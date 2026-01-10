@@ -60,9 +60,7 @@ function ContactModal({
   templates,
   availableKarma,
 }: ContactModalProps) {
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
-    null
-  );
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [contact, setContact] = useState<Partial<Contact>>(
     initialContact || {
       name: "",
@@ -102,30 +100,27 @@ function ContactModal({
     return true;
   }, [contact.name, contactCost, availableKarma]);
 
-  const handleSelectTemplate = useCallback(
-    (template: ContactTemplateData | null) => {
-      if (!template) {
-        setSelectedTemplateId(null);
-        setContact({
-          name: "",
-          type: "",
-          connection: 1,
-          loyalty: 1,
-          notes: "",
-        });
-        return;
-      }
-      setSelectedTemplateId(template.id);
+  const handleSelectTemplate = useCallback((template: ContactTemplateData | null) => {
+    if (!template) {
+      setSelectedTemplateId(null);
       setContact({
         name: "",
-        type: template.name,
-        connection: template.suggestedConnection,
-        loyalty: template.suggestedLoyalty || 2,
-        notes: template.description,
+        type: "",
+        connection: 1,
+        loyalty: 1,
+        notes: "",
       });
-    },
-    []
-  );
+      return;
+    }
+    setSelectedTemplateId(template.id);
+    setContact({
+      name: "",
+      type: template.name,
+      connection: template.suggestedConnection,
+      loyalty: template.suggestedLoyalty || 2,
+      notes: template.description,
+    });
+  }, []);
 
   const handleSave = useCallback(() => {
     if (!isValid) return;
@@ -239,8 +234,7 @@ function ContactModal({
                 </div>
                 {selectedTemplateId && (
                   <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-                    {templates.find((t) => t.id === selectedTemplateId)
-                      ?.description}
+                    {templates.find((t) => t.id === selectedTemplateId)?.description}
                   </p>
                 )}
               </div>
@@ -255,9 +249,7 @@ function ContactModal({
                 <input
                   type="text"
                   value={contact.name || ""}
-                  onChange={(e) =>
-                    setContact({ ...contact, name: e.target.value })
-                  }
+                  onChange={(e) => setContact({ ...contact, name: e.target.value })}
                   className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="Contact's name or alias"
                   autoFocus
@@ -270,9 +262,7 @@ function ContactModal({
                 <input
                   type="text"
                   value={contact.type || ""}
-                  onChange={(e) =>
-                    setContact({ ...contact, type: e.target.value })
-                  }
+                  onChange={(e) => setContact({ ...contact, type: e.target.value })}
                   className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="e.g., Fixer, Street Doc"
                 />
@@ -304,9 +294,7 @@ function ContactModal({
               </label>
               <textarea
                 value={contact.notes || ""}
-                onChange={(e) =>
-                  setContact({ ...contact, notes: e.target.value })
-                }
+                onChange={(e) => setContact({ ...contact, notes: e.target.value })}
                 rows={2}
                 className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                 placeholder="Any additional details about this contact..."
@@ -316,9 +304,7 @@ function ContactModal({
             {/* Cost indicator */}
             <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
               <div className="flex items-center justify-between">
-                <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                  Contact Cost:
-                </span>
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
                 <span
                   className={`font-medium ${
                     contactCost > MAX_KARMA_PER_CONTACT
@@ -339,7 +325,9 @@ function ContactModal({
               {!isValid && (
                 <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
                   {!contact.name?.trim() && "• Enter a contact name"}
-                  {contact.name?.trim() && contactCost > availableKarma && "• Not enough karma available"}
+                  {contact.name?.trim() &&
+                    contactCost > availableKarma &&
+                    "• Not enough karma available"}
                 </div>
               )}
             </div>
@@ -397,8 +385,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     }
 
     const metatypeMin =
-      selectedMetatype?.attributes?.charisma &&
-      "min" in selectedMetatype.attributes.charisma
+      selectedMetatype?.attributes?.charisma && "min" in selectedMetatype.attributes.charisma
         ? selectedMetatype.attributes.charisma.min
         : 1;
 
@@ -421,21 +408,14 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   }, [contacts]);
 
   // Calculate free vs general karma usage
-  const freeContactKarmaSpent = Math.min(
-    totalContactKarmaSpent,
-    freeContactKarma
-  );
-  const generalKarmaSpentOnContacts = Math.max(
-    0,
-    totalContactKarmaSpent - freeContactKarma
-  );
+  const freeContactKarmaSpent = Math.min(totalContactKarmaSpent, freeContactKarma);
+  const generalKarmaSpentOnContacts = Math.max(0, totalContactKarmaSpent - freeContactKarma);
   const freeContactKarmaRemaining = freeContactKarma - freeContactKarmaSpent;
 
   // Get general karma remaining from budget context
   // Use Math.max(0, ...) to prevent overspent karma from blocking free contact points
   const karmaRemaining = Math.max(0, budgets["karma"]?.remaining ?? 0);
-  const totalKarmaAvailableForContacts =
-    freeContactKarmaRemaining + karmaRemaining;
+  const totalKarmaAvailableForContacts = freeContactKarmaRemaining + karmaRemaining;
 
   // Handle adding a new contact
   const handleAddContact = useCallback(
@@ -525,8 +505,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
       const removedContact = contacts[index];
       const updatedContacts = contacts.filter((_, i) => i !== index);
       const newTotalContactKarmaSpent =
-        totalContactKarmaSpent -
-        (removedContact.connection + removedContact.loyalty);
+        totalContactKarmaSpent - (removedContact.connection + removedContact.loyalty);
       const newGeneralKarmaSpentOnContacts = Math.max(
         0,
         newTotalContactKarmaSpent - freeContactKarma
@@ -602,9 +581,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
       {Array.from({ length: max }, (_, i) => (
         <div
           key={i}
-          className={`h-2 w-2 rounded-full ${
-            i < value ? color : "bg-zinc-200 dark:bg-zinc-600"
-          }`}
+          className={`h-2 w-2 rounded-full ${i < value ? color : "bg-zinc-200 dark:bg-zinc-600"}`}
         />
       ))}
     </div>
@@ -614,13 +591,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     <>
       <CreationCard
         title="Contacts"
-        status={
-          contacts.length > 0
-            ? "valid"
-            : freeContactKarma > 0
-              ? "warning"
-              : "pending"
-        }
+        status={contacts.length > 0 ? "valid" : freeContactKarma > 0 ? "warning" : "pending"}
         headerAction={
           <button
             onClick={handleOpenAddModal}
@@ -706,19 +677,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                       <div className="mt-1 flex items-center gap-3 text-xs">
                         <div className="flex items-center gap-1">
                           <span className="text-zinc-500">C:</span>
-                          {renderRatingDots(
-                            contact.connection,
-                            MAX_CONNECTION,
-                            "bg-blue-500"
-                          )}
+                          {renderRatingDots(contact.connection, MAX_CONNECTION, "bg-blue-500")}
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-zinc-500">L:</span>
-                          {renderRatingDots(
-                            contact.loyalty,
-                            MAX_LOYALTY,
-                            "bg-rose-500"
-                          )}
+                          {renderRatingDots(contact.loyalty, MAX_LOYALTY, "bg-rose-500")}
                         </div>
                       </div>
                     </div>
@@ -772,9 +735,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={handleModalSave}
-        initialContact={
-          editingIndex !== null ? contacts[editingIndex] : undefined
-        }
+        initialContact={editingIndex !== null ? contacts[editingIndex] : undefined}
         isEditing={editingIndex !== null}
         templates={contactTemplates}
         maxCost={MAX_KARMA_PER_CONTACT}

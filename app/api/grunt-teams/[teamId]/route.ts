@@ -49,18 +49,13 @@ export async function GET(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize access to the campaign
-    const { authorized, role, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireMember: true }
-    );
+    const { authorized, role, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireMember: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -68,10 +63,7 @@ export async function GET(
 
     // Check visibility for players
     if (role === "player" && !team.visibility?.showToPlayers) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Include combat state if requested
@@ -90,10 +82,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Get grunt team error:", error);
-    return NextResponse.json(
-      { success: false, error: "An error occurred" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "An error occurred" }, { status: 500 });
   }
 }
 
@@ -121,18 +110,13 @@ export async function PUT(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize GM access
-    const { authorized, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -181,10 +165,7 @@ export async function PUT(
   } catch (error) {
     console.error("Update grunt team error:", error);
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }
 
@@ -210,18 +191,13 @@ export async function DELETE(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize GM access
-    const { authorized, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -234,9 +210,6 @@ export async function DELETE(
     return NextResponse.json({ success: true });
   } catch (error) {
     console.error("Delete grunt team error:", error);
-    return NextResponse.json(
-      { success: false, error: "An error occurred" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "An error occurred" }, { status: 500 });
   }
 }

@@ -245,8 +245,8 @@ function IndividualGruntRow({
         grunt.isDead
           ? "border-zinc-300 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-900 opacity-60"
           : grunt.isStunned
-          ? "border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20"
-          : "border-zinc-200 dark:border-zinc-800"
+            ? "border-yellow-300 dark:border-yellow-700 bg-yellow-50 dark:bg-yellow-900/20"
+            : "border-zinc-200 dark:border-zinc-800"
       }`}
     >
       <div className="flex items-center justify-between mb-2">
@@ -402,26 +402,22 @@ export function GruntTeamCombatTrackerTab({
                   Specialists
                 </h4>
                 <div className="space-y-2">
-                  {Object.entries(individualGrunts.specialists).map(
-                    ([specId, specGrunt]) => {
-                      const specialist = team.specialists?.find(
-                        (s) => s.id === specId
-                      );
-                      return (
-                        <IndividualGruntRow
-                          key={specId}
-                          gruntId={specId}
-                          grunt={specGrunt}
-                          label={specialist?.type || "Specialist"}
-                          icon={Star}
-                          iconColor="text-indigo-500"
-                          conditionMonitorSize={team.baseGrunts.conditionMonitorSize}
-                          onApplyDamage={onApplyDamage}
-                          readonly={readonly}
-                        />
-                      );
-                    }
-                  )}
+                  {Object.entries(individualGrunts.specialists).map(([specId, specGrunt]) => {
+                    const specialist = team.specialists?.find((s) => s.id === specId);
+                    return (
+                      <IndividualGruntRow
+                        key={specId}
+                        gruntId={specId}
+                        grunt={specGrunt}
+                        label={specialist?.type || "Specialist"}
+                        icon={Star}
+                        iconColor="text-indigo-500"
+                        conditionMonitorSize={team.baseGrunts.conditionMonitorSize}
+                        onApplyDamage={onApplyDamage}
+                        readonly={readonly}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             )}
@@ -432,19 +428,17 @@ export function GruntTeamCombatTrackerTab({
               Grunts ({activeCount}/{team.initialSize} active)
             </h4>
             <div className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-              {Object.entries(individualGrunts.grunts).map(
-                ([gruntId, grunt], index) => (
-                  <IndividualGruntRow
-                    key={gruntId}
-                    gruntId={gruntId}
-                    grunt={grunt}
-                    label={`Grunt ${index + 1}`}
-                    conditionMonitorSize={team.baseGrunts.conditionMonitorSize}
-                    onApplyDamage={onApplyDamage}
-                    readonly={readonly}
-                  />
-                )
-              )}
+              {Object.entries(individualGrunts.grunts).map(([gruntId, grunt], index) => (
+                <IndividualGruntRow
+                  key={gruntId}
+                  gruntId={gruntId}
+                  grunt={grunt}
+                  label={`Grunt ${index + 1}`}
+                  conditionMonitorSize={team.baseGrunts.conditionMonitorSize}
+                  onApplyDamage={onApplyDamage}
+                  readonly={readonly}
+                />
+              ))}
             </div>
           </div>
         </div>
@@ -454,8 +448,8 @@ export function GruntTeamCombatTrackerTab({
       {!individualGrunts && isGM && (
         <div className="rounded-lg border border-dashed border-zinc-300 dark:border-zinc-700 p-8 text-center">
           <p className="text-zinc-500 dark:text-zinc-400">
-            Individual grunt tracking is not initialized. Click &ldquo;Refresh&rdquo; to
-            load combat tracking state.
+            Individual grunt tracking is not initialized. Click &ldquo;Refresh&rdquo; to load combat
+            tracking state.
           </p>
         </div>
       )}

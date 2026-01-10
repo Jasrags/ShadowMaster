@@ -4,7 +4,7 @@
  * Comprehensive unit tests for the equipment rating system utilities.
  */
 
-import { describe, it, expect } from 'vitest';
+import { describe, it, expect } from "vitest";
 import {
   calculateRatedValue,
   calculateRatedItemValues,
@@ -16,25 +16,25 @@ import {
   formatRatingWithCost,
   getRatingRange,
   getRatingOptions,
-} from '../ratings';
+} from "../ratings";
 import type {
   RatingConfig,
   RatingScalingConfig,
   CatalogItemRatingSpec,
   RatingValidationContext,
-} from '@/lib/types/ratings';
+} from "@/lib/types/ratings";
 
 // =============================================================================
 // CORE CALCULATION FUNCTIONS
 // =============================================================================
 
-describe('calculateRatedValue', () => {
-  describe('scaling types', () => {
-    it('should calculate linear scaling', () => {
+describe("calculateRatedValue", () => {
+  describe("scaling types", () => {
+    it("should calculate linear scaling", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 100,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       };
 
       expect(calculateRatedValue(scaling, 1)).toBe(100);
@@ -43,11 +43,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 5)).toBe(500);
     });
 
-    it('should calculate squared scaling', () => {
+    it("should calculate squared scaling", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 10,
         perRating: true,
-        scalingType: 'squared',
+        scalingType: "squared",
       };
 
       expect(calculateRatedValue(scaling, 1)).toBe(10);
@@ -55,11 +55,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 3)).toBe(90); // 10 * 3^2
     });
 
-    it('should calculate flat scaling (no scaling)', () => {
+    it("should calculate flat scaling (no scaling)", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 500,
         perRating: true,
-        scalingType: 'flat',
+        scalingType: "flat",
       };
 
       expect(calculateRatedValue(scaling, 1)).toBe(500);
@@ -67,11 +67,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 10)).toBe(500);
     });
 
-    it('should calculate table scaling', () => {
+    it("should calculate table scaling", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 100,
         perRating: true,
-        scalingType: 'table',
+        scalingType: "table",
         valueLookup: {
           1: 1000,
           2: 2500,
@@ -86,11 +86,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 4)).toBe(7000);
     });
 
-    it('should fallback to linear for table scaling with missing rating', () => {
+    it("should fallback to linear for table scaling with missing rating", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 100,
         perRating: true,
-        scalingType: 'table',
+        scalingType: "table",
         valueLookup: {
           1: 1000,
           3: 3000,
@@ -101,7 +101,7 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 2)).toBe(200); // 100 * 2
     });
 
-    it('should use linear as default scaling type', () => {
+    it("should use linear as default scaling type", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 50,
         perRating: true,
@@ -112,22 +112,22 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 4)).toBe(200);
     });
 
-    it('should handle formula scaling (fallback to linear for now)', () => {
+    it("should handle formula scaling (fallback to linear for now)", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 100,
         perRating: true,
-        scalingType: 'formula',
+        scalingType: "formula",
       };
 
       // Currently falls through to linear
       expect(calculateRatedValue(scaling, 3)).toBe(300);
     });
 
-    it('should return base value when perRating is false', () => {
+    it("should return base value when perRating is false", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 2500,
         perRating: false,
-        scalingType: 'linear',
+        scalingType: "linear",
       };
 
       expect(calculateRatedValue(scaling, 1)).toBe(2500);
@@ -136,12 +136,12 @@ describe('calculateRatedValue', () => {
     });
   });
 
-  describe('min/max bounds', () => {
-    it('should enforce minimum value', () => {
+  describe("min/max bounds", () => {
+    it("should enforce minimum value", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 10,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
         minValue: 50,
       };
 
@@ -150,11 +150,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 10)).toBe(100); // Above min
     });
 
-    it('should enforce maximum value', () => {
+    it("should enforce maximum value", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 100,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
         maxValue: 400,
       };
 
@@ -163,11 +163,11 @@ describe('calculateRatedValue', () => {
       expect(calculateRatedValue(scaling, 10)).toBe(400); // Clamped to max
     });
 
-    it('should enforce both min and max values', () => {
+    it("should enforce both min and max values", () => {
       const scaling: RatingScalingConfig = {
         baseValue: 50,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
         minValue: 100,
         maxValue: 300,
       };
@@ -179,8 +179,8 @@ describe('calculateRatedValue', () => {
   });
 });
 
-describe('calculateRatedItemValues', () => {
-  it('should calculate all values for an item with multiple scaling types', () => {
+describe("calculateRatedItemValues", () => {
+  it("should calculate all values for an item with multiple scaling types", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -189,17 +189,17 @@ describe('calculateRatedItemValues', () => {
       costScaling: {
         baseValue: 2500,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
       availabilityScaling: {
         baseValue: 3,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
       essenceScaling: {
         baseValue: 0.2,
         perRating: false,
-        scalingType: 'flat',
+        scalingType: "flat",
       },
     };
 
@@ -211,7 +211,7 @@ describe('calculateRatedItemValues', () => {
     expect(result.essence).toBe(0.2); // Flat, not per rating
   });
 
-  it('should calculate capacity scaling', () => {
+  it("should calculate capacity scaling", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -220,7 +220,7 @@ describe('calculateRatedItemValues', () => {
       capacityScaling: {
         baseValue: 4,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
     };
 
@@ -228,7 +228,7 @@ describe('calculateRatedItemValues', () => {
     expect(result.capacity).toBe(8); // 4 * 2
   });
 
-  it('should calculate capacity cost scaling', () => {
+  it("should calculate capacity cost scaling", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -237,7 +237,7 @@ describe('calculateRatedItemValues', () => {
       capacityCostScaling: {
         baseValue: 1,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
     };
 
@@ -245,7 +245,7 @@ describe('calculateRatedItemValues', () => {
     expect(result.capacityCost).toBe(3); // 1 * 3
   });
 
-  it('should calculate attribute bonus scaling', () => {
+  it("should calculate attribute bonus scaling", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -255,7 +255,7 @@ describe('calculateRatedItemValues', () => {
         reaction: {
           baseValue: 1,
           perRating: true,
-          scalingType: 'linear',
+          scalingType: "linear",
         },
       },
     };
@@ -264,7 +264,7 @@ describe('calculateRatedItemValues', () => {
     expect(result.attributeBonuses).toEqual({ reaction: 2 });
   });
 
-  it('should calculate karma cost scaling', () => {
+  it("should calculate karma cost scaling", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -273,7 +273,7 @@ describe('calculateRatedItemValues', () => {
       karmaScaling: {
         baseValue: 6,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
     };
 
@@ -281,7 +281,7 @@ describe('calculateRatedItemValues', () => {
     expect(result.karmaCost).toBe(24); // 6 * 4
   });
 
-  it('should return zero cost and availability when scaling not specified', () => {
+  it("should return zero cost and availability when scaling not specified", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -299,19 +299,19 @@ describe('calculateRatedItemValues', () => {
 // VALIDATION FUNCTIONS
 // =============================================================================
 
-describe('validateRating', () => {
+describe("validateRating", () => {
   const baseConfig: RatingConfig = {
     hasRating: true,
     maxRating: 6,
   };
 
-  it('should validate rating within range', () => {
+  it("should validate rating within range", () => {
     const result = validateRating(3, baseConfig);
     expect(result.valid).toBe(true);
     expect(result.error).toBeUndefined();
   });
 
-  it('should reject rating below minimum', () => {
+  it("should reject rating below minimum", () => {
     const config: RatingConfig = {
       hasRating: true,
       minRating: 2,
@@ -320,43 +320,43 @@ describe('validateRating', () => {
 
     const result = validateRating(1, config);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('at least 2');
+    expect(result.error).toContain("at least 2");
     expect(result.suggestedValue).toBe(2);
   });
 
-  it('should reject rating above maximum', () => {
+  it("should reject rating above maximum", () => {
     const result = validateRating(7, baseConfig);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('cannot exceed 6');
+    expect(result.error).toContain("cannot exceed 6");
     expect(result.suggestedValue).toBe(6);
   });
 
-  it('should use context maxRatingOverride', () => {
+  it("should use context maxRatingOverride", () => {
     const context: RatingValidationContext = {
       maxRatingOverride: 4,
     };
 
     const result = validateRating(5, baseConfig, context);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('cannot exceed 4');
+    expect(result.error).toContain("cannot exceed 4");
     expect(result.suggestedValue).toBe(4);
   });
 
-  it('should default minimum to 1', () => {
+  it("should default minimum to 1", () => {
     const result = validateRating(0, baseConfig);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('at least 1');
+    expect(result.error).toContain("at least 1");
     expect(result.suggestedValue).toBe(1);
   });
 
-  it('should validate integer constraint', () => {
+  it("should validate integer constraint", () => {
     const result = validateRating(3.5, baseConfig);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('whole number');
+    expect(result.error).toContain("whole number");
     expect(result.suggestedValue).toBe(4);
   });
 
-  it('should allow fractional ratings when integerOnly is false', () => {
+  it("should allow fractional ratings when integerOnly is false", () => {
     const config: RatingConfig = {
       hasRating: true,
       maxRating: 6,
@@ -367,7 +367,7 @@ describe('validateRating', () => {
     expect(result.valid).toBe(true);
   });
 
-  it('should reject item that does not support ratings', () => {
+  it("should reject item that does not support ratings", () => {
     const config: RatingConfig = {
       hasRating: false,
       maxRating: 0,
@@ -375,12 +375,12 @@ describe('validateRating', () => {
 
     const result = validateRating(1, config);
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('does not support ratings');
+    expect(result.error).toContain("does not support ratings");
   });
 });
 
-describe('validateRatingAvailability', () => {
-  it('should validate rating within availability limit', () => {
+describe("validateRatingAvailability", () => {
+  it("should validate rating within availability limit", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -389,7 +389,7 @@ describe('validateRatingAvailability', () => {
       availabilityScaling: {
         baseValue: 2,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
     };
 
@@ -401,7 +401,7 @@ describe('validateRatingAvailability', () => {
     expect(result.valid).toBe(true);
   });
 
-  it('should reject rating that exceeds availability', () => {
+  it("should reject rating that exceeds availability", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -410,7 +410,7 @@ describe('validateRatingAvailability', () => {
       availabilityScaling: {
         baseValue: 3,
         perRating: true,
-        scalingType: 'linear',
+        scalingType: "linear",
       },
     };
 
@@ -420,11 +420,11 @@ describe('validateRatingAvailability', () => {
 
     const result = validateRatingAvailability(spec, 5, context); // 3 * 5 = 15
     expect(result.valid).toBe(false);
-    expect(result.error).toContain('exceeds maximum');
+    expect(result.error).toContain("exceeds maximum");
     expect(result.suggestedValue).toBe(4); // 3 * 4 = 12
   });
 
-  it('should return valid when maxAvailability not specified', () => {
+  it("should return valid when maxAvailability not specified", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -440,7 +440,7 @@ describe('validateRatingAvailability', () => {
     expect(result.valid).toBe(true);
   });
 
-  it('should return valid when availabilityScaling not specified', () => {
+  it("should return valid when availabilityScaling not specified", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -461,8 +461,8 @@ describe('validateRatingAvailability', () => {
 // CONVERSION HELPERS
 // =============================================================================
 
-describe('convertLegacyRatingSpec', () => {
-  it('should convert legacy format with all properties', () => {
+describe("convertLegacyRatingSpec", () => {
+  it("should convert legacy format with all properties", () => {
     const legacy = {
       hasRating: true,
       maxRating: 6,
@@ -502,7 +502,7 @@ describe('convertLegacyRatingSpec', () => {
     });
   });
 
-  it('should convert with missing optional fields', () => {
+  it("should convert with missing optional fields", () => {
     const legacy = {
       hasRating: true,
       maxRating: 6,
@@ -524,7 +524,7 @@ describe('convertLegacyRatingSpec', () => {
     expect(spec.availabilityScaling).toBeUndefined();
   });
 
-  it('should default minRating to 1', () => {
+  it("should default minRating to 1", () => {
     const legacy = {
       hasRating: true,
       maxRating: 6,
@@ -534,7 +534,7 @@ describe('convertLegacyRatingSpec', () => {
     expect(spec.rating?.minRating).toBe(1);
   });
 
-  it('should default maxRating to 6 when not provided', () => {
+  it("should default maxRating to 6 when not provided", () => {
     const legacy = {
       hasRating: true,
     };
@@ -543,7 +543,7 @@ describe('convertLegacyRatingSpec', () => {
     expect(spec.rating?.maxRating).toBe(6);
   });
 
-  it('should handle item without rating', () => {
+  it("should handle item without rating", () => {
     const legacy = {
       cost: 500,
     };
@@ -556,7 +556,7 @@ describe('convertLegacyRatingSpec', () => {
     });
   });
 
-  it('should default costPerRating to false', () => {
+  it("should default costPerRating to false", () => {
     const legacy = {
       cost: 1000,
     };
@@ -570,56 +570,56 @@ describe('convertLegacyRatingSpec', () => {
 // DISPLAY HELPERS
 // =============================================================================
 
-describe('getRatingLabel', () => {
+describe("getRatingLabel", () => {
   it('should return "Rating" for default semantic type', () => {
-    expect(getRatingLabel()).toBe('Rating');
-    expect(getRatingLabel('rating')).toBe('Rating');
+    expect(getRatingLabel()).toBe("Rating");
+    expect(getRatingLabel("rating")).toBe("Rating");
   });
 
   it('should return "Force" for force semantic type', () => {
-    expect(getRatingLabel('force')).toBe('Force');
+    expect(getRatingLabel("force")).toBe("Force");
   });
 
   it('should return "Device Rating" for deviceRating semantic type', () => {
-    expect(getRatingLabel('deviceRating')).toBe('Device Rating');
+    expect(getRatingLabel("deviceRating")).toBe("Device Rating");
   });
 
   it('should return "Capacity" for capacity semantic type', () => {
-    expect(getRatingLabel('capacity')).toBe('Capacity');
+    expect(getRatingLabel("capacity")).toBe("Capacity");
   });
 });
 
-describe('formatRating', () => {
+describe("formatRating", () => {
   const config: RatingConfig = {
     hasRating: true,
     minRating: 1,
     maxRating: 6,
-    semanticType: 'rating',
+    semanticType: "rating",
   };
 
-  it('should format rating with label', () => {
-    expect(formatRating(3, config)).toBe('Rating 3');
+  it("should format rating with label", () => {
+    expect(formatRating(3, config)).toBe("Rating 3");
   });
 
-  it('should format without label when showLabel is false', () => {
-    expect(formatRating(3, config, { showLabel: false })).toBe('3');
+  it("should format without label when showLabel is false", () => {
+    expect(formatRating(3, config, { showLabel: false })).toBe("3");
   });
 
-  it('should show range when requested', () => {
-    expect(formatRating(3, config, { showRange: true })).toBe('Rating 3 (1-6)');
+  it("should show range when requested", () => {
+    expect(formatRating(3, config, { showRange: true })).toBe("Rating 3 (1-6)");
   });
 
-  it('should use custom label', () => {
-    expect(formatRating(3, config, { customLabel: 'Level' })).toBe('Level 3');
+  it("should use custom label", () => {
+    expect(formatRating(3, config, { customLabel: "Level" })).toBe("Level 3");
   });
 
-  it('should handle missing config', () => {
-    expect(formatRating(3)).toBe('Rating 3');
+  it("should handle missing config", () => {
+    expect(formatRating(3)).toBe("Rating 3");
   });
 });
 
-describe('formatRatingWithCost', () => {
-  it('should format rating with cost', () => {
+describe("formatRatingWithCost", () => {
+  it("should format rating with cost", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -636,12 +636,12 @@ describe('formatRatingWithCost', () => {
     };
 
     const result = formatRatingWithCost(3, spec);
-    expect(result).toContain('Rating 3');
-    expect(result).toContain('7,500¥');
-    expect(result).not.toContain('Avail');
+    expect(result).toContain("Rating 3");
+    expect(result).toContain("7,500¥");
+    expect(result).not.toContain("Avail");
   });
 
-  it('should include availability when requested', () => {
+  it("should include availability when requested", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -658,7 +658,7 @@ describe('formatRatingWithCost', () => {
     };
 
     const result = formatRatingWithCost(3, spec, { showAvailability: true });
-    expect(result).toContain('Avail 9');
+    expect(result).toContain("Avail 9");
   });
 });
 
@@ -666,8 +666,8 @@ describe('formatRatingWithCost', () => {
 // RANGE HELPERS
 // =============================================================================
 
-describe('getRatingRange', () => {
-  it('should return array of rating values', () => {
+describe("getRatingRange", () => {
+  it("should return array of rating values", () => {
     const config: RatingConfig = {
       hasRating: true,
       minRating: 1,
@@ -677,7 +677,7 @@ describe('getRatingRange', () => {
     expect(getRatingRange(config)).toEqual([1, 2, 3, 4, 5, 6]);
   });
 
-  it('should use default minRating of 1', () => {
+  it("should use default minRating of 1", () => {
     const config: RatingConfig = {
       hasRating: true,
       maxRating: 4,
@@ -686,7 +686,7 @@ describe('getRatingRange', () => {
     expect(getRatingRange(config)).toEqual([1, 2, 3, 4]);
   });
 
-  it('should handle custom minRating', () => {
+  it("should handle custom minRating", () => {
     const config: RatingConfig = {
       hasRating: true,
       minRating: 2,
@@ -696,7 +696,7 @@ describe('getRatingRange', () => {
     expect(getRatingRange(config)).toEqual([2, 3, 4, 5]);
   });
 
-  it('should handle single rating value', () => {
+  it("should handle single rating value", () => {
     const config: RatingConfig = {
       hasRating: true,
       minRating: 3,
@@ -707,8 +707,8 @@ describe('getRatingRange', () => {
   });
 });
 
-describe('getRatingOptions', () => {
-  it('should return options with calculated values', () => {
+describe("getRatingOptions", () => {
+  it("should return options with calculated values", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -748,7 +748,7 @@ describe('getRatingOptions', () => {
     });
   });
 
-  it('should mark options as invalid when availability exceeded', () => {
+  it("should mark options as invalid when availability exceeded", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: true,
@@ -774,14 +774,14 @@ describe('getRatingOptions', () => {
     expect(options[4].error).toBeDefined();
   });
 
-  it('should return empty array for item without rating', () => {
+  it("should return empty array for item without rating", () => {
     const spec: CatalogItemRatingSpec = {};
 
     const options = getRatingOptions(spec);
     expect(options).toEqual([]);
   });
 
-  it('should return empty array when hasRating is false', () => {
+  it("should return empty array when hasRating is false", () => {
     const spec: CatalogItemRatingSpec = {
       rating: {
         hasRating: false,
@@ -805,11 +805,11 @@ import {
   getRatedItemValuesUnified,
   getRatingOptionsUnified,
   isRatingValid,
-} from '../ratings';
-import type { RatingTable } from '@/lib/types/ratings';
+} from "../ratings";
+import type { RatingTable } from "@/lib/types/ratings";
 
-describe('hasUnifiedRatings', () => {
-  it('should return true for item with ratings table', () => {
+describe("hasUnifiedRatings", () => {
+  it("should return true for item with ratings table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -825,7 +825,7 @@ describe('hasUnifiedRatings', () => {
     expect(hasUnifiedRatings(item)).toBe(true);
   });
 
-  it('should return false for item without ratings table', () => {
+  it("should return false for item without ratings table", () => {
     const item = {
       hasRating: true as const,
       maxRating: 4,
@@ -834,7 +834,7 @@ describe('hasUnifiedRatings', () => {
     expect(hasUnifiedRatings(item)).toBe(false);
   });
 
-  it('should return false for item with hasRating false', () => {
+  it("should return false for item with hasRating false", () => {
     const item = {
       hasRating: false as const,
       ratings: {
@@ -845,7 +845,7 @@ describe('hasUnifiedRatings', () => {
     expect(hasUnifiedRatings(item)).toBe(false);
   });
 
-  it('should return false for item without hasRating', () => {
+  it("should return false for item without hasRating", () => {
     const item = {
       ratings: {
         1: { cost: 1000 },
@@ -856,7 +856,7 @@ describe('hasUnifiedRatings', () => {
   });
 });
 
-describe('getRatingTableValue', () => {
+describe("getRatingTableValue", () => {
   const item = {
     hasRating: true as const,
     minRating: 1,
@@ -869,7 +869,7 @@ describe('getRatingTableValue', () => {
     } as RatingTable,
   };
 
-  it('should return values for valid rating', () => {
+  it("should return values for valid rating", () => {
     const value = getRatingTableValue(item, 2);
     expect(value).toEqual({
       cost: 6000,
@@ -879,20 +879,20 @@ describe('getRatingTableValue', () => {
     });
   });
 
-  it('should return undefined for rating not in table', () => {
+  it("should return undefined for rating not in table", () => {
     const value = getRatingTableValue(item, 5);
     expect(value).toBeUndefined();
   });
 
-  it('should return undefined for item without ratings table', () => {
+  it("should return undefined for item without ratings table", () => {
     const itemNoRatings = { hasRating: true as const, maxRating: 4 };
     const value = getRatingTableValue(itemNoRatings, 2);
     expect(value).toBeUndefined();
   });
 });
 
-describe('getAvailableRatings', () => {
-  it('should return array of ratings from unified table', () => {
+describe("getAvailableRatings", () => {
+  it("should return array of ratings from unified table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -909,7 +909,7 @@ describe('getAvailableRatings', () => {
     expect(ratings).toEqual([1, 2, 3, 4]);
   });
 
-  it('should return ratings in numeric order', () => {
+  it("should return ratings in numeric order", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -926,7 +926,7 @@ describe('getAvailableRatings', () => {
     expect(ratings).toEqual([1, 2, 3, 4]);
   });
 
-  it('should return range from min to max for items without unified ratings', () => {
+  it("should return range from min to max for items without unified ratings", () => {
     const item = {
       hasRating: true as const,
       minRating: 2,
@@ -937,7 +937,7 @@ describe('getAvailableRatings', () => {
     expect(ratings).toEqual([2, 3, 4, 5]);
   });
 
-  it('should default minRating to 1', () => {
+  it("should default minRating to 1", () => {
     const item = {
       hasRating: true as const,
       maxRating: 3,
@@ -948,8 +948,8 @@ describe('getAvailableRatings', () => {
   });
 });
 
-describe('getRatedItemValuesUnified', () => {
-  it('should return values from unified ratings table', () => {
+describe("getRatedItemValuesUnified", () => {
+  it("should return values from unified ratings table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -968,7 +968,7 @@ describe('getRatedItemValuesUnified', () => {
     expect(values.essence).toBe(0.3);
   });
 
-  it('should fall back to legacy ratingSpec when no unified ratings', () => {
+  it("should fall back to legacy ratingSpec when no unified ratings", () => {
     const item = {
       hasRating: true as const,
       maxRating: 6,
@@ -985,7 +985,7 @@ describe('getRatedItemValuesUnified', () => {
     expect(values.availability).toBe(9); // 3 * 3
   });
 
-  it('should use base values for items without rating support', () => {
+  it("should use base values for items without rating support", () => {
     const item = {
       cost: 500,
       availability: 4,
@@ -997,8 +997,8 @@ describe('getRatedItemValuesUnified', () => {
   });
 });
 
-describe('isRatingValid', () => {
-  it('should return true for valid rating in unified table', () => {
+describe("isRatingValid", () => {
+  it("should return true for valid rating in unified table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -1015,7 +1015,7 @@ describe('isRatingValid', () => {
     expect(isRatingValid(item, 4)).toBe(true);
   });
 
-  it('should return false for rating not in unified table', () => {
+  it("should return false for rating not in unified table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -1032,7 +1032,7 @@ describe('isRatingValid', () => {
     expect(isRatingValid(item, 0)).toBe(false);
   });
 
-  it('should validate against min/max for legacy items', () => {
+  it("should validate against min/max for legacy items", () => {
     const item = {
       hasRating: true as const,
       minRating: 2,
@@ -1046,8 +1046,8 @@ describe('isRatingValid', () => {
   });
 });
 
-describe('getRatingOptionsUnified', () => {
-  it('should return options from unified ratings table', () => {
+describe("getRatingOptionsUnified", () => {
+  it("should return options from unified ratings table", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -1068,7 +1068,7 @@ describe('getRatingOptionsUnified', () => {
     expect(options[2].values.cost).toBe(10000);
   });
 
-  it('should mark options as invalid when availability exceeds limit', () => {
+  it("should mark options as invalid when availability exceeds limit", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -1084,10 +1084,10 @@ describe('getRatingOptionsUnified', () => {
     const options = getRatingOptionsUnified(item, { maxAvailability: 12 });
     expect(options[2].valid).toBe(true); // avail 9
     expect(options[3].valid).toBe(false); // avail 15
-    expect(options[3].error).toContain('exceeds');
+    expect(options[3].error).toContain("exceeds");
   });
 
-  it('should fall back to legacy format options', () => {
+  it("should fall back to legacy format options", () => {
     const item = {
       hasRating: true as const,
       minRating: 1,
@@ -1106,4 +1106,3 @@ describe('getRatingOptionsUnified', () => {
     expect(options[2].values.cost).toBe(3000);
   });
 });
-

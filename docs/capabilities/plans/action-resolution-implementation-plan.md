@@ -25,6 +25,7 @@ Implement a complete Action Resolution system that provides probabilistic determ
 **Purpose**: Define all types for action resolution system
 
 **Satisfies**:
+
 - Capability: "configurable action pools incorporating base character attributes, skill ratings, and situational modifiers"
 - Capability: "persistent history record containing the pool configuration, individual results, and outcome statistics"
 
@@ -113,6 +114,7 @@ edgeCurrent?: number; // Current Edge points available (defaults to edge attribu
 **Purpose**: Add `diceRules` module with SR5-specific probability model
 
 **Satisfies**:
+
 - Capability: "authoritative probability model defined by the game edition ruleset"
 - Capability: "Hit identification MUST be based on ruleset-defined value thresholds"
 
@@ -151,15 +153,13 @@ edgeCurrent?: number; // Current Edge points available (defaults to edge attribu
 **Purpose**: Calculate action pools from character state and context
 
 **Satisfies**:
+
 - Capability: "configurable action pools incorporating base character attributes, skill ratings, and situational modifiers"
 - Capability: "Resolution pools MUST automatically incorporate persistent character modifiers, such as wound penalties"
 
 ```typescript
 // Functions to implement:
-function buildActionPool(
-  character: Character,
-  options: PoolBuildOptions
-): ActionPool;
+function buildActionPool(character: Character, options: PoolBuildOptions): ActionPool;
 
 function calculateWoundModifier(
   physicalDamage: number,
@@ -167,10 +167,7 @@ function calculateWoundModifier(
   boxesPerPenalty: number
 ): number;
 
-function applyModifiers(
-  basePool: number,
-  modifiers: PoolModifier[]
-): number;
+function applyModifiers(basePool: number, modifiers: PoolModifier[]): number;
 ```
 
 #### File: `/lib/rules/action-resolution/dice-engine.ts` (NEW)
@@ -178,6 +175,7 @@ function applyModifiers(
 **Purpose**: Core dice rolling logic with hit/glitch calculation
 
 **Satisfies**:
+
 - Capability: "Successful outcomes (Hits) and complications (Glitches) MUST be calculated with absolute precision"
 - Capability: "Individual results MUST be generated using an unbiased random distribution mechanism"
 - Capability: "Complication identification... MUST be calculated according to the distribution of minimum values"
@@ -186,10 +184,7 @@ function applyModifiers(
 // Functions to implement:
 function rollDice(poolSize: number): DiceResult[];
 
-function calculateHits(
-  dice: DiceResult[],
-  hitThreshold: number
-): number;
+function calculateHits(dice: DiceResult[], hitThreshold: number): number;
 
 function calculateGlitch(
   dice: DiceResult[],
@@ -204,6 +199,7 @@ function sortDiceForDisplay(dice: DiceResult[]): DiceResult[];
 **Purpose**: Handle Edge-powered interventions (rerolls, push the limit)
 
 **Satisfies**:
+
 - Capability: "Resource-backed interventions MUST be restricted by character resource availability"
 - Capability: "Interventions MUST re-evaluate the complication status... while maintaining the integrity of original successes"
 
@@ -211,10 +207,7 @@ function sortDiceForDisplay(dice: DiceResult[]): DiceResult[];
 // Functions to implement:
 function canSpendEdge(character: Character, action: EdgeAction): boolean;
 
-function performSecondChance(
-  result: ActionResult,
-  edgeRules: EditionDiceRules
-): ActionResult;
+function performSecondChance(result: ActionResult, edgeRules: EditionDiceRules): ActionResult;
 
 function performPushTheLimit(
   pool: ActionPool,
@@ -236,15 +229,13 @@ function performPushTheLimit(
 **Purpose**: Persist action history per character
 
 **Satisfies**:
+
 - Capability: "persistent, auditable record of all action attempts and their resulting states"
 - Capability: "Action records MUST maintain an immutable link to the character entity"
 
 ```typescript
 // Functions to implement:
-async function getActionHistory(
-  userId: string,
-  characterId: string
-): Promise<ActionHistory | null>;
+async function getActionHistory(userId: string, characterId: string): Promise<ActionHistory | null>;
 
 async function saveActionResult(
   userId: string,
@@ -287,6 +278,7 @@ async function restoreEdge(
 **Purpose**: Roll dice and record action results
 
 **Satisfies**:
+
 - Capability: "Action resolution MUST NOT proceed without an authorized participant request and a valid pool configuration"
 
 ```typescript
@@ -339,7 +331,10 @@ function useEdge(characterId: string): {
   restore: (amount: number) => Promise<void>;
 };
 
-function usePoolBuilder(character: Character, ruleset: MergedRuleset): {
+function usePoolBuilder(
+  character: Character,
+  ruleset: MergedRuleset
+): {
   buildPool: (options: PoolBuildOptions) => ActionPool;
   woundModifier: number;
 };
@@ -356,6 +351,7 @@ function usePoolBuilder(character: Character, ruleset: MergedRuleset): {
 **Satisfies**: Capability: "Individual results within an action pool MUST be sorted and visualized for immediate participant verifiability"
 
 Changes:
+
 - Add `characterId` prop for persistence mode
 - Add `onRollComplete` callback with full `ActionResult`
 - Integrate with `useActionResolver` hook when `characterId` provided
@@ -407,6 +403,7 @@ Changes:
 **Purpose**: Add action resolution section to character sheet
 
 Changes:
+
 - Add "Action Roller" section with integrated DiceRoller
 - Display current Edge prominently
 - Link to action history page
@@ -416,6 +413,7 @@ Changes:
 **Purpose**: Dedicated page for action rolling and history
 
 Features:
+
 - Full ActionPoolBuilder UI
 - Integrated dice roller
 - Complete action history

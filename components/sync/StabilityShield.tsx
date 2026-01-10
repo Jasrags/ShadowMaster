@@ -117,9 +117,7 @@ export function StabilityShield({
 
   // Derive status from props if provided (faster, no API call)
   const hasDerivedStatus = syncStatus !== undefined || legalityStatus !== undefined;
-  const derivedStatus = hasDerivedStatus
-    ? deriveShieldStatus(syncStatus, legalityStatus)
-    : null;
+  const derivedStatus = hasDerivedStatus ? deriveShieldStatus(syncStatus, legalityStatus) : null;
 
   // Only fetch from API if we don't have derived status
   const fetchedShield = useStabilityShield(characterId, hasDerivedStatus);
@@ -241,10 +239,7 @@ export function StabilityShield({
 
       {/* Migration Wizard Modal */}
       {showWizard && (
-        <MigrationWizard
-          characterId={characterId}
-          onClose={() => setShowWizard(false)}
-        />
+        <MigrationWizard characterId={characterId} onClose={() => setShowWizard(false)} />
       )}
     </>
   );
@@ -264,33 +259,18 @@ function ShieldIcon({ className = "", status }: ShieldIconProps) {
   const iconContent = {
     green: (
       // Checkmark inside shield
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M9 12l2 2 4-4"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4" />
     ),
     yellow: (
       // Exclamation mark inside shield
       <>
-        <path
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          strokeWidth={2}
-          d="M12 9v2"
-        />
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2" />
         <circle cx="12" cy="15" r="1" fill="currentColor" />
       </>
     ),
     red: (
       // X inside shield
-      <path
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        strokeWidth={2}
-        d="M10 14l4-4m0 4l-4-4"
-      />
+      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 14l4-4m0 4l-4-4" />
     ),
   };
 

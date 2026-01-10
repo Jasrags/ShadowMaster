@@ -31,7 +31,20 @@ import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, RatingSelector } from "./shared";
 import { getRatedItemValuesUnified, type RatedItem } from "@/lib/rules/ratings";
-import { Lock, Search, X, Plus, Minus, ShoppingCart, Sword, Shield, Backpack, Gem, AlertTriangle, Info } from "lucide-react";
+import {
+  Lock,
+  Search,
+  X,
+  Plus,
+  Minus,
+  ShoppingCart,
+  Sword,
+  Shield,
+  Backpack,
+  Gem,
+  AlertTriangle,
+  Info,
+} from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -62,10 +75,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -131,9 +141,7 @@ function GearItemRow({
       }`}
     >
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-zinc-900 dark:text-zinc-100">
-          {name}
-        </div>
+        <div className="font-medium text-zinc-900 dark:text-zinc-100">{name}</div>
         <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           {stats}
           <span>Avail: {availability}</span>
@@ -204,7 +212,9 @@ function RatedGearItemRow({
         <div className="flex-1 min-w-0">
           <div className="font-medium text-zinc-900 dark:text-zinc-100">
             {item.name}
-            <span className="ml-1.5 text-xs text-zinc-500">(R{minRating}-{maxRating})</span>
+            <span className="ml-1.5 text-xs text-zinc-500">
+              (R{minRating}-{maxRating})
+            </span>
           </div>
           <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span>{item.category}</span>
@@ -283,9 +293,7 @@ function CartItemRow({
 }) {
   return (
     <div className="flex items-center justify-between py-1.5">
-      <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">
-        {name}
-      </span>
+      <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">{name}</span>
       <div className="flex items-center gap-2">
         <span className="text-xs text-zinc-500">{formatCurrency(cost)}¥</span>
         <button
@@ -366,15 +374,20 @@ export function GearCard({ state, updateState }: GearCardProps) {
   const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
   const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
   const augmentationSpent =
-    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    ) +
     ((state.selections?.bioware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const totalSpent = weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+  const totalSpent =
+    weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
   // Total item count
-  const totalItems = selectedWeapons.length + selectedArmor.length + selectedGear.length + selectedFoci.length;
+  const totalItems =
+    selectedWeapons.length + selectedArmor.length + selectedGear.length + selectedFoci.length;
 
   // Priority source
   const prioritySource = useMemo(() => {
@@ -646,9 +659,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -698,9 +709,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
           </div>
           <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
             <div
-              className={`h-full transition-all ${
-                isOverBudget ? "bg-red-500" : "bg-blue-500"
-              }`}
+              className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
               style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
             />
           </div>
@@ -802,10 +811,15 @@ export function GearCard({ state, updateState }: GearCardProps) {
 
             const Icon = tab.icon;
             const count =
-              tab.id === "weapons" ? selectedWeapons.length :
-              tab.id === "armor" ? selectedArmor.length :
-              tab.id === "gear" ? selectedGear.length :
-              tab.id === "foci" ? selectedFoci.length : 0;
+              tab.id === "weapons"
+                ? selectedWeapons.length
+                : tab.id === "armor"
+                  ? selectedArmor.length
+                  : tab.id === "gear"
+                    ? selectedGear.length
+                    : tab.id === "foci"
+                      ? selectedFoci.length
+                      : 0;
 
             return (
               <button
@@ -825,11 +839,11 @@ export function GearCard({ state, updateState }: GearCardProps) {
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
                 {count > 0 && (
-                  <span className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] ${
-                    activeTab === tab.id
-                      ? "bg-white/20"
-                      : "bg-amber-200/50 dark:bg-amber-800/50"
-                  }`}>
+                  <span
+                    className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] ${
+                      activeTab === tab.id ? "bg-white/20" : "bg-amber-200/50 dark:bg-amber-800/50"
+                    }`}
+                  >
                     {count}
                   </span>
                 )}

@@ -1,10 +1,9 @@
-
 import { promises as fs } from "fs";
 import path from "path";
 
 const LOGS_DIR = path.join(process.cwd(), "data", "security", "logs");
 
-export type SecurityEvent = 
+export type SecurityEvent =
   | "signin.success"
   | "signin.failure"
   | "signup.success"
@@ -35,7 +34,7 @@ export class AuditLogger {
   public static async log(record: Omit<SecurityRecord, "timestamp">): Promise<void> {
     try {
       await this.ensureDirectory();
-      
+
       const fullRecord: SecurityRecord = {
         ...record,
         timestamp: new Date().toISOString(),
@@ -46,7 +45,7 @@ export class AuditLogger {
 
       const line = JSON.stringify(fullRecord) + "\n";
       await fs.appendFile(logFilePath, line, "utf-8");
-      
+
       console.log(`[AuditLog] ${record.event}: ${record.userId || record.email || record.ip}`);
     } catch (error) {
       console.error("Failed to write to audit log:", error);

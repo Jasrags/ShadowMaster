@@ -101,16 +101,16 @@ function SpellRow({
         {/* Spell info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {spell.name}
-            </span>
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">{spell.name}</span>
 
             {/* Badges */}
-            <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
-              spell.type === "mana"
-                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-            }`}>
+            <span
+              className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
+                spell.type === "mana"
+                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+              }`}
+            >
               {spell.type}
             </span>
 
@@ -178,7 +178,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
 
   // For aspected mages, check if they have sorcery
   const aspectedGroup = state.selections["aspected-mage-group"] as string | undefined;
-  const isBlockedAspected = magicalPath === "aspected-mage" && aspectedGroup && aspectedGroup !== "sorcery";
+  const isBlockedAspected =
+    magicalPath === "aspected-mage" && aspectedGroup && aspectedGroup !== "sorcery";
 
   // Get magic priority and free spell count
   const { freeSpells } = useMemo(() => {
@@ -255,8 +256,7 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
       const search = searchQuery.toLowerCase();
       spells = spells.filter(
         (s) =>
-          s.name.toLowerCase().includes(search) ||
-          s.description?.toLowerCase().includes(search)
+          s.name.toLowerCase().includes(search) || s.description?.toLowerCase().includes(search)
       );
     }
 
@@ -310,14 +310,7 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
         },
       });
     },
-    [
-      selectedSpells,
-      freeSpells,
-      karmaRemaining,
-      state.selections,
-      state.budgets,
-      updateState,
-    ]
+    [selectedSpells, freeSpells, karmaRemaining, state.selections, state.budgets, updateState]
   );
 
   // Remove spell
@@ -403,12 +396,10 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     return (
       <CreationCard title="Spells" description="Not available" status="pending">
         <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            No spells available — Adept
-          </p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">No spells available — Adept</p>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Adepts channel magic through their bodies as Adept Powers, not spells.
-            See the Adept Powers section to allocate your Power Points.
+            Adepts channel magic through their bodies as Adept Powers, not spells. See the Adept
+            Powers section to allocate your Power Points.
           </p>
         </div>
       </CreationCard>
@@ -455,7 +446,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
               </div>
             </div>
             <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at {SPELL_KARMA_COST} karma each
+              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at{" "}
+              {SPELL_KARMA_COST} karma each
             </div>
           </div>
         )}
@@ -546,8 +538,11 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
               {selectedSpells.length} spell{selectedSpells.length !== 1 ? "s" : ""} selected
             </span>
             <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {freeRemaining > 0 ? `${freeRemaining} free remaining` :
-               isOverFree ? `${karmaSpentOnSpells} karma spent` : "All free spells used"}
+              {freeRemaining > 0
+                ? `${freeRemaining} free remaining`
+                : isOverFree
+                  ? `${karmaSpentOnSpells} karma spent`
+                  : "All free spells used"}
             </span>
           </div>
         )}
@@ -622,7 +617,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
                   {filteredSpells.map((spell) => {
                     const isSelected = selectedSpells.includes(spell.id);
                     const willBeFree = selectedSpells.length < freeSpells;
-                    const canSelect = isSelected || willBeFree || karmaRemaining >= SPELL_KARMA_COST;
+                    const canSelect =
+                      isSelected || willBeFree || karmaRemaining >= SPELL_KARMA_COST;
                     const spellIndex = selectedSpells.indexOf(spell.id);
                     const isFree = isSelected && spellIndex < freeSpells;
 

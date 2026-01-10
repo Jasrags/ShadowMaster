@@ -638,7 +638,6 @@ export interface BiowareGradeData {
   availabilityModifier: number;
 }
 
-
 /**
  * Bioware catalog item data structure (from ruleset)
  */
@@ -833,12 +832,12 @@ export interface TraditionData {
   id: string;
   name: string;
   drainAttributes: [string, string];
-   
+
   spiritTypes: TraditionSpiritTypes;
   description: string;
   source?: string;
   isPossessionTradition?: boolean;
-   
+
   drainVariant?: DrainVariant;
 }
 
@@ -957,7 +956,7 @@ export interface DroneSizeData {
 /**
  * Handling rating - can be single value or on-road/off-road pair
  */
- 
+
 export type HandlingRatingData = number | { onRoad: number; offRoad: number };
 
 /**
@@ -987,7 +986,7 @@ export interface VehicleCatalogItemData {
 /**
  * Drone weapon mount configuration
  */
- 
+
 export interface DroneWeaponMountsData {
   standard?: number;
   heavy?: number;
@@ -1126,7 +1125,7 @@ export interface FocusCatalogItemData {
 /**
  * Spirit type data structure
  */
- 
+
 export interface SpiritTypeData {
   type: SpiritType;
   name: string;

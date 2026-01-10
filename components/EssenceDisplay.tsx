@@ -96,9 +96,7 @@ export function EssenceDisplay({
 
   // Calculate effective magic/resonance
   const effectiveMagic = isAwakened ? Math.max(0, magicRating - magicLoss) : undefined;
-  const effectiveResonance = isEmerged
-    ? Math.max(0, resonanceRating - resonanceLoss)
-    : undefined;
+  const effectiveResonance = isEmerged ? Math.max(0, resonanceRating - resonanceLoss) : undefined;
 
   if (compact) {
     return (
@@ -209,17 +207,13 @@ export function EssenceDisplay({
                 <span className="essence-display__label">Magic:</span>
                 <span className="essence-display__value">
                   {effectiveMagic}
-                  {magicLoss > 0 && (
-                    <span className="essence-display__loss"> (-{magicLoss})</span>
-                  )}
+                  {magicLoss > 0 && <span className="essence-display__loss"> (-{magicLoss})</span>}
                 </span>
               </div>
               {essenceHole !== undefined && essenceHole > 0 && (
                 <div className="essence-display__row essence-display__row--warning">
                   <span className="essence-display__label">Essence Hole:</span>
-                  <span className="essence-display__value">
-                    {formatEssence(essenceHole)}
-                  </span>
+                  <span className="essence-display__value">{formatEssence(essenceHole)}</span>
                 </div>
               )}
             </>
@@ -304,7 +298,11 @@ export function EssenceCostBadge({
   className?: string;
 }) {
   const colorClass =
-    cost >= 1 ? "essence-badge--high" : cost >= 0.5 ? "essence-badge--medium" : "essence-badge--low";
+    cost >= 1
+      ? "essence-badge--high"
+      : cost >= 0.5
+        ? "essence-badge--medium"
+        : "essence-badge--low";
 
   return (
     <span className={`essence-badge ${colorClass} ${className}`}>

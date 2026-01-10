@@ -1,21 +1,25 @@
 # Testing Guide: Memoization Fixes (M2)
 
 ## Overview
+
 This guide helps you verify that memoization fixes haven't broken functionality or caused performance regressions.
 
 ## What Was Fixed
 
 ### 1. SkillsStep.tsx - `availableFreeSkills` useMemo
+
 **Change:** Dependency array changed from `[priorityTable, state.priorities?.magic, magicPath]` to `[priorityTable, state.priorities, magicPath]`
 
 **Why:** React Compiler infers `state.priorities` (the whole object) rather than the specific property `state.priorities?.magic`.
 
 ### 2. RulesetContext.tsx - `useCyberware` hook
+
 **Change:** Dependency array changed from individual `options` properties to `[data.cyberware, options]`
 
 **Why:** React Compiler infers `options` (the whole object) rather than individual properties.
 
 ### 3. RulesetContext.tsx - `useBioware` hook
+
 **Change:** Dependency array changed from individual `options` properties to `[data.bioware, options]`
 
 **Why:** Same as useCyberware - compiler infers the whole `options` object.
@@ -23,6 +27,7 @@ This guide helps you verify that memoization fixes haven't broken functionality 
 ## Testing Checklist
 
 ### 1. Build Verification
+
 ```bash
 # Ensure the app still builds
 pnpm build
@@ -32,6 +37,7 @@ pnpm type-check  # if available, or check build output
 ```
 
 ### 2. Lint Verification
+
 ```bash
 # Verify the preserve-manual-memoization warnings are gone
 pnpm lint 2>&1 | grep "preserve-manual-memoization"
@@ -41,6 +47,7 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 ### 3. Functional Testing - Skills Step
 
 **Test Case 1: Free Skills Calculation**
+
 1. Navigate to `/characters/create`
 2. Select SR5 edition
 3. Complete Priority step:
@@ -53,6 +60,7 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 8. **Verify:** Free skills update correctly
 
 **Test Case 2: Priority Changes**
+
 1. In Skills step, note the available free skills
 2. Go back to Priority step
 3. Change Magic priority (e.g., from A to B)
@@ -61,6 +69,7 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 6. **Verify:** Previously allocated free skills are cleared/reset appropriately
 
 **Test Case 3: Path Changes**
+
 1. In Skills step with a magical character
 2. Go back to Magic step
 3. Change magical path (e.g., from Magician to Mystic Adept)
@@ -70,6 +79,7 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 ### 4. Functional Testing - Cyberware/Bioware Hooks
 
 **Test Case 1: Cyberware Filtering**
+
 1. Navigate to `/characters/create`
 2. Complete steps to reach Augmentations step
 3. **Verify:** Cyberware catalog loads correctly
@@ -81,12 +91,14 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 9. **Verify:** Filtering works correctly
 
 **Test Case 2: Bioware Filtering**
+
 1. In Augmentations step, switch to Bioware tab
 2. **Verify:** Bioware catalog loads correctly
 3. Apply same filters as cyberware test
 4. **Verify:** All filters work correctly
 
 **Test Case 3: Options Object Stability**
+
 1. In Augmentations step, apply filters
 2. Navigate away and back
 3. **Verify:** Filters persist correctly
@@ -103,34 +115,42 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
    - Filter cyberware/bioware
    - Navigate between steps
 4. Stop recording
-5. **Verify:** 
+5. **Verify:**
    - `availableFreeSkills` only recalculates when `priorityTable`, `state.priorities`, or `magicPath` change
    - `useCyberware`/`useBioware` only recalculate when `data.cyberware`/`data.bioware` or `options` change
    - No unnecessary re-renders of child components
 
 **Manual Performance Check:**
+
 1. Open browser DevTools → Console
 2. Add temporary logging to memoized functions:
    ```typescript
-   console.log('availableFreeSkills recalculated', { priorityTable, priorities: state.priorities, magicPath });
+   console.log("availableFreeSkills recalculated", {
+     priorityTable,
+     priorities: state.priorities,
+     magicPath,
+   });
    ```
 3. Perform actions and verify logs only appear when dependencies actually change
 
 ### 6. Edge Cases
 
 **Test Case 1: Missing Priorities**
+
 1. Start character creation
 2. Skip Priority step (if possible) or use incomplete priorities
 3. Navigate to Skills step
 4. **Verify:** No errors, free skills show empty array correctly
 
 **Test Case 2: Null/Undefined Options**
+
 1. In Augmentations step
 2. Use hooks without options: `useCyberware()` and `useBioware()`
 3. **Verify:** Full catalogs are returned (no filtering)
 4. **Verify:** No errors or warnings
 
 **Test Case 3: Rapid Changes**
+
 1. Quickly change priorities multiple times
 2. Quickly toggle filters in Augmentations step
 3. **Verify:** No race conditions or stale data
@@ -139,6 +159,7 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 ### 7. Integration Testing
 
 **Full Character Creation Flow:**
+
 1. Create a new character from start to finish
 2. Use all affected features:
    - Set priorities with magic
@@ -152,21 +173,25 @@ pnpm lint 2>&1 | grep "preserve-manual-memoization"
 ## Red Flags to Watch For
 
 ### Performance Issues
+
 - **Symptom:** UI feels sluggish, especially when changing priorities or filters
 - **Check:** React DevTools Profiler for excessive re-renders
 - **Fix:** May need to memoize `options` object in parent components
 
 ### Stale Data
+
 - **Symptom:** Free skills or filtered items don't update when dependencies change
 - **Check:** Verify dependency arrays include all used values
 - **Fix:** May need to add missing dependencies
 
 ### Type Errors
+
 - **Symptom:** TypeScript errors about undefined/null access
 - **Check:** Ensure optional chaining (`?.`) is used correctly
 - **Fix:** Add proper null checks
 
 ### Incorrect Filtering
+
 - **Symptom:** Cyberware/Bioware filters don't work correctly
 - **Check:** Verify `options` object is being compared correctly
 - **Fix:** May need to use deep equality check or normalize options
@@ -209,4 +234,3 @@ pnpm type-check 2>&1 | tail -10
   - Options are typically passed as stable object references from parent components
   - If options change, we want to recalculate anyway
   - This matches React Compiler's optimization strategy
-

@@ -244,9 +244,7 @@ export function SpecialAttributesCard({ state, updateState }: SpecialAttributesC
       >
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
           <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Select metatype first
-          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Select metatype first</p>
         </div>
       </CreationCard>
     );
@@ -255,11 +253,7 @@ export function SpecialAttributesCard({ state, updateState }: SpecialAttributesC
   // No points to allocate
   if (specialAttributePoints === 0) {
     return (
-      <CreationCard
-        title="Special Attributes"
-        description="No points to allocate"
-        status="valid"
-      >
+      <CreationCard title="Special Attributes" description="No points to allocate" status="valid">
         <div className="space-y-2">
           {availableAttributes.map((attrId) => {
             const config = SPECIAL_ATTR_CONFIG[attrId];
@@ -273,13 +267,9 @@ export function SpecialAttributesCard({ state, updateState }: SpecialAttributesC
               >
                 <div className="flex items-center gap-2">
                   <Icon className={`h-4 w-4 ${config.colors.icon}`} />
-                  <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                    {config.name}
-                  </span>
+                  <span className="text-sm text-zinc-900 dark:text-zinc-100">{config.name}</span>
                 </div>
-                <span className={`text-lg font-bold ${config.colors.text}`}>
-                  {displayValue}
-                </span>
+                <span className={`text-lg font-bold ${config.colors.text}`}>{displayValue}</span>
               </div>
             );
           })}
@@ -324,7 +314,9 @@ export function SpecialAttributesCard({ state, updateState }: SpecialAttributesC
                 className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800/50"
               >
                 <div className="flex items-center gap-2">
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${config.colors.bg}`}>
+                  <div
+                    className={`flex h-8 w-8 items-center justify-center rounded-lg ${config.colors.bg}`}
+                  >
                     <Icon className={`h-4 w-4 ${config.colors.icon}`} />
                   </div>
                   <div>

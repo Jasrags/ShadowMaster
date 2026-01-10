@@ -152,11 +152,7 @@ function createError(
 /**
  * Create a validation warning
  */
-function createWarning(
-  code: string,
-  message: string,
-  reason?: string
-): ValidationWarning {
+function createWarning(code: string, message: string, reason?: string): ValidationWarning {
   return { code, message, reason };
 }
 
@@ -200,12 +196,7 @@ export function validateCharacterState(character: Character): ValidationResult {
 
   // Check character status
   if (character.status === "deceased") {
-    errors.push(
-      createError(
-        ValidationErrorCodes.DEAD,
-        "Character is deceased and cannot act"
-      )
-    );
+    errors.push(createError(ValidationErrorCodes.DEAD, "Character is deceased and cannot act"));
     return failValidation(errors);
   }
 
@@ -223,10 +214,7 @@ export function validateCharacterState(character: Character): ValidationResult {
 
     if (overflow >= overflowMax) {
       errors.push(
-        createError(
-          ValidationErrorCodes.DEAD,
-          "Character has exceeded overflow and is dead"
-        )
+        createError(ValidationErrorCodes.DEAD, "Character has exceeded overflow and is dead")
       );
       return failValidation(errors);
     }
@@ -385,31 +373,47 @@ function validateSinglePrerequisite(
       // Check if character has the required equipment type
       // Ranged weapon subcategories from catalog
       const rangedSubcategories = [
-        "light-pistol", "heavy-pistol", "hold-out", "machine-pistol",
-        "smg", "assault-rifle", "rifle", "sniper-rifle", "shotgun",
-        "machine-gun", "cannon", "launcher"
+        "light-pistol",
+        "heavy-pistol",
+        "hold-out",
+        "machine-pistol",
+        "smg",
+        "assault-rifle",
+        "rifle",
+        "sniper-rifle",
+        "shotgun",
+        "machine-gun",
+        "cannon",
+        "launcher",
       ];
       switch (requirement) {
         case "ranged_weapon":
           // Check for firearms or ranged weapons by subcategory
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return rangedSubcategories.includes(subcat);
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return rangedSubcategories.includes(subcat);
+            }) ?? false;
           break;
         case "melee_weapon":
           // Check for melee weapons by subcategory
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return subcat === "melee";
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return subcat === "melee";
+            }) ?? false;
           break;
         case "throwing_weapon":
           // Check for throwing weapons by subcategory
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return subcat === "throwingweapons" || subcat === "throwing-weapons" || subcat === "grenades";
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return (
+                subcat === "throwingweapons" ||
+                subcat === "throwing-weapons" ||
+                subcat === "grenades"
+              );
+            }) ?? false;
           break;
         case "weapon":
           // Check for any weapon
@@ -421,7 +425,8 @@ function validateSinglePrerequisite(
             (character.gear?.some((g) => {
               const cat = (g.category || "").toLowerCase();
               return cat === "cyberdeck" || cat === "commlink" || cat === "deck";
-            }) ?? false) ||
+            }) ??
+              false) ||
             character.magicalPath === "technomancer";
           break;
         case "firing_mode_sa":
@@ -429,10 +434,11 @@ function validateSinglePrerequisite(
         case "firing_mode_fa":
           // Check if any weapon supports the firing mode
           const mode = requirement.replace("firing_mode_", "").toUpperCase();
-          hasMet = character.weapons?.some((w) => {
-            const modes = w.mode || [];
-            return Array.isArray(modes) ? modes.includes(mode) : false;
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const modes = w.mode || [];
+              return Array.isArray(modes) ? modes.includes(mode) : false;
+            }) ?? false;
           break;
         case "ammunition_clip":
         case "holstered_weapon":
@@ -442,8 +448,10 @@ function validateSinglePrerequisite(
         default:
           // Fallback: check gear by name or category
           hasMet =
-            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ?? false) ||
-            (character.weapons?.some((w) => w.name === requirement || w.category === requirement) ?? false);
+            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ??
+              false) ||
+            (character.weapons?.some((w) => w.name === requirement || w.category === requirement) ??
+              false);
       }
       break;
 
@@ -452,32 +460,50 @@ function validateSinglePrerequisite(
       // For now, assume equipment is ready if character has it
       // Ranged weapon subcategories from catalog
       const readyRangedSubcategories = [
-        "light-pistol", "heavy-pistol", "hold-out", "machine-pistol",
-        "smg", "assault-rifle", "rifle", "sniper-rifle", "shotgun",
-        "machine-gun", "cannon", "launcher"
+        "light-pistol",
+        "heavy-pistol",
+        "hold-out",
+        "machine-pistol",
+        "smg",
+        "assault-rifle",
+        "rifle",
+        "sniper-rifle",
+        "shotgun",
+        "machine-gun",
+        "cannon",
+        "launcher",
       ];
       switch (requirement) {
         case "ranged_weapon":
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return readyRangedSubcategories.includes(subcat);
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return readyRangedSubcategories.includes(subcat);
+            }) ?? false;
           break;
         case "melee_weapon":
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return subcat === "melee";
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return subcat === "melee";
+            }) ?? false;
           break;
         case "throwing_weapon":
-          hasMet = character.weapons?.some((w) => {
-            const subcat = (w.subcategory || "").toLowerCase();
-            return subcat === "throwingweapons" || subcat === "throwing-weapons" || subcat === "grenades";
-          }) ?? false;
+          hasMet =
+            character.weapons?.some((w) => {
+              const subcat = (w.subcategory || "").toLowerCase();
+              return (
+                subcat === "throwingweapons" ||
+                subcat === "throwing-weapons" ||
+                subcat === "grenades"
+              );
+            }) ?? false;
           break;
         default:
-          hasMet = (character.weapons?.length ?? 0) > 0 ||
-            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ?? false);
+          hasMet =
+            (character.weapons?.length ?? 0) > 0 ||
+            (character.gear?.some((g) => g.name === requirement || g.category === requirement) ??
+              false);
       }
       break;
 
@@ -517,23 +543,19 @@ function validateSinglePrerequisite(
         hasMet = magicAttr > 0;
       } else if (requirement === "spellcaster") {
         hasMet =
-          magicAttr > 0 &&
-          ["full-mage", "aspected-mage", "mystic-adept"].includes(magicalPath);
+          magicAttr > 0 && ["full-mage", "aspected-mage", "mystic-adept"].includes(magicalPath);
       } else {
         // Default: check magic > 0 and valid magical path
         hasMet =
           magicAttr > 0 &&
-          ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(
-            magicalPath
-          );
+          ["full-mage", "aspected-mage", "mystic-adept", "adept"].includes(magicalPath);
       }
       break;
 
     case "technomancer":
       // Check if character is a technomancer
       hasMet =
-        (character.attributes?.resonance ?? 0) > 0 &&
-        character.magicalPath === "technomancer";
+        (character.attributes?.resonance ?? 0) > 0 && character.magicalPath === "technomancer";
       break;
 
     case "vehicle":
@@ -634,22 +656,12 @@ export function validateCombatContext(
 
   // Check session status
   if (session.status === "completed" || session.status === "abandoned") {
-    errors.push(
-      createError(
-        ValidationErrorCodes.NO_COMBAT_SESSION,
-        "Combat session has ended"
-      )
-    );
+    errors.push(createError(ValidationErrorCodes.NO_COMBAT_SESSION, "Combat session has ended"));
     return failValidation(errors);
   }
 
   if (session.status === "paused") {
-    errors.push(
-      createError(
-        ValidationErrorCodes.COMBAT_PAUSED,
-        "Combat is currently paused"
-      )
-    );
+    errors.push(createError(ValidationErrorCodes.COMBAT_PAUSED, "Combat is currently paused"));
     return failValidation(errors);
   }
 
@@ -667,12 +679,7 @@ export function validateCombatContext(
 
   // Check participant status
   if (participant.status === "out") {
-    errors.push(
-      createError(
-        ValidationErrorCodes.INCAPACITATED,
-        "Participant is out of combat"
-      )
-    );
+    errors.push(createError(ValidationErrorCodes.INCAPACITATED, "Participant is out of combat"));
     return failValidation(errors);
   }
 
@@ -812,10 +819,7 @@ export function validateActionEligibility(
     // 4. Validate action economy
     const participant = combatSession.participants.find((p) => p.id === participantId);
     if (participant) {
-      const economyResult = validateActionEconomy(
-        participant.actionsRemaining,
-        action.type
-      );
+      const economyResult = validateActionEconomy(participant.actionsRemaining, action.type);
       if (!economyResult.valid) {
         return economyResult;
       }
@@ -825,10 +829,7 @@ export function validateActionEligibility(
         const currentTurnId = combatSession.initiativeOrder[combatSession.currentTurn];
         if (currentTurnId !== participantId) {
           errors.push(
-            createError(
-              ValidationErrorCodes.NOT_YOUR_TURN,
-              "It is not your turn to act"
-            )
+            createError(ValidationErrorCodes.NOT_YOUR_TURN, "It is not your turn to act")
           );
           return failValidation(errors);
         }
@@ -837,12 +838,7 @@ export function validateActionEligibility(
   }
 
   // 5. Calculate state modifiers and build pool
-  const stateModifiers = calculateStateModifiers(
-    character,
-    action,
-    combatSession,
-    participantId
-  );
+  const stateModifiers = calculateStateModifiers(character, action, combatSession, participantId);
 
   // Build the action pool
   let modifiedPool: ActionPool | undefined;
@@ -922,9 +918,7 @@ export function validateActionCost(
     switch (resourceCost.type) {
       case "edge":
         const edgeCurrent = character.attributes?.edge ?? 0;
-        const edgeCost = typeof resourceCost.amount === "number"
-          ? resourceCost.amount
-          : 1;
+        const edgeCost = typeof resourceCost.amount === "number" ? resourceCost.amount : 1;
         if (edgeCurrent < edgeCost) {
           errors.push(
             createError(

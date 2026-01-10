@@ -9,18 +9,10 @@
  */
 
 import { useMemo, useState } from "react";
-import {
-  useGear,
-  type GearItemData,
-} from "@/lib/rules/RulesetContext";
+import { useGear, type GearItemData } from "@/lib/rules/RulesetContext";
 import type { Weapon } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
-import {
-  ShieldAlert,
-  AlertTriangle,
-  Package,
-  X,
-} from "lucide-react";
+import { ShieldAlert, AlertTriangle, Package, X } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -126,7 +118,7 @@ function isAmmoCompatible(ammo: GearItemData, subcategory: string): boolean {
   if (compatibleTypes.length === 0) return false;
 
   // Check if ammo id matches any compatible type
-  return compatibleTypes.some(type => ammo.id.includes(type));
+  return compatibleTypes.some((type) => ammo.id.includes(type));
 }
 
 // =============================================================================
@@ -184,12 +176,10 @@ export function AmmunitionModal({
 
   // Calculate derived values
   const roundsPerBox = selectedAmmo ? getRoundsPerBox(selectedAmmo) : 10;
-  const totalCost = selectedAmmo && selectedRounds
-    ? calculateCost(selectedRounds, selectedAmmo)
-    : 0;
-  const totalBoxes = selectedAmmo && selectedRounds
-    ? calculateBoxes(selectedRounds, roundsPerBox)
-    : 0;
+  const totalCost =
+    selectedAmmo && selectedRounds ? calculateCost(selectedRounds, selectedAmmo) : 0;
+  const totalBoxes =
+    selectedAmmo && selectedRounds ? calculateBoxes(selectedRounds, roundsPerBox) : 0;
   const actualRounds = totalBoxes * roundsPerBox;
   const canAfford = totalCost <= remaining;
 
@@ -241,9 +231,7 @@ export function AmmunitionModal({
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                 Purchase Ammunition
               </h2>
-              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
-                For: {weapon.name}
-              </p>
+              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">For: {weapon.name}</p>
             </div>
             <button
               onClick={close}
@@ -253,208 +241,214 @@ export function AmmunitionModal({
             </button>
           </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
-          {!usesAmmo ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <Package className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                This weapon doesn&apos;t use ammunition
-              </p>
-            </div>
-          ) : ammunition.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-12 text-center">
-              <Package className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
-                No compatible ammunition available
-              </p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {/* Ammunition List */}
-              <div className="space-y-2">
-                {ammunition.map((ammo) => {
-                  const isSelected = selectedAmmo?.id === ammo.id;
-                  const tooExpensive = ammo.cost > remaining;
-                  const ammoRoundsPerBox = getRoundsPerBox(ammo);
+          {/* Content */}
+          <div className="flex-1 overflow-y-auto p-6">
+            {!usesAmmo ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <Package className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+                  This weapon doesn&apos;t use ammunition
+                </p>
+              </div>
+            ) : ammunition.length === 0 ? (
+              <div className="flex flex-col items-center justify-center py-12 text-center">
+                <Package className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+                <p className="mt-3 text-sm text-zinc-500 dark:text-zinc-400">
+                  No compatible ammunition available
+                </p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {/* Ammunition List */}
+                <div className="space-y-2">
+                  {ammunition.map((ammo) => {
+                    const isSelected = selectedAmmo?.id === ammo.id;
+                    const tooExpensive = ammo.cost > remaining;
+                    const ammoRoundsPerBox = getRoundsPerBox(ammo);
 
-                  return (
-                    <div
-                      key={ammo.id}
-                      className={`rounded-lg border transition-all ${
-                        isSelected
-                          ? "border-amber-500 bg-amber-50 ring-1 ring-amber-500 dark:bg-amber-900/20"
-                          : tooExpensive
-                            ? "border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-                            : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700"
-                      }`}
-                    >
-                      {/* Ammo Header - Clickable */}
-                      <button
-                        onClick={() => {
-                          if (isSelected) {
-                            // Clicking again deselects
-                            setSelectedAmmo(null);
-                            setSelectedRounds(null);
-                            setCustomRounds("");
-                          } else {
-                            setSelectedAmmo(ammo);
-                            setSelectedRounds(null);
-                            setCustomRounds("");
-                          }
-                        }}
-                        disabled={tooExpensive}
-                        className={`w-full p-3 text-left ${tooExpensive ? "cursor-not-allowed" : ""}`}
+                    return (
+                      <div
+                        key={ammo.id}
+                        className={`rounded-lg border transition-all ${
+                          isSelected
+                            ? "border-amber-500 bg-amber-50 ring-1 ring-amber-500 dark:bg-amber-900/20"
+                            : tooExpensive
+                              ? "border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+                              : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700"
+                        }`}
                       >
-                        <div className="flex items-start justify-between">
-                          <div className="flex-1">
-                            <div className="flex items-center gap-2">
-                              <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                                {ammo.name}
-                              </span>
-                              {ammo.legality === "forbidden" && (
-                                <span className="flex items-center gap-0.5 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-medium text-red-700 dark:bg-red-900/40 dark:text-red-300">
-                                  <ShieldAlert className="h-3 w-3" />
-                                  Forbidden
+                        {/* Ammo Header - Clickable */}
+                        <button
+                          onClick={() => {
+                            if (isSelected) {
+                              // Clicking again deselects
+                              setSelectedAmmo(null);
+                              setSelectedRounds(null);
+                              setCustomRounds("");
+                            } else {
+                              setSelectedAmmo(ammo);
+                              setSelectedRounds(null);
+                              setCustomRounds("");
+                            }
+                          }}
+                          disabled={tooExpensive}
+                          className={`w-full p-3 text-left ${tooExpensive ? "cursor-not-allowed" : ""}`}
+                        >
+                          <div className="flex items-start justify-between">
+                            <div className="flex-1">
+                              <div className="flex items-center gap-2">
+                                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                                  {ammo.name}
                                 </span>
-                              )}
-                              {ammo.legality === "restricted" && (
-                                <span className="flex items-center gap-0.5 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
-                                  <AlertTriangle className="h-3 w-3" />
-                                  Restricted
-                                </span>
-                              )}
-                            </div>
-
-                            {/* Stats */}
-                            <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                              {(() => {
-                                const dmg = "damageModifier" in ammo ? ammo.damageModifier : null;
-                                return dmg ? <span>DV: {String(dmg)}</span> : null;
-                              })()}
-                              {(() => {
-                                const ap = "apModifier" in ammo ? ammo.apModifier : null;
-                                if (ap === null || ap === undefined) return null;
-                                return (
-                                  <span>
-                                    AP: {Number(ap) >= 0 ? "+" : ""}{String(ap)}
+                                {ammo.legality === "forbidden" && (
+                                  <span className="flex items-center gap-0.5 rounded bg-red-100 px-1.5 py-0.5 text-[10px] font-medium text-red-700 dark:bg-red-900/40 dark:text-red-300">
+                                    <ShieldAlert className="h-3 w-3" />
+                                    Forbidden
                                   </span>
-                                );
-                              })()}
-                              <span>Avail: {ammo.availability}</span>
+                                )}
+                                {ammo.legality === "restricted" && (
+                                  <span className="flex items-center gap-0.5 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/40 dark:text-amber-300">
+                                    <AlertTriangle className="h-3 w-3" />
+                                    Restricted
+                                  </span>
+                                )}
+                              </div>
+
+                              {/* Stats */}
+                              <div className="mt-1 flex flex-wrap gap-x-3 gap-y-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+                                {(() => {
+                                  const dmg = "damageModifier" in ammo ? ammo.damageModifier : null;
+                                  return dmg ? <span>DV: {String(dmg)}</span> : null;
+                                })()}
+                                {(() => {
+                                  const ap = "apModifier" in ammo ? ammo.apModifier : null;
+                                  if (ap === null || ap === undefined) return null;
+                                  return (
+                                    <span>
+                                      AP: {Number(ap) >= 0 ? "+" : ""}
+                                      {String(ap)}
+                                    </span>
+                                  );
+                                })()}
+                                <span>Avail: {ammo.availability}</span>
+                              </div>
+
+                              {/* Description */}
+                              {ammo.description && (
+                                <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+                                  {ammo.description}
+                                </p>
+                              )}
                             </div>
 
-                            {/* Description */}
-                            {ammo.description && (
-                              <p className="mt-1.5 text-xs text-zinc-500 dark:text-zinc-400">
-                                {ammo.description}
+                            {/* Price per box */}
+                            <div className="ml-4 text-right">
+                              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                                {formatCurrency(ammo.cost)}¥
+                              </span>
+                              <p className="text-[10px] text-zinc-400">
+                                per {ammoRoundsPerBox} rounds
+                              </p>
+                            </div>
+                          </div>
+                        </button>
+
+                        {/* Expanded Quantity Selector */}
+                        {isSelected && (
+                          <div className="border-t border-amber-200 bg-amber-50/50 p-3 dark:border-amber-800 dark:bg-amber-900/10">
+                            {/* Preset Buttons */}
+                            <div className="grid grid-cols-4 gap-2 mb-3">
+                              {PRESET_AMOUNTS.map((rounds) => {
+                                const cost = calculateCost(rounds, ammo);
+                                const boxes = calculateBoxes(rounds, ammoRoundsPerBox);
+                                const isAffordable = cost <= remaining;
+                                const isActive = selectedRounds === rounds && customRounds === "";
+
+                                return (
+                                  <button
+                                    key={rounds}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handlePresetSelect(rounds);
+                                    }}
+                                    disabled={!isAffordable}
+                                    className={`flex flex-col items-center rounded-lg border p-2 transition-all ${
+                                      isActive
+                                        ? "border-amber-500 bg-amber-200 dark:bg-amber-800/50"
+                                        : isAffordable
+                                          ? "border-amber-300 bg-white hover:border-amber-400 hover:bg-amber-100 dark:border-amber-700 dark:bg-zinc-800 dark:hover:bg-amber-900/30"
+                                          : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+                                    }`}
+                                  >
+                                    <span
+                                      className={`text-sm font-semibold ${
+                                        isActive
+                                          ? "text-amber-800 dark:text-amber-200"
+                                          : "text-zinc-900 dark:text-zinc-100"
+                                      }`}
+                                    >
+                                      {rounds}
+                                    </span>
+                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                                      rounds
+                                    </span>
+                                    <span
+                                      className={`mt-1 text-xs font-medium ${
+                                        isActive
+                                          ? "text-amber-700 dark:text-amber-300"
+                                          : "text-zinc-600 dark:text-zinc-400"
+                                      }`}
+                                    >
+                                      {formatCurrency(cost)}¥
+                                    </span>
+                                    <span className="text-[10px] text-zinc-400">
+                                      ({boxes} box{boxes !== 1 ? "es" : ""})
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {/* Custom Input */}
+                            <div className="flex items-center gap-2">
+                              <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                                Or custom:
+                              </span>
+                              <input
+                                type="number"
+                                min="1"
+                                value={customRounds}
+                                onClick={(e) => e.stopPropagation()}
+                                onChange={(e) => handleCustomChange(e.target.value)}
+                                placeholder="Enter rounds"
+                                className="w-24 rounded-lg border border-amber-300 bg-white px-2 py-1 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-amber-700 dark:bg-zinc-800 dark:text-zinc-100"
+                              />
+                              <span className="text-xs text-zinc-600 dark:text-zinc-400">
+                                rounds
+                              </span>
+                              {customRounds && selectedRounds && (
+                                <span className="ml-auto text-xs text-zinc-500">
+                                  = {formatCurrency(totalCost)}¥
+                                </span>
+                              )}
+                            </div>
+
+                            {/* Rounding notice */}
+                            {selectedRounds && actualRounds !== selectedRounds && (
+                              <p className="mt-2 text-[10px] text-amber-600 dark:text-amber-400">
+                                Rounded up from {selectedRounds} to {actualRounds} rounds (sold in
+                                boxes of {ammoRoundsPerBox})
                               </p>
                             )}
                           </div>
-
-                          {/* Price per box */}
-                          <div className="ml-4 text-right">
-                            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                              {formatCurrency(ammo.cost)}¥
-                            </span>
-                            <p className="text-[10px] text-zinc-400">
-                              per {ammoRoundsPerBox} rounds
-                            </p>
-                          </div>
-                        </div>
-                      </button>
-
-                      {/* Expanded Quantity Selector */}
-                      {isSelected && (
-                        <div className="border-t border-amber-200 bg-amber-50/50 p-3 dark:border-amber-800 dark:bg-amber-900/10">
-                          {/* Preset Buttons */}
-                          <div className="grid grid-cols-4 gap-2 mb-3">
-                            {PRESET_AMOUNTS.map((rounds) => {
-                              const cost = calculateCost(rounds, ammo);
-                              const boxes = calculateBoxes(rounds, ammoRoundsPerBox);
-                              const isAffordable = cost <= remaining;
-                              const isActive = selectedRounds === rounds && customRounds === "";
-
-                              return (
-                                <button
-                                  key={rounds}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handlePresetSelect(rounds);
-                                  }}
-                                  disabled={!isAffordable}
-                                  className={`flex flex-col items-center rounded-lg border p-2 transition-all ${
-                                    isActive
-                                      ? "border-amber-500 bg-amber-200 dark:bg-amber-800/50"
-                                      : isAffordable
-                                        ? "border-amber-300 bg-white hover:border-amber-400 hover:bg-amber-100 dark:border-amber-700 dark:bg-zinc-800 dark:hover:bg-amber-900/30"
-                                        : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
-                                  }`}
-                                >
-                                  <span className={`text-sm font-semibold ${
-                                    isActive
-                                      ? "text-amber-800 dark:text-amber-200"
-                                      : "text-zinc-900 dark:text-zinc-100"
-                                  }`}>
-                                    {rounds}
-                                  </span>
-                                  <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                                    rounds
-                                  </span>
-                                  <span className={`mt-1 text-xs font-medium ${
-                                    isActive
-                                      ? "text-amber-700 dark:text-amber-300"
-                                      : "text-zinc-600 dark:text-zinc-400"
-                                  }`}>
-                                    {formatCurrency(cost)}¥
-                                  </span>
-                                  <span className="text-[10px] text-zinc-400">
-                                    ({boxes} box{boxes !== 1 ? "es" : ""})
-                                  </span>
-                                </button>
-                              );
-                            })}
-                          </div>
-
-                          {/* Custom Input */}
-                          <div className="flex items-center gap-2">
-                            <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                              Or custom:
-                            </span>
-                            <input
-                              type="number"
-                              min="1"
-                              value={customRounds}
-                              onClick={(e) => e.stopPropagation()}
-                              onChange={(e) => handleCustomChange(e.target.value)}
-                              placeholder="Enter rounds"
-                              className="w-24 rounded-lg border border-amber-300 bg-white px-2 py-1 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-amber-700 dark:bg-zinc-800 dark:text-zinc-100"
-                            />
-                            <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                              rounds
-                            </span>
-                            {customRounds && selectedRounds && (
-                              <span className="ml-auto text-xs text-zinc-500">
-                                = {formatCurrency(totalCost)}¥
-                              </span>
-                            )}
-                          </div>
-
-                          {/* Rounding notice */}
-                          {selectedRounds && actualRounds !== selectedRounds && (
-                            <p className="mt-2 text-[10px] text-amber-600 dark:text-amber-400">
-                              Rounded up from {selectedRounds} to {actualRounds} rounds (sold in boxes of {ammoRoundsPerBox})
-                            </p>
-                          )}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
-            </div>
-          )}
-        </div>
+            )}
+          </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">

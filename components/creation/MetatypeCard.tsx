@@ -95,10 +95,7 @@ function MetatypeModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={handleClose}
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
 
       {/* Modal */}
       <div className="relative max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
@@ -132,8 +129,7 @@ function MetatypeModal({
           <div className="space-y-2">
             {metatypes.map((metatype) => {
               const isSelected = selectedId === metatype.id;
-              const description =
-                METATYPE_DESCRIPTIONS[metatype.id] || metatype.description || "";
+              const description = METATYPE_DESCRIPTIONS[metatype.id] || metatype.description || "";
 
               return (
                 <button
@@ -184,9 +180,7 @@ function MetatypeModal({
                     </div>
                     <div className="text-zinc-700 dark:text-zinc-300">
                       <span className="font-medium">Racial Traits:</span>{" "}
-                      {metatype.racialTraits.length > 0
-                        ? metatype.racialTraits.join(", ")
-                        : "None"}
+                      {metatype.racialTraits.length > 0 ? metatype.racialTraits.join(", ") : "None"}
                     </div>
                   </div>
                 </button>
@@ -287,16 +281,10 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
   // If no priority assigned, show locked state
   if (!metatypePriority) {
     return (
-      <CreationCard
-        title="Metatype"
-        description="Select your character's species"
-        status="pending"
-      >
+      <CreationCard title="Metatype" description="Select your character's species" status="pending">
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
           <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Set Metatype priority first
-          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Set Metatype priority first</p>
         </div>
       </CreationCard>
     );
@@ -312,7 +300,8 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
         <>
           <span className="text-zinc-400"> • </span>
           <span className="text-zinc-500 dark:text-zinc-400">
-            {selectedMetatypeData.racialTraits.length} trait{selectedMetatypeData.racialTraits.length !== 1 ? "s" : ""}
+            {selectedMetatypeData.racialTraits.length} trait
+            {selectedMetatypeData.racialTraits.length !== 1 ? "s" : ""}
           </span>
         </>
       )}
@@ -347,9 +336,7 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
                 <span className="font-semibold uppercase text-emerald-900 dark:text-emerald-100">
                   {selectedMetatypeData.name}
                 </span>
-                <span className="text-sm text-emerald-600 dark:text-emerald-400">
-                  Change
-                </span>
+                <span className="text-sm text-emerald-600 dark:text-emerald-400">Change</span>
               </button>
 
               {/* Special Attribute Points */}
@@ -386,9 +373,7 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
               onClick={() => setIsModalOpen(true)}
               className="flex w-full items-center justify-between rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-3 text-left transition-colors hover:border-zinc-400 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:hover:border-zinc-500 dark:hover:bg-zinc-700"
             >
-              <span className="text-zinc-500 dark:text-zinc-400">
-                Choose metatype...
-              </span>
+              <span className="text-zinc-500 dark:text-zinc-400">Choose metatype...</span>
               <span className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-300">
                 Select
                 <ChevronRight className="h-4 w-4" />
@@ -397,8 +382,7 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
           )}
 
           {/* Unavailable metatypes hint */}
-          {metatypes.filter((m) => !availableMetatypes.find((am) => am.id === m.id))
-            .length > 0 && (
+          {metatypes.filter((m) => !availableMetatypes.find((am) => am.id === m.id)).length > 0 && (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
               <span className="font-medium">Higher priority needed:</span>{" "}
               {metatypes

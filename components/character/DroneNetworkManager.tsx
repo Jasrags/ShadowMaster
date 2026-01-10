@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * DroneNetworkManager - Manage slaved drones in the RCC network
@@ -6,8 +6,8 @@
  * Lists owned drones, shows slave status, condition, and noise.
  */
 
-import type { CharacterDrone } from '@/lib/types/character';
-import type { SlavedDrone } from '@/lib/types/rigging';
+import type { CharacterDrone } from "@/lib/types/character";
+import type { SlavedDrone } from "@/lib/types/rigging";
 
 interface DroneNetworkManagerProps {
   ownedDrones: CharacterDrone[];
@@ -24,9 +24,9 @@ export function DroneNetworkManager({
   maxDrones,
   onSlaveDrone,
   onReleaseDrone,
-  className = ''
+  className = "",
 }: DroneNetworkManagerProps) {
-  const slavedIds = new Set(slavedDrones.map(d => d.droneId));
+  const slavedIds = new Set(slavedDrones.map((d) => d.droneId));
   const canSlaveMore = slavedDrones.length < maxDrones;
 
   if (ownedDrones.length === 0) {
@@ -41,23 +41,28 @@ export function DroneNetworkManager({
   return (
     <div className={`drone-manager ${className}`}>
       <h3 className="drone-manager__title">Drone Network</h3>
-      
+
       <div className="drone-manager__capacity">
-        <span>{slavedDrones.length} / {maxDrones} slaved</span>
+        <span>
+          {slavedDrones.length} / {maxDrones} slaved
+        </span>
       </div>
 
       <ul className="drone-manager__list">
-        {ownedDrones.map(drone => {
-          const isSlaved = slavedIds.has(drone.id ?? '');
-          const slavedData = slavedDrones.find(d => d.droneId === drone.id);
-          
+        {ownedDrones.map((drone) => {
+          const isSlaved = slavedIds.has(drone.id ?? "");
+          const slavedData = slavedDrones.find((d) => d.droneId === drone.id);
+
           return (
-            <li key={drone.id} className={`drone-manager__item ${isSlaved ? 'drone-manager__item--slaved' : ''}`}>
+            <li
+              key={drone.id}
+              className={`drone-manager__item ${isSlaved ? "drone-manager__item--slaved" : ""}`}
+            >
               <div className="drone-manager__drone-info">
                 <span className="drone-manager__drone-name">{drone.name}</span>
                 <span className="drone-manager__drone-size">{drone.size}</span>
               </div>
-              
+
               <div className="drone-manager__drone-stats">
                 <span>P: {drone.pilot}</span>
                 <span>B: {drone.body}</span>
@@ -67,9 +72,7 @@ export function DroneNetworkManager({
               {isSlaved && slavedData && (
                 <div className="drone-manager__slaved-info">
                   {slavedData.noisePenalty > 0 && (
-                    <span className="drone-manager__noise">
-                      Noise: -{slavedData.noisePenalty}
-                    </span>
+                    <span className="drone-manager__noise">Noise: -{slavedData.noisePenalty}</span>
                   )}
                   {slavedData.conditionDamageTaken > 0 && (
                     <span className="drone-manager__damage">
@@ -83,14 +86,14 @@ export function DroneNetworkManager({
                 {isSlaved ? (
                   <button
                     className="drone-manager__btn drone-manager__btn--release"
-                    onClick={() => onReleaseDrone?.(drone.id ?? '')}
+                    onClick={() => onReleaseDrone?.(drone.id ?? "")}
                   >
                     Release
                   </button>
                 ) : (
                   <button
                     className="drone-manager__btn drone-manager__btn--slave"
-                    onClick={() => onSlaveDrone?.(drone.id ?? '')}
+                    onClick={() => onSlaveDrone?.(drone.id ?? "")}
                     disabled={!canSlaveMore}
                   >
                     Slave

@@ -29,18 +29,12 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, contactId } = await params;
@@ -48,19 +42,13 @@ export async function GET(
     // Get character to verify ownership
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get contact
     const contact = await getCharacterContact(userId, characterId, contactId);
     if (!contact) {
-      return NextResponse.json(
-        { success: false, error: "Contact not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Contact not found" }, { status: 404 });
     }
 
     // Get transaction history
@@ -73,10 +61,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get contact:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to get contact" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to get contact" }, { status: 500 });
   }
 }
 
@@ -88,18 +73,12 @@ export async function PUT(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, contactId } = await params;
@@ -107,19 +86,13 @@ export async function PUT(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get existing contact
     const existingContact = await getCharacterContact(userId, characterId, contactId);
     if (!existingContact) {
-      return NextResponse.json(
-        { success: false, error: "Contact not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Contact not found" }, { status: 404 });
     }
 
     // Parse body
@@ -168,18 +141,12 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, contactId } = await params;
@@ -187,19 +154,13 @@ export async function DELETE(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get contact to verify it exists
     const contact = await getCharacterContact(userId, characterId, contactId);
     if (!contact) {
-      return NextResponse.json(
-        { success: false, error: "Contact not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Contact not found" }, { status: 404 });
     }
 
     // Delete contact

@@ -111,7 +111,9 @@ export default function ContactDetailPage({
   const [showCallFavorModal, setShowCallFavorModal] = useState(false);
 
   const theme = THEMES[DEFAULT_THEME];
-  const statusStyle = contact ? STATUS_STYLES[contact.status] || STATUS_STYLES.inactive : STATUS_STYLES.inactive;
+  const statusStyle = contact
+    ? STATUS_STYLES[contact.status] || STATUS_STYLES.inactive
+    : STATUS_STYLES.inactive;
 
   // Fetch data
   useEffect(() => {
@@ -217,11 +219,14 @@ export default function ContactDetailPage({
     rushJob?: boolean;
     notes?: string;
   }) => {
-    const response = await fetch(`/api/characters/${characterId}/contacts/${contactId}/call-favor`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      `/api/characters/${characterId}/contacts/${contactId}/call-favor`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      }
+    );
 
     const result = await response.json();
     if (!result.success) {
@@ -303,10 +308,14 @@ export default function ContactDetailPage({
     favorBalance > 0
       ? `${favorBalance} owed to you`
       : favorBalance < 0
-      ? `${Math.abs(favorBalance)} owed by you`
-      : "Even";
+        ? `${Math.abs(favorBalance)} owed by you`
+        : "Even";
   const favorBalanceColor =
-    favorBalance > 0 ? "text-emerald-400" : favorBalance < 0 ? "text-amber-400" : "text-muted-foreground";
+    favorBalance > 0
+      ? "text-emerald-400"
+      : favorBalance < 0
+        ? "text-amber-400"
+        : "text-muted-foreground";
 
   return (
     <div className={`min-h-screen ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
@@ -398,13 +407,17 @@ export default function ContactDetailPage({
             <div className="grid grid-cols-2 gap-4 text-center shrink-0">
               <div className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border}`}>
                 <div className="text-[10px] text-muted-foreground uppercase">Connection</div>
-                <div className={`text-3xl font-bold ${theme.colors.accent}`}>{contact.connection}</div>
+                <div className={`text-3xl font-bold ${theme.colors.accent}`}>
+                  {contact.connection}
+                </div>
               </div>
               <div className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border}`}>
                 <div className="text-[10px] text-muted-foreground uppercase">Loyalty</div>
                 <div className="text-3xl font-bold text-pink-400">{contact.loyalty}</div>
               </div>
-              <div className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border} col-span-2`}>
+              <div
+                className={`p-4 rounded ${theme.colors.card} border ${theme.colors.border} col-span-2`}
+              >
                 <div className="text-[10px] text-muted-foreground uppercase">Favor Balance</div>
                 <div className={`text-xl font-bold ${favorBalanceColor}`}>{favorBalanceText}</div>
               </div>
@@ -421,7 +434,9 @@ export default function ContactDetailPage({
           {/* Notes */}
           {contact.notes && (
             <div className="mt-4 p-3 bg-muted/30 rounded">
-              <div className="text-[10px] font-mono text-muted-foreground uppercase mb-1">Notes</div>
+              <div className="text-[10px] font-mono text-muted-foreground uppercase mb-1">
+                Notes
+              </div>
               <p className="text-sm text-foreground">{contact.notes}</p>
             </div>
           )}
@@ -513,7 +528,10 @@ export default function ContactDetailPage({
           ) : (
             <div className="space-y-2">
               {transactions.map((tx) => {
-                const typeInfo = TYPE_LABELS[tx.type] || { label: tx.type, color: "text-muted-foreground" };
+                const typeInfo = TYPE_LABELS[tx.type] || {
+                  label: tx.type,
+                  color: "text-muted-foreground",
+                };
                 return (
                   <div
                     key={tx.id}
@@ -530,11 +548,7 @@ export default function ContactDetailPage({
                     <p className="text-sm text-foreground">{tx.description}</p>
                     <div className="flex flex-wrap gap-3 mt-2 text-xs text-muted-foreground">
                       {tx.favorChange !== 0 && (
-                        <span
-                          className={
-                            tx.favorChange > 0 ? "text-emerald-400" : "text-red-400"
-                          }
-                        >
+                        <span className={tx.favorChange > 0 ? "text-emerald-400" : "text-red-400"}>
                           Favor: {tx.favorChange > 0 ? "+" : ""}
                           {tx.favorChange}
                         </span>
@@ -576,7 +590,9 @@ export default function ContactDetailPage({
       <ContactFormModal
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
-        onSubmit={handleUpdateContact as (data: import("@/lib/types").CreateContactRequest) => Promise<void>}
+        onSubmit={
+          handleUpdateContact as (data: import("@/lib/types").CreateContactRequest) => Promise<void>
+        }
         contact={contact}
         theme={theme}
       />

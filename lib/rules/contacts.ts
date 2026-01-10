@@ -203,9 +203,7 @@ export function validateContactAgainstCampaign(
     socialCapital.campaignContactLimit !== undefined &&
     socialCapital.activeContacts >= socialCapital.campaignContactLimit
   ) {
-    errors.push(
-      `Campaign contact limit of ${socialCapital.campaignContactLimit} reached`
-    );
+    errors.push(`Campaign contact limit of ${socialCapital.campaignContactLimit} reached`);
   }
 
   return {
@@ -222,10 +220,7 @@ export function validateContactAgainstCampaign(
 /**
  * Calculate contact points for a contact (connection + loyalty)
  */
-export function calculateContactPoints(contact: {
-  connection: number;
-  loyalty: number;
-}): number {
+export function calculateContactPoints(contact: { connection: number; loyalty: number }): number {
   return contact.connection + contact.loyalty;
 }
 
@@ -298,10 +293,7 @@ const VALID_TRANSITIONS: Record<ContactStatus, ContactStatus[]> = {
  * @param newStatus - Desired new status
  * @returns Whether transition is allowed
  */
-export function isValidTransition(
-  currentStatus: ContactStatus,
-  newStatus: ContactStatus
-): boolean {
+export function isValidTransition(currentStatus: ContactStatus, newStatus: ContactStatus): boolean {
   if (currentStatus === newStatus) {
     return true; // No-op is always valid
   }
@@ -375,10 +367,7 @@ export function canReactivateContact(
  * @param editionCode - Edition for cost calculation
  * @returns Karma cost
  */
-export function getReactivationCost(
-  contact: SocialContact,
-  editionCode: string
-): number {
+export function getReactivationCost(contact: SocialContact, editionCode: string): number {
   switch (editionCode) {
     case "sr5":
       // SR5: Connection + Loyalty in karma

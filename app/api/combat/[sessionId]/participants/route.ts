@@ -12,11 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacterById } from "@/lib/storage/characters";
-import {
-  getCombatSession,
-  addParticipant,
-  setInitiativeScore,
-} from "@/lib/storage/combat";
+import { getCombatSession, addParticipant, setInitiativeScore } from "@/lib/storage/combat";
 import type { ParticipantType, ActionAllocation } from "@/lib/types";
 
 interface RouteParams {
@@ -41,18 +37,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -67,10 +57,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Check access
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Get current participant
@@ -111,18 +98,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -137,10 +118,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Check ownership
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Parse body

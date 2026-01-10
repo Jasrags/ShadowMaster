@@ -10,13 +10,7 @@
 
 import { useState } from "react";
 import type { Weapon, ItemLegality } from "@/lib/types";
-import {
-  ChevronDown,
-  ChevronRight,
-  X,
-  Wifi,
-  Plus,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, X, Wifi, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -24,15 +18,15 @@ import {
 
 // Subcategory display names
 const SUBCATEGORY_LABELS: Record<string, string> = {
-  "holdout": "Holdout",
+  holdout: "Holdout",
   "light-pistol": "Lt. Pistol",
   "heavy-pistol": "Hvy. Pistol",
   "machine-pistol": "Machine Pistol",
-  "taser": "Taser",
-  "smg": "SMG",
+  taser: "Taser",
+  smg: "SMG",
   "assault-rifle": "Assault Rifle",
-  "rifle": "Rifle",
-  "shotgun": "Shotgun",
+  rifle: "Rifle",
+  shotgun: "Shotgun",
   "sniper-rifle": "Sniper",
   "light-machine-gun": "LMG",
   "medium-machine-gun": "MMG",
@@ -40,12 +34,12 @@ const SUBCATEGORY_LABELS: Record<string, string> = {
   "assault-cannon": "Assault Cannon",
   "grenade-launcher": "Grenade Launcher",
   "missile-launcher": "Missile Launcher",
-  "blade": "Blade",
-  "club": "Club",
+  blade: "Blade",
+  club: "Club",
   "exotic-melee": "Exotic",
-  "unarmed": "Unarmed",
-  "grenade": "Grenade",
-  "throwing": "Throwing",
+  unarmed: "Unarmed",
+  grenade: "Grenade",
+  throwing: "Throwing",
 };
 
 // =============================================================================
@@ -146,13 +140,16 @@ export function WeaponRow({
   const conceal = getConcealability(weapon);
   const hasWireless = true; // Most SR5 weapons are wireless-capable
   const modCost = weapon.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
-  const ammoCost = weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.cost * a.quantity, 0) || 0;
+  const ammoCost =
+    weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.cost * a.quantity, 0) || 0;
   const totalCost = weapon.cost + modCost + ammoCost;
 
   // Counts
   const modCount = weapon.modifications?.length || 0;
   const ammoCount = weapon.purchasedAmmunition?.length || 0;
-  const totalRounds = weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.quantity * (a.roundsPerBox || 10), 0) || 0;
+  const totalRounds =
+    weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.quantity * (a.roundsPerBox || 10), 0) ||
+    0;
 
   // Check if expandable
   const hasExpandableContent = modCount > 0 || ammoCount > 0 || hasWireless;
@@ -189,9 +186,7 @@ export function WeaponRow({
         </span>
 
         {/* Wireless indicator */}
-        {hasWireless && (
-          <Wifi className="h-3.5 w-3.5 shrink-0 text-blue-500" />
-        )}
+        {hasWireless && <Wifi className="h-3.5 w-3.5 shrink-0 text-blue-500" />}
 
         {/* Cost */}
         <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 shrink-0">
@@ -253,17 +248,21 @@ export function WeaponRow({
             </span>
             <span>
               <span className="text-zinc-400 dark:text-zinc-500">Conceal</span>{" "}
-              <span className="text-zinc-700 dark:text-zinc-300">{conceal >= 0 ? `+${conceal}` : conceal}</span>
+              <span className="text-zinc-700 dark:text-zinc-300">
+                {conceal >= 0 ? `+${conceal}` : conceal}
+              </span>
             </span>
             <span>
               <span className="text-zinc-400 dark:text-zinc-500">Avail</span>{" "}
-              <span className={
-                legality === "forbidden"
-                  ? "text-red-600 dark:text-red-400"
-                  : legality === "restricted"
-                    ? "text-amber-600 dark:text-amber-400"
-                    : "text-zinc-700 dark:text-zinc-300"
-              }>
+              <span
+                className={
+                  legality === "forbidden"
+                    ? "text-red-600 dark:text-red-400"
+                    : legality === "restricted"
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-zinc-700 dark:text-zinc-300"
+                }
+              >
                 {getAvailabilityDisplay(weapon.availability || 0, legality)}
               </span>
             </span>
@@ -298,10 +297,7 @@ export function WeaponRow({
             {modCount > 0 ? (
               <div className="space-y-1">
                 {weapon.modifications?.map((mod, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between text-xs"
-                  >
+                  <div key={idx} className="flex items-center justify-between text-xs">
                     <span className="text-zinc-600 dark:text-zinc-400">
                       • {mod.name}
                       {mod.mount && (
@@ -349,18 +345,18 @@ export function WeaponRow({
             {ammoCount > 0 ? (
               <div className="space-y-1">
                 {weapon.purchasedAmmunition?.map((ammo, idx) => (
-                  <div
-                    key={idx}
-                    className="flex items-center justify-between text-xs"
-                  >
+                  <div key={idx} className="flex items-center justify-between text-xs">
                     <span className="text-zinc-600 dark:text-zinc-400">
                       • {ammo.name}
                       <span className="text-zinc-400 dark:text-zinc-500">
-                        {" "}({ammo.quantity * (ammo.roundsPerBox || 10)} rds)
+                        {" "}
+                        ({ammo.quantity * (ammo.roundsPerBox || 10)} rds)
                       </span>
                     </span>
                     <div className="flex items-center gap-1">
-                      <span className="text-zinc-400">¥{formatCurrency(ammo.cost * ammo.quantity)}</span>
+                      <span className="text-zinc-400">
+                        ¥{formatCurrency(ammo.cost * ammo.quantity)}
+                      </span>
                       {onRemoveAmmo && (
                         <button
                           onClick={() => weapon.id && onRemoveAmmo(weapon.id, idx)}

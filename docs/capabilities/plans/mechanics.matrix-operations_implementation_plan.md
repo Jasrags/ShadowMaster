@@ -30,13 +30,13 @@ Implement a complete Matrix Operations system that governs digital interactions,
 
 The following architectural decisions require user approval:
 
-| Decision                           | Proposed Choice                                        | Rationale                                                                |
-| ---------------------------------- | ------------------------------------------------------ | ------------------------------------------------------------------------ |
-| **Cyberdeck Attribute Config**     | Validated at gear level, reconfigurable during scenes  | Deckers swap Attack/Sleaze/DP/Firewall dynamically; validate array fits  |
-| **Overwatch Score Management**     | Ephemeral (scene-level, not persisted to character)    | OS resets when decker jacks out; persist only during active matrix runs  |
-| **Persona State**                  | Tracked in MatrixState, ephemeral during scenes        | Persona icons, matrix condition monitor are session-level                |
-| **Matrix Damage Integration**      | Extend `condition` with `matrixDamage` field           | Biofeedback damage causes stun/physical based on mode (AR vs VR)         |
-| **Program Slot Enforcement**       | Hard validation at load time, warning at creation      | Prevent loading more programs than deck supports                         |
+| Decision                       | Proposed Choice                                       | Rationale                                                               |
+| ------------------------------ | ----------------------------------------------------- | ----------------------------------------------------------------------- |
+| **Cyberdeck Attribute Config** | Validated at gear level, reconfigurable during scenes | Deckers swap Attack/Sleaze/DP/Firewall dynamically; validate array fits |
+| **Overwatch Score Management** | Ephemeral (scene-level, not persisted to character)   | OS resets when decker jacks out; persist only during active matrix runs |
+| **Persona State**              | Tracked in MatrixState, ephemeral during scenes       | Persona icons, matrix condition monitor are session-level               |
+| **Matrix Damage Integration**  | Extend `condition` with `matrixDamage` field          | Biofeedback damage causes stun/physical based on mode (AR vs VR)        |
+| **Program Slot Enforcement**   | Hard validation at load time, warning at creation     | Prevent loading more programs than deck supports                        |
 
 ---
 
@@ -184,6 +184,7 @@ export interface OverwatchEvent {
 ```
 
 **Satisfies:**
+
 - Guarantee: "Matrix identity and presence MUST be authoritative and bound to a specific hardware or persona identifier"
 - Requirement: "The system MUST enforce mandatory hardware-specific attribute requirements"
 
@@ -301,6 +302,7 @@ export interface CharacterCommlink {
 ```
 
 **Satisfies:**
+
 - Requirement: "Hardware-specific limits (e.g., Data Processing, Firewall) MUST be automatically applied to all relevant matrix actions"
 
 ---
@@ -340,19 +342,16 @@ export function validateProgramLoad(
 /**
  * Check if character has valid matrix hardware
  */
-export function hasValidMatrixHardware(
-  character: Character
-): boolean;
+export function hasValidMatrixHardware(character: Character): boolean;
 
 /**
  * Get active cyberdeck for a character
  */
-export function getActiveCyberdeck(
-  character: Character
-): CharacterCyberdeck | null;
+export function getActiveCyberdeck(character: Character): CharacterCyberdeck | null;
 ```
 
 **Satisfies:**
+
 - Constraint: "A character MUST NOT engage in matrix operations without a valid hardware interface or digital persona"
 - Requirement: "The system MUST enforce mandatory hardware-specific attribute requirements"
 
@@ -383,17 +382,12 @@ export function validateProgramAllocation(
 /**
  * Check if a program exists in the ruleset
  */
-export function validateProgramExists(
-  programId: string,
-  ruleset: LoadedRuleset
-): boolean;
+export function validateProgramExists(programId: string, ruleset: LoadedRuleset): boolean;
 
 /**
  * Get program slot count for active device
  */
-export function getProgramSlotLimit(
-  character: Character
-): number;
+export function getProgramSlotLimit(character: Character): number;
 
 /**
  * Check if program is compatible with device type
@@ -406,6 +400,7 @@ export function isProgramCompatible(
 ```
 
 **Satisfies:**
+
 - Requirement: "Active program slots MUST be constrained by hardware-specific memory and processing limits"
 - Requirement: "Every matrix program and utility MUST be bound to a verifiable ruleset definition"
 
@@ -443,10 +438,7 @@ export function rollOverwatchIncrease(): number;
 /**
  * Check if convergence threshold reached
  */
-export function checkConvergence(
-  currentOS: number,
-  threshold: number
-): boolean;
+export function checkConvergence(currentOS: number, threshold: number): boolean;
 
 /**
  * Handle convergence effects
@@ -465,6 +457,7 @@ export function handleConvergence(
 ```
 
 **Satisfies:**
+
 - Guarantee: "The accumulation of digital 'Overwatch Score' MUST be auditable and result in predictable system interventions"
 
 ---
@@ -491,9 +484,7 @@ export interface OverwatchSession {
 /**
  * Create a new overwatch tracking session
  */
-export function startOverwatchSession(
-  characterId: string
-): OverwatchSession;
+export function startOverwatchSession(characterId: string): OverwatchSession;
 
 /**
  * Record an overwatch event
@@ -554,12 +545,11 @@ export function checkMarkRequirements(
 /**
  * Categorize action as legal/illegal
  */
-export function isIllegalAction(
-  action: MatrixAction
-): boolean;
+export function isIllegalAction(action: MatrixAction): boolean;
 ```
 
 **Satisfies:**
+
 - Guarantee: "Digital interactions MUST adhere to strictly defined network protocols and action economy rules"
 - Requirement: "The system MUST provide Authoritative resolution for matrix actions"
 
@@ -600,10 +590,7 @@ export function calculateMatrixDicePool(
 /**
  * Calculate matrix limit for an action
  */
-export function calculateMatrixLimit(
-  action: MatrixAction,
-  matrixState: MatrixState
-): number;
+export function calculateMatrixLimit(action: MatrixAction, matrixState: MatrixState): number;
 
 /**
  * Get attribute value from current persona config
@@ -615,6 +602,7 @@ export function getPersonaAttribute(
 ```
 
 **Satisfies:**
+
 - Requirement: "Hardware-specific limits MUST be automatically applied to all relevant matrix actions"
 
 ---
@@ -655,10 +643,7 @@ export function removeMarks(
 /**
  * Check marks on a specific target
  */
-export function getMarksOnTarget(
-  matrixState: MatrixState,
-  targetId: string
-): number;
+export function getMarksOnTarget(matrixState: MatrixState, targetId: string): number;
 
 /**
  * Validate mark requirements for an action
@@ -671,6 +656,7 @@ export function hasRequiredMarks(
 ```
 
 **Satisfies:**
+
 - Requirement: "Digital 'marks' or authorization states MUST be persistent and verifiable throughout a matrix session"
 
 ---
@@ -823,6 +809,7 @@ matrixState?: MatrixState;
 **File:** [NEW] `/components/character/MatrixSummary.tsx`
 
 Display on character sheet:
+
 - Active device and attributes (ASDF configuration)
 - Program slots used/available
 - Loaded programs list
@@ -876,45 +863,45 @@ Display on character sheet:
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/cyberdeck-validator.test.ts`
 
-| Test Case                                | Capability Reference                                    |
-| ---------------------------------------- | ------------------------------------------------------- |
-| Validates attribute array configuration  | Requirement: "enforce mandatory hardware requirements"  |
-| Rejects invalid ASDF assignment          | Requirement: "enforce mandatory hardware requirements"  |
-| Validates program slot limits            | Requirement: "constrained by hardware limits"           |
-| Rejects program overload                 | Requirement: "constrained by hardware limits"           |
+| Test Case                               | Capability Reference                                   |
+| --------------------------------------- | ------------------------------------------------------ |
+| Validates attribute array configuration | Requirement: "enforce mandatory hardware requirements" |
+| Rejects invalid ASDF assignment         | Requirement: "enforce mandatory hardware requirements" |
+| Validates program slot limits           | Requirement: "constrained by hardware limits"          |
+| Rejects program overload                | Requirement: "constrained by hardware limits"          |
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/program-validator.test.ts`
 
-| Test Case                                | Capability Reference                                  |
-| ---------------------------------------- | ----------------------------------------------------- |
-| Validates program exists in ruleset      | Requirement: "bound to verifiable ruleset definition" |
-| Validates program compatibility          | Constraint: "incompatible ruleset bundles prohibited" |
-| Calculates slot usage correctly          | Requirement: "constrained by hardware limits"         |
+| Test Case                           | Capability Reference                                  |
+| ----------------------------------- | ----------------------------------------------------- |
+| Validates program exists in ruleset | Requirement: "bound to verifiable ruleset definition" |
+| Validates program compatibility     | Constraint: "incompatible ruleset bundles prohibited" |
+| Calculates slot usage correctly     | Requirement: "constrained by hardware limits"         |
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/overwatch-calculator.test.ts`
 
-| Test Case                                | Capability Reference                                    |
-| ---------------------------------------- | ------------------------------------------------------- |
-| Calculates OS increase for illegal acts  | Guarantee: "OS MUST be auditable"                       |
-| Triggers convergence at threshold        | Guarantee: "predictable system interventions"           |
-| Tracks session events correctly          | Guarantee: "OS MUST be auditable"                       |
-| Resets OS on jack out                    | Guarantee: "predictable system interventions"           |
+| Test Case                               | Capability Reference                          |
+| --------------------------------------- | --------------------------------------------- |
+| Calculates OS increase for illegal acts | Guarantee: "OS MUST be auditable"             |
+| Triggers convergence at threshold       | Guarantee: "predictable system interventions" |
+| Tracks session events correctly         | Guarantee: "OS MUST be auditable"             |
+| Resets OS on jack out                   | Guarantee: "predictable system interventions" |
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/mark-tracker.test.ts`
 
-| Test Case                                | Capability Reference                                    |
-| ---------------------------------------- | ------------------------------------------------------- |
-| Places marks correctly (1-3 max)         | Requirement: "marks MUST be persistent and verifiable"  |
-| Validates mark requirements for actions  | Requirement: "marks MUST be persistent and verifiable"  |
-| Removes marks on disconnect              | Requirement: "marks MUST be persistent and verifiable"  |
+| Test Case                               | Capability Reference                                   |
+| --------------------------------------- | ------------------------------------------------------ |
+| Places marks correctly (1-3 max)        | Requirement: "marks MUST be persistent and verifiable" |
+| Validates mark requirements for actions | Requirement: "marks MUST be persistent and verifiable" |
+| Removes marks on disconnect             | Requirement: "marks MUST be persistent and verifiable" |
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/dice-pool-calculator.test.ts`
 
-| Test Case                                | Capability Reference                                    |
-| ---------------------------------------- | ------------------------------------------------------- |
-| Calculates correct pool for Hack on Fly  | Requirement: "Authoritative resolution for actions"     |
-| Applies correct matrix limit             | Requirement: "hardware limits automatically applied"    |
-| Includes program bonuses                 | Requirement: "update based on program modifications"    |
+| Test Case                               | Capability Reference                                 |
+| --------------------------------------- | ---------------------------------------------------- |
+| Calculates correct pool for Hack on Fly | Requirement: "Authoritative resolution for actions"  |
+| Applies correct matrix limit            | Requirement: "hardware limits automatically applied" |
+| Includes program bonuses                | Requirement: "update based on program modifications" |
 
 ---
 
@@ -922,12 +909,12 @@ Display on character sheet:
 
 **File:** [NEW] `/lib/rules/matrix/__tests__/matrix-flow.integration.test.ts`
 
-| Test Case                                | Capability Reference                                   |
-| ---------------------------------------- | ------------------------------------------------------ |
-| Full decker character with deck + progs  | Full system integration                                |
-| Matrix session with OS tracking          | Guarantee: "OS MUST be auditable"                      |
-| Mark placement and action validation     | Requirement: "marks MUST be persistent"                |
-| Convergence handling and cleanup         | Guarantee: "predictable system interventions"          |
+| Test Case                               | Capability Reference                          |
+| --------------------------------------- | --------------------------------------------- |
+| Full decker character with deck + progs | Full system integration                       |
+| Matrix session with OS tracking         | Guarantee: "OS MUST be auditable"             |
+| Mark placement and action validation    | Requirement: "marks MUST be persistent"       |
+| Convergence handling and cleanup        | Guarantee: "predictable system interventions" |
 
 ---
 
@@ -935,11 +922,11 @@ Display on character sheet:
 
 **File:** [NEW] `/app/api/matrix/__tests__/validate.test.ts`
 
-| Test Case                              | Capability Reference                            |
-| -------------------------------------- | ----------------------------------------------- |
-| Validates deck configuration           | Requirement: "hardware requirements enforced"   |
-| Returns program slot errors            | Requirement: "constrained by hardware limits"   |
-| Requires authentication                | Security requirement                            |
+| Test Case                    | Capability Reference                          |
+| ---------------------------- | --------------------------------------------- |
+| Validates deck configuration | Requirement: "hardware requirements enforced" |
+| Returns program slot errors  | Requirement: "constrained by hardware limits" |
+| Requires authentication      | Security requirement                          |
 
 ---
 

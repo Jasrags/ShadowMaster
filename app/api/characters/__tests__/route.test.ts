@@ -5,27 +5,27 @@
  * authentication, filtering, sorting, pagination, and error handling.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { GET, POST } from '../route';
-import { NextRequest } from 'next/server';
-import * as sessionModule from '@/lib/auth/session';
-import * as userStorageModule from '@/lib/storage/users';
-import * as characterStorageModule from '@/lib/storage/characters';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { GET, POST } from "../route";
+import { NextRequest } from "next/server";
+import * as sessionModule from "@/lib/auth/session";
+import * as userStorageModule from "@/lib/storage/users";
+import * as characterStorageModule from "@/lib/storage/characters";
 
 import type { Character, CharacterDraft, UserRole } from "@/lib/types";
 import type { CharacterSearchResult } from "@/lib/storage/characters";
 
 // Mock dependencies
-vi.mock('@/lib/auth/session');
-vi.mock('@/lib/storage/users');
-vi.mock('@/lib/storage/characters');
+vi.mock("@/lib/auth/session");
+vi.mock("@/lib/storage/users");
+vi.mock("@/lib/storage/characters");
 
 // Helper to create a NextRequest with JSON body
-function createMockRequest(url: string, body?: unknown, method = 'GET'): NextRequest {
+function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
   const request = new NextRequest(url, {
     method,
     body: body ? JSON.stringify(body) : undefined,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
   });
 
   // Mock json() method if body is provided
@@ -36,13 +36,13 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
   return request;
 }
 
-describe('GET /api/characters', () => {
-  const mockUser: import('@/lib/types/user').User = {
-    id: 'test-user-id',
-    email: 'test@example.com',
-    username: 'testuser',
-    passwordHash: 'hash',
-    role: ['user'] as UserRole[],
+describe("GET /api/characters", () => {
+  const mockUser: import("@/lib/types/user").User = {
+    id: "test-user-id",
+    email: "test@example.com",
+    username: "testuser",
+    passwordHash: "hash",
+    role: ["user"] as UserRole[],
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -53,7 +53,7 @@ describe('GET /api/characters', () => {
       theme: "system",
       navigationCollapsed: false,
     },
-    accountStatus: 'active',
+    accountStatus: "active",
     statusChangedAt: null,
     statusChangedBy: null,
     statusReason: null,
@@ -63,22 +63,22 @@ describe('GET /api/characters', () => {
 
   const mockCharacters: Character[] = [
     {
-      id: 'char-1',
-      ownerId: 'test-user-id',
-      name: 'Character 1',
-      metatype: 'human',
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
-      rulesetSnapshotId: 'test-snapshot-id',
+      id: "char-1",
+      ownerId: "test-user-id",
+      name: "Character 1",
+      metatype: "human",
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      rulesetSnapshotId: "test-snapshot-id",
       attachedBookIds: [],
-      status: 'draft',
+      status: "draft",
       attributes: { bod: 3, agi: 3, rea: 3, str: 3, cha: 3, int: 3, log: 3, wil: 3 },
       specialAttributes: { edge: 2, essence: 6, magic: 0, resonance: 0 },
       skills: {},
       positiveQualities: [],
       negativeQualities: [],
-      magicalPath: 'mundane',
+      magicalPath: "mundane",
       nuyen: 0,
       startingNuyen: 0,
       gear: [],
@@ -88,26 +88,26 @@ describe('GET /api/characters', () => {
       karmaTotal: 0,
       karmaCurrent: 0,
       karmaSpentAtCreation: 0,
-      createdAt: new Date('2024-01-01').toISOString(),
-      updatedAt: new Date('2024-01-02').toISOString(),
+      createdAt: new Date("2024-01-01").toISOString(),
+      updatedAt: new Date("2024-01-02").toISOString(),
     },
     {
-      id: 'char-2',
-      ownerId: 'test-user-id',
-      name: 'Character 2',
-      metatype: 'elf',
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
-      rulesetSnapshotId: 'test-snapshot-id',
+      id: "char-2",
+      ownerId: "test-user-id",
+      name: "Character 2",
+      metatype: "elf",
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      rulesetSnapshotId: "test-snapshot-id",
       attachedBookIds: [],
-      status: 'active',
+      status: "active",
       attributes: { bod: 3, agi: 4, rea: 3, str: 3, cha: 4, int: 3, log: 3, wil: 3 },
       specialAttributes: { edge: 1, essence: 6, magic: 6, resonance: 0 },
       skills: {},
       positiveQualities: [],
       negativeQualities: [],
-      magicalPath: 'full-mage',
+      magicalPath: "full-mage",
       nuyen: 5000,
       startingNuyen: 20000,
       gear: [],
@@ -117,8 +117,8 @@ describe('GET /api/characters', () => {
       karmaTotal: 10,
       karmaCurrent: 5,
       karmaSpentAtCreation: 0,
-      createdAt: new Date('2024-01-03').toISOString(),
-      updatedAt: new Date('2024-01-04').toISOString(),
+      createdAt: new Date("2024-01-03").toISOString(),
+      updatedAt: new Date("2024-01-04").toISOString(),
     },
   ];
 
@@ -126,7 +126,7 @@ describe('GET /api/characters', () => {
     vi.clearAllMocks();
   });
 
-  it('should return user characters when authenticated', async () => {
+  it("should return user characters when authenticated", async () => {
     const searchResult: CharacterSearchResult = {
       characters: mockCharacters,
       total: 2,
@@ -135,11 +135,11 @@ describe('GET /api/characters', () => {
       offset: 0,
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
-    const request = createMockRequest('http://localhost:3000/api/characters');
+    const request = createMockRequest("http://localhost:3000/api/characters");
     const response = await GET(request);
     const data = await response.json();
 
@@ -149,11 +149,11 @@ describe('GET /api/characters', () => {
     expect(data.total).toBe(2);
     expect(data.hasMore).toBe(false);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
-      expect.objectContaining({ userId: 'test-user-id' })
+      expect.objectContaining({ userId: "test-user-id" })
     );
   });
 
-  it('should filter characters by status when status query param provided', async () => {
+  it("should filter characters by status when status query param provided", async () => {
     const draftCharacters = [mockCharacters[0]];
     const searchResult: CharacterSearchResult = {
       characters: draftCharacters,
@@ -163,11 +163,11 @@ describe('GET /api/characters', () => {
       offset: 0,
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
-    const request = createMockRequest('http://localhost:3000/api/characters?status=draft');
+    const request = createMockRequest("http://localhost:3000/api/characters?status=draft");
     const response = await GET(request);
     const data = await response.json();
 
@@ -177,14 +177,14 @@ describe('GET /api/characters', () => {
     expect(data.total).toBe(1);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({
-        userId: 'test-user-id',
-        filters: expect.objectContaining({ status: ['draft'] }),
+        userId: "test-user-id",
+        filters: expect.objectContaining({ status: ["draft"] }),
       })
     );
   });
 
-  it('should filter characters by edition when edition query param provided', async () => {
-    const sr5Characters = mockCharacters.filter((c) => c.editionCode === 'sr5');
+  it("should filter characters by edition when edition query param provided", async () => {
+    const sr5Characters = mockCharacters.filter((c) => c.editionCode === "sr5");
     const searchResult: CharacterSearchResult = {
       characters: sr5Characters,
       total: 2,
@@ -193,11 +193,11 @@ describe('GET /api/characters', () => {
       offset: 0,
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
-    const request = createMockRequest('http://localhost:3000/api/characters?edition=sr5');
+    const request = createMockRequest("http://localhost:3000/api/characters?edition=sr5");
     const response = await GET(request);
     const data = await response.json();
 
@@ -207,16 +207,16 @@ describe('GET /api/characters', () => {
     expect(data.total).toBe(2);
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({
-        userId: 'test-user-id',
-        filters: expect.objectContaining({ edition: ['sr5'] }),
+        userId: "test-user-id",
+        filters: expect.objectContaining({ edition: ["sr5"] }),
       })
     );
   });
 
-  it('should filter by both status and edition', async () => {
+  it("should filter by both status and edition", async () => {
     const draftCharacter = {
       ...mockCharacters[0],
-      status: 'draft' as const,
+      status: "draft" as const,
     };
     const draftCharacters = [draftCharacter];
     const searchResult: CharacterSearchResult = {
@@ -227,50 +227,52 @@ describe('GET /api/characters', () => {
       offset: 0,
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
-    const request = createMockRequest('http://localhost:3000/api/characters?status=draft&edition=sr5');
+    const request = createMockRequest(
+      "http://localhost:3000/api/characters?status=draft&edition=sr5"
+    );
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.characters).toHaveLength(1);
-    expect(data.characters[0].status).toBe('draft');
-    expect(data.characters[0].editionCode).toBe('sr5');
+    expect(data.characters[0].status).toBe("draft");
+    expect(data.characters[0].editionCode).toBe("sr5");
     expect(characterStorageModule.searchCharacters).toHaveBeenCalledWith(
       expect.objectContaining({
-        userId: 'test-user-id',
+        userId: "test-user-id",
         filters: expect.objectContaining({
-          status: ['draft'],
-          edition: ['sr5'],
+          status: ["draft"],
+          edition: ["sr5"],
         }),
       })
     );
   });
 
-  it('should sort characters by updated date (most recent first)', async () => {
+  it("should sort characters by updated date (most recent first)", async () => {
     // Characters are returned already sorted by the search function
     const sortedCharacters: Character[] = [
       {
-        id: 'char-2',
-        ownerId: 'test-user-id',
-        name: 'Character 2',
-        metatype: 'elf',
-        editionId: 'sr5',
-        editionCode: 'sr5',
-        creationMethodId: 'priority',
-        rulesetSnapshotId: 'test-snapshot-id',
+        id: "char-2",
+        ownerId: "test-user-id",
+        name: "Character 2",
+        metatype: "elf",
+        editionId: "sr5",
+        editionCode: "sr5",
+        creationMethodId: "priority",
+        rulesetSnapshotId: "test-snapshot-id",
         attachedBookIds: [],
-        status: 'active',
+        status: "active",
         attributes: { bod: 3, agi: 4, rea: 3, str: 3, cha: 4, int: 3, log: 3, wil: 3 },
         specialAttributes: { edge: 1, essence: 6, magic: 6, resonance: 0 },
         skills: {},
         positiveQualities: [],
         negativeQualities: [],
-        magicalPath: 'full-mage',
+        magicalPath: "full-mage",
         nuyen: 5000,
         startingNuyen: 20000,
         gear: [],
@@ -280,26 +282,26 @@ describe('GET /api/characters', () => {
         karmaTotal: 10,
         karmaCurrent: 5,
         karmaSpentAtCreation: 0,
-        createdAt: new Date('2024-01-03').toISOString(),
-        updatedAt: new Date('2024-01-05').toISOString(), // More recent
+        createdAt: new Date("2024-01-03").toISOString(),
+        updatedAt: new Date("2024-01-05").toISOString(), // More recent
       },
       {
-        id: 'char-1',
-        ownerId: 'test-user-id',
-        name: 'Character 1',
-        metatype: 'human',
-        editionId: 'sr5',
-        editionCode: 'sr5',
-        creationMethodId: 'priority',
-        rulesetSnapshotId: 'test-snapshot-id',
+        id: "char-1",
+        ownerId: "test-user-id",
+        name: "Character 1",
+        metatype: "human",
+        editionId: "sr5",
+        editionCode: "sr5",
+        creationMethodId: "priority",
+        rulesetSnapshotId: "test-snapshot-id",
         attachedBookIds: [],
-        status: 'draft',
+        status: "draft",
         attributes: { bod: 3, agi: 3, rea: 3, str: 3, cha: 3, int: 3, log: 3, wil: 3 },
         specialAttributes: { edge: 2, essence: 6, magic: 0, resonance: 0 },
         skills: {},
         positiveQualities: [],
         negativeQualities: [],
-        magicalPath: 'mundane',
+        magicalPath: "mundane",
         nuyen: 0,
         startingNuyen: 0,
         gear: [],
@@ -309,8 +311,8 @@ describe('GET /api/characters', () => {
         karmaTotal: 0,
         karmaCurrent: 0,
         karmaSpentAtCreation: 0,
-        createdAt: new Date('2024-01-01').toISOString(),
-        updatedAt: new Date('2024-01-01').toISOString(),
+        createdAt: new Date("2024-01-01").toISOString(),
+        updatedAt: new Date("2024-01-01").toISOString(),
       },
     ];
     const searchResult: CharacterSearchResult = {
@@ -321,78 +323,80 @@ describe('GET /api/characters', () => {
       offset: 0,
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockResolvedValue(searchResult);
 
-    const request = createMockRequest('http://localhost:3000/api/characters');
+    const request = createMockRequest("http://localhost:3000/api/characters");
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(200);
     // Verify sorting: most recent first
-    const dates = data.characters.map((c: { updatedAt: string }) => new Date(c.updatedAt).getTime());
+    const dates = data.characters.map((c: { updatedAt: string }) =>
+      new Date(c.updatedAt).getTime()
+    );
     expect(dates[0]).toBeGreaterThan(dates[1]);
-    expect(data.characters[0].id).toBe('char-2'); // Most recent first
-    expect(data.characters[1].id).toBe('char-1');
+    expect(data.characters[0].id).toBe("char-2"); // Most recent first
+    expect(data.characters[1].id).toBe("char-1");
   });
 
-  it('should return 401 when not authenticated', async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
-    const request = createMockRequest('http://localhost:3000/api/characters');
+    const request = createMockRequest("http://localhost:3000/api/characters");
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
+    expect(data.error).toBe("Unauthorized");
     expect(characterStorageModule.searchCharacters).not.toHaveBeenCalled();
   });
 
-  it('should return 404 when user not found', async () => {
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+  it("should return 404 when user not found", async () => {
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(null);
 
-    const request = createMockRequest('http://localhost:3000/api/characters');
+    const request = createMockRequest("http://localhost:3000/api/characters");
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(404);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('User not found');
+    expect(data.error).toBe("User not found");
   });
 
-  it('should return 500 when an error occurs', async () => {
+  it("should return 500 when an error occurs", async () => {
     // Suppress console.error output for this test
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.searchCharacters).mockRejectedValue(
-      new Error('Database error')
+      new Error("Database error")
     );
 
-    const request = createMockRequest('http://localhost:3000/api/characters');
+    const request = createMockRequest("http://localhost:3000/api/characters");
     const response = await GET(request);
     const data = await response.json();
 
     expect(response.status).toBe(500);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Failed to get characters');
+    expect(data.error).toBe("Failed to get characters");
 
     // Restore console.error
     consoleErrorSpy.mockRestore();
   });
 });
 
-describe('POST /api/characters', () => {
-  const mockUser: import('@/lib/types/user').User = {
-    id: 'test-user-id',
-    email: 'test@example.com',
-    username: 'testuser',
-    passwordHash: 'hash',
-    role: ['user'] as UserRole[],
+describe("POST /api/characters", () => {
+  const mockUser: import("@/lib/types/user").User = {
+    id: "test-user-id",
+    email: "test@example.com",
+    username: "testuser",
+    passwordHash: "hash",
+    role: ["user"] as UserRole[],
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -403,7 +407,7 @@ describe('POST /api/characters', () => {
       theme: "system",
       navigationCollapsed: false,
     },
-    accountStatus: 'active',
+    accountStatus: "active",
     statusChangedAt: null,
     statusChangedBy: null,
     statusReason: null,
@@ -412,21 +416,21 @@ describe('POST /api/characters', () => {
   };
 
   const mockDraft: CharacterDraft = {
-    id: 'new-char-id',
-    ownerId: 'test-user-id',
-    name: 'New Character',
-    metatype: 'human',
-    editionId: 'sr5',
-    editionCode: 'sr5',
-    creationMethodId: 'priority',
+    id: "new-char-id",
+    ownerId: "test-user-id",
+    name: "New Character",
+    metatype: "human",
+    editionId: "sr5",
+    editionCode: "sr5",
+    creationMethodId: "priority",
     attachedBookIds: [],
-    status: 'draft',
+    status: "draft",
     attributes: { bod: 1, agi: 1, rea: 1, str: 1, cha: 1, int: 1, log: 1, wil: 1 },
     specialAttributes: { edge: 2, essence: 6 },
     skills: {},
     positiveQualities: [],
     negativeQualities: [],
-    magicalPath: 'mundane',
+    magicalPath: "mundane",
     nuyen: 0,
     startingNuyen: 0,
     gear: [],
@@ -444,23 +448,19 @@ describe('POST /api/characters', () => {
     vi.clearAllMocks();
   });
 
-  it('should create character draft successfully', async () => {
+  it("should create character draft successfully", async () => {
     const requestBody = {
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
-      name: 'New Character',
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      name: "New Character",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.createCharacterDraft).mockResolvedValue(mockDraft);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
@@ -471,29 +471,25 @@ describe('POST /api/characters', () => {
     expect(data.character.id).toBe(mockDraft.id);
     expect(data.character.name).toBe(mockDraft.name);
     expect(characterStorageModule.createCharacterDraft).toHaveBeenCalledWith(
-      'test-user-id',
-      'sr5',
-      'sr5',
-      'priority',
-      'New Character',
+      "test-user-id",
+      "sr5",
+      "sr5",
+      "priority",
+      "New Character",
       undefined
     );
   });
 
-  it('should return 400 when editionId is missing', async () => {
+  it("should return 400 when editionId is missing", async () => {
     const requestBody = {
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
+      editionCode: "sr5",
+      creationMethodId: "priority",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
@@ -503,25 +499,21 @@ describe('POST /api/characters', () => {
     expect([400, 500]).toContain(response.status);
     expect(data.success).toBe(false);
     if (response.status === 400) {
-      expect(data.error).toContain('Missing required fields');
+      expect(data.error).toContain("Missing required fields");
     }
     expect(characterStorageModule.createCharacterDraft).not.toHaveBeenCalled();
   });
 
-  it('should return 400 when editionCode is missing', async () => {
+  it("should return 400 when editionCode is missing", async () => {
     const requestBody = {
-      editionId: 'sr5',
-      creationMethodId: 'priority',
+      editionId: "sr5",
+      creationMethodId: "priority",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
@@ -529,24 +521,20 @@ describe('POST /api/characters', () => {
     expect([400, 500]).toContain(response.status);
     expect(data.success).toBe(false);
     if (response.status === 400) {
-      expect(data.error).toContain('Missing required fields');
+      expect(data.error).toContain("Missing required fields");
     }
   });
 
-  it('should return 400 when creationMethodId is missing', async () => {
+  it("should return 400 when creationMethodId is missing", async () => {
     const requestBody = {
-      editionId: 'sr5',
-      editionCode: 'sr5',
+      editionId: "sr5",
+      editionCode: "sr5",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
@@ -554,86 +542,74 @@ describe('POST /api/characters', () => {
     expect([400, 500]).toContain(response.status);
     expect(data.success).toBe(false);
     if (response.status === 400) {
-      expect(data.error).toContain('Missing required fields');
+      expect(data.error).toContain("Missing required fields");
     }
   });
 
-  it('should return 401 when not authenticated', async () => {
+  it("should return 401 when not authenticated", async () => {
     const requestBody = {
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
     };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
 
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
+    expect(data.error).toBe("Unauthorized");
     expect(characterStorageModule.createCharacterDraft).not.toHaveBeenCalled();
   });
 
-  it('should return 404 when user not found', async () => {
+  it("should return 404 when user not found", async () => {
     const requestBody = {
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(null);
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
 
     expect(response.status).toBe(404);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('User not found');
+    expect(data.error).toBe("User not found");
   });
 
-  it('should return 500 when an error occurs', async () => {
+  it("should return 500 when an error occurs", async () => {
     // Suppress console.error output for this test
-    const consoleErrorSpy = vi.spyOn(console, 'error').mockImplementation(() => { });
+    const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 
     const requestBody = {
-      editionId: 'sr5',
-      editionCode: 'sr5',
-      creationMethodId: 'priority',
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
     };
 
-    vi.mocked(sessionModule.getSession).mockResolvedValue('test-user-id');
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
     vi.mocked(characterStorageModule.createCharacterDraft).mockRejectedValue(
-      new Error('Database error')
+      new Error("Database error")
     );
 
-    const request = createMockRequest(
-      'http://localhost:3000/api/characters',
-      requestBody,
-      'POST'
-    );
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
 
     const response = await POST(request);
     const data = await response.json();
 
     expect(response.status).toBe(500);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Failed to create character');
+    expect(data.error).toBe("Failed to create character");
 
     // Restore console.error
     consoleErrorSpy.mockRestore();

@@ -1,11 +1,11 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 Enchanting is the technique of tapping into the fundamental power latent in natural elements and imbuing items with magic that aids and enhances a magician’s abilities. With it, you can enchant small items with spells, create magical foci, and break down magical items into component reagents.
 
@@ -47,13 +47,13 @@ The object used for the preparation is called the lynchpin. It must be small eno
 A preparation releases its spell when a condition called the trigger is met. Choose a trigger type for the preparation. The trigger you pick can add to the Drain Value of the preparation.
 
 Command
-:   The preparation is triggered by you. You must be on the physical plane (or manifest if you’re astrally projecting), have line of sight to the preparation (as defined for Spellcasting, p. 281), and take a Simple Action to trigger the preparation. You have some control over the preparation’s target with this trigger. This trigger adds +2 Drain to the creation of the preparation. Command triggers are the only triggers preparation with healing spells can have.
+: The preparation is triggered by you. You must be on the physical plane (or manifest if you’re astrally projecting), have line of sight to the preparation (as defined for Spellcasting, p. 281), and take a Simple Action to trigger the preparation. You have some control over the preparation’s target with this trigger. This trigger adds +2 Drain to the creation of the preparation. Command triggers are the only triggers preparation with healing spells can have.
 
 Contact
-:   The next living being to touch the preparation activates the spell. This trigger adds +1 Drain.
+: The next living being to touch the preparation activates the spell. This trigger adds +1 Drain.
 
 Time
-:   Choose an amount of time when picking this trigger. The countdown starts at the end of the creation of the preparation, and the preparation is activated when the time’s up. The time you declare is limited by the final Potency of the preparation in hours—if the time is greater than the resulting Potency after creation, the preparation activates prematurely. This trigger adds +2 Drain to the creation of the preparation.
+: Choose an amount of time when picking this trigger. The countdown starts at the end of the creation of the preparation, and the preparation is activated when the time’s up. The time you declare is limited by the final Potency of the preparation in hours—if the time is greater than the resulting Potency after creation, the preparation activates prematurely. This trigger adds +2 Drain to the creation of the preparation.
 
 ## Step 5:create The Preparation
 
@@ -78,10 +78,10 @@ When the spell is released from the preparation, it goes off as though it were c
 The target(s) of a preparation must be on the physical plane The actual target(s) of the spell depend on the range of the spell used:
 
 Touch
-:   Touch spells affect the living being touching the preparation. If more than one living being is touching the preparation when it activates, the spell’s target is either chosen by the magician (if the command trigger was chosen) or at random.
+: Touch spells affect the living being touching the preparation. If more than one living being is touching the preparation when it activates, the spell’s target is either chosen by the magician (if the command trigger was chosen) or at random.
 
 Line of Sight
-:   The target of the spell is chosen by the magician if the preparation employed a command trigger, otherwise the spell hits the nearest viable target within line of sight. In either case, the spell’s range is limited to (Potency x Force) meters.
+: The target of the spell is chosen by the magician if the preparation employed a command trigger, otherwise the spell hits the nearest viable target within line of sight. In either case, the spell’s range is limited to (Potency x Force) meters.
 
 Area
-:   The preparation is the center of the area of effect, and the radius is the Potency of the preparation in meters.
+: The preparation is the center of the area of effect, and the radius is the Potency of the preparation in meters.

@@ -15,11 +15,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import {
-  getAllCharacters,
-  getCharacterById,
-  updateCharacter,
-} from "@/lib/storage/characters";
+import { getAllCharacters, getCharacterById, updateCharacter } from "@/lib/storage/characters";
 import {
   needsGearStateMigration,
   migrateCharacterGearState,
@@ -33,18 +29,14 @@ import type { Character } from "@/lib/types";
 // =============================================================================
 
 async function requireAdmin(): Promise<
-  | { authorized: true; userId: string }
-  | { authorized: false; response: NextResponse }
+  { authorized: true; userId: string } | { authorized: false; response: NextResponse }
 > {
   const userId = await getSession();
 
   if (!userId) {
     return {
       authorized: false,
-      response: NextResponse.json(
-        { error: "Authentication required" },
-        { status: 401 }
-      ),
+      response: NextResponse.json({ error: "Authentication required" }, { status: 401 }),
     };
   }
 
@@ -59,10 +51,7 @@ async function requireAdmin(): Promise<
   if (!user.role.includes("administrator")) {
     return {
       authorized: false,
-      response: NextResponse.json(
-        { error: "Administrator access required" },
-        { status: 403 }
-      ),
+      response: NextResponse.json({ error: "Administrator access required" }, { status: 403 }),
     };
   }
 
@@ -88,9 +77,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
 
     if (characterIds && characterIds.length > 0) {
       // Get specific characters
-      const results = await Promise.all(
-        characterIds.map((id) => getCharacterById(id.trim()))
-      );
+      const results = await Promise.all(characterIds.map((id) => getCharacterById(id.trim())));
       charactersToCheck = results.filter((c): c is Character => c !== null);
     } else {
       // Get all characters
@@ -115,10 +102,7 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     console.error("Migration preview error:", error);
-    return NextResponse.json(
-      { error: "Failed to preview migration" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to preview migration" }, { status: 500 });
   }
 }
 
@@ -143,9 +127,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
 
     if (characterIds && characterIds.length > 0) {
       // Get specific characters
-      const results = await Promise.all(
-        characterIds.map((id) => getCharacterById(id.trim()))
-      );
+      const results = await Promise.all(characterIds.map((id) => getCharacterById(id.trim())));
       charactersToMigrate = results.filter((c): c is Character => c !== null);
     } else {
       // Get all characters
@@ -160,9 +142,7 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
       const saveResults: { characterId: string; saved: boolean; error?: string }[] = [];
 
       for (const char of charactersToMigrate) {
-        const migrationResult = batchResult.results.find(
-          (r) => r.characterId === char.id
-        );
+        const migrationResult = batchResult.results.find((r) => r.characterId === char.id);
 
         if (migrationResult?.success && migrationResult.changes.length > 0) {
           // Get the migrated character
@@ -197,9 +177,6 @@ export async function POST(request: NextRequest): Promise<NextResponse> {
     });
   } catch (error) {
     console.error("Migration error:", error);
-    return NextResponse.json(
-      { error: "Failed to execute migration" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to execute migration" }, { status: 500 });
   }
 }

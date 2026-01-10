@@ -5,18 +5,21 @@ The alphabetical listing in this chapter is great if you already know what you w
 ## Matrix Actions by Function
 
 ### Device Manipulation
+
 - Control Device: Variable
 - Format Device: Complex
 - Reboot Device: Complex
 - Spoof Command: Complex
 
 ### File Manipulation
+
 - Crack File: Complex
 - Disarm Data Bomb: Complex
 - Edit File: Complex
 - Set Data Bomb: Complex
 
 ### Information Gathering
+
 - Check Overwatch Score: Simple
 - Matrix Perception: Complex
 - Matrix Search: Special
@@ -24,6 +27,7 @@ The alphabetical listing in this chapter is great if you already know what you w
 - Trace Icon: Complex
 
 ### Mark Manipulation
+
 - Brute Force: Complex
 - Erase Mark: Complex
 - Erase Matrix Signature: Complex
@@ -31,11 +35,13 @@ The alphabetical listing in this chapter is great if you already know what you w
 - Invite Mark: Simple
 
 ### Matrix Combat
+
 - Crash Program: Simple
 - Data Spike: Simple
 - Full Matrix Defense: Interrupt
 
 ### Miscellaneous
+
 - Change Icon: Simple
 - Enter/Exit Host: Complex
 - Erase Matrix Signature: Complex
@@ -50,6 +56,7 @@ The alphabetical listing in this chapter is great if you already know what you w
 ## Matrix Actions by Limit
 
 ### Attack
+
 - Brute Force: Complex
 - Crack File: Complex
 - Crash Program: Complex
@@ -59,6 +66,7 @@ The alphabetical listing in this chapter is great if you already know what you w
 - Jam Signals: Complex
 
 ### Sleaze
+
 - Check Overwatch Score: Simple
 - Crack File: Complex
 - Format Device: Complex
@@ -69,8 +77,9 @@ The alphabetical listing in this chapter is great if you already know what you w
 - Spoof Command: Complex
 
 ### Data Processing
+
 - Change Icon: Simple
-- Control Device*: Variable
+- Control Device\*: Variable
 - Edit File: Complex
 - Enter/Exit Host: Complex
 - Grid Hop: Complex
@@ -84,9 +93,10 @@ The alphabetical listing in this chapter is great if you already know what you w
 - Trace Icon: Complex
 
 ### Firewall
+
 - Disarm Data Bomb: Complex
 - Erase Matrix Signature: Complex
 - Full Matrix Defense: Interrupt
 - Jack Out: Simple
 
-*Control Device may or may not use Data Processing as its limit.
+\*Control Device may or may not use Data Processing as its limit.

@@ -250,7 +250,8 @@ export interface VehicleSelections {
  * when accessing specific sections.
  */
 export interface CreationSelections
-  extends CharacterInfoSelections,
+  extends
+    CharacterInfoSelections,
     MetatypeSelections,
     MagicalPathSelections,
     AttributeSelections,

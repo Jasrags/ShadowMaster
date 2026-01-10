@@ -11,15 +11,7 @@
 import { useState, useMemo, useCallback } from "react";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  Package,
-  Sword,
-  Shield,
-  Cpu,
-  Car,
-  AlertCircle,
-  CheckCircle2,
-} from "lucide-react";
+import { Package, Sword, Shield, Cpu, Car, AlertCircle, CheckCircle2 } from "lucide-react";
 
 // Import individual panels
 import { GearPanel } from "./gear/GearPanel";
@@ -165,9 +157,7 @@ export function GearTabsCard({ state, updateState }: GearTabsCardProps) {
       {/* Header */}
       <div className="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
         <div className="flex items-center gap-2">
-          <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-            Equipment & Gear
-          </h3>
+          <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Equipment & Gear</h3>
           {isOverBudget ? (
             <span className="flex items-center gap-1 rounded bg-red-100 px-1.5 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
               <AlertCircle className="h-3 w-3" />
@@ -185,9 +175,7 @@ export function GearTabsCard({ state, updateState }: GearTabsCardProps) {
         {nuyenBudget && (
           <div
             className={`text-sm font-medium ${
-              isOverBudget
-                ? "text-red-600 dark:text-red-400"
-                : "text-zinc-600 dark:text-zinc-400"
+              isOverBudget ? "text-red-600 dark:text-red-400" : "text-zinc-600 dark:text-zinc-400"
             }`}
           >
             {nuyenBudget.remaining.toLocaleString()}¥ remaining

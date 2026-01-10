@@ -66,10 +66,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -271,9 +268,7 @@ export function WeaponPurchaseModal({
     }
   };
 
-  const conceal = selectedWeapon
-    ? getBaseConcealability(selectedWeapon.subcategory || "")
-    : 0;
+  const conceal = selectedWeapon ? getBaseConcealability(selectedWeapon.subcategory || "") : 0;
   const canAffordSelected = selectedWeapon ? selectedWeapon.cost <= remaining : false;
 
   return (
@@ -293,246 +288,260 @@ export function WeaponPurchaseModal({
             </button>
           </div>
 
-        {/* Search & Filters */}
-        <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search weapons..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
+          {/* Search & Filters */}
+          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search weapons..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              />
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-1.5">
+              {WEAPON_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-2.5 py-1 text-xs font-medium rounded-full transition-colors ${
+                    selectedCategory === cat.id
+                      ? "bg-amber-500 text-white"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
-          {/* Category Pills */}
-          <div className="flex flex-wrap gap-1.5">
-            {WEAPON_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-2.5 py-1 text-xs font-medium rounded-full transition-colors ${
-                  selectedCategory === cat.id
-                    ? "bg-amber-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {cat.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Content - Split Pane */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Left: Weapon List - Virtualized */}
-          <div
-            ref={scrollContainerRef}
-            className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4"
-          >
-            {filteredWeapons.length === 0 ? (
-              <p className="text-sm text-zinc-500 text-center py-8">
-                No weapons found
-              </p>
-            ) : (
-              <div
-                style={{
-                  height: `${rowVirtualizer.getTotalSize()}px`,
-                  width: "100%",
-                  position: "relative",
-                }}
-              >
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                  const weapon = filteredWeapons[virtualRow.index];
-                  return (
-                    <div
-                      key={weapon.id}
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: `${virtualRow.size}px`,
-                        transform: `translateY(${virtualRow.start}px)`,
-                        padding: "4px 0",
-                      }}
-                    >
-                      <WeaponListItem
-                        weapon={weapon}
-                        isSelected={selectedWeapon?.id === weapon.id}
-                        canAfford={weapon.cost <= remaining}
-                        onClick={() => setSelectedWeapon(weapon)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Right: Detail Preview */}
-          <div className="w-1/2 overflow-y-auto p-4">
-            {selectedWeapon ? (
-              <div className="space-y-4">
-                {/* Weapon Name */}
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedWeapon.name}
-                  </h3>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400 capitalize">
-                    {selectedWeapon.subcategory?.replace("-", " ") || selectedWeapon.category}
-                  </p>
-                </div>
-
-                {/* Stats Grid */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Statistics
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Damage</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedWeapon.damage}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">AP</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedWeapon.ap}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Accuracy</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedWeapon.accuracy || "-"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Mode</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {formatModes(selectedWeapon.mode)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">RC</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedWeapon.rc || "-"}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Ammo</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedWeapon.ammo || "-"}
-                      </span>
-                    </div>
-                    {selectedWeapon.reach !== undefined && (
-                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                        <span className="text-zinc-500 dark:text-zinc-400">Reach</span>
-                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                          {selectedWeapon.reach}
-                        </span>
+          {/* Content - Split Pane */}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left: Weapon List - Virtualized */}
+            <div
+              ref={scrollContainerRef}
+              className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4"
+            >
+              {filteredWeapons.length === 0 ? (
+                <p className="text-sm text-zinc-500 text-center py-8">No weapons found</p>
+              ) : (
+                <div
+                  style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: "100%",
+                    position: "relative",
+                  }}
+                >
+                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const weapon = filteredWeapons[virtualRow.index];
+                    return (
+                      <div
+                        key={weapon.id}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${virtualRow.start}px)`,
+                          padding: "4px 0",
+                        }}
+                      >
+                        <WeaponListItem
+                          weapon={weapon}
+                          isSelected={selectedWeapon?.id === weapon.id}
+                          canAfford={weapon.cost <= remaining}
+                          onClick={() => setSelectedWeapon(weapon)}
+                        />
                       </div>
-                    )}
-                  </div>
+                    );
+                  })}
                 </div>
+              )}
+            </div>
 
-                {/* Physical Stats */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Physical
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Conceal</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {conceal >= 0 ? `+${conceal}` : conceal}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
-                      <span className={`font-medium ${
-                        selectedWeapon.legality === "forbidden"
-                          ? "text-red-600 dark:text-red-400"
-                          : selectedWeapon.legality === "restricted"
-                            ? "text-amber-600 dark:text-amber-400"
-                            : "text-zinc-900 dark:text-zinc-100"
-                      }`}>
-                        {getAvailabilityDisplay(selectedWeapon.availability, selectedWeapon.legality)}
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Wireless Bonus */}
-                <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
-                  <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
-                    <Wifi className="h-4 w-4" />
-                    Wireless Bonus
-                  </div>
-                  <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-                    Eject clip as a Free Action. +1 Accuracy when connected to a smartgun system.
-                  </p>
-                </div>
-
-                {/* Legality Warning */}
-                {(selectedWeapon.legality === "restricted" || selectedWeapon.legality === "forbidden") && (
-                  <div className={`rounded-lg p-3 ${
-                    selectedWeapon.legality === "forbidden"
-                      ? "bg-red-50 dark:bg-red-900/20"
-                      : "bg-amber-50 dark:bg-amber-900/20"
-                  }`}>
-                    <div className={`flex items-center gap-2 text-sm font-medium ${
-                      selectedWeapon.legality === "forbidden"
-                        ? "text-red-700 dark:text-red-300"
-                        : "text-amber-700 dark:text-amber-300"
-                    }`}>
-                      <AlertTriangle className="h-4 w-4" />
-                      {selectedWeapon.legality === "forbidden" ? "Forbidden" : "Restricted"}
-                    </div>
-                    <p className={`mt-1 text-xs ${
-                      selectedWeapon.legality === "forbidden"
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-amber-600 dark:text-amber-400"
-                    }`}>
-                      {selectedWeapon.legality === "forbidden"
-                        ? "Illegal to own. Possession triggers serious legal consequences."
-                        : "Requires a license. May draw law enforcement attention."}
+            {/* Right: Detail Preview */}
+            <div className="w-1/2 overflow-y-auto p-4">
+              {selectedWeapon ? (
+                <div className="space-y-4">
+                  {/* Weapon Name */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {selectedWeapon.name}
+                    </h3>
+                    <p className="text-sm text-zinc-500 dark:text-zinc-400 capitalize">
+                      {selectedWeapon.subcategory?.replace("-", " ") || selectedWeapon.category}
                     </p>
                   </div>
-                )}
 
-                {/* Purchase Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={handlePurchase}
-                    disabled={!canAffordSelected}
-                    className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                      canAffordSelected
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
-                        : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                    }`}
-                  >
-                    {canAffordSelected
-                      ? `Purchase - ${formatCurrency(selectedWeapon.cost)}¥`
-                      : `Cannot Afford (${formatCurrency(selectedWeapon.cost)}¥)`}
-                  </button>
+                  {/* Stats Grid */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Statistics
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Damage</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedWeapon.damage}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">AP</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedWeapon.ap}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Accuracy</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedWeapon.accuracy || "-"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Mode</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {formatModes(selectedWeapon.mode)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">RC</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedWeapon.rc || "-"}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Ammo</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedWeapon.ammo || "-"}
+                        </span>
+                      </div>
+                      {selectedWeapon.reach !== undefined && (
+                        <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                          <span className="text-zinc-500 dark:text-zinc-400">Reach</span>
+                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                            {selectedWeapon.reach}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Physical Stats */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Physical
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Conceal</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {conceal >= 0 ? `+${conceal}` : conceal}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
+                        <span
+                          className={`font-medium ${
+                            selectedWeapon.legality === "forbidden"
+                              ? "text-red-600 dark:text-red-400"
+                              : selectedWeapon.legality === "restricted"
+                                ? "text-amber-600 dark:text-amber-400"
+                                : "text-zinc-900 dark:text-zinc-100"
+                          }`}
+                        >
+                          {getAvailabilityDisplay(
+                            selectedWeapon.availability,
+                            selectedWeapon.legality
+                          )}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Wireless Bonus */}
+                  <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
+                    <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
+                      <Wifi className="h-4 w-4" />
+                      Wireless Bonus
+                    </div>
+                    <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                      Eject clip as a Free Action. +1 Accuracy when connected to a smartgun system.
+                    </p>
+                  </div>
+
+                  {/* Legality Warning */}
+                  {(selectedWeapon.legality === "restricted" ||
+                    selectedWeapon.legality === "forbidden") && (
+                    <div
+                      className={`rounded-lg p-3 ${
+                        selectedWeapon.legality === "forbidden"
+                          ? "bg-red-50 dark:bg-red-900/20"
+                          : "bg-amber-50 dark:bg-amber-900/20"
+                      }`}
+                    >
+                      <div
+                        className={`flex items-center gap-2 text-sm font-medium ${
+                          selectedWeapon.legality === "forbidden"
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-amber-700 dark:text-amber-300"
+                        }`}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        {selectedWeapon.legality === "forbidden" ? "Forbidden" : "Restricted"}
+                      </div>
+                      <p
+                        className={`mt-1 text-xs ${
+                          selectedWeapon.legality === "forbidden"
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-amber-600 dark:text-amber-400"
+                        }`}
+                      >
+                        {selectedWeapon.legality === "forbidden"
+                          ? "Illegal to own. Possession triggers serious legal consequences."
+                          : "Requires a license. May draw law enforcement attention."}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Purchase Button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={handlePurchase}
+                      disabled={!canAffordSelected}
+                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
+                        canAffordSelected
+                          ? "bg-amber-500 text-white hover:bg-amber-600"
+                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
+                      }`}
+                    >
+                      {canAffordSelected
+                        ? `Purchase - ${formatCurrency(selectedWeapon.cost)}¥`
+                        : `Cannot Afford (${formatCurrency(selectedWeapon.cost)}¥)`}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
-                <p className="text-sm">Select a weapon to see details</p>
-              </div>
-            )}
+              ) : (
+                <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
+                  <p className="text-sm">Select a weapon to see details</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
           {/* Footer */}
           <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              Budget: <span className="font-medium text-zinc-900 dark:text-zinc-100">{formatCurrency(remaining)}¥</span> remaining
+              Budget:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>{" "}
+              remaining
             </div>
             <button
               onClick={close}

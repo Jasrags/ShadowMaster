@@ -1,11 +1,11 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 | Head | Eye | Ear | Body | Limb | Limb Accessories | Weapon | Other | Basic Bioware | Cultured Bioware | Other Bioware |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ---- | --- | --- | ---- | ---- | ---------------- | ------ | ----- | ------------- | ---------------- | ------------- |
 
 In today’s world of transplant-friendly bioware, the use of cyberlimbs is sometimes viewed as crude and outdated. On the other hand, they are cheap and easy to service and upgrade, so in the end they became even more popular for the less fortunate. Since cyberlimbs are more capable than most natural limbs, and you can load them up with all sorts of wiz tech, this kind of cyberware has stayed in high demand.
 
@@ -15,28 +15,28 @@ Cyberlimbs have their own Strength and Agility ratings. When a particular limb i
 
 Cyberlimbs have other useful features. They give you 1 extra damage box on your Physical Condition Monitor for each cyberlimb you possess (ignore hands and feet, and partial limbs count for half a limb). They have Capacity, letting you add cyberweapons and other cyber systems that have a Capacity cost [in brackets]. They can perform at superhuman levels with the right enhancements. Cyberlimbs can be dangerous even if they don’t have cyberweapons installed— their unarmed Damage Value is (STR)P.
 
-| Part | Device | Essence | Capacity | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Limb** | **Obvious Full Arm** | 1 | 15 | 4 | 15,000¥ | Core |
-| **Limb** | **Obvious Full Leg** | 1 | 20 | 4 | 15,000¥ | Core |
-| **Limb** | **Obvious Hand/Foot** | 0.25 | 4 | 2 | 5,000¥ | Core |
-| **Limb** | **Obvious Lower Arm** | 0.45 | 10 | 4 | 10,000¥ | Core |
-| **Limb** | **Obvious Lower Leg** | 0.45 | 12 | 4 | 10,000¥ | Core |
-| **Limb** | **Obvious Torso** | 1.5 | 10 | 12 | 20,000¥ | Core |
-| **Limb** | **Obvious Skull** | 0.75 | 4 | 16 | 10,000¥ | Core |
-| **Limb** | **Synthetic Full Arm** | 1 | 8 | 4 | 20,000¥ | Core |
-| **Limb** | **Synthetic Full Leg** | 1 | 10 | 4 | 20,000¥ | Core |
-| **Limb** | **Synthetic Hand/Foot** | 0.25 | 2 | 2 | 6,000¥ | Core |
-| **Limb** | **Synthetic Lower Arm** | 0.45 | 5 | 4 | 12,000¥ | Core |
-| **Limb** | **Synthetic Lower Leg** | 0.45 | 6 | 4 | 12,000¥ | Core |
-| **Limb** | **Synthetic Torso** | 1.5 | 5 | 12 | 25,000¥ | Core |
-| **Limb** | **Synthetic Skull** | 0.75 | 2 | 16 | 15,000¥ | Core |
-| **Limb** | **Agility (R 1-3)** | - | Rating | (Rating * 3)R | Rating * 6,500¥ | Core |
-| **Limb** | **Armor (R 1-3)** | - | Rating | Rating * 5 | Rating * 3,000¥ | Core |
-| **Limb** | **Strength (R 1-3)** | - | Rating | (Rating * 3)R | Rating * 6,500¥ | Core |
-| **Limb** | **Primitive Hand/Foot** | - | - | - | 20¥ | SR5:CF |
-| **Limb** | **Primitive Partial Arm/Leg** | - | - | - | 100¥ | SR5:CF |
-| **Limb** | **Primitive Full Arm/Leg** | - | - | - | 250¥ | SR5:CF |
+| Part     | Device                        | Essence | Capacity | Avail          | Cost             | Source |
+| -------- | ----------------------------- | ------- | -------- | -------------- | ---------------- | ------ |
+| **Limb** | **Obvious Full Arm**          | 1       | 15       | 4              | 15,000¥          | Core   |
+| **Limb** | **Obvious Full Leg**          | 1       | 20       | 4              | 15,000¥          | Core   |
+| **Limb** | **Obvious Hand/Foot**         | 0.25    | 4        | 2              | 5,000¥           | Core   |
+| **Limb** | **Obvious Lower Arm**         | 0.45    | 10       | 4              | 10,000¥          | Core   |
+| **Limb** | **Obvious Lower Leg**         | 0.45    | 12       | 4              | 10,000¥          | Core   |
+| **Limb** | **Obvious Torso**             | 1.5     | 10       | 12             | 20,000¥          | Core   |
+| **Limb** | **Obvious Skull**             | 0.75    | 4        | 16             | 10,000¥          | Core   |
+| **Limb** | **Synthetic Full Arm**        | 1       | 8        | 4              | 20,000¥          | Core   |
+| **Limb** | **Synthetic Full Leg**        | 1       | 10       | 4              | 20,000¥          | Core   |
+| **Limb** | **Synthetic Hand/Foot**       | 0.25    | 2        | 2              | 6,000¥           | Core   |
+| **Limb** | **Synthetic Lower Arm**       | 0.45    | 5        | 4              | 12,000¥          | Core   |
+| **Limb** | **Synthetic Lower Leg**       | 0.45    | 6        | 4              | 12,000¥          | Core   |
+| **Limb** | **Synthetic Torso**           | 1.5     | 5        | 12             | 25,000¥          | Core   |
+| **Limb** | **Synthetic Skull**           | 0.75    | 2        | 16             | 15,000¥          | Core   |
+| **Limb** | **Agility (R 1-3)**           | -       | Rating   | (Rating \* 3)R | Rating \* 6,500¥ | Core   |
+| **Limb** | **Armor (R 1-3)**             | -       | Rating   | Rating \* 5    | Rating \* 3,000¥ | Core   |
+| **Limb** | **Strength (R 1-3)**          | -       | Rating   | (Rating \* 3)R | Rating \* 6,500¥ | Core   |
+| **Limb** | **Primitive Hand/Foot**       | -       | -        | -              | 20¥              | SR5:CF |
+| **Limb** | **Primitive Partial Arm/Leg** | -       | -        | -              | 100¥             | SR5:CF |
+| **Limb** | **Primitive Full Arm/Leg**    | -       | -        | -              | 250¥             | SR5:CF |
 
 ## Contents
 
@@ -74,11 +74,11 @@ Cyberlimbs have other useful features. They give you 1 extra damage box on your 
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | - | Cyberlimb+1 | +5,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL       | COST    | SOURCE |
+| ------- | -------- | ----------- | ------- | ------ |
+| -       | -        | Cyberlimb+1 | +5,000¥ | Core   |
 
-| Cost and Availability Multiply by each STR and AGI point above 3 |  |
+| Cost and Availability Multiply by each STR and AGI point above 3 | |
 | All standard cyberlimbs come with Strength and Agility attributes of 3. These values can only be augmented by cyberlimb enhancements, not other augmentations. You can have your cyberlimb tailored and customized to your frame and musculature. Customization lets you add to your limb’s base Strength and/or Agility ratings. Each increase of either attribute increases the limb’s Availability and cost. If either of your limb’s attributes are increased beyond your natural maximum for that attribute, you can’t use the cyberlimb (so don’t overdo it), but you can still add cyberlimb enhancements. You customize your cyberlimb when you buy it; you can’t customize it after purchase, but you can add enhancements.Cyberlimbs may be either obvious or synthetic. |
 
 # Obvious Limbs
@@ -89,78 +89,78 @@ These implants are immediately recognizable as artificial limbs unless you cover
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1 | 15 | 4 | 15,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1       | 15       | 4     | 15,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Full Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1 | 20 | 4 | 15,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1       | 20       | 4     | 15,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Hand/Foot
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | 4 | 2 | 5,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.25    | 4        | 2     | 5,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Lower Arm
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.45 | 10 | 4 | 10,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.45    | 10       | 4     | 10,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Lower Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.45 | 12 | 4 | 10,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.45    | 12       | 4     | 10,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Torso
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1.5 | 10 | 12 | 20,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1.5     | 10       | 12    | 20,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Obvious Skull
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.75 | 4 | 16 | 10,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.75    | 4        | 16    | 10,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 # Synthetic Limbs
 
@@ -170,78 +170,78 @@ Synthetic limbs are disguised as natural limbs. The fact that they’re cybernet
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1 | 8 | 4 | 20,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1       | 8        | 4     | 20,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Full Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1 | 10 | 4 | 20,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1       | 10       | 4     | 20,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Hand/Foot
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | 2 | 2 | 6,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.25    | 2        | 2     | 6,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Lower Arm
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.45 | 5 | 4 | 12,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.45    | 5        | 4     | 12,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Lower Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.45 | 6 | 4 | 12,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.45    | 6        | 4     | 12,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Torso
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1.5 | 5 | 12 | 25,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1.5     | 5        | 12    | 25,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Synthetic Skull
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.75 | 2 | 16 | 15,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.75    | 2        | 16    | 15,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 # Primitive Limbs
 
@@ -250,33 +250,33 @@ Synthetic limbs are disguised as natural limbs. The fact that they’re cybernet
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | - | - | 20¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| -       | -        | -     | 20¥  | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Primitive Partial Arm/Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | - | - | 100¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| -       | -        | -     | 100¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Primitive Full Arm/Leg
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | - | - | 250¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| -       | -        | -     | 250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 # Cyberlimb Enhancements
 
@@ -286,31 +286,31 @@ Cyberlimb enhancements use up to the Capacity of the cyberlimb they enhance. The
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | Rating | (Rating x 3)R | 6,500¥ x Rating | Core |
+| ESSENCE | CAPACITY | AVAIL         | COST            | SOURCE |
+| ------- | -------- | ------------- | --------------- | ------ |
+| -       | Rating   | (Rating x 3)R | 6,500¥ x Rating | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Armor (R 1-3)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | Rating | Rating x 5 | 3,000¥ x Rating | Core |
+| ESSENCE | CAPACITY | AVAIL      | COST            | SOURCE |
+| ------- | -------- | ---------- | --------------- | ------ |
+| -       | Rating   | Rating x 5 | 3,000¥ x Rating | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Strength (R 1-3)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | Rating | (Rating x 3)R | 6,500¥ x Rating | Core |
+| ESSENCE | CAPACITY | AVAIL         | COST            | SOURCE |
+| ------- | -------- | ------------- | --------------- | ------ |
+| -       | Rating   | (Rating x 3)R | 6,500¥ x Rating | Core   |
 
-|  |  |
-|  |
+| | |
+| |

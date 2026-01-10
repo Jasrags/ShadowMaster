@@ -57,10 +57,7 @@ export function isItemWirelessActive(
  * Check if a cyberware item should contribute wireless bonuses.
  * Considers both wireless state and device condition (if applicable).
  */
-export function isCyberwareWirelessActive(
-  cyberware: CyberwareItem,
-  character: Character
-): boolean {
+export function isCyberwareWirelessActive(cyberware: CyberwareItem, character: Character): boolean {
   // Check basic wireless state
   if (!isItemWirelessActive(cyberware, character)) {
     return false;
@@ -81,9 +78,7 @@ export function isCyberwareWirelessActive(
 /**
  * Collect all wireless effects from cyberware.
  */
-export function collectCyberwareEffects(
-  character: Character
-): WirelessEffect[] {
+export function collectCyberwareEffects(character: Character): WirelessEffect[] {
   const cyberware = character.cyberware || [];
   const effects: WirelessEffect[] = [];
 
@@ -120,10 +115,7 @@ export function collectBiowareEffects(character: Character): WirelessEffect[] {
       wirelessEffects?: WirelessEffect[];
     };
 
-    if (
-      isItemWirelessActive(itemWithWireless, character) &&
-      itemWithWireless.wirelessEffects
-    ) {
+    if (isItemWirelessActive(itemWithWireless, character) && itemWithWireless.wirelessEffects) {
       effects.push(...itemWithWireless.wirelessEffects);
     }
   }
@@ -135,18 +127,13 @@ export function collectBiowareEffects(character: Character): WirelessEffect[] {
  * Collect wireless effects from weapon modifications (e.g., smartgun).
  * Only applies to readied or holstered weapons with wireless enabled.
  */
-export function collectWeaponModEffects(
-  character: Character
-): WirelessEffect[] {
+export function collectWeaponModEffects(character: Character): WirelessEffect[] {
   const weapons = character.weapons || [];
   const effects: WirelessEffect[] = [];
 
   for (const weapon of weapons) {
     // Weapon must be available (not stored) and have wireless
-    if (
-      weapon.state?.readiness === "stored" ||
-      weapon.state?.wirelessEnabled === false
-    ) {
+    if (weapon.state?.readiness === "stored" || weapon.state?.wirelessEnabled === false) {
       continue;
     }
 
@@ -179,9 +166,7 @@ export function collectWeaponModEffects(
  * Calculate all active wireless bonuses for a character.
  * Aggregates effects from all wireless-enabled equipment.
  */
-export function calculateWirelessBonuses(
-  character: Character
-): ActiveWirelessBonuses {
+export function calculateWirelessBonuses(character: Character): ActiveWirelessBonuses {
   // Start with empty bonuses
   let bonuses: ActiveWirelessBonuses = { ...EMPTY_WIRELESS_BONUSES };
   bonuses.attributes = {};
@@ -199,11 +184,7 @@ export function calculateWirelessBonuses(
   const biowareEffects = collectBiowareEffects(character);
   const weaponEffects = collectWeaponModEffects(character);
 
-  const allEffects = [
-    ...cyberwareEffects,
-    ...biowareEffects,
-    ...weaponEffects,
-  ];
+  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects];
 
   // Apply each effect to bonuses
   for (const effect of allEffects) {
@@ -233,11 +214,7 @@ export function calculateContextualWirelessBonuses(
   const biowareEffects = collectBiowareEffects(character);
   const weaponEffects = collectWeaponModEffects(character);
 
-  const allEffects = [
-    ...cyberwareEffects,
-    ...biowareEffects,
-    ...weaponEffects,
-  ];
+  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects];
 
   // Only apply effects that match the context
   for (const effect of allEffects) {
@@ -268,10 +245,7 @@ export function getWirelessInitiativeDiceBonus(character: Character): number {
 /**
  * Get wireless bonus for a specific attribute.
  */
-export function getWirelessAttributeBonus(
-  character: Character,
-  attribute: AttributeKey
-): number {
+export function getWirelessAttributeBonus(character: Character, attribute: AttributeKey): number {
   const bonuses = calculateWirelessBonuses(character);
   return bonuses.attributes[attribute] ?? 0;
 }
@@ -280,10 +254,7 @@ export function getWirelessAttributeBonus(
  * Get wireless bonus for attack pools.
  * Optionally filter by ranged/melee context.
  */
-export function getWirelessAttackBonus(
-  character: Character,
-  isRanged: boolean = true
-): number {
+export function getWirelessAttackBonus(character: Character, isRanged: boolean = true): number {
   const context = isRanged ? "ranged_attack" : "melee_attack";
   const bonuses = calculateContextualWirelessBonuses(character, context);
   return bonuses.attackPool;
@@ -300,10 +271,7 @@ export function getWirelessDefenseBonus(character: Character): number {
 /**
  * Get wireless bonus for a specific limit.
  */
-export function getWirelessLimitBonus(
-  character: Character,
-  limit: LimitKey
-): number {
+export function getWirelessLimitBonus(character: Character, limit: LimitKey): number {
   const bonuses = calculateWirelessBonuses(character);
   return bonuses.limits[limit] ?? 0;
 }

@@ -7,10 +7,7 @@
  */
 
 import { useMemo, useState } from "react";
-import {
-  useDrones,
-  type DroneCatalogItemData,
-} from "@/lib/rules/RulesetContext";
+import { useDrones, type DroneCatalogItemData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
 import { Search, Bot, Plus } from "lucide-react";
@@ -63,10 +60,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -81,12 +75,7 @@ function isItemAvailable(availability: number): boolean {
 // COMPONENT
 // =============================================================================
 
-export function DroneModal({
-  isOpen,
-  onClose,
-  onAdd,
-  remainingNuyen,
-}: DroneModalProps) {
+export function DroneModal({ isOpen, onClose, onAdd, remainingNuyen }: DroneModalProps) {
   const drones = useDrones();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -135,7 +124,9 @@ export function DroneModal({
           <div className="border-b border-zinc-200 px-4 py-2 dark:border-zinc-700">
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
               Budget:{" "}
-              <span className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>
+              <span
+                className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
+              >
                 {formatCurrency(remainingNuyen)}¥
               </span>{" "}
               remaining
@@ -179,9 +170,15 @@ export function DroneModal({
                           <span>{drone.droneType}</span>
                           <span>Hand: {drone.handling}</span>
                           <span>Spd: {drone.speed}</span>
-                          <span>B/A: {drone.body}/{drone.armor}</span>
-                          <span>P/S: {drone.pilot}/{drone.sensor}</span>
-                          <span>Avail: {getAvailabilityDisplay(drone.availability, drone.legality)}</span>
+                          <span>
+                            B/A: {drone.body}/{drone.armor}
+                          </span>
+                          <span>
+                            P/S: {drone.pilot}/{drone.sensor}
+                          </span>
+                          <span>
+                            Avail: {getAvailabilityDisplay(drone.availability, drone.legality)}
+                          </span>
                         </div>
                       </div>
                       <div className="ml-3 flex flex-col items-end gap-2">

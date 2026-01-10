@@ -5,19 +5,19 @@
  * and quality selection validation.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import type { Character, Quality, MergedRuleset, QualitySelection } from '@/lib/types';
+import { describe, it, expect, beforeEach } from "vitest";
+import type { Character, Quality, MergedRuleset, QualitySelection } from "@/lib/types";
 import {
   validatePrerequisites,
   checkIncompatibilities,
   canTakeQuality,
   validateQualitySelection,
   validateAllQualities,
-} from '../validation';
-import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../validation";
+import { createMockMergedRuleset } from "@/__tests__/mocks/rulesets";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
-describe('Quality Validation', () => {
+describe("Quality Validation", () => {
   let ruleset: MergedRuleset;
   let character: Character;
 
@@ -34,52 +34,52 @@ describe('Quality Validation', () => {
     character = createMockCharacter();
   });
 
-  describe('validatePrerequisites', () => {
-    it('should allow quality with no prerequisites', () => {
+  describe("validatePrerequisites", () => {
+    it("should allow quality with no prerequisites", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const result = validatePrerequisites(quality, character, ruleset);
       expect(result.allowed).toBe(true);
     });
 
-    it('should validate metatype requirements', () => {
+    it("should validate metatype requirements", () => {
       const quality: Quality = {
-        id: 'elf-only',
-        name: 'Elf Only',
-        type: 'positive',
+        id: "elf-only",
+        name: "Elf Only",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Elf-only quality',
+        summary: "Elf-only quality",
         prerequisites: {
-          metatypes: ['Elf'],
+          metatypes: ["Elf"],
         },
       };
 
       // Human character should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires metatype: Elf');
+      expect(result1.reason).toContain("Requires metatype: Elf");
 
       // Elf character should pass
-      const elfCharacter = createMockCharacter({ metatype: 'Elf' });
+      const elfCharacter = createMockCharacter({ metatype: "Elf" });
       const result2 = validatePrerequisites(quality, elfCharacter, ruleset);
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate excluded metatypes', () => {
+    it("should validate excluded metatypes", () => {
       const quality: Quality = {
-        id: 'no-elf',
-        name: 'No Elf',
-        type: 'positive',
+        id: "no-elf",
+        name: "No Elf",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Not for elves',
+        summary: "Not for elves",
         prerequisites: {
-          metatypesExcluded: ['Elf'],
+          metatypesExcluded: ["Elf"],
         },
       };
 
@@ -88,19 +88,19 @@ describe('Quality Validation', () => {
       expect(result1.allowed).toBe(true);
 
       // Elf character should fail
-      const elfCharacter = createMockCharacter({ metatype: 'Elf' });
+      const elfCharacter = createMockCharacter({ metatype: "Elf" });
       const result2 = validatePrerequisites(quality, elfCharacter, ruleset);
       expect(result2.allowed).toBe(false);
-      expect(result2.reason).toContain('Not available to Elf');
+      expect(result2.reason).toContain("Not available to Elf");
     });
 
-    it('should validate magic requirements', () => {
+    it("should validate magic requirements", () => {
       const quality: Quality = {
-        id: 'magic-required',
-        name: 'Magic Required',
-        type: 'positive',
+        id: "magic-required",
+        name: "Magic Required",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires magic',
+        summary: "Requires magic",
         prerequisites: {
           hasMagic: true,
         },
@@ -109,7 +109,7 @@ describe('Quality Validation', () => {
       // Mundane character should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires Magic attribute');
+      expect(result1.reason).toContain("Requires Magic attribute");
 
       // Awakened character should pass
       const awakenedCharacter = createMockCharacter({
@@ -123,13 +123,13 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate resonance requirements', () => {
+    it("should validate resonance requirements", () => {
       const quality: Quality = {
-        id: 'resonance-required',
-        name: 'Resonance Required',
-        type: 'positive',
+        id: "resonance-required",
+        name: "Resonance Required",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires resonance',
+        summary: "Requires resonance",
         prerequisites: {
           hasResonance: true,
         },
@@ -138,7 +138,7 @@ describe('Quality Validation', () => {
       // Mundane character should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires Resonance attribute');
+      expect(result1.reason).toContain("Requires Resonance attribute");
 
       // Technomancer character should pass
       const technomancerCharacter = createMockCharacter({
@@ -152,13 +152,13 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate attribute requirements', () => {
+    it("should validate attribute requirements", () => {
       const quality: Quality = {
-        id: 'high-willpower',
-        name: 'High Willpower',
-        type: 'positive',
+        id: "high-willpower",
+        name: "High Willpower",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires high willpower',
+        summary: "Requires high willpower",
         prerequisites: {
           attributes: {
             willpower: { min: 4 },
@@ -169,7 +169,7 @@ describe('Quality Validation', () => {
       // Low willpower should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires willpower 4+');
+      expect(result1.reason).toContain("Requires willpower 4+");
 
       // High willpower should pass
       const highWillCharacter = createMockCharacter({
@@ -181,13 +181,13 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate attribute maximum requirements', () => {
+    it("should validate attribute maximum requirements", () => {
       const quality: Quality = {
-        id: 'low-agility',
-        name: 'Low Agility',
-        type: 'positive',
+        id: "low-agility",
+        name: "Low Agility",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires low agility',
+        summary: "Requires low agility",
         prerequisites: {
           attributes: {
             agility: { max: 3 },
@@ -203,7 +203,7 @@ describe('Quality Validation', () => {
       });
       const result1 = validatePrerequisites(quality, highAgilityCharacter, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires agility ≤3');
+      expect(result1.reason).toContain("Requires agility ≤3");
 
       // Low agility should pass
       const lowAgilityCharacter = createMockCharacter({
@@ -215,13 +215,13 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate skill requirements', () => {
+    it("should validate skill requirements", () => {
       const quality: Quality = {
-        id: 'skilled',
-        name: 'Skilled',
-        type: 'positive',
+        id: "skilled",
+        name: "Skilled",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires high skill',
+        summary: "Requires high skill",
         prerequisites: {
           skills: {
             firearms: { min: 4 },
@@ -232,7 +232,7 @@ describe('Quality Validation', () => {
       // Low skill should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires firearms skill 4+');
+      expect(result1.reason).toContain("Requires firearms skill 4+");
 
       // High skill should pass
       const skilledCharacter = createMockCharacter({
@@ -244,26 +244,26 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate magical path requirements', () => {
+    it("should validate magical path requirements", () => {
       const quality: Quality = {
-        id: 'mage-only',
-        name: 'Mage Only',
-        type: 'positive',
+        id: "mage-only",
+        name: "Mage Only",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Mage only',
+        summary: "Mage only",
         prerequisites: {
-          magicalPaths: ['full-mage'],
+          magicalPaths: ["full-mage"],
         },
       };
 
       // Mundane should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires magical path: full-mage');
+      expect(result1.reason).toContain("Requires magical path: full-mage");
 
       // Mage should pass
       const mageCharacter = createMockCharacter({
-        magicalPath: 'full-mage',
+        magicalPath: "full-mage",
         specialAttributes: {
           edge: 1,
           essence: 6,
@@ -274,15 +274,15 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate excluded magical paths', () => {
+    it("should validate excluded magical paths", () => {
       const quality: Quality = {
-        id: 'no-adept',
-        name: 'No Adept',
-        type: 'positive',
+        id: "no-adept",
+        name: "No Adept",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Not for adepts',
+        summary: "Not for adepts",
         prerequisites: {
-          magicalPathsExcluded: ['adept'],
+          magicalPathsExcluded: ["adept"],
         },
       };
 
@@ -292,7 +292,7 @@ describe('Quality Validation', () => {
 
       // Adept should fail
       const adeptCharacter = createMockCharacter({
-        magicalPath: 'adept',
+        magicalPath: "adept",
         specialAttributes: {
           edge: 1,
           essence: 6,
@@ -301,32 +301,32 @@ describe('Quality Validation', () => {
       });
       const result2 = validatePrerequisites(quality, adeptCharacter, ruleset);
       expect(result2.allowed).toBe(false);
-      expect(result2.reason).toContain('Not available to adept');
+      expect(result2.reason).toContain("Not available to adept");
     });
 
-    it('should validate required qualities (all)', () => {
+    it("should validate required qualities (all)", () => {
       const quality: Quality = {
-        id: 'advanced-quality',
-        name: 'Advanced Quality',
-        type: 'positive',
+        id: "advanced-quality",
+        name: "Advanced Quality",
+        type: "positive",
         karmaCost: 10,
-        summary: 'Requires base quality',
+        summary: "Requires base quality",
         prerequisites: {
-          requiredQualities: ['base-quality'],
+          requiredQualities: ["base-quality"],
         },
       };
 
       // Without base quality should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires quality: base-quality');
+      expect(result1.reason).toContain("Requires quality: base-quality");
 
       // With base quality should pass
       const withBaseCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'base-quality',
-            source: 'creation',
+            qualityId: "base-quality",
+            source: "creation",
           },
         ],
       });
@@ -334,29 +334,29 @@ describe('Quality Validation', () => {
       expect(result2.allowed).toBe(true);
     });
 
-    it('should validate required any qualities (at least one)', () => {
+    it("should validate required any qualities (at least one)", () => {
       const quality: Quality = {
-        id: 'flexible-quality',
-        name: 'Flexible Quality',
-        type: 'positive',
+        id: "flexible-quality",
+        name: "Flexible Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires one of several qualities',
+        summary: "Requires one of several qualities",
         prerequisites: {
-          requiredAnyQualities: ['quality-a', 'quality-b'],
+          requiredAnyQualities: ["quality-a", "quality-b"],
         },
       };
 
       // Without any should fail
       const result1 = validatePrerequisites(quality, character, ruleset);
       expect(result1.allowed).toBe(false);
-      expect(result1.reason).toContain('Requires at least one of: quality-a, quality-b');
+      expect(result1.reason).toContain("Requires at least one of: quality-a, quality-b");
 
       // With one should pass
       const withOneCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-a',
-            source: 'creation',
+            qualityId: "quality-a",
+            source: "creation",
           },
         ],
       });
@@ -365,28 +365,28 @@ describe('Quality Validation', () => {
     });
   });
 
-  describe('checkIncompatibilities', () => {
-    it('should allow quality with no incompatibilities', () => {
+  describe("checkIncompatibilities", () => {
+    it("should allow quality with no incompatibilities", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const result = checkIncompatibilities(quality, character);
       expect(result.allowed).toBe(true);
     });
 
-    it('should detect incompatible qualities', () => {
+    it("should detect incompatible qualities", () => {
       const quality: Quality = {
-        id: 'quality-a',
-        name: 'Quality A',
-        type: 'positive',
+        id: "quality-a",
+        name: "Quality A",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Incompatible with B',
-        incompatibilities: ['quality-b'],
+        summary: "Incompatible with B",
+        incompatibilities: ["quality-b"],
       };
 
       // Without incompatible quality should pass
@@ -397,31 +397,31 @@ describe('Quality Validation', () => {
       const withIncompatibleCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-b',
-            source: 'creation',
+            qualityId: "quality-b",
+            source: "creation",
           },
         ],
       });
       const result2 = checkIncompatibilities(quality, withIncompatibleCharacter);
       expect(result2.allowed).toBe(false);
-      expect(result2.reason).toContain('Incompatible with: quality-b');
+      expect(result2.reason).toContain("Incompatible with: quality-b");
     });
 
-    it('should check incompatibilities case-insensitively', () => {
+    it("should check incompatibilities case-insensitively", () => {
       const quality: Quality = {
-        id: 'quality-a',
-        name: 'Quality A',
-        type: 'positive',
+        id: "quality-a",
+        name: "Quality A",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Incompatible with B',
-        incompatibilities: ['Quality-B'],
+        summary: "Incompatible with B",
+        incompatibilities: ["Quality-B"],
       };
 
       const withIncompatibleCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-b',
-            source: 'creation',
+            qualityId: "quality-b",
+            source: "creation",
           },
         ],
       });
@@ -430,27 +430,27 @@ describe('Quality Validation', () => {
     });
   });
 
-  describe('canTakeQuality', () => {
-    it('should allow quality when all checks pass', () => {
+  describe("canTakeQuality", () => {
+    it("should allow quality when all checks pass", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const result = canTakeQuality(quality, character, ruleset);
       expect(result.allowed).toBe(true);
     });
 
-    it('should fail when prerequisites not met', () => {
+    it("should fail when prerequisites not met", () => {
       const quality: Quality = {
-        id: 'magic-required',
-        name: 'Magic Required',
-        type: 'positive',
+        id: "magic-required",
+        name: "Magic Required",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires magic',
+        summary: "Requires magic",
         prerequisites: {
           hasMagic: true,
         },
@@ -460,21 +460,21 @@ describe('Quality Validation', () => {
       expect(result.allowed).toBe(false);
     });
 
-    it('should fail when incompatibility exists', () => {
+    it("should fail when incompatibility exists", () => {
       const quality: Quality = {
-        id: 'quality-a',
-        name: 'Quality A',
-        type: 'positive',
+        id: "quality-a",
+        name: "Quality A",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Incompatible with B',
-        incompatibilities: ['quality-b'],
+        summary: "Incompatible with B",
+        incompatibilities: ["quality-b"],
       };
 
       const withIncompatibleCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-b',
-            source: 'creation',
+            qualityId: "quality-b",
+            source: "creation",
           },
         ],
       });
@@ -483,45 +483,45 @@ describe('Quality Validation', () => {
       expect(result.allowed).toBe(false);
     });
 
-    it('should fail when quality limit exceeded', () => {
+    it("should fail when quality limit exceeded", () => {
       const quality: Quality = {
-        id: 'limited-quality',
-        name: 'Limited Quality',
-        type: 'positive',
+        id: "limited-quality",
+        name: "Limited Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Can only take once',
+        summary: "Can only take once",
         limit: 1,
       };
 
       const withQualityCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'limited-quality',
-            source: 'creation',
+            qualityId: "limited-quality",
+            source: "creation",
           },
         ],
       });
 
       const result = canTakeQuality(quality, withQualityCharacter, ruleset);
       expect(result.allowed).toBe(false);
-      expect(result.reason).toContain('Already have maximum instances');
+      expect(result.reason).toContain("Already have maximum instances");
     });
 
-    it('should allow when limit not exceeded', () => {
+    it("should allow when limit not exceeded", () => {
       const quality: Quality = {
-        id: 'multi-quality',
-        name: 'Multi Quality',
-        type: 'positive',
+        id: "multi-quality",
+        name: "Multi Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Can take multiple times',
+        summary: "Can take multiple times",
         limit: 3,
       };
 
       const withOneInstanceCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'multi-quality',
-            source: 'creation',
+            qualityId: "multi-quality",
+            source: "creation",
           },
         ],
       });
@@ -530,21 +530,21 @@ describe('Quality Validation', () => {
       expect(result.allowed).toBe(true);
     });
 
-    it('should skip limit check when option provided', () => {
+    it("should skip limit check when option provided", () => {
       const quality: Quality = {
-        id: 'limited-quality',
-        name: 'Limited Quality',
-        type: 'positive',
+        id: "limited-quality",
+        name: "Limited Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Can only take once',
+        summary: "Can only take once",
         limit: 1,
       };
 
       const withQualityCharacter = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'limited-quality',
-            source: 'creation',
+            qualityId: "limited-quality",
+            source: "creation",
           },
         ],
       });
@@ -556,19 +556,19 @@ describe('Quality Validation', () => {
     });
   });
 
-  describe('validateQualitySelection', () => {
-    it('should validate selection with no requirements', () => {
+  describe("validateQualitySelection", () => {
+    it("should validate selection with no requirements", () => {
       const quality: Quality = {
-        id: 'simple-quality',
-        name: 'Simple Quality',
-        type: 'positive',
+        id: "simple-quality",
+        name: "Simple Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Simple quality',
+        summary: "Simple quality",
       };
 
       const selection: QualitySelection = {
-        qualityId: 'simple-quality',
-        source: 'creation',
+        qualityId: "simple-quality",
+        source: "creation",
       };
 
       const result = validateQualitySelection(selection, quality, character);
@@ -576,72 +576,72 @@ describe('Quality Validation', () => {
       expect(result.errors).toHaveLength(0);
     });
 
-    it('should require rating for per-rating qualities', () => {
+    it("should require rating for per-rating qualities", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
 
       // Missing rating should fail
       const selection1: QualitySelection = {
-        qualityId: 'rated-quality',
-        source: 'creation',
+        qualityId: "rated-quality",
+        source: "creation",
       };
 
       const result1 = validateQualitySelection(selection1, quality, character);
       expect(result1.valid).toBe(false);
       expect(result1.errors).toHaveLength(1);
-      expect(result1.errors[0].field).toBe('rating');
+      expect(result1.errors[0].field).toBe("rating");
 
       // Valid rating should pass
       const selection2: QualitySelection = {
-        qualityId: 'rated-quality',
+        qualityId: "rated-quality",
         rating: 2,
-        source: 'creation',
+        source: "creation",
       };
 
       const result2 = validateQualitySelection(selection2, quality, character);
       expect(result2.valid).toBe(true);
     });
 
-    it('should validate rating range', () => {
+    it("should validate rating range", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
 
       // Rating too low should fail
       const selection1: QualitySelection = {
-        qualityId: 'rated-quality',
+        qualityId: "rated-quality",
         rating: 0,
-        source: 'creation',
+        source: "creation",
       };
 
       const result1 = validateQualitySelection(selection1, quality, character);
       expect(result1.valid).toBe(false);
-      expect(result1.errors[0].message).toContain('rating must be 1-2');
+      expect(result1.errors[0].message).toContain("rating must be 1-2");
 
       // Rating too high should fail
       const selection2: QualitySelection = {
-        qualityId: 'rated-quality',
+        qualityId: "rated-quality",
         rating: 3,
-        source: 'creation',
+        source: "creation",
       };
 
       const result2 = validateQualitySelection(selection2, quality, character);
@@ -649,72 +649,72 @@ describe('Quality Validation', () => {
 
       // Valid rating should pass
       const selection3: QualitySelection = {
-        qualityId: 'rated-quality',
+        qualityId: "rated-quality",
         rating: 1,
-        source: 'creation',
+        source: "creation",
       };
 
       const result3 = validateQualitySelection(selection3, quality, character);
       expect(result3.valid).toBe(true);
     });
 
-    it('should require specification when needed', () => {
+    it("should require specification when needed", () => {
       const quality: Quality = {
-        id: 'spec-quality',
-        name: 'Spec Quality',
-        type: 'positive',
+        id: "spec-quality",
+        name: "Spec Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires specification',
+        summary: "Requires specification",
         requiresSpecification: true,
       };
 
       // Missing specification should fail
       const selection1: QualitySelection = {
-        qualityId: 'spec-quality',
-        source: 'creation',
+        qualityId: "spec-quality",
+        source: "creation",
       };
 
       const result1 = validateQualitySelection(selection1, quality, character);
       expect(result1.valid).toBe(false);
-      expect(result1.errors[0].field).toBe('specification');
+      expect(result1.errors[0].field).toBe("specification");
 
       // With specification should pass
       const selection2: QualitySelection = {
-        qualityId: 'spec-quality',
-        specification: 'Test Spec',
-        source: 'creation',
+        qualityId: "spec-quality",
+        specification: "Test Spec",
+        source: "creation",
       };
 
       const result2 = validateQualitySelection(selection2, quality, character);
       expect(result2.valid).toBe(true);
     });
 
-    it('should validate specification against options', () => {
+    it("should validate specification against options", () => {
       const quality: Quality = {
-        id: 'option-quality',
-        name: 'Option Quality',
-        type: 'positive',
+        id: "option-quality",
+        name: "Option Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Has options',
-        specificationOptions: ['option-a', 'option-b'],
+        summary: "Has options",
+        specificationOptions: ["option-a", "option-b"],
       };
 
       // Invalid option should fail
       const selection1: QualitySelection = {
-        qualityId: 'option-quality',
-        specification: 'invalid-option',
-        source: 'creation',
+        qualityId: "option-quality",
+        specification: "invalid-option",
+        source: "creation",
       };
 
       const result1 = validateQualitySelection(selection1, quality, character);
       expect(result1.valid).toBe(false);
-      expect(result1.errors[0].message).toContain('must be one of: option-a, option-b');
+      expect(result1.errors[0].message).toContain("must be one of: option-a, option-b");
 
       // Valid option should pass
       const selection2: QualitySelection = {
-        qualityId: 'option-quality',
-        specification: 'option-a',
-        source: 'creation',
+        qualityId: "option-quality",
+        specification: "option-a",
+        source: "creation",
       };
 
       const result2 = validateQualitySelection(selection2, quality, character);
@@ -722,22 +722,22 @@ describe('Quality Validation', () => {
     });
   });
 
-  describe('validateAllQualities', () => {
-    it('should validate all qualities on character', () => {
+  describe("validateAllQualities", () => {
+    it("should validate all qualities on character", () => {
       const quality1: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'positive',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "positive",
         karmaCost: 5,
-        summary: 'First quality',
+        summary: "First quality",
       };
 
       const quality2: Quality = {
-        id: 'quality-2',
-        name: 'Quality 2',
-        type: 'positive',
+        id: "quality-2",
+        name: "Quality 2",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Second quality',
+        summary: "Second quality",
         prerequisites: {
           hasMagic: true,
         },
@@ -756,12 +756,12 @@ describe('Quality Validation', () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
           {
-            qualityId: 'quality-2',
-            source: 'creation',
+            qualityId: "quality-2",
+            source: "creation",
           },
         ],
       });
@@ -769,31 +769,31 @@ describe('Quality Validation', () => {
       const result = validateAllQualities(characterWithQualities, rulesetWithQualities);
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors.some((e) => e.qualityId === 'quality-2')).toBe(true);
+      expect(result.errors.some((e) => e.qualityId === "quality-2")).toBe(true);
     });
 
-    it('should report missing quality definitions', () => {
+    it("should report missing quality definitions", () => {
       const characterWithUnknownQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'unknown-quality',
-            source: 'creation',
+            qualityId: "unknown-quality",
+            source: "creation",
           },
         ],
       });
 
       const result = validateAllQualities(characterWithUnknownQuality, ruleset);
       expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.message.includes('not found'))).toBe(true);
+      expect(result.errors.some((e) => e.message.includes("not found"))).toBe(true);
     });
 
-    it('should return valid when all qualities are valid', () => {
+    it("should return valid when all qualities are valid", () => {
       const quality: Quality = {
-        id: 'valid-quality',
-        name: 'Valid Quality',
-        type: 'positive',
+        id: "valid-quality",
+        name: "Valid Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Valid quality',
+        summary: "Valid quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -809,8 +809,8 @@ describe('Quality Validation', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'valid-quality',
-            source: 'creation',
+            qualityId: "valid-quality",
+            source: "creation",
           },
         ],
       });
@@ -821,4 +821,3 @@ describe('Quality Validation', () => {
     });
   });
 });
-

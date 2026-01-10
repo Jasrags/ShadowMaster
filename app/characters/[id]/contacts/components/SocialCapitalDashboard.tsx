@@ -29,9 +29,10 @@ export function SocialCapitalDashboard({
     .slice(0, 5);
 
   // Calculate budget percentage
-  const budgetPercentage = socialCapital.maxContactPoints > 0
-    ? Math.round((socialCapital.usedContactPoints / socialCapital.maxContactPoints) * 100)
-    : 0;
+  const budgetPercentage =
+    socialCapital.maxContactPoints > 0
+      ? Math.round((socialCapital.usedContactPoints / socialCapital.maxContactPoints) * 100)
+      : 0;
 
   // Get bar color based on usage
   const getBarColor = () => {
@@ -72,21 +73,15 @@ export function SocialCapitalDashboard({
         </div>
         <div className={`p-3 rounded text-center ${t.colors.card} border ${t.colors.border}`}>
           <div className="text-[10px] text-emerald-400 uppercase font-mono">Active</div>
-          <div className="text-xl font-bold text-emerald-400">
-            {socialCapital.activeContacts}
-          </div>
+          <div className="text-xl font-bold text-emerald-400">{socialCapital.activeContacts}</div>
         </div>
         <div className={`p-3 rounded text-center ${t.colors.card} border ${t.colors.border}`}>
           <div className="text-[10px] text-red-400 uppercase font-mono">Burned</div>
-          <div className="text-xl font-bold text-red-400">
-            {socialCapital.burnedContacts}
-          </div>
+          <div className="text-xl font-bold text-red-400">{socialCapital.burnedContacts}</div>
         </div>
         <div className={`p-3 rounded text-center ${t.colors.card} border ${t.colors.border}`}>
           <div className="text-[10px] text-amber-400 uppercase font-mono">Inactive</div>
-          <div className="text-xl font-bold text-amber-400">
-            {socialCapital.inactiveContacts}
-          </div>
+          <div className="text-xl font-bold text-amber-400">{socialCapital.inactiveContacts}</div>
         </div>
       </div>
 
@@ -103,10 +98,7 @@ export function SocialCapitalDashboard({
                 <div key={archetype} className="flex items-center gap-2">
                   <div className="w-20 text-xs text-muted-foreground truncate">{archetype}</div>
                   <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
-                    <div
-                      className={`h-full ${t.colors.accentBg}`}
-                      style={{ width: `${pct}%` }}
-                    />
+                    <div className={`h-full ${t.colors.accentBg}`} style={{ width: `${pct}%` }} />
                   </div>
                   <div className="w-12 text-xs text-muted-foreground text-right font-mono">
                     {count} ({pct}%)
@@ -171,8 +163,8 @@ export function SocialCapitalDashboard({
       {socialCapital.burnedContacts > 0 && (
         <div className="p-3 bg-red-500/10 border border-red-500/30 rounded text-xs text-red-400">
           <strong>Warning:</strong> You have {socialCapital.burnedContacts} burned contact
-          {socialCapital.burnedContacts > 1 ? "s" : ""}. These relationships may be repairable
-          with karma investment.
+          {socialCapital.burnedContacts > 1 ? "s" : ""}. These relationships may be repairable with
+          karma investment.
         </div>
       )}
     </div>

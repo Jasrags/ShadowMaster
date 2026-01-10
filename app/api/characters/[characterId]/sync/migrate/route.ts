@@ -14,7 +14,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacterById, rollbackMigration } from "@/lib/storage/characters";
 import { executeMigration, validateMigrationPlan } from "@/lib/rules/sync/migration-engine";
-import { recordMigrationStart, recordMigrationComplete, recordMigrationRollback } from "@/lib/rules/sync/sync-audit";
+import {
+  recordMigrationStart,
+  recordMigrationComplete,
+  recordMigrationRollback,
+} from "@/lib/rules/sync/sync-audit";
 import type { MigrationPlan } from "@/lib/types";
 
 interface RouteParams {
@@ -28,18 +32,12 @@ interface RouteParams {
  *
  * Applies a migration plan to the character
  */
-export async function POST(
-  request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+export async function POST(request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Verify session
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -47,18 +45,12 @@ export async function POST(
     // Get character
     const character = await getCharacterById(characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Verify ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Parse request body
@@ -66,10 +58,7 @@ export async function POST(
     const plan = body.plan as MigrationPlan;
 
     if (!plan) {
-      return NextResponse.json(
-        { error: "Migration plan is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "Migration plan is required" }, { status: 400 });
     }
 
     // Validate plan
@@ -113,10 +102,7 @@ export async function POST(
     }
   } catch (error) {
     console.error("Error applying migration:", error);
-    return NextResponse.json(
-      { error: "Failed to apply migration" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to apply migration" }, { status: 500 });
   }
 }
 
@@ -133,10 +119,7 @@ export async function DELETE(
     // Verify session
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -144,18 +127,12 @@ export async function DELETE(
     // Get character
     const character = await getCharacterById(characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Verify ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Forbidden" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Attempt rollback
@@ -185,28 +162,17 @@ export async function DELETE(
         estimatedKarmaDelta: 0,
       };
 
-      await recordMigrationRollback(
-        userId,
-        character,
-        rollbackPlan,
-        "User requested rollback"
-      );
+      await recordMigrationRollback(userId, character, rollbackPlan, "User requested rollback");
 
       return NextResponse.json({
         success: true,
         character: rolledBackCharacter,
       });
     } else {
-      return NextResponse.json(
-        { error: "No rollback available" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "No rollback available" }, { status: 400 });
     }
   } catch (error) {
     console.error("Error rolling back migration:", error);
-    return NextResponse.json(
-      { error: "Failed to rollback migration" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to rollback migration" }, { status: 500 });
   }
 }

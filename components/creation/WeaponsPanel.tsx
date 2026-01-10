@@ -22,15 +22,22 @@ import {
   type GearCatalogData,
   type WeaponModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { CreationState, Weapon, InstalledWeaponMod, WeaponMount, PurchasedAmmunitionItem } from "@/lib/types";
+import type {
+  CreationState,
+  Weapon,
+  InstalledWeaponMod,
+  WeaponMount,
+  PurchasedAmmunitionItem,
+} from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
 import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "./shared";
-import { WeaponRow, WeaponPurchaseModal, WeaponModificationModal, AmmunitionModal } from "./weapons";
+  WeaponRow,
+  WeaponPurchaseModal,
+  WeaponModificationModal,
+  AmmunitionModal,
+} from "./weapons";
 import {
   Lock,
   Plus,
@@ -113,7 +120,9 @@ function getWeaponCategory(weapon: Weapon): WeaponCategoryKey {
   }
 
   // Check throwing/grenades
-  if (["grenade", "throwing", "throwing-weapon", "grenades", "throwingweapons"].includes(subcategory)) {
+  if (
+    ["grenade", "throwing", "throwing-weapon", "grenades", "throwingweapons"].includes(subcategory)
+  ) {
     return "throwing";
   }
 
@@ -193,7 +202,9 @@ function WeaponCategorySection({
             {category.label}
           </span>
           {weapons.length > 0 && (
-            <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${colorClasses.badge}`}>
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${colorClasses.badge}`}
+            >
               {weapons.length}
             </span>
           )}
@@ -252,10 +263,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const [ammoWeaponId, setAmmoWeaponId] = useState<string | null>(null);
 
   // Get weapons catalog
-  const weaponsCatalog = useMemo(
-    () => getWeaponsCatalog(gearCatalog),
-    [gearCatalog]
-  );
+  const weaponsCatalog = useMemo(() => getWeaponsCatalog(gearCatalog), [gearCatalog]);
 
   // Get selected weapons from state
   const selectedWeapons = useMemo(
@@ -286,16 +294,29 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const totalNuyen = baseNuyen + convertedNuyen;
 
   // Calculate total spent across all gear categories
-  const selectedGear = (state.selections?.gear || []) as Array<{ cost: number; quantity: number }>;
-  const selectedArmor = (state.selections?.armor || []) as Array<{ cost: number; quantity: number }>;
-  const selectedFoci = (state.selections?.foci || []) as Array<{ cost: number }>;
-  const selectedCyberware = (state.selections?.cyberware || []) as Array<{ cost: number }>;
-  const selectedBioware = (state.selections?.bioware || []) as Array<{ cost: number }>;
+  const selectedGear = (state.selections?.gear || []) as Array<{
+    cost: number;
+    quantity: number;
+  }>;
+  const selectedArmor = (state.selections?.armor || []) as Array<{
+    cost: number;
+    quantity: number;
+  }>;
+  const selectedFoci = (state.selections?.foci || []) as Array<{
+    cost: number;
+  }>;
+  const selectedCyberware = (state.selections?.cyberware || []) as Array<{
+    cost: number;
+  }>;
+  const selectedBioware = (state.selections?.bioware || []) as Array<{
+    cost: number;
+  }>;
 
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
-    const ammoCost = w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
+    const ammoCost =
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => sum + a.cost * a.quantity, 0);
@@ -306,12 +327,25 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     selectedBioware.reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
   const vehiclesSpent =
-    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    ) +
     ((state.selections?.drones as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
     ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
-    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
+    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    );
 
-  const totalSpent = weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent + vehiclesSpent;
+  const totalSpent =
+    weaponsSpent +
+    armorSpent +
+    gearSpent +
+    fociSpent +
+    augmentationSpent +
+    lifestyleSpent +
+    vehiclesSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
@@ -474,7 +508,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       // Calculate availability
       let availability = mod.availability || 0;
       if (rating && mod.ratingSpec?.availabilityScaling?.perRating) {
-        availability = (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
+        availability =
+          (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
       }
 
       // Create installed mod
@@ -730,9 +765,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -741,11 +774,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
   return (
     <>
-      <CreationCard
-        title="Weapons"
-        description={`${selectedWeapons.length} items • ${formatCurrency(weaponsSpent)}¥`}
-        status={validationStatus}
-      >
+      <CreationCard title="Weapons" status={validationStatus}>
         <div className="space-y-4">
           {/* Nuyen Budget Bar */}
           <div className="space-y-1">
@@ -770,10 +799,10 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
             </div>
             <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
               <div
-                className={`h-full transition-all ${
-                  isOverBudget ? "bg-red-500" : "bg-blue-500"
-                }`}
-                style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
+                className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
+                style={{
+                  width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%`,
+                }}
               />
             </div>
           </div>
@@ -786,7 +815,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
                   <AlertTriangle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
                   <div className="text-xs">
                     <span className="font-medium text-red-700 dark:text-red-300">
-                      {legalityWarnings.forbidden.length} forbidden item{legalityWarnings.forbidden.length !== 1 ? "s" : ""}
+                      {legalityWarnings.forbidden.length} forbidden item
+                      {legalityWarnings.forbidden.length !== 1 ? "s" : ""}
                     </span>
                     <span className="text-red-600 dark:text-red-400"> - illegal to possess</span>
                   </div>
@@ -797,7 +827,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
                   <AlertTriangle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
                   <div className="text-xs">
                     <span className="font-medium text-amber-700 dark:text-amber-300">
-                      {legalityWarnings.restricted.length} restricted item{legalityWarnings.restricted.length !== 1 ? "s" : ""}
+                      {legalityWarnings.restricted.length} restricted item
+                      {legalityWarnings.restricted.length !== 1 ? "s" : ""}
                     </span>
                     <span className="text-amber-600 dark:text-amber-400"> - requires license</span>
                   </div>
@@ -839,6 +870,17 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
             onAddAmmo={handleAddAmmo}
             onRemoveAmmo={handleRemoveAmmo}
           />
+
+          {/* Footer Summary */}
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedWeapons.length} item
+              {selectedWeapons.length !== 1 ? "s" : ""}
+            </span>
+            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(weaponsSpent)}¥
+            </span>
+          </div>
         </div>
       </CreationCard>
 

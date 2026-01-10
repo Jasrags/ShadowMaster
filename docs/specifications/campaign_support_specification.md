@@ -33,7 +33,6 @@ This feature is critical for multiplayer Shadowrun sessions where the GM needs t
 
 ---
 
-
 ## Page Structure
 
 ### Routes
@@ -378,13 +377,7 @@ export interface CampaignActivityEvent {
 
   /** Target of the activity (character, player, session, etc.) */
   targetId?: ID;
-  targetType?:
-    | "character"
-    | "player"
-    | "session"
-    | "post"
-    | "location"
-    | "campaign";
+  targetType?: "character" | "player" | "session" | "post" | "location" | "campaign";
   targetName?: string;
 
   /** Human-readable description */
@@ -1559,10 +1552,7 @@ data/
 // CRUD operations
 export function createCampaign(campaign: Campaign): Campaign;
 export function getCampaignById(campaignId: ID): Campaign | null;
-export function updateCampaign(
-  campaignId: ID,
-  updates: Partial<Campaign>
-): Campaign;
+export function updateCampaign(campaignId: ID, updates: Partial<Campaign>): Campaign;
 export function deleteCampaign(campaignId: ID): void;
 
 // Query operations
@@ -1580,9 +1570,7 @@ export function getCampaignCharacters(campaignId: ID, userId?: ID): Character[];
 export function getCharacterCountByCampaign(campaignId: ID): number;
 
 // Advancement settings
-export function getCampaignAdvancementSettings(
-  campaignId: ID
-): CampaignAdvancementSettings | null;
+export function getCampaignAdvancementSettings(campaignId: ID): CampaignAdvancementSettings | null;
 export function updateCampaignAdvancementSettings(
   campaignId: ID,
   settings: Partial<CampaignAdvancementSettings>
@@ -1594,10 +1582,7 @@ export function updateCampaignAdvancementSettings(
 ```typescript
 // Session management
 export function createSession(session: CampaignSession): CampaignSession;
-export function getSessionById(
-  campaignId: ID,
-  sessionId: ID
-): CampaignSession | null;
+export function getSessionById(campaignId: ID, sessionId: ID): CampaignSession | null;
 export function updateSession(
   campaignId: ID,
   sessionId: ID,
@@ -1634,10 +1619,7 @@ export function getCampaignActivity(
   campaignId: ID,
   options?: ActivityQueryOptions
 ): CampaignActivityEvent[];
-export function getRecentActivity(
-  campaignId: ID,
-  limit?: number
-): CampaignActivityEvent[];
+export function getRecentActivity(campaignId: ID, limit?: number): CampaignActivityEvent[];
 ```
 
 **Functions needed in `/lib/storage/notifications.ts`:**
@@ -1796,7 +1778,6 @@ app/api/campaigns/
 ### Dependencies
 
 - **Existing:**
-
   - `@/lib/types` - Type definitions (extend with Campaign types)
   - `@/lib/storage` - Storage layer (add campaigns.ts)
   - `@/lib/auth` - Authentication utilities
@@ -1855,7 +1836,6 @@ app/api/campaigns/
 - Character must comply with gameplay level restrictions
 
 ---
-
 
 ## Security Considerations
 
@@ -1942,39 +1922,30 @@ app/api/campaigns/
 ## Open Questions
 
 1. **Edition Immutability:** Should campaigns allow edition changes if no characters exist yet?
-
    - **Recommendation:** Allow edition change only if campaign has zero characters
 
 2. **Character Association:** What happens to characters when a player leaves a campaign?
-
    - **Recommendation:** Characters remain associated with campaign but player loses access (or allow GM to transfer ownership)
 
 3. **Campaign Deletion:** Should deleting a campaign delete associated characters?
-
    - **Recommendation:** No - unlink characters from campaign (set `campaignId` to null) but preserve characters
 
 4. **Invite Code Expiration:** Should invite codes expire after a certain time?
-
    - **Recommendation:** Phase 2 feature - start with permanent codes, add expiration later
 
 5. **Max Players Enforcement:** What happens if max players is set lower than current player count?
-
    - **Recommendation:** Prevent reducing max players below current count, or require removing players first
 
 6. **Character Validation:** Should system validate existing characters when campaign rules change?
-
    - **Recommendation:** Phase 2 feature - start with validation only at character creation, add validation checks later
 
 7. **House Rules Format:** Should house rules be freeform text or structured JSON?
-
    - **Recommendation:** Start with freeform text, add structured format in Phase 2 for automation
 
 8. **Campaign Visibility:** Should "public" campaigns be searchable by anyone or require login?
-
    - **Recommendation:** Require login for discovery, but allow unauthenticated users to see public campaign details if they have link
 
 9. **Gameplay Level Changes:** Can GM change gameplay level after campaign has characters?
-
    - **Recommendation:** Allow with warning that it may affect character validity, add validation checks
 
 10. **Multiple Campaigns per Character:** Can a character belong to multiple campaigns?

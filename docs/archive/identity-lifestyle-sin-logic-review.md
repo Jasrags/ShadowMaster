@@ -33,6 +33,7 @@ A **Lifestyle** represents living conditions and monthly expenses. It is separat
 - Is **NOT** directly tied to a SIN (identities use lifestyles)
 
 **Deferred Items:**
+
 - Guest sharing mechanics (0-10 guests limit, even split vs. base + 10% per occupant) - to be implemented later
 
 ### Character
@@ -73,18 +74,21 @@ Identity → Lifestyle (association, not ownership)
 ## SR5 Rules Compliance
 
 ### SIN Rules
+
 - **Fake SINs**: Rating 1-4 only (not 1-6)
 - **Real SINs**: No ratings - they come from SINner quality levels
 - **SIN Broadcasting**: Characters with Real SINs must broadcast them at all times
 - **Fake SIN Detection**: If a fake SIN is detected, all associated licenses become invalid
 
 ### License Rules
+
 - **Fake Licenses**: Rating 1-4 only (not 1-6), must be tied to a Fake SIN
 - **Real Licenses**: No ratings - valid/invalid based on SIN status, must be tied to a Real SIN
 - **License Requirements**: Different activities require different licenses (firearms, magic, vehicles, etc.)
 - **License Types**: Custom name/type per license (e.g., "Firearms License", "Magic User License")
 
 ### Lifestyle Rules
+
 - **Permanent Purchase**: 100 × monthly cost (one-time payment)
 - **Team Lifestyle**: Base + 10% per extra occupant (SR5 standard) - deferred implementation
 - **Lifestyle Modifications**: Examples from SR5:
@@ -95,6 +99,7 @@ Identity → Lifestyle (association, not ownership)
   - Dangerous Area: -20%, degrades security response tier
 
 ### Identity-Lifestyle Relationship
+
 - A character can have multiple identities, each potentially using a different lifestyle
 - Example: "John Smith" identity uses Medium lifestyle, "Bob Johnson" identity uses Low lifestyle
 - Lifestyles are not owned by identities - they're associated/used by them
@@ -104,14 +109,15 @@ Identity → Lifestyle (association, not ownership)
 ### Data Model Considerations
 
 1. **Identity Structure**:
+
    ```typescript
    interface Identity {
      id: string;
      name: string;
      sin: {
-       type: 'fake' | 'real';
+       type: "fake" | "real";
        rating?: number; // 1-4 for fake, undefined for real
-       sinnerQuality?: 'national' | 'criminal' | 'corporate-limited' | 'corporate-born';
+       sinnerQuality?: "national" | "criminal" | "corporate-limited" | "corporate-born";
      };
      licenses: License[];
      associatedLifestyleId?: string; // Reference to lifestyle
@@ -119,10 +125,11 @@ Identity → Lifestyle (association, not ownership)
    ```
 
 2. **Lifestyle Structure**:
+
    ```typescript
    interface Lifestyle {
      id: string;
-     type: 'street' | 'squatter' | 'low' | 'medium' | 'high' | 'luxury';
+     type: "street" | "squatter" | "low" | "medium" | "high" | "luxury";
      monthlyCost: number;
      isPermanent: boolean;
      modifications: LifestyleModification[];

@@ -10,10 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, spendEdge } from "@/lib/storage/characters";
-import {
-  getAction,
-  updateActionResult,
-} from "@/lib/storage/action-history";
+import { getAction, updateActionResult } from "@/lib/storage/action-history";
 import {
   executeReroll,
   executeCloseCall,
@@ -37,18 +34,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, actionId } = await params;
@@ -56,19 +47,13 @@ export async function POST(
     // Verify character ownership
     let character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get the original action
     const originalAction = await getAction(userId, characterId, actionId);
     if (!originalAction) {
-      return NextResponse.json(
-        { success: false, error: "Action not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Action not found" }, { status: 404 });
     }
 
     // Parse request body
@@ -92,10 +77,7 @@ export async function POST(
 
     // Check Edge availability
     if (!canSpendEdge(character, 1)) {
-      return NextResponse.json(
-        { success: false, error: "Insufficient Edge" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Insufficient Edge" }, { status: 400 });
     }
 
     // Handle different Edge actions
@@ -141,10 +123,7 @@ export async function POST(
     } else if (body.edgeAction === "close_call") {
       // Check if there's a glitch to negate
       if (!originalAction.isGlitch && !originalAction.isCriticalGlitch) {
-        return NextResponse.json(
-          { success: false, error: "No glitch to negate" },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: "No glitch to negate" }, { status: 400 });
       }
 
       // Spend Edge
@@ -167,10 +146,7 @@ export async function POST(
       });
     }
 
-    return NextResponse.json(
-      { success: false, error: "Unknown Edge action" },
-      { status: 400 }
-    );
+    return NextResponse.json({ success: false, error: "Unknown Edge action" }, { status: 400 });
   } catch (error) {
     console.error("Error rerolling action:", error);
     return NextResponse.json(

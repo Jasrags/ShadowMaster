@@ -7,13 +7,17 @@ Define how ShadowMaster represents and automates Shadowrun 5e combat, focusing o
 ## Glossary
 
 ### Combat Turn
+
 A three-second chunk of time where players act in order of their initiative. A Combat Turn is composed of a series of Initiative Passes.
 
 ### Initiative Pass
+
 Chunks of a Combat Turn. Characters get one Action Phase per Combat Turn. Typically, all characters are guaranteed an Action Phase on the first Initiative Pass, but subsequent passes will depend on how high their Initiative is.
 
 ### Action Phase
+
 When a character acts during an Initiative Pass.
+
 - On an Action Phase, you can perform either one (1) Complex Action or two (2) Simple Actions.
 - Additionally, you may always take one Free Action per Action Phase.
 - If you do not use your Free Action, you may use it at any point until your next Action Phase, even if it's during another character's Action Phase.
@@ -23,44 +27,51 @@ When a character acts during an Initiative Pass.
 ### Initiative System
 
 #### Initiative Attribute
+
 This is a derived value that depends on summing two other Attributes, depending on the Initiative Type:
 
-| Initiative Type | Formula |
-|----------------|---------|
-| Physical | `Reaction + Intuition` |
-| Rigging AR | `Reaction + Intuition` |
-| Matrix AR | `Reaction + Intuition` |
-| Astral | `Intuition × 2` |
+| Initiative Type      | Formula                       |
+| -------------------- | ----------------------------- |
+| Physical             | `Reaction + Intuition`        |
+| Rigging AR           | `Reaction + Intuition`        |
+| Matrix AR            | `Reaction + Intuition`        |
+| Astral               | `Intuition × 2`               |
 | Matrix (cold-sim) VR | `Data Processing + Intuition` |
-| Matrix (hot-sim) VR | `Data Processing + Intuition` |
+| Matrix (hot-sim) VR  | `Data Processing + Intuition` |
 
 **Example**: If it's Physical Initiative and your Reaction is 3 and your Intuition is 4, your Initiative Attribute is 7.
 
 #### Initiative Dice
+
 Each Initiative Type has a Base Initiative Dice. Certain upgrades (such as Wired Reflexes) can give you more dice to roll, but it's not improvable with Karma.
 
 **Base Dice by Initiative Type**:
 
-| Initiative Type | Base Dice |
-|----------------|-----------|
-| Physical | 1d6 |
-| Rigging AR | 1d6 |
-| Matrix AR | 1d6 |
-| Astral | 2d6 |
-| Matrix (cold-sim) VR | 3d6 |
-| Matrix (hot-sim) VR | 4d6 |
+| Initiative Type      | Base Dice |
+| -------------------- | --------- |
+| Physical             | 1d6       |
+| Rigging AR           | 1d6       |
+| Matrix AR            | 1d6       |
+| Astral               | 2d6       |
+| Matrix (cold-sim) VR | 3d6       |
+| Matrix (hot-sim) VR  | 4d6       |
 
 **Edge Usage**: Edge can be used to give yourself the maximum 5d6 dice for a single Combat Turn.
-- *(House Rule Note)*: Some groups limit Edge to +2d6 dice (still limited to 5d6 total)
+
+- _(House Rule Note)_: Some groups limit Edge to +2d6 dice (still limited to 5d6 total)
 
 #### Initiative Score
+
 This is the sum of your Initiative Attribute and a **roll** of your Initiative Dice.
 
 **Example**: Astral Initiative is `(Intuition × 2) + 2d6`
+
 - If you had 5 Intuition and rolled a 3 and a 6, your Initiative Score would be `(5 × 2 + 3 + 6) = 19`
 
 #### Tie Resolution
+
 When Initiative Scores are tied, resolve in this order:
+
 1. **Edge** (highest Edge acts first)
 2. **Reaction** (highest Reaction acts first)
 3. **Intuition** (highest Intuition acts first)
@@ -78,7 +89,7 @@ When Initiative Scores are tied, resolve in this order:
 
 - **Changing Initiative mid-turn**: Adjust score immediately for attribute changes; reroll added dice when Initiative Dice increase; subtract roll when dice decrease.
 - **Damage effects**: Damage applies wound modifiers to Initiative instantly.
-- **Edge options**: 
+- **Edge options**:
   - **Seize the Initiative**: Act first for the turn
   - **Blitz**: Roll 5d6 once per Edge spend
 
@@ -176,60 +187,60 @@ Called shots allow characters to target specific locations or perform special ma
 
 **General Called Shots**
 
-| ACTION | DICE POOL MODIFIER | EFFECTS |
-| --- | --- | --- |
-| Blast Out Of Hand | -4 | No Damage; Knocks Weapon From Hand |
-| Dirty Trick | -4 | No Damage; Penalty On Next Action |
-| Shake Up | -4 | Does Damage; Decreases Target Initiative |
-| Splitting Damage | -4 | Evenly Divide Damage Between Target's Stun & Physical Condition Monitors |
-| Trick Shot | -4 | Net Hits Added To Intimidation Test dice pool |
+| ACTION            | DICE POOL MODIFIER | EFFECTS                                                                  |
+| ----------------- | ------------------ | ------------------------------------------------------------------------ |
+| Blast Out Of Hand | -4                 | No Damage; Knocks Weapon From Hand                                       |
+| Dirty Trick       | -4                 | No Damage; Penalty On Next Action                                        |
+| Shake Up          | -4                 | Does Damage; Decreases Target Initiative                                 |
+| Splitting Damage  | -4                 | Evenly Divide Damage Between Target's Stun & Physical Condition Monitors |
+| Trick Shot        | -4                 | Net Hits Added To Intimidation Test dice pool                            |
 
 **Close Combat Only Called Shots**
 
-| ACTION | DICE POOL MODIFIER | EFFECTS |
-| --- | --- | --- |
-| Break Weapon | -4 | Break Weapon As Barrier |
-| Feint | -4 | No Damage; On next attack, -net hits to target Defense Test |
-| Knock Down | -4 | No Damage; Target Knocked Prone |
+| ACTION       | DICE POOL MODIFIER | EFFECTS                                                     |
+| ------------ | ------------------ | ----------------------------------------------------------- |
+| Break Weapon | -4                 | Break Weapon As Barrier                                     |
+| Feint        | -4                 | No Damage; On next attack, -net hits to target Defense Test |
+| Knock Down   | -4                 | No Damage; Target Knocked Prone                             |
 
 **Unarmed Combat Only Called Shots**
 
-| ACTION | DICE POOL MODIFIER | EFFECTS |
-| --- | --- | --- |
-| Disarm | -4 | Take Weapon If STR + net hits > Target Physical Limit |
-| Reversal | -4 | Gain Superior Position |
+| ACTION   | DICE POOL MODIFIER | EFFECTS                                               |
+| -------- | ------------------ | ----------------------------------------------------- |
+| Disarm   | -4                 | Take Weapon If STR + net hits > Target Physical Limit |
+| Reversal | -4                 | Gain Superior Position                                |
 
 **Specific Target Called Shots (Living)**
 
-| ACTION | DICE POOL MODIFIER | DV LIMIT | EFFECTS |
-| --- | --- | --- | --- |
-| Ankle | -8 | 1 | Slowed, Winded |
-| Ear | -10 | 1 | Deafened, Stunned |
-| Eye | -10 | 1 | Blinded, Stunned |
-| Foot | -8 | 1 | Stunned, Slowed, Winded |
-| Forearm | -6 | 2 | Broken Grip, Weak Side |
-| Genitals | -10 | 4 | Stunned, Nauseous, Buckled |
-| Gut | -6 | 8 | Stunned, Nauseous, Slow Death |
-| Hand | -8 | 1 | Stunned, Broken Grip, Weak Side |
-| Hip | -6 | 3 | Knockdown, Slowed |
-| Jaw | -8 | 2 | Stunned, Unable To Speak |
-| Knee | -8 | 1 | Stunned, Slowed, Winded |
-| Neck | -8 | 10 | Stunned, Bleedout |
-| Shin | -6 | 2 | Knockdown, Slowed, Winded |
-| Shoulder / Upper Arm | -6 | 3 | Stunned, One-Arm Bandit, Weak Side |
-| Sternum | -10 | 10 | Stunned, Fatigued, Winded |
-| Thigh | -6 | 3 | Slowed, Winded |
+| ACTION               | DICE POOL MODIFIER | DV LIMIT | EFFECTS                            |
+| -------------------- | ------------------ | -------- | ---------------------------------- |
+| Ankle                | -8                 | 1        | Slowed, Winded                     |
+| Ear                  | -10                | 1        | Deafened, Stunned                  |
+| Eye                  | -10                | 1        | Blinded, Stunned                   |
+| Foot                 | -8                 | 1        | Stunned, Slowed, Winded            |
+| Forearm              | -6                 | 2        | Broken Grip, Weak Side             |
+| Genitals             | -10                | 4        | Stunned, Nauseous, Buckled         |
+| Gut                  | -6                 | 8        | Stunned, Nauseous, Slow Death      |
+| Hand                 | -8                 | 1        | Stunned, Broken Grip, Weak Side    |
+| Hip                  | -6                 | 3        | Knockdown, Slowed                  |
+| Jaw                  | -8                 | 2        | Stunned, Unable To Speak           |
+| Knee                 | -8                 | 1        | Stunned, Slowed, Winded            |
+| Neck                 | -8                 | 10       | Stunned, Bleedout                  |
+| Shin                 | -6                 | 2        | Knockdown, Slowed, Winded          |
+| Shoulder / Upper Arm | -6                 | 3        | Stunned, One-Arm Bandit, Weak Side |
+| Sternum              | -10                | 10       | Stunned, Fatigued, Winded          |
+| Thigh                | -6                 | 3        | Slowed, Winded                     |
 
 **Specific Target Called Shots (Vehicle)**
 
-| ACTION | DICE POOL MODIFIER | DV LIMIT | EFFECTS |
-| --- | --- | --- | --- |
-| Engine Block | -4 | None | Disables Vehicle |
-| Fuel Tank / Battery | -6 | None | Disables Vehicle. Causes Fuel Leak Or Battery Leak |
-| Axle | -6 | 6 | Reduces Speed To 1 |
-| Antenna | -8 | 2 | Disables Communications & Wireless Capability |
-| Door Lock | -6 | 0 | Door Cannot Be Opened |
-| Window Motor | -4 | 0 | Window Cannot Be Opened |
+| ACTION              | DICE POOL MODIFIER | DV LIMIT | EFFECTS                                            |
+| ------------------- | ------------------ | -------- | -------------------------------------------------- |
+| Engine Block        | -4                 | None     | Disables Vehicle                                   |
+| Fuel Tank / Battery | -6                 | None     | Disables Vehicle. Causes Fuel Leak Or Battery Leak |
+| Axle                | -6                 | 6        | Reduces Speed To 1                                 |
+| Antenna             | -8                 | 2        | Disables Communications & Wireless Capability      |
+| Door Lock           | -6                 | 0        | Door Cannot Be Opened                              |
+| Window Motor        | -4                 | 0        | Window Cannot Be Opened                            |
 
 ## Elemental Damage
 
@@ -259,11 +270,11 @@ Vehicles can be damaged by Electricity attacks but do not suffer any secondary e
 
 **Fire Armor Penetration**
 
-| TYPE OF FIRE | AP |
-| --- | --- |
-| Open Flame | –2 |
-| Fire-based spells | –spell Force |
-| Flame-based weapon | –6 |
+| TYPE OF FIRE       | AP           |
+| ------------------ | ------------ |
+| Open Flame         | –2           |
+| Fire-based spells  | –spell Force |
+| Flame-based weapon | –6           |
 
 Fire damage is **Physical**. It can also make things catch fire. To determine if something catches fire, **roll Armor Value + Fire Resistance – Fire AP (see Fire Armor Piercing Ratings table)**. The threshold on this test is the net hits rolled on the fire-based attack. If the item succeeds, it is not on fire (for now). Armor accessories are excluded from the test but the gamemaster may require them to make their own test.
 
@@ -272,6 +283,7 @@ When something catches fire, the fire has an **initial Damage Value of 3**. This
 ### Other Elemental Damage Types
 
 **Pollutant Damage**: Treat any Pollutant attack as a toxin with the following characteristics:
+
 - Vector: Inhalation
 - Speed: Immediate
 - Penetration: 0
@@ -297,13 +309,13 @@ Fatigue damage is **Stun damage** you incur through doing something strenuous or
 
 **Fatigue From Environments**: Hot, cold, humid, dry, polluted, or irradiated environments can cause fatigue damage, depending on the severity of the surroundings. As with running fatigue, the **DV from a harsh environment starts at 1S and increases over time**. Unlike running fatigue, if you keel over in a hostile environment the damage doesn't stop rolling in.
 
-| SEVERITY | INTERVAL |
-| --- | --- |
-| Mild | 6 hours |
-| Moderate | 3 hours |
-| Harsh | 60 minutes |
-| Extreme | 1 minute (10 Combat Turns) |
-| Deadly | 6 seconds (2 Combat Turns) |
+| SEVERITY | INTERVAL                   |
+| -------- | -------------------------- |
+| Mild     | 6 hours                    |
+| Moderate | 3 hours                    |
+| Harsh    | 60 minutes                 |
+| Extreme  | 1 minute (10 Combat Turns) |
+| Deadly   | 6 seconds (2 Combat Turns) |
 
 **Hunger, Thirst, And Sleep Deprivation**: **After 24 hours, if you haven't eaten, slept, or had a (nonalcoholic) drink**, you risk fatigue damage. Like running, the **damage starts at a mere 1S and increases over each interval it is taken**. The interval for **hunger is 6 days, for thirst is 2 days, and for sleep is 3 hours**. This damage stops when you eat, drink, or sleep, respectively.
 
@@ -311,40 +323,40 @@ Fatigue damage is **Stun damage** you incur through doing something strenuous or
 
 ### Environmental Modifiers
 
-| VISIBILITY | LIGHT / GLARE | WIND | RANGE | MODIFIER |
-| --- | --- | --- | --- | --- |
-| Clear | Full Light / No Glare | None / Light Breeze | Short | 0 |
-| Light Rain / Fog / Smoke | Partial Light / Weak Glare | Light Winds / Light Breeze | Medium | -1 |
-| Moderate Rain / Fog / Smoke | Dim Light / Moderate Glare | Moderate Winds / Light Breeze | Long | -3 |
-| Heavy Rain / Fog / Smoke | Total Darkness/ Blinding Glare | Strong Winds / Light Breeze | Extreme | -6 |
-| Combination of two or more conditions at the -6 level row |  |  |  | -10 |
+| VISIBILITY                                                | LIGHT / GLARE                  | WIND                          | RANGE   | MODIFIER |
+| --------------------------------------------------------- | ------------------------------ | ----------------------------- | ------- | -------- |
+| Clear                                                     | Full Light / No Glare          | None / Light Breeze           | Short   | 0        |
+| Light Rain / Fog / Smoke                                  | Partial Light / Weak Glare     | Light Winds / Light Breeze    | Medium  | -1       |
+| Moderate Rain / Fog / Smoke                               | Dim Light / Moderate Glare     | Moderate Winds / Light Breeze | Long    | -3       |
+| Heavy Rain / Fog / Smoke                                  | Total Darkness/ Blinding Glare | Strong Winds / Light Breeze   | Extreme | -6       |
+| Combination of two or more conditions at the -6 level row |                                |                               |         | -10      |
 
 ### Situational Modifiers
 
-| SITUATION | ATTACKER'S MODIFIER |
-| --- | --- |
-| Attacker Firing From Cover With Imaging Device | -3 |
-| Attacker Firing From A Moving Vehicle | -2 |
-| Attacker In Melee Combat | -3 |
-| Attacker Running | -2 |
-| Attacker Using Off-Hand Weapon | -2 |
-| Attacker Wounded | -Wound Modifier |
-| Blind Fire | -6 |
-| Called Shot | Varies |
-| Previously Aimed With Take Aim | +1 Dice Pool, +1 Accuracy |
-| Wireless Smartgun | +1 (Gear) / +2 (Implanted) |
+| SITUATION                                      | ATTACKER'S MODIFIER        |
+| ---------------------------------------------- | -------------------------- |
+| Attacker Firing From Cover With Imaging Device | -3                         |
+| Attacker Firing From A Moving Vehicle          | -2                         |
+| Attacker In Melee Combat                       | -3                         |
+| Attacker Running                               | -2                         |
+| Attacker Using Off-Hand Weapon                 | -2                         |
+| Attacker Wounded                               | -Wound Modifier            |
+| Blind Fire                                     | -6                         |
+| Called Shot                                    | Varies                     |
+| Previously Aimed With Take Aim                 | +1 Dice Pool, +1 Accuracy  |
+| Wireless Smartgun                              | +1 (Gear) / +2 (Implanted) |
 
 ## Weapon Firing Modes
 
-| MODE | ATTACK | ACTION | DEFENSE MODIFIER | ROUNDS USED | NOTES |
-| --- | --- | --- | --- | --- | --- |
-| Single-Shot (SS) | Single Shot | Simple | 0 | 1 | No Recoil |
-| Semi-Automatic (SA) | Single Shot | Simple | 0 | 1 |  |
-| Semi-Automatic (SA) | Semi-Automatic Burst (SB) | Complex | -2 | 3 |  |
-| Burst-Fire (BF) | Burst Fire (SB) | Simple | -2 | 3 |  |
-| Burst-Fire (BF) | Long Burst (LB) | Complex | -5 | 6 |  |
-| Full-Auto (FA) | Full Auto | Simple | -5 | 6 |  |
-| Full-Auto (FA) | Full Auto | Complex | -9 | 10 |  |
+| MODE                | ATTACK                    | ACTION  | DEFENSE MODIFIER | ROUNDS USED | NOTES     |
+| ------------------- | ------------------------- | ------- | ---------------- | ----------- | --------- |
+| Single-Shot (SS)    | Single Shot               | Simple  | 0                | 1           | No Recoil |
+| Semi-Automatic (SA) | Single Shot               | Simple  | 0                | 1           |           |
+| Semi-Automatic (SA) | Semi-Automatic Burst (SB) | Complex | -2               | 3           |           |
+| Burst-Fire (BF)     | Burst Fire (SB)           | Simple  | -2               | 3           |           |
+| Burst-Fire (BF)     | Long Burst (LB)           | Complex | -5               | 6           |           |
+| Full-Auto (FA)      | Full Auto                 | Simple  | -5               | 6           |           |
+| Full-Auto (FA)      | Full Auto                 | Complex | -9               | 10          |           |
 
 ## Armor Features
 
@@ -385,10 +397,10 @@ After character creation, the character can continue to learn techniques within 
 
 **Learning Martial Arts**
 
-| DESCRIPTION | LEARNING TIME | KARMA | INSTRUCTION COST |
-| --- | --- | --- | --- |
-| New Technique | 2 Weeks | 5 | 1,500¥ |
-| New Style | 1 Month | 7 | 2,500¥ |
+| DESCRIPTION   | LEARNING TIME | KARMA | INSTRUCTION COST |
+| ------------- | ------------- | ----- | ---------------- |
+| New Technique | 2 Weeks       | 5     | 1,500¥           |
+| New Style     | 1 Month       | 7     | 2,500¥           |
 
 Note: The learning of a new style comes with one technique available under that style.
 
@@ -409,5 +421,4 @@ For detailed descriptions of each style and their available techniques, see the 
 - SR5 Core Rulebook (pp. 159-160 for Initiative)
 - [Hardcore Game Mode: SR5 Combat Rules Summary](https://hardcoregamemode.blogspot.com/2014/07/shadowrun-5th-edition-combat-rules.html)
 
-*Last updated: 2025-01-XX*
-
+_Last updated: 2025-01-XX_

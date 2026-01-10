@@ -5,8 +5,8 @@
  * karma cost calculations, and karma transaction logging.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import type { Character, Quality, MergedRuleset } from '@/lib/types';
+import { describe, it, expect, beforeEach } from "vitest";
+import type { Character, Quality, MergedRuleset } from "@/lib/types";
 import {
   validateQualityAcquisition,
   acquireQuality,
@@ -14,11 +14,11 @@ import {
   removeQuality,
   calculatePostCreationCost,
   calculateBuyOffCost,
-} from '../advancement';
-import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../advancement";
+import { createMockMergedRuleset } from "@/__tests__/mocks/rulesets";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
-describe('Quality Advancement', () => {
+describe("Quality Advancement", () => {
   let ruleset: MergedRuleset;
   let character: Character;
 
@@ -37,30 +37,30 @@ describe('Quality Advancement', () => {
     });
   });
 
-  describe('calculatePostCreationCost', () => {
-    it('should calculate 2× cost for post-creation acquisition', () => {
+  describe("calculatePostCreationCost", () => {
+    it("should calculate 2× cost for post-creation acquisition", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const cost = calculatePostCreationCost(quality);
       expect(cost).toBe(10); // 5 * 2
     });
 
-    it('should calculate 2× cost for per-rating quality', () => {
+    it("should calculate 2× cost for per-rating quality", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
@@ -70,40 +70,40 @@ describe('Quality Advancement', () => {
     });
   });
 
-  describe('calculateBuyOffCost', () => {
-    it('should calculate 2× original karma bonus for buy-off', () => {
+  describe("calculateBuyOffCost", () => {
+    it("should calculate 2× original karma bonus for buy-off", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const buyOffCost = calculateBuyOffCost(quality, 5);
       expect(buyOffCost).toBe(10); // 5 * 2
     });
 
-    it('should handle negative karma values', () => {
+    it("should handle negative karma values", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const buyOffCost = calculateBuyOffCost(quality, -5);
       expect(buyOffCost).toBe(10); // abs(-5) * 2
     });
 
-    it('should use quality definition when originalKarma not provided', () => {
+    it("should use quality definition when originalKarma not provided", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const buyOffCost = calculateBuyOffCost(quality);
@@ -111,14 +111,14 @@ describe('Quality Advancement', () => {
     });
   });
 
-  describe('validateQualityAcquisition', () => {
-    it('should validate successful acquisition', () => {
+  describe("validateQualityAcquisition", () => {
+    it("should validate successful acquisition", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -131,26 +131,26 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = validateQualityAcquisition(character, 'test-quality', rulesetWithQuality);
+      const result = validateQualityAcquisition(character, "test-quality", rulesetWithQuality);
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
       expect(result.cost).toBe(10); // 2× cost
     });
 
-    it('should fail when quality not found', () => {
-      const result = validateQualityAcquisition(character, 'unknown-quality', ruleset);
+    it("should fail when quality not found", () => {
+      const result = validateQualityAcquisition(character, "unknown-quality", ruleset);
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors[0].message).toContain('not found');
+      expect(result.errors[0].message).toContain("not found");
     });
 
-    it('should fail when prerequisites not met', () => {
+    it("should fail when prerequisites not met", () => {
       const quality: Quality = {
-        id: 'magic-quality',
-        name: 'Magic Quality',
-        type: 'positive',
+        id: "magic-quality",
+        name: "Magic Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires magic',
+        summary: "Requires magic",
         prerequisites: {
           hasMagic: true,
         },
@@ -166,18 +166,18 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = validateQualityAcquisition(character, 'magic-quality', rulesetWithQuality);
+      const result = validateQualityAcquisition(character, "magic-quality", rulesetWithQuality);
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
     });
 
-    it('should fail when not enough karma', () => {
+    it("should fail when not enough karma", () => {
       const quality: Quality = {
-        id: 'expensive-quality',
-        name: 'Expensive Quality',
-        type: 'positive',
+        id: "expensive-quality",
+        name: "Expensive Quality",
+        type: "positive",
         karmaCost: 30,
-        summary: 'Expensive quality',
+        summary: "Expensive quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -194,21 +194,25 @@ describe('Quality Advancement', () => {
         karmaCurrent: 10,
       });
 
-      const result = validateQualityAcquisition(poorCharacter, 'expensive-quality', rulesetWithQuality);
+      const result = validateQualityAcquisition(
+        poorCharacter,
+        "expensive-quality",
+        rulesetWithQuality
+      );
       expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.message.includes('Not enough karma'))).toBe(true);
+      expect(result.errors.some((e) => e.message.includes("Not enough karma"))).toBe(true);
     });
 
-    it('should validate rating for per-rating qualities', () => {
+    it("should validate rating for per-rating qualities", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
@@ -224,25 +228,25 @@ describe('Quality Advancement', () => {
       });
 
       // Missing rating should fail
-      const result1 = validateQualityAcquisition(character, 'rated-quality', rulesetWithQuality);
+      const result1 = validateQualityAcquisition(character, "rated-quality", rulesetWithQuality);
       expect(result1.valid).toBe(false);
 
       // Valid rating should pass
-      const result2 = validateQualityAcquisition(character, 'rated-quality', rulesetWithQuality, {
+      const result2 = validateQualityAcquisition(character, "rated-quality", rulesetWithQuality, {
         rating: 1,
       });
       expect(result2.valid).toBe(true);
     });
   });
 
-  describe('acquireQuality', () => {
-    it('should acquire quality successfully', () => {
+  describe("acquireQuality", () => {
+    it("should acquire quality successfully", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -255,28 +259,28 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = acquireQuality(character, 'test-quality', rulesetWithQuality);
-      expect(result.selection.qualityId).toBe('test-quality');
-      expect(result.selection.source).toBe('advancement');
+      const result = acquireQuality(character, "test-quality", rulesetWithQuality);
+      expect(result.selection.qualityId).toBe("test-quality");
+      expect(result.selection.source).toBe("advancement");
       expect(result.selection.originalKarma).toBe(10); // 2× cost
       expect(result.cost).toBe(10);
       expect(result.updatedCharacter.positiveQualities?.length).toBe(1);
       expect(result.updatedCharacter.advancementHistory?.length).toBe(1);
       const historyRecord = result.updatedCharacter.advancementHistory?.[0];
-      expect(historyRecord?.type).toBe('quality');
-      expect(historyRecord?.targetId).toBe('test-quality');
+      expect(historyRecord?.type).toBe("quality");
+      expect(historyRecord?.targetId).toBe("test-quality");
       expect(historyRecord?.karmaCost).toBe(10);
       expect(historyRecord?.trainingRequired).toBe(false);
-      expect(historyRecord?.trainingStatus).toBe('completed');
+      expect(historyRecord?.trainingStatus).toBe("completed");
     });
 
-    it('should throw error when validation fails', () => {
+    it("should throw error when validation fails", () => {
       const quality: Quality = {
-        id: 'magic-quality',
-        name: 'Magic Quality',
-        type: 'positive',
+        id: "magic-quality",
+        name: "Magic Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Requires magic',
+        summary: "Requires magic",
         prerequisites: {
           hasMagic: true,
         },
@@ -293,17 +297,17 @@ describe('Quality Advancement', () => {
       });
 
       expect(() => {
-        acquireQuality(character, 'magic-quality', rulesetWithQuality);
+        acquireQuality(character, "magic-quality", rulesetWithQuality);
       }).toThrow();
     });
 
-    it('should throw error when not enough karma', () => {
+    it("should throw error when not enough karma", () => {
       const quality: Quality = {
-        id: 'expensive-quality',
-        name: 'Expensive Quality',
-        type: 'positive',
+        id: "expensive-quality",
+        name: "Expensive Quality",
+        type: "positive",
         karmaCost: 30,
-        summary: 'Expensive quality',
+        summary: "Expensive quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -321,18 +325,18 @@ describe('Quality Advancement', () => {
       });
 
       expect(() => {
-        acquireQuality(poorCharacter, 'expensive-quality', rulesetWithQuality);
-      }).toThrow('Not enough karma');
+        acquireQuality(poorCharacter, "expensive-quality", rulesetWithQuality);
+      }).toThrow("Not enough karma");
     });
 
-    it('should initialize dynamic state for dynamic qualities', () => {
+    it("should initialize dynamic state for dynamic qualities", () => {
       const quality: Quality = {
-        id: 'addiction',
-        name: 'Addiction',
-        type: 'negative',
+        id: "addiction",
+        name: "Addiction",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'Addiction quality',
-        dynamicState: 'addiction',
+        summary: "Addiction quality",
+        dynamicState: "addiction",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -345,31 +349,31 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = acquireQuality(character, 'addiction', rulesetWithQuality, {
-        variant: 'moderate',
-        specification: 'Cram',
+      const result = acquireQuality(character, "addiction", rulesetWithQuality, {
+        variant: "moderate",
+        specification: "Cram",
       });
 
       expect(result.selection.dynamicState).not.toBeNull();
-      expect(result.selection.dynamicState?.type).toBe('addiction');
+      expect(result.selection.dynamicState?.type).toBe("addiction");
     });
   });
 
-  describe('validateQualityRemoval', () => {
-    it('should validate successful removal', () => {
+  describe("validateQualityRemoval", () => {
+    it("should validate successful removal", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
             originalKarma: -5,
           },
         ],
@@ -386,33 +390,37 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = validateQualityRemoval(characterWithQuality, 'negative-quality', rulesetWithQuality);
+      const result = validateQualityRemoval(
+        characterWithQuality,
+        "negative-quality",
+        rulesetWithQuality
+      );
       expect(result.valid).toBe(true);
       expect(result.errors).toHaveLength(0);
       expect(result.cost).toBe(10); // 2× original bonus
     });
 
-    it('should fail when quality not found on character', () => {
-      const result = validateQualityRemoval(character, 'unknown-quality', ruleset);
+    it("should fail when quality not found on character", () => {
+      const result = validateQualityRemoval(character, "unknown-quality", ruleset);
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors[0].message).toContain('not found');
+      expect(result.errors[0].message).toContain("not found");
     });
 
-    it('should fail when not enough karma for buy-off', () => {
+    it("should fail when not enough karma for buy-off", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 20,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
             originalKarma: -20,
           },
         ],
@@ -429,27 +437,31 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = validateQualityRemoval(characterWithQuality, 'negative-quality', rulesetWithQuality);
+      const result = validateQualityRemoval(
+        characterWithQuality,
+        "negative-quality",
+        rulesetWithQuality
+      );
       expect(result.valid).toBe(false);
-      expect(result.errors.some((e) => e.message.includes('Not enough karma'))).toBe(true);
+      expect(result.errors.some((e) => e.message.includes("Not enough karma"))).toBe(true);
     });
   });
 
-  describe('removeQuality', () => {
-    it('should remove quality successfully', () => {
+  describe("removeQuality", () => {
+    it("should remove quality successfully", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
             originalKarma: -5,
           },
         ],
@@ -466,38 +478,43 @@ describe('Quality Advancement', () => {
         },
       });
 
-      const result = removeQuality(characterWithQuality, 'negative-quality', rulesetWithQuality, 'Story development');
+      const result = removeQuality(
+        characterWithQuality,
+        "negative-quality",
+        rulesetWithQuality,
+        "Story development"
+      );
 
       expect(result.updatedCharacter.negativeQualities?.length).toBe(0);
       expect(result.cost).toBe(10); // 2× original bonus
       expect(result.updatedCharacter.advancementHistory?.length).toBe(1);
       const historyRecord = result.updatedCharacter.advancementHistory?.[0];
-      expect(historyRecord?.type).toBe('quality');
-      expect(historyRecord?.targetName).toContain('Negative Quality');
-      expect(historyRecord?.targetName).toContain('(Removed)');
+      expect(historyRecord?.type).toBe("quality");
+      expect(historyRecord?.targetName).toContain("Negative Quality");
+      expect(historyRecord?.targetName).toContain("(Removed)");
       expect(historyRecord?.karmaCost).toBe(10);
     });
 
-    it('should throw error when validation fails', () => {
+    it("should throw error when validation fails", () => {
       expect(() => {
-        removeQuality(character, 'unknown-quality', ruleset);
+        removeQuality(character, "unknown-quality", ruleset);
       }).toThrow();
     });
 
-    it('should throw error when not enough karma', () => {
+    it("should throw error when not enough karma", () => {
       const quality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 20,
-        summary: 'A negative quality',
+        summary: "A negative quality",
       };
 
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
             originalKarma: -20,
           },
         ],
@@ -515,9 +532,8 @@ describe('Quality Advancement', () => {
       });
 
       expect(() => {
-        removeQuality(characterWithQuality, 'negative-quality', rulesetWithQuality);
-      }).toThrow('Not enough karma');
+        removeQuality(characterWithQuality, "negative-quality", rulesetWithQuality);
+      }).toThrow("Not enough karma");
     });
   });
 });
-

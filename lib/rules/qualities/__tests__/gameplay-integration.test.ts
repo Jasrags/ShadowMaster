@@ -5,8 +5,8 @@
  * lifestyle costs, healing modifiers, and attribute modifiers.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import type { Character, Quality, MergedRuleset } from '@/lib/types';
+import { describe, it, expect, beforeEach } from "vitest";
+import type { Character, Quality, MergedRuleset } from "@/lib/types";
 import {
   calculateWoundModifier,
   calculateSkillDicePool,
@@ -15,11 +15,11 @@ import {
   calculateHealingDicePool,
   calculateAttributeValue,
   calculateAttributeMaximum,
-} from '../gameplay-integration';
-import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../gameplay-integration";
+import { createMockMergedRuleset } from "@/__tests__/mocks/rulesets";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
-describe('Quality Gameplay Integration', () => {
+describe("Quality Gameplay Integration", () => {
   let ruleset: MergedRuleset;
   let character: Character;
 
@@ -54,8 +54,8 @@ describe('Quality Gameplay Integration', () => {
     });
   });
 
-  describe('calculateWoundModifier', () => {
-    it('should calculate base wound modifier', () => {
+  describe("calculateWoundModifier", () => {
+    it("should calculate base wound modifier", () => {
       const characterWithDamage = createMockCharacter({
         condition: {
           physicalDamage: 6,
@@ -63,24 +63,24 @@ describe('Quality Gameplay Integration', () => {
         },
       });
 
-      const modifier = calculateWoundModifier(characterWithDamage, ruleset, 'physical');
+      const modifier = calculateWoundModifier(characterWithDamage, ruleset, "physical");
       // 6 damage / 3 interval = -2 modifier
       expect(modifier).toBe(-2);
     });
 
-    it('should apply High Pain Tolerance (boxes ignored)', () => {
+    it("should apply High Pain Tolerance (boxes ignored)", () => {
       const quality: Quality = {
-        id: 'high-pain-tolerance',
-        name: 'High Pain Tolerance',
-        type: 'positive',
+        id: "high-pain-tolerance",
+        name: "High Pain Tolerance",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Ignore wound boxes',
+        summary: "Ignore wound boxes",
         effects: [
           {
-            id: 'ignore-boxes',
-            type: 'wound-modifier',
-            trigger: 'damage-taken',
-            target: { stat: 'wound-boxes-ignored' },
+            id: "ignore-boxes",
+            type: "wound-modifier",
+            trigger: "damage-taken",
+            target: { stat: "wound-boxes-ignored" },
             value: 2,
           },
         ],
@@ -99,8 +99,8 @@ describe('Quality Gameplay Integration', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'high-pain-tolerance',
-            source: 'creation',
+            qualityId: "high-pain-tolerance",
+            source: "creation",
           },
         ],
         condition: {
@@ -109,12 +109,12 @@ describe('Quality Gameplay Integration', () => {
         },
       });
 
-      const modifier = calculateWoundModifier(characterWithQuality, rulesetWithQuality, 'physical');
+      const modifier = calculateWoundModifier(characterWithQuality, rulesetWithQuality, "physical");
       // 6 damage - 2 ignored = 4 effective damage / 3 interval = -1 modifier
       expect(modifier).toBe(-1);
     });
 
-    it('should handle stun damage track', () => {
+    it("should handle stun damage track", () => {
       const characterWithStun = createMockCharacter({
         condition: {
           physicalDamage: 0,
@@ -122,38 +122,32 @@ describe('Quality Gameplay Integration', () => {
         },
       });
 
-      const modifier = calculateWoundModifier(characterWithStun, ruleset, 'stun');
+      const modifier = calculateWoundModifier(characterWithStun, ruleset, "stun");
       // 9 damage / 3 interval = -3 modifier
       expect(modifier).toBe(-3);
     });
   });
 
-  describe('calculateSkillDicePool', () => {
-    it('should calculate base dice pool', () => {
-      const pool = calculateSkillDicePool(
-        character,
-        ruleset,
-        'firearms',
-        'agility',
-        4
-      );
+  describe("calculateSkillDicePool", () => {
+    it("should calculate base dice pool", () => {
+      const pool = calculateSkillDicePool(character, ruleset, "firearms", "agility", 4);
       // 4 agility + 4 skill = 8 dice
       expect(pool).toBe(8);
     });
 
-    it('should apply dice pool modifiers from qualities', () => {
+    it("should apply dice pool modifiers from qualities", () => {
       const quality: Quality = {
-        id: 'catlike',
-        name: 'Catlike',
-        type: 'positive',
+        id: "catlike",
+        name: "Catlike",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Bonus to Stealth',
+        summary: "Bonus to Stealth",
         effects: [
           {
-            id: 'stealth-bonus',
-            type: 'dice-pool-modifier',
-            trigger: 'skill-test',
-            target: { skill: 'stealth' },
+            id: "stealth-bonus",
+            type: "dice-pool-modifier",
+            trigger: "skill-test",
+            target: { skill: "stealth" },
             value: 2,
           },
         ],
@@ -173,8 +167,8 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         positiveQualities: [
           {
-            qualityId: 'catlike',
-            source: 'creation',
+            qualityId: "catlike",
+            source: "creation",
           },
         ],
         skills: {
@@ -185,27 +179,27 @@ describe('Quality Gameplay Integration', () => {
       const pool = calculateSkillDicePool(
         characterWithQuality,
         rulesetWithQuality,
-        'stealth',
-        'agility',
+        "stealth",
+        "agility",
         3
       );
       // 4 agility + 3 skill + 2 quality = 9 dice
       expect(pool).toBe(9);
     });
 
-    it('should not apply modifiers to wrong skill', () => {
+    it("should not apply modifiers to wrong skill", () => {
       const quality: Quality = {
-        id: 'catlike',
-        name: 'Catlike',
-        type: 'positive',
+        id: "catlike",
+        name: "Catlike",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Bonus to Stealth',
+        summary: "Bonus to Stealth",
         effects: [
           {
-            id: 'stealth-bonus',
-            type: 'dice-pool-modifier',
-            trigger: 'skill-test',
-            target: { skill: 'stealth' },
+            id: "stealth-bonus",
+            type: "dice-pool-modifier",
+            trigger: "skill-test",
+            target: { skill: "stealth" },
             value: 2,
           },
         ],
@@ -225,8 +219,8 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         positiveQualities: [
           {
-            qualityId: 'catlike',
-            source: 'creation',
+            qualityId: "catlike",
+            source: "creation",
           },
         ],
       });
@@ -234,26 +228,26 @@ describe('Quality Gameplay Integration', () => {
       const pool = calculateSkillDicePool(
         characterWithQuality,
         rulesetWithQuality,
-        'firearms',
-        'agility',
+        "firearms",
+        "agility",
         4
       );
       // 4 agility + 4 skill = 8 dice (no bonus for firearms)
       expect(pool).toBe(8);
     });
 
-    it('should ensure pool does not go below 0', () => {
+    it("should ensure pool does not go below 0", () => {
       const quality: Quality = {
-        id: 'penalty-quality',
-        name: 'Penalty Quality',
-        type: 'negative',
+        id: "penalty-quality",
+        name: "Penalty Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'Large penalty',
+        summary: "Large penalty",
         effects: [
           {
-            id: 'large-penalty',
-            type: 'dice-pool-modifier',
-            trigger: 'skill-test',
+            id: "large-penalty",
+            type: "dice-pool-modifier",
+            trigger: "skill-test",
             target: {},
             value: -20,
           },
@@ -274,8 +268,8 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         negativeQualities: [
           {
-            qualityId: 'penalty-quality',
-            source: 'creation',
+            qualityId: "penalty-quality",
+            source: "creation",
           },
         ],
       });
@@ -283,8 +277,8 @@ describe('Quality Gameplay Integration', () => {
       const pool = calculateSkillDicePool(
         characterWithQuality,
         rulesetWithQuality,
-        'firearms',
-        'agility',
+        "firearms",
+        "agility",
         4
       );
       // Should be clamped to 0, not negative
@@ -292,8 +286,8 @@ describe('Quality Gameplay Integration', () => {
     });
   });
 
-  describe('calculateLimit', () => {
-    it('should calculate physical limit', () => {
+  describe("calculateLimit", () => {
+    it("should calculate physical limit", () => {
       const characterWithAttrs = createMockCharacter({
         attributes: {
           strength: 4,
@@ -302,12 +296,12 @@ describe('Quality Gameplay Integration', () => {
         },
       });
 
-      const limit = calculateLimit(characterWithAttrs, ruleset, 'physical');
+      const limit = calculateLimit(characterWithAttrs, ruleset, "physical");
       // (4*2 + 3 + 3) / 3 = 14/3 = 4.67 -> 5
       expect(limit).toBe(5);
     });
 
-    it('should calculate mental limit', () => {
+    it("should calculate mental limit", () => {
       const characterWithAttrs = createMockCharacter({
         attributes: {
           logic: 4,
@@ -316,24 +310,24 @@ describe('Quality Gameplay Integration', () => {
         },
       });
 
-      const limit = calculateLimit(characterWithAttrs, ruleset, 'mental');
+      const limit = calculateLimit(characterWithAttrs, ruleset, "mental");
       // (4*2 + 3 + 3) / 3 = 14/3 = 4.67 -> 5
       expect(limit).toBe(5);
     });
 
-    it('should apply limit modifiers from qualities', () => {
+    it("should apply limit modifiers from qualities", () => {
       const quality: Quality = {
-        id: 'indomitable',
-        name: 'Indomitable',
-        type: 'positive',
+        id: "indomitable",
+        name: "Indomitable",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Bonus to Physical limit',
+        summary: "Bonus to Physical limit",
         effects: [
           {
-            id: 'physical-limit-bonus',
-            type: 'limit-modifier',
-            trigger: 'always',
-            target: { limit: 'physical' },
+            id: "physical-limit-bonus",
+            type: "limit-modifier",
+            trigger: "always",
+            target: { limit: "physical" },
             value: 1,
           },
         ],
@@ -357,30 +351,30 @@ describe('Quality Gameplay Integration', () => {
         },
         positiveQualities: [
           {
-            qualityId: 'indomitable',
-            source: 'creation',
+            qualityId: "indomitable",
+            source: "creation",
           },
         ],
       });
 
-      const limit = calculateLimit(characterWithQuality, rulesetWithQuality, 'physical');
+      const limit = calculateLimit(characterWithQuality, rulesetWithQuality, "physical");
       // Base 5 + 1 modifier = 6
       expect(limit).toBe(6);
     });
 
-    it('should ensure limit does not go below 1', () => {
+    it("should ensure limit does not go below 1", () => {
       const quality: Quality = {
-        id: 'limit-penalty',
-        name: 'Limit Penalty',
-        type: 'negative',
+        id: "limit-penalty",
+        name: "Limit Penalty",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'Large limit penalty',
+        summary: "Large limit penalty",
         effects: [
           {
-            id: 'large-penalty',
-            type: 'limit-modifier',
-            trigger: 'always',
-            target: { limit: 'physical' },
+            id: "large-penalty",
+            type: "limit-modifier",
+            trigger: "always",
+            target: { limit: "physical" },
             value: -10,
           },
         ],
@@ -404,39 +398,39 @@ describe('Quality Gameplay Integration', () => {
         },
         negativeQualities: [
           {
-            qualityId: 'limit-penalty',
-            source: 'creation',
+            qualityId: "limit-penalty",
+            source: "creation",
           },
         ],
       });
 
-      const limit = calculateLimit(characterWithQuality, rulesetWithQuality, 'physical');
+      const limit = calculateLimit(characterWithQuality, rulesetWithQuality, "physical");
       // Should be clamped to 1, not 0 or negative
       expect(limit).toBe(1);
     });
   });
 
-  describe('calculateLifestyleCost', () => {
-    it('should calculate base lifestyle cost', () => {
+  describe("calculateLifestyleCost", () => {
+    it("should calculate base lifestyle cost", () => {
       const cost = calculateLifestyleCost(character, ruleset, 1000);
       expect(cost).toBe(1000);
     });
 
-    it('should apply dependents modifiers', () => {
+    it("should apply dependents modifiers", () => {
       const characterWithDependent = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'dependents',
-            source: 'creation',
+            qualityId: "dependents",
+            source: "creation",
             rating: 2,
-            specification: 'Child',
+            specification: "Child",
             dynamicState: {
-              type: 'dependent',
+              type: "dependent",
               state: {
-                name: 'Child',
-                relationship: 'child',
+                name: "Child",
+                relationship: "child",
                 tier: 2,
-                currentStatus: 'safe',
+                currentStatus: "safe",
                 lastCheckedIn: new Date().toISOString(),
                 lifestyleCostModifier: 20, // +20%
                 timeCommitmentHours: 10,
@@ -452,30 +446,24 @@ describe('Quality Gameplay Integration', () => {
     });
   });
 
-  describe('calculateHealingDicePool', () => {
-    it('should calculate base healing pool', () => {
-      const pool = calculateHealingDicePool(
-        character,
-        ruleset,
-        'first-aid',
-        false,
-        6
-      );
+  describe("calculateHealingDicePool", () => {
+    it("should calculate base healing pool", () => {
+      const pool = calculateHealingDicePool(character, ruleset, "first-aid", false, 6);
       expect(pool).toBe(6);
     });
 
-    it('should apply healing modifiers', () => {
+    it("should apply healing modifiers", () => {
       const quality: Quality = {
-        id: 'quick-healer',
-        name: 'Quick Healer',
-        type: 'positive',
+        id: "quick-healer",
+        name: "Quick Healer",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Bonus to healing',
+        summary: "Bonus to healing",
         effects: [
           {
-            id: 'healing-bonus',
-            type: 'healing-modifier',
-            trigger: 'healing',
+            id: "healing-bonus",
+            type: "healing-modifier",
+            trigger: "healing",
             target: { affectsOthers: false },
             value: 2,
           },
@@ -496,8 +484,8 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         positiveQualities: [
           {
-            qualityId: 'quick-healer',
-            source: 'creation',
+            qualityId: "quick-healer",
+            source: "creation",
           },
         ],
       });
@@ -505,7 +493,7 @@ describe('Quality Gameplay Integration', () => {
       const pool = calculateHealingDicePool(
         characterWithQuality,
         rulesetWithQuality,
-        'first-aid',
+        "first-aid",
         true, // healing self
         6
       );
@@ -514,25 +502,25 @@ describe('Quality Gameplay Integration', () => {
     });
   });
 
-  describe('calculateAttributeValue', () => {
-    it('should calculate base attribute value', () => {
-      const value = calculateAttributeValue(character, ruleset, 'agility');
+  describe("calculateAttributeValue", () => {
+    it("should calculate base attribute value", () => {
+      const value = calculateAttributeValue(character, ruleset, "agility");
       expect(value).toBe(4);
     });
 
-    it('should apply attribute modifiers', () => {
+    it("should apply attribute modifiers", () => {
       const quality: Quality = {
-        id: 'attribute-bonus',
-        name: 'Attribute Bonus',
-        type: 'positive',
+        id: "attribute-bonus",
+        name: "Attribute Bonus",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Bonus to Agility',
+        summary: "Bonus to Agility",
         effects: [
           {
-            id: 'agility-bonus',
-            type: 'attribute-modifier',
-            trigger: 'always',
-            target: { attribute: 'agility' },
+            id: "agility-bonus",
+            type: "attribute-modifier",
+            trigger: "always",
+            target: { attribute: "agility" },
             value: 1,
           },
         ],
@@ -552,37 +540,37 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         positiveQualities: [
           {
-            qualityId: 'attribute-bonus',
-            source: 'creation',
+            qualityId: "attribute-bonus",
+            source: "creation",
           },
         ],
       });
 
-      const value = calculateAttributeValue(characterWithQuality, rulesetWithQuality, 'agility');
+      const value = calculateAttributeValue(characterWithQuality, rulesetWithQuality, "agility");
       // 4 base + 1 modifier = 5
       expect(value).toBe(5);
     });
   });
 
-  describe('calculateAttributeMaximum', () => {
-    it('should calculate base attribute maximum', () => {
-      const max = calculateAttributeMaximum(character, ruleset, 'agility', 6);
+  describe("calculateAttributeMaximum", () => {
+    it("should calculate base attribute maximum", () => {
+      const max = calculateAttributeMaximum(character, ruleset, "agility", 6);
       expect(max).toBe(6);
     });
 
-    it('should apply attribute maximum modifiers', () => {
+    it("should apply attribute maximum modifiers", () => {
       const quality: Quality = {
-        id: 'attribute-max-bonus',
-        name: 'Attribute Max Bonus',
-        type: 'positive',
+        id: "attribute-max-bonus",
+        name: "Attribute Max Bonus",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Increases Agility maximum',
+        summary: "Increases Agility maximum",
         effects: [
           {
-            id: 'agility-max-bonus',
-            type: 'attribute-maximum',
-            trigger: 'always',
-            target: { attribute: 'agility' },
+            id: "agility-max-bonus",
+            type: "attribute-maximum",
+            trigger: "always",
+            target: { attribute: "agility" },
             value: 1,
           },
         ],
@@ -602,16 +590,15 @@ describe('Quality Gameplay Integration', () => {
         ...character,
         positiveQualities: [
           {
-            qualityId: 'attribute-max-bonus',
-            source: 'creation',
+            qualityId: "attribute-max-bonus",
+            source: "creation",
           },
         ],
       });
 
-      const max = calculateAttributeMaximum(characterWithQuality, rulesetWithQuality, 'agility', 6);
+      const max = calculateAttributeMaximum(characterWithQuality, rulesetWithQuality, "agility", 6);
       // 6 base + 1 modifier = 7
       expect(max).toBe(7);
     });
   });
 });
-

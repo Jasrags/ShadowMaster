@@ -42,7 +42,9 @@ export default function StatusTransitionDialog({
   const [loading, setLoading] = useState(false);
   const [loadingTransitions, setLoadingTransitions] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [validationErrors, setValidationErrors] = useState<Array<{ code: string; message: string }>>([]);
+  const [validationErrors, setValidationErrors] = useState<
+    Array<{ code: string; message: string }>
+  >([]);
   const [canOverride, setCanOverride] = useState(false);
 
   // Fetch available transitions when dialog opens
@@ -115,7 +117,9 @@ export default function StatusTransitionDialog({
         // Validation failed but can be overridden
         setValidationErrors(data.errors);
         setCanOverride(true);
-        setError("Character validation failed. Review errors below and choose to override if appropriate.");
+        setError(
+          "Character validation failed. Review errors below and choose to override if appropriate."
+        );
       } else {
         setError(data.error || "Failed to transition status");
         if (data.errors) {
@@ -182,7 +186,9 @@ export default function StatusTransitionDialog({
               </div>
               <div className="mt-1 flex items-center gap-2 text-sm">
                 <span className="text-zinc-500 dark:text-zinc-400">Current Status:</span>
-                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusBadgeColor(currentStatus)}`}>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusBadgeColor(currentStatus)}`}
+                >
                   {currentStatus}
                 </span>
               </div>
@@ -224,8 +230,8 @@ export default function StatusTransitionDialog({
                   Character has validation issues
                 </div>
                 <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                  This draft character has {validation.errors?.length || 0} validation error(s).
-                  You can still finalize with admin override.
+                  This draft character has {validation.errors?.length || 0} validation error(s). You
+                  can still finalize with admin override.
                 </p>
               </div>
             )}
@@ -301,7 +307,8 @@ export default function StatusTransitionDialog({
                           Override validation and proceed anyway
                         </span>
                         <p className="mt-0.5 text-xs text-amber-700 dark:text-amber-500">
-                          As an administrator, you can bypass validation requirements. This will be logged in the audit trail.
+                          As an administrator, you can bypass validation requirements. This will be
+                          logged in the audit trail.
                         </p>
                       </div>
                     </label>
@@ -322,7 +329,9 @@ export default function StatusTransitionDialog({
               </button>
               <button
                 type="submit"
-                disabled={loading || !selectedStatus || !note.trim() || (canOverride && !skipValidation)}
+                disabled={
+                  loading || !selectedStatus || !note.trim() || (canOverride && !skipValidation)
+                }
                 className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
               >
                 {loading ? (

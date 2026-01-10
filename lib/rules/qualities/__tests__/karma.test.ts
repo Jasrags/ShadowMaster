@@ -5,19 +5,19 @@
  * and karma limit validation.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
-import type { Character, Quality, MergedRuleset } from '@/lib/types';
+import { describe, it, expect, beforeEach } from "vitest";
+import type { Character, Quality, MergedRuleset } from "@/lib/types";
 import {
   calculateQualityCost,
   calculatePositiveQualityKarma,
   calculateNegativeQualityKarma,
   getAvailableKarma,
   validateKarmaLimits,
-} from '../karma';
-import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../karma";
+import { createMockMergedRuleset } from "@/__tests__/mocks/rulesets";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
-describe('Quality Karma Accounting', () => {
+describe("Quality Karma Accounting", () => {
   let ruleset: MergedRuleset;
   let character: Character;
 
@@ -34,44 +34,44 @@ describe('Quality Karma Accounting', () => {
     character = createMockCharacter();
   });
 
-  describe('calculateQualityCost', () => {
-    it('should calculate base cost for positive quality', () => {
+  describe("calculateQualityCost", () => {
+    it("should calculate base cost for positive quality", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const cost = calculateQualityCost(quality);
       expect(cost).toBe(5);
     });
 
-    it('should calculate base cost for negative quality', () => {
+    it("should calculate base cost for negative quality", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'negative',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const cost = calculateQualityCost(quality);
       expect(cost).toBe(5);
     });
 
-    it('should calculate cost for per-rating quality with levels', () => {
+    it("should calculate cost for per-rating quality with levels", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
-          { level: 3, name: 'Rating 3', karma: 15 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
+          { level: 3, name: "Rating 3", karma: 15 },
         ],
         maxRating: 3,
       };
@@ -81,16 +81,16 @@ describe('Quality Karma Accounting', () => {
       expect(calculateQualityCost(quality, 3)).toBe(15);
     });
 
-    it('should use first level when rating not specified for levels', () => {
+    it("should use first level when rating not specified for levels", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
@@ -99,13 +99,13 @@ describe('Quality Karma Accounting', () => {
       expect(cost).toBe(5);
     });
 
-    it('should calculate cost for per-rating quality without explicit levels', () => {
+    it("should calculate cost for per-rating quality without explicit levels", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         maxRating: 3,
       };
 
@@ -114,13 +114,13 @@ describe('Quality Karma Accounting', () => {
       expect(calculateQualityCost(quality, 3)).toBe(15);
     });
 
-    it('should double cost for post-creation acquisition', () => {
+    it("should double cost for post-creation acquisition", () => {
       const quality: Quality = {
-        id: 'test-quality',
-        name: 'Test Quality',
-        type: 'positive',
+        id: "test-quality",
+        name: "Test Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A test quality',
+        summary: "A test quality",
       };
 
       const creationCost = calculateQualityCost(quality, undefined, false);
@@ -130,16 +130,16 @@ describe('Quality Karma Accounting', () => {
       expect(postCreationCost).toBe(10);
     });
 
-    it('should double cost for post-creation per-rating quality', () => {
+    it("should double cost for post-creation per-rating quality", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
@@ -151,27 +151,27 @@ describe('Quality Karma Accounting', () => {
     });
   });
 
-  describe('calculatePositiveQualityKarma', () => {
-    it('should return 0 for character with no positive qualities', () => {
+  describe("calculatePositiveQualityKarma", () => {
+    it("should return 0 for character with no positive qualities", () => {
       const total = calculatePositiveQualityKarma(character, ruleset);
       expect(total).toBe(0);
     });
 
-    it('should calculate total from quality definitions', () => {
+    it("should calculate total from quality definitions", () => {
       const quality1: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'positive',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "positive",
         karmaCost: 5,
-        summary: 'First quality',
+        summary: "First quality",
       };
 
       const quality2: Quality = {
-        id: 'quality-2',
-        name: 'Quality 2',
-        type: 'positive',
+        id: "quality-2",
+        name: "Quality 2",
+        type: "positive",
         karmaCost: 10,
-        summary: 'Second quality',
+        summary: "Second quality",
       };
 
       const rulesetWithQualities = createMockMergedRuleset({
@@ -187,12 +187,12 @@ describe('Quality Karma Accounting', () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
           {
-            qualityId: 'quality-2',
-            source: 'creation',
+            qualityId: "quality-2",
+            source: "creation",
           },
         ],
       });
@@ -201,17 +201,17 @@ describe('Quality Karma Accounting', () => {
       expect(total).toBe(15);
     });
 
-    it('should use originalKarma as fallback when ruleset not provided', () => {
+    it("should use originalKarma as fallback when ruleset not provided", () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
             originalKarma: 5,
           },
           {
-            qualityId: 'quality-2',
-            source: 'creation',
+            qualityId: "quality-2",
+            source: "creation",
             originalKarma: 10,
           },
         ],
@@ -221,16 +221,16 @@ describe('Quality Karma Accounting', () => {
       expect(total).toBe(15);
     });
 
-    it('should calculate cost for per-rating qualities', () => {
+    it("should calculate cost for per-rating qualities", () => {
       const quality: Quality = {
-        id: 'rated-quality',
-        name: 'Rated Quality',
-        type: 'positive',
+        id: "rated-quality",
+        name: "Rated Quality",
+        type: "positive",
         karmaCost: 5,
-        summary: 'Per-rating quality',
+        summary: "Per-rating quality",
         levels: [
-          { level: 1, name: 'Rating 1', karma: 5 },
-          { level: 2, name: 'Rating 2', karma: 10 },
+          { level: 1, name: "Rating 1", karma: 5 },
+          { level: 2, name: "Rating 2", karma: 10 },
         ],
         maxRating: 2,
       };
@@ -248,9 +248,9 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'rated-quality',
+            qualityId: "rated-quality",
             rating: 2,
-            source: 'creation',
+            source: "creation",
           },
         ],
       });
@@ -259,13 +259,13 @@ describe('Quality Karma Accounting', () => {
       expect(total).toBe(10);
     });
 
-    it('should handle post-creation costs', () => {
+    it("should handle post-creation costs", () => {
       const quality: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'positive',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "positive",
         karmaCost: 5,
-        summary: 'A quality',
+        summary: "A quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -281,8 +281,8 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'advancement',
+            qualityId: "quality-1",
+            source: "advancement",
           },
         ],
       });
@@ -303,27 +303,27 @@ describe('Quality Karma Accounting', () => {
     });
   });
 
-  describe('calculateNegativeQualityKarma', () => {
-    it('should return 0 for character with no negative qualities', () => {
+  describe("calculateNegativeQualityKarma", () => {
+    it("should return 0 for character with no negative qualities", () => {
       const total = calculateNegativeQualityKarma(character, ruleset);
       expect(total).toBe(0);
     });
 
-    it('should calculate total from quality definitions', () => {
+    it("should calculate total from quality definitions", () => {
       const quality1: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'negative',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'First quality',
+        summary: "First quality",
       };
 
       const quality2: Quality = {
-        id: 'quality-2',
-        name: 'Quality 2',
-        type: 'negative',
+        id: "quality-2",
+        name: "Quality 2",
+        type: "negative",
         karmaBonus: 10,
-        summary: 'Second quality',
+        summary: "Second quality",
       };
 
       const rulesetWithQualities = createMockMergedRuleset({
@@ -339,12 +339,12 @@ describe('Quality Karma Accounting', () => {
       const characterWithQualities = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
           {
-            qualityId: 'quality-2',
-            source: 'creation',
+            qualityId: "quality-2",
+            source: "creation",
           },
         ],
       });
@@ -353,17 +353,17 @@ describe('Quality Karma Accounting', () => {
       expect(total).toBe(15);
     });
 
-    it('should use originalKarma as fallback when ruleset not provided', () => {
+    it("should use originalKarma as fallback when ruleset not provided", () => {
       const characterWithQualities = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
             originalKarma: -5,
           },
           {
-            qualityId: 'quality-2',
-            source: 'creation',
+            qualityId: "quality-2",
+            source: "creation",
             originalKarma: -10,
           },
         ],
@@ -373,13 +373,13 @@ describe('Quality Karma Accounting', () => {
       expect(total).toBe(15); // Absolute value
     });
 
-    it('should handle negative karma values correctly', () => {
+    it("should handle negative karma values correctly", () => {
       const quality: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'negative',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'A quality',
+        summary: "A quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -395,8 +395,8 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
         ],
       });
@@ -406,22 +406,22 @@ describe('Quality Karma Accounting', () => {
     });
   });
 
-  describe('getAvailableKarma', () => {
-    it('should calculate available karma correctly', () => {
+  describe("getAvailableKarma", () => {
+    it("should calculate available karma correctly", () => {
       const quality1: Quality = {
-        id: 'positive-quality',
-        name: 'Positive Quality',
-        type: 'positive',
+        id: "positive-quality",
+        name: "Positive Quality",
+        type: "positive",
         karmaCost: 10,
-        summary: 'Positive',
+        summary: "Positive",
       };
 
       const quality2: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 5,
-        summary: 'Negative',
+        summary: "Negative",
       };
 
       const rulesetWithQualities = createMockMergedRuleset({
@@ -437,14 +437,14 @@ describe('Quality Karma Accounting', () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'positive-quality',
-            source: 'creation',
+            qualityId: "positive-quality",
+            source: "creation",
           },
         ],
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
           },
         ],
       });
@@ -454,20 +454,20 @@ describe('Quality Karma Accounting', () => {
       expect(available).toBe(20);
     });
 
-    it('should handle character with no qualities', () => {
+    it("should handle character with no qualities", () => {
       const available = getAvailableKarma(character, 25, ruleset);
       expect(available).toBe(25);
     });
   });
 
-  describe('validateKarmaLimits', () => {
-    it('should pass when within limits', () => {
+  describe("validateKarmaLimits", () => {
+    it("should pass when within limits", () => {
       const quality: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'positive',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "positive",
         karmaCost: 10,
-        summary: 'A quality',
+        summary: "A quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -483,8 +483,8 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
         ],
       });
@@ -495,13 +495,13 @@ describe('Quality Karma Accounting', () => {
       expect(result.negativeExceeded).toBe(false);
     });
 
-    it('should fail when positive karma limit exceeded', () => {
+    it("should fail when positive karma limit exceeded", () => {
       const quality: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'positive',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "positive",
         karmaCost: 30,
-        summary: 'A quality',
+        summary: "A quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -517,8 +517,8 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
         ],
       });
@@ -528,16 +528,16 @@ describe('Quality Karma Accounting', () => {
       expect(result.positiveExceeded).toBe(true);
       expect(result.negativeExceeded).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors[0].message).toContain('exceed 25 Karma limit');
+      expect(result.errors[0].message).toContain("exceed 25 Karma limit");
     });
 
-    it('should fail when negative karma limit exceeded', () => {
+    it("should fail when negative karma limit exceeded", () => {
       const quality: Quality = {
-        id: 'quality-1',
-        name: 'Quality 1',
-        type: 'negative',
+        id: "quality-1",
+        name: "Quality 1",
+        type: "negative",
         karmaBonus: 30,
-        summary: 'A quality',
+        summary: "A quality",
       };
 
       const rulesetWithQuality = createMockMergedRuleset({
@@ -553,8 +553,8 @@ describe('Quality Karma Accounting', () => {
       const characterWithQuality = createMockCharacter({
         negativeQualities: [
           {
-            qualityId: 'quality-1',
-            source: 'creation',
+            qualityId: "quality-1",
+            source: "creation",
           },
         ],
       });
@@ -564,24 +564,24 @@ describe('Quality Karma Accounting', () => {
       expect(result.positiveExceeded).toBe(false);
       expect(result.negativeExceeded).toBe(true);
       expect(result.errors.length).toBeGreaterThan(0);
-      expect(result.errors[0].message).toContain('exceed 25 Karma bonus limit');
+      expect(result.errors[0].message).toContain("exceed 25 Karma bonus limit");
     });
 
-    it('should report both limits when both exceeded', () => {
+    it("should report both limits when both exceeded", () => {
       const positiveQuality: Quality = {
-        id: 'positive-quality',
-        name: 'Positive Quality',
-        type: 'positive',
+        id: "positive-quality",
+        name: "Positive Quality",
+        type: "positive",
         karmaCost: 30,
-        summary: 'Positive',
+        summary: "Positive",
       };
 
       const negativeQuality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 30,
-        summary: 'Negative',
+        summary: "Negative",
       };
 
       const rulesetWithQualities = createMockMergedRuleset({
@@ -597,14 +597,14 @@ describe('Quality Karma Accounting', () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'positive-quality',
-            source: 'creation',
+            qualityId: "positive-quality",
+            source: "creation",
           },
         ],
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
           },
         ],
       });
@@ -616,21 +616,21 @@ describe('Quality Karma Accounting', () => {
       expect(result.errors.length).toBe(2);
     });
 
-    it('should return correct totals', () => {
+    it("should return correct totals", () => {
       const positiveQuality: Quality = {
-        id: 'positive-quality',
-        name: 'Positive Quality',
-        type: 'positive',
+        id: "positive-quality",
+        name: "Positive Quality",
+        type: "positive",
         karmaCost: 15,
-        summary: 'Positive',
+        summary: "Positive",
       };
 
       const negativeQuality: Quality = {
-        id: 'negative-quality',
-        name: 'Negative Quality',
-        type: 'negative',
+        id: "negative-quality",
+        name: "Negative Quality",
+        type: "negative",
         karmaBonus: 10,
-        summary: 'Negative',
+        summary: "Negative",
       };
 
       const rulesetWithQualities = createMockMergedRuleset({
@@ -646,14 +646,14 @@ describe('Quality Karma Accounting', () => {
       const characterWithQualities = createMockCharacter({
         positiveQualities: [
           {
-            qualityId: 'positive-quality',
-            source: 'creation',
+            qualityId: "positive-quality",
+            source: "creation",
           },
         ],
         negativeQualities: [
           {
-            qualityId: 'negative-quality',
-            source: 'creation',
+            qualityId: "negative-quality",
+            source: "creation",
           },
         ],
       });
@@ -664,4 +664,3 @@ describe('Quality Karma Accounting', () => {
     });
   });
 });
-

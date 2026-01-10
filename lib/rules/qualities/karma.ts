@@ -18,9 +18,7 @@ export function calculateQualityCost(
 ): number {
   // For per-rating qualities with levels
   if (quality.levels && quality.levels.length > 0) {
-    const levelData = rating
-      ? quality.levels.find((l) => l.level === rating)
-      : quality.levels[0];
+    const levelData = rating ? quality.levels.find((l) => l.level === rating) : quality.levels[0];
 
     if (levelData) {
       const baseCost = Math.abs(levelData.karma);
@@ -165,4 +163,3 @@ export function validateKarmaLimits(
     errors,
   };
 }
-

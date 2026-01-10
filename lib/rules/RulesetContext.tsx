@@ -8,13 +8,7 @@
  * accessing ruleset data during character creation.
  */
 
-import React, {
-  createContext,
-  useContext,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
+import React, { createContext, useContext, useState, useCallback, useMemo } from "react";
 import type {
   EditionCode,
   MergedRuleset,
@@ -25,8 +19,65 @@ import type {
   CatalogItemRatingSpec,
   ItemLegality,
 } from "../types";
-import type { QualityData, AdeptPowerCatalogItem, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData } from "./loader-types";
-export type { QualityData, TraditionData, MentorSpiritData, TraditionSpiritTypes, MentorSpiritAdvantages, RitualData, RitualKeywordData, MinionStatsData, VehicleCategoryData, DroneSizeData, VehicleCatalogItemData, DroneCatalogItemData, RCCCatalogItemData, AutosoftCatalogItemData, HandlingRatingData, DroneWeaponMountsData, ProgramCatalogItemData, ProgramsCatalogData, FocusCatalogItemData, SpiritsCatalogData, ModificationsCatalogData, WeaponModificationCatalogItemData, ArmorModificationCatalogItemData, CyberwareModificationCatalogItemData, GearModificationCatalogItemData, LifestyleSubscriptionCatalogItem, ActionsCatalogData };
+import type {
+  QualityData,
+  AdeptPowerCatalogItem,
+  TraditionData,
+  MentorSpiritData,
+  TraditionSpiritTypes,
+  MentorSpiritAdvantages,
+  RitualData,
+  RitualKeywordData,
+  MinionStatsData,
+  VehicleCategoryData,
+  DroneSizeData,
+  VehicleCatalogItemData,
+  DroneCatalogItemData,
+  RCCCatalogItemData,
+  AutosoftCatalogItemData,
+  HandlingRatingData,
+  DroneWeaponMountsData,
+  ProgramCatalogItemData,
+  ProgramsCatalogData,
+  FocusCatalogItemData,
+  SpiritsCatalogData,
+  ModificationsCatalogData,
+  WeaponModificationCatalogItemData,
+  ArmorModificationCatalogItemData,
+  CyberwareModificationCatalogItemData,
+  GearModificationCatalogItemData,
+  LifestyleSubscriptionCatalogItem,
+  ActionsCatalogData,
+} from "./loader-types";
+export type {
+  QualityData,
+  TraditionData,
+  MentorSpiritData,
+  TraditionSpiritTypes,
+  MentorSpiritAdvantages,
+  RitualData,
+  RitualKeywordData,
+  MinionStatsData,
+  VehicleCategoryData,
+  DroneSizeData,
+  VehicleCatalogItemData,
+  DroneCatalogItemData,
+  RCCCatalogItemData,
+  AutosoftCatalogItemData,
+  HandlingRatingData,
+  DroneWeaponMountsData,
+  ProgramCatalogItemData,
+  ProgramsCatalogData,
+  FocusCatalogItemData,
+  SpiritsCatalogData,
+  ModificationsCatalogData,
+  WeaponModificationCatalogItemData,
+  ArmorModificationCatalogItemData,
+  CyberwareModificationCatalogItemData,
+  GearModificationCatalogItemData,
+  LifestyleSubscriptionCatalogItem,
+  ActionsCatalogData,
+};
 
 // =============================================================================
 // TYPES
@@ -84,8 +135,6 @@ export interface ExampleLanguageData {
   name: string;
   region?: string;
 }
-
-
 
 export interface PriorityTableData {
   levels: string[];
@@ -638,43 +687,40 @@ export interface RulesetProviderProps {
   initialBookIds?: ID[];
 }
 
-export function RulesetProvider({
-  children,
-}: RulesetProviderProps) {
+export function RulesetProvider({ children }: RulesetProviderProps) {
   const [state, setState] = useState<RulesetContextState>(defaultState);
   const [data, setData] = useState<RulesetData>(defaultData);
 
   // Load ruleset action via API
-  const loadRuleset = useCallback(
-    async (editionCode: EditionCode, bookIds?: ID[]) => {
-      setState((prev) => ({
-        ...prev,
-        loading: true,
-        error: null,
-        ready: false,
-      }));
+  const loadRuleset = useCallback(async (editionCode: EditionCode, bookIds?: ID[]) => {
+    setState((prev) => ({
+      ...prev,
+      loading: true,
+      error: null,
+      ready: false,
+    }));
 
-      try {
-        // Build API URL
-        let url = `/api/rulesets/${editionCode}`;
-        if (bookIds && bookIds.length > 0) {
-          url += `?bookIds=${bookIds.join(",")}`;
-        }
+    try {
+      // Build API URL
+      let url = `/api/rulesets/${editionCode}`;
+      if (bookIds && bookIds.length > 0) {
+        url += `?bookIds=${bookIds.join(",")}`;
+      }
 
-        // Fetch from API
-        const response = await fetch(url);
-        const result = await response.json();
+      // Fetch from API
+      const response = await fetch(url);
+      const result = await response.json();
 
-        if (!result.success) {
-          throw new Error(result.error || "Failed to load ruleset");
-        }
+      if (!result.success) {
+        throw new Error(result.error || "Failed to load ruleset");
+      }
 
-        const { ruleset, creationMethods, extractedData } = result;
-        const defaultMethod = creationMethods[0] || null;
+      const { ruleset, creationMethods, extractedData } = result;
+      const defaultMethod = creationMethods[0] || null;
 
-        // Transform extracted data
-        const transformedData: RulesetData = extractedData
-          ? {
+      // Transform extracted data
+      const transformedData: RulesetData = extractedData
+        ? {
             metatypes: extractedData.metatypes || [],
             skills: extractedData.skills || defaultData.skills,
             qualities: extractedData.qualities || { positive: [], negative: [] },
@@ -704,30 +750,28 @@ export function RulesetProvider({
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
           }
-          : defaultData;
+        : defaultData;
 
-        setState({
-          editionCode,
-          ruleset,
-          creationMethods,
-          currentCreationMethod: defaultMethod,
-          loading: false,
-          error: null,
-          ready: true,
-        });
+      setState({
+        editionCode,
+        ruleset,
+        creationMethods,
+        currentCreationMethod: defaultMethod,
+        loading: false,
+        error: null,
+        ready: true,
+      });
 
-        setData(transformedData);
-      } catch (error) {
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: error instanceof Error ? error.message : "Unknown error",
-          ready: false,
-        }));
-      }
-    },
-    []
-  );
+      setData(transformedData);
+    } catch (error) {
+      setState((prev) => ({
+        ...prev,
+        loading: false,
+        error: error instanceof Error ? error.message : "Unknown error",
+        ready: false,
+      }));
+    }
+  }, []);
 
   // Select creation method action
   const selectCreationMethod = useCallback(
@@ -769,11 +813,7 @@ export function RulesetProvider({
     [state, data, loadRuleset, selectCreationMethod, clearRuleset, refresh]
   );
 
-  return (
-    <RulesetContext.Provider value={contextValue}>
-      {children}
-    </RulesetContext.Provider>
-  );
+  return <RulesetContext.Provider value={contextValue}>{children}</RulesetContext.Provider>;
 }
 
 // =============================================================================
@@ -925,9 +965,7 @@ export function useWeaponModifications(options?: {
     let filtered = [...data.modifications.weaponMods];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -939,9 +977,7 @@ export function useWeaponModifications(options?: {
     }
 
     if (options?.mountType) {
-      filtered = filtered.filter(
-        (item) => item.mount === options.mountType
-      );
+      filtered = filtered.filter((item) => item.mount === options.mountType);
     }
 
     return filtered;
@@ -997,9 +1033,7 @@ export function useArmorModifications(options?: {
     let filtered = [...data.modifications.armorMods];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1011,9 +1045,7 @@ export function useArmorModifications(options?: {
     }
 
     if (options?.maxCapacityCost !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.capacityCost <= options.maxCapacityCost!
-      );
+      filtered = filtered.filter((item) => item.capacityCost <= options.maxCapacityCost!);
     }
 
     return filtered;
@@ -1038,9 +1070,7 @@ export function useGearModifications(options?: {
     let filtered = [...data.modifications.gearMods];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1054,8 +1084,7 @@ export function useGearModifications(options?: {
     if (options?.category) {
       filtered = filtered.filter(
         (item) =>
-          !item.applicableCategories ||
-          item.applicableCategories.includes(options.category!)
+          !item.applicableCategories || item.applicableCategories.includes(options.category!)
       );
     }
 
@@ -1082,9 +1111,7 @@ export function useCyberwareModifications(options?: {
     let filtered = [...data.modifications.cyberwareMods];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1096,9 +1123,7 @@ export function useCyberwareModifications(options?: {
     }
 
     if (options?.maxCapacityCost !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.capacityCost <= options.maxCapacityCost!
-      );
+      filtered = filtered.filter((item) => item.capacityCost <= options.maxCapacityCost!);
     }
 
     if (options?.applicableCategories && options.applicableCategories.length > 0) {
@@ -1106,9 +1131,7 @@ export function useCyberwareModifications(options?: {
         if (!item.applicableCategories || item.applicableCategories.length === 0) {
           return true; // If no categories specified, allow all
         }
-        return item.applicableCategories.some((cat) =>
-          options.applicableCategories!.includes(cat)
-        );
+        return item.applicableCategories.some((cat) => options.applicableCategories!.includes(cat));
       });
     }
 
@@ -1188,9 +1211,7 @@ export function useCyberware(options?: {
     let filteredCatalog = [...data.cyberware.catalog];
 
     if (options?.category) {
-      filteredCatalog = filteredCatalog.filter(
-        (item) => item.category === options.category
-      );
+      filteredCatalog = filteredCatalog.filter((item) => item.category === options.category);
     }
 
     if (options?.maxAvailability !== undefined) {
@@ -1231,9 +1252,7 @@ export function useBioware(options?: {
     let filteredCatalog = [...data.bioware.catalog];
 
     if (options?.category) {
-      filteredCatalog = filteredCatalog.filter(
-        (item) => item.category === options.category
-      );
+      filteredCatalog = filteredCatalog.filter((item) => item.category === options.category);
     }
 
     if (options?.maxAvailability !== undefined) {
@@ -1298,9 +1317,7 @@ export function useCyberwareCatalog(options?: {
     let filtered = [...data.cyberware.catalog];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1332,9 +1349,7 @@ export function useBiowareCatalog(options?: {
     let filtered = [...data.bioware.catalog];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1365,14 +1380,10 @@ export function useCyberwareByCategory(
   return useMemo(() => {
     if (!data.cyberware?.catalog) return [];
 
-    let filtered = data.cyberware.catalog.filter(
-      (item) => item.category === category
-    );
+    let filtered = data.cyberware.catalog.filter((item) => item.category === category);
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1403,14 +1414,10 @@ export function useBiowareByCategory(
   return useMemo(() => {
     if (!data.bioware?.catalog) return [];
 
-    let filtered = data.bioware.catalog.filter(
-      (item) => item.category === category
-    );
+    let filtered = data.bioware.catalog.filter((item) => item.category === category);
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1652,7 +1659,10 @@ export function canAddAugmentation(
     return { allowed: false, reason: "Forbidden items not allowed at creation" };
   }
   if (availability > maxAvailability) {
-    return { allowed: false, reason: `Availability ${availability} exceeds maximum ${maxAvailability}` };
+    return {
+      allowed: false,
+      reason: `Availability ${availability} exceeds maximum ${maxAvailability}`,
+    };
   }
   return { allowed: true };
 }
@@ -1829,15 +1839,11 @@ export function useVehicles(options?: {
     ];
 
     if (options?.category) {
-      allVehicles = allVehicles.filter(
-        (item) => item.category === options.category
-      );
+      allVehicles = allVehicles.filter((item) => item.category === options.category);
     }
 
     if (options?.maxAvailability !== undefined) {
-      allVehicles = allVehicles.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      allVehicles = allVehicles.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1861,11 +1867,14 @@ export function useVehiclesByType(): {
   aircraft: VehicleCatalogItemData[];
 } {
   const { data } = useRuleset();
-  return useMemo(() => ({
-    groundcraft: data.vehicles?.groundcraft || [],
-    watercraft: data.vehicles?.watercraft || [],
-    aircraft: data.vehicles?.aircraft || [],
-  }), [data.vehicles]);
+  return useMemo(
+    () => ({
+      groundcraft: data.vehicles?.groundcraft || [],
+      watercraft: data.vehicles?.watercraft || [],
+      aircraft: data.vehicles?.aircraft || [],
+    }),
+    [data.vehicles]
+  );
 }
 
 /**
@@ -1903,9 +1912,7 @@ export function useDrones(options?: {
     }
 
     if (options?.maxAvailability !== undefined) {
-      result = result.filter(
-        (drone) => drone.availability <= options.maxAvailability!
-      );
+      result = result.filter((drone) => drone.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -1945,15 +1952,11 @@ export function useRCCs(options?: {
     let result = [...rccs];
 
     if (options?.minDeviceRating !== undefined) {
-      result = result.filter(
-        (rcc) => rcc.deviceRating >= options.minDeviceRating!
-      );
+      result = result.filter((rcc) => rcc.deviceRating >= options.minDeviceRating!);
     }
 
     if (options?.maxAvailability !== undefined) {
-      result = result.filter(
-        (rcc) => rcc.availability <= options.maxAvailability!
-      );
+      result = result.filter((rcc) => rcc.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeRestricted) {
@@ -1981,15 +1984,11 @@ export function useAutosofts(options?: {
     let result = [...autosofts];
 
     if (options?.category) {
-      result = result.filter(
-        (autosoft) => autosoft.category === options.category
-      );
+      result = result.filter((autosoft) => autosoft.category === options.category);
     }
 
     if (options?.requiresTarget !== undefined) {
-      result = result.filter(
-        (autosoft) => autosoft.requiresTarget === options.requiresTarget
-      );
+      result = result.filter((autosoft) => autosoft.requiresTarget === options.requiresTarget);
     }
 
     return result;
@@ -1999,10 +1998,7 @@ export function useAutosofts(options?: {
 /**
  * Calculate the cost of an autosoft at a specific rating
  */
-export function calculateAutosoftCost(
-  costPerRating: number,
-  rating: number
-): number {
+export function calculateAutosoftCost(costPerRating: number, rating: number): number {
   return costPerRating * rating;
 }
 
@@ -2060,15 +2056,11 @@ export function usePrograms(options?: {
     ];
 
     if (options?.category) {
-      allPrograms = allPrograms.filter(
-        (item) => item.category === options.category
-      );
+      allPrograms = allPrograms.filter((item) => item.category === options.category);
     }
 
     if (options?.maxAvailability !== undefined) {
-      allPrograms = allPrograms.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      allPrograms = allPrograms.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -2092,11 +2084,14 @@ export function useProgramsByCategory(): {
   agents: ProgramCatalogItemData[];
 } {
   const { data } = useRuleset();
-  return useMemo(() => ({
-    common: data.programs?.common || [],
-    hacking: data.programs?.hacking || [],
-    agents: data.programs?.agents || [],
-  }), [data.programs]);
+  return useMemo(
+    () => ({
+      common: data.programs?.common || [],
+      hacking: data.programs?.hacking || [],
+      agents: data.programs?.agents || [],
+    }),
+    [data.programs]
+  );
 }
 
 /**
@@ -2126,10 +2121,7 @@ export function useAgentPrograms(): ProgramCatalogItemData[] {
 /**
  * Calculate the cost of an agent at a specific rating
  */
-export function calculateAgentCost(
-  costPerRating: number,
-  rating: number
-): number {
+export function calculateAgentCost(costPerRating: number, rating: number): number {
   return costPerRating * rating;
 }
 
@@ -2195,7 +2187,9 @@ export function useAllActions(): ActionDefinition[] {
 /**
  * Hook to get actions by domain
  */
-export function useActionsByDomain(domain: "combat" | "general" | "magic" | "matrix" | "social" | "vehicle"): ActionDefinition[] {
+export function useActionsByDomain(
+  domain: "combat" | "general" | "magic" | "matrix" | "social" | "vehicle"
+): ActionDefinition[] {
   const { data } = useRuleset();
 
   return useMemo(() => {
@@ -2287,9 +2281,7 @@ export function useCyberdecks(options?: {
     let filtered = [...data.gear.cyberdecks];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -2301,9 +2293,7 @@ export function useCyberdecks(options?: {
     }
 
     if (options?.minDeviceRating !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.deviceRating >= options.minDeviceRating!
-      );
+      filtered = filtered.filter((item) => item.deviceRating >= options.minDeviceRating!);
     }
 
     return filtered.sort((a, b) => a.name.localeCompare(b.name));
@@ -2338,9 +2328,7 @@ export function useCommlinks(options?: {
     let filtered = [...data.gear.commlinks];
 
     if (options?.maxAvailability !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.availability <= options.maxAvailability!
-      );
+      filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
     }
 
     if (options?.excludeForbidden) {
@@ -2352,9 +2340,7 @@ export function useCommlinks(options?: {
     }
 
     if (options?.minDeviceRating !== undefined) {
-      filtered = filtered.filter(
-        (item) => item.deviceRating >= options.minDeviceRating!
-      );
+      filtered = filtered.filter((item) => item.deviceRating >= options.minDeviceRating!);
     }
 
     return filtered.sort((a, b) => a.name.localeCompare(b.name));

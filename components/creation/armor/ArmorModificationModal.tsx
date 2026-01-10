@@ -35,10 +35,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -48,10 +45,7 @@ function getAvailabilityDisplay(
 /**
  * Calculate the capacity cost for a mod, optionally with rating
  */
-function getModCapacityCost(
-  mod: ArmorModificationCatalogItemData,
-  rating?: number
-): number {
+function getModCapacityCost(mod: ArmorModificationCatalogItemData, rating?: number): number {
   // No capacity cost (bracketed in rulebook)
   if (mod.noCapacityCost) return 0;
 
@@ -88,10 +82,7 @@ function getModCost(mod: ArmorModificationCatalogItemData, rating?: number): num
 /**
  * Calculate the availability for a mod, optionally with rating
  */
-function getModAvailability(
-  mod: ArmorModificationCatalogItemData,
-  rating?: number
-): number {
+function getModAvailability(mod: ArmorModificationCatalogItemData, rating?: number): number {
   // Rating-based availability
   if (mod.ratingSpec?.availabilityScaling?.perRating && rating) {
     return (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
@@ -219,9 +210,7 @@ export function ArmorModificationModal({
   const filteredMods = useMemo(() => {
     if (!searchQuery) return modsWithFitInfo;
     const query = searchQuery.toLowerCase();
-    return modsWithFitInfo.filter((item) =>
-      item.mod.name.toLowerCase().includes(query)
-    );
+    return modsWithFitInfo.filter((item) => item.mod.name.toLowerCase().includes(query));
   }, [modsWithFitInfo, searchQuery]);
 
   // Sort: fitting first, then by name
@@ -304,9 +293,7 @@ export function ArmorModificationModal({
               <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
                 Add Modification
               </h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {armor.name}
-              </p>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">{armor.name}</p>
             </div>
             <button
               onClick={close}
@@ -316,229 +303,248 @@ export function ArmorModificationModal({
             </button>
           </div>
 
-        {/* Capacity Status */}
-        <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
-          <div className="flex items-center justify-between text-sm mb-2">
-            <span className="flex items-center gap-2 font-medium text-zinc-700 dark:text-zinc-300">
-              <Shield className="h-4 w-4" />
-              Modification Capacity
-            </span>
-            <span className="text-zinc-500 dark:text-zinc-400">
-              {usedCapacity} / {totalCapacity} used
-              <span className="ml-2 text-emerald-600 dark:text-emerald-400">
-                ({remainingCapacity} available)
+          {/* Capacity Status */}
+          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
+            <div className="flex items-center justify-between text-sm mb-2">
+              <span className="flex items-center gap-2 font-medium text-zinc-700 dark:text-zinc-300">
+                <Shield className="h-4 w-4" />
+                Modification Capacity
               </span>
-            </span>
+              <span className="text-zinc-500 dark:text-zinc-400">
+                {usedCapacity} / {totalCapacity} used
+                <span className="ml-2 text-emerald-600 dark:text-emerald-400">
+                  ({remainingCapacity} available)
+                </span>
+              </span>
+            </div>
+            <div className="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+              <div
+                className={`h-full rounded-full transition-all ${getCapacityColor(capacityPercentage)}`}
+                style={{ width: `${Math.min(100, capacityPercentage)}%` }}
+              />
+            </div>
           </div>
-          <div className="h-2 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-            <div
-              className={`h-full rounded-full transition-all ${getCapacityColor(capacityPercentage)}`}
-              style={{ width: `${Math.min(100, capacityPercentage)}%` }}
-            />
-          </div>
-        </div>
 
-        {/* Search */}
-        <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search modifications..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
+          {/* Search */}
+          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search modifications..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              />
+            </div>
           </div>
-        </div>
 
-        {/* Content - Split Pane */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Left: Mod List */}
-          <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
-            <div className="space-y-2">
-              {sortedMods.length === 0 ? (
-                <p className="text-sm text-zinc-500 text-center py-8">
-                  No modifications found
-                </p>
+          {/* Content - Split Pane */}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left: Mod List */}
+            <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
+              <div className="space-y-2">
+                {sortedMods.length === 0 ? (
+                  <p className="text-sm text-zinc-500 text-center py-8">No modifications found</p>
+                ) : (
+                  sortedMods.map(({ mod, capacityCost, canFit }) => {
+                    const cost = getModCost(mod);
+                    return (
+                      <ModListItem
+                        key={mod.id}
+                        mod={mod}
+                        isSelected={selectedMod?.id === mod.id}
+                        canFit={canFit}
+                        canAfford={cost <= remaining}
+                        capacityCost={capacityCost}
+                        onClick={() => handleSelectMod(mod)}
+                      />
+                    );
+                  })
+                )}
+              </div>
+            </div>
+
+            {/* Right: Detail Preview */}
+            <div className="w-1/2 overflow-y-auto p-4">
+              {selectedMod ? (
+                <div className="space-y-4">
+                  {/* Mod Name */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {selectedMod.name}
+                    </h3>
+                    {ratingBounds.hasRating && (
+                      <p className="text-sm text-blue-600 dark:text-blue-400">
+                        Rating {ratingBounds.min}-{ratingBounds.max}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  {selectedMod.description && (
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      {selectedMod.description}
+                    </p>
+                  )}
+
+                  {/* Rating Selector */}
+                  {ratingBounds.hasRating && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        Rating
+                      </span>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() =>
+                            setSelectedRating(Math.max(ratingBounds.min, selectedRating - 1))
+                          }
+                          disabled={selectedRating <= ratingBounds.min}
+                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                            selectedRating > ratingBounds.min
+                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                          {selectedRating}
+                        </div>
+                        <button
+                          onClick={() =>
+                            setSelectedRating(Math.min(ratingBounds.max, selectedRating + 1))
+                          }
+                          disabled={selectedRating >= ratingBounds.max}
+                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                            selectedRating < ratingBounds.max
+                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Stats */}
+                  <div className="space-y-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Statistics
+                    </span>
+                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
+                      <span className="text-zinc-500 dark:text-zinc-400">Capacity Cost</span>
+                      <span
+                        className={`font-medium ${
+                          !canFitSelected
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-zinc-900 dark:text-zinc-100"
+                        }`}
+                      >
+                        {selectedMod.noCapacityCost ? "[0]" : selectedModCapacity}
+                        {!canFitSelected && " (exceeds)"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
+                      <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
+                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                        {formatCurrency(selectedModCost)}¥
+                      </span>
+                    </div>
+                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
+                      <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
+                      <span
+                        className={`font-medium ${
+                          selectedMod.legality === "forbidden"
+                            ? "text-red-600 dark:text-red-400"
+                            : selectedMod.legality === "restricted"
+                              ? "text-amber-600 dark:text-amber-400"
+                              : "text-zinc-900 dark:text-zinc-100"
+                        }`}
+                      >
+                        {getAvailabilityDisplay(selectedModAvail, selectedMod.legality)}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Requirements Warning */}
+                  {selectedMod.requirements && selectedMod.requirements.length > 0 && (
+                    <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
+                      <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
+                        <AlertTriangle className="h-4 w-4" />
+                        Requirements
+                      </div>
+                      <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                        {selectedMod.requirements.join(", ")}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Legality Warning */}
+                  {(selectedMod.legality === "restricted" ||
+                    selectedMod.legality === "forbidden") && (
+                    <div
+                      className={`rounded-lg p-3 ${
+                        selectedMod.legality === "forbidden"
+                          ? "bg-red-50 dark:bg-red-900/20"
+                          : "bg-amber-50 dark:bg-amber-900/20"
+                      }`}
+                    >
+                      <div
+                        className={`flex items-center gap-2 text-sm font-medium ${
+                          selectedMod.legality === "forbidden"
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-amber-700 dark:text-amber-300"
+                        }`}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        {selectedMod.legality === "forbidden" ? "Forbidden" : "Restricted"}
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Install Button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={handleInstall}
+                      disabled={!canInstall}
+                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
+                        canInstall
+                          ? "bg-amber-500 text-white hover:bg-amber-600"
+                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
+                      }`}
+                    >
+                      {!canFitSelected
+                        ? `Exceeds Capacity (needs ${selectedModCapacity})`
+                        : canAffordSelected
+                          ? `Install - ${formatCurrency(selectedModCost)}¥`
+                          : `Cannot Afford (${formatCurrency(selectedModCost)}¥)`}
+                    </button>
+                  </div>
+                </div>
               ) : (
-                sortedMods.map(({ mod, capacityCost, canFit }) => {
-                  const cost = getModCost(mod);
-                  return (
-                    <ModListItem
-                      key={mod.id}
-                      mod={mod}
-                      isSelected={selectedMod?.id === mod.id}
-                      canFit={canFit}
-                      canAfford={cost <= remaining}
-                      capacityCost={capacityCost}
-                      onClick={() => handleSelectMod(mod)}
-                    />
-                  );
-                })
+                <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
+                  <p className="text-sm">Select a modification to see details</p>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Right: Detail Preview */}
-          <div className="w-1/2 overflow-y-auto p-4">
-            {selectedMod ? (
-              <div className="space-y-4">
-                {/* Mod Name */}
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedMod.name}
-                  </h3>
-                  {ratingBounds.hasRating && (
-                    <p className="text-sm text-blue-600 dark:text-blue-400">
-                      Rating {ratingBounds.min}-{ratingBounds.max}
-                    </p>
-                  )}
-                </div>
-
-                {/* Description */}
-                {selectedMod.description && (
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    {selectedMod.description}
-                  </p>
-                )}
-
-                {/* Rating Selector */}
-                {ratingBounds.hasRating && (
-                  <div className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      Rating
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() => setSelectedRating(Math.max(ratingBounds.min, selectedRating - 1))}
-                        disabled={selectedRating <= ratingBounds.min}
-                        className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                          selectedRating > ratingBounds.min
-                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                        {selectedRating}
-                      </div>
-                      <button
-                        onClick={() => setSelectedRating(Math.min(ratingBounds.max, selectedRating + 1))}
-                        disabled={selectedRating >= ratingBounds.max}
-                        className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                          selectedRating < ratingBounds.max
-                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stats */}
-                <div className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Statistics
-                  </span>
-                  <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
-                    <span className="text-zinc-500 dark:text-zinc-400">Capacity Cost</span>
-                    <span className={`font-medium ${
-                      !canFitSelected
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-zinc-900 dark:text-zinc-100"
-                    }`}>
-                      {selectedMod.noCapacityCost ? "[0]" : selectedModCapacity}
-                      {!canFitSelected && " (exceeds)"}
-                    </span>
-                  </div>
-                  <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
-                    <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
-                    <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {formatCurrency(selectedModCost)}¥
-                    </span>
-                  </div>
-                  <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
-                    <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
-                    <span className={`font-medium ${
-                      selectedMod.legality === "forbidden"
-                        ? "text-red-600 dark:text-red-400"
-                        : selectedMod.legality === "restricted"
-                          ? "text-amber-600 dark:text-amber-400"
-                          : "text-zinc-900 dark:text-zinc-100"
-                    }`}>
-                      {getAvailabilityDisplay(selectedModAvail, selectedMod.legality)}
-                    </span>
-                  </div>
-                </div>
-
-                {/* Requirements Warning */}
-                {selectedMod.requirements && selectedMod.requirements.length > 0 && (
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
-                    <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
-                      <AlertTriangle className="h-4 w-4" />
-                      Requirements
-                    </div>
-                    <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-                      {selectedMod.requirements.join(", ")}
-                    </p>
-                  </div>
-                )}
-
-                {/* Legality Warning */}
-                {(selectedMod.legality === "restricted" || selectedMod.legality === "forbidden") && (
-                  <div className={`rounded-lg p-3 ${
-                    selectedMod.legality === "forbidden"
-                      ? "bg-red-50 dark:bg-red-900/20"
-                      : "bg-amber-50 dark:bg-amber-900/20"
-                  }`}>
-                    <div className={`flex items-center gap-2 text-sm font-medium ${
-                      selectedMod.legality === "forbidden"
-                        ? "text-red-700 dark:text-red-300"
-                        : "text-amber-700 dark:text-amber-300"
-                    }`}>
-                      <AlertTriangle className="h-4 w-4" />
-                      {selectedMod.legality === "forbidden" ? "Forbidden" : "Restricted"}
-                    </div>
-                  </div>
-                )}
-
-                {/* Install Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={handleInstall}
-                    disabled={!canInstall}
-                    className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                      canInstall
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
-                        : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                    }`}
-                  >
-                    {!canFitSelected
-                      ? `Exceeds Capacity (needs ${selectedModCapacity})`
-                      : canAffordSelected
-                        ? `Install - ${formatCurrency(selectedModCost)}¥`
-                        : `Cannot Afford (${formatCurrency(selectedModCost)}¥)`}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
-                <p className="text-sm">Select a modification to see details</p>
-              </div>
-            )}
-          </div>
-        </div>
-
           {/* Footer */}
           <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              Budget: <span className="font-medium text-zinc-900 dark:text-zinc-100">{formatCurrency(remaining)}¥</span> remaining
+              Budget:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>{" "}
+              remaining
               <span className="mx-2">•</span>
-              Capacity: <span className="font-medium text-zinc-900 dark:text-zinc-100">{remainingCapacity}</span> available
+              Capacity:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {remainingCapacity}
+              </span>{" "}
+              available
             </div>
             <button
               onClick={close}

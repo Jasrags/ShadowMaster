@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * MatrixActions - Display available matrix actions with dice pool preview
@@ -7,19 +7,19 @@
  * and calculated dice pools based on current configuration.
  */
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo } from "react";
 import type {
   CharacterCyberdeck,
   MatrixMark,
   MatrixAction,
   MatrixActionCategory,
-} from '@/lib/types/matrix';
+} from "@/lib/types/matrix";
 import {
   isIllegalAction,
   getMarkRequirement,
   isActionSupportedByDevice,
   getActionRequirementsSummary,
-} from '@/lib/rules/matrix/action-validator';
+} from "@/lib/rules/matrix/action-validator";
 
 interface MatrixActionsProps {
   activeDeck?: CharacterCyberdeck | null;
@@ -31,21 +31,21 @@ interface MatrixActionsProps {
 }
 
 const CATEGORY_LABELS: Record<MatrixActionCategory, string> = {
-  attack: 'Cybercombat',
-  sleaze: 'Hacking',
-  device: 'Device Control',
-  file: 'File Operations',
-  persona: 'Persona',
-  complex_form: 'Complex Forms',
+  attack: "Cybercombat",
+  sleaze: "Hacking",
+  device: "Device Control",
+  file: "File Operations",
+  persona: "Persona",
+  complex_form: "Complex Forms",
 };
 
 const CATEGORY_ORDER: MatrixActionCategory[] = [
-  'sleaze',
-  'attack',
-  'device',
-  'file',
-  'persona',
-  'complex_form',
+  "sleaze",
+  "attack",
+  "device",
+  "file",
+  "persona",
+  "complex_form",
 ];
 
 export function MatrixActions({
@@ -54,9 +54,9 @@ export function MatrixActions({
   marks = [],
   overwatchScore = 0,
   onActionSelect,
-  className = ''
+  className = "",
 }: MatrixActionsProps) {
-  const [selectedCategory, setSelectedCategory] = useState<MatrixActionCategory | 'all'>('all');
+  const [selectedCategory, setSelectedCategory] = useState<MatrixActionCategory | "all">("all");
   const [showUnavailable, setShowUnavailable] = useState(false);
 
   // Group actions by category
@@ -83,13 +83,11 @@ export function MatrixActions({
   // Filter actions
   const filteredActions = useMemo(() => {
     let actions =
-      selectedCategory === 'all'
-        ? matrixActions
-        : actionsByCategory[selectedCategory] ?? [];
+      selectedCategory === "all" ? matrixActions : (actionsByCategory[selectedCategory] ?? []);
 
     if (!showUnavailable && activeDeck) {
       actions = actions.filter((action) =>
-        isActionSupportedByDevice(action, activeDeck.deviceRating > 0 ? 'cyberdeck' : 'commlink')
+        isActionSupportedByDevice(action, activeDeck.deviceRating > 0 ? "cyberdeck" : "commlink")
       );
     }
 
@@ -103,10 +101,10 @@ export function MatrixActions({
     const requirements = getActionRequirementsSummary(action);
 
     // Check if we have enough marks on a target
-    const hasEnoughMarks = marksRequired === 0 || marks.some(m => m.markCount >= marksRequired);
+    const hasEnoughMarks = marksRequired === 0 || marks.some((m) => m.markCount >= marksRequired);
 
     // Check device support
-    const deviceType = activeDeck?.deviceRating ? 'cyberdeck' : 'commlink';
+    const deviceType = activeDeck?.deviceRating ? "cyberdeck" : "commlink";
     const supported = isActionSupportedByDevice(action, deviceType);
 
     return {
@@ -122,9 +120,7 @@ export function MatrixActions({
     return (
       <div className={`matrix-actions matrix-actions--no-deck ${className}`}>
         <h4 className="matrix-actions__title">Matrix Actions</h4>
-        <p className="matrix-actions__no-deck-msg">
-          Equip a cyberdeck to access matrix actions
-        </p>
+        <p className="matrix-actions__no-deck-msg">Equip a cyberdeck to access matrix actions</p>
       </div>
     );
   }
@@ -147,8 +143,8 @@ export function MatrixActions({
       <div className="matrix-actions__tabs">
         <button
           type="button"
-          className={`matrix-actions__tab ${selectedCategory === 'all' ? 'matrix-actions__tab--active' : ''}`}
-          onClick={() => setSelectedCategory('all')}
+          className={`matrix-actions__tab ${selectedCategory === "all" ? "matrix-actions__tab--active" : ""}`}
+          onClick={() => setSelectedCategory("all")}
         >
           All
         </button>
@@ -159,7 +155,7 @@ export function MatrixActions({
             <button
               key={category}
               type="button"
-              className={`matrix-actions__tab ${selectedCategory === category ? 'matrix-actions__tab--active' : ''}`}
+              className={`matrix-actions__tab ${selectedCategory === category ? "matrix-actions__tab--active" : ""}`}
               onClick={() => setSelectedCategory(category)}
             >
               {CATEGORY_LABELS[category]}
@@ -179,7 +175,7 @@ export function MatrixActions({
             return (
               <div
                 key={action.id}
-                className={`matrix-actions__item ${!status.supported ? 'matrix-actions__item--unavailable' : ''}`}
+                className={`matrix-actions__item ${!status.supported ? "matrix-actions__item--unavailable" : ""}`}
               >
                 <div className="matrix-actions__item-header">
                   <span className="matrix-actions__item-name">{action.name}</span>
@@ -194,8 +190,8 @@ export function MatrixActions({
                     )}
                     {status.marksRequired > 0 && (
                       <span
-                        className={`matrix-actions__badge ${status.hasEnoughMarks ? 'matrix-actions__badge--marks-ok' : 'matrix-actions__badge--marks-needed'}`}
-                        title={`Requires ${status.marksRequired} mark${status.marksRequired > 1 ? 's' : ''}`}
+                        className={`matrix-actions__badge ${status.hasEnoughMarks ? "matrix-actions__badge--marks-ok" : "matrix-actions__badge--marks-needed"}`}
+                        title={`Requires ${status.marksRequired} mark${status.marksRequired > 1 ? "s" : ""}`}
                       >
                         {status.marksRequired}M
                       </span>
@@ -211,13 +207,9 @@ export function MatrixActions({
                   <span className="matrix-actions__item-type">
                     {CATEGORY_LABELS[action.category]}
                   </span>
-                  <span className="matrix-actions__item-skill">
-                    {action.skill}
-                  </span>
+                  <span className="matrix-actions__item-skill">{action.skill}</span>
                   {status.requirements && (
-                    <span className="matrix-actions__item-reqs">
-                      {status.requirements}
-                    </span>
+                    <span className="matrix-actions__item-reqs">{status.requirements}</span>
                   )}
                 </div>
 
@@ -240,8 +232,8 @@ export function MatrixActions({
       {/* Overwatch Warning */}
       {overwatchScore > 30 && (
         <div className="matrix-actions__os-warning">
-          <strong>Warning:</strong> Overwatch Score is at {overwatchScore}/40.
-          Consider jacking out soon.
+          <strong>Warning:</strong> Overwatch Score is at {overwatchScore}/40. Consider jacking out
+          soon.
         </div>
       )}
     </div>

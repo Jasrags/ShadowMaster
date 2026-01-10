@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -10,9 +10,9 @@
 
 EQUUS SAGITTARIUS
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Centaur | 3/8 | 1/6 | 1/6 | 3/8 | 1/6 | 1/6 | 1/5 | 1/5 | 1/5 | 1 | 6 | REA+INT |
+| RACE                                                                                                                                                      | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT    |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | --- | ------- |
+| Centaur                                                                                                                                                   | 3/8  | 1/6 | 1/6 | 3/8 | 1/6 | 1/6 | 1/5 | 1/5 | 1/5  | 1   | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision, Thermographic Vision, Magic Sense, Natural Weapon (Kick: DV (STR + 2)P, AP +1, +1Reach), Search; Movement (x1/x4/+4) |
 
 Centaurs are a member of the equine family, with a lower body resembling a horse with a hominid torso attached where the horse head would be. A centaur typically stands 2.7–3.2 meters tall and weighs between 400–1000 kilograms. Most of the variation comes from the horse body, which may resemble several different breeds of common horse (Equus ferus). Centaurs possess only three digits and an opposable thumb on each hand, and the skull shape can vary within the species. The common centaur, known to metahumanity since shortly after the Awakening, has a primarily equine head similar to a horse but shortened slightly in length. A second variation of the species, much like the varieties of metahuman subspecies, has a human head. These “lesser centaurs,” as other centaurs referred to them, rarely reach adulthood, as they are generally cast out of their tribes and left to fend for themselves. A few have been taken in by kind-hearted centaurs, metahumans, other metasapient species, and at least one dragon, and have survived to adulthood outside of their regular culture.

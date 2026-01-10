@@ -1,34 +1,34 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
-| NAME | COMBAT | DETECTION | HEALTH | ILLUSION | MANIPULATION | DRAIN | SOURCE |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| The Hermetic Mage | Fire | Air | Man | Water | Earth | Logic + Willpower | Core |
-| The Shaman | Beasts | Water | Earth | Air | Man | Charisma + Willpower | Core |
-| Aztec | Guardian | Fire | Plant | Water | Beasts | Charisma + Willpower | SR5:SG |
-| Black Magic | Fire | Water | Earth | Air | Man | Charisma + Willpower | SR5:SG |
-| Buddhism | Air | Guidance | Earth | Fire | Water | Intuition + Willpower | SR5:SG |
-| Chaos Magic | Fire | Air | Earth | Man | Water | Intuition + Willpower | SR5:SG |
-| Christian Theurgy | Fire | Water | Air | Earth | Guidance | Charisma + Willpower | SR5:SG |
-| Druid | Beasts | Water | Plant | Air | Earth | Intuition + Willpower | SR5:SG |
-| Egyptian | Fire | Earth | Air | Guidance | Water | Intuition + Willpower | SR5:SSP |
-| Hinduism | Beasts | Water | Plant | Air | Earth | Logic + Willpower | SR5:SG |
-| Islam | Guardian | Earth | Plant | Air | Fire | Logic + Willpower | SR5:SG |
-| Path Of The Wheel | Earth | Guidance | Air | Water | Fire | Charisma + Willpower | SR5:SG |
-| Qabbalism | Air | Earth | Fire | Water | Task | Logic + Willpower | SR5:SG |
-| Shinto | Air | Water | Plant | Beasts | Man | Charisma + Willpower | SR5:SG |
-| Sioux | Beasts | Plant | Fire | Air | Guardian | Intuition + Willpower | SR5:SG |
-| Vodou | Guardian | Water | Man | Guidance | Task | Charisma + Willpower | SR5:SG |
-| Wicca | Fire | Water | Plant | Air | Earth | Intuition(Goddess Wicca)/Logic(Gardnerian Wicca) + Willpower | SR5:SG |
-| Wuxing | Fire | Earth | Plant | Water | Guidance | Logic + Willpower | SR5:SG |
-| Zoroastrianism | Man | Water | Fire | Air | Plant | Logic + Willpower | SR5:SG |
-| Insect Spirits | Soldier | Scout | Caretaker | Nymph | Worker | Intuition + Willpower | SR5:SG |
+| NAME              | COMBAT   | DETECTION | HEALTH    | ILLUSION | MANIPULATION | DRAIN                                                        | SOURCE  |
+| ----------------- | -------- | --------- | --------- | -------- | ------------ | ------------------------------------------------------------ | ------- |
+| The Hermetic Mage | Fire     | Air       | Man       | Water    | Earth        | Logic + Willpower                                            | Core    |
+| The Shaman        | Beasts   | Water     | Earth     | Air      | Man          | Charisma + Willpower                                         | Core    |
+| Aztec             | Guardian | Fire      | Plant     | Water    | Beasts       | Charisma + Willpower                                         | SR5:SG  |
+| Black Magic       | Fire     | Water     | Earth     | Air      | Man          | Charisma + Willpower                                         | SR5:SG  |
+| Buddhism          | Air      | Guidance  | Earth     | Fire     | Water        | Intuition + Willpower                                        | SR5:SG  |
+| Chaos Magic       | Fire     | Air       | Earth     | Man      | Water        | Intuition + Willpower                                        | SR5:SG  |
+| Christian Theurgy | Fire     | Water     | Air       | Earth    | Guidance     | Charisma + Willpower                                         | SR5:SG  |
+| Druid             | Beasts   | Water     | Plant     | Air      | Earth        | Intuition + Willpower                                        | SR5:SG  |
+| Egyptian          | Fire     | Earth     | Air       | Guidance | Water        | Intuition + Willpower                                        | SR5:SSP |
+| Hinduism          | Beasts   | Water     | Plant     | Air      | Earth        | Logic + Willpower                                            | SR5:SG  |
+| Islam             | Guardian | Earth     | Plant     | Air      | Fire         | Logic + Willpower                                            | SR5:SG  |
+| Path Of The Wheel | Earth    | Guidance  | Air       | Water    | Fire         | Charisma + Willpower                                         | SR5:SG  |
+| Qabbalism         | Air      | Earth     | Fire      | Water    | Task         | Logic + Willpower                                            | SR5:SG  |
+| Shinto            | Air      | Water     | Plant     | Beasts   | Man          | Charisma + Willpower                                         | SR5:SG  |
+| Sioux             | Beasts   | Plant     | Fire      | Air      | Guardian     | Intuition + Willpower                                        | SR5:SG  |
+| Vodou             | Guardian | Water     | Man       | Guidance | Task         | Charisma + Willpower                                         | SR5:SG  |
+| Wicca             | Fire     | Water     | Plant     | Air      | Earth        | Intuition(Goddess Wicca)/Logic(Gardnerian Wicca) + Willpower | SR5:SG  |
+| Wuxing            | Fire     | Earth     | Plant     | Water    | Guidance     | Logic + Willpower                                            | SR5:SG  |
+| Zoroastrianism    | Man      | Water     | Fire      | Air      | Plant        | Logic + Willpower                                            | SR5:SG  |
+| Insect Spirits    | Soldier  | Scout     | Caretaker | Nymph    | Worker       | Intuition + Willpower                                        | SR5:SG  |
 
 Common magic traditions of the Sixth World are presented below. The outlines of how to use traditions in Shadowrun are presented on p. 279, SR5. Each tradition presented below includes preferred spells and/or adept powers for that tradition. There are no benefits in game mechanics for choosing those spells; they are there so that players can give their characters the flavor of that tradition. The descriptions also include the type of spirits each tradition uses to perform particular functions, as well as the attributes they use for Drain. Mages of that particular tradition may only summon the spirits listed with the tradition, and they are restricted in the tasks they can assign them. Assigning tasks outside the general area of their tradition will not receive a response from the spirit (for example, a Buddhist mage telling an air spirit to heal him will get no response, as air is a Combat spirit in that tradition, while the Health spirit is earth). Descriptions also include notable teachers in each tradition who can be used in games to help characters advance in a particular tradition. Note that when a tradition is described as a “possession tradition,” replace the spirit power of Materialization in any spirits summoned by conjurers of that tradition with Possession (p. 197).
 
@@ -85,10 +85,10 @@ Different aspects of the world (the elements) are important to traditions in dif
 
 **Hermetic Tradition**
 
-| Combat | Fire | Detection | Air |
-| --- | --- | --- | --- |
-| Health | Man | Illusion | Water |
-| Manipulation | Earth | Drain | Logic + Willpower |
+| Combat       | Fire  | Detection | Air               |
+| ------------ | ----- | --------- | ----------------- |
+| Health       | Man   | Illusion  | Water             |
+| Manipulation | Earth | Drain     | Logic + Willpower |
 
 The hermetic mage relies on logic, practice, and execution of a planned formula rather than intuition and improvisation to effectively cast spells. They have learned to control magic and believe that the universe (both the magical parts and the mundane) follows patterns of energy that can be manipulated through complex symbols, formulae, and arcane knowledge of its components. This tradition was widely practiced (if not effective) even before the Awakening, and this form appealed early on to corporations and governments due to its intellectual, formalized nature. In hermetic thinking, casting magic involves imposing the magician’s will on the universe—so you can imagine some of the egos that emerge when mages get together. Mages are scholars and often have libraries of magical information from which they design spells. Any mage worth his reagents has at least a digital copy of one of the founding texts on hermeticism (rich mages have a fancy hard copy written and bound by hand in a very fancy ceremony). Hermetic trappings also include deluxe, well-crafted equipment in archaic laboratories where mages can create preparations and carry out their research.
 
@@ -100,10 +100,10 @@ Mages, unsurprisingly, take a somewhat arrogant view on conjuring. The mage tend
 
 **Shamanic Tradition**
 
-| Combat | Beasts | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Earth | Illusion | Air |
-| Manipulation | Man | Drain | Charisma + Willpower |
+| Combat       | Beasts | Detection | Water                |
+| ------------ | ------ | --------- | -------------------- |
+| Health       | Earth  | Illusion  | Air                  |
+| Manipulation | Man    | Drain     | Charisma + Willpower |
 
 The shaman uses mana to balance the world of nature and their own will. They believe in harmony and guidance, observing the world and using emotion to weave magic. They respect the gift of magic that connects them to the flow of the spirit of life. To the shaman, the earth is a living being, and her children are spirits who guide and aid those that support her; spirits of the sky, mountain, birds, rats, even metahumanity. Shamanism has been practiced far longer than hermetic magic and can be found in all parts of the world, although it wasn’t taken seriously by modern metahumanity until the Great Ghost Dance. To the shaman, casting a spell is asking a greater universal entity, such as a mentor spirit, to grant her power.
 
@@ -116,19 +116,19 @@ The shamanic perspective on conjuring is based on a belief that spirits are inte
 ## Aztec
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Aztec Tradition**
 
-| Combat | Guardian | Detection | Fire |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Water |
-| Manipulation | Beasts | Drain | Charisma + Willpower |
-| Preferred Spells |
-| Calm Pack | Compel Truth | Eyes of the Pack | Powerball |
-| Resist Pain |
+| Combat                 | Guardian            | Detection        | Fire                  |
+| ---------------------- | ------------------- | ---------------- | --------------------- |
+| Health                 | Plant               | Illusion         | Water                 |
+| Manipulation           | Beasts              | Drain            | Charisma + Willpower  |
+| Preferred Spells       |
+| Calm Pack              | Compel Truth        | Eyes of the Pack | Powerball             |
+| Resist Pain            |
 | Preferred Adept Powers |
-| Animal Empathy | Enhanced Perception | Natural Immunity | Temperature Tolerance |
+| Animal Empathy         | Enhanced Perception | Natural Immunity | Temperature Tolerance |
 
 Read the title again. It says “Aztec.” Not “Blood.” Blood Magic and Aztechnology are so closely intertwined in the minds of many in the shadows that they are viewed as one in the same (and both use the same term, nahualli, for their priests). But the magic as practiced by Aztechnology is not deeply tied to Aztec traditions—it’s mainly connected to the way Aztechnology likes to function. But enough about what the Aztec tradition is not. What it is, at the core, is the idea that every living being, even the gods, share a portion of their soul with an animal twin. Every nahualli must have a mentor spirit that represents their animal twin, and their relationship to that mentor is complex. They do not so much try to emulate the traits of their mentor as incorporate those traits in their magic, using the skills of their mentor to compliment their own abilities.
 
@@ -139,19 +139,19 @@ Tlalli Ichtaca was on her way to becoming a nahualli in Tenochtitlan when she st
 ## Black Magic
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Black Magic Tradition**
 
-| Combat | Fire | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Earth | Illusion | Air |
-| Manipulation | Man | Drain | Charisma + Willpower |
-| Preferred Spells |
-| Chaotic World | Control Actions | Control Thoughts | Death Touch |
-| Opium Den |
+| Combat                 | Fire            | Detection        | Water                |
+| ---------------------- | --------------- | ---------------- | -------------------- |
+| Health                 | Earth           | Illusion         | Air                  |
+| Manipulation           | Man             | Drain            | Charisma + Willpower |
+| Preferred Spells       |
+| Chaotic World          | Control Actions | Control Thoughts | Death Touch          |
+| Opium Den              |
 | Preferred Adept Powers |
-| Commanding Voice | Cool Resolve | Killing Hands | Voice Control |
+| Commanding Voice       | Cool Resolve    | Killing Hands    | Voice Control        |
 
 Interested in learning Black Magic? Start by taking your books by Crowley and LaVey, along with your fake Necronomicon, and throwing them out the window. Black Magic isn’t messing around. It isn’t dressing up “be yourself” platitudes in trappings of darkness. It’s not there to say “boo” and then go away so you can tuck yourself in at night and sleep soundly. It is mean, brutal, and focused. It has a bad reputation because it deserves it.
 
@@ -168,20 +168,20 @@ The fact that a Manhattan mage named Juliette Burma put out a notice on the Matr
 ## Buddhism
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Buddhist Tradition**
 
-| Combat | Air | Detection | Guidance |
-| --- | --- | --- | --- |
-| Health | Earth | Illusion | Fire |
-| Manipulation | Water | Drain | Intuition + Willpower |
-| Preferred Spells |
-| Hibernate | Mask | Silence | Spatial Sense |
-| Resist Pain |
+| Combat                 | Air                         | Detection      | Guidance              |
+| ---------------------- | --------------------------- | -------------- | --------------------- |
+| Health                 | Earth                       | Illusion       | Fire                  |
+| Manipulation           | Water                       | Drain          | Intuition + Willpower |
+| Preferred Spells       |
+| Hibernate              | Mask                        | Silence        | Spatial Sense         |
+| Resist Pain            |
 | Preferred Adept Powers |
-| Cool Resolve | Improved Physical Attribute | Improved Sense | Living Focus |
-| Maintain Warmth |
+| Cool Resolve           | Improved Physical Attribute | Improved Sense | Living Focus          |
+| Maintain Warmth        |
 
 The religion of Buddhism has spread across the Sixth World and is commonly practiced throughout Asia, with significant enclaves in North America as immigrants migrated to the continent, either forcibly by their own volition. The religion has developed into three major schools of thought, with only the Vajrayana, or Tantric, school accepting magic as a pathway to nirvana. The other schools largely believe the Awakening is another part of reality to be overcome along the road to enlightenment. While many practitioners of magic claim Buddhism as their religion, the majority of these casters practice a different tradition, normally Wuxing or Shinto. It is believed the majority of this tradition’s followers are located in Tibet, although there are significant numbers in Imperial Japan and continental Asia.
 
@@ -194,19 +194,19 @@ Jeremy Blue Sky, a practitioner of this tradition, resides near Bellingham, Sali
 ## Chaos Magic
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Chaos Tradition**
 
-| Combat | Fire | Detection | Air |
-| --- | --- | --- | --- |
-| Health | Earth | Illusion | Man |
-| Manipulation | Water | Drain | Intuition + Willpower |
-| Preferred Spells |
-| Chaotic World (natch) | Flamethrower | Mana Static | Mass Animate |
-| Shape [Material] |
+| Combat                 | Fire              | Detection     | Air                   |
+| ---------------------- | ----------------- | ------------- | --------------------- |
+| Health                 | Earth             | Illusion      | Man                   |
+| Manipulation           | Water             | Drain         | Intuition + Willpower |
+| Preferred Spells       |
+| Chaotic World (natch)  | Flamethrower      | Mana Static   | Mass Animate          |
+| Shape [Material]       |
 | Preferred Adept Powers |
-| Adrenaline Boost | Improved Reflexes | Rapid Healing | Spell Resistance |
+| Adrenaline Boost       | Improved Reflexes | Rapid Healing | Spell Resistance      |
 
 Degrees in Thaumaturgy. Lectures on how mana responds to different strains of plant life. Longitudinal studies on the effects of living adjacent to ley lines. All these things make Chaos Magicians cringe. They tend to view the academic view of magic as narrow and stultifying, spending so much time studying the individual notes that they completely miss the music. Magic, in their eyes, is not supposed to be confined and measured. It is to be experienced, felt, and enjoyed.
 
@@ -221,19 +221,19 @@ Reuben Patel came to Chicago as soon as he heard that Governor Presbitero wanted
 ## Christian Theurgy
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Christian Theurgy**
 
-| Combat | Fire | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Air | Illusion | Earth |
-| Manipulation | Guidance | Drain | Charisma + Willpower |
-| Preferred Spells |
-| Detect Life | Heal | Increase Inherent Limits | Influence |
-| Lightning Bolt |
+| Combat                 | Fire         | Detection                | Water                |
+| ---------------------- | ------------ | ------------------------ | -------------------- |
+| Health                 | Air          | Illusion                 | Earth                |
+| Manipulation           | Guidance     | Drain                    | Charisma + Willpower |
+| Preferred Spells       |
+| Detect Life            | Heal         | Increase Inherent Limits | Influence            |
+| Lightning Bolt         |
 | Preferred Adept Powers |
-| Astral Perception | Danger Sense | Empathic Healing | Mystic Armor |
+| Astral Perception      | Danger Sense | Empathic Healing         | Mystic Armor         |
 
 Christianity made its transition to the Sixth World in fits and starts. For some people, it was easy. The supernatural had always played a role in their stories and beliefs, so they simply accepted magic as part of the belief framework they’d always held. Others, however, identified magic with the witchcraft and satanism they’d been warned about for years, so they put up walls (the Catholic Church in particular erecting some strong barriers). The Imago Dei encyclical helped break down those walls, but it also transitioned people away from the belief that magic was a manifestation of godly power. Christian Theurgists in general see magic as a tool they can use to perform God’s work, rather than a direct channel to the divine. Spirits often make Christian Theurgists uncomfortable—they’re not sure if they should treat them like the souls of the dead, angels, devils, or something else, so they’re often more comfortable just leaving them alone.
 
@@ -248,18 +248,18 @@ Nathaniel de Leon was led a small group of Sylvestrine monks during the Aztlan-A
 ## Druid
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Druidic Tradition**
 
-| Combat | Beasts | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Air |
-| Manipulation | Earth | Drain | Intuition + Willpower |
+| Combat           | Beasts                 | Detection    | Water                 |
+| ---------------- | ---------------------- | ------------ | --------------------- |
+| Health           | Plant                  | Illusion     | Air                   |
+| Manipulation     | Earth                  | Drain        | Intuition + Willpower |
 | Preferred Spells |
-| Camouflage | Control Pack | Invisibility | Resist Pain |
-| Stunball | Preferred Adept Powers |
-| Animal Empathy | Enhanced Perception | Plague Cloud | Traceless Walk |
+| Camouflage       | Control Pack           | Invisibility | Resist Pain           |
+| Stunball         | Preferred Adept Powers |
+| Animal Empathy   | Enhanced Perception    | Plague Cloud | Traceless Walk        |
 
 The umbrella term “druid” encompasses a variety of beliefs, from the nature-centered perspective of Celtic druids to the heavily shamanic viewpoint of wild druids to the esoteric mumblings of English druids. The commonality between the beliefs is the invocation of spirits tied to particular locations and the desire of the druid to work with those spirits to gain a measure of control over what happens in that spot. The Celtic druid may believe in a spirit that predates the existence of humanity, while English druids believe the spirits were shaped by the places and by the humans living there, but in operative terms that is a minor distinction—both believe the spirit is important, and both want the spirit on their side.
 
@@ -274,19 +274,19 @@ Ryanne Winter met a spirit she refers to as the guardian of the Bitterroot Fores
 ## Egyptian
 
 Source
-:   SR5:SSP
+: SR5:SSP
 
 **Egyptian Tradition**
 
-| Combat | Fire | Detection | Earth |
-| --- | --- | --- | --- |
-| Health | Air | Illusion | Guidance |
-| Manipulation | Water | Drain | Intuition + Willpower |
+| Combat           | Fire                   | Detection | Earth                 |
+| ---------------- | ---------------------- | --------- | --------------------- |
+| Health           | Air                    | Illusion  | Guidance              |
+| Manipulation     | Water                  | Drain     | Intuition + Willpower |
 | Preferred Spells |
-| Corrode | Convert Blood to Ichor | Evaporate | Translate |
-| Phantasm |
+| Corrode          | Convert Blood to Ichor | Evaporate | Translate             |
+| Phantasm         |
 
-The Egyptian tradition is based on the ancient religion of Egypt, with the practitioners following the path of the priests in using magic (*heka*). Suppressed in its native country, the tradition has a fairly large following in Europe and southern Africa. The tradition has strict rules regarding how and why spells can be cast, and how magic can influence the spiritual essence of the divinities or people, referred to as *ka* by the tradition.
+The Egyptian tradition is based on the ancient religion of Egypt, with the practitioners following the path of the priests in using magic (_heka_). Suppressed in its native country, the tradition has a fairly large following in Europe and southern Africa. The tradition has strict rules regarding how and why spells can be cast, and how magic can influence the spiritual essence of the divinities or people, referred to as _ka_ by the tradition.
 
 The spirits of this tradition frequently take the form of the Glorious ones, who include the deities of the original religion and the pharaohs who joined them in godhood. The practitioners of this tradition often take one of these figures as a mentor spirit, but even those who do not speak of the Glorious ones with reverence. Egyptian practitioners generally summon these spirits into wax figurines, although they can also inhabit a living being when needed.
 
@@ -297,18 +297,18 @@ Fernando Jenningsen is a study in contradictions. The magician dresses in cuttin
 ## Hinduism
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Hindu Tradition**
 
-| Combat | Beasts | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Air |
-| Manipulation | Earth | Drain | Logic + Willpower |
-| Preferred Spells |
-| Alter Temperature | Analyze Magic | Fast | [Sense] Removal |
+| Combat                 | Beasts        | Detection                   | Water             |
+| ---------------------- | ------------- | --------------------------- | ----------------- |
+| Health                 | Plant         | Illusion                    | Air               |
+| Manipulation           | Earth         | Drain                       | Logic + Willpower |
+| Preferred Spells       |
+| Alter Temperature      | Analyze Magic | Fast                        | [Sense] Removal   |
 | Preferred Adept Powers |
-| Attribute Boost | Flexibility | Improved Physical Attribute | Pain Resistance |
+| Attribute Boost        | Flexibility   | Improved Physical Attribute | Pain Resistance   |
 
 The Hindu tradition is based on the Hindu religious system, and it is designed to provide a path for the enlightened to reach transcendence. The path is one of ritual devotion, asceticism, and karmic purity. While the exact strictures followed by each school vary, most accept the precepts from the Vedas, texts originally written in Ancient India. Those followers who are Awakened believe following the precepts of their faith assist them along the path.
 
@@ -323,19 +323,19 @@ Adi Varma is a yoga instructor currently employed at Proteus’ Fiji arkoblock. 
 ## Islam
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Islamic Tradition**
 
-| Combat | Guardian | Detection | Earth |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Air |
-| Manipulation | Fire | Drain | Logic + Willpower |
-| Preferred Spells |
-| Detect Enemies | Fireball | Foreboding | Mass Agony |
-| Spirit Zapper |
+| Combat                 | Guardian         | Detection         | Earth             |
+| ---------------------- | ---------------- | ----------------- | ----------------- | ------- |
+| Health                 | Plant            | Illusion          | Air               |
+| Manipulation           | Fire             | Drain             | Logic + Willpower |
+| Preferred Spells       |
+| Detect Enemies         | Fireball         | Foreboding        | Mass Agony        |
+| Spirit Zapper          |
 | Preferred Adept Powers |
-| Combat Sense | Adrenaline Boost | Improved Reflexes | Killing Hands | Riposte |
+| Combat Sense           | Adrenaline Boost | Improved Reflexes | Killing Hands     | Riposte |
 
 Islam has a difficult relationship with magic. On the one hand, mainstream Islam is generally not fond of magic; on the other hand, Awakened individuals have been very useful in advancing the cause of Islam in some instances, so they cannot dismiss it entirely. More conservative factions forbid women from practicing magic (some extremists have been known to assense female babies and exile or kill them if they are Awakened), while progressive Muslims welcome female practitioners and use them to teach the next generation of Islamic spellcasters.
 
@@ -352,19 +352,19 @@ Ibrahim Addaya was a well-respected scholar at the Prince Sultan University unti
 ## Path Of The Wheel
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Path Of The Wheel**
 
-| Combat | Earth | Detection | Guidance |
-| --- | --- | --- | --- |
-| Health | Air | Illusion | Water |
-| Manipulation | Fire | Drain | Charisma + Willpower |
-| Preferred Spells |
-| Ball Lightning | Detect Enemies | Disrupt [Focus] | Improved Invisibility |
-| Influence |
+| Combat                 | Earth           | Detection       | Guidance              |
+| ---------------------- | --------------- | --------------- | --------------------- |
+| Health                 | Air             | Illusion        | Water                 |
+| Manipulation           | Fire            | Drain           | Charisma + Willpower  |
+| Preferred Spells       |
+| Ball Lightning         | Detect Enemies  | Disrupt [Focus] | Improved Invisibility |
+| Influence              |
 | Preferred Adept Powers |
-| Combat Sense | Critical Strike | Mystic Armor | Penetrating Strike |
+| Combat Sense           | Critical Strike | Mystic Armor    | Penetrating Strike    |
 
 Perhaps the most rigid of the major magical traditions of the Sixth World, the Path of the Wheel is rooted in the elven nation of Tír na nÓg. The tradition takes its name from the Draesis ti Heron, the Wheel of Life that describes five different paths souls take in their journey toward enlightenment and total understanding. These paths are: the Path of the Warrior, the Path of the Steward, the Path of the Bard, the Path of the Druid, and the Path of the Rígh. Travelers on the paths follow mentor spirits particular to their path, and the paths are also reflected in Tír na nÓg’s social order. In fact, more than one observer has claimed that the Path of the Wheel is at least as much about social control as it is about advancing magic.
 
@@ -379,17 +379,17 @@ Practitioners of the Path of the Wheel are strictly forbidden from sharing their
 ## Qabbalism
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Qabbalistic Tradition**
 
-| Combat | Air | Detection | Earth |
-| --- | --- | --- | --- |
-| Health | Fire | Illusion | Water |
-| Manipulation | Task | Drain | Logic + Willpower |
-| Note | Qabbalism is a possession tradition |
+| Combat           | Air                                 | Detection | Earth             |
+| ---------------- | ----------------------------------- | --------- | ----------------- |
+| Health           | Fire                                | Illusion  | Water             |
+| Manipulation     | Task                                | Drain     | Logic + Willpower |
+| Note             | Qabbalism is a possession tradition |
 | Preferred Spells |
-| Borrow Sense | Double Image | Nutrition | Slay |
+| Borrow Sense     | Double Image                        | Nutrition | Slay              |
 
 Perhaps the most ancient mystic tradition, Qabbalism is based on the teachings of the Torah and other works, including the Zohar, the SeferYetzirah and the Bahar. These works form the basis of the Hebrew mysticism and also a portion of hermetic lore. The tradition use a combination of esoteric philosophy and frequently refers to the mystical power of the Hebrew alphabet and true names to influence the universe.
 
@@ -404,16 +404,16 @@ Fredrick Rosen is a fairly new member of the University of Denver’s faculty, w
 ## Shinto
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Shinto Tradition**
 
-| Combat | Air | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Beasts |
-| Manipulation | Man | Drain | Charisma + Willpower |
+| Combat           | Air              | Detection | Water                |
+| ---------------- | ---------------- | --------- | -------------------- |
+| Health           | Plant            | Illusion  | Beasts               |
+| Manipulation     | Man              | Drain     | Charisma + Willpower |
 | Preferred Spells |
-| Astral Window | Control Emotions | Stunbolt | Thought Recognition |
+| Astral Window    | Control Emotions | Stunbolt  | Thought Recognition  |
 
 The official religion of Japan, Shinto has spread with the power of Imperial Japan and the corporations that originated there. Shinto features a number of public shrines devoted to the kami, or gods. Its tenets are largely based around harmony with kami spirits, with Awakened activities being considered a natural extension of this concept, and it lacks dogmatic approach to its worship. The religion currently has 115,000 shrines and over 25,000 priests in Japan, with more around the world. The Emperor has increased the influence of the religion in national politics by including practitioners part of the national rebuilding effort.
 
@@ -426,19 +426,19 @@ Shigetoshi Suzuki is a priest at the Atsuta shrine who frequently works as a tut
 ## Sioux
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Sioux Tradition**
 
-| Combat | Beasts | Detection | Plant |
-| --- | --- | --- | --- |
-| Health | Fire | Illusion | Air |
-| Manipulation | Guardian | Drain | Intuition + Willpower |
-| Preferred Spells |
-| Clout | Control Thoughts | Forced Defense | Invisibility |
-| Silence |
+| Combat                 | Beasts           | Detection        | Plant                 |
+| ---------------------- | ---------------- | ---------------- | --------------------- | --------------- |
+| Health                 | Fire             | Illusion         | Air                   |
+| Manipulation           | Guardian         | Drain            | Intuition + Willpower |
+| Preferred Spells       |
+| Clout                  | Control Thoughts | Forced Defense   | Invisibility          |
+| Silence                |
 | Preferred Adept Powers |
-| Critical Strike | Freefall | Adrenaline Boost | Improved Reflexes | Missile Mastery |
+| Critical Strike        | Freefall         | Adrenaline Boost | Improved Reflexes     | Missile Mastery |
 
 Perhaps the most important thing to understand about beliefs in the Sioux tradition is the term Wakan Tanka. By most interpretations it means “Great Spirit,” meaning the power of life that animates everything in this world, from the sun to the earth to the plants and animals that live on it. Wakan Tanka has been described as a sheltering tree covering all the children of the one mother and one father.
 
@@ -455,19 +455,19 @@ Snana Cansasa meditates in her lodge and spends a part of each day contemplating
 ## Vodou
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Vodou Tradition**
 
-| Combat | Guardian | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Man | Illusion | Guidance |
-| Manipulation | Task | Drain | Charisma + Willpower |
-| Preferred Spells |
-| Clairvoyance | Entertainment | Mind Probe | Mob Mind |
-| Stunbolt |
+| Combat                 | Guardian         | Detection      | Water                |
+| ---------------------- | ---------------- | -------------- | -------------------- |
+| Health                 | Man              | Illusion       | Guidance             |
+| Manipulation           | Task             | Drain          | Charisma + Willpower |
+| Preferred Spells       |
+| Clairvoyance           | Entertainment    | Mind Probe     | Mob Mind             |
+| Stunbolt               |
 | Preferred Adept Powers |
-| Astral Perception | Commanding Voice | Improved Sense | Rapid Healing |
+| Astral Perception      | Commanding Voice | Improved Sense | Rapid Healing        |
 
 Perhaps no tradition besides Blood Magic has been as maligned as Vodou, though in Blood Magic’s case the defamation is usually warranted. Vodou has years of baggage connecting it to frenetic, out-of-control practitioners and dolls crafted with an intent to do harm at a remote distance. While these images perhaps touch on some aspects of Vodou, they miss the larger picture.
 
@@ -482,16 +482,16 @@ Benoit Delatour of Port-au-Prince is not going to be the one to quash any stereo
 ## Wicca
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Wiccan Tradition**
 
-| Combat | Fire | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Air |
-| Manipulation | Earth | Drain | Intuition(Goddess Wicca)/Logic(Gardnerian Wicca) + Willpower |
+| Combat           | Fire      | Detection        | Water                                                        |
+| ---------------- | --------- | ---------------- | ------------------------------------------------------------ |
+| Health           | Plant     | Illusion         | Air                                                          |
+| Manipulation     | Earth     | Drain            | Intuition(Goddess Wicca)/Logic(Gardnerian Wicca) + Willpower |
 | Preferred Spells |
-| Analyze Magic | Confusion | Control Emotions | Prophylaxis |
+| Analyze Magic    | Confusion | Control Emotions | Prophylaxis                                                  |
 
 The Wiccan tradition is the Awakened manifestation of one of the Sixth World’s largest recognizable neo-pagan movements. Wicca is collection of beliefs, tenets gathered from nineteenth century sources and New Age reasoning merged with earlier, pre-Christian concepts. The central tenets of the religion are harmony with nature and the Wiccan Rede or a similar code.
 
@@ -504,18 +504,18 @@ Katherine Stubbard maintains a talismonger shop in Ontario with a large inventor
 ## Wuxing
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Wuxing Tradition**
 
-| Combat | Fire | Detection | Earth |
-| --- | --- | --- | --- |
-| Health | Plant | Illusion | Water |
-| Manipulation | Guidance | Drain | Logic + Willpower |
-| Preferred Spells |
-| Control Actions | Mana Barrier | [Sense] Removal | Silence |
+| Combat                 | Fire            | Detection       | Earth             |
+| ---------------------- | --------------- | --------------- | ----------------- |
+| Health                 | Plant           | Illusion        | Water             |
+| Manipulation           | Guidance        | Drain           | Logic + Willpower |
+| Preferred Spells       |
+| Control Actions        | Mana Barrier    | [Sense] Removal | Silence           |
 | Preferred Adept Powers |
-| Astral Perception | Attribute Boost | Cool Resolve | Kinesics |
+| Astral Perception      | Attribute Boost | Cool Resolve    | Kinesics          |
 
 The central concept of the Wuxing tradition is the idea of qi, the force that connects and binds all life. Qi manifests itself in many ways and is often connected to the five basic elements of the tradition: fire, water, earth, wood, and metal. It also acts in connection with the two poles known as yin and yang, which are sometimes compared to order and chaos, or peace and tumult.
 
@@ -532,19 +532,19 @@ If you want the best teachers of Wuxing, go to Hong Kong. But not everyone can g
 ## Zoroastrianism
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Zoroastrian Tradition**
 
-| Combat | Man | Detection | Water |
-| --- | --- | --- | --- |
-| Health | Fire | Illusion | Air |
-| Manipulation | Plant | Drain | Logic + Willpower |
-| Preferred Spells |
-| Analyze Truth | Armor | Detect Enemies | Heal |
-| Stunball |
+| Combat                 | Man          | Detection         | Water             |
+| ---------------------- | ------------ | ----------------- | ----------------- |
+| Health                 | Fire         | Illusion          | Air               |
+| Manipulation           | Plant        | Drain             | Logic + Willpower |
+| Preferred Spells       |
+| Analyze Truth          | Armor        | Detect Enemies    | Heal              |
+| Stunball               |
 | Preferred Adept Powers |
-| Commanding Voice | Danger Sense | Metabolic Control | Pain Resistance |
+| Commanding Voice       | Danger Sense | Metabolic Control | Pain Resistance   |
 
 The forerunner of most modern monotheistic religions, Zoroastrianism is not a tradition for those who just want to sit an contemplate things. It is an active faith, one that sets a stark difference between good and evil, order and chaos, and tells the devout in no uncertain terms that they need to be working on behalf of good.
 
@@ -563,14 +563,14 @@ Hester Khorasani had a career for a time as a special effects wizard for Horizon
 ## Insect Spirits
 
 Source
-:   SR5:SG
+: SR5:SG
 
 **Insect Spirit Tradition**
 
-| Combat | Soldier | Detection | Scout |
-| --- | --- | --- | --- |
-| Health | Caretaker | Illusion | Nymph |
-| Manipulation | Worker | Drain | Intuition + Willpower |
+| Combat       | Soldier   | Detection | Scout                 |
+| ------------ | --------- | --------- | --------------------- |
+| Health       | Caretaker | Illusion  | Nymph                 |
+| Manipulation | Worker    | Drain     | Intuition + Willpower |
 
 The following rules can be used as the tradition followed by the insect shaman. Although this rules framework is provided for consistency, in game terms the methodology followed by insect shamans is wholly alien to any other magic practitioners in the Sixth World. Insect shamans always adopt a mentor spirit of one of the insect orders listed below, though the mentor spirit provides no specific bonuses or penalties. Insect shaman spellcasting and summoning appear to be a series of bizarre gestures and incomprehensible clicking and clacking. Insect shamans often manifest a (rather frightening) shamanic mask.
 

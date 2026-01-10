@@ -457,17 +457,17 @@ This project has MCP servers configured in the workspace `.mcp.json` file. These
 
 ### Available Servers
 
-| Server                 | Purpose                      | When to Use                                                  |
-| ---------------------- | ---------------------------- | ------------------------------------------------------------ |
+| Server                 | Purpose                      | When to Use                                                           |
+| ---------------------- | ---------------------------- | --------------------------------------------------------------------- |
 | **context7**           | Library documentation lookup | Query up-to-date docs for libraries/frameworks (React, Next.js, etc.) |
-| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase |
-| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs     |
-| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                 |
-| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues |
-| **git**                | Git operations               | Commits, diffs, branches, history viewing                    |
-| **filesystem**         | File operations              | Read/write project files                                     |
-| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                    |
-| **time**               | Timezone utilities           | Timestamps (rarely needed)                                   |
+| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase          |
+| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs              |
+| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                          |
+| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues          |
+| **git**                | Git operations               | Commits, diffs, branches, history viewing                             |
+| **filesystem**         | File operations              | Read/write project files                                              |
+| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                             |
+| **time**               | Timezone utilities           | Timestamps (rarely needed)                                            |
 
 ### Context7 Usage
 
@@ -480,6 +480,7 @@ get-library-docs: { libraryId: "/react/react", topic: "hooks" }
 ```
 
 Best for:
+
 - Checking current API signatures
 - Understanding library-specific patterns
 - Verifying framework best practices
@@ -497,6 +498,7 @@ get_knip_docs: { topic: "configuration" }
 ```
 
 Best for:
+
 - Finding unused exports before refactoring
 - Identifying dead code after feature removal
 - Cleaning up unused dependencies

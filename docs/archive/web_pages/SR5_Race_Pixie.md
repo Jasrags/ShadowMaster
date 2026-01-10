@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -10,9 +10,9 @@
 
 INSUFFICIENT DATA FOR CLASSIFICATION
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Pixie | 1/2 | 3/8 | 3/8 | 1/2 | 3/8 | 2/7 | 2/7 | 3/8 | 2/7 | 1 | 6 | REA+INT |
+| RACE                                                                                                                        | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT    |
+| --------------------------------------------------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | --- | ------- |
+| Pixie                                                                                                                       | 1/2  | 3/8 | 3/8 | 1/2 | 3/8 | 2/7 | 2/7 | 3/8 | 2/7  | 1   | 6   | REA+INT |
 | **Racial Traits:** Astral Perception, Concealment (Self Only), Vanishing, Uneducated; Movement (x1/x2/+1; x2/x6/+2m flight) |
 
 | They don’t just live in treehouses. Those little houses usually have a secret door that leads to a tunnel down through the tree trunk and into the ground, where they have built entire underground cities. Plan 9 Speaking of criminal SINs and trying to fit in, Ashindar, a black-feathered pixie, was caught by the government of Tír Tairngire and convicted of murder after his assassination of a Telestrian exec. He killed the exec using an assault cannon, or so the media depictions seemed to show. The weapon was actually a small-caliber rifle, custom modified to fit his diminutive stature. He escaped custody shortly after the trial. Chainbreaker He let himself get caught. It was a message: Stay out of Brocéliande Forest. Thorn |

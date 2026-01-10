@@ -11,33 +11,21 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCampaignById } from "@/lib/storage/campaigns";
-import {
-  getCampaignContacts,
-  createCampaignContact,
-} from "@/lib/storage/contacts";
+import { getCampaignContacts, createCampaignContact } from "@/lib/storage/contacts";
 import { validateContact } from "@/lib/rules/contacts";
 import type { CreateContactRequest, ContactStatus, SocialContact } from "@/lib/types";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { id: campaignId } = await params;
@@ -45,16 +33,11 @@ export async function GET(
     // Get campaign
     const campaign = await getCampaignById(campaignId);
     if (!campaign) {
-      return NextResponse.json(
-        { success: false, error: "Campaign not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
     }
 
     // Check if user is a member of the campaign
-    const isMember =
-      campaign.gmId === userId ||
-      campaign.playerIds.includes(userId);
+    const isMember = campaign.gmId === userId || campaign.playerIds.includes(userId);
 
     if (!isMember) {
       return NextResponse.json(
@@ -81,15 +64,11 @@ export async function GET(
 
     // Apply filters
     if (archetype) {
-      contacts = contacts.filter(
-        (c) => c.archetype.toLowerCase() === archetype.toLowerCase()
-      );
+      contacts = contacts.filter((c) => c.archetype.toLowerCase() === archetype.toLowerCase());
     }
 
     if (location) {
-      contacts = contacts.filter(
-        (c) => c.location?.toLowerCase() === location.toLowerCase()
-      );
+      contacts = contacts.filter((c) => c.location?.toLowerCase() === location.toLowerCase());
     }
 
     if (status) {
@@ -128,26 +107,17 @@ export async function GET(
   }
 }
 
-export async function POST(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
   try {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { id: campaignId } = await params;
@@ -155,10 +125,7 @@ export async function POST(
     // Get campaign
     const campaign = await getCampaignById(campaignId);
     if (!campaign) {
-      return NextResponse.json(
-        { success: false, error: "Campaign not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
     }
 
     // Only GM can create campaign contacts

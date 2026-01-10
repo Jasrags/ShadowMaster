@@ -69,21 +69,13 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize view access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -135,21 +127,13 @@ export async function PATCH(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize edit access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "edit"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "edit");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -232,7 +216,9 @@ export async function PATCH(
 
         const gearItem = character.gear![gearIndex];
         // Cast to include state property for state management
-        const gearWithState = gearItem as GearItem & { state?: import("@/lib/types/gear-state").GearState };
+        const gearWithState = gearItem as GearItem & {
+          state?: import("@/lib/types/gear-state").GearState;
+        };
         result = setEquipmentReadiness(gearWithState, newState, "gear");
 
         if (result.success) {
@@ -258,10 +244,7 @@ export async function PATCH(
     }
 
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: result.error, result },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: result.error, result }, { status: 400 });
     }
 
     return NextResponse.json({

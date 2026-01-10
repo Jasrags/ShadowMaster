@@ -1,10 +1,10 @@
 {
   "mcpServers": {
-     "context7": {
-        "type": "stdio",
-        "command": "npx",
-        "args": ["-y", "@upstash/context7-mcp"]
-      },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp"]
+    },
     "next-devtools": {
       "type": "stdio",
       "command": "node",
@@ -32,39 +32,27 @@
     "memory": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-memory/dist/index.js"
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-memory/dist/index.js"]
     },
     "sequentialthinking": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
     },
     "time": {
       "type": "stdio",
       "command": "/Users/jrags/.local/bin/uv",
-      "args": [
-        "tool",
-        "run",
-        "mcp-server-time"
-      ]
+      "args": ["tool", "run", "mcp-server-time"]
     },
     "spec-lint": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "/Users/jrags/Code/Jasrags/shadow-master/tools/spec-lint-mcp.mjs"
-      ]
+      "args": ["/Users/jrags/Code/Jasrags/shadow-master/tools/spec-lint-mcp.mjs"]
     },
     "knip": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@knip/mcp/src/cli.js"
-      ]
+      "args": ["./node_modules/@knip/mcp/src/cli.js"]
     }
   }
 }

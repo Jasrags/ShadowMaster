@@ -9,7 +9,11 @@ import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter } from "@/lib/storage/characters";
 import { getCampaignById } from "@/lib/storage/campaigns";
-import { approveAdvancement, isCampaignGM, requiresGMApproval } from "@/lib/rules/advancement/approval";
+import {
+  approveAdvancement,
+  isCampaignGM,
+  requiresGMApproval,
+} from "@/lib/rules/advancement/approval";
 
 export async function POST(
   request: NextRequest,
@@ -19,18 +23,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, recordId } = await params;
@@ -42,10 +40,7 @@ export async function POST(
       const { getCharacterById } = await import("@/lib/storage/characters");
       const characterById = await getCharacterById(characterId);
       if (!characterById) {
-        return NextResponse.json(
-          { success: false, error: "Character not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
       }
 
       // Verify character is in a campaign and user is the GM
@@ -58,10 +53,7 @@ export async function POST(
 
       const campaign = await getCampaignById(characterById.campaignId);
       if (!campaign) {
-        return NextResponse.json(
-          { success: false, error: "Campaign not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
       }
 
       if (!isCampaignGM(campaign, userId)) {
@@ -101,10 +93,7 @@ export async function POST(
 
     const campaign = await getCampaignById(character.campaignId);
     if (!campaign) {
-      return NextResponse.json(
-        { success: false, error: "Campaign not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
     }
 
     if (!isCampaignGM(campaign, userId)) {
@@ -126,12 +115,7 @@ export async function POST(
     });
   } catch (error) {
     console.error("Failed to approve advancement:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to approve advancement";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 400 }
-    );
+    const errorMessage = error instanceof Error ? error.message : "Failed to approve advancement";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
   }
 }
-

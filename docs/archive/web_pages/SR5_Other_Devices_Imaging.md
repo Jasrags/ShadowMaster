@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -38,144 +38,144 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | Capacity x 50¥ | Core |
+| RATING | AVAIL | COST           | SOURCE |
+| ------ | ----- | -------------- | ------ |
+| -      | -     | Capacity x 50¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Binoculars, Optical
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | 50¥ | Core |
+| ------ | ----- | ---- | ------ |
+| -      | -     | 50¥  | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Camera (Capacity 1–6)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | Capacity x 100¥ | Core |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| -      | -     | Capacity x 100¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Micro–Camera (Capacity 1)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | 100¥ | Core |
+| ------ | ----- | ---- | ------ |
+| -      | -     | 100¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Contacts (Capacity 1–3)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 6 | Capacity x 200¥ | Core |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| -      | 6     | Capacity x 200¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Glasses (Capacity 1–4)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | Capacity x 100¥ | Core |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| -      | -     | Capacity x 100¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Goggles (Capacity 1–6)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | Capacity x 50¥ | Core |
+| RATING | AVAIL | COST           | SOURCE |
+| ------ | ----- | -------------- | ------ |
+| -      | -     | Capacity x 50¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Endoscope
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 8 | 250¥ | Core |
+| ------ | ----- | ---- | ------ |
+| -      | 8     | 250¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Imaging Scopes (Capacity 3)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 2 | 300¥ | Core |
+| ------ | ----- | ---- | ------ |
+| -      | 2     | 300¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Periscope
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 3 | 50¥ | Core |
+| ------ | ----- | ---- | ------ |
+| -      | 3     | 50¥  | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Mage Sight Goggles
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 12R | 3,000¥ | Core |
+| RATING | AVAIL | COST   | SOURCE |
+| ------ | ----- | ------ | ------ |
+| -      | 12R   | 3,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Monocle (Capacity 1–4)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | - | Rating x 120¥ | Core |
+| RATING | AVAIL | COST          | SOURCE |
+| ------ | ----- | ------------- | ------ |
+| -      | -     | Rating x 120¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Telescoping Mirror On A Stick
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 10 | 35¥ | SR5:R&G |
+| RATING | AVAIL | COST | SOURCE  |
+| ------ | ----- | ---- | ------- |
+| -      | 10    | 35¥  | SR5:R&G |
 
-|  |  |
-|  |
+| | |
+| |
 
 Approximately the size of a human hand, the MOAS is perfect for covert around-the-corner surveillance when wireless or technological devices aren’t feasible. It comes with a fifteen-centimeter telescoping probe with magnetic clamp for extra length.
 
@@ -183,11 +183,11 @@ Approximately the size of a human hand, the MOAS is perfect for covert around-th
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 10R | Rating x 600¥ | SR5:R&G |
+| RATING | AVAIL | COST          | SOURCE  |
+| ------ | ----- | ------------- | ------- |
+| -      | 10R   | Rating x 600¥ | SR5:R&G |
 
-|  |  |
-|  |
+| | |
+| |
 
 An inexpensive, hand-held sensor package used to look around corners or over top of obstacles. Image link is standard and it comes with limited upgrading capabilities. It can be accessed wirelessly or viewed directly through a small viewfinder at the base.

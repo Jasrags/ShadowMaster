@@ -356,12 +356,7 @@ export interface MagicValidationWarning {
 /**
  * Categories of spells in Shadowrun
  */
-export type SpellCategory =
-  | "combat"
-  | "detection"
-  | "health"
-  | "illusion"
-  | "manipulation";
+export type SpellCategory = "combat" | "detection" | "health" | "illusion" | "manipulation";
 
 /**
  * Types of spell (mana vs physical targeting)

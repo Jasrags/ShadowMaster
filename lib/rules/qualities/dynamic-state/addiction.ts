@@ -16,10 +16,7 @@ import { updateDynamicState, getDynamicState } from "../dynamic-state";
  * @param addictionId - Quality ID for the addiction
  * @returns Whether craving is active
  */
-export function checkAddictionCraving(
-  character: Character,
-  addictionId: string
-): boolean {
+export function checkAddictionCraving(character: Character, addictionId: string): boolean {
   const state = getDynamicState(character, addictionId);
   if (state?.type !== "addiction") {
     return false;
@@ -75,17 +72,17 @@ export function makeCravingTest(
  * @param addictionId - Quality ID for the addiction
  * @returns Updated character (does not persist)
  */
-export function beginWithdrawal(
-  character: Character,
-  addictionId: string
-): Character {
+export function beginWithdrawal(character: Character, addictionId: string): Character {
   const state = getDynamicState(character, addictionId);
   if (state?.type !== "addiction") {
     return character;
   }
 
   const addictionState = state.state as AddictionState;
-  const withdrawalPenalty = calculateWithdrawalPenalty(addictionState.severity, addictionState.daysClean);
+  const withdrawalPenalty = calculateWithdrawalPenalty(
+    addictionState.severity,
+    addictionState.daysClean
+  );
 
   const updatedState: Partial<AddictionState> = {
     withdrawalActive: true,
@@ -104,11 +101,7 @@ export function beginWithdrawal(
  * @param date - Date of dose (defaults to now)
  * @returns Updated character (does not persist)
  */
-export function recordDose(
-  character: Character,
-  addictionId: string,
-  date?: string
-): Character {
+export function recordDose(character: Character, addictionId: string, date?: string): Character {
   const state = getDynamicState(character, addictionId);
   if (state?.type !== "addiction") {
     return character;
@@ -189,10 +182,7 @@ export function attemptRecovery(
  * @param addictionId - Quality ID for the addiction
  * @returns Current withdrawal penalty (0-6 dice)
  */
-export function calculateWithdrawalPenalties(
-  character: Character,
-  addictionId: string
-): number {
+export function calculateWithdrawalPenalties(character: Character, addictionId: string): number {
   const state = getDynamicState(character, addictionId);
   if (state?.type !== "addiction") {
     return 0;
@@ -239,9 +229,7 @@ function calculateWithdrawalPenalty(
  * @param severity - Addiction severity
  * @returns ISO date string for next check
  */
-function calculateNextCravingCheck(
-  severity: "mild" | "moderate" | "severe" | "burnout"
-): string {
+function calculateNextCravingCheck(severity: "mild" | "moderate" | "severe" | "burnout"): string {
   const now = new Date();
   let daysUntilCheck = 7; // Default: weekly
 
@@ -263,4 +251,3 @@ function calculateNextCravingCheck(
   const nextCheck = new Date(now.getTime() + daysUntilCheck * 24 * 60 * 60 * 1000);
   return nextCheck.toISOString();
 }
-

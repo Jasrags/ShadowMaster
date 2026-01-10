@@ -177,10 +177,10 @@ describe("optional-rules", () => {
     describe("resetOptionalRule", () => {
       it("should remove rule from both lists", () => {
         state = { enabledRuleIds: ["rule-a"], disabledRuleIds: ["rule-b"] };
-        
+
         let newState = resetOptionalRule(state, "rule-a");
         expect(newState.enabledRuleIds).not.toContain("rule-a");
-        
+
         newState = resetOptionalRule(state, "rule-b");
         expect(newState.disabledRuleIds).not.toContain("rule-b");
       });

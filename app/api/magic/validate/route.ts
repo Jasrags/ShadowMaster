@@ -1,17 +1,17 @@
 /**
  * API Route: /api/magic/validate
- * 
+ *
  * POST - Validate magic configuration (tradition, spells, powers)
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacterById } from "@/lib/storage/characters";
-import { 
-  validateTraditionEligibility, 
-  validateSpellAllocation, 
+import {
+  validateTraditionEligibility,
+  validateSpellAllocation,
   validateAdeptPowerAllocation,
-  getEssenceMagicState
+  getEssenceMagicState,
 } from "@/lib/rules/magic";
 import { extractAugmentationRules } from "@/lib/rules/loader";
 import type { EditionCode, MagicalPath, Character } from "@/lib/types";
@@ -25,15 +25,15 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { 
-      characterId, 
-      editionCode, 
-      traditionId, 
-      spellIds, 
+    const {
+      characterId,
+      editionCode,
+      traditionId,
+      spellIds,
       adeptPowers, // Array of { id, rating, specification }
       magicalPath,
       spellLimit,
-      powerPointBudget
+      powerPointBudget,
     } = body;
 
     let character: Character | null = null;
@@ -51,18 +51,24 @@ export async function POST(request: NextRequest) {
     }
 
     if (!finalEditionCode) {
-      return NextResponse.json({ success: false, error: "Edition code is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Edition code is required" },
+        { status: 400 }
+      );
     }
 
     // Load ruleset
     const { loadRuleset } = await import("@/lib/rules/loader");
     const loadResult = await loadRuleset({
       editionCode: finalEditionCode,
-      bookIds: character?.attachedBookIds
+      bookIds: character?.attachedBookIds,
     });
 
     if (!loadResult.success || !loadResult.ruleset) {
-      return NextResponse.json({ success: false, error: loadResult.error || "Failed to load ruleset" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: loadResult.error || "Failed to load ruleset" },
+        { status: 500 }
+      );
     }
 
     const ruleset = loadResult.ruleset;
@@ -77,7 +83,7 @@ export async function POST(request: NextRequest) {
         ruleset
       );
       if (!traditionResult.valid) {
-        errors.push(...traditionResult.errors.map(e => e.message));
+        errors.push(...traditionResult.errors.map((e) => e.message));
       }
     }
 
@@ -90,10 +96,10 @@ export async function POST(request: NextRequest) {
         ruleset
       );
       if (!spellResult.valid) {
-        errors.push(...spellResult.errors.map(e => e.message));
+        errors.push(...spellResult.errors.map((e) => e.message));
       }
       if (spellResult.warnings) {
-        warnings.push(...spellResult.warnings.map(w => typeof w === 'string' ? w : w.message));
+        warnings.push(...spellResult.warnings.map((w) => (typeof w === "string" ? w : w.message)));
       }
     }
 
@@ -106,20 +112,20 @@ export async function POST(request: NextRequest) {
         ruleset
       );
       if (!powerResult.valid) {
-        errors.push(...powerResult.errors.map(e => e.message));
+        errors.push(...powerResult.errors.map((e) => e.message));
       }
     }
 
     // 4. Essence-Magic State (if character data available)
     let essenceMagicStatus = null;
     if (character) {
-        const augmentationRules = extractAugmentationRules(ruleset);
-        const state = getEssenceMagicState(character, augmentationRules);
-        essenceMagicStatus = {
-            effectiveMagic: state.effectiveMagicRating,
-            magicLost: state.magicLostToEssence,
-            isBurnedOut: state.effectiveMagicRating === 0
-        };
+      const augmentationRules = extractAugmentationRules(ruleset);
+      const state = getEssenceMagicState(character, augmentationRules);
+      essenceMagicStatus = {
+        effectiveMagic: state.effectiveMagicRating,
+        magicLost: state.magicLostToEssence,
+        isBurnedOut: state.effectiveMagicRating === 0,
+      };
     }
 
     return NextResponse.json({
@@ -127,9 +133,8 @@ export async function POST(request: NextRequest) {
       valid: errors.length === 0,
       errors,
       warnings,
-      essenceMagicStatus
+      essenceMagicStatus,
     });
-
   } catch (error) {
     console.error("Magic validation error:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });

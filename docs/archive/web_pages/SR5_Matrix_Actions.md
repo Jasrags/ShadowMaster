@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC  |
+| ------ | ----------------- | ------- | ------ | ---------- | -------- | ------ | ------------- | ------ | ------- | ------------- | --- |
 
 **MATRIX PERCEPTION**
 
@@ -11,29 +11,29 @@
 
 **USER MODES TABLE**
 
-| USER MODE | INITIATIVE | INITIATIVE DICE | NOTES |
-| --- | --- | --- | --- |
-| Augmented Reality | Physical Initiative | Physical Initiative Dice | can be distracting |
-| Cold-Sim | Data Processing + Intuition | 3D6 |  |
-| Hot-Sim | Data Processing + Intuition | 4D6 | +2 dice pool bonus to Matrix actions |
+| USER MODE         | INITIATIVE                  | INITIATIVE DICE          | NOTES                                |
+| ----------------- | --------------------------- | ------------------------ | ------------------------------------ |
+| Augmented Reality | Physical Initiative         | Physical Initiative Dice | can be distracting                   |
+| Cold-Sim          | Data Processing + Intuition | 3D6                      |                                      |
+| Hot-Sim           | Data Processing + Intuition | 4D6                      | +2 dice pool bonus to Matrix actions |
 
 **MATRIX SEARCH TABLE**
 
-| INFORMATION IS | THRESHOLD | TIME |
-| --- | --- | --- |
-| General Knowledge or Public | 1 | 1 minute |
-| Limited Interest or Not Publicized | 3 | 30 minutes |
-| Hidden or Actively Hunted and Erased | 6 | 12 hours |
-| Protected or Secret | N/A | N/A |
-| INFORMATION IS | DICE POOL MODIFIER |
-| Intricate or Specialized | –1 |
-| Obscure | –2 |
-| On another grid | –2 |
+| INFORMATION IS                       | THRESHOLD          | TIME       |
+| ------------------------------------ | ------------------ | ---------- |
+| General Knowledge or Public          | 1                  | 1 minute   |
+| Limited Interest or Not Publicized   | 3                  | 30 minutes |
+| Hidden or Actively Hunted and Erased | 6                  | 12 hours   |
+| Protected or Secret                  | N/A                | N/A        |
+| INFORMATION IS                       | DICE POOL MODIFIER |
+| Intricate or Specialized             | –1                 |
+| Obscure                              | –2                 |
+| On another grid                      | –2                 |
 
 **MATRIX SPOTTING TABLE**
 
-| TARGET IS | NOT RUNNING SILENT | RUNNING SILENT |
-| --- | --- | --- |
-| Within 100 meters | Automatic | Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze Test |
+| TARGET IS          | NOT RUNNING SILENT                            | RUNNING SILENT                                                        |
+| ------------------ | --------------------------------------------- | --------------------------------------------------------------------- |
+| Within 100 meters  | Automatic                                     | Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze Test |
 | Outside 100 meters | Simple Computer + Intuition [Data Processing] |
-| A Host | Automatic |
+| A Host             | Automatic                                     |

@@ -1,6 +1,6 @@
 /**
  * API Route: /api/characters/[characterId]/gameplay
- * 
+ *
  * POST - Apply gameplay actions (damage, healing, karma)
  */
 
@@ -32,10 +32,7 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -43,10 +40,7 @@ export async function POST(
     // Check character exists and belongs to user
     const existing = await getCharacter(userId, characterId);
     if (!existing) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check character is active
@@ -64,21 +58,11 @@ export async function POST(
 
     switch (body.action) {
       case "damage":
-        character = await applyDamage(
-          userId,
-          characterId,
-          body.physical || 0,
-          body.stun || 0
-        );
+        character = await applyDamage(userId, characterId, body.physical || 0, body.stun || 0);
         break;
 
       case "heal":
-        character = await healCharacter(
-          userId,
-          characterId,
-          body.physical || 0,
-          body.stun || 0
-        );
+        character = await healCharacter(userId, characterId, body.physical || 0, body.stun || 0);
         break;
 
       case "spendKarma":
@@ -110,10 +94,7 @@ export async function POST(
         break;
 
       default:
-        return NextResponse.json(
-          { success: false, error: "Unknown action" },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: "Unknown action" }, { status: 400 });
     }
 
     return NextResponse.json({
@@ -123,10 +104,6 @@ export async function POST(
   } catch (error) {
     console.error("Failed to apply gameplay action:", error);
     const message = error instanceof Error ? error.message : "Failed to apply action";
-    return NextResponse.json(
-      { success: false, error: message },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: message }, { status: 500 });
   }
 }
-

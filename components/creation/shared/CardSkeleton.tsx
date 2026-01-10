@@ -16,11 +16,7 @@ interface CardSkeletonProps {
   className?: string;
 }
 
-export function CardSkeleton({
-  title,
-  rows = 3,
-  className = "",
-}: CardSkeletonProps) {
+export function CardSkeleton({ title, rows = 3, className = "" }: CardSkeletonProps) {
   return (
     <div
       className={`animate-pulse rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 ${className}`}
@@ -31,9 +27,7 @@ export function CardSkeleton({
       <div className="flex items-start justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800">
         <div>
           <div className="flex items-center gap-2">
-            <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-              {title}
-            </h3>
+            <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h3>
             <div className="h-5 w-16 rounded bg-zinc-200 dark:bg-zinc-700" />
           </div>
           <div className="mt-1 h-3 w-32 rounded bg-zinc-100 dark:bg-zinc-800" />

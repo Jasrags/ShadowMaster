@@ -106,10 +106,7 @@ export function ModalHeader({
   return (
     <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
       <div className="flex items-center gap-3">
-        <Heading
-          slot="title"
-          className="text-lg font-semibold text-zinc-900 dark:text-zinc-100"
-        >
+        <Heading slot="title" className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
           {title}
         </Heading>
         {children}
@@ -130,15 +127,9 @@ export function ModalHeader({
 /**
  * Scrollable modal body
  */
-export function ModalBody({
-  children,
-  className = "",
-  scrollable = true,
-}: ModalBodyProps) {
+export function ModalBody({ children, className = "", scrollable = true }: ModalBodyProps) {
   return (
-    <div
-      className={`${scrollable ? "min-h-0 flex-1 overflow-y-auto" : ""} ${className}`}
-    >
+    <div className={`${scrollable ? "min-h-0 flex-1 overflow-y-auto" : ""} ${className}`}>
       {children}
     </div>
   );
@@ -214,11 +205,7 @@ export function BaseModal({
         <Dialog className="flex max-h-[90vh] flex-col outline-none">
           {({ close }) => (
             <>
-              <ModalHeader
-                title={title}
-                showCloseButton={showCloseButton}
-                onClose={close}
-              />
+              <ModalHeader title={title} showCloseButton={showCloseButton} onClose={close} />
               {children}
             </>
           )}

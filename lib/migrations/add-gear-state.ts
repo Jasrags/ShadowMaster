@@ -16,11 +16,7 @@
  */
 
 import type { Character, Weapon, ArmorItem, CyberwareItem } from "@/lib/types";
-import type {
-  GearState,
-  WeaponAmmoState,
-  DeviceCondition,
-} from "@/lib/types/gear-state";
+import type { GearState, WeaponAmmoState, DeviceCondition } from "@/lib/types/gear-state";
 import { DEFAULT_STATE_BY_CATEGORY } from "@/lib/types/gear-state";
 
 // =============================================================================
@@ -62,17 +58,13 @@ export interface BatchMigrationResult {
  */
 export function needsGearStateMigration(character: Character): boolean {
   // Check weapons in gear array
-  const weaponsInGear = (character.gear?.filter(
-    (g): g is Weapon => g.category === "weapons"
-  ) ?? []);
+  const weaponsInGear = character.gear?.filter((g): g is Weapon => g.category === "weapons") ?? [];
   if (weaponsInGear.some((w) => !w.state)) {
     return true;
   }
 
   // Check armor in gear array
-  const armorInGear = (character.gear?.filter(
-    (g): g is ArmorItem => g.category === "armor"
-  ) ?? []);
+  const armorInGear = character.gear?.filter((g): g is ArmorItem => g.category === "armor") ?? [];
   if (armorInGear.some((a) => !a.state)) {
     return true;
   }
@@ -163,9 +155,10 @@ function getDefaultDeviceCondition(): DeviceCondition {
  * Migrate a character's gear to include state fields.
  * Returns a new character object with migrated data.
  */
-export function migrateCharacterGearState(
-  character: Character
-): { character: Character; result: MigrationResult } {
+export function migrateCharacterGearState(character: Character): {
+  character: Character;
+  result: MigrationResult;
+} {
   const changes: MigrationChange[] = [];
 
   // Create a deep copy to avoid mutating original
@@ -361,9 +354,7 @@ export function migrateCharacterGearState(
  * Migrate multiple characters.
  * Returns results for each character.
  */
-export function migrateCharactersGearState(
-  characters: Character[]
-): BatchMigrationResult {
+export function migrateCharactersGearState(characters: Character[]): BatchMigrationResult {
   const results: MigrationResult[] = [];
   let migrated = 0;
   let skipped = 0;

@@ -66,10 +66,7 @@ describe("OpposedTestResolver", () => {
   describe("rendering", () => {
     it("renders attacker and defender pool info", () => {
       render(
-        <OpposedTestResolver
-          attackerPool={mockAttackerPool}
-          defenderPool={mockDefenderPool}
-        />
+        <OpposedTestResolver attackerPool={mockAttackerPool} defenderPool={mockDefenderPool} />
       );
 
       expect(screen.getByText("Street Samurai")).toBeInTheDocument();
@@ -78,10 +75,7 @@ describe("OpposedTestResolver", () => {
 
     it("shows dice pool totals", () => {
       render(
-        <OpposedTestResolver
-          attackerPool={mockAttackerPool}
-          defenderPool={mockDefenderPool}
-        />
+        <OpposedTestResolver attackerPool={mockAttackerPool} defenderPool={mockDefenderPool} />
       );
 
       expect(screen.getByText(/12d6/)).toBeInTheDocument();
@@ -90,10 +84,7 @@ describe("OpposedTestResolver", () => {
 
     it("shows limit when provided", () => {
       render(
-        <OpposedTestResolver
-          attackerPool={mockAttackerPool}
-          defenderPool={mockDefenderPool}
-        />
+        <OpposedTestResolver attackerPool={mockAttackerPool} defenderPool={mockDefenderPool} />
       );
 
       expect(screen.getByText(/L7/)).toBeInTheDocument();
@@ -101,10 +92,7 @@ describe("OpposedTestResolver", () => {
 
     it("shows pool breakdown when provided", () => {
       render(
-        <OpposedTestResolver
-          attackerPool={mockAttackerPool}
-          defenderPool={mockDefenderPool}
-        />
+        <OpposedTestResolver attackerPool={mockAttackerPool} defenderPool={mockDefenderPool} />
       );
 
       expect(screen.getByText("Agility")).toBeInTheDocument();
@@ -113,10 +101,7 @@ describe("OpposedTestResolver", () => {
 
     it("shows Roll Both button when ready", () => {
       render(
-        <OpposedTestResolver
-          attackerPool={mockAttackerPool}
-          defenderPool={mockDefenderPool}
-        />
+        <OpposedTestResolver attackerPool={mockAttackerPool} defenderPool={mockDefenderPool} />
       );
 
       expect(screen.getByText("Roll Both")).toBeInTheDocument();

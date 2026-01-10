@@ -181,7 +181,10 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
       ) : (
         <div className="space-y-2">
           {filteredTransactions.map((tx) => {
-            const typeInfo = TYPE_LABELS[tx.type] || { label: tx.type, color: "text-muted-foreground" };
+            const typeInfo = TYPE_LABELS[tx.type] || {
+              label: tx.type,
+              color: "text-muted-foreground",
+            };
             const isExpanded = expandedId === tx.id;
 
             return (
@@ -206,8 +209,8 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
                         tx.favorChange > 0
                           ? "text-emerald-400"
                           : tx.favorChange < 0
-                          ? "text-red-400"
-                          : "text-muted-foreground"
+                            ? "text-red-400"
+                            : "text-muted-foreground"
                       }`}
                     >
                       {tx.favorChange > 0 ? "+" : ""}
@@ -233,7 +236,9 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
                       {tx.loyaltyChange !== undefined && tx.loyaltyChange !== 0 && (
                         <span>
                           Loyalty:{" "}
-                          <span className={tx.loyaltyChange > 0 ? "text-emerald-400" : "text-red-400"}>
+                          <span
+                            className={tx.loyaltyChange > 0 ? "text-emerald-400" : "text-red-400"}
+                          >
                             {tx.loyaltyChange > 0 ? "+" : ""}
                             {tx.loyaltyChange}
                           </span>
@@ -242,7 +247,11 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
                       {tx.connectionChange !== undefined && tx.connectionChange !== 0 && (
                         <span>
                           Connection:{" "}
-                          <span className={tx.connectionChange > 0 ? "text-emerald-400" : "text-red-400"}>
+                          <span
+                            className={
+                              tx.connectionChange > 0 ? "text-emerald-400" : "text-red-400"
+                            }
+                          >
                             {tx.connectionChange > 0 ? "+" : ""}
                             {tx.connectionChange}
                           </span>
@@ -269,7 +278,8 @@ export function FavorLedgerView({ ledger, contacts, theme }: FavorLedgerViewProp
 
                     {tx.rollResult !== undefined && (
                       <div className="text-xs text-muted-foreground">
-                        Roll: <span className="text-foreground font-mono">{tx.rollResult} hits</span>
+                        Roll:{" "}
+                        <span className="text-foreground font-mono">{tx.rollResult} hits</span>
                         {tx.netHits !== undefined && (
                           <span className="ml-2">
                             (Net: {tx.netHits > 0 ? "+" : ""}

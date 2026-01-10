@@ -7,10 +7,7 @@
  */
 
 import { useMemo, useState } from "react";
-import {
-  useRCCs,
-  type RCCCatalogItemData,
-} from "@/lib/rules/RulesetContext";
+import { useRCCs, type RCCCatalogItemData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
 import { Search, Wifi, Plus } from "lucide-react";
@@ -55,10 +52,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -73,12 +67,7 @@ function isItemAvailable(availability: number): boolean {
 // COMPONENT
 // =============================================================================
 
-export function RCCModal({
-  isOpen,
-  onClose,
-  onAdd,
-  remainingNuyen,
-}: RCCModalProps) {
+export function RCCModal({ isOpen, onClose, onAdd, remainingNuyen }: RCCModalProps) {
   const rccs = useRCCs();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -119,7 +108,9 @@ export function RCCModal({
           <div className="border-b border-zinc-200 px-4 py-2 dark:border-zinc-700">
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
               Budget:{" "}
-              <span className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>
+              <span
+                className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
+              >
                 {formatCurrency(remainingNuyen)}¥
               </span>{" "}
               remaining
@@ -162,7 +153,9 @@ export function RCCModal({
                           <span>Rating {rcc.deviceRating}</span>
                           <span>DP: {rcc.dataProcessing}</span>
                           <span>FW: {rcc.firewall}</span>
-                          <span>Avail: {getAvailabilityDisplay(rcc.availability, rcc.legality)}</span>
+                          <span>
+                            Avail: {getAvailabilityDisplay(rcc.availability, rcc.legality)}
+                          </span>
                         </div>
                       </div>
                       <div className="ml-3 flex flex-col items-end gap-2">

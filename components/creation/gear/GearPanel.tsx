@@ -22,11 +22,7 @@ import {
 import type { CreationState, GearItem } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "../shared";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
@@ -113,41 +109,27 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     cost: number;
   }>;
 
-  const gearSpent = selectedGear.reduce(
-    (sum, g) => sum + g.cost * g.quantity,
-    0
-  );
+  const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
-    const modCost =
-      w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
+    const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
     const ammoCost =
-      w.purchasedAmmunition?.reduce(
-        (a, ammo) => a + ammo.cost * ammo.quantity,
-        0
-      ) || 0;
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => {
     const baseCost = a.cost * a.quantity;
-    const modCost =
-      a.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
+    const modCost = a.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
     return sum + baseCost + modCost;
   }, 0);
   const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
   const augmentationSpent =
     selectedCyberware.reduce((s, i) => s + i.cost, 0) +
     selectedBioware.reduce((s, i) => s + i.cost, 0);
-  const lifestyleSpent =
-    (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
+  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
 
   const totalSpent =
-    gearSpent +
-    weaponsSpent +
-    armorSpent +
-    fociSpent +
-    augmentationSpent +
-    lifestyleSpent;
+    gearSpent + weaponsSpent + armorSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
@@ -172,40 +154,33 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   });
 
   // Calculate gear cost based on rating
-  const calculateGearCost = useCallback(
-    (gearData: GearItemData, rating?: number) => {
-      // Unified ratings - look up from table
-      if (hasUnifiedRatings(gearData)) {
-        const r = rating ?? gearData.minRating ?? 1;
-        const ratingValue = getRatingTableValue(gearData, r);
-        return ratingValue?.cost ?? 0;
+  const calculateGearCost = useCallback((gearData: GearItemData, rating?: number) => {
+    // Unified ratings - look up from table
+    if (hasUnifiedRatings(gearData)) {
+      const r = rating ?? gearData.minRating ?? 1;
+      const ratingValue = getRatingTableValue(gearData, r);
+      return ratingValue?.cost ?? 0;
+    }
+
+    const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+    const effectiveRating = rating || 1;
+    let cost = gearData.cost ?? 0;
+
+    if (hasRatingFlag) {
+      if (gearData.ratingSpec?.costScaling?.perRating) {
+        cost = (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) * effectiveRating;
+      } else if (gearData.costPerRating) {
+        cost = (gearData.cost || 0) * effectiveRating;
       }
+    }
 
-      const hasRatingFlag =
-        gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
-      const effectiveRating = rating || 1;
-      let cost = gearData.cost ?? 0;
-
-      if (hasRatingFlag) {
-        if (gearData.ratingSpec?.costScaling?.perRating) {
-          cost =
-            (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) *
-            effectiveRating;
-        } else if (gearData.costPerRating) {
-          cost = (gearData.cost || 0) * effectiveRating;
-        }
-      }
-
-      return cost;
-    },
-    []
-  );
+    return cost;
+  }, []);
 
   // Add gear (actual implementation)
   const actuallyAddGear = useCallback(
     (gearData: GearItemData, rating?: number) => {
-      const hasRatingFlag =
-        gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+      const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
       const effectiveRating = rating || 1;
       let cost = gearData.cost ?? 0;
       let availability = gearData.availability ?? 0;
@@ -226,8 +201,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         // Legacy cost scaling
         if (gearData.ratingSpec?.costScaling?.perRating) {
           cost =
-            (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) *
-            effectiveRating;
+            (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) * effectiveRating;
         } else if (gearData.costPerRating) {
           cost = (gearData.cost || 0) * effectiveRating;
         }
@@ -235,21 +209,22 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         // Legacy availability scaling
         if (gearData.ratingSpec?.availabilityScaling?.perRating) {
           availability =
-            (gearData.ratingSpec.availabilityScaling.baseValue ||
-              gearData.availability || 0) * effectiveRating;
+            (gearData.ratingSpec.availabilityScaling.baseValue || gearData.availability || 0) *
+            effectiveRating;
         }
       }
 
       const newGear: GearItem = {
         id: `${gearData.id}-${Date.now()}`,
-        name: hasRatingFlag || hasUnifiedRatings(gearData)
-          ? `${gearData.name} (Rating ${effectiveRating})`
-          : gearData.name,
+        name:
+          hasRatingFlag || hasUnifiedRatings(gearData)
+            ? `${gearData.name} (Rating ${effectiveRating})`
+            : gearData.name,
         category: gearData.category,
         cost,
         availability,
         quantity: 1,
-        rating: (hasRatingFlag || hasUnifiedRatings(gearData)) ? effectiveRating : gearData.rating,
+        rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
         capacity,
         capacityUsed: 0,
         modifications: [],
@@ -281,8 +256,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       // Check if karma conversion could help
       const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
       if (conversionInfo?.canConvert) {
-        const hasRatingFlag =
-          gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+        const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
         const effectiveRating = rating || 1;
         const itemName = hasRatingFlag
           ? `${gearData.name} (Rating ${effectiveRating})`
@@ -352,8 +326,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         : mod.capacityCost || 1;
 
       // Check capacity
-      const capacityRemaining =
-        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      const capacityRemaining = (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
       if (capacityCost > capacityRemaining) return;
 
       // Calculate cost
@@ -402,8 +375,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         : mod.capacityCost || 1;
 
       // Check capacity first (this is a hard limit, not fixable by karma)
-      const capacityRemaining =
-        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      const capacityRemaining = (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
       if (capacityCost > capacityRemaining) return;
 
       // Calculate cost
@@ -421,9 +393,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       // Check if karma conversion could help
       const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
       if (conversionInfo?.canConvert) {
-        const modName = mod.hasRating
-          ? `${mod.name} (Rating ${effectiveRating})`
-          : mod.name;
+        const modName = mod.hasRating ? `${mod.name} (Rating ${effectiveRating})` : mod.name;
         karmaConversionPrompt.promptConversion(modName, cost, () => {
           actuallyInstallMod(mod, rating);
         });
@@ -443,21 +413,14 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   }, [isOverBudget, selectedGear.length]);
 
   // Check prerequisites
-  const hasPriorities =
-    state.priorities?.metatype && state.priorities?.resources;
+  const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
   if (!hasPriorities) {
     return (
-      <CreationCard
-        title="Gear"
-        description="Purchase equipment"
-        status="pending"
-      >
+      <CreationCard title="Gear" description="Purchase equipment" status="pending">
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -496,9 +459,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
               <Backpack className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                No gear purchased
-              </p>
+              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No gear purchased</p>
               <button
                 onClick={() => setIsPurchaseModalOpen(true)}
                 className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"

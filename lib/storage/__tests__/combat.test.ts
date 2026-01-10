@@ -52,7 +52,9 @@ const mockBase = base as typeof base & {
 // TEST FIXTURES
 // =============================================================================
 
-function createMockSession(overrides: Partial<CombatSession> = {}): Omit<CombatSession, "id" | "createdAt" | "updatedAt"> {
+function createMockSession(
+  overrides: Partial<CombatSession> = {}
+): Omit<CombatSession, "id" | "createdAt" | "updatedAt"> {
   return {
     campaignId: "campaign-1",
     ownerId: "user-1",
@@ -69,7 +71,9 @@ function createMockSession(overrides: Partial<CombatSession> = {}): Omit<CombatS
   } as Omit<CombatSession, "id" | "createdAt" | "updatedAt">;
 }
 
-function createMockParticipant(overrides: Partial<CombatParticipant> = {}): Omit<CombatParticipant, "id"> {
+function createMockParticipant(
+  overrides: Partial<CombatParticipant> = {}
+): Omit<CombatParticipant, "id"> {
   return {
     type: "character",
     entityId: "char-1",
@@ -381,7 +385,11 @@ describe("updateParticipantActions", () => {
       interrupt: false,
     };
 
-    const updated = await combatStorage.updateParticipantActions(session.id, participantId, newActions);
+    const updated = await combatStorage.updateParticipantActions(
+      session.id,
+      participantId,
+      newActions
+    );
 
     expect(updated?.actionsRemaining).toEqual(newActions);
   });
@@ -435,7 +443,12 @@ describe("setInitiativeScore", () => {
     const withParticipant = await combatStorage.addParticipant(session.id, createMockParticipant());
     const participantId = withParticipant!.participants[0].id;
 
-    const updated = await combatStorage.setInitiativeScore(session.id, participantId, 15, [5, 4, 3, 3]);
+    const updated = await combatStorage.setInitiativeScore(
+      session.id,
+      participantId,
+      15,
+      [5, 4, 3, 3]
+    );
 
     const participant = updated?.participants.find((p) => p.id === participantId);
     expect(participant?.initiativeScore).toBe(15);
@@ -551,9 +564,7 @@ describe("advanceTurn", () => {
 
 describe("advanceRound", () => {
   it("should increment round counter", async () => {
-    const session = await combatStorage.createCombatSession(
-      createMockSession({ round: 1 })
-    );
+    const session = await combatStorage.createCombatSession(createMockSession({ round: 1 }));
 
     const updated = await combatStorage.advanceRound(session.id);
 
@@ -561,9 +572,7 @@ describe("advanceRound", () => {
   });
 
   it("should reset turn to 0", async () => {
-    const session = await combatStorage.createCombatSession(
-      createMockSession({ currentTurn: 3 })
-    );
+    const session = await combatStorage.createCombatSession(createMockSession({ currentTurn: 3 }));
 
     const updated = await combatStorage.advanceRound(session.id);
 
@@ -589,8 +598,20 @@ describe("advanceRound", () => {
             id: "p1",
             status: "active",
             conditions: [
-              { id: "c1", name: "Stun", description: "Stunned", roundsRemaining: 1, source: "test" },
-              { id: "c2", name: "Blind", description: "Blinded", roundsRemaining: 3, source: "test" },
+              {
+                id: "c1",
+                name: "Stun",
+                description: "Stunned",
+                roundsRemaining: 1,
+                source: "test",
+              },
+              {
+                id: "c2",
+                name: "Blind",
+                description: "Blinded",
+                roundsRemaining: 3,
+                source: "test",
+              },
             ],
           },
         ] as CombatParticipant[],
@@ -700,7 +721,10 @@ describe("resolveInterrupt", () => {
         },
       ],
     });
-    const withParticipant = await combatStorage.addParticipant(session.id, participantWithInterrupt);
+    const withParticipant = await combatStorage.addParticipant(
+      session.id,
+      participantWithInterrupt
+    );
     const participantId = withParticipant!.participants[0].id;
 
     const updated = await combatStorage.resolveInterrupt(session.id, participantId, "int-1");

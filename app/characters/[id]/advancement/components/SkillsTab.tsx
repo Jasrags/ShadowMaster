@@ -5,8 +5,15 @@ import { Button, Dialog, Heading, Modal, ModalOverlay, TextField } from "react-a
 import type { Character, MergedRuleset } from "@/lib/types";
 import { useSkills } from "@/lib/rules";
 // Import directly from specific files to avoid pulling in server-side magic-advancement code
-import { validateSkillAdvancement, getSkillMaximum, validateSpecializationAdvancement } from "@/lib/rules/advancement/validation";
-import { calculateActiveSkillCost, calculateSpecializationCost } from "@/lib/rules/advancement/costs";
+import {
+  validateSkillAdvancement,
+  getSkillMaximum,
+  validateSpecializationAdvancement,
+} from "@/lib/rules/advancement/validation";
+import {
+  calculateActiveSkillCost,
+  calculateSpecializationCost,
+} from "@/lib/rules/advancement/costs";
 import { X, ArrowUp, Search, Plus } from "lucide-react";
 
 interface SkillsTabProps {
@@ -32,9 +39,7 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
     if (!searchQuery.trim()) return activeSkills;
     const query = searchQuery.toLowerCase();
     return activeSkills.filter(
-      (skill) =>
-        skill.name.toLowerCase().includes(query) ||
-        skill.id.toLowerCase().includes(query)
+      (skill) => skill.name.toLowerCase().includes(query) || skill.id.toLowerCase().includes(query)
     );
   }, [activeSkills, searchQuery]);
 
@@ -44,7 +49,7 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
       const currentRating = character.skills[skillId] || 0;
       const maxRating = getSkillMaximum(character, skillId, ruleset);
       const nextRating = Math.min(currentRating + 1, maxRating);
-      
+
       setSelectedSkill(skillId);
       setNewRating(nextRating);
       setModalMode("advance");
@@ -56,17 +61,14 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
   );
 
   // Handle specialization click
-  const handleSpecializationClick = useCallback(
-    (skillId: string) => {
-      setSelectedSkill(skillId);
-      setSpecialization("");
-      setModalMode("specialization");
-      setNotes("");
-      setErrorMessage(null);
-      setIsModalOpen(true);
-    },
-    []
-  );
+  const handleSpecializationClick = useCallback((skillId: string) => {
+    setSelectedSkill(skillId);
+    setSpecialization("");
+    setModalMode("specialization");
+    setNotes("");
+    setErrorMessage(null);
+    setIsModalOpen(true);
+  }, []);
 
   // Handle submit
   const handleSubmit = useCallback(async () => {
@@ -79,12 +81,7 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
       if (modalMode === "advance") {
         if (!newRating) return;
         // Validate
-        const validation = validateSkillAdvancement(
-          character,
-          selectedSkill,
-          newRating,
-          ruleset
-        );
+        const validation = validateSkillAdvancement(character, selectedSkill, newRating, ruleset);
 
         if (!validation.valid) {
           setErrorMessage(validation.errors.map((e) => e.message).join(", "));
@@ -114,11 +111,7 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
         }
 
         // Validate
-        const validation = validateSpecializationAdvancement(
-          character,
-          selectedSkill,
-          ruleset
-        );
+        const validation = validateSpecializationAdvancement(character, selectedSkill, ruleset);
 
         if (!validation.valid) {
           setErrorMessage(validation.errors.map((e) => e.message).join(", "));
@@ -127,15 +120,18 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
         }
 
         // Call API
-        const response = await fetch(`/api/characters/${character.id}/advancement/specializations`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            skillId: selectedSkill,
-            specialization: specialization.trim(),
-            notes,
-          }),
-        });
+        const response = await fetch(
+          `/api/characters/${character.id}/advancement/specializations`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              skillId: selectedSkill,
+              specialization: specialization.trim(),
+              notes,
+            }),
+          }
+        );
 
         const result = await response.json();
         if (!result.success) throw new Error(result.error || "Failed to add specialization");
@@ -152,7 +148,16 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
     } finally {
       setIsSubmitting(false);
     }
-  }, [character, selectedSkill, newRating, specialization, notes, modalMode, ruleset, onCharacterUpdate]);
+  }, [
+    character,
+    selectedSkill,
+    newRating,
+    specialization,
+    notes,
+    modalMode,
+    ruleset,
+    onCharacterUpdate,
+  ]);
 
   // Get skill info
   const getSkillInfo = useCallback(
@@ -166,7 +171,16 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
       const skill = activeSkills.find((s) => s.id === skillId);
       const specializations = character.skillSpecializations?.[skillId] || [];
 
-      return { currentRating, maxRating, canAdvance, nextRating, cost, canAfford, skill, specializations };
+      return {
+        currentRating,
+        maxRating,
+        canAdvance,
+        nextRating,
+        cost,
+        canAfford,
+        skill,
+        specializations,
+      };
     },
     [character, ruleset, activeSkills]
   );
@@ -184,11 +198,7 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
       {/* Search */}
       <div className="relative">
         <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-zinc-500" />
-        <TextField
-          value={searchQuery}
-          onChange={setSearchQuery}
-          className="w-full"
-        >
+        <TextField value={searchQuery} onChange={setSearchQuery} className="w-full">
           <input
             placeholder="Search skills..."
             className="w-full pl-10 pr-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-emerald-500"
@@ -199,8 +209,15 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
       {/* Skills List */}
       <div className="space-y-3">
         {filteredSkills.map((skill) => {
-          const { currentRating, maxRating, canAdvance, nextRating, cost, canAfford, specializations } =
-            getSkillInfo(skill.id);
+          const {
+            currentRating,
+            maxRating,
+            canAdvance,
+            nextRating,
+            cost,
+            canAfford,
+            specializations,
+          } = getSkillInfo(skill.id);
 
           const specCost = calculateSpecializationCost();
           const canAffordSpec = character.karmaCurrent >= specCost;
@@ -275,12 +292,12 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
               <div className="p-6">
                 <div className="flex items-center justify-between mb-4">
                   <Heading className="text-xl font-bold text-zinc-100">
-                    {modalMode === "advance" ? "Advance" : "Add Specialization for"} {selectedSkill ? activeSkills.find((s) => s.id === selectedSkill)?.name : "Skill"}
+                    {modalMode === "advance" ? "Advance" : "Add Specialization for"}{" "}
+                    {selectedSkill
+                      ? activeSkills.find((s) => s.id === selectedSkill)?.name
+                      : "Skill"}
                   </Heading>
-                  <Button
-                    onPress={close}
-                    className="text-zinc-400 hover:text-zinc-200"
-                  >
+                  <Button onPress={close} className="text-zinc-400 hover:text-zinc-200">
                     <X className="h-5 w-5" />
                   </Button>
                 </div>
@@ -300,15 +317,14 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
                         </label>
                         <div className="flex items-center gap-4">
                           <span className="text-zinc-400">
-                            Current: <span className="font-bold text-zinc-100">
+                            Current:{" "}
+                            <span className="font-bold text-zinc-100">
                               {character.skills[selectedSkill] || 0}
                             </span>
                           </span>
                           <ArrowUp className="h-4 w-4 text-zinc-500" />
                           <span className="text-zinc-400">
-                            New: <span className="font-bold text-emerald-400">
-                              {newRating}
-                            </span>
+                            New: <span className="font-bold text-emerald-400">{newRating}</span>
                           </span>
                         </div>
                       </div>
@@ -333,28 +349,33 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
                       <div className="flex justify-between text-sm">
                         <span className="text-zinc-400">Karma Cost:</span>
                         <span className="font-bold text-amber-400">
-                          {modalMode === "advance" 
-                            ? (newRating ? calculateActiveSkillCost(newRating) : 0)
-                            : calculateSpecializationCost()
-                          }
+                          {modalMode === "advance"
+                            ? newRating
+                              ? calculateActiveSkillCost(newRating)
+                              : 0
+                            : calculateSpecializationCost()}
                         </span>
                       </div>
                       <div className="flex justify-between text-sm mt-1">
                         <span className="text-zinc-400">Available:</span>
-                        <span className={character.karmaCurrent >= (modalMode === "advance" ? (newRating ? calculateActiveSkillCost(newRating) : 0) : calculateSpecializationCost())
-                          ? "text-emerald-400"
-                          : "text-red-400"
-                        }>
+                        <span
+                          className={
+                            character.karmaCurrent >=
+                            (modalMode === "advance"
+                              ? newRating
+                                ? calculateActiveSkillCost(newRating)
+                                : 0
+                              : calculateSpecializationCost())
+                              ? "text-emerald-400"
+                              : "text-red-400"
+                          }
+                        >
                           {character.karmaCurrent}
                         </span>
                       </div>
                     </div>
 
-                    <TextField
-                      value={notes}
-                      onChange={setNotes}
-                      className="space-y-2"
-                    >
+                    <TextField value={notes} onChange={setNotes} className="space-y-2">
                       <label className="block text-sm font-medium text-zinc-300">
                         Notes (Optional)
                       </label>
@@ -375,10 +396,22 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
                       </Button>
                       <Button
                         onPress={handleSubmit}
-                        isDisabled={isSubmitting || (modalMode === "advance" && (!newRating || character.karmaCurrent < calculateActiveSkillCost(newRating))) || (modalMode === "specialization" && (!specialization.trim() || character.karmaCurrent < calculateSpecializationCost()))}
+                        isDisabled={
+                          isSubmitting ||
+                          (modalMode === "advance" &&
+                            (!newRating ||
+                              character.karmaCurrent < calculateActiveSkillCost(newRating))) ||
+                          (modalMode === "specialization" &&
+                            (!specialization.trim() ||
+                              character.karmaCurrent < calculateSpecializationCost()))
+                        }
                         className="flex-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 disabled:bg-zinc-700 disabled:text-zinc-500 text-white rounded transition-colors"
                       >
-                        {isSubmitting ? "Processing..." : (modalMode === "advance" ? "Advance Skill" : "Add Specialization")}
+                        {isSubmitting
+                          ? "Processing..."
+                          : modalMode === "advance"
+                            ? "Advance Skill"
+                            : "Add Specialization"}
                       </Button>
                     </div>
                   </div>
@@ -391,4 +424,3 @@ export function SkillsTab({ character, ruleset, onCharacterUpdate }: SkillsTabPr
     </div>
   );
 }
-

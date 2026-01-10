@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -8,33 +8,33 @@ Sporting Rifles are fired with the Longarms skill.
 
 **Range Table**
 
-| DP Modifier | Short +0 | Medium -1 | Long -3 | Extreme -6 |
-| --- | --- | --- | --- | --- |
-| Longarms | Range in Meters |
-| Sporting Rifles | 0–50 | 51–250 | 251–500 | 501–750 |
+| DP Modifier     | Short +0        | Medium -1 | Long -3 | Extreme -6 |
+| --------------- | --------------- | --------- | ------- | ---------- |
+| Longarms        | Range in Meters |
+| Sporting Rifles | 0–50            | 51–250    | 251–500 | 501–750    |
 
-| Weapon | Acc | DV | AP | Modes | RC | Ammo | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| M1 Garand | 5 | 12P | -1 | SA | – | 8 ( c ) | 3R | 1,100¥ | SR5:GH3 |
-| Marlin 79S | 4 | 6P | – | SA | – | 10 ( c ) | 3R | 300¥ | SR5:GH3 |
-| Marlin 3041 BL | 5 | 10P | -3 | SA | – | 6 ( m ) | 5R | 1,100¥ | SR5:GH3 |
-| Marlin 3468SS | 4 | 13P | -1 | SS | – | 4 ( m ) | 6R | 1,000¥ | SR5:GH3 |
-| Marlin X71 | 5 | 12P | -4 | SS | – | 5 ( m ) | 6R | 1,500¥ | SR5:GH3 |
-| Springfield Model 1855 Reproduction | 2 | 10P | – | SS | – | 1 ( cb ) | 4R | 850¥ | SR5:GH3 |
-| Springfield 2003 | 9 | 12P | -2 | SS | – | 5 ( m ) | 4R | 3,600¥ | SR5:GH3 |
-| Springfield M1A | 6 | 12P | -1 | SA | – | 20 ( c ) | 6R | 1,700¥ | SR5:GH3 |
-| Winchester Model 2024 | 6 | 12P | – | SA | – | 7 ( m ) | 4R | 1,800¥ | SR5:GH3 |
-| Winchester Model 2067 | 5 | 8P | -1 | SA | – | 15 ( m ) | 4R | 650¥ | SR5:GH3 |
+| Weapon                              | Acc | DV  | AP  | Modes | RC  | Ammo     | Avail | Cost   | Source  |
+| ----------------------------------- | --- | --- | --- | ----- | --- | -------- | ----- | ------ | ------- |
+| M1 Garand                           | 5   | 12P | -1  | SA    | –   | 8 ( c )  | 3R    | 1,100¥ | SR5:GH3 |
+| Marlin 79S                          | 4   | 6P  | –   | SA    | –   | 10 ( c ) | 3R    | 300¥   | SR5:GH3 |
+| Marlin 3041 BL                      | 5   | 10P | -3  | SA    | –   | 6 ( m )  | 5R    | 1,100¥ | SR5:GH3 |
+| Marlin 3468SS                       | 4   | 13P | -1  | SS    | –   | 4 ( m )  | 6R    | 1,000¥ | SR5:GH3 |
+| Marlin X71                          | 5   | 12P | -4  | SS    | –   | 5 ( m )  | 6R    | 1,500¥ | SR5:GH3 |
+| Springfield Model 1855 Reproduction | 2   | 10P | –   | SS    | –   | 1 ( cb ) | 4R    | 850¥   | SR5:GH3 |
+| Springfield 2003                    | 9   | 12P | -2  | SS    | –   | 5 ( m )  | 4R    | 3,600¥ | SR5:GH3 |
+| Springfield M1A                     | 6   | 12P | -1  | SA    | –   | 20 ( c ) | 6R    | 1,700¥ | SR5:GH3 |
+| Winchester Model 2024               | 6   | 12P | –   | SA    | –   | 7 ( m )  | 4R    | 1,800¥ | SR5:GH3 |
+| Winchester Model 2067               | 5   | 8P  | -1  | SA    | –   | 15 ( m ) | 4R    | 650¥   | SR5:GH3 |
 
 ## M1 Garand
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 12P | –1 | SA | – | 8(c) | 3R | 1,100¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Vintage
+: Vintage
 
 The Garand has been a hallmark of quality since its introduction over a century ago. Newly manufactured, the current rifle is a fine successor to the original, with the original manufacturing tools used whenever possible to ensure it is as accurate and dependable as the originals were when manufactured.
 
@@ -49,13 +49,13 @@ The Garand has been a hallmark of quality since its introduction over a century 
 
 ## Marlin 79S
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 6P | – | SA | – | 10(c) | 3R | 300¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   None
+: None
 
 The first rifle everyone should use to learn to shoot, the 79S is a plinker’s dream. The small-bore rifle is accurate, easy to maintain, and just plain fun to shoot. An additional benefit is that the ammunition is widely available and less expensive when you arrange a bulk purchase. The 79S has minimal recoil, and with its limited power cartridge, down-range incidents are less likely to happen. Marlin supports youth marksmanship programs by providing this rifle to qualified organizations, teaching the next generation how to defend themselves.
 
@@ -77,13 +77,13 @@ The first rifle everyone should use to learn to shoot, the 79S is a plinker’s 
 
 ## Marlin 3041 BL
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 10P | –3 | SA | – | 6(m) | 5R | 1,100¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Imaging Sight (w/ vision magnification)
+: Imaging Sight (w/ vision magnification)
 
 A classic rifle for traditional shooters, the 3041’s lever action has been extensively reengineered to meet the toughest reliability standards, as shown by its selection by Illinois’ Department of Revenue as its issue long arm. The rifle’s barrel and action have been protected by Marlin’s proprietary anti-corrosion treatment to create an heirloom sure to last through generations of use.
 
@@ -101,13 +101,13 @@ A classic rifle for traditional shooters, the 3041’s lever action has been ext
 
 ## Marlin 3468SS
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 13P | –1 | SS | – | 4(m) | 6R | 1,000¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   None
+: None
 
 This large-caliber rifle utilizes the classic .45-70 Government cartridge, making it ideal for hunting larger North American game, and is powerful enough to handle most Awakening-related problems an outdoorsman is likely to encounter. The reinforced polymer frame is designed to endure years of rough handling in the woods, while the improved double-link system ensures a smooth cycling action.
 
@@ -122,13 +122,13 @@ This large-caliber rifle utilizes the classic .45-70 Government cartridge, makin
 
 ## Marlin X71
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 12P | –4 | SS | – | 5(m) | 6R | 1,500¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Extreme Environment Modification Level 1 (Arctic), Imaging Sight (w/ low-light vision, vision enhancement 2, vision magnification)
+: Extreme Environment Modification Level 1 (Arctic), Imaging Sight (w/ low-light vision, vision enhancement 2, vision magnification)
 
 A modern bolt-action rifle intended for the big-game hunter, the X71 has been thoroughly redesigned to meet the grueling requirements of arctic environments. The rifle’s self-diagnostic program is not as versatile as those offered through smartlink technology, but the simplicity lessens the chance of a malfunction. It’s simple-to-read ammunition counter allows the shooter to quickly determine their status when hunting dangerous prey, ensuring the hunter will not become the hunted.
 
@@ -146,13 +146,13 @@ A modern bolt-action rifle intended for the big-game hunter, the X71 has been th
 
 ## Springfield Model 1855 Reproduction
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 2 | 10P | – | SS | – | 1(cb) | 4R | 850¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Vintage, Cap & Ball
+: Vintage, Cap & Ball
 
 A reproduction of a two century old weapon, the 1855 has remained popular with the re-enactors of North America. While the hobby is not as popular as it was at the turn of the century, Springfield has licensed production to a number of smaller firms across the continent.
 
@@ -169,13 +169,13 @@ The quality of the rifle-muskets sold through Springfield’s Matrix storefront 
 
 ## Springfield 2003
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 9 | 12P | –2 | SS | – | 5(m) | 4R | 3,600¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Vintage
+: Vintage
 
 A modern remake of a classic rifle, the Springfield 2003 is a hunter’s dream come true. The bolt action is now computer verified to be within tolerance, and it utilizes the latest in laser-measuring tools. Sporting a chrome-plated bore and barrel, this weapon’s careful craftsmanship maintains a level of precision in manufacturing normally reserved for sniper weapons developed for elite Special Forces teams. The modern, composite furniture eliminates the one major problem with such heirloom firearms, which is that the wood used on the originals often ages poorly with use. The latest version is meant to last multiple lifetimes, as the composite has been fully tested for dependability and resiliency.
 
@@ -190,13 +190,13 @@ A modern remake of a classic rifle, the Springfield 2003 is a hunter’s dream c
 
 ## Springfield M1A
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6 | 12P | –1 | SA | – | 20(c) | 6R | 1,700¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Imaging Sight (w/ image link, vision magnification, vision enhancement 1)
+: Imaging Sight (w/ image link, vision magnification, vision enhancement 1)
 
 A classic North American hunting rifle evolved from a century-old military design, Springfield is happy to announce a new manufacturing partner for this historically significant rifle. Our current partner has updated the rifle to accept modern attachments to meet the needs of today’s shooters, including an advanced imaging sight designed to link with the shooter’s PAN, helping with accuracy and eliminating missed opportunities on hunting trips. Interested customers should contact their local dealer for availability or purchase direct from our Matrix store. Please be advised, due to strong demand, Matrix orders will require three weeks for delivery.
 
@@ -211,13 +211,13 @@ A classic North American hunting rifle evolved from a century-old military desig
 
 ## Winchester Model 2024
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6 | 12P | – | SA | – | 7(m) | 4R | 1,800¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Imaging Scope (w/ vision magnification)
+: Imaging Scope (w/ vision magnification)
 
 This classic intermediate-caliber rifle has been updated to reflect the needs of today’s hunter. The lever-action has been updated by utilizing modern materials, including titanium alloy in those areas requiring the greatest torsion strength. The chamber has been coated with easy-to clean polymers without reducing its ability to withstand the pressures created by ATF-approved propellants.
 
@@ -235,13 +235,13 @@ This classic intermediate-caliber rifle has been updated to reflect the needs of
 
 ## Winchester Model 2067
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 8P | –1 | SA | – | 15(m) | 4R | 650¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Vintage
+: Vintage
 
 This the latest update to “The Gun that Won the West.” It has been re-engineered to handle the chamber pressures of modern propellants and to meet current safety code. The rifle still uses classic calibers for traditional shootists and competitions, but has been also improved to utilize a number of modern cartridges for those who desire standardization in their collections. Available in a number of different sub-models; please refer to our Matrix catalog prior to purchase.
 
@@ -256,10 +256,10 @@ This the latest update to “The Gun that Won the West.” It has been re-engine
 
 ---
 
-| Weapons |
-| --- |
-| Melee | Blades // Clubs // Exotic // Implant // Improvised // Misc. |
-| Ranged | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing |
-| Firearms | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // *Misc.* ( Exotic / Implant ) |
-| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile ) |
-| *Misc.* | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles ) |
+| Weapons                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Melee                     | Blades // Clubs // Exotic // Implant // Improvised // Misc.                                                                                                                      |
+| Ranged                    | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing                                                                                                           |
+| Firearms                  | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // _Misc._ ( Exotic / Implant ) |
+| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile )                                                                                                                              |
+| _Misc._                   | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles )                                                                  |

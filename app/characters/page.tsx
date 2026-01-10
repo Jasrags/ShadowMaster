@@ -27,7 +27,12 @@ function PlusIcon({ className }: { className?: string }) {
 function UserIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={1.5}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
     </svg>
   );
 }
@@ -35,7 +40,12 @@ function UserIcon({ className }: { className?: string }) {
 function TrashIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+      />
     </svg>
   );
 }
@@ -43,7 +53,12 @@ function TrashIcon({ className }: { className?: string }) {
 function SearchIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+      />
     </svg>
   );
 }
@@ -51,7 +66,12 @@ function SearchIcon({ className }: { className?: string }) {
 function GridIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+      />
     </svg>
   );
 }
@@ -59,7 +79,12 @@ function GridIcon({ className }: { className?: string }) {
 function ListIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 6h16M4 10h16M4 14h16M4 18h16"
+      />
     </svg>
   );
 }
@@ -67,7 +92,12 @@ function ListIcon({ className }: { className?: string }) {
 function UploadIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"
+      />
     </svg>
   );
 }
@@ -75,7 +105,12 @@ function UploadIcon({ className }: { className?: string }) {
 function ShieldIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+      />
     </svg>
   );
 }
@@ -84,17 +119,22 @@ function ShieldIcon({ className }: { className?: string }) {
 // STATUS BADGE COMPONENT
 // =============================================================================
 
-
 function StatusBadge({ status }: { status: string }) {
   const styles: Record<string, string> = {
-    active: "bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30",
-    draft: "bg-amber-500/10 text-amber-700 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30",
-    retired: "bg-zinc-500/10 text-zinc-700 border-zinc-500/20 dark:bg-zinc-500/20 dark:text-zinc-400 dark:border-zinc-500/30",
-    deceased: "bg-destructive/10 text-destructive border-destructive/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30",
+    active:
+      "bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30",
+    draft:
+      "bg-amber-500/10 text-amber-700 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30",
+    retired:
+      "bg-zinc-500/10 text-zinc-700 border-zinc-500/20 dark:bg-zinc-500/20 dark:text-zinc-400 dark:border-zinc-500/30",
+    deceased:
+      "bg-destructive/10 text-destructive border-destructive/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30",
   };
 
   return (
-    <span className={`px-2 py-0.5 text-xs font-mono uppercase rounded border ${styles[status] || styles.draft}`}>
+    <span
+      className={`px-2 py-0.5 text-xs font-mono uppercase rounded border ${styles[status] || styles.draft}`}
+    >
       {status}
     </span>
   );
@@ -114,7 +154,12 @@ interface CharacterCardProps {
   isAdminMode?: boolean;
 }
 
-function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = false }: CharacterCardProps) {
+function CharacterCard({
+  character,
+  onDelete,
+  viewMode = "grid",
+  isAdminMode = false,
+}: CharacterCardProps) {
   const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async (e: React.MouseEvent) => {
@@ -144,7 +189,11 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
   if (viewMode === "list") {
     return (
       <Link
-        href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
+        href={
+          character.status === "draft"
+            ? `/characters/${character.id}/edit`
+            : `/characters/${character.id}`
+        }
         className="group relative block"
       >
         <div className="relative rounded-lg border border-border bg-card transition-all duration-200 hover:border-emerald-500/50 hover:bg-muted/50">
@@ -236,7 +285,11 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
   // Grid view (default)
   return (
     <Link
-      href={character.status === "draft" ? `/characters/${character.id}/edit` : `/characters/${character.id}`}
+      href={
+        character.status === "draft"
+          ? `/characters/${character.id}/edit`
+          : `/characters/${character.id}`
+      }
       className="group relative block"
     >
       <div className="relative rounded-lg border border-border bg-card transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/5">
@@ -339,7 +392,7 @@ function CharacterCard({ character, onDelete, viewMode = "grid", isAdminMode = f
           </div>
         </div>
       </div>
-    </Link >
+    </Link>
   );
 }
 
@@ -353,9 +406,7 @@ function EmptyState() {
       <div className="mx-auto h-16 w-16 rounded-full bg-muted p-4 flex items-center justify-center">
         <UserIcon className="h-8 w-8 text-muted-foreground" />
       </div>
-      <h3 className="mt-4 text-lg font-medium text-foreground">
-        No characters yet
-      </h3>
+      <h3 className="mt-4 text-lg font-medium text-foreground">No characters yet</h3>
       <p className="mt-2 text-sm text-muted-foreground">
         Get started by creating your first Shadowrun character.
       </p>
@@ -380,10 +431,7 @@ function LoadingState() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[1, 2, 3].map((i) => (
-        <div
-          key={i}
-          className="rounded-lg border border-border bg-card p-5 animate-pulse"
-        >
+        <div key={i} className="rounded-lg border border-border bg-card p-5 animate-pulse">
           <div className="flex items-start justify-between mb-4">
             <div className="space-y-2">
               <div className="h-5 w-32 bg-muted rounded" />
@@ -427,15 +475,19 @@ function FilterTabs({ activeFilter, onFilterChange, counts }: FilterTabsProps) {
         <button
           key={filter.id}
           onClick={() => onFilterChange(filter.id)}
-          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${activeFilter === filter.id
-            ? "bg-background text-foreground shadow-sm"
-            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-            }`}
+          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+            activeFilter === filter.id
+              ? "bg-background text-foreground shadow-sm"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+          }`}
         >
           {filter.label}
           {counts[filter.id] !== undefined && (
-            <span className={`ml-1.5 text-xs font-mono ${activeFilter === filter.id ? "text-primary" : "text-muted-foreground"
-              }`}>
+            <span
+              className={`ml-1.5 text-xs font-mono ${
+                activeFilter === filter.id ? "text-primary" : "text-muted-foreground"
+              }`}
+            >
               ({counts[filter.id]})
             </span>
           )}
@@ -533,8 +585,8 @@ export default function CharactersPage() {
       setCharacters((prev) => [data.character, ...prev]);
 
       // Select appropriate filter to view new character
-      if (activeFilter !== 'all' && data.character.status !== activeFilter) {
-        setActiveFilter('all');
+      if (activeFilter !== "all" && data.character.status !== activeFilter) {
+        setActiveFilter("all");
       }
 
       setShowImportDialog(false);
@@ -574,8 +626,10 @@ export default function CharactersPage() {
           return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
         case "updated":
         default:
-          return new Date(b.updatedAt || b.createdAt).getTime() -
-            new Date(a.updatedAt || a.createdAt).getTime();
+          return (
+            new Date(b.updatedAt || b.createdAt).getTime() -
+            new Date(a.updatedAt || a.createdAt).getTime()
+          );
       }
     });
 
@@ -593,9 +647,7 @@ export default function CharactersPage() {
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
-            <h1 className="text-2xl font-bold text-foreground">
-              Characters
-            </h1>
+            <h1 className="text-2xl font-bold text-foreground">Characters</h1>
             {isAdminMode && (
               <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded">
                 Admin Mode
@@ -603,7 +655,9 @@ export default function CharactersPage() {
             )}
           </div>
           <p className="mt-1 text-sm text-muted-foreground">
-            {isAdminMode ? "Viewing all characters across all users" : "Manage your Shadowrun characters"}
+            {isAdminMode
+              ? "Viewing all characters across all users"
+              : "Manage your Shadowrun characters"}
           </p>
         </div>
         <div className="flex items-center gap-2">
@@ -678,20 +732,22 @@ export default function CharactersPage() {
                   <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
                     <button
                       onClick={() => setViewMode("grid")}
-                      className={`p-1.5 rounded transition-colors ${viewMode === "grid"
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                        }`}
+                      className={`p-1.5 rounded transition-colors ${
+                        viewMode === "grid"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
                       aria-label="Grid view"
                     >
                       <GridIcon className="w-4 h-4" />
                     </button>
                     <button
                       onClick={() => setViewMode("list")}
-                      className={`p-1.5 rounded transition-colors ${viewMode === "list"
-                        ? "bg-background text-foreground shadow-sm"
-                        : "text-muted-foreground hover:text-foreground"
-                        }`}
+                      className={`p-1.5 rounded transition-colors ${
+                        viewMode === "list"
+                          ? "bg-background text-foreground shadow-sm"
+                          : "text-muted-foreground hover:text-foreground"
+                      }`}
                       aria-label="List view"
                     >
                       <ListIcon className="w-4 h-4" />
@@ -754,7 +810,8 @@ export default function CharactersPage() {
               {/* Results count */}
               {searchQuery && (
                 <div className="text-sm text-muted-foreground">
-                  Found {filteredCharacters.length} character{filteredCharacters.length !== 1 ? "s" : ""}
+                  Found {filteredCharacters.length} character
+                  {filteredCharacters.length !== 1 ? "s" : ""}
                   {searchQuery && ` matching "${searchQuery}"`}
                 </div>
               )}
@@ -765,8 +822,7 @@ export default function CharactersPage() {
                   <p className="text-muted-foreground">
                     {searchQuery
                       ? `No characters matching "${searchQuery}"`
-                      : `No ${activeFilter === "all" ? "" : activeFilter} characters found`
-                    }
+                      : `No ${activeFilter === "all" ? "" : activeFilter} characters found`}
                   </p>
                   {searchQuery && (
                     <button

@@ -20,6 +20,7 @@ The character sheet creation page is a well-architected, feature-rich implementa
 **Location:** `components/creation/QualitiesCard.tsx:432-750`, and similar modal patterns throughout
 
 **Issue:** Custom modals use raw `<div>` elements with `fixed` positioning but lack:
+
 - Focus trapping (users can tab outside modal)
 - Focus restoration on close
 - Escape key handling
@@ -74,6 +75,7 @@ useEffect(() => {
 **Issue:** The `QualitySelectionModal` receives the entire qualities array and re-renders completely when any parent state changes. The `qualitiesByCategory` memo helps but category grouping runs on every render.
 
 **Recommendation:**
+
 - Memoize the modal component with `React.memo`
 - Consider virtualization for large lists (50+ qualities per category)
 - Extract modal into separate file for code splitting
@@ -83,6 +85,7 @@ useEffect(() => {
 **Location:** Multiple components
 
 **Issues found:**
+
 - `PrioritySelectionCard`: Drag-and-drop only; keyboard users rely on small chevron buttons
 - `AttributesCard`: +/- buttons lack keyboard shortcuts (e.g., arrow keys)
 - `Tooltip` component at `AttributesCard.tsx:110-129` uses hover-only activation; keyboard users can't access tooltip content
@@ -94,6 +97,7 @@ useEffect(() => {
 **Issue:** All 19+ creation cards and their modals are eagerly loaded, including conditional ones (spells, adept powers, complex forms). This inflates initial bundle size.
 
 **Recommendation:**
+
 ```tsx
 // Use dynamic imports for conditional sections
 const SpellsCard = dynamic(() => import("@/components/creation/SpellsCard"), {
@@ -136,11 +140,13 @@ The current UI already implements several good patterns. Here are specific recom
 When a card reaches "valid" status, show a compact summary instead of full controls:
 
 ```tsx
-{status === "valid" && (
-  <div className="flex flex-wrap gap-1 text-xs">
-    <span>BOD 4</span> • <span>AGI 5</span> • <span>REA 3</span>...
-  </div>
-)}
+{
+  status === "valid" && (
+    <div className="flex flex-wrap gap-1 text-xs">
+      <span>BOD 4</span> • <span>AGI 5</span> • <span>REA 3</span>...
+    </div>
+  );
+}
 ```
 
 ### 3.3 Sticky Budget Summary
@@ -150,6 +156,7 @@ When a card reaches "valid" status, show a compact summary instead of full contr
 **Issue:** BudgetSummaryCard scrolls with content; users lose budget visibility while scrolling Column 2/3
 
 **Recommendation:** Make budget summary sticky within Column 1:
+
 ```tsx
 <div className="sticky top-20 space-y-4">
   <BudgetSummaryCard ... />
@@ -161,6 +168,7 @@ When a card reaches "valid" status, show a compact summary instead of full contr
 
 **Current:** Weapons/Armor/Gear show all details inline
 **Recommendation:** Two-tier display:
+
 1. **List view:** Name + cost + key stat (e.g., damage for weapons)
 2. **Expand/modal:** Full stats, modifications, ammunition
 
@@ -186,6 +194,7 @@ Consolidate Gear/Weapons/Armor/Vehicles into a single card with tabs to reduce v
 ### 4.1 Inconsistent Modal Patterns
 
 **Issue:** Some modals use `react-aria-components`, others use raw divs:
+
 - `KarmaConversionModal.tsx` - uses react-aria Dialog
 - `QualitiesCard.tsx` - raw div modal
 - `SkillModal.tsx` - raw div modal
@@ -195,6 +204,7 @@ Consolidate Gear/Weapons/Armor/Vehicles into a single card with tabs to reduce v
 ### 4.2 Duplicated Budget Bar Components
 
 **Locations:**
+
 - `AttributesCard.tsx:135-195` - `CompactBudgetBar`
 - `QualitiesCard.tsx:116-174` - `QualityBudgetBar`
 - `SheetCreationLayout.tsx:121-134` - inline budget bar logic
@@ -262,6 +272,7 @@ const corePointsSpent = useMemo(() => {
 ### 5.2 Well-Structured Context System
 
 The `CreationBudgetContext` cleanly separates:
+
 - Budget calculation (`calculateBudgetTotals`)
 - Spent value extraction (`extractSpentValues`)
 - Validation (`validateBudgets`)
@@ -278,6 +289,7 @@ const { positive: positiveQualities, negative: negativeQualities } = useQualitie
 ### 5.4 Consistent Card Wrapper Pattern
 
 `CreationCard` provides uniform:
+
 - Header with title/description
 - Validation badge integration
 - Status-based border coloring
@@ -302,16 +314,16 @@ Based on SR5 Core Rulebook requirements:
 
 ### Currently Missing
 
-| Element | Status | Notes |
-|---------|--------|-------|
-| **Lifestyle Selection** | Missing | Required for starting nuyen calculation |
-| **Martial Arts Styles** | Missing | Optional but common |
-| **Mentor Spirit Selection** | Partial | Referenced in types, UI not visible |
-| **Initiate Grade / Metamagics** | Missing | Post-creation advancement |
-| **Sprite/Spirit Compilation** | Missing | For technomancers/summoners |
-| **Custom Ammunition** | Present | In `AmmunitionModal` |
-| **Drug/Toxin Selection** | Missing | Usually part of gear |
-| **Bound Foci** | Partial | FociCard exists, binding logic unclear |
+| Element                         | Status  | Notes                                   |
+| ------------------------------- | ------- | --------------------------------------- |
+| **Lifestyle Selection**         | Missing | Required for starting nuyen calculation |
+| **Martial Arts Styles**         | Missing | Optional but common                     |
+| **Mentor Spirit Selection**     | Partial | Referenced in types, UI not visible     |
+| **Initiate Grade / Metamagics** | Missing | Post-creation advancement               |
+| **Sprite/Spirit Compilation**   | Missing | For technomancers/summoners             |
+| **Custom Ammunition**           | Present | In `AmmunitionModal`                    |
+| **Drug/Toxin Selection**        | Missing | Usually part of gear                    |
+| **Bound Foci**                  | Partial | FociCard exists, binding logic unclear  |
 
 ### Implemented Well
 
@@ -359,7 +371,9 @@ Based on SR5 Core Rulebook requirements:
 
 ```tsx
 // In modal search
-{isSearching && <Loader2 className="animate-spin" />}
+{
+  isSearching && <Loader2 className="animate-spin" />;
+}
 ```
 
 ### 7.3 Escape Key Handler for Raw Modals
@@ -391,6 +405,7 @@ useEffect(() => {
 **Current:** 3 columns to 1 column works but ordering may not be ideal
 
 **Quick fix:** Add `order` classes for mobile priority:
+
 ```tsx
 <div className="order-1 lg:order-none">
   <PrioritySelectionCard />
@@ -401,16 +416,16 @@ useEffect(() => {
 
 ## Summary Metrics
 
-| Category | Score | Notes |
-|----------|-------|-------|
-| **Shadowrun Coverage** | 85% | Missing lifestyle, martial arts |
-| **Performance** | 75% | Good memoization, needs code splitting |
-| **Accessibility** | 45% | Critical modal issues, limited ARIA |
-| **Code Architecture** | 90% | Excellent patterns, minor duplication |
-| **Data Flow** | 85% | Clean contexts, minor coupling |
-| **UX/Data Density** | 70% | Good foundations, needs progressive disclosure |
-| **Security** | 90% | Server-side validation, proper auth checks |
-| **Type Safety** | 75% | Excessive assertions, could be stricter |
+| Category               | Score | Notes                                          |
+| ---------------------- | ----- | ---------------------------------------------- |
+| **Shadowrun Coverage** | 85%   | Missing lifestyle, martial arts                |
+| **Performance**        | 75%   | Good memoization, needs code splitting         |
+| **Accessibility**      | 45%   | Critical modal issues, limited ARIA            |
+| **Code Architecture**  | 90%   | Excellent patterns, minor duplication          |
+| **Data Flow**          | 85%   | Clean contexts, minor coupling                 |
+| **UX/Data Density**    | 70%   | Good foundations, needs progressive disclosure |
+| **Security**           | 90%   | Server-side validation, proper auth checks     |
+| **Type Safety**        | 75%   | Excessive assertions, could be stricter        |
 
 ---
 
@@ -429,14 +444,17 @@ useEffect(() => {
 ## Files Reviewed
 
 ### Core Page Components
+
 - `app/characters/create/sheet/page.tsx`
 - `app/characters/create/sheet/components/SheetCreationLayout.tsx`
 
 ### Context Providers
+
 - `lib/contexts/CreationBudgetContext.tsx`
 - `lib/rules/RulesetContext.tsx`
 
 ### Creation Card Components (48+ files)
+
 - `components/creation/shared/CreationCard.tsx`
 - `components/creation/AttributesCard.tsx`
 - `components/creation/QualitiesCard.tsx`
@@ -448,5 +466,6 @@ useEffect(() => {
 - And 40+ additional component files
 
 ### Type Definitions
+
 - `lib/types/creation.ts`
 - `lib/types/character.ts`

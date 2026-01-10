@@ -14,28 +14,17 @@ import type {
   RiggingValidationError,
   RiggingValidationWarning,
 } from "@/lib/types/rigging";
-import {
-  JUMPED_IN_INITIATIVE_BONUS,
-  JUMPED_IN_HOTSIM_INITIATIVE_BONUS,
-} from "@/lib/types/rigging";
+import { JUMPED_IN_INITIATIVE_BONUS, JUMPED_IN_HOTSIM_INITIATIVE_BONUS } from "@/lib/types/rigging";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 /** VCR catalog IDs that match Vehicle Control Rig */
-const VCR_CATALOG_PATTERNS = [
-  "vehicle-control-rig",
-  "vcr",
-  "control-rig",
-];
+const VCR_CATALOG_PATTERNS = ["vehicle-control-rig", "vcr", "control-rig"];
 
 /** VCR name patterns to match */
-const VCR_NAME_PATTERNS = [
-  /vehicle control rig/i,
-  /control rig/i,
-  /vcr/i,
-];
+const VCR_NAME_PATTERNS = [/vehicle control rig/i, /control rig/i, /vcr/i];
 
 /** Essence cost per VCR rating */
 const VCR_ESSENCE_COSTS: Record<number, number> = {
@@ -94,9 +83,7 @@ export function hasVehicleControlRig(character: Character): boolean {
 /**
  * Get VCR details from character's augmentations
  */
-export function getVehicleControlRig(
-  character: Character
-): VehicleControlRig | null {
+export function getVehicleControlRig(character: Character): VehicleControlRig | null {
   if (!character.cyberware || character.cyberware.length === 0) {
     return null;
   }
@@ -194,14 +181,9 @@ export function calculateVCRControlBonus(vcrRating: number): number {
  *
  * VCR adds its rating to the initiative dice bonus
  */
-export function calculateVCRInitiativeBonus(
-  vcrRating: number,
-  vrMode: RiggerVRMode
-): number {
+export function calculateVCRInitiativeBonus(vcrRating: number, vrMode: RiggerVRMode): number {
   const baseBonus =
-    vrMode === "hot-sim"
-      ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS
-      : JUMPED_IN_INITIATIVE_BONUS;
+    vrMode === "hot-sim" ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS : JUMPED_IN_INITIATIVE_BONUS;
 
   // VCR rating adds to initiative dice in some interpretations
   // Using standard SR5 rules: VR mode determines dice, VCR adds to initiative score

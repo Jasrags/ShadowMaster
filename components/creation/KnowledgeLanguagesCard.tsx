@@ -17,14 +17,7 @@ import { useMemo, useCallback, useState } from "react";
 import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
 import { useSkills } from "@/lib/rules";
 import { CreationCard, BudgetIndicator } from "./shared";
-import {
-  Minus,
-  Plus,
-  X,
-  Book,
-  Languages,
-  AlertTriangle,
-} from "lucide-react";
+import { Minus, Plus, X, Book, Languages, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -183,9 +176,7 @@ function KnowledgeSkillRow({
       {/* Skill info */}
       <div className="flex items-center gap-1.5">
         <Book className="h-3.5 w-3.5 text-amber-500" />
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {skill.name}
-        </span>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{skill.name}</span>
         <span
           className="text-[10px] text-zinc-400 dark:text-zinc-500"
           title={CATEGORY_LABELS[skill.category]}
@@ -268,9 +259,7 @@ function AddLanguageModal({
   // Filter out already-added languages
   const availableExamples = useMemo(() => {
     if (!exampleLanguages) return [];
-    return exampleLanguages.filter(
-      (lang) => !existingLanguages.includes(lang.name)
-    );
+    return exampleLanguages.filter((lang) => !existingLanguages.includes(lang.name));
   }, [exampleLanguages, existingLanguages]);
 
   const handleSelectFromDropdown = (langName: string) => {
@@ -305,9 +294,7 @@ function AddLanguageModal({
       <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
-          <h3 className="text-lg font-semibold text-amber-700 dark:text-amber-400">
-            Add Language
-          </h3>
+          <h3 className="text-lg font-semibold text-amber-700 dark:text-amber-400">Add Language</h3>
           <button
             onClick={handleClose}
             className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
@@ -387,15 +374,12 @@ function AddLanguageModal({
                   <span className="font-medium text-zinc-700 dark:text-zinc-300">
                     Native language
                   </span>{" "}
-                  is free and has no rating. Other languages cost 1 point per
-                  rating.
+                  is free and has no rating. Other languages cost 1 point per rating.
                 </p>
               ) : (
                 <p>
                   Languages cost 1 knowledge point per rating level.{" "}
-                  <span className="font-medium">
-                    {pointsRemaining} points remaining.
-                  </span>
+                  <span className="font-medium">{pointsRemaining} points remaining.</span>
                 </p>
               )}
             </div>
@@ -463,14 +447,15 @@ function AddKnowledgeSkillModal({
   if (!isOpen) return null;
 
   // Use ruleset categories if available, otherwise fallback
-  const categoryOptions = knowledgeCategories?.length > 0
-    ? knowledgeCategories
-    : [
-        { id: "academic", name: "Academic" },
-        { id: "interests", name: "Interests" },
-        { id: "professional", name: "Professional" },
-        { id: "street", name: "Street" },
-      ];
+  const categoryOptions =
+    knowledgeCategories?.length > 0
+      ? knowledgeCategories
+      : [
+          { id: "academic", name: "Academic" },
+          { id: "interests", name: "Interests" },
+          { id: "professional", name: "Professional" },
+          { id: "street", name: "Street" },
+        ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -560,9 +545,7 @@ function AddKnowledgeSkillModal({
               <div className="flex gap-2">
                 <select
                   value={category}
-                  onChange={(e) =>
-                    setCategory(e.target.value as KnowledgeCategory)
-                  }
+                  onChange={(e) => setCategory(e.target.value as KnowledgeCategory)}
                   className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                 >
                   {categoryOptions.map((cat) => (
@@ -589,9 +572,7 @@ function AddKnowledgeSkillModal({
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               <p>
                 Knowledge skills cost 1 point per rating level.{" "}
-                <span className="font-medium">
-                  {pointsRemaining} points remaining.
-                </span>
+                <span className="font-medium">{pointsRemaining} points remaining.</span>
               </p>
             </div>
           </div>
@@ -615,10 +596,7 @@ function AddKnowledgeSkillModal({
 // MAIN COMPONENT
 // =============================================================================
 
-export function KnowledgeLanguagesCard({
-  state,
-  updateState,
-}: KnowledgeLanguagesCardProps) {
+export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguagesCardProps) {
   const [showAddLanguage, setShowAddLanguage] = useState(false);
   const [showAddKnowledge, setShowAddKnowledge] = useState(false);
 
@@ -645,9 +623,7 @@ export function KnowledgeLanguagesCard({
   // Calculate points spent (languages + knowledge skills ratings)
   // Native language is free
   const knowledgePointsSpent = useMemo(() => {
-    const langPoints = languages
-      .filter((l) => !l.isNative)
-      .reduce((sum, l) => sum + l.rating, 0);
+    const langPoints = languages.filter((l) => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
     const skillPoints = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0);
     return langPoints + skillPoints;
   }, [languages, knowledgeSkills]);
@@ -715,7 +691,9 @@ export function KnowledgeLanguagesCard({
   const hasBilingualQuality = useMemo(() => {
     // Qualities are stored separately as positiveQualities and negativeQualities
     // Bilingual is a positive quality
-    const positiveQualities = state.selections.positiveQualities as Array<{ id: string }> | undefined;
+    const positiveQualities = state.selections.positiveQualities as
+      | Array<{ id: string }>
+      | undefined;
     if (!positiveQualities) return false;
     return positiveQualities.some((q) => q.id === "bilingual");
   }, [state.selections.positiveQualities]);
@@ -793,10 +771,7 @@ export function KnowledgeLanguagesCard({
   const hasAttributes = intuition > 1 || logic > 1;
 
   return (
-    <CreationCard
-      title="Knowledge & Languages"
-      status={validationStatus}
-    >
+    <CreationCard title="Knowledge & Languages" status={validationStatus}>
       <div className="space-y-4">
         {/* Budget indicator */}
         <BudgetIndicator
@@ -804,7 +779,11 @@ export function KnowledgeLanguagesCard({
           tooltip={`Based on (INT ${intuition} + LOG ${logic}) × 2`}
           spent={knowledgePointsSpent}
           total={knowledgePointsTotal}
-          note={isOverBudget ? `${Math.abs(knowledgePointsTotal - knowledgePointsSpent)} points over budget` : undefined}
+          note={
+            isOverBudget
+              ? `${Math.abs(knowledgePointsTotal - knowledgePointsSpent)} points over budget`
+              : undefined
+          }
           noteStyle="warning"
           compact
         />
@@ -839,9 +818,7 @@ export function KnowledgeLanguagesCard({
                 <LanguageRow
                   key={`${lang.name}-${index}`}
                   language={lang}
-                  onRatingChange={(delta) =>
-                    handleLanguageRatingChange(index, delta)
-                  }
+                  onRatingChange={(delta) => handleLanguageRatingChange(index, delta)}
                   onRemove={() => handleRemoveLanguage(index)}
                 />
               ))}
@@ -864,18 +841,14 @@ export function KnowledgeLanguagesCard({
             </button>
           </div>
           {knowledgeSkills.length === 0 ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              No knowledge skills added.
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">No knowledge skills added.</p>
           ) : (
             <div className="rounded-lg border border-zinc-200 bg-white px-3 py-1 dark:border-zinc-700 dark:bg-zinc-900">
               {knowledgeSkills.map((skill, index) => (
                 <KnowledgeSkillRow
                   key={`${skill.name}-${index}`}
                   skill={skill}
-                  onRatingChange={(delta) =>
-                    handleKnowledgeRatingChange(index, delta)
-                  }
+                  onRatingChange={(delta) => handleKnowledgeRatingChange(index, delta)}
                   onRemove={() => handleRemoveKnowledge(index)}
                 />
               ))}
@@ -887,9 +860,12 @@ export function KnowledgeLanguagesCard({
         {(languages.length > 0 || knowledgeSkills.length > 0) && (
           <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
             <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total: {languages.length > 0 && `${languages.length} language${languages.length !== 1 ? "s" : ""}`}
+              Total:{" "}
+              {languages.length > 0 &&
+                `${languages.length} language${languages.length !== 1 ? "s" : ""}`}
               {languages.length > 0 && knowledgeSkills.length > 0 && ", "}
-              {knowledgeSkills.length > 0 && `${knowledgeSkills.length} skill${knowledgeSkills.length !== 1 ? "s" : ""}`}
+              {knowledgeSkills.length > 0 &&
+                `${knowledgeSkills.length} skill${knowledgeSkills.length !== 1 ? "s" : ""}`}
             </span>
             <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
               {knowledgePointsSpent} pts

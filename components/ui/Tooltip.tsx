@@ -90,12 +90,7 @@ function TooltipContent({
     >
       {showArrow && (
         <OverlayArrow>
-          <svg
-            width={8}
-            height={8}
-            viewBox="0 0 8 8"
-            className="fill-zinc-900 dark:fill-zinc-100"
-          >
+          <svg width={8} height={8} viewBox="0 0 8 8" className="fill-zinc-900 dark:fill-zinc-100">
             <path d="M0 0 L4 4 L8 0" />
           </svg>
         </OverlayArrow>
@@ -145,11 +140,7 @@ export function Tooltip({
   return (
     <TooltipTrigger delay={delay} closeDelay={closeDelay} isDisabled={isDisabled}>
       {children}
-      <TooltipContent
-        placement={placement}
-        showArrow={showArrow}
-        className={className}
-      >
+      <TooltipContent placement={placement} showArrow={showArrow} className={className}>
         {content}
       </TooltipContent>
     </TooltipTrigger>

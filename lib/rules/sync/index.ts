@@ -46,10 +46,7 @@ export {
   updatePlanWithSelection,
   createRemovalOptions,
 } from "./migration-engine";
-export type {
-  ValidationResult,
-  UserSelection,
-} from "./migration-engine";
+export type { ValidationResult, UserSelection } from "./migration-engine";
 
 // Sync Audit Trail
 export {
@@ -64,11 +61,7 @@ export {
   getRecentSyncEvents,
   formatSyncEvent,
 } from "./sync-audit";
-export type {
-  CreateAuditEntryOptions,
-  AuditQueryOptions,
-  SyncAuditSummary,
-} from "./sync-audit";
+export type { CreateAuditEntryOptions, AuditQueryOptions, SyncAuditSummary } from "./sync-audit";
 
 // React Hooks (client-side only)
 // Note: These are re-exported from a separate hooks file

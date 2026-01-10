@@ -1,7 +1,9 @@
 # Feature Request Template
+
 ## (Tailored for Game/Character Management Applications)
 
 ## Overview
+
 **Feature Name:** User Management System
 **Requested By:** Jason Ragsdale
 **Date:** 2025-01-27
@@ -12,8 +14,10 @@
 ---
 
 ## Problem Statement
+
 **What problem does this solve?**
 Administrators need a way to view, manage, and modify user accounts in the system. Without user management capabilities, administrators cannot:
+
 - View all registered users
 - Modify user roles (e.g., promote users to gamemaster or administrator)
 - Update user information (email, username)
@@ -21,8 +25,9 @@ Administrators need a way to view, manage, and modify user accounts in the syste
 - Ensure proper access control across the application
 
 **Who would benefit from this?**
+
 - **Target users:** Administrators, System Administrators
-- **Use cases:** 
+- **Use cases:**
   - Administrators managing user accounts and permissions
   - Promoting trusted users to gamemaster or administrator roles
   - Correcting user information (email typos, username changes)
@@ -30,12 +35,14 @@ Administrators need a way to view, manage, and modify user accounts in the syste
   - Maintaining system security through role management
 
 **Current Workaround:**
+
 - Administrators would need to manually edit JSON files in the file system
 - No visibility into user accounts without direct file access
 - No way to change user roles without technical knowledge
 - Risk of data corruption from manual file edits
 
 **Game Impact:**
+
 - Enables proper role-based access control for game features
 - Allows administrators to delegate gamemaster permissions
 - Ensures users have appropriate access levels for their needs
@@ -44,10 +51,12 @@ Administrators need a way to view, manage, and modify user accounts in the syste
 ---
 
 ## Proposed Solution
+
 **Feature Description:**
 Implement a comprehensive user management interface that allows administrators to view all users, edit user information (email, username, role), and manage user permissions. The system will provide a secure, role-based interface accessible only to administrators, with validation to prevent system-breaking changes (e.g., removing the last administrator).
 
 **User Stories:**
+
 - As an administrator, I want to view all users in the system so that I can see who has accounts
 - As an administrator, I want to change a user's role so that I can grant appropriate permissions
 - As an administrator, I want to update a user's email or username so that I can correct errors
@@ -56,6 +65,7 @@ Implement a comprehensive user management interface that allows administrators t
 - As a non-administrator, I want to be denied access to user management so that I cannot modify other users' accounts
 
 **Key Functionality:**
+
 1. **User List View:** Display all users in a table format with key information
 2. **User Information Display:** Show email, username, role, and creation date
 3. **Role Management:** Edit user roles (user, administrator, gamemaster)
@@ -67,17 +77,21 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Game Mechanics Integration
+
 **Related Game Rules:**
+
 - Not directly related to game rules, but supports role-based access control
 - Enables gamemaster role assignment for campaign management
 - Supports administrator role for system management
 
 **Rules Compliance:**
+
 - User management must respect role-based permissions
 - Changes must be validated to prevent system-breaking modifications
 - All modifications must be logged and traceable
 
 **Edition Considerations:**
+
 - User management is edition-agnostic
 - Roles apply across all editions
 - User accounts can contain characters from multiple editions
@@ -85,15 +99,18 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## User Experience
+
 **User Flow:**
 
 **Viewing Users:**
+
 1. Administrator navigates to User Management page
 2. System verifies administrator role
 3. System loads and displays all users in a table
 4. Administrator can see user email, username, role, and creation date
 
 **Editing User Role:**
+
 1. Administrator clicks "Edit" button for a user
 2. Role field becomes editable (dropdown)
 3. Administrator selects new role
@@ -103,6 +120,7 @@ Implement a comprehensive user management interface that allows administrators t
 7. Table refreshes to show updated information
 
 **Editing User Information:**
+
 1. Administrator clicks "Edit" button for a user
 2. Email and/or username fields become editable
 3. Administrator modifies information
@@ -112,6 +130,7 @@ Implement a comprehensive user management interface that allows administrators t
 7. Table refreshes to show updated information
 
 **UI/UX Considerations:**
+
 - **Key screens:** User Management page with user table (`app/users/page.tsx`)
 - **Component library:** React Aria Components for accessible primitives
   - Table component for user list display
@@ -122,7 +141,7 @@ Implement a comprehensive user management interface that allows administrators t
   - Dark mode support via `prefers-color-scheme` media query
   - CSS custom properties for theming (`--background`, `--foreground`)
   - Geist fonts via CSS variables (`--font-geist-sans`)
-- **Visual feedback:** 
+- **Visual feedback:**
   - Loading state while fetching users
   - Error messages for failed operations
   - Success confirmation on save
@@ -139,11 +158,13 @@ Implement a comprehensive user management interface that allows administrators t
   - ARIA labels automatically provided by React Aria Components
 
 **Character Sheet Integration:**
+
 - User management is separate from character sheets
 - Changes to user roles may affect character access permissions
 - User information changes do not affect character data
 
 **Example/Inspiration:**
+
 - Standard admin panels from content management systems
 - User management interfaces from SaaS applications
 - Role management patterns from authentication systems
@@ -151,7 +172,9 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Technical Considerations
+
 **Technical Approach:**
+
 - Create user management API routes using Next.js 16 App Router (`app/api/users/route.ts`, `app/api/users/[id]/route.ts`)
 - Implement frontend page as Server Component with Client Component for interactive table
 - Use React Aria Components for accessible table, form inputs, and buttons
@@ -161,6 +184,7 @@ Implement a comprehensive user management interface that allows administrators t
 - Use TypeScript throughout for type safety
 
 **Tech Stack Alignment:**
+
 - **Next.js 16.0.7** - App Router for file-based routing and API routes
 - **React 19.2.0** - Server Components by default, Client Components for interactivity
 - **TypeScript 5** - Type-safe implementation
@@ -169,9 +193,11 @@ Implement a comprehensive user management interface that allows administrators t
 - **Geist Fonts** - Consistent typography via CSS variables
 
 **Calculation Engine:**
+
 - N/A (user management feature, not calculation-based)
 
 **Data Requirements:**
+
 - **User data structure:**
   ```json
   {
@@ -199,6 +225,7 @@ Implement a comprehensive user management interface that allows administrators t
   - Cannot remove last administrator
 
 **Performance:**
+
 - Fast user list loading (< 500ms for typical user counts)
 - Server Components for initial data fetching (reduced client-side JavaScript)
 - Efficient user lookup and updates
@@ -207,6 +234,7 @@ Implement a comprehensive user management interface that allows administrators t
 - Next.js optimizations (automatic code splitting, font optimization)
 
 **Integration Points:**
+
 - **API routes (Next.js App Router):**
   - `app/api/users/route.ts` - GET handler to list all users (admin only)
   - `app/api/users/[id]/route.ts` - PUT handler to update user (admin only)
@@ -235,6 +263,7 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Acceptance Criteria
+
 - [ ] Administrator can view all users in a table format
 - [ ] User table displays: email, username, role, creation date
 - [ ] Administrator can edit user role via dropdown
@@ -255,7 +284,9 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Success Metrics
+
 **How will we measure success?**
+
 - **Administrator adoption:** % of administrators using user management features
 - **Time saved:** Reduction in time spent managing users vs. manual file editing
 - **Accuracy:** Zero incorrect role assignments or data corruption
@@ -263,6 +294,7 @@ Implement a comprehensive user management interface that allows administrators t
 - **Security:** Zero unauthorized access incidents
 
 **Target Goals:**
+
 - 100% of administrators can successfully manage users
 - User management operations complete in < 2 seconds
 - Zero data corruption incidents
@@ -271,7 +303,9 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Game Rules Validation
+
 **Test Cases:**
+
 - Administrator can view all users
 - Administrator can change user role from "user" to "gamemaster"
 - Administrator can change user role from "user" to "administrator"
@@ -288,6 +322,7 @@ Implement a comprehensive user management interface that allows administrators t
 - Loading states appear during API operations
 
 **Rules Compliance Verification:**
+
 - Verify admin-only access is enforced at both API and UI levels
 - Verify last administrator protection works correctly
 - Verify all validation rules are enforced
@@ -296,48 +331,59 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Alternatives Considered
+
 **Alternative 1: Command-line user management tool**
+
 - **Description:** Create a CLI tool for managing users via terminal
 - **Why this wasn't chosen:** Less user-friendly, requires technical knowledge, doesn't integrate with web application workflow
 
 **Alternative 2: External user management system**
+
 - **Description:** Use third-party user management service
 - **Why this wasn't chosen:** Adds external dependencies, may have cost implications, doesn't align with self-hosted JSON storage approach
 
 **Alternative 3: Read-only user list with separate edit interface**
+
 - **Description:** Separate view and edit pages instead of inline editing
 - **Why this wasn't chosen:** Inline editing provides better UX with immediate feedback and fewer page navigations
 
 **Alternative 4: Bulk user operations**
+
 - **Description:** Allow editing multiple users at once
 - **Why this wasn't chosen:** Deferred to future release - MVP focuses on individual user management
 
 ---
 
 ## Additional Context
+
 **Architecture Reference:**
+
 - See `docs/architecture/architecture-overview.md` for complete tech stack and architectural patterns
 - Follows Next.js 16 App Router conventions and Server Component patterns
 - Aligns with project design principles (modularity, type safety, performance)
 
 **Related Features:**
+
 - User Authentication System (prerequisite - users must exist to be managed)
 - Role-Based Access Control (enabled by user management)
 - Character Management (may be affected by role changes)
 - Campaign Management (gamemaster role assignment)
 
 **Game System Context:**
+
 - This is an administrative feature that supports the overall user system
 - Required for proper access control and system administration
 - Enables delegation of permissions (gamemaster role)
 - Supports system maintenance and user support
 
 **Community Feedback:**
+
 - Administrators need to manage user accounts
 - Users may need role changes for campaign participation
 - System administrators need visibility into user base
 
 **Timeline Considerations:**
+
 - **Urgency:** High - needed for system administration
 - **Dependencies:** Requires User Authentication System to be implemented first
 - **Ruleset data availability:** N/A - not dependent on game rules data
@@ -345,7 +391,8 @@ Implement a comprehensive user management interface that allows administrators t
 ---
 
 ## Questions
-- [X] Should we support user deletion in initial implementation?
+
+- [x] Should we support user deletion in initial implementation?
   - **Answer:** Yes
 - [x] Should we support bulk user operations (e.g., change multiple roles at once)?
   - **Answer:** Not yet - deferred to future release
@@ -369,4 +416,3 @@ Implement a comprehensive user management interface that allows administrators t
   - **Answer:** Yes
 - [x] Should we support exporting user list to CSV/JSON?
   - **Answer:** Not yet - deferred to future release
-

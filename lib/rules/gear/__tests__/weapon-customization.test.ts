@@ -240,7 +240,11 @@ describe("applyBuiltInModifications", () => {
   it("adds built-in mods with isBuiltIn flag", () => {
     const weapon = createBaseWeapon();
     const builtInMods: WeaponModificationCatalogItem[] = [
-      createBaseMod({ id: "smartgun-internal", name: "Smartgun System (Internal)", mount: "internal" }),
+      createBaseMod({
+        id: "smartgun-internal",
+        name: "Smartgun System (Internal)",
+        mount: "internal",
+      }),
     ];
 
     const result = applyBuiltInModifications(weapon, builtInMods);
@@ -384,8 +388,22 @@ describe("calculateModificationCost", () => {
   it("sums costs of non-built-in mods", () => {
     const weapon = createBaseWeapon({
       modifications: [
-        { catalogId: "mod1", name: "Mod 1", cost: 100, availability: 4, isBuiltIn: false, capacityUsed: 0 },
-        { catalogId: "mod2", name: "Mod 2", cost: 200, availability: 6, isBuiltIn: false, capacityUsed: 0 },
+        {
+          catalogId: "mod1",
+          name: "Mod 1",
+          cost: 100,
+          availability: 4,
+          isBuiltIn: false,
+          capacityUsed: 0,
+        },
+        {
+          catalogId: "mod2",
+          name: "Mod 2",
+          cost: 200,
+          availability: 6,
+          isBuiltIn: false,
+          capacityUsed: 0,
+        },
       ],
     });
 
@@ -397,8 +415,22 @@ describe("calculateModificationCost", () => {
   it("excludes built-in mods from cost calculation", () => {
     const weapon = createBaseWeapon({
       modifications: [
-        { catalogId: "mod1", name: "Mod 1", cost: 100, availability: 4, isBuiltIn: false, capacityUsed: 0 },
-        { catalogId: "mod2", name: "Mod 2", cost: 0, availability: 4, isBuiltIn: true, capacityUsed: 0 },
+        {
+          catalogId: "mod1",
+          name: "Mod 1",
+          cost: 100,
+          availability: 4,
+          isBuiltIn: false,
+          capacityUsed: 0,
+        },
+        {
+          catalogId: "mod2",
+          name: "Mod 2",
+          cost: 0,
+          availability: 4,
+          isBuiltIn: true,
+          capacityUsed: 0,
+        },
       ],
     });
 

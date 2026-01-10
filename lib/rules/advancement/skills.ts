@@ -101,9 +101,7 @@ export function advanceSkill(
     ruleset: advancementRules,
   });
   if (!validation.valid) {
-    throw new Error(
-      `Cannot advance skill: ${validation.errors.map((e) => e.message).join(", ")}`
-    );
+    throw new Error(`Cannot advance skill: ${validation.errors.map((e) => e.message).join(", ")}`);
   }
 
   const cost = validation.cost;
@@ -148,7 +146,9 @@ export function advanceSkill(
   let trainingPeriod: TrainingPeriod | undefined;
   if (trainingTime > 0) {
     const trainingPeriodId = uuidv4();
-    const expectedCompletionDate = new Date(Date.now() + trainingTime * 24 * 60 * 60 * 1000).toISOString();
+    const expectedCompletionDate = new Date(
+      Date.now() + trainingTime * 24 * 60 * 60 * 1000
+    ).toISOString();
 
     trainingPeriod = {
       id: trainingPeriodId,
@@ -186,4 +186,3 @@ export function advanceSkill(
     updatedCharacter,
   };
 }
-

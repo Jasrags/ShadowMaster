@@ -17,10 +17,7 @@ import type {
   RiggingValidationError,
   RiggingValidationWarning,
 } from "@/lib/types/rigging";
-import {
-  JUMPED_IN_INITIATIVE_BONUS,
-  JUMPED_IN_HOTSIM_INITIATIVE_BONUS,
-} from "@/lib/types/rigging";
+import { JUMPED_IN_INITIATIVE_BONUS, JUMPED_IN_HOTSIM_INITIATIVE_BONUS } from "@/lib/types/rigging";
 import { getVehicleControlRig, hasVehicleControlRig } from "./vcr-validator";
 import { getDroneFromNetwork } from "./drone-network";
 
@@ -126,9 +123,7 @@ function createJumpedInState(
   vcr: VehicleControlRig
 ): JumpedInState {
   const initiativeDiceBonus =
-    vrMode === "hot-sim"
-      ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS
-      : JUMPED_IN_INITIATIVE_BONUS;
+    vrMode === "hot-sim" ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS : JUMPED_IN_INITIATIVE_BONUS;
 
   return {
     isActive: true,
@@ -180,13 +175,7 @@ export function jumpIn(
   }
 
   // Create jumped-in state
-  const jumpedInState = createJumpedInState(
-    targetId,
-    targetType,
-    targetName,
-    vrMode,
-    vcr
-  );
+  const jumpedInState = createJumpedInState(targetId, targetType, targetName, vrMode, vcr);
 
   // Update drone network if jumping into a drone
   let updatedNetwork = riggingState.droneNetwork;
@@ -270,9 +259,7 @@ export function calculateJumpedInInitiative(
   vrMode: RiggerVRMode
 ): InitiativeResult {
   const vrModeBonus =
-    vrMode === "hot-sim"
-      ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS
-      : JUMPED_IN_INITIATIVE_BONUS;
+    vrMode === "hot-sim" ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS : JUMPED_IN_INITIATIVE_BONUS;
 
   // Base initiative = Reaction + Intuition + Data Processing (use VCR rating as proxy)
   const baseInitiative = reaction + intuition + vcrRating;
@@ -367,18 +354,13 @@ export function getJumpedInDuration(riggingState: RiggingState): number {
  * Switch VR mode while jumped in
  * Note: This should require an action and may have consequences
  */
-export function switchVRMode(
-  riggingState: RiggingState,
-  newMode: RiggerVRMode
-): RiggingState {
+export function switchVRMode(riggingState: RiggingState, newMode: RiggerVRMode): RiggingState {
   if (!riggingState.jumpedInState?.isActive) {
     return riggingState;
   }
 
   const initiativeDiceBonus =
-    newMode === "hot-sim"
-      ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS
-      : JUMPED_IN_INITIATIVE_BONUS;
+    newMode === "hot-sim" ? JUMPED_IN_HOTSIM_INITIATIVE_BONUS : JUMPED_IN_INITIATIVE_BONUS;
 
   return {
     ...riggingState,

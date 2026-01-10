@@ -51,10 +51,7 @@ import { DEFAULT_MORALE_TIERS } from "../types/grunts";
  * @param willpower - Willpower attribute
  * @returns Condition monitor size (boxes)
  */
-export function calculateConditionMonitorSize(
-  body: number,
-  willpower: number
-): number {
+export function calculateConditionMonitorSize(body: number, willpower: number): number {
   return 8 + Math.ceil(Math.max(body, willpower) / 2);
 }
 
@@ -62,10 +59,7 @@ export function calculateConditionMonitorSize(
  * Calculate condition monitor size from GruntStats
  */
 export function getConditionMonitorSize(stats: GruntStats): number {
-  return calculateConditionMonitorSize(
-    stats.attributes.body,
-    stats.attributes.willpower
-  );
+  return calculateConditionMonitorSize(stats.attributes.body, stats.attributes.willpower);
 }
 
 /**
@@ -125,10 +119,7 @@ export function applyDamage(
  * @param monitorSize - Size of condition monitor
  * @returns Updated damage result
  */
-export function applySimplifiedDamage(
-  grunt: IndividualGrunt,
-  monitorSize: number
-): DamageResult {
+export function applySimplifiedDamage(grunt: IndividualGrunt, monitorSize: number): DamageResult {
   const previousDamage = grunt.currentDamage;
   const newDamage = monitorSize; // Fill entire monitor
 
@@ -199,10 +190,7 @@ export function calculateMoraleThreshold(
  * @param initialSize - Initial team size
  * @returns Casualty percentage (0-100)
  */
-export function calculateCasualtyPercentage(
-  casualties: number,
-  initialSize: number
-): number {
+export function calculateCasualtyPercentage(casualties: number, initialSize: number): number {
   if (initialSize === 0) return 0;
   return Math.round((casualties / initialSize) * 100);
 }
@@ -226,15 +214,9 @@ export function checkMorale(team: GruntTeam): MoraleState {
   }
 
   const hasLieutenant = team.lieutenant !== undefined;
-  const breakThreshold = calculateMoraleThreshold(
-    team.professionalRating,
-    hasLieutenant
-  );
+  const breakThreshold = calculateMoraleThreshold(team.professionalRating, hasLieutenant);
 
-  const casualtyPercent = calculateCasualtyPercentage(
-    team.state.casualties,
-    team.initialSize
-  );
+  const casualtyPercent = calculateCasualtyPercentage(team.state.casualties, team.initialSize);
 
   if (casualtyPercent >= breakThreshold) {
     return team.state.moraleBroken ? "broken" : "broken";
@@ -261,28 +243,16 @@ export function checkMorale(team: GruntTeam): MoraleState {
  * @param previousCasualties - Casualties before this update
  * @returns Whether a morale check should be made
  */
-export function shouldCheckMorale(
-  team: GruntTeam,
-  previousCasualties: number
-): boolean {
+export function shouldCheckMorale(team: GruntTeam, previousCasualties: number): boolean {
   if (team.state.moraleBroken) {
     return false; // Already broken
   }
 
   const hasLieutenant = team.lieutenant !== undefined;
-  const breakThreshold = calculateMoraleThreshold(
-    team.professionalRating,
-    hasLieutenant
-  );
+  const breakThreshold = calculateMoraleThreshold(team.professionalRating, hasLieutenant);
 
-  const previousPercent = calculateCasualtyPercentage(
-    previousCasualties,
-    team.initialSize
-  );
-  const currentPercent = calculateCasualtyPercentage(
-    team.state.casualties,
-    team.initialSize
-  );
+  const previousPercent = calculateCasualtyPercentage(previousCasualties, team.initialSize);
+  const currentPercent = calculateCasualtyPercentage(team.state.casualties, team.initialSize);
 
   // Check if we crossed the threshold
   return previousPercent < breakThreshold && currentPercent >= breakThreshold;
@@ -351,10 +321,7 @@ export function canSpendEdge(team: GruntTeam, amount: number): boolean {
  * @param amount - Amount to spend
  * @returns Remaining Edge (minimum 0)
  */
-export function calculateRemainingEdge(
-  currentEdge: number,
-  amount: number
-): number {
+export function calculateRemainingEdge(currentEdge: number, amount: number): number {
   return Math.max(0, currentEdge - amount);
 }
 
@@ -374,10 +341,7 @@ export function calculateRemainingEdge(
  * @param dieRoll - Result of 1d6 roll (1-6)
  * @returns Initiative score
  */
-export function rollGroupInitiative(
-  stats: GruntStats,
-  dieRoll: number
-): number {
+export function rollGroupInitiative(stats: GruntStats, dieRoll: number): number {
   const baseInitiative = stats.attributes.reaction + stats.attributes.intuition;
   return baseInitiative + dieRoll;
 }
@@ -392,12 +356,8 @@ export function rollGroupInitiative(
  * @param dieRoll - Result of 1d6 roll (1-6)
  * @returns Initiative score
  */
-export function rollLieutenantInitiative(
-  lieutenant: LieutenantStats,
-  dieRoll: number
-): number {
-  const baseInitiative =
-    lieutenant.attributes.reaction + lieutenant.attributes.intuition;
+export function rollLieutenantInitiative(lieutenant: LieutenantStats, dieRoll: number): number {
+  const baseInitiative = lieutenant.attributes.reaction + lieutenant.attributes.intuition;
   return baseInitiative + dieRoll;
 }
 
@@ -419,11 +379,9 @@ export function rollSpecialistInitiative(
 ): number {
   // Get effective attributes (base + modifications)
   const reaction =
-    specialist.statModifications?.attributes?.reaction ??
-    baseStats.attributes.reaction;
+    specialist.statModifications?.attributes?.reaction ?? baseStats.attributes.reaction;
   const intuition =
-    specialist.statModifications?.attributes?.intuition ??
-    baseStats.attributes.intuition;
+    specialist.statModifications?.attributes?.intuition ?? baseStats.attributes.intuition;
 
   const baseInitiative = reaction + intuition;
   const diceTotal = dieRolls.reduce((sum, roll) => sum + roll, 0);
@@ -440,10 +398,7 @@ export function rollSpecialistInitiative(
  * @param damage - Current damage
  * @returns Modified initiative
  */
-export function applyWoundModifierToInitiative(
-  baseInitiative: number,
-  damage: number
-): number {
+export function applyWoundModifierToInitiative(baseInitiative: number, damage: number): number {
   const woundMod = calculateWoundModifier(damage);
   return Math.max(0, baseInitiative + woundMod);
 }
@@ -505,9 +460,7 @@ export function validateLieutenantStats(
 
   // Warnings for missing leadership
   if (lieutenant.canBoostProfessionalRating && !lieutenant.leadershipSkill) {
-    warnings.push(
-      "Lieutenant marked as able to boost PR but has no Leadership skill"
-    );
+    warnings.push("Lieutenant marked as able to boost PR but has no Leadership skill");
   }
 
   return {
@@ -554,9 +507,7 @@ function sumSkills(skills: Record<string, number>): number {
  * @param team - Partial grunt team to validate
  * @returns Validation result
  */
-export function validateGruntTeam(
-  team: Partial<GruntTeam>
-): GruntValidationResult {
+export function validateGruntTeam(team: Partial<GruntTeam>): GruntValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
 

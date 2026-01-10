@@ -1,6 +1,6 @@
 /**
  * localStorage mock for testing
- * 
+ *
  * Provides a mock implementation of localStorage that can be used
  * in tests for draft auto-save functionality.
  */
@@ -39,9 +39,9 @@ export class MockLocalStorage {
  */
 export function setupLocalStorageMock(): MockLocalStorage {
   const mockStorage = new MockLocalStorage();
-  
+
   // Replace global localStorage
-  Object.defineProperty(window, 'localStorage', {
+  Object.defineProperty(window, "localStorage", {
     value: mockStorage,
     writable: true,
   });
@@ -56,4 +56,3 @@ export function cleanupLocalStorageMock(): void {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   delete (window as any).localStorage;
 }
-

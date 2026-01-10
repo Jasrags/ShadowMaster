@@ -19,14 +19,7 @@ import { useMemo, useCallback, useEffect, useState } from "react";
 import { usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
-import {
-  GripVertical,
-  Check,
-  Circle,
-  AlertTriangle,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -36,13 +29,7 @@ const PRIORITY_LEVELS = ["A", "B", "C", "D", "E"] as const;
 type PriorityLevel = (typeof PRIORITY_LEVELS)[number];
 
 // Categories in their default order (A-E)
-const DEFAULT_PRIORITY_ORDER = [
-  "metatype",
-  "attributes",
-  "magic",
-  "skills",
-  "resources",
-] as const;
+const DEFAULT_PRIORITY_ORDER = ["metatype", "attributes", "magic", "skills", "resources"] as const;
 
 const CATEGORY_CONFIG: Record<
   string,
@@ -167,7 +154,10 @@ function CategoryRow({
 
       <div className="flex items-center gap-3 pl-4">
         {/* Drag Handle */}
-        <div className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300" aria-hidden="true">
+        <div
+          className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300"
+          aria-hidden="true"
+        >
           <GripVertical className="h-5 w-5" />
         </div>
 
@@ -178,9 +168,7 @@ function CategoryRow({
               {config.label}
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">
-            {description}
-          </p>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">{description}</p>
         </div>
 
         {/* Status */}
@@ -191,8 +179,8 @@ function CategoryRow({
               status === "complete"
                 ? "text-emerald-600 dark:text-emerald-400"
                 : status === "conflict"
-                ? "text-amber-600 dark:text-amber-400"
-                : "text-zinc-500 dark:text-zinc-400"
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-zinc-500 dark:text-zinc-400"
             }`}
           >
             {statusText[status]}
@@ -233,10 +221,7 @@ function CategoryRow({
 // MAIN COMPONENT
 // =============================================================================
 
-export function PrioritySelectionCard({
-  state,
-  updateState,
-}: PrioritySelectionCardProps) {
+export function PrioritySelectionCard({ state, updateState }: PrioritySelectionCardProps) {
   const priorityTable = usePriorityTable();
   const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
 
@@ -266,8 +251,10 @@ export function PrioritySelectionCard({
     return [...DEFAULT_PRIORITY_ORDER].sort((a, b) => {
       const levelA = priorities[a] || "E";
       const levelB = priorities[b] || "E";
-      return PRIORITY_LEVELS.indexOf(levelA as PriorityLevel) -
-        PRIORITY_LEVELS.indexOf(levelB as PriorityLevel);
+      return (
+        PRIORITY_LEVELS.indexOf(levelA as PriorityLevel) -
+        PRIORITY_LEVELS.indexOf(levelB as PriorityLevel)
+      );
     });
   }, [priorities]);
 
@@ -303,13 +290,10 @@ export function PrioritySelectionCard({
   );
 
   // Check for conflicts (e.g., metatype not available at priority)
-  const hasConflict = useCallback(
-    (_category: string): boolean => {
-      // TODO: Implement conflict detection for metatype/magic priority requirements
-      return false;
-    },
-    []
-  );
+  const hasConflict = useCallback((_category: string): boolean => {
+    // TODO: Implement conflict detection for metatype/magic priority requirements
+    return false;
+  }, []);
 
   // Get description for a category at its current priority
   const getDescription = useCallback(
@@ -327,9 +311,7 @@ export function PrioritySelectionCard({
           if (!metatypeData?.available) return "";
           const count = metatypeData.available.length;
           const metatypes =
-            count <= 3
-              ? metatypeData.available.join(", ")
-              : `${count} metatypes available`;
+            count <= 3 ? metatypeData.available.join(", ") : `${count} metatypes available`;
 
           // Get special attribute points for the selected metatype or show range
           const sapValues = Object.values(metatypeData.specialAttributePoints || {});
@@ -409,13 +391,10 @@ export function PrioritySelectionCard({
   );
 
   // Drag and drop handlers
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, category: string) => {
-      setDraggedCategory(category);
-      e.dataTransfer.effectAllowed = "move";
-    },
-    []
-  );
+  const handleDragStart = useCallback((e: React.DragEvent, category: string) => {
+    setDraggedCategory(category);
+    e.dataTransfer.effectAllowed = "move";
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();

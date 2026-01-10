@@ -52,20 +52,15 @@ export interface CommandResult {
 /**
  * Create a new drone network for RCC
  */
-export function createDroneNetwork(
-  networkId: string,
-  rccConfig: RCCConfiguration
-): DroneNetwork {
+export function createDroneNetwork(networkId: string, rccConfig: RCCConfiguration): DroneNetwork {
   // Convert running autosofts to shared autosofts
-  const sharedAutosofts: SharedAutosoft[] = rccConfig.runningAutosofts.map(
-    (autosoft) => ({
-      autosoftId: autosoft.autosoftId,
-      name: autosoft.name,
-      rating: autosoft.rating,
-      category: autosoft.category,
-      target: autosoft.target,
-    })
-  );
+  const sharedAutosofts: SharedAutosoft[] = rccConfig.runningAutosofts.map((autosoft) => ({
+    autosoftId: autosoft.autosoftId,
+    name: autosoft.name,
+    rating: autosoft.rating,
+    category: autosoft.category,
+    target: autosoft.target,
+  }));
 
   return {
     networkId,
@@ -104,31 +99,27 @@ function createSlavedDrone(
 
   // Resolve installed autosoft IDs to full data
   const installedAutosoftIds = drone.installedAutosofts ?? [];
-  const installedAutosofts: InstalledAutosoft[] = installedAutosoftIds.map(
-    (autosoftId) => {
-      // Find the autosoft in character's owned autosofts
-      const autosoft = autosofts?.find(
-        (a) => a.id === autosoftId || a.catalogId === autosoftId
-      );
-      if (!autosoft) {
-        // Return placeholder if not found
-        return {
-          autosoftId,
-          name: autosoftId,
-          rating: 1,
-          category: "perception" as const,
-          target: undefined,
-        };
-      }
+  const installedAutosofts: InstalledAutosoft[] = installedAutosoftIds.map((autosoftId) => {
+    // Find the autosoft in character's owned autosofts
+    const autosoft = autosofts?.find((a) => a.id === autosoftId || a.catalogId === autosoftId);
+    if (!autosoft) {
+      // Return placeholder if not found
       return {
-        autosoftId: autosoft.catalogId,
-        name: autosoft.name,
-        rating: autosoft.rating,
-        category: autosoft.category,
-        target: autosoft.target,
+        autosoftId,
+        name: autosoftId,
+        rating: 1,
+        category: "perception" as const,
+        target: undefined,
       };
     }
-  );
+    return {
+      autosoftId: autosoft.catalogId,
+      name: autosoft.name,
+      rating: autosoft.rating,
+      category: autosoft.category,
+      target: autosoft.target,
+    };
+  });
 
   return {
     droneId: drone.id ?? drone.catalogId,
@@ -200,10 +191,7 @@ export function slaveDroneToNetwork(
 /**
  * Release a drone from the network
  */
-export function releaseDroneFromNetwork(
-  network: DroneNetwork,
-  droneId: string
-): DroneNetwork {
+export function releaseDroneFromNetwork(network: DroneNetwork, droneId: string): DroneNetwork {
   return {
     ...network,
     slavedDrones: network.slavedDrones.filter((d) => d.droneId !== droneId),
@@ -254,9 +242,7 @@ export function unshareAutosoftFromNetwork(
 ): DroneNetwork {
   return {
     ...network,
-    sharedAutosofts: network.sharedAutosofts.filter(
-      (a) => a.autosoftId !== autosoftId
-    ),
+    sharedAutosofts: network.sharedAutosofts.filter((a) => a.autosoftId !== autosoftId),
   };
 }
 
@@ -399,10 +385,7 @@ export function issueNetworkCommand(
 /**
  * Clear command from a drone
  */
-export function clearDroneCommand(
-  network: DroneNetwork,
-  droneId: string
-): DroneNetwork {
+export function clearDroneCommand(network: DroneNetwork, droneId: string): DroneNetwork {
   return {
     ...network,
     slavedDrones: network.slavedDrones.map((drone) =>
@@ -497,10 +480,7 @@ export function updateAllDronePositions(
 /**
  * Get a drone from the network by ID
  */
-export function getDroneFromNetwork(
-  network: DroneNetwork,
-  droneId: string
-): SlavedDrone | null {
+export function getDroneFromNetwork(network: DroneNetwork, droneId: string): SlavedDrone | null {
   return network.slavedDrones.find((d) => d.droneId === droneId) ?? null;
 }
 

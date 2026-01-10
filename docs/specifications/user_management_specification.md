@@ -15,6 +15,7 @@
 User management provides administrators with the ability to view, edit, and manage user accounts in the Shadow Master system. This feature enables role-based access control by allowing administrators to assign and modify user roles (user, administrator, gamemaster), update user information, and maintain system security through proper account management.
 
 **Key Features:**
+
 - View all registered users in a sortable, searchable table
 - Edit user information (email, username, roles)
 - Delete user accounts (with safety validations)
@@ -29,12 +30,12 @@ User management provides administrators with the ability to view, edit, and mana
 
 ---
 
-
 ## Page Structure
 
 ### Routes
 
 #### User Management Page
+
 - **Path:** `/app/users/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
@@ -50,12 +51,14 @@ User management provides administrators with the ability to view, edit, and mana
 **Location:** `/app/users/page.tsx`
 
 **Responsibilities:**
+
 - Verify administrator access
 - Fetch initial user list from server
 - Render UserTable component
 - Handle server-side errors and redirects
 
 **Implementation:**
+
 - Server component (Next.js App Router)
 - Uses `requireAdmin()` middleware for access control
 - Redirects to home if not admin or not authenticated
@@ -73,6 +76,7 @@ User management provides administrators with the ability to view, edit, and mana
 **Description:** Client component displaying user list with search, sort, pagination, and actions.
 
 **Responsibilities:**
+
 - Display users in table format
 - Handle search input
 - Handle sorting by column
@@ -83,6 +87,7 @@ User management provides administrators with the ability to view, edit, and mana
 - Display loading and error states
 
 **State:**
+
 - `users: PublicUser[]` - Current page of users
 - `search: string` - Search query
 - `page: number` - Current page number
@@ -95,6 +100,7 @@ User management provides administrators with the ability to view, edit, and mana
 - `isModalOpen: boolean` - Edit modal visibility
 
 **Props:**
+
 ```typescript
 interface UserTableProps {
   initialUsers: PublicUser[];
@@ -102,6 +108,7 @@ interface UserTableProps {
 ```
 
 **Features:**
+
 - **Search:** Filter users by email or username (client-side and server-side)
 - **Sorting:** Click column headers to sort (toggle asc/desc)
 - **Pagination:** Previous/Next buttons with page indicator
@@ -119,6 +126,7 @@ interface UserTableProps {
 **Description:** Modal dialog for editing user information.
 
 **Responsibilities:**
+
 - Display user edit form
 - Validate input (email, username, roles)
 - Handle form submission
@@ -126,12 +134,14 @@ interface UserTableProps {
 - Call onSave callback with update data
 
 **State:**
+
 - `email: string` - User email
 - `username: string` - Username
 - `selectedRoles: Set<UserRole>` - Selected roles (multi-select)
 - `errors: Record<string, string>` - Validation errors
 
 **Props:**
+
 ```typescript
 interface UserEditModalProps {
   user: PublicUser;
@@ -143,12 +153,14 @@ interface UserEditModalProps {
 ```
 
 **Form Fields:**
+
 - **Email** (required, email format validation)
 - **Username** (required, 3-50 characters)
 - **Roles** (required, multi-select: user, gamemaster, administrator)
 - **Read-only:** User ID, Created date
 
 **Validation:**
+
 - Email format validation
 - Username length validation (3-50 characters)
 - At least one role required
@@ -227,11 +239,13 @@ export interface UsersListResponse {
 ### Role System
 
 **Roles:**
+
 - **user** - Standard user (default for new registrations)
 - **gamemaster** - Game Master role (for campaign management, future)
 - **administrator** - System administrator (access to user management, full system access)
 
 **Multi-Role Support:**
+
 - Users can have multiple roles simultaneously
 - Roles are stored as an array: `role: UserRole[]`
 - First user created automatically gets "administrator" role
@@ -250,6 +264,7 @@ export interface UsersListResponse {
 **Authorization:** Administrator role required
 
 **Query Parameters:**
+
 - `search?: string` - Search query (filters email and username)
 - `page?: number` - Page number (default: 1)
 - `limit?: number` - Users per page (default: 20)
@@ -259,6 +274,7 @@ export interface UsersListResponse {
   - Options: "asc", "desc"
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -274,11 +290,13 @@ export interface UsersListResponse {
 ```
 
 **Status Codes:**
+
 - `200` - Success
 - `403` - Forbidden (not administrator)
 - `500` - Server error
 
 **Implementation:**
+
 - Verifies administrator role via `requireAdmin()`
 - Fetches all users from storage
 - Filters users (removes passwordHash, converts to PublicUser)
@@ -296,6 +314,7 @@ export interface UsersListResponse {
 **Authorization:** Administrator role required
 
 **Request:**
+
 ```typescript
 {
   email?: string;
@@ -305,6 +324,7 @@ export interface UsersListResponse {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -314,6 +334,7 @@ export interface UsersListResponse {
 ```
 
 **Status Codes:**
+
 - `200` - Success
 - `400` - Bad request (validation errors)
 - `403` - Forbidden (not administrator)
@@ -321,12 +342,14 @@ export interface UsersListResponse {
 - `500` - Server error
 
 **Validation:**
+
 - Email: Valid email format (if provided)
 - Username: 3-50 characters (if provided)
 - Role: Must be array, at least one role, valid role values
 - Safety: Cannot remove administrator role from last administrator
 
 **Implementation:**
+
 - Verifies administrator role
 - Validates user exists
 - Validates email format (if provided)
@@ -347,6 +370,7 @@ export interface UsersListResponse {
 **Request:** None (user ID from route)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -355,6 +379,7 @@ export interface UsersListResponse {
 ```
 
 **Status Codes:**
+
 - `200` - Success
 - `400` - Bad request (cannot delete last admin)
 - `403` - Forbidden (not administrator)
@@ -362,10 +387,12 @@ export interface UsersListResponse {
 - `500` - Server error
 
 **Safety Validation:**
+
 - Prevents deletion of last administrator
 - Returns error if attempting to delete last admin
 
 **Implementation:**
+
 - Verifies administrator role
 - Validates user exists
 - Checks if user is administrator
@@ -381,6 +408,7 @@ export interface UsersListResponse {
 ### Storage Layer
 
 **File Structure:**
+
 ```
 data/users/
 ├── {userId}.json
@@ -395,7 +423,9 @@ data/users/
 export function getUserById(userId: string): Promise<User | null>;
 export function getUserByEmail(email: string): Promise<User | null>;
 export function getAllUsers(): Promise<User[]>;
-export function createUser(userData: Omit<User, "id" | "createdAt" | "lastLogin" | "characters">): Promise<User>;
+export function createUser(
+  userData: Omit<User, "id" | "createdAt" | "lastLogin" | "characters">
+): Promise<User>;
 export function updateUser(userId: string, updates: Partial<User>): Promise<User>;
 export function deleteUser(userId: string): Promise<void>;
 ```
@@ -409,11 +439,13 @@ export function deleteUser(userId: string): Promise<void>;
 **Middleware:** `/lib/auth/middleware.ts`
 
 **Functions:**
+
 - `requireAuth()` - Requires authenticated user (throws if not)
 - `requireAdmin()` - Requires administrator role (throws if not authenticated or not admin)
 - `isAdmin()` - Checks if current user is admin (returns boolean)
 
 **Usage:**
+
 - Server components use `await requireAdmin()` before rendering
 - API routes use `await requireAdmin()` before processing requests
 - Throws error if unauthorized, which triggers redirect (server components) or 403 response (API routes)
@@ -421,11 +453,13 @@ export function deleteUser(userId: string): Promise<void>;
 ### Role Checks
 
 **Current User Role:**
+
 - Retrieved from session cookie (user ID)
 - User record loaded from storage
 - Role array checked for "administrator"
 
 **Role Hierarchy:**
+
 - No strict hierarchy (roles are independent)
 - Administrator role grants access to user management
 - Gamemaster role (future use for campaign management)
@@ -547,46 +581,52 @@ app/api/users/
 ### Search and Filtering
 
 **Current Implementation:**
+
 - Search filters by email or username (case-insensitive)
 - Search is performed server-side via API query parameter
 - Client triggers API call when search input changes (debounced)
 
 **Future Enhancements:**
+
 - Advanced filters (by role, creation date range, etc.)
 - Full-text search across all user fields
 - Client-side filtering for instant feedback (with server-side validation)
 
 ---
 
-
 ## Security Checklist
 
 Use this checklist when reviewing user management security:
 
 ### Access Control
+
 - [x] Page requires administrator authentication
 - [x] API endpoints verify administrator role
 - [x] Server-side authorization checks (not just client-side)
 - [x] Non-administrators cannot access user management
 
 ### Data Protection
+
 - [x] Passwords never exposed (passwordHash excluded)
 - [x] Only necessary user data exposed
 - [x] Sensitive operations require confirmation
 
 ### Safety Validations
+
 - [x] Cannot remove admin role from last administrator
 - [x] Cannot delete last administrator
 - [x] Users must have at least one role
 - [x] Input validation (email, username, roles)
 
 ### Input Validation
+
 - [x] Email format validation (client + server)
 - [x] Username length validation (client + server)
 - [x] Role validation (valid values, array format)
 - [x] Server-side validation mandatory
 
 ### Error Handling
+
 - [x] Generic error messages for security
 - [x] Specific validation errors for user feedback
 - [x] Proper HTTP status codes
@@ -642,6 +682,7 @@ Use this checklist when reviewing user management security:
 **Current Status:** ✅ Basic implementation complete
 
 **Recent Enhancements:**
+
 - Multi-role support (users can have multiple roles)
 - Server-side authorization checks
 - Safety validations (prevent removing last admin)
@@ -697,4 +738,3 @@ Use this checklist when reviewing user management security:
 - Consider data retention policies when implementing user deletion (GDPR compliance, future)
 - Integration with character management: Consider showing character count and linking to user's characters
 - Future: Consider user groups or permission templates for easier role management
-

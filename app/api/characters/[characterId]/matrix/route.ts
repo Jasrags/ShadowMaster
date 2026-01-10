@@ -40,35 +40,23 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Not authorized to view this character" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Not authorized to view this character" }, { status: 403 });
     }
 
     // Get matrix equipment
@@ -109,10 +97,7 @@ export async function GET(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to get matrix equipment:", error);
-    return NextResponse.json(
-      { error: "Failed to get matrix equipment" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to get matrix equipment" }, { status: 500 });
   }
 }
 
@@ -137,27 +122,18 @@ export async function PATCH(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
@@ -184,10 +160,7 @@ export async function PATCH(
       }
 
       // Validate the configuration
-      const validation = validateCyberdeckConfig(
-        body.deckConfig,
-        activeDeck.attributeArray
-      );
+      const validation = validateCyberdeckConfig(body.deckConfig, activeDeck.attributeArray);
 
       if (!validation.valid) {
         return NextResponse.json(
@@ -202,10 +175,7 @@ export async function PATCH(
 
       // Update the deck's current config
       const updatedDecks = (character.cyberdecks ?? []).map((deck) => {
-        if (
-          deck.id === activeDeck.id ||
-          deck.catalogId === activeDeck.catalogId
-        ) {
+        if (deck.id === activeDeck.id || deck.catalogId === activeDeck.catalogId) {
           return {
             ...deck,
             currentConfig: body.deckConfig as CyberdeckAttributeConfig,
@@ -251,10 +221,7 @@ export async function PATCH(
       const newLoadedPrograms = [...activeDeck.loadedPrograms, ...toLoad];
 
       const updatedDecks = (character.cyberdecks ?? []).map((deck) => {
-        if (
-          deck.id === activeDeck.id ||
-          deck.catalogId === activeDeck.catalogId
-        ) {
+        if (deck.id === activeDeck.id || deck.catalogId === activeDeck.catalogId) {
           return {
             ...deck,
             loadedPrograms: newLoadedPrograms,
@@ -271,22 +238,14 @@ export async function PATCH(
     if (body.unloadPrograms && body.unloadPrograms.length > 0) {
       const activeDeck = getActiveCyberdeck(character);
       if (!activeDeck) {
-        return NextResponse.json(
-          { success: false, error: "No active cyberdeck" },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: "No active cyberdeck" }, { status: 400 });
       }
 
       const toUnload = new Set(body.unloadPrograms);
-      const newLoadedPrograms = activeDeck.loadedPrograms.filter(
-        (id) => !toUnload.has(id)
-      );
+      const newLoadedPrograms = activeDeck.loadedPrograms.filter((id) => !toUnload.has(id));
 
       const updatedDecks = (character.cyberdecks ?? []).map((deck) => {
-        if (
-          deck.id === activeDeck.id ||
-          deck.catalogId === activeDeck.catalogId
-        ) {
+        if (deck.id === activeDeck.id || deck.catalogId === activeDeck.catalogId) {
           return {
             ...deck,
             loadedPrograms: newLoadedPrograms,
@@ -301,20 +260,15 @@ export async function PATCH(
 
     // Apply updates if any
     if (Object.keys(updates).length > 0) {
-      await updateCharacterWithAudit(
-        character.ownerId,
-        characterId,
-        updates,
-        {
-          action: "updated",
-          actor: {
-            userId,
-            role: "owner",
-          },
-          details: auditDetails,
-          note: "Matrix equipment configuration updated",
-        }
-      );
+      await updateCharacterWithAudit(character.ownerId, characterId, updates, {
+        action: "updated",
+        actor: {
+          userId,
+          role: "owner",
+        },
+        details: auditDetails,
+        note: "Matrix equipment configuration updated",
+      });
     }
 
     // Return updated cyberdecks

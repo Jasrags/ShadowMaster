@@ -32,11 +32,13 @@ todos:
 # Draft Resume Editing Plan
 
 ## Goals
+
 - Show draft characters in list with resume affordance and metadata.
 - Resume drafts via `/characters/create?resume=[id]`, restoring `creationState` from server.
 - Persist creation state to character metadata on every wizard change.
 
 ## Implementation Steps
+
 - **List UX**
   - Update `[app/characters/page.tsx](app/characters/page.tsx)` list sorting/filter to surface drafts (default sort by `updatedAt` when draft filter on).
   - In `[app/characters/components/CharacterCard.tsx](app/characters/components/CharacterCard.tsx)` add draft badge, progress indicator (step X/Y if available), and click-through to resume route for `status === "draft"`.

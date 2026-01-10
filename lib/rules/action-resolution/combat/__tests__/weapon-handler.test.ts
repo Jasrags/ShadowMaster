@@ -244,7 +244,9 @@ describe("parseDamage", () => {
 
 describe("calculateRecoilCompensation", () => {
   it("includes base compensation of 1", () => {
-    const character = createMockCharacter({ attributes: { strength: 0 } as Character["attributes"] });
+    const character = createMockCharacter({
+      attributes: { strength: 0 } as Character["attributes"],
+    });
     const weapon = createMockWeapon({ recoil: 0 });
     expect(calculateRecoilCompensation(character, weapon)).toBeGreaterThanOrEqual(1);
   });

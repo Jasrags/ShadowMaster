@@ -27,15 +27,7 @@ import type { WirelessEffect } from "./wireless-effects";
 /**
  * Supported Shadowrun edition identifiers
  */
-export type EditionCode =
-  | "sr1"
-  | "sr2"
-  | "sr3"
-  | "sr4"
-  | "sr4a"
-  | "sr5"
-  | "sr6"
-  | "anarchy";
+export type EditionCode = "sr1" | "sr2" | "sr3" | "sr4" | "sr4a" | "sr5" | "sr6" | "anarchy";
 
 /**
  * An Edition represents a top-level ruleset for a specific
@@ -669,7 +661,15 @@ export interface CyberImplantWeaponCatalogItem extends CyberwareCatalogItem {
  * Quality catalog item in ruleset data
  * @see Quality in ./qualities.ts for full type definition
  */
-export type { Quality, QualityCatalog, QualityEffect, QualityPrerequisites, QualityLevel, SourceReference, DynamicStateType };
+export type {
+  Quality,
+  QualityCatalog,
+  QualityEffect,
+  QualityPrerequisites,
+  QualityLevel,
+  SourceReference,
+  DynamicStateType,
+};
 
 // =============================================================================
 // FOCI TYPES (for ruleset data)
@@ -777,11 +777,11 @@ export interface Spirit {
  * Mount points for weapon accessories
  */
 export type WeaponMountType =
-  | "top"       // Top rail mount
-  | "under"     // Underbarrel mount
-  | "side"      // Side mount
-  | "barrel"    // Barrel modifications
-  | "stock"     // Stock modifications
+  | "top" // Top rail mount
+  | "under" // Underbarrel mount
+  | "side" // Side mount
+  | "barrel" // Barrel modifications
+  | "stock" // Stock modifications
   | "internal"; // Internal modifications
 
 /**
@@ -988,4 +988,3 @@ export interface MergedRuleset {
   /** When this snapshot was created */
   createdAt: ISODateString;
 }
-

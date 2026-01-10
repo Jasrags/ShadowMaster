@@ -1,13 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  AlertCircle, 
-  Calendar, 
-  History, 
-  Activity, 
-  Plus 
-} from "lucide-react";
+import { AlertCircle, Calendar, History, Activity, Plus } from "lucide-react";
 import type { QualitySelection, AddictionState } from "@/lib/types";
 
 interface AddictionTrackerProps {
@@ -45,11 +39,11 @@ export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps)
     setIsUpdating(true);
     try {
       const now = new Date().toISOString();
-      await onUpdate({ 
+      await onUpdate({
         lastDose: now,
         cravingActive: false,
         withdrawalActive: false,
-        daysClean: 0
+        daysClean: 0,
       });
     } finally {
       setIsUpdating(false);
@@ -73,7 +67,9 @@ export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps)
           </p>
         </div>
         <div className="text-right">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Days Clean</div>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+            Days Clean
+          </div>
           <div className="text-xl font-mono font-bold text-emerald-500">{state.daysClean}</div>
         </div>
       </div>
@@ -84,29 +80,31 @@ export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps)
           onClick={handleToggleCraving}
           disabled={isUpdating}
           className={`flex flex-col items-center justify-center p-3 rounded border transition-all ${
-            state.cravingActive 
-              ? 'bg-amber-500/10 border-amber-500 text-amber-500' 
-              : 'bg-muted/30 border-border text-muted-foreground hover:bg-muted/50'
+            state.cravingActive
+              ? "bg-amber-500/10 border-amber-500 text-amber-500"
+              : "bg-muted/30 border-border text-muted-foreground hover:bg-muted/50"
           }`}
         >
-          <Activity className={`w-5 h-5 mb-1 ${state.cravingActive ? 'animate-pulse' : ''}`} />
+          <Activity className={`w-5 h-5 mb-1 ${state.cravingActive ? "animate-pulse" : ""}`} />
           <span className="text-[10px] font-bold uppercase">Craving</span>
-          <span className="text-[8px] opacity-70 italic">{state.cravingActive ? 'Active' : 'Inactive'}</span>
+          <span className="text-[8px] opacity-70 italic">
+            {state.cravingActive ? "Active" : "Inactive"}
+          </span>
         </button>
 
         <button
           onClick={handleToggleWithdrawal}
           disabled={isUpdating}
           className={`flex flex-col items-center justify-center p-3 rounded border transition-all ${
-            state.withdrawalActive 
-              ? 'bg-red-500/10 border-red-500 text-red-500' 
-              : 'bg-muted/30 border-border text-muted-foreground hover:bg-muted/50'
+            state.withdrawalActive
+              ? "bg-red-500/10 border-red-500 text-red-500"
+              : "bg-muted/30 border-border text-muted-foreground hover:bg-muted/50"
           }`}
         >
           <AlertCircle className="w-5 h-5 mb-1" />
           <span className="text-[10px] font-bold uppercase">Withdrawal</span>
           <span className="text-[8px] opacity-70 italic">
-            {state.withdrawalActive ? `Active (-${state.withdrawalPenalty})` : 'Inactive'}
+            {state.withdrawalActive ? `Active (-${state.withdrawalPenalty})` : "Inactive"}
           </span>
         </button>
       </div>

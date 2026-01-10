@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Armor** | **Weapons** | **Elemental Damage** | **Modifiers** | **Called Shots** | **Martial Arts** |
@@ -61,11 +61,11 @@ Vehicles can be damaged by Electricity attacks but do not suffer any secondary e
 
 **FIRE ARMOR PENETRATION**
 
-| TYPE OF FIRE | AP |
-| --- | --- |
-| Open Flame | –2 |
-| Fire-based spells | –spell Force |
-| Flame-based weapon | –6 |
+| TYPE OF FIRE       | AP           |
+| ------------------ | ------------ |
+| Open Flame         | –2           |
+| Fire-based spells  | –spell Force |
+| Flame-based weapon | –6           |
 
 Fire damage is **Physical**. It can also make things catch fire. To determine if something catches fire, **roll Armor Value + Fire Resistance – Fire AP (see Fire Armor Piercing Ratings table)**. The threshold on this test is the net hits rolled on the fire-based attack. If the item succeeds, it is not on fire (for now). Armor accessories are excluded from the test but the gamemaster may require them to make their own test.
 
@@ -77,23 +77,23 @@ When something catches fire, the fire has an **initial Damage Value of 3**. This
 
 ## Pollutant Damage
 
-| Vector | Inhalation |
-| --- | --- |
-| Speed | Immediate |
-| Penetration | 0 |
-| Power | (DV of attack) |
-| Effect | Physical damage Anaphylactic Shock (see left) Armor provides no dice to resist a Pollutant attack. Armor upgraded with a Chemical seal (p. 437, SR5) provides immunity to the damage and toxic effects. |
+| Vector      | Inhalation                                                                                                                                                                                              |
+| ----------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Speed       | Immediate                                                                                                                                                                                               |
+| Penetration | 0                                                                                                                                                                                                       |
+| Power       | (DV of attack)                                                                                                                                                                                          |
+| Effect      | Physical damage Anaphylactic Shock (see left) Armor provides no dice to resist a Pollutant attack. Armor upgraded with a Chemical seal (p. 437, SR5) provides immunity to the damage and toxic effects. |
 
 Pollutant attacks deliver a concentrated burst of chemicals and other invasive elements that cause a severe reaction. Effects depend on the strength of the attack and the target’s ability to resist, but can range from mild discomfort to complete and debilitating shutdown of the target’s body. **Treat any Pollutant attack as a toxin** with the following characteristics:
 
 Anaphylactic Shock
-:   If the damage from the attack with this effect is not completely resisted, the victim enters anaphylactic shock, resulting in muscle spasms and autonomic system failure if left untreated. The victim continues to **take 1 box of unresisted Physical damage each Combat Turn until death, or until the victim is treated as per** .
+: If the damage from the attack with this effect is not completely resisted, the victim enters anaphylactic shock, resulting in muscle spasms and autonomic system failure if left untreated. The victim continues to **take 1 box of unresisted Physical damage each Combat Turn until death, or until the victim is treated as per** .
 
 ## Radiation Damage
 
 Radiation powers and spells used by toxic spirits, magicians, and adepts cause highly concentrated bursts of radiation to be inflicted upon the target(s). Immediate effects are burns similar to being exposed to extreme heat. The ongoing effects, however, are much more damaging, causing the body to begin to break down at the cellular level.
 
-Radiation attacks cause **Physical damage**. Armor provides no dice to resist Radiation damage, unless it has an upgrade to provide Radiation resistance, which provides dice equal to its rating for the Damage Resistance Test and the following Toxin Resistance Test. Treat every Radiation attack that hits as a **toxin causing**  with a **DV equal to net hits of the attack** (before the Damage Resistance roll).
+Radiation attacks cause **Physical damage**. Armor provides no dice to resist Radiation damage, unless it has an upgrade to provide Radiation resistance, which provides dice equal to its rating for the Damage Resistance Test and the following Toxin Resistance Test. Treat every Radiation attack that hits as a **toxin causing** with a **DV equal to net hits of the attack** (before the Damage Resistance roll).
 
 ## Water Damage
 
@@ -111,19 +111,19 @@ Falling characters drop 50 meters in the first Combat Turn, 150 meters in the se
 
 **ENVIRONMENT & FATIGUE / FATIGUE DAMAGE ENVIRONMENT**
 
-| SEVERITY | INTERVAL |
-| --- | --- |
-| Mild | 6 hours |
-| Moderate | 3 hours |
-| Harsh | 60 minutes |
-| Extreme | 1 minute (10 Combat Turns) |
-| Deadly | 6 seconds (2 Combat Turns) |
+| SEVERITY | INTERVAL                   |
+| -------- | -------------------------- |
+| Mild     | 6 hours                    |
+| Moderate | 3 hours                    |
+| Harsh    | 60 minutes                 |
+| Extreme  | 1 minute (10 Combat Turns) |
+| Deadly   | 6 seconds (2 Combat Turns) |
 
 Hot, cold, humid, dry, polluted, or irradiated environments can cause fatigue damage, depending on the severity of the surroundings. As with running fatigue, the **DV from a harsh environment starts at 1S and increases over time**. Unlike running fatigue, if you keel over in a hostile environment the damage doesn’t stop rolling in.
 
 ### Fatigue Damage
 
-Fatigue damage is **Stun damage' *you incur through doing something strenuous or for being in the middle of something stressful. It’s caused by harsh environments, hard exertion, and drek like that. Fatigue damage is resisted with*** *Body + Willpower, not with any armor**. Fatigue damage** cannot be healed while the condition causing it still exists*.
+Fatigue damage is **Stun damage' _you incur through doing something strenuous or for being in the middle of something stressful. It’s caused by harsh environments, hard exertion, and drek like that. Fatigue damage is resisted with_** _Body + Willpower, not with any armor**. Fatigue damage** cannot be healed while the condition causing it still exists_.
 
 ### Fatigue From Running
 

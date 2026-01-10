@@ -124,9 +124,7 @@ export function CreationCard({
   const CollapseIcon = isCollapsed ? ChevronRight : ChevronDown;
 
   return (
-    <div
-      className={`rounded-lg border bg-white dark:bg-zinc-900 ${getBorderColor()} ${className}`}
-    >
+    <div className={`rounded-lg border bg-white dark:bg-zinc-900 ${getBorderColor()} ${className}`}>
       {/* Header */}
       <div
         className={`flex items-start justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800 ${
@@ -156,9 +154,7 @@ export function CreationCard({
           )}
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-                {title}
-              </h3>
+              <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h3>
               <ValidationBadge
                 status={status}
                 errorCount={errorCount}
@@ -166,9 +162,7 @@ export function CreationCard({
               />
             </div>
             {description && !isCollapsed && (
-              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-                {description}
-              </p>
+              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
             )}
             {/* Show summary when collapsed */}
             {isCollapsed && collapsedSummary && (
@@ -178,9 +172,7 @@ export function CreationCard({
             )}
           </div>
         </div>
-        {headerAction && (
-          <div onClick={(e) => e.stopPropagation()}>{headerAction}</div>
-        )}
+        {headerAction && <div onClick={(e) => e.stopPropagation()}>{headerAction}</div>}
       </div>
 
       {/* Content - with animation */}

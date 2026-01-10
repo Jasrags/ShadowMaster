@@ -47,17 +47,11 @@ interface GearRowProps {
 // COMPONENT
 // =============================================================================
 
-export function GearRow({
-  gear,
-  onRemove,
-  onAddMod,
-  onRemoveMod,
-}: GearRowProps) {
+export function GearRow({ gear, onRemove, onAddMod, onRemoveMod }: GearRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Calculate total cost including modifications
-  const modCost =
-    gear.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
+  const modCost = gear.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
   const totalCost = gear.cost + modCost;
 
   // Capacity tracking
@@ -114,7 +108,9 @@ export function GearRow({
                 {getCategoryDisplay(gear.category)}
               </span>
               {hasCapacity && (
-                <span>Cap {capacityUsed}/{gear.capacity}</span>
+                <span>
+                  Cap {capacityUsed}/{gear.capacity}
+                </span>
               )}
               {gear.availability !== undefined && gear.availability > 0 && (
                 <span>Avail {gear.availability}</span>
@@ -146,53 +142,41 @@ export function GearRow({
             {/* Stats Grid */}
             <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
               <div className="flex justify-between">
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  Category
-                </span>
+                <span className="text-zinc-500 dark:text-zinc-400">Category</span>
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
                   {getCategoryDisplay(gear.category)}
                 </span>
               </div>
               {gear.rating && (
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">
-                    Rating
-                  </span>
+                  <span className="text-zinc-500 dark:text-zinc-400">Rating</span>
                   <span className="font-medium text-zinc-900 dark:text-zinc-100">
                     {gear.rating}
                   </span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  Availability
-                </span>
+                <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
                   {gear.availability || 0}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  Quantity
-                </span>
+                <span className="text-zinc-500 dark:text-zinc-400">Quantity</span>
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
                   {gear.quantity}
                 </span>
               </div>
               {gear.weight && (
                 <div className="flex justify-between">
-                  <span className="text-zinc-500 dark:text-zinc-400">
-                    Weight
-                  </span>
+                  <span className="text-zinc-500 dark:text-zinc-400">Weight</span>
                   <span className="font-medium text-zinc-900 dark:text-zinc-100">
                     {gear.weight} kg
                   </span>
                 </div>
               )}
               <div className="flex justify-between">
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  Base Cost
-                </span>
+                <span className="text-zinc-500 dark:text-zinc-400">Base Cost</span>
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
                   {formatCurrency(gear.cost)}¥
                 </span>
@@ -257,12 +241,8 @@ export function GearRow({
                           )}
                         </span>
                         <div className="flex items-center gap-2">
-                          <span className="text-[10px] text-zinc-400">
-                            Cap: {mod.capacityUsed}
-                          </span>
-                          <span className="text-xs text-zinc-500">
-                            {formatCurrency(mod.cost)}¥
-                          </span>
+                          <span className="text-[10px] text-zinc-400">Cap: {mod.capacityUsed}</span>
+                          <span className="text-xs text-zinc-500">{formatCurrency(mod.cost)}¥</span>
                           {onRemoveMod && (
                             <button
                               onClick={() => gear.id && onRemoveMod(gear.id, idx)}
@@ -294,9 +274,7 @@ export function GearRow({
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Notes
                 </span>
-                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                  {gear.notes}
-                </p>
+                <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">{gear.notes}</p>
               </div>
             )}
           </div>

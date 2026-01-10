@@ -70,7 +70,7 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     accuracyModifier: 2,
     description: "Provides targeting assistance via DNI or image link.",
   },
-  "silencer": {
+  silencer: {
     id: "silencer",
     name: "Silencer/Suppressor",
     mount: "barrel",
@@ -87,7 +87,7 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     availability: 2,
     description: "Visible laser for improved targeting.",
   },
-  "foregrip": {
+  foregrip: {
     id: "foregrip",
     name: "Foregrip",
     mount: "under",
@@ -104,7 +104,7 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     availability: 4,
     description: "Magnified optic with image enhancement.",
   },
-  "bipod": {
+  bipod: {
     id: "bipod",
     name: "Bipod",
     mount: "under",
@@ -178,7 +178,10 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get weapon modifications:", error);
-    return NextResponse.json({ success: false, error: "Failed to get modifications" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to get modifications" },
+      { status: 500 }
+    );
   }
 }
 
@@ -237,17 +240,23 @@ export async function POST(
     // Get modification from catalog
     const mod = getModFromCatalog(modId);
     if (!mod) {
-      return NextResponse.json({ success: false, error: `Modification "${modId}" not found in catalog` }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: `Modification "${modId}" not found in catalog` },
+        { status: 404 }
+      );
     }
 
     // Validate installation
     const validation = validateModInstallation(weapon, mod, DEFAULT_MOUNT_REGISTRY);
     if (!validation.valid) {
-      return NextResponse.json({
-        success: false,
-        error: "Modification cannot be installed",
-        validationErrors: validation.errors,
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Modification cannot be installed",
+          validationErrors: validation.errors,
+        },
+        { status: 400 }
+      );
     }
 
     // Calculate cost
@@ -255,10 +264,13 @@ export async function POST(
 
     // Check if character has enough nuyen
     if (character.nuyen < modCost) {
-      return NextResponse.json({
-        success: false,
-        error: `Insufficient nuyen. Need ${modCost}¥, have ${character.nuyen}¥`,
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: `Insufficient nuyen. Need ${modCost}¥, have ${character.nuyen}¥`,
+        },
+        { status: 400 }
+      );
     }
 
     // Install the modification
@@ -304,6 +316,9 @@ export async function POST(
     });
   } catch (error) {
     console.error("Failed to install modification:", error);
-    return NextResponse.json({ success: false, error: "Failed to install modification" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to install modification" },
+      { status: 500 }
+    );
   }
 }

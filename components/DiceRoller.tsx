@@ -59,57 +59,97 @@ function DiceFace({ value, isHit, isOne, isAnimating, size = "md" }: DiceFacePro
   const dotPatterns: Record<number, React.JSX.Element> = {
     1: (
       <div className="absolute inset-0 flex items-center justify-center">
-        <div className={`rounded-full ${isOne ? "bg-red-400" : "bg-zinc-400"} ${size === "sm" ? "w-2 h-2" : size === "md" ? "w-2.5 h-2.5" : "w-3 h-3"}`} />
+        <div
+          className={`rounded-full ${isOne ? "bg-red-400" : "bg-zinc-400"} ${size === "sm" ? "w-2 h-2" : size === "md" ? "w-2.5 h-2.5" : "w-3 h-3"}`}
+        />
       </div>
     ),
     2: (
       <div className="absolute inset-2 flex flex-col justify-between">
         <div className="flex justify-end">
-          <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+          <div
+            className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+          />
         </div>
         <div className="flex justify-start">
-          <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+          <div
+            className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+          />
         </div>
       </div>
     ),
     3: (
       <div className="absolute inset-2 flex flex-col justify-between">
         <div className="flex justify-end">
-          <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+          <div
+            className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+          />
         </div>
         <div className="flex justify-center">
-          <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+          <div
+            className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+          />
         </div>
         <div className="flex justify-start">
-          <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+          <div
+            className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+          />
         </div>
       </div>
     ),
     4: (
       <div className="absolute inset-2 grid grid-cols-2 gap-1">
         <div className={`rounded-full bg-zinc-400 ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full bg-zinc-400 justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full bg-zinc-400 self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full bg-zinc-400 justify-self-end self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+        <div
+          className={`rounded-full bg-zinc-400 justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full bg-zinc-400 self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full bg-zinc-400 justify-self-end self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
       </div>
     ),
     5: (
       <div className="absolute inset-2 grid grid-cols-2 gap-1">
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} col-span-2 justify-self-center self-center ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} col-span-2 justify-self-center self-center ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
       </div>
     ),
     6: (
       <div className="absolute inset-2 grid grid-cols-2 gap-1">
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
-        <div className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`} />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
+        <div
+          className={`rounded-full ${isHit ? "bg-emerald-400" : "bg-zinc-400"} justify-self-end ${size === "sm" ? "w-1.5 h-1.5" : "w-2 h-2"}`}
+        />
       </div>
     ),
   };
@@ -236,7 +276,7 @@ export function DiceRoller({
   // Update base pool when initialPool prop changes (Context Awareness)
   React.useEffect(() => {
     setBasePoolSize(initialPool);
-    // Optional: reset modifier when context changes? 
+    // Optional: reset modifier when context changes?
     // Usually a good idea so a previous situational mod doesn't apply to a new skill roll automatically.
     setModifier(0);
   }, [initialPool]);
@@ -271,7 +311,9 @@ export function DiceRoller({
         // Convert API result to RollResult format
         const apiResult = data.result;
         // API returns DiceResult[] - convert to our local format and sort
-        const dice: DiceResult[] = (apiResult.dice as Array<{ value: number; isHit?: boolean; isOne?: boolean } | number>).map((d) => {
+        const dice: DiceResult[] = (
+          apiResult.dice as Array<{ value: number; isHit?: boolean; isOne?: boolean } | number>
+        ).map((d) => {
           // Handle both object format (from API) and number format
           if (typeof d === "number") {
             return { value: d, isHit: d >= 5, isOne: d === 1 };
@@ -382,7 +424,11 @@ export function DiceRoller({
             <input
               type="number"
               value={basePoolSize}
-              onChange={(e) => setBasePoolSize(Math.max(minPool, Math.min(maxPool, parseInt(e.target.value) || minPool)))}
+              onChange={(e) =>
+                setBasePoolSize(
+                  Math.max(minPool, Math.min(maxPool, parseInt(e.target.value) || minPool))
+                )
+              }
               min={minPool}
               max={maxPool}
               className="w-20 h-10 text-center font-mono text-xl font-bold bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none placeholder-zinc-700"
@@ -404,10 +450,11 @@ export function DiceRoller({
                 <button
                   key={preset}
                   onClick={() => setBasePoolSize(preset)}
-                  className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${basePoolSize === preset
-                    ? "bg-emerald-600 text-white"
-                    : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
-                    }`}
+                  className={`px-2.5 py-1 text-xs font-mono rounded transition-colors ${
+                    basePoolSize === preset
+                      ? "bg-emerald-600 text-white"
+                      : "bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300"
+                  }`}
                 >
                   {preset}
                 </button>
@@ -423,16 +470,18 @@ export function DiceRoller({
           </label>
           <div className="flex items-center gap-2">
             <Button
-              onPress={() => setModifier(prev => prev - 1)}
+              onPress={() => setModifier((prev) => prev - 1)}
               className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 transition-colors font-bold text-xl"
             >
               −
             </Button>
-            <div className={`w-20 h-10 flex items-center justify-center font-mono text-xl font-bold rounded-lg border ${modifier > 0 ? "text-emerald-400 border-emerald-500/50 bg-emerald-500/10" : modifier < 0 ? "text-red-400 border-red-500/50 bg-red-500/10" : "text-zinc-400 border-zinc-700 bg-zinc-900"}`}>
+            <div
+              className={`w-20 h-10 flex items-center justify-center font-mono text-xl font-bold rounded-lg border ${modifier > 0 ? "text-emerald-400 border-emerald-500/50 bg-emerald-500/10" : modifier < 0 ? "text-red-400 border-red-500/50 bg-red-500/10" : "text-zinc-400 border-zinc-700 bg-zinc-900"}`}
+            >
               {modifier > 0 ? `+${modifier}` : modifier}
             </div>
             <Button
-              onPress={() => setModifier(prev => prev + 1)}
+              onPress={() => setModifier((prev) => prev + 1)}
               className="w-10 h-10 rounded-lg bg-zinc-800 border border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 transition-colors font-bold text-xl"
             >
               +
@@ -443,7 +492,7 @@ export function DiceRoller({
             {[-2, -1, 1, 2].map((val) => (
               <button
                 key={val}
-                onClick={() => setModifier(prev => prev + val)}
+                onClick={() => setModifier((prev) => prev + val)}
                 className="px-2.5 py-1 text-xs font-mono rounded bg-zinc-800 text-zinc-400 hover:bg-zinc-700 hover:text-zinc-300 transition-colors"
               >
                 {val > 0 ? `+${val}` : val}
@@ -463,17 +512,30 @@ export function DiceRoller({
       <Button
         onPress={rollDice}
         isDisabled={isRolling}
-        className={`w-full font-bold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900 ${compact ? "py-2 text-sm" : "py-3 text-lg"
-          } ${isRolling
+        className={`w-full font-bold rounded-lg transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-zinc-900 ${
+          compact ? "py-2 text-sm" : "py-3 text-lg"
+        } ${
+          isRolling
             ? "bg-zinc-700 text-zinc-400 cursor-wait"
             : "bg-gradient-to-r from-emerald-600 to-emerald-500 text-white hover:from-emerald-500 hover:to-emerald-400 shadow-lg shadow-emerald-500/20 hover:shadow-emerald-500/30"
-          }`}
+        }`}
       >
         {isRolling ? (
           <span className="flex items-center justify-center gap-2">
             <svg className="w-5 h-5 animate-spin" viewBox="0 0 24 24" fill="none">
-              <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-              <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+              <circle
+                className="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke="currentColor"
+                strokeWidth="4"
+              />
+              <path
+                className="opacity-75"
+                fill="currentColor"
+                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"
+              />
             </svg>
             Rolling...
           </span>
@@ -485,7 +547,9 @@ export function DiceRoller({
             Roll {totalPoolSize}d6
             {modifier !== 0 && (
               <span className="text-xs font-mono opacity-80">
-                ({basePoolSize}{modifier > 0 ? "+" : ""}{modifier})
+                ({basePoolSize}
+                {modifier > 0 ? "+" : ""}
+                {modifier})
               </span>
             )}
           </span>
@@ -501,25 +565,34 @@ export function DiceRoller({
 
       {/* Current Result */}
       {currentResult && (
-        <div className={`rounded-lg border overflow-hidden ${currentResult.isCriticalGlitch
-          ? "border-red-500/50 bg-red-950/30"
-          : currentResult.isGlitch
-            ? "border-amber-500/50 bg-amber-950/30"
-            : currentResult.hits > 0
-              ? "border-emerald-500/50 bg-emerald-950/30"
-              : "border-zinc-700 bg-zinc-800/50"
-          }`}>
+        <div
+          className={`rounded-lg border overflow-hidden ${
+            currentResult.isCriticalGlitch
+              ? "border-red-500/50 bg-red-950/30"
+              : currentResult.isGlitch
+                ? "border-amber-500/50 bg-amber-950/30"
+                : currentResult.hits > 0
+                  ? "border-emerald-500/50 bg-emerald-950/30"
+                  : "border-zinc-700 bg-zinc-800/50"
+          }`}
+        >
           {/* Result Header */}
-          <div className={`px-4 py-2 border-b ${currentResult.isCriticalGlitch
-            ? "border-red-500/30 bg-red-900/20"
-            : currentResult.isGlitch
-              ? "border-amber-500/30 bg-amber-900/20"
-              : "border-zinc-700 bg-zinc-800/30"
-            }`}>
+          <div
+            className={`px-4 py-2 border-b ${
+              currentResult.isCriticalGlitch
+                ? "border-red-500/30 bg-red-900/20"
+                : currentResult.isGlitch
+                  ? "border-amber-500/30 bg-amber-900/20"
+                  : "border-zinc-700 bg-zinc-800/30"
+            }`}
+          >
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
-                <span className={`text-3xl font-bold font-mono ${currentResult.hits > 0 ? "text-emerald-400" : "text-zinc-400"
-                  }`}>
+                <span
+                  className={`text-3xl font-bold font-mono ${
+                    currentResult.hits > 0 ? "text-emerald-400" : "text-zinc-400"
+                  }`}
+                >
                   {currentResult.hits}
                 </span>
                 <span className="text-sm text-zinc-400">
@@ -560,15 +633,21 @@ export function DiceRoller({
             <div className="flex justify-center gap-6 mt-4 pt-3 border-t border-zinc-700/50">
               <div className="text-center">
                 <span className="block text-xs text-zinc-500 uppercase">Hits</span>
-                <span className="text-lg font-mono font-bold text-emerald-400">{currentResult.hits}</span>
+                <span className="text-lg font-mono font-bold text-emerald-400">
+                  {currentResult.hits}
+                </span>
               </div>
               <div className="text-center">
                 <span className="block text-xs text-zinc-500 uppercase">Ones</span>
-                <span className="text-lg font-mono font-bold text-red-400">{currentResult.ones}</span>
+                <span className="text-lg font-mono font-bold text-red-400">
+                  {currentResult.ones}
+                </span>
               </div>
               <div className="text-center">
                 <span className="block text-xs text-zinc-500 uppercase">Pool</span>
-                <span className="text-lg font-mono font-bold text-zinc-400">{currentResult.poolSize}</span>
+                <span className="text-lg font-mono font-bold text-zinc-400">
+                  {currentResult.poolSize}
+                </span>
               </div>
             </div>
           </div>
@@ -607,7 +686,7 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
   const [isRerolling, setIsRerolling] = useState(false);
 
   // Count non-hits that can be rerolled
-  const rerollableCount = result.dice.filter(d => !d.isHit).length;
+  const rerollableCount = result.dice.filter((d) => !d.isHit).length;
 
   const handleReroll = () => {
     if (edgeAvailable <= 0 || rerollableCount === 0) return;
@@ -615,7 +694,7 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
     setIsRerolling(true);
 
     setTimeout(() => {
-      const newDice: DiceResult[] = result.dice.map(d => {
+      const newDice: DiceResult[] = result.dice.map((d) => {
         if (d.isHit) return d; // Keep hits
 
         // Reroll non-hits
@@ -627,8 +706,8 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
         };
       });
 
-      const hits = newDice.filter(d => d.isHit).length;
-      const ones = newDice.filter(d => d.isOne).length;
+      const hits = newDice.filter((d) => d.isHit).length;
+      const ones = newDice.filter((d) => d.isOne).length;
       const isGlitch = ones > result.poolSize / 2;
       const isCriticalGlitch = isGlitch && hits === 0;
 
@@ -673,5 +752,3 @@ export function EdgeRerollButton({ result, edgeAvailable, onReroll }: EdgeReroll
     </Button>
   );
 }
-
-

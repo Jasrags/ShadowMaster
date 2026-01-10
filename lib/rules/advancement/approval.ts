@@ -29,9 +29,7 @@ export function approveAdvancement(
   advancementRecordId: string,
   gmId: string
 ): ApproveAdvancementResult {
-  const advancementRecord = character.advancementHistory?.find(
-    (a) => a.id === advancementRecordId
-  );
+  const advancementRecord = character.advancementHistory?.find((a) => a.id === advancementRecordId);
 
   if (!advancementRecord) {
     throw new Error(`Advancement record ${advancementRecordId} not found`);
@@ -43,7 +41,9 @@ export function approveAdvancement(
 
   // Self-approval restriction (Requirement 25)
   if (character.ownerId === gmId) {
-    throw new Error("Self-approval restriction: GMs cannot approve their own character advancements.");
+    throw new Error(
+      "Self-approval restriction: GMs cannot approve their own character advancements."
+    );
   }
 
   const now = new Date().toISOString();
@@ -92,9 +92,7 @@ export function rejectAdvancement(
     throw new Error("Rejection reason is mandatory.");
   }
 
-  const advancementRecord = character.advancementHistory?.find(
-    (a) => a.id === advancementRecordId
-  );
+  const advancementRecord = character.advancementHistory?.find((a) => a.id === advancementRecordId);
 
   if (!advancementRecord) {
     throw new Error(`Advancement record ${advancementRecordId} not found`);
@@ -102,7 +100,9 @@ export function rejectAdvancement(
 
   // Self-approval restriction also applies to rejection for consistency
   if (character.ownerId === gmId) {
-    throw new Error("Self-governance restriction: GMs cannot reject their own character advancements.");
+    throw new Error(
+      "Self-governance restriction: GMs cannot reject their own character advancements."
+    );
   }
 
   const now = new Date().toISOString();
@@ -167,12 +167,11 @@ export function requiresGMApproval(
   if (!character.campaignId) {
     return false;
   }
-  
+
   // If settings are not provided, default to true for safety in campaigns
   if (!settings) {
     return true;
   }
-  
+
   return settings.requireApproval;
 }
-

@@ -46,11 +46,13 @@ Equipment ratings in Shadowrun 5E are currently handled **inconsistently across 
 **Used by:** Audio devices, optical devices, sensors, vision enhancements, fake SINs/licenses
 
 **Pros:**
+
 - Single catalog item represents all rating levels
 - Cost/availability calculated dynamically
 - Efficient storage
 
 **Cons:**
+
 - Requires calculation logic
 - Current implementation missing some scaling fields (e.g., `availabilityPerRating`)
 
@@ -68,10 +70,12 @@ Equipment ratings in Shadowrun 5E are currently handled **inconsistently across 
 **Used by:** Some security tools, medkits, lockpicking tools
 
 **Pros:**
+
 - Simple - no calculation needed
 - Clear what the item's rating is
 
 **Cons:**
+
 - If rating should be selectable, this pattern doesn't support it
 - Ambiguous whether rating is fixed or just a default
 
@@ -95,10 +99,12 @@ Equipment ratings in Shadowrun 5E are currently handled **inconsistently across 
 **Used by:** Cybereyes, cyberears, dermal plating, some cyberware
 
 **Pros:**
+
 - Each rating level can have unique properties (non-linear scaling)
 - No calculation needed at runtime
 
 **Cons:**
+
 - Data duplication
 - Harder to maintain
 - Updates require changing multiple entries
@@ -106,23 +112,25 @@ Equipment ratings in Shadowrun 5E are currently handled **inconsistently across 
 ### Current Type Definitions (Issues Found)
 
 From `/lib/types/character.ts`:
+
 ```typescript
 // Too loose - just optional number with no constraints
 interface GearItem {
-  rating?: number;  // No min/max enforcement
+  rating?: number; // No min/max enforcement
 }
 
 // Mixed terminology across equipment types
 interface CharacterRCC {
-  deviceRating: number;  // Uses "deviceRating"
+  deviceRating: number; // Uses "deviceRating"
 }
 
 interface FocusItem {
-  force: number;  // Uses "force" for same concept as rating
+  force: number; // Uses "force" for same concept as rating
 }
 ```
 
 From `/lib/types/edition.ts`:
+
 ```typescript
 interface CyberwareCatalogItem {
   hasRating?: boolean;
@@ -140,14 +148,15 @@ interface CyberwareCatalogItem {
 
 The SR5 rules make an important semantic distinction:
 
-| Term | Meaning | Affects | Examples |
-|------|---------|---------|----------|
-| **Rating** | Quality/power level | Dice pools, effect strength, detection difficulty | Fake SINs (1-6), Vision Enhancement (1-3), Agent programs |
-| **Capacity** | Enhancement slot count | How many mods can be installed | Goggles (1-6 slots), Cybereyes (4-16 slots), Headphones |
-| **Device Rating** | Matrix capability | Matrix actions, defense | Commlinks (1-6), Cyberdecks, RCCs |
-| **Force** | Magical potency | Spell/focus power, bonding karma | Foci (1-6+), Spirits, Barriers |
+| Term              | Meaning                | Affects                                           | Examples                                                  |
+| ----------------- | ---------------------- | ------------------------------------------------- | --------------------------------------------------------- |
+| **Rating**        | Quality/power level    | Dice pools, effect strength, detection difficulty | Fake SINs (1-6), Vision Enhancement (1-3), Agent programs |
+| **Capacity**      | Enhancement slot count | How many mods can be installed                    | Goggles (1-6 slots), Cybereyes (4-16 slots), Headphones   |
+| **Device Rating** | Matrix capability      | Matrix actions, defense                           | Commlinks (1-6), Cyberdecks, RCCs                         |
+| **Force**         | Magical potency        | Spell/focus power, bonding karma                  | Foci (1-6+), Spirits, Barriers                            |
 
 Some items have **both**:
+
 - **Cybereyes Rating 2** has capacity 8 (rating determines capacity)
 - **Vision Enhancement Rating 3** uses 3 capacity slots (enhancement with rating)
 
@@ -156,7 +165,7 @@ Some items have **both**:
 Keep these as semantically distinct but use a unified underlying system:
 
 ```typescript
-type RatingType = 'rating' | 'capacity' | 'deviceRating' | 'force';
+type RatingType = "rating" | "capacity" | "deviceRating" | "force";
 ```
 
 ---
@@ -208,10 +217,10 @@ Create new file: `/lib/types/ratings.ts`
  * Semantic type of rating for display and rule purposes
  */
 export type RatingSemanticType =
-  | 'rating'        // Standard equipment rating
-  | 'capacity'      // Enhancement slot capacity
-  | 'deviceRating'  // Matrix device rating
-  | 'force';        // Magical force rating
+  | "rating" // Standard equipment rating
+  | "capacity" // Enhancement slot capacity
+  | "deviceRating" // Matrix device rating
+  | "force"; // Magical force rating
 
 /**
  * Base configuration for any rated item in the catalog
@@ -240,11 +249,11 @@ export interface RatingConfig {
  * Scaling type for how values change with rating
  */
 export type ScalingType =
-  | 'linear'    // value = base × rating
-  | 'squared'   // value = base × rating²
-  | 'flat'      // value = base (no scaling)
-  | 'table'     // value = lookup[rating] (for non-linear)
-  | 'formula';  // value = custom formula
+  | "linear" // value = base × rating
+  | "squared" // value = base × rating²
+  | "flat" // value = base (no scaling)
+  | "table" // value = lookup[rating] (for non-linear)
+  | "formula"; // value = custom formula
 
 /**
  * Configuration for how a value scales with rating
@@ -433,7 +442,7 @@ import type {
   RatingValidationContext,
   RatingDisplayOptions,
   RatingSemanticType,
-} from '../types/ratings';
+} from "../types/ratings";
 
 // =============================================================================
 // CORE CALCULATION FUNCTIONS
@@ -442,10 +451,7 @@ import type {
 /**
  * Calculate a scaled value based on rating
  */
-export function calculateRatedValue(
-  scaling: RatingScalingConfig,
-  rating: number
-): number {
+export function calculateRatedValue(scaling: RatingScalingConfig, rating: number): number {
   // If not scaling with rating, return base value
   if (!scaling.perRating) {
     return scaling.baseValue;
@@ -454,15 +460,15 @@ export function calculateRatedValue(
   let value: number;
 
   switch (scaling.scalingType) {
-    case 'squared':
+    case "squared":
       value = scaling.baseValue * rating * rating;
       break;
 
-    case 'flat':
+    case "flat":
       value = scaling.baseValue;
       break;
 
-    case 'table':
+    case "table":
       if (scaling.valueLookup && scaling.valueLookup[rating] !== undefined) {
         value = scaling.valueLookup[rating];
       } else {
@@ -471,13 +477,13 @@ export function calculateRatedValue(
       }
       break;
 
-    case 'formula':
+    case "formula":
       // Future: implement formula parser
       // For now, fall through to linear
       value = scaling.baseValue * rating;
       break;
 
-    case 'linear':
+    case "linear":
     default:
       value = scaling.baseValue * rating;
       break;
@@ -564,7 +570,7 @@ export function validateRating(
   if (!ratingConfig.hasRating) {
     return {
       valid: false,
-      error: 'Item does not support ratings',
+      error: "Item does not support ratings",
     };
   }
 
@@ -593,7 +599,7 @@ export function validateRating(
   if (ratingConfig.integerOnly !== false && !Number.isInteger(rating)) {
     return {
       valid: false,
-      error: 'Rating must be a whole number',
+      error: "Rating must be a whole number",
       suggestedValue: Math.round(rating),
     };
   }
@@ -647,15 +653,15 @@ export function validateRatingAvailability(
  */
 export function getRatingLabel(semanticType?: RatingSemanticType): string {
   switch (semanticType) {
-    case 'force':
-      return 'Force';
-    case 'deviceRating':
-      return 'Device Rating';
-    case 'capacity':
-      return 'Capacity';
-    case 'rating':
+    case "force":
+      return "Force";
+    case "deviceRating":
+      return "Device Rating";
+    case "capacity":
+      return "Capacity";
+    case "rating":
     default:
-      return 'Rating';
+      return "Rating";
   }
 }
 
@@ -669,7 +675,7 @@ export function formatRating(
 ): string {
   const label = options?.customLabel ?? getRatingLabel(config?.semanticType);
 
-  let result = '';
+  let result = "";
 
   if (options?.showLabel !== false) {
     result = `${label} ${rating}`;
@@ -810,7 +816,7 @@ export function getRatingOptions(
 
   const range = getRatingRange(spec.rating);
 
-  return range.map(rating => {
+  return range.map((rating) => {
     const values = calculateRatedItemValues(spec, rating);
     const validation = validateRatingAvailability(spec, rating, context ?? {});
 
@@ -833,6 +839,7 @@ export function getRatingOptions(
 Convert existing data to this unified format:
 
 **Before (current inconsistent format):**
+
 ```json
 {
   "id": "fake-sin",
@@ -848,6 +855,7 @@ Convert existing data to this unified format:
 ```
 
 **After (standardized nested format):**
+
 ```json
 {
   "id": "fake-sin",
@@ -972,20 +980,18 @@ import {
   validateRating,
   validateRatingAvailability,
   calculateRatedItemValues,
-  convertLegacyRatingSpec
-} from './ratings';
+  convertLegacyRatingSpec,
+} from "./ratings";
 
 /**
  * Validate equipment ratings on character gear
  */
-export function validateEquipmentRatings(
-  context: ValidationContext
-): ValidationError[] {
+export function validateEquipmentRatings(context: ValidationContext): ValidationError[] {
   const errors: ValidationError[] = [];
   const { character, ruleset, creationState } = context;
 
   // Determine if we're in creation (stricter availability rules)
-  const isCreation = character.status === 'draft';
+  const isCreation = character.status === "draft";
   const maxAvailability = isCreation ? 12 : undefined;
 
   const validationContext: RatingValidationContext = {
@@ -1007,22 +1013,26 @@ export function validateEquipmentRatings(
           const ratingValidation = validateRating(item.rating, spec.rating, validationContext);
           if (!ratingValidation.valid) {
             errors.push({
-              constraintId: 'equipment-rating-range',
+              constraintId: "equipment-rating-range",
               field: `gear.${item.id || item.name}`,
               message: `${item.name}: ${ratingValidation.error}`,
-              severity: 'error',
+              severity: "error",
             });
           }
 
           // Validate availability at creation
           if (isCreation) {
-            const availValidation = validateRatingAvailability(spec, item.rating, validationContext);
+            const availValidation = validateRatingAvailability(
+              spec,
+              item.rating,
+              validationContext
+            );
             if (!availValidation.valid) {
               errors.push({
-                constraintId: 'equipment-rating-availability',
+                constraintId: "equipment-rating-availability",
                 field: `gear.${item.id || item.name}`,
                 message: `${item.name}: ${availValidation.error}`,
-                severity: 'error',
+                severity: "error",
               });
             }
           }
@@ -1043,10 +1053,10 @@ export function validateEquipmentRatings(
           const ratingValidation = validateRating(item.rating, spec.rating, validationContext);
           if (!ratingValidation.valid) {
             errors.push({
-              constraintId: 'cyberware-rating-range',
+              constraintId: "cyberware-rating-range",
               field: `cyberware.${item.id || item.name}`,
               message: `${item.name}: ${ratingValidation.error}`,
-              severity: 'error',
+              severity: "error",
             });
           }
         }
@@ -1059,19 +1069,19 @@ export function validateEquipmentRatings(
     // Force 1-6 for starting characters
     if (isCreation && focus.force > 6) {
       errors.push({
-        constraintId: 'focus-force-creation',
+        constraintId: "focus-force-creation",
         field: `foci.${focus.id || focus.name}`,
         message: `${focus.name}: Force cannot exceed 6 at character creation`,
-        severity: 'error',
+        severity: "error",
       });
     }
 
     if (focus.force < 1) {
       errors.push({
-        constraintId: 'focus-force-minimum',
+        constraintId: "focus-force-minimum",
         field: `foci.${focus.id || focus.name}`,
         message: `${focus.name}: Force must be at least 1`,
-        severity: 'error',
+        severity: "error",
       });
     }
   }
@@ -1080,7 +1090,7 @@ export function validateEquipmentRatings(
 }
 
 // Add to constraintValidators registry
-constraintValidators['equipment-rating'] = (constraint, context) => {
+constraintValidators["equipment-rating"] = (constraint, context) => {
   const errors = validateEquipmentRatings(context);
   return errors.length > 0 ? errors[0] : null;
 };
@@ -1268,7 +1278,7 @@ export function getEffectiveRating(
  */
 export function getRatingDiceBonus(
   item: { rating?: number },
-  bonusType: 'perception' | 'defense' | 'attack' | 'limit'
+  bonusType: "perception" | "defense" | "attack" | "limit"
 ): number {
   const rating = item.rating ?? 0;
 
@@ -1283,16 +1293,16 @@ export function getRatingDiceBonus(
  */
 export function getRatingThreshold(
   item: { rating?: number },
-  testType: 'detect' | 'analyze' | 'bypass'
+  testType: "detect" | "analyze" | "bypass"
 ): number {
   const rating = item.rating ?? 0;
 
   switch (testType) {
-    case 'detect':
+    case "detect":
       return rating; // Threshold equals rating
-    case 'analyze':
+    case "analyze":
       return rating * 2; // Extended test, rating × 2 hits needed
-    case 'bypass':
+    case "bypass":
       return rating + 2; // Rating + 2 to bypass
     default:
       return rating;
@@ -1305,36 +1315,43 @@ export function getRatingThreshold(
 ## Migration Path
 
 ### Phase 1: Add New Types (Non-Breaking)
+
 - Create `/lib/types/ratings.ts` with new type definitions
 - Export from `/lib/types/index.ts`
 - No changes to existing code
 
 ### Phase 2: Add Rating Utilities
+
 - Create `/lib/rules/ratings.ts` with calculator functions
 - Add `convertLegacyRatingSpec()` for backward compatibility
 - Begin using in new code
 
 ### Phase 3: Update Catalog Type Definitions
+
 - Extend `CyberwareCatalogItem`, `GearCatalogItem`, etc. with `CatalogItemRatingSpec`
 - Keep existing properties for backward compatibility
 - Add JSDoc deprecation notices to old properties
 
 ### Phase 4: Add Validation
+
 - Add `validateEquipmentRatings()` to validation engine
 - Register new constraint type
 - Test with existing character data
 
 ### Phase 5: Migrate JSON Data
+
 - Create migration script to convert existing format
 - Run against `/data/editions/sr5/core-rulebook.json`
 - Validate migrated data
 
 ### Phase 6: Update Character Creation UI
+
 - Create `RatingSelector` component
 - Update gear/cyberware/focus selection steps
 - Add rating validation feedback
 
 ### Phase 7: Add Gameplay Support
+
 - Create `/lib/rules/gameplay.ts`
 - Add effective rating calculations
 - Integrate with character sheet display
@@ -1343,15 +1360,15 @@ export function getRatingThreshold(
 
 ## Summary
 
-| Aspect | Current State | Proposed State |
-|--------|---------------|----------------|
-| **Type Safety** | Loose `rating?: number` | Structured `RatingConfig` with min/max |
-| **Cost Calculation** | Ad-hoc in multiple places | Centralized `calculateRatedValue()` |
-| **Validation** | None | `validateRating()` + validation engine integration |
-| **Data Format** | 3 inconsistent patterns | Single unified nested format |
-| **Terminology** | Mixed (rating/force/deviceRating) | Standardized with `semanticType` |
-| **Character Creation** | Manual calculations | Reusable `RatingSelector` component |
-| **Gameplay** | Not implemented | `getEffectiveRating()` helper |
+| Aspect                 | Current State                     | Proposed State                                     |
+| ---------------------- | --------------------------------- | -------------------------------------------------- |
+| **Type Safety**        | Loose `rating?: number`           | Structured `RatingConfig` with min/max             |
+| **Cost Calculation**   | Ad-hoc in multiple places         | Centralized `calculateRatedValue()`                |
+| **Validation**         | None                              | `validateRating()` + validation engine integration |
+| **Data Format**        | 3 inconsistent patterns           | Single unified nested format                       |
+| **Terminology**        | Mixed (rating/force/deviceRating) | Standardized with `semanticType`                   |
+| **Character Creation** | Manual calculations               | Reusable `RatingSelector` component                |
+| **Gameplay**           | Not implemented                   | `getEffectiveRating()` helper                      |
 
 ---
 

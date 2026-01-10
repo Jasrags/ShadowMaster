@@ -215,19 +215,13 @@ export const COMMON_WIRELESS_EFFECTS: Record<string, WirelessEffect[]> = {
   "synaptic-booster-3": [{ type: "initiative", modifier: 1 }],
 
   // Muscle Toner: +1 Agility (wireless)
-  "muscle-toner": [
-    { type: "attribute", attribute: "agility", modifier: 1 },
-  ],
+  "muscle-toner": [{ type: "attribute", attribute: "agility", modifier: 1 }],
 
   // Muscle Replacement: +1 Strength (wireless)
-  "muscle-replacement": [
-    { type: "attribute", attribute: "strength", modifier: 1 },
-  ],
+  "muscle-replacement": [{ type: "attribute", attribute: "strength", modifier: 1 }],
 
   // Reaction Enhancers: +1 Reaction (wireless)
-  "reaction-enhancers": [
-    { type: "attribute", attribute: "reaction", modifier: 1 },
-  ],
+  "reaction-enhancers": [{ type: "attribute", attribute: "reaction", modifier: 1 }],
 
   // Cybereyes with vision enhancement: +1 to visual perception
   "cybereyes-vision-enhancement": [
@@ -281,9 +275,7 @@ export function effectAppliesInContext(
 /**
  * Merge multiple wireless bonus objects into one.
  */
-export function mergeWirelessBonuses(
-  ...bonuses: ActiveWirelessBonuses[]
-): ActiveWirelessBonuses {
+export function mergeWirelessBonuses(...bonuses: ActiveWirelessBonuses[]): ActiveWirelessBonuses {
   const result: ActiveWirelessBonuses = { ...EMPTY_WIRELESS_BONUSES };
   result.attributes = {};
   result.limits = {};
@@ -372,15 +364,13 @@ export function applyWirelessEffect(
     case "limit":
       if (effect.limit) {
         result.limits = { ...result.limits };
-        result.limits[effect.limit] =
-          (result.limits[effect.limit] ?? 0) + effect.modifier;
+        result.limits[effect.limit] = (result.limits[effect.limit] ?? 0) + effect.modifier;
       }
       break;
     case "skill":
       if (effect.skill) {
         result.skills = { ...result.skills };
-        result.skills[effect.skill] =
-          (result.skills[effect.skill] ?? 0) + effect.modifier;
+        result.skills[effect.skill] = (result.skills[effect.skill] ?? 0) + effect.modifier;
       }
       break;
     case "special":

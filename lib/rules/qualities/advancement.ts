@@ -130,9 +130,7 @@ export function acquireQuality(
 
   // Check karma
   if (character.karmaCurrent < validation.cost) {
-    throw new Error(
-      `Not enough karma. Need ${validation.cost}, have ${character.karmaCurrent}`
-    );
+    throw new Error(`Not enough karma. Need ${validation.cost}, have ${character.karmaCurrent}`);
   }
 
   // Get quality definition
@@ -187,22 +185,13 @@ export function acquireQuality(
     ...character,
     karmaCurrent: character.karmaCurrent - validation.cost,
     karmaTotal: character.karmaTotal,
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
+    advancementHistory: [...(character.advancementHistory || []), advancementRecord],
   };
 
   if (quality.type === "positive") {
-    updatedCharacter.positiveQualities = [
-      ...(character.positiveQualities || []),
-      selection,
-    ];
+    updatedCharacter.positiveQualities = [...(character.positiveQualities || []), selection];
   } else {
-    updatedCharacter.negativeQualities = [
-      ...(character.negativeQualities || []),
-      selection,
-    ];
+    updatedCharacter.negativeQualities = [...(character.negativeQualities || []), selection];
   }
 
   return {
@@ -288,10 +277,7 @@ export function validateQualityRemoval(
 /**
  * Calculate buy-off cost for a negative quality (2× original karma bonus)
  */
-export function calculateBuyOffCost(
-  quality: Quality,
-  originalKarma?: number
-): number {
+export function calculateBuyOffCost(quality: Quality, originalKarma?: number): number {
   // If we have the original karma value, use that
   if (originalKarma !== undefined && originalKarma !== null) {
     return Math.abs(originalKarma) * 2;
@@ -324,9 +310,7 @@ export function removeQuality(
   // Validate removal
   const validation = validateQualityRemoval(character, qualityId, ruleset);
   if (!validation.valid) {
-    throw new Error(
-      `Cannot remove quality: ${validation.errors.map((e) => e.message).join(", ")}`
-    );
+    throw new Error(`Cannot remove quality: ${validation.errors.map((e) => e.message).join(", ")}`);
   }
 
   if (!validation.cost) {
@@ -335,9 +319,7 @@ export function removeQuality(
 
   // Check karma
   if (character.karmaCurrent < validation.cost) {
-    throw new Error(
-      `Not enough karma. Need ${validation.cost}, have ${character.karmaCurrent}`
-    );
+    throw new Error(`Not enough karma. Need ${validation.cost}, have ${character.karmaCurrent}`);
   }
 
   // Get quality definition
@@ -368,22 +350,15 @@ export function removeQuality(
   const updatedCharacter: Character = {
     ...character,
     karmaCurrent: character.karmaCurrent - validation.cost,
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
+    advancementHistory: [...(character.advancementHistory || []), advancementRecord],
   };
 
   if (quality.type === "positive") {
-    updatedCharacter.positiveQualities = (
-      character.positiveQualities || []
-    ).filter(
+    updatedCharacter.positiveQualities = (character.positiveQualities || []).filter(
       (q) => (q.qualityId || q.id)?.toLowerCase() !== qualityId.toLowerCase()
     );
   } else {
-    updatedCharacter.negativeQualities = (
-      character.negativeQualities || []
-    ).filter(
+    updatedCharacter.negativeQualities = (character.negativeQualities || []).filter(
       (q) => (q.qualityId || q.id)?.toLowerCase() !== qualityId.toLowerCase()
     );
   }
@@ -395,4 +370,3 @@ export function removeQuality(
     advancementRecord,
   };
 }
-

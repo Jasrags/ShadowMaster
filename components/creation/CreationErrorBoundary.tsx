@@ -120,14 +120,17 @@ export class CreationErrorBoundary extends Component<
               Something went wrong
             </h2>
             <p className="mb-6 text-zinc-600 dark:text-zinc-400">
-              An error occurred while loading the character creation page.
-              Your progress may have been saved automatically.
+              An error occurred while loading the character creation page. Your progress may have
+              been saved automatically.
             </p>
 
             {/* Last Saved Info */}
             <div className="mb-6 rounded-lg bg-zinc-100 p-4 dark:bg-zinc-800">
               <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                Last saved: <span className="font-medium text-zinc-900 dark:text-zinc-100">{this.formatLastSaved()}</span>
+                Last saved:{" "}
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                  {this.formatLastSaved()}
+                </span>
               </div>
               {characterId && (
                 <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-500">

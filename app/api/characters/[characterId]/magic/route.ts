@@ -1,6 +1,6 @@
 /**
  * API Route: /api/characters/[characterId]/magic
- * 
+ *
  * GET - Get character's magical state
  * PATCH - Update character's magical state (runtime)
  */
@@ -9,7 +9,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacter, saveCharacter } from "@/lib/storage/characters";
 import { loadRuleset, extractAugmentationRules } from "@/lib/rules/loader";
-import { 
+import {
   getEssenceMagicState,
   getSpellDefinition,
   getAdeptPowerDefinition,
@@ -35,11 +35,14 @@ export async function GET(
     // Load ruleset
     const loadResult = await loadRuleset({
       editionCode: character.editionCode,
-      bookIds: character.attachedBookIds
+      bookIds: character.attachedBookIds,
     });
 
     if (!loadResult.success || !loadResult.ruleset) {
-      return NextResponse.json({ success: false, error: "Failed to load ruleset" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: "Failed to load ruleset" },
+        { status: 500 }
+      );
     }
 
     const ruleset = loadResult.ruleset;
@@ -47,15 +50,17 @@ export async function GET(
     const magicState = getEssenceMagicState(character, augmentationRules);
 
     // Enrich spells with metadata
-    const spellsDetailed = (character.spells || []).map(spellId => {
-        const def = getSpellDefinition(spellId, undefined, ruleset);
-        return def ? { id: spellId, name: def.name, category: def.category, drain: def.drain } : { id: spellId, unknown: true };
+    const spellsDetailed = (character.spells || []).map((spellId) => {
+      const def = getSpellDefinition(spellId, undefined, ruleset);
+      return def
+        ? { id: spellId, name: def.name, category: def.category, drain: def.drain }
+        : { id: spellId, unknown: true };
     });
 
     // Enrich adept powers with metadata
-    const powersDetailed = (character.adeptPowers || []).map(p => {
-        const def = getAdeptPowerDefinition(p.catalogId, ruleset);
-        return def ? { ...p, name: def.name, baseCost: def.cost } : { ...p, unknown: true };
+    const powersDetailed = (character.adeptPowers || []).map((p) => {
+      const def = getAdeptPowerDefinition(p.catalogId, ruleset);
+      return def ? { ...p, name: def.name, baseCost: def.cost } : { ...p, unknown: true };
     });
 
     return NextResponse.json({
@@ -69,9 +74,8 @@ export async function GET(
       powersKnown: powersDetailed,
       sustainedSpells: character.sustainedSpells || [],
       boundSpirits: character.spirits || [],
-      activeFoci: character.activeFoci || []
+      activeFoci: character.activeFoci || [],
     });
-
   } catch (error) {
     console.error("Fetch magic state error:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });
@@ -110,8 +114,8 @@ export async function PATCH(
     }
 
     const updatedCharacter = {
-        ...character,
-        ...updates
+      ...character,
+      ...updates,
     };
 
     await saveCharacter(updatedCharacter);
@@ -119,11 +123,10 @@ export async function PATCH(
     return NextResponse.json({
       success: true,
       character: {
-          id: updatedCharacter.id,
-          magicState: updates // Return updated fields
-      }
+        id: updatedCharacter.id,
+        magicState: updates, // Return updated fields
+      },
     });
-
   } catch (error) {
     console.error("Update magic state error:", error);
     return NextResponse.json({ success: false, error: "Internal server error" }, { status: 500 });

@@ -8,6 +8,7 @@
 **Category:** Gameplay, Combat Management, Session Tools
 **Affected Editions:** All editions (combat mechanics vary by edition)
 **Related Specs:**
+
 - [Campaign Support Specification](./campaign_support_specification.md)
 - [NPCs/Grunts Specification](./npcs_grunts_specification.md)
 - [Character Advancement Specification](./character_advancement_specification.md)
@@ -20,6 +21,7 @@
 The Encounter system provides GMs with tools to plan, run, and track combat and non-combat encounters within campaigns. Encounters serve as the bridge between campaign sessions, NPCs/Grunts, player characters, and locations. The system includes initiative tracking, action management, damage application, and post-encounter reward calculation.
 
 **Key Features:**
+
 - Encounter creation with participant management (PCs + NPCs)
 - Combined initiative tracker for all participants
 - Turn-based action tracking
@@ -34,18 +36,19 @@ The Encounter system provides GMs with tools to plan, run, and track combat and 
 
 ---
 
-
 ## Page Structure
 
 ### Routes
 
 #### Encounters List Page
+
 - **Path:** `/app/campaigns/[campaignId]/encounters/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Lists all encounters for a campaign
 
 #### Encounter Detail Page
+
 - **Path:** `/app/campaigns/[campaignId]/encounters/[encounterId]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
@@ -57,12 +60,14 @@ The Encounter system provides GMs with tools to plan, run, and track combat and 
   - `rewards`: Post-encounter reward distribution
 
 #### Create Encounter Page
+
 - **Path:** `/app/campaigns/[campaignId]/encounters/create/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route, GM-only)
 - **Description:** Wizard/form for creating a new encounter
 
 #### Combat Tracker (Full Screen)
+
 - **Path:** `/app/campaigns/[campaignId]/encounters/[encounterId]/combat/page.tsx`
 - **Layout:** Minimal layout (focused combat view)
 - **Authentication:** Required (protected route)
@@ -119,23 +124,23 @@ The Encounter system provides GMs with tools to plan, run, and track combat and 
  * Encounter status
  */
 export type EncounterStatus =
-  | "planning"    // Setting up, not yet started
-  | "active"      // Combat in progress
-  | "paused"      // Temporarily stopped (between sessions)
-  | "completed"   // Finished
-  | "abandoned";  // Cancelled without completion
+  | "planning" // Setting up, not yet started
+  | "active" // Combat in progress
+  | "paused" // Temporarily stopped (between sessions)
+  | "completed" // Finished
+  | "abandoned"; // Cancelled without completion
 
 /**
  * Encounter type/category
  */
 export type EncounterType =
-  | "combat"           // Standard combat encounter
-  | "social"           // Social encounter (negotiations, interrogations)
-  | "stealth"          // Infiltration/stealth encounter
-  | "chase"            // Vehicle/foot chase
-  | "matrix"           // Matrix-focused encounter
-  | "astral"           // Astral combat/exploration
-  | "mixed";           // Multiple types
+  | "combat" // Standard combat encounter
+  | "social" // Social encounter (negotiations, interrogations)
+  | "stealth" // Infiltration/stealth encounter
+  | "chase" // Vehicle/foot chase
+  | "matrix" // Matrix-focused encounter
+  | "astral" // Astral combat/exploration
+  | "mixed"; // Multiple types
 
 /**
  * A campaign encounter
@@ -585,6 +590,7 @@ export interface CombatLogEntry {
 **Location:** `/app/campaigns/[campaignId]/encounters/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display campaign's encounters
 - Filter encounters by status
 - Search encounters by name
@@ -592,6 +598,7 @@ export interface CombatLogEntry {
 - Link to encounter detail pages
 
 **State:**
+
 - `encounters: Encounter[]` - All encounters for campaign
 - `filterStatus: EncounterStatus | "all"` - Current status filter
 - `searchQuery: string` - Search input
@@ -608,6 +615,7 @@ export interface CombatLogEntry {
 **Description:** Individual encounter display card in list view.
 
 **Features:**
+
 - Encounter name and type
 - Status badge (Planning/Active/Paused/Completed)
 - Participant count (PCs + NPCs)
@@ -617,6 +625,7 @@ export interface CombatLogEntry {
 - Quick actions (View, Edit, Delete, Start Combat)
 
 **Props:**
+
 ```typescript
 interface EncounterCardProps {
   encounter: Encounter;
@@ -634,12 +643,14 @@ interface EncounterCardProps {
 **Location:** `/app/campaigns/[campaignId]/encounters/[encounterId]/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display encounter details
 - Render appropriate tab content
 - Handle encounter state transitions
 - Check user permissions
 
 **Tabs:**
+
 - **Overview** - Encounter details, participants, difficulty
 - **Combat** - Active combat tracker
 - **Log** - Combat history
@@ -654,6 +665,7 @@ interface EncounterCardProps {
 **Description:** Step-by-step wizard for creating a new encounter.
 
 **Steps:**
+
 1. **Basic Info** - Name, type, description
 2. **Location** - Optional location selection
 3. **Player Characters** - Select participating PCs
@@ -662,6 +674,7 @@ interface EncounterCardProps {
 6. **Review** - Review and create
 
 **Props:**
+
 ```typescript
 interface CreateEncounterWizardProps {
   campaignId: ID;
@@ -680,6 +693,7 @@ interface CreateEncounterWizardProps {
 **Description:** Main combat initiative tracking component.
 
 **Features:**
+
 - Ordered list of all participants by initiative
 - Current turn indicator
 - Round counter
@@ -690,6 +704,7 @@ interface CreateEncounterWizardProps {
 - Drag-and-drop reordering (GM override)
 
 **Props:**
+
 ```typescript
 interface InitiativeTrackerProps {
   encounter: Encounter;
@@ -711,6 +726,7 @@ interface InitiativeTrackerProps {
 **Description:** Details panel for selected participant.
 
 **Features:**
+
 - Participant name and type
 - Initiative score breakdown
 - Condition monitors (Physical/Stun)
@@ -721,6 +737,7 @@ interface InitiativeTrackerProps {
 - Quick stats display
 
 **Props:**
+
 ```typescript
 interface ParticipantPanelProps {
   participant: PCParticipant | NPCParticipant;
@@ -743,6 +760,7 @@ interface ParticipantPanelProps {
 **Description:** Visual condition monitor component.
 
 **Features:**
+
 - Boxes display (filled/empty)
 - Physical and Stun tracks
 - Wound modifier calculation
@@ -751,6 +769,7 @@ interface ParticipantPanelProps {
 - Color-coded severity
 
 **Props:**
+
 ```typescript
 interface ConditionMonitorDisplayProps {
   maxPhysical: number;
@@ -771,6 +790,7 @@ interface ConditionMonitorDisplayProps {
 **Description:** Form for applying damage to a participant.
 
 **Features:**
+
 - Damage amount input
 - Damage type selector (Physical/Stun)
 - Armor/resistance input
@@ -778,6 +798,7 @@ interface ConditionMonitorDisplayProps {
 - Apply button
 
 **Props:**
+
 ```typescript
 interface DamageApplicationFormProps {
   targetName: string;
@@ -795,6 +816,7 @@ interface DamageApplicationFormProps {
 **Description:** Combat log display component.
 
 **Features:**
+
 - Chronological list of combat events
 - Filter by type (attacks, damage, spells, etc.)
 - Filter by round
@@ -803,6 +825,7 @@ interface DamageApplicationFormProps {
 - Export log option
 
 **Props:**
+
 ```typescript
 interface CombatLogPanelProps {
   encounterId: ID;
@@ -821,6 +844,7 @@ interface CombatLogPanelProps {
 **Description:** Post-encounter reward distribution interface.
 
 **Features:**
+
 - Difficulty summary
 - Suggested karma display
 - Outcome selection (victory, retreat, etc.)
@@ -830,6 +854,7 @@ interface CombatLogPanelProps {
 - Link to session rewards
 
 **Props:**
+
 ```typescript
 interface EncounterRewardsTabProps {
   encounter: Encounter;
@@ -848,6 +873,7 @@ interface EncounterRewardsTabProps {
 **Description:** Dialog for adding participants to an encounter.
 
 **Features:**
+
 - Tab: Campaign Characters (PCs)
 - Tab: Grunt Teams (NPCs)
 - Tab: Quick NPC (inline definition)
@@ -856,6 +882,7 @@ interface EncounterRewardsTabProps {
 - Preview stats
 
 **Props:**
+
 ```typescript
 interface AddParticipantDialogProps {
   campaignId: ID;
@@ -876,6 +903,7 @@ interface AddParticipantDialogProps {
 **Description:** Environmental modifiers display and editor.
 
 **Features:**
+
 - Lighting selector
 - Visibility toggles
 - Background count input
@@ -884,6 +912,7 @@ interface AddParticipantDialogProps {
 - Modifier effect summary
 
 **Props:**
+
 ```typescript
 interface EnvironmentPanelProps {
   environment: EncounterEnvironment;
@@ -903,12 +932,14 @@ interface EnvironmentPanelProps {
 **Purpose:** List all encounters for a campaign
 
 **Query Parameters:**
+
 - `status?: EncounterStatus` - Filter by status
 - `sessionId?: ID` - Filter by session
 - `locationId?: ID` - Filter by location
 - `search?: string` - Search by name
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -924,6 +955,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Get detailed encounter information
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -940,6 +972,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Create a new encounter
 
 **Request:**
+
 ```typescript
 {
   name: string;
@@ -955,6 +988,7 @@ interface EnvironmentPanelProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -970,6 +1004,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Update encounter details (GM-only)
 
 **Request:**
+
 ```typescript
 {
   name?: string;
@@ -997,6 +1032,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Start combat (transition from planning to active)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1012,6 +1048,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Roll initiative for all participants
 
 **Request:**
+
 ```typescript
 {
   reroll?: boolean;  // Whether to reroll existing initiative
@@ -1019,6 +1056,7 @@ interface EnvironmentPanelProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1035,6 +1073,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Use Edge to seize initiative
 
 **Request:**
+
 ```typescript
 {
   participantId: ID;
@@ -1048,6 +1087,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Advance to next turn
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1065,6 +1105,7 @@ interface EnvironmentPanelProps {
 **Purpose:** End current round and start new round
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1083,6 +1124,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Add a participant mid-encounter
 
 **Request:**
+
 ```typescript
 {
   type: "pc" | "npc";
@@ -1107,6 +1149,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Update participant state
 
 **Request:**
+
 ```typescript
 {
   isActive?: boolean;
@@ -1127,6 +1170,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Apply damage to a participant
 
 **Request:**
+
 ```typescript
 {
   damage: number;
@@ -1136,6 +1180,7 @@ interface EnvironmentPanelProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1155,12 +1200,14 @@ interface EnvironmentPanelProps {
 **Purpose:** Get combat log entries
 
 **Query Parameters:**
+
 - `round?: number` - Filter by round
 - `type?: CombatLogEntryType` - Filter by type
 - `limit?: number` - Pagination
 - `offset?: number` - Pagination
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1177,6 +1224,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Add a GM note to combat log
 
 **Request:**
+
 ```typescript
 {
   description: string;
@@ -1193,6 +1241,7 @@ interface EnvironmentPanelProps {
 **Purpose:** End encounter and calculate rewards
 
 **Request:**
+
 ```typescript
 {
   resolution: EncounterOutcome["resolution"];
@@ -1202,6 +1251,7 @@ interface EnvironmentPanelProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1219,6 +1269,7 @@ interface EnvironmentPanelProps {
 **Purpose:** Distribute karma rewards to participants
 
 **Request:**
+
 ```typescript
 {
   karma: number;
@@ -1228,6 +1279,7 @@ interface EnvironmentPanelProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -1241,6 +1293,7 @@ interface EnvironmentPanelProps {
 ## Storage Layer
 
 **File Structure:**
+
 ```
 data/
 ├── encounters/
@@ -1259,7 +1312,10 @@ data/
 
 ```typescript
 // CRUD operations
-export function createEncounter(campaignId: ID, encounter: Omit<Encounter, "id" | "createdAt">): Encounter;
+export function createEncounter(
+  campaignId: ID,
+  encounter: Omit<Encounter, "id" | "createdAt">
+): Encounter;
 export function getEncounterById(encounterId: ID): Encounter | null;
 export function updateEncounter(encounterId: ID, updates: Partial<Encounter>): Encounter;
 export function deleteEncounter(encounterId: ID): void;
@@ -1270,9 +1326,16 @@ export function getEncountersBySession(sessionId: ID): Encounter[];
 export function getActiveEncounters(campaignId: ID): Encounter[];
 
 // Participant management
-export function addParticipant(encounterId: ID, participant: PCParticipant | NPCParticipant): Encounter;
+export function addParticipant(
+  encounterId: ID,
+  participant: PCParticipant | NPCParticipant
+): Encounter;
 export function removeParticipant(encounterId: ID, participantId: ID): Encounter;
-export function updateParticipantState(encounterId: ID, participantId: ID, state: Partial<ParticipantState>): Encounter;
+export function updateParticipantState(
+  encounterId: ID,
+  participantId: ID,
+  state: Partial<ParticipantState>
+): Encounter;
 
 // Combat state
 export function rollInitiative(encounterId: ID): InitiativeRollResult[];
@@ -1288,22 +1351,41 @@ export function getCombatLog(encounterId: ID, options?: LogQueryOptions): Combat
 
 ```typescript
 // Initiative
-export function calculateInitiative(reaction: number, intuition: number, modifiers?: number): { base: number; dice: number };
+export function calculateInitiative(
+  reaction: number,
+  intuition: number,
+  modifiers?: number
+): { base: number; dice: number };
 export function rollInitiativeDice(dice: number): number[];
 export function sortInitiativeOrder(entries: InitiativeEntry[]): InitiativeEntry[];
 
 // Damage
-export function applyDamage(state: ParticipantState, damage: number, type: "physical" | "stun", monitorSize: number): ParticipantState;
+export function applyDamage(
+  state: ParticipantState,
+  damage: number,
+  type: "physical" | "stun",
+  monitorSize: number
+): ParticipantState;
 export function calculateWoundModifier(physicalDamage: number, stunDamage: number): number;
-export function isDefeated(state: ParticipantState, physicalMonitor: number, stunMonitor: number): boolean;
+export function isDefeated(
+  state: ParticipantState,
+  physicalMonitor: number,
+  stunMonitor: number
+): boolean;
 
 // Difficulty
 export function calculateDifficultyRating(encounter: Encounter): DifficultyRating;
-export function calculateSuggestedKarma(difficulty: DifficultyRating, outcome: EncounterOutcome): number;
+export function calculateSuggestedKarma(
+  difficulty: DifficultyRating,
+  outcome: EncounterOutcome
+): number;
 
 // Action economy
 export function resetActionsForTurn(state: ParticipantState): ParticipantState;
-export function canTakeAction(state: ParticipantState, actionType: "free" | "simple" | "complex"): boolean;
+export function canTakeAction(
+  state: ParticipantState,
+  actionType: "free" | "simple" | "complex"
+): boolean;
 ```
 
 ---
@@ -1315,16 +1397,17 @@ export function canTakeAction(state: ParticipantState, actionType: "free" | "sim
 Each NPC contributes threat points based on Professional Rating:
 
 | Professional Rating | Threat Points |
-|---------------------|---------------|
-| 0 (Untrained) | 0.5 |
-| 1 (Inexperienced) | 1 |
-| 2 (Regular) | 2 |
-| 3 (Experienced) | 3 |
-| 4 (Veteran) | 5 |
-| 5 (Elite) | 8 |
-| 6 (Prime) | 12 |
+| ------------------- | ------------- |
+| 0 (Untrained)       | 0.5           |
+| 1 (Inexperienced)   | 1             |
+| 2 (Regular)         | 2             |
+| 3 (Experienced)     | 3             |
+| 4 (Veteran)         | 5             |
+| 5 (Elite)           | 8             |
+| 6 (Prime)           | 12            |
 
 **Modifiers:**
+
 - Lieutenant: +2 threat points
 - Specialist: +1 threat point each
 - Magic-capable: +2 threat points
@@ -1332,13 +1415,13 @@ Each NPC contributes threat points based on Professional Rating:
 
 ### Difficulty Tiers
 
-| Tier | Threat/PC Ratio | Suggested Karma |
-|------|-----------------|-----------------|
-| Trivial | < 1 | 1 |
-| Easy | 1-2 | 2 |
-| Medium | 2-4 | 3-4 |
-| Hard | 4-6 | 5-6 |
-| Deadly | > 6 | 7+ |
+| Tier    | Threat/PC Ratio | Suggested Karma |
+| ------- | --------------- | --------------- |
+| Trivial | < 1             | 1               |
+| Easy    | 1-2             | 2               |
+| Medium  | 2-4             | 3-4             |
+| Hard    | 4-6             | 5-6             |
+| Deadly  | > 6             | 7+              |
 
 ### Karma Calculation Formula
 
@@ -1352,7 +1435,6 @@ Base Karma = Difficulty Tier Base
 ```
 
 ---
-
 
 ## Security Considerations
 
@@ -1448,6 +1530,7 @@ Base Karma = Difficulty Tier Base
 **Priority:** Medium-High
 **Estimated Effort:** 12-16 days
 **Dependencies:**
+
 - Campaign system (complete)
 - NPCs/Grunts system (partial)
 - Character system (complete)

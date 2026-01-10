@@ -36,18 +36,12 @@ interface MigrationWizardProps {
 // COMPONENT
 // =============================================================================
 
-export function MigrationWizard({
-  characterId,
-  onClose,
-  onComplete,
-}: MigrationWizardProps) {
+export function MigrationWizard({ characterId, onClose, onComplete }: MigrationWizardProps) {
   const wizard = useMigrationWizard(characterId);
   const [isApplying, setIsApplying] = useState(false);
 
   // Get breaking changes that need decisions
-  const breakingChanges = wizard.report?.changes.filter(
-    (c) => c.severity === "breaking"
-  ) || [];
+  const breakingChanges = wizard.report?.changes.filter((c) => c.severity === "breaking") || [];
 
   // Current breaking change (if on a resolve step)
   const currentChangeIndex = wizard.currentStep - 1; // Step 0 is review
@@ -89,10 +83,7 @@ export function MigrationWizard({
       {/* Content area */}
       <div className="p-6">
         {wizard.currentStep === 0 && (
-          <ReviewStep
-            report={wizard.report}
-            breakingCount={breakingChanges.length}
-          />
+          <ReviewStep report={wizard.report} breakingCount={breakingChanges.length} />
         )}
 
         {currentChange && (
@@ -100,21 +91,13 @@ export function MigrationWizard({
             change={currentChange}
             changeIndex={currentChangeIndex}
             totalChanges={breakingChanges.length}
-            onSelect={(option, action) =>
-              wizard.makeSelection(currentChange.id, option, action)
-            }
-            currentSelection={wizard.plan?.steps.find(
-              (s) => s.changeId === currentChange.id
-            )}
+            onSelect={(option, action) => wizard.makeSelection(currentChange.id, option, action)}
+            currentSelection={wizard.plan?.steps.find((s) => s.changeId === currentChange.id)}
           />
         )}
 
         {wizard.currentStep === wizard.totalSteps - 1 && (
-          <ConfirmStep
-            plan={wizard.plan}
-            canApply={wizard.canApply}
-            error={wizard.error}
-          />
+          <ConfirmStep plan={wizard.plan} canApply={wizard.canApply} error={wizard.error} />
         )}
       </div>
 
@@ -148,9 +131,7 @@ function WizardContainer({ children, onClose }: WizardContainerProps) {
       <div className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between px-6 py-4 border-b border-gray-200 dark:border-gray-700">
-          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">
-            Migration Wizard
-          </h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-white">Migration Wizard</h2>
           <button
             onClick={onClose}
             className="text-gray-400 hover:text-gray-500 dark:hover:text-gray-300"
@@ -205,14 +186,19 @@ function WizardProgress({ currentStep, totalSteps, breakingChanges }: WizardProg
                   index < currentStep
                     ? "bg-green-500 text-white"
                     : index === currentStep
-                    ? "bg-blue-500 text-white"
-                    : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
+                      ? "bg-blue-500 text-white"
+                      : "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400"
                 }
               `}
             >
               {index < currentStep ? (
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               ) : (
                 index + 1
@@ -221,9 +207,7 @@ function WizardProgress({ currentStep, totalSteps, breakingChanges }: WizardProg
             {index < steps.length - 1 && (
               <div
                 className={`w-12 h-0.5 ${
-                  index < currentStep
-                    ? "bg-green-500"
-                    : "bg-gray-200 dark:bg-gray-700"
+                  index < currentStep ? "bg-green-500" : "bg-gray-200 dark:bg-gray-700"
                 }`}
               />
             )}
@@ -253,9 +237,7 @@ function ReviewStep({ report, breakingCount }: ReviewStepProps) {
   return (
     <div className="space-y-6">
       <div>
-        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
-          Changes Detected
-        </h3>
+        <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">Changes Detected</h3>
         <p className="text-sm text-gray-500 dark:text-gray-400">
           Review the changes between your character&apos;s ruleset and the current version.
         </p>
@@ -274,15 +256,18 @@ function ReviewStep({ report, breakingCount }: ReviewStepProps) {
             {nonBreaking.slice(0, 5).map((change) => (
               <li key={change.id} className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
                 {change.description}
               </li>
             ))}
             {nonBreaking.length > 5 && (
-              <li className="text-green-500">
-                ...and {nonBreaking.length - 5} more
-              </li>
+              <li className="text-green-500">...and {nonBreaking.length - 5} more</li>
             )}
           </ul>
         </div>
@@ -301,7 +286,12 @@ function ReviewStep({ report, breakingCount }: ReviewStepProps) {
             {breaking.map((change) => (
               <li key={change.id} className="flex items-center gap-2">
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+                  />
                 </svg>
                 {change.description}
               </li>
@@ -392,15 +382,16 @@ function ResolveStep({
               }
             `}
           >
-            <div className="font-medium text-gray-900 dark:text-white">
-              {option.label}
-            </div>
+            <div className="font-medium text-gray-900 dark:text-white">{option.label}</div>
             <div className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               {option.description}
             </div>
             {option.karmaDelta !== undefined && option.karmaDelta !== 0 && (
-              <div className={`text-sm mt-1 ${option.karmaDelta > 0 ? "text-green-600" : "text-red-600"}`}>
-                Karma: {option.karmaDelta > 0 ? "+" : ""}{option.karmaDelta}
+              <div
+                className={`text-sm mt-1 ${option.karmaDelta > 0 ? "text-green-600" : "text-red-600"}`}
+              >
+                Karma: {option.karmaDelta > 0 ? "+" : ""}
+                {option.karmaDelta}
               </div>
             )}
           </button>
@@ -461,8 +452,8 @@ function ConfirmStep({ plan, canApply, error }: ConfirmStepProps) {
 
       <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
         <p className="text-sm text-blue-700 dark:text-blue-300">
-          This migration will update your character to the latest ruleset version.
-          A backup of your current state will be saved for rollback if needed.
+          This migration will update your character to the latest ruleset version. A backup of your
+          current state will be saved for rollback if needed.
         </p>
       </div>
     </div>

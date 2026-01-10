@@ -20,32 +20,54 @@ import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
 import { Tooltip } from "@/components/ui";
-import {
-  Lock,
-  Minus,
-  Plus,
-  Info,
-  Star,
-  Sparkles,
-  Cpu,
-} from "lucide-react";
+import { Lock, Minus, Plus, Info, Star, Sparkles, Cpu } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const PHYSICAL_ATTRIBUTES = [
-  { id: "body", name: "Body", abbr: "BOD", description: "Physical health and resistance to damage" },
-  { id: "agility", name: "Agility", abbr: "AGI", description: "Coordination and fine motor skills" },
+  {
+    id: "body",
+    name: "Body",
+    abbr: "BOD",
+    description: "Physical health and resistance to damage",
+  },
+  {
+    id: "agility",
+    name: "Agility",
+    abbr: "AGI",
+    description: "Coordination and fine motor skills",
+  },
   { id: "reaction", name: "Reaction", abbr: "REA", description: "Response time and reflexes" },
   { id: "strength", name: "Strength", abbr: "STR", description: "Raw physical power" },
 ] as const;
 
 const MENTAL_ATTRIBUTES = [
-  { id: "willpower", name: "Willpower", abbr: "WIL", description: "Mental fortitude and resistance to magic" },
-  { id: "logic", name: "Logic", abbr: "LOG", description: "Problem solving and analytical thinking" },
-  { id: "intuition", name: "Intuition", abbr: "INT", description: "Gut feelings and situational awareness" },
-  { id: "charisma", name: "Charisma", abbr: "CHA", description: "Social influence and personal magnetism" },
+  {
+    id: "willpower",
+    name: "Willpower",
+    abbr: "WIL",
+    description: "Mental fortitude and resistance to magic",
+  },
+  {
+    id: "logic",
+    name: "Logic",
+    abbr: "LOG",
+    description: "Problem solving and analytical thinking",
+  },
+  {
+    id: "intuition",
+    name: "Intuition",
+    abbr: "INT",
+    description: "Gut feelings and situational awareness",
+  },
+  {
+    id: "charisma",
+    name: "Charisma",
+    abbr: "CHA",
+    description: "Social influence and personal magnetism",
+  },
 ] as const;
 
 const SPECIAL_ATTR_CONFIG = {
@@ -142,16 +164,17 @@ function InlineAttributeRow({
       {/* Name with tooltip */}
       <div className="flex items-center gap-1.5">
         {Icon && <Icon className={`h-3.5 w-3.5 ${iconColor}`} />}
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {name}
-        </span>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{name}</span>
         <Tooltip content={`${name} (${abbr}): ${description}`}>
           <button
             type="button"
             aria-label={`Info about ${name}`}
             className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
           >
-            <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" aria-hidden="true" />
+            <Info
+              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              aria-hidden="true"
+            />
           </button>
         </Tooltip>
       </div>
@@ -252,16 +275,17 @@ function SpecialAttributeRow({
     <div className="flex items-center justify-between py-1.5">
       <div className="flex items-center gap-1.5">
         <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {config.name}
-        </span>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{config.name}</span>
         <Tooltip content={`${config.name} (${config.abbr}): ${config.description}`}>
           <button
             type="button"
             aria-label={`Info about ${config.name}`}
             className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
           >
-            <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" aria-hidden="true" />
+            <Info
+              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              aria-hidden="true"
+            />
           </button>
         </Tooltip>
       </div>
@@ -487,14 +511,20 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
   // Calculate special attribute points spent
   const specialPointsSpent = useMemo(
-    () => availableSpecialAttributes.reduce((sum, attrId) => sum + getSpecialAllocatedPoints(attrId), 0),
+    () =>
+      availableSpecialAttributes.reduce(
+        (sum, attrId) => sum + getSpecialAllocatedPoints(attrId),
+        0
+      ),
     [availableSpecialAttributes, getSpecialAllocatedPoints]
   );
 
   const corePointsRemaining = attributePoints - corePointsSpent;
   const specialPointsRemaining = specialAttributePoints - specialPointsSpent;
   const isCoreOverBudget = corePointsRemaining < 0;
-  const karmaRequired = isCoreOverBudget ? Math.abs(corePointsRemaining) * KARMA_PER_ATTRIBUTE_POINT : 0;
+  const karmaRequired = isCoreOverBudget
+    ? Math.abs(corePointsRemaining) * KARMA_PER_ATTRIBUTE_POINT
+    : 0;
 
   // Handle core attribute change
   // Phase 4.2: Store coreAttributePointsSpent in selections (not budgets)
@@ -596,7 +626,6 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     if (!metatypePriority) return "";
     return "Metatype";
   }, [metatypePriority]);
-
 
   // Render core attribute row
   const renderCoreAttribute = (attr: {

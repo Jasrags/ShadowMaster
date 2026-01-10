@@ -15,13 +15,7 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import {
-  Plus,
-  X,
-  FileText,
-  AlertTriangle,
-  Home,
-} from "lucide-react";
+import { Plus, X, FileText, AlertTriangle, Home } from "lucide-react";
 import type {
   CreationState,
   Identity,
@@ -47,7 +41,14 @@ interface IdentitiesCardProps {
   updateState: (updates: Partial<CreationState>) => void;
 }
 
-type ModalType = "identity" | "license" | "lifestyle" | "edit-identity" | "edit-license" | "edit-lifestyle" | null;
+type ModalType =
+  | "identity"
+  | "license"
+  | "lifestyle"
+  | "edit-identity"
+  | "edit-license"
+  | "edit-lifestyle"
+  | null;
 
 interface NewIdentityState {
   name: string;
@@ -131,18 +132,13 @@ function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={onClose}
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
 
       {/* Modal */}
       <div className="relative max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
         {/* Header */}
         <div className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-200 bg-white px-6 py-4 dark:border-zinc-700 dark:bg-zinc-900">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            {title}
-          </h2>
+          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">{title}</h2>
           <button
             onClick={onClose}
             className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
@@ -220,7 +216,11 @@ function NewIdentityModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit Identity" : "New Identity"}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={isEditMode ? "Edit Identity" : "New Identity"}
+    >
       <div className="space-y-5">
         {/* Identity Name */}
         <div>
@@ -253,9 +253,7 @@ function NewIdentityModal({
                   : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
               }`}
             >
-              <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                Fake SIN
-              </div>
+              <div className="font-medium text-zinc-900 dark:text-zinc-100">Fake SIN</div>
               <div className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
                 Purchased as gear (Rating 1-4)
               </div>
@@ -275,9 +273,7 @@ function NewIdentityModal({
               }`}
             >
               <div className="flex items-center gap-2">
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                  Real SIN
-                </span>
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">Real SIN</span>
                 {!hasSINnerQuality && (
                   <span className="text-sm text-amber-600 dark:text-amber-400">
                     (Requires SINner quality)
@@ -299,9 +295,7 @@ function NewIdentityModal({
             </label>
             <select
               value={formState.sinRating}
-              onChange={(e) =>
-                setFormState({ ...formState, sinRating: parseInt(e.target.value) })
-              }
+              onChange={(e) => setFormState({ ...formState, sinRating: parseInt(e.target.value) })}
               className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
             >
               {[1, 2, 3, 4].map((r) => (
@@ -419,7 +413,11 @@ function NewLicenseModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit License" : "New License"}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={isEditMode ? "Edit License" : "New License"}
+    >
       <div className="space-y-5">
         {/* License Name */}
         <div>
@@ -465,7 +463,9 @@ function NewLicenseModal({
             License Type
           </label>
           <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-600 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400">
-            {sinType === "fake" ? "Fake License (matches fake SIN)" : "Real License (matches real SIN)"}
+            {sinType === "fake"
+              ? "Fake License (matches fake SIN)"
+              : "Real License (matches real SIN)"}
           </div>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
             License type automatically matches the identity&apos;s SIN type.
@@ -480,9 +480,7 @@ function NewLicenseModal({
             </label>
             <select
               value={formState.rating}
-              onChange={(e) =>
-                setFormState({ ...formState, rating: parseInt(e.target.value) })
-              }
+              onChange={(e) => setFormState({ ...formState, rating: parseInt(e.target.value) })}
               className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
             >
               {[1, 2, 3, 4].map((r) => (
@@ -492,7 +490,8 @@ function NewLicenseModal({
               ))}
             </select>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              Fake licenses must have a rating between 1-4. Higher ratings are more expensive but harder to detect.
+              Fake licenses must have a rating between 1-4. Higher ratings are more expensive but
+              harder to detect.
             </p>
           </div>
         )}
@@ -564,9 +563,7 @@ function NewLifestyleModal({
     subscriptions: [],
   };
 
-  const [formState, setFormState] = useState<NewLifestyleState>(
-    initialData || defaultFormState
-  );
+  const [formState, setFormState] = useState<NewLifestyleState>(initialData || defaultFormState);
 
   // Reset form when modal opens with initialData (for edit mode)
   const resetFormOnOpen = useCallback(() => {
@@ -575,7 +572,7 @@ function NewLifestyleModal({
     } else if (isOpen && !initialData) {
       setFormState(defaultFormState);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, initialData]);
 
   // Use effect to reset form when modal opens
@@ -589,7 +586,7 @@ function NewLifestyleModal({
   const baseCost = selectedLifestyle?.monthlyCost || 0;
   const modificationsCost = formState.modifications.reduce((sum, mod) => {
     if (mod.modifierType === "percentage") {
-      return sum + (baseCost * mod.modifier / 100) * (mod.type === "positive" ? 1 : -1);
+      return sum + ((baseCost * mod.modifier) / 100) * (mod.type === "positive" ? 1 : -1);
     }
     return sum + mod.modifier * (mod.type === "positive" ? 1 : -1);
   }, 0);
@@ -661,7 +658,11 @@ function NewLifestyleModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={handleClose} title={isEditMode ? "Edit Lifestyle" : "New Lifestyle"}>
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      title={isEditMode ? "Edit Lifestyle" : "New Lifestyle"}
+    >
       <div className="space-y-5">
         {/* Lifestyle Type */}
         <div>
@@ -676,7 +677,8 @@ function NewLifestyleModal({
             <option value="">Select a lifestyle...</option>
             {LIFESTYLE_TYPES.map((l) => (
               <option key={l.id} value={l.id}>
-                {l.name} ({l.monthlyCost === 0 ? "Free" : `¥${l.monthlyCost.toLocaleString()}/month`})
+                {l.name} (
+                {l.monthlyCost === 0 ? "Free" : `¥${l.monthlyCost.toLocaleString()}/month`})
               </option>
             ))}
           </select>
@@ -715,9 +717,7 @@ function NewLifestyleModal({
                   className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                      {mod.name}
-                    </span>
+                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{mod.name}</span>
                     <span
                       className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
                         mod.type === "positive"
@@ -743,7 +743,8 @@ function NewLifestyleModal({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No modifications added. Click &quot;+ Add Modification&quot; to add lifestyle modifications.
+              No modifications added. Click &quot;+ Add Modification&quot; to add lifestyle
+              modifications.
             </p>
           )}
         </div>
@@ -767,9 +768,7 @@ function NewLifestyleModal({
                   className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
                 >
                   <div className="flex items-center gap-2">
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                      {sub.name}
-                    </span>
+                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{sub.name}</span>
                     {sub.category && (
                       <span className="rounded-full bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
                         {sub.category}
@@ -791,7 +790,8 @@ function NewLifestyleModal({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No subscriptions added. Click &quot;+ Add Subscription&quot; to add services like DocWagon contracts.
+              No subscriptions added. Click &quot;+ Add Subscription&quot; to add services like
+              DocWagon contracts.
             </p>
           )}
         </div>
@@ -856,7 +856,13 @@ function NewLifestyleModal({
               {modificationsCost !== 0 && (
                 <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
                   <span>Modifications</span>
-                  <span className={modificationsCost > 0 ? "text-red-600 dark:text-red-400" : "text-emerald-600 dark:text-emerald-400"}>
+                  <span
+                    className={
+                      modificationsCost > 0
+                        ? "text-red-600 dark:text-red-400"
+                        : "text-emerald-600 dark:text-emerald-400"
+                    }
+                  >
                     {modificationsCost > 0 ? "+" : ""}¥{modificationsCost.toLocaleString()}
                   </span>
                 </div>
@@ -944,9 +950,7 @@ function IdentityCard({
       {/* Header */}
       <div className="flex items-center justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-700/50">
         <div>
-          <div className="font-medium text-zinc-900 dark:text-zinc-100">
-            {identity.name}
-          </div>
+          <div className="font-medium text-zinc-900 dark:text-zinc-100">{identity.name}</div>
           {identity.sin.type === "fake" ? (
             <span className="mt-1 inline-block rounded bg-blue-100 px-2 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/30 dark:text-blue-300">
               Fake SIN (Rating {identity.sin.rating})
@@ -1024,7 +1028,8 @@ function IdentityCard({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No licenses added yet. Click &quot;Add License&quot; to add a license to this identity.
+              No licenses added yet. Click &quot;Add License&quot; to add a license to this
+              identity.
             </p>
           )}
         </div>
@@ -1088,7 +1093,8 @@ function IdentityCard({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No lifestyles added yet. Click &quot;+ Add Lifestyle&quot; to add a lifestyle for this identity.
+              No lifestyles added yet. Click &quot;+ Add Lifestyle&quot; to add a lifestyle for this
+              identity.
             </p>
           )}
         </div>
@@ -1165,7 +1171,12 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
       lifestylesCost += lifestyle.monthlyCost * (lifestyle.prepaidMonths || 1);
     });
 
-    return { sinsCost, licensesCost, lifestylesCost, total: sinsCost + licensesCost + lifestylesCost };
+    return {
+      sinsCost,
+      licensesCost,
+      lifestylesCost,
+      total: sinsCost + licensesCost + lifestylesCost,
+    };
   }, [identities, lifestyles]);
 
   // Get nuyen remaining
@@ -1277,8 +1288,10 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         customExpenses: lifestyleData.customExpenses || undefined,
         customIncome: lifestyleData.customIncome || undefined,
         notes: lifestyleData.notes || undefined,
-        modifications: lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
-        subscriptions: lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
+        modifications:
+          lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
+        subscriptions:
+          lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
         // Associate with the identity
         associatedIdentityId: identity.id,
       };
@@ -1386,8 +1399,10 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         customExpenses: lifestyleData.customExpenses || undefined,
         customIncome: lifestyleData.customIncome || undefined,
         notes: lifestyleData.notes || undefined,
-        modifications: lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
-        subscriptions: lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
+        modifications:
+          lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
+        subscriptions:
+          lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
       };
 
       const updatedLifestyles = [...lifestyles];
@@ -1443,9 +1458,10 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
   const currentIdentity = editingIdentityIndex !== null ? identities[editingIdentityIndex] : null;
 
   // Get current license for edit modal
-  const currentLicense = editingIdentityIndex !== null && editingLicenseIndex !== null
-    ? identities[editingIdentityIndex]?.licenses?.[editingLicenseIndex]
-    : null;
+  const currentLicense =
+    editingIdentityIndex !== null && editingLicenseIndex !== null
+      ? identities[editingIdentityIndex]?.licenses?.[editingLicenseIndex]
+      : null;
 
   // Get current lifestyle for edit modal
   const currentLifestyle = editingLifestyleId
@@ -1463,9 +1479,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
           {/* Cost Summary */}
           {totalCosts.total > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
-              <span className="text-zinc-600 dark:text-zinc-400">
-                SINs & Licenses Cost:
-              </span>
+              <span className="text-zinc-600 dark:text-zinc-400">SINs & Licenses Cost:</span>
               <span className="font-medium text-zinc-900 dark:text-zinc-100">
                 ¥{totalCosts.total.toLocaleString()}
               </span>

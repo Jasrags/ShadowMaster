@@ -32,10 +32,7 @@ Examples:
 Note: If your password contains special characters or spaces, wrap it in quotes.
 `;
 
-async function changePassword(
-  email: string,
-  newPassword: string
-): Promise<void> {
+async function changePassword(email: string, newPassword: string): Promise<void> {
   // Validate inputs
   if (!email || !newPassword) {
     console.error("Error: Both email and new password are required.");
@@ -107,4 +104,3 @@ async function main(): Promise<void> {
 }
 
 main();
-

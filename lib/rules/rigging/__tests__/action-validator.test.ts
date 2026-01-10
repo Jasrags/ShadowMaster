@@ -31,11 +31,13 @@ import type {
 /**
  * Create a minimal test character
  */
-function createTestCharacter(options: {
-  hasVCR?: boolean;
-  vcrRating?: number;
-  hasRCC?: boolean;
-} = {}): Character {
+function createTestCharacter(
+  options: {
+    hasVCR?: boolean;
+    vcrRating?: number;
+    hasRCC?: boolean;
+  } = {}
+): Character {
   const char: Character = {
     id: "test-char-1",
     ownerId: "test-user-1",
@@ -124,14 +126,16 @@ function createTestCharacter(options: {
 /**
  * Create a test rigging state
  */
-function createTestRiggingState(options: {
-  hasVCR?: boolean;
-  vcrRating?: number;
-  hasRCC?: boolean;
-  isJumpedIn?: boolean;
-  jumpedIntoId?: string;
-  droneIds?: string[];
-} = {}): RiggingState {
+function createTestRiggingState(
+  options: {
+    hasVCR?: boolean;
+    vcrRating?: number;
+    hasRCC?: boolean;
+    isJumpedIn?: boolean;
+    jumpedIntoId?: string;
+    droneIds?: string[];
+  } = {}
+): RiggingState {
   const state: RiggingState = {
     sessionId: "test-session-1",
     characterId: "test-char-1",
@@ -219,10 +223,13 @@ function createTestRiggingState(options: {
 /**
  * Create a test slaved drone
  */
-function createTestDrone(id: string, options: {
-  noisePenalty?: number;
-  autosofts?: SharedAutosoft[];
-} = {}): SlavedDrone {
+function createTestDrone(
+  id: string,
+  options: {
+    noisePenalty?: number;
+    autosofts?: SharedAutosoft[];
+  } = {}
+): SlavedDrone {
   return {
     droneId: id,
     catalogId: "test-drone-catalog",
@@ -234,13 +241,14 @@ function createTestDrone(id: string, options: {
     conditionMonitorMax: 8,
     distanceFromRigger: 100,
     noisePenalty: options.noisePenalty || 0,
-    installedAutosofts: options.autosofts?.map(a => ({
-      autosoftId: a.autosoftId,
-      name: a.name,
-      rating: a.rating,
-      category: a.category,
-      target: a.target,
-    })) || [],
+    installedAutosofts:
+      options.autosofts?.map((a) => ({
+        autosoftId: a.autosoftId,
+        name: a.name,
+        rating: a.rating,
+        category: a.category,
+        target: a.target,
+      })) || [],
   };
 }
 
@@ -407,12 +415,7 @@ describe("action-validator", () => {
   describe("validateVehicleAction", () => {
     it("should validate action without rigging state for non-jumped-in action", () => {
       const character = createTestCharacter();
-      const result = validateVehicleAction(
-        character,
-        undefined,
-        "accelerate",
-        "vehicle-1"
-      );
+      const result = validateVehicleAction(character, undefined, "accelerate", "vehicle-1");
 
       expect(result.valid).toBe(true);
       expect(result.controlMode).toBe("manual");
@@ -421,12 +424,7 @@ describe("action-validator", () => {
 
     it("should reject jumped-in required action without rigging state", () => {
       const character = createTestCharacter();
-      const result = validateVehicleAction(
-        character,
-        undefined,
-        "stunt",
-        "vehicle-1"
-      );
+      const result = validateVehicleAction(character, undefined, "stunt", "vehicle-1");
 
       expect(result.valid).toBe(false);
       expect(result.errors.length).toBeGreaterThan(0);
@@ -442,12 +440,7 @@ describe("action-validator", () => {
         jumpedIntoId: "drone-1",
       });
 
-      const result = validateVehicleAction(
-        character,
-        riggingState,
-        "stunt",
-        "drone-1"
-      );
+      const result = validateVehicleAction(character, riggingState, "stunt", "drone-1");
 
       expect(result.valid).toBe(true);
       expect(result.controlMode).toBe("jumped-in");
@@ -461,15 +454,10 @@ describe("action-validator", () => {
         droneIds: ["drone-1"],
       });
 
-      const result = validateVehicleAction(
-        character,
-        riggingState,
-        "stunt",
-        "drone-1"
-      );
+      const result = validateVehicleAction(character, riggingState, "stunt", "drone-1");
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === "REQUIRES_JUMPED_IN")).toBe(true);
+      expect(result.errors.some((e) => e.code === "REQUIRES_JUMPED_IN")).toBe(true);
     });
 
     it("should include VCR control bonus when jumped in", () => {
@@ -481,16 +469,13 @@ describe("action-validator", () => {
         jumpedIntoId: "drone-1",
       });
 
-      const result = validateVehicleAction(
-        character,
-        riggingState,
-        "accelerate",
-        "drone-1"
-      );
+      const result = validateVehicleAction(character, riggingState, "accelerate", "drone-1");
 
       expect(result.valid).toBe(true);
-      expect(result.applicableBonuses.some(b => b.source === "Vehicle Control Rig")).toBe(true);
-      expect(result.applicableBonuses.find(b => b.source === "Vehicle Control Rig")?.value).toBe(3);
+      expect(result.applicableBonuses.some((b) => b.source === "Vehicle Control Rig")).toBe(true);
+      expect(result.applicableBonuses.find((b) => b.source === "Vehicle Control Rig")?.value).toBe(
+        3
+      );
     });
 
     it("should use remote control mode when not jumped in but has RCC", () => {
@@ -500,12 +485,7 @@ describe("action-validator", () => {
         droneIds: ["drone-1"],
       });
 
-      const result = validateVehicleAction(
-        character,
-        riggingState,
-        "accelerate",
-        "drone-1"
-      );
+      const result = validateVehicleAction(character, riggingState, "accelerate", "drone-1");
 
       expect(result.valid).toBe(true);
       expect(result.controlMode).toBe("remote");
@@ -515,12 +495,7 @@ describe("action-validator", () => {
   describe("validateDroneCommand", () => {
     it("should reject command without rigging state", () => {
       const character = createTestCharacter();
-      const result = validateDroneCommand(
-        character,
-        undefined,
-        "drone-1",
-        "attack"
-      );
+      const result = validateDroneCommand(character, undefined, "drone-1", "attack");
 
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe("NO_RIGGING_STATE");
@@ -531,12 +506,7 @@ describe("action-validator", () => {
       const riggingState = createTestRiggingState({ hasRCC: true });
       // No drone network
 
-      const result = validateDroneCommand(
-        character,
-        riggingState,
-        "drone-1",
-        "attack"
-      );
+      const result = validateDroneCommand(character, riggingState, "drone-1", "attack");
 
       expect(result.valid).toBe(false);
       expect(result.errors[0].code).toBe("NO_DRONE_NETWORK");
@@ -567,12 +537,7 @@ describe("action-validator", () => {
         droneIds: ["drone-1"],
       });
 
-      const result = validateDroneCommand(
-        character,
-        riggingState,
-        "drone-1",
-        "attack"
-      );
+      const result = validateDroneCommand(character, riggingState, "drone-1", "attack");
 
       expect(result.valid).toBe(true);
     });

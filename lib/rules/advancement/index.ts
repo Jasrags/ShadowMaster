@@ -52,18 +52,10 @@ export {
 } from "./attributes";
 
 // Skill advancement
-export {
-  advanceSkill,
-  type AdvanceSkillOptions,
-  type AdvanceSkillResult,
-} from "./skills";
+export { advanceSkill, type AdvanceSkillOptions, type AdvanceSkillResult } from "./skills";
 
 // Edge advancement
-export {
-  advanceEdge,
-  type AdvanceEdgeOptions,
-  type AdvanceEdgeResult,
-} from "./edge";
+export { advanceEdge, type AdvanceEdgeOptions, type AdvanceEdgeResult } from "./edge";
 
 // Specialization advancement
 export {

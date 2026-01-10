@@ -21,10 +21,10 @@ This folder contains planning documents for phases that have been completed acco
 ## Current Active Planning Documents
 
 Active planning documents remain in `/docs/architecture/`:
+
 - `beta_implementation_plan_v2.md` - Current beta implementation plan (active)
 - `gameplay_features_implementation_plan.md` - Gameplay features plan (active)
 
 ## Archive Date
 
 Documents archived: January 2025
-

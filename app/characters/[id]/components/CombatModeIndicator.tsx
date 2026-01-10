@@ -31,10 +31,7 @@ interface CombatModeIndicatorProps {
   onOpenCombatTracker?: () => void;
 }
 
-export function CombatModeIndicator({
-  theme,
-  onOpenCombatTracker,
-}: CombatModeIndicatorProps) {
+export function CombatModeIndicator({ theme, onOpenCombatTracker }: CombatModeIndicatorProps) {
   const {
     session,
     participant,
@@ -70,21 +67,16 @@ export function CombatModeIndicator({
       <div
         className={`
           flex items-center justify-between px-4 py-2
-          ${isMyTurn
-            ? "bg-emerald-500/20 border-b border-emerald-500/30"
-            : "bg-amber-500/10 border-b border-amber-500/20"
+          ${
+            isMyTurn
+              ? "bg-emerald-500/20 border-b border-emerald-500/30"
+              : "bg-amber-500/10 border-b border-amber-500/20"
           }
         `}
       >
         <div className="flex items-center gap-2">
-          <Swords
-            className={`w-5 h-5 ${isMyTurn ? "text-emerald-500" : "text-amber-500"}`}
-          />
-          <span
-            className={`font-bold text-sm ${
-              isMyTurn ? "text-emerald-500" : "text-amber-500"
-            }`}
-          >
+          <Swords className={`w-5 h-5 ${isMyTurn ? "text-emerald-500" : "text-amber-500"}`} />
+          <span className={`font-bold text-sm ${isMyTurn ? "text-emerald-500" : "text-amber-500"}`}>
             {isMyTurn ? "YOUR TURN" : "IN COMBAT"}
           </span>
         </div>
@@ -155,9 +147,10 @@ export function CombatModeIndicator({
                 <span
                   className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${actionEconomy.free > 0
-                      ? "bg-emerald-500/20 text-emerald-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      actionEconomy.free > 0
+                        ? "bg-emerald-500/20 text-emerald-500"
+                        : "bg-muted text-muted-foreground"
                     }
                   `}
                 >
@@ -171,9 +164,10 @@ export function CombatModeIndicator({
                 <span
                   className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${actionEconomy.simple > 0
-                      ? "bg-blue-500/20 text-blue-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      actionEconomy.simple > 0
+                        ? "bg-blue-500/20 text-blue-500"
+                        : "bg-muted text-muted-foreground"
                     }
                   `}
                 >
@@ -187,9 +181,10 @@ export function CombatModeIndicator({
                 <span
                   className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${actionEconomy.complex > 0
-                      ? "bg-purple-500/20 text-purple-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      actionEconomy.complex > 0
+                        ? "bg-purple-500/20 text-purple-500"
+                        : "bg-muted text-muted-foreground"
                     }
                   `}
                 >
@@ -293,11 +288,7 @@ export function CombatModeIndicator({
         </div>
 
         {/* Error Display */}
-        {error && (
-          <div className="text-xs text-red-500 p-2 rounded bg-red-500/10">
-            {error}
-          </div>
-        )}
+        {error && <div className="text-xs text-red-500 p-2 rounded bg-red-500/10">{error}</div>}
       </div>
     </div>
   );
@@ -315,9 +306,10 @@ export function CombatModeChip({ theme }: { theme: Theme }) {
     <div
       className={`
         inline-flex items-center gap-2 px-3 py-1.5 rounded-full
-        ${isMyTurn
-          ? "bg-emerald-500/20 border border-emerald-500/30"
-          : "bg-amber-500/10 border border-amber-500/20"
+        ${
+          isMyTurn
+            ? "bg-emerald-500/20 border border-emerald-500/30"
+            : "bg-amber-500/10 border border-amber-500/20"
         }
       `}
     >

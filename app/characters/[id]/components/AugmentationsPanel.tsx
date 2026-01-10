@@ -12,7 +12,13 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import type { Character, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
+import type {
+  Character,
+  CyberwareItem,
+  BiowareItem,
+  CyberwareGrade,
+  BiowareGrade,
+} from "@/lib/types";
 import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
 import { Section } from "./Section";
@@ -27,10 +33,7 @@ import {
 } from "@/components/cyberlimbs";
 import type { CyberlimbInstallSelection } from "@/components/cyberlimbs";
 import { Cpu, Heart, Wifi, WifiOff, Plus, Settings, CircuitBoard } from "lucide-react";
-import {
-  useRemoveAugmentation,
-  useUpgradeAugmentation,
-} from "@/lib/rules/augmentations/hooks";
+import { useRemoveAugmentation, useUpgradeAugmentation } from "@/lib/rules/augmentations/hooks";
 import {
   useInstallCyberlimb,
   useRemoveCyberlimb,
@@ -78,9 +81,7 @@ export function AugmentationsPanel({
 }: AugmentationsPanelProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   const [activeTab, setActiveTab] = useState<"cyberware" | "bioware" | "cyberlimbs">("cyberware");
-  const [wirelessEnabled, setWirelessEnabled] = useState(
-    character.wirelessBonusesEnabled ?? true
-  );
+  const [wirelessEnabled, setWirelessEnabled] = useState(character.wirelessBonusesEnabled ?? true);
 
   // Modal state
   const [installModalOpen, setInstallModalOpen] = useState(false);
@@ -90,29 +91,50 @@ export function AugmentationsPanel({
   const [detailPanelOpen, setDetailPanelOpen] = useState(false);
 
   // Mutations - Augmentations
-  const { remove: removeAugmentation, loading: removeLoading } = useRemoveAugmentation(character.id || null);
-  const { upgrade: upgradeAugmentation, loading: upgradeLoading } = useUpgradeAugmentation(character.id || null);
+  const { remove: removeAugmentation, loading: removeLoading } = useRemoveAugmentation(
+    character.id || null
+  );
+  const { upgrade: upgradeAugmentation, loading: upgradeLoading } = useUpgradeAugmentation(
+    character.id || null
+  );
 
   // Mutations - Cyberlimbs
-  const { install: installCyberlimb, loading: installLoading } = useInstallCyberlimb(character.id || null);
-  const { remove: removeCyberlimb, loading: removeLimbLoading } = useRemoveCyberlimb(character.id || null);
-  const { toggle: toggleWireless, loading: wirelessLoading } = useToggleCyberlimbWireless(character.id || null);
-  const { add: addEnhancement, loading: enhancementLoading } = useAddCyberlimbEnhancement(character.id || null);
-  const { remove: removeEnhancement, loading: removeEnhancementLoading } = useRemoveCyberlimbEnhancement(character.id || null);
-  const { add: addAccessory, loading: accessoryLoading } = useAddCyberlimbAccessory(character.id || null);
-  const { remove: removeAccessory, loading: removeAccessoryLoading } = useRemoveCyberlimbAccessory(character.id || null);
+  const { install: installCyberlimb, loading: installLoading } = useInstallCyberlimb(
+    character.id || null
+  );
+  const { remove: removeCyberlimb, loading: removeLimbLoading } = useRemoveCyberlimb(
+    character.id || null
+  );
+  const { toggle: toggleWireless, loading: wirelessLoading } = useToggleCyberlimbWireless(
+    character.id || null
+  );
+  const { add: addEnhancement, loading: enhancementLoading } = useAddCyberlimbEnhancement(
+    character.id || null
+  );
+  const { remove: removeEnhancement, loading: removeEnhancementLoading } =
+    useRemoveCyberlimbEnhancement(character.id || null);
+  const { add: addAccessory, loading: accessoryLoading } = useAddCyberlimbAccessory(
+    character.id || null
+  );
+  const { remove: removeAccessory, loading: removeAccessoryLoading } = useRemoveCyberlimbAccessory(
+    character.id || null
+  );
 
   // Get augmentation data
   const cyberware = useMemo(() => character.cyberware || [], [character.cyberware]);
   const bioware = useMemo(() => character.bioware || [], [character.bioware]);
-  const cyberlimbs = useMemo(() => (character.cyberlimbs || []) as CyberlimbItem[], [character.cyberlimbs]);
+  const cyberlimbs = useMemo(
+    () => (character.cyberlimbs || []) as CyberlimbItem[],
+    [character.cyberlimbs]
+  );
 
   // Calculate essence values
   const maxEssence = 6;
   const cyberwareEssence = cyberware.reduce((sum, item) => sum + item.essenceCost, 0);
   const biowareEssence = bioware.reduce((sum, item) => sum + item.essenceCost, 0);
   const cyberlimbEssence = cyberlimbs.reduce((sum, limb) => sum + limb.essenceCost, 0);
-  const totalEssenceLoss = Math.round((cyberwareEssence + biowareEssence + cyberlimbEssence) * 100) / 100;
+  const totalEssenceLoss =
+    Math.round((cyberwareEssence + biowareEssence + cyberlimbEssence) * 100) / 100;
   const currentEssence = Math.round((maxEssence - totalEssenceLoss) * 100) / 100;
 
   // Check for awakened/technomancer
@@ -296,7 +318,12 @@ export function AugmentationsPanel({
   }, []);
 
   const handleAddEnhancement = useCallback(
-    async (selection: { enhancementType: string; rating: number; capacityCost: number; cost: number }) => {
+    async (selection: {
+      enhancementType: string;
+      rating: number;
+      capacityCost: number;
+      cost: number;
+    }) => {
       if (!selectedLimbId) return;
       // Map enhancement type to catalog ID (simplified - would need proper catalog lookup)
       const catalogIdMap: Record<string, string> = {
@@ -321,7 +348,10 @@ export function AugmentationsPanel({
                 id: result.enhancement!.id,
                 catalogId: result.enhancement!.catalogId,
                 name: result.enhancement!.name,
-                enhancementType: result.enhancement!.enhancementType as "strength" | "agility" | "armor",
+                enhancementType: result.enhancement!.enhancementType as
+                  | "strength"
+                  | "agility"
+                  | "armor",
                 rating: result.enhancement!.rating,
                 capacityUsed: result.enhancement!.capacityUsed,
                 cost: result.enhancement!.cost,
@@ -348,7 +378,13 @@ export function AugmentationsPanel({
   }, []);
 
   const handleAddAccessory = useCallback(
-    async (selection: { catalogId: string; name: string; rating?: number; capacityCost: number; cost: number }) => {
+    async (selection: {
+      catalogId: string;
+      name: string;
+      rating?: number;
+      capacityCost: number;
+      cost: number;
+    }) => {
       if (!selectedLimbId) return;
 
       const result = await addAccessory(selectedLimbId, {
@@ -404,11 +440,7 @@ export function AugmentationsPanel({
 
   if (!hasAugmentations) {
     return (
-      <Section
-        theme={t}
-        title="Augmentations"
-        icon={<Cpu className="w-4 h-4 text-cyan-500" />}
-      >
+      <Section theme={t} title="Augmentations" icon={<Cpu className="w-4 h-4 text-cyan-500" />}>
         <div className={`p-4 rounded border text-center ${t.colors.card} ${t.colors.border}`}>
           <p className="text-sm text-muted-foreground">No augmentations installed.</p>
           <p className="text-xs text-muted-foreground/70 mt-1">
@@ -420,11 +452,7 @@ export function AugmentationsPanel({
   }
 
   return (
-    <Section
-      theme={t}
-      title="Augmentations"
-      icon={<Cpu className="w-4 h-4 text-cyan-500" />}
-    >
+    <Section theme={t} title="Augmentations" icon={<Cpu className="w-4 h-4 text-cyan-500" />}>
       <div className="space-y-4">
         {/* Essence Summary */}
         <div className={`p-3 rounded-lg border ${t.colors.card} ${t.colors.border}`}>
@@ -530,7 +558,9 @@ export function AugmentationsPanel({
         <div className="space-y-3">
           {activeTab === "cyberware" ? (
             cyberware.length === 0 ? (
-              <p className="text-sm text-muted-foreground text-center py-4">No cyberware installed</p>
+              <p className="text-sm text-muted-foreground text-center py-4">
+                No cyberware installed
+              </p>
             ) : (
               cyberware.map((item) => (
                 <AugmentationCard
@@ -540,9 +570,7 @@ export function AugmentationsPanel({
                   showActions={showActions}
                   isActive={isActive}
                   onRemove={
-                    showActions && isActive && item.id
-                      ? () => handleRemove(item.id!)
-                      : undefined
+                    showActions && isActive && item.id ? () => handleRemove(item.id!) : undefined
                   }
                   onUpgrade={
                     showActions && isActive && item.id
@@ -564,9 +592,7 @@ export function AugmentationsPanel({
                   showActions={showActions}
                   isActive={isActive}
                   onRemove={
-                    showActions && isActive && item.id
-                      ? () => handleRemove(item.id!)
-                      : undefined
+                    showActions && isActive && item.id ? () => handleRemove(item.id!) : undefined
                   }
                   onUpgrade={
                     showActions && isActive && item.id

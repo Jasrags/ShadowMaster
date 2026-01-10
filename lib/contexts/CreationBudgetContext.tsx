@@ -19,10 +19,7 @@ import React, {
   useEffect,
   useRef,
 } from "react";
-import type {
-  CreationState,
-  ValidationError,
-} from "../types/creation";
+import type { CreationState, ValidationError } from "../types/creation";
 import type { PriorityTableData } from "../rules/RulesetContext";
 
 // =============================================================================
@@ -116,9 +113,7 @@ export interface CreationBudgetProviderProps {
 // CONTEXT
 // =============================================================================
 
-const CreationBudgetContext = createContext<CreationBudgetContextValue | null>(
-  null
-);
+const CreationBudgetContext = createContext<CreationBudgetContextValue | null>(null);
 
 // =============================================================================
 // BUDGET CALCULATION HELPERS
@@ -132,7 +127,10 @@ function calculateBudgetTotals(
   selections: Record<string, unknown>,
   priorityTable: PriorityTableData | null
 ): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
-  const totals: Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> = {
+  const totals: Record<
+    string,
+    { total: number; label: string; displayFormat?: "number" | "currency" }
+  > = {
     karma: { total: 25, label: "Karma", displayFormat: "number" },
   };
 
@@ -350,10 +348,7 @@ function extractSpentValues(
     const baseCost = w.cost * (w.quantity || 1);
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
     const ammoCost =
-      w.purchasedAmmunition?.reduce(
-        (a, ammo) => a + ammo.cost * (ammo.quantity || 1),
-        0
-      ) || 0;
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * (ammo.quantity || 1), 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
 
@@ -407,8 +402,12 @@ function extractSpentValues(
   const negativeQualities = (selections.negativeQualities || []) as QualitySelectionWithKarma[];
 
   // Calculate karma from quality selections if they have karma values
-  const positiveQualitiesHaveKarma = positiveQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
-  const negativeQualitiesHaveKarma = negativeQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+  const positiveQualitiesHaveKarma = positiveQualities.some(
+    (q) => q.karma !== undefined || q.originalKarma !== undefined
+  );
+  const negativeQualitiesHaveKarma = negativeQualities.some(
+    (q) => q.karma !== undefined || q.originalKarma !== undefined
+  );
 
   const karmaSpentPositive = positiveQualitiesHaveKarma
     ? positiveQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
@@ -484,11 +483,17 @@ function validateBudgets(
   // Check positive quality limit (max 25 karma)
   // Derive from selections if karma values are present, otherwise fall back to budgets
   type QualitySelectionWithKarma = { karma?: number; originalKarma?: number };
-  const positiveQualities = (state.selections.positiveQualities || []) as QualitySelectionWithKarma[];
-  const negativeQualities = (state.selections.negativeQualities || []) as QualitySelectionWithKarma[];
+  const positiveQualities = (state.selections.positiveQualities ||
+    []) as QualitySelectionWithKarma[];
+  const negativeQualities = (state.selections.negativeQualities ||
+    []) as QualitySelectionWithKarma[];
 
-  const positiveQualitiesHaveKarma = positiveQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
-  const negativeQualitiesHaveKarma = negativeQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+  const positiveQualitiesHaveKarma = positiveQualities.some(
+    (q) => q.karma !== undefined || q.originalKarma !== undefined
+  );
+  const negativeQualitiesHaveKarma = negativeQualities.some(
+    (q) => q.karma !== undefined || q.originalKarma !== undefined
+  );
 
   const positiveKarmaSpent = positiveQualitiesHaveKarma
     ? positiveQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
@@ -540,12 +545,7 @@ export function CreationBudgetProvider({
 
   // Calculate budget totals from priorities
   const budgetTotals = useMemo(
-    () =>
-      calculateBudgetTotals(
-        creationState.priorities,
-        creationState.selections,
-        priorityTable
-      ),
+    () => calculateBudgetTotals(creationState.priorities, creationState.selections, priorityTable),
     [creationState.priorities, creationState.selections, priorityTable]
   );
 
@@ -682,11 +682,7 @@ export function CreationBudgetProvider({
     ]
   );
 
-  return (
-    <CreationBudgetContext.Provider value={value}>
-      {children}
-    </CreationBudgetContext.Provider>
-  );
+  return <CreationBudgetContext.Provider value={value}>{children}</CreationBudgetContext.Provider>;
 }
 
 // =============================================================================
@@ -699,9 +695,7 @@ export function CreationBudgetProvider({
 export function useCreationBudgets(): CreationBudgetContextValue {
   const context = useContext(CreationBudgetContext);
   if (!context) {
-    throw new Error(
-      "useCreationBudgets must be used within a CreationBudgetProvider"
-    );
+    throw new Error("useCreationBudgets must be used within a CreationBudgetProvider");
   }
   return context;
 }

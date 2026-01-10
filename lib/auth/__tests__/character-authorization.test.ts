@@ -20,12 +20,7 @@ import type { ActorRole } from "@/lib/types/audit";
 describe("getPermissionsForRole", () => {
   describe("admin role", () => {
     it("should have all permissions regardless of status", () => {
-      const statuses: CharacterStatus[] = [
-        "draft",
-        "active",
-        "retired",
-        "deceased",
-      ];
+      const statuses: CharacterStatus[] = ["draft", "active", "retired", "deceased"];
 
       for (const status of statuses) {
         const permissions = getPermissionsForRole("admin", status);
@@ -81,12 +76,7 @@ describe("getPermissionsForRole", () => {
 
   describe("gm role", () => {
     it("should have view permission for all statuses", () => {
-      const statuses: CharacterStatus[] = [
-        "draft",
-        "active",
-        "retired",
-        "deceased",
-      ];
+      const statuses: CharacterStatus[] = ["draft", "active", "retired", "deceased"];
 
       for (const status of statuses) {
         const permissions = getPermissionsForRole("gm", status);
@@ -109,12 +99,7 @@ describe("getPermissionsForRole", () => {
     });
 
     it("should not have edit permission", () => {
-      const statuses: CharacterStatus[] = [
-        "draft",
-        "active",
-        "retired",
-        "deceased",
-      ];
+      const statuses: CharacterStatus[] = ["draft", "active", "retired", "deceased"];
 
       for (const status of statuses) {
         const permissions = getPermissionsForRole("gm", status);
@@ -240,12 +225,7 @@ describe("Permission Scenarios", () => {
 
   describe("Character deletion", () => {
     it("owner can delete their character at any status", () => {
-      const statuses: CharacterStatus[] = [
-        "draft",
-        "active",
-        "retired",
-        "deceased",
-      ];
+      const statuses: CharacterStatus[] = ["draft", "active", "retired", "deceased"];
 
       for (const status of statuses) {
         const permissions = getPermissionsForRole("owner", status);

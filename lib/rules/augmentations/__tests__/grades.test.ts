@@ -279,24 +279,14 @@ describe("Grade Comparison", () => {
     it("calculates essence refund for upgrade", () => {
       // Upgrading from standard (1.0x) to alpha (0.8x)
       // Base 1.0 essence: 1.0 -> 0.8 = 0.2 refund
-      const refund = calculateGradeUpgradeEssenceRefund(
-        1.0,
-        "standard",
-        "alpha",
-        true
-      );
+      const refund = calculateGradeUpgradeEssenceRefund(1.0, "standard", "alpha", true);
       expect(refund).toBe(0.2);
     });
 
     it("calculates larger refund for bigger upgrade", () => {
       // Upgrading from used (1.25x) to delta (0.5x)
       // Base 2.0 essence: 2.5 -> 1.0 = 1.5 refund
-      const refund = calculateGradeUpgradeEssenceRefund(
-        2.0,
-        "used",
-        "delta",
-        true
-      );
+      const refund = calculateGradeUpgradeEssenceRefund(2.0, "used", "delta", true);
       expect(refund).toBe(1.5);
     });
   });

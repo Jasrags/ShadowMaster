@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | **Active Skills** | **Knowledge Skills** | **Language Skills** | **Common Skill and Attribute Uses** |
@@ -55,35 +55,35 @@ Perception Tests involving vision (which is most of them) use the same Visibilit
 
 **Environmental Modifiers**
 
-| VISIBILITY | LIGHT/GLARE | WIND | RANGE | MODIFIER |
-| --- | --- | --- | --- | --- |
-| Clear | Full Light/No Glare | None or Light Breeze | Short | None |
-| Light Rain/Fog/Smoke | Partial Light/Weak Glare | Light Winds | Medium | –1 |
-| Moderate Rain/Fog/Smoke | Dim Light/Moderate Glare | Moderate Winds | Long | –3 |
-| Heavy Rain/Fog/Smoke | Total Darkness/Blinding Glare | Strong Winds | Extreme | –6 |
-| Combination of two or more conditions at the –6 level row | ----- | ----- | ----- | -10 |
+| VISIBILITY                                                | LIGHT/GLARE                   | WIND                 | RANGE   | MODIFIER |
+| --------------------------------------------------------- | ----------------------------- | -------------------- | ------- | -------- |
+| Clear                                                     | Full Light/No Glare           | None or Light Breeze | Short   | None     |
+| Light Rain/Fog/Smoke                                      | Partial Light/Weak Glare      | Light Winds          | Medium  | –1       |
+| Moderate Rain/Fog/Smoke                                   | Dim Light/Moderate Glare      | Moderate Winds       | Long    | –3       |
+| Heavy Rain/Fog/Smoke                                      | Total Darkness/Blinding Glare | Strong Winds         | Extreme | –6       |
+| Combination of two or more conditions at the –6 level row | -----                         | -----                | -----   | -10      |
 
 **PERCEPTION TEST MODIFIERS**
 
-| SITUATION | DICE POOL MODIFIER |
-| --- | --- |
-| Perceiver is distracted | -2 |
-| Perciever is specifically looking/listening for it | +3 |
-| Object/sound not in immediate vicinity | -2 |
-| Object/sound far away | -3 |
-| Object/sound stands out in some way | +2 |
-| Interfering sight/odor/sound | -2 |
-| Perceiver has active enhancements | + Rating |
-| Visibility and Light | Environmental Factors (Above) |
+| SITUATION                                          | DICE POOL MODIFIER            |
+| -------------------------------------------------- | ----------------------------- |
+| Perceiver is distracted                            | -2                            |
+| Perciever is specifically looking/listening for it | +3                            |
+| Object/sound not in immediate vicinity             | -2                            |
+| Object/sound far away                              | -3                            |
+| Object/sound stands out in some way                | +2                            |
+| Interfering sight/odor/sound                       | -2                            |
+| Perceiver has active enhancements                  | + Rating                      |
+| Visibility and Light                               | Environmental Factors (Above) |
 
 **PERCEPTION THRESHOLDS**
 
-| ITEM/EVENT IS: | THRESHOLD | EXAMPLES |
-| --- | --- | --- |
-| Obvious | 1 | Neon sign, running crowd, yelling, gunfire |
-| Normal | 2 | Street sign, pedestrian, conversation, silenced gunfire |
-| Obscured/Small/Muffled | 3 | Item dropped under table, contact lens, whispering |
-| Hidden/Micro/Silent | 4 | Secret door, needle in haystack, subvocal speech |
+| ITEM/EVENT IS:         | THRESHOLD | EXAMPLES                                                |
+| ---------------------- | --------- | ------------------------------------------------------- |
+| Obvious                | 1         | Neon sign, running crowd, yelling, gunfire              |
+| Normal                 | 2         | Street sign, pedestrian, conversation, silenced gunfire |
+| Obscured/Small/Muffled | 3         | Item dropped under table, contact lens, whispering      |
+| Hidden/Micro/Silent    | 4         | Secret door, needle in haystack, subvocal speech        |
 
 ### Using Stealth
 

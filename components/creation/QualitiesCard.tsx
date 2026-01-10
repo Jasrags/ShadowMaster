@@ -51,7 +51,12 @@ function getQualityCategory(quality: QualityData): QualityCategory {
   const summary = (quality.summary || "").toLowerCase();
 
   // Magic-related
-  if (quality.requiresMagic || name.includes("astral") || name.includes("magic") || name.includes("spirit")) {
+  if (
+    quality.requiresMagic ||
+    name.includes("astral") ||
+    name.includes("magic") ||
+    name.includes("spirit")
+  ) {
     return "magical";
   }
 
@@ -132,15 +137,16 @@ function SelectedQualityCard({
 }) {
   // Get level name if quality has named levels (legacy format only)
   // Unified ratings don't have named levels, just numeric ratings
-  const levelName = selection.level && quality.levels
-    ? quality.levels.find((l) => l.level === selection.level)?.name
-    : null;
+  const levelName =
+    selection.level && quality.levels
+      ? quality.levels.find((l) => l.level === selection.level)?.name
+      : null;
 
   const displayName = selection.specification
     ? `${quality.name} (${selection.specification})`
     : selection.level
-    ? `${quality.name} (${levelName || `Rating ${selection.level}`})`
-    : quality.name;
+      ? `${quality.name} (${levelName || `Rating ${selection.level}`})`
+      : quality.name;
 
   return (
     <div className="py-1.5">
@@ -330,7 +336,9 @@ function QualitySelectionModal({
   };
 
   // Get available levels for a quality (unified or legacy)
-  const getQualityLevels = (quality: QualityData): Array<{ level: number; name?: string; karma: number }> => {
+  const getQualityLevels = (
+    quality: QualityData
+  ): Array<{ level: number; name?: string; karma: number }> => {
     // Check unified ratings first
     if (hasUnifiedRatings(quality)) {
       const ratings = getAvailableRatings(quality);
@@ -394,7 +402,15 @@ function QualitySelectionModal({
       return usedKarma + cost <= maxKarma && karmaBalance >= cost;
     }
     return usedKarma + cost <= maxKarma;
-  }, [selectedQuality, specification, selectedLevel, isPositive, usedKarma, maxKarma, karmaBalance]);
+  }, [
+    selectedQuality,
+    specification,
+    selectedLevel,
+    isPositive,
+    usedKarma,
+    maxKarma,
+    karmaBalance,
+  ]);
 
   const selectedCost = selectedQuality ? getQualityCost(selectedQuality, selectedLevel) : 0;
 
@@ -421,8 +437,8 @@ function QualitySelectionModal({
                 />
               </div>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {remainingKarma} karma available for {isPositive ? "positive" : "negative"} qualities (
-                {usedKarma} of {maxKarma} max used)
+                {remainingKarma} karma available for {isPositive ? "positive" : "negative"}{" "}
+                qualities ({usedKarma} of {maxKarma} max used)
               </p>
             </div>
 
@@ -491,8 +507,8 @@ function QualitySelectionModal({
                               ? "border-blue-400 bg-blue-50 dark:border-blue-600 dark:bg-blue-900/30"
                               : "border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30"
                             : canAfford
-                            ? "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
-                            : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+                              ? "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600"
+                              : "cursor-not-allowed border-zinc-200 bg-zinc-50 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
                         }`}
                       >
                         <div className="flex items-center justify-between">
@@ -547,163 +563,170 @@ function QualitySelectionModal({
               </div>
             </div>
 
-        {/* Specification/Level selection (if needed) */}
-        {selectedQuality && (selectedQuality.requiresSpecification || hasLevels(selectedQuality)) && (
-          <div className="shrink-0 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-            {selectedQuality.requiresSpecification && (
-              <div className="mb-3">
-                <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  {selectedQuality.specificationLabel || "Specification"}
-                </label>
-                {selectedQuality.specificationOptions ? (
-                  // Static options from quality definition
-                  <div className="relative">
-                    <select
-                      value={specification}
-                      onChange={(e) => setSpecification(e.target.value)}
-                      className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                    >
-                      <option value="">Select {selectedQuality.specificationLabel}...</option>
-                      {selectedQuality.specificationOptions.map((opt) => (
-                        <option key={opt} value={opt}>
-                          {opt}
-                        </option>
-                      ))}
-                    </select>
-                    <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                  </div>
-                ) : selectedQuality.specificationSource === "skillGroups" ? (
-                  // Dynamic options from skill groups
-                  <>
-                    <div className="relative">
-                      <select
-                        value={specification}
-                        onChange={(e) => setSpecification(e.target.value)}
-                        className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                      >
-                        <option value="">Select {selectedQuality.specificationLabel}...</option>
-                        {skillGroups.map((group) => (
-                          <option key={group.id} value={group.id}>
-                            {group.name}
-                          </option>
-                        ))}
-                      </select>
-                      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                    </div>
-                    {/* Warning for Incompetent quality conflicting with existing skills */}
-                    {incompetentConflictInfo && (
-                      <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
-                        <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
-                        <div className="text-sm text-amber-700 dark:text-amber-300">
-                          <strong>Warning:</strong> You have skills from the{" "}
-                          <strong>{incompetentConflictInfo.groupName}</strong> group selected.
-                          {incompetentConflictInfo.hasGroupSelected && (
-                            <span> You have the entire skill group selected.</span>
-                          )}
-                          {incompetentConflictInfo.conflictingSkillCount > 0 && (
-                            <span>
-                              {" "}
-                              You have {incompetentConflictInfo.conflictingSkillCount} individual skill
-                              {incompetentConflictInfo.conflictingSkillCount !== 1 ? "s" : ""} from this
-                              group.
-                            </span>
-                          )}
-                          <div className="mt-1 text-xs">
-                            These skills will need to be removed if you add this quality.
-                          </div>
-                        </div>
-                      </div>
-                    )}
-                  </>
-                ) : (
-                  // Free-form text input
-                  <input
-                    type="text"
-                    value={specification}
-                    onChange={(e) => setSpecification(e.target.value)}
-                    placeholder={`Enter ${selectedQuality.specificationLabel || "specification"}...`}
-                    className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                  />
-                )}
-              </div>
-            )}
-
-            {hasLevels(selectedQuality) && (() => {
-              const levels = getQualityLevels(selectedQuality);
-              const hasNamedLevels = levels.some((l) => l.name);
-
-              return (
-                <div>
-                  <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    {/* Use "Option" for qualities with named levels, "Rating" otherwise */}
-                    {hasNamedLevels ? "Option" : "Rating"}
-                  </label>
-                  {/* Use dropdown for qualities with named levels or many levels */}
-                  {hasNamedLevels || levels.length > 4 ? (
-                    <div className="relative">
-                      <select
-                        value={selectedLevel}
-                        onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
-                        className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-                      >
-                        {levels.map((level) => {
-                          const levelCost = Math.abs(level.karma);
-                          const canAffordLevel = isPositive
-                            ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
-                            : usedKarma + levelCost <= maxKarma;
-
-                          return (
-                            <option
-                              key={level.level}
-                              value={level.level}
-                              disabled={!canAffordLevel}
-                            >
-                              {level.name || `Rating ${level.level}`} ({isPositive ? levelCost : `+${levelCost}`} karma)
-                              {!canAffordLevel ? " - cannot afford" : ""}
-                            </option>
-                          );
-                        })}
-                      </select>
-                      <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                    </div>
-                  ) : (
-                    <div className="flex gap-2">
-                      {levels.map((level) => {
-                        const levelCost = Math.abs(level.karma);
-                        const canAffordLevel = isPositive
-                          ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
-                          : usedKarma + levelCost <= maxKarma;
-
-                        return (
-                          <button
-                            key={level.level}
-                            onClick={() => setSelectedLevel(level.level)}
-                            disabled={!canAffordLevel}
-                            className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
-                              selectedLevel === level.level
-                                ? isPositive
-                                  ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
-                                  : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
-                                : canAffordLevel
-                                ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
-                                : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
-                            }`}
+            {/* Specification/Level selection (if needed) */}
+            {selectedQuality &&
+              (selectedQuality.requiresSpecification || hasLevels(selectedQuality)) && (
+                <div className="shrink-0 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+                  {selectedQuality.requiresSpecification && (
+                    <div className="mb-3">
+                      <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        {selectedQuality.specificationLabel || "Specification"}
+                      </label>
+                      {selectedQuality.specificationOptions ? (
+                        // Static options from quality definition
+                        <div className="relative">
+                          <select
+                            value={specification}
+                            onChange={(e) => setSpecification(e.target.value)}
+                            className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                           >
-                            <div className="text-sm font-medium">{level.level}</div>
-                            <div className="text-xs text-zinc-500 dark:text-zinc-400">
-                              {isPositive ? `${levelCost}` : `+${levelCost}`} karma
+                            <option value="">Select {selectedQuality.specificationLabel}...</option>
+                            {selectedQuality.specificationOptions.map((opt) => (
+                              <option key={opt} value={opt}>
+                                {opt}
+                              </option>
+                            ))}
+                          </select>
+                          <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                        </div>
+                      ) : selectedQuality.specificationSource === "skillGroups" ? (
+                        // Dynamic options from skill groups
+                        <>
+                          <div className="relative">
+                            <select
+                              value={specification}
+                              onChange={(e) => setSpecification(e.target.value)}
+                              className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                            >
+                              <option value="">
+                                Select {selectedQuality.specificationLabel}...
+                              </option>
+                              {skillGroups.map((group) => (
+                                <option key={group.id} value={group.id}>
+                                  {group.name}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                          </div>
+                          {/* Warning for Incompetent quality conflicting with existing skills */}
+                          {incompetentConflictInfo && (
+                            <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+                              <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                              <div className="text-sm text-amber-700 dark:text-amber-300">
+                                <strong>Warning:</strong> You have skills from the{" "}
+                                <strong>{incompetentConflictInfo.groupName}</strong> group selected.
+                                {incompetentConflictInfo.hasGroupSelected && (
+                                  <span> You have the entire skill group selected.</span>
+                                )}
+                                {incompetentConflictInfo.conflictingSkillCount > 0 && (
+                                  <span>
+                                    {" "}
+                                    You have {incompetentConflictInfo.conflictingSkillCount}{" "}
+                                    individual skill
+                                    {incompetentConflictInfo.conflictingSkillCount !== 1
+                                      ? "s"
+                                      : ""}{" "}
+                                    from this group.
+                                  </span>
+                                )}
+                                <div className="mt-1 text-xs">
+                                  These skills will need to be removed if you add this quality.
+                                </div>
+                              </div>
                             </div>
-                          </button>
-                        );
-                      })}
+                          )}
+                        </>
+                      ) : (
+                        // Free-form text input
+                        <input
+                          type="text"
+                          value={specification}
+                          onChange={(e) => setSpecification(e.target.value)}
+                          placeholder={`Enter ${selectedQuality.specificationLabel || "specification"}...`}
+                          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                        />
+                      )}
                     </div>
                   )}
-                </div>
-              );
-            })()}
-          </div>
-        )}
 
+                  {hasLevels(selectedQuality) &&
+                    (() => {
+                      const levels = getQualityLevels(selectedQuality);
+                      const hasNamedLevels = levels.some((l) => l.name);
+
+                      return (
+                        <div>
+                          <label className="mb-1 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                            {/* Use "Option" for qualities with named levels, "Rating" otherwise */}
+                            {hasNamedLevels ? "Option" : "Rating"}
+                          </label>
+                          {/* Use dropdown for qualities with named levels or many levels */}
+                          {hasNamedLevels || levels.length > 4 ? (
+                            <div className="relative">
+                              <select
+                                value={selectedLevel}
+                                onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
+                                className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                              >
+                                {levels.map((level) => {
+                                  const levelCost = Math.abs(level.karma);
+                                  const canAffordLevel = isPositive
+                                    ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
+                                    : usedKarma + levelCost <= maxKarma;
+
+                                  return (
+                                    <option
+                                      key={level.level}
+                                      value={level.level}
+                                      disabled={!canAffordLevel}
+                                    >
+                                      {level.name || `Rating ${level.level}`} (
+                                      {isPositive ? levelCost : `+${levelCost}`} karma)
+                                      {!canAffordLevel ? " - cannot afford" : ""}
+                                    </option>
+                                  );
+                                })}
+                              </select>
+                              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                            </div>
+                          ) : (
+                            <div className="flex gap-2">
+                              {levels.map((level) => {
+                                const levelCost = Math.abs(level.karma);
+                                const canAffordLevel = isPositive
+                                  ? usedKarma + levelCost <= maxKarma && karmaBalance >= levelCost
+                                  : usedKarma + levelCost <= maxKarma;
+
+                                return (
+                                  <button
+                                    key={level.level}
+                                    onClick={() => setSelectedLevel(level.level)}
+                                    disabled={!canAffordLevel}
+                                    className={`flex-1 rounded-lg border px-3 py-2 text-center transition-colors ${
+                                      selectedLevel === level.level
+                                        ? isPositive
+                                          ? "border-blue-400 bg-blue-100 text-blue-700 dark:border-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
+                                          : "border-amber-400 bg-amber-100 text-amber-700 dark:border-amber-600 dark:bg-amber-900/50 dark:text-amber-300"
+                                        : canAffordLevel
+                                          ? "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
+                                          : "cursor-not-allowed border-zinc-200 opacity-50 dark:border-zinc-700"
+                                    }`}
+                                  >
+                                    <div className="text-sm font-medium">{level.level}</div>
+                                    <div className="text-xs text-zinc-500 dark:text-zinc-400">
+                                      {isPositive ? `${levelCost}` : `+${levelCost}`} karma
+                                    </div>
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          )}
+                        </div>
+                      );
+                    })()}
+                </div>
+              )}
           </ModalBody>
 
           <ModalFooter>
@@ -717,7 +740,8 @@ function QualitySelectionModal({
                   {/* Show validation error when specification is required but missing */}
                   {selectedQuality.requiresSpecification && !specification && (
                     <div className="text-xs text-amber-600 dark:text-amber-400">
-                      Please enter a {selectedQuality.specificationLabel?.toLowerCase() || "specification"} above
+                      Please enter a{" "}
+                      {selectedQuality.specificationLabel?.toLowerCase() || "specification"} above
                     </div>
                   )}
                 </div>
@@ -799,29 +823,26 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
 
   // Get cost of a quality selection
   // Supports unified ratings table (preferred) and legacy levels array
-  const getSelectionCost = useCallback(
-    (selection: SelectedQuality, qualityList: QualityData[]) => {
-      const quality = qualityList.find((q) => q.id === selection.id);
-      if (!quality) return 0;
+  const getSelectionCost = useCallback((selection: SelectedQuality, qualityList: QualityData[]) => {
+    const quality = qualityList.find((q) => q.id === selection.id);
+    if (!quality) return 0;
 
-      // Check unified ratings table first
-      if (hasUnifiedRatings(quality) && selection.level) {
-        const ratingValue = getRatingTableValue(quality, selection.level);
-        if (ratingValue?.karmaCost !== undefined) {
-          return Math.abs(ratingValue.karmaCost);
-        }
+    // Check unified ratings table first
+    if (hasUnifiedRatings(quality) && selection.level) {
+      const ratingValue = getRatingTableValue(quality, selection.level);
+      if (ratingValue?.karmaCost !== undefined) {
+        return Math.abs(ratingValue.karmaCost);
       }
+    }
 
-      // Fall back to legacy levels array
-      if (quality.levels && selection.level) {
-        const levelData = quality.levels.find((l) => l.level === selection.level);
-        return levelData ? Math.abs(levelData.karma) : quality.karmaCost || 0;
-      }
+    // Fall back to legacy levels array
+    if (quality.levels && selection.level) {
+      const levelData = quality.levels.find((l) => l.level === selection.level);
+      return levelData ? Math.abs(levelData.karma) : quality.karmaCost || 0;
+    }
 
-      return quality.karmaCost || quality.karmaBonus || 0;
-    },
-    []
-  );
+    return quality.karmaCost || quality.karmaBonus || 0;
+  }, []);
 
   // Calculate karma spent/gained
   const positiveKarmaSpent = useMemo(() => {
@@ -890,12 +911,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         },
       });
     },
-    [
-      selectedPositive,
-      selectedNegative,
-      state.selections,
-      updateState,
-    ]
+    [selectedPositive, selectedNegative, state.selections, updateState]
   );
 
   // Get validation status
@@ -906,10 +922,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   }, [isPositiveOver, isNegativeOver, selectedPositive, selectedNegative]);
 
   return (
-    <CreationCard
-      title="Qualities"
-      status={validationStatus}
-    >
+    <CreationCard title="Qualities" status={validationStatus}>
       <div className="space-y-3">
         {/* Budget indicators */}
         <div className="grid gap-3 sm:grid-cols-2">
@@ -946,7 +959,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedPositive.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">No positive qualities selected</p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              No positive qualities selected
+            </p>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedPositive.map((selection) => {
@@ -984,7 +999,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedNegative.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">No negative qualities selected</p>
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">
+              No negative qualities selected
+            </p>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedNegative.map((selection) => {

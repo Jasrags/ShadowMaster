@@ -77,7 +77,7 @@ export function BudgetIndicator({
   // Resolve mode from deprecated compact prop
   const resolvedMode = mode ?? (compact ? "compact" : "default");
 
-  const remaining = remainingOverride ?? (total - spent);
+  const remaining = remainingOverride ?? total - spent;
   const percentSpent = total > 0 ? Math.min(100, Math.max(0, (spent / total) * 100)) : 0;
   const isOverspent = remaining < 0 || spent > total;
   const isComplete = remaining === 0 && total > 0;
@@ -136,18 +136,17 @@ export function BudgetIndicator({
       : `${label}: ${formatValue(remaining)} remaining`;
 
   // Compute karma warning note if over budget and karmaRequired provided
-  const karmaNote = isOverspent && karmaRequired
-    ? `Requires ${karmaRequired} karma`
-    : undefined;
+  const karmaNote = isOverspent && karmaRequired ? `Requires ${karmaRequired} karma` : undefined;
   const finalNote = note || karmaNote;
   const finalNoteStyle = note ? noteStyle : "warning";
 
   // Card mode: bordered container with prominent remaining display
   if (resolvedMode === "card") {
     // Compute over-budget message with unit cost if provided
-    const overBudgetMessage = isOverspent && karmaRequired && karmaCostPerUnit && unitName
-      ? `${Math.abs(remaining)} ${unitName}${Math.abs(remaining) !== 1 ? "s" : ""} over free limit → ${karmaRequired} karma (${karmaCostPerUnit} karma per ${unitName})`
-      : undefined;
+    const overBudgetMessage =
+      isOverspent && karmaRequired && karmaCostPerUnit && unitName
+        ? `${Math.abs(remaining)} ${unitName}${Math.abs(remaining) !== 1 ? "s" : ""} over free limit → ${karmaRequired} karma (${karmaCostPerUnit} karma per ${unitName})`
+        : undefined;
 
     // Get card border and background based on variant and overspent state
     const getCardStyles = () => {
@@ -173,27 +172,19 @@ export function BudgetIndicator({
 
         {/* Header: label and remaining value */}
         <div className="flex items-center justify-between">
-          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {label}
-          </div>
-          <div className={`text-lg font-bold ${getCardValueColor()}`}>
-            {formatValue(remaining)}
-          </div>
+          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{label}</div>
+          <div className={`text-lg font-bold ${getCardValueColor()}`}>{formatValue(remaining)}</div>
         </div>
 
         {/* Description */}
         {description && (
-          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            {description}
-          </div>
+          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{description}</div>
         )}
 
         {/* Source with "of X remaining" */}
         <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
           {source}
-          <span className="float-right">
-            of {formatValue(total)} remaining
-          </span>
+          <span className="float-right">of {formatValue(total)} remaining</span>
         </div>
 
         {/* Progress bar */}
@@ -223,7 +214,9 @@ export function BudgetIndicator({
 
         {/* Generic note */}
         {finalNote && !overBudgetMessage && (
-          <div className={`mt-2 text-xs ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}>
+          <div
+            className={`mt-2 text-xs ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}
+          >
             {finalNote}
           </div>
         )}
@@ -270,7 +263,9 @@ export function BudgetIndicator({
           </div>
         )}
         {finalNote && (
-          <div className={`text-right text-[10px] ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}>
+          <div
+            className={`text-right text-[10px] ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}
+          >
             {finalNote}
           </div>
         )}
@@ -326,14 +321,17 @@ export function BudgetIndicator({
               className="absolute right-0 top-0 h-full bg-red-500"
               style={{
                 width: `${Math.min(30, ((spent - total) / total) * 100)}%`,
-                backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
+                backgroundImage:
+                  "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
               }}
             />
           )}
         </div>
       )}
       {finalNote && (
-        <div className={`text-xs ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}>
+        <div
+          className={`text-xs ${finalNoteStyle === "warning" ? "text-amber-600 dark:text-amber-400" : getNoteColor()}`}
+        >
           {finalNote}
         </div>
       )}

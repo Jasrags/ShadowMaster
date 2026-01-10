@@ -2,15 +2,7 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  ArrowLeft,
-  Loader2,
-  Edit,
-  Trash2,
-  BarChart3,
-  Swords,
-  Settings,
-} from "lucide-react";
+import { ArrowLeft, Loader2, Edit, Trash2, BarChart3, Swords, Settings } from "lucide-react";
 import type { GruntTeam, IndividualGrunts, Campaign, ID } from "@/lib/types";
 import { ProfessionalRatingBadge } from "../components/ProfessionalRatingBadge";
 import { GruntTeamStatsTab } from "./components/GruntTeamStatsTab";
@@ -38,26 +30,29 @@ export default function GruntTeamDetailPage() {
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("stats");
 
-  const fetchTeam = useCallback(async (includeCombatState = false) => {
-    try {
-      const queryParams = includeCombatState ? "?includeCombatState=true" : "";
-      const response = await fetch(`/api/grunt-teams/${teamId}${queryParams}`);
-      const data = await response.json();
+  const fetchTeam = useCallback(
+    async (includeCombatState = false) => {
+      try {
+        const queryParams = includeCombatState ? "?includeCombatState=true" : "";
+        const response = await fetch(`/api/grunt-teams/${teamId}${queryParams}`);
+        const data = await response.json();
 
-      if (!response.ok) {
-        throw new Error(data.error || "Failed to fetch grunt team");
-      }
+        if (!response.ok) {
+          throw new Error(data.error || "Failed to fetch grunt team");
+        }
 
-      setTeam(data.team);
-      if (data.individualGrunts) {
-        setIndividualGrunts(data.individualGrunts);
+        setTeam(data.team);
+        if (data.individualGrunts) {
+          setIndividualGrunts(data.individualGrunts);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
       }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  }, [teamId]);
+    },
+    [teamId]
+  );
 
   const fetchCampaign = useCallback(async () => {
     try {
@@ -88,7 +83,9 @@ export default function GruntTeamDetailPage() {
   }, [activeTab, userRole, individualGrunts, fetchTeam]);
 
   const handleDelete = async () => {
-    if (!confirm("Are you sure you want to delete this grunt team? This action cannot be undone.")) {
+    if (
+      !confirm("Are you sure you want to delete this grunt team? This action cannot be undone.")
+    ) {
       return;
     }
 
@@ -114,14 +111,11 @@ export default function GruntTeamDetailPage() {
     damageType: "physical" | "stun"
   ) => {
     try {
-      const response = await fetch(
-        `/api/grunt-teams/${teamId}/grunts/${gruntId}/damage`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ damage, damageType }),
-        }
-      );
+      const response = await fetch(`/api/grunt-teams/${teamId}/grunts/${gruntId}/damage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ damage, damageType }),
+      });
 
       if (!response.ok) {
         const data = await response.json();
@@ -193,9 +187,7 @@ export default function GruntTeamDetailPage() {
     return (
       <div className="mx-auto max-w-5xl px-4 py-8">
         <div className="rounded-lg bg-red-50 p-6 text-center dark:bg-red-900/30">
-          <p className="text-red-700 dark:text-red-400">
-            {error || "Grunt team not found"}
-          </p>
+          <p className="text-red-700 dark:text-red-400">{error || "Grunt team not found"}</p>
           <button
             onClick={() => router.push(`/campaigns/${campaignId}/grunt-teams`)}
             className="mt-4 rounded-md bg-red-600 px-4 py-2 text-sm font-medium text-white hover:bg-red-700"
@@ -223,29 +215,21 @@ export default function GruntTeamDetailPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="flex items-center gap-3 mb-2">
-              <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-                {team.name}
-              </h1>
+              <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">{team.name}</h1>
               <ProfessionalRatingBadge rating={team.professionalRating} />
             </div>
             {campaign && (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {campaign.title}
-              </p>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">{campaign.title}</p>
             )}
             {team.description && (
-              <p className="mt-2 text-zinc-600 dark:text-zinc-400 max-w-2xl">
-                {team.description}
-              </p>
+              <p className="mt-2 text-zinc-600 dark:text-zinc-400 max-w-2xl">{team.description}</p>
             )}
           </div>
 
           {isGM && (
             <div className="flex gap-2">
               <button
-                onClick={() =>
-                  router.push(`/campaigns/${campaignId}/grunt-teams/${teamId}/edit`)
-                }
+                onClick={() => router.push(`/campaigns/${campaignId}/grunt-teams/${teamId}/edit`)}
                 className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
               >
                 <Edit className="h-4 w-4" />
@@ -293,9 +277,7 @@ export default function GruntTeamDetailPage() {
 
       {/* Tab Content */}
       <div>
-        {activeTab === "stats" && (
-          <GruntTeamStatsTab team={team} userRole={userRole || "player"} />
-        )}
+        {activeTab === "stats" && <GruntTeamStatsTab team={team} userRole={userRole || "player"} />}
         {activeTab === "combat" && (
           <GruntTeamCombatTrackerTab
             team={team}
@@ -313,8 +295,8 @@ export default function GruntTeamDetailPage() {
               Team Settings
             </h3>
             <p className="text-zinc-500 dark:text-zinc-400">
-              Settings configuration will be available here. Use the Edit button
-              to modify team configuration.
+              Settings configuration will be available here. Use the Edit button to modify team
+              configuration.
             </p>
           </div>
         )}

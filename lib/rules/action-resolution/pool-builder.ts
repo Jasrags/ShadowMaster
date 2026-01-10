@@ -12,13 +12,8 @@ import type {
   PoolBuildOptions,
   EditionDiceRules,
 } from "@/lib/types";
-import type {
-  EncumbranceState,
-} from "@/lib/types/gear-state";
-import type {
-  EffectConditionType,
-  ActiveWirelessBonuses,
-} from "@/lib/types/wireless-effects";
+import type { EncumbranceState } from "@/lib/types/gear-state";
+import type { EffectConditionType, ActiveWirelessBonuses } from "@/lib/types/wireless-effects";
 import { DEFAULT_DICE_RULES } from "./dice-engine";
 import { calculateEncumbrance } from "../encumbrance/calculator";
 import { calculateContextualWirelessBonuses } from "../wireless/bonus-calculator";
@@ -85,10 +80,7 @@ export function createWoundModifier(
 /**
  * Get attribute value from character
  */
-export function getAttributeValue(
-  character: Character,
-  attributeName: string
-): number {
+export function getAttributeValue(character: Character, attributeName: string): number {
   if (!character.attributes) return 0;
 
   const normalizedName = attributeName.toLowerCase();
@@ -135,10 +127,7 @@ export function getAttributeValue(
 /**
  * Get skill rating from character
  */
-export function getSkillRating(
-  character: Character,
-  skillName: string
-): number {
+export function getSkillRating(character: Character, skillName: string): number {
   if (!character.skills) return 0;
 
   const normalizedName = skillName.toLowerCase();
@@ -193,22 +182,15 @@ export function calculateLimit(
   switch (limitType) {
     case "physical":
       // (Strength + Body + Reaction) / 3, rounded up
-      return Math.ceil(
-        ((attrs.strength ?? 0) + (attrs.body ?? 0) + (attrs.reaction ?? 0)) / 3
-      );
+      return Math.ceil(((attrs.strength ?? 0) + (attrs.body ?? 0) + (attrs.reaction ?? 0)) / 3);
     case "mental":
       // (Logic + Intuition + Willpower) / 3, rounded up
-      return Math.ceil(
-        ((attrs.logic ?? 0) + (attrs.intuition ?? 0) + (attrs.willpower ?? 0)) /
-          3
-      );
+      return Math.ceil(((attrs.logic ?? 0) + (attrs.intuition ?? 0) + (attrs.willpower ?? 0)) / 3);
     case "social":
       // (Charisma + Willpower + Essence) / 3, rounded up
       // Essence comes from derivedStats or defaults to 6
       const essence = character.derivedStats?.essence ?? 6;
-      return Math.ceil(
-        ((attrs.charisma ?? 0) + (attrs.willpower ?? 0) + essence) / 3
-      );
+      return Math.ceil(((attrs.charisma ?? 0) + (attrs.willpower ?? 0) + essence) / 3);
     default:
       return 0;
   }
@@ -301,10 +283,7 @@ export function buildSimplePool(diceCount: number): ActionPool {
 /**
  * Add modifiers to an existing pool
  */
-export function addModifiersToPool(
-  pool: ActionPool,
-  ...newModifiers: PoolModifier[]
-): ActionPool {
+export function addModifiersToPool(pool: ActionPool, ...newModifiers: PoolModifier[]): ActionPool {
   const allModifiers = [...pool.modifiers, ...newModifiers];
   const modifierTotal = allModifiers.reduce((sum, m) => sum + m.value, 0);
 
@@ -318,11 +297,7 @@ export function addModifiersToPool(
 /**
  * Apply a limit to a pool
  */
-export function applyLimitToPool(
-  pool: ActionPool,
-  limit: number,
-  limitSource: string
-): ActionPool {
+export function applyLimitToPool(pool: ActionPool, limit: number, limitSource: string): ActionPool {
   return {
     ...pool,
     limit,
@@ -459,9 +434,7 @@ export function buildPerceptionPool(
  * Calculate encumbrance modifier for a character.
  * Returns null if character is not encumbered.
  */
-export function createEncumbranceModifier(
-  character: Character
-): PoolModifier | null {
+export function createEncumbranceModifier(character: Character): PoolModifier | null {
   const encumbrance = calculateEncumbrance(character);
 
   if (encumbrance.overweightPenalty < 0) {
@@ -525,7 +498,11 @@ export function createWirelessModifiers(
   const modifiers: PoolModifier[] = [];
 
   // Extract relevant bonuses based on test type
-  if (context.testType === "attack" || context.testType === "ranged_attack" || context.testType === "melee_attack") {
+  if (
+    context.testType === "attack" ||
+    context.testType === "ranged_attack" ||
+    context.testType === "melee_attack"
+  ) {
     if (bonuses.attackPool > 0) {
       modifiers.push({
         source: "wireless",

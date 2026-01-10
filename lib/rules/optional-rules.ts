@@ -99,17 +99,23 @@ export function extractOptionalRules(ruleset: LoadedRuleset): OptionalRule[] {
   for (const book of ruleset.books) {
     // Access the modules object - check for a custom optionalRules key
     // Since optionalRules isn't a standard RuleModuleType, we check the raw payload
-    const modulesPayload = book.payload.modules as Record<string, { payload?: unknown } | undefined>;
-    
+    const modulesPayload = book.payload.modules as Record<
+      string,
+      { payload?: unknown } | undefined
+    >;
+
     // Try to find optional rules in a custom module or in the book's metadata
-    const optionalRulesEntry = modulesPayload["optionalRules"] as { payload?: OptionalRulesPayload } | undefined;
-    
+    const optionalRulesEntry = modulesPayload["optionalRules"] as
+      | { payload?: OptionalRulesPayload }
+      | undefined;
+
     if (optionalRulesEntry?.payload?.rules && Array.isArray(optionalRulesEntry.payload.rules)) {
       const bookRules = optionalRulesEntry.payload.rules
-        .filter((r): r is OptionalRule =>
-          typeof r.id === "string" &&
-          typeof r.name === "string" &&
-          typeof r.description === "string"
+        .filter(
+          (r): r is OptionalRule =>
+            typeof r.id === "string" &&
+            typeof r.name === "string" &&
+            typeof r.description === "string"
         )
         .map((r) => ({
           ...r,
@@ -280,10 +286,7 @@ export function createDefaultOptionalRulesState(
  * @param ruleId - ID of rule to enable
  * @returns New state with rule enabled
  */
-export function enableOptionalRule(
-  state: OptionalRulesState,
-  ruleId: string
-): OptionalRulesState {
+export function enableOptionalRule(state: OptionalRulesState, ruleId: string): OptionalRulesState {
   return {
     enabledRuleIds: state.enabledRuleIds.includes(ruleId)
       ? state.enabledRuleIds
@@ -299,10 +302,7 @@ export function enableOptionalRule(
  * @param ruleId - ID of rule to disable
  * @returns New state with rule disabled
  */
-export function disableOptionalRule(
-  state: OptionalRulesState,
-  ruleId: string
-): OptionalRulesState {
+export function disableOptionalRule(state: OptionalRulesState, ruleId: string): OptionalRulesState {
   return {
     enabledRuleIds: state.enabledRuleIds.filter((id) => id !== ruleId),
     disabledRuleIds: state.disabledRuleIds.includes(ruleId)
@@ -318,10 +318,7 @@ export function disableOptionalRule(
  * @param ruleId - ID of rule to reset
  * @returns New state with rule reset to default
  */
-export function resetOptionalRule(
-  state: OptionalRulesState,
-  ruleId: string
-): OptionalRulesState {
+export function resetOptionalRule(state: OptionalRulesState, ruleId: string): OptionalRulesState {
   return {
     enabledRuleIds: state.enabledRuleIds.filter((id) => id !== ruleId),
     disabledRuleIds: state.disabledRuleIds.filter((id) => id !== ruleId),

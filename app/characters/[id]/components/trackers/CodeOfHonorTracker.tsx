@@ -1,15 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Shield, 
-  Slash, 
-  History, 
-  Plus, 
+import {
+  Shield,
+  Slash,
+  History,
+  Plus,
   AlertTriangle,
   Scroll,
   MinusCircle,
-  Calendar
+  Calendar,
 } from "lucide-react";
 import type { QualitySelection, CodeOfHonorState } from "@/lib/types";
 
@@ -36,17 +36,17 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
       const violation = {
         date: new Date().toISOString(),
         description: newViolation.description,
-        karmaLost: newViolation.karmaLost
+        karmaLost: newViolation.karmaLost,
       };
 
       const updatedViolations = [...state.violations, violation];
       const updatedTotalKarma = state.totalKarmaLost + violation.karmaLost;
 
-      await onUpdate({ 
+      await onUpdate({
         violations: updatedViolations,
-        totalKarmaLost: updatedTotalKarma
+        totalKarmaLost: updatedTotalKarma,
       });
-      
+
       setNewViolation({ description: "", karmaLost: 1 });
       setShowAddViolation(false);
     } finally {
@@ -63,12 +63,13 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
             <Shield className="w-5 h-5" />
           </div>
           <div>
-            <h4 className="text-sm font-bold text-foreground">
-              {state.codeName}
-            </h4>
+            <h4 className="text-sm font-bold text-foreground">{state.codeName}</h4>
             <div className="flex flex-wrap gap-1 mt-1">
               {state.protectedGroups?.map((group, idx) => (
-                <span key={idx} className="text-[8px] px-1.5 py-px bg-muted text-muted-foreground border border-border rounded font-mono uppercase tracking-widest">
+                <span
+                  key={idx}
+                  className="text-[8px] px-1.5 py-px bg-muted text-muted-foreground border border-border rounded font-mono uppercase tracking-widest"
+                >
                   {group}
                 </span>
               ))}
@@ -76,8 +77,12 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
           </div>
         </div>
         <div className="text-right">
-          <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">Karma Lost</div>
-          <div className={`text-xl font-mono font-bold ${state.totalKarmaLost > 0 ? 'text-red-500' : 'text-muted-foreground'}`}>
+          <div className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+            Karma Lost
+          </div>
+          <div
+            className={`text-xl font-mono font-bold ${state.totalKarmaLost > 0 ? "text-red-500" : "text-muted-foreground"}`}
+          >
             {state.totalKarmaLost}
           </div>
         </div>
@@ -96,7 +101,7 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
             <History className="w-3 h-3" />
             Code Violations
           </div>
-          <button 
+          <button
             onClick={() => setShowAddViolation(!showAddViolation)}
             className="text-[10px] flex items-center gap-1 text-blue-500 hover:text-blue-400 font-bold transition-colors"
           >
@@ -124,15 +129,24 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
                   Karma Penalty
                 </label>
                 <div className="flex items-center gap-2">
-                  <button 
-                    onClick={() => setNewViolation({ ...newViolation, karmaLost: Math.max(1, newViolation.karmaLost - 1) })}
+                  <button
+                    onClick={() =>
+                      setNewViolation({
+                        ...newViolation,
+                        karmaLost: Math.max(1, newViolation.karmaLost - 1),
+                      })
+                    }
                     className="p-1 rounded bg-muted hover:bg-muted-foreground/10 border border-border"
                   >
                     <MinusCircle className="w-4 h-4" />
                   </button>
-                  <span className="flex-1 text-center font-mono font-bold">{newViolation.karmaLost}</span>
-                  <button 
-                    onClick={() => setNewViolation({ ...newViolation, karmaLost: newViolation.karmaLost + 1 })}
+                  <span className="flex-1 text-center font-mono font-bold">
+                    {newViolation.karmaLost}
+                  </span>
+                  <button
+                    onClick={() =>
+                      setNewViolation({ ...newViolation, karmaLost: newViolation.karmaLost + 1 })
+                    }
                     className="p-1 rounded bg-muted hover:bg-muted-foreground/10 border border-border"
                   >
                     <Plus className="w-4 h-4" />
@@ -162,18 +176,27 @@ export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerPr
           {state.violations.length === 0 ? (
             <div className="flex flex-col items-center justify-center p-8 bg-muted/20 border border-dashed border-border rounded text-center">
               <Slash className="w-8 h-8 text-muted-foreground/30 mb-2" />
-              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">No Violations Found</p>
-              <p className="text-[9px] text-muted-foreground italic">Your honor remains intact... for now.</p>
+              <p className="text-[10px] text-muted-foreground uppercase tracking-widest font-bold">
+                No Violations Found
+              </p>
+              <p className="text-[9px] text-muted-foreground italic">
+                Your honor remains intact... for now.
+              </p>
             </div>
           ) : (
             [...state.violations].reverse().map((violation, idx) => (
-              <div key={idx} className="p-3 bg-muted/40 border border-border/50 rounded flex gap-3 items-start group">
+              <div
+                key={idx}
+                className="p-3 bg-muted/40 border border-border/50 rounded flex gap-3 items-start group"
+              >
                 <div className="p-1 rounded bg-red-500/10 text-red-500 shrink-0">
                   <AlertTriangle className="w-3 h-3" />
                 </div>
                 <div className="flex-1 space-y-1">
                   <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-bold text-foreground line-clamp-1">{violation.description}</span>
+                    <span className="text-[10px] font-bold text-foreground line-clamp-1">
+                      {violation.description}
+                    </span>
                     <span className="text-[9px] font-mono text-red-500 font-bold bg-red-500/5 px-1.5 rounded-sm shrink-0">
                       -{violation.karmaLost} Karma
                     </span>

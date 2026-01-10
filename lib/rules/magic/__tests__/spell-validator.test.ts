@@ -100,9 +100,7 @@ function createMockRuleset(
   } as LoadedRuleset;
 }
 
-function createMockCharacter(
-  overrides: Partial<Character> = {}
-): Partial<Character> {
+function createMockCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
     id: "test-character",
     name: "Test Character",
@@ -127,9 +125,7 @@ function createMockCharacter(
   };
 }
 
-function createMockAdeptPowerInstance(
-  overrides: Partial<AdeptPower> = {}
-): AdeptPower {
+function createMockAdeptPowerInstance(overrides: Partial<AdeptPower> = {}): AdeptPower {
   return {
     id: "power-1",
     catalogId: "killing-hands",
@@ -156,9 +152,7 @@ describe("validateSpellAllocation", () => {
         category: "detection",
       }),
     ],
-    health: [
-      createMockSpell({ id: "heal", name: "Heal", category: "health" }),
-    ],
+    health: [createMockSpell({ id: "heal", name: "Heal", category: "health" })],
     illusion: [
       createMockSpell({
         id: "invisibility",
@@ -178,12 +172,7 @@ describe("validateSpellAllocation", () => {
 
   it("should validate spell allocation within budget", () => {
     const character = createMockCharacter({ magicalPath: "full-mage" });
-    const result = validateSpellAllocation(
-      character,
-      ["acid-stream", "fireball"],
-      5,
-      mockRuleset
-    );
+    const result = validateSpellAllocation(character, ["acid-stream", "fireball"], 5, mockRuleset);
 
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
@@ -201,9 +190,7 @@ describe("validateSpellAllocation", () => {
     );
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" }));
   });
 
   it("should reject non-existent spells", () => {
@@ -216,9 +203,7 @@ describe("validateSpellAllocation", () => {
     );
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "SPELLS_NOT_FOUND" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "SPELLS_NOT_FOUND" }));
   });
 
   it("should reject duplicate spells", () => {
@@ -231,24 +216,15 @@ describe("validateSpellAllocation", () => {
     );
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "DUPLICATE_SPELLS" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "DUPLICATE_SPELLS" }));
   });
 
   it("should reject character who cannot cast spells", () => {
     const character = createMockCharacter({ magicalPath: "adept" });
-    const result = validateSpellAllocation(
-      character,
-      ["acid-stream"],
-      5,
-      mockRuleset
-    );
+    const result = validateSpellAllocation(character, ["acid-stream"], 5, mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "CANNOT_CAST_SPELLS" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "CANNOT_CAST_SPELLS" }));
   });
 
   it("should calculate budget remaining correctly", () => {
@@ -307,12 +283,7 @@ describe("validateAdeptPowerAllocation", () => {
       }),
     ];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(true);
     expect(result.errors).toHaveLength(0);
@@ -335,12 +306,7 @@ describe("validateAdeptPowerAllocation", () => {
     ];
 
     // 1.5 * 2 = 3 PP
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      6,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 6, mockRuleset);
 
     expect(result.valid).toBe(true);
     expect(result.budgetRemaining).toBe(3);
@@ -362,12 +328,7 @@ describe("validateAdeptPowerAllocation", () => {
     ];
 
     // 1.5 * 3 = 4.5 PP > 4
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(false);
     expect(result.errors).toContainEqual(
@@ -390,17 +351,10 @@ describe("validateAdeptPowerAllocation", () => {
       }),
     ];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      10,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 10, mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "POWER_LEVEL_EXCEEDED" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "POWER_LEVEL_EXCEEDED" }));
   });
 
   it("should reject power requiring skill without specification", () => {
@@ -418,17 +372,10 @@ describe("validateAdeptPowerAllocation", () => {
       }),
     ];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "POWER_REQUIRES_SKILL" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "POWER_REQUIRES_SKILL" }));
   });
 
   it("should accept power with required specification", () => {
@@ -447,12 +394,7 @@ describe("validateAdeptPowerAllocation", () => {
       }),
     ];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(true);
   });
@@ -471,36 +413,20 @@ describe("validateAdeptPowerAllocation", () => {
       }),
     ];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "POWER_NOT_FOUND" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "POWER_NOT_FOUND" }));
   });
 
   it("should reject character who cannot use adept powers", () => {
     const character = createMockCharacter({ magicalPath: "full-mage" });
-    const powers: AdeptPower[] = [
-      createMockAdeptPowerInstance(),
-    ];
+    const powers: AdeptPower[] = [createMockAdeptPowerInstance()];
 
-    const result = validateAdeptPowerAllocation(
-      character,
-      powers,
-      4,
-      mockRuleset
-    );
+    const result = validateAdeptPowerAllocation(character, powers, 4, mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "CANNOT_USE_POWERS" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "CANNOT_USE_POWERS" }));
   });
 });
 
@@ -525,16 +451,12 @@ describe("isSpellCompatible", () => {
 
   it("should return false for non-existent spell", () => {
     const character = createMockCharacter({ magicalPath: "full-mage" });
-    expect(isSpellCompatible("nonexistent", character, mockRuleset)).toBe(
-      false
-    );
+    expect(isSpellCompatible("nonexistent", character, mockRuleset)).toBe(false);
   });
 
   it("should return false for character who cannot cast spells", () => {
     const character = createMockCharacter({ magicalPath: "adept" });
-    expect(isSpellCompatible("acid-stream", character, mockRuleset)).toBe(
-      false
-    );
+    expect(isSpellCompatible("acid-stream", character, mockRuleset)).toBe(false);
   });
 });
 
@@ -606,9 +528,7 @@ describe("extractSpellsCatalog", () => {
   it("should extract spells from ruleset", () => {
     const spellsCatalog: SpellsCatalogData = {
       combat: [createMockSpell({ id: "fireball" })],
-      detection: [
-        createMockSpell({ id: "detect-enemies", category: "detection" }),
-      ],
+      detection: [createMockSpell({ id: "detect-enemies", category: "detection" })],
       health: [],
       illusion: [],
       manipulation: [],
@@ -633,9 +553,7 @@ describe("getAllSpells", () => {
   it("should return all spells from all categories", () => {
     const spellsCatalog: SpellsCatalogData = {
       combat: [createMockSpell({ id: "fireball" })],
-      detection: [
-        createMockSpell({ id: "detect-enemies", category: "detection" }),
-      ],
+      detection: [createMockSpell({ id: "detect-enemies", category: "detection" })],
       health: [createMockSpell({ id: "heal", category: "health" })],
       illusion: [],
       manipulation: [],
@@ -650,10 +568,7 @@ describe("getAllSpells", () => {
 describe("getSpellsByCategory", () => {
   it("should return spells for specified category", () => {
     const spellsCatalog: SpellsCatalogData = {
-      combat: [
-        createMockSpell({ id: "fireball" }),
-        createMockSpell({ id: "acid-stream" }),
-      ],
+      combat: [createMockSpell({ id: "fireball" }), createMockSpell({ id: "acid-stream" })],
       detection: [],
       health: [],
       illusion: [],

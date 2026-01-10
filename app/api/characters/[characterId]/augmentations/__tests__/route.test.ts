@@ -118,10 +118,7 @@ function createMockCharacter(overrides: Partial<Character> = {}): Character {
   } as Character;
 }
 
-function createMockRequest(
-  method: string,
-  body?: Record<string, unknown>
-): NextRequest {
+function createMockRequest(method: string, body?: Record<string, unknown>): NextRequest {
   const url = `http://localhost:3000/api/characters/${TEST_CHARACTER_ID}/augmentations`;
   const request = new NextRequest(url, {
     method,
@@ -170,9 +167,7 @@ describe("GET /api/characters/[characterId]/augmentations", () => {
 
   it("should return 403 when user does not own character", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createMockCharacter({ ownerId: "other-user" })
-    );
+    vi.mocked(getCharacter).mockResolvedValue(createMockCharacter({ ownerId: "other-user" }));
 
     const request = createMockRequest("GET");
     const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -499,9 +494,7 @@ describe("GET /api/characters/[characterId]/augmentations/[augmentationId]", () 
     };
 
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createMockCharacter({ cyberware: [cyberwareItem] })
-    );
+    vi.mocked(getCharacter).mockResolvedValue(createMockCharacter({ cyberware: [cyberwareItem] }));
 
     const request = createMockRequest("GET");
     const params = Promise.resolve({
@@ -682,9 +675,7 @@ describe("PUT /api/characters/[characterId]/augmentations/[augmentationId]", () 
     };
 
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createMockCharacter({ cyberware: [cyberwareItem] })
-    );
+    vi.mocked(getCharacter).mockResolvedValue(createMockCharacter({ cyberware: [cyberwareItem] }));
 
     const request = createMockRequest("PUT", {});
     const params = Promise.resolve({
@@ -787,9 +778,7 @@ describe("POST /api/characters/[characterId]/augmentations/validate", () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.errors).toContainEqual(
-      expect.objectContaining({ code: "INVALID_TYPE" })
-    );
+    expect(data.errors).toContainEqual(expect.objectContaining({ code: "INVALID_TYPE" }));
   });
 
   it("should return validation result with projection", async () => {

@@ -186,9 +186,7 @@ export function matchesCondition(
   // Check target type
   if (condition.targetType && condition.targetType.length > 0) {
     const contextTarget = context.targetType || [];
-    const hasMatchingTarget = condition.targetType.some((target) =>
-      contextTarget.includes(target)
-    );
+    const hasMatchingTarget = condition.targetType.some((target) => contextTarget.includes(target));
     if (!hasMatchingTarget) {
       return false;
     }
@@ -197,9 +195,7 @@ export function matchesCondition(
   // Check character state
   if (condition.characterState && condition.characterState.length > 0) {
     const contextState = context.characterState || [];
-    const hasMatchingState = condition.characterState.some((state) =>
-      contextState.includes(state)
-    );
+    const hasMatchingState = condition.characterState.some((state) => contextState.includes(state));
     if (!hasMatchingState) {
       return false;
     }
@@ -230,7 +226,15 @@ export function matchesCondition(
  */
 export function matchesTrigger(
   trigger: EffectTrigger,
-  context: GameplayContext | TestContext | CombatContext | MagicContext | MatrixContext | HealingContext | DamageContext | CostContext
+  context:
+    | GameplayContext
+    | TestContext
+    | CombatContext
+    | MagicContext
+    | MatrixContext
+    | HealingContext
+    | DamageContext
+    | CostContext
 ): boolean {
   switch (trigger) {
     case "always":
@@ -259,7 +263,12 @@ export function matchesTrigger(
       return false; // Placeholder
 
     case "magic-use":
-      return "actionType" in context && ["casting", "summoning", "ritual", "enchanting"].includes((context as MagicContext).actionType || "");
+      return (
+        "actionType" in context &&
+        ["casting", "summoning", "ritual", "enchanting"].includes(
+          (context as MagicContext).actionType || ""
+        )
+      );
 
     case "matrix-action":
       return "matrixAction" in context || "matrixMode" in context;
@@ -296,7 +305,15 @@ export function matchesTrigger(
  */
 export function shouldApplyEffect(
   effect: QualityEffect,
-  context: GameplayContext | TestContext | CombatContext | MagicContext | MatrixContext | HealingContext | DamageContext | CostContext
+  context:
+    | GameplayContext
+    | TestContext
+    | CombatContext
+    | MagicContext
+    | MatrixContext
+    | HealingContext
+    | DamageContext
+    | CostContext
 ): boolean {
   // Check trigger
   if (!matchesTrigger(effect.trigger, context)) {
@@ -324,7 +341,15 @@ export function getActiveEffects(
   character: Character,
   quality: Quality,
   selection: QualitySelection,
-  context: GameplayContext | TestContext | CombatContext | MagicContext | MatrixContext | HealingContext | DamageContext | CostContext
+  context:
+    | GameplayContext
+    | TestContext
+    | CombatContext
+    | MagicContext
+    | MatrixContext
+    | HealingContext
+    | DamageContext
+    | CostContext
 ): ResolvedEffect[] {
   // Only process if quality is active
   if (selection.active === false) {
@@ -390,4 +415,3 @@ export function filterEffectsByTarget(
 ): ResolvedEffect[] {
   return effects.filter((resolved) => targetMatcher(resolved.target));
 }
-

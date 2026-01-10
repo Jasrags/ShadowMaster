@@ -53,6 +53,7 @@ Without a unified state model, each gear type would need bespoke handling, creat
 ### Per-Type State Fields
 
 **Rejected.** Adding `equipped` to Weapon, `wireless` to Augmentation, `condition` to Cyberdeck separately would:
+
 - Require different handling code for each type
 - Create inconsistent APIs
 - Make it harder to add new gear types
@@ -60,6 +61,7 @@ Without a unified state model, each gear type would need bespoke handling, creat
 ### Text Parsing for Wireless Bonuses
 
 **Rejected.** Parsing bonus descriptions like "Gain +1 to your Initiative Score" would:
+
 - Be fragile (text variations break parsing)
 - Require maintenance as new bonuses are added
 - Fail silently when patterns don't match
@@ -68,6 +70,7 @@ Without a unified state model, each gear type would need bespoke handling, creat
 ### Global Wireless Toggle Only
 
 **Rejected.** Keeping only `wirelessBonusesEnabled` at character level would:
+
 - Prevent tactical choices (disable specific compromised items)
 - Not support "running silent" on select devices
 - Miss SR5's granular wireless control design
@@ -75,6 +78,7 @@ Without a unified state model, each gear type would need bespoke handling, creat
 ### Simplified Condition (Working/Bricked)
 
 **Approved with modification.** Three-state condition (working, bricked, permanently bricked) is sufficient for MVP:
+
 - Working: Normal operation
 - Bricked: Disabled, can be repaired
 - Permanently Bricked: Destroyed, cannot be repaired
@@ -91,9 +95,7 @@ Catalog items will include both human-readable and machine-readable wireless dat
 {
   "id": "wired-reflexes-2",
   "wirelessBonus": "Gain +2 to your Initiative Score.",
-  "wirelessEffects": [
-    { "type": "initiative", "modifier": 2 }
-  ]
+  "wirelessEffects": [{ "type": "initiative", "modifier": 2 }]
 }
 ```
 
@@ -102,6 +104,7 @@ Effect types include: `attribute`, `initiative`, `attack_pool`, `defense_pool`, 
 ### Magazine System
 
 Weapons with removable magazines include one magazine at purchase. Spare magazines are separate inventory items. Magazine state tracks:
+
 - Ammo type loaded
 - Current round count
 - Maximum capacity
@@ -109,6 +112,7 @@ Weapons with removable magazines include one magazine at purchase. Spare magazin
 ### Equipment States
 
 Four-state model for gear readiness:
+
 - **readied**: In hand, immediately usable (weapons)
 - **holstered**: Accessible, Simple Action to ready (weapons, some gear)
 - **worn**: Currently worn (armor, clothing, some augmentations)

@@ -5,12 +5,8 @@
   "version": "1.0.0",
   "description": "The fifth edition of Shadowrun, published by Catalyst Game Labs in 2013. Features the Priority character creation system, Limits, and an updated Matrix.",
   "releaseYear": 2013,
-  "bookIds": [
-    "core-rulebook"
-  ],
-  "creationMethodIds": [
-    "priority"
-  ],
+  "bookIds": ["core-rulebook"],
+  "creationMethodIds": ["priority"],
   "defaultCreationMethodId": "priority",
   "philosophy": "Fifth Edition brings a streamlined approach to the classic Shadowrun experience, balancing narrative freedom with structured mechanical resolution. The Priority system provides clear trade-offs during character creation, while Limits ensure no single attribute dominates dice rolls.",
   "mechanicalHighlights": [

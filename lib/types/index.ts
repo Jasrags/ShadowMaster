@@ -48,7 +48,7 @@ export type {
   MigrationValidationResult,
 } from "./synchronization";
 
-  // Edition and ruleset types
+// Edition and ruleset types
 export type {
   EditionCode,
   Edition,
@@ -362,11 +362,7 @@ export type {
 } from "./ratings";
 
 // Rating system utility functions
-export {
-  hasUnifiedRatings,
-  getRatingTableValue,
-  getAvailableRatings,
-} from "./ratings";
+export { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "./ratings";
 
 // Gameplay context types
 export type {
@@ -453,10 +449,7 @@ export type {
 } from "./grunts";
 
 // Grunt constants
-export {
-  PROFESSIONAL_RATING_DESCRIPTIONS,
-  DEFAULT_MORALE_TIERS,
-} from "./grunts";
+export { PROFESSIONAL_RATING_DESCRIPTIONS, DEFAULT_MORALE_TIERS } from "./grunts";
 
 // Contact and Social Governance types
 export type {
@@ -499,10 +492,7 @@ export type {
 } from "./contacts";
 
 // Contact visibility defaults
-export {
-  DEFAULT_CONTACT_VISIBILITY,
-  GM_CONTACT_VISIBILITY,
-} from "./contacts";
+export { DEFAULT_CONTACT_VISIBILITY, GM_CONTACT_VISIBILITY } from "./contacts";
 
 // Action Resolution types
 export type {
@@ -685,11 +675,7 @@ export type {
 } from "./matrix";
 
 // Matrix constants
-export {
-  OVERWATCH_THRESHOLD,
-  MAX_MARKS,
-  MATRIX_CONDITION_BASE,
-} from "./matrix";
+export { OVERWATCH_THRESHOLD, MAX_MARKS, MATRIX_CONDITION_BASE } from "./matrix";
 
 // Rigging control types
 export type {

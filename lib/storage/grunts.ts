@@ -84,12 +84,10 @@ export async function createGruntTeam(
   const teamId = uuidv4();
 
   // Process specialists to add IDs
-  const specialists: GruntSpecialist[] | undefined = request.specialists?.map(
-    (spec) => ({
-      ...spec,
-      id: uuidv4(),
-    })
-  );
+  const specialists: GruntSpecialist[] | undefined = request.specialists?.map((spec) => ({
+    ...spec,
+    id: uuidv4(),
+  }));
 
   const team: GruntTeam = {
     id: teamId,
@@ -127,10 +125,7 @@ export async function createGruntTeam(
  * @param campaignId - Optional campaign ID for direct lookup (faster)
  * @returns Grunt team or null if not found
  */
-export async function getGruntTeam(
-  teamId: ID,
-  campaignId?: ID
-): Promise<GruntTeam | null> {
+export async function getGruntTeam(teamId: ID, campaignId?: ID): Promise<GruntTeam | null> {
   // If campaignId provided, do direct lookup
   if (campaignId) {
     const filePath = getGruntTeamPath(campaignId, teamId);
@@ -185,7 +180,8 @@ export async function updateGruntTeam(
     createdAt: team.createdAt,
     updatedAt: new Date().toISOString(),
     // Handle null values for optional fields
-    encounterId: updates.encounterId === null ? undefined : (updates.encounterId ?? team.encounterId),
+    encounterId:
+      updates.encounterId === null ? undefined : (updates.encounterId ?? team.encounterId),
     lieutenant: updates.lieutenant === null ? undefined : (updates.lieutenant ?? team.lieutenant),
     // Merge partial baseGrunts if provided
     baseGrunts: updates.baseGrunts
@@ -213,10 +209,7 @@ export async function updateGruntTeam(
  * @param campaignId - Optional campaign ID for direct lookup
  * @returns True if deleted, false if not found
  */
-export async function deleteGruntTeam(
-  teamId: ID,
-  campaignId?: ID
-): Promise<boolean> {
+export async function deleteGruntTeam(teamId: ID, campaignId?: ID): Promise<boolean> {
   const team = await getGruntTeam(teamId, campaignId);
   if (!team) {
     return false;
@@ -271,9 +264,7 @@ export async function getGruntTeamsByCampaign(
   let filtered = teams;
 
   if (options?.professionalRating !== undefined) {
-    filtered = filtered.filter(
-      (t) => t.professionalRating === options.professionalRating
-    );
+    filtered = filtered.filter((t) => t.professionalRating === options.professionalRating);
   }
 
   if (options?.search) {
@@ -424,9 +415,7 @@ export async function saveIndividualGrunts(
  * @param team - Grunt team
  * @returns Individual grunts (existing or newly initialized)
  */
-export async function getOrInitializeIndividualGrunts(
-  team: GruntTeam
-): Promise<IndividualGrunts> {
+export async function getOrInitializeIndividualGrunts(team: GruntTeam): Promise<IndividualGrunts> {
   const existing = await getIndividualGrunts(team.id, team.campaignId);
   if (existing) {
     return existing;
@@ -553,9 +542,7 @@ export async function spendGroupEdge(
   }
 
   if (team.groupEdge < amount) {
-    throw new Error(
-      `Insufficient Group Edge: have ${team.groupEdge}, need ${amount}`
-    );
+    throw new Error(`Insufficient Group Edge: have ${team.groupEdge}, need ${amount}`);
   }
 
   const updatedTeam: GruntTeam = {
@@ -577,10 +564,7 @@ export async function spendGroupEdge(
  * @param campaignId - Optional campaign ID
  * @returns Updated grunt team
  */
-export async function refreshGroupEdge(
-  teamId: ID,
-  campaignId?: ID
-): Promise<GruntTeam> {
+export async function refreshGroupEdge(teamId: ID, campaignId?: ID): Promise<GruntTeam> {
   const team = await getGruntTeam(teamId, campaignId);
   if (!team) {
     throw new Error(`Grunt team with ID ${teamId} not found`);
@@ -605,10 +589,7 @@ export async function refreshGroupEdge(
  * @param campaignId - Optional campaign ID
  * @returns Updated grunt team with fresh combat state
  */
-export async function resetCombatState(
-  teamId: ID,
-  campaignId?: ID
-): Promise<GruntTeam> {
+export async function resetCombatState(teamId: ID, campaignId?: ID): Promise<GruntTeam> {
   const team = await getGruntTeam(teamId, campaignId);
   if (!team) {
     throw new Error(`Grunt team with ID ${teamId} not found`);

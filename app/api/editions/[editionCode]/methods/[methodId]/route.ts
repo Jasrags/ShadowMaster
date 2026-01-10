@@ -72,15 +72,15 @@ function buildResourceAllocationExplanation(method: {
   if (method.id === "priority" || method.type === "priority") {
     return "Priority-based creation uses five priority levels (A through E) assigned to five categories: Metatype, Attributes, Magic/Resonance, Skills, and Resources. Each priority can only be used once, creating meaningful trade-offs. High priority in one area means lower priority elsewhere.";
   }
-  
+
   if (method.id === "sum-to-ten" || method.type === "sum-to-ten") {
     return "Sum-to-Ten is a variant of Priority creation where priority levels are assigned point values (A=4, B=3, C=2, D=1, E=0) and must total exactly 10. This allows for more flexible combinations than standard Priority.";
   }
-  
+
   if (method.id === "karma-build" || method.type === "karma") {
     return "Karma Build provides a pool of Karma points to spend directly on all character aspects. Every attribute point, skill rank, and enhancement has a Karma cost. This method offers maximum flexibility but requires careful planning.";
   }
-  
+
   if (method.id === "life-modules" || method.type === "life-modules") {
     return "Life Modules create characters through narrative choices representing life stages. Each module (nationality, formative years, education, career) provides skills, contacts, and backgrounds while telling your character's story.";
   }

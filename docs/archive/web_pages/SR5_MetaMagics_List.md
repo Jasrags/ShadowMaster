@@ -1,11 +1,11 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 ## Contents
 
@@ -178,7 +178,7 @@ A character with the shielding metamagic learns to better protect herself and ot
 ## Sympathetic Linking
 
 Source
-:   SR5:SG
+: SR5:SG
 
 For all links, the object must be small and easily carried by the magician. While a rigger’s favorite car could be considered as a sympathetic link, it is too large to carry. Just take the driver’s seat cushion. Using sympathetic or symbolic links in a ritual that normally contains the Material Link keyword is more difficult to successfully complete. When using a sympathetic link, add 2 to the Force of the spell for the opposing test in Step 7: Seal the Ritual (p. 296, SR5). With a symbolic link, add 4.
 
@@ -186,57 +186,57 @@ For all links, the object must be small and easily carried by the magician. Whil
 
 **PSYCHOMETRY TABLE**
 
-| SITUATION | MODIFIERS |
-| --- | --- |
-| TIME SINCE IMPRESSION* |
-| 1 Day | +0 |
-| 1 Week | –2 |
-| 1 Month | –4 |
-| 1 Year | –6 |
-| 1 Decade | –8 |
-| Each Additional Decade | –2 |
-| NATURE OF ITEM |
-| Nature of item has a strong connection to the impression (wedding ring, beloved toy, etc.) | +2 |
-| Initiate had a strong connection to item when impression was formed (friend’s toy, school building, etc.) | +2 |
-| Impression recorded violence or powerful emotions | +3 |
-| Impression recorded violent death | +4 |
-| Item is a bonded focus | + (Rating)** |
-| Item is a place of more than 500 square kilometers | –2 |
-| Item carries more than one significant impression –1 for each Astral signature has been erased (p. 312, SR5) | –1 |
-| Cleansing metamagic has been used (Smudging, p. 136) | –Force |
-| Each subsequent attempt to read the item | –2 |
-| INFORMATION |
-| INFO GAINED | HITS |
-| None | 0 |
-| Flashes of insight, superficial and disjointed impressions | 1 |
-| Longer and deeper insights, though visions are still disjointed | 2 |
-| Greater details, multiple sensory feedback, more coherence | 3 |
-| Lengthy sequences, multiple senses, coherent visions, significant information | 4+ |
+| SITUATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | MODIFIERS      |
+| ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------- |
+| TIME SINCE IMPRESSION\*                                                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 1 Day                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | +0             |
+| 1 Week                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | –2             |
+| 1 Month                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          | –4             |
+| 1 Year                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | –6             |
+| 1 Decade                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         | –8             |
+| Each Additional Decade                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | –2             |
+| NATURE OF ITEM                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| Nature of item has a strong connection to the impression (wedding ring, beloved toy, etc.)                                                                                                                                                                                                                                                                                                                                                                                                       | +2             |
+| Initiate had a strong connection to item when impression was formed (friend’s toy, school building, etc.)                                                                                                                                                                                                                                                                                                                                                                                        | +2             |
+| Impression recorded violence or powerful emotions                                                                                                                                                                                                                                                                                                                                                                                                                                                | +3             |
+| Impression recorded violent death                                                                                                                                                                                                                                                                                                                                                                                                                                                                | +4             |
+| Item is a bonded focus                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | + (Rating)\*\* |
+| Item is a place of more than 500 square kilometers                                                                                                                                                                                                                                                                                                                                                                                                                                               | –2             |
+| Item carries more than one significant impression –1 for each Astral signature has been erased (p. 312, SR5)                                                                                                                                                                                                                                                                                                                                                                                     | –1             |
+| Cleansing metamagic has been used (Smudging, p. 136)                                                                                                                                                                                                                                                                                                                                                                                                                                             | –Force         |
+| Each subsequent attempt to read the item                                                                                                                                                                                                                                                                                                                                                                                                                                                         | –2             |
+| INFORMATION                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| INFO GAINED                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      | HITS           |
+| None                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             | 0              |
+| Flashes of insight, superficial and disjointed impressions                                                                                                                                                                                                                                                                                                                                                                                                                                       | 1              |
+| Longer and deeper insights, though visions are still disjointed                                                                                                                                                                                                                                                                                                                                                                                                                                  | 2              |
+| Greater details, multiple sensory feedback, more coherence                                                                                                                                                                                                                                                                                                                                                                                                                                       | 3              |
+| Lengthy sequences, multiple senses, coherent visions, significant information                                                                                                                                                                                                                                                                                                                                                                                                                    | 4+             |
 | Items isolated from other auras or from being disturbed (tombs, basements, abandoned towns) can keep their impression for much longer. It is suggested that items within the Gaiasphere—i.e., underground—retain such impressions longer. The gamemaster can reduce the time modifier to that of a week, month, or year for these kinds of items. Modifier only applies to impressions related to the person to whom the focus is bonded. Stacked foci only grant the highest rating as a bonus. |
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Psychometry is like experiencing flashbacks, a flood of senses and emotions that can be uncontrollable. Once the magician develops this skill, the door can be difficult to close. Everything the magician touches generates this kind of feedback. Do you really need to know the life story behind every shot glass and barstool? The magician learns to put up mental shields to filter out distractions from all the input he would get from astral imprints. The magician needs only a few moments to raise or lower his shields to attempt reading an object. To read an object, the magician makes an Assensing + Intuition + initiate grade [Astral] Test; see the Psychometry table for modifiers and results. When reading an object, the magician has a –2 dice pool penalty to all other actions. Unfortunately, while reading the object, the magician has no control over how long the reading takes, and she cannot stop until the reading is done. It can take 1 minute, 5 minutes, or longer. The gamemaster can roll 1D6 to choose the duration, or he can decide the duration based on the psychometric experience.
 
 ## Magicians And Their Material Link
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Some people fear magicians because of what they believe magic can do, right? Well, magicians fear other magicians, especially if the latter have a material link that can be used in ritual magic. Trids and mythology push this paranoia of stolen locks of hair or drops of blood by evil wizards, and they’re not off base in doing this. The vodou tradition specifically focuses on indirect ritual magic. Because of this, certain cleaning drones and services designed around the quick disposal of any organic material left behind are labeled as “mage sensitive.” Shadow versions of this kind of service even take care of cleaning bloodstains, no questions asked. The Jolly Barber in San Diego, for example, has a dragon- shaped brazier homunculus that eats the sweepings after each haircut. Note that this is different from mana- sensitive services, which are drones and gear that filter pollution or uses less-harsh chemicals to prevent disturbing the magician’s feng shui.
 
 ## Danger Sense
 
 Source
-:   SR5:SG
+: SR5:SG
 
 A magician can attune himself to a higher awareness of the path he takes in life. This hyperawareness lets the magician sense danger before it occurs. This ability is the same as the adept power of the same name, but substitute the power’s levels with magician’s initiate grade. The metamagic and the adept power cannot be combined, so a character with both only applies the higher of the two.
 
 ## Channeling
 
 Source
-:   SR5:SG
+: SR5:SG
 
 When a magician summons a spirit, she may choose to allow the spirit to possess her instead of allowing the spirit to exist in the astral plane to either manifest (p. 314, SR5) or materialize (p. 398, SR5). This must be decided at the time of summoning. Treat channeling the same as if the spirit has the Possession power (p. 197), with a few exceptions:
 
@@ -253,7 +253,7 @@ When a magician summons a spirit, she may choose to allow the spirit to possess 
 ## Exorcism
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Exorcism is a unique form of spirit combat where the magician pulls the spirit from its vessel. The ability requires physical contact with the vessel. A magic user makes an Opposed Test pitting Willpower + Charisma against twice the spirit’s Force. A magician with the Banishing skill may add his Willpower to the normal Banishing skill test.
 
@@ -264,24 +264,24 @@ If the exorcism is successful, the spirit loses its corporeal connection and is 
 ## Extended Masking
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Masking
+: Masking
 
 Extended masking extends your masking to include anchored, sustained, or quickened spells; imbued or attuned items; or alchemical preparations that are in the magician’s possession. The magician may mask a number of items up to his initiate grade (this is in addition to bonded foci). Each item masked in this way must have a Force less than the magician’s Magic attribute. As per the masking rules, an Opposed Assensing test is required to view such items. If the observer fails to gain any net hits, the masked items appear to the observer as normal fluctuations in the background count.
 
 ## Astral Bluff
 
 Source
-:   SR5:SG
+: SR5:SG
 
 When a magician uses Assensing on an initiate possessing this technique, astral bluff allows the targeted character to spend a Simple Action to adjust his aura to give a temporary false impression. These are small adjustments (emotional state, health, etc.), but this change can add weight to a character’s disguise or other such falsehoods. The character makes a Con + Magic [Social] (3) Test; if they succeed, they’ve managed to give the right impression and keep targets from examining their aura too closely. This affect is brief; if the magician’s aura stays in visible range of someone who would be inclined to give a closer investigation for longer than five minutes, the jig is up. The target decides that bluff or no, the aura should be inspected, so they take a closer look that is enough to see past any astral bluffs. At this point, if the magician wants to convincingly disguise his aura, he will need to use masking metamagic. The astral bluff metamagic can be used in conjunction with a Con or Disguise test as per teamwork rules (p. 49, SR5)
 
 ## Flux
 
 Source
-:   SR5:SG
+: SR5:SG
 
 With flux, the magician can set his aura in constant flux. While doing so makes his shifting aura stand out in the astral plane, it also temporarily scrambles the mystic link between himself and potential ritual links (material, sympathetic, or symbolic), bonded foci, attuned animals/ items, summoned/bound spirits, mana barriers, active spells (sustained, quickened, or anchored), and alchemical preparations (active or command triggered). If the magician casts spells with his aura in flux, the astral signature is also mixed and cannot be read. Any ritual magic that targets a magician in a state of flux has its effective Force increased by 4 + initiate grade for the opposed test in the final step (p. 296, SR5). Any attempt to track the target meets a similar problem, increasing in threshold by 4 + initiate grade (p. 315, SR5).
 
@@ -292,7 +292,7 @@ The magician can safely keep his aura in flux for (Magic) hours per twenty-four-
 ## Absorption
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Absorption allows the magician to siphon some of the mana away from a spell used against her. This includes triggered preparations and some ritual spells whose ritual includes the spell keyword. With an Interrupt Action, the magician rolls Magic + Counterspelling [Force], where the Force is equal to the spell the magician is defending against. Each success does two things:
 
@@ -303,70 +303,70 @@ Absorption allows the magician to siphon some of the mana away from a spell used
 These temporary charges dissipate when the magician casts a spell. Each mana charge in the magician’s aura reduces the Drain Value of the spell he casts by 1 per charge (though the minimum Drain Value of 2 still applies), and then the mana charges are gone. The magician cannot divide the charges among different spells; all stored charges go toward the next spell he casts. If the magician absorbs a number of mana charges greater than the magician’s Magic rating, the magician suffers 1 box of Physical damage per mana charge (meaning all stored mana charge, not just the excess), and all stored charges immediately dissipate. Also, if the magician doesn’t cast a spell before the mana charges expire, the magician suffers Drain with a Drain Value equal to the remaining mana charges, as they dissipate on their own. The Drain may be resisted as normal.
 
 Prerequisite
-:   Shielding
+: Shielding
 
 Absorption and the Spell Defense Pool
-:   If a magician maintains active spell defense while attempting the absorption technique, the number of hits scored on an absorption roll reduces her spell defense pool by that amount for the rest of that Combat Turn. Resisting damage and spell defense rules occur as normal.
+: If a magician maintains active spell defense while attempting the absorption technique, the number of hits scored on an absorption roll reduces her spell defense pool by that amount for the rest of that Combat Turn. Resisting damage and spell defense rules occur as normal.
 
 ## Reflection
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Shielding
+: Shielding
 
 Reflection is an advanced understanding of shielding metamagic, allowing the magician to turn a defensive ability into an offensive action. If an astrally perceiving magician sees that he or those he’s protecting with spell defense are the target of a spell (and note that astral perception is a necessity, not just the knowledge that a spell is being cast), he can access three additional Interrupt Actions that can protect the group instead of using spell defense dice (p. 294, SR5). With each Interrupt Action, the magician uses up 1 die from the spell defense dice pool. If no more defensive dice remain, then the Interrupt Action cannot be taken. The three actions possible are: Reflect Spell, Deflect spell, and Greater Reflection.
 
 ## Reflect Spell
 
 Source
-:   SR5:SG
+: SR5:SG
 
 INTERRUPT ACTION
 
 (–7 INITIATIVE SCORE)
 
 Prerequisite
-:   Reflection
+: Reflection
 
 With this action, the magician can use Counterspelling + Magic [Astral] versus the caster’s Spellcasting Test. If the reflecting magician scores more hits than the caster, the spell is redirected at the caster at half the spell’s Force, and the original target takes no damage. The reflecting magician suffers Drain as if he had used a Reckless Spellcasting action to cast it (increasing the customary Drain by 3). This reflected spell only affects the caster, regardless of whether it was an area-effect spell. Treat the net hits in reflecting as spellcasting hits, as if the magician had actually cast it. This would add to any net hits from the original Spellcasting Test. If the magician does not get more hits than the caster, then the spell hits as if the magician didn’t attempt to defend against it.
 
 ## Deflect Spell
 
 Source
-:   SR5:SG
+: SR5:SG
 
 INTERRUPT ACTION
 
 (–5 INITIATIVE SCORE, –1 EDGE)
 
 Prerequisite
-:   Reflection
+: Reflection
 
 For any indirect spell targeting those the magician is protecting with spell defense, the magician makes a Counterspelling + Magic [Astral] Test against the opponent’s Spellcasting Test. Each net hit on the test adds one scatter die to the attack, and the gamemaster determines scatter (p.181, SR5). If the magician does not get more net hits than the caster, then the spell hits as if the magician didn’t attempt to defend against it.
 
 ## Greater Reflection
 
 Source
-:   SR5:SG
+: SR5:SG
 
 INTERRUPT ACTION
 
 (–10 INITIATIVE SCORE, –1 EDGE)
 
 Prerequisite
-:   Reflection
+: Reflection
 
 This works the same as Reflect Spell but with the option of either sending the spell’s full Force back at the caster or as the same version (i.e., if the reflected spell was an Area spell, then the area of effect would be centered on the caster). If the magician does not get more hits than the caster, then the spell hits as if the magician didn’t attempt to defend against it. Regardless of success, the magician attempting this action must resist Drain as if he cast the spell himself.
 
 ## Anchoring
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Quickening
+: Quickening
 
 Anchoring metamagic is similar to alchemy but is tied to the foundation rules of a quickened spell. The quickened spell can be attached to a temporary astral construct. This anchor later releases the quickened spell based on a pre-specified trigger. A spell with any duration type can be anchored, and the spell can be triggered by any type of preparation trigger (p. 305, SR5), including the background count and Detection spell triggers (p. 219). The trigger’s conditions must be defined before the anchored spell is cast.
 
@@ -383,227 +383,227 @@ See p. 219 for all available triggers.
 ## Advanced Alchemy
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Fixation
+: Fixation
 
 With advanced alchemy, the magician can prepare magical compounds (p. 218) that can imbue the user with extraordinary powers … or curse them. The magician can also tailor more specific triggers with preparations (see Advanced Alchemy, p. 218).
 
 ## Efficient Ritual
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Why sacrifice a whole day standing over a bonfire when twelve hours could do? Magicians who advance their study into rituals can learn to complete a magical ritual faster. Reduce the time to complete a ritual by half for any ritual that the magician is the leader of. The cost of the time reduction is +2 to the Drain Value at the completion step the ritual (p. 296, SR5).
 
 ## Greater Ritual
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Greater ritual allows the magician to participate in a ritual without adding dice to it. Instead, the magician amplifies the ritual by adding her Magic rating to the ritual’s Force for determining its limit, size, and effect. This addition is not included in the completion step of the ritual (p. 296, SR5). The magician takes Drain as if she actively participated in the ritual. The magician can be the leader of the ritual and still use greater ritual metamagic, but this adds +2 to the Drain Value when the ritual completes.
 
 ## Penetrating Spell
 
 Source
-:   SR5:SG
+: SR5:SG
 
 With this metamagic, the magician can choose to increase a Combat spell’s AP at a cost of reduced damage before casting the spell. Reduce the DV by 1 for every point of AP increased, up to the Force of the spell. Minimum damage is 1. Drain Value increases by 1 for every point of AP increased. For example, a Force 5 Fireball spell (normally with a DV of 5P and AP –5) is modified to have a DV of 3P and AP –7 before the spell is cast; since the AP was increased by 2, the normal Drain Value is then increased by 2. Net hits are then applied to either increase the Damage Value or reduce scatter, as normal (p. 283, SR5).
 
 ## Cleansing
 
 Source
-:   SR5:SG
+: SR5:SG
 
 This technique allows the magician to temporarily reduce background count. Cleansing only affects positive background counts such as from a domain (p. 25) or aspected mana. The magician uses a Complex Action and makes an Opposed Test pitting Counterspelling + Magic + initiate grade [Astral] against a dice pool equal to the background count. Each net hit can either reduce the background count by 1 or extend the duration of a previously achieved background reduction by 1 Combat Turn. This background count reduction is temporary and only affects the cleansing magician for (Magic) Combat Turn(s). After the test, the magician suffers Drain with a Drain Value equal to the natural background count. If the background count exceeds the magician’s Magic, Drain is Physical. If the background count is greater than twice the magician’s Magic, then the magician cannot perform a cleansing action. This action can be done each Combat Turn to further reduce or extend the temporary background count reduction, but the magician suffers Drain equal to the natural background count prior to a second attempt to cleanse the same area.
 
 ## Sensing
 
 Source
-:   SR5:SG
+: SR5:SG
 
 The magician can use the Observe in Detail action (p. 165, SR5) to learn details of the surrounding area—such as background count, how the background count is aspected, and if background count changes—without having to astrally perceive or project. The magician can also feel a negative background count based on mana ebbs and voids (p. 32) but is more sensitive to them: add +2 when determining the effect of background count. The magician cannot use this ability to sense astral forms, spells, mana barriers, spirits, or foci. Gamemasters may also give the character a chance to sense some unusual change nearby even if they are not actively using sensing; in this case, the gamemaster should make the Observe in Detail Perception Test in secret to not give anything away. This phenomenon includes noticing alchera (p. 29), mana storms, warps, or surges (p. 34).
 
 ## Infusion
 
 Source
-:   SR5:SG
+: SR5:SG
 
 ACTIVATION COST
-:   COMPLEX ACTION
+: COMPLEX ACTION
 
 Prerequisite
-:   Adept Centering
+: Adept Centering
 
 When focused, an adept can pull energy from the cosmos and channel it into one of his existing powers. For each level of initiate grade, the adept can add 0.5 PP to an adept power. The total levels of a power enhanced this way cannot exceed the adept’s Magic rating. The enhancement will last for (Magic) Combat Turns. Once the power boost ends, the adept immediately suffers Stun damage from this stretch of qi. The Damage Value equals four times the total power point cost of the enhanced power (not just the power point boost). In addition to this damage, the adept suffers a temporary loss of a number of power points equal to the power point boost for (Magic) minutes. The gamemaster selects what powers are affected, and the adept should not know a power is inaccessible until he tries to use it.
 
 ## Qi Sculpt
 
 Source
-:   SR5:SG
+: SR5:SG
 
 ACTIVATION COST
-:   COMPLEX ACTION
+: COMPLEX ACTION
 
 Prerequisite
-:   Adept Centering
+: Adept Centering
 
 An adept at peace with herself can adjust her qi like wet clay. Qi sculpt allows the adept to remove qi from one power and temporarily add it to another power in which they already have invested power points. For each level of initiate grade, the adept can shift 0.25 PP of one adept power to another power. The enhanced power cannot have more levels than the adept’s Magic rating. This shift of power lasts for (Magic) minutes. Once the shift ends, the adept suffers Stun damage with a Damage Value equal to the four times the power point boost.
 
 ## Air Walking
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Light Body
+: Light Body
 
 The adept can briefly step on air as he would a stone. Add the adept’s initiate grade when calculating the maximum jumping distance (p. 134, SR5).
 
 ## Supernatural Prowess
 
 Source
-:   SR5:SG
+: SR5:SG
 
 For any physical action, the adept can substitute a physical attribute for Magic + initiate grade for that test. If done during combat, the substitution affects all physical actions associated to that attribute within a Combat Turn. This metamagic cannot be combined with Attribute Boost. This can be done 1 + initiate grade times per day. Dice pools and Physical limits temporarily change with this action.
 
 ## Pied Piper
 
 Source
-:   SR5:SG
+: SR5:SG
 
 The adept’s mastery of the artistic skill becomes anincredible work. His performance of the skill not onlymesmerizes the audience, it attracts them. Those whosee or hear the performance enter a mild trance. Theadept can target a person or a group of people to donothing else but experience the performance. The adeptmust have line of sight to the target(s). The adeptmakes an Opposed Test pitting Performance + Charisma[Magic] against Willpower + Charisma. If multipleindividuals are targeted, use the largest dice poolamong the defenders and add +1 die per additionaltarget (maximum +5). If the test is successful, the target(s) follow the adept as he performs for (Charisma x10) minutes. Subjects entranced this way can still havethe trance interrupted by significant distractions, suchas loud noises or a hard shove.
 
 ## Skin Artist
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Melanin Control
+: Melanin Control
 
 With this enhancement, an artist’s body is her own canvas. The adept possesses even finer control over her skin pigmentation, including formation of more colors (black, red, and blue) from her body. The adept can create a variety of tattoo markings anywhere on her body or change her whole skin tone to an unnatural hue.
 
 ## Hot Qi
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Living Focus
+: Living Focus
 
 As the adept burns out, he normally becomes unable to use some foci because his Magic rating is too low. With the hot qi technique, the adept can still use a qi focus, but he takes unresisted Stun damage equal to the difference between the focus’s Force and his Magic rating. If the Force of the focus exceeds twice the adept’s Magic rating, the damage is Physical. The focus’s Force cannot exceed 12.
 
 ## Shadow Touch
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Traceless Walk
+: Traceless Walk
 
 Adepts following the Invisible Way can learn to avoid leaving fingerprints on items they touch. This ability can also be used to avoid triggering alchemical preparations that use a contact trigger. The latter ability requires a successful Opposed Test between the adept’s Magic rating and the current Potency of the preparation.
 
 ## Stillness Of The Void
 
 Source
-:   SR5:SG
+: SR5:SG
 
 An adept who meditates can steel his mind against Detection spells and ritual magic and become as nothing. To enter this state, the adept must remain still and concentrate only on managing his breathing for five minutes; he also cannot speak, gesture, or move. Performing any action, such as being moved or taking any damage, will break the adept’s concentration, and he will have to start again. While resisting Detection spells, add 1 + initiate grade to the Opposed test. Items in the adept’s possession are also resisted by the adept in this manner to prevent detection (e.g., a Detect Guns spell). Astrally tracking the adept also becomes difficult, adding 1 + initiate grade to the threshold of the Assensing Test for astral tracking (p. 315, SR5). The adept can stay in this mental state for eight hours.
 
 ## Digital Celerity
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Nimble Fingers
+: Nimble Fingers
 
 This power allows the adept greater control in the palming or pickpocketing of an object and preventing anyone from noticing the act. This is true sleight of hand that mundane magicians attempt to attain. It imposes an additional –1 Perception modifier per initiate grade to anyone observing or being targeted by the adept.
 
 ## Master Of The Nine Chakras
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Nerve Strike
+: Nerve Strike
 
 The adept has a better understanding of how magic flows with a person’s vital energy. With this power, the adept can strike specific spots of energy concentration, causing a disruption of this flow and temporarily reducing the target’s Magic attribute. Refer to Nerve Strike (p. 173), but the attack reduces Magic instead. Magic lost this way has an effect similar to a background count, as the target accumulates dice pool penalties for casting spells or using Magical skills. If the subject’s Magic is reduced to 0, the target cannot use any magically related skill or adept power until the attribute recovers.
 
 ## Domain Of The Spiritual
 
 Source
-:   SR5:SG
+: SR5:SG
 
 The background caused by domains of religious significance, such as churches, cemeteries, and so forth, doesn’t affect those on this path as much as other adepts. Reduce background count penalties by 1 + initiate grade if the background count is aspected toward a religion or spiritual significance.
 
 ## Fae-touched
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Those on this path gain a hauntingly beautiful appearance. An adept may pit his Magic + Intuition + initiate grade against the target’s Willpower + Intuition in an Opposed Test. If the opponent fails, then the target believes in an idealized mana-based illusion of the adept. The adept can then substitute Magic + initiate grade for Charisma for all Charisma tests against those who believe the illusion. If the Opposed Test was successful, the illusion lasts twenty-four hours. This can be done 1 + initiate grade times a day. Drain from each attempt equals the target’s hits in resisting the attempt (minimum 2).
 
 ## Silver-tongued Devil
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Commanding Voice
+: Commanding Voice
 
 An adept of the Speaker’s Way can create a longer-lasting impression on subjects when using Commanding Voice (p. 170). If the adept wins the Opposed Test, the target continues to carry out the action for one minute before realizing what they’re doing. The Silver-Tongued Devil’s verboseness makes it unusable in combat situations. This power comes at a price of mental stress. When using the power, the adept suffers Stun damage equal to the hits (not net hits) from the target’s Opposed Test. Damage is resisted by Body + Willpower.
 
 ## Presence
 
 Source
-:   SR5:SG
+: SR5:SG
 
 The presence of a follower of the Speaker’s Way is very palpable, sometimes even visible, when the adept speaks. An adept with this metamagic can add her initiate grade in dice to all tests for one social skill, which is chosen when the metamagic is selected. The metamagic cannot be selected multiple times. The bonus also only applies when the adept is using her skill on others, not when she is resisting social skills of others.
 
 ## Barrage
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Missile Mastery
+: Missile Mastery
 
 A single improvised weapon in the hands of an adept is deadly; a handful is even worse. An adept mastering the Barrage technique can loose a handful of readied, improvised throwing weapons at a target(s). When making the throwing weapon attack, the adept can use the rules for narrow or medium spreads (p. 180, SR5). The adept must have either two or more throwing weapons or a gamemaster-approved handful of improvised weapons readied to use this technique.
 
 ## Domain Of The Warrior
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Those on this path are not as affected by the background taint of violence and war as other adepts. Reduce background count penalties by 1+ initiate grade if the background is aspected to violence and war.
 
 ## Master Of Taijiquan
 
 Source
-:   SR5:SG
+: SR5:SG
 
 Prerequisite
-:   Counterstrike
+: Counterstrike
 
 While people around the world practice taijiquan—a.k.a. t’ai chi—for its defense-training and health benefits, an adept mastering taijiquan flows like a river in combat, especially with multiple melee combatants. He uses the various attackers’ strengths to maneuver their strikes against each other. When the adept successfully blocks a melee attack from one attacker with Counterstrike, he may choose instead to redirect that attack against a second attacker. The second attacker would have to defend against the first attack with the number of hits equal to the adept’s Counterstrike test. The base Damage Value is equal to the melee attack from the first attacker. This mastery of kinetic energy only works in combat against multiple melee opponents. You can’t make an attacker hit himself, though you can taunt him with the promise to do so.
 
 ## Improved Astral Form
 
 Source
-:   SR5:FA
+: SR5:FA
 
 A magician draws energy from their body to create the astral form, leaving their physical frame in a sleep-like state in the process. Those who take this technique have learned to draw more energy, putting their frame in a deeper slumber in exchange for more time away from it. This technique allows the magician to add their initiate level to the duration that they may remain projected. If this technique is used, the deep slumber means that it takes one minute for a magician’s body to wake up after the astral form rejoins it.
 
 ## Astralnaut
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Improved Astral Form
+: Improved Astral Form
 
 By truly mastering the act of drawing energy from the physical frame, an astralnaut can drain so much that their body enters a coma, their physical processes slowing to a crawl. This allows the magician to greatly expand the duration of their astral jaunts, including metaplanar explorations. When using this technique, the magician’s allowed time in an astral form is measured in days, not hours. Due to the coma-like state, it requires twenty-four
 hours for the magician’s body to wake up once the astral form has rejoined it.
@@ -611,10 +611,10 @@ hours for the magician’s body to wake up once the astral form has rejoined it.
 ## Harmonious Defense
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Way of Unified Mana (Hapsum-Do)
+: Way of Unified Mana (Hapsum-Do)
 
 A character with harmonious defense has learned the ability to use their connection to magic to shield themselves and others from hostile magic. When the adept declares that they will use harmonious defense (a Free Action), they receive a dice pool equal to their Willpower + Magic + initiate grade, which can be used in the same fashion as spell defense dice from the Counterspelling skill. Note that whenever an adept uses harmonious defense, they
 automatically begin perceiving astrally.
@@ -622,10 +622,10 @@ automatically begin perceiving astrally.
 ## Harmonious Reflection
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Way of Unified Mana (Hapsum-Do), Harmonious Defence
+: Way of Unified Mana (Hapsum-Do), Harmonious Defence
 
 Harmonious reﬂection is the adept version of the reﬂection metamagic. Instead of using the Counterspelling Skill, however, the adept focuses their own magic and discipline to counter offensive magic.
 
@@ -640,7 +640,7 @@ With this action, the adept can use Willpower + Magic [Astral] versus the caster
 ## Noble Sacrifice
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Superfcially similar to blood magic, the noble sacrifce metamagic is actually its opposite. The Awakened individual with noble sacrifice is convinced of the inherent goodness of risking harm to one’s self for the benefit of others. As such, when they are suffering on behalf of others, they become much more powerful than they would be otherwise. This metamagic requires the mage to take a Free Action to activate. Once activated, the mage designates a metahuman individual or individuals within X meters of themselves (where X is Magic Rating). When any of these individuals take damage, it applies instead to the magician, who may resist it normally, as if the damage was happening directly to them (before the designated individual(s) do their own resistance rolls). Their own stats, skills, and attributes are used to resist the damage. Every three boxes of Physical or Stun damage suffered by the magician in this way generate one Protection Magic Point that must be used before the end of the next Combat Turn. Protection Magic Points generated by noble sacrifice can be used in any of the following ways, in any combination:
 
@@ -653,7 +653,7 @@ Additionally, if the magician has not attacked an enemy this round, they receive
 ## Paradigm shift
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Perhaps the single most interesting technique yet discovered, paradigm shift allows a magician to set aside their old tradition and choose a new one. Once chosen, this new tradition defnes their use of magic, and they lose all access to their old tradition. When the magician initiates again, they may choose paradigm shift as the new metamagic if they wish to change again.
 
@@ -668,44 +668,44 @@ This is less something you learn, more something you become. Any magician may tu
 ## Reckless Necro Conjuring
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Unlike normal reckless conjuring (p. 192, Street Grimoire), reckless necro conjuring allows a necro mage to summon a spirit without a Necro Summoning ritual. When reckless necro conjuring is used, a necro mage summons a necro spirit in the same way a normal mage would summon a spirit, except the host needed for the spirit (see Necro Summoning Ritual, p. 52) is still required. Only one necro spirit can be summoned at a time in this fashion, and the mage must resist drain like a normal mage does when summoning a spirit, except the drain value is now equal to two times the hits (not net hits) on the spirit’s defense test, with a minimum drain value of 4. This metamagic only applies to summoning necro spirits.
 
 ## Spirit Expansion: UMT
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Able to summon 5 types of spirit
+: Able to summon 5 types of spirit
 
 One of the defining moments in Universal Magic Theory was when a group of shamans in Prague were able to call forth an elemental, previously the exclusive domain of hermetic magicians. It took some time to perfect the technique, but it has since been expanded. Each time that this technique is taken, the magician learns to summon one new type of spirit, chosen from air, earth, fire, water, beasts, man, guardian, guidance, plant, or task. As the new spirit is from outside the magician’s tradition, they do not slot into a spellcasting area, but may otherwise serve as normal for a spirit of their kind.
 
 ## Spirit Expansion: Shedim
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Able to summon at least one type of spirit. Power must be learned from a master shedim that knows this metamagic.
+: Able to summon at least one type of spirit. Power must be learned from a master shedim that knows this metamagic.
 
 With the closing of the DeeCee portal, the pathway for more shedim spirits to enter our world was lost. This meant that each one destroyed or banished was one less that would ever exist here. Realizing that extinction was the final result, several master shedim in Europe gathered together and crafted a technique not unlike that of insect shamans, allowing them to teach a metahuman to summon their kind. In exchange for serving a new master, the shedim would be allowed entry into this plane of existence and, like any spirit, would have a small chance of slipping free. These master shedim have been quietly teaching this technique in hopes of saving their kind. Most magicians who have seen it call it “necromancy,” conﬂating it with previously discovered necromantic traditions, an error that the shedim have seen no reason to correct. A shedim summoner may also summon a master shedim as a great form ritual.
 
 ## Structured Spellcasting
 
 Source
-:   SR5:FA
+: SR5:FA
 
 This metamagic seeks to take the risk (and some reward) out of spellcasting by making it more tame and controlled. A mage with this metamagic may not use reckless spellcasting. Another effect of this metamagic is that in no case whatsoever may the mage ignore the limit on Spellcasting tests, even by using reagents or Edge. For giving up this freedom, the drain the mage suffers for casting spells is reduced by 1 (but always at least 1).
 
 ## Tarot Summoning
 
 Source
-:   SR5:FA
+: SR5:FA
 
 Prerequisite
-:   Tarot tradition
+: Tarot tradition
 
 This metamagic may be taken up to five times. At the first level of Tarot Summoning, mages choose one suit of the tarot: blades, coins, batons, or cups. The mage can only summon spirits from this suit using tarot summoning (see Tarot Summoning sidebar, p. 93, SR5:Forbidden Arcana). If a card is drawn that is not of a suit chosen by the mage, no spirit is summoned (or a spirit is summoned but refuses to obey the mage, gamemaster’s discretion). Tarot mages may remove suits from their deck that they are unable to summon, but only entire suits, rather than individual cards of some suits.
 

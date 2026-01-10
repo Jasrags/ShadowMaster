@@ -104,13 +104,7 @@
             "description": "A shadow broker who connects runners with jobs, gear, and information.",
             "suggestedConnection": 4,
             "suggestedLoyalty": 2,
-            "commonMetatypes": [
-              "Human",
-              "Elf",
-              "Ork",
-              "Dwarf",
-              "Troll"
-            ]
+            "commonMetatypes": ["Human", "Elf", "Ork", "Dwarf", "Troll"]
           },
           {
             "id": "street-doc",
@@ -118,10 +112,7 @@
             "description": "An underground medical professional who asks no questions.",
             "suggestedConnection": 2,
             "suggestedLoyalty": 2,
-            "commonMetatypes": [
-              "Human",
-              "Dwarf"
-            ]
+            "commonMetatypes": ["Human", "Dwarf"]
           },
           {
             "id": "arms-dealer",
@@ -129,11 +120,7 @@
             "description": "A supplier of weapons, ammo, and military-grade hardware.",
             "suggestedConnection": 3,
             "suggestedLoyalty": 1,
-            "commonMetatypes": [
-              "Ork",
-              "Troll",
-              "Human"
-            ]
+            "commonMetatypes": ["Ork", "Troll", "Human"]
           },
           {
             "id": "talismonger",
@@ -141,10 +128,7 @@
             "description": "A dealer in magical supplies, foci, and reagents.",
             "suggestedConnection": 3,
             "suggestedLoyalty": 1,
-            "commonMetatypes": [
-              "Elf",
-              "Human"
-            ]
+            "commonMetatypes": ["Elf", "Human"]
           },
           {
             "id": "info-broker",
@@ -152,11 +136,7 @@
             "description": "A specialist in gathering and selling secrets and paydata.",
             "suggestedConnection": 4,
             "suggestedLoyalty": 1,
-            "commonMetatypes": [
-              "Elf",
-              "Human",
-              "Dwarf"
-            ]
+            "commonMetatypes": ["Elf", "Human", "Dwarf"]
           },
           {
             "id": "mr-johnson",
@@ -164,10 +144,7 @@
             "description": "A corporate agent who hires runners for deniable assets operations.",
             "suggestedConnection": 5,
             "suggestedLoyalty": 1,
-            "commonMetatypes": [
-              "Human",
-              "Elf"
-            ]
+            "commonMetatypes": ["Human", "Elf"]
           },
           {
             "id": "mechanic",
@@ -175,11 +152,7 @@
             "description": "A skilled technician who repairs and modifies vehicles and drones.",
             "suggestedConnection": 2,
             "suggestedLoyalty": 2,
-            "commonMetatypes": [
-              "Dwarf",
-              "Ork",
-              "Human"
-            ]
+            "commonMetatypes": ["Dwarf", "Ork", "Human"]
           },
           {
             "id": "beat-cop",
@@ -187,11 +160,7 @@
             "description": "A law enforcement officer willing to look the other way or share tips.",
             "suggestedConnection": 2,
             "suggestedLoyalty": 1,
-            "commonMetatypes": [
-              "Human",
-              "Ork",
-              "Dwarf"
-            ]
+            "commonMetatypes": ["Human", "Ork", "Dwarf"]
           },
           {
             "id": "gang-leader",
@@ -199,11 +168,7 @@
             "description": "The head of a local street gang or organized crime cell.",
             "suggestedConnection": 3,
             "suggestedLoyalty": 2,
-            "commonMetatypes": [
-              "Ork",
-              "Troll",
-              "Human"
-            ]
+            "commonMetatypes": ["Ork", "Troll", "Human"]
           },
           {
             "id": "smuggler",
@@ -211,11 +176,7 @@
             "description": "A transporter of illicit goods and people across borders.",
             "suggestedConnection": 3,
             "suggestedLoyalty": 2,
-            "commonMetatypes": [
-              "Human",
-              "Ork",
-              "Elf"
-            ]
+            "commonMetatypes": ["Human", "Ork", "Elf"]
           }
         ]
       }
@@ -267,12 +228,7 @@
             "name": "Attribute Boost",
             "activation": "simple",
             "requiresAttribute": true,
-            "validAttributes": [
-              "body",
-              "agility",
-              "reaction",
-              "strength"
-            ],
+            "validAttributes": ["body", "agility", "reaction", "strength"],
             "description": "Boost a Physical Attribute. Make Magic + Rating Test; each hit boosts attribute by 1. Lasts 2x hits Combat Turns. Drain equal to level afterward.",
             "hasRating": true,
             "minRating": 1,
@@ -344,12 +300,7 @@
             "id": "critical-strike",
             "name": "Critical Strike",
             "requiresSkill": true,
-            "validSkills": [
-              "unarmed-combat",
-              "clubs",
-              "blades",
-              "astral-combat"
-            ],
+            "validSkills": ["unarmed-combat", "clubs", "blades", "astral-combat"],
             "description": "+1 DV with the selected melee skill. May purchase multiple times for different skills.",
             "powerPointCost": 0.5
           },
@@ -495,12 +446,7 @@
             "id": "improved-physical-attribute",
             "name": "Improved Physical Attribute",
             "requiresAttribute": true,
-            "validAttributes": [
-              "body",
-              "agility",
-              "reaction",
-              "strength"
-            ],
+            "validAttributes": ["body", "agility", "reaction", "strength"],
             "description": "Permanently increase a Physical Attribute by 1 per level, up to augmented maximum.",
             "hasRating": true,
             "minRating": 1,
@@ -532,11 +478,7 @@
             "id": "improved-potential",
             "name": "Improved Potential",
             "requiresLimit": true,
-            "validLimits": [
-              "physical",
-              "mental",
-              "social"
-            ],
+            "validLimits": ["physical", "mental", "social"],
             "description": "Raise one inherent limit by 1 per level. May purchase once per limit.",
             "hasRating": true,
             "minRating": 1,
@@ -1035,9 +977,7 @@
                 "base": 6
               }
             },
-            "racialTraits": [
-              "Low-Light Vision"
-            ],
+            "racialTraits": ["Low-Light Vision"],
             "priorityAvailability": {
               "A": {
                 "specialAttributePoints": 8
@@ -1162,9 +1102,7 @@
                 "base": 6
               }
             },
-            "racialTraits": [
-              "Low-Light Vision"
-            ],
+            "racialTraits": ["Low-Light Vision"],
             "priorityAvailability": {
               "A": {
                 "specialAttributePoints": 7
@@ -1420,13 +1358,7 @@
     "priorities": {
       "mergeStrategy": "replace",
       "payload": {
-        "levels": [
-          "A",
-          "B",
-          "C",
-          "D",
-          "E"
-        ],
+        "levels": ["A", "B", "C", "D", "E"],
         "categories": [
           {
             "id": "metatype",
@@ -1457,13 +1389,7 @@
         "table": {
           "A": {
             "metatype": {
-              "available": [
-                "human",
-                "elf",
-                "dwarf",
-                "ork",
-                "troll"
-              ],
+              "available": ["human", "elf", "dwarf", "ork", "troll"],
               "specialAttributePoints": {
                 "human": 9,
                 "elf": 8,
@@ -1521,13 +1447,7 @@
           },
           "B": {
             "metatype": {
-              "available": [
-                "human",
-                "elf",
-                "dwarf",
-                "ork",
-                "troll"
-              ],
+              "available": ["human", "elf", "dwarf", "ork", "troll"],
               "specialAttributePoints": {
                 "human": 7,
                 "elf": 6,
@@ -1607,12 +1527,7 @@
           },
           "C": {
             "metatype": {
-              "available": [
-                "human",
-                "elf",
-                "dwarf",
-                "ork"
-              ],
+              "available": ["human", "elf", "dwarf", "ork"],
               "specialAttributePoints": {
                 "human": 5,
                 "elf": 3,
@@ -1670,10 +1585,7 @@
           },
           "D": {
             "metatype": {
-              "available": [
-                "human",
-                "elf"
-              ],
+              "available": ["human", "elf"],
               "specialAttributePoints": {
                 "human": 3,
                 "elf": 0
@@ -1700,9 +1612,7 @@
           },
           "E": {
             "metatype": {
-              "available": [
-                "human"
-              ],
+              "available": ["human"],
               "specialAttributePoints": {
                 "human": 1
               }
@@ -1737,11 +1647,7 @@
             "description": "Full magical practitioner with access to all magical skills and abilities.",
             "hasMagic": true,
             "hasResonance": false,
-            "skillGroups": [
-              "Sorcery",
-              "Conjuring",
-              "Enchanting"
-            ],
+            "skillGroups": ["Sorcery", "Conjuring", "Enchanting"],
             "canAstralProject": true,
             "canCastSpells": true,
             "canSummonSpirits": true
@@ -1752,10 +1658,7 @@
             "description": "Combines magical abilities with adept powers. Cannot astrally project.",
             "hasMagic": true,
             "hasResonance": false,
-            "skillGroups": [
-              "Sorcery",
-              "Conjuring"
-            ],
+            "skillGroups": ["Sorcery", "Conjuring"],
             "canAstralProject": false,
             "canCastSpells": true,
             "canSummonSpirits": true,
@@ -1779,11 +1682,7 @@
             "description": "Magician limited to one magical skill group (Sorcery, Conjuring, or Enchanting).",
             "hasMagic": true,
             "hasResonance": false,
-            "limitedTo": [
-              "Sorcery",
-              "Conjuring",
-              "Enchanting"
-            ],
+            "limitedTo": ["Sorcery", "Conjuring", "Enchanting"],
             "canAstralProject": true,
             "selectOneGroup": true
           },
@@ -1793,9 +1692,7 @@
             "description": "Naturally interfaces with the Matrix through Resonance.",
             "hasMagic": false,
             "hasResonance": true,
-            "skillGroups": [
-              "Tasking"
-            ],
+            "skillGroups": ["Tasking"],
             "canCompileSprites": true,
             "canThreadComplexForms": true
           }
@@ -1804,10 +1701,7 @@
           {
             "id": "hermetic",
             "name": "Hermetic",
-            "drainAttributes": [
-              "LOG",
-              "WIL"
-            ],
+            "drainAttributes": ["LOG", "WIL"],
             "spiritTypes": {
               "combat": "fire",
               "detection": "air",
@@ -1821,10 +1715,7 @@
           {
             "id": "shaman",
             "name": "Shaman",
-            "drainAttributes": [
-              "CHA",
-              "WIL"
-            ],
+            "drainAttributes": ["CHA", "WIL"],
             "spiritTypes": {
               "combat": "beasts",
               "detection": "water",
@@ -2814,14 +2705,8 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": [
-              "computer",
-              "hacking"
-            ],
-            "powers": [
-              "cookie",
-              "hash"
-            ]
+            "skills": ["computer", "hacking"],
+            "powers": ["cookie", "hash"]
           },
           {
             "id": "crack",
@@ -2838,14 +2723,8 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": [
-              "computer",
-              "electronic-warfare",
-              "hacking"
-            ],
-            "powers": [
-              "suppression"
-            ]
+            "skills": ["computer", "electronic-warfare", "hacking"],
+            "powers": ["suppression"]
           },
           {
             "id": "data",
@@ -2862,14 +2741,8 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": [
-              "computer",
-              "electronic-warfare"
-            ],
-            "powers": [
-              "camouflage",
-              "watermark"
-            ]
+            "skills": ["computer", "electronic-warfare"],
+            "powers": ["camouflage", "watermark"]
           },
           {
             "id": "fault",
@@ -2886,14 +2759,8 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": [
-              "computer",
-              "cybercombat",
-              "hacking"
-            ],
-            "powers": [
-              "electron-storm"
-            ]
+            "skills": ["computer", "cybercombat", "hacking"],
+            "powers": ["electron-storm"]
           },
           {
             "id": "machine",
@@ -2910,16 +2777,8 @@
               "dice": 4
             },
             "resonance": "L",
-            "skills": [
-              "computer",
-              "electronic-warfare",
-              "hardware"
-            ],
-            "powers": [
-              "diagnostics",
-              "gremlins",
-              "stability"
-            ]
+            "skills": ["computer", "electronic-warfare", "hardware"],
+            "powers": ["diagnostics", "gremlins", "stability"]
           }
         ],
         "spritePowers": [
@@ -3183,10 +3042,7 @@
           {
             "id": "curse",
             "name": "Curse",
-            "keywords": [
-              "material-link",
-              "spell"
-            ],
+            "keywords": ["material-link", "spell"],
             "spellCategory": "illusion",
             "description": "A Curse allows an illusion spell to be cast on a subject through a material link rather than a mystic link from observing the subject. A Curse can be used on any target, whether within visual range of the leader or not, provided there is a link to the target. If the spell applies to multiple targets, such as in a mass spell, then the ritual must have a link to each of the targets. The link is used as part of the offering and is effectively destroyed during the ritual.",
             "duration": "Force hours",
@@ -3195,10 +3051,7 @@
           {
             "id": "prodigal-spell",
             "name": "Prodigal Spell",
-            "keywords": [
-              "spell",
-              "spotter"
-            ],
+            "keywords": ["spell", "spotter"],
             "spellCategory": "combat",
             "description": "This ritual allows you to cast any Combat spell at a distant target that is out of line of sight of your ritual team. The Combat spell can be either direct or indirect. Direct combat spells travel to the target in astral space. Indirect combat spells travel to the target in physical space, requiring a clear (but not necessarily straight) path in the physical world between the ritual team and target.",
             "duration": "Force hours",
@@ -3207,10 +3060,7 @@
           {
             "id": "remote-sensing",
             "name": "Remote Sensing",
-            "keywords": [
-              "spell",
-              "spotter"
-            ],
+            "keywords": ["spell", "spotter"],
             "spellCategory": "detection",
             "description": "This ritual allows you to cast any Detection spell with an even greater range. The area of the spell is increased to Force x (sum total of the participants' Magic attributes) x 100 meters. The spell's subject must be present in the foundation during the ritual but may then take his new sense outside the foundation while the ritual participants sustain it for him.",
             "duration": "Force hours",
@@ -3219,9 +3069,7 @@
           {
             "id": "ward",
             "name": "Ward",
-            "keywords": [
-              "anchored"
-            ],
+            "keywords": ["anchored"],
             "description": "The ward is a basic ritual, taught to many magicians. It creates an astral barrier with a Force equal to the Force of the ritual. The ward may encompass a volume of up to fifty cubic meters times the sum of the participants' Magic ratings. The ward lasts for a number of weeks equal to the net hits from the sealing step of the ritual—if the leader spends an amount of karma equal to the ward's Force, the ward is permanent.",
             "duration": "Force hours",
             "canBePermanent": true,
@@ -3231,9 +3079,7 @@
           {
             "id": "circle-of-protection",
             "name": "Circle of Protection",
-            "keywords": [
-              "anchored"
-            ],
+            "keywords": ["anchored"],
             "description": "The circle of protection is a small astral and physical barrier. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The circle acts as a combination of the physical barrier and mana barrier spells with a Force equal to the Force of the ritual. The mana barrier is dual-natured. Anyone or anything within the barrier is protected from outside physical objects and magical attacks. If something crosses the barrier from the inside, then the ward ends.",
             "duration": "Net hits hours",
             "source": "Core"
@@ -3241,10 +3087,7 @@
           {
             "id": "circle-of-healing",
             "name": "Circle of Healing",
-            "keywords": [
-              "anchored",
-              "spell"
-            ],
+            "keywords": ["anchored", "spell"],
             "spellCategory": "health",
             "description": "This ritual is used to cast a healing magic on a number of targets at once. Even though it's called a circle, it creates a sphere around the anchor that has a radius in meters equal to the leader's Magic rating. The net hits from the sealing step are used as the net hits for the spell, and apply to everyone in the circle as long as they remain in the circle.",
             "duration": "Force days",
@@ -3253,10 +3096,7 @@
           {
             "id": "renascence",
             "name": "Renascence",
-            "keywords": [
-              "anchored",
-              "spell"
-            ],
+            "keywords": ["anchored", "spell"],
             "spellCategory": "manipulation",
             "description": "This ritual sustains and maintains an area manipulation spell for a time. The area of the spell is a sphere with a radius equal to the leader's Magic rating, and the effect is based on the ritual's Force and the net hits from the sealing step. The base duration of the effect is 1 hour, which is doubled for each net hit from the sealing step of the ritual.",
             "duration": "Force hours",
@@ -3265,9 +3105,7 @@
           {
             "id": "watcher",
             "name": "Watcher",
-            "keywords": [
-              "minion"
-            ],
+            "keywords": ["minion"],
             "description": "Watchers are like spirits, but in actuality are entities born from the ritual leader's own mind rather than the metaplanes. They are a creation of mana, woven with the personalities of the ritual participants. A watcher can speak any language its creators can speak. A watcher is bound only to the leader of the ritual and follows his orders. A watcher lasts for a number of hours equal to its Force times the net hits on the sealing test. A watcher's skills are equal to half the Force of the ritual (rounded up). A leader can dismiss a watcher bound to him as a Free Action. Watchers cannot be banished or counterspelled.",
             "duration": "Force minutes",
             "minionStats": {
@@ -3282,17 +3120,8 @@
                 "charisma": "F-2"
               },
               "astralInitiative": "(F x 2) + 1D6",
-              "skills": [
-                "Assensing",
-                "Astral Combat",
-                "Perception"
-              ],
-              "powers": [
-                "Astral Form",
-                "Manifest",
-                "Search",
-                "Sapience"
-              ],
+              "skills": ["Assensing", "Astral Combat", "Perception"],
+              "powers": ["Astral Form", "Manifest", "Search", "Sapience"],
               "notes": "Watchers don't have a corporeal body."
             },
             "source": "Core"
@@ -3300,9 +3129,7 @@
           {
             "id": "homunculus",
             "name": "Homunculus",
-            "keywords": [
-              "minion"
-            ],
+            "keywords": ["minion"],
             "description": "The magician can bind a spark of intelligence into an inanimate form, creating a homunculus. The homunculus has a physical form but isn't very bright. It understands any language its creators speak and has a modicum of a personality that reflects those of its creators. You need an inanimate object to animate for the ritual. It can be at most (Force x 10) kilograms in mass. The homunculus obeys the leader's commands as much as possible within the limitations of its physical capabilities. A homunculus lasts for a number of days equal to its Force times the net hits on the sealing test.",
             "duration": "Force hours",
             "minionStats": {
@@ -3317,15 +3144,8 @@
               },
               "initiative": "(F + 1) + 1D6",
               "movement": "x2/x4/+1",
-              "skills": [
-                "Assensing",
-                "Astral Combat",
-                "Perception",
-                "Unarmed Combat"
-              ],
-              "powers": [
-                "Sapience"
-              ],
+              "skills": ["Assensing", "Astral Combat", "Perception", "Unarmed Combat"],
+              "powers": ["Sapience"],
               "notes": "The body of a minion is equivalent to the Structure rating of the material used in creating it."
             },
             "source": "Core"
@@ -3367,92 +3187,52 @@
           {
             "id": "acting",
             "name": "Acting",
-            "skills": [
-              "con",
-              "impersonation",
-              "performance"
-            ]
+            "skills": ["con", "impersonation", "performance"]
           },
           {
             "id": "athletics",
             "name": "Athletics",
-            "skills": [
-              "gymnastics",
-              "running",
-              "swimming"
-            ]
+            "skills": ["gymnastics", "running", "swimming"]
           },
           {
             "id": "biotech",
             "name": "Biotech",
-            "skills": [
-              "cybertechnology",
-              "first-aid",
-              "medicine"
-            ]
+            "skills": ["cybertechnology", "first-aid", "medicine"]
           },
           {
             "id": "close-combat",
             "name": "Close Combat",
-            "skills": [
-              "blades",
-              "clubs",
-              "unarmed-combat"
-            ]
+            "skills": ["blades", "clubs", "unarmed-combat"]
           },
           {
             "id": "conjuring",
             "name": "Conjuring",
-            "skills": [
-              "banishing",
-              "binding",
-              "summoning"
-            ]
+            "skills": ["banishing", "binding", "summoning"]
           },
           {
             "id": "cracking",
             "name": "Cracking",
-            "skills": [
-              "cybercombat",
-              "electronic-warfare",
-              "hacking"
-            ]
+            "skills": ["cybercombat", "electronic-warfare", "hacking"]
           },
           {
             "id": "electronics",
             "name": "Electronics",
-            "skills": [
-              "computer",
-              "hardware",
-              "software"
-            ]
+            "skills": ["computer", "hardware", "software"]
           },
           {
             "id": "enchanting",
             "name": "Enchanting",
-            "skills": [
-              "alchemy",
-              "artificing",
-              "disenchanting"
-            ]
+            "skills": ["alchemy", "artificing", "disenchanting"]
           },
           {
             "id": "firearms",
             "name": "Firearms",
-            "skills": [
-              "automatics",
-              "longarms",
-              "pistols"
-            ]
+            "skills": ["automatics", "longarms", "pistols"]
           },
           {
             "id": "influence",
             "name": "Influence",
-            "skills": [
-              "etiquette",
-              "leadership",
-              "negotiation"
-            ]
+            "skills": ["etiquette", "leadership", "negotiation"]
           },
           {
             "id": "engineering",
@@ -3467,38 +3247,22 @@
           {
             "id": "outdoors",
             "name": "Outdoors",
-            "skills": [
-              "navigation",
-              "survival",
-              "tracking"
-            ]
+            "skills": ["navigation", "survival", "tracking"]
           },
           {
             "id": "sorcery",
             "name": "Sorcery",
-            "skills": [
-              "counterspelling",
-              "ritual-spellcasting",
-              "spellcasting"
-            ]
+            "skills": ["counterspelling", "ritual-spellcasting", "spellcasting"]
           },
           {
             "id": "stealth",
             "name": "Stealth",
-            "skills": [
-              "disguise",
-              "palming",
-              "sneaking"
-            ]
+            "skills": ["disguise", "palming", "sneaking"]
           },
           {
             "id": "tasking",
             "name": "Tasking",
-            "skills": [
-              "compiling",
-              "decompiling",
-              "registering"
-            ]
+            "skills": ["compiling", "decompiling", "registering"]
           }
         ],
         "activeSkills": [
@@ -3510,12 +3274,7 @@
             "group": null,
             "canDefault": true,
             "category": "combat",
-            "suggestedSpecializations": [
-              "Bow",
-              "Crossbow",
-              "Non-Standard Ammunition",
-              "Slingshot"
-            ]
+            "suggestedSpecializations": ["Bow", "Crossbow", "Non-Standard Ammunition", "Slingshot"]
           },
           {
             "id": "automatics",
@@ -3540,12 +3299,7 @@
             "group": "close-combat",
             "canDefault": true,
             "category": "combat",
-            "suggestedSpecializations": [
-              "Axes",
-              "Knives",
-              "Swords",
-              "Parrying"
-            ]
+            "suggestedSpecializations": ["Axes", "Knives", "Swords", "Parrying"]
           },
           {
             "id": "clubs",
@@ -3555,13 +3309,7 @@
             "group": "close-combat",
             "canDefault": true,
             "category": "combat",
-            "suggestedSpecializations": [
-              "Batons",
-              "Hammers",
-              "Saps",
-              "Staves",
-              "Parrying"
-            ]
+            "suggestedSpecializations": ["Batons", "Hammers", "Saps", "Staves", "Parrying"]
           },
           {
             "id": "exotic-ranged-weapon",
@@ -3612,12 +3360,7 @@
             "group": "firearms",
             "canDefault": true,
             "category": "combat",
-            "suggestedSpecializations": [
-              "Holdouts",
-              "Revolvers",
-              "Semi-Automatics",
-              "Tasers"
-            ]
+            "suggestedSpecializations": ["Holdouts", "Revolvers", "Semi-Automatics", "Tasers"]
           },
           {
             "id": "throwing-weapons",
@@ -3627,11 +3370,7 @@
             "group": null,
             "canDefault": true,
             "category": "combat",
-            "suggestedSpecializations": [
-              "Aerodynamic",
-              "Blades",
-              "Non-Aerodynamic"
-            ]
+            "suggestedSpecializations": ["Aerodynamic", "Blades", "Non-Aerodynamic"]
           },
           {
             "id": "unarmed-combat",
@@ -3656,12 +3395,7 @@
             "group": "stealth",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Camouflage",
-              "Cosmetic",
-              "Theatrical",
-              "Trideo & Video"
-            ]
+            "suggestedSpecializations": ["Camouflage", "Cosmetic", "Theatrical", "Trideo & Video"]
           },
           {
             "id": "diving",
@@ -3691,12 +3425,7 @@
             "group": null,
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Cuffs",
-              "Ropes",
-              "Zip Ties",
-              "Contortionism"
-            ]
+            "suggestedSpecializations": ["Cuffs", "Ropes", "Zip Ties", "Contortionism"]
           },
           {
             "id": "free-fall",
@@ -3743,11 +3472,7 @@
             "group": "stealth",
             "canDefault": false,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Legerdemain",
-              "Pickpocket",
-              "Pilfering"
-            ]
+            "suggestedSpecializations": ["Legerdemain", "Pickpocket", "Pilfering"]
           },
           {
             "id": "perception",
@@ -3774,13 +3499,7 @@
             "group": "athletics",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Distance",
-              "Sprinting",
-              "Desert",
-              "Urban",
-              "Wilderness"
-            ]
+            "suggestedSpecializations": ["Distance", "Sprinting", "Desert", "Urban", "Wilderness"]
           },
           {
             "id": "sneaking",
@@ -3790,11 +3509,7 @@
             "group": "stealth",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Jungle",
-              "Urban",
-              "Desert"
-            ]
+            "suggestedSpecializations": ["Jungle", "Urban", "Desert"]
           },
           {
             "id": "survival",
@@ -3804,14 +3519,7 @@
             "group": "outdoors",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Desert",
-              "Forest",
-              "Jungle",
-              "Mountain",
-              "Polar",
-              "Urban"
-            ]
+            "suggestedSpecializations": ["Desert", "Forest", "Jungle", "Mountain", "Polar", "Urban"]
           },
           {
             "id": "swimming",
@@ -3821,10 +3529,7 @@
             "group": "athletics",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Dash",
-              "Long Distance"
-            ]
+            "suggestedSpecializations": ["Dash", "Long Distance"]
           },
           {
             "id": "tracking",
@@ -3834,14 +3539,7 @@
             "group": "outdoors",
             "canDefault": true,
             "category": "physical",
-            "suggestedSpecializations": [
-              "Desert",
-              "Forest",
-              "Jungle",
-              "Mountain",
-              "Polar",
-              "Urban"
-            ]
+            "suggestedSpecializations": ["Desert", "Forest", "Jungle", "Mountain", "Polar", "Urban"]
           },
           {
             "id": "con",
@@ -3851,10 +3549,7 @@
             "group": "acting",
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Fast Talking",
-              "Seduction"
-            ]
+            "suggestedSpecializations": ["Fast Talking", "Seduction"]
           },
           {
             "id": "etiquette",
@@ -3881,13 +3576,7 @@
             "group": "acting",
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Dwarf",
-              "Elf",
-              "Human",
-              "Ork",
-              "Troll"
-            ]
+            "suggestedSpecializations": ["Dwarf", "Elf", "Human", "Ork", "Troll"]
           },
           {
             "id": "instruction",
@@ -3897,12 +3586,7 @@
             "group": null,
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Combat",
-              "Language",
-              "Magical",
-              "Academic"
-            ]
+            "suggestedSpecializations": ["Combat", "Language", "Magical", "Academic"]
           },
           {
             "id": "intimidation",
@@ -3912,12 +3596,7 @@
             "group": null,
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Interrogation",
-              "Mental",
-              "Physical",
-              "Torture"
-            ]
+            "suggestedSpecializations": ["Interrogation", "Mental", "Physical", "Torture"]
           },
           {
             "id": "leadership",
@@ -3927,12 +3606,7 @@
             "group": "influence",
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Command",
-              "Direct",
-              "Inspire",
-              "Rally"
-            ]
+            "suggestedSpecializations": ["Command", "Direct", "Inspire", "Rally"]
           },
           {
             "id": "negotiation",
@@ -3942,11 +3616,7 @@
             "group": "influence",
             "canDefault": true,
             "category": "social",
-            "suggestedSpecializations": [
-              "Bargaining",
-              "Contracts",
-              "Diplomacy"
-            ]
+            "suggestedSpecializations": ["Bargaining", "Contracts", "Diplomacy"]
           },
           {
             "id": "performance",
@@ -3991,11 +3661,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Spell Design",
-              "Focus Design",
-              "Spirit Formulae"
-            ]
+            "suggestedSpecializations": ["Spell Design", "Focus Design", "Spirit Formulae"]
           },
           {
             "id": "artificing",
@@ -4006,10 +3672,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Focus Analysis",
-              "Crafting"
-            ]
+            "suggestedSpecializations": ["Focus Analysis", "Crafting"]
           },
           {
             "id": "assensing",
@@ -4020,11 +3683,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Aura Reading",
-              "Astral Signatures",
-              "Metahuman"
-            ]
+            "suggestedSpecializations": ["Aura Reading", "Astral Signatures", "Metahuman"]
           },
           {
             "id": "astral-combat",
@@ -4035,11 +3694,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Against Mages",
-              "Against Spirits",
-              "Specific Spirit Type"
-            ]
+            "suggestedSpecializations": ["Against Mages", "Against Spirits", "Specific Spirit Type"]
           },
           {
             "id": "banishing",
@@ -4103,10 +3758,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Alchemical Preparations",
-              "Foci"
-            ]
+            "suggestedSpecializations": ["Alchemical Preparations", "Foci"]
           },
           {
             "id": "ritual-spellcasting",
@@ -4117,13 +3769,7 @@
             "canDefault": false,
             "category": "magical",
             "requiresMagic": true,
-            "suggestedSpecializations": [
-              "Anchored",
-              "Material Link",
-              "Minion",
-              "Spell",
-              "Spotter"
-            ]
+            "suggestedSpecializations": ["Anchored", "Material Link", "Minion", "Spell", "Spotter"]
           },
           {
             "id": "spellcasting",
@@ -4169,14 +3815,7 @@
             "canDefault": false,
             "category": "resonance",
             "requiresResonance": true,
-            "suggestedSpecializations": [
-              "Courier",
-              "Crack",
-              "Data",
-              "Fault",
-              "Machine",
-              "Sprite"
-            ]
+            "suggestedSpecializations": ["Courier", "Crack", "Data", "Fault", "Machine", "Sprite"]
           },
           {
             "id": "decompiling",
@@ -4187,14 +3826,7 @@
             "canDefault": false,
             "category": "resonance",
             "requiresResonance": true,
-            "suggestedSpecializations": [
-              "Courier",
-              "Crack",
-              "Data",
-              "Fault",
-              "Machine",
-              "Sprite"
-            ]
+            "suggestedSpecializations": ["Courier", "Crack", "Data", "Fault", "Machine", "Sprite"]
           },
           {
             "id": "registering",
@@ -4205,14 +3837,7 @@
             "canDefault": false,
             "category": "resonance",
             "requiresResonance": true,
-            "suggestedSpecializations": [
-              "Courier",
-              "Crack",
-              "Data",
-              "Fault",
-              "Machine",
-              "Sprite"
-            ]
+            "suggestedSpecializations": ["Courier", "Crack", "Data", "Fault", "Machine", "Sprite"]
           },
           {
             "id": "aeronautics-mechanic",
@@ -4276,12 +3901,7 @@
             "group": null,
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Cooking",
-              "Sculpting",
-              "Drawing",
-              "Carpentry"
-            ]
+            "suggestedSpecializations": ["Cooking", "Sculpting", "Drawing", "Carpentry"]
           },
           {
             "id": "automotive-mechanic",
@@ -4291,12 +3911,7 @@
             "group": "engineering",
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Walker",
-              "Hover",
-              "Tracked",
-              "Wheeled"
-            ]
+            "suggestedSpecializations": ["Walker", "Hover", "Tracked", "Wheeled"]
           },
           {
             "id": "biotechnology",
@@ -4338,11 +3953,7 @@
             "group": "electronics",
             "canDefault": true,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Edit File",
-              "Matrix Perception",
-              "Matrix Search"
-            ]
+            "suggestedSpecializations": ["Edit File", "Matrix Perception", "Matrix Search"]
           },
           {
             "id": "cybercombat",
@@ -4352,13 +3963,7 @@
             "group": "cracking",
             "canDefault": true,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Devices",
-              "Grids",
-              "IC",
-              "Personas",
-              "Sprites"
-            ]
+            "suggestedSpecializations": ["Devices", "Grids", "IC", "Personas", "Sprites"]
           },
           {
             "id": "cybertechnology",
@@ -4368,12 +3973,7 @@
             "group": "biotech",
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Bodyware",
-              "Cyberlimbs",
-              "Headware",
-              "Repair"
-            ]
+            "suggestedSpecializations": ["Bodyware", "Cyberlimbs", "Headware", "Repair"]
           },
           {
             "id": "demolitions",
@@ -4445,12 +4045,7 @@
             "group": "cracking",
             "canDefault": true,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Devices",
-              "Files",
-              "Hosts",
-              "Personas"
-            ]
+            "suggestedSpecializations": ["Devices", "Files", "Hosts", "Personas"]
           },
           {
             "id": "hardware",
@@ -4460,12 +4055,7 @@
             "group": "electronics",
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Commlinks",
-              "Cyberdecks",
-              "Smartguns",
-              "Maglocks"
-            ]
+            "suggestedSpecializations": ["Commlinks", "Cyberdecks", "Smartguns", "Maglocks"]
           },
           {
             "id": "industrial-mechanic",
@@ -4526,12 +4116,7 @@
             "group": "engineering",
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Motorboat",
-              "Sailboat",
-              "Ship",
-              "Submarine"
-            ]
+            "suggestedSpecializations": ["Motorboat", "Sailboat", "Ship", "Submarine"]
           },
           {
             "id": "navigation",
@@ -4557,12 +4142,7 @@
             "group": "electronics",
             "canDefault": false,
             "category": "technical",
-            "suggestedSpecializations": [
-              "Data Bombs",
-              "Editor",
-              "Resonance Spike",
-              "Tattletale"
-            ]
+            "suggestedSpecializations": ["Data Bombs", "Editor", "Resonance Spike", "Tattletale"]
           },
           {
             "id": "gunnery",
@@ -4621,12 +4201,7 @@
             "group": null,
             "canDefault": false,
             "category": "vehicle",
-            "suggestedSpecializations": [
-              "Biped",
-              "Multiped",
-              "Quadruped",
-              "Remote"
-            ]
+            "suggestedSpecializations": ["Biped", "Multiped", "Quadruped", "Remote"]
           },
           {
             "id": "pilot-exotic-vehicle",
@@ -6153,9 +5728,7 @@
               "subcategory": "light-pistol",
               "accuracy": 7,
               "damage": "6P",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 16,
               "availability": 3,
@@ -6170,9 +5743,7 @@
               "accuracy": 6,
               "accuracySmartgun": 8,
               "damage": "6P",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 16,
               "availability": 6,
@@ -6188,9 +5759,7 @@
               "availability": 5,
               "damage": "8P",
               "ap": -1,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 15,
               "accuracy": 5,
@@ -6211,9 +5780,7 @@
               "subcategory": "light-pistol",
               "accuracy": 3,
               "damage": "Chemical",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 20,
               "availability": 7,
@@ -6228,10 +5795,7 @@
               "accuracy": 4,
               "damage": "9P (f)",
               "ap": 4,
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "ammo": 30,
               "availability": 8,
@@ -6245,10 +5809,7 @@
               "subcategory": "light-pistol",
               "accuracy": 6,
               "damage": "6P",
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 21,
@@ -6265,9 +5826,7 @@
               "accuracySmartgun": 6,
               "damage": "8P",
               "ap": -1,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 10,
               "availability": 4,
@@ -6289,9 +5848,7 @@
               "availability": 4,
               "damage": "7P",
               "ap": 0,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 11,
               "accuracy": 7,
@@ -6305,9 +5862,7 @@
               "accuracy": 6,
               "damage": "7P",
               "ap": -1,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 14,
               "availability": 7,
@@ -6322,9 +5877,7 @@
               "accuracy": 4,
               "damage": "9S(e)",
               "ap": -5,
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 4,
               "availability": 0,
@@ -6337,9 +5890,7 @@
               "subcategory": "heavy-pistol",
               "accuracy": 3,
               "damage": "Special",
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "availability": 11,
               "cost": 5000,
@@ -6354,9 +5905,7 @@
               "availability": 6,
               "damage": "7P",
               "ap": 0,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 30,
@@ -6372,9 +5921,7 @@
               "accuracy": 5,
               "damage": "8P(f)",
               "ap": 5,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 4,
               "availability": 5,
@@ -6388,9 +5935,7 @@
               "subcategory": "light-pistol",
               "accuracy": 5,
               "damage": "as Drug/Toxin",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 5,
               "availability": 4,
@@ -6404,9 +5949,7 @@
               "subcategory": "rifle",
               "accuracy": 6,
               "damage": "as Drug/Toxin",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 6,
               "availability": 6,
@@ -6422,9 +5965,7 @@
               "availability": 6,
               "damage": "7P",
               "ap": -1,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 8,
               "accuracy": 4,
@@ -6439,9 +5980,7 @@
               "availability": 4,
               "damage": "9P",
               "ap": -2,
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 6,
               "accuracy": 5,
@@ -6456,9 +5995,7 @@
               "availability": 4,
               "damage": "6P",
               "ap": 0,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 6,
               "accuracy": 4,
@@ -6473,10 +6010,7 @@
               "accuracySmartgun": 6,
               "damage": "6P/7P",
               "ap": 0,
-              "mode": [
-                "SA",
-                "SS"
-              ],
+              "mode": ["SA", "SS"],
               "rc": 0,
               "ammo": 6,
               "availability": 3,
@@ -6490,10 +6024,7 @@
               "subcategory": "hold-out",
               "accuracy": 4,
               "damage": "7P",
-              "mode": [
-                "SS",
-                "BF"
-              ],
+              "mode": ["SS", "BF"],
               "rc": 0,
               "ammo": 2,
               "availability": 4,
@@ -6508,9 +6039,7 @@
               "accuracy": 5,
               "damage": "7S(e)",
               "ap": -5,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 4,
               "availability": 0,
@@ -6527,10 +6056,7 @@
               "availability": 9,
               "damage": "7P",
               "ap": 0,
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 2,
               "ammo": 40,
               "accuracy": 5,
@@ -6544,10 +6070,7 @@
               "subcategory": "machine-pistol",
               "accuracy": 5,
               "damage": "6P",
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 35,
@@ -6563,11 +6086,7 @@
               "accuracy": 4,
               "accuracySmartgun": 5,
               "damage": "7P",
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 2,
               "rcMax": 3,
               "ammo": 32,
@@ -6582,11 +6101,7 @@
               "subcategory": "smg",
               "accuracy": 6,
               "damage": "8P",
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 1,
               "rcMax": 2,
               "ammo": 50,
@@ -6603,11 +6118,7 @@
               "availability": 8,
               "damage": "7P",
               "ap": 0,
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 28,
@@ -6624,10 +6135,7 @@
               "availability": 6,
               "damage": "8P",
               "ap": 0,
-              "mode": [
-                "BF",
-                "FA"
-              ],
+              "mode": ["BF", "FA"],
               "rc": 2,
               "ammo": 32,
               "accuracy": 4,
@@ -6643,10 +6151,7 @@
               "availability": 6,
               "damage": "8P",
               "ap": 0,
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 30,
@@ -6661,11 +6166,7 @@
               "subcategory": "machine-pistol",
               "accuracy": 4,
               "damage": "7P",
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 0,
               "ammo": 30,
               "availability": 8,
@@ -6681,9 +6182,7 @@
               "availability": 4,
               "damage": "7P",
               "ap": 0,
-              "mode": [
-                "BF"
-              ],
+              "mode": ["BF"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 24,
@@ -6702,11 +6201,7 @@
               "availability": 4,
               "damage": "10P",
               "ap": -2,
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 0,
               "ammo": 38,
               "accuracy": 5,
@@ -6721,11 +6216,7 @@
               "availability": 11,
               "damage": "11P",
               "ap": -2,
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 2,
               "ammo": 42,
               "accuracy": 5,
@@ -6751,9 +6242,7 @@
               "accuracy": 4,
               "accuracySmartgun": 6,
               "damage": "Grenade",
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 8,
               "availability": 8,
@@ -6767,9 +6256,7 @@
               "subcategory": "launcher",
               "accuracy": 4,
               "damage": "Grenade",
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "ammo": 12,
               "availability": 10,
@@ -6783,9 +6270,7 @@
               "subcategory": "launcher",
               "accuracy": 5,
               "damage": "Missile",
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 1,
               "availability": 10,
@@ -6801,11 +6286,7 @@
               "availability": 4,
               "damage": "9P",
               "ap": -2,
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 0,
               "ammo": 40,
               "accuracy": 4,
@@ -6820,11 +6301,7 @@
               "availability": 8,
               "damage": "10P",
               "ap": -2,
-              "mode": [
-                "SA",
-                "BF",
-                "FA"
-              ],
+              "mode": ["SA", "BF", "FA"],
               "rc": 2,
               "ammo": 35,
               "accuracy": 5,
@@ -6840,10 +6317,7 @@
               "accuracySmartgun": 6,
               "damage": "9P",
               "ap": -2,
-              "mode": [
-                "BF",
-                "FA"
-              ],
+              "mode": ["BF", "FA"],
               "rc": 2,
               "rcMax": 3,
               "ammo": 50,
@@ -6859,9 +6333,7 @@
               "accuracy": 4,
               "damage": "16P",
               "ap": -6,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 6,
@@ -6877,9 +6349,7 @@
               "accuracy": 4,
               "accuracySmartgun": 6,
               "damage": "Missile",
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 2,
               "availability": 18,
@@ -6895,9 +6365,7 @@
               "accuracySmartgun": 7,
               "damage": "17P",
               "ap": -6,
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 15,
               "availability": 20,
@@ -6912,9 +6380,7 @@
               "accuracy": 5,
               "damage": "12P",
               "ap": -4,
-              "mode": [
-                "FA"
-              ],
+              "mode": ["FA"],
               "rc": 0,
               "rcMax": 6,
               "ammo": 50,
@@ -6930,9 +6396,7 @@
               "accuracy": 5,
               "damage": "10P",
               "ap": -3,
-              "mode": [
-                "FA"
-              ],
+              "mode": ["FA"],
               "rc": 0,
               "ammo": 50,
               "availability": 12,
@@ -6948,10 +6412,7 @@
               "availability": 14,
               "damage": "11P",
               "ap": -2,
-              "mode": [
-                "BF",
-                "FA"
-              ],
+              "mode": ["BF", "FA"],
               "rc": 1,
               "ammo": 60,
               "accuracy": 6,
@@ -6969,10 +6430,7 @@
               "availability": 4,
               "damage": "10P",
               "ap": -1,
-              "mode": [
-                "SS",
-                "SA"
-              ],
+              "mode": ["SS", "SA"],
               "rc": 0,
               "ammo": 5,
               "accuracy": 4,
@@ -6987,10 +6445,7 @@
               "availability": 12,
               "damage": "13P",
               "ap": -1,
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "ammo": 10,
               "ammoAlt": 24,
@@ -7007,9 +6462,7 @@
               "accuracy": 6,
               "damage": "11P",
               "ap": -1,
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 2,
@@ -7028,9 +6481,7 @@
               "availability": 10,
               "damage": "13P",
               "ap": -4,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 14,
@@ -7045,10 +6496,7 @@
               "accuracy": 6,
               "damage": "12P",
               "ap": -3,
-              "mode": [
-                "SA",
-                "BF"
-              ],
+              "mode": ["SA", "BF"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 20,
@@ -7065,9 +6513,7 @@
               "availability": 16,
               "damage": "14P",
               "ap": -5,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 15,
@@ -7083,9 +6529,7 @@
               "availability": 4,
               "damage": "12P",
               "ap": -4,
-              "mode": [
-                "SS"
-              ],
+              "mode": ["SS"],
               "rc": 0,
               "ammo": 5,
               "accuracy": 7,
@@ -7099,9 +6543,7 @@
               "accuracy": 6,
               "damage": "11P",
               "ap": -3,
-              "mode": [
-                "SA"
-              ],
+              "mode": ["SA"],
               "rc": 0,
               "rcMax": 1,
               "ammo": 8,
@@ -9351,10 +8793,7 @@
             "availability": 6,
             "cost": 600,
             "description": "Reduces scatter distance for launched grenades by 2m per net hit instead of 1m.",
-            "compatibleWeapons": [
-              "grenade-launcher",
-              "rocket-launcher"
-            ],
+            "compatibleWeapons": ["grenade-launcher", "rocket-launcher"],
             "page": 432,
             "source": "Core",
             "legality": "restricted"
@@ -9397,9 +8836,7 @@
             "cost": 200,
             "costPerRating": true,
             "description": "Provides Recoil Compensation equal to its rating. Cannot be removed once installed.",
-            "incompatibleWeapons": [
-              "revolver"
-            ],
+            "incompatibleWeapons": ["revolver"],
             "page": 432,
             "source": "Core",
             "ratingSpec": {
@@ -9438,11 +8875,7 @@
             "cost": 350,
             "concealabilityModifier": -1,
             "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2.",
-            "compatibleWeapons": [
-              "holdout",
-              "light-pistol",
-              "taser"
-            ],
+            "compatibleWeapons": ["holdout", "light-pistol", "taser"],
             "page": 432,
             "source": "Core",
             "legality": "restricted"
@@ -9513,10 +8946,7 @@
             "availability": 9,
             "cost": 500,
             "description": "Reduces sound and flash of weapon discharge. -4 dice pool modifier on Perception Tests to notice or locate firer. Cannot be used with revolvers or shotguns.",
-            "incompatibleWeapons": [
-              "revolver",
-              "shotgun"
-            ],
+            "incompatibleWeapons": ["revolver", "shotgun"],
             "page": 433,
             "source": "Core",
             "legality": "forbidden"
@@ -9572,9 +9002,7 @@
             "availability": 2,
             "cost": 25,
             "description": "Allows fully reloading a revolver as a Complex Action instead of one round at a time.",
-            "compatibleWeapons": [
-              "revolver"
-            ],
+            "compatibleWeapons": ["revolver"],
             "page": 433,
             "source": "Core"
           },
@@ -9632,10 +9060,7 @@
             "availability": 12,
             "cost": 3000,
             "description": "Airtight environmental control providing complete protection against contact and inhalation vector chemicals. Requires full body armor with helmet.",
-            "requirements": [
-              "full-body-armor",
-              "helmet"
-            ],
+            "requirements": ["full-body-armor", "helmet"],
             "page": 437,
             "source": "Core",
             "legality": "restricted"
@@ -9796,10 +9221,7 @@
             "availability": 2,
             "hasRating": true,
             "maxRating": 3,
-            "applicableCategories": [
-              "audio-devices",
-              "helmets"
-            ],
+            "applicableCategories": ["audio-devices", "helmets"],
             "description": "Provides efficient noise filtering and audio enhancement.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception equal to rating.",
             "page": 445,
@@ -9834,10 +9256,7 @@
             "availability": 3,
             "hasRating": true,
             "maxRating": 6,
-            "applicableCategories": [
-              "audio-devices",
-              "helmets"
-            ],
+            "applicableCategories": ["audio-devices", "helmets"],
             "description": "Allows user to selectively filter specific sounds.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
             "page": 445,
@@ -11883,7 +11302,11 @@
             "category": "basic",
             "description": "Unarmed damage becomes (STR)P. Incompatible with bone lacing.",
             "page": 459,
-            "incompatibleWith": ["bone-lacing-plastic", "bone-lacing-aluminum", "bone-lacing-titanium"]
+            "incompatibleWith": [
+              "bone-lacing-plastic",
+              "bone-lacing-aluminum",
+              "bone-lacing-titanium"
+            ]
           },
           {
             "id": "toxin-extractor",
@@ -13057,20 +12480,8 @@
                 "type": "priority",
                 "payload": {
                   "type": "priority",
-                  "categories": [
-                    "metatype",
-                    "attributes",
-                    "magic",
-                    "skills",
-                    "resources"
-                  ],
-                  "levels": [
-                    "A",
-                    "B",
-                    "C",
-                    "D",
-                    "E"
-                  ]
+                  "categories": ["metatype", "attributes", "magic", "skills", "resources"],
+                  "levels": ["A", "B", "C", "D", "E"]
                 }
               },
               {
@@ -13234,9 +12645,7 @@
                 "type": "validate",
                 "payload": {
                   "type": "validate",
-                  "validations": [
-                    "all"
-                  ]
+                  "validations": ["all"]
                 }
               }
             ],
@@ -13821,9 +13230,7 @@
                 "description": "The spirit can surround and trap targets."
               }
             ],
-            "weaknesses": [
-              "Vulnerable to Earth-based attacks"
-            ]
+            "weaknesses": ["Vulnerable to Earth-based attacks"]
           },
           {
             "type": "beasts",
@@ -13861,9 +13268,7 @@
                 "description": "The spirit can move through earth and stone."
               }
             ],
-            "weaknesses": [
-              "Vulnerable to Air-based attacks"
-            ]
+            "weaknesses": ["Vulnerable to Air-based attacks"]
           },
           {
             "type": "fire",
@@ -13882,9 +13287,7 @@
                 "description": "The spirit can protect a location or person."
               }
             ],
-            "weaknesses": [
-              "Severe allergy to Water"
-            ]
+            "weaknesses": ["Severe allergy to Water"]
           },
           {
             "type": "man",
@@ -13922,9 +13325,7 @@
                 "description": "The spirit can move through water and liquid."
               }
             ],
-            "weaknesses": [
-              "Vulnerable to Fire-based attacks"
-            ]
+            "weaknesses": ["Vulnerable to Fire-based attacks"]
           },
           {
             "type": "guardian",
@@ -14118,14 +13519,8 @@
             "id": "fixer",
             "name": "Fixer",
             "description": "A shadow broker who connects runners with jobs, gear, and information. The essential contact for any runner.",
-            "suggestedConnection": [
-              3,
-              6
-            ],
-            "suggestedLoyalty": [
-              1,
-              4
-            ],
+            "suggestedConnection": [3, 6],
+            "suggestedLoyalty": [1, 4],
             "commonServices": [
               "job-referral",
               "equipment-procurement",
@@ -14139,25 +13534,15 @@
               "introduction": 200,
               "information-basic": 100
             },
-            "commonLocations": [
-              "Seattle",
-              "Hong Kong",
-              "Berlin"
-            ],
+            "commonLocations": ["Seattle", "Hong Kong", "Berlin"],
             "commonOrganizations": []
           },
           {
             "id": "street-doc",
             "name": "Street Doc",
             "description": "An underground medical professional who provides healing, augmentation, and asks no questions.",
-            "suggestedConnection": [
-              2,
-              4
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "medical-treatment",
               "augmentation-installation",
@@ -14171,25 +13556,15 @@
               "toxin-screening": 100,
               "cyberware-maintenance": 300
             },
-            "commonLocations": [
-              "Barrens",
-              "Redmond",
-              "Puyallup"
-            ],
+            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
             "commonOrganizations": []
           },
           {
             "id": "talismonger",
             "name": "Talismonger",
             "description": "A dealer in magical supplies, foci, reagents, and enchanted goods.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "reagent-supply",
               "focus-procurement",
@@ -14203,24 +13578,15 @@
               "magical-goods": 500,
               "enchanting-services": 1000
             },
-            "commonLocations": [
-              "Seattle",
-              "Tir Tairngire"
-            ],
+            "commonLocations": ["Seattle", "Tir Tairngire"],
             "commonOrganizations": []
           },
           {
             "id": "mr-johnson",
             "name": "Mr. Johnson",
             "description": "A corporate agent who hires runners for deniable operations. High-paying but demanding.",
-            "suggestedConnection": [
-              4,
-              8
-            ],
-            "suggestedLoyalty": [
-              1,
-              2
-            ],
+            "suggestedConnection": [4, 8],
+            "suggestedLoyalty": [1, 2],
             "commonServices": [
               "job-offer",
               "corporate-access",
@@ -14233,29 +13599,15 @@
               "corporate-access": 2000,
               "insider-information": 1000
             },
-            "commonLocations": [
-              "Downtown Seattle",
-              "Corporate Arcologies"
-            ],
-            "commonOrganizations": [
-              "Ares",
-              "Aztechnology",
-              "Renraku",
-              "Saeder-Krupp"
-            ]
+            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
+            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp"]
           },
           {
             "id": "gang-leader",
             "name": "Gang Leader",
             "description": "A street gang boss who provides muscle, territory access, and street-level intelligence.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              4
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 4],
             "commonServices": [
               "muscle-for-hire",
               "territory-passage",
@@ -14269,29 +13621,15 @@
               "street-intel": 50,
               "safe-house": 300
             },
-            "commonLocations": [
-              "Barrens",
-              "Redmond",
-              "Puyallup"
-            ],
-            "commonOrganizations": [
-              "Halloweeners",
-              "Crimson Crush",
-              "First Nations"
-            ]
+            "commonLocations": ["Barrens", "Redmond", "Puyallup"],
+            "commonOrganizations": ["Halloweeners", "Crimson Crush", "First Nations"]
           },
           {
             "id": "fence",
             "name": "Fence",
             "description": "A specialist in buying and selling stolen goods, no questions asked.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "buy-stolen-goods",
               "sell-equipment",
@@ -14304,24 +13642,15 @@
               "find-specific-item": 200,
               "appraisal": 50
             },
-            "commonLocations": [
-              "Seattle",
-              "Tacoma"
-            ],
+            "commonLocations": ["Seattle", "Tacoma"],
             "commonOrganizations": []
           },
           {
             "id": "armorer",
             "name": "Armorer",
             "description": "A weapons dealer and modifier who can supply or customize combat gear.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "weapon-procurement",
               "weapon-modification",
@@ -14335,30 +13664,16 @@
               "ammunition-supply": 100,
               "armor-customization": 400
             },
-            "commonLocations": [
-              "Seattle",
-              "Tacoma"
-            ],
+            "commonLocations": ["Seattle", "Tacoma"],
             "commonOrganizations": []
           },
           {
             "id": "id-manufacturer",
             "name": "ID Manufacturer",
             "description": "A forger who creates fake SINs, licenses, and identity documents.",
-            "suggestedConnection": [
-              3,
-              6
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
-            "commonServices": [
-              "fake-sin",
-              "fake-license",
-              "identity-scrub",
-              "document-forgery"
-            ],
+            "suggestedConnection": [3, 6],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["fake-sin", "fake-license", "identity-scrub", "document-forgery"],
             "riskProfile": "high",
             "typicalCosts": {
               "fake-sin": 2500,
@@ -14366,30 +13681,16 @@
               "identity-scrub": 1000,
               "document-forgery": 500
             },
-            "commonLocations": [
-              "Seattle",
-              "Hong Kong"
-            ],
+            "commonLocations": ["Seattle", "Hong Kong"],
             "commonOrganizations": []
           },
           {
             "id": "bartender",
             "name": "Bartender",
             "description": "A social hub who hears everything and knows everyone in their neighborhood.",
-            "suggestedConnection": [
-              1,
-              3
-            ],
-            "suggestedLoyalty": [
-              1,
-              4
-            ],
-            "commonServices": [
-              "rumors",
-              "introduction",
-              "meeting-place",
-              "message-drop"
-            ],
+            "suggestedConnection": [1, 3],
+            "suggestedLoyalty": [1, 4],
+            "commonServices": ["rumors", "introduction", "meeting-place", "message-drop"],
             "riskProfile": "low",
             "typicalCosts": {
               "rumors": 20,
@@ -14397,23 +13698,15 @@
               "meeting-place": 0,
               "message-drop": 10
             },
-            "commonLocations": [
-              "Seattle"
-            ],
+            "commonLocations": ["Seattle"],
             "commonOrganizations": []
           },
           {
             "id": "corporate-contact",
             "name": "Corporate Contact",
             "description": "An insider at a megacorporation who provides access and information.",
-            "suggestedConnection": [
-              3,
-              7
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [3, 7],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "insider-access",
               "corporate-intel",
@@ -14427,30 +13720,15 @@
               "security-schedule": 800,
               "personnel-files": 300
             },
-            "commonLocations": [
-              "Downtown Seattle",
-              "Corporate Arcologies"
-            ],
-            "commonOrganizations": [
-              "Ares",
-              "Aztechnology",
-              "Renraku",
-              "Saeder-Krupp",
-              "Shiawase"
-            ]
+            "commonLocations": ["Downtown Seattle", "Corporate Arcologies"],
+            "commonOrganizations": ["Ares", "Aztechnology", "Renraku", "Saeder-Krupp", "Shiawase"]
           },
           {
             "id": "law-enforcement",
             "name": "Law Enforcement",
             "description": "A cop or security officer who provides warnings, favors, and information.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "investigation-warning",
               "case-files",
@@ -14464,32 +13742,16 @@
               "evidence-handling": 1000,
               "patrol-schedules": 200
             },
-            "commonLocations": [
-              "Seattle"
-            ],
-            "commonOrganizations": [
-              "Lone Star",
-              "Knight Errant"
-            ]
+            "commonLocations": ["Seattle"],
+            "commonOrganizations": ["Lone Star", "Knight Errant"]
           },
           {
             "id": "media-contact",
             "name": "Media Contact",
             "description": "A journalist or media personality who can spread or suppress stories.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
-            "commonServices": [
-              "story-plant",
-              "story-suppress",
-              "investigation",
-              "public-records"
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["story-plant", "story-suppress", "investigation", "public-records"],
             "riskProfile": "medium",
             "typicalCosts": {
               "story-plant": 500,
@@ -14497,27 +13759,15 @@
               "investigation": 300,
               "public-records": 100
             },
-            "commonLocations": [
-              "Seattle",
-              "Los Angeles"
-            ],
-            "commonOrganizations": [
-              "KSAF",
-              "NewsNet"
-            ]
+            "commonLocations": ["Seattle", "Los Angeles"],
+            "commonOrganizations": ["KSAF", "NewsNet"]
           },
           {
             "id": "academic",
             "name": "Academic",
             "description": "A professor or researcher who provides analysis, translation, and obscure knowledge.",
-            "suggestedConnection": [
-              2,
-              4
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
             "commonServices": [
               "research",
               "translation",
@@ -14531,32 +13781,16 @@
               "artifact-analysis": 500,
               "historical-records": 150
             },
-            "commonLocations": [
-              "Seattle"
-            ],
-            "commonOrganizations": [
-              "University of Washington",
-              "MIT&T"
-            ]
+            "commonLocations": ["Seattle"],
+            "commonOrganizations": ["University of Washington", "MIT&T"]
           },
           {
             "id": "decker",
             "name": "Decker",
             "description": "A matrix specialist who provides hacking services and digital intelligence.",
-            "suggestedConnection": [
-              2,
-              5
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
-            "commonServices": [
-              "matrix-search",
-              "file-retrieval",
-              "host-mapping",
-              "icon-creation"
-            ],
+            "suggestedConnection": [2, 5],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["matrix-search", "file-retrieval", "host-mapping", "icon-creation"],
             "riskProfile": "medium",
             "typicalCosts": {
               "matrix-search": 100,
@@ -14564,29 +13798,16 @@
               "host-mapping": 300,
               "icon-creation": 200
             },
-            "commonLocations": [
-              "Matrix"
-            ],
+            "commonLocations": ["Matrix"],
             "commonOrganizations": []
           },
           {
             "id": "rigger",
             "name": "Rigger",
             "description": "A vehicle specialist who provides transportation, drones, and mechanical expertise.",
-            "suggestedConnection": [
-              2,
-              4
-            ],
-            "suggestedLoyalty": [
-              1,
-              3
-            ],
-            "commonServices": [
-              "transportation",
-              "drone-loan",
-              "vehicle-modification",
-              "smuggling"
-            ],
+            "suggestedConnection": [2, 4],
+            "suggestedLoyalty": [1, 3],
+            "commonServices": ["transportation", "drone-loan", "vehicle-modification", "smuggling"],
             "riskProfile": "medium",
             "typicalCosts": {
               "transportation": 100,
@@ -14594,10 +13815,7 @@
               "vehicle-modification": 800,
               "smuggling": 1000
             },
-            "commonLocations": [
-              "Seattle",
-              "Tacoma"
-            ],
+            "commonLocations": ["Seattle", "Tacoma"],
             "commonOrganizations": []
           }
         ]
@@ -14763,9 +13981,7 @@
             "opposedTest": false,
             "typicalTime": "1 hour",
             "canRush": false,
-            "archetypeIds": [
-              "street-doc"
-            ]
+            "archetypeIds": ["street-doc"]
           },
           {
             "id": "medical-surgery",
@@ -14781,9 +13997,7 @@
             "threshold": 2,
             "typicalTime": "1 day",
             "canRush": false,
-            "archetypeIds": [
-              "street-doc"
-            ]
+            "archetypeIds": ["street-doc"]
           },
           {
             "id": "job-referral",
@@ -14798,10 +14012,7 @@
             "opposedTest": false,
             "typicalTime": "1 day",
             "canRush": false,
-            "archetypeIds": [
-              "fixer",
-              "mr-johnson"
-            ]
+            "archetypeIds": ["fixer", "mr-johnson"]
           },
           {
             "id": "cover-story",
@@ -14832,9 +14043,7 @@
             "typicalTime": "Immediate",
             "canRush": true,
             "rushCostMultiplier": 2,
-            "archetypeIds": [
-              "rigger"
-            ]
+            "archetypeIds": ["rigger"]
           },
           {
             "id": "smuggling",
@@ -14852,10 +14061,7 @@
             "typicalTime": "1 day",
             "canRush": true,
             "rushCostMultiplier": 3,
-            "archetypeIds": [
-              "rigger",
-              "fixer"
-            ]
+            "archetypeIds": ["rigger", "fixer"]
           },
           {
             "id": "muscle-hire",
@@ -14871,10 +14077,7 @@
             "typicalTime": "4 hours",
             "canRush": true,
             "rushCostMultiplier": 2,
-            "archetypeIds": [
-              "gang-leader",
-              "fixer"
-            ]
+            "archetypeIds": ["gang-leader", "fixer"]
           },
           {
             "id": "fake-sin",
@@ -14892,9 +14095,7 @@
             "typicalTime": "1 week",
             "canRush": true,
             "rushCostMultiplier": 3,
-            "archetypeIds": [
-              "id-manufacturer"
-            ]
+            "archetypeIds": ["id-manufacturer"]
           }
         ]
       }
@@ -15081,10 +14282,7 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": [
-                "dodge",
-                "hit-the-dirt"
-              ]
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
             },
             "effects": [
               {
@@ -15098,11 +14296,7 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "ranged",
-              "firearm"
-            ],
+            "tags": ["attack", "ranged", "firearm"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15153,11 +14347,7 @@
             ],
             "rollConfig": {
               "skill": "automatics",
-              "skillOptions": [
-                "automatics",
-                "longarms",
-                "pistols"
-              ],
+              "skillOptions": ["automatics", "longarms", "pistols"],
               "attribute": "agility",
               "limitType": "weapon_accuracy"
             },
@@ -15166,10 +14356,7 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": [
-                "dodge",
-                "hit-the-dirt"
-              ]
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
             },
             "effects": [
               {
@@ -15183,12 +14370,7 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "ranged",
-              "firearm",
-              "semi-auto"
-            ],
+            "tags": ["attack", "ranged", "firearm", "semi-auto"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15238,10 +14420,7 @@
             ],
             "rollConfig": {
               "skill": "automatics",
-              "skillOptions": [
-                "automatics",
-                "longarms"
-              ],
+              "skillOptions": ["automatics", "longarms"],
               "attribute": "agility",
               "limitType": "weapon_accuracy"
             },
@@ -15250,10 +14429,7 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": [
-                "dodge",
-                "hit-the-dirt"
-              ]
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
             },
             "effects": [
               {
@@ -15267,12 +14443,7 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "ranged",
-              "firearm",
-              "burst"
-            ],
+            "tags": ["attack", "ranged", "firearm", "burst"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15336,10 +14507,7 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": [
-                "dodge",
-                "hit-the-dirt"
-              ]
+              "availableInterrupts": ["dodge", "hit-the-dirt"]
             },
             "effects": [
               {
@@ -15353,13 +14521,7 @@
                 "description": "Deal weapon damage plus net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "ranged",
-              "firearm",
-              "full-auto",
-              "suppressive"
-            ],
+            "tags": ["attack", "ranged", "firearm", "full-auto", "suppressive"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15391,12 +14553,7 @@
             ],
             "rollConfig": {
               "skill": "unarmed_combat",
-              "skillOptions": [
-                "unarmed_combat",
-                "blades",
-                "clubs",
-                "exotic_melee_weapon"
-              ],
+              "skillOptions": ["unarmed_combat", "blades", "clubs", "exotic_melee_weapon"],
               "attribute": "agility",
               "limitType": "physical"
             },
@@ -15406,11 +14563,7 @@
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
               "allowBlockParry": true,
-              "availableInterrupts": [
-                "block",
-                "parry",
-                "dodge"
-              ]
+              "availableInterrupts": ["block", "parry", "dodge"]
             },
             "effects": [
               {
@@ -15425,10 +14578,7 @@
                 "description": "Deal weapon damage (or STR for unarmed) plus net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "melee"
-            ],
+            "tags": ["attack", "melee"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15462,9 +14612,7 @@
               "defaultDefenseAttribute": "reaction",
               "defaultDefenseSkill": "intuition",
               "allowFullDefense": true,
-              "availableInterrupts": [
-                "dodge"
-              ]
+              "availableInterrupts": ["dodge"]
             },
             "effects": [
               {
@@ -15479,11 +14627,7 @@
                 "description": "Deal weapon damage plus STR and net hits"
               }
             ],
-            "tags": [
-              "attack",
-              "ranged",
-              "thrown"
-            ],
+            "tags": ["attack", "ranged", "thrown"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15515,10 +14659,7 @@
                 "description": "Weapon becomes readied"
               }
             ],
-            "tags": [
-              "preparation",
-              "weapon"
-            ],
+            "tags": ["preparation", "weapon"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15558,11 +14699,7 @@
                 "description": "+1 dice to next attack (max +3, or Willpower with scope)"
               }
             ],
-            "tags": [
-              "preparation",
-              "ranged",
-              "bonus"
-            ],
+            "tags": ["preparation", "ranged", "bonus"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15598,11 +14735,7 @@
                 "description": "+2 to +4 defense against ranged attacks depending on cover quality"
               }
             ],
-            "tags": [
-              "defense",
-              "cover",
-              "movement"
-            ],
+            "tags": ["defense", "cover", "movement"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15646,10 +14779,7 @@
                 "description": "Weapon is reloaded with fresh ammunition"
               }
             ],
-            "tags": [
-              "reload",
-              "weapon"
-            ],
+            "tags": ["reload", "weapon"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15681,10 +14811,7 @@
                 "description": "Clip is removed from weapon"
               }
             ],
-            "tags": [
-              "reload",
-              "weapon"
-            ],
+            "tags": ["reload", "weapon"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15732,11 +14859,7 @@
                 "description": "Weapon is drawn and an attack can be made immediately"
               }
             ],
-            "tags": [
-              "attack",
-              "weapon",
-              "speed"
-            ],
+            "tags": ["attack", "weapon", "speed"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15767,10 +14890,7 @@
                 "description": "Gain detailed information based on hits"
               }
             ],
-            "tags": [
-              "perception",
-              "awareness"
-            ],
+            "tags": ["perception", "awareness"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15811,10 +14931,7 @@
                 "description": "Move base Run rate plus 2m per hit"
               }
             ],
-            "tags": [
-              "movement",
-              "run"
-            ],
+            "tags": ["movement", "run"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15846,11 +14963,7 @@
                 "description": "Next attack targets a specific location"
               }
             ],
-            "tags": [
-              "attack",
-              "modifier",
-              "tactical"
-            ],
+            "tags": ["attack", "modifier", "tactical"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15882,10 +14995,7 @@
                 "description": "Object is dropped and no longer held"
               }
             ],
-            "tags": [
-              "item",
-              "quick"
-            ],
+            "tags": ["item", "quick"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15918,11 +15028,7 @@
                 "description": "Character becomes prone"
               }
             ],
-            "tags": [
-              "defense",
-              "position",
-              "quick"
-            ],
+            "tags": ["defense", "position", "quick"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15956,9 +15062,7 @@
                 "description": "Move at running pace"
               }
             ],
-            "tags": [
-              "movement"
-            ],
+            "tags": ["movement"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -15977,9 +15081,7 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": [
-              "communication"
-            ],
+            "tags": ["communication"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16005,10 +15107,7 @@
                 "description": "Dice pool will be split among multiple attacks"
               }
             ],
-            "tags": [
-              "attack",
-              "modifier"
-            ],
+            "tags": ["attack", "modifier"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16048,11 +15147,7 @@
                 "description": "Add Gymnastics rating to defense pool"
               }
             ],
-            "tags": [
-              "defense",
-              "interrupt",
-              "reaction"
-            ],
+            "tags": ["defense", "interrupt", "reaction"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16092,11 +15187,7 @@
                 "description": "Add Unarmed Combat rating to defense pool"
               }
             ],
-            "tags": [
-              "defense",
-              "interrupt",
-              "melee"
-            ],
+            "tags": ["defense", "interrupt", "melee"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16128,11 +15219,7 @@
             "modifiers": [],
             "rollConfig": {
               "skill": "blades",
-              "skillOptions": [
-                "blades",
-                "clubs",
-                "exotic_melee_weapon"
-              ],
+              "skillOptions": ["blades", "clubs", "exotic_melee_weapon"],
               "attribute": "reaction",
               "limitType": "physical"
             },
@@ -16146,11 +15233,7 @@
                 "description": "Add weapon skill rating to defense pool"
               }
             ],
-            "tags": [
-              "defense",
-              "interrupt",
-              "melee"
-            ],
+            "tags": ["defense", "interrupt", "melee"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16180,11 +15263,7 @@
                 "description": "Add Willpower to all defense tests until your next action"
               }
             ],
-            "tags": [
-              "defense",
-              "interrupt",
-              "ongoing"
-            ],
+            "tags": ["defense", "interrupt", "ongoing"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16231,12 +15310,7 @@
                 "description": "Add Willpower to defense against this attack"
               }
             ],
-            "tags": [
-              "defense",
-              "interrupt",
-              "ranged",
-              "position"
-            ],
+            "tags": ["defense", "interrupt", "ranged", "position"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16263,10 +15337,7 @@
             "modifiers": [],
             "rollConfig": {
               "skill": "running",
-              "skillOptions": [
-                "running",
-                "gymnastics"
-              ],
+              "skillOptions": ["running", "gymnastics"],
               "attribute": "reaction",
               "limitType": "physical"
             },
@@ -16283,11 +15354,7 @@
                 "description": "Target's movement is stopped"
               }
             ],
-            "tags": [
-              "movement",
-              "interrupt",
-              "blocking"
-            ],
+            "tags": ["movement", "interrupt", "blocking"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16313,10 +15380,7 @@
               "limitType": "mental"
             },
             "effects": [],
-            "tags": [
-              "perception",
-              "awareness"
-            ],
+            "tags": ["perception", "awareness"],
             "source": {
               "book": "SR5 Core",
               "page": 135
@@ -16335,10 +15399,7 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": [
-              "device",
-              "interaction"
-            ],
+            "tags": ["device", "interaction"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16357,19 +15418,12 @@
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
-              "skillOptions": [
-                "*"
-              ],
-              "attributeOptions": [
-                "*"
-              ],
+              "skillOptions": ["*"],
+              "attributeOptions": ["*"],
               "limitType": "varies"
             },
             "effects": [],
-            "tags": [
-              "skill",
-              "general"
-            ],
+            "tags": ["skill", "general"],
             "source": {
               "book": "SR5 Core",
               "page": 163
@@ -16388,10 +15442,7 @@
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
-            "tags": [
-              "item",
-              "interaction"
-            ],
+            "tags": ["item", "interaction"],
             "source": {
               "book": "SR5 Core",
               "page": 163

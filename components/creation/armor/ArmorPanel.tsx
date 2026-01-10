@@ -21,11 +21,7 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "../shared";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
@@ -80,10 +76,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const [modifyingArmorId, setModifyingArmorId] = useState<string | null>(null);
 
   // Get armor catalog
-  const armorCatalog = useMemo(
-    () => getArmorCatalog(gearCatalog),
-    [gearCatalog]
-  );
+  const armorCatalog = useMemo(() => getArmorCatalog(gearCatalog), [gearCatalog]);
 
   // Get selected armor from state
   const selectedArmor = useMemo(
@@ -117,7 +110,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
-    const ammoCost = w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
+    const ammoCost =
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
@@ -127,7 +121,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     selectedBioware.reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
 
-  const totalSpent = armorSpent + weaponsSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+  const totalSpent =
+    armorSpent + weaponsSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
@@ -283,7 +278,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       if (mod.noCapacityCost) {
         capacityCost = 0;
       } else if (mod.ratingSpec?.capacityCostScaling?.perRating && rating) {
-        capacityCost = (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
+        capacityCost =
+          (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
       } else if (mod.capacityPerRating && rating) {
         capacityCost = (mod.capacityCost || 0) * rating;
       }
@@ -304,7 +300,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Calculate availability
       let modAvailability = mod.availability || 0;
       if (mod.ratingSpec?.availabilityScaling?.perRating && rating) {
-        modAvailability = (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
+        modAvailability =
+          (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
       }
 
       // Create installed mod
@@ -357,7 +354,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       if (mod.noCapacityCost) {
         capacityCost = 0;
       } else if (mod.ratingSpec?.capacityCostScaling?.perRating && rating) {
-        capacityCost = (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
+        capacityCost =
+          (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
       } else if (mod.capacityPerRating && rating) {
         capacityCost = (mod.capacityCost || 0) * rating;
       }
@@ -411,9 +409,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -452,9 +448,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
               <Shield className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                No armor purchased
-              </p>
+              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No armor purchased</p>
               <button
                 onClick={() => setIsPurchaseModalOpen(true)}
                 className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"

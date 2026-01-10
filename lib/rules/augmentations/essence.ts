@@ -15,10 +15,7 @@ import type {
   CyberwareGrade,
   BiowareGrade,
 } from "@/lib/types/character";
-import type {
-  CyberwareCatalogItem,
-  BiowareCatalogItem,
-} from "@/lib/types/edition";
+import type { CyberwareCatalogItem, BiowareCatalogItem } from "@/lib/types/edition";
 import { getCyberwareGradeMultiplier, getBiowareGradeMultiplier } from "./grades";
 
 // =============================================================================
@@ -269,10 +266,7 @@ export function calculateTotalEssenceLoss(
  * @param essenceLoss - Total essence lost to augmentations
  * @returns Remaining essence (rounded to 2 decimals, minimum 0)
  */
-export function calculateRemainingEssence(
-  baseEssence: number,
-  essenceLoss: number
-): number {
+export function calculateRemainingEssence(baseEssence: number, essenceLoss: number): number {
   const remaining = Math.max(0, baseEssence - essenceLoss);
   return roundEssence(remaining);
 }

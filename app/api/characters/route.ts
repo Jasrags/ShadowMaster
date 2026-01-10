@@ -51,18 +51,12 @@ export async function GET(request: NextRequest) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Parse query params
@@ -95,7 +89,15 @@ export async function GET(request: NextRequest) {
     const searchText = searchParams.get("search");
     const ownerIdParam = searchParams.get("ownerId"); // Admin mode only
 
-    if (statusParam || editionParam || campaignId || metatype || magicalPath || searchText || ownerIdParam) {
+    if (
+      statusParam ||
+      editionParam ||
+      campaignId ||
+      metatype ||
+      magicalPath ||
+      searchText ||
+      ownerIdParam
+    ) {
       searchOptions.filters = {};
 
       if (statusParam) {
@@ -187,9 +189,11 @@ export async function GET(request: NextRequest) {
       offset: result.offset,
       isAdminMode,
       // Include unique owners for filter dropdown (admin mode only)
-      ...(isAdminMode && ownerMap ? {
-        owners: Array.from(ownerMap.entries()).map(([id, username]) => ({ id, username })),
-      } : {}),
+      ...(isAdminMode && ownerMap
+        ? {
+            owners: Array.from(ownerMap.entries()).map(([id, username]) => ({ id, username })),
+          }
+        : {}),
     });
   } catch (error) {
     console.error("Failed to get characters:", error);
@@ -205,18 +209,12 @@ export async function POST(request: NextRequest) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Parse body
@@ -226,7 +224,10 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!editionId || !editionCode || !creationMethodId) {
       return NextResponse.json(
-        { success: false, error: "Missing required fields: editionId, editionCode, creationMethodId" },
+        {
+          success: false,
+          error: "Missing required fields: editionId, editionCode, creationMethodId",
+        },
         { status: 400 }
       );
     }
@@ -243,41 +244,44 @@ export async function POST(request: NextRequest) {
 
     // Log activity and notify GM asynchronously if campaignId is present
     if (campaignId) {
-        try {
-            const { logActivity } = await import("@/lib/storage/activity");
-            const { createNotification } = await import("@/lib/storage/notifications");
-            const { getCampaignById } = await import("@/lib/storage/campaigns");
-            
-            await logActivity({
-                campaignId: campaignId,
-                type: "character_created",
-                actorId: userId,
-                targetId: draft.id,
-                targetType: "character",
-                targetName: draft.name || "A new character",
-                description: `${user.username} created a character for the campaign: "${draft.name || 'Unnamed'}".`,
-            });
-            
-            const campaign = await getCampaignById(campaignId);
-            if (campaign) {
-                await createNotification({
-                    userId: campaign.gmId,
-                    campaignId: campaignId,
-                    type: "character_approval_requested",
-                    title: "New Character",
-                    message: `${user.username} created a new character "${draft.name || 'Unnamed'}" for your campaign "${campaign.title}".`,
-                    actionUrl: `/campaigns/${campaignId}?tab=approvals`,
-                });
-            }
-        } catch (activityError) {
-            console.error("Failed to log character creation activity:", activityError);
+      try {
+        const { logActivity } = await import("@/lib/storage/activity");
+        const { createNotification } = await import("@/lib/storage/notifications");
+        const { getCampaignById } = await import("@/lib/storage/campaigns");
+
+        await logActivity({
+          campaignId: campaignId,
+          type: "character_created",
+          actorId: userId,
+          targetId: draft.id,
+          targetType: "character",
+          targetName: draft.name || "A new character",
+          description: `${user.username} created a character for the campaign: "${draft.name || "Unnamed"}".`,
+        });
+
+        const campaign = await getCampaignById(campaignId);
+        if (campaign) {
+          await createNotification({
+            userId: campaign.gmId,
+            campaignId: campaignId,
+            type: "character_approval_requested",
+            title: "New Character",
+            message: `${user.username} created a new character "${draft.name || "Unnamed"}" for your campaign "${campaign.title}".`,
+            actionUrl: `/campaigns/${campaignId}?tab=approvals`,
+          });
         }
+      } catch (activityError) {
+        console.error("Failed to log character creation activity:", activityError);
+      }
     }
 
-    return NextResponse.json({
-      success: true,
-      character: draft,
-    }, { status: 201 });
+    return NextResponse.json(
+      {
+        success: true,
+        character: draft,
+      },
+      { status: 201 }
+    );
   } catch (error) {
     console.error("Failed to create character:", error);
     return NextResponse.json(
@@ -286,4 +290,3 @@ export async function POST(request: NextRequest) {
     );
   }
 }
-

@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |
@@ -14,15 +14,15 @@ Players should only have one Priority Level left to assign to Resources. This Pr
 
 **GEAR CHECKLIST**
 
-| WHAT ESSENTIAL GEAR SHOULD A CHARACTER CONSIDER BUYING? |
-| --- |
+| WHAT ESSENTIAL GEAR SHOULD A CHARACTER CONSIDER BUYING?                                                                                                                                                                                                                                                                                                                                                                                              |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Weapons (Melee, Ranged, both) Ammunition Clothing and Armor Cyberware/bioware Fake SINs, fake licenses, p. 442 Cyberdeck Programs Tools Breaking and entering tools Surveillance equipment Lifestyle, p. 373 Vehicle(s) Drones (usually owned by riggers) Biotech Disguises, p. 443 Sensors and sensory enhancements Magical goods (foci, ritual materials, alchemical preparations, etc.) Certified credstick(s) (for extra cash) DocWagon Contract |
 
 The character needs to spend the vast majority of nuyen they have; by the end of this step, they may choose to hold onto 5,000 nuyen or less and add it to their starting nuyen (p. 95). Any nuyen remaining over 5,000 is lost and cannot be recovered. While nuyen from this step cannot be converted to Karma, players can convert some of their Karma to nuyen if they need a little more to spend. They may convert up to 10 Karma at a rate of 2,000 nuyen per Karma point for gear, which means they can have up to 20,000 extra nuyen.
 
 If the player finds that he or she has more than the 5,000 nuyen that can be saved (or even if he or she hasn’t), there are a few essential pieces of gear to consider when building a shadowrunner. You’ll want a commlink (p. 438) to stay in touch and to keep your gear relatively safe from hackers. A fake SIN (p. 442), along with some fake licenses, will help smooth dealing with law enforcement or even simple purchases like buying a bus ticket or covering a bar tab. For more ideas, see the Gear Checklist sidebar.
 
-Keep in mind there are three restrictions when it comes to purchasing gear. First, when purchasing augmentations such as cyberware and bioware, each attribute rating (Mental and Physical) can only receive an augmentation bonus of up to +4. If the attribute being raised has not reached its natural maximum limit, the attribute can be raised naturally with Karma; but at no point can augmentations exceed the +4 bonus cap. The second restriction is that at normal character creation, characters are restricted to a maximum Availability rating of 12 and a device rating of 6. After character creation, characters may be able to acquire gear that has a higher  and a higher device rating. Finally, all gear is subject to gamemaster approval, even if the gear falls within these restrictions.
+Keep in mind there are three restrictions when it comes to purchasing gear. First, when purchasing augmentations such as cyberware and bioware, each attribute rating (Mental and Physical) can only receive an augmentation bonus of up to +4. If the attribute being raised has not reached its natural maximum limit, the attribute can be raised naturally with Karma; but at no point can augmentations exceed the +4 bonus cap. The second restriction is that at normal character creation, characters are restricted to a maximum Availability rating of 12 and a device rating of 6. After character creation, characters may be able to acquire gear that has a higher and a higher device rating. Finally, all gear is subject to gamemaster approval, even if the gear falls within these restrictions.
 
 ## Contents
 
@@ -55,25 +55,25 @@ Augmentations need to be noted on the character sheet. The rating should be adde
 
 **LIFESTYLE COSTS TABLE**
 
-| LIFESTYLE | COST |
-| --- | --- |
-| Street | Free |
-| Squatter | 500¥ |
-| Low | 2,000¥ |
-| Middle | 5,000¥ |
-| High | 10,000¥ |
-| Luxury | 100,000¥ |
+| LIFESTYLE | COST     |
+| --------- | -------- |
+| Street    | Free     |
+| Squatter  | 500¥     |
+| Low       | 2,000¥   |
+| Middle    | 5,000¥   |
+| High      | 10,000¥  |
+| Luxury    | 100,000¥ |
 
 **STARTING NUYEN TABLE**
 
 | LIFESTYLE | STARTING NUYEN |
-| --- | --- |
-| Street | 1D6 x 20¥ |
-| Squatter | 2D6 x 40¥ |
-| Low | 3D6 x 60¥ |
-| Middle | 4D6 x 100¥ |
-| High | 5D6 x 500¥ |
-| Luxury | 6D6 x 1,000¥ |
+| --------- | -------------- |
+| Street    | 1D6 x 20¥      |
+| Squatter  | 2D6 x 40¥      |
+| Low       | 3D6 x 60¥      |
+| Middle    | 4D6 x 100¥     |
+| High      | 5D6 x 500¥     |
+| Luxury    | 6D6 x 1,000¥   |
 
 Lifestyle determines how the character lives and their monthly expenses so that they can survive. Is the character a squatter in an abandoned building? Does he survive by dumpster diving? Does the character live in a rundown apartment? Or has the character found a way to own her own home? Depending on the answers to these questions, the character may have a Street, Squatter, Low, Middle, High, or Luxury lifestyle. More information on lifestyles can be found on p. 373.
 

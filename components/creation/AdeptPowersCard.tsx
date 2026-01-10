@@ -66,7 +66,8 @@ function PowerRow({
   onDecrease?: () => void;
   onRemove: () => void;
 }) {
-  const canIncrease = isLeveled && rating !== undefined && maxLevel !== undefined && rating < maxLevel;
+  const canIncrease =
+    isLeveled && rating !== undefined && maxLevel !== undefined && rating < maxLevel;
   const canDecrease = isLeveled && rating !== undefined && rating > 1;
 
   return (
@@ -82,9 +83,7 @@ function PowerRow({
             </span>
           </div>
 
-          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            {power.description}
-          </div>
+          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{power.description}</div>
 
           {power.activation && (
             <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
@@ -188,7 +187,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   const karmaPurchasedPP = Math.floor(karmaSpentPowerPoints / POWER_POINT_KARMA_COST);
 
   const basePowerPointBudget = isMysticAdept
-    ? ((state.selections["power-points-allocation"] as number) || 0)
+    ? (state.selections["power-points-allocation"] as number) || 0
     : magicRating;
 
   const powerPointBudget = basePowerPointBudget + karmaPurchasedPP;
@@ -215,9 +214,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     if (!searchQuery.trim()) return adeptPowersCatalog;
     const search = searchQuery.toLowerCase();
     return adeptPowersCatalog.filter(
-      (p) =>
-        p.name.toLowerCase().includes(search) ||
-        p.description.toLowerCase().includes(search)
+      (p) => p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search)
     );
   }, [adeptPowersCatalog, searchQuery]);
 
@@ -228,19 +225,16 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   );
 
   // Calculate cost for power at level
-  const calculateCost = useCallback(
-    (power: AdeptPowerCatalogItem, level: number): number => {
-      if (power.costType === "table" && power.levels) {
-        const levelData = power.levels.find((l) => l.level === level);
-        return levelData?.cost || 0;
-      }
-      if (power.costType === "perLevel") {
-        return (power.cost || 0) * level;
-      }
-      return power.cost || 0;
-    },
-    []
-  );
+  const calculateCost = useCallback((power: AdeptPowerCatalogItem, level: number): number => {
+    if (power.costType === "table" && power.levels) {
+      const levelData = power.levels.find((l) => l.level === level);
+      return levelData?.cost || 0;
+    }
+    if (power.costType === "perLevel") {
+      return (power.cost || 0) * level;
+    }
+    return power.cost || 0;
+  }, []);
 
   // Check if power is already selected
   const isPowerSelected = useCallback(
@@ -267,7 +261,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       id: `${selectedPowerId}-${Date.now()}`,
       catalogId: selectedPowerId,
       name: power.name,
-      rating: power.costType === "perLevel" || power.costType === "table" ? selectedLevel : undefined,
+      rating:
+        power.costType === "perLevel" || power.costType === "table" ? selectedLevel : undefined,
       powerPointCost: cost,
       specification: selectedSpec || undefined,
     };
@@ -345,9 +340,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       if (costDiff > ppRemaining) return;
 
       const updatedPowers = selectedPowers.map((p) =>
-        p.id === powerId
-          ? { ...p, rating: newLevel, powerPointCost: newCost }
-          : p
+        p.id === powerId ? { ...p, rating: newLevel, powerPointCost: newCost } : p
       );
 
       updateState({
@@ -361,7 +354,16 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
         },
       });
     },
-    [selectedPowers, getPowerById, calculateCost, ppRemaining, ppSpent, state.selections, state.budgets, updateState]
+    [
+      selectedPowers,
+      getPowerById,
+      calculateCost,
+      ppRemaining,
+      ppSpent,
+      state.selections,
+      state.budgets,
+      updateState,
+    ]
   );
 
   // Purchase power point with karma (mystic adepts only)
@@ -535,7 +537,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                 const catalogPower = getPowerById(power.catalogId);
                 if (!catalogPower) return null;
 
-                const isLeveled = catalogPower.costType === "perLevel" || catalogPower.costType === "table";
+                const isLeveled =
+                  catalogPower.costType === "perLevel" || catalogPower.costType === "table";
 
                 return (
                   <PowerRow
@@ -635,9 +638,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                     const isSelected = selectedPowerId === power.id;
                     const alreadyHas = isPowerSelected(power.id);
                     const baseCost =
-                      power.costType === "table"
-                        ? power.levels?.[0]?.cost || 0
-                        : power.cost || 0;
+                      power.costType === "table" ? power.levels?.[0]?.cost || 0 : power.cost || 0;
                     const costDisplay =
                       power.costType === "perLevel"
                         ? `${baseCost.toFixed(2)}/level`
@@ -696,7 +697,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                   </div>
 
                   {/* Level selector */}
-                  {(selectedPowerData.costType === "perLevel" || selectedPowerData.costType === "table") && (
+                  {(selectedPowerData.costType === "perLevel" ||
+                    selectedPowerData.costType === "table") && (
                     <div className="mb-3">
                       <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
                         Level
@@ -776,11 +778,13 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
 
                   {/* Cost and add button */}
                   <div className="flex items-center justify-between pt-2">
-                    <span className={`text-sm font-medium ${
-                      selectedCost > ppRemaining
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-violet-700 dark:text-violet-300"
-                    }`}>
+                    <span
+                      className={`text-sm font-medium ${
+                        selectedCost > ppRemaining
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-violet-700 dark:text-violet-300"
+                      }`}
+                    >
                       Cost: {selectedCost.toFixed(2)} PP
                       {selectedCost > ppRemaining && " (insufficient PP)"}
                     </span>

@@ -17,6 +17,7 @@ This document outlines the implementation plan for the GM approval UI workflow. 
 ## Current State
 
 ### ✅ Completed (Backend)
+
 - `POST /api/characters/[characterId]/advancement/[recordId]/approve` - Approve advancement
 - `POST /api/characters/[characterId]/advancement/[recordId]/reject` - Reject advancement
 - Enforcement in all advancement endpoints (prevents self-approval)
@@ -24,6 +25,7 @@ This document outlines the implementation plan for the GM approval UI workflow. 
 - Full test coverage (16 tests)
 
 ### ✅ Completed (Frontend)
+
 - `GET /api/campaigns/[id]/advancements/pending` - Fetch pending advancements for campaign
 - `CampaignAdvancementsTab.tsx` - Main UI component with advancement cards
 - `CampaignTabs.tsx` - Added "Approvals" tab (GM-only) with pending count badge
@@ -84,6 +86,7 @@ This document outlines the implementation plan for the GM approval UI workflow. 
 **Authentication:** Required (GM only)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -99,6 +102,7 @@ This document outlines the implementation plan for the GM approval UI workflow. 
 ```
 
 **Implementation Notes:**
+
 - Query all characters in campaign
 - Filter advancement history for `gmApproved: false`
 - Return with character context
@@ -117,6 +121,7 @@ This document outlines the implementation plan for the GM approval UI workflow. 
 **Endpoint:** `POST /api/characters/[characterId]/advancement/[recordId]/reject`
 
 **Body:**
+
 ```typescript
 {
   reason?: string; // Optional rejection reason
@@ -146,6 +151,7 @@ app/api/campaigns/[id]/advancements/
 **Location:** `app/campaigns/[id]/components/CampaignAdvancementsTab.tsx`
 
 **Props:**
+
 ```typescript
 interface CampaignAdvancementsTabProps {
   campaign: Campaign;
@@ -154,6 +160,7 @@ interface CampaignAdvancementsTabProps {
 ```
 
 **Features:**
+
 - Fetch pending advancements on mount
 - Display list of advancement cards
 - Loading and error states
@@ -170,6 +177,7 @@ interface CampaignAdvancementsTabProps {
 **Location:** `app/campaigns/[id]/components/AdvancementCard.tsx`
 
 **Props:**
+
 ```typescript
 interface AdvancementCardProps {
   advancement: AdvancementRecord;
@@ -184,6 +192,7 @@ interface AdvancementCardProps {
 ```
 
 **Features:**
+
 - Display advancement details in card format
 - Character name (link to character sheet)
 - Advancement type badge
@@ -204,6 +213,7 @@ interface AdvancementCardProps {
 **Location:** `app/campaigns/[id]/components/RejectAdvancementDialog.tsx`
 
 **Props:**
+
 ```typescript
 interface RejectAdvancementDialogProps {
   isOpen: boolean;
@@ -215,6 +225,7 @@ interface RejectAdvancementDialogProps {
 ```
 
 **Features:**
+
 - Modal dialog for rejection
 - Text area for rejection reason (required)
 - Cancel and Confirm buttons
@@ -297,23 +308,27 @@ interface RejectAdvancementDialogProps {
 ### Visual Design
 
 **Tab Badge:**
+
 - Show count of pending advancements: "Advancements (3)"
 - Use warning/attention color (yellow/orange) if count > 0
 - Only visible to GMs
 
 **Advancement Card:**
+
 - Border: `border-zinc-200 dark:border-zinc-800`
 - Background: `bg-white dark:bg-black`
 - Hover: `hover:border-zinc-300 hover:shadow-md`
 - Padding: `p-4` or `p-6`
 
 **Advancement Type Badges:**
+
 - Attribute: Blue (`bg-blue-100 text-blue-800`)
 - Skill: Green (`bg-green-100 text-green-800`)
 - Edge: Purple (`bg-purple-100 text-purple-800`)
 - Specialization: Orange (`bg-orange-100 text-orange-800`)
 
 **Action Buttons:**
+
 - Approve: Green (`bg-green-600 hover:bg-green-700`)
 - Reject: Red (`bg-red-600 hover:bg-red-700`)
 
@@ -363,7 +378,7 @@ useEffect(() => {
     try {
       const res = await fetch(`/api/campaigns/${campaign.id}/advancements/pending`);
       const data = await res.json();
-      
+
       if (data.success) {
         setAdvancements(data.advancements || []);
       } else {
@@ -375,7 +390,7 @@ useEffect(() => {
       setLoading(false);
     }
   }
-  
+
   fetchPendingAdvancements();
 }, [campaign.id]);
 ```
@@ -385,13 +400,12 @@ useEffect(() => {
 ```typescript
 const handleApprove = async (characterId: string, recordId: string) => {
   try {
-    const res = await fetch(
-      `/api/characters/${characterId}/advancement/${recordId}/approve`,
-      { method: "POST" }
-    );
-    
+    const res = await fetch(`/api/characters/${characterId}/advancement/${recordId}/approve`, {
+      method: "POST",
+    });
+
     const data = await res.json();
-    
+
     if (data.success) {
       // Show success notification
       // Refresh list
@@ -410,17 +424,14 @@ const handleApprove = async (characterId: string, recordId: string) => {
 ```typescript
 const handleReject = async (characterId: string, recordId: string, reason: string) => {
   try {
-    const res = await fetch(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ reason }),
-      }
-    );
-    
+    const res = await fetch(`/api/characters/${characterId}/advancement/${recordId}/reject`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ reason }),
+    });
+
     const data = await res.json();
-    
+
     if (data.success) {
       // Show success notification
       // Close dialog
@@ -498,12 +509,14 @@ const handleReject = async (characterId: string, recordId: string, reason: strin
 ## Dependencies
 
 ### Required
+
 - Character Advancement System (✅ Complete)
 - Campaign System (✅ Complete)
 - React Aria Components (✅ Available)
 - Tailwind CSS (✅ Available)
 
 ### Optional
+
 - Toast notification library (if not using React Aria)
 - Date formatting library (if needed)
 
@@ -512,12 +525,14 @@ const handleReject = async (characterId: string, recordId: string, reason: strin
 ## Estimated Effort
 
 ### MVP (Minimum Viable Product)
+
 - **Time:** 4-6 hours
 - **Components:** 3 files
 - **API Endpoints:** 1 new endpoint
 - **Complexity:** Medium
 
 ### With Enhancements
+
 - **Time:** 8-12 hours
 - **Additional Features:** Filtering, bulk operations, notifications
 - **Complexity:** Medium-High
@@ -555,4 +570,3 @@ const handleReject = async (characterId: string, recordId: string, reason: strin
 **Implementation Status:** Complete
 **Implemented By:** Claude Code (feature/gm-approval-ui branch)
 **Implementation Date:** 2025-12-22
-

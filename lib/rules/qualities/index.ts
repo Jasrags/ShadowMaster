@@ -34,9 +34,7 @@ export {
 } from "./karma";
 
 // Creation helper functions
-export {
-  buildCharacterFromCreationState,
-} from "./creation-helper";
+export { buildCharacterFromCreationState } from "./creation-helper";
 
 // Effects system functions
 export {
@@ -51,11 +49,7 @@ export {
   filterEffectsByTarget,
 } from "./effects";
 
-export {
-  registerEffectHandler,
-  getEffectHandler,
-  processEffect,
-} from "./effects/handlers";
+export { registerEffectHandler, getEffectHandler, processEffect } from "./effects/handlers";
 
 export {
   getAllCharacterEffects,
@@ -124,4 +118,3 @@ export {
   type AcquisitionValidationResult,
   type RemovalValidationResult,
 } from "./advancement";
-

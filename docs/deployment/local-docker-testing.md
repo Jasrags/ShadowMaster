@@ -149,7 +149,7 @@ docker-compose down -v
 Create `docker-compose.dev.yml` for development:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   shadow-master:
@@ -429,11 +429,13 @@ docker system prune -a --volumes
 ### Workflow Recommendation
 
 1. **Develop locally with hot reload**:
+
    ```bash
    pnpm dev
    ```
 
 2. **Test Docker build before committing**:
+
    ```bash
    docker build -t shadow-master:test .
    docker run -p 3000:3000 shadow-master:test
@@ -442,6 +444,7 @@ docker system prune -a --volumes
    ```
 
 3. **If build/tests pass, commit and push**:
+
    ```bash
    git add .
    git commit -m "Your changes"

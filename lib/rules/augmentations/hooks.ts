@@ -12,12 +12,7 @@
  */
 
 import { useState, useCallback, useMemo } from "react";
-import type {
-  CyberwareItem,
-  BiowareItem,
-  CyberwareGrade,
-  BiowareGrade,
-} from "@/lib/types";
+import type { CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
 
 // =============================================================================
 // TYPES
@@ -554,14 +549,11 @@ export function useValidateAugmentation(characterId: string | null): {
       setState({ data: null, loading: true, error: null });
 
       try {
-        const response = await fetch(
-          `/api/characters/${characterId}/augmentations/validate`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(request),
-          }
-        );
+        const response = await fetch(`/api/characters/${characterId}/augmentations/validate`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(request),
+        });
 
         const data: ValidateAugmentationResult = await response.json();
 
@@ -741,10 +733,7 @@ export function useAugmentationBonuses(
  */
 export function useInitiativeDiceBonus(cyberware: CyberwareItem[]): number {
   return useMemo(() => {
-    return cyberware.reduce(
-      (sum, item) => sum + (item.initiativeDiceBonus || 0),
-      0
-    );
+    return cyberware.reduce((sum, item) => sum + (item.initiativeDiceBonus || 0), 0);
   }, [cyberware]);
 }
 

@@ -67,11 +67,7 @@ export interface VehicleActionValidation {
 // =============================================================================
 
 /** Actions that require the character to be jumped into the vehicle */
-const JUMPED_IN_REQUIRED_ACTIONS: VehicleActionType[] = [
-  "stunt",
-  "ram",
-  "evasive_driving",
-];
+const JUMPED_IN_REQUIRED_ACTIONS: VehicleActionType[] = ["stunt", "ram", "evasive_driving"];
 
 /** Actions that can be performed remotely but with penalties */
 const REMOTE_CAPABLE_ACTIONS: VehicleActionType[] = [
@@ -161,9 +157,7 @@ export function getSkillForAction(actionType: VehicleActionType): string {
 /**
  * Get relevant autosoft categories for an action
  */
-export function getAutosoftCategoriesForAction(
-  actionType: VehicleActionType
-): AutosoftCategory[] {
+export function getAutosoftCategoriesForAction(actionType: VehicleActionType): AutosoftCategory[] {
   return ACTION_TO_AUTOSOFT_CATEGORY[actionType] || [];
 }
 
@@ -261,9 +255,7 @@ export function validateVehicleAction(
 
   // Calculate noise penalty for remote control
   if (controlMode === "remote" && riggingState.droneNetwork) {
-    const drone = riggingState.droneNetwork.slavedDrones.find(
-      (d) => d.droneId === targetId
-    );
+    const drone = riggingState.droneNetwork.slavedDrones.find((d) => d.droneId === targetId);
     if (drone) {
       noisePenalty = drone.noisePenalty;
       if (noisePenalty > 0) {
@@ -284,9 +276,7 @@ export function validateVehicleAction(
   // Check for applicable autosofts
   if (controlMode === "remote" && riggingState.droneNetwork) {
     const applicableCategories = getAutosoftCategoriesForAction(actionType);
-    const drone = riggingState.droneNetwork.slavedDrones.find(
-      (d) => d.droneId === targetId
-    );
+    const drone = riggingState.droneNetwork.slavedDrones.find((d) => d.droneId === targetId);
 
     if (drone && applicableCategories.length > 0) {
       const autosoftBonuses = getApplicableAutosofts(
@@ -334,10 +324,7 @@ export function validateVehicleAction(
  * - Remote: No bonus (but can use autosofts)
  * - Jumped-in: +VCR rating to all vehicle tests
  */
-export function getControlModeBonus(
-  controlMode: ControlMode,
-  vcrRating?: number
-): number {
+export function getControlModeBonus(controlMode: ControlMode, vcrRating?: number): number {
   if (controlMode === "jumped-in" && vcrRating) {
     return vcrRating;
   }
@@ -376,9 +363,7 @@ export function getApplicableAutosofts(
   ];
 
   // Filter by applicable categories
-  const applicableAutosofts = allAutosofts.filter((a) =>
-    applicableCategories.includes(a.category)
-  );
+  const applicableAutosofts = allAutosofts.filter((a) => applicableCategories.includes(a.category));
 
   // Deduplicate by type, keeping highest rating
   const autosoftMap = new Map<string, SharedAutosoft>();
@@ -446,9 +431,7 @@ export function validateDroneCommand(
     };
   }
 
-  const drone = riggingState.droneNetwork.slavedDrones.find(
-    (d) => d.droneId === droneId
-  );
+  const drone = riggingState.droneNetwork.slavedDrones.find((d) => d.droneId === droneId);
 
   if (!drone) {
     errors.push({
@@ -467,8 +450,7 @@ export function validateDroneCommand(
   }
 
   // Check if drone is operational
-  const isDroneOperational =
-    drone.conditionDamageTaken < drone.conditionMonitorMax;
+  const isDroneOperational = drone.conditionDamageTaken < drone.conditionMonitorMax;
   if (!isDroneOperational) {
     errors.push({
       code: "DRONE_DESTROYED",
@@ -490,9 +472,7 @@ export function validateDroneCommand(
 /**
  * Get the limit type for a vehicle test
  */
-export function getLimitTypeForTest(
-  testType: VehicleTestType
-): "handling" | "speed" | "sensor" {
+export function getLimitTypeForTest(testType: VehicleTestType): "handling" | "speed" | "sensor" {
   switch (testType) {
     case "control":
     case "stunt":

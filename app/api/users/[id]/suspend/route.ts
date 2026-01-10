@@ -29,10 +29,7 @@ export async function POST(
     // Validate user exists
     const existingUser = await getUserById(id);
     if (!existingUser) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Check if already suspended
@@ -54,19 +51,16 @@ export async function POST(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     // Handle last-admin protection
     if (errorMessage.includes("last administrator")) {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
 
     console.error("Suspend user error:", error);
@@ -94,10 +88,7 @@ export async function DELETE(
     // Validate user exists
     const existingUser = await getUserById(id);
     if (!existingUser) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Check if not suspended
@@ -119,11 +110,11 @@ export async function DELETE(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     console.error("Reactivate user error:", error);

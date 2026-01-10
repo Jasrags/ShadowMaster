@@ -2,16 +2,16 @@
 
 import { useEffect, useState, use, useCallback } from "react";
 import { Link, Button } from "react-aria-components";
-import { 
-  CheckCircle, 
-  Clock, 
-  Check, 
-  X, 
-  AlertCircle, 
+import {
+  CheckCircle,
+  Clock,
+  Check,
+  X,
+  AlertCircle,
   ChevronRight,
   User,
   Shield,
-  Zap
+  Zap,
 } from "lucide-react";
 import type { AdvancementRecord, ID } from "@/lib/types";
 
@@ -25,7 +25,7 @@ interface PendingAdvancement {
 export default function GMApprovalDashboard({ params }: { params: Promise<{ id: string }> }) {
   const resolvedParams = use(params);
   const campaignId = resolvedParams.id;
-  
+
   const [pendingItems, setPendingItems] = useState<PendingAdvancement[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -36,11 +36,11 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
     try {
       const response = await fetch(`/api/campaigns/${campaignId}/advancements/pending`);
       const data = await response.json();
-      
+
       if (!data.success) {
         throw new Error(data.error || "Failed to load pending advancements");
       }
-      
+
       setPendingItems(data.pendingAdvancements || []);
     } catch (err) {
       setError(err instanceof Error ? err.message : "An error occurred");
@@ -61,17 +61,20 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
         rejectionReason = window.prompt("Reason for rejection:") || "Rejected by GM";
       }
 
-      const response = await fetch(`/api/characters/${characterId}/advancement/${recordId}/${action}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: action === "reject" ? JSON.stringify({ reason: rejectionReason }) : undefined,
-      });
+      const response = await fetch(
+        `/api/characters/${characterId}/advancement/${recordId}/${action}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: action === "reject" ? JSON.stringify({ reason: rejectionReason }) : undefined,
+        }
+      );
 
       const result = await response.json();
       if (!result.success) throw new Error(result.error || `Failed to ${action} advancement`);
 
       // Remove from list
-      setPendingItems(prev => prev.filter(item => item.advancement.id !== recordId));
+      setPendingItems((prev) => prev.filter((item) => item.advancement.id !== recordId));
     } catch (err) {
       alert(err instanceof Error ? err.message : `Failed to ${action} advancement`);
     } finally {
@@ -85,10 +88,14 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "attribute": return <Shield className="h-4 w-4 text-blue-400" />;
-      case "skill": return <Zap className="h-4 w-4 text-emerald-400" />;
-      case "edge": return <Shield className="h-4 w-4 text-amber-400" />;
-      default: return <Clock className="h-4 w-4 text-zinc-400" />;
+      case "attribute":
+        return <Shield className="h-4 w-4 text-blue-400" />;
+      case "skill":
+        return <Zap className="h-4 w-4 text-emerald-400" />;
+      case "edge":
+        return <Shield className="h-4 w-4 text-amber-400" />;
+      default:
+        return <Clock className="h-4 w-4 text-zinc-400" />;
     }
   };
 
@@ -135,7 +142,7 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
           </p>
         </div>
         <div className="flex gap-4">
-           <Link
+          <Link
             href={`/campaigns/${campaignId}`}
             className="text-sm text-zinc-400 hover:text-emerald-400 transition-colors flex items-center gap-1"
           >
@@ -148,7 +155,9 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
         <div className="p-12 text-center rounded-lg border border-dashed border-zinc-700 bg-zinc-800/10">
           <CheckCircle className="h-12 w-12 text-emerald-500/20 mx-auto mb-4" />
           <h3 className="text-lg font-medium text-zinc-300">No Pending Advancements</h3>
-          <p className="text-sm text-zinc-500 mt-1">All character growth has been reviewed. Good work, Chummer.</p>
+          <p className="text-sm text-zinc-500 mt-1">
+            All character growth has been reviewed. Good work, Chummer.
+          </p>
         </div>
       ) : (
         <div className="space-y-4">
@@ -166,7 +175,7 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
                     <div>
                       <h3 className="font-bold text-zinc-100 flex items-center gap-2">
                         {item.characterName}
-                        <Link 
+                        <Link
                           href={`/characters/${item.characterId}`}
                           className="text-xs font-normal text-zinc-500 hover:text-emerald-400 underline decoration-zinc-700 underline-offset-4"
                         >
@@ -183,14 +192,19 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
                     <div className="p-3 rounded bg-zinc-900/50 border border-zinc-700/50">
                       <div className="flex items-center gap-2 mb-2">
                         {getTypeIcon(item.advancement.type)}
-                        <span className="text-sm font-semibold text-zinc-300 capitalize">{item.advancement.type} Advancement</span>
+                        <span className="text-sm font-semibold text-zinc-300 capitalize">
+                          {item.advancement.type} Advancement
+                        </span>
                       </div>
                       <div className="text-sm text-zinc-100 font-medium">
                         {item.advancement.targetName}
                       </div>
                       <div className="text-sm text-zinc-400 mt-1">
                         {item.advancement.previousValue !== undefined ? (
-                          <>Rating {item.advancement.previousValue} <ChevronRight className="inline h-3 w-3" /> {item.advancement.newValue}</>
+                          <>
+                            Rating {item.advancement.previousValue}{" "}
+                            <ChevronRight className="inline h-3 w-3" /> {item.advancement.newValue}
+                          </>
                         ) : (
                           <>Rating {item.advancement.newValue}</>
                         )}
@@ -198,10 +212,14 @@ export default function GMApprovalDashboard({ params }: { params: Promise<{ id: 
                     </div>
 
                     <div className="p-3 rounded bg-zinc-900/50 border border-zinc-700/50">
-                      <div className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-2">Transaction Details</div>
+                      <div className="text-xs text-zinc-500 uppercase tracking-wider font-bold mb-2">
+                        Transaction Details
+                      </div>
                       <div className="flex justify-between text-sm">
                         <span className="text-zinc-400">Karma Cost:</span>
-                        <span className="font-bold text-amber-400">{item.advancement.karmaCost}k</span>
+                        <span className="font-bold text-amber-400">
+                          {item.advancement.karmaCost}k
+                        </span>
                       </div>
                       <div className="flex justify-between text-sm mt-1">
                         <span className="text-zinc-400">Paid:</span>

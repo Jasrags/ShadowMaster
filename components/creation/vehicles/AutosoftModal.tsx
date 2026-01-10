@@ -8,10 +8,7 @@
  */
 
 import { useMemo, useState } from "react";
-import {
-  useAutosofts,
-  type AutosoftCatalogItemData,
-} from "@/lib/rules/RulesetContext";
+import { useAutosofts, type AutosoftCatalogItemData } from "@/lib/rules/RulesetContext";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
 import { Search, Cpu, Plus, Minus } from "lucide-react";
 
@@ -70,12 +67,7 @@ function getMaxAvailableRating(availabilityPerRating: number, maxRating: number)
 // COMPONENT
 // =============================================================================
 
-export function AutosoftModal({
-  isOpen,
-  onClose,
-  onAdd,
-  remainingNuyen,
-}: AutosoftModalProps) {
+export function AutosoftModal({ isOpen, onClose, onAdd, remainingNuyen }: AutosoftModalProps) {
   const autosofts = useAutosofts();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRatings, setSelectedRatings] = useState<Record<string, number>>({});
@@ -92,13 +84,22 @@ export function AutosoftModal({
   }, [autosofts, searchQuery]);
 
   // Get current rating for an autosoft
-  const getRating = (autosoftId: string, maxRating: number, availabilityPerRating: number): number => {
+  const getRating = (
+    autosoftId: string,
+    maxRating: number,
+    availabilityPerRating: number
+  ): number => {
     const maxAvailable = getMaxAvailableRating(availabilityPerRating, maxRating);
     return selectedRatings[autosoftId] || Math.min(1, maxAvailable);
   };
 
   // Update rating
-  const updateRating = (autosoftId: string, delta: number, maxRating: number, availabilityPerRating: number) => {
+  const updateRating = (
+    autosoftId: string,
+    delta: number,
+    maxRating: number,
+    availabilityPerRating: number
+  ) => {
     const maxAvailable = getMaxAvailableRating(availabilityPerRating, maxRating);
     const currentRating = getRating(autosoftId, maxRating, availabilityPerRating);
     const newRating = Math.max(1, Math.min(maxAvailable, currentRating + delta));
@@ -136,7 +137,9 @@ export function AutosoftModal({
           <div className="border-b border-zinc-200 px-4 py-2 dark:border-zinc-700">
             <span className="text-sm text-zinc-600 dark:text-zinc-400">
               Budget:{" "}
-              <span className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>
+              <span
+                className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}
+              >
                 {formatCurrency(remainingNuyen)}¥
               </span>{" "}
               remaining
@@ -160,8 +163,15 @@ export function AutosoftModal({
           <ModalBody className="p-4">
             <div className="space-y-2">
               {filteredAutosofts.map((autosoft) => {
-                const maxAvailable = getMaxAvailableRating(autosoft.availabilityPerRating, autosoft.maxRating);
-                const rating = getRating(autosoft.id, autosoft.maxRating, autosoft.availabilityPerRating);
+                const maxAvailable = getMaxAvailableRating(
+                  autosoft.availabilityPerRating,
+                  autosoft.maxRating
+                );
+                const rating = getRating(
+                  autosoft.id,
+                  autosoft.maxRating,
+                  autosoft.availabilityPerRating
+                );
                 const cost = autosoft.costPerRating * rating;
                 const availability = autosoft.availabilityPerRating * rating;
                 const canAfford = cost <= remainingNuyen;
@@ -193,7 +203,14 @@ export function AutosoftModal({
                         <div className="mt-2 flex items-center gap-2">
                           <span className="text-xs text-zinc-500 dark:text-zinc-400">Rating:</span>
                           <button
-                            onClick={() => updateRating(autosoft.id, -1, autosoft.maxRating, autosoft.availabilityPerRating)}
+                            onClick={() =>
+                              updateRating(
+                                autosoft.id,
+                                -1,
+                                autosoft.maxRating,
+                                autosoft.availabilityPerRating
+                              )
+                            }
                             disabled={rating <= 1}
                             className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-700"
                           >
@@ -203,7 +220,14 @@ export function AutosoftModal({
                             {rating}
                           </span>
                           <button
-                            onClick={() => updateRating(autosoft.id, 1, autosoft.maxRating, autosoft.availabilityPerRating)}
+                            onClick={() =>
+                              updateRating(
+                                autosoft.id,
+                                1,
+                                autosoft.maxRating,
+                                autosoft.availabilityPerRating
+                              )
+                            }
                             disabled={rating >= maxAvailable}
                             className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-700"
                           >

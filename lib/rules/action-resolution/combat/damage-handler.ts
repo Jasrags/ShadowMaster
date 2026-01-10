@@ -10,17 +10,8 @@
  * - Knockdown and other damage effects
  */
 
-import type {
-  Character,
-  ActionPool,
-  PoolModifier,
-  EditionDiceRules,
-} from "@/lib/types";
-import {
-  buildActionPool,
-  getAttributeValue,
-  calculateWoundModifier,
-} from "../pool-builder";
+import type { Character, ActionPool, PoolModifier, EditionDiceRules } from "@/lib/types";
+import { buildActionPool, getAttributeValue, calculateWoundModifier } from "../pool-builder";
 import { DEFAULT_DICE_RULES } from "../dice-engine";
 
 // =============================================================================
@@ -55,13 +46,7 @@ export interface DamageApplication {
 /**
  * Element types for special damage
  */
-export type ElementType =
-  | "fire"
-  | "electricity"
-  | "acid"
-  | "cold"
-  | "radiation"
-  | "toxin";
+export type ElementType = "fire" | "electricity" | "acid" | "cold" | "radiation" | "toxin";
 
 /**
  * State of a condition monitor
@@ -181,9 +166,7 @@ export function calculateOverflowMax(body: number): number {
 /**
  * Get current condition monitor state from character
  */
-export function getConditionMonitorState(
-  character: Character
-): ConditionMonitorState {
+export function getConditionMonitorState(character: Character): ConditionMonitorState {
   const body = getAttributeValue(character, "body");
   const willpower = getAttributeValue(character, "willpower");
 
@@ -237,10 +220,7 @@ export function getArmorValue(character: Character): number {
 /**
  * Calculate modified armor after armor penetration
  */
-export function calculateModifiedArmor(
-  baseArmor: number,
-  armorPenetration: number
-): number {
+export function calculateModifiedArmor(baseArmor: number, armorPenetration: number): number {
   // AP is negative (e.g., -4), so we add it
   // Modified armor cannot go below 0
   return Math.max(0, baseArmor + armorPenetration);
@@ -278,10 +258,7 @@ export function calculateResistancePool(
 ): ResistanceResult {
   const modifiers: PoolModifier[] = [];
   const baseArmor = getArmorValue(character);
-  const modifiedArmor = calculateModifiedArmor(
-    baseArmor,
-    damageApplication.armorPenetration
-  );
+  const modifiedArmor = calculateModifiedArmor(baseArmor, damageApplication.armorPenetration);
 
   // Add armor to pool
   modifiers.push({
@@ -425,11 +402,7 @@ export function calculateWoundModifierFromState(
   state: ConditionMonitorState,
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): number {
-  return calculateWoundModifier(
-    state.physicalDamage,
-    state.stunDamage,
-    rules
-  );
+  return calculateWoundModifier(state.physicalDamage, state.stunDamage, rules);
 }
 
 /**
@@ -444,18 +417,11 @@ export function processDamageApplication(
   const triggeredEffects: string[] = [];
 
   // Calculate resistance
-  const resistanceResult = calculateResistancePool(
-    character,
-    damageApplication,
-    rules
-  );
+  const resistanceResult = calculateResistancePool(character, damageApplication, rules);
 
   // Get current state
   const currentState = getConditionMonitorState(character);
-  const previousWoundModifier = calculateWoundModifierFromState(
-    currentState,
-    rules
-  );
+  const previousWoundModifier = calculateWoundModifierFromState(currentState, rules);
 
   // Calculate damage after armor (this is already factored into resistance)
   const damageAfterArmor = damageApplication.damageValue;
@@ -474,11 +440,7 @@ export function processDamageApplication(
   }
 
   // Apply damage to condition monitor
-  const newState = applyDamageToMonitor(
-    currentState,
-    damageDealt,
-    actualDamageType
-  );
+  const newState = applyDamageToMonitor(currentState, damageDealt, actualDamageType);
 
   // Calculate new wound modifier
   const newWoundModifier = calculateWoundModifierFromState(newState, rules);
@@ -566,9 +528,7 @@ export function calculateNaturalHealingPool(
     {
       attribute: "body",
       skill: undefined,
-      manualPool:
-        getAttributeValue(character, "body") +
-        getAttributeValue(character, "willpower"),
+      manualPool: getAttributeValue(character, "body") + getAttributeValue(character, "willpower"),
       includeWoundModifiers: true,
     },
     rules
@@ -597,9 +557,7 @@ export function processElementalDamage(
       effects.push("Fire damage: Target may catch fire (opposed test)");
       break;
     case "electricity":
-      effects.push(
-        "Electrical damage: -1 to actions for (damage) rounds if damage exceeds armor"
-      );
+      effects.push("Electrical damage: -1 to actions for (damage) rounds if damage exceeds armor");
       break;
     case "acid":
       effects.push("Acid damage: Reduces armor by 1 per hit");
@@ -625,9 +583,7 @@ export function processElementalDamage(
 /**
  * Create updates for character condition after damage
  */
-export function createConditionUpdates(
-  damageResult: DamageResult
-): {
+export function createConditionUpdates(damageResult: DamageResult): {
   physicalDamage: number;
   stunDamage: number;
   overflowDamage: number;

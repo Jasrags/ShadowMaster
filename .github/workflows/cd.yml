@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       environment:
-        description: 'Environment to deploy to'
+        description: "Environment to deploy to"
         required: true
         type: choice
         options:
@@ -12,10 +12,10 @@ on:
           - staging
           - production
       image_tag:
-        description: 'Docker image tag to deploy (default: latest)'
+        description: "Docker image tag to deploy (default: latest)"
         required: false
         type: string
-        default: 'latest'
+        default: "latest"
 
 env:
   REGISTRY: ghcr.io
@@ -26,16 +26,16 @@ jobs:
     name: Deploy to ${{ inputs.environment }}
     runs-on: ubuntu-latest
     environment: ${{ inputs.environment }}
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      
+
       - name: Verify image exists
         run: |
           echo "Verifying image: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}"
           # You can add actual verification logic here if needed
-      
+
       - name: Generate deployment summary
         run: |
           echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
@@ -55,14 +55,14 @@ jobs:
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
           echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:${{ inputs.image_tag }}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-      
+
       # Add your deployment steps here
       # Examples:
       # - Webhook to Portainer to trigger stack update
       # - SSH to server and pull new image
       # - Kubernetes deployment update
       # - Cloud provider CLI commands
-      
+
       - name: Deployment instructions
         run: |
           echo "============================================"

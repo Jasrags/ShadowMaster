@@ -34,21 +34,13 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize view access (need to see the character to clone it)
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -107,9 +99,7 @@ export async function POST(
       knowledgeSkills: sourceCharacter.knowledgeSkills
         ? [...sourceCharacter.knowledgeSkills]
         : undefined,
-      languages: sourceCharacter.languages
-        ? [...sourceCharacter.languages]
-        : undefined,
+      languages: sourceCharacter.languages ? [...sourceCharacter.languages] : undefined,
 
       // Copy qualities
       positiveQualities: [...sourceCharacter.positiveQualities],
@@ -127,40 +117,41 @@ export async function POST(
       adeptPowers: sourceCharacter.adeptPowers
         ? sourceCharacter.adeptPowers.map((p) => ({ ...p }))
         : undefined,
-      complexForms: sourceCharacter.complexForms
-        ? [...sourceCharacter.complexForms]
-        : undefined,
+      complexForms: sourceCharacter.complexForms ? [...sourceCharacter.complexForms] : undefined,
 
       // Conditionally copy gear
-      gear: includeGear
-        ? sourceCharacter.gear.map((g) => ({ ...g }))
-        : [],
-      weapons: includeGear && sourceCharacter.weapons
-        ? sourceCharacter.weapons.map((w) => ({ ...w }))
-        : undefined,
-      armor: includeGear && sourceCharacter.armor
-        ? sourceCharacter.armor.map((a) => ({ ...a }))
-        : undefined,
-      cyberware: includeGear && sourceCharacter.cyberware
-        ? sourceCharacter.cyberware.map((c) => ({ ...c }))
-        : undefined,
-      bioware: includeGear && sourceCharacter.bioware
-        ? sourceCharacter.bioware.map((b) => ({ ...b }))
-        : undefined,
-      vehicles: includeGear && sourceCharacter.vehicles
-        ? sourceCharacter.vehicles.map((v) => ({ ...v }))
-        : undefined,
-      drones: includeGear && sourceCharacter.drones
-        ? sourceCharacter.drones.map((d) => ({ ...d }))
-        : undefined,
-      foci: includeGear && sourceCharacter.foci
-        ? sourceCharacter.foci.map((f) => ({ ...f }))
-        : undefined,
+      gear: includeGear ? sourceCharacter.gear.map((g) => ({ ...g })) : [],
+      weapons:
+        includeGear && sourceCharacter.weapons
+          ? sourceCharacter.weapons.map((w) => ({ ...w }))
+          : undefined,
+      armor:
+        includeGear && sourceCharacter.armor
+          ? sourceCharacter.armor.map((a) => ({ ...a }))
+          : undefined,
+      cyberware:
+        includeGear && sourceCharacter.cyberware
+          ? sourceCharacter.cyberware.map((c) => ({ ...c }))
+          : undefined,
+      bioware:
+        includeGear && sourceCharacter.bioware
+          ? sourceCharacter.bioware.map((b) => ({ ...b }))
+          : undefined,
+      vehicles:
+        includeGear && sourceCharacter.vehicles
+          ? sourceCharacter.vehicles.map((v) => ({ ...v }))
+          : undefined,
+      drones:
+        includeGear && sourceCharacter.drones
+          ? sourceCharacter.drones.map((d) => ({ ...d }))
+          : undefined,
+      foci:
+        includeGear && sourceCharacter.foci
+          ? sourceCharacter.foci.map((f) => ({ ...f }))
+          : undefined,
 
       // Conditionally copy contacts
-      contacts: includeContacts
-        ? sourceCharacter.contacts.map((c) => ({ ...c }))
-        : [],
+      contacts: includeContacts ? sourceCharacter.contacts.map((c) => ({ ...c })) : [],
 
       // Copy identities and lifestyles (required for valid character)
       identities: sourceCharacter.identities

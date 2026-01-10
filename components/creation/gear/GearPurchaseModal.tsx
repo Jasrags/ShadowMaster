@@ -10,11 +10,7 @@
 
 import { useState, useMemo, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import {
-  useGear,
-  type GearItemData,
-  type GearCatalogData,
-} from "@/lib/rules/RulesetContext";
+import { useGear, type GearItemData, type GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { BaseModalRoot } from "@/components/ui";
@@ -57,10 +53,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -128,10 +121,7 @@ function getGearAvailability(gear: GearItemData, rating?: number): number {
 
   // Legacy ratingSpec
   if (gear.ratingSpec?.availabilityScaling?.perRating && rating) {
-    return (
-      (gear.ratingSpec.availabilityScaling.baseValue || gear.availability) *
-      rating
-    );
+    return (gear.ratingSpec.availabilityScaling.baseValue || gear.availability) * rating;
   }
   return gear.availability ?? 0;
 }
@@ -258,9 +248,7 @@ function GearListItem({
         <div className="flex-shrink-0 text-right">
           <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {formatCurrency(gear.cost)}¥
-            {(gear.costPerRating ||
-              gear.ratingSpec?.costScaling?.perRating) &&
-              "/R"}
+            {(gear.costPerRating || gear.ratingSpec?.costScaling?.perRating) && "/R"}
           </div>
         </div>
       </div>
@@ -280,8 +268,7 @@ export function GearPurchaseModal({
 }: GearPurchaseModalProps) {
   const gearCatalog = useGear();
 
-  const [selectedCategory, setSelectedCategory] =
-    useState<GearCategory>("all");
+  const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGear, setSelectedGear] = useState<GearItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
@@ -296,23 +283,18 @@ export function GearPurchaseModal({
   const categoryCounts = useMemo(() => {
     if (!gearCatalog) return {};
     return {
-      all: getAllGear(gearCatalog).filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
+      all: getAllGear(gearCatalog).filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
+        .length,
       electronics: gearCatalog.electronics.filter(
         (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
-      tools: gearCatalog.tools.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
+      tools: gearCatalog.tools.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY).length,
+      survival: gearCatalog.survival.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
         .length,
-      survival: gearCatalog.survival.filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
-      medical: gearCatalog.medical.filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
-      security: gearCatalog.security.filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
+      medical: gearCatalog.medical.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
+        .length,
+      security: gearCatalog.security.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
+        .length,
       miscellaneous: gearCatalog.miscellaneous.filter(
         (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
@@ -326,9 +308,7 @@ export function GearPurchaseModal({
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       items = items.filter(
-        (g) =>
-          g.name.toLowerCase().includes(query) ||
-          g.category.toLowerCase().includes(query)
+        (g) => g.name.toLowerCase().includes(query) || g.category.toLowerCase().includes(query)
       );
     }
 
@@ -345,18 +325,12 @@ export function GearPurchaseModal({
   // Calculate selected gear values with rating
   const selectedGearCost = useMemo(() => {
     if (!selectedGear) return 0;
-    return getGearCost(
-      selectedGear,
-      ratingBounds.hasRating ? selectedRating : undefined
-    );
+    return getGearCost(selectedGear, ratingBounds.hasRating ? selectedRating : undefined);
   }, [selectedGear, selectedRating, ratingBounds.hasRating]);
 
   const selectedGearAvail = useMemo(() => {
     if (!selectedGear) return 0;
-    return getGearAvailability(
-      selectedGear,
-      ratingBounds.hasRating ? selectedRating : undefined
-    );
+    return getGearAvailability(selectedGear, ratingBounds.hasRating ? selectedRating : undefined);
   }, [selectedGear, selectedRating, ratingBounds.hasRating]);
 
   const canAfford = selectedGearCost <= remaining;
@@ -383,10 +357,7 @@ export function GearPurchaseModal({
 
   const handlePurchase = () => {
     if (selectedGear && canPurchase) {
-      onPurchase(
-        selectedGear,
-        ratingBounds.hasRating ? selectedRating : undefined
-      );
+      onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined);
       setSelectedGear(null);
       setSelectedRating(1);
     }
@@ -420,281 +391,260 @@ export function GearPurchaseModal({
             </button>
           </div>
 
-        {/* Category Filters */}
-        <div className="flex flex-wrap gap-1.5 border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
-          {GEAR_CATEGORIES.map((category) => {
-            const count =
-              categoryCounts[category.id as keyof typeof categoryCounts] || 0;
-            return (
-              <button
-                key={category.id}
-                onClick={() => {
-                  setSelectedCategory(category.id);
-                  setSelectedGear(null);
-                }}
-                className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                  selectedCategory === category.id
-                    ? "bg-amber-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {category.label}
-                <span
-                  className={`ml-1 ${
+          {/* Category Filters */}
+          <div className="flex flex-wrap gap-1.5 border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
+            {GEAR_CATEGORIES.map((category) => {
+              const count = categoryCounts[category.id as keyof typeof categoryCounts] || 0;
+              return (
+                <button
+                  key={category.id}
+                  onClick={() => {
+                    setSelectedCategory(category.id);
+                    setSelectedGear(null);
+                  }}
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                     selectedCategory === category.id
-                      ? "text-amber-100"
-                      : "text-zinc-400 dark:text-zinc-500"
+                      ? "bg-amber-500 text-white"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
                   }`}
                 >
-                  ({count})
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Search */}
-        <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search gear..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-          </div>
-        </div>
-
-        {/* Content - Split Pane */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left: Gear List - Virtualized */}
-          <div
-            ref={scrollContainerRef}
-            className="w-1/2 overflow-y-auto border-r border-zinc-100 p-4 dark:border-zinc-800"
-          >
-            {filteredGear.length === 0 ? (
-              <p className="py-8 text-center text-sm text-zinc-500">
-                No gear found
-              </p>
-            ) : (
-              <div
-                style={{
-                  height: `${rowVirtualizer.getTotalSize()}px`,
-                  width: "100%",
-                  position: "relative",
-                }}
-              >
-                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                  const gear = filteredGear[virtualRow.index];
-                  const cost = getGearCost(gear);
-                  return (
-                    <div
-                      key={gear.id}
-                      style={{
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        width: "100%",
-                        height: `${virtualRow.size}px`,
-                        transform: `translateY(${virtualRow.start}px)`,
-                        padding: "4px 0",
-                      }}
-                    >
-                      <GearListItem
-                        gear={gear}
-                        isSelected={selectedGear?.id === gear.id}
-                        canAfford={cost <= remaining}
-                        onClick={() => handleSelectGear(gear)}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-
-          {/* Right: Detail Preview */}
-          <div className="w-1/2 overflow-y-auto p-4">
-            {selectedGear ? (
-              <div className="space-y-4">
-                {/* Gear Name */}
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedGear.name}
-                  </h3>
-                  <p className="text-sm capitalize text-zinc-500 dark:text-zinc-400">
-                    {selectedGear.category}
-                    {selectedGear.subcategory &&
-                      ` • ${selectedGear.subcategory}`}
-                  </p>
-                </div>
-
-                {/* Description */}
-                {selectedGear.description && (
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    {selectedGear.description}
-                  </p>
-                )}
-
-                {/* Rating Selector */}
-                {ratingBounds.hasRating && (
-                  <div className="space-y-2">
-                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                      Rating
-                    </span>
-                    <div className="flex items-center gap-3">
-                      <button
-                        onClick={() =>
-                          setSelectedRating(
-                            Math.max(ratingBounds.min, selectedRating - 1)
-                          )
-                        }
-                        disabled={selectedRating <= ratingBounds.min}
-                        className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                          selectedRating > ratingBounds.min
-                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </button>
-                      <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                        {selectedRating}
-                      </div>
-                      <button
-                        onClick={() =>
-                          setSelectedRating(
-                            Math.min(ratingBounds.max, selectedRating + 1)
-                          )
-                        }
-                        disabled={selectedRating >= ratingBounds.max}
-                        className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                          selectedRating < ratingBounds.max
-                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                            : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                        }`}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Stats */}
-                <div className="space-y-2">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Statistics
+                  {category.label}
+                  <span
+                    className={`ml-1 ${
+                      selectedCategory === category.id
+                        ? "text-amber-100"
+                        : "text-zinc-400 dark:text-zinc-500"
+                    }`}
+                  >
+                    ({count})
                   </span>
-                  <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
-                    <span className="text-zinc-500 dark:text-zinc-400">
-                      Cost
-                    </span>
-                    <span
-                      className={`font-medium ${
-                        !canAfford
-                          ? "text-red-600 dark:text-red-400"
-                          : "text-zinc-900 dark:text-zinc-100"
-                      }`}
-                    >
-                      {formatCurrency(selectedGearCost)}¥
-                      {!canAfford && " (over budget)"}
-                    </span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Search */}
+          <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search gear..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              />
+            </div>
+          </div>
+
+          {/* Content - Split Pane */}
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left: Gear List - Virtualized */}
+            <div
+              ref={scrollContainerRef}
+              className="w-1/2 overflow-y-auto border-r border-zinc-100 p-4 dark:border-zinc-800"
+            >
+              {filteredGear.length === 0 ? (
+                <p className="py-8 text-center text-sm text-zinc-500">No gear found</p>
+              ) : (
+                <div
+                  style={{
+                    height: `${rowVirtualizer.getTotalSize()}px`,
+                    width: "100%",
+                    position: "relative",
+                  }}
+                >
+                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                    const gear = filteredGear[virtualRow.index];
+                    const cost = getGearCost(gear);
+                    return (
+                      <div
+                        key={gear.id}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${virtualRow.start}px)`,
+                          padding: "4px 0",
+                        }}
+                      >
+                        <GearListItem
+                          gear={gear}
+                          isSelected={selectedGear?.id === gear.id}
+                          canAfford={cost <= remaining}
+                          onClick={() => handleSelectGear(gear)}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Right: Detail Preview */}
+            <div className="w-1/2 overflow-y-auto p-4">
+              {selectedGear ? (
+                <div className="space-y-4">
+                  {/* Gear Name */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {selectedGear.name}
+                    </h3>
+                    <p className="text-sm capitalize text-zinc-500 dark:text-zinc-400">
+                      {selectedGear.category}
+                      {selectedGear.subcategory && ` • ${selectedGear.subcategory}`}
+                    </p>
                   </div>
-                  <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
-                    <span className="text-zinc-500 dark:text-zinc-400">
-                      Availability
-                    </span>
-                    <span
-                      className={`font-medium ${
-                        selectedGear.legality === "forbidden"
-                          ? "text-red-600 dark:text-red-400"
-                          : selectedGear.legality === "restricted"
-                            ? "text-amber-600 dark:text-amber-400"
-                            : "text-zinc-900 dark:text-zinc-100"
-                      }`}
-                    >
-                      {getAvailabilityDisplay(
-                        selectedGearAvail,
-                        selectedGear.legality
-                      )}
-                    </span>
-                  </div>
-                  {selectedGear.capacity && (
-                    <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
-                      <span className="text-zinc-500 dark:text-zinc-400">
-                        Capacity
+
+                  {/* Description */}
+                  {selectedGear.description && (
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      {selectedGear.description}
+                    </p>
+                  )}
+
+                  {/* Rating Selector */}
+                  {ratingBounds.hasRating && (
+                    <div className="space-y-2">
+                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        Rating
                       </span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedGear.capacity}
-                      </span>
+                      <div className="flex items-center gap-3">
+                        <button
+                          onClick={() =>
+                            setSelectedRating(Math.max(ratingBounds.min, selectedRating - 1))
+                          }
+                          disabled={selectedRating <= ratingBounds.min}
+                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                            selectedRating > ratingBounds.min
+                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
+                        >
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                          {selectedRating}
+                        </div>
+                        <button
+                          onClick={() =>
+                            setSelectedRating(Math.min(ratingBounds.max, selectedRating + 1))
+                          }
+                          disabled={selectedRating >= ratingBounds.max}
+                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                            selectedRating < ratingBounds.max
+                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                      </div>
                     </div>
                   )}
-                </div>
 
-                {/* Legality Warning */}
-                {(selectedGear.legality === "restricted" ||
-                  selectedGear.legality === "forbidden") && (
-                  <div
-                    className={`rounded-lg p-3 ${
-                      selectedGear.legality === "forbidden"
-                        ? "bg-red-50 dark:bg-red-900/20"
-                        : "bg-amber-50 dark:bg-amber-900/20"
-                    }`}
-                  >
+                  {/* Stats */}
+                  <div className="space-y-2">
+                    <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Statistics
+                    </span>
+                    <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
+                      <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
+                      <span
+                        className={`font-medium ${
+                          !canAfford
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-zinc-900 dark:text-zinc-100"
+                        }`}
+                      >
+                        {formatCurrency(selectedGearCost)}¥{!canAfford && " (over budget)"}
+                      </span>
+                    </div>
+                    <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
+                      <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
+                      <span
+                        className={`font-medium ${
+                          selectedGear.legality === "forbidden"
+                            ? "text-red-600 dark:text-red-400"
+                            : selectedGear.legality === "restricted"
+                              ? "text-amber-600 dark:text-amber-400"
+                              : "text-zinc-900 dark:text-zinc-100"
+                        }`}
+                      >
+                        {getAvailabilityDisplay(selectedGearAvail, selectedGear.legality)}
+                      </span>
+                    </div>
+                    {selectedGear.capacity && (
+                      <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
+                        <span className="text-zinc-500 dark:text-zinc-400">Capacity</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedGear.capacity}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Legality Warning */}
+                  {(selectedGear.legality === "restricted" ||
+                    selectedGear.legality === "forbidden") && (
                     <div
-                      className={`flex items-center gap-2 text-sm font-medium ${
+                      className={`rounded-lg p-3 ${
                         selectedGear.legality === "forbidden"
-                          ? "text-red-700 dark:text-red-300"
-                          : "text-amber-700 dark:text-amber-300"
+                          ? "bg-red-50 dark:bg-red-900/20"
+                          : "bg-amber-50 dark:bg-amber-900/20"
                       }`}
                     >
-                      <AlertTriangle className="h-4 w-4" />
-                      {selectedGear.legality === "forbidden"
-                        ? "Forbidden"
-                        : "Restricted"}
+                      <div
+                        className={`flex items-center gap-2 text-sm font-medium ${
+                          selectedGear.legality === "forbidden"
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-amber-700 dark:text-amber-300"
+                        }`}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        {selectedGear.legality === "forbidden" ? "Forbidden" : "Restricted"}
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Availability Warning */}
-                {!availabilityOk && (
-                  <div className="rounded-lg bg-red-50 p-3 dark:bg-red-900/20">
-                    <div className="flex items-center gap-2 text-sm font-medium text-red-700 dark:text-red-300">
-                      <AlertTriangle className="h-4 w-4" />
-                      Availability exceeds {MAX_AVAILABILITY} for character
-                      creation
+                  {/* Availability Warning */}
+                  {!availabilityOk && (
+                    <div className="rounded-lg bg-red-50 p-3 dark:bg-red-900/20">
+                      <div className="flex items-center gap-2 text-sm font-medium text-red-700 dark:text-red-300">
+                        <AlertTriangle className="h-4 w-4" />
+                        Availability exceeds {MAX_AVAILABILITY} for character creation
+                      </div>
                     </div>
-                  </div>
-                )}
+                  )}
 
-                {/* Purchase Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={handlePurchase}
-                    disabled={!canPurchase}
-                    className={`w-full rounded-lg py-3 text-sm font-medium transition-colors ${
-                      canPurchase
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
-                        : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-                    }`}
-                  >
-                    {!canAfford
-                      ? `Cannot Afford (${formatCurrency(selectedGearCost)}¥)`
-                      : !availabilityOk
-                        ? `Availability Too High (${selectedGearAvail})`
-                        : `Purchase - ${formatCurrency(selectedGearCost)}¥`}
-                  </button>
+                  {/* Purchase Button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={handlePurchase}
+                      disabled={!canPurchase}
+                      className={`w-full rounded-lg py-3 text-sm font-medium transition-colors ${
+                        canPurchase
+                          ? "bg-amber-500 text-white hover:bg-amber-600"
+                          : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                      }`}
+                    >
+                      {!canAfford
+                        ? `Cannot Afford (${formatCurrency(selectedGearCost)}¥)`
+                        : !availabilityOk
+                          ? `Availability Too High (${selectedGearAvail})`
+                          : `Purchase - ${formatCurrency(selectedGearCost)}¥`}
+                    </button>
+                  </div>
                 </div>
-              </div>
-            ) : (
-              <div className="flex h-full items-center justify-center text-zinc-400 dark:text-zinc-500">
-                <p className="text-sm">Select gear to see details</p>
-              </div>
-            )}
+              ) : (
+                <div className="flex h-full items-center justify-center text-zinc-400 dark:text-zinc-500">
+                  <p className="text-sm">Select gear to see details</p>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
           {/* Footer */}
           <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-3 dark:border-zinc-700">

@@ -50,7 +50,11 @@ interface SheetCreationContentProps {
   existingCharacter?: { id: string; editionCode: string; creationState?: CreationState } | null;
 }
 
-function SheetCreationContent({ campaignId, campaign, existingCharacter }: SheetCreationContentProps) {
+function SheetCreationContent({
+  campaignId,
+  campaign,
+  existingCharacter,
+}: SheetCreationContentProps) {
   const router = useRouter();
   const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(
     (existingCharacter?.editionCode as EditionCode) || campaign?.editionCode || null
@@ -167,7 +171,8 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
             setCharacterId(data.character.id);
             updateState({ characterId: data.character.id });
             // Save the creation state to the new character
-            const newCharacterName = (creationState.selections.characterName as string) || undefined;
+            const newCharacterName =
+              (creationState.selections.characterName as string) || undefined;
             await fetch(`/api/characters/${data.character.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
@@ -239,9 +244,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-emerald-500" />
-          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-            Loading ruleset...
-          </p>
+          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">Loading ruleset...</p>
         </div>
       </div>
     );
@@ -315,7 +318,11 @@ export default function SheetCreationPage() {
   const campaignId = searchParams.get("campaignId") || undefined;
   const existingCharacterId = searchParams.get("characterId") || undefined;
   const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [existingCharacter, setExistingCharacter] = useState<{ id: string; editionCode: string; creationState?: CreationState } | null>(null);
+  const [existingCharacter, setExistingCharacter] = useState<{
+    id: string;
+    editionCode: string;
+    creationState?: CreationState;
+  } | null>(null);
   const [loading, setLoading] = useState(!!campaignId || !!existingCharacterId);
 
   // Load campaign and/or existing character if IDs are provided
@@ -388,7 +395,6 @@ export default function SheetCreationPage() {
               </span>
             )}
           </div>
-
         </div>
       </header>
 

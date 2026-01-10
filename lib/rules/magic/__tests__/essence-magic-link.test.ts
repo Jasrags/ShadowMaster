@@ -20,9 +20,7 @@ import type { AugmentationRulesData } from "../../loader-types";
 // TEST FIXTURES
 // =============================================================================
 
-function createMockCharacter(
-  overrides: Partial<Character> = {}
-): Partial<Character> {
+function createMockCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
     id: "test-character",
     name: "Test Character",
@@ -37,8 +35,6 @@ function createMockCharacter(
     ...overrides,
   };
 }
-
-
 
 function createMockRules(
   formula: "roundUp" | "roundDown" | "exact" = "roundUp"

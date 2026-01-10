@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -62,9 +62,9 @@
 
 **AgHexHex**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 8 | 500¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost          | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------- | ------ |
+| -     | -         | -         | ¥             | 8     | 500¥ \* Force | SR5:SG |
 
 AgHexHex, more formally known as silver hexamagnohexaphosphate, is a magical alchemical compound found to have a detrimental effect against Awakened creatures capable of transforming into vapor particles (Mist Form), keeping them corporeal.
 
@@ -80,9 +80,9 @@ Required Reagent: Refined silver
 
 **Aqua Fictus**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 3 | 10 Hours | 850¥ | 8 | 1,000¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost   | Source |
+| ------- | --------- | --------- | ------------- | ----- | ------ | ------ |
+| Alchemy | 3         | 10 Hours  | 850¥          | 8     | 1,000¥ | SR5:SG |
 
 A fool’s gold solution that can be used to make false reagents or make an object such as an alchemical preparation or a ritual circle appear to be magical. Aqua fictus looks like a swirling metallic solution that emits occasional flashes of light. Any item coated with aqua fictus appears to glow with a concentrated-mana aura like that of reagents. This trick is difficult to detect. A successful Alchemy + Magic [Mental] (3) Test lets a magician notice the false magic coating on a mundane object. Sales of such items are hit or miss because of the variety of reagents required, and the coating fades entirely after twelve hours. This solution is used in the creation of fake magical items, such as a paper lotus (p. 215).
 
@@ -90,9 +90,9 @@ A fool’s gold solution that can be used to make false reagents or make an obje
 
 **Aqua Fortis**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 3 | 10 Hours | 43¥ | 4 | 50¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Alchemy | 3         | 10 Hours  | 43¥           | 4     | 50¥  | SR5:SG |
 
 This substance detects traces of orichalcum and other true elements. An eight-ounce spray bottle can cover one square meter. Any traces of orichalcum left behind, such as from spilled aqua regia, glow gold. Other Awakened elements glow violet. Aqua fortis allows the user to Observe in Detail (p. 165, SR5) to see if orichalcum or other Awakened elements are present. The gamemaster determines the threshold of the test.
 
@@ -100,9 +100,9 @@ This substance detects traces of orichalcum and other true elements. An eight-ou
 
 **Aqua Regia**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 3 | 10 Hours | 85¥ | 5 | 100¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Alchemy | 3         | 10 Hours  | 85¥           | 5     | 100¥ | SR5:SG |
 
 This solution can dissolve orichalcum without damaging the metal’s magical properties. This makes the material very easy to transport discreetly. Eight ounces of aqua regia can dissolve 1 dram of orichalcum. Aqua regia is a corrosive acid (p. 170, SR5) capable of dissolving any metal. The base Damage Value is 14P with an AP of –4.
 
@@ -112,9 +112,9 @@ To extract orichalcum once it has been dissolved in aqua regia, the magician mus
 
 **Aqua Vitae**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 3 | 4 Hours | 13¥ | 1 | 15¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Alchemy | 3         | 4 Hours   | 13¥           | 1     | 15¥  | SR5:SG |
 
 More of an alchemist’s joke, aqua vitae is an alcoholic distillation created through alchemical means. Since soy is the prevalent food staple in the Sixth World, alchemists have worked out ways to distill liquor from just about anything (which gives “hair of the dog” a whole new meaning). Such brews are more potent than standard alcohol. Aqua vitae has an Addiction Rating of 4 (p. 414, SR5)
 
@@ -122,9 +122,9 @@ More of an alchemist’s joke, aqua vitae is an alcoholic distillation created t
 
 **Astral Powder**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 4 | 2 Days | 70¥ | 4 | 120¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Alchemy | 4         | 2 Days    | 70¥           | 4     | 120¥ | SR5:SG |
 
 Astral powder, also known as fairy dust, is attracted to sustained magic like static cling. Astral powder was developed as an alternative to using FAB (fluorescing astral bacter ia) to detect astral entities, since some consider FAB an environmental hazard regardless of the genetic var iant. Astral powder clings to spir its, astrally projecting beings, wards, and sustained or quickened spells. This allows non-Awakened characters to use an Observe in Detail action (p. 165, SR5) on such things, though the observer will not know exactly what the object is. For example, a person targeted with an Invisibility spell would look no dif ferent under astral powder than an astrally projecting magician would. The dispersal device is a paper sphere preparation, which is learned as par t of astral powder’s formula. This sphere detonates af ter being thrown, and the astral powder contained within disperses a cloud with a three-meter radius.
 
@@ -134,9 +134,9 @@ Since astral powder is physical, it cannot move through other physical objects. 
 
 **BDNB**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 8 | 500¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost          | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------- | ------ |
+| -     | -         | -         | ¥             | 8     | 500¥ \* Force | SR5:SG |
 
 Also known as “Bad Dog! No Biscuit!,” this compound is commonly used for hunting Awakened game.
 
@@ -156,33 +156,33 @@ Science has had some success in cultivating mana-sensitive bacteria strains as p
 
 **FAB I**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 10 | 50¥ per cubic meter | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost                | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------------- | ------ |
+| -     | -         | -         | ¥             | 10    | 50¥ per cubic meter | SR5:SG |
 
 ### FAB II
 
 **FAB II**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 16R | (50¥ * Force) per cubic meter | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost                           | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------------------------ | ------ |
+| -     | -         | -         | ¥             | 16R   | (50¥ \* Force) per cubic meter | SR5:SG |
 
 ### FAB III
 
 **FAB III**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 20F | (25,000¥ * Force) per cubic meter | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost                               | Source |
+| ----- | --------- | --------- | ------------- | ----- | ---------------------------------- | ------ |
+| -     | -         | -         | ¥             | 20F   | (25,000¥ \* Force) per cubic meter | SR5:SG |
 
 ## Fetish
 
 **Fetish**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Artificing | 2 | 1 Day | 1,700¥ | 4 | 2,000¥ | SR5:SG |
+| Skill      | Threshold | Base Time | Material Cost | Avail | Cost   | Source |
+| ---------- | --------- | --------- | ------------- | ----- | ------ | ------ |
+| Artificing | 2         | 1 Day     | 1,700¥        | 4     | 2,000¥ | SR5:SG |
 
 An alchemist can create a magical device that reduces Drain when cast with a spell suited to fetishes (p. 212). Such spells have to be learned specifically with the fetish, meaning that a character would have to learn a spell twice if he wants to cast it both with and without a fetish. An alchemist needs 1 dram of radical reagents to make the fetish functional for magical use. A magician casting a fetish spell either through Spellcasting or Ritual Spellcasting can reduce the Drain Value by 2 (to a minimum of 2).
 
@@ -190,9 +190,9 @@ An alchemist can create a magical device that reduces Drain when cast with a spe
 
 **Govi**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | Force | 50¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost         | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------ | ------ |
+| -     | -         | -         | ¥             | Force | 50¥ \* Force | SR5:SG |
 
 In the vodou traditions, govi are specially prepared clay pots to hold work loa (watcher spirits). The houngan shapes clay into a pot, etches it with images of their mait-tete, and paints it. Since 2057, govi have been created from glass bottles or other modern containers properly designed with vevers (symbolic images of the loa). Other traditions have taken up creating their own versions of govi to contain watchers. These brooches and talismans are marked with spiritual symbols of the magician’s tradition and incorporate a small compartment to contain the watcher.
 
@@ -204,9 +204,9 @@ If a govi is destroyed, the watcher associated with it is also destroyed, whethe
 
 **Hand of Glory**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force^2)R | 1,500¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail      | Cost            | Source |
+| ----- | --------- | --------- | ------------- | ---------- | --------------- | ------ |
+| -     | -         | -         | ¥             | (Force^2)R | 1,500¥ \* Force | SR5:SG |
 
 The Hand of Glory is an alchemical formula found in the banned witchcraft book Compendium Maleficarum. This preparation’s lynchpin is the hand of a talented, deceased individual (the formula romanticizes this as the hand of a hanged criminal, but any hand will do). This unique alchemical preparation allows the magician to use the remembered talent of the individual when performing a task. In game terms, the Hand of Glory is tied to one physical Active skill known by the previous owner. The skill is limited by the Force of the ritual instead of any other limit, including Accuracy. Reagents used must be refined quality or better. When triggered, the magician can use the skill for a number of minutes equal to the Potency. The Hand of Glory, once created, is bonded to the magician and cannot be unbound until the Hand is destroyed or used. It also doesn’t lose Potency.
 
@@ -218,9 +218,9 @@ The Compendium Maleficarum warns of trying to own more than one Hand of Glory, s
 
 **Lot's Curse**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 14F | 1,000¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost            | Source |
+| ----- | --------- | --------- | ------------- | ----- | --------------- | ------ |
+| -     | -         | -         | ¥             | 14F   | 1,000¥ \* Force | SR5:SG |
 
 Lot’s Curse is a poison made from the Awakened Gomorrah tree, whose fruit causes calcification of flesh and death when eaten.
 
@@ -236,9 +236,9 @@ Required Reagent: Refined Gomorrah apple
 
 **Magecuff**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 5 | 1,000¥ | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost   | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------ | ------ |
+| -     | -         | -         | ¥             | 5     | 1,000¥ | SR5:SG |
 
 Magecuffs are crafted with glomoss bioluminescent plant that glows in response to magic or astral entities) and a light-triggered shock device. If the cuffs detect spellcasting or astral projection, the cuffs subject the incarcerated individual to a 15S electrical attack (p.170, SR5).
 
@@ -247,8 +247,8 @@ Magecuffs are crafted with glomoss bioluminescent plant that glows in response t
 **Magemask**
 
 | Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | 2R | 200¥ | SR5:SG |
+| ----- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| -     | -         | -         | ¥             | 2R    | 200¥ | SR5:SG |
 
 A magemask is a plastic hood and gag that cuts off the incarcerated individual’s line of sight and produces a combination of light and sounds that disorient the magician and deters astral projection. Attempting astral projection while wearing a magemask requires a Willpower + Intuition (4) Test.
 
@@ -256,9 +256,9 @@ A magemask is a plastic hood and gag that cuts off the incarcerated individual�
 
 **Mana-Sensitive Film Plate**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Alchemy | 4 | 3 Days | 21¥ | 4 | 25¥ | SR5:SG |
+| Skill   | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Alchemy | 4         | 3 Days    | 21¥           | 4     | 25¥  | SR5:SG |
 
 Modern magicians have updated the ancient process of daguerreotype photography, exchanging the essential chemical actions with an alchemical process. The layers of chemicals used are mana-sensitive, derived from various Awakened plants and animals, allowing auras, spirits, and even background count to be recorded on the plate. Mana-sensitive film plates are used with mortis optigrams and quicksilver cameras.
 
@@ -266,9 +266,9 @@ Modern magicians have updated the ancient process of daguerreotype photography, 
 
 **Mortis Optigram**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Artificing | 4 | 1 Week | 2,550¥ | 6 | 3,000¥ | SR5:SG |
+| Skill      | Threshold | Base Time | Material Cost | Avail | Cost   | Source |
+| ---------- | --------- | --------- | ------------- | ----- | ------ | ------ |
+| Artificing | 4         | 1 Week    | 2,550¥        | 6     | 3,000¥ | SR5:SG |
 
 According to an old, oft-ignored theory, in death the eyes record the last moments of life. Necromancers have found good reason to believe this theory, and they can photograph such images on astral film by using a mortis optigram and the eyes of the deceased. The eyes are positioned to face the plate in the camera. As the magician takes the picture, the last thing the eyes saw is captured on the mana-sensitive film plate. The process takes twenty minutes to complete.
 
@@ -286,9 +286,9 @@ Net hits from the Artificing Test determine the Force of the restraint, and the 
 
 **Mystic Cuff**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force)R | 200¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail    | Cost          | Source |
+| ----- | --------- | --------- | ------------- | -------- | ------------- | ------ |
+| -     | -         | -         | ¥             | (Force)R | 200¥ \* Force | SR5:SG |
 
 Mystic cuffs are made of steel or titanium and can have a maximum Force of 8; they are ineffective if the subject has one or more cyberarms.
 
@@ -296,9 +296,9 @@ Mystic cuffs are made of steel or titanium and can have a maximum Force of 8; th
 
 **Mystic Jacket**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force)R | 500¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail    | Cost          | Source |
+| ----- | --------- | --------- | ------------- | -------- | ------------- | ------ |
+| -     | -         | -         | ¥             | (Force)R | 500¥ \* Force | SR5:SG |
 
 Similar to a straitjacket, a mystic jacket can have embedded brass studs on the inside and woven symbols on the outside. A mystic jacket can have a Force up to 18.If the subject has the Flux metamagic (p. 150), he can reduce the effectiveness of the mystic restraints by his initiate grade while his aura is in flux.
 
@@ -306,9 +306,9 @@ Similar to a straitjacket, a mystic jacket can have embedded brass studs on the 
 
 **Mystic Mask**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force)R | 400¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail    | Cost          | Source |
+| ----- | --------- | --------- | ------------- | -------- | ------------- | ------ |
+| -     | -         | -         | ¥             | (Force)R | 400¥ \* Force | SR5:SG |
 
 Masks are made of steel and leather or ceramic and have a maximum Force of 12.
 
@@ -316,9 +316,9 @@ Masks are made of steel and leather or ceramic and have a maximum Force of 12.
 
 **Quicksilver Camera**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Artificing | 4 | 1 Week | 2,125¥ | 4 | 2,500¥ | SR5:SG |
+| Skill      | Threshold | Base Time | Material Cost | Avail | Cost   | Source |
+| ---------- | --------- | --------- | ------------- | ----- | ------ | ------ |
+| Artificing | 4         | 1 Week    | 2,125¥        | 4     | 2,500¥ | SR5:SG |
 
 The quicksilver camera is a handheld camera with a built-in collapsible tripod. It can hold five mana-sensitive film plates, with only one being exposed at a time. This camera can take an astral photograph in two minutes.
 
@@ -330,9 +330,9 @@ To improve the process, alchemists altered the plates so that the Awakened photo
 
 **Sage**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force * 6)R | 800¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail         | Cost          | Source |
+| ----- | --------- | --------- | ------------- | ------------- | ------------- | ------ |
+| -     | -         | -         | ¥             | (Force \* 6)R | 800¥ \* Force | SR5:SG |
 
 Trigger: Contact
 
@@ -346,9 +346,9 @@ Required Reagent: Refined Cladonia stellaris lichen from the North American tund
 
 **Shofar**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | Force | 800¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail | Cost          | Source |
+| ----- | --------- | --------- | ------------- | ----- | ------------- | ------ |
+| -     | -         | -         | ¥             | Force | 800¥ \* Force | SR5:SG |
 
 The shofar, which is a more impressive name than “the horn that scares spirits,” derives from the Judean tradition of exorcism. The shofar’s sound causes spirits to be shaken and leave the area. When using it, make an Opposed Test pitting the spirit’s Force + Willpower against the shofar’s Force x 2. Materialized or manifested spirits that fail the Opposed Test stop what they are doing and retreat back to astral space, wasting the service they are in process of fulfilling. Materialized or manifested free spirits attempt to leave the area as if affected by the Fear power for a number of Combat Turns equal to the shofar’s Potency. Spirits inhabiting a living or nonliving vessel are only distracted by the noise and suffer a –2 dice penalty to all actions for that Combat Turn. The shofar effect is instantaneous, but after activating it, the item disintegrates. The shofar has a longer shelf life than other compounds, as its Potency reduces by 1 per week. Requires Exorcism (see p. 148).
 
@@ -356,9 +356,9 @@ The shofar, which is a more impressive name than “the horn that scares spirits
 
 **Spirit Strength**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force * 6)R | 3,000¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail         | Cost            | Source |
+| ----- | --------- | --------- | ------------- | ------------- | --------------- | ------ |
+| -     | -         | -         | ¥             | (Force \* 6)R | 3,000¥ \* Force | SR5:SG |
 
 Trigger: Contact
 
@@ -372,9 +372,9 @@ Required Reagent: Refined teonanácatl mushroom from Aztlan
 
 **Symbolic Link**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| Artificing | - | 1 Day | ¥ | - | ¥ | SR5:SG |
+| Skill      | Threshold | Base Time | Material Cost | Avail | Cost | Source |
+| ---------- | --------- | --------- | ------------- | ----- | ---- | ------ |
+| Artificing | -         | 1 Day     | ¥             | -     | ¥    | SR5:SG |
 
 From effigies to drawings, a symbolic link is a representation of a spell’s target. The most notorious of symbolic links are voodoo dolls, which a magician can use to inflict curses upon the individual the doll represents. The magician uses the Artificing skill to create a symbolic link, but the required Force depends on how well the magician knows the subject. The symbolic link is viable for a number of days equal to the net hits in the Artificing Test. The downside to symbolic links is that the object contains the creator’s astral signature while the link remains viable. This means that a voodoo doll can be used as a material link against the creator. Requires Psychometry (see p. 144).
 
@@ -382,9 +382,9 @@ From effigies to drawings, a symbolic link is a representation of a spell’s ta
 
 **Witch's Moss**
 
-| Skill | Threshold | Base Time | Material Cost | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| - | - | - | ¥ | (Force * 6)R | 1,600¥ * Force | SR5:SG |
+| Skill | Threshold | Base Time | Material Cost | Avail         | Cost            | Source |
+| ----- | --------- | --------- | ------------- | ------------- | --------------- | ------ |
+| -     | -         | -         | ¥             | (Force \* 6)R | 1,600¥ \* Force | SR5:SG |
 
 Trigger: Contact
 

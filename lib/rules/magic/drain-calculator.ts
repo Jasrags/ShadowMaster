@@ -6,12 +6,7 @@
  */
 
 import type { Character } from "@/lib/types/character";
-import type {
-  DrainResult,
-  DrainBreakdown,
-  DrainModifier,
-  DrainAction,
-} from "@/lib/types/magic";
+import type { DrainResult, DrainBreakdown, DrainModifier, DrainAction } from "@/lib/types/magic";
 import type { LoadedRuleset } from "../loader-types";
 import { findTradition, getDrainAttributes } from "./tradition-validator";
 import { getSpellDefinition } from "./spell-validator";
@@ -245,10 +240,7 @@ export function parseDrainFormula(formula: string, force: number): number {
  * @param magicRating - The character's Magic attribute
  * @returns "physical" or "stun"
  */
-export function getDrainType(
-  drainValue: number,
-  magicRating: number
-): "stun" | "physical" {
+export function getDrainType(drainValue: number, magicRating: number): "stun" | "physical" {
   return drainValue > magicRating ? "physical" : "stun";
 }
 
@@ -259,10 +251,7 @@ export function getDrainType(
 /**
  * Get the base drain formula for a magical action
  */
-function getBaseDrainFormula(
-  input: DrainCalculationInput,
-  ruleset: LoadedRuleset
-): string {
+function getBaseDrainFormula(input: DrainCalculationInput, ruleset: LoadedRuleset): string {
   switch (input.action) {
     case "spellcasting":
       return getSpellDrainFormula(input, ruleset);
@@ -300,10 +289,7 @@ function getBaseDrainFormula(
 /**
  * Get drain formula for a specific spell
  */
-function getSpellDrainFormula(
-  input: DrainCalculationInput,
-  ruleset: LoadedRuleset
-): string {
+function getSpellDrainFormula(input: DrainCalculationInput, ruleset: LoadedRuleset): string {
   if (!input.spellId) {
     // Default spell drain if no specific spell
     return "F-2";
@@ -320,10 +306,7 @@ function getSpellDrainFormula(
 /**
  * Get drain formula for a specific ritual
  */
-function getRitualDrainFormula(
-  _input: DrainCalculationInput,
-  _ruleset: LoadedRuleset
-): string {
+function getRitualDrainFormula(_input: DrainCalculationInput, _ruleset: LoadedRuleset): string {
   // TODO: Look up ritual drain from ruleset
   // For now, use default ritual drain
   return "F";
@@ -349,10 +332,7 @@ function getMentorSpiritModifier(
 /**
  * Get attribute value from character
  */
-function getAttributeValue(
-  character: Partial<Character>,
-  attrCode: string
-): number | undefined {
+function getAttributeValue(character: Partial<Character>, attrCode: string): number | undefined {
   const normalizedCode = attrCode.toLowerCase();
 
   // Check regular attributes first

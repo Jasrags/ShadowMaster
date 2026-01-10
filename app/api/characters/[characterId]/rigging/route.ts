@@ -42,35 +42,23 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Not authorized to view this character" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Not authorized to view this character" }, { status: 403 });
     }
 
     // Count equipment
@@ -80,18 +68,12 @@ export async function GET(
     const autosoftCount = (character.autosofts ?? []).length;
 
     // Check for VCR
-    const vcr = hasVehicleControlRig(character) 
-      ? getVehicleControlRig(character) 
-      : null;
+    const vcr = hasVehicleControlRig(character) ? getVehicleControlRig(character) : null;
 
     // Get active RCC configuration
-    const activeRCC = hasRCC(character)
-      ? getActiveRCC(character)
-      : null;
+    const activeRCC = hasRCC(character) ? getActiveRCC(character) : null;
 
-    const maxSlavedDrones = activeRCC
-      ? buildRCCConfiguration(activeRCC, []).maxSlavedDrones
-      : 0;
+    const maxSlavedDrones = activeRCC ? buildRCCConfiguration(activeRCC, []).maxSlavedDrones : 0;
 
     const response: RiggingEquipmentSummary = {
       vehicleCount,
@@ -107,9 +89,6 @@ export async function GET(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to get rigging equipment:", error);
-    return NextResponse.json(
-      { error: "Failed to get rigging equipment" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to get rigging equipment" }, { status: 500 });
   }
 }

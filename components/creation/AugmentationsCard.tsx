@@ -15,17 +15,10 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import {
-  useAugmentationRules,
-  calculateMagicLoss,
-} from "@/lib/rules/RulesetContext";
+import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
 import type { CreationState, CyberwareItem, BiowareItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "./shared";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
 import {
   AugmentationModal,
   CyberwareEnhancementModal,
@@ -156,7 +149,9 @@ function AugmentationItem({
         {hasExpandableContent ? (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            aria-label={isExpanded ? `Collapse ${displayName} details` : `Expand ${displayName} details`}
+            aria-label={
+              isExpanded ? `Collapse ${displayName} details` : `Expand ${displayName} details`
+            }
             aria-expanded={isExpanded}
             className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
           >
@@ -181,9 +176,7 @@ function AugmentationItem({
         {/* Essence */}
         <span
           className={`text-sm font-medium shrink-0 ${
-            isCyberware
-              ? "text-cyan-600 dark:text-cyan-400"
-              : "text-pink-600 dark:text-pink-400"
+            isCyberware ? "text-cyan-600 dark:text-cyan-400" : "text-pink-600 dark:text-pink-400"
           }`}
         >
           {formatEssence(item.essenceCost)} ESS
@@ -220,28 +213,29 @@ function AugmentationItem({
           </div>
 
           {/* Bonuses (Armor, Attributes, Initiative) */}
-          {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
+          {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) ||
+            item.armorBonus ||
+            (item as CyberwareItem).initiativeDiceBonus) && (
             <div className="flex flex-wrap gap-1">
               {item.armorBonus && (
                 <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                  <Shield className="h-3 w-3" />
-                  +{item.armorBonus} Armor
+                  <Shield className="h-3 w-3" />+{item.armorBonus} Armor
                 </span>
               )}
               {(item as CyberwareItem).initiativeDiceBonus && (
                 <span className="flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-                  <Zap className="h-3 w-3" />
-                  +{(item as CyberwareItem).initiativeDiceBonus}D6 Init
+                  <Zap className="h-3 w-3" />+{(item as CyberwareItem).initiativeDiceBonus}D6 Init
                 </span>
               )}
-              {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
-                <span
-                  key={attr}
-                  className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                >
-                  {attr.toUpperCase()}: +{bonus}
-                </span>
-              ))}
+              {item.attributeBonuses &&
+                Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
+                  <span
+                    key={attr}
+                    className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+                  >
+                    {attr.toUpperCase()}: +{bonus}
+                  </span>
+                ))}
             </div>
           )}
 
@@ -365,11 +359,7 @@ function CyberlimbAugmentationItem({
           onClick={() => setIsExpanded(!isExpanded)}
           className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
         >
-          {isExpanded ? (
-            <ChevronDown className="h-4 w-4" />
-          ) : (
-            <ChevronRight className="h-4 w-4" />
-          )}
+          {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
         </button>
 
         {/* Name */}
@@ -411,7 +401,8 @@ function CyberlimbAugmentationItem({
         <div className="border-t border-zinc-100 dark:border-zinc-800 py-3 ml-6 space-y-3">
           {/* Grade & Location */}
           <div className="text-xs text-zinc-500 dark:text-zinc-400">
-            {GRADE_DISPLAY[item.grade]} • {locationDisplay} • {item.appearance === "synthetic" ? "Synthetic" : "Obvious"}
+            {GRADE_DISPLAY[item.grade]} • {locationDisplay} •{" "}
+            {item.appearance === "synthetic" ? "Synthetic" : "Obvious"}
           </div>
 
           {/* Limb Attributes - inline */}
@@ -424,8 +415,7 @@ function CyberlimbAugmentationItem({
             </span>
             {armorBonus > 0 && (
               <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                <Shield className="h-3 w-3" />
-                +{armorBonus} Armor
+                <Shield className="h-3 w-3" />+{armorBonus} Armor
               </span>
             )}
           </div>
@@ -455,7 +445,10 @@ function CyberlimbAugmentationItem({
                   >
                     <span className="text-zinc-600 dark:text-zinc-400">
                       • {enh.name}
-                      <span className="text-zinc-400 dark:text-zinc-500"> +{enh.rating} [{enh.capacityUsed}]</span>
+                      <span className="text-zinc-400 dark:text-zinc-500">
+                        {" "}
+                        +{enh.rating} [{enh.capacityUsed}]
+                      </span>
                     </span>
                     <div className="flex items-center gap-1">
                       <span className="text-zinc-400">¥{formatCurrency(enh.cost)}</span>
@@ -501,8 +494,13 @@ function CyberlimbAugmentationItem({
                   >
                     <span className="text-zinc-600 dark:text-zinc-400">
                       • {acc.name}
-                      {acc.rating && <span className="text-zinc-400 dark:text-zinc-500"> R{acc.rating}</span>}
-                      <span className="text-zinc-400 dark:text-zinc-500"> [{acc.capacityUsed}]</span>
+                      {acc.rating && (
+                        <span className="text-zinc-400 dark:text-zinc-500"> R{acc.rating}</span>
+                      )}
+                      <span className="text-zinc-400 dark:text-zinc-500">
+                        {" "}
+                        [{acc.capacityUsed}]
+                      </span>
                     </span>
                     <div className="flex items-center gap-1">
                       <span className="text-zinc-400">¥{formatCurrency(acc.cost)}</span>
@@ -548,7 +546,10 @@ function CyberlimbAugmentationItem({
                   >
                     <span className="text-zinc-600 dark:text-zinc-400">
                       • {wpn.name}
-                      <span className="text-zinc-400 dark:text-zinc-500"> ({wpn.damage}/{wpn.ap}AP) [{wpn.capacityUsed}]</span>
+                      <span className="text-zinc-400 dark:text-zinc-500">
+                        {" "}
+                        ({wpn.damage}/{wpn.ap}AP) [{wpn.capacityUsed}]
+                      </span>
                     </span>
                     <div className="flex items-center gap-1">
                       <span className="text-zinc-400">¥{formatCurrency(wpn.cost)}</span>
@@ -594,7 +595,9 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const [enhancementModalCyberware, setEnhancementModalCyberware] = useState<CyberwareItem | null>(
     null
   );
-  const [accessoryModalCyberlimb, setAccessoryModalCyberlimb] = useState<CyberlimbItem | null>(null);
+  const [accessoryModalCyberlimb, setAccessoryModalCyberlimb] = useState<CyberlimbItem | null>(
+    null
+  );
   const [weaponModalCyberlimb, setWeaponModalCyberlimb] = useState<CyberlimbItem | null>(null);
 
   // Get selections from state
@@ -647,10 +650,12 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
 
   // Calculate total spent across all gear categories
   const gearSpent =
-    ((state.selections?.weapons as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
+    (
+      (state.selections?.weapons as Array<{
+        cost: number;
+        quantity: number;
+      }>) || []
+    ).reduce((s, i) => s + i.cost * i.quantity, 0) +
     ((state.selections?.armor as Array<{ cost: number; quantity: number }>) || []).reduce(
       (s, i) => s + i.cost * i.quantity,
       0
@@ -761,15 +766,23 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               ...(selection.location && { location: selection.location }),
               ...(selection.limbType && { limbType: selection.limbType }),
               ...(selection.appearance && { appearance: selection.appearance }),
-              ...(selection.baseStrength && { baseStrength: selection.baseStrength }),
-              ...(selection.baseAgility && { baseAgility: selection.baseAgility }),
+              ...(selection.baseStrength && {
+                baseStrength: selection.baseStrength,
+              }),
+              ...(selection.baseAgility && {
+                baseAgility: selection.baseAgility,
+              }),
             } as CyberwareItem)
           : ({
               ...baseItem,
               // Add initiative dice bonus if present (e.g., Synaptic Booster)
-              ...(selection.initiativeDiceBonus && { initiativeDiceBonus: selection.initiativeDiceBonus }),
+              ...(selection.initiativeDiceBonus && {
+                initiativeDiceBonus: selection.initiativeDiceBonus,
+              }),
               // Add skill-linked bioware fields if present
-              ...(selection.targetSkill && { targetSkill: selection.targetSkill }),
+              ...(selection.targetSkill && {
+                targetSkill: selection.targetSkill,
+              }),
             } as BiowareItem);
 
       if (selection.type === "cyberware") {
@@ -786,7 +799,10 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               return true;
             }
 
-            const existingItem = item as CyberwareItem & { location: CyberlimbLocation; limbType: CyberlimbType };
+            const existingItem = item as CyberwareItem & {
+              location: CyberlimbLocation;
+              limbType: CyberlimbType;
+            };
             const existingSide = LOCATION_SIDE[existingItem.location];
 
             // Only check items on the same side
@@ -801,7 +817,10 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
             }
 
             // Hierarchy replacement (e.g., full-arm replaces lower-arm and hand)
-            if (selection.limbType && wouldReplaceExisting(selection.limbType, existingItem.limbType)) {
+            if (
+              selection.limbType &&
+              wouldReplaceExisting(selection.limbType, existingItem.limbType)
+            ) {
               return false;
             }
 
@@ -883,7 +902,9 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         if (item.id !== cyberwareId) return item;
 
         const enhancements = item.enhancements || [];
-        const removedEnhancement = enhancements[enhancementIndex] as CyberwareItem & { capacityCost?: number };
+        const removedEnhancement = enhancements[enhancementIndex] as CyberwareItem & {
+          capacityCost?: number;
+        };
         if (!removedEnhancement) return item;
 
         // Get the capacity cost that was used by this enhancement
@@ -916,19 +937,22 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         if (item.id !== enhancementModalCyberware.id) return item;
 
         // Build all new enhancements
-        const newEnhancements = enhancements.map((enhancement) => ({
-          catalogId: enhancement.catalogId,
-          name: enhancement.name,
-          category: enhancement.category as CyberwareItem["category"],
-          grade: item.grade, // Inherit parent grade
-          baseEssenceCost: 0,
-          essenceCost: 0,
-          cost: enhancement.cost,
-          availability: enhancement.availability,
-          legality: enhancement.legality,
-          rating: enhancement.rating,
-          capacityCost: enhancement.capacityCost, // Store for removal
-        } as CyberwareItem));
+        const newEnhancements = enhancements.map(
+          (enhancement) =>
+            ({
+              catalogId: enhancement.catalogId,
+              name: enhancement.name,
+              category: enhancement.category as CyberwareItem["category"],
+              grade: item.grade, // Inherit parent grade
+              baseEssenceCost: 0,
+              essenceCost: 0,
+              cost: enhancement.cost,
+              availability: enhancement.availability,
+              legality: enhancement.legality,
+              rating: enhancement.rating,
+              capacityCost: enhancement.capacityCost, // Store for removal
+            }) as CyberwareItem
+        );
 
         // Calculate total capacity used
         const totalCapacityCost = enhancements.reduce((sum, e) => sum + e.capacityCost, 0);
@@ -992,17 +1016,13 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   // Get remaining capacity for accessory modal
   const accessoryRemainingCapacity = useMemo(() => {
     if (!accessoryModalCyberlimb) return 0;
-    return (
-      (accessoryModalCyberlimb.capacity || 0) - (accessoryModalCyberlimb.capacityUsed || 0)
-    );
+    return (accessoryModalCyberlimb.capacity || 0) - (accessoryModalCyberlimb.capacityUsed || 0);
   }, [accessoryModalCyberlimb]);
 
   // Get remaining capacity for weapon modal
   const weaponRemainingCapacity = useMemo(() => {
     if (!weaponModalCyberlimb) return 0;
-    return (
-      (weaponModalCyberlimb.capacity || 0) - (weaponModalCyberlimb.capacityUsed || 0)
-    );
+    return (weaponModalCyberlimb.capacity || 0) - (weaponModalCyberlimb.capacityUsed || 0);
   }, [weaponModalCyberlimb]);
 
   // Add accessories to cyberlimb (actual implementation - handles batch)
@@ -1239,10 +1259,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
 
   return (
     <>
-      <CreationCard
-        title="Augmentations"
-        status={validationStatus}
-      >
+      <CreationCard title="Augmentations" status={validationStatus}>
         <div className="space-y-4">
           {/* Essence bar - compact style */}
           <div className="space-y-1">
@@ -1271,7 +1288,9 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                 className={`h-full transition-all ${
                   remainingEssence < 1 ? "bg-amber-500" : "bg-emerald-500"
                 }`}
-                style={{ width: `${Math.min(100, (totalEssenceLoss / maxEssence) * 100)}%` }}
+                style={{
+                  width: `${Math.min(100, (totalEssenceLoss / maxEssence) * 100)}%`,
+                }}
               />
             </div>
           </div>
@@ -1302,7 +1321,9 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
                 className={`h-full transition-all ${
                   remainingNuyen < 0 ? "bg-red-500" : "bg-blue-500"
                 }`}
-                style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
+                style={{
+                  width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%`,
+                }}
               />
             </div>
           </div>
@@ -1399,9 +1420,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               </div>
             ) : (
               <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  No cyberware installed
-                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">No cyberware installed</p>
               </div>
             )}
           </div>
@@ -1441,9 +1460,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               </div>
             ) : (
               <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  No bioware installed
-                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">No bioware installed</p>
               </div>
             )}
           </div>

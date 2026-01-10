@@ -3,7 +3,12 @@
 import React, { useState, useEffect, use, useCallback } from "react";
 import { Link, Button } from "react-aria-components";
 import { Plus, Users, Search, Filter, BookOpen, TrendingUp } from "lucide-react";
-import type { SocialContact, SocialCapital, ContactArchetype, CreateContactRequest } from "@/lib/types";
+import type {
+  SocialContact,
+  SocialCapital,
+  ContactArchetype,
+  CreateContactRequest,
+} from "@/lib/types";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { Section } from "../components/Section";
 import { ContactCard } from "./components/ContactCard";
@@ -65,16 +70,18 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
   const [socialCapital, setSocialCapital] = useState<SocialCapital | null>(null);
   const [favorLedger, setFavorLedger] = useState<FavorLedgerData | null>(null);
   const [archetypes, setArchetypes] = useState<ContactArchetype[]>([]);
-  const [favorServices, setFavorServices] = useState<Array<{
-    id: string;
-    name: string;
-    description: string;
-    minimumConnection: number;
-    minimumLoyalty: number;
-    favorCost: number;
-    riskLevel: string;
-    [key: string]: unknown;
-  }>>([]);
+  const [favorServices, setFavorServices] = useState<
+    Array<{
+      id: string;
+      name: string;
+      description: string;
+      minimumConnection: number;
+      minimumLoyalty: number;
+      favorCost: number;
+      riskLevel: string;
+      [key: string]: unknown;
+    }>
+  >([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -205,9 +212,7 @@ export default function ContactsPage({ params }: { params: Promise<{ id: string 
     }
 
     // Update contact in list
-    setContacts((prev) =>
-      prev.map((c) => (c.id === selectedContact.id ? result.contact : c))
-    );
+    setContacts((prev) => prev.map((c) => (c.id === selectedContact.id ? result.contact : c)));
 
     // Refresh character nuyen
     if (character) {

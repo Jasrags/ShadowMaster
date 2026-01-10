@@ -10,8 +10,19 @@
  * @satisfies Constraints: max limits, availability, mutual exclusivity
  */
 
-import type { Character, CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade, ItemLegality } from "@/lib/types";
-import type { CyberwareCatalogItem, BiowareCatalogItem, AugmentationRules } from "@/lib/types/edition";
+import type {
+  Character,
+  CyberwareItem,
+  BiowareItem,
+  CyberwareGrade,
+  BiowareGrade,
+  ItemLegality,
+} from "@/lib/types";
+import type {
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+  AugmentationRules,
+} from "@/lib/types/edition";
 import {
   calculateCyberwareEssence,
   calculateBiowareEssence,
@@ -141,8 +152,22 @@ export function validateAugmentationInstall(
   const errors: AugmentationValidationError[] = [];
   const warnings: AugmentationValidationWarning[] = [];
 
-  const isCyberware = "category" in augmentation &&
-    ["headware", "eyeware", "earware", "bodyware", "cyberlimb", "cyberlimb-enhancement", "cyberlimb-accessory", "hand-blade", "hand-razor", "spur", "cybernetic-weapon", "nanocyber"].includes(augmentation.category);
+  const isCyberware =
+    "category" in augmentation &&
+    [
+      "headware",
+      "eyeware",
+      "earware",
+      "bodyware",
+      "cyberlimb",
+      "cyberlimb-enhancement",
+      "cyberlimb-accessory",
+      "hand-blade",
+      "hand-razor",
+      "spur",
+      "cybernetic-weapon",
+      "nanocyber",
+    ].includes(augmentation.category);
 
   // 1. Validate essence
   const essenceResult = validateEssenceForInstall(
@@ -187,20 +212,13 @@ export function validateAugmentationInstall(
   }
 
   // 4. Check for duplicates
-  const duplicateResult = validateNoDuplicate(
-    character,
-    augmentation.id,
-    isCyberware
-  );
+  const duplicateResult = validateNoDuplicate(character, augmentation.id, isCyberware);
   if (!duplicateResult.valid && duplicateResult.error) {
     errors.push(duplicateResult.error);
   }
 
   // 5. Check mutual exclusions
-  const exclusionResult = validateMutualExclusion(
-    character,
-    augmentation
-  );
+  const exclusionResult = validateMutualExclusion(character, augmentation);
   if (!exclusionResult.valid && exclusionResult.error) {
     errors.push(exclusionResult.error);
   }
@@ -244,14 +262,15 @@ function validateEssenceForInstall(
 
   // Calculate essence cost
   const essenceCost = isCyberware
-    ? calculateCyberwareEssence(augmentation as CyberwareCatalogItem, grade as CyberwareGrade, rating)
+    ? calculateCyberwareEssence(
+        augmentation as CyberwareCatalogItem,
+        grade as CyberwareGrade,
+        rating
+      )
     : calculateBiowareEssence(augmentation as BiowareCatalogItem, grade as BiowareGrade, rating);
 
   // Get current essence
-  const currentEssence = getCurrentEssence(
-    character.cyberware ?? [],
-    character.bioware ?? []
-  );
+  const currentEssence = getCurrentEssence(character.cyberware ?? [], character.bioware ?? []);
 
   // Validate
   const result = validateAugmentationEssence(currentEssence, essenceCost);
@@ -260,7 +279,10 @@ function validateEssenceForInstall(
     return {
       valid: false,
       error: {
-        code: result.projectedEssence < ESSENCE_MIN_VIABLE ? "ESSENCE_WOULD_KILL" : "ESSENCE_INSUFFICIENT",
+        code:
+          result.projectedEssence < ESSENCE_MIN_VIABLE
+            ? "ESSENCE_WOULD_KILL"
+            : "ESSENCE_INSUFFICIENT",
         message: result.error ?? "Insufficient essence",
         field: "essence",
         augmentationId: augmentation.id,
@@ -335,7 +357,8 @@ export function validateAvailabilityConstraint(
       valid: false,
       error: {
         code: "AVAILABILITY_RESTRICTED",
-        message: "Restricted items cannot be purchased during character creation without GM approval.",
+        message:
+          "Restricted items cannot be purchased during character creation without GM approval.",
         field: "availability",
         details: { availability: finalAvailability, restricted: true },
       },
@@ -411,9 +434,7 @@ export function validateAttributeBonusLimit(
 /**
  * Aggregate all attribute bonuses from installed augmentations
  */
-export function aggregateAttributeBonuses(
-  character: Partial<Character>
-): Record<string, number> {
+export function aggregateAttributeBonuses(character: Partial<Character>): Record<string, number> {
   const bonuses: Record<string, number> = {};
 
   // Sum cyberware bonuses
@@ -452,10 +473,26 @@ const MUTUAL_EXCLUSIONS: Record<string, string[]> = {
   "muscle-augmentation": ["muscle-replacement"],
 
   // Bone augmentations
-  "bone-lacing-plastic": ["bone-lacing-aluminum", "bone-lacing-titanium", "bone-density-augmentation"],
-  "bone-lacing-aluminum": ["bone-lacing-plastic", "bone-lacing-titanium", "bone-density-augmentation"],
-  "bone-lacing-titanium": ["bone-lacing-plastic", "bone-lacing-aluminum", "bone-density-augmentation"],
-  "bone-density-augmentation": ["bone-lacing-plastic", "bone-lacing-aluminum", "bone-lacing-titanium"],
+  "bone-lacing-plastic": [
+    "bone-lacing-aluminum",
+    "bone-lacing-titanium",
+    "bone-density-augmentation",
+  ],
+  "bone-lacing-aluminum": [
+    "bone-lacing-plastic",
+    "bone-lacing-titanium",
+    "bone-density-augmentation",
+  ],
+  "bone-lacing-titanium": [
+    "bone-lacing-plastic",
+    "bone-lacing-aluminum",
+    "bone-density-augmentation",
+  ],
+  "bone-density-augmentation": [
+    "bone-lacing-plastic",
+    "bone-lacing-aluminum",
+    "bone-lacing-titanium",
+  ],
 
   // Reaction enhancers
   "wired-reflexes": ["synaptic-booster", "move-by-wire"],
@@ -536,16 +573,20 @@ function validateNoDuplicate(
 ): { valid: boolean; error?: AugmentationValidationError } {
   const items = isCyberware ? character.cyberware : character.bioware;
 
-  const existing = (items ?? []).find(item => item.catalogId === augmentationId);
+  const existing = (items ?? []).find((item) => item.catalogId === augmentationId);
 
   if (existing) {
     // Some items can have multiples (like cyberlimbs)
     const allowMultiples = [
-      "cyberarm", "cyberleg", "cyberhand", "cyberfoot",
-      "cybereye", "cyberear",
+      "cyberarm",
+      "cyberleg",
+      "cyberhand",
+      "cyberfoot",
+      "cybereye",
+      "cyberear",
     ];
 
-    if (!allowMultiples.some(m => augmentationId.includes(m))) {
+    if (!allowMultiples.some((m) => augmentationId.includes(m))) {
       return {
         valid: false,
         error: {
@@ -621,25 +662,17 @@ export function canInstallAugmentation(
   rating: number | undefined,
   context: ValidationContext
 ): boolean {
-  const result = validateAugmentationInstall(
-    character,
-    augmentation,
-    grade,
-    rating,
-    context
-  );
+  const result = validateAugmentationInstall(character, augmentation, grade, rating, context);
   return result.valid;
 }
 
 /**
  * Get a human-readable summary of validation errors
  */
-export function getValidationErrorSummary(
-  result: AugmentationValidationResult
-): string {
+export function getValidationErrorSummary(result: AugmentationValidationResult): string {
   if (result.valid) {
     return "Installation is valid.";
   }
 
-  return result.errors.map(e => e.message).join(" ");
+  return result.errors.map((e) => e.message).join(" ");
 }
