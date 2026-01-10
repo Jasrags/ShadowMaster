@@ -15,7 +15,8 @@
  * - Level selection for leveled qualities
  */
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { useQualities, useSkills } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
@@ -302,6 +303,37 @@ function QualitySelectionModal({
     return grouped;
   }, [filteredQualities]);
 
+  // Flatten qualities with category headers for virtualization
+  type VirtualItem =
+    | { type: "header"; category: QualityCategory }
+    | { type: "quality"; quality: QualityData };
+
+  const virtualItems = useMemo((): VirtualItem[] => {
+    const items: VirtualItem[] = [];
+    QUALITY_CATEGORIES.forEach((category) => {
+      const categoryQualities = qualitiesByCategory[category];
+      if (categoryQualities.length > 0) {
+        items.push({ type: "header", category });
+        categoryQualities.forEach((quality) => {
+          items.push({ type: "quality", quality });
+        });
+      }
+    });
+    return items;
+  }, [qualitiesByCategory]);
+
+  // Virtualization setup
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: virtualItems.length,
+    getScrollElement: () => scrollContainerRef.current,
+    estimateSize: (index) => {
+      // Headers are smaller than quality items
+      return virtualItems[index].type === "header" ? 32 : 88;
+    },
+    overscan: 5,
+  });
+
   const remainingKarma = maxKarma - usedKarma;
 
   // Check for conflicts when selecting Incompetent quality with a skill group
@@ -456,28 +488,66 @@ function QualitySelectionModal({
               </p>
             </div>
 
-            {/* Quality list - scrollable */}
-            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
-          {QUALITY_CATEGORIES.filter((cat) => qualitiesByCategory[cat].length > 0).map(
-            (category) => (
-              <div key={category} className="mb-4">
-                <h4 className="mb-2 border-b border-zinc-200 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
-                  {CATEGORY_LABELS[category]}
-                </h4>
-                <div className="space-y-2">
-                  {qualitiesByCategory[category].map((quality) => {
-                    const cost = getQualityCost(quality, 1);
-                    const canAfford = isPositive
-                      ? usedKarma + cost <= maxKarma && karmaBalance >= cost
-                      : usedKarma + cost <= maxKarma;
-                    const isSelected = selectedQualityId === quality.id;
+            {/* Quality list - virtualized scrollable container */}
+            <div
+              ref={scrollContainerRef}
+              className="min-h-0 flex-1 overflow-y-auto px-6 py-4"
+              style={{ height: "400px" }}
+            >
+              <div
+                style={{
+                  height: `${rowVirtualizer.getTotalSize()}px`,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const item = virtualItems[virtualRow.index];
 
+                  if (item.type === "header") {
                     return (
+                      <div
+                        key={`header-${item.category}`}
+                        style={{
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          width: "100%",
+                          height: `${virtualRow.size}px`,
+                          transform: `translateY(${virtualRow.start}px)`,
+                        }}
+                      >
+                        <h4 className="border-b border-zinc-200 pb-1 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
+                          {CATEGORY_LABELS[item.category]}
+                        </h4>
+                      </div>
+                    );
+                  }
+
+                  const quality = item.quality;
+                  const cost = getQualityCost(quality, 1);
+                  const canAfford = isPositive
+                    ? usedKarma + cost <= maxKarma && karmaBalance >= cost
+                    : usedKarma + cost <= maxKarma;
+                  const isSelected = selectedQualityId === quality.id;
+
+                  return (
+                    <div
+                      key={quality.id}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`,
+                        padding: "4px 0",
+                      }}
+                    >
                       <button
-                        key={quality.id}
                         onClick={() => handleSelectQuality(quality.id)}
                         disabled={!canAfford && !isSelected}
-                        className={`w-full rounded-lg border p-3 text-left transition-all ${
+                        className={`h-full w-full rounded-lg border p-3 text-left transition-all ${
                           isSelected
                             ? isPositive
                               ? "border-blue-400 bg-blue-50 dark:border-blue-600 dark:bg-blue-900/30"
@@ -533,13 +603,11 @@ function QualitySelectionModal({
                           </p>
                         )}
                       </button>
-                    );
-                  })}
-                </div>
+                    </div>
+                  );
+                })}
               </div>
-            )
-          )}
-        </div>
+            </div>
 
         {/* Specification/Level selection (if needed) */}
         {selectedQuality && (selectedQuality.requiresSpecification || hasLevels(selectedQuality)) && (

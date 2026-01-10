@@ -11,7 +11,8 @@
  * when opened from a specific category section.
  */
 
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import type { WeaponData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
@@ -246,6 +247,15 @@ export function WeaponPurchaseModal({
     return items;
   }, [allWeapons, selectedCategory, searchQuery]);
 
+  // Virtualization setup for weapon list
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: filteredWeapons.length,
+    getScrollElement: () => scrollContainerRef.current,
+    estimateSize: () => 68, // Approximate height of WeaponListItem
+    overscan: 5,
+  });
+
   // Reset selection when modal opens
   const handleClose = () => {
     setSearchQuery("");
@@ -317,25 +327,49 @@ export function WeaponPurchaseModal({
 
         {/* Content - Split Pane */}
         <div className="flex-1 flex overflow-hidden">
-          {/* Left: Weapon List */}
-          <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
-            <div className="space-y-2">
-              {filteredWeapons.length === 0 ? (
-                <p className="text-sm text-zinc-500 text-center py-8">
-                  No weapons found
-                </p>
-              ) : (
-                filteredWeapons.map((weapon) => (
-                  <WeaponListItem
-                    key={weapon.id}
-                    weapon={weapon}
-                    isSelected={selectedWeapon?.id === weapon.id}
-                    canAfford={weapon.cost <= remaining}
-                    onClick={() => setSelectedWeapon(weapon)}
-                  />
-                ))
-              )}
-            </div>
+          {/* Left: Weapon List - Virtualized */}
+          <div
+            ref={scrollContainerRef}
+            className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4"
+          >
+            {filteredWeapons.length === 0 ? (
+              <p className="text-sm text-zinc-500 text-center py-8">
+                No weapons found
+              </p>
+            ) : (
+              <div
+                style={{
+                  height: `${rowVirtualizer.getTotalSize()}px`,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const weapon = filteredWeapons[virtualRow.index];
+                  return (
+                    <div
+                      key={weapon.id}
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`,
+                        padding: "4px 0",
+                      }}
+                    >
+                      <WeaponListItem
+                        weapon={weapon}
+                        isSelected={selectedWeapon?.id === weapon.id}
+                        canAfford={weapon.cost <= remaining}
+                        onClick={() => setSelectedWeapon(weapon)}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
+            )}
           </div>
 
           {/* Right: Detail Preview */}

@@ -8,7 +8,8 @@
  * Right side: Selected gear details with rating selection
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import {
   useGear,
   type GearItemData,
@@ -362,6 +363,15 @@ export function GearPurchaseModal({
   const availabilityOk = selectedGearAvail <= MAX_AVAILABILITY;
   const canPurchase = canAfford && availabilityOk;
 
+  // Virtualization setup for gear list
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const rowVirtualizer = useVirtualizer({
+    count: filteredGear.length,
+    getScrollElement: () => scrollContainerRef.current,
+    estimateSize: () => 72, // Approximate height of GearListItem
+    overscan: 5,
+  });
+
   // Reset selection when modal opens/closes
   const handleClose = () => {
     setSearchQuery("");
@@ -459,28 +469,50 @@ export function GearPurchaseModal({
 
         {/* Content - Split Pane */}
         <div className="flex flex-1 overflow-hidden">
-          {/* Left: Gear List */}
-          <div className="w-1/2 overflow-y-auto border-r border-zinc-100 p-4 dark:border-zinc-800">
-            <div className="space-y-2">
-              {filteredGear.length === 0 ? (
-                <p className="py-8 text-center text-sm text-zinc-500">
-                  No gear found
-                </p>
-              ) : (
-                filteredGear.map((gear) => {
+          {/* Left: Gear List - Virtualized */}
+          <div
+            ref={scrollContainerRef}
+            className="w-1/2 overflow-y-auto border-r border-zinc-100 p-4 dark:border-zinc-800"
+          >
+            {filteredGear.length === 0 ? (
+              <p className="py-8 text-center text-sm text-zinc-500">
+                No gear found
+              </p>
+            ) : (
+              <div
+                style={{
+                  height: `${rowVirtualizer.getTotalSize()}px`,
+                  width: "100%",
+                  position: "relative",
+                }}
+              >
+                {rowVirtualizer.getVirtualItems().map((virtualRow) => {
+                  const gear = filteredGear[virtualRow.index];
                   const cost = getGearCost(gear);
                   return (
-                    <GearListItem
+                    <div
                       key={gear.id}
-                      gear={gear}
-                      isSelected={selectedGear?.id === gear.id}
-                      canAfford={cost <= remaining}
-                      onClick={() => handleSelectGear(gear)}
-                    />
+                      style={{
+                        position: "absolute",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: `${virtualRow.size}px`,
+                        transform: `translateY(${virtualRow.start}px)`,
+                        padding: "4px 0",
+                      }}
+                    >
+                      <GearListItem
+                        gear={gear}
+                        isSelected={selectedGear?.id === gear.id}
+                        canAfford={cost <= remaining}
+                        onClick={() => handleSelectGear(gear)}
+                      />
+                    </div>
                   );
-                })
-              )}
-            </div>
+                })}
+              </div>
+            )}
           </div>
 
           {/* Right: Detail Preview */}
