@@ -15,6 +15,7 @@
 import { useMemo, useState, useCallback } from "react";
 import { useCyberware } from "@/lib/rules/RulesetContext";
 import type { CyberlimbItem, ItemLegality, CyberlimbType } from "@/lib/types";
+import { BaseModalRoot } from "@/components/ui";
 import { X, Search, Plus, Minus, Wrench, ShoppingCart } from "lucide-react";
 
 // =============================================================================
@@ -237,35 +238,34 @@ export function CyberlimbAccessoryModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[85vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add Accessories
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {parentCyberlimb.name} —{" "}
-              <span className={effectiveRemainingCapacity < remainingCapacity ? "text-sky-600 dark:text-sky-400" : ""}>
-                {effectiveRemainingCapacity}
-              </span>
-              {effectiveRemainingCapacity < remainingCapacity && (
-                <span className="text-zinc-400"> (was {remainingCapacity})</span>
-              )}{" "}
-              capacity remaining
-            </p>
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
+      {({ close }) => (
+        <div className="flex h-[85vh] flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Add Accessories
+              </h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                {parentCyberlimb.name} —{" "}
+                <span className={effectiveRemainingCapacity < remainingCapacity ? "text-sky-600 dark:text-sky-400" : ""}>
+                  {effectiveRemainingCapacity}
+                </span>
+                {effectiveRemainingCapacity < remainingCapacity && (
+                  <span className="text-zinc-400"> (was {remainingCapacity})</span>
+                )}{" "}
+                capacity remaining
+              </p>
+            </div>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
         {/* Content - Split Pane */}
         <div className="flex flex-1 overflow-hidden">
@@ -560,7 +560,7 @@ export function CyberlimbAccessoryModal({
           {/* Install All Button */}
           <div className="flex gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
             <button
-              onClick={handleClose}
+              onClick={close}
               className="flex-1 rounded-lg border border-zinc-300 px-4 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-100 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-700"
             >
               Cancel
@@ -579,7 +579,8 @@ export function CyberlimbAccessoryModal({
             </button>
           </div>
         </div>
-      </div>
-    </div>
+        </div>
+      )}
+    </BaseModalRoot>
   );
 }

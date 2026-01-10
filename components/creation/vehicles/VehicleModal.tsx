@@ -4,6 +4,8 @@
  * VehicleModal
  *
  * Modal for adding vehicles during character creation.
+ *
+ * Uses BaseModal for accessibility (focus trapping, keyboard handling).
  */
 
 import { useMemo, useState } from "react";
@@ -14,7 +16,8 @@ import {
   type HandlingRatingData,
 } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
-import { X, Search, Car, Plus } from "lucide-react";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Search, Car, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -120,29 +123,20 @@ export function VehicleModal({
     onAdd(selection);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="flex max-h-[80vh] w-full max-w-lg flex-col rounded-xl bg-white shadow-xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
-          <div className="flex items-center gap-2">
+    <BaseModalRoot
+      isOpen={isOpen}
+      onClose={onClose}
+      size="lg"
+    >
+      {({ close }) => (
+        <>
+          <ModalHeader title="Add Vehicle" onClose={close}>
             <Car className="h-5 w-5 text-blue-500" />
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add Vehicle
-            </h2>
-          </div>
-          <button
-            onClick={onClose}
-            className="rounded-lg p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+          </ModalHeader>
 
-        {/* Budget */}
-        <div className="border-b border-zinc-200 px-4 py-2 dark:border-zinc-700">
+          {/* Budget */}
+          <div className="border-b border-zinc-200 px-4 py-2 dark:border-zinc-700">
           <span className="text-sm text-zinc-600 dark:text-zinc-400">
             Budget:{" "}
             <span className={`font-medium ${remainingNuyen < 0 ? "text-red-500" : "text-emerald-600 dark:text-emerald-400"}`}>
@@ -152,8 +146,8 @@ export function VehicleModal({
           </span>
         </div>
 
-        {/* Search */}
-        <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
+          {/* Search */}
+          <div className="border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
             <input
@@ -163,11 +157,10 @@ export function VehicleModal({
               onChange={(e) => setSearchQuery(e.target.value)}
               className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
             />
+            </div>
           </div>
-        </div>
 
-        {/* Vehicle list */}
-        <div className="flex-1 overflow-y-auto p-4">
+          <ModalBody className="p-4">
           <div className="space-y-2">
             {filteredVehicles.map((vehicle) => {
               const canAfford = vehicle.cost <= remainingNuyen;
@@ -220,19 +213,19 @@ export function VehicleModal({
                 No vehicles found
               </div>
             )}
-          </div>
-        </div>
+            </div>
+          </ModalBody>
 
-        {/* Footer */}
-        <div className="flex justify-end border-t border-zinc-200 px-4 py-3 dark:border-zinc-700">
-          <button
-            onClick={onClose}
-            className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-          >
-            Close
-          </button>
-        </div>
-      </div>
-    </div>
+          <ModalFooter className="justify-end">
+            <button
+              onClick={close}
+              className="rounded-lg bg-zinc-100 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            >
+              Close
+            </button>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

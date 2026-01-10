@@ -8,13 +8,16 @@
  * - Force rating selection (1-6)
  * - Spell/Spirit selection for specific focus types
  * - Cost and bonding karma preview
+ *
+ * Uses BaseModal for accessibility (focus trapping, keyboard handling).
  */
 
 import { useMemo, useState, useCallback } from "react";
 import { useFoci, useSpells } from "@/lib/rules";
 import type { FocusCatalogItemData } from "@/lib/rules/loader-types";
 import { SpiritType } from "@/lib/types/edition";
-import { X, Plus, Minus, Sparkles, Sword, BookOpen, Ghost, Wand2, Zap } from "lucide-react";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Plus, Minus, Sparkles, Sword, BookOpen, Ghost, Wand2, Zap } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -205,26 +208,17 @@ export function FocusModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Add Focus
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="lg"
+    >
+      {({ close }) => (
+        <>
+          <ModalHeader title="Add Focus" onClose={close} />
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6">
+          <ModalBody className="p-6">
           <div className="space-y-6">
             {/* Focus Type Selection */}
             <div>
@@ -415,30 +409,30 @@ export function FocusModal({
                 )}
               </div>
             )}
-          </div>
-        </div>
+            </div>
+          </ModalBody>
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <button
-            onClick={handleClose}
-            className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleAdd}
-            disabled={!isSelectionComplete || exceedsAvailability}
-            className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-              isSelectionComplete && !exceedsAvailability
-                ? "bg-purple-500 text-white hover:bg-purple-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-            }`}
-          >
-            Add Focus
-          </button>
-        </div>
-      </div>
-    </div>
+          <ModalFooter className="justify-end gap-3">
+            <button
+              onClick={close}
+              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            >
+              Cancel
+            </button>
+            <button
+              onClick={handleAdd}
+              disabled={!isSelectionComplete || exceedsAvailability}
+              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                isSelectionComplete && !exceedsAvailability
+                  ? "bg-purple-500 text-white hover:bg-purple-600"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+              }`}
+            >
+              Add Focus
+            </button>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

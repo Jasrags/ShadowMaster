@@ -9,11 +9,14 @@
  * - Rating selection
  * - Multi-specialization support (suggestions + custom)
  * - Duplicate prevention
+ *
+ * Uses BaseModal for accessibility (focus trapping, keyboard handling).
  */
 
 import { useMemo, useState, useCallback } from "react";
 import { useSkills, type SkillData, type SkillGroupData } from "@/lib/rules";
-import { X, Search, Plus, Minus, Info, Check, AlertTriangle } from "lucide-react";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Search, Plus, Minus, Info, Check, AlertTriangle, X } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -216,26 +219,19 @@ export function SkillModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Add Skill
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="full"
+      className="max-w-4xl"
+    >
+      {({ close }) => (
+        <>
+          <ModalHeader title="Add Skill" onClose={close} />
 
-        {/* Search and Filters */}
-        <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
+          {/* Search and Filters */}
+          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
           {/* Search */}
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
@@ -276,8 +272,9 @@ export function SkillModal({
           )}
         </div>
 
-        {/* Content - Split Pane */}
-        <div className="flex flex-1 overflow-hidden">
+          <ModalBody scrollable={false}>
+            {/* Content - Split Pane */}
+            <div className="flex flex-1 overflow-hidden">
           {/* Left Pane - Skill List */}
           <div className="w-1/2 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700">
             {Object.entries(skillsByCategory).map(([category, skills]) => (
@@ -507,50 +504,51 @@ export function SkillModal({
                 <p className="mt-4 text-sm">Select a skill from the list</p>
               </div>
             )}
-          </div>
-        </div>
+            </div>
+            </div>
+          </ModalBody>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            {selectedSkill && (
-              <>
-                Cost: <span className="font-medium text-zinc-900 dark:text-zinc-100">{skillCost} skill points</span>
-                {specKarmaCost > 0 && (
-                  <>
-                    {" + "}
-                    <span className="font-medium text-amber-600 dark:text-amber-400">
-                      {specKarmaCost} karma
-                    </span>
-                    <span className="text-zinc-400">
-                      {" "}({selectedSpecs.length} spec{selectedSpecs.length !== 1 ? "s" : ""})
-                    </span>
-                  </>
-                )}
-              </>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleClose}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleAddSkill}
-              disabled={!selectedSkill || !canAfford}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                selectedSkill && canAfford
-                  ? "bg-emerald-500 text-white hover:bg-emerald-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-              }`}
-            >
-              Add Skill
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          <ModalFooter>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              {selectedSkill && (
+                <>
+                  Cost: <span className="font-medium text-zinc-900 dark:text-zinc-100">{skillCost} skill points</span>
+                  {specKarmaCost > 0 && (
+                    <>
+                      {" + "}
+                      <span className="font-medium text-amber-600 dark:text-amber-400">
+                        {specKarmaCost} karma
+                      </span>
+                      <span className="text-zinc-400">
+                        {" "}({selectedSpecs.length} spec{selectedSpecs.length !== 1 ? "s" : ""})
+                      </span>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddSkill}
+                disabled={!selectedSkill || !canAfford}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  selectedSkill && canAfford
+                    ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                Add Skill
+              </button>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

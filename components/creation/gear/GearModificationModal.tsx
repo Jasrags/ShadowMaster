@@ -14,7 +14,8 @@ import {
   type GearModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import type { GearItem, ItemLegality } from "@/lib/types";
-import { X, Search, AlertTriangle, Backpack, Minus, Plus } from "lucide-react";
+import { BaseModalRoot } from "@/components/ui";
+import { Search, AlertTriangle, Backpack, Minus, Plus, X } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -287,32 +288,27 @@ export function GearModificationModal({
     setSelectedRating(1);
   };
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/50" onClick={handleClose} />
-
-      {/* Modal */}
-      <div className="relative mx-4 flex max-h-[85vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add Modification
-            </h2>
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              {gear.name}
-            </p>
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="xl">
+      {({ close }) => (
+        <div className="flex max-h-[85vh] flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Add Modification
+              </h2>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                {gear.name}
+              </p>
+            </div>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
         {/* Capacity Status */}
         <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
@@ -556,29 +552,30 @@ export function GearModificationModal({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-3 dark:border-zinc-700">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            Budget:{" "}
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {formatCurrency(remaining)}¥
-            </span>{" "}
-            remaining
-            <span className="mx-2">•</span>
-            Capacity:{" "}
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {remainingCapacity}
-            </span>{" "}
-            available
+          {/* Footer */}
+          <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-3 dark:border-zinc-700">
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              Budget:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>{" "}
+              remaining
+              <span className="mx-2">•</span>
+              Capacity:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {remainingCapacity}
+              </span>{" "}
+              available
+            </div>
+            <button
+              onClick={close}
+              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            >
+              Cancel
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            Cancel
-          </button>
         </div>
-      </div>
-    </div>
+      )}
+    </BaseModalRoot>
   );
 }

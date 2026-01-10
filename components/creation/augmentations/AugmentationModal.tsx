@@ -40,6 +40,7 @@ import {
   isBlockedByExisting,
 } from "@/lib/types/cyberlimb";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
+import { BaseModalRoot } from "@/components/ui";
 import { X, Search, Cpu, Heart, AlertTriangle, Zap, Plus, Ban } from "lucide-react";
 import { RatingSelector } from "../shared";
 
@@ -639,34 +640,33 @@ export function AugmentationModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="flex items-center gap-3">
-            <div
-              className={`rounded-lg p-2 ${
-                isCyberware
-                  ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-300"
-                  : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-300"
-              }`}
-            >
-              <TypeIcon className="h-5 w-5" />
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
+      {({ close }) => (
+        <div className="flex h-[80vh] flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div className="flex items-center gap-3">
+              <div
+                className={`rounded-lg p-2 ${
+                  isCyberware
+                    ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-300"
+                    : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-300"
+                }`}
+              >
+                <TypeIcon className="h-5 w-5" />
+              </div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Add {isCyberware ? "Cyberware" : "Bioware"}
+              </h2>
             </div>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add {isCyberware ? "Cyberware" : "Bioware"}
-            </h2>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
         {/* Content - Split Pane */}
         <div className="flex flex-1 overflow-hidden">
@@ -1117,7 +1117,8 @@ export function AugmentationModal({
             )}
           </div>
         </div>
-      </div>
-    </div>
+        </div>
+      )}
+    </BaseModalRoot>
   );
 }

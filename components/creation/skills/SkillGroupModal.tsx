@@ -8,11 +8,14 @@
  * - Split-pane design (list left, details right)
  * - Rating selection
  * - Shows skills in the group
+ *
+ * Uses BaseModal for accessibility (focus trapping, keyboard handling).
  */
 
 import { useMemo, useState, useCallback } from "react";
 import { useSkills } from "@/lib/rules";
-import { X, Search, Plus, Minus, Check, Users, AlertTriangle } from "lucide-react";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Search, Plus, Minus, Check, Users, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -121,26 +124,19 @@ export function SkillGroupModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Add Skill Group
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot
+      isOpen={isOpen}
+      onClose={handleClose}
+      size="2xl"
+      className="max-w-3xl"
+    >
+      {({ close }) => (
+        <>
+          <ModalHeader title="Add Skill Group" onClose={close} />
 
-        {/* Search */}
-        <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
+          {/* Search */}
+          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
           <div className="relative">
             <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
             <input
@@ -153,8 +149,9 @@ export function SkillGroupModal({
           </div>
         </div>
 
-        {/* Content - Split Pane */}
-        <div className="flex flex-1 overflow-hidden">
+          <ModalBody scrollable={false}>
+            {/* Content - Split Pane */}
+            <div className="flex flex-1 overflow-hidden">
           {/* Left Pane - Group List */}
           <div className="w-1/2 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700">
             <div className="sticky top-0 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
@@ -300,45 +297,46 @@ export function SkillGroupModal({
                 <p className="mt-4 text-sm">Select a skill group from the list</p>
               </div>
             )}
-          </div>
-        </div>
+            </div>
+            </div>
+          </ModalBody>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            {selectedGroup && (
-              <>
-                Cost:{" "}
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                  {groupCost} group point{groupCost !== 1 ? "s" : ""}
-                </span>
-                <span className="ml-2 text-zinc-400">
-                  ({groupSkills.length} skills at rating {rating})
-                </span>
-              </>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleClose}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleAddGroup}
-              disabled={!selectedGroup || !canAfford || hasConflicts}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                selectedGroup && canAfford && !hasConflicts
-                  ? "bg-purple-500 text-white hover:bg-purple-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-              }`}
-            >
-              Add Skill Group
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          <ModalFooter>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              {selectedGroup && (
+                <>
+                  Cost:{" "}
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                    {groupCost} group point{groupCost !== 1 ? "s" : ""}
+                  </span>
+                  <span className="ml-2 text-zinc-400">
+                    ({groupSkills.length} skills at rating {rating})
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddGroup}
+                disabled={!selectedGroup || !canAfford || hasConflicts}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  selectedGroup && canAfford && !hasConflicts
+                    ? "bg-purple-500 text-white hover:bg-purple-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                Add Skill Group
+              </button>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

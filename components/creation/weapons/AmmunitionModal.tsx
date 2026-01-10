@@ -14,11 +14,12 @@ import {
   type GearItemData,
 } from "@/lib/rules/RulesetContext";
 import type { Weapon } from "@/lib/types";
+import { BaseModalRoot } from "@/components/ui";
 import {
-  X,
   ShieldAlert,
   AlertTriangle,
   Package,
+  X,
 } from "lucide-react";
 
 // =============================================================================
@@ -227,38 +228,30 @@ export function AmmunitionModal({
     onClose();
   };
 
-  if (!isOpen) return null;
-
   // Check if weapon uses ammo
   const usesAmmo = getCompatibleAmmoTypes(weapon.subcategory).length > 0;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={handleClose}
-      />
-
-      {/* Modal */}
-      <div className="relative mx-4 flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-2xl dark:border-zinc-700 dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Purchase Ammunition
-            </h2>
-            <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
-              For: {weapon.name}
-            </p>
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="lg">
+      {({ close }) => (
+        <div className="flex max-h-[85vh] flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Purchase Ammunition
+              </h2>
+              <p className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
+                For: {weapon.name}
+              </p>
+            </div>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
         {/* Content */}
         <div className="flex-1 overflow-y-auto p-6">
@@ -463,31 +456,32 @@ export function AmmunitionModal({
           )}
         </div>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            Budget remaining:{" "}
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {formatCurrency(remaining)}¥
-            </span>
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleClose}
-              className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handlePurchase}
-              disabled={!selectedAmmo || !selectedRounds || !canAfford}
-              className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:bg-zinc-300 dark:disabled:bg-zinc-700"
-            >
-              Purchase {selectedRounds && actualRounds > 0 ? `${actualRounds} rounds` : ""}
-            </button>
+          {/* Footer */}
+          <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              Budget remaining:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg border border-zinc-300 px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handlePurchase}
+                disabled={!selectedAmmo || !selectedRounds || !canAfford}
+                className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:bg-zinc-300 dark:disabled:bg-zinc-700"
+              >
+                Purchase {selectedRounds && actualRounds > 0 ? `${actualRounds} rounds` : ""}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </BaseModalRoot>
   );
 }

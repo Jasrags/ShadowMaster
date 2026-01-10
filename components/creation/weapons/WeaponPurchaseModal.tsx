@@ -14,7 +14,8 @@
 import { useState, useMemo, useEffect } from "react";
 import type { WeaponData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
-import { X, Search, Wifi, AlertTriangle } from "lucide-react";
+import { BaseModalRoot } from "@/components/ui";
+import { Search, Wifi, AlertTriangle, X } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -260,35 +261,27 @@ export function WeaponPurchaseModal({
     }
   };
 
-  if (!isOpen) return null;
-
   const conceal = selectedWeapon
     ? getBaseConcealability(selectedWeapon.subcategory || "")
     : 0;
   const canAffordSelected = selectedWeapon ? selectedWeapon.cost <= remaining : false;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={handleClose}
-      />
-
-      {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[85vh] bg-white dark:bg-zinc-900 rounded-xl shadow-2xl flex flex-col mx-4">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Select Weapon
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
+      {({ close }) => (
+        <div className="flex max-h-[85vh] flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+              Select Weapon
+            </h2>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
 
         {/* Search & Filters */}
         <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
@@ -502,19 +495,20 @@ export function WeaponPurchaseModal({
           </div>
         </div>
 
-        {/* Footer */}
-        <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            Budget: <span className="font-medium text-zinc-900 dark:text-zinc-100">{formatCurrency(remaining)}¥</span> remaining
+          {/* Footer */}
+          <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              Budget: <span className="font-medium text-zinc-900 dark:text-zinc-100">{formatCurrency(remaining)}¥</span> remaining
+            </div>
+            <button
+              onClick={close}
+              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            >
+              Cancel
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            Cancel
-          </button>
         </div>
-      </div>
-    </div>
+      )}
+    </BaseModalRoot>
   );
 }

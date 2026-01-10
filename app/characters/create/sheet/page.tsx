@@ -10,12 +10,13 @@
  * See ADR-011: Sheet-Driven Creation for design rationale.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RulesetProvider, useRulesetStatus, useRuleset, usePriorityTable } from "@/lib/rules";
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
+import { CreationErrorBoundary } from "@/components/creation/CreationErrorBoundary";
 import type { EditionCode, Campaign, CreationState, ID } from "@/lib/types";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -69,6 +70,10 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
 
+  // Refs for managing auto-save race conditions
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const saveVersionRef = useRef(0);
+
   // Auto-load ruleset if campaign or existing character is provided
   useEffect(() => {
     const edition = existingCharacter?.editionCode || campaign?.editionCode;
@@ -105,14 +110,24 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
     [creationState.budgets, updateState]
   );
 
-  // Auto-save draft to server (debounced)
+  // Auto-save draft to server (debounced with race condition protection)
   useEffect(() => {
     // Only save if we have priorities set (meaningful progress)
     if (!creationState.priorities || Object.keys(creationState.priorities).length === 0) {
       return;
     }
 
+    // Increment version for this save attempt
+    const currentVersion = ++saveVersionRef.current;
+
     const saveTimeout = setTimeout(async () => {
+      // Abort any in-flight request before starting a new one
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
+      const signal = abortControllerRef.current.signal;
+
       setIsSaving(true);
       try {
         if (characterId) {
@@ -128,6 +143,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
                 creationMode: "sheet",
               },
             }),
+            signal,
           });
         } else {
           // Create new draft
@@ -141,9 +157,13 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
               name: (creationState.selections.characterName as string) || "Unnamed Runner",
               campaignId,
             }),
+            signal,
           });
           const data = await res.json();
           if (data.success && data.character?.id) {
+            // Ignore response if a newer save has started
+            if (currentVersion !== saveVersionRef.current) return;
+
             setCharacterId(data.character.id);
             updateState({ characterId: data.character.id });
             // Save the creation state to the new character
@@ -161,14 +181,26 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
                   creationMode: "sheet",
                 },
               }),
+              signal,
             });
           }
         }
-        setLastSaved(new Date());
+
+        // Only update lastSaved if this is still the current version
+        if (currentVersion === saveVersionRef.current) {
+          setLastSaved(new Date());
+        }
       } catch (e) {
+        // Ignore aborted requests
+        if (e instanceof Error && e.name === "AbortError") {
+          return;
+        }
         console.error("Failed to save draft:", e);
       } finally {
-        setIsSaving(false);
+        // Only update isSaving if this is still the current version
+        if (currentVersion === saveVersionRef.current) {
+          setIsSaving(false);
+        }
       }
     }, 1000); // 1 second debounce
 
@@ -360,14 +392,16 @@ export default function SheetCreationPage() {
         </div>
       </header>
 
-      {/* Content wrapped in RulesetProvider */}
+      {/* Content wrapped in RulesetProvider and ErrorBoundary */}
       <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6 lg:px-6">
         <RulesetProvider>
-          <SheetCreationContent
-            campaignId={campaignId}
-            campaign={campaign}
-            existingCharacter={existingCharacter}
-          />
+          <CreationErrorBoundary characterId={existingCharacterId}>
+            <SheetCreationContent
+              campaignId={campaignId}
+              campaign={campaign}
+              existingCharacter={existingCharacter}
+            />
+          </CreationErrorBoundary>
         </RulesetProvider>
       </main>
     </div>
