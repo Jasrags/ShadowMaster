@@ -245,6 +245,9 @@ function calculateBudgetTotals(
 
 /**
  * Extract spent values from creation state budgets and selections
+ *
+ * Phase 4.2: Budget calculation is now derived from selections where possible,
+ * reducing the need for components to update both selections AND budgets.
  */
 function extractSpentValues(
   stateBudgets: Record<string, number>,
@@ -252,16 +255,40 @@ function extractSpentValues(
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
-  // Map state budget keys to our budget IDs
-  const spentMappings: Record<string, string> = {
-    "attribute-points-spent": "attribute-points",
-    "special-attribute-points-spent": "special-attribute-points",
+  // ============================================================================
+  // ATTRIBUTE POINTS - derived from selections
+  // ============================================================================
+
+  // Core attribute points: stored directly in selections.coreAttributePointsSpent
+  // This is set by AttributesCard when attributes change
+  const coreAttributePointsSpent = selections.coreAttributePointsSpent as number | undefined;
+  if (coreAttributePointsSpent !== undefined) {
+    spent["attribute-points"] = coreAttributePointsSpent;
+  } else if ("attribute-points-spent" in stateBudgets) {
+    // Fallback to legacy budget field for backwards compatibility
+    spent["attribute-points"] = stateBudgets["attribute-points-spent"] as number;
+  }
+
+  // Special attribute points: sum of allocated points in selections.specialAttributes
+  // Each value represents points ALLOCATED (not the total attribute value)
+  const specialAttributes = (selections.specialAttributes || {}) as Record<string, number>;
+  spent["special-attribute-points"] = Object.values(specialAttributes).reduce(
+    (sum, allocated) => sum + (allocated || 0),
+    0
+  );
+
+  // ============================================================================
+  // REMAINING BUDGET MAPPINGS - still read from stateBudgets for now
+  // ============================================================================
+
+  // These could be derived from selections in a future refactor
+  const remainingMappings: Record<string, string> = {
     "contact-points-spent": "contact-points",
     "spell-slots-spent": "spell-slots",
     "power-points-spent": "power-points",
   };
 
-  for (const [stateKey, budgetId] of Object.entries(spentMappings)) {
+  for (const [stateKey, budgetId] of Object.entries(remainingMappings)) {
     if (stateKey in stateBudgets) {
       spent[budgetId] = stateBudgets[stateKey] as number;
     }
@@ -369,9 +396,29 @@ function extractSpentValues(
     vehiclesSpent +
     lifestyleSpent;
 
-  // Karma is special - calculate from multiple sources
-  const karmaGainedNegative = (stateBudgets["karma-gained-negative"] as number) || 0;
-  const karmaSpentPositive = (stateBudgets["karma-spent-positive"] as number) || 0;
+  // ============================================================================
+  // KARMA - calculate from multiple sources
+  // ============================================================================
+
+  // Quality karma: try to derive from selections first, fall back to stateBudgets
+  // Quality selections store karma in each item's `karma` or `originalKarma` field
+  type QualitySelectionWithKarma = { karma?: number; originalKarma?: number };
+  const positiveQualities = (selections.positiveQualities || []) as QualitySelectionWithKarma[];
+  const negativeQualities = (selections.negativeQualities || []) as QualitySelectionWithKarma[];
+
+  // Calculate karma from quality selections if they have karma values
+  const positiveQualitiesHaveKarma = positiveQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+  const negativeQualitiesHaveKarma = negativeQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+
+  const karmaSpentPositive = positiveQualitiesHaveKarma
+    ? positiveQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
+    : (stateBudgets["karma-spent-positive"] as number) || 0;
+
+  const karmaGainedNegative = negativeQualitiesHaveKarma
+    ? negativeQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
+    : (stateBudgets["karma-gained-negative"] as number) || 0;
+
+  // Other karma sources (still from stateBudgets for now)
   const karmaSpentGear = (stateBudgets["karma-spent-gear"] as number) || 0;
   const karmaSpentSpells = (stateBudgets["karma-spent-spells"] as number) || 0;
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
@@ -435,7 +482,18 @@ function validateBudgets(
   }
 
   // Check positive quality limit (max 25 karma)
-  const positiveKarmaSpent = (state.budgets["karma-spent-positive"] as number) || 0;
+  // Derive from selections if karma values are present, otherwise fall back to budgets
+  type QualitySelectionWithKarma = { karma?: number; originalKarma?: number };
+  const positiveQualities = (state.selections.positiveQualities || []) as QualitySelectionWithKarma[];
+  const negativeQualities = (state.selections.negativeQualities || []) as QualitySelectionWithKarma[];
+
+  const positiveQualitiesHaveKarma = positiveQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+  const negativeQualitiesHaveKarma = negativeQualities.some(q => q.karma !== undefined || q.originalKarma !== undefined);
+
+  const positiveKarmaSpent = positiveQualitiesHaveKarma
+    ? positiveQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
+    : (state.budgets["karma-spent-positive"] as number) || 0;
+
   if (positiveKarmaSpent > 25) {
     errors.push({
       constraintId: "positive-quality-limit",
@@ -445,7 +503,10 @@ function validateBudgets(
   }
 
   // Check negative quality limit (max 25 karma gained)
-  const negativeKarmaGained = (state.budgets["karma-gained-negative"] as number) || 0;
+  const negativeKarmaGained = negativeQualitiesHaveKarma
+    ? negativeQualities.reduce((sum, q) => sum + (q.karma ?? q.originalKarma ?? 0), 0)
+    : (state.budgets["karma-gained-negative"] as number) || 0;
+
   if (negativeKarmaGained > 25) {
     errors.push({
       constraintId: "negative-quality-limit",

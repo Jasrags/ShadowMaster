@@ -109,6 +109,8 @@ interface SelectedQuality {
   id: string;
   specification?: string;
   level?: number;
+  /** Karma cost/value for this selection - used by CreationBudgetContext */
+  karma?: number;
 }
 
 // =============================================================================
@@ -836,29 +838,28 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const isNegativeOver = negativeKarmaGained > MAX_NEGATIVE_KARMA;
 
   // Add a quality
+  // Phase 4.2: Store karma in each selection, context derives totals from selections
   const handleAddQuality = useCallback(
     (qualityId: string, isPositive: boolean, specification?: string, level?: number) => {
+      const qualityList = isPositive ? positiveQualities : negativeQualities;
+
+      // Create selection with karma value stored
       const newSelection: SelectedQuality = { id: qualityId };
       if (specification) newSelection.specification = specification;
       if (level) newSelection.level = level;
 
+      // Calculate and store karma for this selection
+      newSelection.karma = getSelectionCost(newSelection, qualityList);
+
       const currentList = isPositive ? selectedPositive : selectedNegative;
       const newList = [...currentList, newSelection];
 
-      // Calculate new karma values
-      const qualityList = isPositive ? positiveQualities : negativeQualities;
-      const newKarma = newList.reduce((sum, sel) => sum + getSelectionCost(sel, qualityList), 0);
-
+      // Only update selections - context derives karma from selection karma values
       updateState({
         selections: {
           ...state.selections,
           positiveQualities: isPositive ? newList : selectedPositive,
           negativeQualities: isPositive ? selectedNegative : newList,
-        },
-        budgets: {
-          ...state.budgets,
-          "karma-spent-positive": isPositive ? newKarma : positiveKarmaSpent,
-          "karma-gained-negative": isPositive ? negativeKarmaGained : newKarma,
         },
       });
     },
@@ -869,45 +870,30 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       negativeQualities,
       getSelectionCost,
       state.selections,
-      state.budgets,
-      positiveKarmaSpent,
-      negativeKarmaGained,
       updateState,
     ]
   );
 
   // Remove a quality
+  // Phase 4.2: Only update selections, context derives karma totals
   const handleRemoveQuality = useCallback(
     (qualityId: string, isPositive: boolean) => {
       const currentList = isPositive ? selectedPositive : selectedNegative;
       const newList = currentList.filter((sel) => sel.id !== qualityId);
 
-      const qualityList = isPositive ? positiveQualities : negativeQualities;
-      const newKarma = newList.reduce((sum, sel) => sum + getSelectionCost(sel, qualityList), 0);
-
+      // Only update selections - context derives karma from selection karma values
       updateState({
         selections: {
           ...state.selections,
           positiveQualities: isPositive ? newList : selectedPositive,
           negativeQualities: isPositive ? selectedNegative : newList,
         },
-        budgets: {
-          ...state.budgets,
-          "karma-spent-positive": isPositive ? newKarma : positiveKarmaSpent,
-          "karma-gained-negative": isPositive ? negativeKarmaGained : newKarma,
-        },
       });
     },
     [
       selectedPositive,
       selectedNegative,
-      positiveQualities,
-      negativeQualities,
-      getSelectionCost,
       state.selections,
-      state.budgets,
-      positiveKarmaSpent,
-      negativeKarmaGained,
       updateState,
     ]
   );

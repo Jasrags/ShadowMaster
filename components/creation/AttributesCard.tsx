@@ -497,6 +497,8 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   const karmaRequired = isCoreOverBudget ? Math.abs(corePointsRemaining) * KARMA_PER_ATTRIBUTE_POINT : 0;
 
   // Handle core attribute change
+  // Phase 4.2: Store coreAttributePointsSpent in selections (not budgets)
+  // The CreationBudgetContext derives attribute-points from selections.coreAttributePointsSpent
   const handleCoreAttributeChange = useCallback(
     (attrId: CoreAttributeId, delta: number) => {
       const limits = getAttributeLimits(attrId);
@@ -507,6 +509,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
       const newAttributes = { ...attributes, [attrId]: newValue };
 
+      // Calculate new spent points
       let newSpent = 0;
       [...PHYSICAL_ATTRIBUTES, ...MENTAL_ATTRIBUTES].forEach((attr) => {
         const val = attr.id === attrId ? newValue : getAttributeValue(attr.id);
@@ -514,19 +517,22 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
         newSpent += val - lim.min;
       });
 
+      // Store both attribute values and spent points in selections
+      // Context derives budget from coreAttributePointsSpent
       updateState({
-        selections: { ...state.selections, attributes: newAttributes },
-        budgets: {
-          ...state.budgets,
-          "attribute-points-spent": newSpent,
-          "attribute-points-total": attributePoints,
+        selections: {
+          ...state.selections,
+          attributes: newAttributes,
+          coreAttributePointsSpent: newSpent,
         },
       });
     },
-    [attributes, getAttributeValue, getAttributeLimits, state.selections, state.budgets, attributePoints, updateState]
+    [attributes, getAttributeValue, getAttributeLimits, state.selections, updateState]
   );
 
   // Handle special attribute change
+  // Phase 4.2: Only update selections, not budgets
+  // The CreationBudgetContext derives special-attribute-points from selections.specialAttributes
   const handleSpecialAttributeChange = useCallback(
     (attrId: SpecialAttributeId, delta: number) => {
       const currentAllocated = getSpecialAllocatedPoints(attrId);
@@ -542,13 +548,9 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
       const newSpecialAttributes = { ...specialAttributes, [attrId]: newAllocated };
 
-      const newSpent = availableSpecialAttributes.reduce((sum, id) => {
-        return sum + (id === attrId ? newAllocated : getSpecialAllocatedPoints(id));
-      }, 0);
-
+      // Only update selections - context derives spent from specialAttributes values
       updateState({
         selections: { ...state.selections, specialAttributes: newSpecialAttributes },
-        budgets: { ...state.budgets, "special-attribute-points-spent": newSpent },
       });
     },
     [
@@ -556,9 +558,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
       getSpecialAttributeLimits,
       specialPointsRemaining,
       specialAttributes,
-      availableSpecialAttributes,
       state.selections,
-      state.budgets,
       updateState,
     ]
   );
