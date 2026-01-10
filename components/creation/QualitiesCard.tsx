@@ -22,9 +22,9 @@ import type { CreationState } from "@/lib/types";
 import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, BudgetIndicator } from "./shared";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
-import { Plus, Search, AlertTriangle, X, Check, ChevronDown, Info } from "lucide-react";
+import { Plus, Search, AlertTriangle, X, Check, ChevronDown } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -109,70 +109,6 @@ interface SelectedQuality {
   id: string;
   specification?: string;
   level?: number;
-}
-
-// =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function QualityBudgetBar({
-  label,
-  tooltip,
-  used,
-  max,
-  isOver,
-  isPositive,
-}: {
-  label: string;
-  tooltip: string;
-  used: number;
-  max: number;
-  isOver: boolean;
-  isPositive: boolean;
-}) {
-  const remaining = max - used;
-  const percentage = max > 0 ? Math.min(100, (used / max) * 100) : 0;
-
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs">
-        <span
-          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
-          title={tooltip}
-        >
-          {label}
-          <Info className="h-3 w-3 text-zinc-400" />
-        </span>
-        <span
-          className={`font-medium ${
-            isOver
-              ? "text-red-600 dark:text-red-400"
-              : remaining === 0
-                ? "text-emerald-600 dark:text-emerald-400"
-                : isPositive
-                  ? "text-blue-600 dark:text-blue-400"
-                  : "text-amber-600 dark:text-amber-400"
-          }`}
-        >
-          {used} / {max}
-        </span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-        <div
-          className={`h-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : isPositive
-                  ? "bg-blue-500"
-                  : "bg-amber-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -991,21 +927,21 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       <div className="space-y-3">
         {/* Budget indicators */}
         <div className="grid gap-3 sm:grid-cols-2">
-          <QualityBudgetBar
+          <BudgetIndicator
             label="Positive Qualities"
             tooltip="Cost karma to acquire (max 25)"
-            used={positiveKarmaSpent}
-            max={MAX_POSITIVE_KARMA}
-            isOver={isPositiveOver}
-            isPositive={true}
+            spent={positiveKarmaSpent}
+            total={MAX_POSITIVE_KARMA}
+            variant="positive"
+            compact
           />
-          <QualityBudgetBar
+          <BudgetIndicator
             label="Negative Qualities"
             tooltip="Grant karma when taken (max 25)"
-            used={negativeKarmaGained}
-            max={MAX_NEGATIVE_KARMA}
-            isOver={isNegativeOver}
-            isPositive={false}
+            spent={negativeKarmaGained}
+            total={MAX_NEGATIVE_KARMA}
+            variant="negative"
+            compact
           />
         </div>
 
