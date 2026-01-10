@@ -17,6 +17,7 @@
  */
 
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useCreationBudgets } from "@/lib/contexts";
 import type { CreationState, Campaign } from "@/lib/types";
 import {
@@ -28,7 +29,7 @@ import {
   Save,
 } from "lucide-react";
 
-// Phase 2, 3, 4, 5 & 6 Components
+// Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
   PrioritySelectionCard,
   MetatypeCard,
@@ -37,10 +38,6 @@ import {
   KnowledgeLanguagesCard,
   QualitiesCard,
   MagicPathCard,
-  SpellsCard,
-  AdeptPowersCard,
-  ComplexFormsCard,
-  FociCard,
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
@@ -51,6 +48,41 @@ import {
   CharacterInfoCard,
   DerivedStatsCard,
 } from "@/components/creation";
+
+// Dynamic imports for conditional cards (code splitting)
+import { CardSkeleton } from "@/components/creation/shared";
+
+const SpellsCard = dynamic(
+  () => import("@/components/creation/SpellsCard").then((mod) => mod.SpellsCard),
+  {
+    loading: () => <CardSkeleton title="Spells" rows={4} />,
+    ssr: false,
+  }
+);
+
+const AdeptPowersCard = dynamic(
+  () => import("@/components/creation/AdeptPowersCard").then((mod) => mod.AdeptPowersCard),
+  {
+    loading: () => <CardSkeleton title="Adept Powers" rows={4} />,
+    ssr: false,
+  }
+);
+
+const ComplexFormsCard = dynamic(
+  () => import("@/components/creation/ComplexFormsCard").then((mod) => mod.ComplexFormsCard),
+  {
+    loading: () => <CardSkeleton title="Complex Forms" rows={4} />,
+    ssr: false,
+  }
+);
+
+const FociCard = dynamic(
+  () => import("@/components/creation/foci/FociCard").then((mod) => mod.FociCard),
+  {
+    loading: () => <CardSkeleton title="Foci" rows={4} />,
+    ssr: false,
+  }
+);
 
 // =============================================================================
 // TYPES
