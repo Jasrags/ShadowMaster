@@ -84,9 +84,20 @@ export function BudgetIndicator({
     }
   };
 
+  // Screen-reader only announcement for budget changes
+  const srAnnouncement = isOverspent
+    ? `${label}: Over budget by ${formatValue(Math.abs(remaining))}`
+    : isComplete
+      ? `${label}: Budget complete`
+      : `${label}: ${formatValue(remaining)} remaining`;
+
   if (compact) {
     return (
       <div className={className}>
+        {/* Screen reader announcement */}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {srAnnouncement}
+        </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-xs text-zinc-500 dark:text-zinc-400">{label}</span>
           <span className={`text-xs font-medium ${getStatusColor()}`}>
@@ -109,6 +120,10 @@ export function BudgetIndicator({
 
   return (
     <div className={className}>
+      {/* Screen reader announcement */}
+      <div className="sr-only" aria-live="polite" aria-atomic="true">
+        {srAnnouncement}
+      </div>
       <div className="flex items-center justify-between text-sm">
         <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
         <span className={`font-medium ${getStatusColor()}`}>
@@ -121,7 +136,14 @@ export function BudgetIndicator({
         </span>
       </div>
       {showProgressBar && (
-        <div className="relative mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+        <div
+          className="relative mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800"
+          role="progressbar"
+          aria-valuenow={spent}
+          aria-valuemin={0}
+          aria-valuemax={total}
+          aria-label={`${label} progress: ${formatValue(spent)} of ${formatValue(total)} spent`}
+        >
           <div
             className={`h-full transition-all ${getProgressColor()}`}
             style={{ width: `${percentSpent}%` }}

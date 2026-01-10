@@ -14,11 +14,12 @@
  * - Metatype min/max enforcement with MAX badge
  */
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback } from "react";
 import { useMetatypes, usePriorityTable, useMagicPaths } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
+import { Tooltip } from "@/components/ui";
 import {
   Lock,
   Minus,
@@ -101,31 +102,6 @@ interface AttributeLimits {
 interface AttributesCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// TOOLTIP COMPONENT
-// =============================================================================
-
-function Tooltip({ content, children }: { content: string; children: React.ReactNode }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <div className="relative inline-flex">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div className="absolute bottom-full left-1/2 z-50 mb-2 w-48 -translate-x-1/2 rounded-lg bg-zinc-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-zinc-700">
-          {content}
-          <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-zinc-900 dark:border-t-zinc-700" />
-        </div>
-      )}
-    </div>
-  );
 }
 
 // =============================================================================
@@ -237,7 +213,13 @@ function InlineAttributeRow({
           {name}
         </span>
         <Tooltip content={`${name} (${abbr}): ${description}`}>
-          <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
+          <button
+            type="button"
+            aria-label={`Info about ${name}`}
+            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          >
+            <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" aria-hidden="true" />
+          </button>
         </Tooltip>
       </div>
 
@@ -247,33 +229,52 @@ function InlineAttributeRow({
           {min}-{max}
         </span>
 
-        <div className="flex items-center gap-1">
+        <div
+          className="flex items-center gap-1"
+          role="group"
+          aria-label={`${name} controls`}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+              e.preventDefault();
+              if (canDecrease) onDecrease();
+            } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+              e.preventDefault();
+              if (canIncrease) onIncrease();
+            }
+          }}
+        >
           <button
             onClick={onDecrease}
             disabled={!canDecrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Decrease ${name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canDecrease
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
 
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+          <div
+            className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {value}
           </div>
 
           <button
             onClick={onIncrease}
             disabled={!canIncrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Increase ${name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canIncrease
                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
 
@@ -322,7 +323,13 @@ function SpecialAttributeRow({
           {config.name}
         </span>
         <Tooltip content={`${config.name} (${config.abbr}): ${config.description}`}>
-          <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
+          <button
+            type="button"
+            aria-label={`Info about ${config.name}`}
+            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          >
+            <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" aria-hidden="true" />
+          </button>
         </Tooltip>
       </div>
 
@@ -331,21 +338,37 @@ function SpecialAttributeRow({
           {min}-{max}
         </span>
 
-        <div className="flex items-center gap-1">
+        <div
+          className="flex items-center gap-1"
+          role="group"
+          aria-label={`${config.name} controls`}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+              e.preventDefault();
+              if (canDecrease) onDecrease();
+            } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+              e.preventDefault();
+              if (canIncrease) onIncrease();
+            }
+          }}
+        >
           <button
             onClick={onDecrease}
             disabled={!canDecrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Decrease ${config.name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canDecrease
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
 
           <div
             className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${config.bgColor} ${config.textColor}`}
+            aria-live="polite"
+            aria-atomic="true"
           >
             {value}
           </div>
@@ -353,13 +376,14 @@ function SpecialAttributeRow({
           <button
             onClick={onIncrease}
             disabled={!canIncrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Increase ${config.name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canIncrease
                 ? `${config.buttonColor} text-white`
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
 

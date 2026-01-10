@@ -173,13 +173,14 @@ function PowerRow({
               <button
                 onClick={onDecrease}
                 disabled={!canDecrease}
+                aria-label={`Decrease ${power.name} level`}
                 className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                   canDecrease
                     ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                     : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
               >
-                <Minus className="h-3 w-3" />
+                <Minus className="h-3 w-3" aria-hidden="true" />
               </button>
               <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                 {rating}
@@ -187,13 +188,14 @@ function PowerRow({
               <button
                 onClick={onIncrease}
                 disabled={!canIncrease}
+                aria-label={`Increase ${power.name} level`}
                 className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                   canIncrease
                     ? "bg-violet-500 text-white hover:bg-violet-600"
                     : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-3 w-3" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -201,6 +203,7 @@ function PowerRow({
           {/* Remove button */}
           <button
             onClick={onRemove}
+            aria-label={`Remove ${power.name}`}
             className="text-xs text-zinc-400 hover:text-red-500"
           >
             Remove

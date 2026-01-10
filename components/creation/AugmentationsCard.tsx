@@ -156,12 +156,14 @@ function AugmentationItem({
         {hasExpandableContent ? (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
+            aria-label={isExpanded ? `Collapse ${displayName} details` : `Expand ${displayName} details`}
+            aria-expanded={isExpanded}
             className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             {isExpanded ? (
-              <ChevronDown className="h-4 w-4" />
+              <ChevronDown className="h-4 w-4" aria-hidden="true" />
             ) : (
-              <ChevronRight className="h-4 w-4" />
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
         ) : (
@@ -202,9 +204,10 @@ function AugmentationItem({
         {/* Remove Button */}
         <button
           onClick={onRemove}
+          aria-label={`Remove ${displayName}`}
           className="shrink-0 p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded"
         >
-          <X className="h-4 w-4" />
+          <X className="h-4 w-4" aria-hidden="true" />
         </button>
       </div>
 

@@ -225,13 +225,14 @@ function RatedGearItemRow({
           <button
             onClick={() => setSelectedRating(Math.max(minRating, selectedRating - 1))}
             disabled={selectedRating <= minRating}
+            aria-label={`Decrease ${item.name} rating`}
             className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
               selectedRating > minRating
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
           <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
             {selectedRating}
@@ -239,25 +240,27 @@ function RatedGearItemRow({
           <button
             onClick={() => setSelectedRating(Math.min(maxRating, selectedRating + 1))}
             disabled={selectedRating >= maxRating}
+            aria-label={`Increase ${item.name} rating`}
             className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
               selectedRating < maxRating
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
         <button
           onClick={() => onAdd(selectedRating)}
           disabled={!canAfford}
+          aria-label={`Add ${item.name} to cart`}
           className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
             canAfford
               ? "bg-emerald-500 text-white hover:bg-emerald-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Plus className="h-3 w-3" />
+          <Plus className="h-3 w-3" aria-hidden="true" />
           Add
         </button>
       </div>
@@ -715,13 +718,14 @@ export function GearCard({ state, updateState }: GearCardProps) {
             <button
               onClick={() => handleKarmaConversion(-1)}
               disabled={karmaConversion <= 0}
+              aria-label="Decrease karma to nuyen conversion"
               className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 karmaConversion > 0
                   ? "bg-amber-200 text-amber-700 hover:bg-amber-300 dark:bg-amber-900/60 dark:text-amber-300"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Minus className="h-3 w-3" />
+              <Minus className="h-3 w-3" aria-hidden="true" />
             </button>
             <div className="flex h-6 w-8 items-center justify-center rounded bg-white text-sm font-bold text-amber-700 dark:bg-zinc-800 dark:text-amber-300">
               {karmaConversion}
@@ -729,13 +733,14 @@ export function GearCard({ state, updateState }: GearCardProps) {
             <button
               onClick={() => handleKarmaConversion(1)}
               disabled={karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0}
+              aria-label="Increase karma to nuyen conversion"
               className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
                   ? "bg-amber-500 text-white hover:bg-amber-600"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Plus className="h-3 w-3" />
+              <Plus className="h-3 w-3" aria-hidden="true" />
             </button>
           </div>
         </div>

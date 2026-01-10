@@ -17,3 +17,11 @@ export {
   type ModalFooterProps,
   type ModalSize,
 } from "./BaseModal";
+
+export {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+  type TooltipProps,
+  type TooltipPlacement,
+} from "./Tooltip";

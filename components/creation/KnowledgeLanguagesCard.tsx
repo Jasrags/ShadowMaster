@@ -191,13 +191,14 @@ function LanguageRow({
             <button
               onClick={() => onRatingChange(-1)}
               disabled={!canDecrease}
+              aria-label={`Decrease ${language.name} rating`}
               className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 canDecrease
                   ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Minus className="h-3 w-3" />
+              <Minus className="h-3 w-3" aria-hidden="true" />
             </button>
             <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
               {language.rating}
@@ -205,20 +206,22 @@ function LanguageRow({
             <button
               onClick={() => onRatingChange(1)}
               disabled={!canIncrease}
+              aria-label={`Increase ${language.name} rating`}
               className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 canIncrease
                   ? "bg-emerald-500 text-white hover:bg-emerald-600"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Plus className="h-3 w-3" />
+              <Plus className="h-3 w-3" aria-hidden="true" />
             </button>
             <button
               onClick={onRemove}
+              aria-label={`Remove ${language.name}`}
               className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
               title="Remove language"
             >
-              <X className="h-3.5 w-3.5" />
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </>
         )}
@@ -270,13 +273,14 @@ function KnowledgeSkillRow({
         <button
           onClick={() => onRatingChange(-1)}
           disabled={!canDecrease}
+          aria-label={`Decrease ${skill.name} rating`}
           className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
             canDecrease
               ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Minus className="h-3 w-3" />
+          <Minus className="h-3 w-3" aria-hidden="true" />
         </button>
         <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
           {skill.rating}
@@ -284,20 +288,22 @@ function KnowledgeSkillRow({
         <button
           onClick={() => onRatingChange(1)}
           disabled={!canIncrease}
+          aria-label={`Increase ${skill.name} rating`}
           className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
             canIncrease
               ? "bg-amber-500 text-white hover:bg-amber-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Plus className="h-3 w-3" />
+          <Plus className="h-3 w-3" aria-hidden="true" />
         </button>
         <button
           onClick={onRemove}
+          aria-label={`Remove ${skill.name}`}
           className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
           title="Remove skill"
         >
-          <X className="h-3.5 w-3.5" />
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
     </div>
