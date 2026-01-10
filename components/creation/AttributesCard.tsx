@@ -18,13 +18,12 @@ import { useMemo, useCallback } from "react";
 import { useMetatypes, usePriorityTable, useMagicPaths } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, BudgetIndicator } from "./shared";
 import { Tooltip } from "@/components/ui";
 import {
   Lock,
   Minus,
   Plus,
-  AlertTriangle,
   Info,
   Star,
   Sparkles,
@@ -102,72 +101,6 @@ interface AttributeLimits {
 interface AttributesCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// COMPACT BUDGET BAR
-// =============================================================================
-
-function CompactBudgetBar({
-  label,
-  spent,
-  total,
-  tooltip,
-  isOver,
-  karmaRequired,
-}: {
-  label: string;
-  spent: number;
-  total: number;
-  tooltip: string;
-  isOver: boolean;
-  karmaRequired?: number;
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs">
-        <span
-          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
-          title={tooltip}
-        >
-          {label}
-          <Info className="h-3 w-3 text-zinc-400" />
-        </span>
-        <span
-          className={`font-medium ${
-            isOver
-              ? "text-amber-600 dark:text-amber-400"
-              : remaining === 0
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-zinc-900 dark:text-zinc-100"
-          }`}
-        >
-          {spent} / {total}
-        </span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-        <div
-          className={`h-full transition-all ${
-            isOver
-              ? "bg-amber-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-      {isOver && karmaRequired && (
-        <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
-          <AlertTriangle className="h-3 w-3" />
-          <span>{karmaRequired} karma needed</span>
-        </div>
-      )}
-    </div>
-  );
 }
 
 // =============================================================================
@@ -713,12 +646,12 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     return (
       <CreationCard title="Attributes" description="Awaiting metatype" status="pending">
         <div className="space-y-3">
-          <CompactBudgetBar
+          <BudgetIndicator
             label="Attribute Points"
             spent={0}
             total={attributePoints}
             tooltip={attributePrioritySource}
-            isOver={false}
+            compact
           />
           <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
             <Lock className="h-4 w-4 text-blue-500" />
@@ -735,13 +668,13 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     <CreationCard title="Attributes" status={validationStatus}>
       <div className="space-y-4">
         {/* Core Attribute Budget */}
-        <CompactBudgetBar
+        <BudgetIndicator
           label="Attribute Points"
           spent={corePointsSpent}
           total={attributePoints}
           tooltip={attributePrioritySource}
-          isOver={isCoreOverBudget}
-          karmaRequired={karmaRequired}
+          karmaRequired={isCoreOverBudget ? karmaRequired : undefined}
+          compact
         />
 
         {/* Physical Attributes */}
@@ -769,12 +702,12 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
           <>
             {/* Special Attribute Budget */}
             {specialAttributePoints > 0 && (
-              <CompactBudgetBar
+              <BudgetIndicator
                 label="Special Attr Points"
                 spent={specialPointsSpent}
                 total={specialAttributePoints}
                 tooltip={specialPrioritySource}
-                isOver={false}
+                compact
               />
             )}
 

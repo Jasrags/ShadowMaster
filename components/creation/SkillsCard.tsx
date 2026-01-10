@@ -18,7 +18,7 @@ import { useMemo, useCallback, useState } from "react";
 import { useSkills } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, BudgetIndicator } from "./shared";
 import { SkillModal, SkillGroupModal } from "./skills";
 import {
   Minus,
@@ -30,7 +30,6 @@ import {
   ChevronDown,
   ChevronRight,
   Star,
-  Info,
 } from "lucide-react";
 
 // =============================================================================
@@ -48,64 +47,6 @@ const KARMA_PER_SPECIALIZATION = 7;
 interface SkillsCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  tooltip,
-  spent,
-  total,
-  isOver,
-}: {
-  label: string;
-  tooltip: string;
-  spent: number;
-  total: number;
-  isOver: boolean;
-}) {
-  const remaining = total - spent;
-  const percentage = total > 0 ? Math.min(100, (spent / total) * 100) : 0;
-
-  return (
-    <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs">
-        <span
-          className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
-          title={tooltip}
-        >
-          {label}
-          <Info className="h-3 w-3 text-zinc-400" />
-        </span>
-        <span
-          className={`font-medium ${
-            isOver
-              ? "text-amber-600 dark:text-amber-400"
-              : remaining === 0
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-zinc-900 dark:text-zinc-100"
-          }`}
-        >
-          {spent} / {total}
-        </span>
-      </div>
-      <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
-        <div
-          className={`h-full transition-all ${
-            isOver
-              ? "bg-amber-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -694,20 +635,20 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         <div className="space-y-3">
           {/* Budget indicators */}
           <div className={`grid gap-3 ${skillGroupPoints > 0 ? "sm:grid-cols-2" : ""}`}>
-            <BudgetProgressBar
+            <BudgetIndicator
               label="Skill Points"
               tooltip="Points for individual skills"
               spent={skillPointsSpent}
               total={skillPoints}
-              isOver={isSkillsOverBudget}
+              compact
             />
             {skillGroupPoints > 0 && (
-              <BudgetProgressBar
+              <BudgetIndicator
                 label="Group Points"
                 tooltip="Points for skill groups"
                 spent={groupPointsSpent}
                 total={skillGroupPoints}
-                isOver={isGroupsOverBudget}
+                compact
               />
             )}
           </div>
