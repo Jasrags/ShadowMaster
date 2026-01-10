@@ -458,7 +458,7 @@ export function SheetCreationLayout({
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       {/* Column 1: Foundation */}
-      <div className="space-y-4">
+      <div className="flex flex-col space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
         <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
           Foundation
         </h2>
@@ -475,18 +475,21 @@ export function SheetCreationLayout({
         {/* Magic Path - Phase 3 */}
         <MagicPathCard state={creationState} updateState={updateState} />
 
-        {/* Budget Summary */}
-        <BudgetSummaryCard creationState={creationState} />
-
         {/* Derived Stats - Phase 6 */}
         <DerivedStatsCard state={creationState} updateState={updateState} />
 
-        {/* Finalize */}
-        <ValidationSummary
-          onFinalize={onFinalize}
-          isSaving={isSaving}
-          lastSaved={lastSaved}
-        />
+        {/* Sticky Budget Section - stays visible while scrolling */}
+        <div className="mt-auto space-y-4 lg:sticky lg:bottom-0 lg:bg-gradient-to-t lg:from-white lg:via-white lg:pt-4 lg:dark:from-zinc-950 lg:dark:via-zinc-950">
+          {/* Budget Summary */}
+          <BudgetSummaryCard creationState={creationState} />
+
+          {/* Finalize */}
+          <ValidationSummary
+            onFinalize={onFinalize}
+            isSaving={isSaving}
+            lastSaved={lastSaved}
+          />
+        </div>
       </div>
 
       {/* Column 2: Stats */}

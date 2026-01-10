@@ -302,9 +302,27 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
     );
   }
 
+  // Summary for collapsed state
+  const collapsedSummary = selectedMetatypeData ? (
+    <span className="text-sm">
+      <span className="font-medium">{selectedMetatypeData.name}</span>
+      <span className="text-zinc-400"> • </span>
+      <span>{selectedMetatypeData.specialAttributePoints} SAP</span>
+      {selectedMetatypeData.racialTraits.length > 0 && (
+        <>
+          <span className="text-zinc-400"> • </span>
+          <span className="text-zinc-500 dark:text-zinc-400">
+            {selectedMetatypeData.racialTraits.length} trait{selectedMetatypeData.racialTraits.length !== 1 ? "s" : ""}
+          </span>
+        </>
+      )}
+    </span>
+  ) : null;
+
   return (
     <>
       <CreationCard
+        id="metatype"
         title="Metatype"
         description={
           selectedMetatypeData
@@ -312,6 +330,9 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
             : `Priority ${metatypePriority} - ${availableMetatypes.length} option${availableMetatypes.length !== 1 ? "s" : ""}`
         }
         status={validationStatus}
+        collapsible={!!selectedMetatypeData}
+        collapsedSummary={collapsedSummary}
+        autoCollapseOnValid
       >
         <div className="space-y-3">
           {/* Selection trigger / Selected display */}
