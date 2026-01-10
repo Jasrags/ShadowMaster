@@ -58,9 +58,6 @@ import {
   ChevronDown,
   ChevronRight,
   Shield,
-  Crosshair,
-  Settings,
-  Wrench,
   Info,
 } from "lucide-react";
 
@@ -127,6 +124,14 @@ function AugmentationItem({
     : 0;
   const enhancementCount = cyberItem.enhancements?.length || 0;
 
+  // Check if expandable (has bonuses, capacity, or enhancements)
+  const hasExpandableContent =
+    hasCapacity ||
+    enhancementCount > 0 ||
+    (item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) ||
+    item.armorBonus ||
+    (item as CyberwareItem).initiativeDiceBonus;
+
   // Format item name with rating
   const displayName = useMemo(() => {
     // Check if name already contains rating info like "(Rating X)" and convert to RX
@@ -137,15 +142,21 @@ function AugmentationItem({
     return item.name;
   }, [item.name]);
 
+  // Format category display
+  const categoryDisplay = useMemo(() => {
+    if (!item.category) return "";
+    return item.category.charAt(0).toUpperCase() + item.category.slice(1).replace(/-/g, " ");
+  }, [item.category]);
+
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
-      {/* Collapsed Header */}
-      <div className="flex w-full items-center gap-2 p-3">
-        {/* Expand/Collapse Button - spacer for non-expandable items maintains alignment */}
-        {(hasCapacity || enhancementCount > 0 || (item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus) ? (
+    <div>
+      {/* Compact Single-Line Header */}
+      <div className="flex items-center gap-2 py-2">
+        {/* Expand/Collapse Button */}
+        {hasExpandableContent ? (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
-            className="shrink-0 text-zinc-400"
+            className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
           >
             {isExpanded ? (
               <ChevronDown className="h-4 w-4" />
@@ -154,234 +165,132 @@ function AugmentationItem({
             )}
           </button>
         ) : (
-          /* Spacer for non-expandable items to maintain alignment */
           <div className="w-4 shrink-0" />
         )}
 
-        {/* Type badge */}
-        <div
-          className={`flex h-6 w-6 shrink-0 items-center justify-center rounded ${
+        {/* Name */}
+        <span
+          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1"
+          title={displayName}
+        >
+          {displayName}
+        </span>
+
+        {/* Essence */}
+        <span
+          className={`text-sm font-medium shrink-0 ${
             isCyberware
-              ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400"
-              : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-400"
+              ? "text-cyan-600 dark:text-cyan-400"
+              : "text-pink-600 dark:text-pink-400"
           }`}
         >
-          {isCyberware ? <Cpu className="h-3.5 w-3.5" /> : <Heart className="h-3.5 w-3.5" />}
-        </div>
+          {formatEssence(item.essenceCost)} ESS
+        </span>
 
-        {/* Name, grade, and quick stats */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-1.5">
-            <span
-              className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
-              title={displayName}
-            >
-              {displayName}
-            </span>
-            <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              {GRADE_DISPLAY[item.grade]}
-            </span>
-            {enhancementCount > 0 && (
-              <span className="shrink-0 rounded bg-blue-100 px-1 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
-                {enhancementCount} mod{enhancementCount !== 1 ? "s" : ""}
-              </span>
-            )}
-          </div>
-          {hasCapacity && (
-            <div className="mt-0.5 flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-              <Zap className="h-3 w-3" />
-              <span>Cap {cyberItem.capacityUsed || 0}/{cyberItem.capacity}</span>
-            </div>
-          )}
-        </div>
+        {/* Cost */}
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 shrink-0">
+          ¥{formatCurrency(item.cost)}
+        </span>
 
-        {/* Essence and cost */}
-        <div className="shrink-0 text-right">
-          <div
-            className={`text-xs font-medium ${
-              isCyberware
-                ? "text-cyan-600 dark:text-cyan-400"
-                : "text-pink-600 dark:text-pink-400"
-            }`}
-          >
-            {formatEssence(item.essenceCost)} ESS
-          </div>
-          <div className="text-[10px] text-zinc-400">{formatCurrency(item.cost)}¥</div>
-        </div>
+        {/* Mod count badge (only if has mods) */}
+        {enhancementCount > 0 && (
+          <span className="text-[10px] text-zinc-500 dark:text-zinc-400 shrink-0">
+            [{enhancementCount} mod{enhancementCount !== 1 ? "s" : ""}]
+          </span>
+        )}
 
-        {/* Remove button */}
+        {/* Remove Button */}
         <button
           onClick={onRemove}
-          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+          className="shrink-0 p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Collapsed preview: bonuses shown inline */}
-      {!isExpanded && ((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
-        <div className="flex flex-wrap gap-1.5 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
-          {item.armorBonus && (
-            <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-              <Shield className="h-3 w-3" />
-              +{item.armorBonus} Armor
-            </span>
-          )}
-          {(item as CyberwareItem).initiativeDiceBonus && (
-            <span className="flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-              <Zap className="h-3 w-3" />
-              +{(item as CyberwareItem).initiativeDiceBonus}D6 Init
-            </span>
-          )}
-          {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
-            <span
-              key={attr}
-              className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-            >
-              {attr.toUpperCase()}: +{bonus}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Collapsed preview: enhancements shown as tags */}
-      {!isExpanded && hasCapacity && cyberItem.enhancements && cyberItem.enhancements.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
-          {cyberItem.enhancements.map((enh, idx) => (
-            <span
-              key={`${enh.catalogId}-${idx}`}
-              className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
-            >
-              {enh.name}
-              {enh.rating && ` R${enh.rating}`}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Expanded Detail View */}
+      {/* Expanded Details */}
       {isExpanded && (
-        <div className="border-t border-zinc-100 dark:border-zinc-800">
-          <div className="space-y-3 p-3">
-            {/* Bonuses (Armor, Attributes, Initiative) */}
-            {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
-              <div>
-                <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Bonuses
-                </div>
-                <div className="flex flex-wrap gap-1">
-                  {item.armorBonus && (
-                    <span className="flex items-center gap-1 rounded bg-amber-100 px-2 py-1 text-xs font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
-                      <Shield className="h-3.5 w-3.5" />
-                      +{item.armorBonus} Armor
-                    </span>
-                  )}
-                  {(item as CyberwareItem).initiativeDiceBonus && (
-                    <span className="flex items-center gap-1 rounded bg-purple-100 px-2 py-1 text-xs font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-                      <Zap className="h-3.5 w-3.5" />
-                      +{(item as CyberwareItem).initiativeDiceBonus}D6 Initiative
-                    </span>
-                  )}
-                  {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
-                    <span
-                      key={attr}
-                      className="rounded bg-emerald-100 px-2 py-1 text-xs font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+        <div className="border-t border-zinc-100 dark:border-zinc-800 py-3 ml-6 space-y-3">
+          {/* Grade & Category */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            {GRADE_DISPLAY[item.grade]} • {categoryDisplay}
+          </div>
+
+          {/* Bonuses (Armor, Attributes, Initiative) */}
+          {((item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0) || item.armorBonus || (item as CyberwareItem).initiativeDiceBonus) && (
+            <div className="flex flex-wrap gap-1">
+              {item.armorBonus && (
+                <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                  <Shield className="h-3 w-3" />
+                  +{item.armorBonus} Armor
+                </span>
+              )}
+              {(item as CyberwareItem).initiativeDiceBonus && (
+                <span className="flex items-center gap-1 rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                  <Zap className="h-3 w-3" />
+                  +{(item as CyberwareItem).initiativeDiceBonus}D6 Init
+                </span>
+              )}
+              {item.attributeBonuses && Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
+                <span
+                  key={attr}
+                  className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+                >
+                  {attr.toUpperCase()}: +{bonus}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Modifications */}
+          {hasCapacity && (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Mods ({cyberItem.capacityUsed || 0}/{cyberItem.capacity} cap)
+                </span>
+                {remainingCapacity > 0 && onAddEnhancement && (
+                  <button
+                    onClick={onAddEnhancement}
+                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {cyberItem.enhancements && cyberItem.enhancements.length > 0 ? (
+                <div className="space-y-1">
+                  {cyberItem.enhancements.map((enh, idx) => (
+                    <div
+                      key={`${enh.catalogId}-${idx}`}
+                      className="flex items-center justify-between text-xs"
                     >
-                      {attr.toUpperCase()}: +{bonus}
-                    </span>
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        • {enh.name}
+                        {enh.rating && (
+                          <span className="text-zinc-400 dark:text-zinc-500"> R{enh.rating}</span>
+                        )}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-zinc-400">¥{formatCurrency(enh.cost)}</span>
+                        {onRemoveEnhancement && (
+                          <button
+                            onClick={() => onRemoveEnhancement(idx)}
+                            className="p-0.5 text-zinc-400 hover:text-red-500"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
                   ))}
                 </div>
-              </div>
-            )}
-
-            {/* Capacity Bar */}
-            {hasCapacity && (
-              <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/50">
-                <div className="mb-1.5 flex items-center justify-between text-xs">
-                  <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                    Modification Capacity
-                  </span>
-                  <span className="text-zinc-500 dark:text-zinc-400">
-                    {cyberItem.capacityUsed || 0} / {cyberItem.capacity} used
-                  </span>
-                </div>
-                <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-                  <div
-                    className={`h-full rounded-full transition-all ${
-                      remainingCapacity === 0
-                        ? "bg-amber-500"
-                        : "bg-blue-500"
-                    }`}
-                    style={{
-                      width: `${Math.min(100, ((cyberItem.capacityUsed || 0) / (cyberItem.capacity || 1)) * 100)}%`,
-                    }}
-                  />
-                </div>
-                <div className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400">
-                  {remainingCapacity} capacity remaining
-                </div>
-              </div>
-            )}
-
-            {/* Enhancements List */}
-            {hasCapacity && (
-              <div>
-                <div className="mb-1.5 flex items-center justify-between">
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Modifications
-                  </span>
-                  {remainingCapacity > 0 && onAddEnhancement && (
-                    <button
-                      onClick={onAddEnhancement}
-                      className="flex items-center gap-1 text-xs text-blue-600 hover:text-blue-700 dark:text-blue-400"
-                    >
-                      <Plus className="h-3 w-3" />
-                      Add Mod
-                    </button>
-                  )}
-                </div>
-                {cyberItem.enhancements && cyberItem.enhancements.length > 0 ? (
-                  <div className="space-y-1">
-                    {cyberItem.enhancements.map((enh, idx) => (
-                      <div
-                        key={`${enh.catalogId}-${idx}`}
-                        className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
-                      >
-                        <span className="text-zinc-700 dark:text-zinc-300">
-                          {enh.name}
-                          {enh.rating && (
-                            <span className="ml-1 text-xs text-zinc-400">R{enh.rating}</span>
-                          )}
-                        </span>
-                        <div className="flex items-center gap-2">
-                          <span className="text-xs text-zinc-500">
-                            {formatCurrency(enh.cost)}¥
-                          </span>
-                          {onRemoveEnhancement && (
-                            <button
-                              onClick={() => onRemoveEnhancement(idx)}
-                              className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                            >
-                              <X className="h-3 w-3" />
-                            </button>
-                          )}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
-                    No modifications installed
-                  </p>
-                )}
-                {remainingCapacity === 0 && (
-                  <p className="mt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
-                    No capacity remaining for additional modifications
-                  </p>
-                )}
-              </div>
-            )}
-          </div>
+              ) : (
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
+              )}
+            </div>
+          )}
         </div>
       )}
     </div>
@@ -445,13 +354,13 @@ function CyberlimbAugmentationItem({
   }, [item.location]);
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900">
-      {/* Collapsed Header */}
-      <div className="flex w-full items-center gap-2 p-3">
+    <div>
+      {/* Compact Single-Line Header */}
+      <div className="flex items-center gap-2 py-2">
         {/* Expand/Collapse Button */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="shrink-0 text-zinc-400"
+          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
         >
           {isExpanded ? (
             <ChevronDown className="h-4 w-4" />
@@ -460,336 +369,206 @@ function CyberlimbAugmentationItem({
           )}
         </button>
 
-        {/* Cyberlimb badge */}
-        <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-400">
-          <Cpu className="h-3.5 w-3.5" />
-        </div>
+        {/* Name */}
+        <span
+          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1"
+          title={item.name}
+        >
+          {item.name}
+        </span>
 
-        {/* Name, location, and stats */}
-        <div className="min-w-0 flex-1">
-          <div className="flex items-baseline gap-1.5">
-            <span
-              className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
-              title={item.name}
-            >
-              {item.name}
-            </span>
-            <span className="shrink-0 rounded bg-zinc-100 px-1 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              {GRADE_DISPLAY[item.grade]}
-            </span>
-            {totalMods > 0 && (
-              <span className="shrink-0 rounded bg-blue-100 px-1 py-0.5 text-[10px] font-medium text-blue-600 dark:bg-blue-900/40 dark:text-blue-300">
-                {totalMods} mod{totalMods !== 1 ? "s" : ""}
-              </span>
-            )}
-          </div>
-          <div className="mt-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
-            {locationDisplay} • {item.appearance === "synthetic" ? "Synthetic" : "Obvious"}
-          </div>
-        </div>
+        {/* Essence */}
+        <span className="text-sm font-medium text-cyan-600 dark:text-cyan-400 shrink-0">
+          {formatEssence(item.essenceCost)} ESS
+        </span>
 
-        {/* Essence and cost */}
-        <div className="shrink-0 text-right">
-          <div className="text-xs font-medium text-cyan-600 dark:text-cyan-400">
-            {formatEssence(item.essenceCost)} ESS
-          </div>
-          <div className="text-[10px] text-zinc-400">{formatCurrency(item.cost)}¥</div>
-        </div>
+        {/* Cost */}
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 shrink-0">
+          ¥{formatCurrency(item.cost)}
+        </span>
+
+        {/* Mod count badge (only if has mods) */}
+        {totalMods > 0 && (
+          <span className="text-[10px] text-zinc-500 dark:text-zinc-400 shrink-0">
+            [{totalMods} mod{totalMods !== 1 ? "s" : ""}]
+          </span>
+        )}
 
         {/* Remove button */}
         <button
           onClick={onRemove}
-          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+          className="shrink-0 p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded"
         >
           <X className="h-4 w-4" />
         </button>
       </div>
 
-      {/* Collapsed preview: Limb attributes as inline stats */}
-      {!isExpanded && (
-        <div className="flex items-center gap-3 border-t border-zinc-100 px-3 py-2 dark:border-zinc-800">
-          {/* Limb Attributes */}
-          <div className="flex items-center gap-2">
-            <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+      {/* Expanded Detail View */}
+      {isExpanded && (
+        <div className="border-t border-zinc-100 dark:border-zinc-800 py-3 ml-6 space-y-3">
+          {/* Grade & Location */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            {GRADE_DISPLAY[item.grade]} • {locationDisplay} • {item.appearance === "synthetic" ? "Synthetic" : "Obvious"}
+          </div>
+
+          {/* Limb Attributes - inline */}
+          <div className="flex flex-wrap gap-1.5">
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
               STR {effectiveStr}
             </span>
-            <span className="text-zinc-300 dark:text-zinc-600">|</span>
-            <span className="font-mono text-xs font-semibold text-emerald-600 dark:text-emerald-400">
+            <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
               AGI {effectiveAgi}
             </span>
             {armorBonus > 0 && (
-              <>
-                <span className="text-zinc-300 dark:text-zinc-600">|</span>
-                <span className="flex items-center gap-1 font-mono text-xs font-semibold text-amber-600 dark:text-amber-400">
-                  <Shield className="h-3 w-3" />
-                  +{armorBonus}
-                </span>
-              </>
+              <span className="flex items-center gap-1 rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                <Shield className="h-3 w-3" />
+                +{armorBonus} Armor
+              </span>
             )}
           </div>
-          <div className="flex-1" />
-          {/* Capacity indicator */}
-          <div className="flex items-center gap-1 text-xs text-zinc-500 dark:text-zinc-400">
-            <Zap className="h-3 w-3" />
-            <span className="font-mono">{item.capacityUsed || 0}/{totalCapacity}</span>
+
+          {/* Enhancements */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Enhancements ({enhancementCount})
+              </span>
+              {remainingCapacity > 0 && onAddEnhancement && (
+                <button
+                  onClick={onAddEnhancement}
+                  className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                >
+                  <Plus className="h-3 w-3" />
+                  Add
+                </button>
+              )}
+            </div>
+            {item.enhancements && item.enhancements.length > 0 ? (
+              <div className="space-y-1">
+                {item.enhancements.map((enh, idx) => (
+                  <div
+                    key={`${enh.catalogId}-${idx}`}
+                    className="flex items-center justify-between text-xs"
+                  >
+                    <span className="text-zinc-600 dark:text-zinc-400">
+                      • {enh.name}
+                      <span className="text-zinc-400 dark:text-zinc-500"> +{enh.rating} [{enh.capacityUsed}]</span>
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-zinc-400">¥{formatCurrency(enh.cost)}</span>
+                      {onRemoveEnhancement && (
+                        <button
+                          onClick={() => onRemoveEnhancement(idx)}
+                          className="p-0.5 text-zinc-400 hover:text-red-500"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
+            )}
           </div>
-        </div>
-      )}
 
-      {/* Expanded Detail View */}
-      {isExpanded && (
-        <div className="border-t border-zinc-100 dark:border-zinc-800">
-          <div className="space-y-4 p-3">
-            {/* LIMB ATTRIBUTES Section */}
-            <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-              <div className="mb-2 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Limb Attributes
-              </div>
-              <div className="flex items-center gap-4">
-                <div className="text-center">
-                  <div className="font-mono text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                    {effectiveStr}
-                  </div>
-                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                    STR
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="font-mono text-lg font-bold text-emerald-600 dark:text-emerald-400">
-                    {effectiveAgi}
-                  </div>
-                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                    AGI
-                  </div>
-                </div>
-                <div className="text-center">
-                  <div className="font-mono text-lg font-bold text-amber-600 dark:text-amber-400">
-                    {armorBonus > 0 ? `+${armorBonus}` : "—"}
-                  </div>
-                  <div className="text-[10px] uppercase tracking-wide text-zinc-500 dark:text-zinc-400">
-                    Armor
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* ENHANCEMENTS Section */}
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Settings className="h-3 w-3 text-emerald-500" />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Enhancements
-                  </span>
-                  <span className="rounded bg-emerald-100 px-1 py-0.5 text-[9px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
-                    {enhancementCount}
-                  </span>
-                </div>
-                {remainingCapacity > 0 && onAddEnhancement && (
-                  <button
-                    onClick={onAddEnhancement}
-                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
-                  >
-                    <Plus className="h-3 w-3" />
-                    Add
-                  </button>
-                )}
-              </div>
-              {item.enhancements && item.enhancements.length > 0 ? (
-                <div className="space-y-1">
-                  {item.enhancements.map((enh, idx) => (
-                    <div
-                      key={`${enh.catalogId}-${idx}`}
-                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-zinc-700 dark:text-zinc-300">
-                          {enh.name}
-                        </span>
-                        <span className="rounded bg-emerald-100 px-1 py-0.5 text-[9px] font-mono text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">
-                          +{enh.rating}
-                        </span>
-                        <span className="text-[10px] text-zinc-400">
-                          [{enh.capacityUsed}]
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-zinc-500">
-                          {formatCurrency(enh.cost)}¥
-                        </span>
-                        {onRemoveEnhancement && (
-                          <button
-                            onClick={() => onRemoveEnhancement(idx)}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
-                  No enhancements installed
-                </p>
+          {/* Accessories */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Accessories ({accessoryCount})
+              </span>
+              {remainingCapacity > 0 && onAddAccessory && (
+                <button
+                  onClick={onAddAccessory}
+                  className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                >
+                  <Plus className="h-3 w-3" />
+                  Add
+                </button>
               )}
             </div>
-
-            {/* ACCESSORIES Section */}
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Wrench className="h-3 w-3 text-sky-500" />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Accessories
-                  </span>
-                  <span className="rounded bg-sky-100 px-1 py-0.5 text-[9px] font-medium text-sky-700 dark:bg-sky-900/50 dark:text-sky-300">
-                    {accessoryCount}
-                  </span>
-                </div>
-                {remainingCapacity > 0 && onAddAccessory && (
-                  <button
-                    onClick={onAddAccessory}
-                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+            {item.accessories && item.accessories.length > 0 ? (
+              <div className="space-y-1">
+                {item.accessories.map((acc, idx) => (
+                  <div
+                    key={`${acc.catalogId}-${idx}`}
+                    className="flex items-center justify-between text-xs"
                   >
-                    <Plus className="h-3 w-3" />
-                    Add
-                  </button>
-                )}
-              </div>
-              {item.accessories && item.accessories.length > 0 ? (
-                <div className="space-y-1">
-                  {item.accessories.map((acc, idx) => (
-                    <div
-                      key={`${acc.catalogId}-${idx}`}
-                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-zinc-700 dark:text-zinc-300">
-                          {acc.name}
-                        </span>
-                        {acc.rating && (
-                          <span className="rounded bg-sky-100 px-1 py-0.5 text-[9px] font-mono text-sky-700 dark:bg-sky-900/40 dark:text-sky-300">
-                            R{acc.rating}
-                          </span>
-                        )}
-                        <span className="text-[10px] text-zinc-400">
-                          [{acc.capacityUsed}]
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-zinc-500">
-                          {formatCurrency(acc.cost)}¥
-                        </span>
-                        {onRemoveAccessory && (
-                          <button
-                            onClick={() => onRemoveAccessory(idx)}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        )}
-                      </div>
+                    <span className="text-zinc-600 dark:text-zinc-400">
+                      • {acc.name}
+                      {acc.rating && <span className="text-zinc-400 dark:text-zinc-500"> R{acc.rating}</span>}
+                      <span className="text-zinc-400 dark:text-zinc-500"> [{acc.capacityUsed}]</span>
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-zinc-400">¥{formatCurrency(acc.cost)}</span>
+                      {onRemoveAccessory && (
+                        <button
+                          onClick={() => onRemoveAccessory(idx)}
+                          className="p-0.5 text-zinc-400 hover:text-red-500"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
-                  No accessories installed
-                </p>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
+            )}
+          </div>
+
+          {/* Weapons */}
+          <div>
+            <div className="flex items-center justify-between mb-1.5">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                Implant Weapons ({weaponCount})
+              </span>
+              {remainingCapacity > 0 && onAddWeapon && (
+                <button
+                  onClick={onAddWeapon}
+                  className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                >
+                  <Plus className="h-3 w-3" />
+                  Add
+                </button>
               )}
             </div>
-
-            {/* WEAPONS Section */}
-            <div>
-              <div className="mb-1.5 flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Crosshair className="h-3 w-3 text-red-500" />
-                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Implant Weapons
-                  </span>
-                  <span className="rounded bg-red-100 px-1 py-0.5 text-[9px] font-medium text-red-700 dark:bg-red-900/50 dark:text-red-300">
-                    {weaponCount}
-                  </span>
-                </div>
-                {remainingCapacity > 0 && onAddWeapon && (
-                  <button
-                    onClick={onAddWeapon}
-                    className="flex items-center gap-1 text-[10px] font-medium text-sky-600 hover:text-sky-700 dark:text-sky-400 dark:hover:text-sky-300"
+            {item.weapons && item.weapons.length > 0 ? (
+              <div className="space-y-1">
+                {item.weapons.map((wpn, idx) => (
+                  <div
+                    key={`${wpn.catalogId}-${idx}`}
+                    className="flex items-center justify-between text-xs"
                   >
-                    <Plus className="h-3 w-3" />
-                    Add
-                  </button>
-                )}
-              </div>
-              {item.weapons && item.weapons.length > 0 ? (
-                <div className="space-y-1">
-                  {item.weapons.map((wpn, idx) => (
-                    <div
-                      key={`${wpn.catalogId}-${idx}`}
-                      className="flex items-center justify-between rounded bg-zinc-50 px-2 py-1.5 text-sm dark:bg-zinc-800"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className="text-zinc-700 dark:text-zinc-300">
-                          {wpn.name}
-                        </span>
-                        <span className="rounded bg-red-100 px-1 py-0.5 text-[9px] font-mono text-red-700 dark:bg-red-900/40 dark:text-red-300">
-                          {wpn.damage} / {wpn.ap}AP
-                        </span>
-                        <span className="text-[10px] text-zinc-400">
-                          [{wpn.capacityUsed}]
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="font-mono text-[10px] text-zinc-500">
-                          {formatCurrency(wpn.cost)}¥
-                        </span>
-                        {onRemoveWeapon && (
-                          <button
-                            onClick={() => onRemoveWeapon(idx)}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                          >
-                            <X className="h-3 w-3" />
-                          </button>
-                        )}
-                      </div>
+                    <span className="text-zinc-600 dark:text-zinc-400">
+                      • {wpn.name}
+                      <span className="text-zinc-400 dark:text-zinc-500"> ({wpn.damage}/{wpn.ap}AP) [{wpn.capacityUsed}]</span>
+                    </span>
+                    <div className="flex items-center gap-1">
+                      <span className="text-zinc-400">¥{formatCurrency(wpn.cost)}</span>
+                      {onRemoveWeapon && (
+                        <button
+                          onClick={() => onRemoveWeapon(idx)}
+                          className="p-0.5 text-zinc-400 hover:text-red-500"
+                        >
+                          <X className="h-3 w-3" />
+                        </button>
+                      )}
                     </div>
-                  ))}
-                </div>
-              ) : (
-                <p className="text-xs italic text-zinc-400 dark:text-zinc-500">
-                  No implant weapons installed
-                </p>
-              )}
-            </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
+            )}
+          </div>
 
-            {/* Capacity Bar */}
-            <div className="rounded-lg bg-zinc-50 p-2.5 dark:bg-zinc-800/50">
-              <div className="mb-1.5 flex items-center justify-between text-xs">
-                <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                  Modification Capacity
-                </span>
-                <span className="font-mono text-zinc-500 dark:text-zinc-400">
-                  {item.capacityUsed || 0} / {totalCapacity}
-                </span>
-              </div>
-              <div className="h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-                <div
-                  className={`h-full rounded-full transition-all ${
-                    remainingCapacity === 0
-                      ? "bg-amber-500"
-                      : "bg-cyan-500"
-                  }`}
-                  style={{
-                    width: `${Math.min(100, ((item.capacityUsed || 0) / totalCapacity) * 100)}%`,
-                  }}
-                />
-              </div>
-              <div className="mt-1 text-[10px] text-zinc-500 dark:text-zinc-400">
-                {remainingCapacity} capacity remaining
-              </div>
-            </div>
+          {/* Capacity summary */}
+          <div className="text-[10px] text-zinc-400 dark:text-zinc-500">
+            Capacity: {item.capacityUsed || 0}/{totalCapacity} used ({remainingCapacity} remaining)
           </div>
         </div>
       )}
@@ -1581,42 +1360,39 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               </button>
             </div>
             {selectedCyberware.length > 0 ? (
-              <div className="space-y-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
-                {selectedCyberware.map((item, index) => (
-                  <div key={item.id}>
-                    {index > 0 && (
-                      <div className="my-2 border-t border-zinc-100 dark:border-zinc-800" />
-                    )}
-                    {isCyberlimb(item) ? (
-                      <CyberlimbAugmentationItem
-                        item={item}
-                        onRemove={() => item.id && removeCyberware(item.id)}
-                        onAddEnhancement={() => setEnhancementModalCyberware(item)}
-                        onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
-                        onAddAccessory={() => setAccessoryModalCyberlimb(item)}
-                        onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
-                        onAddWeapon={() => setWeaponModalCyberlimb(item)}
-                        onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
-                      />
-                    ) : (
-                      <AugmentationItem
-                        item={item}
-                        type="cyberware"
-                        onRemove={() => item.id && removeCyberware(item.id)}
-                        onAddEnhancement={
-                          item.capacity && item.capacity > 0
-                            ? () => setEnhancementModalCyberware(item)
-                            : undefined
-                        }
-                        onRemoveEnhancement={
-                          item.id && item.capacity && item.capacity > 0
-                            ? (idx) => removeEnhancement(item.id!, idx)
-                            : undefined
-                        }
-                      />
-                    )}
-                  </div>
-                ))}
+              <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
+                {selectedCyberware.map((item) =>
+                  isCyberlimb(item) ? (
+                    <CyberlimbAugmentationItem
+                      key={item.id}
+                      item={item}
+                      onRemove={() => item.id && removeCyberware(item.id)}
+                      onAddEnhancement={() => setEnhancementModalCyberware(item)}
+                      onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
+                      onAddAccessory={() => setAccessoryModalCyberlimb(item)}
+                      onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
+                      onAddWeapon={() => setWeaponModalCyberlimb(item)}
+                      onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
+                    />
+                  ) : (
+                    <AugmentationItem
+                      key={item.id}
+                      item={item}
+                      type="cyberware"
+                      onRemove={() => item.id && removeCyberware(item.id)}
+                      onAddEnhancement={
+                        item.capacity && item.capacity > 0
+                          ? () => setEnhancementModalCyberware(item)
+                          : undefined
+                      }
+                      onRemoveEnhancement={
+                        item.id && item.capacity && item.capacity > 0
+                          ? (idx) => removeEnhancement(item.id!, idx)
+                          : undefined
+                      }
+                    />
+                  )
+                )}
               </div>
             ) : (
               <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
@@ -1650,18 +1426,14 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               </button>
             </div>
             {selectedBioware.length > 0 ? (
-              <div className="space-y-2 rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
-                {selectedBioware.map((item, index) => (
-                  <div key={item.id}>
-                    {index > 0 && (
-                      <div className="my-2 border-t border-zinc-100 dark:border-zinc-800" />
-                    )}
-                    <AugmentationItem
-                      item={item}
-                      type="bioware"
-                      onRemove={() => item.id && removeBioware(item.id)}
-                    />
-                  </div>
+              <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
+                {selectedBioware.map((item) => (
+                  <AugmentationItem
+                    key={item.id}
+                    item={item}
+                    type="bioware"
+                    onRemove={() => item.id && removeBioware(item.id)}
+                  />
                 ))}
               </div>
             ) : (

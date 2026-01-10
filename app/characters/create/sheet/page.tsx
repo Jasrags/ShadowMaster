@@ -337,7 +337,7 @@ export default function SheetCreationPage() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-6">
           <div className="flex items-center gap-4">
             <Link
               href="/characters"
@@ -361,7 +361,7 @@ export default function SheetCreationPage() {
       </header>
 
       {/* Content wrapped in RulesetProvider */}
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6 lg:px-6">
         <RulesetProvider>
           <SheetCreationContent
             campaignId={campaignId}

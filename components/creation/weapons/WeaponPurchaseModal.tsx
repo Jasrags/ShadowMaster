@@ -6,9 +6,12 @@
  * Split-pane modal for browsing and purchasing weapons.
  * Left side: Category list with weapon items
  * Right side: Detail preview of selected weapon
+ *
+ * Supports initialCategory prop to pre-filter by weapon category
+ * when opened from a specific category section.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import type { WeaponData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { X, Search, Wifi, AlertTriangle } from "lucide-react";
@@ -32,6 +35,22 @@ const WEAPON_CATEGORIES = [
 ] as const;
 
 type WeaponCategory = (typeof WEAPON_CATEGORIES)[number]["id"];
+
+// Map from WeaponsPanel category keys to modal categories
+type WeaponPanelCategoryKey = "ranged" | "melee" | "throwing";
+
+const PANEL_CATEGORY_TO_MODAL: Record<WeaponPanelCategoryKey, WeaponCategory> = {
+  ranged: "pistols", // Default to pistols for ranged
+  melee: "melee",
+  throwing: "throwingWeapons",
+};
+
+// Categories that belong to each panel category
+const PANEL_CATEGORY_GROUPS: Record<WeaponPanelCategoryKey, WeaponCategory[]> = {
+  ranged: ["pistols", "smgs", "rifles", "shotguns", "sniperRifles"],
+  melee: ["melee"],
+  throwing: ["throwingWeapons", "grenades"],
+};
 
 // =============================================================================
 // HELPERS
@@ -105,6 +124,8 @@ interface WeaponPurchaseModalProps {
   };
   remaining: number;
   onPurchase: (weapon: WeaponData) => void;
+  /** Optional initial category from WeaponsPanel (ranged, melee, throwing) */
+  initialCategory?: WeaponPanelCategoryKey | null;
 }
 
 // =============================================================================
@@ -173,10 +194,21 @@ export function WeaponPurchaseModal({
   weapons,
   remaining,
   onPurchase,
+  initialCategory,
 }: WeaponPurchaseModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<WeaponCategory>("all");
   const [selectedWeapon, setSelectedWeapon] = useState<WeaponData | null>(null);
+
+  // Set initial category when modal opens with a category specified
+  useEffect(() => {
+    if (isOpen && initialCategory) {
+      setSelectedCategory(PANEL_CATEGORY_TO_MODAL[initialCategory]);
+    } else if (!isOpen) {
+      // Reset to "all" when closing
+      setSelectedCategory("all");
+    }
+  }, [isOpen, initialCategory]);
 
   // Flatten all weapons into a single array with category info
   const allWeapons = useMemo(() => {
