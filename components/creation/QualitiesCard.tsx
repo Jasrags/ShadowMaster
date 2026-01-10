@@ -22,6 +22,7 @@ import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "./shared";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
 import { Plus, Search, AlertTriangle, X, Check, ChevronDown, Info } from "lucide-react";
 
 // =============================================================================
@@ -427,44 +428,36 @@ function QualitySelectionModal({
 
   const selectedCost = selectedQuality ? getQualityCost(selectedQuality, selectedLevel) : 0;
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[85vh] w-full max-w-2xl flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Add {isPositive ? "Positive" : "Negative"} Quality
-          </h3>
-          <button
-            onClick={onClose}
-            className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="2xl">
+      {({ close }) => (
+        <>
+          <ModalHeader
+            title={`Add ${isPositive ? "Positive" : "Negative"} Quality`}
+            onClose={close}
+          />
 
-        {/* Search and budget info */}
-        <div className="shrink-0 border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="relative mb-3">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search qualities..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-300 py-2 pl-10 pr-4 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-          </div>
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            {remainingKarma} karma available for {isPositive ? "positive" : "negative"} qualities (
-            {usedKarma} of {maxKarma} max used)
-          </p>
-        </div>
+          <ModalBody className="flex flex-col p-0">
+            {/* Search and budget info */}
+            <div className="shrink-0 border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+              <div className="relative mb-3">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                <input
+                  type="text"
+                  placeholder="Search qualities..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-lg border border-zinc-300 py-2 pl-10 pr-4 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                />
+              </div>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                {remainingKarma} karma available for {isPositive ? "positive" : "negative"} qualities (
+                {usedKarma} of {maxKarma} max used)
+              </p>
+            </div>
 
-        {/* Quality list - scrollable */}
-        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
+            {/* Quality list - scrollable */}
+            <div className="min-h-0 flex-1 overflow-y-auto px-6 py-4">
           {QUALITY_CATEGORIES.filter((cat) => qualitiesByCategory[cat].length > 0).map(
             (category) => (
               <div key={category} className="mb-4">
@@ -705,48 +698,50 @@ function QualitySelectionModal({
           </div>
         )}
 
-        {/* Footer */}
-        <div className="flex shrink-0 items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm">
-            {selectedQuality ? (
-              <div className="space-y-1">
-                <div className="text-zinc-600 dark:text-zinc-400">
-                  Selected: {selectedQuality.name} (
-                  {isPositive ? `${selectedCost} karma` : `+${selectedCost} karma`})
-                </div>
-                {/* Show validation error when specification is required but missing */}
-                {selectedQuality.requiresSpecification && !specification && (
-                  <div className="text-xs text-amber-600 dark:text-amber-400">
-                    ⚠ Please enter a {selectedQuality.specificationLabel?.toLowerCase() || "specification"} above
+          </ModalBody>
+
+          <ModalFooter>
+            <div className="text-sm">
+              {selectedQuality ? (
+                <div className="space-y-1">
+                  <div className="text-zinc-600 dark:text-zinc-400">
+                    Selected: {selectedQuality.name} (
+                    {isPositive ? `${selectedCost} karma` : `+${selectedCost} karma`})
                   </div>
-                )}
-              </div>
-            ) : (
-              <span className="text-zinc-600 dark:text-zinc-400">Select a quality to add</span>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={onClose}
-              className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleAdd}
-              disabled={!canAdd}
-              className={`rounded-lg px-4 py-2 text-sm font-medium ${
-                canAdd
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
-              }`}
-            >
-              Add Quality
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+                  {/* Show validation error when specification is required but missing */}
+                  {selectedQuality.requiresSpecification && !specification && (
+                    <div className="text-xs text-amber-600 dark:text-amber-400">
+                      Please enter a {selectedQuality.specificationLabel?.toLowerCase() || "specification"} above
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <span className="text-zinc-600 dark:text-zinc-400">Select a quality to add</span>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAdd}
+                disabled={!canAdd}
+                className={`rounded-lg px-4 py-2 text-sm font-medium ${
+                  canAdd
+                    ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
+                }`}
+              >
+                Add Quality
+              </button>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }
 
