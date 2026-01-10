@@ -20,7 +20,7 @@ import { useAdeptPowers, usePriorityTable } from "@/lib/rules";
 import type { CreationState, AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, BudgetIndicator } from "./shared";
 import { Lock, Search, Plus, Minus, X, Zap, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -39,74 +39,6 @@ const ADEPT_PATHS = ["adept", "mystic-adept"];
 interface AdeptPowersCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  description,
-  spent,
-  total,
-  source,
-  displayFormat = "decimal",
-}: {
-  label: string;
-  description: string;
-  spent: number;
-  total: number;
-  source: string;
-  displayFormat?: "decimal" | "integer";
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining <= 0;
-
-  const formatValue = (value: number) => {
-    return displayFormat === "decimal" ? value.toFixed(2) : Math.round(value).toString();
-  };
-
-  return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {label}
-        </div>
-        <div className={`text-lg font-bold ${
-          isComplete
-            ? "text-emerald-600 dark:text-emerald-400"
-            : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatValue(remaining)}
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {source}
-        <span className="float-right">
-          of {formatValue(total)} remaining
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isComplete
-              ? "bg-emerald-500"
-              : "bg-violet-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -516,13 +448,15 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     >
       <div className="space-y-4">
         {/* Power Point Budget */}
-        <BudgetProgressBar
+        <BudgetIndicator
           label="Power Points"
           description="Allocate power points to adept powers"
           spent={ppSpent}
           total={powerPointBudget}
           source={budgetSource}
-          displayFormat="decimal"
+          mode="card"
+          displayFormat="decimal2"
+          variant="violet"
         />
 
         {/* Mystic Adept Allocation */}
