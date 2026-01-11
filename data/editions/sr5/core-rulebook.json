@@ -10200,81 +10200,94 @@
           {
             "id": "standard-credstick",
             "name": "Standard Credstick",
-            "category": "miscellaneous",
+            "category": "credsticks",
             "cost": 5,
-            "availability": 0,
-            "description": "Standard payment device."
+            "maxValue": 5000,
+            "description": "Standard payment device. Max value: 5,000¥",
+            "page": 443,
+            "source": "Core"
+          },
+          {
+            "id": "silver-credstick",
+            "name": "Silver Credstick",
+            "category": "credsticks",
+            "cost": 20,
+            "maxValue": 20000,
+            "description": "Silver-tier payment device. Max value: 20,000¥",
+            "page": 443,
+            "source": "Core"
+          },
+          {
+            "id": "gold-credstick",
+            "name": "Gold Credstick",
+            "category": "credsticks",
+            "cost": 100,
+            "availability": 5,
+            "maxValue": 100000,
+            "description": "Gold-tier payment device. Max value: 100,000¥",
+            "page": 443,
+            "source": "Core"
+          },
+          {
+            "id": "platinum-credstick",
+            "name": "Platinum Credstick",
+            "category": "credsticks",
+            "cost": 500,
+            "availability": 10,
+            "maxValue": 500000,
+            "description": "Platinum-tier payment device. Max value: 500,000¥",
+            "page": 443,
+            "source": "Core"
+          },
+          {
+            "id": "ebony-credstick",
+            "name": "Ebony Credstick",
+            "category": "credsticks",
+            "cost": 1000,
+            "availability": 20,
+            "maxValue": 1000000,
+            "description": "Ebony-tier payment device. Max value: 1,000,000¥",
+            "page": 443,
+            "source": "Core"
           },
           {
             "id": "fake-sin",
             "name": "Fake SIN",
-            "category": "miscellaneous",
+            "category": "identification",
             "hasRating": true,
             "maxRating": 6,
-            "description": "Forged identity (Rating 1-6).",
-            "legality": "forbidden",
             "minRating": 1,
+            "legality": "forbidden",
+            "description": "Forged System Identification Number. Quality depends on rating.",
+            "page": 443,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 2500,
-                "availability": 3
-              },
-              "2": {
-                "cost": 5000,
-                "availability": 3
-              },
-              "3": {
-                "cost": 7500,
-                "availability": 3
-              },
-              "4": {
-                "cost": 10000,
-                "availability": 3
-              },
-              "5": {
-                "cost": 12500,
-                "availability": 3
-              },
-              "6": {
-                "cost": 15000,
-                "availability": 3
-              }
+              "1": { "cost": 2500, "availability": 3 },
+              "2": { "cost": 5000, "availability": 6 },
+              "3": { "cost": 7500, "availability": 9 },
+              "4": { "cost": 10000, "availability": 12 },
+              "5": { "cost": 12500, "availability": 15 },
+              "6": { "cost": 15000, "availability": 18 }
             }
           },
           {
             "id": "fake-license",
             "name": "Fake License",
-            "category": "miscellaneous",
+            "category": "identification",
             "hasRating": true,
             "maxRating": 6,
-            "description": "Forged permit or license (Rating 1-6).",
-            "legality": "forbidden",
             "minRating": 1,
+            "legality": "forbidden",
+            "description": "Forged permit or license tied to a SIN. Quality depends on rating.",
+            "page": 443,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 200,
-                "availability": 3
-              },
-              "2": {
-                "cost": 400,
-                "availability": 3
-              },
-              "3": {
-                "cost": 600,
-                "availability": 3
-              },
-              "4": {
-                "cost": 800,
-                "availability": 3
-              },
-              "5": {
-                "cost": 1000,
-                "availability": 3
-              },
-              "6": {
-                "cost": 1200,
-                "availability": 3
-              }
+              "1": { "cost": 200, "availability": 3 },
+              "2": { "cost": 400, "availability": 6 },
+              "3": { "cost": 600, "availability": 9 },
+              "4": { "cost": 800, "availability": 12 },
+              "5": { "cost": 1000, "availability": 15 },
+              "6": { "cost": 1200, "availability": 18 }
             }
           },
           {
@@ -14930,24 +14943,135 @@
             "id": "agent",
             "name": "Agent",
             "category": "agent",
-            "cost": 0,
-            "availability": 0,
+            "hasRating": true,
             "minRating": 1,
             "maxRating": 6,
-            "costPerRating": 1000,
-            "description": "An autonomous program that can perform Matrix actions on your behalf.",
-            "effects": "Agent uses its rating for all Matrix attributes. Can perform autonomous Matrix actions.",
-            "page": 246,
-            "source": "SR5",
-            "ratingSpec": {
-              "costScaling": {
-                "baseValue": 0,
-                "perRating": 1000
-              },
-              "availabilityScaling": {
-                "baseValue": 0,
-                "perRating": false
-              }
+            "description": "An autonomous program that can perform Matrix actions on your behalf. Uses its rating for all Matrix attributes.",
+            "page": 442,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 1000, "availability": 3 },
+              "2": { "cost": 2000, "availability": 6 },
+              "3": { "cost": 3000, "availability": 9 },
+              "4": { "cost": 8000, "availability": 12 },
+              "5": { "cost": 10000, "availability": 15 },
+              "6": { "cost": 12000, "availability": 18 }
+            }
+          }
+        ],
+        "datasofts": [
+          {
+            "id": "datasoft",
+            "name": "Datasoft",
+            "category": "software",
+            "cost": 120,
+            "availability": 4,
+            "description": "Contains reference information on a single subject.",
+            "page": 442,
+            "source": "Core"
+          }
+        ],
+        "mapsofts": [
+          {
+            "id": "mapsoft",
+            "name": "Mapsoft",
+            "category": "software",
+            "cost": 100,
+            "availability": 4,
+            "description": "Contains detailed maps of a specific area.",
+            "page": 442,
+            "source": "Core"
+          }
+        ],
+        "shopsofts": [
+          {
+            "id": "shopsoft",
+            "name": "Shopsoft",
+            "category": "software",
+            "cost": 150,
+            "availability": 4,
+            "description": "Contains shopping catalogs and price comparisons.",
+            "page": 442,
+            "source": "Core"
+          }
+        ],
+        "tutorsofts": [
+          {
+            "id": "tutorsoft",
+            "name": "Tutorsoft",
+            "category": "software",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Interactive instruction program. Rating determines quality of instruction.",
+            "page": 442,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 400, "availability": 1 },
+              "2": { "cost": 800, "availability": 2 },
+              "3": { "cost": 1200, "availability": 3 },
+              "4": { "cost": 1600, "availability": 4 },
+              "5": { "cost": 2000, "availability": 5 },
+              "6": { "cost": 2400, "availability": 6 }
+            }
+          }
+        ],
+        "skillsofts": [
+          {
+            "id": "activesoft",
+            "name": "Activesoft",
+            "category": "skillsoft",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Provides active skill knowledge. Requires skillwires to use.",
+            "page": 442,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 5000, "availability": 8 },
+              "2": { "cost": 10000, "availability": 8 },
+              "3": { "cost": 15000, "availability": 8 },
+              "4": { "cost": 20000, "availability": 8 },
+              "5": { "cost": 25000, "availability": 8 },
+              "6": { "cost": 30000, "availability": 8 }
+            }
+          },
+          {
+            "id": "knowsoft",
+            "name": "Knowsoft",
+            "category": "skillsoft",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Provides knowledge skill information. Can be accessed without skillwires.",
+            "page": 442,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 2000, "availability": 4 },
+              "2": { "cost": 4000, "availability": 4 },
+              "3": { "cost": 6000, "availability": 4 },
+              "4": { "cost": 8000, "availability": 4 },
+              "5": { "cost": 10000, "availability": 4 },
+              "6": { "cost": 12000, "availability": 4 }
+            }
+          },
+          {
+            "id": "linguasoft",
+            "name": "Linguasoft",
+            "category": "skillsoft",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Provides language translation. Can be accessed without skillwires.",
+            "page": 442,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 1000, "availability": 2 },
+              "2": { "cost": 2000, "availability": 2 },
+              "3": { "cost": 3000, "availability": 2 },
+              "4": { "cost": 4000, "availability": 2 },
+              "5": { "cost": 5000, "availability": 2 },
+              "6": { "cost": 6000, "availability": 2 }
             }
           }
         ]
