@@ -15,7 +15,7 @@
       "command": "node",
       "args": [
         "./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
-        "/Users/jrags/Code/Jasrags/shadow-master"
+        "/Users/jrags/Code/Jasrags/ShadowMaster"
       ]
     },
     "git": {
@@ -26,7 +26,7 @@
         "run",
         "mcp-server-git",
         "--repository",
-        "/Users/jrags/Code/Jasrags/shadow-master"
+        "/Users/jrags/Code/Jasrags/ShadowMaster"
       ]
     },
     "memory": {
@@ -47,7 +47,7 @@
     "spec-lint": {
       "type": "stdio",
       "command": "node",
-      "args": ["/Users/jrags/Code/Jasrags/shadow-master/tools/spec-lint-mcp.mjs"]
+      "args": ["/Users/jrags/Code/Jasrags/ShadowMaster/tools/spec-lint-mcp.mjs"]
     },
     "knip": {
       "type": "stdio",
