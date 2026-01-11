@@ -13205,13 +13205,16 @@
             "id": "harley-davidson-scorpion",
             "name": "Harley-Davidson Scorpion",
             "category": "bikes",
-            "handling": 4,
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
             "speed": 4,
             "acceleration": 2,
-            "body": 5,
+            "body": 8,
             "armor": 6,
             "pilot": 1,
-            "sensor": 1,
+            "sensor": 2,
             "seats": 1,
             "cost": 12000,
             "availability": 0,
@@ -13262,10 +13265,10 @@
             },
             "speed": 3,
             "acceleration": 2,
-            "body": 8,
+            "body": 11,
             "armor": 4,
             "pilot": 1,
-            "sensor": 1,
+            "sensor": 2,
             "seats": 4,
             "cost": 16000,
             "availability": 0,
@@ -13352,15 +13355,15 @@
             "name": "GMC Bulldog Step-Van",
             "category": "trucks",
             "handling": {
-              "onRoad": 4,
-              "offRoad": 3
+              "onRoad": 3,
+              "offRoad": 2
             },
             "speed": 3,
             "acceleration": 1,
             "body": 16,
-            "armor": 6,
+            "armor": 10,
             "pilot": 1,
-            "sensor": 1,
+            "sensor": 2,
             "seats": 3,
             "cost": 35000,
             "availability": 0,
@@ -13372,17 +13375,17 @@
             "category": "trucks",
             "handling": {
               "onRoad": 3,
-              "offRoad": 3
+              "offRoad": 2
             },
             "speed": 3,
-            "acceleration": 1,
+            "acceleration": 2,
             "body": 18,
             "armor": 14,
-            "pilot": 2,
+            "pilot": 1,
             "sensor": 2,
             "seats": 8,
             "cost": 52000,
-            "availability": 6,
+            "availability": 8,
             "page": 463
           }
         ],
@@ -13553,7 +13556,7 @@
             "sensor": 3,
             "canFly": true,
             "cost": 2000,
-            "availability": 0,
+            "availability": 8,
             "description": "Insect-sized flying surveillance drone",
             "page": 465
           },
@@ -13588,9 +13591,10 @@
             "sensor": 3,
             "canFly": true,
             "cost": 21000,
-            "availability": 6,
+            "availability": 10,
             "description": "Advanced surveillance drone with stealth features",
-            "page": 466
+            "page": 466,
+            "legality": "restricted"
           },
           {
             "id": "mct-nissan-roto-drone",
@@ -13600,7 +13604,7 @@
             "handling": 4,
             "speed": 4,
             "acceleration": 2,
-            "body": 3,
+            "body": 4,
             "armor": 4,
             "pilot": 3,
             "sensor": 3,
@@ -13609,7 +13613,7 @@
               "standard": 1
             },
             "cost": 5000,
-            "availability": 4,
+            "availability": 6,
             "description": "Popular aerial drone with weapon mount",
             "page": 466,
             "legality": "restricted"
@@ -13636,18 +13640,18 @@
             "name": "Ares Duelist",
             "size": "medium",
             "droneType": "combat",
-            "handling": 4,
+            "handling": 5,
             "speed": 3,
             "acceleration": 1,
-            "body": 4,
+            "body": 6,
             "armor": 6,
             "pilot": 3,
             "sensor": 3,
             "weaponMounts": {
               "standard": 2
             },
-            "cost": 10500,
-            "availability": 8,
+            "cost": 14500,
+            "availability": 12,
             "description": "Anthroform combat drone with sword arms",
             "page": 465,
             "legality": "restricted"
@@ -13700,18 +13704,18 @@
             "name": "Cyberspace Designs Dalmatian",
             "size": "large",
             "droneType": "utility",
-            "handling": 4,
+            "handling": 5,
             "speed": 3,
             "acceleration": 2,
-            "body": 5,
-            "armor": 6,
+            "body": 4,
+            "armor": 4,
             "pilot": 3,
             "sensor": 3,
             "weaponMounts": {
               "standard": 1
             },
-            "cost": 8000,
-            "availability": 4,
+            "cost": 10000,
+            "availability": 6,
             "description": "Large utility drone with cargo capacity",
             "page": 465
           },
