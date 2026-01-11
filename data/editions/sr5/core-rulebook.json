@@ -8843,31 +8843,18 @@
           {
             "id": "binoculars",
             "name": "Binoculars",
-            "category": "electronics",
+            "category": "optical-devices",
             "hasRating": true,
-            "maxRating": 3,
             "minRating": 1,
+            "maxRating": 3,
+            "description": "Electronic binoculars with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              }
+              "1": { "cost": 50, "availability": 0, "capacity": 1 },
+              "2": { "cost": 100, "availability": 0, "capacity": 2 },
+              "3": { "cost": 150, "availability": 0, "capacity": 3 }
             }
-          },
-          {
-            "id": "binoculars-optical",
-            "name": "Binoculars, Optical",
-            "category": "electronics",
-            "cost": 50,
-            "availability": 0
           },
           {
             "id": "bug-scanner",
@@ -8908,35 +8895,20 @@
           {
             "id": "camera",
             "name": "Camera",
-            "category": "electronics",
+            "category": "optical-devices",
             "hasRating": true,
-            "maxRating": 6,
             "minRating": 1,
+            "maxRating": 6,
+            "description": "Electronic camera with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 100,
-                "availability": 0
-              },
-              "2": {
-                "cost": 200,
-                "availability": 0
-              },
-              "3": {
-                "cost": 300,
-                "availability": 0
-              },
-              "4": {
-                "cost": 400,
-                "availability": 0
-              },
-              "5": {
-                "cost": 500,
-                "availability": 0
-              },
-              "6": {
-                "cost": 600,
-                "availability": 0
-              }
+              "1": { "cost": 100, "availability": 0, "capacity": 1 },
+              "2": { "cost": 200, "availability": 0, "capacity": 2 },
+              "3": { "cost": 300, "availability": 0, "capacity": 3 },
+              "4": { "cost": 400, "availability": 0, "capacity": 4 },
+              "5": { "cost": 500, "availability": 0, "capacity": 5 },
+              "6": { "cost": 600, "availability": 0, "capacity": 6 }
             }
           },
           {
@@ -9083,36 +9055,76 @@
           {
             "id": "goggles",
             "name": "Goggles",
-            "category": "electronics",
+            "category": "optical-devices",
             "hasRating": true,
-            "maxRating": 6,
             "minRating": 1,
+            "maxRating": 6,
+            "description": "Electronic goggles with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              },
-              "4": {
-                "cost": 200,
-                "availability": 0
-              },
-              "5": {
-                "cost": 250,
-                "availability": 0
-              },
-              "6": {
-                "cost": 300,
-                "availability": 0
-              }
+              "1": { "cost": 50, "availability": 0, "capacity": 1 },
+              "2": { "cost": 100, "availability": 0, "capacity": 2 },
+              "3": { "cost": 150, "availability": 0, "capacity": 3 },
+              "4": { "cost": 200, "availability": 0, "capacity": 4 },
+              "5": { "cost": 250, "availability": 0, "capacity": 5 },
+              "6": { "cost": 300, "availability": 0, "capacity": 6 }
             }
+          },
+          {
+            "id": "contacts",
+            "name": "Contacts",
+            "category": "optical-devices",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "description": "Contact lenses with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 100, "availability": 6, "capacity": 1 },
+              "2": { "cost": 200, "availability": 6, "capacity": 2 },
+              "3": { "cost": 300, "availability": 6, "capacity": 3 }
+            }
+          },
+          {
+            "id": "glasses",
+            "name": "Glasses",
+            "category": "optical-devices",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "description": "Electronic glasses with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 100, "availability": 0, "capacity": 1 },
+              "2": { "cost": 200, "availability": 0, "capacity": 2 },
+              "3": { "cost": 300, "availability": 0, "capacity": 3 },
+              "4": { "cost": 400, "availability": 0, "capacity": 4 }
+            }
+          },
+          {
+            "id": "endoscope",
+            "name": "Endoscope",
+            "category": "optical-devices",
+            "cost": 250,
+            "availability": 8,
+            "capacity": 1,
+            "description": "Flexible fiber-optic camera for looking around corners or into tight spaces.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "mage-sight-goggles",
+            "name": "Mage Sight Goggles",
+            "category": "optical-devices",
+            "cost": 2000,
+            "availability": 14,
+            "legality": "restricted",
+            "description": "Goggles that allow non-Awakened users to see astral forms with an Assensing Test.",
+            "page": 444,
+            "source": "Core"
           },
           {
             "id": "headphones",
@@ -9417,6 +9429,91 @@
             "quantity": 10,
             "description": "Hard to detect RFID tags, sold per 10.",
             "page": 440,
+            "source": "Core"
+          }
+        ],
+        "visionEnhancements": [
+          {
+            "id": "flare-compensation",
+            "name": "Flare Compensation",
+            "category": "vision-enhancements",
+            "capacityCost": 1,
+            "cost": 250,
+            "availability": 1,
+            "description": "Protects against sudden flashes of light and glare. Negates glare modifiers.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "image-link",
+            "name": "Image Link",
+            "category": "vision-enhancements",
+            "capacityCost": 1,
+            "cost": 25,
+            "availability": 4,
+            "description": "Allows overlaying AR imagery on your vision.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "low-light-vision",
+            "name": "Low-Light Vision",
+            "category": "vision-enhancements",
+            "capacityCost": 2,
+            "cost": 500,
+            "availability": 4,
+            "description": "Amplifies existing light, allowing vision in dim conditions.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "smartlink",
+            "name": "Smartlink",
+            "category": "vision-enhancements",
+            "capacityCost": 2,
+            "cost": 2000,
+            "availability": 4,
+            "legality": "restricted",
+            "description": "Provides targeting data from a smartgun, granting +2 accuracy.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "thermographic-vision",
+            "name": "Thermographic Vision",
+            "category": "vision-enhancements",
+            "capacityCost": 2,
+            "cost": 500,
+            "availability": 6,
+            "description": "Allows seeing heat signatures, useful in darkness or through smoke.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
+            "id": "vision-enhancement",
+            "name": "Vision Enhancement",
+            "category": "vision-enhancements",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "description": "Improves visual acuity. Adds rating as dice to visual Perception tests.",
+            "page": 444,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 500, "availability": 2, "capacityCost": 1 },
+              "2": { "cost": 1000, "availability": 4, "capacityCost": 2 },
+              "3": { "cost": 1500, "availability": 6, "capacityCost": 3 }
+            }
+          },
+          {
+            "id": "vision-magnification",
+            "name": "Vision Magnification",
+            "category": "vision-enhancements",
+            "capacityCost": 1,
+            "cost": 250,
+            "availability": 2,
+            "description": "Provides telescopic zoom capability for distant viewing.",
+            "page": 444,
             "source": "Core"
           }
         ],
