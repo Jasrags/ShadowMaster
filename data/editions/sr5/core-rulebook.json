@@ -10720,139 +10720,57 @@
         ],
         "vehicleMods": [
           {
-            "id": "weapon-mount-standard",
-            "name": "Weapon Mount (Standard)",
-            "slots": 2,
-            "availability": 12,
-            "cost": 2500,
-            "description": "Standard weapon mount for vehicles. Can mount any firearm up to assault rifle size.",
-            "compatibleSizes": ["all"],
+            "id": "rigger-interface",
+            "name": "Rigger Interface",
+            "availability": 4,
+            "cost": 1000,
+            "description": "When added to a vehicle, this lets you use a control rig to jump in and control it directly through immersive virtual reality. Allows control via direct fiber-optic cable or wireless link.",
             "page": 461,
+            "source": "Core"
+          },
+          {
+            "id": "weapon-mount-standard",
+            "name": "Standard Weapon Mount",
+            "availability": 8,
+            "cost": 2500,
+            "description": "Standard weapon mounts may hold any assault rifle or smaller-sized weapon and 250 rounds of ammo. Operated remotely with ninety-degree arc of fire.",
+            "mountSlots": 1,
+            "ammoCapacity": 250,
+            "maxWeaponSize": "assault-rifle",
+            "page": 461,
+            "source": "Core",
             "legality": "forbidden"
           },
           {
             "id": "weapon-mount-heavy",
-            "name": "Weapon Mount (Heavy)",
-            "slots": 4,
-            "availability": 16,
+            "name": "Heavy Weapon Mount",
+            "availability": 14,
             "cost": 5000,
-            "description": "Heavy weapon mount for vehicles. Can mount machine guns and heavy weapons.",
-            "compatibleSizes": ["large", "huge"],
+            "description": "Heavy weapon mounts count as two weapon mounts and can hold any weapon and up to 500 rounds of belted ammo or up to Body rockets/missiles. Operated remotely with ninety-degree arc of fire.",
+            "mountSlots": 2,
+            "ammoCapacity": 500,
+            "maxWeaponSize": "heavy",
             "page": 461,
+            "source": "Core",
             "legality": "forbidden"
           },
           {
-            "id": "weapon-mount-popup",
-            "name": "Weapon Mount (Popup)",
-            "slots": 2,
-            "availability": 16,
-            "cost": 3500,
-            "description": "Concealed weapon mount that pops up when needed. +2 to Conceal tests.",
-            "additionalCost": 1000,
-            "page": 461,
-            "legality": "forbidden"
-          },
-          {
-            "id": "armor-vehicle",
-            "name": "Vehicle Armor",
-            "hasRating": true,
-            "maxRating": 6,
-            "slots": 3,
-            "slotsPerRating": true,
-            "availability": 6,
-            "availabilityPerRating": true,
-            "cost": 3000,
-            "costPerRating": true,
-            "description": "Additional armor plating for vehicles. Each point adds 1 to vehicle armor rating.",
-            "page": 461,
-            "legality": "restricted"
-          },
-          {
-            "id": "sensor-array",
-            "name": "Sensor Array",
-            "hasRating": true,
-            "maxRating": 8,
-            "slots": 0,
-            "availability": 2,
-            "availabilityPerRating": true,
-            "cost": 1000,
-            "costPerRating": true,
-            "description": "Upgraded sensor package. Replaces vehicle's sensor rating with array rating.",
-            "page": 445
-          },
-          {
-            "id": "run-flat-tires",
-            "name": "Run-Flat Tires",
-            "slots": 0,
-            "availability": 4,
+            "id": "manual-operation",
+            "name": "Manual Operation",
+            "availability": 1,
+            "availabilityModifier": true,
             "cost": 500,
-            "description": "Self-sealing tires that continue operating after puncture. Each set of 4.",
-            "compatibleCategories": ["bikes", "cars", "trucks"],
-            "page": 461
-          },
-          {
-            "id": "manual-control-override",
-            "name": "Manual Control Override",
-            "slots": 0,
-            "availability": 4,
-            "cost": 500,
-            "description": "Allows full manual control of vehicle, overriding pilot system.",
-            "page": 461
-          },
-          {
-            "id": "rigger-interface",
-            "name": "Rigger Interface",
-            "slots": 0,
-            "availability": 6,
-            "cost": 1000,
-            "description": "Allows vehicle to be jumped into with a control rig. Required for direct neural control.",
+            "costModifier": true,
+            "description": "Manual operation can be added to weapon mounts, but only for vehicles, not drones.",
+            "requiresMount": true,
+            "vehiclesOnly": true,
             "page": 461,
-            "legality": "restricted"
-          },
-          {
-            "id": "morphing-license-plate",
-            "name": "Morphing License Plate",
-            "slots": 0,
-            "availability": 8,
-            "cost": 1000,
-            "description": "e-Paper license plate that can display any registration info.",
-            "page": 461,
-            "legality": "forbidden"
-          },
-          {
-            "id": "spoof-chip",
-            "name": "Spoof Chip",
-            "slots": 0,
-            "availability": 8,
-            "cost": 500,
-            "description": "Broadcasts false vehicle registration info to RFID scanners.",
-            "page": 461,
-            "legality": "forbidden"
-          },
-          {
-            "id": "gridlink",
-            "name": "GridLink",
-            "slots": 0,
-            "availability": 0,
-            "cost": 0,
-            "description": "Standard in all legal vehicles. Allows external traffic control override.",
-            "page": 461
-          },
-          {
-            "id": "gridlink-override",
-            "name": "GridLink Override",
-            "slots": 0,
-            "availability": 6,
-            "cost": 500,
-            "description": "Defeats GridLink allowing full control even in controlled traffic zones.",
-            "page": 461,
-            "legality": "restricted"
+            "source": "Core"
           }
         ],
-        "vehicleModSlots": {
-          "description": "Vehicles have mod slots equal to Body for modifications",
-          "slotsFormula": "body",
-          "maxArmorFormula": "body"
+        "vehicleModRules": {
+          "maxWeaponMounts": "floor(body / 3)",
+          "description": "Vehicles may be equipped with a number of weapon mounts equal to their unaugmented Body ÷ 3 (round down)."
         }
       }
     },
