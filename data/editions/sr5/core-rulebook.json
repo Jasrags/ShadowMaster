@@ -7998,7 +7998,8 @@
               "availability": 4,
               "damage": "(STR+1)P",
               "ap": -1,
-              "accuracy": 0
+              "accuracy": "physical",
+              "legality": "restricted"
             },
             {
               "id": "throwing-knife",
@@ -8006,10 +8007,131 @@
               "category": "weapons",
               "subcategory": "throwingWeapons",
               "cost": 25,
-              "availability": 0,
+              "availability": 4,
               "damage": "(STR+1)P",
               "ap": -1,
-              "accuracy": 0
+              "accuracy": "physical",
+              "legality": "restricted"
+            }
+          ],
+          "bows": [
+            {
+              "id": "bow",
+              "name": "Bow",
+              "category": "weapons",
+              "subcategory": "bow",
+              "hasRating": true,
+              "minRating": 1,
+              "maxRating": 6,
+              "accuracy": 6,
+              "damage": "(Rating+2)P",
+              "ap": "-(Rating/4)",
+              "mode": ["SS"],
+              "availability": "Rating",
+              "cost": "Rating*100",
+              "description": "Bows have a rating from 1-6. Damage is (Rating + 2)P, AP is -(Rating / 4 rounded down). A character needs minimum STR equal to the bow's rating to use it.",
+              "page": 424,
+              "source": "Core"
+            }
+          ],
+          "crossbows": [
+            {
+              "id": "light-crossbow",
+              "name": "Light Crossbow",
+              "category": "weapons",
+              "subcategory": "crossbow",
+              "accuracy": 7,
+              "damage": "5P",
+              "ap": -1,
+              "mode": ["SS"],
+              "availability": 2,
+              "cost": 300,
+              "page": 424,
+              "source": "Core"
+            },
+            {
+              "id": "medium-crossbow",
+              "name": "Medium Crossbow",
+              "category": "weapons",
+              "subcategory": "crossbow",
+              "accuracy": 6,
+              "damage": "7P",
+              "ap": -2,
+              "mode": ["SS"],
+              "availability": 4,
+              "cost": 500,
+              "legality": "restricted",
+              "page": 424,
+              "source": "Core"
+            },
+            {
+              "id": "heavy-crossbow",
+              "name": "Heavy Crossbow",
+              "category": "weapons",
+              "subcategory": "crossbow",
+              "accuracy": 5,
+              "damage": "10P",
+              "ap": -3,
+              "mode": ["SS"],
+              "availability": 8,
+              "cost": 1000,
+              "legality": "restricted",
+              "page": 424,
+              "source": "Core"
+            }
+          ],
+          "projectileAmmunition": [
+            {
+              "id": "arrow",
+              "name": "Arrow",
+              "category": "ammunition",
+              "subcategory": "bow",
+              "hasRating": true,
+              "minRating": 1,
+              "maxRating": 6,
+              "availability": "Rating",
+              "cost": "Rating*2",
+              "description": "Standard arrows for bows. Rating must match bow rating.",
+              "page": 424,
+              "source": "Core"
+            },
+            {
+              "id": "injection-arrow",
+              "name": "Injection Arrow",
+              "category": "ammunition",
+              "subcategory": "bow",
+              "hasRating": true,
+              "minRating": 1,
+              "maxRating": 6,
+              "availability": "(Rating+2)",
+              "cost": "Rating*20",
+              "legality": "restricted",
+              "description": "Hollow arrows designed to deliver drugs or toxins on impact.",
+              "page": 424,
+              "source": "Core"
+            },
+            {
+              "id": "bolt",
+              "name": "Bolt",
+              "category": "ammunition",
+              "subcategory": "crossbow",
+              "availability": 2,
+              "cost": 5,
+              "description": "Standard bolts for crossbows.",
+              "page": 424,
+              "source": "Core"
+            },
+            {
+              "id": "injection-bolt",
+              "name": "Injection Bolt",
+              "category": "ammunition",
+              "subcategory": "crossbow",
+              "availability": 8,
+              "cost": 50,
+              "legality": "restricted",
+              "description": "Hollow bolts designed to deliver drugs or toxins on impact.",
+              "page": 424,
+              "source": "Core"
             }
           ],
           "grenades": [
