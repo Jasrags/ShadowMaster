@@ -9823,6 +9823,397 @@
                 "availability": 6
               }
             }
+          },
+          {
+            "id": "chisel-crowbar",
+            "name": "Chisel/Crowbar",
+            "category": "tools",
+            "cost": 20,
+            "availability": 0,
+            "description": "Doubles effective Strength when forcing a door or container.",
+            "page": 448,
+            "source": "Core"
+          },
+          {
+            "id": "miniwelder",
+            "name": "Miniwelder",
+            "category": "tools",
+            "cost": 250,
+            "availability": 2,
+            "description": "Portable welder with 30 minutes of operation. DV 25 against barriers.",
+            "page": 448,
+            "source": "Core"
+          },
+          {
+            "id": "miniwelder-fuel-canister",
+            "name": "Miniwelder Fuel Canister",
+            "category": "tools",
+            "cost": 80,
+            "availability": 2,
+            "description": "Replacement fuel for miniwelder.",
+            "page": 448,
+            "source": "Core"
+          },
+          {
+            "id": "monofilament-chainsaw",
+            "name": "Monofilament Chainsaw",
+            "category": "tools",
+            "cost": 500,
+            "availability": 8,
+            "description": "Motorized saw with monofilament wire. DV 8P (doubled vs barriers), Acc 3, Reach 1, AP -6. Uses Exotic Melee Weapon skill.",
+            "page": 448,
+            "source": "Core"
+          }
+        ],
+        "sensors": {
+          "housings": [
+            {
+              "id": "handheld-housing",
+              "name": "Handheld Housing",
+              "category": "sensor-housing",
+              "hasRating": true,
+              "minRating": 1,
+              "maxRating": 3,
+              "description": "Portable sensor housing. Capacity equals rating.",
+              "page": 446,
+              "source": "Core",
+              "ratings": {
+                "1": { "cost": 100, "availability": 0, "capacity": 1 },
+                "2": { "cost": 200, "availability": 0, "capacity": 2 },
+                "3": { "cost": 300, "availability": 0, "capacity": 3 }
+              }
+            },
+            {
+              "id": "wall-mounted-housing",
+              "name": "Wall-Mounted Housing",
+              "category": "sensor-housing",
+              "hasRating": true,
+              "minRating": 1,
+              "maxRating": 6,
+              "description": "Fixed installation sensor housing. Capacity equals rating.",
+              "page": 446,
+              "source": "Core",
+              "ratings": {
+                "1": { "cost": 250, "availability": 0, "capacity": 1 },
+                "2": { "cost": 500, "availability": 0, "capacity": 2 },
+                "3": { "cost": 750, "availability": 0, "capacity": 3 },
+                "4": { "cost": 1000, "availability": 0, "capacity": 4 },
+                "5": { "cost": 1250, "availability": 0, "capacity": 5 },
+                "6": { "cost": 1500, "availability": 0, "capacity": 6 }
+              }
+            },
+            {
+              "id": "sensor-array",
+              "name": "Sensor Array",
+              "category": "sensor-housing",
+              "hasRating": true,
+              "minRating": 2,
+              "maxRating": 8,
+              "capacityCost": 6,
+              "description": "Sensor package that includes up to 8 functions. Use Electronic Warfare in place of Perception, sensor Rating as limit.",
+              "page": 446,
+              "source": "Core",
+              "ratings": {
+                "2": { "cost": 2000, "availability": 7 },
+                "3": { "cost": 3000, "availability": 7 },
+                "4": { "cost": 4000, "availability": 7 },
+                "5": { "cost": 5000, "availability": 7 },
+                "6": { "cost": 6000, "availability": 7 },
+                "7": { "cost": 7000, "availability": 7 },
+                "8": { "cost": 8000, "availability": 7 }
+              }
+            },
+            {
+              "id": "single-sensor",
+              "name": "Single Sensor",
+              "category": "sensor-housing",
+              "hasRating": true,
+              "minRating": 2,
+              "maxRating": 8,
+              "capacityCost": 1,
+              "description": "Single function sensor. Use Electronic Warfare in place of Perception, sensor Rating as limit.",
+              "page": 446,
+              "source": "Core",
+              "ratings": {
+                "2": { "cost": 200, "availability": 5 },
+                "3": { "cost": 300, "availability": 5 },
+                "4": { "cost": 400, "availability": 5 },
+                "5": { "cost": 500, "availability": 5 },
+                "6": { "cost": 600, "availability": 5 },
+                "7": { "cost": 700, "availability": 5 },
+                "8": { "cost": 800, "availability": 5 }
+              }
+            }
+          ],
+          "maxRatingByHousing": {
+            "rfid": 2,
+            "audio-visual-device": 2,
+            "headware": 2,
+            "handheld-device": 3,
+            "small-drone": 3,
+            "wall-mounted-device": 4,
+            "medium-drone": 4,
+            "large-drone": 5,
+            "cyberlimb": 5,
+            "motorcycle": 6,
+            "vehicle": 7,
+            "building": 8
+          },
+          "functions": [
+            {
+              "id": "atmosphere-sensor",
+              "name": "Atmosphere Sensor",
+              "category": "sensor-function",
+              "description": "Weather and atmospheric analysis.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "camera-sensor",
+              "name": "Camera",
+              "category": "sensor-function",
+              "description": "Visual recording sensor.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "cyberware-scanner",
+              "name": "Cyberware Scanner",
+              "category": "sensor-function",
+              "maxRange": 15,
+              "rangeUnit": "meters",
+              "description": "Millimeter-wave scanner to detect cyber-implants and contraband.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "directional-microphone-sensor",
+              "name": "Directional Microphone",
+              "category": "sensor-function",
+              "description": "Focused audio pickup.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "geiger-counter",
+              "name": "Geiger Counter",
+              "category": "sensor-function",
+              "description": "Detects radioactivity.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "laser-microphone-sensor",
+              "name": "Laser Microphone",
+              "category": "sensor-function",
+              "maxRange": 100,
+              "rangeUnit": "meters",
+              "description": "Audio pickup via laser reflection.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "laser-range-finder",
+              "name": "Laser Range Finder",
+              "category": "sensor-function",
+              "maxRange": 1000,
+              "rangeUnit": "meters",
+              "description": "Calculates exact distance to target via laser reflection.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "mad-scanner",
+              "name": "MAD Scanner",
+              "category": "sensor-function",
+              "maxRange": 5,
+              "rangeUnit": "meters",
+              "description": "Magnetic Anomaly Detection - detects weapons and metal concentrations.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "motion-sensor",
+              "name": "Motion Sensor",
+              "category": "sensor-function",
+              "maxRange": 25,
+              "rangeUnit": "meters",
+              "description": "Ultrasound and infrared motion and temperature detection.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "olfactory-sensor",
+              "name": "Olfactory Sensor",
+              "category": "sensor-function",
+              "description": "Analyzes airborne molecules like olfactory booster cyberware.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "omni-directional-microphone-sensor",
+              "name": "Omni-directional Microphone",
+              "category": "sensor-function",
+              "description": "360-degree audio pickup.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "radio-signal-scanner",
+              "name": "Radio Signal Scanner",
+              "category": "sensor-function",
+              "maxRange": 20,
+              "rangeUnit": "meters",
+              "description": "Can be used as a bug scanner.",
+              "page": 446,
+              "source": "Core"
+            },
+            {
+              "id": "ultrasound-sensor",
+              "name": "Ultrasound",
+              "category": "sensor-function",
+              "maxRange": 50,
+              "rangeUnit": "meters",
+              "description": "Creates topographic map via ultrasonic pulses. Sees textures, distances, and invisible targets. Cannot see color, brightness, or through glass.",
+              "page": 446,
+              "source": "Core"
+            }
+          ]
+        },
+        "securityDevices": [
+          {
+            "id": "key-combination-lock",
+            "name": "Key/Combination Lock",
+            "category": "security",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Mechanical key or combination lock.",
+            "page": 447,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 10, "availability": 1 },
+              "2": { "cost": 20, "availability": 2 },
+              "3": { "cost": 30, "availability": 3 },
+              "4": { "cost": 40, "availability": 4 },
+              "5": { "cost": 50, "availability": 5 },
+              "6": { "cost": 60, "availability": 6 }
+            }
+          },
+          {
+            "id": "maglock",
+            "name": "Maglock",
+            "category": "security",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Electronic lock with various access control options.",
+            "page": 447,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 100, "availability": 1 },
+              "2": { "cost": 200, "availability": 2 },
+              "3": { "cost": 300, "availability": 3 },
+              "4": { "cost": 400, "availability": 4 },
+              "5": { "cost": 500, "availability": 5 },
+              "6": { "cost": 600, "availability": 6 }
+            }
+          },
+          {
+            "id": "maglock-keypad-cardreader",
+            "name": "Keypad or Card Reader",
+            "category": "security",
+            "subcategory": "maglock-accessory",
+            "cost": 50,
+            "availability": 0,
+            "costModifier": true,
+            "description": "Add-on for maglock access control.",
+            "page": 447,
+            "source": "Core"
+          },
+          {
+            "id": "maglock-anti-tamper",
+            "name": "Anti-tamper Circuits",
+            "category": "security",
+            "subcategory": "maglock-accessory",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "costModifier": true,
+            "description": "Adds security against tampering to maglock.",
+            "page": 447,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 250, "availability": 1 },
+              "2": { "cost": 500, "availability": 2 },
+              "3": { "cost": 750, "availability": 3 },
+              "4": { "cost": 1000, "availability": 4 }
+            }
+          },
+          {
+            "id": "maglock-biometric-reader",
+            "name": "Biometric Reader",
+            "category": "security",
+            "subcategory": "maglock-accessory",
+            "cost": 200,
+            "availability": 4,
+            "costModifier": true,
+            "description": "Biometric access control for maglock.",
+            "page": 447,
+            "source": "Core"
+          }
+        ],
+        "restraints": [
+          {
+            "id": "restraints-metal",
+            "name": "Metal Restraints",
+            "category": "restraints",
+            "cost": 20,
+            "availability": 0,
+            "armor": 16,
+            "structure": 2,
+            "description": "Standard metal handcuffs with mechanical or wireless lock.",
+            "page": 447,
+            "source": "Core"
+          },
+          {
+            "id": "restraints-plasteel",
+            "name": "Plasteel Restraints",
+            "category": "restraints",
+            "cost": 50,
+            "availability": 6,
+            "legality": "restricted",
+            "armor": 20,
+            "structure": 2,
+            "description": "Flash-fused restraints that must be cut free.",
+            "page": 447,
+            "source": "Core"
+          },
+          {
+            "id": "restraints-plastic",
+            "name": "Plastic Restraints (10)",
+            "category": "restraints",
+            "cost": 5,
+            "availability": 0,
+            "quantity": 10,
+            "armor": 6,
+            "structure": 1,
+            "description": "Disposable plastic zip-tie restraints, pack of 10.",
+            "page": 447,
+            "source": "Core"
+          },
+          {
+            "id": "containment-manacles",
+            "name": "Containment Manacles",
+            "category": "restraints",
+            "cost": 250,
+            "availability": 6,
+            "legality": "restricted",
+            "armor": 16,
+            "structure": 2,
+            "description": "Restricts movement to a shuffle, prevents cyber-implant weapon extension.",
+            "page": 447,
+            "source": "Core"
           }
         ],
         "survival": [
