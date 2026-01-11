@@ -5419,9 +5419,14 @@
             "id": "addiction",
             "name": "Addiction",
             "karmaBonus": 4,
-            "summary": "Physical or physiological dependence on a substance.",
+            "summary": "Physical or psychological dependence on a substance or activity.",
             "requiresSpecification": true,
-            "specificationLabel": "Substance",
+            "specificationLabel": "Substance/Activity",
+            "requiresSelection": {
+              "type": "dependency-type",
+              "label": "Dependency Type",
+              "options": ["psychological", "physiological"]
+            },
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
@@ -5429,32 +5434,105 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 4
+                "karmaCost": 4,
+                "name": "Mild",
+                "cravingFrequency": "monthly",
+                "doseRequirement": "1 dose or 1 hour",
+                "withdrawalPenalty": -2,
+                "socialPenalty": 0
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 9
+                "karmaCost": 9,
+                "name": "Moderate",
+                "cravingFrequency": "biweekly",
+                "doseRequirement": "1 dose or 1 hour",
+                "withdrawalPenalty": -4,
+                "socialPenalty": 0
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 20
+                "karmaCost": 20,
+                "name": "Severe",
+                "cravingFrequency": "weekly",
+                "doseRequirement": "2 doses or 2 hours",
+                "withdrawalPenalty": -4,
+                "socialPenalty": -2
               },
               "4": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 25
+                "karmaCost": 25,
+                "name": "Burnout",
+                "cravingFrequency": "daily",
+                "doseRequirement": "3 doses or 3 hours minimum",
+                "withdrawalPenalty": -6,
+                "socialPenalty": -3
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "addiction-withdrawal-mental",
+                "type": "dice-pool-modifier",
+                "trigger": "withdrawal",
+                "target": {
+                  "attributeCategory": "mental"
+                },
+                "value": "rating-based",
+                "condition": {
+                  "dependencyType": "psychological"
+                },
+                "description": "Withdrawal penalty to Mental-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6."
+              },
+              {
+                "id": "addiction-withdrawal-physical",
+                "type": "dice-pool-modifier",
+                "trigger": "withdrawal",
+                "target": {
+                  "attributeCategory": "physical"
+                },
+                "value": "rating-based",
+                "condition": {
+                  "dependencyType": "physiological"
+                },
+                "description": "Withdrawal penalty to Physical-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6."
+              },
+              {
+                "id": "addiction-social-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "always",
+                "target": {
+                  "skillCategory": "social"
+                },
+                "value": "rating-based",
+                "condition": {
+                  "minRating": 3
+                },
+                "description": "Social penalty from obvious addiction symptoms: Severe -2, Burnout -3 (applies whether in withdrawal or not)."
+              }
+            ]
           },
           {
             "id": "allergy",
             "name": "Allergy",
             "karmaBonus": 5,
-            "summary": "Allergenic reaction to a substance or condition.",
+            "summary": "Allergenic reaction to a substance or condition. Karma = Commonality + Severity.",
             "requiresSpecification": true,
             "specificationLabel": "Allergen",
+            "karmaCalculation": {
+              "commonality": {
+                "uncommon": 2,
+                "common": 7
+              },
+              "severity": {
+                "mild": 3,
+                "moderate": 8,
+                "severe": 13,
+                "extreme": 18
+              }
+            },
             "hasRating": true,
             "minRating": 1,
             "maxRating": 8,
@@ -5462,57 +5540,118 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 5
+                "karmaCost": 5,
+                "commonality": "uncommon",
+                "severity": "mild",
+                "resistancePenalty": -1
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "commonality": "common",
+                "severity": "mild",
+                "resistancePenalty": -1
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "commonality": "uncommon",
+                "severity": "moderate",
+                "resistancePenalty": -2
               },
               "4": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 15
+                "karmaCost": 15,
+                "commonality": "common",
+                "severity": "moderate",
+                "resistancePenalty": -2
               },
               "5": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 15
+                "karmaCost": 15,
+                "commonality": "uncommon",
+                "severity": "severe",
+                "resistancePenalty": -3
               },
               "6": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 20
+                "karmaCost": 20,
+                "commonality": "common",
+                "severity": "severe",
+                "resistancePenalty": -3
               },
               "7": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 20
+                "karmaCost": 20,
+                "commonality": "uncommon",
+                "severity": "extreme",
+                "resistancePenalty": -4
               },
               "8": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 25
+                "karmaCost": 25,
+                "commonality": "common",
+                "severity": "extreme",
+                "resistancePenalty": -4
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "allergy-resistance-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "attacked-with-allergen",
+                "target": {
+                  "test": "resistance"
+                },
+                "value": "severity-based",
+                "description": "Lose 1 die from Resistance Tests per severity level when attacked with allergen: Mild -1, Moderate -2, Severe -3, Extreme -4."
+              }
+            ]
           },
           {
             "id": "astral-beacon",
             "name": "Astral Beacon",
             "karmaBonus": 10,
-            "summary": "Highly visible astral signature; lasts twice as long.",
-            "requiresMagic": true
+            "summary": "Highly visible astral signature; lasts twice as long; easier to assense.",
+            "requiresMagic": true,
+            "incompatibilities": ["astral-chameleon"],
+            "effects": [
+              {
+                "id": "astral-beacon-signature-duration",
+                "type": "duration-modifier",
+                "trigger": "always",
+                "target": {
+                  "stat": "astral-signature"
+                },
+                "value": 2,
+                "multiplier": true,
+                "description": "Astral signature lasts twice as long as normal."
+              },
+              {
+                "id": "astral-beacon-assensing-threshold",
+                "type": "threshold-modifier",
+                "trigger": "being-assensed",
+                "target": {
+                  "test": "assensing"
+                },
+                "value": -1,
+                "description": "Others receive -1 to the threshold of Assensing Tests to gather information about your astral signature."
+              }
+            ]
           },
           {
             "id": "bad-luck",
             "name": "Bad Luck",
             "karmaBonus": 12,
-            "summary": "Edge occasionally backfires (1 on d6).",
+            "summary": "Edge occasionally backfires (1 on d6). Once per session.",
+            "incompatibilities": ["lucky"],
             "effects": [
               {
                 "id": "bad-luck-edge-backfire",
@@ -5523,7 +5662,8 @@
                 },
                 "value": "backfire-chance",
                 "backfireChance": "1-on-d6",
-                "description": "Whenever Edge is used, roll 1d6. On a result of 1, the Edge use backfires dramatically—the gamemaster decides the exact nature of the mishap."
+                "oncePerSession": true,
+                "description": "Whenever Edge is used, roll 1d6. On a result of 1, the Edge use backfires dramatically. After Bad Luck triggers once per session, no further rolls needed for remaining Edge uses."
               }
             ]
           },
@@ -5531,29 +5671,109 @@
             "id": "bad-rep",
             "name": "Bad Rep",
             "karmaBonus": 7,
-            "summary": "Start with 3 Notoriety."
+            "summary": "Start with 3 Notoriety. Must confront source to buy off.",
+            "effects": [
+              {
+                "id": "bad-rep-notoriety",
+                "type": "derived-stat-modifier",
+                "trigger": "character-creation",
+                "target": {
+                  "stat": "notoriety"
+                },
+                "value": 3,
+                "description": "Character starts play with 3 points of Notoriety."
+              }
+            ],
+            "buyoffRequirement": "Must confront and resolve the source of the bad reputation before buying off with Karma."
           },
           {
             "id": "code-of-honor",
             "name": "Code of Honor",
             "karmaBonus": 15,
-            "summary": "Bound by strict rules about who may be harmed.",
+            "summary": "Will not kill or allow killing of a protected group.",
             "requiresSpecification": true,
-            "specificationLabel": "Code"
+            "specificationLabel": "Protected Group",
+            "limit": 1,
+            "gmApprovalRequired": true,
+            "effects": [
+              {
+                "id": "code-of-honor-resist-violence",
+                "type": "required-test",
+                "trigger": "protected-group-violence",
+                "target": {
+                  "test": "resist-intervention"
+                },
+                "testPool": "charisma + willpower",
+                "threshold": 4,
+                "onFailure": "must-stop-violence",
+                "description": "When anyone attempts to kill a member of the protected group, make a Charisma + Willpower (4) Test. Failure means the character must immediately stop the violence."
+              },
+              {
+                "id": "code-of-honor-public-awareness",
+                "type": "derived-stat-modifier",
+                "trigger": "witness-left-alive",
+                "target": {
+                  "stat": "public-awareness"
+                },
+                "value": 1,
+                "perWitness": true,
+                "description": "+1 Public Awareness for each protected group member left alive who can remember the character."
+              },
+              {
+                "id": "code-of-honor-complication-roll",
+                "type": "gm-roll",
+                "trigger": "non-lethal-force-used",
+                "target": {
+                  "group": "protected"
+                },
+                "dieRoll": "1d6",
+                "complicationOn": 1,
+                "description": "Each time non-lethal force is used against protected group, GM rolls 1d6. On 1, unforeseen complication occurs."
+              },
+              {
+                "id": "code-of-honor-karma-loss",
+                "type": "karma-penalty",
+                "trigger": "protected-group-killed",
+                "target": {
+                  "resource": "karma"
+                },
+                "value": -1,
+                "perKill": true,
+                "description": "Lose 1 Karma for the adventure for each protected group member killed, whether intentionally or inadvertently."
+              }
+            ]
           },
           {
             "id": "codeblock",
             "name": "Codeblock",
             "karmaBonus": 10,
-            "summary": "-2 dice on one specific Matrix action.",
+            "summary": "-2 dice on one specific Matrix action (must have a test).",
             "requiresSpecification": true,
-            "specificationLabel": "Matrix Action"
+            "specificationLabel": "Matrix Action",
+            "specificationSource": "matrixActions",
+            "specificationRequirement": "Must be a Matrix action with an associated test",
+            "incompatibilities": {
+              "quality": "codeslinger",
+              "condition": "same-specification"
+            },
+            "effects": [
+              {
+                "id": "codeblock-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "matrix-action",
+                "target": {
+                  "action": "specification"
+                },
+                "value": -2,
+                "description": "-2 dice pool modifier to the specified Matrix action."
+              }
+            ]
           },
           {
             "id": "combat-paralysis",
             "name": "Combat Paralysis",
             "karmaBonus": 12,
-            "summary": "First Initiative halved; –3 on Surprise tests.",
+            "summary": "First Initiative halved; –3 on Surprise tests; +1 Composure threshold under fire.",
             "effects": [
               {
                 "id": "combat-paralysis-initiative",
@@ -5563,7 +5783,7 @@
                   "stat": "initiative"
                 },
                 "value": "halved",
-                "description": "Initiative is halved during the first Combat Turn of any combat encounter."
+                "description": "Initiative Score is halved (rounded up) during the first Combat Turn of any combat encounter."
               },
               {
                 "id": "combat-paralysis-surprise",
@@ -5574,6 +5794,19 @@
                 },
                 "value": -3,
                 "description": "–3 dice pool modifier to Surprise tests."
+              },
+              {
+                "id": "combat-paralysis-composure",
+                "type": "threshold-modifier",
+                "trigger": "composure-test",
+                "target": {
+                  "test": "composure"
+                },
+                "value": 1,
+                "condition": {
+                  "situation": "under-fire-or-combat"
+                },
+                "description": "+1 threshold modifier for Composure Tests while under fire or in combat situations."
               }
             ]
           },
@@ -5581,7 +5814,7 @@
             "id": "dependents",
             "name": "Dependents",
             "karmaBonus": 3,
-            "summary": "Loved ones require time/resources. Increases lifestyle cost.",
+            "summary": "Loved ones require time/resources. Increases lifestyle cost and skill learning time.",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 3,
@@ -5589,39 +5822,137 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 3
+                "karmaCost": 3,
+                "name": "Occasional Nuisance",
+                "lifestyleCostIncrease": 0.1,
+                "description": "Drops in unexpectedly, needs emotional support, occasional money. Examples: slacker sibling, long-term boyfriend/girlfriend, child with visitation."
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 6
+                "karmaCost": 6,
+                "name": "Regular Inconvenience",
+                "lifestyleCostIncrease": 0.2,
+                "description": "Needs regular attention, shares living space, gets involved in affairs. Examples: live-in partner, shared custody child, close family member."
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 9
+                "karmaCost": 9,
+                "name": "Close Family/Life Partner",
+                "lifestyleCostIncrease": 0.3,
+                "description": "Lives with character, major strain on time/resources, may require special care. Examples: large family, elderly parents with needs, full custody children."
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "dependents-lifestyle-cost",
+                "type": "cost-modifier",
+                "trigger": "always",
+                "target": {
+                  "cost": "lifestyle"
+                },
+                "value": "rating-based",
+                "description": "Increase lifestyle cost by 10%/20%/30% per month based on rating."
+              },
+              {
+                "id": "dependents-skill-learning-time",
+                "type": "time-modifier",
+                "trigger": "skill-improvement",
+                "target": {
+                  "action": "learn-skill"
+                },
+                "value": 1.5,
+                "multiplier": true,
+                "description": "Increase time to learn or improve skills by 50%."
+              },
+              {
+                "id": "dependents-project-time",
+                "type": "time-modifier",
+                "trigger": "long-term-project",
+                "target": {
+                  "action": "project"
+                },
+                "value": 1.5,
+                "multiplier": true,
+                "description": "Increase base time for long-term projects by 50%."
+              }
+            ]
           },
           {
             "id": "distinctive-style",
             "name": "Distinctive Style",
             "karmaBonus": 5,
-            "summary": "Memorable; +2 dice to identify/trace you.",
+            "summary": "Memorable appearance; +2 dice to identify/trace, -1 Memory threshold.",
             "requiresSpecification": true,
-            "specificationLabel": "Style"
+            "specificationLabel": "Style",
+            "limit": 1,
+            "incompatibilities": ["blandness"],
+            "effects": [
+              {
+                "id": "distinctive-style-identify-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "being-identified",
+                "target": {
+                  "test": "identify-trace-locate"
+                },
+                "value": 2,
+                "appliesToOthers": true,
+                "description": "+2 dice pool modifier for anyone attempting to identify, trace, or locate this character."
+              },
+              {
+                "id": "distinctive-style-memory-threshold",
+                "type": "threshold-modifier",
+                "trigger": "being-remembered",
+                "target": {
+                  "test": "memory"
+                },
+                "value": -1,
+                "minimum": 1,
+                "appliesToOthers": true,
+                "description": "-1 to Difficulty Threshold (minimum 1) for NPCs making Memory Tests to recall information about the character."
+              }
+            ],
+            "note": "Physical in nature; does not apply to astral searches."
           },
           {
             "id": "elf-poser",
             "name": "Elf Poser",
             "karmaBonus": 6,
-            "summary": "Human posing as an elf. Social stigma."
+            "summary": "Human posing as an elf. Social stigma if discovered.",
+            "metatypeRestrictions": {
+              "allowed": ["human"],
+              "forbidden": ["elf", "dwarf", "ork", "troll"]
+            },
+            "incompatibilities": ["ork-poser"],
+            "effects": [
+              {
+                "id": "elf-poser-pass",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "metatype-appearance"
+                },
+                "value": "pass-as-elf",
+                "description": "Can pass as an elf and avoid negative Social modifiers associated with being non-elf."
+              },
+              {
+                "id": "elf-poser-discovered",
+                "type": "social-modifier",
+                "trigger": "identity-discovered",
+                "target": {
+                  "interaction": "elves"
+                },
+                "value": "contempt-hostility",
+                "description": "If an elf discovers the secret, they will likely treat the character with contempt and hostility."
+              }
+            ]
           },
           {
             "id": "gremlins",
             "name": "Gremlins",
             "karmaBonus": 4,
-            "summary": "Tech malfunctions more around you.",
+            "summary": "Tech glitches more easily. Reduces 1s needed for glitch by rating.",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
@@ -5629,39 +5960,79 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 4
+                "karmaCost": 4,
+                "glitchReduction": 1
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 8
+                "karmaCost": 8,
+                "glitchReduction": 2
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 12
+                "karmaCost": 12,
+                "glitchReduction": 3
               },
               "4": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 16
+                "karmaCost": 16,
+                "glitchReduction": 4
               }
+            },
+            "effects": [
+              {
+                "id": "gremlins-glitch-threshold",
+                "type": "glitch-modifier",
+                "trigger": "technology-use",
+                "target": {
+                  "category": "moderately-sophisticated-devices"
+                },
+                "value": "rating",
+                "description": "Reduce the number of 1s needed to glitch by rating when using technology. GM may require tests for normally automatic operations."
+              }
+            ],
+            "restrictions": {
+              "doesNotAffect": ["cyberware", "bioware", "implants"],
+              "cannotSabotage": "Cannot use Gremlins offensively to damage opponent's equipment by touch."
             }
           },
           {
             "id": "incompetent",
             "name": "Incompetent",
             "karmaBonus": 5,
-            "summary": "Cannot use one skill group.",
+            "summary": "Treated as 'unaware' for one skill group. Cannot possess that group.",
             "requiresSpecification": true,
             "specificationLabel": "Skill Group",
-            "specificationSource": "skillGroups"
+            "specificationSource": "skillGroups",
+            "limit": 1,
+            "gmApprovalRequired": true,
+            "restrictions": {
+              "cannotApplyTo": ["language-skills", "knowledge-skills"],
+              "mustBeRelevant": "GM may reject choices unlikely to come up in play",
+              "cannotPossess": "Character cannot possess the affected skill group",
+              "noGearBenefits": "Gear bonuses for skills in this group provide no benefit"
+            },
+            "effects": [
+              {
+                "id": "incompetent-unaware",
+                "type": "skill-restriction",
+                "trigger": "always",
+                "target": {
+                  "skillGroup": "specification"
+                },
+                "value": "unaware",
+                "description": "Character is treated as 'unaware' for all skills in the specified skill group. Success Tests may be required for tasks others take for granted."
+              }
+            ]
           },
           {
             "id": "insomnia",
             "name": "Insomnia",
             "karmaBonus": 10,
-            "summary": "May double Stun recovery time. Severe causes chronic fatigue.",
+            "summary": "Trouble sleeping affects Stun recovery and Edge refresh.",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 2,
@@ -5669,28 +6040,108 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "name": "Moderate",
+                "testRequired": "Intuition + Willpower (4)",
+                "onSuccess": "Normal Stun recovery and Edge refresh",
+                "onFailure": "Double Stun recovery time, no Edge refresh for up to 24 hours"
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 15
+                "karmaCost": 15,
+                "name": "Severe",
+                "testRequired": "Intuition + Willpower (4)",
+                "onSuccess": "Normal Stun recovery and Edge refresh",
+                "onFailure": "No Stun recovery from rest, no Edge refresh for 24 hours"
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "insomnia-test",
+                "type": "required-test",
+                "trigger": "rest-attempt",
+                "target": {
+                  "action": "stun-recovery"
+                },
+                "testPool": "intuition + willpower",
+                "threshold": 4,
+                "description": "Before rolling Body + Willpower to recover Stun damage, roll Intuition + Willpower (4)."
+              },
+              {
+                "id": "insomnia-recovery-penalty",
+                "type": "time-modifier",
+                "trigger": "insomnia-test-failed",
+                "target": {
+                  "action": "stun-recovery"
+                },
+                "value": "rating-based",
+                "description": "Rating 1: Double Stun recovery time. Rating 2: No Stun recovery from rest attempt."
+              },
+              {
+                "id": "insomnia-edge-refresh-block",
+                "type": "resource-modifier",
+                "trigger": "insomnia-test-failed",
+                "target": {
+                  "resource": "edge-refresh"
+                },
+                "value": "blocked",
+                "duration": "up-to-24-hours",
+                "description": "Edge does not refresh and may not refresh for up to 24 hours on failed test."
+              }
+            ]
           },
           {
             "id": "loss-of-confidence",
             "name": "Loss of Confidence",
             "karmaBonus": 10,
-            "summary": "-2 dice pool modifier for a specific skill.",
+            "summary": "-2 dice for a skill you've invested in. No specialization or Edge use.",
             "requiresSpecification": true,
-            "specificationLabel": "Skill"
+            "specificationLabel": "Skill",
+            "specificationSource": "skills",
+            "prerequisite": {
+              "skillRating": 4,
+              "description": "Must be a skill the character has invested in (rating 4+)"
+            },
+            "effects": [
+              {
+                "id": "loss-of-confidence-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "specification"
+                },
+                "value": -2,
+                "description": "-2 dice pool modifier to tests involving the affected skill."
+              },
+              {
+                "id": "loss-of-confidence-no-specialization",
+                "type": "restriction",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "specification"
+                },
+                "value": "no-specialization",
+                "description": "Cannot use any specialization with this skill while suffering Loss of Confidence."
+              },
+              {
+                "id": "loss-of-confidence-no-edge",
+                "type": "restriction",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "specification"
+                },
+                "value": "no-edge",
+                "description": "Edge may not be used for tests involving this skill."
+              }
+            ]
           },
           {
             "id": "low-pain-tolerance",
             "name": "Low Pain Tolerance",
             "karmaBonus": 9,
             "summary": "Wound modifiers every 2 boxes instead of 3.",
+            "incompatibilities": ["high-pain-tolerance"],
             "effects": [
               {
                 "id": "low-pain-tolerance-wound-threshold",
@@ -5701,7 +6152,7 @@
                 },
                 "value": 2,
                 "replaces": "default-wound-threshold",
-                "description": "Receive wound modifiers for every 2 boxes of damage instead of the normal 3."
+                "description": "Incur -1 wound modifier for every 2 boxes of cumulative damage (Physical + Stun) instead of the normal 3 boxes."
               }
             ]
           },
@@ -5709,13 +6160,40 @@
             "id": "ork-poser",
             "name": "Ork Poser",
             "karmaBonus": 6,
-            "summary": "Pose as an Ork. Social Stigma."
+            "summary": "Human or elf posing as an ork. Social stigma if discovered.",
+            "metatypeRestrictions": {
+              "allowed": ["human", "elf"],
+              "forbidden": ["dwarf", "ork", "troll"]
+            },
+            "incompatibilities": ["elf-poser"],
+            "effects": [
+              {
+                "id": "ork-poser-pass",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "metatype-appearance"
+                },
+                "value": "pass-as-ork",
+                "description": "Can pass as an ork through cosmetic biomods (tusk implants, steroids, larynx alterations)."
+              },
+              {
+                "id": "ork-poser-discovered",
+                "type": "social-modifier",
+                "trigger": "identity-discovered",
+                "target": {
+                  "interaction": "orks"
+                },
+                "value": "variable",
+                "description": "If discovered by an ork, reaction varies from hostility to acceptance (with hazing ritual). May face stigma from prejudiced humans/elves as 'race traitor'."
+              }
+            ]
           },
           {
             "id": "prejudiced",
             "name": "Prejudiced",
             "karmaBonus": 3,
-            "summary": "Bias against specific group. Social penalties.",
+            "summary": "Outspoken bias against a group. Social penalties with that group.",
             "requiresSpecification": true,
             "specificationLabel": "Target Group",
             "hasRating": true,
@@ -5725,48 +6203,163 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 3
+                "karmaCost": 3,
+                "intensity": "biased",
+                "groupSize": "common",
+                "socialPenalty": -2,
+                "targetBonus": 2
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 5
+                "karmaCost": 5,
+                "intensity": "biased",
+                "groupSize": "specific",
+                "socialPenalty": -2,
+                "targetBonus": 2
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 5
+                "karmaCost": 5,
+                "intensity": "outspoken",
+                "groupSize": "common",
+                "socialPenalty": -4,
+                "targetBonus": 4
               },
               "4": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 7
+                "karmaCost": 7,
+                "intensity": "outspoken",
+                "groupSize": "specific",
+                "socialPenalty": -4,
+                "targetBonus": 4
               },
               "5": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 8
+                "karmaCost": 8,
+                "intensity": "radical",
+                "groupSize": "common",
+                "socialPenalty": -6,
+                "targetBonus": 6
               },
               "6": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "intensity": "radical",
+                "groupSize": "specific",
+                "socialPenalty": -6,
+                "targetBonus": 6
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "prejudiced-social-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "social-test",
+                "target": {
+                  "interaction": "prejudiced-group"
+                },
+                "value": "intensity-based",
+                "description": "-2 dice per severity level (Biased -2, Outspoken -4, Radical -6) for Social Tests with the target group."
+              },
+              {
+                "id": "prejudiced-target-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "negotiation",
+                "target": {
+                  "beneficiary": "target"
+                },
+                "value": "intensity-based",
+                "description": "Target receives +2 per severity level (Biased +2, Outspoken +4, Radical +6) to their Negotiation Tests."
+              }
+            ]
           },
           {
             "id": "scorched",
             "name": "Scorched",
             "karmaBonus": 10,
-            "summary": "Flashbacks/neurological issues from BTL/Black IC.",
+            "summary": "Neurological damage from Black IC, Psychotropic IC, or BTLs.",
             "requiresSpecification": true,
-            "specificationLabel": "Effect/Source"
+            "specificationLabel": "Effect",
+            "specificationOptions": [
+              "memory-loss",
+              "blackouts",
+              "migraines",
+              "diminished-senses",
+              "paranoia",
+              "anxiety"
+            ],
+            "requiresSelection": {
+              "type": "scorched-source",
+              "label": "Source",
+              "options": [
+                {
+                  "id": "btl",
+                  "name": "BTL",
+                  "prerequisite": "Mild Addiction to BTLs and BTL gear"
+                },
+                {
+                  "id": "black-ic",
+                  "name": "Black IC",
+                  "prerequisite": "Must be a decker or technomancer"
+                },
+                {
+                  "id": "psychotropic-ic",
+                  "name": "Psychotropic IC",
+                  "prerequisite": "Must be a decker or technomancer"
+                }
+              ]
+            },
+            "effects": [
+              {
+                "id": "scorched-vr-test",
+                "type": "required-test",
+                "trigger": "enter-vr-or-slot-btl",
+                "target": {
+                  "action": "matrix-immersion"
+                },
+                "testPool": "body + willpower",
+                "threshold": 4,
+                "onFailure": "symptoms-6-hours",
+                "onGlitch": "symptoms-24-hours",
+                "description": "When entering VR or slotting a BTL, roll Body + Willpower (4). Failure triggers symptoms for 6 hours; glitch for 24 hours."
+              },
+              {
+                "id": "scorched-confront-test",
+                "type": "required-test",
+                "trigger": "confront-source-ic",
+                "target": {
+                  "action": "face-triggering-ic"
+                },
+                "testPool": "willpower",
+                "threshold": 3,
+                "onFailure": "panic",
+                "description": "When facing the IC type that caused the Scorched condition, roll Willpower (3) to confront it without panicking."
+              },
+              {
+                "id": "scorched-damage-vulnerability",
+                "type": "dice-pool-modifier",
+                "trigger": "damage-from-source",
+                "target": {
+                  "test": "damage-resistance"
+                },
+                "value": -2,
+                "condition": {
+                  "damageSource": "triggering-ic"
+                },
+                "description": "-2 to Damage Resistance Tests when the triggering Black or Psychotropic IC inflicts damage."
+              }
+            ]
           },
           {
             "id": "sensitive-system",
             "name": "Sensitive System",
             "karmaBonus": 12,
-            "summary": "Double Essence cost for cyberware. Bioware rejected.",
+            "summary": "Double Essence for cyberware. Bioware rejected. Awakened/technomancers: may increase Drain/Fading.",
             "effects": [
               {
                 "id": "sensitive-system-cyberware-cost",
@@ -5788,6 +6381,21 @@
                 },
                 "value": "forbidden",
                 "description": "Cannot have bioware implanted. The body rejects all bioware."
+              },
+              {
+                "id": "sensitive-system-drain-fading-test",
+                "type": "required-test",
+                "trigger": "before-drain-or-fading",
+                "target": {
+                  "action": "magic-or-resonance-use"
+                },
+                "testPool": "willpower",
+                "threshold": 2,
+                "onFailure": "drain-fading-plus-2",
+                "condition": {
+                  "characterType": ["awakened", "technomancer"]
+                },
+                "description": "Awakened or technomancers must roll Willpower (2) before Drain/Fading tests. Failure increases Drain/Fading Value by +2 for that test."
               }
             ]
           },
@@ -5813,7 +6421,7 @@
             "id": "sinner",
             "name": "SINner",
             "karmaBonus": 5,
-            "summary": "Legal status and tax obligations.",
+            "summary": "Legal SIN with tax obligations and tracking vulnerability.",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
@@ -5821,65 +6429,374 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 5
+                "karmaCost": 5,
+                "name": "National SIN",
+                "taxRate": 0.15,
+                "description": "Citizen of a nation from birth. Biometrics in Global SIN Registry. Receives 3x spam. 15% tax."
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "name": "Criminal SIN",
+                "taxRate": 0.15,
+                "description": "Convicted felon. Must broadcast SIN. Shunned by society, denied entry to locations, questioned for local crimes. Awakened are registered. 15% tax."
               },
               "3": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 15
+                "karmaCost": 15,
+                "name": "Corporate Limited SIN",
+                "taxRate": 0.2,
+                "description": "Hired into megacorp from outside. Can work as wageslave or low-level security. Valid extraction target. Distrusted by SINless. 20% tax."
               },
               "4": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 25
+                "karmaCost": 25,
+                "name": "Corporate Born SIN",
+                "taxRate": 0.1,
+                "description": "Born into megacorp. Could have held leadership/officer positions. Records limited to issuing corp. Hated by SINless—discovery could be fatal. 10% tax."
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "sinner-tax",
+                "type": "cost-modifier",
+                "trigger": "income",
+                "target": {
+                  "resource": "nuyen"
+                },
+                "value": "rating-based",
+                "description": "Tax percentage of gross income: National 15%, Criminal 15%, Corp Limited 20%, Corp Born 10%."
+              },
+              {
+                "id": "sinner-tracking-vulnerability",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "sin-broadcasting"
+                },
+                "value": "trackable",
+                "description": "Biometric data in Global SIN Registry makes character easier to track if a job goes sideways."
+              }
+            ]
           },
           {
             "id": "social-stress",
             "name": "Social Stress",
             "karmaBonus": 8,
-            "summary": "Emotional triggers interfere with interactions.",
+            "summary": "Emotional triggers reduce glitch threshold for social skills.",
             "requiresSpecification": true,
-            "specificationLabel": "Trigger"
+            "specificationLabel": "Trigger",
+            "effects": [
+              {
+                "id": "social-stress-glitch-threshold",
+                "type": "glitch-modifier",
+                "trigger": "leadership-or-etiquette",
+                "target": {
+                  "skills": ["leadership", "etiquette"]
+                },
+                "value": 1,
+                "description": "When using Leadership or Etiquette skills, reduce the number of 1s required to glitch by 1."
+              },
+              {
+                "id": "social-stress-extra-tests",
+                "type": "special-ability",
+                "trigger": "social-situation",
+                "target": {
+                  "action": "interaction"
+                },
+                "value": "gm-may-require-tests",
+                "description": "GM may call for more Social Tests, particularly when situations related to the stress trigger arise."
+              }
+            ]
           },
           {
             "id": "spirit-bane",
             "name": "Spirit Bane",
             "karmaBonus": 7,
-            "summary": "Spirits of a specific type are hostile.",
+            "summary": "Specified spirits are hostile, harder to summon, resist banishment.",
             "requiresMagic": true,
             "requiresSpecification": true,
-            "specificationLabel": "Spirit Type"
+            "specificationLabel": "Spirit Type",
+            "specificationSource": "spiritTypes",
+            "incompatibilities": {
+              "quality": "spirit-affinity",
+              "condition": "same-specification"
+            },
+            "restrictions": {
+              "doesNotApplyTo": ["watchers", "minions"],
+              "note": "Watchers and minions are constructs, not summoned spirits"
+            },
+            "effects": [
+              {
+                "id": "spirit-bane-summon-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "summoning-binding",
+                "target": {
+                  "spiritType": "specification"
+                },
+                "value": -2,
+                "description": "-2 dice pool modifier when attempting to summon or bind this spirit type."
+              },
+              {
+                "id": "spirit-bane-banish-resistance",
+                "type": "dice-pool-modifier",
+                "trigger": "banishment",
+                "target": {
+                  "spiritType": "specification",
+                  "beneficiary": "spirit"
+                },
+                "value": 2,
+                "description": "Spirit receives +2 dice pool modifier when resisting the character's banishment attempts."
+              },
+              {
+                "id": "spirit-bane-hostility",
+                "type": "special-ability",
+                "trigger": "spirit-encounter",
+                "target": {
+                  "spiritType": "specification"
+                },
+                "value": "hostile",
+                "description": "Spirits of this type harass the character and are reluctant to help them or their allies."
+              },
+              {
+                "id": "spirit-bane-targeting",
+                "type": "special-ability",
+                "trigger": "spirit-attack",
+                "target": {
+                  "spiritType": "specification"
+                },
+                "value": "priority-target",
+                "description": "When ordered to attack a group containing this character, these spirits will single out and target the character first, using lethal force."
+              }
+            ]
           },
           {
             "id": "uncouth",
             "name": "Uncouth",
             "karmaBonus": 14,
-            "summary": "–2 dice to resist social impulses; double Karma for Social skills."
+            "summary": "–2 dice to resist social impulses; double Karma for Social skills.",
+            "canBuyOff": false,
+            "restrictions": {
+              "socialSkillGroups": "unaware",
+              "socialSkillLearning": "individual-only",
+              "description": "Characters cannot learn Social skill groups; they must purchase Social skills individually. If they do not possess an entire Social skill group, they are considered 'unaware' of that group for defaulting purposes, even if they possess individual skills."
+            },
+            "effects": [
+              {
+                "id": "uncouth-impulse-resist",
+                "type": "dice-pool-modifier",
+                "trigger": "social-impulse-resistance",
+                "target": {
+                  "skillCategory": "social"
+                },
+                "value": -2,
+                "description": "–2 dice pool modifier to tests to resist acting on a social impulse or instinct (e.g., resisting intimidation, seduction, or con attempts)."
+              },
+              {
+                "id": "uncouth-karma-penalty",
+                "type": "karma-penalty",
+                "trigger": "skill-advancement",
+                "target": {
+                  "skillCategory": "social"
+                },
+                "value": "double",
+                "description": "Must pay double Karma costs for all Social skills."
+              },
+              {
+                "id": "uncouth-skill-restriction",
+                "type": "skill-restriction",
+                "trigger": "skill-learning",
+                "target": {
+                  "skillCategory": "social"
+                },
+                "value": "no-skill-groups",
+                "description": "Cannot learn Social skill groups; must purchase individual Social skills only."
+              },
+              {
+                "id": "uncouth-defaulting",
+                "type": "defaulting-modifier",
+                "trigger": "defaulting",
+                "target": {
+                  "skillCategory": "social",
+                  "condition": "incomplete-group"
+                },
+                "value": "unaware",
+                "description": "If the character does not possess an entire Social skill group, they are 'unaware' for defaulting purposes, suffering the -1 penalty for being untrained plus unable to default on group skills they don't own."
+              }
+            ]
           },
           {
             "id": "uneducated",
             "name": "Uneducated",
             "karmaBonus": 8,
-            "summary": "Cannot default Technical/Academic skills."
+            "summary": "Cannot default Technical/Academic skills; double Karma for Technical, Academic Knowledge, and Professional Knowledge skills.",
+            "canBuyOff": false,
+            "restrictions": {
+              "technicalDefaulting": "cannot-default",
+              "academicDefaulting": "cannot-default",
+              "professionalDefaulting": "cannot-default",
+              "technicalSkillGroups": "unaware",
+              "description": "Characters cannot default on Technical, Academic Knowledge, or Professional Knowledge skills. They are considered 'unaware' of skill groups they don't fully possess in these categories."
+            },
+            "effects": [
+              {
+                "id": "uneducated-technical-karma",
+                "type": "karma-penalty",
+                "trigger": "skill-advancement",
+                "target": {
+                  "skillCategory": "technical"
+                },
+                "value": "double",
+                "description": "Must pay double Karma costs for all Technical skills."
+              },
+              {
+                "id": "uneducated-academic-karma",
+                "type": "karma-penalty",
+                "trigger": "skill-advancement",
+                "target": {
+                  "skillType": "knowledge",
+                  "knowledgeCategory": "academic"
+                },
+                "value": "double",
+                "description": "Must pay double Karma costs for all Academic Knowledge skills."
+              },
+              {
+                "id": "uneducated-professional-karma",
+                "type": "karma-penalty",
+                "trigger": "skill-advancement",
+                "target": {
+                  "skillType": "knowledge",
+                  "knowledgeCategory": "professional"
+                },
+                "value": "double",
+                "description": "Must pay double Karma costs for all Professional Knowledge skills."
+              },
+              {
+                "id": "uneducated-technical-no-default",
+                "type": "defaulting-modifier",
+                "trigger": "defaulting",
+                "target": {
+                  "skillCategory": "technical"
+                },
+                "value": "cannot-default",
+                "description": "Cannot default on Technical skills."
+              },
+              {
+                "id": "uneducated-academic-no-default",
+                "type": "defaulting-modifier",
+                "trigger": "defaulting",
+                "target": {
+                  "skillType": "knowledge",
+                  "knowledgeCategory": "academic"
+                },
+                "value": "cannot-default",
+                "description": "Cannot default on Academic Knowledge skills."
+              },
+              {
+                "id": "uneducated-professional-no-default",
+                "type": "defaulting-modifier",
+                "trigger": "defaulting",
+                "target": {
+                  "skillType": "knowledge",
+                  "knowledgeCategory": "professional"
+                },
+                "value": "cannot-default",
+                "description": "Cannot default on Professional Knowledge skills."
+              },
+              {
+                "id": "uneducated-skill-restriction",
+                "type": "skill-restriction",
+                "trigger": "skill-learning",
+                "target": {
+                  "skillCategories": ["technical"]
+                },
+                "value": "no-skill-groups",
+                "description": "Cannot learn Technical skill groups; must purchase individual Technical skills only."
+              },
+              {
+                "id": "uneducated-group-defaulting",
+                "type": "defaulting-modifier",
+                "trigger": "defaulting",
+                "target": {
+                  "skillCategory": "technical",
+                  "condition": "incomplete-group"
+                },
+                "value": "unaware",
+                "description": "If the character does not possess an entire Technical skill group, they are 'unaware' for defaulting purposes."
+              }
+            ]
           },
           {
             "id": "unsteady-hands",
             "name": "Unsteady Hands",
             "karmaBonus": 7,
-            "summary": "-2 Agility tests when stressed/shaking."
+            "summary": "-2 Agility tests when stressed/shaking; requires Body + Agility (4) test to avoid.",
+            "effects": [
+              {
+                "id": "unsteady-hands-test",
+                "type": "required-test",
+                "trigger": "stress-inducing-situation",
+                "attribute1": "body",
+                "attribute2": "agility",
+                "threshold": 4,
+                "onFailure": {
+                  "effect": "unsteady-hands-penalty",
+                  "duration": "remainder-of-turn"
+                },
+                "description": "When the character is in a stressful situation, they must make a Body + Agility (4) Test. Failure means shaky hands for the rest of the turn."
+              },
+              {
+                "id": "unsteady-hands-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "test-failure",
+                "target": {
+                  "attribute": "agility",
+                  "actions": ["precision-work", "shooting", "melee", "spellcasting"]
+                },
+                "value": -2,
+                "duration": "remainder-of-turn",
+                "description": "On failed test, suffer –2 dice pool modifier to all Agility-based tests requiring steady hands (shooting, melee combat, spellcasting, etc.) for the remainder of the Combat Turn."
+              }
+            ],
+            "stressTriggers": [
+              "Combat situations",
+              "Time pressure",
+              "Physical danger",
+              "High-stakes negotiations",
+              "Any situation the GM deems stressful"
+            ]
           },
           {
             "id": "weak-immune-system",
             "name": "Weak Immune System",
             "karmaBonus": 10,
-            "summary": "Disease Power +2 against you."
+            "summary": "Diseases and toxins act with +2 effective Power against you.",
+            "incompatibilities": ["natural-immunity", "resistance-pathogens-toxins"],
+            "effects": [
+              {
+                "id": "weak-immune-disease",
+                "type": "power-modifier",
+                "trigger": "disease-resistance",
+                "target": {
+                  "category": "disease"
+                },
+                "value": 2,
+                "description": "All diseases have +2 to their effective Power rating when resisted by this character."
+              },
+              {
+                "id": "weak-immune-toxin",
+                "type": "power-modifier",
+                "trigger": "toxin-resistance",
+                "target": {
+                  "category": "toxin"
+                },
+                "value": 2,
+                "description": "All toxins have +2 to their effective Power rating when resisted by this character."
+              }
+            ]
           }
         ],
         "creationLimits": {
