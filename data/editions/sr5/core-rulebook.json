@@ -10717,7 +10717,143 @@
               }
             }
           }
-        ]
+        ],
+        "vehicleMods": [
+          {
+            "id": "weapon-mount-standard",
+            "name": "Weapon Mount (Standard)",
+            "slots": 2,
+            "availability": 12,
+            "cost": 2500,
+            "description": "Standard weapon mount for vehicles. Can mount any firearm up to assault rifle size.",
+            "compatibleSizes": ["all"],
+            "page": 461,
+            "legality": "forbidden"
+          },
+          {
+            "id": "weapon-mount-heavy",
+            "name": "Weapon Mount (Heavy)",
+            "slots": 4,
+            "availability": 16,
+            "cost": 5000,
+            "description": "Heavy weapon mount for vehicles. Can mount machine guns and heavy weapons.",
+            "compatibleSizes": ["large", "huge"],
+            "page": 461,
+            "legality": "forbidden"
+          },
+          {
+            "id": "weapon-mount-popup",
+            "name": "Weapon Mount (Popup)",
+            "slots": 2,
+            "availability": 16,
+            "cost": 3500,
+            "description": "Concealed weapon mount that pops up when needed. +2 to Conceal tests.",
+            "additionalCost": 1000,
+            "page": 461,
+            "legality": "forbidden"
+          },
+          {
+            "id": "armor-vehicle",
+            "name": "Vehicle Armor",
+            "hasRating": true,
+            "maxRating": 6,
+            "slots": 3,
+            "slotsPerRating": true,
+            "availability": 6,
+            "availabilityPerRating": true,
+            "cost": 3000,
+            "costPerRating": true,
+            "description": "Additional armor plating for vehicles. Each point adds 1 to vehicle armor rating.",
+            "page": 461,
+            "legality": "restricted"
+          },
+          {
+            "id": "sensor-array",
+            "name": "Sensor Array",
+            "hasRating": true,
+            "maxRating": 8,
+            "slots": 0,
+            "availability": 2,
+            "availabilityPerRating": true,
+            "cost": 1000,
+            "costPerRating": true,
+            "description": "Upgraded sensor package. Replaces vehicle's sensor rating with array rating.",
+            "page": 445
+          },
+          {
+            "id": "run-flat-tires",
+            "name": "Run-Flat Tires",
+            "slots": 0,
+            "availability": 4,
+            "cost": 500,
+            "description": "Self-sealing tires that continue operating after puncture. Each set of 4.",
+            "compatibleCategories": ["bikes", "cars", "trucks"],
+            "page": 461
+          },
+          {
+            "id": "manual-control-override",
+            "name": "Manual Control Override",
+            "slots": 0,
+            "availability": 4,
+            "cost": 500,
+            "description": "Allows full manual control of vehicle, overriding pilot system.",
+            "page": 461
+          },
+          {
+            "id": "rigger-interface",
+            "name": "Rigger Interface",
+            "slots": 0,
+            "availability": 6,
+            "cost": 1000,
+            "description": "Allows vehicle to be jumped into with a control rig. Required for direct neural control.",
+            "page": 461,
+            "legality": "restricted"
+          },
+          {
+            "id": "morphing-license-plate",
+            "name": "Morphing License Plate",
+            "slots": 0,
+            "availability": 8,
+            "cost": 1000,
+            "description": "e-Paper license plate that can display any registration info.",
+            "page": 461,
+            "legality": "forbidden"
+          },
+          {
+            "id": "spoof-chip",
+            "name": "Spoof Chip",
+            "slots": 0,
+            "availability": 8,
+            "cost": 500,
+            "description": "Broadcasts false vehicle registration info to RFID scanners.",
+            "page": 461,
+            "legality": "forbidden"
+          },
+          {
+            "id": "gridlink",
+            "name": "GridLink",
+            "slots": 0,
+            "availability": 0,
+            "cost": 0,
+            "description": "Standard in all legal vehicles. Allows external traffic control override.",
+            "page": 461
+          },
+          {
+            "id": "gridlink-override",
+            "name": "GridLink Override",
+            "slots": 0,
+            "availability": 6,
+            "cost": 500,
+            "description": "Defeats GridLink allowing full control even in controlled traffic zones.",
+            "page": 461,
+            "legality": "restricted"
+          }
+        ],
+        "vehicleModSlots": {
+          "description": "Vehicles have mod slots equal to Body for modifications",
+          "slotsFormula": "body",
+          "maxArmorFormula": "body"
+        }
       }
     },
     "cyberware": {
@@ -10778,32 +10914,35 @@
               "1": {
                 "cost": 43000,
                 "availability": 5,
-                "essenceCost": 1
+                "essenceCost": 1,
+                "vehicleLimitBonus": 1,
+                "jumpedInBonus": 1
               },
               "2": {
                 "cost": 97000,
                 "availability": 10,
-                "essenceCost": 2
+                "essenceCost": 2,
+                "vehicleLimitBonus": 2,
+                "jumpedInBonus": 2
               },
               "3": {
                 "cost": 208000,
                 "availability": 15,
-                "essenceCost": 3
+                "essenceCost": 3,
+                "vehicleLimitBonus": 3,
+                "jumpedInBonus": 3
               }
             },
             "category": "headware",
-            "description": "VCR for controlling vehicles and drones. +1 to vehicle tests.",
-            "wirelessBonus": "Noise reduction equal to rating.",
+            "description": "VCR for controlling vehicles and drones. Adds rating to vehicle test limits when jumped in.",
+            "wirelessBonus": "Noise reduction equal to rating when jumped into a vehicle or drone.",
             "page": 452,
             "wirelessEffects": [
               {
                 "type": "noise_reduction",
-                "modifier": 1
+                "modifierPerRating": true
               }
             ],
-            "attributeBonuses": {
-              "vehicleControl": 1
-            },
             "legality": "restricted"
           },
           {
@@ -13189,7 +13328,10 @@
             "id": "dodge-scoot",
             "name": "Dodge Scoot",
             "category": "bikes",
-            "handling": 4,
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
             "speed": 3,
             "acceleration": 1,
             "body": 4,
