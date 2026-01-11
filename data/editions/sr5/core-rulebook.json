@@ -10749,21 +10749,21 @@
             "id": "alpha",
             "name": "Alphaware",
             "essenceMultiplier": 0.8,
-            "costMultiplier": 2,
+            "costMultiplier": 1.2,
             "availabilityModifier": 2
           },
           {
             "id": "beta",
             "name": "Betaware",
-            "essenceMultiplier": 0.6,
-            "costMultiplier": 4,
+            "essenceMultiplier": 0.7,
+            "costMultiplier": 1.5,
             "availabilityModifier": 4
           },
           {
             "id": "delta",
             "name": "Deltaware",
             "essenceMultiplier": 0.5,
-            "costMultiplier": 10,
+            "costMultiplier": 2.5,
             "availabilityModifier": 8
           }
         ],
@@ -11893,7 +11893,7 @@
             "name": "Cyberlimb Agility Enhancement",
             "category": "cyberlimb-enhancement",
             "essenceCost": 0,
-            "cost": 6500,
+            "cost": 5000,
             "availability": 3,
             "capacityCost": 1,
             "hasRating": true,
@@ -11911,7 +11911,7 @@
                 "maxRating": 3
               },
               "costScaling": {
-                "baseValue": 6500,
+                "baseValue": 5000,
                 "perRating": true
               },
               "availabilityScaling": {
@@ -11934,7 +11934,7 @@
             "name": "Cyberlimb Strength Enhancement",
             "category": "cyberlimb-enhancement",
             "essenceCost": 0,
-            "cost": 6500,
+            "cost": 5000,
             "availability": 3,
             "capacityCost": 1,
             "hasRating": true,
@@ -11952,7 +11952,7 @@
                 "maxRating": 3
               },
               "costScaling": {
-                "baseValue": 6500,
+                "baseValue": 5000,
                 "perRating": true
               },
               "availabilityScaling": {
@@ -12421,6 +12421,13 @@
       "payload": {
         "grades": [
           {
+            "id": "used",
+            "name": "Used",
+            "essenceMultiplier": 1.25,
+            "costMultiplier": 0.75,
+            "availabilityModifier": -4
+          },
+          {
             "id": "standard",
             "name": "Standard",
             "essenceMultiplier": 1,
@@ -12431,21 +12438,21 @@
             "id": "alpha",
             "name": "Alphaware",
             "essenceMultiplier": 0.8,
-            "costMultiplier": 2,
+            "costMultiplier": 1.2,
             "availabilityModifier": 2
           },
           {
             "id": "beta",
             "name": "Betaware",
-            "essenceMultiplier": 0.6,
-            "costMultiplier": 4,
+            "essenceMultiplier": 0.7,
+            "costMultiplier": 1.5,
             "availabilityModifier": 4
           },
           {
             "id": "delta",
             "name": "Deltaware",
             "essenceMultiplier": 0.5,
-            "costMultiplier": 10,
+            "costMultiplier": 2.5,
             "availabilityModifier": 8
           }
         ],
@@ -12989,7 +12996,7 @@
             "name": "Platelet Factories",
             "category": "basic",
             "essenceCost": 0.2,
-            "cost": 17500,
+            "cost": 17000,
             "availability": 12,
             "description": "+1 die to resist bleeding. Reduces Overflow threshold penalty.",
             "page": 460
