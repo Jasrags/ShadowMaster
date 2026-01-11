@@ -8944,8 +8944,71 @@
             "name": "Data Tap",
             "category": "electronics",
             "cost": 300,
-            "availability": 4,
-            "description": "Physical tap for wired connections."
+            "availability": 6,
+            "legality": "restricted",
+            "description": "Physical tap for wired connections.",
+            "page": 441,
+            "source": "Core"
+          },
+          {
+            "id": "headjammer",
+            "name": "Headjammer",
+            "category": "electronics",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "legality": "restricted",
+            "description": "Personal jammer worn as a headband. Generates noise equal to rating.",
+            "page": 441,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 150, "availability": 1 },
+              "2": { "cost": 300, "availability": 2 },
+              "3": { "cost": 450, "availability": 3 },
+              "4": { "cost": 600, "availability": 4 },
+              "5": { "cost": 750, "availability": 5 },
+              "6": { "cost": 900, "availability": 6 }
+            }
+          },
+          {
+            "id": "micro-transceiver",
+            "name": "Micro-transceiver",
+            "category": "electronics",
+            "cost": 100,
+            "availability": 2,
+            "description": "Tiny radio transceiver for short-range communication.",
+            "page": 441,
+            "source": "Core"
+          },
+          {
+            "id": "tag-eraser",
+            "name": "Tag Eraser",
+            "category": "electronics",
+            "cost": 450,
+            "availability": 6,
+            "legality": "restricted",
+            "description": "Erases RFID tags within a few centimeters.",
+            "page": 441,
+            "source": "Core"
+          },
+          {
+            "id": "white-noise-generator",
+            "name": "White Noise Generator",
+            "category": "electronics",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Generates white noise to defeat audio surveillance. Rating = noise generated.",
+            "page": 441,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 50, "availability": 1 },
+              "2": { "cost": 100, "availability": 2 },
+              "3": { "cost": 150, "availability": 3 },
+              "4": { "cost": 200, "availability": 4 },
+              "5": { "cost": 250, "availability": 5 },
+              "6": { "cost": 300, "availability": 6 }
+            }
           },
           {
             "id": "directional-jammer",
@@ -9139,14 +9202,6 @@
             }
           },
           {
-            "id": "micro-transceiver",
-            "name": "Micro-Transceiver",
-            "category": "electronics",
-            "cost": 100,
-            "availability": 2,
-            "description": "Basic wireless communication device."
-          },
-          {
             "id": "monocle",
             "name": "Monocle",
             "category": "electronics",
@@ -9211,88 +9266,158 @@
             "id": "subvocal-mic",
             "name": "Subvocal Microphone",
             "category": "electronics",
+            "deviceRating": 3,
             "cost": 50,
-            "availability": 2,
-            "description": "Picks up subvocalized speech."
+            "availability": 4,
+            "description": "Picks up subvocalized speech.",
+            "page": 440,
+            "source": "Core"
+          }
+        ],
+        "accessories": [
+          {
+            "id": "ar-gloves",
+            "name": "AR Gloves",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 150,
+            "description": "Gloves for interacting with AR interfaces.",
+            "page": 440,
+            "source": "Core"
           },
           {
-            "id": "tag-eraser",
-            "name": "Tag Eraser",
-            "category": "electronics",
-            "cost": 450,
+            "id": "biometric-reader",
+            "name": "Biometric Reader",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 200,
+            "availability": 4,
+            "description": "Scans and verifies biometric data.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "electronic-paper",
+            "name": "Electronic Paper",
+            "category": "accessories",
+            "deviceRating": 1,
+            "cost": 5,
+            "description": "Flexible display sheet.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "printer",
+            "name": "Printer",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 25,
+            "description": "Standard document printer.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "satellite-link",
+            "name": "Satellite Link",
+            "category": "accessories",
+            "deviceRating": 4,
+            "cost": 500,
             "availability": 6,
-            "description": "Destroys RFID tags."
+            "description": "Satellite communication uplink.",
+            "page": 440,
+            "source": "Core"
           },
           {
-            "id": "headjammer",
-            "name": "Headjammer",
-            "category": "electronics",
-            "hasRating": true,
-            "maxRating": 6,
-            "description": "Personal wireless jammer worn on the head (Rating 1-6).",
+            "id": "simrig",
+            "name": "Simrig",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 1000,
+            "availability": 12,
+            "description": "Records simsense experiences.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "trid-projector",
+            "name": "Trid Projector",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 200,
+            "description": "Projects 3D holographic images.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "trodes",
+            "name": "Trodes",
+            "category": "accessories",
+            "deviceRating": 3,
+            "cost": 70,
+            "description": "External electrodes for simsense and AR without implants.",
+            "page": 440,
+            "source": "Core"
+          }
+        ],
+        "rfidTags": [
+          {
+            "id": "standard-tags",
+            "name": "Standard Tags",
+            "category": "rfidTags",
+            "deviceRating": 1,
+            "cost": 1,
+            "quantity": 10,
+            "description": "Basic RFID tags, sold per 10.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "datachip",
+            "name": "Datachip",
+            "category": "rfidTags",
+            "deviceRating": 1,
+            "cost": 5,
+            "quantity": 10,
+            "description": "Small data storage chips, sold per 10.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "security-tags",
+            "name": "Security Tags",
+            "category": "rfidTags",
+            "deviceRating": 3,
+            "cost": 5,
+            "availability": 3,
+            "quantity": 10,
+            "description": "Encrypted security tags, sold per 10.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "sensor-tags",
+            "name": "Sensor Tags",
+            "category": "rfidTags",
+            "deviceRating": 2,
+            "cost": 40,
+            "availability": 5,
+            "quantity": 10,
+            "description": "RFID tags with built-in sensors, sold per 10.",
+            "page": 440,
+            "source": "Core"
+          },
+          {
+            "id": "stealth-tags",
+            "name": "Stealth Tags",
+            "category": "rfidTags",
+            "deviceRating": 3,
+            "cost": 10,
+            "availability": 7,
             "legality": "restricted",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 150,
-                "availability": 1
-              },
-              "2": {
-                "cost": 300,
-                "availability": 2
-              },
-              "3": {
-                "cost": 450,
-                "availability": 3
-              },
-              "4": {
-                "cost": 600,
-                "availability": 4
-              },
-              "5": {
-                "cost": 750,
-                "availability": 5
-              },
-              "6": {
-                "cost": 900,
-                "availability": 6
-              }
-            }
-          },
-          {
-            "id": "white-noise-generator",
-            "name": "White Noise Generator",
-            "category": "electronics",
-            "hasRating": true,
-            "maxRating": 6,
-            "description": "Prevents audio surveillance (Rating 1-6).",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 1
-              },
-              "2": {
-                "cost": 100,
-                "availability": 2
-              },
-              "3": {
-                "cost": 150,
-                "availability": 3
-              },
-              "4": {
-                "cost": 200,
-                "availability": 4
-              },
-              "5": {
-                "cost": 250,
-                "availability": 5
-              },
-              "6": {
-                "cost": 300,
-                "availability": 6
-              }
-            }
+            "quantity": 10,
+            "description": "Hard to detect RFID tags, sold per 10.",
+            "page": 440,
+            "source": "Core"
           }
         ],
         "tools": [
