@@ -8535,61 +8535,99 @@
             "cost": 100,
             "availability": 2,
             "deviceRating": 1,
-            "description": "Basic commlink for the budget-conscious."
+            "description": "Basic commlink for the budget-conscious.",
+            "page": 438,
+            "source": "Core"
           },
           {
-            "id": "sony-angel",
-            "name": "Sony Angel",
+            "id": "sony-emperor",
+            "name": "Sony Emperor",
             "category": "commlinks",
-            "cost": 300,
-            "availability": 2,
+            "cost": 700,
+            "availability": 4,
             "deviceRating": 2,
-            "description": "Entry-level consumer commlink."
+            "description": "Entry-level consumer commlink.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "renraku-sensei",
             "name": "Renraku Sensei",
             "category": "commlinks",
             "cost": 1000,
-            "availability": 2,
+            "availability": 6,
             "deviceRating": 3,
-            "description": "Popular mid-range commlink."
+            "description": "Popular mid-range commlink.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "erika-elite",
             "name": "Erika Elite",
             "category": "commlinks",
             "cost": 2500,
-            "availability": 4,
+            "availability": 8,
             "deviceRating": 4,
-            "description": "High-end consumer commlink."
+            "description": "High-end consumer commlink.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "hermes-ikon",
             "name": "Hermes Ikon",
             "category": "commlinks",
             "cost": 3000,
-            "availability": 6,
+            "availability": 10,
             "deviceRating": 5,
-            "description": "Executive-class commlink."
+            "description": "Executive-class commlink.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "transys-avalon",
             "name": "Transys Avalon",
             "category": "commlinks",
             "cost": 5000,
-            "availability": 8,
+            "availability": 12,
             "deviceRating": 6,
-            "description": "Top-of-the-line luxury commlink."
+            "description": "Top-of-the-line luxury commlink.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "fairlight-caliban",
             "name": "Fairlight Caliban",
             "category": "commlinks",
             "cost": 8000,
-            "availability": 10,
+            "availability": 14,
             "deviceRating": 7,
-            "description": "Cutting-edge personal computing."
+            "description": "Cutting-edge personal computing.",
+            "page": 438,
+            "source": "Core"
+          },
+          {
+            "id": "sim-module",
+            "name": "Sim Module",
+            "category": "commlinks",
+            "subcategory": "accessory",
+            "cost": 100,
+            "costModifier": true,
+            "description": "Simsense module for commlinks. Allows BTL playback and AR/VR experience.",
+            "page": 438,
+            "source": "Core"
+          },
+          {
+            "id": "sim-module-hot-sim",
+            "name": "Sim Module (Hot-Sim Modified)",
+            "category": "commlinks",
+            "subcategory": "accessory",
+            "cost": 250,
+            "costModifier": true,
+            "availability": 4,
+            "legality": "forbidden",
+            "description": "Hot-sim modified simsense module. Illegal due to lack of safety limiters.",
+            "page": 438,
+            "source": "Core"
           }
         ],
         "cyberdecks": [
@@ -8599,6 +8637,7 @@
             "category": "cyberdecks",
             "cost": 49500,
             "availability": 3,
+            "legality": "restricted",
             "deviceRating": 1,
             "attributes": {
               "attack": 4,
@@ -8607,7 +8646,9 @@
               "firewall": 1
             },
             "programs": 1,
-            "description": "Entry-level deck for aspiring deckers."
+            "description": "Entry-level deck for aspiring deckers.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "microdeck-summit",
@@ -8615,6 +8656,7 @@
             "category": "cyberdecks",
             "cost": 58000,
             "availability": 3,
+            "legality": "restricted",
             "deviceRating": 1,
             "attributes": {
               "attack": 4,
@@ -8623,14 +8665,17 @@
               "firewall": 1
             },
             "programs": 1,
-            "description": "Budget deck with decent specs."
+            "description": "Budget deck with decent specs.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "microtronica-azteca-200",
             "name": "Microtronica Azteca 200",
             "category": "cyberdecks",
             "cost": 110250,
-            "availability": 5,
+            "availability": 6,
+            "legality": "restricted",
             "deviceRating": 2,
             "attributes": {
               "attack": 5,
@@ -8639,14 +8684,17 @@
               "firewall": 2
             },
             "programs": 2,
-            "description": "Solid mid-range deck."
+            "description": "Solid mid-range deck.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "hermes-chariot",
             "name": "Hermes Chariot",
             "category": "cyberdecks",
             "cost": 123000,
-            "availability": 5,
+            "availability": 6,
+            "legality": "restricted",
             "deviceRating": 2,
             "attributes": {
               "attack": 5,
@@ -8655,14 +8703,17 @@
               "firewall": 2
             },
             "programs": 2,
-            "description": "Popular with professional deckers."
+            "description": "Popular with professional deckers.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "novatech-navigator",
             "name": "Novatech Navigator",
             "category": "cyberdecks",
             "cost": 205750,
-            "availability": 6,
+            "availability": 9,
+            "legality": "restricted",
             "deviceRating": 3,
             "attributes": {
               "attack": 6,
@@ -8671,14 +8722,17 @@
               "firewall": 3
             },
             "programs": 3,
-            "description": "High-performance deck for serious work."
+            "description": "High-performance deck for serious work.",
+            "page": 438,
+            "source": "Core"
           },
           {
             "id": "renraku-tsurugi",
             "name": "Renraku Tsurugi",
             "category": "cyberdecks",
             "cost": 214125,
-            "availability": 7,
+            "availability": 9,
+            "legality": "restricted",
             "deviceRating": 3,
             "attributes": {
               "attack": 6,
@@ -8687,14 +8741,17 @@
               "firewall": 3
             },
             "programs": 3,
-            "description": "Corporate-quality deck."
+            "description": "Corporate-quality deck.",
+            "page": 438,
+            "source": "Core"
           },
           {
-            "id": "shiawase-cyber-5",
-            "name": "Shiawase Cyber-5",
+            "id": "sony-ciy-720",
+            "name": "Sony CIY-720",
             "category": "cyberdecks",
-            "cost": 345250,
-            "availability": 9,
+            "cost": 345000,
+            "availability": 12,
+            "legality": "restricted",
             "deviceRating": 4,
             "attributes": {
               "attack": 7,
@@ -8703,23 +8760,47 @@
               "firewall": 4
             },
             "programs": 4,
-            "description": "Elite deck for top-tier deckers."
+            "description": "High-end deck with balanced attributes.",
+            "page": 438,
+            "source": "Core"
           },
           {
-            "id": "fairlight-excalibur",
-            "name": "Fairlight Excalibur",
+            "id": "shiawase-cyber-5",
+            "name": "Shiawase Cyber-5",
             "category": "cyberdecks",
-            "cost": 823250,
-            "availability": 12,
-            "deviceRating": 6,
+            "cost": 549375,
+            "availability": 15,
+            "legality": "restricted",
+            "deviceRating": 5,
             "attributes": {
               "attack": 8,
               "sleaze": 7,
               "dataProcessing": 6,
               "firewall": 5
             },
+            "programs": 5,
+            "description": "Elite deck for top-tier deckers.",
+            "page": 438,
+            "source": "Core"
+          },
+          {
+            "id": "fairlight-excalibur",
+            "name": "Fairlight Excalibur",
+            "category": "cyberdecks",
+            "cost": 823250,
+            "availability": 18,
+            "legality": "restricted",
+            "deviceRating": 6,
+            "attributes": {
+              "attack": 9,
+              "sleaze": 8,
+              "dataProcessing": 7,
+              "firewall": 6
+            },
             "programs": 6,
-            "description": "The legendary Excalibur - the best money can buy."
+            "description": "The legendary Excalibur - the best money can buy.",
+            "page": 438,
+            "source": "Core"
           }
         ],
         "electronics": [
