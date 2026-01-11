@@ -61,4 +61,3 @@ export async function requireAdmin(): Promise<PublicUser> {
   }
   return user;
 }
-

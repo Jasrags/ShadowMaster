@@ -10,11 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter, saveCharacter } from "@/lib/storage/characters";
-import {
-  getCharacterContact,
-  updateCharacterContact,
-  burnContact,
-} from "@/lib/storage/contacts";
+import { getCharacterContact, updateCharacterContact, burnContact } from "@/lib/storage/contacts";
 import { addFavorTransaction } from "@/lib/storage/favor-ledger";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import {
@@ -41,18 +37,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, contactId } = await params;
@@ -60,19 +50,13 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get contact
     const contact = await getCharacterContact(userId, characterId, contactId);
     if (!contact) {
-      return NextResponse.json(
-        { success: false, error: "Contact not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Contact not found" }, { status: 404 });
     }
 
     // Parse body
@@ -94,10 +78,7 @@ export async function POST(
     }
 
     // Load ruleset for service definitions
-    const mergeResult = await loadAndMergeRuleset(
-      character.editionCode,
-      character.attachedBookIds
-    );
+    const mergeResult = await loadAndMergeRuleset(character.editionCode, character.attachedBookIds);
 
     if (!mergeResult.success || !mergeResult.ruleset) {
       return NextResponse.json(
@@ -111,8 +92,7 @@ export async function POST(
     const favorServicesModule = mergeResult.ruleset.modules?.favorServices as
       | { services?: FavorServiceDefinition[] }
       | undefined;
-    const favorServices: FavorServiceDefinition[] =
-      favorServicesModule?.services || [];
+    const favorServices: FavorServiceDefinition[] = favorServicesModule?.services || [];
 
     // Find the requested service
     const service = favorServices.find((s) => s.id === serviceId);
@@ -153,13 +133,7 @@ export async function POST(
     const costs = calculateFavorCost(service, contact, character, rushJob);
 
     // Resolve the favor call
-    const resolution = resolveFavorCall(
-      contact,
-      service,
-      character,
-      diceRoll,
-      opposingRoll
-    );
+    const resolution = resolveFavorCall(contact, service, character, diceRoll, opposingRoll);
 
     // Apply resource costs
     const updatedCharacter = { ...character };
@@ -169,10 +143,7 @@ export async function POST(
     }
 
     if (costs.karmaCost > 0) {
-      updatedCharacter.karmaCurrent = Math.max(
-        0,
-        updatedCharacter.karmaCurrent - costs.karmaCost
-      );
+      updatedCharacter.karmaCurrent = Math.max(0, updatedCharacter.karmaCurrent - costs.karmaCost);
     }
 
     // Save updated character
@@ -245,9 +216,6 @@ export async function POST(
     });
   } catch (error) {
     console.error("Failed to call favor:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to call favor" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to call favor" }, { status: 500 });
   }
 }

@@ -2,9 +2,7 @@
   "timestamp": "2026-01-04T23:48:38.989Z",
   "config": {
     "edition": "sr5",
-    "sources": [
-      "Core"
-    ],
+    "sources": ["Core"],
     "categories": [],
     "outputDir": "/Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/plans/verification-reports",
     "reportOnly": true

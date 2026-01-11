@@ -1,11 +1,11 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 # Blood Magic
 
@@ -19,8 +19,8 @@ A magician who knows the metamagic techniques of Sacrifice and Invocation may cr
 
 ```
 Action: Complex
-Type: P  
-Range: [Magic] meters 
+Type: P
+Range: [Magic] meters
 Duration: Instant
 ```
 

@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |

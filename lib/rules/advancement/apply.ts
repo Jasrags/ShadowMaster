@@ -11,10 +11,7 @@ import type { Character, AdvancementRecord } from "@/lib/types";
  * @param record - Advancement record to apply
  * @returns Updated character
  */
-export function applyAdvancement(
-  character: Character,
-  record: AdvancementRecord
-): Character {
+export function applyAdvancement(character: Character, record: AdvancementRecord): Character {
   const updatedCharacter: Character = { ...character };
 
   if (record.type === "attribute") {
@@ -34,7 +31,7 @@ export function applyAdvancement(
       const specializationName = specializationMatch[1].trim();
       const skillId = record.targetId;
       const existingSpecializations = character.skillSpecializations?.[skillId] || [];
-      
+
       if (!existingSpecializations.includes(specializationName)) {
         updatedCharacter.skillSpecializations = {
           ...character.skillSpecializations,

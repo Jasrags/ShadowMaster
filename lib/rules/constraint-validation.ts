@@ -18,18 +18,9 @@ import type {
   Campaign,
 } from "../types";
 import { getModule } from "./merge";
-import {
-  validateRating,
-  validateRatingAvailability,
-  convertLegacyRatingSpec,
-} from "./ratings";
-import {
-  validateAllQualities,
-  validateKarmaLimits,
-} from "./qualities";
-import {
-  validateAllGear,
-} from "./gear/validation";
+import { validateRating, validateRatingAvailability, convertLegacyRatingSpec } from "./ratings";
+import { validateAllQualities, validateKarmaLimits } from "./qualities";
+import { validateAllGear } from "./gear/validation";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -80,10 +71,7 @@ type ConstraintValidator = (
 /**
  * Find a gear catalog item by ID or name
  */
-function findGearCatalogItem(
-  ruleset: MergedRuleset,
-  identifier: string
-): GearItemData | null {
+function findGearCatalogItem(ruleset: MergedRuleset, identifier: string): GearItemData | null {
   const gearCatalog = getModule<GearCatalogData>(ruleset, "gear");
   if (!gearCatalog) return null;
 
@@ -110,10 +98,7 @@ function findGearCatalogItem(
     ...(gearCatalog.weapons?.grenades || []),
   ];
 
-  return (
-    allGear.find((item) => item.id === identifier || item.name === identifier) ||
-    null
-  );
+  return allGear.find((item) => item.id === identifier || item.name === identifier) || null;
 }
 
 /**
@@ -127,11 +112,7 @@ function findCyberwareCatalogItem(
   if (!cyberwareCatalog) return null;
 
   const catalog = cyberwareCatalog.catalog || [];
-  return (
-    catalog.find(
-      (item) => item.id === identifier || item.name === identifier
-    ) || null
-  );
+  return catalog.find((item) => item.id === identifier || item.name === identifier) || null;
 }
 
 // =============================================================================
@@ -152,9 +133,7 @@ function validateEquipmentRatings(
 /**
  * Internal function that returns all rating validation errors
  */
-function validateEquipmentRatingsInternal(
-  context: ValidationContext
-): ValidationError[] {
+function validateEquipmentRatingsInternal(context: ValidationContext): ValidationError[] {
   const errors: ValidationError[] = [];
   const { character, ruleset } = context;
 
@@ -171,21 +150,14 @@ function validateEquipmentRatingsInternal(
   // Validate gear ratings
   for (const item of character.gear || []) {
     if (item.rating !== undefined) {
-      const catalogItem = findGearCatalogItem(
-        ruleset,
-        item.id || item.name
-      );
+      const catalogItem = findGearCatalogItem(ruleset, item.id || item.name);
 
       if (catalogItem) {
         const spec = convertLegacyRatingSpec(catalogItem);
 
         if (spec.rating) {
           // Validate rating is in range
-          const ratingValidation = validateRating(
-            item.rating,
-            spec.rating,
-            validationContext
-          );
+          const ratingValidation = validateRating(item.rating, spec.rating, validationContext);
           if (!ratingValidation.valid) {
             errors.push({
               constraintId: "equipment-rating-range",
@@ -219,20 +191,13 @@ function validateEquipmentRatingsInternal(
   // Validate cyberware ratings
   for (const item of character.cyberware || []) {
     if (item.rating !== undefined) {
-      const catalogItem = findCyberwareCatalogItem(
-        ruleset,
-        item.catalogId || item.name
-      );
+      const catalogItem = findCyberwareCatalogItem(ruleset, item.catalogId || item.name);
 
       if (catalogItem) {
         const spec = convertLegacyRatingSpec(catalogItem);
 
         if (spec.rating) {
-          const ratingValidation = validateRating(
-            item.rating,
-            spec.rating,
-            validationContext
-          );
+          const ratingValidation = validateRating(item.rating, spec.rating, validationContext);
           if (!ratingValidation.valid) {
             errors.push({
               constraintId: "cyberware-rating-range",
@@ -347,15 +312,19 @@ function validateAttributeLimit(
     );
 
     // Exceptional Attribute allows +1 to the maxAtMax count
-    const effectiveMaxAtMax = hasExceptionalAttribute
-      ? params.maxAtMax + 1
-      : params.maxAtMax;
+    const effectiveMaxAtMax = hasExceptionalAttribute ? params.maxAtMax + 1 : params.maxAtMax;
 
     // Physical and Mental attributes that count toward the limit
     // Special attributes (edge, magic, resonance) are excluded per rules
     const physicalMentalAttributes = [
-      "body", "agility", "reaction", "strength",
-      "willpower", "logic", "intuition", "charisma",
+      "body",
+      "agility",
+      "reaction",
+      "strength",
+      "willpower",
+      "logic",
+      "intuition",
+      "charisma",
     ];
 
     let atMaxCount = 0;
@@ -371,9 +340,7 @@ function validateAttributeLimit(
     }
 
     if (atMaxCount > effectiveMaxAtMax) {
-      const qualityNote = hasExceptionalAttribute
-        ? " (including Exceptional Attribute bonus)"
-        : "";
+      const qualityNote = hasExceptionalAttribute ? " (including Exceptional Attribute bonus)" : "";
       return {
         constraintId: constraint.id,
         message:
@@ -387,7 +354,8 @@ function validateAttributeLimit(
   // Check specific attribute max value
   if (params.attributeId && params.maxValue !== undefined) {
     const value = character.attributes?.[params.attributeId] || 0;
-    const finalMax = attributeCap !== undefined ? Math.min(params.maxValue, attributeCap) : params.maxValue;
+    const finalMax =
+      attributeCap !== undefined ? Math.min(params.maxValue, attributeCap) : params.maxValue;
     if (value > finalMax) {
       return {
         constraintId: constraint.id,
@@ -414,9 +382,11 @@ function validateSkillLimit(
     maxWithAptitude?: number;
   };
 
-  const hasAptitude = character.positiveQualities?.some(q => (q.qualityId || q.id) === "aptitude");
+  const hasAptitude = character.positiveQualities?.some(
+    (q) => (q.qualityId || q.id) === "aptitude"
+  );
   const campaignSkillCap = context.campaign?.advancementSettings?.skillRatingCap;
-  let maxRating = hasAptitude ? (params.maxWithAptitude || 7) : (params.max || 6);
+  let maxRating = hasAptitude ? params.maxWithAptitude || 7 : params.max || 6;
 
   if (campaignSkillCap !== undefined) {
     maxRating = Math.min(maxRating, campaignSkillCap);
@@ -478,9 +448,7 @@ function validateSpecialAttributeInit(
     if (edgeLimits && "min" in edgeLimits) {
       const currentEdge = character.specialAttributes?.edge ?? 0;
       if (currentEdge < edgeLimits.min) {
-        errors.push(
-          `Edge must be at least ${edgeLimits.min} (metatype minimum)`
-        );
+        errors.push(`Edge must be at least ${edgeLimits.min} (metatype minimum)`);
       }
     }
   }
@@ -568,10 +536,7 @@ function validateSpecialAttributeInit(
 
           if (option?.resonanceRating !== undefined) {
             // Resonance should be at least the priority base value
-            if (
-              currentResonance !== undefined &&
-              currentResonance < option.resonanceRating
-            ) {
+            if (currentResonance !== undefined && currentResonance < option.resonanceRating) {
               errors.push(
                 `Resonance must be at least ${option.resonanceRating} (from Priority ${magicPriority})`
               );
@@ -661,8 +626,7 @@ function validateRequiredSelection(
       break;
     case "qualities":
       actualCount =
-        (character.positiveQualities?.length || 0) +
-        (character.negativeQualities?.length || 0);
+        (character.positiveQualities?.length || 0) + (character.negativeQualities?.length || 0);
       break;
     case "priorities":
       actualCount = Object.keys(creationState?.priorities || {}).length;
@@ -710,7 +674,9 @@ function validateForbiddenCombination(
       presentItems = [
         ...(character.positiveQualities || []),
         ...(character.negativeQualities || []),
-      ].map(q => q.qualityId || q.id).filter((id): id is string => !!id);
+      ]
+        .map((q) => q.qualityId || q.id)
+        .filter((id): id is string => !!id);
       break;
     case "skill":
       presentItems = Object.keys(character.skills || {});
@@ -724,9 +690,7 @@ function validateForbiddenCombination(
   if (forbidden.length > 1) {
     return {
       constraintId: constraint.id,
-      message:
-        constraint.errorMessage ||
-        `Cannot have these together: ${forbidden.join(", ")}`,
+      message: constraint.errorMessage || `Cannot have these together: ${forbidden.join(", ")}`,
       severity: constraint.severity,
     };
   }
@@ -754,7 +718,9 @@ function validateRequiredCombination(
     const allQualities = [
       ...(character.positiveQualities || []),
       ...(character.negativeQualities || []),
-    ].map((q) => (q.qualityId || q.id || '').toLowerCase()).filter(id => id);
+    ]
+      .map((q) => (q.qualityId || q.id || "").toLowerCase())
+      .filter((id) => id);
 
     if (
       allQualities.includes(params.ifHas.toLowerCase()) &&
@@ -763,8 +729,7 @@ function validateRequiredCombination(
       return {
         constraintId: constraint.id,
         message:
-          constraint.errorMessage ||
-          `Having "${params.ifHas}" requires "${params.mustHave}"`,
+          constraint.errorMessage || `Having "${params.ifHas}" requires "${params.mustHave}"`,
         severity: constraint.severity,
       };
     }
@@ -801,8 +766,7 @@ function validateEssenceMinimum(
 /**
  * Custom validation - placeholder for extensibility
  */
-function validateCustom(
-): ValidationError | null {
+function validateCustom(): ValidationError | null {
   // Custom validators would be registered and looked up by name
   // For now, this is a placeholder that always passes
   // const params = _constraint.params as { validatorName?: string };
@@ -951,10 +915,7 @@ function validateBasicCharacter(context: ValidationContext): ValidationResult {
 /**
  * Validate a specific step in the creation process
  */
-export function validateStep(
-  stepId: string,
-  context: ValidationContext
-): ValidationResult {
+export function validateStep(stepId: string, context: ValidationContext): ValidationResult {
   const { creationMethod } = context;
 
   if (!creationMethod) {
@@ -997,9 +958,7 @@ export function calculateRemainingBudget(
 /**
  * Validate that all points/resources have been spent appropriately
  */
-export function validateBudgetsComplete(
-  context: ValidationContext
-): ValidationResult {
+export function validateBudgetsComplete(context: ValidationContext): ValidationResult {
   const { creationMethod, creationState } = context;
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
@@ -1092,4 +1051,3 @@ export function isAttributeWithinLimits(
   const { min, max } = limits[attributeId];
   return value >= min && value <= max;
 }
-

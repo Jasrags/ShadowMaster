@@ -14,11 +14,7 @@ import {
   updateAdvancementRecord,
   removeTrainingPeriod,
 } from "@/lib/storage/characters";
-import {
-  completeTraining,
-  interruptTraining,
-  resumeTraining,
-} from "@/lib/rules/advancement";
+import { completeTraining, interruptTraining, resumeTraining } from "@/lib/rules/advancement";
 
 export async function POST(
   request: NextRequest,
@@ -28,18 +24,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, trainingId } = await params;
@@ -47,10 +37,7 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Character must be active (not draft)
@@ -67,7 +54,10 @@ export async function POST(
 
     if (!action || typeof action !== "string") {
       return NextResponse.json(
-        { success: false, error: "Missing or invalid action (expected: 'complete', 'interrupt', or 'resume')" },
+        {
+          success: false,
+          error: "Missing or invalid action (expected: 'complete', 'interrupt', or 'resume')",
+        },
         { status: 400 }
       );
     }
@@ -183,27 +173,20 @@ export async function POST(
 
         default:
           return NextResponse.json(
-            { success: false, error: `Invalid action: ${action}. Expected: 'complete', 'interrupt', or 'resume'` },
+            {
+              success: false,
+              error: `Invalid action: ${action}. Expected: 'complete', 'interrupt', or 'resume'`,
+            },
             { status: 400 }
           );
       }
-
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : `Failed to ${action} training`;
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 400 }
-      );
+      const errorMessage = error instanceof Error ? error.message : `Failed to ${action} training`;
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
   } catch (error) {
     console.error("Failed to manage training:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to manage training";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : "Failed to manage training";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }
-

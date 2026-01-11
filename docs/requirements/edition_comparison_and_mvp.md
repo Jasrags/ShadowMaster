@@ -2,39 +2,47 @@
 
 ## Attribute Comparison
 
-  Edition   Notes
-  --------- -----------------------------------------------
-  1E--3E    Classic attributes, similar across editions
-  4E/4A     Streamlined, fixed target numbers
-  5E        Same attributes + improved Matrix integration
-  6E        Similar but simplified; Edge-based mechanics
+Edition Notes
+
+---
+
+1E--3E Classic attributes, similar across editions
+4E/4A Streamlined, fixed target numbers
+5E Same attributes + improved Matrix integration
+6E Similar but simplified; Edge-based mechanics
 
 ## Skill System Comparison
 
-  Edition   Skill Structure
-  --------- --------------------------------
-  1E--3E    Larger, more granular
-  4E/4A     Consolidated skills
-  5E        Similar to 4E, improved Matrix
-  6E        Further streamlined
+Edition Skill Structure
+
+---
+
+1E--3E Larger, more granular
+4E/4A Consolidated skills
+5E Similar to 4E, improved Matrix
+6E Further streamlined
 
 ## Combat Comparison
 
-  Edition   Highlights
-  --------- --------------------------------------
-  1E--3E    Variable TNs, complex modifiers
-  4E        Opposed dice pools
-  5E        Initiative and recoil changes
-  6E        Edge economy replaces many modifiers
+Edition Highlights
+
+---
+
+1E--3E Variable TNs, complex modifiers
+4E Opposed dice pools
+5E Initiative and recoil changes
+6E Edge economy replaces many modifiers
 
 ## Matrix Comparison
 
-  Edition   Mechanic
-  --------- --------------------------------------
-  1E--3E    Deckers, very complex
-  4E        Wireless world introduced
-  5E        Best "classic" wireless Matrix rules
-  6E        Simplified around Edge
+Edition Mechanic
+
+---
+
+1E--3E Deckers, very complex
+4E Wireless world introduced
+5E Best "classic" wireless Matrix rules
+6E Simplified around Edge
 
 ## MVP Recommendation
 

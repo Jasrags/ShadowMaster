@@ -1,14 +1,14 @@
-'use client';
+"use client";
 
 /**
  * AdeptPowerList - Displays character's adept powers with PP tracking
- * 
+ *
  * Shows power point budget, individual powers with costs,
  * and activation info.
  */
 
-import type { AdeptPower } from '@/lib/types/character';
-import type { AdeptPowerCatalogItem } from '@/lib/rules/loader-types';
+import type { AdeptPower } from "@/lib/types/character";
+import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 
 interface AdeptPowerListProps {
   powers: AdeptPower[];
@@ -18,16 +18,16 @@ interface AdeptPowerListProps {
   onTogglePower?: (power: AdeptPower) => void;
 }
 
-export function AdeptPowerList({ 
-  powers, 
-  powerCatalog, 
+export function AdeptPowerList({
+  powers,
+  powerCatalog,
   powerPointsTotal,
-  className = '',
-  onTogglePower 
+  className = "",
+  onTogglePower,
 }: AdeptPowerListProps) {
   // Calculate spent power points
   const powerPointsSpent = powers.reduce((sum, power) => {
-    const catalogPower = powerCatalog.find(p => p.id === power.catalogId);
+    const catalogPower = powerCatalog.find((p) => p.id === power.catalogId);
     if (!catalogPower) return sum;
     return sum + calculatePowerCost(power, catalogPower);
   }, 0);
@@ -46,11 +46,11 @@ export function AdeptPowerList({
   return (
     <div className={`adept-powers ${className}`}>
       <h3 className="adept-powers__title">Adept Powers</h3>
-      
+
       {/* Power Point Budget */}
       <div className="adept-powers__budget">
         <div className="adept-powers__budget-bar">
-          <div 
+          <div
             className="adept-powers__budget-fill"
             style={{ width: `${(powerPointsSpent / powerPointsTotal) * 100}%` }}
           />
@@ -68,9 +68,9 @@ export function AdeptPowerList({
       {/* Power List */}
       <ul className="adept-powers__list">
         {powers.map((power, idx) => {
-          const catalogPower = powerCatalog.find(p => p.id === power.catalogId);
+          const catalogPower = powerCatalog.find((p) => p.id === power.catalogId);
           return (
-            <AdeptPowerCard 
+            <AdeptPowerCard
               key={`${power.catalogId}-${idx}`}
               power={power}
               catalogPower={catalogPower}
@@ -115,7 +115,9 @@ function AdeptPowerCard({ power, catalogPower, onToggle }: AdeptPowerCardProps) 
       {catalogPower?.activation && (
         <div className="adept-power-card__activation">
           <span className="adept-power-card__label">Activation:</span>
-          <span className="adept-power-card__value">{formatActivation(catalogPower.activation)}</span>
+          <span className="adept-power-card__value">
+            {formatActivation(catalogPower.activation)}
+          </span>
         </div>
       )}
 
@@ -124,7 +126,7 @@ function AdeptPowerCard({ power, catalogPower, onToggle }: AdeptPowerCardProps) 
       )}
 
       {onToggle && catalogPower?.activation && (
-        <button 
+        <button
           className="adept-power-card__toggle-btn"
           onClick={onToggle}
           aria-label={`Toggle ${power.name}`}
@@ -140,20 +142,20 @@ function calculatePowerCost(power: AdeptPower, catalogPower: AdeptPowerCatalogIt
   if (catalogPower.cost === null) {
     // Variable cost - check levels table
     if (catalogPower.levels && power.rating !== undefined) {
-      const level = catalogPower.levels.find(l => l.level === power.rating);
+      const level = catalogPower.levels.find((l) => l.level === power.rating);
       return level?.cost ?? 0;
     }
     return 0;
   }
 
   switch (catalogPower.costType) {
-    case 'fixed':
+    case "fixed":
       return catalogPower.cost;
-    case 'perLevel':
+    case "perLevel":
       return catalogPower.cost * (power.rating ?? 1);
-    case 'table':
+    case "table":
       if (catalogPower.levels && power.rating !== undefined) {
-        const level = catalogPower.levels.find(l => l.level === power.rating);
+        const level = catalogPower.levels.find((l) => l.level === power.rating);
         return level?.cost ?? catalogPower.cost;
       }
       return catalogPower.cost;
@@ -164,10 +166,10 @@ function calculatePowerCost(power: AdeptPower, catalogPower: AdeptPowerCatalogIt
 
 function formatActivation(activation: string): string {
   const activationMap: Record<string, string> = {
-    'free': 'Free Action',
-    'simple': 'Simple Action',
-    'complex': 'Complex Action',
-    'interrupt': 'Interrupt'
+    free: "Free Action",
+    simple: "Simple Action",
+    complex: "Complex Action",
+    interrupt: "Interrupt",
   };
   return activationMap[activation] ?? activation;
 }

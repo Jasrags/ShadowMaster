@@ -119,9 +119,7 @@ export function initializeDynamicState(
  * @param severity - Addiction severity
  * @returns ISO date string for next check
  */
-function calculateNextCravingCheck(
-  severity: "mild" | "moderate" | "severe" | "burnout"
-): string {
+function calculateNextCravingCheck(severity: "mild" | "moderate" | "severe" | "burnout"): string {
   const now = new Date();
   let daysUntilCheck = 7; // Default: weekly
 
@@ -185,12 +183,8 @@ export function updateDynamicState(
   const positiveQualities = character.positiveQualities || [];
   const negativeQualities = character.negativeQualities || [];
 
-  const positiveIndex = positiveQualities.findIndex(
-    (q) => (q.qualityId || q.id) === qualityId
-  );
-  const negativeIndex = negativeQualities.findIndex(
-    (q) => (q.qualityId || q.id) === qualityId
-  );
+  const positiveIndex = positiveQualities.findIndex((q) => (q.qualityId || q.id) === qualityId);
+  const negativeIndex = negativeQualities.findIndex((q) => (q.qualityId || q.id) === qualityId);
 
   if (positiveIndex >= 0) {
     const updatedPositive = [...positiveQualities];
@@ -262,7 +256,10 @@ export function validateDynamicState(
     case "addiction": {
       if (state.type === "addiction") {
         const addictionState = state.state;
-        if (!addictionState.severity || !["mild", "moderate", "severe", "burnout"].includes(addictionState.severity)) {
+        if (
+          !addictionState.severity ||
+          !["mild", "moderate", "severe", "burnout"].includes(addictionState.severity)
+        ) {
           errors.push("Invalid addiction severity");
         }
         if (addictionState.withdrawalPenalty < 0 || addictionState.withdrawalPenalty > 6) {
@@ -275,7 +272,10 @@ export function validateDynamicState(
     case "allergy": {
       if (state.type === "allergy") {
         const allergyState = state.state;
-        if (!allergyState.severity || !["mild", "moderate", "severe", "extreme"].includes(allergyState.severity)) {
+        if (
+          !allergyState.severity ||
+          !["mild", "moderate", "severe", "extreme"].includes(allergyState.severity)
+        ) {
           errors.push("Invalid allergy severity");
         }
         if (allergyState.damageAccumulated < 0) {
@@ -291,7 +291,10 @@ export function validateDynamicState(
         if (!dependentState.tier || ![1, 2, 3].includes(dependentState.tier)) {
           errors.push("Dependent tier must be 1, 2, or 3");
         }
-        if (dependentState.lifestyleCostModifier < 0 || dependentState.lifestyleCostModifier > 100) {
+        if (
+          dependentState.lifestyleCostModifier < 0 ||
+          dependentState.lifestyleCostModifier > 100
+        ) {
           errors.push("Lifestyle cost modifier must be 0-100%");
         }
       }
@@ -311,4 +314,3 @@ export function validateDynamicState(
 
   return { valid: errors.length === 0, errors };
 }
-

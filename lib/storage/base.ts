@@ -94,9 +94,7 @@ export async function listJsonFiles(dirPath: string): Promise<string[]> {
   try {
     await ensureDirectory(dirPath);
     const files = await fs.readdir(dirPath);
-    return files
-      .filter((file) => file.endsWith(".json"))
-      .map((file) => file.replace(".json", ""));
+    return files.filter((file) => file.endsWith(".json")).map((file) => file.replace(".json", ""));
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") {
       return [];
@@ -161,4 +159,3 @@ export async function deleteDirectory(dirPath: string): Promise<boolean> {
     return false;
   }
 }
-

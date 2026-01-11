@@ -13,6 +13,7 @@ This document provides a step-by-step guide to manually verify the inventory man
 Located at: `/data/characters/b93e21d4-0d8e-44e8-98f0-d4d7a2942e91/test-street-sam.json`
 
 This character has been configured with:
+
 - **Weapons**: 5 weapons with various states and ammo configurations
 - **Armor**: 2 armor items (Armor Jacket worn, Full Body Armor stored)
 - **Ammunition**: 8 ammo types across different calibers
@@ -26,15 +27,16 @@ This character has been configured with:
 
 **Location**: Character Sheet > Inventory Panel > Weapons Tab
 
-| Weapon | Expected State | Visual Indicator |
-|--------|---------------|------------------|
-| Ares Predator V | Holstered | Amber badge |
-| Steyr TMP | Stored | Gray badge |
-| HK-227 | Stored | Gray badge |
-| Ares Alpha | Readied | Green badge |
-| Combat Knife | Holstered | Amber badge |
+| Weapon          | Expected State | Visual Indicator |
+| --------------- | -------------- | ---------------- |
+| Ares Predator V | Holstered      | Amber badge      |
+| Steyr TMP       | Stored         | Gray badge       |
+| HK-227          | Stored         | Gray badge       |
+| Ares Alpha      | Readied        | Green badge      |
+| Combat Knife    | Holstered      | Amber badge      |
 
 **Verify**:
+
 - [ ] Each weapon shows correct readiness badge color
 - [ ] Readiness dropdown appears on hover/click
 - [ ] Dropdown shows valid states: Readied, Holstered, Stored
@@ -42,20 +44,21 @@ This character has been configured with:
 ### Test: Weapon State Transitions
 
 **Steps**:
+
 1. Click on a weapon's readiness badge
 2. Select a different state from dropdown
 3. Verify visual update
 
 **Expected State Transitions** (SR5 Core p.163):
 
-| From → To | Action Cost |
-|-----------|-------------|
-| Readied → Holstered | Simple Action |
-| Readied → Stored | Complex Action |
-| Holstered → Readied | Simple Action |
-| Holstered → Stored | Simple Action |
-| Stored → Readied | Complex Action |
-| Stored → Holstered | Simple Action |
+| From → To           | Action Cost    |
+| ------------------- | -------------- |
+| Readied → Holstered | Simple Action  |
+| Readied → Stored    | Complex Action |
+| Holstered → Readied | Simple Action  |
+| Holstered → Stored  | Simple Action  |
+| Stored → Readied    | Complex Action |
+| Stored → Holstered  | Simple Action  |
 
 ---
 
@@ -65,12 +68,13 @@ This character has been configured with:
 
 **Location**: Character Sheet > Inventory Panel > Armor Tab
 
-| Armor | Expected State | Notes |
-|-------|---------------|-------|
-| Armor Jacket (12) | Worn | Blue badge, contributes to armor total |
-| Full Body Armor (15) | Stored | Gray badge, does not contribute |
+| Armor                | Expected State | Notes                                  |
+| -------------------- | -------------- | -------------------------------------- |
+| Armor Jacket (12)    | Worn           | Blue badge, contributes to armor total |
+| Full Body Armor (15) | Stored         | Gray badge, does not contribute        |
 
 **Verify**:
+
 - [ ] Worn armor shows blue "Worn" badge
 - [ ] Stored armor shows gray "Stored" badge
 - [ ] Only worn armor contributes to Combat Quick Reference armor value
@@ -78,11 +82,13 @@ This character has been configured with:
 ### Test: Armor State Transitions
 
 **Steps**:
+
 1. Click armor state badge
 2. Toggle between Worn and Stored
 3. Check Combat Quick Reference armor value updates
 
 **Expected**:
+
 - Wearing Armor Jacket: Armor = 12
 - Wearing Full Body Armor: Armor = 15
 - Wearing both: Armor = 15 (highest only, SR5 stacking rule)
@@ -96,10 +102,12 @@ This character has been configured with:
 **Rule**: Only the highest base armor piece applies.
 
 **Steps**:
+
 1. Equip both armor pieces (set both to "Worn")
 2. Check Combat Quick Reference
 
 **Expected**:
+
 - Armor shows 15 (Full Body Armor, the highest)
 - Not 27 (12 + 15)
 
@@ -108,6 +116,7 @@ This character has been configured with:
 **Rule**: Items with `armorModifier: true` (like helmets/shields) ADD to base armor.
 
 **Note**: Test character doesn't have armor accessories. To test:
+
 1. Add a Helmet (`armorModifier: true`, rating 2) to character
 2. Equip Armor Jacket (12) + Helmet (+2)
 3. Expected armor = 14
@@ -119,6 +128,7 @@ This character has been configured with:
 **Test Street Sam's Strength**: 4
 
 **Scenario**: If wearing accessories totaling +6:
+
 - Raw bonus: +6
 - Effective bonus: +4 (capped at Strength)
 - Excess: 2 points
@@ -128,10 +138,12 @@ This character has been configured with:
 **Rule**: -1 AGI/REA per 2 full points accessory bonus exceeds Strength.
 
 **Scenario**: Accessories total +8, Strength = 4
+
 - Excess: 4 points
 - Penalty: -2 AGI, -2 REA
 
 **Visual Indicator**:
+
 - Warning icon appears on armor display
 - Amber text shows penalty value
 
@@ -144,6 +156,7 @@ This character has been configured with:
 **Location**: Character sheet header area
 
 **Verify**:
+
 - [ ] Global wireless toggle visible (Wifi icon)
 - [ ] Toggle state matches `character.wirelessBonusesEnabled`
 - [ ] Test Street Sam should have wireless enabled
@@ -153,17 +166,20 @@ This character has been configured with:
 **Location**: Each weapon/cyberware row
 
 **Steps**:
+
 1. Locate Wifi icon on weapon row
 2. Click to toggle wireless
 3. Verify icon changes (Wifi → WifiOff)
 
 **Expected**:
+
 - Active: Cyan Wifi icon
 - Disabled: Gray WifiOff icon
 
 ### Test: Wireless Bonus Effects
 
 **What IS implemented**:
+
 - Initiative bonuses from Wired Reflexes (visible in Combat Quick Reference)
 - **Smartgun +2 dice pool bonus** in weapon attack pools
 - Wireless toggle state persistence
@@ -172,6 +188,7 @@ This character has been configured with:
 
 **Smartgun Wireless Bonus Conditions**:
 The +2 dice pool bonus applies when ALL conditions are met:
+
 1. Global wireless is enabled on character
 2. Weapon is not stored (readied or holstered)
 3. Per-weapon wireless is enabled (or not set - defaults to enabled)
@@ -179,6 +196,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 5. Weapon is ranged (not melee)
 
 **Visual Indicators**:
+
 - Weapon pool displays show cyan Wifi icon when smartgun wireless bonus is active
 - Modifier breakdown shows "Smartgun +2" as a gear bonus
 
@@ -190,14 +208,15 @@ The +2 dice pool bonus applies when ALL conditions are met:
 
 **Location**: Expanded weapon row > Ammunition section
 
-| Weapon | Loaded Ammo | Current/Max |
-|--------|-------------|-------------|
-| Ares Predator V | Heavy Pistol Regular | 15/15 |
-| Steyr TMP | Empty | 0/30 |
-| HK-227 | SMG APDS | 20/28 |
-| Ares Alpha | Assault Rifle Regular | 42/42 |
+| Weapon          | Loaded Ammo           | Current/Max |
+| --------------- | --------------------- | ----------- |
+| Ares Predator V | Heavy Pistol Regular  | 15/15       |
+| Steyr TMP       | Empty                 | 0/30        |
+| HK-227          | SMG APDS              | 20/28       |
+| Ares Alpha      | Assault Rifle Regular | 42/42       |
 
 **Visual Elements**:
+
 - [ ] Ammo bar shows fill percentage
 - [ ] Color coding: Green (>50%), Yellow (25-50%), Orange (<25%), Red (empty)
 - [ ] Empty weapons show red warning
@@ -206,22 +225,24 @@ The +2 dice pool bonus applies when ALL conditions are met:
 
 **Verify ammo modifiers are shown**:
 
-| Ammo Type | DV Modifier | AP Modifier |
-|-----------|-------------|-------------|
-| Regular | 0 | 0 |
-| APDS | 0 | -4 |
-| Explosive | +1 | +1 |
-| Gel | +0S | +1 |
-| Stick-n-Shock | -2S(e) | -5 |
+| Ammo Type     | DV Modifier | AP Modifier |
+| ------------- | ----------- | ----------- |
+| Regular       | 0           | 0           |
+| APDS          | 0           | -4          |
+| Explosive     | +1          | +1          |
+| Gel           | +0S         | +1          |
+| Stick-n-Shock | -2S(e)      | -5          |
 
 ### Test: Reload Menu
 
 **Steps**:
+
 1. Expand a weapon with less than full ammo
 2. Click "Reload" button
 3. Verify dropdown shows compatible ammo only
 
 **Expected for Ares Predator V (heavy-pistol)**:
+
 - Heavy Pistol Regular Rounds (100 available)
 - Heavy Pistol APDS (30 available)
 - Heavy Pistol Explosive Rounds (20 available)
@@ -237,6 +258,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 **Location**: Inventory Panel > Ammo Tab
 
 **Verify all ammo types listed**:
+
 - [ ] Heavy Pistol Regular (100 rounds)
 - [ ] Heavy Pistol APDS (30 rounds)
 - [ ] Heavy Pistol Explosive (20 rounds)
@@ -247,6 +269,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 - [ ] Assault Rifle Explosive (20 rounds)
 
 **Display Elements**:
+
 - Caliber grouping
 - Quantity display
 - DV/AP modifiers
@@ -261,11 +284,13 @@ The +2 dice pool bonus applies when ALL conditions are met:
 **Location**: Character Sheet > Augmentations Panel
 
 **Test Street Sam's Cyberware**:
+
 - Wired Reflexes 2 - wireless enabled
 - Smartlink - wireless enabled
 - Cybereyes Rating 3 - wireless enabled
 
 **Verify**:
+
 - [ ] Each cyberware shows wireless indicator
 - [ ] Enabled items show cyan Wifi icon
 - [ ] Can toggle individual item wireless
@@ -279,6 +304,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 **Location**: Combat Quick Reference > Armor display
 
 **Expected for Test Street Sam**:
+
 - Base armor: 12 (Armor Jacket, worn)
 - No accessories currently equipped
 - Total: 12
@@ -286,6 +312,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 ### Test: Initiative with Wireless
 
 **Wired Reflexes 2 (wireless enabled)**:
+
 - Base: REA (5) + INT (5) = 10
 - Wired Reflexes 2: +2 to Initiative, +2d6
 - Wireless bonus: +1d6 additional
@@ -295,6 +322,7 @@ The +2 dice pool bonus applies when ALL conditions are met:
 ### Test: Wound Modifier Display
 
 **Steps**:
+
 1. Apply damage to character (via API or direct edit)
 2. Check wound modifier appears in Combat Quick Reference
 3. Verify initiative and pools show wound penalty
@@ -308,11 +336,13 @@ The +2 dice pool bonus applies when ALL conditions are met:
 **Location**: Inventory Panel header
 
 **Elements**:
+
 - Current weight / Max capacity
 - Visual progress bar
 - Color coding: Green (normal), Yellow (75%+), Red (over capacity)
 
 **Test Street Sam**:
+
 - Strength: 4
 - Max capacity: 40 kg (STR × 10)
 
@@ -323,11 +353,13 @@ The +2 dice pool bonus applies when ALL conditions are met:
 ### Test: State Saves on Change
 
 **Steps**:
+
 1. Change a weapon's readiness state
 2. Refresh the page
 3. Verify state persisted
 
 **Verify**:
+
 - [ ] Weapon states persist
 - [ ] Armor states persist
 - [ ] Wireless toggles persist
@@ -347,14 +379,17 @@ The +2 dice pool bonus applies when ALL conditions are met:
 ## Troubleshooting
 
 ### Dropdown being clipped
+
 If dropdown menus appear cut off, check for `overflow-hidden` on parent containers.
 
 ### State not updating
+
 1. Check browser console for errors
 2. Verify `onUpdate` callback is wired
 3. Check API endpoint is responding
 
 ### Wireless bonuses not showing
+
 1. Verify `wirelessBonusesEnabled: true` on character
 2. Check individual item `state.wirelessEnabled`
 3. Verify cyberware has wireless bonus defined
@@ -363,12 +398,12 @@ If dropdown menus appear cut off, check for `overflow-hidden` on parent containe
 
 ## API Endpoints
 
-| Endpoint | Method | Purpose |
-|----------|--------|---------|
-| `/api/characters/[id]` | GET | Fetch character data |
-| `/api/characters/[id]` | PATCH | Update character |
-| `/api/characters/[id]/inventory/state` | PATCH | Update item state |
-| `/api/admin/migrate/gear-state` | POST | Migrate legacy characters |
+| Endpoint                               | Method | Purpose                   |
+| -------------------------------------- | ------ | ------------------------- |
+| `/api/characters/[id]`                 | GET    | Fetch character data      |
+| `/api/characters/[id]`                 | PATCH  | Update character          |
+| `/api/characters/[id]/inventory/state` | PATCH  | Update item state         |
+| `/api/admin/migrate/gear-state`        | POST   | Migrate legacy characters |
 
 ---
 

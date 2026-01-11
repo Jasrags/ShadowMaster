@@ -92,9 +92,7 @@ export interface SyncAuditSummary {
  * @param options - Options for the audit entry
  * @returns The created audit entry
  */
-export function createSyncAuditEntry(
-  options: CreateAuditEntryOptions
-): SyncAuditEntry {
+export function createSyncAuditEntry(options: CreateAuditEntryOptions): SyncAuditEntry {
   return {
     id: uuidv4(),
     timestamp: new Date().toISOString(),
@@ -336,9 +334,7 @@ export function getSyncAuditSummary(character: Character): SyncAuditSummary {
   const auditLog = character.auditLog || [];
 
   // Filter to sync-related events
-  const syncEvents = auditLog.filter((entry) =>
-    isSyncEvent(entry.action as SyncEventType)
-  );
+  const syncEvents = auditLog.filter((entry) => isSyncEvent(entry.action as SyncEventType));
 
   // Count by type
   const eventsByType: Record<SyncEventType, number> = {
@@ -361,17 +357,19 @@ export function getSyncAuditSummary(character: Character): SyncAuditSummary {
   const driftEvents = syncEvents.filter((e) => e.action === "drift_detected");
   const migrationEvents = syncEvents.filter((e) => e.action === "migration_completed");
 
-  const lastDriftCheck = driftEvents.length > 0
-    ? driftEvents.sort((a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      )[0]?.timestamp
-    : undefined;
+  const lastDriftCheck =
+    driftEvents.length > 0
+      ? driftEvents.sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )[0]?.timestamp
+      : undefined;
 
-  const lastMigration = migrationEvents.length > 0
-    ? migrationEvents.sort((a, b) =>
-        new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-      )[0]?.timestamp
-    : undefined;
+  const lastMigration =
+    migrationEvents.length > 0
+      ? migrationEvents.sort(
+          (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
+        )[0]?.timestamp
+      : undefined;
 
   return {
     totalEvents: syncEvents.length,
@@ -397,15 +395,11 @@ export function getRecentSyncEvents(
   const auditLog = character.auditLog || [];
 
   // Filter to sync events
-  let events = auditLog.filter((entry) =>
-    isSyncEvent(entry.action as SyncEventType)
-  );
+  let events = auditLog.filter((entry) => isSyncEvent(entry.action as SyncEventType));
 
   // Apply event type filter
   if (options.eventTypes && options.eventTypes.length > 0) {
-    events = events.filter((e) =>
-      options.eventTypes!.includes(e.action as SyncEventType)
-    );
+    events = events.filter((e) => options.eventTypes!.includes(e.action as SyncEventType));
   }
 
   // Apply date filters
@@ -420,9 +414,7 @@ export function getRecentSyncEvents(
   }
 
   // Sort by timestamp descending (most recent first)
-  events.sort((a, b) =>
-    new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  events.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   // Apply pagination
   const offset = options.offset || 0;
@@ -498,9 +490,7 @@ function getDefaultDescription(eventType: SyncEventType): string {
  */
 export function formatSyncEvent(entry: SyncAuditEntry): string {
   const date = new Date(entry.timestamp).toLocaleString();
-  const actor = entry.actor.userId
-    ? `by ${entry.actor.userId}`
-    : "by system";
+  const actor = entry.actor.userId ? `by ${entry.actor.userId}` : "by system";
 
   switch (entry.eventType) {
     case "drift_detected":

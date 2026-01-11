@@ -230,9 +230,7 @@ export function updateEssenceHoleOnRemoval(
   formula: "roundUp" | "roundDown" | "exact" = DEFAULT_MAGIC_REDUCTION_FORMULA
 ): EssenceHoleUpdateResult {
   // Current loss decreases when augmentation is removed
-  const newCurrentLoss = roundEssence(
-    Math.max(0, current.currentEssenceLoss - removedEssenceCost)
-  );
+  const newCurrentLoss = roundEssence(Math.max(0, current.currentEssenceLoss - removedEssenceCost));
 
   // Peak loss NEVER decreases - this is the key to essence holes
   const peakLoss = current.peakEssenceLoss;
@@ -274,9 +272,7 @@ export function updateEssenceHoleOnGradeUpgrade(
 ): EssenceHoleUpdateResult {
   // Grade upgrade reduces current essence cost
   const essenceDiff = oldEssenceCost - newEssenceCost;
-  const newCurrentLoss = roundEssence(
-    Math.max(0, current.currentEssenceLoss - essenceDiff)
-  );
+  const newCurrentLoss = roundEssence(Math.max(0, current.currentEssenceLoss - essenceDiff));
 
   // Peak stays the same - the original install still happened
   const peakLoss = current.peakEssenceLoss;
@@ -340,12 +336,10 @@ export function getEssenceMagicSummary(
   const formula = rules?.magicReductionFormula ?? DEFAULT_MAGIC_REDUCTION_FORMULA;
 
   // For magic calculation, use peak essence loss (includes hole)
-  const effectiveEssenceLoss = tracksHole
-    ? essenceHoleState.peakEssenceLoss
-    : totalEssenceLoss;
+  const effectiveEssenceLoss = tracksHole ? essenceHoleState.peakEssenceLoss : totalEssenceLoss;
 
-  const baseMagic = character.specialAttributes?.magic ??
-    character.specialAttributes?.resonance ?? 0;
+  const baseMagic =
+    character.specialAttributes?.magic ?? character.specialAttributes?.resonance ?? 0;
 
   const magicLoss = tracksHole ? calculateMagicLoss(effectiveEssenceLoss, formula) : 0;
   const effectiveMagic = Math.max(0, baseMagic - magicLoss);
@@ -411,8 +405,8 @@ export function getMagicLossWarning(
   }
 
   const magicType = character.magicalPath === "technomancer" ? "Resonance" : "Magic";
-  const currentMagic = character.specialAttributes?.magic ??
-    character.specialAttributes?.resonance ?? 0;
+  const currentMagic =
+    character.specialAttributes?.magic ?? character.specialAttributes?.resonance ?? 0;
   const newEffectiveMagic = Math.max(0, currentMagic - newState.magicLost);
 
   if (newEffectiveMagic === 0) {

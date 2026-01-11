@@ -15,15 +15,8 @@ import {
   updateIndividualGrunt,
   updateGruntTeamState,
 } from "@/lib/storage/grunts";
-import {
-  applyDamage,
-  applySimplifiedDamage,
-  checkMorale,
-} from "@/lib/rules/grunts";
-import type {
-  DamageResponse,
-  ApplyDamageRequest,
-} from "@/lib/types/grunts";
+import { applyDamage, applySimplifiedDamage, checkMorale } from "@/lib/rules/grunts";
+import type { DamageResponse, ApplyDamageRequest } from "@/lib/types/grunts";
 
 /**
  * POST /api/grunt-teams/[teamId]/grunts/[gruntId]/damage
@@ -48,18 +41,13 @@ export async function POST(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize GM access
-    const { authorized, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -84,15 +72,13 @@ export async function POST(
 
     // Get individual grunts
     const individualGrunts = await getOrInitializeIndividualGrunts(team);
-    const grunt = individualGrunts.grunts[gruntId] ||
+    const grunt =
+      individualGrunts.grunts[gruntId] ||
       (individualGrunts.lieutenant?.id === gruntId ? individualGrunts.lieutenant : null) ||
       individualGrunts.specialists?.[gruntId];
 
     if (!grunt) {
-      return NextResponse.json(
-        { success: false, error: "Grunt not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt not found" }, { status: 404 });
     }
 
     if (grunt.isDead) {
@@ -141,11 +127,7 @@ export async function POST(
       const updatedTeam = { ...team, state: updatedTeamState };
       const moraleState = checkMorale(updatedTeam);
       if (moraleState === "broken" || moraleState === "routed") {
-        await updateGruntTeamState(
-          teamId,
-          { moraleBroken: true, moraleState },
-          team.campaignId
-        );
+        await updateGruntTeamState(teamId, { moraleBroken: true, moraleState }, team.campaignId);
         updatedTeamState.moraleBroken = true;
         updatedTeamState.moraleState = moraleState;
       }
@@ -159,9 +141,6 @@ export async function POST(
   } catch (error) {
     console.error("Apply damage error:", error);
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

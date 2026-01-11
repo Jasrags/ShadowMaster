@@ -17,7 +17,10 @@ export async function POST(req: NextRequest) {
 
     const { password } = await req.json();
     if (!password) {
-      return NextResponse.json({ success: false, error: "Password confirmation required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Password confirmation required" },
+        { status: 400 }
+      );
     }
 
     const user = await getUserById(userId);

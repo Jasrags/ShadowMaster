@@ -65,11 +65,7 @@ export interface UseKarmaConversionPromptReturn {
    * @param cost - Total cost of the item
    * @param onSuccess - Callback to execute the actual purchase after conversion
    */
-  promptConversion: (
-    itemName: string,
-    cost: number,
-    onSuccess: () => void
-  ) => void;
+  promptConversion: (itemName: string, cost: number, onSuccess: () => void) => void;
 
   /** Current modal state */
   modalState: KarmaConversionModalState;

@@ -73,7 +73,12 @@ export function validateSpellAdvancement(
 
   // Check character can cast spells
   const magicalPath = character.magicalPath;
-  if (!magicalPath || magicalPath === "mundane" || magicalPath === "technomancer" || magicalPath === "adept") {
+  if (
+    !magicalPath ||
+    magicalPath === "mundane" ||
+    magicalPath === "technomancer" ||
+    magicalPath === "adept"
+  ) {
     errors.push({
       message: "Character cannot learn spells with this magical path",
       field: "magicalPath",
@@ -370,7 +375,12 @@ export function validateRitualAdvancement(
 
   // Check character can perform rituals
   const magicalPath = character.magicalPath;
-  if (!magicalPath || magicalPath === "mundane" || magicalPath === "technomancer" || magicalPath === "adept") {
+  if (
+    !magicalPath ||
+    magicalPath === "mundane" ||
+    magicalPath === "technomancer" ||
+    magicalPath === "adept"
+  ) {
     errors.push({
       message: "Character cannot learn rituals with this magical path",
       field: "magicalPath",
@@ -413,10 +423,7 @@ export function validateRitualAdvancement(
  * @param knownMetamagics - List of metamagic IDs already known
  * @returns List of available metamagic IDs
  */
-export function getAvailableMetamagics(
-  initiateGrade: number,
-  knownMetamagics: string[]
-): string[] {
+export function getAvailableMetamagics(initiateGrade: number, knownMetamagics: string[]): string[] {
   if (initiateGrade <= 0) {
     return [];
   }

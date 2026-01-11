@@ -1,11 +1,11 @@
 /**
  * Storage layer mocks for testing
- * 
+ *
  * Provides mock implementations of file-based storage operations
  * for testing without touching the actual file system.
  */
 
-import type { Character, User, Campaign } from '@/lib/types';
+import type { Character, User, Campaign } from "@/lib/types";
 
 /**
  * Mock file system storage
@@ -27,7 +27,7 @@ export class MockFileStorage {
   async writeFile<T>(path: string, data: T): Promise<void> {
     this.files.set(path, data);
     // Ensure parent directory exists
-    const dir = path.substring(0, path.lastIndexOf('/'));
+    const dir = path.substring(0, path.lastIndexOf("/"));
     if (dir) {
       this.directories.add(dir);
     }
@@ -46,17 +46,17 @@ export class MockFileStorage {
    * List files in a directory
    */
   async listFiles(dir: string): Promise<string[]> {
-    const prefix = dir.endsWith('/') ? dir : `${dir}/`;
+    const prefix = dir.endsWith("/") ? dir : `${dir}/`;
     const files: string[] = [];
-    
+
     for (const path of this.files.keys()) {
       if (path.startsWith(prefix)) {
         const relativePath = path.substring(prefix.length);
         // Remove .json extension
-        files.push(relativePath.replace(/\.json$/, ''));
+        files.push(relativePath.replace(/\.json$/, ""));
       }
     }
-    
+
     return files;
   }
 
@@ -89,11 +89,11 @@ export function createMockStorage() {
  */
 export function createMockUser(overrides?: Partial<User>): User {
   return {
-    id: 'test-user-id',
-    email: 'test@example.com',
-    username: 'testuser',
-    passwordHash: 'mock-hash',
-    role: ['user'],
+    id: "test-user-id",
+    email: "test@example.com",
+    username: "testuser",
+    passwordHash: "mock-hash",
+    role: ["user"],
     createdAt: new Date().toISOString(),
     lastLogin: null,
     characters: [],
@@ -101,11 +101,11 @@ export function createMockUser(overrides?: Partial<User>): User {
     lockoutUntil: null,
     sessionVersion: 1,
     preferences: {
-      theme: 'system',
+      theme: "system",
       navigationCollapsed: false,
     },
     // Governance fields
-    accountStatus: 'active',
+    accountStatus: "active",
     statusChangedAt: null,
     statusChangedBy: null,
     statusReason: null,
@@ -120,16 +120,16 @@ export function createMockUser(overrides?: Partial<User>): User {
  */
 export function createMockCharacter(overrides?: Partial<Character>): Character {
   return {
-    id: 'test-character-id',
-    ownerId: 'test-user-id',
-    editionId: 'test-edition-id',
-    editionCode: 'sr5',
-    creationMethodId: 'test-creation-method-id',
-    rulesetSnapshotId: 'test-snapshot-id',
+    id: "test-character-id",
+    ownerId: "test-user-id",
+    editionId: "test-edition-id",
+    editionCode: "sr5",
+    creationMethodId: "test-creation-method-id",
+    rulesetSnapshotId: "test-snapshot-id",
     attachedBookIds: [],
-    name: 'Test Character',
-    metatype: 'Human',
-    status: 'draft',
+    name: "Test Character",
+    metatype: "Human",
+    status: "draft",
     attributes: {},
     specialAttributes: {
       edge: 1,
@@ -138,7 +138,7 @@ export function createMockCharacter(overrides?: Partial<Character>): Character {
     skills: {},
     positiveQualities: [],
     negativeQualities: [],
-    magicalPath: 'mundane',
+    magicalPath: "mundane",
     nuyen: 0,
     startingNuyen: 0,
     gear: [],
@@ -162,17 +162,17 @@ export function createMockCharacter(overrides?: Partial<Character>): Character {
  */
 export function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
   return {
-    id: 'test-campaign-id',
-    gmId: 'test-gm-id',
-    title: 'Test Campaign',
-    status: 'active',
-    editionId: 'test-edition-id',
-    editionCode: 'sr5',
-    enabledBookIds: ['sr5-core'],
-    enabledCreationMethodIds: ['priority'],
-    gameplayLevel: 'experienced',
+    id: "test-campaign-id",
+    gmId: "test-gm-id",
+    title: "Test Campaign",
+    status: "active",
+    editionId: "test-edition-id",
+    editionCode: "sr5",
+    enabledBookIds: ["sr5-core"],
+    enabledCreationMethodIds: ["priority"],
+    gameplayLevel: "experienced",
     playerIds: [],
-    visibility: 'private',
+    visibility: "private",
     advancementSettings: {
       trainingTimeMultiplier: 1.0,
       attributeKarmaMultiplier: 5,
@@ -192,5 +192,3 @@ export function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
     ...overrides,
   };
 }
-
-

@@ -42,9 +42,13 @@ interface ContactModalProps {
 // CONSTANTS
 // =============================================================================
 
-const MAX_CONNECTION = 6;
+// SR5 CRB p.387: Connection 1-12, Loyalty 1-6
+// Contact cost = Connection + Loyalty (CRB p.98)
+const MAX_CONNECTION = 12;
 const MAX_LOYALTY = 6;
-const MAX_KARMA_PER_CONTACT = 7;
+// Maximum individual contact cost (Connection 12 + Loyalty 6 = 18)
+// In practice, limited by available karma (CHA×3 free + general karma)
+const MAX_KARMA_PER_CONTACT = 18;
 const MIN_KARMA_PER_CONTACT = 2;
 
 // =============================================================================
@@ -60,9 +64,7 @@ function ContactModal({
   templates,
   availableKarma,
 }: ContactModalProps) {
-  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(
-    null
-  );
+  const [selectedTemplateId, setSelectedTemplateId] = useState<string | null>(null);
   const [contact, setContact] = useState<Partial<Contact>>(
     initialContact || {
       name: "",
@@ -102,30 +104,27 @@ function ContactModal({
     return true;
   }, [contact.name, contactCost, availableKarma]);
 
-  const handleSelectTemplate = useCallback(
-    (template: ContactTemplateData | null) => {
-      if (!template) {
-        setSelectedTemplateId(null);
-        setContact({
-          name: "",
-          type: "",
-          connection: 1,
-          loyalty: 1,
-          notes: "",
-        });
-        return;
-      }
-      setSelectedTemplateId(template.id);
+  const handleSelectTemplate = useCallback((template: ContactTemplateData | null) => {
+    if (!template) {
+      setSelectedTemplateId(null);
       setContact({
         name: "",
-        type: template.name,
-        connection: template.suggestedConnection,
-        loyalty: template.suggestedLoyalty || 2,
-        notes: template.description,
+        type: "",
+        connection: 1,
+        loyalty: 1,
+        notes: "",
       });
-    },
-    []
-  );
+      return;
+    }
+    setSelectedTemplateId(template.id);
+    setContact({
+      name: "",
+      type: template.name,
+      connection: template.suggestedConnection,
+      loyalty: template.suggestedLoyalty || 2,
+      notes: template.description,
+    });
+  }, []);
 
   const handleSave = useCallback(() => {
     if (!isValid) return;
@@ -239,8 +238,7 @@ function ContactModal({
                 </div>
                 {selectedTemplateId && (
                   <p className="mt-2 text-xs text-zinc-500 dark:text-zinc-400">
-                    {templates.find((t) => t.id === selectedTemplateId)
-                      ?.description}
+                    {templates.find((t) => t.id === selectedTemplateId)?.description}
                   </p>
                 )}
               </div>
@@ -255,9 +253,7 @@ function ContactModal({
                 <input
                   type="text"
                   value={contact.name || ""}
-                  onChange={(e) =>
-                    setContact({ ...contact, name: e.target.value })
-                  }
+                  onChange={(e) => setContact({ ...contact, name: e.target.value })}
                   className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="Contact's name or alias"
                   autoFocus
@@ -270,9 +266,7 @@ function ContactModal({
                 <input
                   type="text"
                   value={contact.type || ""}
-                  onChange={(e) =>
-                    setContact({ ...contact, type: e.target.value })
-                  }
+                  onChange={(e) => setContact({ ...contact, type: e.target.value })}
                   className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="e.g., Fixer, Street Doc"
                 />
@@ -304,9 +298,7 @@ function ContactModal({
               </label>
               <textarea
                 value={contact.notes || ""}
-                onChange={(e) =>
-                  setContact({ ...contact, notes: e.target.value })
-                }
+                onChange={(e) => setContact({ ...contact, notes: e.target.value })}
                 rows={2}
                 className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                 placeholder="Any additional details about this contact..."
@@ -314,25 +306,34 @@ function ContactModal({
             </div>
 
             {/* Cost indicator */}
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                Contact Cost:
-              </span>
-              <span
-                className={`font-medium ${
-                  contactCost > MAX_KARMA_PER_CONTACT
-                    ? "text-red-600 dark:text-red-400"
-                    : contactCost > availableKarma
-                      ? "text-amber-600 dark:text-amber-400"
-                      : "text-emerald-600 dark:text-emerald-400"
-                }`}
-              >
-                {contactCost} Karma
-                {contactCost > MAX_KARMA_PER_CONTACT && " (max 7)"}
-                {contactCost <= MAX_KARMA_PER_CONTACT &&
-                  contactCost > availableKarma &&
-                  " (not enough)"}
-              </span>
+            <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
+                <span
+                  className={`font-medium ${
+                    contactCost > MAX_KARMA_PER_CONTACT
+                      ? "text-red-600 dark:text-red-400"
+                      : contactCost > availableKarma
+                        ? "text-amber-600 dark:text-amber-400"
+                        : "text-emerald-600 dark:text-emerald-400"
+                  }`}
+                >
+                  {contactCost} / {availableKarma} Karma
+                  {contactCost > MAX_KARMA_PER_CONTACT && ` (max ${MAX_KARMA_PER_CONTACT})`}
+                  {contactCost <= MAX_KARMA_PER_CONTACT &&
+                    contactCost > availableKarma &&
+                    " (not enough)"}
+                </span>
+              </div>
+              {/* Validation feedback */}
+              {!isValid && (
+                <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
+                  {!contact.name?.trim() && "• Enter a contact name"}
+                  {contact.name?.trim() &&
+                    contactCost > availableKarma &&
+                    "• Not enough karma available"}
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -388,8 +389,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     }
 
     const metatypeMin =
-      selectedMetatype?.attributes?.charisma &&
-      "min" in selectedMetatype.attributes.charisma
+      selectedMetatype?.attributes?.charisma && "min" in selectedMetatype.attributes.charisma
         ? selectedMetatype.attributes.charisma.min
         : 1;
 
@@ -412,20 +412,14 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   }, [contacts]);
 
   // Calculate free vs general karma usage
-  const freeContactKarmaSpent = Math.min(
-    totalContactKarmaSpent,
-    freeContactKarma
-  );
-  const generalKarmaSpentOnContacts = Math.max(
-    0,
-    totalContactKarmaSpent - freeContactKarma
-  );
+  const freeContactKarmaSpent = Math.min(totalContactKarmaSpent, freeContactKarma);
+  const generalKarmaSpentOnContacts = Math.max(0, totalContactKarmaSpent - freeContactKarma);
   const freeContactKarmaRemaining = freeContactKarma - freeContactKarmaSpent;
 
   // Get general karma remaining from budget context
-  const karmaRemaining = budgets["karma"]?.remaining ?? 0;
-  const totalKarmaAvailableForContacts =
-    freeContactKarmaRemaining + karmaRemaining;
+  // Use Math.max(0, ...) to prevent overspent karma from blocking free contact points
+  const karmaRemaining = Math.max(0, budgets["karma"]?.remaining ?? 0);
+  const totalKarmaAvailableForContacts = freeContactKarmaRemaining + karmaRemaining;
 
   // Handle adding a new contact
   const handleAddContact = useCallback(
@@ -515,8 +509,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
       const removedContact = contacts[index];
       const updatedContacts = contacts.filter((_, i) => i !== index);
       const newTotalContactKarmaSpent =
-        totalContactKarmaSpent -
-        (removedContact.connection + removedContact.loyalty);
+        totalContactKarmaSpent - (removedContact.connection + removedContact.loyalty);
       const newGeneralKarmaSpentOnContacts = Math.max(
         0,
         newTotalContactKarmaSpent - freeContactKarma
@@ -592,9 +585,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
       {Array.from({ length: max }, (_, i) => (
         <div
           key={i}
-          className={`h-2 w-2 rounded-full ${
-            i < value ? color : "bg-zinc-200 dark:bg-zinc-600"
-          }`}
+          className={`h-2 w-2 rounded-full ${i < value ? color : "bg-zinc-200 dark:bg-zinc-600"}`}
         />
       ))}
     </div>
@@ -604,44 +595,46 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     <>
       <CreationCard
         title="Contacts"
-        description={`${contacts.length} contact${contacts.length !== 1 ? "s" : ""}`}
-        status={
-          contacts.length > 0
-            ? "valid"
-            : freeContactKarma > 0
-              ? "warning"
-              : "pending"
+        status={contacts.length > 0 ? "valid" : freeContactKarma > 0 ? "warning" : "pending"}
+        headerAction={
+          <button
+            onClick={handleOpenAddModal}
+            disabled={totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT}
+            className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${
+              totalKarmaAvailableForContacts >= MIN_KARMA_PER_CONTACT
+                ? "bg-amber-500 text-white hover:bg-amber-600"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+            }`}
+          >
+            <Plus className="h-4 w-4" />
+            Contact
+          </button>
         }
       >
         <div className="space-y-3">
-          {/* Budget Display - unified format */}
-          <div className="rounded-md bg-indigo-50 p-3 dark:bg-indigo-900/20">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-indigo-700 dark:text-indigo-300">
-                Contact Points (CHA {charisma} × 3)
+          {/* Contact Points - compact like Essence bar */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs">
+              <span
+                className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
+                title="Cost = Connection + Loyalty (max 7 per contact). Min 2 karma each."
+              >
+                Contact Points
+                <Info className="h-3 w-3 text-zinc-400" />
               </span>
               <span
                 className={`font-medium ${
-                  freeContactKarmaRemaining < 0
-                    ? "text-red-600 dark:text-red-400"
-                    : freeContactKarmaRemaining === 0
-                      ? "text-emerald-600 dark:text-emerald-400"
-                      : "text-indigo-700 dark:text-indigo-300"
+                  freeContactKarmaRemaining === 0 && generalKarmaSpentOnContacts === 0
+                    ? "text-emerald-600 dark:text-emerald-400"
+                    : "text-zinc-900 dark:text-zinc-100"
                 }`}
               >
-                {freeContactKarmaSpent} spent
-                <span className="text-indigo-400 dark:text-indigo-500"> • </span>
-                {Math.max(0, freeContactKarmaRemaining)} left
-                {totalContactKarmaSpent > freeContactKarma && (
-                  <span className="text-amber-600 dark:text-amber-400">
-                    {" "}(+{generalKarmaSpentOnContacts})
-                  </span>
-                )}
+                {freeContactKarmaSpent} / {freeContactKarma}
               </span>
             </div>
-            <div className="relative mt-1.5 h-1.5 overflow-hidden rounded-full bg-indigo-200 dark:bg-indigo-800">
+            <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
               <div
-                className={`h-full rounded-full transition-all ${
+                className={`h-full transition-all ${
                   freeContactKarmaRemaining === 0 && generalKarmaSpentOnContacts === 0
                     ? "bg-emerald-500"
                     : "bg-indigo-500"
@@ -654,30 +647,12 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                   }%`,
                 }}
               />
-              {/* Overflow indicator when using general karma */}
-              {generalKarmaSpentOnContacts > 0 && (
-                <div
-                  className="absolute right-0 top-0 h-full bg-amber-500"
-                  style={{
-                    width: `${Math.min(30, (generalKarmaSpentOnContacts / freeContactKarma) * 100)}%`,
-                    backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.15) 2px, rgba(0,0,0,0.15) 4px)",
-                  }}
-                />
-              )}
             </div>
             {generalKarmaSpentOnContacts > 0 && (
-              <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+              <div className="text-xs text-amber-600 dark:text-amber-400">
                 +{generalKarmaSpentOnContacts} from general karma
               </div>
             )}
-          </div>
-
-          {/* Info */}
-          <div className="flex items-start gap-2 rounded-md bg-zinc-50 p-2 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-            <Info className="mt-0.5 h-3 w-3 flex-shrink-0" />
-            <span>
-              Cost = Connection + Loyalty (max 7 per contact). Min 2 karma each.
-            </span>
           </div>
 
           {/* Contacts List */}
@@ -706,19 +681,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                       <div className="mt-1 flex items-center gap-3 text-xs">
                         <div className="flex items-center gap-1">
                           <span className="text-zinc-500">C:</span>
-                          {renderRatingDots(
-                            contact.connection,
-                            MAX_CONNECTION,
-                            "bg-blue-500"
-                          )}
+                          {renderRatingDots(contact.connection, MAX_CONNECTION, "bg-blue-500")}
                         </div>
                         <div className="flex items-center gap-1">
                           <span className="text-zinc-500">L:</span>
-                          {renderRatingDots(
-                            contact.loyalty,
-                            MAX_LOYALTY,
-                            "bg-rose-500"
-                          )}
+                          {renderRatingDots(contact.loyalty, MAX_LOYALTY, "bg-rose-500")}
                         </div>
                       </div>
                     </div>
@@ -746,27 +713,22 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
             </div>
           )}
 
-          {/* Add Contact Button */}
-          <button
-            onClick={handleOpenAddModal}
-            disabled={totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT}
-            className={`flex w-full items-center justify-center gap-1 rounded-md border-2 border-dashed py-2 text-xs font-medium transition-colors ${
-              totalKarmaAvailableForContacts >= MIN_KARMA_PER_CONTACT
-                ? "border-zinc-300 text-zinc-600 hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20"
-                : "cursor-not-allowed border-zinc-200 text-zinc-400 dark:border-zinc-700 dark:text-zinc-500"
-            }`}
-          >
-            <Plus className="h-3 w-3" />
-            Add Contact
-            {totalKarmaAvailableForContacts < MIN_KARMA_PER_CONTACT && (
-              <span className="text-xs">(need 2+ karma)</span>
-            )}
-          </button>
-
           {/* Empty state */}
           {contacts.length === 0 && (
             <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
               Every runner needs contacts. Add fixers, informants, and allies.
+            </div>
+          )}
+
+          {/* Summary */}
+          {contacts.length > 0 && (
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Total: {contacts.length} contact{contacts.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+                {totalContactKarmaSpent} pts
+              </span>
             </div>
           )}
         </div>
@@ -777,9 +739,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onSave={handleModalSave}
-        initialContact={
-          editingIndex !== null ? contacts[editingIndex] : undefined
-        }
+        initialContact={editingIndex !== null ? contacts[editingIndex] : undefined}
         isEditing={editingIndex !== null}
         templates={contactTemplates}
         maxCost={MAX_KARMA_PER_CONTACT}

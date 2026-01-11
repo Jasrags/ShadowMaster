@@ -29,10 +29,7 @@ import {
   type SpellData,
   type SpellsCatalogData,
 } from "@/lib/rules";
-import {
-  calculateLimit,
-  calculateWoundModifier,
-} from "@/lib/rules/qualities";
+import { calculateLimit, calculateWoundModifier } from "@/lib/rules/qualities";
 import { DownloadIcon, X } from "lucide-react";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { QualitiesSection } from "./components/QualitiesSection";
@@ -54,7 +51,12 @@ import { StabilityShield } from "@/components/sync";
 function ArrowLeftIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M10 19l-7-7m0 0l7-7m-7 7h18"
+      />
     </svg>
   );
 }
@@ -62,7 +64,12 @@ function ArrowLeftIcon({ className }: { className?: string }) {
 function EditIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"
+      />
     </svg>
   );
 }
@@ -78,7 +85,12 @@ function DiceIcon({ className }: { className?: string }) {
 function PrinterIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"
+      />
     </svg>
   );
 }
@@ -86,7 +98,12 @@ function PrinterIcon({ className }: { className?: string }) {
 function TrendingUpIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"
+      />
     </svg>
   );
 }
@@ -94,14 +111,15 @@ function TrendingUpIcon({ className }: { className?: string }) {
 function UsersIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+      />
     </svg>
   );
 }
-
-
-
-
 
 // =============================================================================
 // ATTRIBUTE HELPERS
@@ -121,36 +139,39 @@ const ATTRIBUTE_DISPLAY: Record<string, { abbr: string; color: string }> = {
 /**
  * Calculate total bonus for an attribute from all sources (Cyberware, Bioware, Adept Powers)
  */
-function getAttributeBonus(character: Character, attrId: string): Array<{ source: string, value: number }> {
-  const bonuses: Array<{ source: string, value: number }> = [];
+function getAttributeBonus(
+  character: Character,
+  attrId: string
+): Array<{ source: string; value: number }> {
+  const bonuses: Array<{ source: string; value: number }> = [];
 
   // Check Cyberware
-  character.cyberware?.forEach(item => {
+  character.cyberware?.forEach((item) => {
     if (item.attributeBonuses?.[attrId]) {
       bonuses.push({ source: item.name, value: item.attributeBonuses[attrId] });
     }
   });
 
   // Check Bioware
-  character.bioware?.forEach(item => {
+  character.bioware?.forEach((item) => {
     if (item.attributeBonuses?.[attrId]) {
       bonuses.push({ source: item.name, value: item.attributeBonuses[attrId] });
     }
   });
 
   // Check Adept Powers
-  character.adeptPowers?.forEach(power => {
-    if (power.name.toLowerCase().includes("improved physical attribute") &&
+  character.adeptPowers?.forEach((power) => {
+    if (
+      power.name.toLowerCase().includes("improved physical attribute") &&
       power.specification?.toLowerCase() === attrId.toLowerCase() &&
-      power.rating) {
+      power.rating
+    ) {
       bonuses.push({ source: power.name, value: power.rating });
     }
   });
 
   return bonuses;
 }
-
-
 
 // =============================================================================
 // NOTE: ConditionMonitor component has been replaced by InteractiveConditionMonitor
@@ -176,20 +197,22 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
   const metatypes = useMetatypes();
 
   // Find current metatype data for limits
-  const metatypeData = metatypes.find(m => m.name.toLowerCase() === character.metatype.toLowerCase());
+  const metatypeData = metatypes.find(
+    (m) => m.name.toLowerCase() === character.metatype.toLowerCase()
+  );
 
   // Calculate attribute bonuses from all sources
   const getAugmentations = (attrId: string) => getAttributeBonus(character, attrId);
 
   const attributes = [
-    { id: 'body', label: 'Body' },
-    { id: 'agility', label: 'Agility' },
-    { id: 'reaction', label: 'Reaction' },
-    { id: 'strength', label: 'Strength' },
-    { id: 'willpower', label: 'Willpower' },
-    { id: 'logic', label: 'Logic' },
-    { id: 'intuition', label: 'Intuition' },
-    { id: 'charisma', label: 'Charisma' },
+    { id: "body", label: "Body" },
+    { id: "agility", label: "Agility" },
+    { id: "reaction", label: "Reaction" },
+    { id: "strength", label: "Strength" },
+    { id: "willpower", label: "Willpower" },
+    { id: "logic", label: "Logic" },
+    { id: "intuition", label: "Intuition" },
+    { id: "charisma", label: "Charisma" },
   ];
 
   return (
@@ -198,9 +221,13 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
         <thead>
           <tr className="border-b border-border/50">
             <th className="py-2 px-1 font-bold text-muted-foreground uppercase">Attribute</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Base</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">
+              Base
+            </th>
             <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Aug</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">Min/Max</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-center">
+              Min/Max
+            </th>
             <th className="py-2 px-1 font-bold text-muted-foreground uppercase">Notes</th>
           </tr>
         </thead>
@@ -213,9 +240,8 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
 
             // Get metatype limits
             const limit = metatypeData?.attributes[id];
-            const minMaxStr = limit && 'min' in limit && 'max' in limit
-              ? `(${limit.min}/${limit.max})`
-              : '(1/6)';
+            const minMaxStr =
+              limit && "min" in limit && "max" in limit ? `(${limit.min}/${limit.max})` : "(1/6)";
 
             return (
               <tr
@@ -224,19 +250,20 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
                 className="group border-b border-border/20 hover:bg-muted/30 cursor-pointer transition-colors"
               >
                 <td className="py-2 px-1">
-                  <span className={`font-bold ${display?.color || 'text-foreground'}`}>{label}</span>
+                  <span className={`font-bold ${display?.color || "text-foreground"}`}>
+                    {label}
+                  </span>
                 </td>
-                <td className="py-2 px-1 text-center font-bold">
-                  [{base}]
-                </td>
+                <td className="py-2 px-1 text-center font-bold">[{base}]</td>
                 <td className="py-2 px-1 text-center font-bold text-emerald-500">
-                  {augTotal > 0 ? `[+${augTotal}]` : '[  ]'}
+                  {augTotal > 0 ? `[+${augTotal}]` : "[  ]"}
                 </td>
-                <td className="py-2 px-1 text-center text-muted-foreground">
-                  {minMaxStr}
-                </td>
-                <td className="py-2 px-1 text-[10px] text-muted-foreground italic truncate max-w-[120px]" title={bonuses.map(b => `${b.source} (+${b.value})`).join(", ")}>
-                  {bonuses.length > 0 ? bonuses.map(b => b.source).join(", ") : ""}
+                <td className="py-2 px-1 text-center text-muted-foreground">{minMaxStr}</td>
+                <td
+                  className="py-2 px-1 text-[10px] text-muted-foreground italic truncate max-w-[120px]"
+                  title={bonuses.map((b) => `${b.source} (+${b.value})`).join(", ")}
+                >
+                  {bonuses.length > 0 ? bonuses.map((b) => b.source).join(", ") : ""}
                 </td>
               </tr>
             );
@@ -244,7 +271,9 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
         </tbody>
       </table>
 
-      <div className={`mt-4 pt-4 border-t border-border/50 grid grid-cols-1 sm:grid-cols-2 gap-4 ${t.fonts.mono} text-xs`}>
+      <div
+        className={`mt-4 pt-4 border-t border-border/50 grid grid-cols-1 sm:grid-cols-2 gap-4 ${t.fonts.mono} text-xs`}
+      >
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground uppercase">Edge</span>
           <div className="flex items-center gap-2">
@@ -255,14 +284,19 @@ function AttributesTable({ character, onSelect, theme }: AttributesTableProps) {
         </div>
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground uppercase">Essence</span>
-          <span className="font-bold text-blue-400">[{character.specialAttributes.essence.toFixed(2)}]</span>
+          <span className="font-bold text-blue-400">
+            [{character.specialAttributes.essence.toFixed(2)}]
+          </span>
         </div>
-        {(character.specialAttributes.magic !== undefined || character.specialAttributes.resonance !== undefined) && (
+        {(character.specialAttributes.magic !== undefined ||
+          character.specialAttributes.resonance !== undefined) && (
           <div className="flex items-center justify-between">
             <span className="text-muted-foreground uppercase">
               {character.specialAttributes.magic !== undefined ? "Magic" : "Resonance"}
             </span>
-            <span className={`font-bold ${character.specialAttributes.magic !== undefined ? "text-violet-400" : "text-cyan-400"}`}>
+            <span
+              className={`font-bold ${character.specialAttributes.magic !== undefined ? "text-violet-400" : "text-cyan-400"}`}
+            >
               [{character.specialAttributes.magic ?? character.specialAttributes.resonance}]
             </span>
           </div>
@@ -304,11 +338,21 @@ function SkillList({ character, onSelect, theme }: SkillListProps) {
       <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
         <thead>
           <tr className="border-b border-border/50">
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Skill</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Attr</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Rtg</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Spec</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Dice Pool</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">
+              Skill
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+              Attr
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+              Rtg
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">
+              Spec
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">
+              Dice Pool
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -323,7 +367,7 @@ function SkillList({ character, onSelect, theme }: SkillListProps) {
               const baseAttr = character.attributes[attrId] || 0;
               const bonuses = getAttributeBonus(character, attrId);
               const augTotal = bonuses.reduce((sum, b) => sum + b.value, 0);
-              dicePool += (baseAttr + augTotal);
+              dicePool += baseAttr + augTotal;
             }
 
             const rawSpecs = specializations[skillId];
@@ -338,27 +382,23 @@ function SkillList({ character, onSelect, theme }: SkillListProps) {
                 className="group border-b border-border/20 hover:bg-muted/30 cursor-pointer transition-colors"
               >
                 <td className="py-2 px-1 max-w-[100px] truncate">
-                  <span className={`capitalize ${t.id === 'modern-card' ? 'font-medium text-foreground' : 'text-foreground/90'}`}>
+                  <span
+                    className={`capitalize ${t.id === "modern-card" ? "font-medium text-foreground" : "text-foreground/90"}`}
+                  >
                     {skillId.replace(/-/g, " ")}
                   </span>
                 </td>
                 <td className="py-2 px-1 text-center">
                   {attrDisplay && (
-                    <span className={`text-[10px] ${attrDisplay.color}`}>
-                      {attrDisplay.abbr}
-                    </span>
+                    <span className={`text-[10px] ${attrDisplay.color}`}>{attrDisplay.abbr}</span>
                   )}
                 </td>
-                <td className="py-2 px-1 text-center font-bold">
-                  [{rating}]
-                </td>
+                <td className="py-2 px-1 text-center font-bold">[{rating}]</td>
                 <td className="py-2 px-1 max-w-[120px] truncate">
-                  <span className="text-muted-foreground italic text-[10px]">
-                    {specDisplay}
-                  </span>
+                  <span className="text-muted-foreground italic text-[10px]">{specDisplay}</span>
                 </td>
                 <td className="py-2 px-1 text-right font-bold tabular-nums">
-                  <span className={t.id === 'modern-card' ? 'text-indigo-500' : 'text-emerald-500'}>
+                  <span className={t.id === "modern-card" ? "text-indigo-500" : "text-emerald-500"}>
                     {dicePool}
                   </span>
                 </td>
@@ -397,9 +437,15 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
           <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
             <thead>
               <tr className="border-b border-border/50">
-                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Knowledge Skill</th>
-                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Type</th>
-                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Rating</th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">
+                  Knowledge Skill
+                </th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+                  Type
+                </th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">
+                  Rating
+                </th>
               </tr>
             </thead>
             <tbody>
@@ -409,8 +455,12 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
                   onClick={() => onSelect?.(skill.rating, skill.name)}
                   className="border-b border-border/20 hover:bg-muted/30 transition-colors cursor-pointer group"
                 >
-                  <td className="py-2 px-1 text-foreground/90 group-hover:text-foreground">{skill.name}</td>
-                  <td className="py-2 px-1 text-center text-muted-foreground capitalize text-[10px]">{skill.category}</td>
+                  <td className="py-2 px-1 text-foreground/90 group-hover:text-foreground">
+                    {skill.name}
+                  </td>
+                  <td className="py-2 px-1 text-center text-muted-foreground capitalize text-[10px]">
+                    {skill.category}
+                  </td>
                   <td className="py-2 px-1 text-right font-bold tabular-nums">[{skill.rating}]</td>
                 </tr>
               ))}
@@ -422,15 +472,20 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
       {languages.length > 0 && (
         <div className="pt-2 border-t border-border/20">
           <div className="flex flex-wrap items-center gap-2">
-            <span className={`text-[10px] font-bold text-muted-foreground uppercase ${t.fonts.mono}`}>Languages:</span>
+            <span
+              className={`text-[10px] font-bold text-muted-foreground uppercase ${t.fonts.mono}`}
+            >
+              Languages:
+            </span>
             {languages.map((lang, index) => (
               <span
                 key={index}
                 onClick={() => !lang.isNative && onSelect?.(lang.rating, lang.name)}
-                className={`px-2 py-1 text-[11px] rounded border transition-colors ${lang.isNative
-                  ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-medium"
-                  : "bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground cursor-pointer"
-                  }`}
+                className={`px-2 py-1 text-[11px] rounded border transition-colors ${
+                  lang.isNative
+                    ? "bg-emerald-500/10 text-emerald-400 border-emerald-500/30 font-medium"
+                    : "bg-muted text-muted-foreground border-border hover:bg-muted/80 hover:text-foreground cursor-pointer"
+                }`}
               >
                 {lang.name} {lang.isNative ? "(N)" : `(${lang.rating})`}
               </span>
@@ -441,8 +496,6 @@ function KnowledgeAndLanguages({ character, onSelect, theme }: KnowledgeAndLangu
     </div>
   );
 }
-
-
 
 // =============================================================================
 // GEAR ITEM COMPONENT
@@ -462,26 +515,35 @@ function GearItem({ item, theme }: GearItemProps) {
   const t = theme || THEMES[DEFAULT_THEME];
 
   // Use a neutral but tech-y color for gear, maybe blue/indigo to distinguish from weapons
-  const borderColor = t.id === 'modern-card' ? 'border-indigo-400/50' : 'border-indigo-500/40';
-  const ratingColor = t.id === 'modern-card' ? 'text-indigo-600 bg-indigo-50' : 'text-indigo-400 bg-indigo-500/10';
+  const borderColor = t.id === "modern-card" ? "border-indigo-400/50" : "border-indigo-500/40";
+  const ratingColor =
+    t.id === "modern-card" ? "text-indigo-600 bg-indigo-50" : "text-indigo-400 bg-indigo-500/10";
 
   return (
-    <div className={`flex items-center justify-between py-2 px-3 bg-muted/30 rounded border-l-2 transition-all ${borderColor} hover:bg-muted/50 group`}>
+    <div
+      className={`flex items-center justify-between py-2 px-3 bg-muted/30 rounded border-l-2 transition-all ${borderColor} hover:bg-muted/50 group`}
+    >
       <div className="flex flex-col gap-0.5">
         <div className="flex items-center gap-2">
           <span className="text-xs font-medium text-foreground/90 group-hover:text-foreground">
             {item.name}
           </span>
           {item.rating && (
-            <span className={`text-[9px] font-mono font-bold px-1.5 py-px rounded-sm ${ratingColor}`}>
+            <span
+              className={`text-[9px] font-mono font-bold px-1.5 py-px rounded-sm ${ratingColor}`}
+            >
               R{item.rating}
             </span>
           )}
         </div>
-        <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">{item.category}</span>
+        <span className="text-[10px] text-muted-foreground/60 uppercase tracking-wider">
+          {item.category}
+        </span>
       </div>
       {item.quantity > 1 && (
-        <span className={`text-xs ${t.fonts.mono} font-medium text-muted-foreground bg-background/50 px-2 py-1 rounded`}>
+        <span
+          className={`text-xs ${t.fonts.mono} font-medium text-muted-foreground bg-background/50 px-2 py-1 rounded`}
+        >
           ×{item.quantity}
         </span>
       )}
@@ -494,19 +556,25 @@ function GearItem({ item, theme }: GearItemProps) {
 // =============================================================================
 
 function isMeleeWeapon(w: Weapon): boolean {
-  const hasReach = typeof w.reach === 'number';
+  const hasReach = typeof w.reach === "number";
   const cat = w.category.toLowerCase();
   const subcat = (w.subcategory || "").toLowerCase();
   const dmg = w.damage.toLowerCase();
   const mode = w.mode || [];
 
-  return hasReach ||
-    cat.includes('melee') || subcat.includes('melee') ||
-    cat.includes('blade') || subcat.includes('blade') ||
-    cat.includes('club') || subcat.includes('club') ||
-    cat.includes('unarmed') || subcat.includes('unarmed') ||
-    dmg.includes('str') ||
-    mode.length === 0;
+  return (
+    hasReach ||
+    cat.includes("melee") ||
+    subcat.includes("melee") ||
+    cat.includes("blade") ||
+    subcat.includes("blade") ||
+    cat.includes("club") ||
+    subcat.includes("club") ||
+    cat.includes("unarmed") ||
+    subcat.includes("unarmed") ||
+    dmg.includes("str") ||
+    mode.length === 0
+  );
 }
 
 // =============================================================================
@@ -530,18 +598,32 @@ function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableP
       <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
         <thead>
           <tr className="border-b border-border/50">
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Name</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Dmg</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">AP</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">
+              Name
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+              Dmg
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+              AP
+            </th>
             {type === "ranged" ? (
               <>
-                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Acc</th>
-                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Mode</th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+                  Acc
+                </th>
+                <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+                  Mode
+                </th>
               </>
             ) : (
-              <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Reach</th>
+              <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+                Reach
+              </th>
             )}
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Pool</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">
+              Pool
+            </th>
           </tr>
         </thead>
         <tbody>
@@ -559,12 +641,23 @@ function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableP
               poolLabel = `AGI + ${w.name}`;
             }
 
-            const commonCombatSkills = ['pistols', 'automatics', 'longarms', 'unarmed-combat', 'blades', 'clubs', 'archery', 'throwing-weapons'];
-            const foundSkill = commonCombatSkills.find(s => w.category.toLowerCase().includes(s.replace(/-/g, ' ')));
+            const commonCombatSkills = [
+              "pistols",
+              "automatics",
+              "longarms",
+              "unarmed-combat",
+              "blades",
+              "clubs",
+              "archery",
+              "throwing-weapons",
+            ];
+            const foundSkill = commonCombatSkills.find((s) =>
+              w.category.toLowerCase().includes(s.replace(/-/g, " "))
+            );
 
             if (foundSkill && skills[foundSkill]) {
               basePool += skills[foundSkill];
-              poolLabel = `${isMelee ? 'STR' : 'AGI'} + ${foundSkill.replace(/-/g, ' ')}`;
+              poolLabel = `${isMelee ? "STR" : "AGI"} + ${foundSkill.replace(/-/g, " ")}`;
             }
 
             return (
@@ -575,7 +668,9 @@ function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableP
               >
                 <td className="py-2 px-1">
                   <div className="flex flex-col">
-                    <span className={`font-bold ${t.id === 'modern-card' ? 'text-foreground' : 'text-foreground/90'}`}>
+                    <span
+                      className={`font-bold ${t.id === "modern-card" ? "text-foreground" : "text-foreground/90"}`}
+                    >
                       {w.name}
                     </span>
                     <span className="text-[9px] text-muted-foreground uppercase opacity-70">
@@ -584,29 +679,27 @@ function WeaponTable({ weapons, character, type, onSelect, theme }: WeaponTableP
                   </div>
                 </td>
                 <td className="py-2 px-1 text-center">
-                  <span className={t.id === 'modern-card' ? 'text-emerald-600' : 'text-emerald-500'}>
+                  <span
+                    className={t.id === "modern-card" ? "text-emerald-600" : "text-emerald-500"}
+                  >
                     {w.damage}
                   </span>
                 </td>
-                <td className="py-2 px-1 text-center text-amber-500">
-                  {w.ap}
-                </td>
+                <td className="py-2 px-1 text-center text-amber-500">{w.ap}</td>
                 {type === "ranged" ? (
                   <>
-                    <td className="py-2 px-1 text-center text-cyan-500">
-                      {w.accuracy || '-'}
-                    </td>
+                    <td className="py-2 px-1 text-center text-cyan-500">{w.accuracy || "-"}</td>
                     <td className="py-2 px-1 text-center text-[9px] text-muted-foreground">
-                      {w.mode?.join('/') || '-'}
+                      {w.mode?.join("/") || "-"}
                     </td>
                   </>
                 ) : (
                   <td className="py-2 px-1 text-center text-purple-500">
-                    {(w.reach != null && Number(w.reach) !== 0) ? w.reach : '-'}
+                    {w.reach != null && Number(w.reach) !== 0 ? w.reach : "-"}
                   </td>
                 )}
                 <td className="py-2 px-1 text-right font-bold tabular-nums">
-                  <span className={t.id === 'modern-card' ? 'text-indigo-500' : 'text-emerald-500'}>
+                  <span className={t.id === "modern-card" ? "text-indigo-500" : "text-emerald-500"}>
                     {basePool}
                   </span>
                 </td>
@@ -636,14 +729,23 @@ function ArmorTable({ armor, theme }: ArmorTableProps) {
       <table className={`w-full text-left border-collapse ${t.fonts.mono} text-xs`}>
         <thead>
           <tr className="border-b border-border/50">
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">Name</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">Rating</th>
-            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">Status</th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px]">
+              Name
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-center">
+              Rating
+            </th>
+            <th className="py-2 px-1 font-bold text-muted-foreground uppercase text-[10px] text-right">
+              Status
+            </th>
           </tr>
         </thead>
         <tbody>
           {armor.map((a, idx) => (
-            <tr key={`${a.name}-${idx}`} className="border-b border-border/20 hover:bg-muted/10 transition-colors">
+            <tr
+              key={`${a.name}-${idx}`}
+              className="border-b border-border/20 hover:bg-muted/10 transition-colors"
+            >
               <td className="py-2 px-1">
                 <div className="flex flex-col">
                   <span className="font-bold text-foreground/90">{a.name}</span>
@@ -697,19 +799,23 @@ function SpellCard({ spellId, spellsCatalog, onSelect, theme }: SpellCardProps) 
   return (
     <div
       onClick={() => onSelect?.(6, spell.name)}
-      className={`p-3 rounded transition-all cursor-pointer group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : 'border-violet-500/50'}`}
+      className={`p-3 rounded transition-all cursor-pointer group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === "modern-card" ? t.components.card.border : "border-violet-500/50"}`}
     >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-foreground transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground' : 'group-hover:text-violet-400'}`}>
+            <span
+              className={`text-sm font-bold text-foreground transition-colors ${t.id === "modern-card" ? "group-hover:text-foreground" : "group-hover:text-violet-400"}`}
+            >
               {spell.name}
             </span>
             <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-tighter px-1.5 py-0.5 border border-border rounded">
               {spell.category}
             </span>
           </div>
-          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">{spell.description}</p>
+          <p className="text-[11px] text-muted-foreground line-clamp-2 leading-relaxed">
+            {spell.description}
+          </p>
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono mt-1">
             <div className="flex gap-1.5">
               <span className="text-muted-foreground opacity-70">TYPE</span>
@@ -726,8 +832,12 @@ function SpellCard({ spellId, spellsCatalog, onSelect, theme }: SpellCardProps) 
           </div>
         </div>
         <div className="text-right shrink-0">
-          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Drain</div>
-          <div className="text-sm font-mono text-violet-400 font-bold leading-none">{spell.drain}</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">
+            Drain
+          </div>
+          <div className="text-sm font-mono text-violet-400 font-bold leading-none">
+            {spell.drain}
+          </div>
         </div>
       </div>
     </div>
@@ -746,11 +856,15 @@ interface AdeptPowerCardProps {
 function AdeptPowerCard({ power, theme }: AdeptPowerCardProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   return (
-    <div className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : 'border-amber-500/50'}`}>
+    <div
+      className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === "modern-card" ? t.components.card.border : "border-amber-500/50"}`}
+    >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-foreground transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground' : 'group-hover:text-amber-400'}`}>
+            <span
+              className={`text-sm font-bold text-foreground transition-colors ${t.id === "modern-card" ? "group-hover:text-foreground" : "group-hover:text-amber-400"}`}
+            >
               {power.name}
             </span>
             {power.rating && (
@@ -766,8 +880,12 @@ function AdeptPowerCard({ power, theme }: AdeptPowerCardProps) {
           )}
         </div>
         <div className="text-right shrink-0">
-          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Cost</div>
-          <div className="text-sm font-mono text-amber-500 dark:text-amber-400 font-bold leading-none">{power.powerPointCost} PP</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">
+            Cost
+          </div>
+          <div className="text-sm font-mono text-amber-500 dark:text-amber-400 font-bold leading-none">
+            {power.powerPointCost} PP
+          </div>
         </div>
       </div>
     </div>
@@ -778,21 +896,30 @@ function AdeptPowerCard({ power, theme }: AdeptPowerCardProps) {
 // AUGMENTATION CARD COMPONENT
 // =============================================================================
 
-function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, theme?: Theme }) {
-  const isCyber = 'grade' in item && (item as CyberwareItem).grade !== undefined;
+function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem; theme?: Theme }) {
+  const isCyber = "grade" in item && (item as CyberwareItem).grade !== undefined;
   const grade = isCyber ? (item as CyberwareItem).grade : (item as BiowareItem).grade;
   const t = theme || THEMES[DEFAULT_THEME];
 
   return (
-    <div className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : (isCyber ? 'border-cyan-500/50' : 'border-emerald-500/50')}`}>
+    <div
+      className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === "modern-card" ? t.components.card.border : isCyber ? "border-cyan-500/50" : "border-emerald-500/50"}`}
+    >
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <div className="flex items-center gap-2">
-            <span className={`text-sm font-bold text-foreground transition-colors ${t.id === 'modern-card' ? 'group-hover:text-foreground' : (isCyber ? 'group-hover:text-cyan-400' : 'group-hover:text-emerald-400')}`}>
+            <span
+              className={`text-sm font-bold text-foreground transition-colors ${t.id === "modern-card" ? "group-hover:text-foreground" : isCyber ? "group-hover:text-cyan-400" : "group-hover:text-emerald-400"}`}
+            >
               {item.name}
             </span>
-            <span className={`text-[9px] font-mono uppercase tracking-tighter px-1.5 py-0.5 border rounded ${isCyber ? 'border-cyan-500/30 text-cyan-500 bg-cyan-500/5' : 'border-emerald-500/30 text-emerald-500 bg-emerald-500/5'
-              }`}>
+            <span
+              className={`text-[9px] font-mono uppercase tracking-tighter px-1.5 py-0.5 border rounded ${
+                isCyber
+                  ? "border-cyan-500/30 text-cyan-500 bg-cyan-500/5"
+                  : "border-emerald-500/30 text-emerald-500 bg-emerald-500/5"
+              }`}
+            >
               {grade}
             </span>
           </div>
@@ -803,7 +930,10 @@ function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, 
           {item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0 && (
             <div className="flex flex-wrap gap-1.5 mt-1">
               {Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
-                <span key={attr} className="px-1.5 py-0.5 text-[10px] font-mono bg-muted text-emerald-400 rounded">
+                <span
+                  key={attr}
+                  className="px-1.5 py-0.5 text-[10px] font-mono bg-muted text-emerald-400 rounded"
+                >
                   {attr.toUpperCase()} +{bonus}
                 </span>
               ))}
@@ -811,8 +941,12 @@ function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, 
           )}
         </div>
         <div className="text-right shrink-0">
-          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">Essence</div>
-          <div className="text-sm font-mono text-foreground/80 font-bold leading-none">{(item.essenceCost ?? 0).toFixed(2)}</div>
+          <div className="text-[10px] text-muted-foreground uppercase font-mono leading-none mb-1">
+            Essence
+          </div>
+          <div className="text-sm font-mono text-foreground/80 font-bold leading-none">
+            {(item.essenceCost ?? 0).toFixed(2)}
+          </div>
         </div>
       </div>
     </div>
@@ -823,24 +957,38 @@ function AugmentationCard({ item, theme }: { item: CyberwareItem | BiowareItem, 
 // VEHICLE CARD COMPONENT
 // =============================================================================
 
-function VehicleCard({ vehicle, theme }: { vehicle: Vehicle | CharacterDrone | CharacterRCC, theme?: Theme }) {
-  const isRCC = 'deviceRating' in vehicle;
-  const isDrone = 'size' in vehicle;
+function VehicleCard({
+  vehicle,
+  theme,
+}: {
+  vehicle: Vehicle | CharacterDrone | CharacterRCC;
+  theme?: Theme;
+}) {
+  const isRCC = "deviceRating" in vehicle;
+  const isDrone = "size" in vehicle;
   const t = theme || THEMES[DEFAULT_THEME];
 
   return (
-    <div className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === 'modern-card' ? t.components.card.border : (isRCC ? 'border-orange-500/50' : 'border-border/50')}`}>
+    <div
+      className={`p-3 rounded transition-all group ${t.components.card.wrapper} ${t.components.card.hover} ${t.id === "modern-card" ? t.components.card.border : isRCC ? "border-orange-500/50" : "border-border/50"}`}
+    >
       <div className="flex items-start justify-between mb-2">
         <div>
-          <div className={`font-bold text-foreground transition-colors ${t.id === 'modern-card' ? '' : 'group-hover:text-amber-400'}`}>{vehicle.name}</div>
+          <div
+            className={`font-bold text-foreground transition-colors ${t.id === "modern-card" ? "" : "group-hover:text-amber-400"}`}
+          >
+            {vehicle.name}
+          </div>
           <div className="text-[10px] text-muted-foreground uppercase font-mono">
-            {isRCC ? 'RCC' : isDrone ? `${(vehicle as CharacterDrone).size} Drone` : 'Vehicle'}
+            {isRCC ? "RCC" : isDrone ? `${(vehicle as CharacterDrone).size} Drone` : "Vehicle"}
           </div>
         </div>
         {isRCC && (
           <div className="text-right">
             <div className="text-[10px] text-muted-foreground uppercase font-mono">Rating</div>
-            <div className="text-lg font-bold font-mono text-orange-400">{(vehicle as CharacterRCC).deviceRating}</div>
+            <div className="text-lg font-bold font-mono text-orange-400">
+              {(vehicle as CharacterRCC).deviceRating}
+            </div>
           </div>
         )}
       </div>
@@ -849,19 +997,29 @@ function VehicleCard({ vehicle, theme }: { vehicle: Vehicle | CharacterDrone | C
         <div className="grid grid-cols-4 gap-2 text-center border-t border-border/50 pt-2">
           {/* ... keeping simplified stats for brevity but reusing structure ... */}
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Hand</div>
-            <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).handling}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Hand
+            </div>
+            <div className="text-xs font-mono text-foreground/80">
+              {(vehicle as Vehicle).handling}
+            </div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Spd</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Spd
+            </div>
             <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).speed}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Body</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Body
+            </div>
             <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).body}</div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Armor</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Armor
+            </div>
             <div className="text-xs font-mono text-foreground/80">{(vehicle as Vehicle).armor}</div>
           </div>
         </div>
@@ -870,12 +1028,20 @@ function VehicleCard({ vehicle, theme }: { vehicle: Vehicle | CharacterDrone | C
       {isRCC && (
         <div className="grid grid-cols-2 gap-4 text-center border-t border-border/50 pt-2">
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Data Proc</div>
-            <div className="text-xs font-mono text-foreground/80">{(vehicle as CharacterRCC).dataProcessing}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Data Proc
+            </div>
+            <div className="text-xs font-mono text-foreground/80">
+              {(vehicle as CharacterRCC).dataProcessing}
+            </div>
           </div>
           <div className="space-y-0.5">
-            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">Firewall</div>
-            <div className="text-xs font-mono text-foreground/80">{(vehicle as CharacterRCC).firewall}</div>
+            <div className="text-[9px] text-muted-foreground opacity-70 uppercase font-mono">
+              Firewall
+            </div>
+            <div className="text-xs font-mono text-foreground/80">
+              {(vehicle as CharacterRCC).firewall}
+            </div>
           </div>
         </div>
       )}
@@ -883,12 +1049,17 @@ function VehicleCard({ vehicle, theme }: { vehicle: Vehicle | CharacterDrone | C
   );
 }
 
-
 // =============================================================================
 // THEME SELECTOR
 // =============================================================================
 
-function ThemeSelector({ currentTheme, onSelect }: { currentTheme: ThemeId, onSelect: (id: ThemeId) => void }) {
+function ThemeSelector({
+  currentTheme,
+  onSelect,
+}: {
+  currentTheme: ThemeId;
+  onSelect: (id: ThemeId) => void;
+}) {
   return (
     <div className="flex items-center gap-1 bg-muted/20 p-1 rounded-lg border border-border/50">
       {Object.values(THEMES).map((theme) => (
@@ -897,9 +1068,11 @@ function ThemeSelector({ currentTheme, onSelect }: { currentTheme: ThemeId, onSe
           onClick={() => onSelect(theme.id)}
           className={`
             px-3 py-1.5 text-xs font-medium rounded-md transition-all
-            ${currentTheme === theme.id
-              ? "bg-emerald-500 text-white shadow-sm"
-              : "text-muted-foreground hover:text-foreground hover:bg-muted/50"}
+            ${
+              currentTheme === theme.id
+                ? "bg-emerald-500 text-white shadow-sm"
+                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+            }
           `}
         >
           {theme.name}
@@ -939,7 +1112,7 @@ function CharacterSheet({
   const { loadRuleset } = useRuleset();
   const { ready, loading: rulesetLoading } = useRulesetStatus();
   const spellsCatalog = useSpells();
-  
+
   // Get ruleset for quality effect calculations (must be called before any early returns)
   const ruleset = useMergedRuleset();
 
@@ -977,7 +1150,7 @@ function CharacterSheet({
   // Calculate derived values with quality effects (must be called before any early returns)
   const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
   const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
-  
+
   // Calculate wound modifier (tracks both physical and stun damage)
   const woundModifier = useMemo(() => {
     if (ruleset) {
@@ -992,18 +1165,24 @@ function CharacterSheet({
   }, [character, ruleset]);
 
   // Handler for when damage is applied via interactive monitors
-  const handleDamageApplied = useCallback((type: "physical" | "stun" | "overflow", newValue: number) => {
-    // Update local character state to reflect new damage
-    setCharacter({
-      ...character,
-      condition: {
-        ...character.condition,
-        [type === "physical" ? "physicalDamage" : type === "stun" ? "stunDamage" : "overflowDamage"]: newValue,
-      },
-    });
-  }, [character, setCharacter]);
+  const handleDamageApplied = useCallback(
+    (type: "physical" | "stun" | "overflow", newValue: number) => {
+      // Update local character state to reflect new damage
+      setCharacter({
+        ...character,
+        condition: {
+          ...character.condition,
+          [type === "physical"
+            ? "physicalDamage"
+            : type === "stun"
+              ? "stunDamage"
+              : "overflowDamage"]: newValue,
+        },
+      });
+    },
+    [character, setCharacter]
+  );
 
-  
   // Calculate limits with quality modifiers if ruleset is available
   const physicalLimit = useMemo(() => {
     if (ruleset) {
@@ -1011,9 +1190,10 @@ function CharacterSheet({
     }
     // Fallback to base calculation
     return Math.ceil(
-      (((character.attributes?.strength || 1) * 2) +
+      ((character.attributes?.strength || 1) * 2 +
         (character.attributes?.body || 1) +
-        (character.attributes?.reaction || 1)) / 3
+        (character.attributes?.reaction || 1)) /
+        3
     );
   }, [character, ruleset]);
 
@@ -1023,9 +1203,10 @@ function CharacterSheet({
     }
     // Fallback to base calculation
     return Math.ceil(
-      (((character.attributes?.logic || 1) * 2) +
+      ((character.attributes?.logic || 1) * 2 +
         (character.attributes?.intuition || 1) +
-        (character.attributes?.willpower || 1)) / 3
+        (character.attributes?.willpower || 1)) /
+        3
     );
   }, [character, ruleset]);
 
@@ -1035,9 +1216,10 @@ function CharacterSheet({
     }
     // Fallback to base calculation
     return Math.ceil(
-      (((character.attributes?.charisma || 1) * 2) +
+      ((character.attributes?.charisma || 1) * 2 +
         (character.attributes?.willpower || 1) +
-        Math.ceil(character.specialAttributes?.essence || 6)) / 3
+        Math.ceil(character.specialAttributes?.essence || 6)) /
+        3
     );
   }, [character, ruleset]);
 
@@ -1060,17 +1242,20 @@ function CharacterSheet({
   const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 
   const handleExport = () => {
-    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(character, null, 2));
-    const downloadAnchorNode = document.createElement('a');
+    const dataStr =
+      "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(character, null, 2));
+    const downloadAnchorNode = document.createElement("a");
     downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", `${character.name || 'character'}.json`);
+    downloadAnchorNode.setAttribute("download", `${character.name || "character"}.json`);
     document.body.appendChild(downloadAnchorNode); // required for firefox
     downloadAnchorNode.click();
     downloadAnchorNode.remove();
   };
 
   return (
-    <div className={`character-sheet min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}>
+    <div
+      className={`character-sheet min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}
+    >
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
         <div className="flex items-center justify-between print-hidden">
@@ -1132,7 +1317,7 @@ function CharacterSheet({
               </Link>
             </>
           )}
-          {(character.status === "draft") && (
+          {character.status === "draft" && (
             <Link
               href={`/characters/${character.id}/edit`}
               className="p-2 text-muted-foreground hover:text-foreground transition-colors"
@@ -1153,9 +1338,11 @@ function CharacterSheet({
         )}
 
         {/* Character Header Card */}
-        <div className={`character-header relative overflow-hidden ${theme.components.section.wrapper} p-6`}>
+        <div
+          className={`character-header relative overflow-hidden ${theme.components.section.wrapper} p-6`}
+        >
           {/* Background Elements - Theme dependent */}
-          {theme.id === 'neon-rain' ? (
+          {theme.id === "neon-rain" ? (
             <>
               <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
               <div className="absolute bottom-0 left-0 w-64 h-64 bg-blue-500/5 blur-3xl rounded-full pointer-events-none print-hidden" />
@@ -1168,7 +1355,9 @@ function CharacterSheet({
           <div className="relative flex flex-col md:flex-row md:items-start justify-between gap-6">
             <div className="space-y-2">
               <div className="flex items-center gap-3">
-                <h1 className={`character-name text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}>
+                <h1
+                  className={`character-name text-3xl md:text-4xl ${theme.fonts.heading} ${theme.colors.heading}`}
+                >
                   {character.name}
                 </h1>
                 <StabilityShield
@@ -1178,18 +1367,27 @@ function CharacterSheet({
                   syncStatus={character.syncStatus}
                   legalityStatus={character.legalityStatus}
                 />
-                <span className={`px-2 py-0.5 text-xs font-mono uppercase tracking-wider rounded border ${character.status === "active" ? theme.components.badge.positive :
-                  character.status === "draft" ? theme.components.badge.neutral :
-                    theme.components.badge.neutral
-                  }`}>
+                <span
+                  className={`px-2 py-0.5 text-xs font-mono uppercase tracking-wider rounded border ${
+                    character.status === "active"
+                      ? theme.components.badge.positive
+                      : character.status === "draft"
+                        ? theme.components.badge.neutral
+                        : theme.components.badge.neutral
+                  }`}
+                >
                   {character.status}
                 </span>
               </div>
 
-              <div className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm ${theme.fonts.mono} ${theme.colors.muted}`}>
+              <div
+                className={`flex flex-wrap items-center gap-x-4 gap-y-2 text-sm ${theme.fonts.mono} ${theme.colors.muted}`}
+              >
                 <span>{character.metatype}</span>
                 <span>•</span>
-                <span className="capitalize">{(character.magicalPath || "mundane").replace("-", " ")}</span>
+                <span className="capitalize">
+                  {(character.magicalPath || "mundane").replace("-", " ")}
+                </span>
                 {character.editionCode && (
                   <>
                     <span>•</span>
@@ -1205,21 +1403,39 @@ function CharacterSheet({
                 href={`/characters/${character.id}/advancement`}
                 className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px] cursor-pointer hover:border-emerald-500/50 transition-colors group`}
               >
-                <span className="text-xs text-muted-foreground uppercase tracking-wider group-hover:text-emerald-400 transition-colors">Karma</span>
-                <span className={`text-xl font-bold ${theme.colors.accent}`}>{character.karmaCurrent}</span>
-                <span className="text-[10px] text-muted-foreground">of {character.karmaTotal} earned</span>
+                <span className="text-xs text-muted-foreground uppercase tracking-wider group-hover:text-emerald-400 transition-colors">
+                  Karma
+                </span>
+                <span className={`text-xl font-bold ${theme.colors.accent}`}>
+                  {character.karmaCurrent}
+                </span>
+                <span className="text-[10px] text-muted-foreground">
+                  of {character.karmaTotal} earned
+                </span>
               </Link>
-              <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Nuyen</span>
-                <span className={`text-xl font-bold ${theme.colors.heading}`}>¥{character.nuyen.toLocaleString()}</span>
+              <div
+                className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}
+              >
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                  Nuyen
+                </span>
+                <span className={`text-xl font-bold ${theme.colors.heading}`}>
+                  ¥{character.nuyen.toLocaleString()}
+                </span>
               </div>
-              <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
-                <span className="text-xs text-muted-foreground uppercase tracking-wider">Essence</span>
+              <div
+                className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}
+              >
+                <span className="text-xs text-muted-foreground uppercase tracking-wider">
+                  Essence
+                </span>
                 <span className={`text-xl font-bold ${theme.colors.heading}`}>
                   {character.specialAttributes?.essence?.toFixed(2) || "6.00"}
                 </span>
               </div>
-              <div className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}>
+              <div
+                className={`p-3 rounded border ${theme.colors.card} ${theme.colors.border} flex flex-col items-center min-w-[80px]`}
+              >
                 <span className="text-xs text-muted-foreground uppercase tracking-wider">Edge</span>
                 <span className={`text-xl font-bold ${theme.colors.accent}`}>
                   {character.specialAttributes?.edge}/{character.specialAttributes?.edge}
@@ -1235,21 +1451,23 @@ function CharacterSheet({
             isDismissable
             className={({ isEntering, isExiting }) => `
               fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm
-              ${isEntering ? 'animate-in fade-in duration-300' : ''}
-              ${isExiting ? 'animate-out fade-out duration-200' : ''}
+              ${isEntering ? "animate-in fade-in duration-300" : ""}
+              ${isExiting ? "animate-out fade-out duration-200" : ""}
             `}
           >
             <Modal
               className={({ isEntering, isExiting }) => `
                 w-full max-w-lg overflow-hidden rounded-xl border ${theme.colors.border} ${theme.colors.card} shadow-2xl
-                ${isEntering ? 'animate-in zoom-in-95 duration-300' : ''}
-                ${isExiting ? 'animate-out zoom-out-95 duration-200' : ''}
+                ${isEntering ? "animate-in zoom-in-95 duration-300" : ""}
+                ${isExiting ? "animate-out zoom-out-95 duration-200" : ""}
               `}
             >
               <Dialog className="outline-none">
                 {({ close }) => (
                   <div className="flex flex-col">
-                    <div className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}>
+                    <div
+                      className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}
+                    >
                       <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
                         Dice Roller
                       </Heading>
@@ -1298,20 +1516,30 @@ function CharacterSheet({
             <Section theme={theme} title="Derived Stats">
               <div className="grid grid-cols-2 gap-4">
                 <div className="text-center p-3 bg-muted/30 rounded">
-                  <span className="block text-xs font-mono text-muted-foreground uppercase">Physical</span>
+                  <span className="block text-xs font-mono text-muted-foreground uppercase">
+                    Physical
+                  </span>
                   <span className="text-xl font-mono font-bold text-red-500">{physicalLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
-                  <span className="block text-xs font-mono text-muted-foreground uppercase">Mental</span>
+                  <span className="block text-xs font-mono text-muted-foreground uppercase">
+                    Mental
+                  </span>
                   <span className="text-xl font-mono font-bold text-blue-400">{mentalLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
-                  <span className="block text-xs font-mono text-muted-foreground uppercase">Social</span>
+                  <span className="block text-xs font-mono text-muted-foreground uppercase">
+                    Social
+                  </span>
                   <span className="text-xl font-mono font-bold text-pink-400">{socialLimit}</span>
                 </div>
                 <div className="text-center p-3 bg-muted/30 rounded">
-                  <span className="block text-xs font-mono text-muted-foreground uppercase">Initiative</span>
-                  <span className="text-xl font-mono font-bold text-emerald-400">{initiative}+1d6</span>
+                  <span className="block text-xs font-mono text-muted-foreground uppercase">
+                    Initiative
+                  </span>
+                  <span className="text-xl font-mono font-bold text-emerald-400">
+                    {initiative}+1d6
+                  </span>
                 </div>
               </div>
             </Section>
@@ -1321,11 +1549,13 @@ function CharacterSheet({
               <div className="space-y-6">
                 {/* Wound Modifier Banner */}
                 {woundModifier !== 0 && (
-                  <div className={`p-2 rounded text-center ${
-                    theme.id === 'modern-card' 
-                      ? 'bg-amber-50 border border-amber-200 text-amber-700' 
-                      : 'bg-amber-500/10 border border-amber-500/30 text-amber-400'
-                  }`}>
+                  <div
+                    className={`p-2 rounded text-center ${
+                      theme.id === "modern-card"
+                        ? "bg-amber-50 border border-amber-200 text-amber-700"
+                        : "bg-amber-500/10 border border-amber-500/30 text-amber-400"
+                    }`}
+                  >
                     <span className="text-xs font-mono uppercase">Total Wound Modifier: </span>
                     <span className="font-mono font-bold">{woundModifier}</span>
                   </div>
@@ -1402,9 +1632,7 @@ function CharacterSheet({
             />
 
             {/* Quick NPC Panel - Add opponents for testing */}
-            <QuickNPCPanel
-              theme={theme}
-            />
+            <QuickNPCPanel theme={theme} />
           </div>
 
           {/* Middle Column - Skills & Powers */}
@@ -1429,30 +1657,38 @@ function CharacterSheet({
                 <div className="space-y-4">
                   {character.spells && character.spells.length > 0 && (
                     <div>
-                      <span className="text-xs font-mono text-violet-500 uppercase mb-2 block">Spells</span>
+                      <span className="text-xs font-mono text-violet-500 uppercase mb-2 block">
+                        Spells
+                      </span>
                       <div className="space-y-3">
                         {character.spells.map((spellEntry, idx) => {
                           // Handle both string IDs and legacy object format
-                          const spellId = typeof spellEntry === 'string' ? spellEntry : (spellEntry as { id: string }).id;
+                          const spellId =
+                            typeof spellEntry === "string"
+                              ? spellEntry
+                              : (spellEntry as { id: string }).id;
                           return (
-                          <SpellCard
-                            theme={theme}
-                            key={spellId || idx}
-                            spellId={spellId}
-                            spellsCatalog={spellsCatalog}
-                            onSelect={(pool, label) => {
-                              setTargetPool(pool);
-                              setPoolContext(label);
-                              setShowDiceRoller(true);
-                            }}
-                          />
-                        )})}
+                            <SpellCard
+                              theme={theme}
+                              key={spellId || idx}
+                              spellId={spellId}
+                              spellsCatalog={spellsCatalog}
+                              onSelect={(pool, label) => {
+                                setTargetPool(pool);
+                                setPoolContext(label);
+                                setShowDiceRoller(true);
+                              }}
+                            />
+                          );
+                        })}
                       </div>
                     </div>
                   )}
                   {character.adeptPowers && character.adeptPowers.length > 0 && (
                     <div>
-                      <span className="text-xs font-mono text-amber-500 uppercase mb-2 block">Adept Powers</span>
+                      <span className="text-xs font-mono text-amber-500 uppercase mb-2 block">
+                        Adept Powers
+                      </span>
                       <div className="space-y-3">
                         {character.adeptPowers.map((power, idx) => (
                           <AdeptPowerCard theme={theme} key={idx} power={power} />
@@ -1481,16 +1717,18 @@ function CharacterSheet({
           {/* Right Column - Gear & Assets */}
           <div className="space-y-6">
             {/* Combat Gear */}
-            {(character.weapons?.length || character.armor?.length) ? (
+            {character.weapons?.length || character.armor?.length ? (
               <Section theme={theme} title="Combat Gear">
                 <div className="space-y-6">
                   {/* Ranged Weapons */}
                   {(() => {
-                    const ranged = character.weapons?.filter(w => !isMeleeWeapon(w)) || [];
+                    const ranged = character.weapons?.filter((w) => !isMeleeWeapon(w)) || [];
                     if (ranged.length === 0) return null;
                     return (
                       <div className="space-y-2">
-                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Ranged Weapons</span>
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
+                          Ranged Weapons
+                        </span>
                         <WeaponTable
                           theme={theme}
                           type="ranged"
@@ -1508,11 +1746,13 @@ function CharacterSheet({
 
                   {/* Melee Weapons */}
                   {(() => {
-                    const melee = character.weapons?.filter(w => isMeleeWeapon(w)) || [];
+                    const melee = character.weapons?.filter((w) => isMeleeWeapon(w)) || [];
                     if (melee.length === 0) return null;
                     return (
                       <div className="space-y-2">
-                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Melee Weapons</span>
+                        <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
+                          Melee Weapons
+                        </span>
                         <WeaponTable
                           theme={theme}
                           type="melee"
@@ -1531,11 +1771,10 @@ function CharacterSheet({
                   {/* Armor & Clothing */}
                   {character.armor && character.armor.length > 0 && (
                     <div className="space-y-2">
-                      <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">Armor & Clothing</span>
-                      <ArmorTable
-                        theme={theme}
-                        armor={character.armor}
-                      />
+                      <span className="text-[10px] font-mono text-muted-foreground uppercase tracking-widest block ml-1">
+                        Armor & Clothing
+                      </span>
+                      <ArmorTable theme={theme} armor={character.armor} />
                     </div>
                   )}
                 </div>
@@ -1543,12 +1782,14 @@ function CharacterSheet({
             ) : null}
 
             {/* Augmentations */}
-            {(character.cyberware?.length || character.bioware?.length) ? (
+            {character.cyberware?.length || character.bioware?.length ? (
               <Section theme={theme} title="Augmentations">
                 <div className="space-y-4">
                   {character.cyberware && character.cyberware.length > 0 && (
                     <div>
-                      <span className="text-xs font-mono text-cyan-500 uppercase mb-2 block">Cyberware</span>
+                      <span className="text-xs font-mono text-cyan-500 uppercase mb-2 block">
+                        Cyberware
+                      </span>
                       <div className="space-y-3">
                         {character.cyberware.map((item, idx) => (
                           <AugmentationCard theme={theme} key={`cyber-${idx}`} item={item} />
@@ -1558,7 +1799,9 @@ function CharacterSheet({
                   )}
                   {character.bioware && character.bioware.length > 0 && (
                     <div>
-                      <span className="text-xs font-mono text-emerald-500 uppercase mb-2 block">Bioware</span>
+                      <span className="text-xs font-mono text-emerald-500 uppercase mb-2 block">
+                        Bioware
+                      </span>
                       <div className="space-y-3">
                         {character.bioware.map((item, idx) => (
                           <AugmentationCard theme={theme} key={`bio-${idx}`} item={item} />
@@ -1571,12 +1814,21 @@ function CharacterSheet({
             ) : null}
 
             {/* Vehicles & Assets */}
-            {(character.vehicles?.length || character.drones?.length || character.rccs?.length) ? (
+            {character.vehicles?.length || character.drones?.length || character.rccs?.length ? (
               <Section theme={theme} title="Gear & Assets">
                 <div className="space-y-3">
-                  {character.rccs && character.rccs.map((rcc, idx) => <VehicleCard theme={theme} key={`rcc-${idx}`} vehicle={rcc} />)}
-                  {character.vehicles && character.vehicles.map((v, idx) => <VehicleCard theme={theme} key={`veh-${idx}`} vehicle={v} />)}
-                  {character.drones && character.drones.map((d, idx) => <VehicleCard theme={theme} key={`drone-${idx}`} vehicle={d} />)}
+                  {character.rccs &&
+                    character.rccs.map((rcc, idx) => (
+                      <VehicleCard theme={theme} key={`rcc-${idx}`} vehicle={rcc} />
+                    ))}
+                  {character.vehicles &&
+                    character.vehicles.map((v, idx) => (
+                      <VehicleCard theme={theme} key={`veh-${idx}`} vehicle={v} />
+                    ))}
+                  {character.drones &&
+                    character.drones.map((d, idx) => (
+                      <VehicleCard theme={theme} key={`drone-${idx}`} vehicle={d} />
+                    ))}
                 </div>
               </Section>
             ) : null}
@@ -1639,10 +1891,16 @@ function CharacterSheet({
                       </div>
                       <div className="flex gap-4 mt-2 text-xs">
                         <span className="text-muted-foreground">
-                          Connection: <span className="text-amber-500 dark:text-amber-400 font-mono">{contact.connection}</span>
+                          Connection:{" "}
+                          <span className="text-amber-500 dark:text-amber-400 font-mono">
+                            {contact.connection}
+                          </span>
                         </span>
                         <span className="text-muted-foreground">
-                          Loyalty: <span className="text-emerald-600 dark:text-emerald-400 font-mono">{contact.loyalty}</span>
+                          Loyalty:{" "}
+                          <span className="text-emerald-600 dark:text-emerald-400 font-mono">
+                            {contact.loyalty}
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -1668,10 +1926,11 @@ function CharacterSheet({
                     return (
                       <div
                         key={`lifestyle-${index}`}
-                        className={`p-3 rounded border-l-2 transition-colors ${isPrimary
-                          ? "bg-emerald-500/10 border-emerald-500/50"
-                          : "bg-muted/30 border-border"
-                          }`}
+                        className={`p-3 rounded border-l-2 transition-colors ${
+                          isPrimary
+                            ? "bg-emerald-500/10 border-emerald-500/50"
+                            : "bg-muted/30 border-border"
+                        }`}
                       >
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
@@ -1705,7 +1964,8 @@ function CharacterSheet({
           <span className="font-mono">ID: {character.id}</span>
           <span className="font-mono">
             Created: {new Date(character.createdAt).toLocaleDateString()}
-            {character.updatedAt && ` • Updated: ${new Date(character.updatedAt).toLocaleDateString()}`}
+            {character.updatedAt &&
+              ` • Updated: ${new Date(character.updatedAt).toLocaleDateString()}`}
           </span>
         </div>
       </div>
@@ -1782,8 +2042,18 @@ export default function CharacterPage({ params }: CharacterPageProps) {
     return (
       <div className="flex flex-col items-center justify-center min-h-[400px] gap-4">
         <div className="w-16 h-16 rounded-full bg-red-500/10 flex items-center justify-center">
-          <svg className="w-8 h-8 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+          <svg
+            className="w-8 h-8 text-red-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+            />
           </svg>
         </div>
         <p className="text-red-400 font-mono">{error || "Character not found"}</p>
@@ -1816,4 +2086,3 @@ export default function CharacterPage({ params }: CharacterPageProps) {
     </RulesetProvider>
   );
 }
-

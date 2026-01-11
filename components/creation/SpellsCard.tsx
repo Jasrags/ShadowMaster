@@ -20,8 +20,8 @@ import { useSpells, usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import type { SpellData } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
-import { Lock, Check, Search, X, Plus, AlertTriangle, Sparkles } from "lucide-react";
+import { CreationCard, BudgetIndicator } from "./shared";
+import { Lock, Check, Search, X, Plus, Sparkles } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -49,89 +49,6 @@ const SPELL_PATHS = ["magician", "mystic-adept", "aspected-mage"];
 interface SpellsCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  description,
-  spent,
-  total,
-  source,
-  isOver,
-  karmaRequired,
-}: {
-  label: string;
-  description: string;
-  spent: number;
-  total: number;
-  source: string;
-  isOver: boolean;
-  karmaRequired?: number;
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-
-  return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {label}
-        </div>
-        <div className={`text-lg font-bold ${
-          isOver
-            ? "text-amber-600 dark:text-amber-400"
-            : remaining === 0
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {remaining}
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {source}
-        <span className="float-right">
-          of {total} remaining
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-amber-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Over budget warning */}
-      {isOver && karmaRequired && (
-        <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
-          <AlertTriangle className="h-3.5 w-3.5" />
-          <span>
-            {Math.abs(remaining)} spells over free limit → {karmaRequired} karma ({SPELL_KARMA_COST} karma per spell)
-          </span>
-        </div>
-      )}
-    </div>
-  );
 }
 
 // =============================================================================
@@ -184,16 +101,16 @@ function SpellRow({
         {/* Spell info */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {spell.name}
-            </span>
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">{spell.name}</span>
 
             {/* Badges */}
-            <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
-              spell.type === "mana"
-                ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-                : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
-            }`}>
+            <span
+              className={`rounded px-1.5 py-0.5 text-[10px] font-medium uppercase ${
+                spell.type === "mana"
+                  ? "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+                  : "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300"
+              }`}
+            >
               {spell.type}
             </span>
 
@@ -261,7 +178,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
 
   // For aspected mages, check if they have sorcery
   const aspectedGroup = state.selections["aspected-mage-group"] as string | undefined;
-  const isBlockedAspected = magicalPath === "aspected-mage" && aspectedGroup && aspectedGroup !== "sorcery";
+  const isBlockedAspected =
+    magicalPath === "aspected-mage" && aspectedGroup && aspectedGroup !== "sorcery";
 
   // Get magic priority and free spell count
   const { freeSpells } = useMemo(() => {
@@ -338,8 +256,7 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
       const search = searchQuery.toLowerCase();
       spells = spells.filter(
         (s) =>
-          s.name.toLowerCase().includes(search) ||
-          s.description?.toLowerCase().includes(search)
+          s.name.toLowerCase().includes(search) || s.description?.toLowerCase().includes(search)
       );
     }
 
@@ -393,14 +310,7 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
         },
       });
     },
-    [
-      selectedSpells,
-      freeSpells,
-      karmaRemaining,
-      state.selections,
-      state.budgets,
-      updateState,
-    ]
+    [selectedSpells, freeSpells, karmaRemaining, state.selections, state.budgets, updateState]
   );
 
   // Remove spell
@@ -486,12 +396,10 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     return (
       <CreationCard title="Spells" description="Not available" status="pending">
         <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            No spells available — Adept
-          </p>
+          <p className="text-sm text-zinc-600 dark:text-zinc-400">No spells available — Adept</p>
           <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            Adepts channel magic through their bodies as Adept Powers, not spells.
-            See the Adept Powers section to allocate your Power Points.
+            Adepts channel magic through their bodies as Adept Powers, not spells. See the Adept
+            Powers section to allocate your Power Points.
           </p>
         </div>
       </CreationCard>
@@ -514,14 +422,16 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
     >
       <div className="space-y-4">
         {/* Free Spells Budget */}
-        <BudgetProgressBar
+        <BudgetIndicator
           label="Free Spells"
           description="Spells from your Magic priority"
           spent={Math.min(selectedSpells.length, freeSpells)}
           total={freeSpells}
           source={prioritySource}
-          isOver={isOverFree}
+          mode="card"
           karmaRequired={isOverFree ? karmaSpentOnSpells : undefined}
+          karmaCostPerUnit={SPELL_KARMA_COST}
+          unitName="spell"
         />
 
         {/* Karma spend indicator */}
@@ -536,7 +446,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
               </div>
             </div>
             <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at {SPELL_KARMA_COST} karma each
+              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at{" "}
+              {SPELL_KARMA_COST} karma each
             </div>
           </div>
         )}
@@ -627,8 +538,11 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
               {selectedSpells.length} spell{selectedSpells.length !== 1 ? "s" : ""} selected
             </span>
             <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {freeRemaining > 0 ? `${freeRemaining} free remaining` :
-               isOverFree ? `${karmaSpentOnSpells} karma spent` : "All free spells used"}
+              {freeRemaining > 0
+                ? `${freeRemaining} free remaining`
+                : isOverFree
+                  ? `${karmaSpentOnSpells} karma spent`
+                  : "All free spells used"}
             </span>
           </div>
         )}
@@ -703,7 +617,8 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
                   {filteredSpells.map((spell) => {
                     const isSelected = selectedSpells.includes(spell.id);
                     const willBeFree = selectedSpells.length < freeSpells;
-                    const canSelect = isSelected || willBeFree || karmaRemaining >= SPELL_KARMA_COST;
+                    const canSelect =
+                      isSelected || willBeFree || karmaRemaining >= SPELL_KARMA_COST;
                     const spellIndex = selectedSpells.indexOf(spell.id);
                     const isFree = isSelected && spellIndex < freeSpells;
 

@@ -11,17 +11,7 @@
 
 import React, { useEffect, useState, useCallback } from "react";
 import { Button } from "react-aria-components";
-import {
-  X,
-  Check,
-  AlertTriangle,
-  Skull,
-  Dice6,
-  Swords,
-  Shield,
-  Target,
-  Zap,
-} from "lucide-react";
+import { X, Check, AlertTriangle, Skull, Dice6, Swords, Shield, Target, Zap } from "lucide-react";
 import type { Theme } from "@/lib/themes";
 
 export interface ActionResult {
@@ -153,11 +143,12 @@ function DiceDisplay({ dice, theme }: { dice: number[]; theme: Theme }) {
             className={`
               w-6 h-6 rounded flex items-center justify-center text-xs font-bold
               ${theme.fonts.mono}
-              ${isHit
-                ? "bg-emerald-500 text-white"
-                : isOne
-                  ? "bg-red-500/30 text-red-500 border border-red-500/50"
-                  : "bg-muted text-muted-foreground"
+              ${
+                isHit
+                  ? "bg-emerald-500 text-white"
+                  : isOne
+                    ? "bg-red-500/30 text-red-500 border border-red-500/50"
+                    : "bg-muted text-muted-foreground"
               }
             `}
           >
@@ -233,7 +224,9 @@ export function ActionResultToast({
       {/* Header */}
       <div className="flex items-start gap-3 p-3">
         {/* Action Icon */}
-        <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-white ${colors.icon}`}>
+        <div
+          className={`w-10 h-10 rounded-lg flex items-center justify-center text-white ${colors.icon}`}
+        >
           {result.isCriticalGlitch ? (
             <Skull className="w-5 h-5" />
           ) : result.isGlitch ? (
@@ -246,9 +239,7 @@ export function ActionResultToast({
         {/* Content */}
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <span className={`font-bold ${theme.colors.heading}`}>
-              {result.actionName}
-            </span>
+            <span className={`font-bold ${theme.colors.heading}`}>{result.actionName}</span>
             <Button
               onPress={handleDismiss}
               className="p-1 rounded hover:bg-muted transition-colors"
@@ -273,9 +264,7 @@ export function ActionResultToast({
               {result.limitedHits ?? result.hits} hits
             </div>
             {result.limit && result.hits > result.limit && (
-              <span className={`text-xs ${theme.colors.muted}`}>
-                (limited from {result.hits})
-              </span>
+              <span className={`text-xs ${theme.colors.muted}`}>(limited from {result.hits})</span>
             )}
             <span className={`text-xs ${theme.fonts.mono} ${theme.colors.muted}`}>
               {result.dicePool}d6
@@ -284,10 +273,12 @@ export function ActionResultToast({
 
           {/* Glitch Warning */}
           {(result.isGlitch || result.isCriticalGlitch) && (
-            <div className={`
+            <div
+              className={`
               flex items-center gap-1.5 mt-2 text-xs font-bold
               ${result.isCriticalGlitch ? "text-red-500" : "text-amber-500"}
-            `}>
+            `}
+            >
               <AlertTriangle className="w-4 h-4" />
               {result.isCriticalGlitch ? "CRITICAL GLITCH!" : "Glitch!"}
             </div>
@@ -295,9 +286,7 @@ export function ActionResultToast({
 
           {/* Outcome */}
           {result.outcome && (
-            <div className={`text-sm mt-2 ${theme.colors.muted}`}>
-              {result.outcome}
-            </div>
+            <div className={`text-sm mt-2 ${theme.colors.muted}`}>{result.outcome}</div>
           )}
         </div>
       </div>
@@ -310,9 +299,7 @@ export function ActionResultToast({
           ${theme.colors.border} hover:bg-muted/30 transition-colors
         `}
       >
-        <span className={theme.colors.muted}>
-          {isExpanded ? "Hide dice" : "Show dice"}
-        </span>
+        <span className={theme.colors.muted}>{isExpanded ? "Hide dice" : "Show dice"}</span>
         <span className={`${theme.fonts.mono} ${theme.colors.muted}`}>
           {result.ones > 0 && <span className="text-red-400 mr-2">1s: {result.ones}</span>}
           5s & 6s: {result.hits}
@@ -349,17 +336,12 @@ export function ActionResultToastContainer({
   maxVisible = 3,
 }: ActionResultToastContainerProps) {
   // Sort by timestamp and limit
-  const visibleResults = results
-    .sort((a, b) => b.timestamp - a.timestamp)
-    .slice(0, maxVisible);
+  const visibleResults = results.sort((a, b) => b.timestamp - a.timestamp).slice(0, maxVisible);
 
   return (
     <div className="fixed bottom-4 right-4 z-50 space-y-2">
       {visibleResults.map((result, index) => (
-        <div
-          key={result.id}
-          style={{ transform: `translateY(${index * -8}px)` }}
-        >
+        <div key={result.id} style={{ transform: `translateY(${index * -8}px)` }}>
           <ActionResultToast
             result={result}
             theme={theme}

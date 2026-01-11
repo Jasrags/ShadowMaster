@@ -1,12 +1,25 @@
 "use client";
 
 import { useState, useMemo, useCallback } from "react";
-import { Button, Dialog, Heading, Modal, ModalOverlay, TextField, TextArea } from "react-aria-components";
+import {
+  Button,
+  Dialog,
+  Heading,
+  Modal,
+  ModalOverlay,
+  TextField,
+  TextArea,
+} from "react-aria-components";
 import type { Character, QualitySelection } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { useQualities, useMergedRuleset, useRulesetStatus } from "@/lib/rules";
 import { getQualityDefinition } from "@/lib/rules/qualities/utils";
-import { validateQualityAcquisition, validateQualityRemoval, calculatePostCreationCost, calculateBuyOffCost } from "@/lib/rules/qualities/advancement";
+import {
+  validateQualityAcquisition,
+  validateQualityRemoval,
+  calculatePostCreationCost,
+  calculateBuyOffCost,
+} from "@/lib/rules/qualities/advancement";
 import { X, Plus, AlertCircle } from "lucide-react";
 
 interface QualitiesAdvancementProps {
@@ -24,7 +37,10 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
   const [selectedQuality, setSelectedQuality] = useState<QualityData | null>(null);
   const [isAcquireModalOpen, setIsAcquireModalOpen] = useState(false);
   const [isRemoveModalOpen, setIsRemoveModalOpen] = useState(false);
-  const [qualityToRemove, setQualityToRemove] = useState<{ id: string; selection: QualitySelection } | null>(null);
+  const [qualityToRemove, setQualityToRemove] = useState<{
+    id: string;
+    selection: QualitySelection;
+  } | null>(null);
   const [rating, setRating] = useState<number | undefined>(undefined);
   const [specification, setSpecification] = useState("");
   const [notes, setNotes] = useState("");
@@ -48,10 +64,7 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
 
   // Get character's current qualities
   const characterQualityIds = useMemo(() => {
-    const all = [
-      ...(character.positiveQualities || []),
-      ...(character.negativeQualities || []),
-    ];
+    const all = [...(character.positiveQualities || []), ...(character.negativeQualities || [])];
     return all.map((q) => q.qualityId || q.id).filter(Boolean) as string[];
   }, [character]);
 
@@ -91,28 +104,29 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
 
   // Handle remove quality (buy off negative quality)
   // Note: This function is defined for future use when buy-off functionality is fully implemented
-   
-  const handleRemoveClick = useCallback((qualityId: string) => {
-    const allQualities = [
-      ...(character.positiveQualities || []),
-      ...(character.negativeQualities || []),
-    ];
-    const selection = allQualities.find(
-      (q) => (q.qualityId || q.id) === qualityId
-    );
 
-    if (!selection) return;
+  const handleRemoveClick = useCallback(
+    (qualityId: string) => {
+      const allQualities = [
+        ...(character.positiveQualities || []),
+        ...(character.negativeQualities || []),
+      ];
+      const selection = allQualities.find((q) => (q.qualityId || q.id) === qualityId);
 
-    const quality = ruleset ? getQualityDefinition(ruleset, qualityId) : null;
-    if (!quality || quality.type === "positive") {
-      setErrorMessage("Can only buy off negative qualities");
-      return;
-    }
+      if (!selection) return;
 
-    setQualityToRemove({ id: qualityId, selection });
-    setErrorMessage(null);
-    setIsRemoveModalOpen(true);
-  }, [character, ruleset]);
+      const quality = ruleset ? getQualityDefinition(ruleset, qualityId) : null;
+      if (!quality || quality.type === "positive") {
+        setErrorMessage("Can only buy off negative qualities");
+        return;
+      }
+
+      setQualityToRemove({ id: qualityId, selection });
+      setErrorMessage(null);
+      setIsRemoveModalOpen(true);
+    },
+    [character, ruleset]
+  );
 
   // Submit acquire quality
   const handleAcquireSubmit = useCallback(async () => {
@@ -174,7 +188,16 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedQuality, ruleset, character, rating, specification, notes, gmApproved, onCharacterUpdate]);
+  }, [
+    selectedQuality,
+    ruleset,
+    character,
+    rating,
+    specification,
+    notes,
+    gmApproved,
+    onCharacterUpdate,
+  ]);
 
   // Submit remove quality
   const handleRemoveSubmit = useCallback(async () => {
@@ -240,11 +263,7 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
   }
 
   if (error || !ruleset) {
-    return (
-      <div className="p-8 text-center text-red-400">
-        {error || "Failed to load ruleset"}
-      </div>
-    );
+    return <div className="p-8 text-center text-red-400">{error || "Failed to load ruleset"}</div>;
   }
 
   return (
@@ -253,7 +272,8 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
       <div>
         <h2 className="text-2xl font-bold text-zinc-100 mb-2">Quality Advancement</h2>
         <p className="text-zinc-400 text-sm">
-          Acquire new qualities or buy off negative qualities. Post-creation costs are 2× normal rates.
+          Acquire new qualities or buy off negative qualities. Post-creation costs are 2× normal
+          rates.
         </p>
         <div className="mt-4 p-4 bg-zinc-800 rounded-lg">
           <div className="flex items-center gap-2 text-zinc-300">
@@ -289,14 +309,10 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
 
       {/* Search */}
       <div className="w-full">
-        <TextField
-          value={searchQuery}
-          onChange={setSearchQuery}
-          className="w-full"
-        >
-          <input 
+        <TextField value={searchQuery} onChange={setSearchQuery} className="w-full">
+          <input
             placeholder="Search qualities..."
-            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500" 
+            className="w-full px-4 py-2 bg-zinc-800 border border-zinc-700 rounded-lg text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </TextField>
       </div>
@@ -306,11 +322,16 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
           // Convert QualityData to Quality for cost calculation
           const quality = ruleset ? getQualityDefinition(ruleset, qualityData.id) : null;
           if (!quality) return null;
-          
-          const cost = activeTab === "positive" 
-            ? calculatePostCreationCost(quality)
-            : calculateBuyOffCost(quality, character.negativeQualities?.find(q => (q.qualityId || q.id) === qualityData.id)?.originalKarma);
-            
+
+          const cost =
+            activeTab === "positive"
+              ? calculatePostCreationCost(quality)
+              : calculateBuyOffCost(
+                  quality,
+                  character.negativeQualities?.find((q) => (q.qualityId || q.id) === qualityData.id)
+                    ?.originalKarma
+                );
+
           const canAfford = character.karmaCurrent >= cost;
 
           return (
@@ -322,20 +343,28 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
             >
               <div className="flex items-start justify-between mb-2">
                 <h3 className="font-semibold text-zinc-100">{qualityData.name}</h3>
-                <span className={`text-sm ${activeTab === "positive" ? "text-blue-400" : "text-red-400"}`}>
+                <span
+                  className={`text-sm ${activeTab === "positive" ? "text-blue-400" : "text-red-400"}`}
+                >
                   {cost} karma (2×)
                 </span>
               </div>
-              <p className="text-sm text-zinc-400 mb-4 line-clamp-2">
-                {qualityData.summary}
-              </p>
+              <p className="text-sm text-zinc-400 mb-4 line-clamp-2">{qualityData.summary}</p>
               <Button
-                onPress={() => activeTab === "positive" ? handleAcquireClick(qualityData) : handleRemoveClick(qualityData.id)}
+                onPress={() =>
+                  activeTab === "positive"
+                    ? handleAcquireClick(qualityData)
+                    : handleRemoveClick(qualityData.id)
+                }
                 isDisabled={!canAfford}
                 className={`w-full px-4 py-2 rounded-lg font-medium transition-colors ${
                   activeTab === "positive"
-                    ? canAfford ? "bg-blue-600 hover:bg-blue-700 text-white" : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
-                    : canAfford ? "bg-red-600 hover:bg-red-700 text-white" : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                    ? canAfford
+                      ? "bg-blue-600 hover:bg-blue-700 text-white"
+                      : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
+                    : canAfford
+                      ? "bg-red-600 hover:bg-red-700 text-white"
+                      : "bg-zinc-700 text-zinc-500 cursor-not-allowed"
                 }`}
               >
                 {activeTab === "positive" ? (
@@ -431,7 +460,10 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
                         onChange={(e) => setGmApproved(e.target.checked)}
                         className="w-4 h-4 rounded border-zinc-700 bg-zinc-800 text-emerald-500 focus:ring-emerald-500"
                       />
-                      <label htmlFor="gmApproved" className="text-sm font-medium text-zinc-300 cursor-pointer">
+                      <label
+                        htmlFor="gmApproved"
+                        className="text-sm font-medium text-zinc-300 cursor-pointer"
+                      >
                         GM Approved
                       </label>
                       <span className="text-[10px] text-zinc-500 ml-auto">
@@ -506,9 +538,7 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
             {({ close }) => (
               <div className="space-y-4">
                 <div className="flex items-center justify-between mb-4">
-                  <Heading className="text-2xl font-bold text-zinc-100">
-                    Buy Off Quality
-                  </Heading>
+                  <Heading className="text-2xl font-bold text-zinc-100">Buy Off Quality</Heading>
                   <Button onPress={close} className="text-zinc-400 hover:text-zinc-100">
                     <X className="w-5 h-5" />
                   </Button>
@@ -579,4 +609,3 @@ export function QualitiesAdvancement({ character, onCharacterUpdate }: Qualities
     </div>
   );
 }
-

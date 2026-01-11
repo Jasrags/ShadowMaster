@@ -5,6 +5,7 @@
 Implement the **System Synchronization** capability to guarantee the integrity and stable evolution of character data relative to its authoritative ruleset source. This system detects "drift" between character snapshots and rulebook updates, maintains mechanical stability during gameplay, and provides controlled migration pathways when breaking changes occur.
 
 **Core Objectives:**
+
 - Protect character mechanical state via mandatory snapshotting (already partially implemented per ADR-004)
 - Distinguish between Live (auto-sync), Snapshot (buffered), and Delta (immutable) data layers
 - Automatically detect and categorize structural changes (Non-Breaking vs. Breaking)
@@ -50,21 +51,21 @@ export type DataLayerType = "live" | "snapshot" | "delta";
 export type DriftSeverity = "none" | "non-breaking" | "breaking";
 
 export type SyncStatus =
-  | "synchronized"      // Character matches current ruleset
-  | "outdated"          // Non-breaking changes available
-  | "invalid"           // Breaking changes require reconciliation
-  | "migrating";        // Active migration in progress
+  | "synchronized" // Character matches current ruleset
+  | "outdated" // Non-breaking changes available
+  | "invalid" // Breaking changes require reconciliation
+  | "migrating"; // Active migration in progress
 
 export type LegalityStatus =
-  | "rules-legal"       // Fully compliant with ruleset version
-  | "draft"             // Editable but not gameplay-ready
-  | "invalid"           // Requires reconciliation
-  | "legacy";           // Locked to obsolete ruleset version
+  | "rules-legal" // Fully compliant with ruleset version
+  | "draft" // Editable but not gameplay-ready
+  | "invalid" // Requires reconciliation
+  | "legacy"; // Locked to obsolete ruleset version
 
 export interface RulesetVersionRef {
   editionCode: EditionCode;
   editionVersion: string;
-  bookVersions: Record<ID, string>;  // bookId -> version
+  bookVersions: Record<ID, string>; // bookId -> version
   snapshotId: ID;
   createdAt: ISODateString;
 }
@@ -82,7 +83,7 @@ export interface DriftReport {
 
 export interface DriftChange {
   id: ID;
-  module: RuleModuleType;           // "skills", "qualities", "metatypes", etc.
+  module: RuleModuleType; // "skills", "qualities", "metatypes", etc.
   changeType: DriftChangeType;
   severity: DriftSeverity;
   affectedItems: AffectedItem[];
@@ -90,12 +91,12 @@ export interface DriftChange {
 }
 
 export type DriftChangeType =
-  | "added"             // New items available (non-breaking)
-  | "removed"           // Items no longer exist (breaking)
-  | "renamed"           // Identifier changed (breaking)
-  | "modified"          // Mechanical values changed (severity varies)
-  | "restructured"      // Schema/structure changed (breaking)
-  | "deprecated";       // Still works but will be removed (warning)
+  | "added" // New items available (non-breaking)
+  | "removed" // Items no longer exist (breaking)
+  | "renamed" // Identifier changed (breaking)
+  | "modified" // Mechanical values changed (severity varies)
+  | "restructured" // Schema/structure changed (breaking)
+  | "deprecated"; // Still works but will be removed (warning)
 
 export interface AffectedItem {
   itemId: ID;
@@ -106,8 +107,8 @@ export interface AffectedItem {
 }
 
 export interface CharacterUsageContext {
-  field: string;                    // e.g., "positiveQualities", "skills"
-  path: string;                     // JSON path to affected data
+  field: string; // e.g., "positiveQualities", "skills"
+  path: string; // JSON path to affected data
   currentValue: unknown;
 }
 
@@ -115,23 +116,23 @@ export interface MigrationRecommendation {
   changeId: ID;
   strategy: MigrationStrategy;
   description: string;
-  autoApplicable: boolean;          // Can be auto-applied
-  requiresUserChoice: boolean;      // User must select option
+  autoApplicable: boolean; // Can be auto-applied
+  requiresUserChoice: boolean; // User must select option
   options?: MigrationOption[];
 }
 
 export type MigrationStrategy =
-  | "auto-update"       // Safe to apply automatically
-  | "manual-select"     // User must choose replacement
-  | "archive"           // Move to legacy storage
-  | "remove";           // Remove from character
+  | "auto-update" // Safe to apply automatically
+  | "manual-select" // User must choose replacement
+  | "archive" // Move to legacy storage
+  | "remove"; // Remove from character
 
 export interface MigrationOption {
   id: ID;
   label: string;
   description: string;
   targetItemId?: ID;
-  karmaDelta?: number;              // Karma adjustment if applicable
+  karmaDelta?: number; // Karma adjustment if applicable
 }
 ```
 
@@ -196,11 +197,11 @@ Ensure version fields are required:
 
 ```typescript
 interface Edition {
-  version: string;  // REQUIRED (currently optional) - semver format
+  version: string; // REQUIRED (currently optional) - semver format
 }
 
 interface Book {
-  version: string;  // NEW REQUIRED field - semver format
+  version: string; // NEW REQUIRED field - semver format
 }
 ```
 
@@ -223,14 +224,10 @@ data/
 
 ```typescript
 // Create and store a new ruleset snapshot
-export async function captureRulesetSnapshot(
-  config: RulesetLoadConfig
-): Promise<RulesetVersionRef>;
+export async function captureRulesetSnapshot(config: RulesetLoadConfig): Promise<RulesetVersionRef>;
 
 // Retrieve a historical snapshot by ID
-export async function getRulesetSnapshot(
-  snapshotId: ID
-): Promise<MergedRuleset | null>;
+export async function getRulesetSnapshot(snapshotId: ID): Promise<MergedRuleset | null>;
 
 // Compare two snapshots for drift
 export async function compareSnapshots(
@@ -239,9 +236,7 @@ export async function compareSnapshots(
 ): Promise<DriftReport>;
 
 // Get current (latest) snapshot for edition
-export async function getCurrentSnapshot(
-  editionCode: EditionCode
-): Promise<RulesetVersionRef>;
+export async function getCurrentSnapshot(editionCode: EditionCode): Promise<RulesetVersionRef>;
 ```
 
 #### 2.2 Character Storage Extensions (`lib/storage/characters.ts`) [MODIFY]
@@ -292,9 +287,7 @@ export async function applyMigration(
 
 ```typescript
 // Main drift analysis entry point
-export async function analyzeCharacterDrift(
-  character: Character
-): Promise<DriftReport>;
+export async function analyzeCharacterDrift(character: Character): Promise<DriftReport>;
 
 // Module-specific drift analyzers
 export function analyzeMetatypeDrift(
@@ -315,22 +308,20 @@ export function analyzeQualityDrift(
 ): DriftChange[];
 
 // Severity classification
-export function classifyDriftSeverity(
-  changes: DriftChange[]
-): DriftSeverity;
+export function classifyDriftSeverity(changes: DriftChange[]): DriftSeverity;
 ```
 
 **Detection Logic:**
 
-| Change Type | Severity | Auto-Resolvable |
-|-------------|----------|-----------------|
-| New items added to catalog | Non-Breaking | Yes (no action) |
-| Flavor text updated | Non-Breaking | Yes (auto-sync) |
-| Mechanical value increased | Non-Breaking | Yes (favorable) |
-| Mechanical value decreased | Breaking | No (user choice) |
-| Item removed from catalog | Breaking | No (migration) |
-| Skill/quality renamed | Breaking | No (migration) |
-| Schema restructured | Breaking | No (wizard) |
+| Change Type                | Severity     | Auto-Resolvable  |
+| -------------------------- | ------------ | ---------------- |
+| New items added to catalog | Non-Breaking | Yes (no action)  |
+| Flavor text updated        | Non-Breaking | Yes (auto-sync)  |
+| Mechanical value increased | Non-Breaking | Yes (favorable)  |
+| Mechanical value decreased | Breaking     | No (user choice) |
+| Item removed from catalog  | Breaking     | No (migration)   |
+| Skill/quality renamed      | Breaking     | No (migration)   |
+| Schema restructured        | Breaking     | No (wizard)      |
 
 #### 3.2 Legality Validator (`lib/rules/sync/legality-validator.ts`) [NEW]
 
@@ -338,19 +329,13 @@ export function classifyDriftSeverity(
 
 ```typescript
 // Validate character against its locked ruleset version
-export function validateRulesLegality(
-  character: Character
-): LegalityValidationResult;
+export function validateRulesLegality(character: Character): LegalityValidationResult;
 
 // Check if character can participate in encounters
-export function canParticipateInEncounter(
-  character: Character
-): EncounterEligibility;
+export function canParticipateInEncounter(character: Character): EncounterEligibility;
 
 // Get legality shield status for UI
-export function getLegalityShield(
-  character: Character
-): StabilityShield;
+export function getLegalityShield(character: Character): StabilityShield;
 
 interface StabilityShield {
   status: "green" | "yellow" | "red";
@@ -383,10 +368,7 @@ export async function executeMigration(
 ): Promise<MigrationResult>;
 
 // Validate migration before execution
-export function validateMigrationPlan(
-  character: Character,
-  plan: MigrationPlan
-): ValidationResult;
+export function validateMigrationPlan(character: Character, plan: MigrationPlan): ValidationResult;
 
 interface MigrationPlan {
   id: ID;
@@ -394,7 +376,7 @@ interface MigrationPlan {
   sourceVersion: RulesetVersionRef;
   targetVersion: RulesetVersionRef;
   steps: MigrationStep[];
-  isComplete: boolean;              // All choices made
+  isComplete: boolean; // All choices made
   estimatedKarmaDelta: number;
 }
 
@@ -485,9 +467,10 @@ Add version-aware hooks:
 ```typescript
 export function useRulesetVersion(): RulesetVersionRef | null;
 export function useCurrentSnapshotId(): ID | null;
-export function useRulesetComparison(
-  characterSnapshotId: ID
-): { isDifferent: boolean; changes?: DriftChange[] };
+export function useRulesetComparison(characterSnapshotId: ID): {
+  isDifferent: boolean;
+  changes?: DriftChange[];
+};
 ```
 
 ---
@@ -499,6 +482,7 @@ export function useRulesetComparison(
 **Satisfies:** Capability Requirement "visual indicators (Stability Shield statuses)"
 
 Visual indicator component showing character sync status:
+
 - **Green Shield**: "Rules Legal" - Fully synchronized
 - **Yellow Shield**: "Update Available" - Non-breaking changes detected
 - **Red Shield**: "Sync Required" - Breaking changes require reconciliation
@@ -510,6 +494,7 @@ Props: `{ characterId: ID; size?: "sm" | "md" | "lg"; showTooltip?: boolean }`
 **Satisfies:** Capability Requirement "Sync Lab for review and reconciliation"
 
 Full-page sync management interface:
+
 - Current version vs. available version comparison
 - Drift report visualization (grouped by module and severity)
 - Non-breaking changes: One-click "Apply Safe Updates"
@@ -521,6 +506,7 @@ Full-page sync management interface:
 **Satisfies:** Capability Requirement "Migration Wizard for manual transformation"
 
 Step-by-step wizard for breaking changes:
+
 1. **Overview**: Summary of detected breaking changes
 2. **Review Changes**: For each breaking change, show context and options
 3. **Make Selections**: User chooses migration path for each item
@@ -532,6 +518,7 @@ Step-by-step wizard for breaking changes:
 **Modify:** `app/characters/[id]/page.tsx`
 
 Add StabilityShield to character header:
+
 ```tsx
 <CharacterHeader>
   <StabilityShield characterId={character.id} />
@@ -540,13 +527,16 @@ Add StabilityShield to character header:
 ```
 
 Add sync warning banner when status is not "synchronized":
+
 ```tsx
-{syncStatus !== "synchronized" && (
-  <SyncWarningBanner
-    status={syncStatus}
-    onSyncClick={() => router.push(`/characters/${id}/sync`)}
-  />
-)}
+{
+  syncStatus !== "synchronized" && (
+    <SyncWarningBanner
+      status={syncStatus}
+      onSyncClick={() => router.push(`/characters/${id}/sync`)}
+    />
+  );
+}
 ```
 
 ---
@@ -593,12 +583,12 @@ Add sync warning banner when status is not "synchronized":
 
 #### Unit Tests (`lib/rules/sync/__tests__/`)
 
-| Test File | Coverage |
-|-----------|----------|
-| `drift-analyzer.test.ts` | Drift detection for all module types |
-| `legality-validator.test.ts` | Legality status transitions |
-| `migration-engine.test.ts` | Migration plan generation and execution |
-| `sync-audit.test.ts` | Audit trail append-only behavior |
+| Test File                    | Coverage                                |
+| ---------------------------- | --------------------------------------- |
+| `drift-analyzer.test.ts`     | Drift detection for all module types    |
+| `legality-validator.test.ts` | Legality status transitions             |
+| `migration-engine.test.ts`   | Migration plan generation and execution |
+| `sync-audit.test.ts`         | Audit trail append-only behavior        |
 
 **Critical Test Cases:**
 
@@ -640,19 +630,19 @@ Add sync warning banner when status is not "synchronized":
 
 #### Integration Tests (`lib/rules/sync/__tests__/integration/`)
 
-| Test File | Coverage |
-|-----------|----------|
-| `sync-workflow.test.ts` | End-to-end sync from detection to application |
-| `migration-wizard.test.ts` | Full wizard flow with user selections |
-| `api-endpoints.test.ts` | API route behavior |
+| Test File                  | Coverage                                      |
+| -------------------------- | --------------------------------------------- |
+| `sync-workflow.test.ts`    | End-to-end sync from detection to application |
+| `migration-wizard.test.ts` | Full wizard flow with user selections         |
+| `api-endpoints.test.ts`    | API route behavior                            |
 
 #### E2E Tests (`e2e/sync/`)
 
-| Test File | Coverage |
-|-----------|----------|
-| `sync-lab.spec.ts` | Sync Lab page functionality |
+| Test File                  | Coverage                    |
+| -------------------------- | --------------------------- |
+| `sync-lab.spec.ts`         | Sync Lab page functionality |
 | `migration-wizard.spec.ts` | Migration wizard modal flow |
-| `stability-shield.spec.ts` | Shield status display |
+| `stability-shield.spec.ts` | Shield status display       |
 
 ### Manual Testing Checklist
 
@@ -725,33 +715,33 @@ Phase 7 ────────────────────────
 
 ### New Files
 
-| Path | Purpose |
-|------|---------|
-| `lib/types/synchronization.ts` | Core sync types and interfaces |
-| `lib/storage/ruleset-snapshots.ts` | Snapshot storage functions |
-| `lib/rules/sync/drift-analyzer.ts` | Drift detection engine |
-| `lib/rules/sync/legality-validator.ts` | Legality validation |
-| `lib/rules/sync/migration-engine.ts` | Migration execution |
-| `lib/rules/sync/sync-audit.ts` | Sync audit trail |
-| `lib/rules/sync/hooks.ts` | React hooks for sync |
-| `components/sync/StabilityShield.tsx` | Status indicator component |
-| `components/sync/SyncWarningBanner.tsx` | Warning banner component |
-| `components/sync/MigrationWizard.tsx` | Migration wizard modal |
-| `app/characters/[id]/sync/page.tsx` | Sync Lab page |
-| `app/api/characters/[characterId]/sync/route.ts` | Sync status API |
-| `app/api/characters/[characterId]/sync/migrate/route.ts` | Migration API |
-| `app/api/rulesets/snapshots/route.ts` | Snapshots API |
+| Path                                                     | Purpose                        |
+| -------------------------------------------------------- | ------------------------------ |
+| `lib/types/synchronization.ts`                           | Core sync types and interfaces |
+| `lib/storage/ruleset-snapshots.ts`                       | Snapshot storage functions     |
+| `lib/rules/sync/drift-analyzer.ts`                       | Drift detection engine         |
+| `lib/rules/sync/legality-validator.ts`                   | Legality validation            |
+| `lib/rules/sync/migration-engine.ts`                     | Migration execution            |
+| `lib/rules/sync/sync-audit.ts`                           | Sync audit trail               |
+| `lib/rules/sync/hooks.ts`                                | React hooks for sync           |
+| `components/sync/StabilityShield.tsx`                    | Status indicator component     |
+| `components/sync/SyncWarningBanner.tsx`                  | Warning banner component       |
+| `components/sync/MigrationWizard.tsx`                    | Migration wizard modal         |
+| `app/characters/[id]/sync/page.tsx`                      | Sync Lab page                  |
+| `app/api/characters/[characterId]/sync/route.ts`         | Sync status API                |
+| `app/api/characters/[characterId]/sync/migrate/route.ts` | Migration API                  |
+| `app/api/rulesets/snapshots/route.ts`                    | Snapshots API                  |
 
 ### Modified Files
 
-| Path | Changes |
-|------|---------|
-| `lib/types/character.ts` | Add sync fields, MechanicalSnapshot, DeltaOverrides |
-| `lib/types/edition.ts` | Make version fields required |
-| `lib/types/index.ts` | Export new types |
-| `lib/storage/characters.ts` | Add sync-related functions |
-| `lib/rules/RulesetContext.tsx` | Add version-aware hooks |
-| `app/characters/[id]/page.tsx` | Integrate StabilityShield and warning banner |
+| Path                           | Changes                                             |
+| ------------------------------ | --------------------------------------------------- |
+| `lib/types/character.ts`       | Add sync fields, MechanicalSnapshot, DeltaOverrides |
+| `lib/types/edition.ts`         | Make version fields required                        |
+| `lib/types/index.ts`           | Export new types                                    |
+| `lib/storage/characters.ts`    | Add sync-related functions                          |
+| `lib/rules/RulesetContext.tsx` | Add version-aware hooks                             |
+| `app/characters/[id]/page.tsx` | Integrate StabilityShield and warning banner        |
 
 ---
 

@@ -290,10 +290,7 @@ export interface EncumbranceState {
  * Calculate encumbrance penalty based on how much over capacity.
  * SR5: -1 per 10% over capacity, max -4
  */
-export function calculateEncumbrancePenalty(
-  currentWeight: number,
-  maxCapacity: number
-): number {
+export function calculateEncumbrancePenalty(currentWeight: number, maxCapacity: number): number {
   if (currentWeight <= maxCapacity) {
     return 0;
   }

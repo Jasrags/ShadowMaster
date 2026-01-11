@@ -168,9 +168,7 @@ export function hasConverged(session: OverwatchSession): boolean {
  */
 export function getSessionDuration(session: OverwatchSession): number {
   const startTime = new Date(session.startedAt).getTime();
-  const endTime = session.convergedAt
-    ? new Date(session.convergedAt).getTime()
-    : Date.now();
+  const endTime = session.convergedAt ? new Date(session.convergedAt).getTime() : Date.now();
   return endTime - startTime;
 }
 
@@ -219,9 +217,7 @@ export interface OverwatchSessionStats {
  * @param session - The overwatch session
  * @returns Session statistics
  */
-export function calculateSessionStats(
-  session: OverwatchSession
-): OverwatchSessionStats {
+export function calculateSessionStats(session: OverwatchSession): OverwatchSessionStats {
   const events = session.events;
 
   if (events.length === 0) {
@@ -416,11 +412,7 @@ export function getActiveSessionForCharacter(
   characterId: ID
 ): OverwatchSession | undefined {
   for (const session of collection.sessions.values()) {
-    if (
-      session.characterId === characterId &&
-      !session.converged &&
-      !session.endReason
-    ) {
+    if (session.characterId === characterId && !session.converged && !session.endReason) {
       return session;
     }
   }
@@ -449,9 +441,7 @@ export function removeSessionFromCollection(
  * @param collection - The session collection
  * @returns Array of completed sessions
  */
-export function getCompletedSessions(
-  collection: OverwatchSessionCollection
-): OverwatchSession[] {
+export function getCompletedSessions(collection: OverwatchSessionCollection): OverwatchSession[] {
   const completed: OverwatchSession[] = [];
 
   for (const session of collection.sessions.values()) {

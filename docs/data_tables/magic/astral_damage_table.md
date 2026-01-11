@@ -2,16 +2,16 @@
 
 ## Attack / Test
 
-| Attack Type | Attack Test | Defense Test |
-| :---------- | :---------- | :----------- |
-| Unarmed | Astral Combat + Willpower [Astral] | Intuition + Logic |
+| Attack Type  | Attack Test                          | Defense Test      |
+| :----------- | :----------------------------------- | :---------------- |
+| Unarmed      | Astral Combat + Willpower [Astral]   | Intuition + Logic |
 | Weapon Focus | Astral Combat + Willpower [Accuracy] | Intuition + Logic |
 
 ## Type / Damage
 
-| Source | Damage |
-| :----- | :----- |
-| Magician | Charisma |
+| Source       | Damage                                        |
+| :----------- | :-------------------------------------------- |
+| Magician     | Charisma                                      |
 | Weapon Focus | by weapon (uses Charisma instead of Strength) |
-| Spirit | Force |
-| Watcher | 1 |
+| Spirit       | Force                                         |
+| Watcher      | 1                                             |

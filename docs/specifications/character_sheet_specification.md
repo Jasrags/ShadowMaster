@@ -15,6 +15,7 @@
 The Character Sheet is the primary interface for viewing and interacting with Shadowrun characters in Shadow Master. It provides a comprehensive, organized display of all character information including attributes, skills, gear, condition monitors, and derived statistics. The sheet integrates with gameplay systems like dice rolling and action resolution, and supports both viewing and limited editing capabilities.
 
 **Key Features:**
+
 - Comprehensive character information display
 - Organized sections (Attributes, Skills, Gear, Qualities, etc.)
 - Condition monitor visualization
@@ -30,13 +31,12 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 
 ---
 
-
-
 ## Page Structure
 
 ### Route
 
 **Character Sheet Page:**
+
 - **Path:** `/app/characters/[id]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
@@ -50,6 +50,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 ### Overall Structure
 
 **Header Section:**
+
 - Navigation back to character list
 - Character name and status badge
 - Metatype and magical path indicators
@@ -57,6 +58,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Action buttons (Dice Roller toggle, Theme Selector, Edit button for drafts)
 
 **Character Header Card:**
+
 - Character name (large, prominent)
 - Status badge (active, draft, retired, deceased)
 - Metatype and magical path
@@ -64,22 +66,26 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Collapsible dice roller section
 
 **Main Content Grid:**
+
 - Three-column layout on large screens
 - Single column on mobile
 - Responsive breakpoints
 
 **Footer:**
+
 - Character ID
 - Creation and update timestamps
 
 ### Color Scheme
 
 **Status Colors:**
+
 - **Active:** Emerald green (`emerald-400`, `emerald-500`)
 - **Draft:** Amber (`amber-400`, `amber-500`)
 - **Retired/Deceased:** Zinc/gray (`zinc-400`, `zinc-500`)
 
 **Attribute Colors:**
+
 - **Body (BOD):** Red (`red-400`)
 - **Agility (AGI):** Amber (`amber-400`)
 - **Reaction (REA):** Orange (`orange-400`)
@@ -90,40 +96,47 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - **Charisma (CHA):** Pink (`pink-400`)
 
 **Special Attributes:**
+
 - **Magic (MAG):** Violet (`violet-400`)
 - **Resonance (RES):** Cyan (`cyan-400`)
 - **Edge:** Rose (`rose-400`)
 - **Essence:** Cyan (`cyan-400`)
 
 **Condition Monitors:**
+
 - **Physical:** Red (`red-400`, `red-500`)
 - **Stun:** Amber (`amber-400`, `amber-500`)
 
 **Derived Stats:**
+
 - **Physical Limit:** Red (`red-400`)
 - **Mental Limit:** Blue (`blue-400`)
 - **Social Limit:** Pink (`pink-400`)
 - **Initiative:** Emerald (`emerald-400`)
 
 **Resources:**
+
 - **Karma:** Amber (`amber-400`)
 - **Nuyen:** Emerald (`emerald-400`)
 
 ### Visual Design Elements
 
 **Section Styling:**
+
 - Border with corner accents (emerald)
 - Dark background with subtle transparency
 - Section headers with emerald accent
 - Consistent padding and spacing
 
 **Typography:**
+
 - Monospace font for numbers and codes (`font-mono`)
 - Bold weights for emphasis (`font-bold`)
 - Uppercase labels with tracking (`uppercase tracking-wider`)
 - Size hierarchy for readability
 
 **Icons:**
+
 - Arrow left (navigation)
 - Edit (draft editing)
 - Dice (dice roller toggle)
@@ -137,6 +150,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Top of page
 
 **Components:**
+
 - Character name (large heading)
 - Status badge
 - Metatype indicator
@@ -145,18 +159,21 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Action buttons (Dice Roller, Theme Selector, Edit)
 
 **Quick Stats Bar:**
+
 - Karma (current)
 - Nuyen (formatted with ¥ symbol)
 - Essence (2 decimal places)
 - Edge (current)
 
 **Dice Roller Section:**
+
 - Collapsible/expandable
 - Integrated DiceRoller component
 - Pool size calculated from character attributes/skills
 - Example: `Agility + Pistols`
 
 **Visual Design:**
+
 - Gradient background
 - Pattern overlay
 - Scan line effect
@@ -169,12 +186,14 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Left column (desktop), first section (mobile)
 
 **Display:**
+
 - All core attributes (BOD, AGI, REA, STR, WIL, LOG, INT, CHA)
 - Attribute abbreviation and full value
 - Progress bar visualization
 - Color-coded by attribute type
 
 **Special Attributes:**
+
 - Magic (MAG) - if character has magic
 - Resonance (RES) - if character has resonance
 - Displayed below core attributes with divider
@@ -182,6 +201,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `AttributeBlock`
 
 **Visual Design:**
+
 - Horizontal layout with abbreviation, progress bar, value
 - Color-coded text
 - Gradient progress bars
@@ -194,12 +214,14 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Left column, below Attributes
 
 **Calculated Values:**
+
 - **Physical Limit:** `ceil(((STR × 2) + BOD + REA) / 3)`
 - **Mental Limit:** `ceil(((LOG × 2) + INT + WIL) / 3)`
 - **Social Limit:** `ceil(((CHA × 2) + WIL + ceil(Essence)) / 3)`
 - **Initiative:** `REA + INT` (base, shows "+1d6" notation)
 
 **Display:**
+
 - Grid layout (2×2)
 - Label and value
 - Color-coded by stat type
@@ -214,12 +236,14 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Left column, below Derived Stats
 
 **Physical Monitor:**
+
 - Max boxes: `ceil(BOD / 2) + 8`
 - Filled boxes: `condition.physicalDamage`
 - Wound modifiers displayed per row of 3
 - Red color scheme
 
 **Stun Monitor:**
+
 - Max boxes: `ceil(WIL / 2) + 8`
 - Filled boxes: `condition.stunDamage`
 - Wound modifiers displayed per row of 3
@@ -228,6 +252,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `ConditionMonitor`
 
 **Visual Design:**
+
 - Hexagonal box shapes (polygon clip-path)
 - Grouped in rows of 3
 - Wound modifier labels (-1, -2, etc.)
@@ -241,6 +266,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Middle column (desktop), second section (mobile)
 
 **Display:**
+
 - All active skills with ratings
 - Sorted by rating (highest first)
 - Skill name (capitalized, spaces instead of hyphens)
@@ -251,6 +277,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `SkillList`
 
 **Visual Design:**
+
 - List layout with hover effects
 - Dots for rating visualization (emerald filled, zinc empty)
 - Attribute abbreviation in color-coded brackets
@@ -263,6 +290,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Middle column, below Skills
 
 **Display:**
+
 - Knowledge skill name
 - Category (academic, interests, professional, street)
 - Rating value
@@ -270,6 +298,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Conditional:** Only shown if character has knowledge skills
 
 **Visual Design:**
+
 - List layout
 - Category shown in parentheses
 - Hover effects
@@ -281,6 +310,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Middle column, below Knowledge Skills
 
 **Display:**
+
 - Language name
 - Rating or "(N)" for native
 - Badge styling
@@ -288,6 +318,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Conditional:** Only shown if character has languages
 
 **Visual Design:**
+
 - Flex wrap layout
 - Badge styling
 - Native languages highlighted (emerald)
@@ -300,6 +331,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Right column (desktop), third section (mobile)
 
 **Display:**
+
 - Positive qualities (green badges)
 - Negative qualities (red badges)
 - Quality names (spaces instead of hyphens)
@@ -308,6 +340,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `QualityBadge`
 
 **Visual Design:**
+
 - Badge layout with flex wrap
 - Color-coded by type (positive/negative)
 - Border and background styling
@@ -320,6 +353,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Right column, below Qualities
 
 **Display:**
+
 - Gear item name
 - Category
 - Rating (if applicable)
@@ -328,6 +362,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `GearItem`
 
 **Visual Design:**
+
 - List layout
 - Left border accent
 - Background with transparency
@@ -340,6 +375,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Right column, below Gear
 
 **Display:**
+
 - Contact name
 - Type (if specified)
 - Connection rating
@@ -348,6 +384,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** Custom contact card
 
 **Visual Design:**
+
 - Card layout
 - Connection and Loyalty highlighted
 - Color-coded ratings (amber for connection, emerald for loyalty)
@@ -359,6 +396,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Location:** Right column, below Contacts
 
 **Display:**
+
 - Lifestyle type/name
 - Primary indicator (if applicable)
 - Permanent indicator (if applicable)
@@ -366,6 +404,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 - Location (if specified)
 
 **Calculations:**
+
 - Base monthly cost
 - Modifications (percentage and fixed)
 - Subscriptions
@@ -375,6 +414,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Conditional:** Only shown if character has lifestyles
 
 **Visual Design:**
+
 - Card layout
 - Primary and Permanent badges
 - Cost formatting with ¥ symbol
@@ -389,6 +429,7 @@ The Character Sheet is the primary interface for viewing and interacting with Sh
 **Component:** `Section`
 
 **Props:**
+
 ```typescript
 interface SectionProps {
   title: string;
@@ -399,6 +440,7 @@ interface SectionProps {
 ```
 
 **Features:**
+
 - Consistent styling across all sections
 - Corner accent decorations
 - Section header with title
@@ -412,6 +454,7 @@ interface SectionProps {
 **Component:** `AttributeBlock`
 
 **Props:**
+
 ```typescript
 interface AttributeBlockProps {
   id: string;
@@ -421,6 +464,7 @@ interface AttributeBlockProps {
 ```
 
 **Features:**
+
 - Displays attribute abbreviation and value
 - Progress bar visualization
 - Color-coded by attribute type
@@ -433,6 +477,7 @@ interface AttributeBlockProps {
 **Component:** `ConditionMonitor`
 
 **Props:**
+
 ```typescript
 interface ConditionMonitorProps {
   label: string;
@@ -443,6 +488,7 @@ interface ConditionMonitorProps {
 ```
 
 **Features:**
+
 - Hexagonal box shapes
 - Grouped in rows of 3
 - Wound modifier labels
@@ -456,6 +502,7 @@ interface ConditionMonitorProps {
 **Component:** `SkillList`
 
 **Props:**
+
 ```typescript
 interface SkillListProps {
   skills: Record<string, number>;
@@ -464,6 +511,7 @@ interface SkillListProps {
 ```
 
 **Features:**
+
 - Sorted by rating
 - Rating visualization (dots)
 - Linked attribute display
@@ -476,6 +524,7 @@ interface SkillListProps {
 **Component:** `QualityBadge`
 
 **Props:**
+
 ```typescript
 interface QualityBadgeProps {
   name: string;
@@ -484,6 +533,7 @@ interface QualityBadgeProps {
 ```
 
 **Features:**
+
 - Color-coded by type
 - Plus/minus indicators
 - Badge styling
@@ -495,6 +545,7 @@ interface QualityBadgeProps {
 **Component:** `GearItem`
 
 **Props:**
+
 ```typescript
 interface GearItemProps {
   item: {
@@ -507,6 +558,7 @@ interface GearItemProps {
 ```
 
 **Features:**
+
 - Item name and category
 - Rating display
 - Quantity display
@@ -519,46 +571,54 @@ interface GearItemProps {
 ### Derived Stats
 
 **Physical Limit:**
+
 ```typescript
 const physicalLimit = Math.ceil(
-  (((character.attributes?.strength || 1) * 2) +
+  ((character.attributes?.strength || 1) * 2 +
     (character.attributes?.body || 1) +
-    (character.attributes?.reaction || 1)) / 3
+    (character.attributes?.reaction || 1)) /
+    3
 );
 ```
 
 **Mental Limit:**
+
 ```typescript
 const mentalLimit = Math.ceil(
-  (((character.attributes?.logic || 1) * 2) +
+  ((character.attributes?.logic || 1) * 2 +
     (character.attributes?.intuition || 1) +
-    (character.attributes?.willpower || 1)) / 3
+    (character.attributes?.willpower || 1)) /
+    3
 );
 ```
 
 **Social Limit:**
+
 ```typescript
 const socialLimit = Math.ceil(
-  (((character.attributes?.charisma || 1) * 2) +
+  ((character.attributes?.charisma || 1) * 2 +
     (character.attributes?.willpower || 1) +
-    Math.ceil(character.specialAttributes?.essence || 6)) / 3
+    Math.ceil(character.specialAttributes?.essence || 6)) /
+    3
 );
 ```
 
 **Initiative:**
+
 ```typescript
-const initiative = (character.attributes?.reaction || 1) + 
-                   (character.attributes?.intuition || 1);
+const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 ```
 
 ### Condition Monitors
 
 **Physical Monitor Max:**
+
 ```typescript
 const physicalMonitorMax = Math.ceil((character.attributes?.body || 1) / 2) + 8;
 ```
 
 **Stun Monitor Max:**
+
 ```typescript
 const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8;
 ```
@@ -566,19 +626,19 @@ const stunMonitorMax = Math.ceil((character.attributes?.willpower || 1) / 2) + 8
 ### Lifestyle Costs
 
 **Total Monthly Cost:**
+
 ```typescript
 let totalMonthlyCost = lifestyle.monthlyCost || 0;
 
 // Apply modifications (excluding permanent lifestyle)
 lifestyle.modifications?.forEach((mod) => {
   if (mod.catalogId === "permanent-lifestyle") return;
-  
+
   if (mod.modifierType === "percentage") {
-    totalMonthlyCost = totalMonthlyCost * 
-      (1 + (mod.type === "positive" ? 1 : -1) * (mod.modifier / 100));
+    totalMonthlyCost =
+      totalMonthlyCost * (1 + (mod.type === "positive" ? 1 : -1) * (mod.modifier / 100));
   } else if (mod.modifierType === "fixed") {
-    totalMonthlyCost = totalMonthlyCost + 
-      (mod.type === "positive" ? 1 : -1) * mod.modifier;
+    totalMonthlyCost = totalMonthlyCost + (mod.type === "positive" ? 1 : -1) * mod.modifier;
   }
 });
 
@@ -605,18 +665,21 @@ if (lifestyle.customIncome) {
 ### Dice Roller Integration
 
 **Toggle Button:**
+
 - Located in character header
 - Shows/hides dice roller section
 
 - Visual feedback (active state)
 
 **Theme Selector:**
+
 - Interactive toggle buttons in the character header to select visual theme
 - Options: "Neon Rain" (Cyberpunk/Default), "Modern Card" (Clean/Responsive)
 - Persists selection to `localStorage` (key: `character-theme-{id}`) and prioritizes `character.uiPreferences.theme` if available.
 - Implementation defined in `lib/themes.ts` using CSS variable-like tokens for easy expansion.
 
 **Dice Roller:**
+
 - Integrated DiceRoller component
 - Pool size calculated from character data
 - Example: `Agility + Pistols` for weapon attacks
@@ -625,10 +688,10 @@ if (lifestyle.customIncome) {
 - Max history: 3
 
 **Pool Calculation:**
+
 ```typescript
 const poolSize = Math.max(
-  (character.attributes?.agility || 3) + 
-  (character.skills?.pistols || 0),
+  (character.attributes?.agility || 3) + (character.skills?.pistols || 0),
   6
 );
 ```
@@ -636,17 +699,20 @@ const poolSize = Math.max(
 ### Edit Button
 
 **Visibility:**
+
 - Only shown for draft characters
 - Links to character edit page
 - Icon button with hover effects
 
 **Navigation:**
+
 - Route: `/characters/[id]/edit`
 - Resumes character creation wizard
 
 ### Navigation
 
 **Back to Characters:**
+
 - Link to character list
 - Arrow icon
 - Hover effects
@@ -658,17 +724,20 @@ const poolSize = Math.max(
 ### Breakpoints
 
 **Mobile (< 640px):**
+
 - Single column layout
 - Stacked sections
 - Full-width components
 - Reduced padding
 
 **Tablet (640px - 1024px):**
+
 - Two-column layout possible
 - Adjusted spacing
 - Maintained readability
 
 **Desktop (> 1024px):**
+
 - Three-column grid
 - Optimal spacing
 - Full feature set
@@ -676,6 +745,7 @@ const poolSize = Math.max(
 ### Layout Grid
 
 **Desktop:**
+
 ```
 ┌─────────────────────────────────────────┐
 │           Character Header               │
@@ -695,6 +765,7 @@ const poolSize = Math.max(
 ```
 
 **Mobile:**
+
 ```
 ┌─────────────────────┐
 │ Character Header    │
@@ -728,11 +799,13 @@ const poolSize = Math.max(
 ### Component State
 
 **Character Data:**
+
 - `character: Character | null` - Character data
 - `loading: boolean` - Loading state
 - `error: string | null` - Error state
 
 **UI State:**
+
 - `showDiceRoller: boolean` - Dice roller visibility
 - `showThemeSelector: boolean` - Theme selector visibility
 - `currentTheme: string` - Selected theme ID
@@ -740,12 +813,14 @@ const poolSize = Math.max(
 ### Data Fetching
 
 **API Call:**
+
 ```typescript
 const response = await fetch(`/api/characters/${characterId}`);
 const data = await response.json();
 ```
 
 **Error Handling:**
+
 - Loading state with spinner
 - Error state with message
 - Fallback UI for missing character
@@ -757,12 +832,14 @@ const data = await response.json();
 ### Dice Roller
 
 **Integration:**
+
 - DiceRoller component imported
 - Pool size calculated from character
 - Integrated in collapsible section
 - Callback support for roll logging
 
 **Future Enhancements:**
+
 - Context-aware pool calculations
 - Quick action buttons (Attack, Skill Test, etc.)
 - Roll history per character
@@ -770,11 +847,13 @@ const data = await response.json();
 ### Character Data
 
 **Data Source:**
+
 - Character type from `/lib/types/character.ts`
 - Complete character object
 - All sections populated from character data
 
 **Data Validation:**
+
 - Null checks for optional fields
 - Default values for missing data
 - Type safety with TypeScript
@@ -782,11 +861,13 @@ const data = await response.json();
 ### Navigation
 
 **Routes:**
+
 - Character list: `/characters`
 - Character edit: `/characters/[id]/edit`
 - Character sheet: `/characters/[id]`
 
 **Breadcrumbs:**
+
 - Back to characters link
 - Character name in header
 
@@ -797,6 +878,7 @@ const data = await response.json();
 ### Phase 1: Enhanced Display
 
 **Expanded Sections - COMPLETED:**
+
 - [x] Weapons section with stats (Damage, AP, Modes, etc.)
 - [x] Armor section with ratings and modifications
 - [x] Cyberware/Bioware sections
@@ -806,6 +888,7 @@ const data = await response.json();
 - [ ] Complex Forms section (for technomancers)
 
 **Improved Visualizations:**
+
 - Weapon cards with damage, AP, modes
 - Armor cards with ratings and modifications
 - Cyberware tree visualization
@@ -814,17 +897,20 @@ const data = await response.json();
 ### Phase 2: Interactive Features
 
 **Editable Fields:**
+
 - Condition monitor editing (damage/healing)
 - Karma spending interface
 - Nuyen tracking
 - Notes section
 
 **Quick Actions:**
+
 - Quick dice pool buttons
 - Action buttons (Attack, Skill Test, etc.)
 - Context menus for items
 
 **Calculations:**
+
 - Automatic dice pool calculation
 - Modifier display
 - Limit enforcement visualization
@@ -832,16 +918,19 @@ const data = await response.json();
 ### Phase 3: Advanced Features
 
 **Tabs/Accordions:**
+
 - Tabbed interface for organization
 - Collapsible sections
 - Customizable layout
 
 **Filters and Search:**
+
 - Filter skills by category
 - Search gear/weapons
 - Filter qualities by type
 
 **Export/Print:**
+
 - PDF export
 - Print-friendly layout
 - Character summary export
@@ -849,16 +938,19 @@ const data = await response.json();
 ### Phase 4: Gameplay Integration
 
 **Combat Integration:**
+
 - Initiative display
 - Action economy tracker
 - Combat modifiers display
 
 **Magic Integration:**
+
 - Spell casting interface
 - Drain tracking
 - Sustaining penalties display
 
 **Matrix Integration:**
+
 - Matrix attributes display
 - Program list
 - Overwatch Score display
@@ -866,16 +958,19 @@ const data = await response.json();
 ### Phase 5: Customization
 
 **Layout Customization:**
+
 - Reorderable sections
 - Collapsible sections
 - Custom section visibility
 
 **Theme Customization:**
+
 - Color scheme options
 - Font size options
 - Layout density options
 
 **Notes and Annotations:**
+
 - Character notes section
 - GM notes (if GM)
 - Private notes
@@ -887,17 +982,20 @@ const data = await response.json();
 ### Unit Tests
 
 **Component Rendering:**
+
 - All sections render correctly
 - Conditional sections show/hide appropriately
 - Empty states display correctly
 - Error states display correctly
 
 **Calculations:**
+
 - Derived stats calculated correctly
 - Condition monitor max calculated correctly
 - Lifestyle costs calculated correctly
 
 **Data Display:**
+
 - Attributes display correctly
 - Skills display correctly
 - Gear displays correctly
@@ -906,16 +1004,19 @@ const data = await response.json();
 ### Integration Tests
 
 **Data Fetching:**
+
 - Character data loads correctly
 - Error handling works
 - Loading states display
 
 **Navigation:**
+
 - Back button works
 - Edit button navigates correctly
 - Links work properly
 
 **Dice Roller:**
+
 - Toggle works
 - Pool calculation correct
 - Integration functional
@@ -923,12 +1024,14 @@ const data = await response.json();
 ### E2E Tests
 
 **Character Sheet Display:**
+
 - Navigate to character sheet
 - Verify all sections display
 - Verify calculations correct
 - Test responsive layout
 
 **Interactive Features:**
+
 - Toggle dice roller
 - Navigate back to list
 - Edit button (draft only)
@@ -940,11 +1043,13 @@ const data = await response.json();
 ### Data Loading
 
 **Optimization:**
+
 - Single API call for character data
 - Efficient data structure
 - Minimal re-renders
 
 **Caching:**
+
 - Character data caching (future)
 - Derived stats caching
 - Calculation memoization
@@ -952,11 +1057,13 @@ const data = await response.json();
 ### Rendering
 
 **Optimization:**
+
 - Component memoization where appropriate
 - Efficient list rendering
 - Lazy loading for large sections (future)
 
 **Responsive:**
+
 - Efficient breakpoint handling
 - Optimized mobile layout
 - Touch-friendly interactions
@@ -968,6 +1075,7 @@ const data = await response.json();
 ### Keyboard Navigation
 
 **Features:**
+
 - All interactive elements keyboard accessible
 - Focus states visible
 - Logical tab order
@@ -975,6 +1083,7 @@ const data = await response.json();
 ### Screen Readers
 
 **Features:**
+
 - Semantic HTML
 - ARIA labels where needed
 - Descriptive text for visual elements
@@ -982,6 +1091,7 @@ const data = await response.json();
 ### Visual Accessibility
 
 **Features:**
+
 - High contrast colors
 - Clear typography
 - Sufficient spacing
@@ -994,6 +1104,7 @@ const data = await response.json();
 ### Data Access
 
 **Authorization:**
+
 - Character must belong to authenticated user
 - Server-side validation
 - No unauthorized data access
@@ -1001,6 +1112,7 @@ const data = await response.json();
 ### Data Display
 
 **Sanitization:**
+
 - User input sanitized
 - XSS prevention
 - Safe rendering
@@ -1012,23 +1124,28 @@ const data = await response.json();
 ### Internal Dependencies
 
 **Components:**
+
 - DiceRoller component
 - React Aria Components (Button, Link)
 
 **Types:**
+
 - Character type from `/lib/types/character.ts`
 - All character-related types
 
 **API:**
+
 - `/api/characters/[id]` endpoint
 
 ### External Dependencies
 
 **React:**
+
 - React hooks (useState, useEffect, use)
 - React Aria Components
 
 **Styling:**
+
 - Tailwind CSS
 - Custom component styles
 
@@ -1046,11 +1163,13 @@ const data = await response.json();
 ## Change Log
 
 ### 2025-01-27
+
 - Initial specification created
 - Documents current character sheet implementation
 - Defines future enhancement roadmap
 
 ### 2025-12-17
+
 - Implemented Phase 2: Enhanced Details
 - Added detailed cards for Weapons, Armor, Spells, Adept Powers, Augmentations, and Vehicles
 - Integrated catalog lookups for spell data
@@ -1079,5 +1198,4 @@ const data = await response.json();
 
 ---
 
-*This specification is a living document and will be updated as the character sheet evolves.*
-
+_This specification is a living document and will be updated as the character sheet evolves._

@@ -25,6 +25,7 @@ The current equipment state model uses a flat `EquipmentReadiness` type with sta
 2. **Gear in a bag** - On the runner but requires time to access
 
 This distinction matters for:
+
 - **Encumbrance**: Only gear ON the runner should count toward weight limits
 - **Access time**: Backpack items take longer to retrieve than holstered items
 - **Run planning**: Runners should decide what to bring vs. leave behind
@@ -84,14 +85,14 @@ interface GearState {
 
 ### Location Descriptions
 
-| Location | Description | Access Time | Encumbrance | Visibility |
-|----------|-------------|-------------|-------------|------------|
-| `stash` | Not on the run | N/A | None | N/A |
-| `carried` | In bag/backpack | Complex+ | Full | Hidden |
-| `holstered` | In holster/sheath | Simple | Full | Depends on holster |
-| `worn` | Armor/clothing | Passive | Full | Visible |
-| `pocketed` | In pocket | Free | Minimal | Hidden |
-| `readied` | In hand/active | Immediate | Full | Visible |
+| Location    | Description       | Access Time | Encumbrance | Visibility         |
+| ----------- | ----------------- | ----------- | ----------- | ------------------ |
+| `stash`     | Not on the run    | N/A         | None        | N/A                |
+| `carried`   | In bag/backpack   | Complex+    | Full        | Hidden             |
+| `holstered` | In holster/sheath | Simple      | Full        | Depends on holster |
+| `worn`      | Armor/clothing    | Passive     | Full        | Visible            |
+| `pocketed`  | In pocket         | Free        | Minimal     | Hidden             |
+| `readied`   | In hand/active    | Immediate   | Full        | Visible            |
 
 ### Stash Sub-Locations
 
@@ -110,6 +111,7 @@ Gear in `stash` can have a sub-location indicating where it's stored:
 ### Concept
 
 A **loadout** is a saved configuration of gear locations for a specific scenario. Runners can:
+
 1. Create loadouts for different run types
 2. Quickly switch between loadouts
 3. See a summary of what they're bringing
@@ -117,6 +119,7 @@ A **loadout** is a saved configuration of gear locations for a specific scenario
 ### Example Loadouts
 
 **"Social Meet"**
+
 - Lined coat (worn)
 - Hold-out pistol (holstered, concealed)
 - Fake SIN (pocketed)
@@ -124,6 +127,7 @@ A **loadout** is a saved configuration of gear locations for a specific scenario
 - Everything else → stash
 
 **"Full Combat"**
+
 - Full body armor (worn)
 - Assault rifle (readied)
 - Heavy pistol (holstered)
@@ -133,6 +137,7 @@ A **loadout** is a saved configuration of gear locations for a specific scenario
 - Everything else → stash
 
 **"Infiltration"**
+
 - Chameleon suit (worn)
 - Silenced pistol (holstered)
 - Lockpick set (pocketed)
@@ -161,22 +166,17 @@ A **loadout** is a saved configuration of gear locations for a specific scenario
  * Where gear is located relative to the runner
  */
 type GearLocation =
-  | "stash"      // Not on the run (home, vehicle, safehouse)
-  | "carried"    // In bag/backpack - Complex Action+ to access
-  | "holstered"  // On body, quick access - Simple Action to ready
-  | "worn"       // Actively worn (armor, clothing)
-  | "pocketed"   // Small items - Free Action access
-  | "readied";   // In hand/active use
+  | "stash" // Not on the run (home, vehicle, safehouse)
+  | "carried" // In bag/backpack - Complex Action+ to access
+  | "holstered" // On body, quick access - Simple Action to ready
+  | "worn" // Actively worn (armor, clothing)
+  | "pocketed" // Small items - Free Action access
+  | "readied"; // In hand/active use
 
 /**
  * Sub-locations for stashed gear
  */
-type StashLocation =
-  | "home"
-  | "safehouse"
-  | "vehicle"
-  | "storage"
-  | string;  // Custom location
+type StashLocation = "home" | "safehouse" | "vehicle" | "storage" | string; // Custom location
 
 /**
  * Enhanced gear state with location model
@@ -195,7 +195,7 @@ interface GearState {
   concealed?: boolean;
 
   /** Which hand weapon is in (only for readied weapons) */
-  handSlot?: HandSlot;  // See weapon-hand-slots.md
+  handSlot?: HandSlot; // See weapon-hand-slots.md
 }
 
 // =============================================================================
@@ -267,6 +267,7 @@ interface GearLocationConstraints {
 ## Encumbrance Calculation
 
 ### Current (Incorrect)
+
 ```typescript
 // Counts ALL gear regardless of location
 const totalWeight = character.gear.reduce((sum, g) => sum + (g.weight || 0), 0);
@@ -283,7 +284,7 @@ const ENCUMBERING_LOCATIONS: GearLocation[] = [
   "holstered",
   "worn",
   "pocketed",
-  "readied"
+  "readied",
 ];
 
 /**
@@ -309,7 +310,7 @@ function calculateEncumbrance(character: Character): EncumbranceResult {
     maxWeight: carryCapacity,
     itemCount,
     isOverEncumbered: totalWeight > carryCapacity,
-    encumbranceLevel: calculateEncumbranceLevel(totalWeight, carryCapacity)
+    encumbranceLevel: calculateEncumbranceLevel(totalWeight, carryCapacity),
   };
 }
 
@@ -330,18 +331,19 @@ function calculateEncumbranceLevel(current: number, max: number): EncumbranceLev
 
 Based on SR5 Core Rulebook action economy:
 
-| Location | Action to Access | Notes |
-|----------|------------------|-------|
-| `readied` | None | Already in use |
-| `pocketed` | Free Action | Small items only |
-| `worn` | N/A | Passive (armor provides protection automatically) |
-| `holstered` | Simple Action | Ready Weapon action |
-| `carried` | Complex Action | Retrieve from bag |
-| `stash` | N/A | Not available during scene |
+| Location    | Action to Access | Notes                                             |
+| ----------- | ---------------- | ------------------------------------------------- |
+| `readied`   | None             | Already in use                                    |
+| `pocketed`  | Free Action      | Small items only                                  |
+| `worn`      | N/A              | Passive (armor provides protection automatically) |
+| `holstered` | Simple Action    | Ready Weapon action                               |
+| `carried`   | Complex Action   | Retrieve from bag                                 |
+| `stash`     | N/A              | Not available during scene                        |
 
 ### Vehicle Stash Exception
 
 If gear is stashed in a **vehicle** and the runner is in/near the vehicle:
+
 - Access time: Complex Action + movement to vehicle
 - GM discretion on availability during vehicle chases
 
@@ -367,12 +369,12 @@ function getConcealmentModifier(item: GearItem): ConcealmentCheck {
 
   // Location modifiers
   const locationModifiers: Record<GearLocation, number> = {
-    stash: 0,      // N/A
-    carried: -4,   // Hidden in bag
-    pocketed: -2,  // In pocket
-    holstered: 0,  // Depends on holster type
-    worn: +2,      // Visible
-    readied: +4,   // Obviously visible
+    stash: 0, // N/A
+    carried: -4, // Hidden in bag
+    pocketed: -2, // In pocket
+    holstered: 0, // Depends on holster type
+    worn: +2, // Visible
+    readied: +4, // Obviously visible
   };
 
   const locationModifier = locationModifiers[location];
@@ -380,7 +382,7 @@ function getConcealmentModifier(item: GearItem): ConcealmentCheck {
   return {
     baseModifier,
     locationModifier,
-    totalModifier: baseModifier + locationModifier
+    totalModifier: baseModifier + locationModifier,
   };
 }
 ```
@@ -431,19 +433,21 @@ function getConcealmentModifier(item: GearItem): ConcealmentCheck {
 ## Migration Path
 
 ### Phase 1: Extend GearState Type
+
 - Add `location` field (default from current `readiness`)
 - Add `stashLocation` field
 - Maintain backward compatibility with `readiness`
 
 ### Phase 2: Migration Script
+
 ```typescript
 function migrateGearState(oldState: OldGearState): GearState {
   // Map old readiness to new location
   const locationMap: Record<EquipmentReadiness, GearLocation> = {
-    "readied": "readied",
-    "holstered": "holstered",
-    "worn": "worn",
-    "stored": "stash",  // Default stored → stash
+    readied: "readied",
+    holstered: "holstered",
+    worn: "worn",
+    stored: "stash", // Default stored → stash
   };
 
   return {
@@ -455,11 +459,13 @@ function migrateGearState(oldState: OldGearState): GearState {
 ```
 
 ### Phase 3: UI Updates
+
 - Update InventoryPanel to show locations
 - Add location selector dropdown
 - Update encumbrance calculation
 
 ### Phase 4: Loadout System
+
 - Add loadout management UI
 - Implement loadout switching
 - Add "Prepare for Run" workflow

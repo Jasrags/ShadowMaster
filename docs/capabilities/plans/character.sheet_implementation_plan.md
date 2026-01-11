@@ -23,29 +23,29 @@ Implement the complete Character Sheet capability as defined in `docs/capabiliti
 
 ### Existing Features (Already Implemented)
 
-| Feature | Location | Status |
-|---------|----------|--------|
-| Character header with metadata | `/app/characters/[id]/page.tsx:140-200` | Complete |
-| Core attributes table | `/app/characters/[id]/page.tsx:1031-1050` | Complete |
-| Condition monitors (display) | `/app/characters/[id]/page.tsx:850-950` | Partial |
-| Derived stats (Limits, Initiative) | `/app/characters/[id]/page.tsx:1031-1069` | Complete |
-| Skills with dice pools | `/app/characters/[id]/page.tsx:600-700` | Complete |
-| Dice roller modal | `/app/characters/[id]/page.tsx` + `/components/DiceRoller.tsx` | Complete |
-| Theme selector (neon-rain/modern-card) | `/app/characters/[id]/page.tsx:1100-1150` | Complete |
-| Quality dynamic state tracking | `/app/characters/[id]/components/QualitiesSection.tsx` | Complete |
-| Quality effect calculations | `/lib/rules/qualities/gameplay-integration.ts` | Complete |
+| Feature                                | Location                                                       | Status   |
+| -------------------------------------- | -------------------------------------------------------------- | -------- |
+| Character header with metadata         | `/app/characters/[id]/page.tsx:140-200`                        | Complete |
+| Core attributes table                  | `/app/characters/[id]/page.tsx:1031-1050`                      | Complete |
+| Condition monitors (display)           | `/app/characters/[id]/page.tsx:850-950`                        | Partial  |
+| Derived stats (Limits, Initiative)     | `/app/characters/[id]/page.tsx:1031-1069`                      | Complete |
+| Skills with dice pools                 | `/app/characters/[id]/page.tsx:600-700`                        | Complete |
+| Dice roller modal                      | `/app/characters/[id]/page.tsx` + `/components/DiceRoller.tsx` | Complete |
+| Theme selector (neon-rain/modern-card) | `/app/characters/[id]/page.tsx:1100-1150`                      | Complete |
+| Quality dynamic state tracking         | `/app/characters/[id]/components/QualitiesSection.tsx`         | Complete |
+| Quality effect calculations            | `/lib/rules/qualities/gameplay-integration.ts`                 | Complete |
 
 ### Gaps to Address
 
-| Gap | Capability Reference | Priority |
-|-----|----------------------|----------|
-| Damage application UI | "Condition monitors MUST visually track physical and stun damage" | High |
-| Wound modifier display on affected rolls | "automatic identification of associated penalties" | High |
-| Print-optimized layout | "accessible and optimized for mobile, tablet, and desktop" | Medium |
-| Combat action helper (defense values) | "pre-calculated and available for immediate use" | Medium |
-| Healing timeline tracking | Quality effects integration | Low |
-| Quality effect tooltips | "clear, rating-based indicators" | Low |
-| Section collapse/expand state persistence | "persistent and consistently applied" | Low |
+| Gap                                       | Capability Reference                                              | Priority |
+| ----------------------------------------- | ----------------------------------------------------------------- | -------- |
+| Damage application UI                     | "Condition monitors MUST visually track physical and stun damage" | High     |
+| Wound modifier display on affected rolls  | "automatic identification of associated penalties"                | High     |
+| Print-optimized layout                    | "accessible and optimized for mobile, tablet, and desktop"        | Medium   |
+| Combat action helper (defense values)     | "pre-calculated and available for immediate use"                  | Medium   |
+| Healing timeline tracking                 | Quality effects integration                                       | Low      |
+| Quality effect tooltips                   | "clear, rating-based indicators"                                  | Low      |
+| Section collapse/expand state persistence | "persistent and consistently applied"                             | Low      |
 
 ---
 
@@ -57,16 +57,17 @@ Implement the complete Character Sheet capability as defined in `docs/capabiliti
 
 The capability requires interactive condition monitors. Two approaches:
 
-| Approach | Pros | Cons |
-|----------|------|------|
+| Approach                             | Pros                           | Cons            |
+| ------------------------------------ | ------------------------------ | --------------- |
 | **A: Direct mutation (Recommended)** | Simpler UX, immediate feedback | No GM oversight |
-| **B: Request-based** | GM can approve damage | More friction |
+| **B: Request-based**                 | GM can approve damage          | More friction   |
 
 **Recommendation:** Approach A for non-campaign characters, Approach B for campaign-linked characters requiring GM approval.
 
 **2. Wound Modifier Display Strategy**
 
 Should wound modifiers be shown:
+
 - **A: Inline with each dice pool** (e.g., "Pistols: 12 - 2 wound = 10")
 - **B: Global banner** when wounded (persistent reminder at top)
 - **C: Both** (Recommended)
@@ -74,6 +75,7 @@ Should wound modifiers be shown:
 **3. Print Layout Implementation**
 
 Options for print optimization:
+
 - **A: CSS @media print** (minimal code, browser-dependent)
 - **B: Dedicated print route** (`/characters/[id]/print`) with simplified layout
 - **C: PDF generation** (requires server-side library)
@@ -89,18 +91,21 @@ Options for print optimization:
 #### 1.1 Damage Application API
 
 **Files to Create:**
+
 - `/app/api/characters/[characterId]/damage/route.ts` - Apply/heal damage endpoint
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "The character sheet MUST present an accurate and comprehensive reflection of the character's current state"
 - **Requirement:** "Condition monitors MUST visually track physical and stun damage"
 
 **Interface Definition:**
+
 ```typescript
 // POST /api/characters/[characterId]/damage
 interface DamageRequest {
   type: "physical" | "stun" | "overflow";
-  amount: number;  // Positive = apply damage, negative = heal
+  amount: number; // Positive = apply damage, negative = heal
   source?: string; // Optional description for audit log
 }
 
@@ -115,12 +120,13 @@ interface DamageResponse {
     woundModifier: number;
   };
   overflow?: {
-    physical: number;  // Excess physical that went to overflow
+    physical: number; // Excess physical that went to overflow
   };
 }
 ```
 
 **Implementation Notes:**
+
 - Physical damage overflow to overflow track when physical monitor full
 - Stun damage overflow converts to physical when stun monitor full
 - Apply audit log entry for each damage event
@@ -129,16 +135,20 @@ interface DamageResponse {
 #### 1.2 Interactive Condition Monitor Component
 
 **Files to Create:**
+
 - `/app/characters/[id]/components/InteractiveConditionMonitor.tsx`
 
 **Files to Modify:**
+
 - `/app/characters/[id]/page.tsx` - Replace inline ConditionMonitor
 
 **Requirements Satisfied:**
+
 - **Requirement:** "Condition monitors MUST visually track physical and stun damage, including the automatic identification of associated penalties"
 - **Requirement:** "integrated tools for rapid gameplay actions"
 
 **Interface Definition:**
+
 ```typescript
 // /app/characters/[id]/components/InteractiveConditionMonitor.tsx
 
@@ -147,10 +157,10 @@ interface InteractiveConditionMonitorProps {
   type: "physical" | "stun" | "overflow";
   current: number;
   max: number;
-  penaltyInterval: number;  // Boxes per -1 penalty (default: 3)
+  penaltyInterval: number; // Boxes per -1 penalty (default: 3)
   theme: CharacterSheetTheme;
   onDamageApplied?: (newValue: number, woundModifier: number) => void;
-  readonly?: boolean;  // True for finalized characters without edit permission
+  readonly?: boolean; // True for finalized characters without edit permission
 }
 
 // Features:
@@ -162,6 +172,7 @@ interface InteractiveConditionMonitorProps {
 ```
 
 **Visual Specification:**
+
 ```
 Physical Monitor (8 boxes)
 ┌───┬───┬───┐ ┌───┬───┬───┐ ┌───┬───┐
@@ -175,14 +186,17 @@ Physical Monitor (8 boxes)
 #### 1.3 Wound Modifier Integration
 
 **Files to Modify:**
+
 - `/app/characters/[id]/page.tsx` - Add wound modifier state
 - `/app/characters/[id]/components/SkillList.tsx` (extract from page.tsx)
 
 **Requirements Satisfied:**
+
 - **Requirement:** "automatic identification of associated penalties"
 - **Requirement:** "Common dice pools MUST be pre-calculated and available for immediate use"
 
 **Changes:**
+
 ```typescript
 // Add wound modifier to character sheet state
 const [woundModifier, setWoundModifier] = useState<number>(0);
@@ -204,13 +218,16 @@ useEffect(() => {
 #### 2.1 Dice Pool Component with Modifiers
 
 **Files to Create:**
+
 - `/app/characters/[id]/components/DicePoolDisplay.tsx`
 
 **Requirements Satisfied:**
+
 - **Requirement:** "Common dice pools MUST be pre-calculated and available for immediate use"
 - **Guarantee:** "Derived statistics and condition monitors MUST be updated automatically"
 
 **Interface Definition:**
+
 ```typescript
 interface DicePoolDisplayProps {
   label: string;
@@ -239,13 +256,16 @@ interface DicePoolModifier {
 #### 2.2 Combat Stats Quick Reference
 
 **Files to Create:**
+
 - `/app/characters/[id]/components/CombatQuickReference.tsx`
 
 **Requirements Satisfied:**
+
 - **Requirement:** "integrated tools for rapid gameplay actions"
 - **Requirement:** "Common dice pools MUST be pre-calculated and available for immediate use"
 
 **Interface Definition:**
+
 ```typescript
 interface CombatQuickReferenceProps {
   character: Character;
@@ -270,13 +290,16 @@ interface CombatQuickReferenceProps {
 #### 3.1 Print Stylesheet
 
 **Files to Create:**
+
 - `/app/characters/[id]/print.css` - Print-specific styles
 - `/app/characters/[id]/print/page.tsx` - Simplified print layout
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Character information MUST remain accessible and optimized for mobile, tablet, and desktop environments"
 
 **Print Layout Specification:**
+
 ```
 Page 1: Core Stats
 ├── Header (Name, Metatype, Status, Edition)
@@ -304,30 +327,42 @@ Page 4+: Magic/Matrix (if applicable)
 ```
 
 **CSS Media Query Additions:**
+
 ```css
 @media print {
   /* Hide interactive elements */
   .dice-roller-button,
   .theme-selector,
-  .action-buttons { display: none; }
+  .action-buttons {
+    display: none;
+  }
 
   /* Optimize for paper */
-  body { font-size: 10pt; }
-  .section { page-break-inside: avoid; }
-  .character-header { page-break-after: avoid; }
+  body {
+    font-size: 10pt;
+  }
+  .section {
+    page-break-inside: avoid;
+  }
+  .character-header {
+    page-break-after: avoid;
+  }
 }
 ```
 
 #### 3.2 Mobile Layout Optimization
 
 **Files to Modify:**
+
 - `/app/characters/[id]/page.tsx` - Responsive breakpoints
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Character information MUST remain accessible and optimized for mobile, tablet, and desktop environments"
 - **Requirement:** "The layout MUST adapt dynamically to optimize for readability"
 
 **Changes:**
+
 ```typescript
 // Mobile: Single column, collapsible sections
 // Tablet: Two columns
@@ -347,13 +382,16 @@ const [collapsedSections, setCollapsedSections] = useLocalStorage<string[]>(
 #### 4.1 UI Preferences API
 
 **Files to Create:**
+
 - `/app/api/characters/[characterId]/preferences/route.ts`
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Participant-defined visual preferences MUST be persistent and consistently applied"
 - **Requirement:** "Visual themes MUST be selectable and persistent"
 
 **Interface Definition:**
+
 ```typescript
 // GET/PUT /api/characters/[characterId]/preferences
 interface CharacterUIPreferences {
@@ -367,21 +405,23 @@ interface CharacterUIPreferences {
 #### 4.2 Enhanced Theme System
 
 **Files to Modify:**
+
 - `/lib/themes.ts` - Add classic-paper theme
 - `/app/characters/[id]/page.tsx` - Apply preferences
 
 **New Theme: Classic Paper**
+
 ```typescript
 export const classicPaperTheme: CharacterSheetTheme = {
   id: "classic-paper",
   name: "Classic Paper",
   description: "Traditional character sheet aesthetic",
   colors: {
-    background: "#f5f5dc",  // Beige
+    background: "#f5f5dc", // Beige
     surface: "#ffffff",
     text: "#333333",
-    accent: "#8b4513",      // Saddle brown
-    border: "#d2b48c",      // Tan
+    accent: "#8b4513", // Saddle brown
+    border: "#d2b48c", // Tan
   },
   fonts: {
     heading: "serif",
@@ -397,12 +437,15 @@ export const classicPaperTheme: CharacterSheetTheme = {
 #### 5.1 Quick Advancement Actions
 
 **Files to Create:**
+
 - `/app/characters/[id]/components/QuickAdvancementPanel.tsx`
 
 **Requirements Satisfied:**
+
 - **Requirement:** "The character sheet MUST provide a direct transition to refinement states for characters in a non-finalized lifecycle status"
 
 **Interface Definition:**
+
 ```typescript
 interface QuickAdvancementPanelProps {
   character: Character;
@@ -424,14 +467,15 @@ interface QuickAdvancementPanelProps {
 
 #### Unit Tests
 
-| Test File | Coverage Target | Requirements Verified |
-|-----------|-----------------|----------------------|
-| `/app/characters/[id]/components/__tests__/InteractiveConditionMonitor.test.tsx` | All damage scenarios | Condition Monitor Tracking |
-| `/app/characters/[id]/components/__tests__/DicePoolDisplay.test.tsx` | Modifier calculations | Dice Pool Pre-calculation |
-| `/lib/rules/qualities/__tests__/wound-modifier.test.ts` | Quality effects on wounds | Automatic Penalty Identification |
-| `/app/api/characters/__tests__/damage.test.ts` | Damage API logic | State Accuracy |
+| Test File                                                                        | Coverage Target           | Requirements Verified            |
+| -------------------------------------------------------------------------------- | ------------------------- | -------------------------------- |
+| `/app/characters/[id]/components/__tests__/InteractiveConditionMonitor.test.tsx` | All damage scenarios      | Condition Monitor Tracking       |
+| `/app/characters/[id]/components/__tests__/DicePoolDisplay.test.tsx`             | Modifier calculations     | Dice Pool Pre-calculation        |
+| `/lib/rules/qualities/__tests__/wound-modifier.test.ts`                          | Quality effects on wounds | Automatic Penalty Identification |
+| `/app/api/characters/__tests__/damage.test.ts`                                   | Damage API logic          | State Accuracy                   |
 
 **Condition Monitor Tests:**
+
 ```typescript
 describe("InteractiveConditionMonitor", () => {
   describe("damage application", () => {
@@ -454,6 +498,7 @@ describe("InteractiveConditionMonitor", () => {
 ```
 
 **Dice Pool Tests:**
+
 ```typescript
 describe("DicePoolDisplay", () => {
   describe("modifier aggregation", () => {
@@ -473,20 +518,21 @@ describe("DicePoolDisplay", () => {
 
 #### Integration Tests
 
-| Test File | Scenarios | Requirements Verified |
-|-----------|-----------|----------------------|
-| `/app/api/characters/__tests__/damage.integration.test.ts` | Full damage flow | State Persistence |
-| `/app/characters/[id]/__tests__/sheet.integration.test.tsx` | Sheet rendering | State Visualization |
+| Test File                                                   | Scenarios        | Requirements Verified |
+| ----------------------------------------------------------- | ---------------- | --------------------- |
+| `/app/api/characters/__tests__/damage.integration.test.ts`  | Full damage flow | State Persistence     |
+| `/app/characters/[id]/__tests__/sheet.integration.test.tsx` | Sheet rendering  | State Visualization   |
 
 #### E2E Tests (Playwright)
 
-| Test File | User Flow | Requirements Verified |
-|-----------|-----------|----------------------|
-| `/e2e/character-sheet-damage.spec.ts` | Apply damage, verify update | Interactive Integration |
-| `/e2e/character-sheet-responsive.spec.ts` | Mobile/tablet/desktop views | Responsive Design |
-| `/e2e/character-sheet-print.spec.ts` | Print preview verification | Print Optimization |
+| Test File                                 | User Flow                   | Requirements Verified   |
+| ----------------------------------------- | --------------------------- | ----------------------- |
+| `/e2e/character-sheet-damage.spec.ts`     | Apply damage, verify update | Interactive Integration |
+| `/e2e/character-sheet-responsive.spec.ts` | Mobile/tablet/desktop views | Responsive Design       |
+| `/e2e/character-sheet-print.spec.ts`      | Print preview verification  | Print Optimization      |
 
 **E2E Damage Flow:**
+
 ```typescript
 test.describe("Character Sheet Damage", () => {
   test("applies physical damage and updates wound modifier", async ({ page }) => {
@@ -501,8 +547,7 @@ test.describe("Character Sheet Damage", () => {
     await expect(page.locator('[data-testid="wound-modifier"]')).toHaveText("-1");
 
     // Verify dice pool displays modifier
-    await expect(page.locator('[data-testid="skill-pistols-pool"]'))
-      .toContainText("wound: -1");
+    await expect(page.locator('[data-testid="skill-pistols-pool"]')).toContainText("wound: -1");
   });
 });
 ```
@@ -510,6 +555,7 @@ test.describe("Character Sheet Damage", () => {
 ### Manual Testing Checklist
 
 #### State Visualization
+
 - [ ] Verify all core attributes display correctly
 - [ ] Verify derived stats match ruleset formulas
 - [ ] Verify condition monitors show current damage
@@ -517,6 +563,7 @@ test.describe("Character Sheet Damage", () => {
 - [ ] Verify wound modifiers calculate correctly per 3-box intervals
 
 #### Interactive Integration
+
 - [ ] Click condition monitor boxes to apply damage
 - [ ] Verify wound modifier updates immediately
 - [ ] Verify dice pools reflect wound modifier
@@ -524,6 +571,7 @@ test.describe("Character Sheet Damage", () => {
 - [ ] Verify dice roller includes limit and modifiers
 
 #### Responsive Design
+
 - [ ] Test on mobile viewport (375px width)
 - [ ] Test on tablet viewport (768px width)
 - [ ] Test on desktop viewport (1280px width)
@@ -531,6 +579,7 @@ test.describe("Character Sheet Damage", () => {
 - [ ] Print preview shows clean layout
 
 #### Preference Persistence
+
 - [ ] Change theme, refresh, verify theme persists
 - [ ] Collapse sections, refresh, verify collapsed state
 - [ ] Switch characters, verify independent preferences
@@ -567,35 +616,35 @@ Phase 5: Advancement Integration (Week 3)
 
 ### Files to Create
 
-| Path | Purpose |
-|------|---------|
-| `/app/api/characters/[characterId]/damage/route.ts` | Damage application endpoint |
-| `/app/api/characters/[characterId]/preferences/route.ts` | UI preferences endpoint |
-| `/app/characters/[id]/components/InteractiveConditionMonitor.tsx` | Clickable condition monitor |
-| `/app/characters/[id]/components/DicePoolDisplay.tsx` | Dice pool with modifier breakdown |
-| `/app/characters/[id]/components/CombatQuickReference.tsx` | Pre-calculated combat stats |
-| `/app/characters/[id]/components/QuickAdvancementPanel.tsx` | Quick advancement actions |
-| `/app/characters/[id]/print/page.tsx` | Print-optimized layout |
-| `/app/characters/[id]/print.css` | Print-specific styles |
+| Path                                                              | Purpose                           |
+| ----------------------------------------------------------------- | --------------------------------- |
+| `/app/api/characters/[characterId]/damage/route.ts`               | Damage application endpoint       |
+| `/app/api/characters/[characterId]/preferences/route.ts`          | UI preferences endpoint           |
+| `/app/characters/[id]/components/InteractiveConditionMonitor.tsx` | Clickable condition monitor       |
+| `/app/characters/[id]/components/DicePoolDisplay.tsx`             | Dice pool with modifier breakdown |
+| `/app/characters/[id]/components/CombatQuickReference.tsx`        | Pre-calculated combat stats       |
+| `/app/characters/[id]/components/QuickAdvancementPanel.tsx`       | Quick advancement actions         |
+| `/app/characters/[id]/print/page.tsx`                             | Print-optimized layout            |
+| `/app/characters/[id]/print.css`                                  | Print-specific styles             |
 
 ### Files to Modify
 
-| Path | Changes |
-|------|---------|
+| Path                            | Changes                                            |
+| ------------------------------- | -------------------------------------------------- |
 | `/app/characters/[id]/page.tsx` | Integrate new components, add wound modifier state |
-| `/lib/themes.ts` | Add classic-paper theme |
-| `/lib/types/character.ts` | Extend UIPreferences interface |
-| `/components/DiceRoller.tsx` | Accept modifier breakdown for display |
+| `/lib/themes.ts`                | Add classic-paper theme                            |
+| `/lib/types/character.ts`       | Extend UIPreferences interface                     |
+| `/components/DiceRoller.tsx`    | Accept modifier breakdown for display              |
 
 ### Test Files to Create
 
-| Path | Purpose |
-|------|---------|
+| Path                                                                             | Purpose                      |
+| -------------------------------------------------------------------------------- | ---------------------------- |
 | `/app/characters/[id]/components/__tests__/InteractiveConditionMonitor.test.tsx` | Condition monitor unit tests |
-| `/app/characters/[id]/components/__tests__/DicePoolDisplay.test.tsx` | Dice pool unit tests |
-| `/app/api/characters/__tests__/damage.test.ts` | Damage API tests |
-| `/e2e/character-sheet-damage.spec.ts` | E2E damage flow tests |
-| `/e2e/character-sheet-responsive.spec.ts` | E2E responsive tests |
+| `/app/characters/[id]/components/__tests__/DicePoolDisplay.test.tsx`             | Dice pool unit tests         |
+| `/app/api/characters/__tests__/damage.test.ts`                                   | Damage API tests             |
+| `/e2e/character-sheet-damage.spec.ts`                                            | E2E damage flow tests        |
+| `/e2e/character-sheet-responsive.spec.ts`                                        | E2E responsive tests         |
 
 ---
 
@@ -610,11 +659,11 @@ Phase 5: Advancement Integration (Week 3)
 
 ## Constraints Compliance
 
-| Constraint | Implementation |
-|------------|----------------|
+| Constraint                                                                                                         | Implementation                                                                                   |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ |
 | "MUST NOT facilitate direct modification of finalized character state outside of authorized advancement workflows" | Damage API requires ownership verification; modification blocked for non-draft unless authorized |
-| "Derived values MUST be dependent solely on the underlying character state and MUST NOT be manually overridden" | All derived stats calculated from `calculateDerivedStats()`, no manual input |
-| "Access to the character sheet MUST be governed by character ownership and participant authorization" | API routes verify ownership via session; 403 for unauthorized access |
+| "Derived values MUST be dependent solely on the underlying character state and MUST NOT be manually overridden"    | All derived stats calculated from `calculateDerivedStats()`, no manual input                     |
+| "Access to the character sheet MUST be governed by character ownership and participant authorization"              | API routes verify ownership via session; 403 for unauthorized access                             |
 
 ---
 

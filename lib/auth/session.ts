@@ -9,10 +9,14 @@ const SESSION_DURATION_MS = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
 /**
  * Create a session by setting a cookie with the user ID and session version
  */
-export function createSession(userId: string, response: NextResponse, sessionVersion: number = 1): void {
+export function createSession(
+  userId: string,
+  response: NextResponse,
+  sessionVersion: number = 1
+): void {
   const expires = new Date(Date.now() + SESSION_DURATION_MS);
   const sessionValue = `${userId}:${sessionVersion}`;
-  
+
   response.cookies.set(SESSION_COOKIE_NAME, sessionValue, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
@@ -31,7 +35,7 @@ export function createSession(userId: string, response: NextResponse, sessionVer
 export async function getSession(): Promise<string | null> {
   const cookieStore = await cookies();
   const sessionCookie = cookieStore.get(SESSION_COOKIE_NAME);
-  
+
   if (!sessionCookie?.value) return null;
 
   const [userId, versionStr] = sessionCookie.value.split(":");
@@ -52,4 +56,3 @@ export async function getSession(): Promise<string | null> {
 export function clearSession(response: NextResponse): void {
   response.cookies.delete(SESSION_COOKIE_NAME);
 }
-

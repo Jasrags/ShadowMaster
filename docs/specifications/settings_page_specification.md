@@ -25,10 +25,10 @@ This page is accessible from the main navigation sidebar and is currently marked
 
 ---
 
-
 ## Page Structure
 
 ### Route
+
 - **Path:** `/app/settings/page.tsx`
 - **Layout:** Uses `SettingsLayout` (wrapping `AuthenticatedLayout`)
 - **Authentication:** Required (protected route)
@@ -67,6 +67,7 @@ This page is accessible from the main navigation sidebar and is currently marked
 **Location:** `/app/settings/page.tsx`
 
 **Responsibilities:**
+
 - Fetch current user data
 - Coordinate between settings sections
 - Handle form submissions and updates
@@ -74,6 +75,7 @@ This page is accessible from the main navigation sidebar and is currently marked
 - Display success/error messages
 
 **State:**
+
 - `user: PublicUser | null` - Current user data
 - `activeSection: SettingsSection` - Currently active section
 - `loading: boolean` - Loading state
@@ -91,6 +93,7 @@ This page is accessible from the main navigation sidebar and is currently marked
 **Description:** Side navigation or tabs for switching between settings sections.
 
 **Sections:**
+
 - **Account** - Profile information, email, username
 - **Security** - Password change, session management
 - **Preferences** - Theme, UI settings
@@ -98,6 +101,7 @@ This page is accessible from the main navigation sidebar and is currently marked
 - **Privacy** - Account deletion, data privacy
 
 **Props:**
+
 ```typescript
 interface SettingsNavigationProps {
   activeSection: SettingsSection;
@@ -114,6 +118,7 @@ interface SettingsNavigationProps {
 **Description:** Manage account information and profile details.
 
 **Features:**
+
 - Display current account information
 - Edit email address (with validation)
 - Edit username (with validation)
@@ -123,11 +128,13 @@ interface SettingsNavigationProps {
 - Character count
 
 **Form Fields:**
+
 - Email (text input, email validation)
 - Username (text input, 3-50 characters)
 - Save button
 
 **Props:**
+
 ```typescript
 interface AccountSectionProps {
   user: PublicUser;
@@ -146,6 +153,7 @@ interface AccountSectionProps {
 **Description:** Manage password and security settings.
 
 **Features:**
+
 - Change password form
 - Current password verification
 - New password strength indicator
@@ -154,17 +162,20 @@ interface AccountSectionProps {
 - Two-factor authentication toggle (future)
 
 **Form Fields:**
+
 - Current password (password input)
 - New password (password input with strength meter)
 - Confirm password (password input)
 - Change password button
 
 **Password Requirements:**
+
 - Minimum 8 characters
 - Show strength indicator (weak, medium, strong)
 - Must match confirmation
 
 **Props:**
+
 ```typescript
 interface SecuritySectionProps {
   onChangePassword: (currentPassword: string, newPassword: string) => Promise<void>;
@@ -182,16 +193,19 @@ interface SecuritySectionProps {
 **Description:** Manage application preferences and UI settings.
 
 **Features:**
--   Theme selection (Light, Dark, System)
--   Sidebar behavior (collapsed by default, etc.)
--   Character creation defaults (preferred edition, etc.)
--   Notification preferences (future)
--   Language selection (future)
+
+- Theme selection (Light, Dark, System)
+- Sidebar behavior (collapsed by default, etc.)
+- Character creation defaults (preferred edition, etc.)
+- Notification preferences (future)
+- Language selection (future)
 
 **Settings:**
+
 - **Auto-save drafts:** Toggle (character creation)
 
 **Props:**
+
 ```typescript
 interface PreferencesSectionProps {
   preferences: UserPreferences;
@@ -210,6 +224,7 @@ interface PreferencesSectionProps {
 **Description:** Export, import, and manage character data.
 
 **Features:**
+
 - Export all characters as JSON
 - Export individual character as JSON
 - Import characters from JSON
@@ -217,12 +232,14 @@ interface PreferencesSectionProps {
 - View storage usage (character count, etc.)
 
 **Actions:**
+
 - **Export All Characters:** Button → Downloads JSON file
 - **Export Character:** Dropdown → Select character → Download
 - **Import Characters:** File input → Upload JSON → Validate → Import
 - **Download Full Backup:** Button → Downloads all user data
 
 **Props:**
+
 ```typescript
 interface DataManagementSectionProps {
   characters: Character[];
@@ -232,6 +249,7 @@ interface DataManagementSectionProps {
 ```
 
 **API Endpoints:**
+
 - `GET /api/settings/export` - Export user data
 - `POST /api/settings/import` - Import character data
 
@@ -244,6 +262,7 @@ interface DataManagementSectionProps {
 **Description:** Privacy settings and account deletion.
 
 **Features:**
+
 - Account deletion option
 - Data retention information
 - Privacy policy link
@@ -251,11 +270,13 @@ interface DataManagementSectionProps {
 - Clear confirmation dialog for deletion
 
 **Actions:**
+
 - **Delete Account:** Button → Confirmation dialog → Delete account and all data
 
 **Warning:** Account deletion is permanent and cannot be undone.
 
 **Props:**
+
 ```typescript
 interface PrivacySectionProps {
   onDeleteAccount: () => Promise<void>;
@@ -286,9 +307,11 @@ interface UserPreferences {
 ### API Endpoints
 
 #### 1. GET `/api/settings/account`
+
 **Purpose:** Get current user's account information
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -301,9 +324,11 @@ interface UserPreferences {
 ---
 
 #### 2. PUT `/api/settings/account`
+
 **Purpose:** Update user's own account information (email, username)
 
 **Request:**
+
 ```typescript
 {
   email?: string;
@@ -312,6 +337,7 @@ interface UserPreferences {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -323,6 +349,7 @@ interface UserPreferences {
 **Implementation:** New endpoint - allows users to update their own account (different from admin-only `/api/users/[id]`)
 
 **Validation:**
+
 - Email format validation
 - Username length (3-50 characters)
 - Email uniqueness check
@@ -331,9 +358,11 @@ interface UserPreferences {
 ---
 
 #### 3. POST `/api/settings/password`
+
 **Purpose:** Change user's password
 
 **Request:**
+
 ```typescript
 {
   currentPassword: string;
@@ -342,6 +371,7 @@ interface UserPreferences {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -352,6 +382,7 @@ interface UserPreferences {
 **Implementation:** New endpoint
 
 **Validation:**
+
 - Verify current password
 - New password minimum 8 characters
 - New password strength requirements
@@ -359,18 +390,22 @@ interface UserPreferences {
 ---
 
 #### 4. GET `/api/settings/export`
+
 **Purpose:** Export all user data as JSON
 
 **Query Parameters:**
+
 - `type?: "characters" | "all"` - What to export (default: "all")
 
 **Response:**
+
 - JSON file download (Content-Type: application/json)
 - Or JSON response with data
 
 **Implementation:** New endpoint
 
 **Data Included:**
+
 - User profile (without password)
 - All characters
 - Preferences (if stored server-side)
@@ -378,12 +413,15 @@ interface UserPreferences {
 ---
 
 #### 5. POST `/api/settings/import`
+
 **Purpose:** Import character data from JSON
 
 **Request:**
+
 - Multipart form data with JSON file
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -395,6 +433,7 @@ interface UserPreferences {
 **Implementation:** New endpoint
 
 **Validation:**
+
 - Validate JSON structure
 - Validate character data against ruleset
 - Check for duplicate character IDs
@@ -403,9 +442,11 @@ interface UserPreferences {
 ---
 
 #### 6. DELETE `/api/settings/account`
+
 **Purpose:** Delete user's own account
 
 **Request:**
+
 ```typescript
 {
   confirm: boolean; // Must be true
@@ -414,6 +455,7 @@ interface UserPreferences {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -424,6 +466,7 @@ interface UserPreferences {
 **Implementation:** New endpoint - allows users to delete their own account
 
 **Security:**
+
 - Require password confirmation
 - Prevent deletion of last administrator (if user is admin)
 - Delete all associated data (characters, etc.)
@@ -512,6 +555,7 @@ app/settings/
 ### Storage Strategy
 
 **User Preferences:**
+
 - **Phase 1:** Store in localStorage (client-side only)
 - **Phase 2:** Add `preferences` field to User type, sync to server
 - **Phase 3:** Full server-side preference management
@@ -519,7 +563,6 @@ app/settings/
 **Rationale:** Start simple with localStorage, add server sync when needed for multi-device support.
 
 ---
-
 
 ## Security Considerations
 
@@ -605,10 +648,12 @@ app/settings/
 ## Change Log
 
 ### 2025-01-27
+
 - Initial specification created
 - Documents current settings page implementation
 
 ### 2025-12-17
+
 - Confirmed full implementation of MVP features
 - Verified account updates, password changes, and data export functionality
 - Updated status to "Fully Implemented"
@@ -641,7 +686,8 @@ app/settings/
 
 **Priority:** Medium-High  
 **Estimated Effort:** 4-5 days  
-**Dependencies:** 
+**Dependencies:**
+
 - User update API endpoints (some exist, some need creation)
 - Password change API endpoint (needs creation)
 - Export/import API endpoints (need creation)
@@ -659,4 +705,3 @@ This feature is important for user autonomy and data management. While not criti
 - Future: Consider adding user feedback/support links in settings
 - Integration with campaign management (future): Allow users to set default campaign preferences
 - Consider adding a "Profile" page separate from Settings for public-facing profile information (future)
-

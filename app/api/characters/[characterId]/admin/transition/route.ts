@@ -9,10 +9,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { requireAdmin } from "@/lib/auth/middleware";
-import {
-  getCharacterById,
-  updateCharacter,
-} from "@/lib/storage/characters";
+import { getCharacterById, updateCharacter } from "@/lib/storage/characters";
 import {
   executeTransition,
   validateCharacterComplete,
@@ -70,10 +67,7 @@ export async function POST(
     // Get character (admin can access any character)
     const character = await getCharacterById(characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // For draft -> active, run validation first to show errors even if skipping
@@ -83,13 +77,16 @@ export async function POST(
 
       // If validation fails and not skipping, return errors
       if (!validationResult.valid && !skipValidation) {
-        return NextResponse.json({
-          success: false,
-          error: "Character validation failed",
-          errors: validationResult.errors,
-          warnings: validationResult.warnings,
-          canOverride: true, // Tell UI that admin can override
-        }, { status: 400 });
+        return NextResponse.json(
+          {
+            success: false,
+            error: "Character validation failed",
+            errors: validationResult.errors,
+            warnings: validationResult.warnings,
+            canOverride: true, // Tell UI that admin can override
+          },
+          { status: 400 }
+        );
       }
     }
 
@@ -103,21 +100,20 @@ export async function POST(
     const result = await executeTransition(character, targetStatus, context);
 
     if (!result.success) {
-      return NextResponse.json({
-        success: false,
-        error: "Status transition failed",
-        errors: result.errors,
-        warnings: result.warnings,
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Status transition failed",
+          errors: result.errors,
+          warnings: result.warnings,
+        },
+        { status: 400 }
+      );
     }
 
     // Save the updated character
     // The state machine returns an updated character with new status and audit entry
-    const savedCharacter = await updateCharacter(
-      character.ownerId,
-      characterId,
-      result.character!
-    );
+    const savedCharacter = await updateCharacter(character.ownerId, characterId, result.character!);
 
     // Log to admin audit trail (separate from character audit)
     await createUserAuditEntry({
@@ -149,10 +145,7 @@ export async function POST(
   } catch (error) {
     // Handle auth errors from requireAdmin()
     if (error instanceof Error && error.message.includes("required")) {
-      return NextResponse.json(
-        { success: false, error: error.message },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: error.message }, { status: 403 });
     }
 
     console.error("Admin status transition failed:", error);
@@ -184,10 +177,7 @@ export async function GET(
     // Get character
     const character = await getCharacterById(characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Define all possible transitions for admin (bidirectional)
@@ -250,10 +240,7 @@ export async function GET(
     });
   } catch (error) {
     if (error instanceof Error && error.message.includes("required")) {
-      return NextResponse.json(
-        { success: false, error: error.message },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: error.message }, { status: 403 });
     }
 
     console.error("Failed to get transitions:", error);

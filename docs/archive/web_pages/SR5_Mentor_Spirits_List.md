@@ -1,49 +1,49 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
-| NAME | SIMILAR ARCHETYPES | SOURCE |
-| --- | --- | --- |
-| **Adversary** | Chaos, Anarchy | SR5:HT |
-| **Alligator** | Crocodile, Sloth, Greed | SR5:HS |
-| **Bear** | Strength, Protection | Core |
-| **Berserker** | Warrior, Warmonger | SR5:SG |
-| **Bat** | Wanderer | SR5:HT |
-| **Boar** |  | SR5:HS |
-| **Cat** | Mystery, Stealth | Core |
-| **Chaos** | Trickster, Troublemaker | SR5:SG |
-| **Dog** | Friendship, Loyalty | Core |
-| **Dolphin** |  | SR5:HS |
-| **Dragonslayer** | Heroism, Adventure | Core |
-| **Eagle** | Nature, Warding | Core |
-| **Fire-bringer** | Invention, Generosity | Core |
-| **Giraffe** |  | SR5:HS |
-| **Horse** |  | SR5:HS |
-| **Monkey** |  | SR5:HT |
-| **Mountain** | Endurance, Stubbornness | Core |
-| **Oracle** | Teacher, Mystic | SR5:SG |
-| **Peacemaker** | Mediator, Pacifist | SR5:SG |
-| **Raccoon** |  | SR5:HS |
-| **Rat** | Survival, Scavenging | Core |
-| **Raven** | Deception, Mischief | Core |
-| **Sea** | Chaos, Greed | Core |
-| **Seducer** | Seductress, Temptation | Core |
-| **Shark** | Hunger, Violence | Core |
-| **Snake** | Knowledge, Curiosity | Core |
-| **Spider** |  | SR5:HS |
-| **Thunderbird** | Anger, War | Core |
-| **Whale** |  | SR5:HS |
-| **Wise Warrior** | Duty, Wisdom | Core |
-| **Wolf** | Hunting, Fellowship | Core |
-| **Doom(TOXIC)** | Destroyer, Reaper | SR5:SG |
-| **Disease(TOXIC)** | Pestilent Rat, Contagion | SR5:SG |
-| **Mutation(TOXIC)** | Mutant Beast, Dark Darwinist | SR5:SG |
-| **Pollution(TOXIC)** |  | SR5:SG |
+| NAME                 | SIMILAR ARCHETYPES           | SOURCE |
+| -------------------- | ---------------------------- | ------ |
+| **Adversary**        | Chaos, Anarchy               | SR5:HT |
+| **Alligator**        | Crocodile, Sloth, Greed      | SR5:HS |
+| **Bear**             | Strength, Protection         | Core   |
+| **Berserker**        | Warrior, Warmonger           | SR5:SG |
+| **Bat**              | Wanderer                     | SR5:HT |
+| **Boar**             |                              | SR5:HS |
+| **Cat**              | Mystery, Stealth             | Core   |
+| **Chaos**            | Trickster, Troublemaker      | SR5:SG |
+| **Dog**              | Friendship, Loyalty          | Core   |
+| **Dolphin**          |                              | SR5:HS |
+| **Dragonslayer**     | Heroism, Adventure           | Core   |
+| **Eagle**            | Nature, Warding              | Core   |
+| **Fire-bringer**     | Invention, Generosity        | Core   |
+| **Giraffe**          |                              | SR5:HS |
+| **Horse**            |                              | SR5:HS |
+| **Monkey**           |                              | SR5:HT |
+| **Mountain**         | Endurance, Stubbornness      | Core   |
+| **Oracle**           | Teacher, Mystic              | SR5:SG |
+| **Peacemaker**       | Mediator, Pacifist           | SR5:SG |
+| **Raccoon**          |                              | SR5:HS |
+| **Rat**              | Survival, Scavenging         | Core   |
+| **Raven**            | Deception, Mischief          | Core   |
+| **Sea**              | Chaos, Greed                 | Core   |
+| **Seducer**          | Seductress, Temptation       | Core   |
+| **Shark**            | Hunger, Violence             | Core   |
+| **Snake**            | Knowledge, Curiosity         | Core   |
+| **Spider**           |                              | SR5:HS |
+| **Thunderbird**      | Anger, War                   | Core   |
+| **Whale**            |                              | SR5:HS |
+| **Wise Warrior**     | Duty, Wisdom                 | Core   |
+| **Wolf**             | Hunting, Fellowship          | Core   |
+| **Doom(TOXIC)**      | Destroyer, Reaper            | SR5:SG |
+| **Disease(TOXIC)**   | Pestilent Rat, Contagion     | SR5:SG |
+| **Mutation(TOXIC)**  | Mutant Beast, Dark Darwinist | SR5:SG |
+| **Pollution(TOXIC)** |                              | SR5:SG |
 
 ## THE DARKER SIDE OF MENTOR SPIRITS
 

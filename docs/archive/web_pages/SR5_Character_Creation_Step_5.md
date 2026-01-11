@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |
@@ -29,11 +29,11 @@ Skills are broken down into three types: Active, Knowledge, and Language skills.
 
 ## WHAT THE NUMBERS MEAN
 
-| COMMON KNOWLEDGE SKILLS IN 2075 | UNCOMMON KNOWLEDGE SKILL |
-| --- | --- |
+| COMMON KNOWLEDGE SKILLS IN 2075                                                                                                                                                                    | UNCOMMON KNOWLEDGE SKILL                                                                        |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- |
 | Chemistry Organized Crime Magic Groups [City] Knowledge Dragons Street Gang Identification Parazoology Corporate Politics Vices National Politics Wilderness Survival Magical Theory Magic Threats | Black Market Pipelines Smugglers Runner Hangouts Mr. Johnsons Corporate Security Fixers Riggers |
-| COMMON LANGUAGES IN 2075 | UNCOMMON LANGUAGES |
-| Spanish Lakota Dakota Diné (Navajo) Russian French Italian German Aztlaner Spanish | Sperethiel (elven language) Or’zet (ork language) English Japanese Mandarin |
+| COMMON LANGUAGES IN 2075                                                                                                                                                                           | UNCOMMON LANGUAGES                                                                              |
+| Spanish Lakota Dakota Diné (Navajo) Russian French Italian German Aztlaner Spanish                                                                                                                 | Sperethiel (elven language) Or’zet (ork language) English Japanese Mandarin                     |
 
 The first number in the skills column is the number of skill points a character has to spend on individual skills. These skill points are generally used to purchase Active skills, though they can be used for Knowledge and Language skills too (see below). If you don’t get exactly the skill ratings you want in this step, remember that skills may also be raised with Karma at the end of character creation. In this step, it only takes one skill priority point to either acquire a new skill or raise a skill rating by 1.
 

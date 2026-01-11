@@ -36,7 +36,7 @@ export async function GET(
   try {
     const { editionCode } = await params;
     const { searchParams } = new URL(request.url);
-    
+
     const category = searchParams.get("category") as ContentCategoryType | null;
     const limit = Math.min(parseInt(searchParams.get("limit") || "20"), 100);
     const offset = parseInt(searchParams.get("offset") || "0");
@@ -53,7 +53,10 @@ export async function GET(
     // Validate category if provided
     if (category && !VALID_CATEGORIES.includes(category)) {
       return NextResponse.json(
-        { success: false, error: `Invalid category: ${category}. Valid options: ${VALID_CATEGORIES.join(", ")}` },
+        {
+          success: false,
+          error: `Invalid category: ${category}. Valid options: ${VALID_CATEGORIES.join(", ")}`,
+        },
         { status: 400 }
       );
     }
@@ -67,7 +70,9 @@ export async function GET(
       const sourceBook = payload.meta.title;
 
       if (!category || category === "metatypes") {
-        const metatypesPayload = modules.metatypes?.payload as { metatypes?: Array<{ id: string; name: string; description?: string }> } | undefined;
+        const metatypesPayload = modules.metatypes?.payload as
+          | { metatypes?: Array<{ id: string; name: string; description?: string }> }
+          | undefined;
         if (metatypesPayload?.metatypes) {
           for (const item of metatypesPayload.metatypes) {
             allItems.push({
@@ -82,7 +87,9 @@ export async function GET(
       }
 
       if (!category || category === "skills") {
-        const skillsPayload = modules.skills?.payload as { activeSkills?: Array<{ id: string; name: string; linkedAttribute?: string }> } | undefined;
+        const skillsPayload = modules.skills?.payload as
+          | { activeSkills?: Array<{ id: string; name: string; linkedAttribute?: string }> }
+          | undefined;
         if (skillsPayload?.activeSkills) {
           for (const item of skillsPayload.activeSkills) {
             allItems.push({
@@ -97,10 +104,12 @@ export async function GET(
       }
 
       if (!category || category === "qualities") {
-        const qualitiesPayload = modules.qualities?.payload as { 
-          positive?: Array<{ id: string; name: string; description?: string }>; 
-          negative?: Array<{ id: string; name: string; description?: string }>; 
-        } | undefined;
+        const qualitiesPayload = modules.qualities?.payload as
+          | {
+              positive?: Array<{ id: string; name: string; description?: string }>;
+              negative?: Array<{ id: string; name: string; description?: string }>;
+            }
+          | undefined;
         if (qualitiesPayload) {
           for (const item of qualitiesPayload.positive || []) {
             allItems.push({
@@ -129,7 +138,9 @@ export async function GET(
         const gearPayload = modules.gear?.payload as Record<string, unknown> | undefined;
         if (gearPayload) {
           // Extract weapons (nested object with categories)
-          const weapons = gearPayload.weapons as Record<string, Array<{ id?: string; name: string; damage?: string }>> | undefined;
+          const weapons = gearPayload.weapons as
+            | Record<string, Array<{ id?: string; name: string; damage?: string }>>
+            | undefined;
           if (weapons && typeof weapons === "object") {
             for (const [weaponCategory, weaponList] of Object.entries(weapons)) {
               if (Array.isArray(weaponList)) {
@@ -149,7 +160,11 @@ export async function GET(
           // Extract armor (can be array or nested object)
           const armor = gearPayload.armor;
           if (Array.isArray(armor)) {
-            for (const item of armor as Array<{ id?: string; name: string; armorRating?: number }>) {
+            for (const item of armor as Array<{
+              id?: string;
+              name: string;
+              armorRating?: number;
+            }>) {
               allItems.push({
                 id: item.id || item.name.toLowerCase().replace(/\s+/g, "-"),
                 name: item.name,
@@ -162,7 +177,11 @@ export async function GET(
             // Handle nested armor categories
             for (const [, armorList] of Object.entries(armor as Record<string, unknown>)) {
               if (Array.isArray(armorList)) {
-                for (const item of armorList as Array<{ id?: string; name: string; armorRating?: number }>) {
+                for (const item of armorList as Array<{
+                  id?: string;
+                  name: string;
+                  armorRating?: number;
+                }>) {
                   allItems.push({
                     id: item.id || item.name.toLowerCase().replace(/\s+/g, "-"),
                     name: item.name,
@@ -196,9 +215,6 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to fetch content:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to fetch content" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to fetch content" }, { status: 500 });
   }
 }

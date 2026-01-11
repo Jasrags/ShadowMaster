@@ -17,18 +17,16 @@ import { getDynamicState, updateDynamicState } from "../dynamic-state";
  * @param allergen - Allergen to check against
  * @returns Whether character is exposed
  */
-export function checkExposure(
-  character: Character,
-  allergyId: string,
-  allergen: string
-): boolean {
+export function checkExposure(character: Character, allergyId: string, allergen: string): boolean {
   const state = getDynamicState(character, allergyId);
   if (state?.type !== "allergy") {
     return false;
   }
 
   const allergyState = state.state as AllergyState;
-  return allergyState.allergen.toLowerCase() === allergen.toLowerCase() && allergyState.currentlyExposed;
+  return (
+    allergyState.allergen.toLowerCase() === allergen.toLowerCase() && allergyState.currentlyExposed
+  );
 }
 
 /**
@@ -67,10 +65,7 @@ export function beginExposure(
  * @param allergyId - Quality ID for the allergy
  * @returns Updated character (does not persist)
  */
-export function endExposure(
-  character: Character,
-  allergyId: string
-): Character {
+export function endExposure(character: Character, allergyId: string): Character {
   const state = getDynamicState(character, allergyId);
   if (state?.type !== "allergy") {
     return character;
@@ -78,7 +73,9 @@ export function endExposure(
 
   const allergyState = state.state as AllergyState;
   const exposureDuration = allergyState.exposureStartTime
-    ? Math.floor((new Date().getTime() - new Date(allergyState.exposureStartTime).getTime()) / 1000 / 60) // minutes
+    ? Math.floor(
+        (new Date().getTime() - new Date(allergyState.exposureStartTime).getTime()) / 1000 / 60
+      ) // minutes
     : 0;
 
   const updatedState: Partial<AllergyState> = {
@@ -97,10 +94,7 @@ export function endExposure(
  * @param allergyId - Quality ID for the allergy
  * @returns Penalty dice based on severity and exposure
  */
-export function calculateAllergyPenalties(
-  character: Character,
-  allergyId: string
-): number {
+export function calculateAllergyPenalties(character: Character, allergyId: string): number {
   const state = getDynamicState(character, allergyId);
   if (state?.type !== "allergy") {
     return 0;
@@ -166,4 +160,3 @@ export function applyAllergyDamage(
 
   return damage;
 }
-

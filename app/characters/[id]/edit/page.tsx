@@ -48,9 +48,7 @@ export default function ResumeCharacterPage({ params }: { params: Promise<{ id: 
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
-          <span className="text-sm text-zinc-500">
-            Loading character...
-          </span>
+          <span className="text-sm text-zinc-500">Loading character...</span>
         </div>
       </div>
     );

@@ -41,11 +41,7 @@ export function validateTraditionEligibility(
 
   // Check magical path supports traditions
   const magicalPath = character.magicalPath;
-  const pathsSupportingTraditions = [
-    "full-mage",
-    "aspected-mage",
-    "mystic-adept",
-  ];
+  const pathsSupportingTraditions = ["full-mage", "aspected-mage", "mystic-adept"];
 
   if (!magicalPath) {
     errors.push({
@@ -135,9 +131,7 @@ export function getDrainAttributes(
  * @param tradition - The tradition data
  * @returns Spirit type mappings for each spell category
  */
-export function getTraditionSpiritTypes(
-  tradition: TraditionData
-): TraditionSpiritTypes {
+export function getTraditionSpiritTypes(tradition: TraditionData): TraditionSpiritTypes {
   return tradition.spiritTypes;
 }
 
@@ -429,10 +423,7 @@ export function canSummonSpirits(character: Partial<Character>): boolean {
 /**
  * Get attribute value from character, handling various attribute key formats
  */
-function getAttributeValue(
-  character: Partial<Character>,
-  attrCode: string
-): number | undefined {
+function getAttributeValue(character: Partial<Character>, attrCode: string): number | undefined {
   const normalizedCode = attrCode.toLowerCase();
 
   // Check regular attributes
@@ -475,8 +466,6 @@ export function findTradition(
 /**
  * Get all available traditions from ruleset
  */
-export function getAvailableTraditions(
-  ruleset: LoadedRuleset
-): TraditionData[] {
+export function getAvailableTraditions(ruleset: LoadedRuleset): TraditionData[] {
   return extractTraditions(ruleset);
 }

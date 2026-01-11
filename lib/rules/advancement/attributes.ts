@@ -93,18 +93,12 @@ export function advanceAttribute(
   const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
 
   // Validate advancement (including downtime limits if applicable)
-  const validation = validateAttributeAdvancement(
-    character,
-    attributeId,
-    newRating,
-    ruleset,
-    {
-      downtimePeriodId: options.downtimePeriodId,
-      campaignEvents: options.campaignEvents,
-      settings: options.settings,
-      ruleset: advancementRules,
-    }
-  );
+  const validation = validateAttributeAdvancement(character, attributeId, newRating, ruleset, {
+    downtimePeriodId: options.downtimePeriodId,
+    campaignEvents: options.campaignEvents,
+    settings: options.settings,
+    ruleset: advancementRules,
+  });
   if (!validation.valid) {
     throw new Error(
       `Cannot advance attribute: ${validation.errors.map((e) => e.message).join(", ")}`
@@ -151,7 +145,9 @@ export function advanceAttribute(
   let trainingPeriod: TrainingPeriod | undefined;
   if (trainingTime > 0) {
     const trainingPeriodId = uuidv4();
-    const expectedCompletionDate = new Date(Date.now() + trainingTime * 24 * 60 * 60 * 1000).toISOString();
+    const expectedCompletionDate = new Date(
+      Date.now() + trainingTime * 24 * 60 * 60 * 1000
+    ).toISOString();
 
     trainingPeriod = {
       id: trainingPeriodId,
@@ -189,4 +185,3 @@ export function advanceAttribute(
     updatedCharacter,
   };
 }
-

@@ -203,7 +203,9 @@ export function CallFavorModal({
                 <div className="flex items-center gap-4 p-3 bg-muted/50 rounded">
                   <div className="text-center">
                     <div className="text-[10px] text-muted-foreground uppercase">Connection</div>
-                    <div className={`text-xl font-bold ${t.colors.accent}`}>{contact.connection}</div>
+                    <div className={`text-xl font-bold ${t.colors.accent}`}>
+                      {contact.connection}
+                    </div>
                   </div>
                   <div className="text-center">
                     <div className="text-[10px] text-muted-foreground uppercase">Loyalty</div>
@@ -216,8 +218,8 @@ export function CallFavorModal({
                         contact.favorBalance > 0
                           ? "text-emerald-400"
                           : contact.favorBalance < 0
-                          ? "text-amber-400"
-                          : "text-muted-foreground"
+                            ? "text-amber-400"
+                            : "text-muted-foreground"
                       }`}
                     >
                       {contact.favorBalance > 0 ? "+" : ""}
@@ -262,7 +264,9 @@ export function CallFavorModal({
                   <div className={`p-4 rounded border ${t.colors.border} space-y-3`}>
                     <div>
                       <div className="font-bold text-foreground">{selectedService.name}</div>
-                      <div className="text-sm text-muted-foreground">{selectedService.description}</div>
+                      <div className="text-sm text-muted-foreground">
+                        {selectedService.description}
+                      </div>
                     </div>
 
                     {/* Risk Level */}
@@ -389,7 +393,9 @@ export function CallFavorModal({
               </div>
 
               {/* Footer */}
-              <div className={`flex items-center justify-end gap-3 p-4 border-t ${t.colors.border}`}>
+              <div
+                className={`flex items-center justify-end gap-3 p-4 border-t ${t.colors.border}`}
+              >
                 <Button
                   type="button"
                   onPress={close}

@@ -143,20 +143,20 @@ Walkthroughs are proof-of-work documents that audit existing implementations aga
 
 **Location:** `/docs/capabilities/walkthroughs/`
 
-| Capability | Walkthrough |
-| ---------- | ----------- |
-| character.advancement | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.advancement_walkthrough.md) |
-| character.quality-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.quality-governance_walkthrough.md) |
-| campaign.management | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.management_walkthrough.md) |
+| Capability                      | Walkthrough                                                                                                                                 |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| character.advancement           | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.advancement_walkthrough.md)           |
+| character.quality-governance    | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/character.quality-governance_walkthrough.md)    |
+| campaign.management             | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.management_walkthrough.md)             |
 | campaign.participant-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.participant-governance_walkthrough.md) |
-| campaign.location-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.location-governance_walkthrough.md) |
-| campaign.governance-approval | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.governance-approval_walkthrough.md) |
-| mechanics.encounter-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.encounter-governance_walkthrough.md) |
-| mechanics.weapon-customization | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.weapon-customization_walkthrough.md) |
-| ruleset.discovery | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.discovery_walkthrough.md) |
-| ruleset.integrity | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.integrity_walkthrough.md) |
-| security.account-security | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-security_walkthrough.md) |
-| security.account-governance | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-governance_walkthrough.md) |
+| campaign.location-governance    | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.location-governance_walkthrough.md)    |
+| campaign.governance-approval    | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/campaign.governance-approval_walkthrough.md)    |
+| mechanics.encounter-governance  | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.encounter-governance_walkthrough.md)  |
+| mechanics.weapon-customization  | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/mechanics.weapon-customization_walkthrough.md)  |
+| ruleset.discovery               | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.discovery_walkthrough.md)               |
+| ruleset.integrity               | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/ruleset.integrity_walkthrough.md)               |
+| security.account-security       | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-security_walkthrough.md)       |
+| security.account-governance     | [walkthrough](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/walkthroughs/security.account-governance_walkthrough.md)     |
 
 ---
 

@@ -91,15 +91,10 @@ export function advanceSpecialization(
   const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
 
   // Validate advancement
-  const validation = validateSpecializationAdvancement(
-    character,
-    skillId,
-    ruleset,
-    {
-      settings: options.settings,
-      ruleset: advancementRules,
-    }
-  );
+  const validation = validateSpecializationAdvancement(character, skillId, ruleset, {
+    settings: options.settings,
+    ruleset: advancementRules,
+  });
   if (!validation.valid) {
     throw new Error(
       `Cannot learn specialization: ${validation.errors.map((e) => e.message).join(", ")}`
@@ -121,16 +116,12 @@ export function advanceSpecialization(
   }
 
   // Calculate training time
-  const trainingTime = calculateAdvancementTrainingTime(
-    "specialization",
-    undefined,
-    {
-      instructorBonus: options.instructorBonus,
-      timeModifier: options.timeModifier,
-      settings: options.settings,
-      ruleset: advancementRules,
-    }
-  );
+  const trainingTime = calculateAdvancementTrainingTime("specialization", undefined, {
+    instructorBonus: options.instructorBonus,
+    timeModifier: options.timeModifier,
+    settings: options.settings,
+    ruleset: advancementRules,
+  });
 
   const skillDisplayName = getSkillDisplayName(skillId, ruleset);
 
@@ -160,7 +151,9 @@ export function advanceSpecialization(
   let trainingPeriod: TrainingPeriod | undefined;
   if (trainingTime > 0) {
     const trainingPeriodId = uuidv4();
-    const expectedCompletionDate = new Date(Date.now() + trainingTime * 24 * 60 * 60 * 1000).toISOString();
+    const expectedCompletionDate = new Date(
+      Date.now() + trainingTime * 24 * 60 * 60 * 1000
+    ).toISOString();
 
     trainingPeriod = {
       id: trainingPeriodId,
@@ -198,4 +191,3 @@ export function advanceSpecialization(
     updatedCharacter,
   };
 }
-

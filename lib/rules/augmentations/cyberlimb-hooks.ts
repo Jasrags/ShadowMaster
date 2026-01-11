@@ -14,10 +14,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import type { CyberwareGrade } from "@/lib/types";
-import type {
-  CyberlimbLocation,
-  CyberlimbEnhancementType,
-} from "@/lib/types/cyberlimb";
+import type { CyberlimbLocation, CyberlimbEnhancementType } from "@/lib/types/cyberlimb";
 
 // =============================================================================
 // TYPES
@@ -289,9 +286,7 @@ export function useCharacterCyberlimbs(characterId: string | null): CyberlimbsSt
     setState((prev) => ({ ...prev, loading: true, error: null }));
 
     try {
-      const response = await fetch(
-        `/api/characters/${characterId}/augmentations/cyberlimbs`
-      );
+      const response = await fetch(`/api/characters/${characterId}/augmentations/cyberlimbs`);
       const data = await response.json();
 
       if (!response.ok || !data.success) {
@@ -384,14 +379,11 @@ export function useInstallCyberlimb(characterId: string | null): {
       setState({ data: null, loading: true, error: null });
 
       try {
-        const response = await fetch(
-          `/api/characters/${characterId}/augmentations/cyberlimbs`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(request),
-          }
-        );
+        const response = await fetch(`/api/characters/${characterId}/augmentations/cyberlimbs`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(request),
+        });
 
         const data: InstallCyberlimbResult = await response.json();
 

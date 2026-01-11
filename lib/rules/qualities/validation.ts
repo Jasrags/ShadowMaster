@@ -136,10 +136,7 @@ export function validatePrerequisites(
   }
 
   // Check required any qualities (must have at least one)
-  if (
-    prerequisites.requiredAnyQualities &&
-    prerequisites.requiredAnyQualities.length > 0
-  ) {
+  if (prerequisites.requiredAnyQualities && prerequisites.requiredAnyQualities.length > 0) {
     const hasAny = prerequisites.requiredAnyQualities.some((reqQuality) =>
       characterHasQuality(character, reqQuality)
     );
@@ -168,11 +165,7 @@ export function checkIncompatibilities(
   const characterQualityIds = getAllQualityIds(character);
 
   for (const incompatibleId of quality.incompatibilities) {
-    if (
-      characterQualityIds.some(
-        (id) => id.toLowerCase() === incompatibleId.toLowerCase()
-      )
-    ) {
+    if (characterQualityIds.some((id) => id.toLowerCase() === incompatibleId.toLowerCase())) {
       return {
         allowed: false,
         reason: `Incompatible with: ${incompatibleId}`,
@@ -337,4 +330,3 @@ export function validateAllQualities(
     errors,
   };
 }
-

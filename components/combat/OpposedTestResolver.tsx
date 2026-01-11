@@ -191,7 +191,8 @@ function PoolDisplay({
 
   // Generate dice array for display
   const diceCount = pool.totalDice;
-  const diceResults = result?.dice || Array(diceCount).fill({ value: 1, isHit: false, isOne: false });
+  const diceResults =
+    result?.dice || Array(diceCount).fill({ value: 1, isHit: false, isOne: false });
 
   return (
     <div className={`flex-1 rounded-lg border ${borderColor} ${bgColor} ${s.padding}`}>
@@ -225,7 +226,9 @@ function PoolDisplay({
           {pool.breakdown.modifiers?.map((mod, i) => (
             <div key={i} className="flex justify-between">
               <span>{mod.name}</span>
-              <span className={`font-mono ${mod.value >= 0 ? "text-emerald-400" : "text-rose-400"}`}>
+              <span
+                className={`font-mono ${mod.value >= 0 ? "text-emerald-400" : "text-rose-400"}`}
+              >
                 {mod.value >= 0 ? "+" : ""}
                 {mod.value}
               </span>
@@ -246,9 +249,7 @@ function PoolDisplay({
           />
         ))}
         {diceCount > 20 && (
-          <div className={`${s.text} text-zinc-500 self-center ml-2`}>
-            +{diceCount - 20} more
-          </div>
+          <div className={`${s.text} text-zinc-500 self-center ml-2`}>+{diceCount - 20} more</div>
         )}
       </div>
 

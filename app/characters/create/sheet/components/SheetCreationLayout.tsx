@@ -17,18 +17,12 @@
  */
 
 import { useMemo } from "react";
+import dynamic from "next/dynamic";
 import { useCreationBudgets } from "@/lib/contexts";
 import type { CreationState, Campaign } from "@/lib/types";
-import {
-  CheckCircle2,
-  AlertCircle,
-  AlertTriangle,
-  Loader2,
-  Clock,
-  Save,
-} from "lucide-react";
+import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, Clock, Save } from "lucide-react";
 
-// Phase 2, 3, 4, 5 & 6 Components
+// Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
   PrioritySelectionCard,
   MetatypeCard,
@@ -37,10 +31,6 @@ import {
   KnowledgeLanguagesCard,
   QualitiesCard,
   MagicPathCard,
-  SpellsCard,
-  AdeptPowersCard,
-  ComplexFormsCard,
-  FociCard,
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
@@ -51,6 +41,41 @@ import {
   CharacterInfoCard,
   DerivedStatsCard,
 } from "@/components/creation";
+
+// Dynamic imports for conditional cards (code splitting)
+import { CardSkeleton } from "@/components/creation/shared";
+
+const SpellsCard = dynamic(
+  () => import("@/components/creation/SpellsCard").then((mod) => mod.SpellsCard),
+  {
+    loading: () => <CardSkeleton title="Spells" rows={4} />,
+    ssr: false,
+  }
+);
+
+const AdeptPowersCard = dynamic(
+  () => import("@/components/creation/AdeptPowersCard").then((mod) => mod.AdeptPowersCard),
+  {
+    loading: () => <CardSkeleton title="Adept Powers" rows={4} />,
+    ssr: false,
+  }
+);
+
+const ComplexFormsCard = dynamic(
+  () => import("@/components/creation/ComplexFormsCard").then((mod) => mod.ComplexFormsCard),
+  {
+    loading: () => <CardSkeleton title="Complex Forms" rows={4} />,
+    ssr: false,
+  }
+);
+
+const FociCard = dynamic(
+  () => import("@/components/creation/foci/FociCard").then((mod) => mod.FociCard),
+  {
+    loading: () => <CardSkeleton title="Foci" rows={4} />,
+    ssr: false,
+  }
+);
 
 // =============================================================================
 // TYPES
@@ -101,12 +126,8 @@ function PlaceholderCard({
     >
       <div className="flex items-start justify-between">
         <div>
-          <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-            {title}
-          </h3>
-          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            {description}
-          </p>
+          <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h3>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{description}</p>
         </div>
         {statusIcons[status]}
       </div>
@@ -146,15 +167,25 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
 
   const budgetList = useMemo(
     () =>
-      Object.entries(budgets).map(([id, budget]) => ({
-        id,
-        ...budget,
-      })),
+      Object.entries(budgets)
+        // Hide budgets with 0 total that aren't relevant for this character
+        .filter(([id, budget]) => {
+          // Always hide special-attribute-points and skill-group-points if total is 0
+          if (id === "special-attribute-points" && budget.total === 0) return false;
+          if (id === "skill-group-points" && budget.total === 0) return false;
+          return true;
+        })
+        .map(([id, budget]) => ({
+          id,
+          ...budget,
+        })),
     [budgets]
   );
 
   // Generate contextual notes for each budget
-  const getNote = (budgetId: string): { text: string; style: "info" | "warning" | "error" } | null => {
+  const getNote = (
+    budgetId: string
+  ): { text: string; style: "info" | "warning" | "error" } | null => {
     switch (budgetId) {
       case "karma":
         // Show breakdown if karma is being used for gear or contacts
@@ -165,7 +196,10 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           };
         }
         if (karmaSpentGear > 0) {
-          return { text: `${karmaSpentGear} converted to ${(karmaSpentGear * 2000).toLocaleString()}¥`, style: "info" };
+          return {
+            text: `${karmaSpentGear} converted to ${(karmaSpentGear * 2000).toLocaleString()}¥`,
+            style: "info",
+          };
         }
         if (karmaSpentContacts > 0) {
           return { text: `${karmaSpentContacts} for extra contacts`, style: "info" };
@@ -207,9 +241,7 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center justify-between">
-        <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-          Budget Summary
-        </h3>
+        <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Budget Summary</h3>
         {isValid ? (
           <span className="flex items-center gap-1 text-xs text-emerald-600 dark:text-emerald-400">
             <CheckCircle2 className="h-3.5 w-3.5" />
@@ -232,9 +264,10 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           budgetList.map((budget) => {
             const barColor = getBudgetBarColor(budget);
             const textColor = getBudgetTextColor(budget);
-            const percentSpent = budget.total > 0
-              ? Math.min(100, Math.max(0, (budget.spent / budget.total) * 100))
-              : 0;
+            const percentSpent =
+              budget.total > 0
+                ? Math.min(100, Math.max(0, (budget.spent / budget.total) * 100))
+                : 0;
             const note = getNote(budget.id);
             const hasOverflow = budget.spent > budget.total;
 
@@ -242,16 +275,15 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
               <div key={budget.id}>
                 {/* Label and values: "X spent • Y left" */}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-zinc-600 dark:text-zinc-400">
-                    {budget.label}
-                  </span>
+                  <span className="text-zinc-600 dark:text-zinc-400">{budget.label}</span>
                   <span className={`font-mono font-medium ${textColor}`}>
                     {formatValue(budget.spent, budget.displayFormat)} spent
                     <span className="font-sans text-zinc-400"> • </span>
                     {formatValue(Math.max(0, budget.remaining), budget.displayFormat)} left
                     {hasOverflow && (
                       <span className="text-red-500">
-                        {" "}(+{formatValue(budget.spent - budget.total, budget.displayFormat)})
+                        {" "}
+                        (+{formatValue(budget.spent - budget.total, budget.displayFormat)})
                       </span>
                     )}
                   </span>
@@ -269,7 +301,8 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
                       className="absolute right-0 top-0 h-full bg-red-500"
                       style={{
                         width: `${Math.min(30, ((budget.spent - budget.total) / budget.total) * 100)}%`,
-                        backgroundImage: "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
+                        backgroundImage:
+                          "repeating-linear-gradient(45deg, transparent, transparent 2px, rgba(0,0,0,0.2) 2px, rgba(0,0,0,0.2) 4px)",
                       }}
                     />
                   )}
@@ -277,13 +310,15 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
 
                 {/* Contextual note */}
                 {note && (
-                  <div className={`mt-0.5 text-xs ${
-                    note.style === "warning"
-                      ? "text-amber-600 dark:text-amber-400"
-                      : note.style === "error"
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-blue-600 dark:text-blue-400"
-                  }`}>
+                  <div
+                    className={`mt-0.5 text-xs ${
+                      note.style === "warning"
+                        ? "text-amber-600 dark:text-amber-400"
+                        : note.style === "error"
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-blue-600 dark:text-blue-400"
+                    }`}
+                  >
                     {note.text}
                   </div>
                 )}
@@ -341,9 +376,7 @@ function ValidationSummary({
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
-      <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
-        Finalize Character
-      </h3>
+      <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Finalize Character</h3>
 
       {/* Save status */}
       <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
@@ -418,7 +451,7 @@ export function SheetCreationLayout({
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       {/* Column 1: Foundation */}
-      <div className="space-y-4">
+      <div className="flex flex-col space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
         <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
           Foundation
         </h2>
@@ -435,18 +468,17 @@ export function SheetCreationLayout({
         {/* Magic Path - Phase 3 */}
         <MagicPathCard state={creationState} updateState={updateState} />
 
-        {/* Budget Summary */}
-        <BudgetSummaryCard creationState={creationState} />
-
         {/* Derived Stats - Phase 6 */}
         <DerivedStatsCard state={creationState} updateState={updateState} />
 
-        {/* Finalize */}
-        <ValidationSummary
-          onFinalize={onFinalize}
-          isSaving={isSaving}
-          lastSaved={lastSaved}
-        />
+        {/* Sticky Budget Section - stays visible while scrolling */}
+        <div className="mt-auto space-y-4 lg:sticky lg:bottom-0 lg:bg-gradient-to-t lg:from-white lg:via-white lg:pt-4 lg:dark:from-zinc-950 lg:dark:via-zinc-950">
+          {/* Budget Summary */}
+          <BudgetSummaryCard creationState={creationState} />
+
+          {/* Finalize */}
+          <ValidationSummary onFinalize={onFinalize} isSaving={isSaving} lastSaved={lastSaved} />
+        </div>
       </div>
 
       {/* Column 2: Stats */}
@@ -465,24 +497,16 @@ export function SheetCreationLayout({
         <QualitiesCard state={creationState} updateState={updateState} />
 
         {/* Spells - Phase 3 (conditional) */}
-        {isMagical && (
-          <SpellsCard state={creationState} updateState={updateState} />
-        )}
+        {isMagical && <SpellsCard state={creationState} updateState={updateState} />}
 
         {/* Adept Powers - Phase 3 (conditional) */}
-        {isAdept && (
-          <AdeptPowersCard state={creationState} updateState={updateState} />
-        )}
+        {isAdept && <AdeptPowersCard state={creationState} updateState={updateState} />}
 
         {/* Foci - Phase 3 (conditional) */}
-        {isMagical && (
-          <FociCard state={creationState} updateState={updateState} />
-        )}
+        {isMagical && <FociCard state={creationState} updateState={updateState} />}
 
         {/* Complex Forms - Phase 3 (conditional) */}
-        {isTechnomancer && (
-          <ComplexFormsCard state={creationState} updateState={updateState} />
-        )}
+        {isTechnomancer && <ComplexFormsCard state={creationState} updateState={updateState} />}
       </div>
 
       {/* Column 3: Abilities & Gear */}

@@ -22,10 +22,7 @@ import {
   rollD6,
   rollDice,
 } from "@/lib/rules/grunts";
-import type {
-  InitiativeResponse,
-  RollInitiativeRequest,
-} from "@/lib/types/grunts";
+import type { InitiativeResponse, RollInitiativeRequest } from "@/lib/types/grunts";
 import type { ID } from "@/lib/types";
 
 /**
@@ -57,18 +54,13 @@ export async function POST(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize GM access
-    const { authorized, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -92,11 +84,7 @@ export async function POST(
     const groupInitiative = rollGroupInitiative(team.baseGrunts, groupDieRoll) + baseModifier;
 
     // Update team state with group initiative
-    await updateGruntTeamState(
-      teamId,
-      { groupInitiative },
-      team.campaignId
-    );
+    await updateGruntTeamState(teamId, { groupInitiative }, team.campaignId);
 
     // If individual initiative requested or we have special units
     if (body.type === "individual" || team.lieutenant || team.specialists?.length) {
@@ -139,7 +127,8 @@ export async function POST(
               // Augmented specialist rolls individual initiative
               // Assume 1 die unless they have augmentations (future: check cyberware)
               const specDieRolls = rollDice(1);
-              const specInit = rollSpecialistInitiative(specialist, team.baseGrunts, specDieRolls) + baseModifier;
+              const specInit =
+                rollSpecialistInitiative(specialist, team.baseGrunts, specDieRolls) + baseModifier;
               specGrunt.initiative = specInit;
               individualInitiatives[specialist.id] = specInit;
             } else {
@@ -158,16 +147,12 @@ export async function POST(
     return NextResponse.json({
       success: true,
       groupInitiative,
-      individualInitiatives: Object.keys(individualInitiatives).length > 0
-        ? individualInitiatives
-        : undefined,
+      individualInitiatives:
+        Object.keys(individualInitiatives).length > 0 ? individualInitiatives : undefined,
     });
   } catch (error) {
     console.error("Roll initiative error:", error);
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

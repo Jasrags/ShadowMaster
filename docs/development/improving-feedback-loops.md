@@ -9,6 +9,7 @@ This document analyzes the current development workflow and provides prioritized
 ### Existing Configuration
 
 **Strengths:**
+
 - ✅ TypeScript strict mode enabled
 - ✅ Incremental compilation enabled (`incremental: true`)
 - ✅ ESLint 9 with flat config
@@ -16,6 +17,7 @@ This document analyzes the current development workflow and provides prioritized
 - ✅ Next.js 16 with built-in type checking
 
 **Gaps:**
+
 - ❌ No dedicated TypeScript type checking in watch mode
 - ❌ No ESLint watch mode
 - ❌ Type errors only discovered on page navigation
@@ -73,11 +75,13 @@ This document analyzes the current development workflow and provides prioritized
 ```
 
 **Benefits**:
+
 - Type errors appear in terminal immediately on save
 - No page navigation required
 - Works across entire codebase, not just imported files
 
 **Tradeoffs**:
+
 - Slightly higher CPU usage (minimal with incremental compilation)
 - Additional terminal process
 
@@ -104,10 +108,12 @@ This document analyzes the current development workflow and provides prioritized
 ```
 
 **Benefits**:
+
 - Lint errors appear immediately on save
 - Prevents committing lint errors
 
 **Tradeoffs**:
+
 - Minimal overhead (ESLint is fast with caching)
 
 **Note**: ESLint 9 supports `--watch` flag natively.
@@ -131,22 +137,17 @@ Create `.vscode/settings.json`:
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  
+
   // ESLint: Auto-fix on save
   "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  
+
   // Show errors in Problems panel
   "problems.showCurrentInStatus": true,
-  
+
   // Fast feedback
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -170,12 +171,14 @@ Create `.vscode/settings.json`:
 ```
 
 **Benefits**:
+
 - Errors visible in editor immediately
 - Auto-fix on save
 - Problems panel shows all errors
 - Works without terminal processes
 
 **Tradeoffs**:
+
 - Requires VS Code (team standardization needed)
 - Slightly higher editor CPU usage (negligible)
 
@@ -197,17 +200,17 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   // ... existing config ...
-  
+
   // Faster type checking in development
   typescript: {
     // Don't block builds on type errors (we have watch mode for that)
     ignoreBuildErrors: false, // Keep false for CI
   },
-  
+
   // Optimize development experience
   experimental: {
     // Faster refresh
-    optimizePackageImports: ['lucide-react', 'react-aria-components'],
+    optimizePackageImports: ["lucide-react", "react-aria-components"],
   },
 };
 ```
@@ -219,22 +222,24 @@ const nextConfig: NextConfig = {
 {
   "compilerOptions": {
     // ... existing options ...
-    
+
     // Performance optimizations
     "skipLibCheck": true, // Already enabled - keep it
-    "incremental": true,   // Already enabled - keep it
-    
+    "incremental": true, // Already enabled - keep it
+
     // Add these for faster checking
-    "assumeChangesOnlyAffectDirectDependencies": true,
+    "assumeChangesOnlyAffectDirectDependencies": true
   }
 }
 ```
 
 **Benefits**:
+
 - Faster type checking in Next.js dev server
 - Better incremental compilation
 
 **Tradeoffs**:
+
 - `assumeChangesOnlyAffectDirectDependencies` can miss some errors (rare)
 
 ---
@@ -263,37 +268,39 @@ const nextConfig: NextConfig = {
 
 ```typescript
 // vitest.config.ts
-import { defineConfig } from 'vitest/config';
-import react from '@vitejs/plugin-react';
-import path from 'path';
+import { defineConfig } from "vitest/config";
+import react from "@vitejs/plugin-react";
+import path from "path";
 
 export default defineConfig({
   plugins: [react()],
   test: {
-    environment: 'jsdom',
-    setupFiles: ['./__tests__/setup.ts'],
+    environment: "jsdom",
+    setupFiles: ["./__tests__/setup.ts"],
     globals: true,
-    include: ['**/*.test.ts', '**/*.test.tsx'],
-    exclude: ['node_modules', '.next', 'e2e'],
+    include: ["**/*.test.ts", "**/*.test.tsx"],
+    exclude: ["node_modules", ".next", "e2e"],
     // Faster watch mode
-    watchExclude: ['**/node_modules/**', '**/.next/**', '**/dist/**'],
+    watchExclude: ["**/node_modules/**", "**/.next/**", "**/dist/**"],
     // Run tests related to changed files
     testTimeout: 5000,
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, './'),
+      "@": path.resolve(__dirname, "./"),
     },
   },
 });
 ```
 
 **Benefits**:
+
 - Tests run automatically on file changes
 - Immediate feedback on test failures
 - Can run in separate terminal or integrated
 
 **Tradeoffs**:
+
 - Higher CPU usage when many tests exist
 - Can be distracting during active development
 
@@ -318,10 +325,7 @@ npx husky init
 // package.json
 {
   "lint-staged": {
-    "*.{ts,tsx}": [
-      "eslint --fix",
-      "prettier --write"
-    ]
+    "*.{ts,tsx}": ["eslint --fix", "prettier --write"]
   },
   "scripts": {
     "prepare": "husky"
@@ -336,11 +340,13 @@ pnpm type-check
 ```
 
 **Benefits**:
+
 - Prevents committing errors
 - Auto-fixes lint issues
 - Fast (only checks staged files)
 
 **Tradeoffs**:
+
 - Adds commit time (usually < 5 seconds)
 - Requires team adoption
 
@@ -379,10 +385,12 @@ pnpm type-check
 ```
 
 **Benefits**:
+
 - 50-80% faster lint runs on subsequent executions
 - Only checks changed files
 
 **Tradeoffs**:
+
 - Requires cache invalidation strategy (usually automatic)
 
 ---
@@ -396,27 +404,19 @@ pnpm type-check
 {
   "compilerOptions": {
     // ... existing ...
-    
+
     // Performance (already have incremental)
     "assumeChangesOnlyAffectDirectDependencies": true,
-    
+
     // Faster resolution
     "moduleResolution": "bundler", // Already set - good
-    
+
     // Reduce work
-    "skipLibCheck": true, // Already set - keep it
+    "skipLibCheck": true // Already set - keep it
   },
-  
+
   // Exclude more if needed
-  "exclude": [
-    "node_modules",
-    ".next",
-    "dist",
-    "build",
-    "**/*.test.ts",
-    "**/*.test.tsx",
-    "e2e"
-  ]
+  "exclude": ["node_modules", ".next", "dist", "build", "**/*.test.ts", "**/*.test.tsx", "e2e"]
 }
 ```
 
@@ -434,6 +434,7 @@ pnpm type-check
 4. ✅ Test workflow
 
 **Commands**:
+
 ```bash
 pnpm add -D concurrently
 # Then update package.json scripts as shown above
@@ -465,12 +466,14 @@ pnpm add -D concurrently
 ### Option A: Terminal-Based Watch Modes (Recommended)
 
 **Pros**:
+
 - Works with any editor
 - Visible to entire team
 - No editor configuration needed
 - Can run in CI/CD
 
 **Cons**:
+
 - Requires terminal management
 - Multiple processes to monitor
 
@@ -481,11 +484,13 @@ pnpm add -D concurrently
 ### Option B: Editor-Only Integration
 
 **Pros**:
+
 - Integrated experience
 - No terminal processes
 - Fast and lightweight
 
 **Cons**:
+
 - Editor-specific (VS Code)
 - Not visible in CI/CD
 - Requires team standardization
@@ -497,12 +502,14 @@ pnpm add -D concurrently
 ### Option C: Hybrid Approach (Recommended)
 
 **Pros**:
+
 - Best of both worlds
 - Editor shows errors immediately
 - Terminal processes catch everything
 - Works in CI/CD
 
 **Cons**:
+
 - Slightly more setup
 - More processes running
 
@@ -546,22 +553,22 @@ pnpm add -D concurrently
 
 ### Strictness vs. Speed
 
-| Approach | Strictness | Speed | Developer Experience |
-|----------|-----------|-------|---------------------|
-| Current (no watch) | High | Slow | Poor |
-| Watch modes | High | Fast | Excellent |
-| Editor-only | High | Fast | Good (if using VS Code) |
-| Hybrid | High | Fast | Excellent |
+| Approach           | Strictness | Speed | Developer Experience    |
+| ------------------ | ---------- | ----- | ----------------------- |
+| Current (no watch) | High       | Slow  | Poor                    |
+| Watch modes        | High       | Fast  | Excellent               |
+| Editor-only        | High       | Fast  | Good (if using VS Code) |
+| Hybrid             | High       | Fast  | Excellent               |
 
 **Recommendation**: Hybrid approach provides best balance.
 
 ### Real-Time vs. On-Demand
 
-| Approach | Feedback Latency | CPU Usage | Setup Complexity |
-|----------|-----------------|-----------|------------------|
-| On-demand (current) | High (seconds to minutes) | Low | Low |
-| Watch modes | Low (< 1 second) | Medium | Medium |
-| Editor integration | Very low (< 100ms) | Low | Low |
+| Approach            | Feedback Latency          | CPU Usage | Setup Complexity |
+| ------------------- | ------------------------- | --------- | ---------------- |
+| On-demand (current) | High (seconds to minutes) | Low       | Low              |
+| Watch modes         | Low (< 1 second)          | Medium    | Medium           |
+| Editor integration  | Very low (< 100ms)        | Low       | Low              |
 
 **Recommendation**: Combine watch modes + editor integration.
 
@@ -596,12 +603,15 @@ pnpm add -D concurrently
 ### Troubleshooting
 
 **Issue**: Watch mode processes consuming too much CPU
+
 - **Solution**: Disable specific watch modes, use editor-only
 
 **Issue**: Type errors not appearing in editor
+
 - **Solution**: Check VS Code TypeScript version, restart TS server
 
 **Issue**: ESLint not auto-fixing
+
 - **Solution**: Check `.vscode/settings.json`, verify ESLint extension installed
 
 ---
@@ -618,6 +628,7 @@ The recommended approach combines:
 This hybrid approach provides the fastest feedback loops while maintaining code quality and team flexibility.
 
 **Expected Impact**:
+
 - ⚡ **90% reduction** in error discovery time
 - 🎯 **Immediate feedback** on save (< 1 second)
 - 🚀 **Faster development** cycles
@@ -635,4 +646,3 @@ This hybrid approach provides the fastest feedback loops while maintaining code 
 - [Next.js TypeScript Configuration](https://nextjs.org/docs/app/building-your-application/configuring/typescript)
 - [VS Code TypeScript Settings](https://code.visualstudio.com/docs/typescript/typescript-compiling)
 - [Vitest Watch Mode](https://vitest.dev/guide/watch-mode.html)
-

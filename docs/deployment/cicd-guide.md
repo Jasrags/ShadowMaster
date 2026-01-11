@@ -15,10 +15,12 @@ The CI/CD pipeline consists of three main workflows:
 ### 1. CI Workflow (`.github/workflows/ci.yml`)
 
 **Triggers**:
+
 - Push to `main` or `develop` branches
 - Pull requests to `main` or `develop` branches
 
 **Jobs**:
+
 - Install dependencies with pnpm
 - Run ESLint checks
 - Build the application
@@ -29,16 +31,19 @@ The CI/CD pipeline consists of three main workflows:
 ### 2. Docker Build Workflow (`.github/workflows/docker-build.yml`)
 
 **Triggers**:
+
 - Push to `main` branch
 - Push of version tags (e.g., `v1.0.0`)
 - Manual workflow dispatch
 
 **Jobs**:
+
 - Build multi-platform Docker images (linux/amd64, linux/arm64)
 - Push images to GitHub Container Registry (GHCR)
 - Generate build summary
 
 **Image Tags**:
+
 - `latest` - Built from main branch
 - `git-<sha>` - Specific commit (e.g., `git-abc1234`)
 - `v1.0.0` - Semantic version from tags
@@ -48,9 +53,11 @@ The CI/CD pipeline consists of three main workflows:
 ### 3. CD Workflow (`.github/workflows/cd.yml`)
 
 **Triggers**:
+
 - Manual workflow dispatch only
 
 **Inputs**:
+
 - **Environment**: development, staging, or production
 - **Image Tag**: Docker image tag to deploy (default: latest)
 
@@ -63,6 +70,7 @@ The CI/CD pipeline consists of three main workflows:
 The workflows use GitHub's built-in `GITHUB_TOKEN`, which is automatically available. No additional secrets are required for GHCR.
 
 **Automatic**:
+
 - `GITHUB_TOKEN` - Provided by GitHub Actions (for GHCR authentication)
 
 ### Recommended: GitHub Environments
@@ -143,14 +151,14 @@ git push origin v1.0.0
 
 ### Tag Types
 
-| Tag | Example | When Used | Purpose |
-|-----|---------|-----------|---------|
-| `latest` | `latest` | Main branch push | Latest stable version |
-| Git SHA | `git-abc1234` | Every build | Exact commit traceability |
-| Semantic | `v1.0.0` | Version tags | Specific releases |
-| Major.Minor | `v1.0` | Version tags | Latest patch version |
-| Major | `v1` | Version tags | Latest in major version |
-| Custom | `beta-1` | Manual dispatch | Special builds |
+| Tag         | Example       | When Used        | Purpose                   |
+| ----------- | ------------- | ---------------- | ------------------------- |
+| `latest`    | `latest`      | Main branch push | Latest stable version     |
+| Git SHA     | `git-abc1234` | Every build      | Exact commit traceability |
+| Semantic    | `v1.0.0`      | Version tags     | Specific releases         |
+| Major.Minor | `v1.0`        | Version tags     | Latest patch version      |
+| Major       | `v1`          | Version tags     | Latest in major version   |
+| Custom      | `beta-1`      | Manual dispatch  | Special builds            |
 
 ### Pull Commands
 
@@ -189,6 +197,7 @@ Recommended branch protection for `main`:
 ### Notifications
 
 Configure notifications:
+
 1. **GitHub Settings** → **Notifications**
 2. Enable **Actions** notifications
 3. Choose email or web notifications
@@ -206,6 +215,7 @@ Add to README.md:
 ### CI Workflow Failures
 
 **Lint errors**:
+
 ```bash
 # Run locally first
 pnpm lint
@@ -215,6 +225,7 @@ pnpm lint --fix
 ```
 
 **Build errors**:
+
 ```bash
 # Test build locally
 pnpm build
@@ -226,20 +237,24 @@ pnpm build --debug
 ### Docker Build Failures
 
 **Build context too large**:
+
 - Verify `.dockerignore` is working
 - Check for large files in repository
 
 **Multi-platform build issues**:
+
 - Ensure Docker Buildx is available (handled by workflow)
 - Check build logs for platform-specific errors
 
 **Image push failures**:
+
 - Verify GITHUB_TOKEN has `write:packages` permission
 - Check if image name matches repository
 
 ### Deployment Issues
 
 **Image not found**:
+
 ```bash
 # Verify image exists in GHCR
 # Go to Packages tab in GitHub repository
@@ -247,6 +262,7 @@ pnpm build --debug
 ```
 
 **Authentication errors**:
+
 - Regenerate GitHub Personal Access Token
 - Update credentials in Portainer
 - Ensure PAT has `read:packages` scope
@@ -256,6 +272,7 @@ pnpm build --debug
 ### For Development
 
 1. **Always create feature branches**:
+
    ```bash
    git checkout -b feature/my-feature
    ```
@@ -274,10 +291,11 @@ pnpm build --debug
 2. **Create release notes** in GitHub Releases
 
 3. **Test in staging before production**:
+
    ```bash
    # Deploy to staging first
    # Use CD workflow with 'staging' environment
-   
+
    # After testing, deploy to production
    # Use CD workflow with 'production' environment
    ```
@@ -363,6 +381,7 @@ Create environment-specific Dockerfiles:
 ## Support
 
 For issues with the CI/CD pipeline:
+
 1. Check workflow logs in GitHub Actions
 2. Review this documentation
 3. Create an issue in the repository

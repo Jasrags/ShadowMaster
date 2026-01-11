@@ -83,21 +83,13 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId, weaponId } = await params;
 
     // Authorize view access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -149,21 +141,13 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId, weaponId } = await params;
 
     // Authorize access (view permission - owners always have this for gameplay actions)
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -211,10 +195,7 @@ export async function POST(
     const result = loadWeapon(weapon, ammoItem, quantity);
 
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: result.error }, { status: 400 });
     }
 
     // Update character with new weapon and ammo state
@@ -244,10 +225,7 @@ export async function POST(
     });
   } catch (error) {
     console.error("Failed to load weapon:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to load weapon" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to load weapon" }, { status: 500 });
   }
 }
 
@@ -263,21 +241,13 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId, weaponId } = await params;
 
     // Authorize access (view permission - owners always have this for gameplay actions)
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -347,10 +317,7 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("Failed to unload weapon:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to unload weapon" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to unload weapon" }, { status: 500 });
   }
 }
 
@@ -366,21 +333,13 @@ export async function PATCH(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId, weaponId } = await params;
 
     // Authorize access (view permission - owners always have this for gameplay actions)
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -428,10 +387,7 @@ export async function PATCH(
     const result = swapMagazine(weapon, newMagazine);
 
     if (!result.success) {
-      return NextResponse.json(
-        { success: false, error: result.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: result.error }, { status: 400 });
     }
 
     // Update spare magazines - remove new mag, add old mag
@@ -460,9 +416,6 @@ export async function PATCH(
     });
   } catch (error) {
     console.error("Failed to swap magazine:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to swap magazine" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to swap magazine" }, { status: 500 });
   }
 }

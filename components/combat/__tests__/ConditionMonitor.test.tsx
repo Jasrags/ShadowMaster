@@ -136,9 +136,7 @@ describe("ConditionMonitor", () => {
 
   describe("overflow track", () => {
     it("shows overflow track when physical is full", () => {
-      render(
-        <ConditionMonitor {...defaultProps} physicalDamage={11} overflowMax={6} />
-      );
+      render(<ConditionMonitor {...defaultProps} physicalDamage={11} overflowMax={6} />);
 
       expect(screen.getByText("Overflow")).toBeInTheDocument();
     });
@@ -181,9 +179,7 @@ describe("ConditionMonitor", () => {
 
     it("calls onDamageChange when increment clicked", () => {
       const onDamageChange = vi.fn();
-      render(
-        <ConditionMonitor {...defaultProps} editable onDamageChange={onDamageChange} />
-      );
+      render(<ConditionMonitor {...defaultProps} editable onDamageChange={onDamageChange} />);
 
       // Find increment buttons (the + icons are in buttons after the damage labels)
       const buttons = screen.getAllByRole("button");
@@ -224,8 +220,11 @@ describe("ConditionMonitor", () => {
 
       // Skip the first few buttons which are the increment/decrement controls
       // Look for the damage box buttons specifically (they have specific size classes)
-      const damageBoxes = Array.from(boxes).filter(box =>
-        box.className.includes("w-6") || box.className.includes("w-5") || box.className.includes("w-8")
+      const damageBoxes = Array.from(boxes).filter(
+        (box) =>
+          box.className.includes("w-6") ||
+          box.className.includes("w-5") ||
+          box.className.includes("w-8")
       );
 
       if (damageBoxes.length > 0) {
@@ -268,26 +267,22 @@ describe("ConditionMonitor", () => {
       render(<ConditionMonitor {...defaultProps} physicalDamage={11} editable />);
 
       // Some increment button should be disabled
-      const disabledButtons = screen.getAllByRole("button").filter(
-        (b) => b.getAttribute("data-disabled") === "true"
-      );
+      const disabledButtons = screen
+        .getAllByRole("button")
+        .filter((b) => b.getAttribute("data-disabled") === "true");
       expect(disabledButtons.length).toBeGreaterThan(0);
     });
   });
 
   describe("layout variants", () => {
     it("renders horizontal layout", () => {
-      const { container } = render(
-        <ConditionMonitor {...defaultProps} layout="horizontal" />
-      );
+      const { container } = render(<ConditionMonitor {...defaultProps} layout="horizontal" />);
 
       expect(container.querySelector(".flex.gap-6")).toBeInTheDocument();
     });
 
     it("renders vertical layout", () => {
-      const { container } = render(
-        <ConditionMonitor {...defaultProps} layout="vertical" />
-      );
+      const { container } = render(<ConditionMonitor {...defaultProps} layout="vertical" />);
 
       expect(container.querySelector(".space-y-4")).toBeInTheDocument();
     });
@@ -350,9 +345,7 @@ describe("CompactConditionMonitor", () => {
   });
 
   it("shows unconscious icon when stun full", () => {
-    const { container } = render(
-      <CompactConditionMonitor {...defaultProps} stunDamage={10} />
-    );
+    const { container } = render(<CompactConditionMonitor {...defaultProps} stunDamage={10} />);
 
     // Moon icon should be present (for unconscious) - it's wrapped in a span with title
     const unconsciousSpan = container.querySelector('span[title="Unconscious"]');
@@ -360,9 +353,7 @@ describe("CompactConditionMonitor", () => {
   });
 
   it("shows incapacitated icon when physical full", () => {
-    const { container } = render(
-      <CompactConditionMonitor {...defaultProps} physicalDamage={11} />
-    );
+    const { container } = render(<CompactConditionMonitor {...defaultProps} physicalDamage={11} />);
 
     // AlertTriangle icon should be present (for incapacitated) - it's wrapped in a span with title
     const incapacitatedSpan = container.querySelector('span[title="Incapacitated"]');

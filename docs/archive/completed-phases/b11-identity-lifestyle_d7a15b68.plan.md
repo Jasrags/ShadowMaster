@@ -12,10 +12,10 @@ todos: []
 
 ## Plan
 
-1) **Define Types**: Update `/lib/types/character.ts` and `/lib/types/edition.ts` to add Identity, SIN, License, Lifestyle, LifestyleModification, SinnerQuality enums; extend Character with identities, lifestyles, primaryLifestyleId. Ensure loader/creation types support new structures.
-2) **Identity Step**: Add IdentitiesStep + editors (`IdentitiesStep.tsx`, `IdentityEditor.tsx`, `LicenseEditor.tsx`), wire into `CreationWizard.tsx`, and link to `QualitiesStep` (SINner) and `GearStep` (fake SIN/license purchases). Add validations for SIN rules.
-3) **Lifestyle Management**: Enhance `GearStep` with multiple lifestyles, LifestyleEditor, modification selector, subscriptions, custom expenses/income, permanent purchase option, and lifestyle-identity associations; update cost calculations and validations.
-4) **Review Integration**: Update `ReviewStep.tsx` to show identities/SINs/licenses/lifestyles with association info and validation states.
+1. **Define Types**: Update `/lib/types/character.ts` and `/lib/types/edition.ts` to add Identity, SIN, License, Lifestyle, LifestyleModification, SinnerQuality enums; extend Character with identities, lifestyles, primaryLifestyleId. Ensure loader/creation types support new structures.
+2. **Identity Step**: Add IdentitiesStep + editors (`IdentitiesStep.tsx`, `IdentityEditor.tsx`, `LicenseEditor.tsx`), wire into `CreationWizard.tsx`, and link to `QualitiesStep` (SINner) and `GearStep` (fake SIN/license purchases). Add validations for SIN rules.
+3. **Lifestyle Management**: Enhance `GearStep` with multiple lifestyles, LifestyleEditor, modification selector, subscriptions, custom expenses/income, permanent purchase option, and lifestyle-identity associations; update cost calculations and validations.
+4. **Review Integration**: Update `ReviewStep.tsx` to show identities/SINs/licenses/lifestyles with association info and validation states.
 
 ## Todos
 

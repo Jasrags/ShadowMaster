@@ -951,7 +951,13 @@ describe("executeOpposedTest", () => {
         valid: true,
         errors: [],
         warnings: [],
-        modifiedPool: { basePool: 6, totalDice: 6, modifiers: [], limit: 6, limitSource: "physical" },
+        modifiedPool: {
+          basePool: 6,
+          totalDice: 6,
+          modifiers: [],
+          limit: 6,
+          limitSource: "physical",
+        },
       })
       // Second call for defender fails
       .mockReturnValueOnce({
@@ -976,8 +982,26 @@ describe("executeOpposedTest", () => {
 
     // Attacker gets 4 hits, defender gets 2 hits
     vi.mocked(executeRoll)
-      .mockReturnValueOnce({ dice: makeDice([5, 5, 5, 5, 3, 2]), hits: 4, rawHits: 4, ones: 0, isGlitch: false, isCriticalGlitch: false, limitApplied: false, poolSize: 6 })
-      .mockReturnValueOnce({ dice: makeDice([5, 5, 3, 3, 2, 2]), hits: 2, rawHits: 2, ones: 0, isGlitch: false, isCriticalGlitch: false, limitApplied: false, poolSize: 6 });
+      .mockReturnValueOnce({
+        dice: makeDice([5, 5, 5, 5, 3, 2]),
+        hits: 4,
+        rawHits: 4,
+        ones: 0,
+        isGlitch: false,
+        isCriticalGlitch: false,
+        limitApplied: false,
+        poolSize: 6,
+      })
+      .mockReturnValueOnce({
+        dice: makeDice([5, 5, 3, 3, 2, 2]),
+        hits: 2,
+        rawHits: 2,
+        ones: 0,
+        isGlitch: false,
+        isCriticalGlitch: false,
+        limitApplied: false,
+        poolSize: 6,
+      });
 
     const result = await executeOpposedTest(
       { characterId: attacker.id, userId: attacker.ownerId, action, character: attacker },
@@ -1059,15 +1083,40 @@ describe("applyStateChanges", () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     const changes: StateChange[] = [
-      { entityId: "char-1", entityType: "character", field: "edge", previousValue: 3, newValue: 2, description: "Spent Edge" },
-      { entityId: "char-1", entityType: "character", field: "karma", previousValue: 10, newValue: 8, description: "Spent karma" },
-      { entityId: "char-2", entityType: "character", field: "edge", previousValue: 2, newValue: 1, description: "Spent Edge" },
+      {
+        entityId: "char-1",
+        entityType: "character",
+        field: "edge",
+        previousValue: 3,
+        newValue: 2,
+        description: "Spent Edge",
+      },
+      {
+        entityId: "char-1",
+        entityType: "character",
+        field: "karma",
+        previousValue: 10,
+        newValue: 8,
+        description: "Spent karma",
+      },
+      {
+        entityId: "char-2",
+        entityType: "character",
+        field: "edge",
+        previousValue: 2,
+        newValue: 1,
+        description: "Spent Edge",
+      },
     ];
 
     await applyStateChanges(changes);
 
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("2 changes to character char-1"));
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("1 changes to character char-2"));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("2 changes to character char-1")
+    );
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("1 changes to character char-2")
+    );
 
     consoleSpy.mockRestore();
   });
@@ -1078,14 +1127,30 @@ describe("rollbackStateChanges", () => {
     const consoleSpy = vi.spyOn(console, "log").mockImplementation(() => {});
 
     const changes: StateChange[] = [
-      { entityId: "char-1", entityType: "character", field: "edge", previousValue: 3, newValue: 2, description: "Spent Edge" },
-      { entityId: "char-1", entityType: "character", field: "karma", previousValue: 10, newValue: 8, description: "Spent karma" },
+      {
+        entityId: "char-1",
+        entityType: "character",
+        field: "edge",
+        previousValue: 3,
+        newValue: 2,
+        description: "Spent Edge",
+      },
+      {
+        entityId: "char-1",
+        entityType: "character",
+        field: "karma",
+        previousValue: 10,
+        newValue: 8,
+        description: "Spent karma",
+      },
     ];
 
     await rollbackStateChanges(changes);
 
     // Should be called with rollback prefix
-    expect(consoleSpy).toHaveBeenCalledWith(expect.stringContaining("2 changes to character char-1"));
+    expect(consoleSpy).toHaveBeenCalledWith(
+      expect.stringContaining("2 changes to character char-1")
+    );
 
     consoleSpy.mockRestore();
   });
@@ -1209,11 +1274,6 @@ describe("getAvailableActions", () => {
     await getAvailableActions(character, [action], combatSession.id, "participant-1");
 
     expect(combatStorage.getCombatSession).toHaveBeenCalledWith(combatSession.id);
-    expect(validateAction).toHaveBeenCalledWith(
-      character,
-      action,
-      combatSession,
-      "participant-1"
-    );
+    expect(validateAction).toHaveBeenCalledWith(character, action, combatSession, "participant-1");
   });
 });

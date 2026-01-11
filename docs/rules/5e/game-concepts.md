@@ -7,10 +7,12 @@ This specification distills the recurring gameplay concepts that span Shadowrun 
 ## Roles at the Table
 
 ### Players
+
 - Drive the narrative by declaring character intentions and applying mechanics to resolve challenges.
 - Expect rules to adjudicate outcomes quickly; routine tasks auto-succeed, extraordinary actions require tests.
 
 ### Gamemaster (GM)
+
 - Frames scenes, portrays non-player characters, and serves as final arbiter of rules.
 - Keeps the story moving, balancing player agency with pacing; leans on guidelines here plus deeper coverage in the core GM advice (SR5, p. 332).
 
@@ -31,7 +33,7 @@ This specification distills the recurring gameplay concepts that span Shadowrun 
 ### Success Threshold Guidelines
 
 | Difficulty | Threshold |
-|------------|-----------|
+| ---------- | --------- |
 | Easy       | 1         |
 | Average    | 2         |
 | Hard       | 4         |
@@ -53,33 +55,38 @@ This specification distills the recurring gameplay concepts that span Shadowrun 
 ## Test Framework
 
 When documenting or implementing a test, capture four elements:
+
 1. Test Type (Success, Opposed, Extended, Teamwork).
 2. Dice Pool (skills, attributes, situational modifiers).
 3. Limit (inherent or gear-based cap on usable hits).
 4. Threshold or opposing dice pool.
 
 ### Limits
+
 - Inherent limits: Physical, Mental, Social—derived from attributes (formulas stored in attributes spec).
 - Gear limits override inherent limits when applicable (e.g., weapon Accuracy, deck attributes).
 - Limits typically apply to skill+attribute pools; attribute-only tests often ignore limits unless specified.
 - Spending Edge (Push the Limit) can ignore limits for a single test.
 
 ### Success Tests
+
 - Single roll to beat a fixed threshold.
 - Document notation as: `[Skill] + [Attribute] [Limit] (Threshold)`.
 
 ### Opposed Tests
+
 - Two parties roll competing pools; higher hits win.
 - Notation: `[Skill] + [Attribute] [Limit] vs. Opposed Pool`.
 
 ### Extended Tests
+
 - Multiple intervals to accumulate hits until threshold met or attempts exhausted.
 - Notation: `[Skill] + [Attribute] [Limit] (Threshold, Interval)`.
 - Dice pool degrades by 1 die after each roll.
 - Suggested intervals for pacing:
 
 | Interval Label | Time Increment |
-|----------------|----------------|
+| -------------- | -------------- |
 | Fast           | 1 Combat Turn  |
 | Quick          | 1 minute       |
 | Short          | 10 minutes     |
@@ -93,10 +100,12 @@ When documenting or implementing a test, capture four elements:
 - Glitch on an Extended Test typically incurs setbacks (e.g., subtract 1d6 accumulated hits). Critical glitch ends the effort with failure.
 
 ### Teamwork Tests
+
 - Assistants roll the relevant pool; each helper with ≥1 hit grants +1 limit and +1 die to the leader (capped by leader’s skill rating or highest attribute for attribute-only pools).
 - Helper glitches remove their contribution; helper critical glitches negate all limit bonuses and introduce complications.
 
 ### Retrying Tests
+
 - Re-attempts suffer a cumulative –2 dice penalty per retry until adequate downtime resets the attempt (GM discretion).
 - Separate discrete actions (e.g., multiple attacks) are not retries for this rule.
 
@@ -124,4 +133,4 @@ When documenting or implementing a test, capture four elements:
 - Need finalized formulas for inherent limits, initiative variants, and condition monitor calculations (tracked in attributes spec).
 - Action taxonomy and Edge options require dedicated specs to avoid duplication.
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_

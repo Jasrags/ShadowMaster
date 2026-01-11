@@ -8,12 +8,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type {
-  Character,
-  MergedRuleset,
-  CreationState,
-  MagicalPath,
-} from "@/lib/types";
+import type { Character, MergedRuleset, CreationState, MagicalPath } from "@/lib/types";
 
 // We'll test the internal logic by importing the validation functions
 // Since they're not exported, we test through the public API
@@ -134,9 +129,7 @@ function createTestRuleset(): MergedRuleset {
   } as unknown as MergedRuleset;
 }
 
-function createTestCreationState(
-  overrides: Partial<CreationState> = {}
-): CreationState {
+function createTestCreationState(overrides: Partial<CreationState> = {}): CreationState {
   return {
     characterId: "test-char",
     creationMethodId: "sr5-priority",
@@ -202,9 +195,7 @@ describe("Attribute Limit - One at Max Rule", () => {
     // Only body is at max
     expect(character.attributes?.body).toBe(6);
     // Count attributes at max should be 1
-    const atMaxCount = Object.entries(character.attributes || {}).filter(
-      ([, v]) => v === 6
-    ).length;
+    const atMaxCount = Object.entries(character.attributes || {}).filter(([, v]) => v === 6).length;
     expect(atMaxCount).toBe(1);
   });
 
@@ -224,9 +215,7 @@ describe("Attribute Limit - One at Max Rule", () => {
       positiveQualities: [], // No Exceptional Attribute
     });
 
-    const atMaxCount = Object.entries(character.attributes || {}).filter(
-      ([, v]) => v === 6
-    ).length;
+    const atMaxCount = Object.entries(character.attributes || {}).filter(([, v]) => v === 6).length;
     expect(atMaxCount).toBe(2);
     // This should fail validation (tested via constraint validator)
   });
@@ -334,9 +323,7 @@ describe("Skill Limit - Rating Cap at Creation", () => {
       ],
     });
 
-    const hasAptitude = character.positiveQualities?.some(
-      (q) => q.qualityId === "aptitude"
-    );
+    const hasAptitude = character.positiveQualities?.some((q) => q.qualityId === "aptitude");
     expect(hasAptitude).toBe(true);
     expect(character.skills?.pistols).toBe(7);
   });
@@ -351,9 +338,7 @@ describe("Skill Limit - Rating Cap at Creation", () => {
     });
 
     expect(character.skills?.pistols).toBe(7);
-    const hasAptitude = character.positiveQualities?.some(
-      (q) => q.qualityId === "aptitude"
-    );
+    const hasAptitude = character.positiveQualities?.some((q) => q.qualityId === "aptitude");
     expect(hasAptitude).toBe(false);
     // This should fail validation
   });
@@ -545,9 +530,7 @@ describe("Aptitude Quality Effects", () => {
       ],
     });
 
-    const hasAptitude = character.positiveQualities?.some(
-      (q) => q.qualityId === "aptitude"
-    );
+    const hasAptitude = character.positiveQualities?.some((q) => q.qualityId === "aptitude");
     expect(hasAptitude).toBe(true);
   });
 

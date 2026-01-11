@@ -1,15 +1,21 @@
 /**
  * API Route: GET /api/editions/[editionCode]
- * 
+ *
  * Returns edition data with optional book loading.
- * 
+ *
  * Query params:
  *   - bookIds: Comma-separated list of book IDs to load
  *   - include: Optional includes (e.g., "summary" for content summary)
  */
 
 import { NextRequest, NextResponse } from "next/server";
-import { getEdition, getBook, getAllBooks, getAllCreationMethods, getEditionContentSummary } from "@/lib/storage/editions";
+import {
+  getEdition,
+  getBook,
+  getAllBooks,
+  getAllCreationMethods,
+  getEditionContentSummary,
+} from "@/lib/storage/editions";
 import type { EditionCode } from "@/lib/types";
 
 export async function GET(
@@ -34,9 +40,7 @@ export async function GET(
     // Load books
     let books;
     if (bookIds && bookIds.length > 0) {
-      books = await Promise.all(
-        bookIds.map((id) => getBook(editionCode as EditionCode, id))
-      );
+      books = await Promise.all(bookIds.map((id) => getBook(editionCode as EditionCode, id)));
       books = books.filter(Boolean);
     } else {
       books = await getAllBooks(editionCode as EditionCode);
@@ -68,4 +72,3 @@ export async function GET(
     );
   }
 }
-

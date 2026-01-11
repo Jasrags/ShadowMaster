@@ -51,29 +51,30 @@ Implement a complete cyberlimb system for Shadowrun 5th Edition that supports:
 
 **Capability Reference:** `character.augmentation-systems` - Augmentation Governance (catalog-driven selection)
 
-| Item ID | Field | Current | Correct | Source |
-|---------|-------|---------|---------|--------|
-| `cyberlimb-arm` | capacity | 10 | 15 | SR5 Core p.456 |
-| `cyberlimb-leg` | capacity | 12 | 20 | SR5 Core p.456 |
-| `cyberlimb-hand` | capacity | 2 | 4 | SR5 Core p.456 |
-| `cyberlimb-foot` | capacity | 2 | 4 | SR5 Core p.456 |
-| `cyberlimb-lower-arm` | capacity | 5 | 10 | SR5 Core p.456 |
-| `cyberlimb-lower-leg` | capacity | 6 | 12 | SR5 Core p.456 |
-| `cyberlimb-arm-synthetic` | capacity | 5 | 8 | SR5 Core p.456 |
-| `cyberlimb-leg-synthetic` | capacity | 6 | 10 | SR5 Core p.456 |
-| `cyberlimb-torso` | availability | 6 | 12 | SR5 Core p.456 |
-| `cyberlimb-skull` | availability | 4 | 16 | SR5 Core p.456 |
-| `cyberlimb-agility` | cost | 3000 | 6500 | SR5 Core p.457 |
-| `cyberlimb-strength` | cost | 3000 | 6500 | SR5 Core p.457 |
-| `cyberlimb-agility` | availability | 8 | `(Rating × 3)R` | SR5 Core p.457 |
-| `cyberlimb-strength` | availability | 8 | `(Rating × 3)R` | SR5 Core p.457 |
-| `cyberlimb-armor` | availability | 8 | `Rating × 5` | SR5 Core p.457 |
+| Item ID                   | Field        | Current | Correct         | Source         |
+| ------------------------- | ------------ | ------- | --------------- | -------------- |
+| `cyberlimb-arm`           | capacity     | 10      | 15              | SR5 Core p.456 |
+| `cyberlimb-leg`           | capacity     | 12      | 20              | SR5 Core p.456 |
+| `cyberlimb-hand`          | capacity     | 2       | 4               | SR5 Core p.456 |
+| `cyberlimb-foot`          | capacity     | 2       | 4               | SR5 Core p.456 |
+| `cyberlimb-lower-arm`     | capacity     | 5       | 10              | SR5 Core p.456 |
+| `cyberlimb-lower-leg`     | capacity     | 6       | 12              | SR5 Core p.456 |
+| `cyberlimb-arm-synthetic` | capacity     | 5       | 8               | SR5 Core p.456 |
+| `cyberlimb-leg-synthetic` | capacity     | 6       | 10              | SR5 Core p.456 |
+| `cyberlimb-torso`         | availability | 6       | 12              | SR5 Core p.456 |
+| `cyberlimb-skull`         | availability | 4       | 16              | SR5 Core p.456 |
+| `cyberlimb-agility`       | cost         | 3000    | 6500            | SR5 Core p.457 |
+| `cyberlimb-strength`      | cost         | 3000    | 6500            | SR5 Core p.457 |
+| `cyberlimb-agility`       | availability | 8       | `(Rating × 3)R` | SR5 Core p.457 |
+| `cyberlimb-strength`      | availability | 8       | `(Rating × 3)R` | SR5 Core p.457 |
+| `cyberlimb-armor`         | availability | 8       | `Rating × 5`    | SR5 Core p.457 |
 
 #### 1.2 Add Missing Cyberlimb Catalog Items
 
 **ADR Reference:** ADR-010 (Inventory State Management) - structured wireless effects
 
 **Missing Synthetic Limbs:**
+
 - `cyberlimb-hand-synthetic` (Essence: 0.25, Capacity: 2, Cost: 6,000¥)
 - `cyberlimb-foot-synthetic` (Essence: 0.25, Capacity: 2, Cost: 6,000¥)
 - `cyberlimb-lower-arm-synthetic` (Essence: 0.45, Capacity: 5, Cost: 12,000¥)
@@ -82,12 +83,14 @@ Implement a complete cyberlimb system for Shadowrun 5th Edition that supports:
 - `cyberlimb-skull-synthetic` (Essence: 0.75, Capacity: 2, Cost: 15,000¥, Avail: 16)
 
 **Missing Accessories:**
+
 - `cyberlimb-hydraulic-jacks` (Rating 1-6, Capacity: [Rating], Cost: Rating × 2,500¥, Avail: 9)
   - `wirelessEffects: [{ type: "dice_pool", skills: ["jumping", "sprinting", "lifting"], modifier: 1 }]`
 - `cyberlimb-large-smuggling-compartment` (Capacity: [5], Cost: 8,000¥, Avail: 6)
   - `wirelessEffects: [{ type: "action_economy", action: "access_compartment", from: "complex", to: "simple" }]`
 
 **Update Existing with Wireless Effects:**
+
 - `cyberlimb-gyromount`:
   - `wirelessEffects: [{ type: "action_economy", action: "toggle_gyromount", from: "simple", to: "free" }]`
 - `cyberlimb-holster`:
@@ -96,6 +99,7 @@ Implement a complete cyberlimb system for Shadowrun 5th Edition that supports:
 #### 1.3 Add Cyberlimb-Specific Catalog Fields
 
 Each cyberlimb catalog item needs:
+
 ```json
 {
   "limbType": "full-arm" | "lower-arm" | "hand" | "full-leg" | "lower-leg" | "foot" | "torso" | "skull",
@@ -125,12 +129,18 @@ import type { WirelessEffect } from "./wireless-effects";
  * Location slots for cyberlimbs
  */
 export type CyberlimbLocation =
-  | "left-arm" | "right-arm"
-  | "left-leg" | "right-leg"
-  | "left-hand" | "right-hand"
-  | "left-foot" | "right-foot"
-  | "left-lower-arm" | "right-lower-arm"
-  | "left-lower-leg" | "right-lower-leg"
+  | "left-arm"
+  | "right-arm"
+  | "left-leg"
+  | "right-leg"
+  | "left-hand"
+  | "right-hand"
+  | "left-foot"
+  | "right-foot"
+  | "left-lower-arm"
+  | "right-lower-arm"
+  | "left-lower-leg"
+  | "right-lower-leg"
   | "torso"
   | "skull";
 
@@ -138,9 +148,14 @@ export type CyberlimbLocation =
  * Cyberlimb type classification
  */
 export type CyberlimbType =
-  | "full-arm" | "lower-arm" | "hand"
-  | "full-leg" | "lower-leg" | "foot"
-  | "torso" | "skull";
+  | "full-arm"
+  | "lower-arm"
+  | "hand"
+  | "full-leg"
+  | "lower-leg"
+  | "foot"
+  | "torso"
+  | "skull";
 
 /**
  * Appearance classification for cyberlimbs
@@ -154,7 +169,12 @@ export type CyberlimbAppearance = "obvious" | "synthetic";
 export interface CyberlimbModificationEntry {
   id: ID;
   timestamp: ISODateString;
-  action: "installed" | "enhancement_added" | "enhancement_removed" | "enhancement_replaced" | "wireless_toggled";
+  action:
+    | "installed"
+    | "enhancement_added"
+    | "enhancement_removed"
+    | "enhancement_replaced"
+    | "wireless_toggled";
   targetId?: string;
   previousValue?: unknown;
   newValue?: unknown;
@@ -227,7 +247,7 @@ export interface CyberImplantWeapon {
  * - ADR-010: Wireless state, device condition
  * - ADR-011: Sheet-driven creation support
  */
-export interface CyberlimbItem extends Omit<CyberwareItem, 'enhancements'> {
+export interface CyberlimbItem extends Omit<CyberwareItem, "enhancements"> {
   // Location & Type
   location: CyberlimbLocation;
   limbType: CyberlimbType;
@@ -269,12 +289,12 @@ export interface CyberlimbItem extends Omit<CyberwareItem, 'enhancements'> {
 export const LIMB_HIERARCHY: Record<CyberlimbType, CyberlimbType[]> = {
   "full-arm": ["lower-arm", "hand"],
   "lower-arm": ["hand"],
-  "hand": [],
+  hand: [],
   "full-leg": ["lower-leg", "foot"],
   "lower-leg": ["foot"],
-  "foot": [],
-  "torso": [],
-  "skull": [],
+  foot: [],
+  torso: [],
+  skull: [],
 };
 
 /**
@@ -283,18 +303,19 @@ export const LIMB_HIERARCHY: Record<CyberlimbType, CyberlimbType[]> = {
 export const LIMB_CM_BONUS: Record<CyberlimbType, number> = {
   "full-arm": 1,
   "full-leg": 1,
-  "torso": 1,
-  "skull": 1,
+  torso: 1,
+  skull: 1,
   "lower-arm": 0.5,
   "lower-leg": 0.5,
-  "hand": 0,
-  "foot": 0,
+  hand: 0,
+  foot: 0,
 };
 ```
 
 #### 2.2 Update Character Interface (`lib/types/character.ts`)
 
 Add to Character interface:
+
 ```typescript
 /**
  * Cyberlimbs installed on the character
@@ -311,6 +332,7 @@ cyberImplantWeapons?: CyberImplantWeapon[];
 #### 2.3 Create Cyberlimb Catalog Types (`lib/types/edition.ts`)
 
 Add to edition.ts:
+
 ```typescript
 /**
  * Cyberlimb catalog item in ruleset data
@@ -490,6 +512,7 @@ export function recalculateCapacityUsed(limb: CyberlimbItem): number;
 **Location:** `app/characters/create/components/CyberlimbSelector.tsx`
 
 **Props:**
+
 ```typescript
 interface CyberlimbSelectorProps {
   catalog: CyberlimbCatalogItem[];
@@ -502,6 +525,7 @@ interface CyberlimbSelectorProps {
 ```
 
 **Features:**
+
 - Location picker (visual body diagram)
 - Limb type/appearance selector
 - Grade selector with cost/essence preview
@@ -514,6 +538,7 @@ interface CyberlimbSelectorProps {
 **Location:** `app/characters/create/components/CyberlimbCustomizer.tsx`
 
 **Props:**
+
 ```typescript
 interface CyberlimbCustomizerProps {
   limb: CyberlimbItem;
@@ -526,6 +551,7 @@ interface CyberlimbCustomizerProps {
 ```
 
 **Features:**
+
 - Current limb stats display (STR, AGI, capacity)
 - Enhancement browser with capacity cost preview
 - Installed enhancements list with remove option
@@ -540,6 +566,7 @@ interface CyberlimbCustomizerProps {
 **Purpose:** Display installed cyberlimb in character sheet
 
 **Features:**
+
 - Limb location and type display
 - Final STR/AGI values
 - Capacity bar (used/total)
@@ -554,6 +581,7 @@ interface CyberlimbCustomizerProps {
 **Purpose:** Visual representation of cyberlimb locations
 
 **Features:**
+
 - SVG body silhouette
 - Click to select location
 - Color-coded installed limbs
@@ -566,12 +594,14 @@ interface CyberlimbCustomizerProps {
 #### 6.1 Update AugmentationsStep
 
 Integrate cyberlimb selector into existing augmentations step:
+
 - Add "Cyberlimbs" tab alongside Cyberware/Bioware
 - Handle essence budget across all augmentation types
 
 #### 6.2 Update Character Sheet
 
 Add cyberlimbs section to character sheet:
+
 - Display in augmentations panel
 - Show CM bonus from cyberlimbs
 - Integrate with derived stats (effective STR/AGI)
@@ -579,6 +609,7 @@ Add cyberlimbs section to character sheet:
 #### 6.3 Update Derived Stats Calculation
 
 Modify derived stats to consider cyberlimbs:
+
 - Physical Condition Monitor: `8 + ceil(BOD/2) + cyberlimbCMBonus`
 - Physical Limit: Consider cyberlimb attributes when applicable
 - Unarmed damage: Use limb STR for cyberlimb attacks
@@ -592,6 +623,7 @@ Modify derived stats to consider cyberlimbs:
 #### Unit Tests (`lib/rules/cyberlimbs/__tests__/`)
 
 **Validation Tests:**
+
 - [ ] Reject installation when essence would drop below 0.01
 - [ ] Reject installation when availability exceeds 12 (creation)
 - [ ] Reject customization exceeding racial maximum
@@ -602,6 +634,7 @@ Modify derived stats to consider cyberlimbs:
 - [ ] Require paired accessories (hydraulic jacks)
 
 **Attribute Calculation Tests:**
+
 - [ ] Correct limb STR = base(3) + custom + enhancement
 - [ ] Correct limb AGI = base(3) + custom + enhancement
 - [ ] Single limb action uses limb attribute
@@ -610,6 +643,7 @@ Modify derived stats to consider cyberlimbs:
 - [ ] Partial limbs only apply to direct tests
 
 **Essence/Cost Calculation Tests:**
+
 - [ ] Essence cost = base × grade multiplier
 - [ ] Customization does not affect essence
 - [ ] Enhancements have 0 essence cost
@@ -617,6 +651,7 @@ Modify derived stats to consider cyberlimbs:
 - [ ] Enhancement costs scale with rating
 
 **Physical CM Bonus Tests:**
+
 - [ ] Full limbs add +1 CM
 - [ ] Partial limbs add +0.5 CM
 - [ ] Hands/feet add +0 CM
@@ -709,6 +744,7 @@ Phase 2 (Types) ─────────────────────�
 ## Files to Create/Modify
 
 ### New Files
+
 - `lib/types/cyberlimb.ts` - Cyberlimb type definitions
 - `lib/rules/cyberlimbs/validation.ts` - Validation logic
 - `lib/rules/cyberlimbs/attributes.ts` - Attribute calculations
@@ -726,6 +762,7 @@ Phase 2 (Types) ─────────────────────�
 - `components/BodyDiagram.tsx` - Visual location selector
 
 ### Modified Files
+
 - `data/editions/sr5/core-rulebook.json` - Data corrections and additions
 - `lib/types/character.ts` - Add cyberlimbs field to Character
 - `lib/types/edition.ts` - Add catalog types

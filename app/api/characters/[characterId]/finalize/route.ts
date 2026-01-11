@@ -40,21 +40,13 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize the finalize action
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "finalize"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "finalize");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -96,9 +88,7 @@ export async function POST(
     }
 
     // Get creation state from character metadata if available
-    const creationState = character.metadata?.creationState as
-      | CreationState
-      | undefined;
+    const creationState = character.metadata?.creationState as CreationState | undefined;
 
     // Load campaign if character is in one
     let campaign: Campaign | undefined;
@@ -152,11 +142,7 @@ export async function POST(
         auditEntry
       );
 
-      const updatedCharacter = await updateCharacter(
-        userId,
-        characterId,
-        characterWithApproval
-      );
+      const updatedCharacter = await updateCharacter(userId, characterId, characterWithApproval);
 
       return NextResponse.json({
         success: true,
@@ -176,11 +162,7 @@ export async function POST(
       note: "Character finalized via API",
     };
 
-    const transitionResult = await executeTransition(
-      character,
-      "active",
-      transitionContext
-    );
+    const transitionResult = await executeTransition(character, "active", transitionContext);
 
     if (!transitionResult.success) {
       return NextResponse.json(
@@ -204,10 +186,7 @@ export async function POST(
     return NextResponse.json({
       success: true,
       character: updatedCharacter,
-      warnings: [
-        ...(validationResult.warnings || []),
-        ...(transitionResult.warnings || []),
-      ],
+      warnings: [...(validationResult.warnings || []), ...(transitionResult.warnings || [])],
     });
   } catch (error) {
     console.error("Failed to finalize character:", error);

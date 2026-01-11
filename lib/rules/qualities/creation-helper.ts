@@ -21,16 +21,17 @@ export function buildCharacterFromCreationState(
     specialAttributes: {
       edge: (state.selections.attributes as Record<string, number>)?.["edg"] || 1,
       essence: 6, // Default, will be calculated properly elsewhere
-      magic: state.selections["magical-path"] === "mundane" 
-        ? undefined 
-        : (state.selections["magical-path"] ? 1 : undefined),
-      resonance: state.selections["magical-path"] === "technomancer"
-        ? 1
-        : undefined,
+      magic:
+        state.selections["magical-path"] === "mundane"
+          ? undefined
+          : state.selections["magical-path"]
+            ? 1
+            : undefined,
+      resonance: state.selections["magical-path"] === "technomancer" ? 1 : undefined,
     },
     magicalPath: (state.selections["magical-path"] as Character["magicalPath"]) || "mundane",
     skills: state.selections.skills as Record<string, number> | undefined,
-    positiveQualities: ((state.selections.positiveQualities as string[]) || []).map(id => ({
+    positiveQualities: ((state.selections.positiveQualities as string[]) || []).map((id) => ({
       qualityId: id,
       id: id, // For backward compatibility
       rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
@@ -38,7 +39,7 @@ export function buildCharacterFromCreationState(
       source: "creation" as const,
       active: true,
     })),
-    negativeQualities: ((state.selections.negativeQualities as string[]) || []).map(id => ({
+    negativeQualities: ((state.selections.negativeQualities as string[]) || []).map((id) => ({
       qualityId: id,
       id: id, // For backward compatibility
       rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
@@ -49,4 +50,3 @@ export function buildCharacterFromCreationState(
     status: "draft" as const,
   };
 }
-

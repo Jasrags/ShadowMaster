@@ -10,13 +10,7 @@
 
 import { useState } from "react";
 import type { ArmorItem } from "@/lib/types";
-import {
-  ChevronDown,
-  ChevronRight,
-  X,
-  Shield,
-  Plus,
-} from "lucide-react";
+import { ChevronDown, ChevronRight, X, Shield, Plus } from "lucide-react";
 
 // =============================================================================
 // HELPERS
@@ -58,12 +52,7 @@ interface ArmorRowProps {
 // COMPONENT
 // =============================================================================
 
-export function ArmorRow({
-  armor,
-  onRemove,
-  onAddMod,
-  onRemoveMod,
-}: ArmorRowProps) {
+export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const capacity = armor.capacity ?? armor.armorRating;
@@ -118,9 +107,18 @@ export function ArmorRow({
                 <Shield className="h-3 w-3" />
                 {armor.armorRating}
               </span>
-              <span>Cap {capacityUsed}/{capacity}</span>
+              <span>
+                Cap {capacityUsed}/{capacity}
+              </span>
               {armor.availability !== undefined && armor.availability > 0 && (
-                <span>Avail {armor.availability}{armor.legality === "restricted" ? "R" : armor.legality === "forbidden" ? "F" : ""}</span>
+                <span>
+                  Avail {armor.availability}
+                  {armor.legality === "restricted"
+                    ? "R"
+                    : armor.legality === "forbidden"
+                      ? "F"
+                      : ""}
+                </span>
               )}
             </div>
           </div>
@@ -158,7 +156,11 @@ export function ArmorRow({
                 <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
                   {armor.availability || 0}
-                  {armor.legality === "restricted" ? "R" : armor.legality === "forbidden" ? "F" : ""}
+                  {armor.legality === "restricted"
+                    ? "R"
+                    : armor.legality === "forbidden"
+                      ? "F"
+                      : ""}
                 </span>
               </div>
               {armor.weight && (
@@ -232,12 +234,8 @@ export function ArmorRow({
                         )}
                       </span>
                       <div className="flex items-center gap-2">
-                        <span className="text-[10px] text-zinc-400">
-                          Cap: {mod.capacityUsed}
-                        </span>
-                        <span className="text-xs text-zinc-500">
-                          {formatCurrency(mod.cost)}¥
-                        </span>
+                        <span className="text-[10px] text-zinc-400">Cap: {mod.capacityUsed}</span>
+                        <span className="text-xs text-zinc-500">{formatCurrency(mod.cost)}¥</span>
                         {onRemoveMod && (
                           <button
                             onClick={() => armor.id && onRemoveMod(armor.id, idx)}

@@ -2,7 +2,7 @@
  * Next.js module mocks for testing
  */
 
-import { vi } from 'vitest';
+import { vi } from "vitest";
 
 /**
  * Mock Next.js cookies() function
@@ -10,8 +10,8 @@ import { vi } from 'vitest';
 export function createMockCookies(cookieValue?: string) {
   return vi.fn(async () => ({
     get: (name: string) => {
-      if (name === 'session' && cookieValue) {
-        return { name: 'session', value: cookieValue };
+      if (name === "session" && cookieValue) {
+        return { name: "session", value: cookieValue };
       }
       return undefined;
     },
@@ -34,6 +34,5 @@ export const mockRouter = {
   refresh: vi.fn(),
 };
 
-export const mockPathname = '/';
+export const mockPathname = "/";
 export const mockSearchParams = new URLSearchParams();
-

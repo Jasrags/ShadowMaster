@@ -24,9 +24,7 @@ interface SystemAuditLogResponse {
  * - fromDate: ISO date string (filter from date)
  * - toDate: ISO date string (filter to date)
  */
-export async function GET(
-  request: NextRequest
-): Promise<NextResponse<SystemAuditLogResponse>> {
+export async function GET(request: NextRequest): Promise<NextResponse<SystemAuditLogResponse>> {
   try {
     // Require administrator role
     await requireAdmin();
@@ -66,11 +64,11 @@ export async function GET(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     console.error("Get system audit log error:", error);

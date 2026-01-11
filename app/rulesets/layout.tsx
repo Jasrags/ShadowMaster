@@ -3,16 +3,8 @@
 import AuthenticatedLayout from "@/app/users/AuthenticatedLayout";
 import { usePathname } from "next/navigation";
 
-export default function RulesetsLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
-    const pathname = usePathname();
+export default function RulesetsLayout({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
 
-    return (
-        <AuthenticatedLayout currentPath={pathname}>
-            {children}
-        </AuthenticatedLayout>
-    );
+  return <AuthenticatedLayout currentPath={pathname}>{children}</AuthenticatedLayout>;
 }

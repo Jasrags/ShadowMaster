@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Armor** | **Weapons** | **Elemental Damage** | **Modifiers** | **Called Shots** | **Martial Arts** |
@@ -32,40 +32,40 @@
 
 | **FIRING MODES**
 
-| MODE | ATTACK | ACTION | DEFENSE MODIFIER | ROUNDS USED | NOTES |
-| --- | --- | --- | --- | --- | --- |
-| Single-Shot (SS) | Single Shot | Simple | 0 | 1 | No Recoil |
-| Semi-Automatic (SA) | Single Shot | Simple | 0 | 1 |  |
-| Semi-Automatic (SA) | Semi-Automatic Burst (SB) | Complex | -2 | 3 |  |
-| Burst-Fire (BF) | Burst Fire (SB) | Simple | -2 | 3 |  |
-| Burst-Fire (BF) | Long Burst (LB) | Complex | -5 | 6 |  |
-| Full-Auto (FA) | Full Auto | Simple | -5 | 6 |  |
-| Full-Auto (FA) | Full Auto | Complex | -9 | 10 |  |
+| MODE                | ATTACK                    | ACTION  | DEFENSE MODIFIER | ROUNDS USED | NOTES     |
+| ------------------- | ------------------------- | ------- | ---------------- | ----------- | --------- |
+| Single-Shot (SS)    | Single Shot               | Simple  | 0                | 1           | No Recoil |
+| Semi-Automatic (SA) | Single Shot               | Simple  | 0                | 1           |           |
+| Semi-Automatic (SA) | Semi-Automatic Burst (SB) | Complex | -2               | 3           |           |
+| Burst-Fire (BF)     | Burst Fire (SB)           | Simple  | -2               | 3           |           |
+| Burst-Fire (BF)     | Long Burst (LB)           | Complex | -5               | 6           |           |
+| Full-Auto (FA)      | Full Auto                 | Simple  | -5               | 6           |           |
+| Full-Auto (FA)      | Full Auto                 | Complex | -9               | 10          |           |
 
 **RECOIL COMPENSATION COMPATIBILITY**
 
-| THIS OPTION ... | DOES NOT STACK WITH ... |
-| --- | --- |
-| Bipod | Foregrip , Gyro Mount , Sling , Tripod , Underbarrel Weight |
-| Folding Stock | Hip Pad Bracing System , Shock Pad , Sling |
-| Foregrip | Bipod , Gyro Mount , Tripod , Underbarrel Weight |
-| Gyro Mount | Bipod , Foregrip , Tripod , Sling , Underbarrel Weight |
-| Hip Pad Bracing System | Folding Stock , Shock Pad , Sling |
-| Shock Pad | Folding Stock , Hip Pad Bracing System , Sling |
-| Sling | Bipod , Folding Stock , Gyro Mount , Hip Pad Bracing System , Shock Pad , Tripod , Underbarrel Weight |
-| Tripod | Bipod , Foregrip , Gyro Mount , Sling , Underbarrel Weight |
-| Underbarrel Weight | Bipod , Foregrip , Gyro Mount , Sling , Tripod |
+| THIS OPTION ...        | DOES NOT STACK WITH ...                                                                               |
+| ---------------------- | ----------------------------------------------------------------------------------------------------- |
+| Bipod                  | Foregrip , Gyro Mount , Sling , Tripod , Underbarrel Weight                                           |
+| Folding Stock          | Hip Pad Bracing System , Shock Pad , Sling                                                            |
+| Foregrip               | Bipod , Gyro Mount , Tripod , Underbarrel Weight                                                      |
+| Gyro Mount             | Bipod , Foregrip , Tripod , Sling , Underbarrel Weight                                                |
+| Hip Pad Bracing System | Folding Stock , Shock Pad , Sling                                                                     |
+| Shock Pad              | Folding Stock , Hip Pad Bracing System , Sling                                                        |
+| Sling                  | Bipod , Folding Stock , Gyro Mount , Hip Pad Bracing System , Shock Pad , Tripod , Underbarrel Weight |
+| Tripod                 | Bipod , Foregrip , Gyro Mount , Sling , Underbarrel Weight                                            |
+| Underbarrel Weight     | Bipod , Foregrip , Gyro Mount , Sling , Tripod                                                        |
 
 **RECOIL COMPENSATION COMPATIBILITY**
 
-| ACCESSORY | BIPOD | FOLDING STOCK | FOREGRIP | GYRO MOUNT | HIP PAD BRACING SYSTEM | SHOCK PAD | SLING | TRIPOD | UNDERBARREL WEIGHT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Bipod | No | Yes | No | No | Yes | Yes | No | No | No |
-| Folding Stock | Yes | No | Yes | Yes | No | No | No | Yes | Yes |
-| Foregrip | No | Yes | No | No | Yes | Yes | Yes | No | No |
-| Gyro Mount | No | Yes | No | No | Yes | Yes | No | No | No |
-| Hip Pad Bracing System | Yes | No | Yes | Yes | No | No | No | Yes | Yes |
-| Shock Pad | Yes | No | Yes | Yes | No | No | No | Yes | Yes |
-| Sling | No | No | Yes | No | No | No | No | No | No |
-| Tripod | No | Yes | No | No | Yes | Yes | No | No | No |
-| Underbarrel Weight | No | Yes | No | No | Yes | Yes | No | No | No |
+| ACCESSORY              | BIPOD | FOLDING STOCK | FOREGRIP | GYRO MOUNT | HIP PAD BRACING SYSTEM | SHOCK PAD | SLING | TRIPOD | UNDERBARREL WEIGHT |
+| ---------------------- | ----- | ------------- | -------- | ---------- | ---------------------- | --------- | ----- | ------ | ------------------ |
+| Bipod                  | No    | Yes           | No       | No         | Yes                    | Yes       | No    | No     | No                 |
+| Folding Stock          | Yes   | No            | Yes      | Yes        | No                     | No        | No    | Yes    | Yes                |
+| Foregrip               | No    | Yes           | No       | No         | Yes                    | Yes       | Yes   | No     | No                 |
+| Gyro Mount             | No    | Yes           | No       | No         | Yes                    | Yes       | No    | No     | No                 |
+| Hip Pad Bracing System | Yes   | No            | Yes      | Yes        | No                     | No        | No    | Yes    | Yes                |
+| Shock Pad              | Yes   | No            | Yes      | Yes        | No                     | No        | No    | Yes    | Yes                |
+| Sling                  | No    | No            | Yes      | No         | No                     | No        | No    | No     | No                 |
+| Tripod                 | No    | Yes           | No       | No         | Yes                    | Yes       | No    | No     | No                 |
+| Underbarrel Weight     | No    | Yes           | No       | No         | Yes                    | Yes       | No    | No     | No                 |

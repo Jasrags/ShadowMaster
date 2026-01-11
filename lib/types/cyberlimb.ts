@@ -123,10 +123,7 @@ export const LIMB_CM_BONUS: Record<CyberlimbType, number> = {
  * Maps location to its "side" for hierarchy checks.
  * Used to determine if a new limb conflicts with an existing one.
  */
-export const LOCATION_SIDE: Record<
-  CyberlimbLocation,
-  "left" | "right" | "center"
-> = {
+export const LOCATION_SIDE: Record<CyberlimbLocation, "left" | "right" | "center"> = {
   "left-arm": "left",
   "right-arm": "right",
   "left-leg": "left",
@@ -315,8 +312,7 @@ export interface CyberImplantWeapon {
  * - ADR-010: Wireless state, device condition
  * - ADR-011: Sheet-driven creation support
  */
-export interface CyberlimbItem
-  extends Omit<CyberwareItem, "enhancements" | "category"> {
+export interface CyberlimbItem extends Omit<CyberwareItem, "enhancements" | "category"> {
   /** Always "cyberlimb" for type discrimination */
   category: "cyberlimb";
 
@@ -404,9 +400,7 @@ export interface CyberlimbItem
 /**
  * Type guard to check if a cyberware item is a cyberlimb.
  */
-export function isCyberlimb(
-  item: CyberwareItem | CyberlimbItem
-): item is CyberlimbItem {
+export function isCyberlimb(item: CyberwareItem | CyberlimbItem): item is CyberlimbItem {
   return item.category === "cyberlimb" && "location" in item && "limbType" in item;
 }
 
@@ -447,14 +441,8 @@ export function isLegLocation(location: CyberlimbLocation): boolean {
  * Formula: baseStrength (3) + customStrength + strengthEnhancementRating
  */
 export function getCyberlimbStrength(limb: CyberlimbItem): number {
-  const strengthEnhancement = limb.enhancements.find(
-    (e) => e.enhancementType === "strength"
-  );
-  return (
-    limb.baseStrength +
-    limb.customStrength +
-    (strengthEnhancement?.rating ?? 0)
-  );
+  const strengthEnhancement = limb.enhancements.find((e) => e.enhancementType === "strength");
+  return limb.baseStrength + limb.customStrength + (strengthEnhancement?.rating ?? 0);
 }
 
 /**
@@ -462,21 +450,15 @@ export function getCyberlimbStrength(limb: CyberlimbItem): number {
  * Formula: baseAgility (3) + customAgility + agilityEnhancementRating
  */
 export function getCyberlimbAgility(limb: CyberlimbItem): number {
-  const agilityEnhancement = limb.enhancements.find(
-    (e) => e.enhancementType === "agility"
-  );
-  return (
-    limb.baseAgility + limb.customAgility + (agilityEnhancement?.rating ?? 0)
-  );
+  const agilityEnhancement = limb.enhancements.find((e) => e.enhancementType === "agility");
+  return limb.baseAgility + limb.customAgility + (agilityEnhancement?.rating ?? 0);
 }
 
 /**
  * Get the armor bonus from a cyberlimb's armor enhancement.
  */
 export function getCyberlimbArmorBonus(limb: CyberlimbItem): number {
-  const armorEnhancement = limb.enhancements.find(
-    (e) => e.enhancementType === "armor"
-  );
+  const armorEnhancement = limb.enhancements.find((e) => e.enhancementType === "armor");
   return armorEnhancement?.rating ?? 0;
 }
 
@@ -491,18 +473,9 @@ export function getCyberlimbAvailableCapacity(limb: CyberlimbItem): number {
  * Calculate total capacity used by all installed items.
  */
 export function calculateCyberlimbCapacityUsed(limb: CyberlimbItem): number {
-  const enhancementCapacity = limb.enhancements.reduce(
-    (sum, e) => sum + e.capacityUsed,
-    0
-  );
-  const accessoryCapacity = limb.accessories.reduce(
-    (sum, a) => sum + a.capacityUsed,
-    0
-  );
-  const weaponCapacity = limb.weapons.reduce(
-    (sum, w) => sum + w.capacityUsed,
-    0
-  );
+  const enhancementCapacity = limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0);
+  const accessoryCapacity = limb.accessories.reduce((sum, a) => sum + a.capacityUsed, 0);
+  const weaponCapacity = limb.weapons.reduce((sum, w) => sum + w.capacityUsed, 0);
   return enhancementCapacity + accessoryCapacity + weaponCapacity;
 }
 
@@ -551,10 +524,7 @@ export function getAffectedLocations(
   // Find all locations on the same side with types that would be replaced
   const affected: CyberlimbLocation[] = [];
   for (const [loc, type] of Object.entries(LOCATION_LIMB_TYPE)) {
-    if (
-      LOCATION_SIDE[loc as CyberlimbLocation] === side &&
-      replacedTypes.includes(type)
-    ) {
+    if (LOCATION_SIDE[loc as CyberlimbLocation] === side && replacedTypes.includes(type)) {
       affected.push(loc as CyberlimbLocation);
     }
   }

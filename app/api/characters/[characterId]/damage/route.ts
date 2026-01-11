@@ -170,7 +170,14 @@ export async function POST(
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json(
-        { success: false, error: "Unauthorized", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+        {
+          success: false,
+          error: "Unauthorized",
+          character: {
+            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+            woundModifier: 0,
+          },
+        },
         { status: 401 }
       );
     }
@@ -178,7 +185,14 @@ export async function POST(
     const user = await getUserById(userId);
     if (!user) {
       return NextResponse.json(
-        { success: false, error: "User not found", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+        {
+          success: false,
+          error: "User not found",
+          character: {
+            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+            woundModifier: 0,
+          },
+        },
         { status: 404 }
       );
     }
@@ -193,7 +207,14 @@ export async function POST(
       // For now, we only allow owners or GMs to modify damage
       // TODO: Implement cross-user character lookup for GM access
       return NextResponse.json(
-        { success: false, error: "Character not found", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+        {
+          success: false,
+          error: "Character not found",
+          character: {
+            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+            woundModifier: 0,
+          },
+        },
         { status: 404 }
       );
     }
@@ -204,14 +225,28 @@ export async function POST(
         const campaign = await getCampaignById(character.campaignId);
         if (!campaign || campaign.gmId !== userId) {
           return NextResponse.json(
-            { success: false, error: "Not authorized to modify this character", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+            {
+              success: false,
+              error: "Not authorized to modify this character",
+              character: {
+                condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+                woundModifier: 0,
+              },
+            },
             { status: 403 }
           );
         }
         isOwner = false;
       } else {
         return NextResponse.json(
-          { success: false, error: "Not authorized to modify this character", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+          {
+            success: false,
+            error: "Not authorized to modify this character",
+            character: {
+              condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+              woundModifier: 0,
+            },
+          },
           { status: 403 }
         );
       }
@@ -224,14 +259,28 @@ export async function POST(
     // Validate request
     if (!type || !["physical", "stun", "overflow"].includes(type)) {
       return NextResponse.json(
-        { success: false, error: "Invalid damage type. Must be 'physical', 'stun', or 'overflow'", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+        {
+          success: false,
+          error: "Invalid damage type. Must be 'physical', 'stun', or 'overflow'",
+          character: {
+            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+            woundModifier: 0,
+          },
+        },
         { status: 400 }
       );
     }
 
     if (typeof amount !== "number") {
       return NextResponse.json(
-        { success: false, error: "Amount must be a number", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+        {
+          success: false,
+          error: "Amount must be a number",
+          character: {
+            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+            woundModifier: 0,
+          },
+        },
         { status: 400 }
       );
     }
@@ -280,7 +329,14 @@ export async function POST(
   } catch (error) {
     console.error("Failed to apply damage:", error);
     return NextResponse.json(
-      { success: false, error: "Failed to apply damage", character: { condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 }, woundModifier: 0 } },
+      {
+        success: false,
+        error: "Failed to apply damage",
+        character: {
+          condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
+          woundModifier: 0,
+        },
+      },
       { status: 500 }
     );
   }

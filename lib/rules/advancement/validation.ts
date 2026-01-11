@@ -48,12 +48,14 @@ function getMetatypeAttributeLimits(
   ruleset: MergedRuleset
 ): Record<string, { min: number; max: number }> | null {
   // Access modules directly to avoid importing from merge.ts (which imports server-only code)
-  const metatypesModule = ruleset.modules.metatypes as {
-    metatypes: Array<{
-      id: string;
-      attributes: Record<string, { min: number; max: number } | { base: number }>;
-    }>;
-  } | undefined;
+  const metatypesModule = ruleset.modules.metatypes as
+    | {
+        metatypes: Array<{
+          id: string;
+          attributes: Record<string, { min: number; max: number } | { base: number }>;
+        }>;
+      }
+    | undefined;
 
   if (!metatypesModule) return null;
 
@@ -138,7 +140,7 @@ export function validateAttributeAdvancement(
 
   // Get current rating
   let currentRating = character.attributes[attributeId] || 0;
-  
+
   // Check special attributes if not in regular attributes
   if (attributeId === "edge") {
     currentRating = character.specialAttributes?.edge || 0;
@@ -224,7 +226,7 @@ export function validateAttributeAdvancement(
  * @param ruleset - Merged ruleset (for checking Aptitude quality)
  * @returns Maximum rating allowed
  */
- 
+
 export function getSkillMaximum(
   character: Character,
   skillId: string,
@@ -324,11 +326,7 @@ export function validateSkillAdvancement(
 
   // Validate downtime limits if downtime period is provided
   if (options.downtimePeriodId && options.campaignEvents) {
-    const downtimeLimitCheck = validateDowntimeLimits(
-      character,
-      options.downtimePeriodId,
-      "skill"
-    );
+    const downtimeLimitCheck = validateDowntimeLimits(character, options.downtimePeriodId, "skill");
     if (!downtimeLimitCheck.valid) {
       errors.push({
         message: downtimeLimitCheck.error || "Downtime limit exceeded",
@@ -338,12 +336,7 @@ export function validateSkillAdvancement(
   }
 
   // Calculate cost and validate karma
-  const cost = calculateAdvancementCost(
-    "skill",
-    newRating,
-    options.settings,
-    options.ruleset
-  );
+  const cost = calculateAdvancementCost("skill", newRating, options.settings, options.ruleset);
   const karmaCheck = validateKarmaAvailability(character, cost);
   if (!karmaCheck.valid) {
     errors.push({
@@ -418,9 +411,10 @@ export function validateSpecializationAdvancement(
  * @param character - Character to validate
  * @returns Validation result
  */
-export function validateCharacterNotDraft(
-  character: Character
-): { valid: boolean; error?: string } {
+export function validateCharacterNotDraft(character: Character): {
+  valid: boolean;
+  error?: string;
+} {
   if (character.status === "draft") {
     return {
       valid: false,
@@ -469,4 +463,3 @@ export function validateAdvancement(
     cost: errors.length === 0 ? cost : undefined,
   };
 }
-

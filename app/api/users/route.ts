@@ -90,11 +90,11 @@ export async function GET(request: NextRequest) {
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     console.error("Get users error:", error);
@@ -104,4 +104,3 @@ export async function GET(request: NextRequest) {
     );
   }
 }
-

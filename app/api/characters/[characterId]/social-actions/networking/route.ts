@@ -29,18 +29,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId } = await params;
@@ -48,10 +42,7 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Parse body

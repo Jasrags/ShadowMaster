@@ -96,9 +96,7 @@ describe("GET /api/characters/[characterId]/wireless", () => {
           cost: 39000,
           availability: 8,
           wirelessEnabled: true,
-          wirelessEffects: [
-            { type: "initiative", modifier: 1 },
-          ],
+          wirelessEffects: [{ type: "initiative", modifier: 1 }],
         } as CyberwareItem,
       ],
     });

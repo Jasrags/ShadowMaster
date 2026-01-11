@@ -1,20 +1,20 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 | Devices | Restraints | B&E Gear | Grapple Guns | Communications | Battering Rams |
-| --- | --- | --- | --- | --- | --- |
+| ------- | ---------- | -------- | ------------ | -------------- | -------------- |
 
 Sometimes, when a maglock pass key or a lock pick just can’t get the job done, a more robust method becomes necessary. Popular with entry teams, battering rams range from hunks of metal to high-tech wireless devices. Battering rams are not recommended for use as a melee weapon but can be used as such (use Exotic Melee Weapon (Battering Rams) skill, assuming you had the foresight to select it). For normal use, battering rams require Strength + Agility for the attack test (see Destroying Barriers, p.197, SR5), which is added to the damage and then resisted by the object’s Body + Armor.
 
-| TYPE | NAME | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| **Battering Ram** | **Standard Ram** | 10R | 2,000¥ | SR5:R&G |
-| **Battering Ram** | **Fluid-Motion Ram** | 10R | 3,500¥ | SR5:R&G |
-| **Battering Ram** | **Pneumatic Ram** | 18R | 10,000¥ | SR5:R&G |
-| **Battering Ram** | **Shock Ram** | 10R | 15,000¥ | SR5:R&G |
+| TYPE              | NAME                 | AVAIL | COST    | SOURCE  |
+| ----------------- | -------------------- | ----- | ------- | ------- |
+| **Battering Ram** | **Standard Ram**     | 10R   | 2,000¥  | SR5:R&G |
+| **Battering Ram** | **Fluid-Motion Ram** | 10R   | 3,500¥  | SR5:R&G |
+| **Battering Ram** | **Pneumatic Ram**    | 18R   | 10,000¥ | SR5:R&G |
+| **Battering Ram** | **Shock Ram**        | 10R   | 15,000¥ | SR5:R&G |
 
 ## Contents
 
@@ -28,7 +28,7 @@ Sometimes, when a maglock pass key or a lock pick just can’t get the job done,
 
 ## Standard Ram
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 4 | - | (STR+2)P | -1 | 10R | 2,000¥ | Core |
@@ -37,10 +37,10 @@ A metal tube weighing approximately 20 kilograms with a blunted end and handles 
 
 ## Fluid-Motion Ram
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
-| 5 | 1 | (STR*+3)P | -1 | 10R | 3,500¥ | Core |
+| 5 | 1 | (STR\*+3)P | -1 | 10R | 3,500¥ | Core |
 
 The same as the standard battering ram, but it includes an internal ten-liter liquid reservoir. When used, the ram is swung backwards and then forward to strike the target. On impact the internal fluid in the ram creates extra momentum that increases the impact damage. Very useful against more durable doors, but using it requires two average-size humans or one average-size troll.
 
@@ -48,7 +48,7 @@ The same as the standard battering ram, but it includes an internal ten-liter li
 
 ## Pneumatic Ram
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 6 | - | 16P | -4 | 18R | 10,000¥ | Core |
@@ -57,7 +57,7 @@ Also known as the P-Ram, a pneumatic ram’s breaching power comes from a large,
 
 ## Shock Ram
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 1 | (Str+2)P + 12(e) | -3 | 10R | 15,000¥ | Core |

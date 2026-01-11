@@ -129,10 +129,7 @@ class StateChangeCollector {
 /**
  * Calculate updated action allocation after using an action
  */
-export function consumeAction(
-  current: ActionAllocation,
-  actionType: string
-): ActionAllocation {
+export function consumeAction(current: ActionAllocation, actionType: string): ActionAllocation {
   const updated = { ...current };
 
   switch (actionType) {
@@ -174,9 +171,7 @@ export function consumeAction(
 /**
  * Execute an action with full validation, rolling, and state updates
  */
-export async function executeAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult> {
+export async function executeAction(request: ExecutionRequest): Promise<ExecutionResult> {
   const stateChanges = new StateChangeCollector();
   const now = new Date().toISOString();
 
@@ -195,9 +190,7 @@ export async function executeAction(
     }
 
     if (request.participantId) {
-      participant = combatSession.participants.find(
-        (p) => p.id === request.participantId
-      ) ?? null;
+      participant = combatSession.participants.find((p) => p.id === request.participantId) ?? null;
     }
   }
 
@@ -270,14 +263,10 @@ export async function executeAction(
   }
 
   // 5. Execute the roll
-  const rollResult = executeRoll(
-    actionPool.totalDice,
-    DEFAULT_DICE_RULES,
-    {
-      limit: actionPool.limit,
-      explodingSixes: request.edgeAction === "push_the_limit",
-    }
-  );
+  const rollResult = executeRoll(actionPool.totalDice, DEFAULT_DICE_RULES, {
+    limit: actionPool.limit,
+    explodingSixes: request.edgeAction === "push_the_limit",
+  });
 
   // 6. Create action result
   const actionResult: ActionResult = {
@@ -304,19 +293,12 @@ export async function executeAction(
   };
 
   // 7. Save action to history
-  await actionHistoryStorage.saveActionResult(
-    request.userId,
-    request.characterId,
-    actionResult
-  );
+  await actionHistoryStorage.saveActionResult(request.userId, request.characterId, actionResult);
 
   // 8. Update combat session state if applicable
   if (combatSession && participant && request.participantId) {
     // Consume the action
-    const updatedActions = consumeAction(
-      participant.actionsRemaining,
-      request.action.type
-    );
+    const updatedActions = consumeAction(participant.actionsRemaining, request.action.type);
 
     stateChanges.add({
       entityId: request.participantId,
@@ -377,9 +359,7 @@ export async function executeAction(
 /**
  * Execute a reroll using Edge (Second Chance or Close Call)
  */
-export async function executeActionReroll(
-  request: RerollRequest
-): Promise<ExecutionResult> {
+export async function executeActionReroll(request: RerollRequest): Promise<ExecutionResult> {
   const stateChanges = new StateChangeCollector();
 
   // 1. Get the original action
@@ -504,9 +484,7 @@ export async function executeActionReroll(
 /**
  * Execute a combat action with full combat context
  */
-export async function executeCombatAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult> {
+export async function executeCombatAction(request: ExecutionRequest): Promise<ExecutionResult> {
   // Validate combat context
   if (!request.combatSessionId || !request.participantId) {
     return {
@@ -523,9 +501,7 @@ export async function executeCombatAction(
 /**
  * Execute a general (non-combat) action
  */
-export async function executeGeneralAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult> {
+export async function executeGeneralAction(request: ExecutionRequest): Promise<ExecutionResult> {
   // Remove combat context requirement
   const generalRequest: ExecutionRequest = {
     ...request,
@@ -544,9 +520,7 @@ export async function executeGeneralAction(
  * Apply a batch of state changes
  * This would update character/session data based on the changes
  */
-export async function applyStateChanges(
-  changes: StateChange[]
-): Promise<void> {
+export async function applyStateChanges(changes: StateChange[]): Promise<void> {
   // Group changes by entity
   const byEntity = new Map<string, StateChange[]>();
   for (const change of changes) {
@@ -571,9 +545,7 @@ export async function applyStateChanges(
 /**
  * Rollback state changes (for error recovery)
  */
-export async function rollbackStateChanges(
-  changes: StateChange[]
-): Promise<void> {
+export async function rollbackStateChanges(changes: StateChange[]): Promise<void> {
   // Apply changes in reverse, swapping previous and new values
   const reversedChanges = [...changes].reverse().map((change) => ({
     ...change,
@@ -670,9 +642,7 @@ export async function executeOpposedTest(
 /**
  * Check if an action can be executed without actually executing it
  */
-export async function canExecuteAction(
-  request: Omit<ExecutionRequest, "userId">
-): Promise<{
+export async function canExecuteAction(request: Omit<ExecutionRequest, "userId">): Promise<{
   canExecute: boolean;
   validation: ValidationResult;
   estimatedPool?: ActionPool;
@@ -719,12 +689,7 @@ export async function getAvailableActions(
   const ineligible: { action: ActionDefinition; reasons: string[] }[] = [];
 
   for (const action of actionCatalog) {
-    const validation = validateAction(
-      character,
-      action,
-      combatSession ?? undefined,
-      participantId
-    );
+    const validation = validateAction(character, action, combatSession ?? undefined, participantId);
 
     if (validation.valid) {
       eligible.push(action);

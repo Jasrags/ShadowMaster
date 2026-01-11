@@ -95,9 +95,7 @@ export function generateMigrationPlan(
   let estimatedKarmaDelta = 0;
 
   for (const change of report.changes) {
-    const recommendation = report.recommendations.find(
-      (r) => r.changeId === change.id
-    );
+    const recommendation = report.recommendations.find((r) => r.changeId === change.id);
 
     // Determine the action for this change
     let action: MigrationAction;
@@ -167,10 +165,7 @@ function getAutoAction(change: DriftChange): MigrationAction {
 /**
  * Calculate karma delta for a migration step
  */
-function calculateKarmaDelta(
-  change: DriftChange,
-  action: MigrationAction
-): number {
+function calculateKarmaDelta(change: DriftChange, action: MigrationAction): number {
   // Basic karma calculation - can be expanded based on change type
   if (action === "remove") {
     // Removing items might refund karma
@@ -212,10 +207,7 @@ function calculateKarmaDelta(
  * @param plan - The migration plan to validate
  * @returns Validation result
  */
-export function validateMigrationPlan(
-  character: Character,
-  plan: MigrationPlan
-): ValidationResult {
+export function validateMigrationPlan(character: Character, plan: MigrationPlan): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
 
@@ -299,12 +291,7 @@ export async function executeMigration(
 
   try {
     // Update sync status to migrating
-    await updateSyncStatus(
-      userId,
-      character.id,
-      "migrating",
-      character.legalityStatus || "draft"
-    );
+    await updateSyncStatus(userId, character.id, "migrating", character.legalityStatus || "draft");
 
     // Apply each step
     for (const step of plan.steps) {
@@ -336,12 +323,7 @@ export async function executeMigration(
     };
   } catch (error) {
     // Rollback on error
-    await updateSyncStatus(
-      userId,
-      character.id,
-      "outdated",
-      character.legalityStatus || "draft"
-    );
+    await updateSyncStatus(userId, character.id, "outdated", character.legalityStatus || "draft");
 
     return {
       success: false,
@@ -355,10 +337,7 @@ export async function executeMigration(
 /**
  * Apply a single migration step to a character
  */
-async function applyMigrationStep(
-  _character: Character,
-  step: MigrationStep
-): Promise<void> {
+async function applyMigrationStep(_character: Character, step: MigrationStep): Promise<void> {
   // In a full implementation, this would modify the character
   // based on the step's action and the affected item type.
   // For now, we just validate the step can be applied.

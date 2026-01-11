@@ -155,7 +155,9 @@ export function QuickCombatControls({
           initiativeScore: initiative.score,
           initiativeDice: initiative.dice,
           isGMControlled: false,
-          woundModifier: -Math.floor((character.condition?.physicalDamage || 0) / 3) - Math.floor((character.condition?.stunDamage || 0) / 3),
+          woundModifier:
+            -Math.floor((character.condition?.physicalDamage || 0) / 3) -
+            Math.floor((character.condition?.stunDamage || 0) / 3),
         }),
       });
 
@@ -253,7 +255,9 @@ export function QuickCombatControls({
           </div>
 
           {displayError && (
-            <div className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}>
+            <div
+              className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}
+            >
               <AlertCircle className="w-4 h-4" />
               {displayError}
             </div>
@@ -294,7 +298,9 @@ export function QuickCombatControls({
 
   // In combat - show combat controls
   return (
-    <div className={`rounded-lg overflow-hidden border-2 border-amber-500/50 ${theme.components.section.wrapper}`}>
+    <div
+      className={`rounded-lg overflow-hidden border-2 border-amber-500/50 ${theme.components.section.wrapper}`}
+    >
       {/* Header */}
       <button
         onClick={() => setIsExpanded(!isExpanded)}
@@ -331,8 +337,12 @@ export function QuickCombatControls({
           {/* Combat Status */}
           <div className="grid grid-cols-2 gap-3">
             {/* Round & Turn */}
-            <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-1`}>
+            <div
+              className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+            >
+              <div
+                className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-1`}
+              >
                 Round / Turn
               </div>
               <div className={`${theme.fonts.mono} font-bold text-amber-500`}>
@@ -341,8 +351,12 @@ export function QuickCombatControls({
             </div>
 
             {/* Initiative */}
-            <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-1`}>
+            <div
+              className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+            >
+              <div
+                className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-1`}
+              >
                 Initiative
               </div>
               <div className={`${theme.fonts.mono} font-bold ${theme.colors.accent}`}>
@@ -358,18 +372,22 @@ export function QuickCombatControls({
 
           {/* Turn Status */}
           {isMyTurn ? (
-            <div className={`
+            <div
+              className={`
               flex items-center gap-2 p-3 rounded border
               bg-emerald-500/20 border-emerald-500/30 text-emerald-500
-            `}>
+            `}
+            >
               <Zap className="w-5 h-5" />
               <span className="font-medium">Your Turn!</span>
             </div>
           ) : (
-            <div className={`
+            <div
+              className={`
               flex items-center gap-2 p-3 rounded border
               ${theme.components.card.wrapper} ${theme.colors.muted}
-            `}>
+            `}
+            >
               <Clock className="w-5 h-5" />
               <span>Waiting for turn...</span>
             </div>
@@ -377,53 +395,70 @@ export function QuickCombatControls({
 
           {/* Action Economy */}
           {participant?.actionsRemaining && (
-            <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-2`}>
+            <div
+              className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+            >
+              <div
+                className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-2`}
+              >
                 Actions Remaining
               </div>
               <div className="flex items-center gap-3">
                 <div className="flex items-center gap-1.5">
                   <span className={`text-xs ${theme.colors.muted}`}>Free</span>
-                  <span className={`
+                  <span
+                    className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${participant.actionsRemaining.free > 0
-                      ? "bg-emerald-500/20 text-emerald-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      participant.actionsRemaining.free > 0
+                        ? "bg-emerald-500/20 text-emerald-500"
+                        : "bg-muted text-muted-foreground"
                     }
-                  `}>
-                    {participant.actionsRemaining.free > 10 ? "∞" : participant.actionsRemaining.free}
+                  `}
+                  >
+                    {participant.actionsRemaining.free > 10
+                      ? "∞"
+                      : participant.actionsRemaining.free}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className={`text-xs ${theme.colors.muted}`}>Simple</span>
-                  <span className={`
+                  <span
+                    className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${participant.actionsRemaining.simple > 0
-                      ? "bg-blue-500/20 text-blue-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      participant.actionsRemaining.simple > 0
+                        ? "bg-blue-500/20 text-blue-500"
+                        : "bg-muted text-muted-foreground"
                     }
-                  `}>
+                  `}
+                  >
                     {participant.actionsRemaining.simple}
                   </span>
                 </div>
                 <div className="flex items-center gap-1.5">
                   <span className={`text-xs ${theme.colors.muted}`}>Complex</span>
-                  <span className={`
+                  <span
+                    className={`
                     px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono}
-                    ${participant.actionsRemaining.complex > 0
-                      ? "bg-purple-500/20 text-purple-500"
-                      : "bg-muted text-muted-foreground"
+                    ${
+                      participant.actionsRemaining.complex > 0
+                        ? "bg-purple-500/20 text-purple-500"
+                        : "bg-muted text-muted-foreground"
                     }
-                  `}>
+                  `}
+                  >
                     {participant.actionsRemaining.complex}
                   </span>
                 </div>
                 <div title="Interrupt Available">
-                  <Shield className={`w-4 h-4 ${
-                    participant.actionsRemaining.interrupt
-                      ? "text-amber-500"
-                      : "text-muted-foreground"
-                  }`} />
+                  <Shield
+                    className={`w-4 h-4 ${
+                      participant.actionsRemaining.interrupt
+                        ? "text-amber-500"
+                        : "text-muted-foreground"
+                    }`}
+                  />
                 </div>
               </div>
             </div>
@@ -438,7 +473,9 @@ export function QuickCombatControls({
           )}
 
           {displayError && (
-            <div className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}>
+            <div
+              className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}
+            >
               <AlertCircle className="w-4 h-4" />
               {displayError}
             </div>
@@ -509,7 +546,9 @@ export function QuickCombatControls({
 
       {/* Collapsed Summary */}
       {!isExpanded && (
-        <div className={`px-4 py-2 flex items-center justify-between border-t ${theme.colors.border}`}>
+        <div
+          className={`px-4 py-2 flex items-center justify-between border-t ${theme.colors.border}`}
+        >
           <div className="flex items-center gap-4">
             {isMyTurn && (
               <span className="text-xs font-medium text-emerald-500 flex items-center gap-1">
@@ -518,10 +557,22 @@ export function QuickCombatControls({
             )}
             {participant?.actionsRemaining && (
               <div className={`flex items-center gap-2 text-xs ${theme.fonts.mono}`}>
-                <span className={participant.actionsRemaining.simple > 0 ? "text-blue-500" : "text-muted-foreground"}>
+                <span
+                  className={
+                    participant.actionsRemaining.simple > 0
+                      ? "text-blue-500"
+                      : "text-muted-foreground"
+                  }
+                >
                   S:{participant.actionsRemaining.simple}
                 </span>
-                <span className={participant.actionsRemaining.complex > 0 ? "text-purple-500" : "text-muted-foreground"}>
+                <span
+                  className={
+                    participant.actionsRemaining.complex > 0
+                      ? "text-purple-500"
+                      : "text-muted-foreground"
+                  }
+                >
                   C:{participant.actionsRemaining.complex}
                 </span>
               </div>

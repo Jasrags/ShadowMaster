@@ -111,10 +111,7 @@ export function useCharacterSheetPreferences(
 
   // Update a single preference
   const updatePreference = useCallback(
-    <K extends keyof CharacterSheetPreferences>(
-      key: K,
-      value: CharacterSheetPreferences[K]
-    ) => {
+    <K extends keyof CharacterSheetPreferences>(key: K, value: CharacterSheetPreferences[K]) => {
       setPreferences((prev) => ({
         ...prev,
         [key]: value,
@@ -147,4 +144,3 @@ export function useCharacterSheetPreferences(
     resetPreferences,
   };
 }
-

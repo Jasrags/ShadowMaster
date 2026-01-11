@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 ---

@@ -99,10 +99,7 @@ export function getWeaponAmmoState(weapon: Weapon): WeaponAmmoState {
  * Update weapon with new ammo state.
  * Updates both new and legacy fields for compatibility.
  */
-export function updateWeaponAmmoState(
-  weapon: Weapon,
-  ammoState: WeaponAmmoState
-): Weapon {
+export function updateWeaponAmmoState(weapon: Weapon, ammoState: WeaponAmmoState): Weapon {
   return {
     ...weapon,
     ammoState,
@@ -122,8 +119,7 @@ export function weaponUsesAmmo(weapon: Weapon): boolean {
   }
 
   // Check if weapon has ammo capacity
-  const capacity =
-    weapon.ammoState?.magazineCapacity ?? weapon.ammoCapacity ?? 0;
+  const capacity = weapon.ammoState?.magazineCapacity ?? weapon.ammoCapacity ?? 0;
   return capacity > 0;
 }
 
@@ -164,13 +160,8 @@ export function loadWeapon(
   }
 
   // Calculate how many rounds to load
-  const spaceAvailable =
-    currentState.magazineCapacity - currentState.currentRounds;
-  const roundsToLoad = Math.min(
-    quantity ?? spaceAvailable,
-    spaceAvailable,
-    ammoItem.quantity
-  );
+  const spaceAvailable = currentState.magazineCapacity - currentState.currentRounds;
+  const roundsToLoad = Math.min(quantity ?? spaceAvailable, spaceAvailable, ammoItem.quantity);
 
   if (roundsToLoad <= 0) {
     return {
@@ -191,8 +182,7 @@ export function loadWeapon(
       success: false,
       weapon,
       roundsLoaded: 0,
-      error:
-        "Cannot mix ammunition types. Unload current ammunition first.",
+      error: "Cannot mix ammunition types. Unload current ammunition first.",
     };
   }
 
@@ -285,10 +275,7 @@ export function unloadWeapon(
  * Swap the current magazine with a spare.
  * Old magazine (with remaining rounds) goes to spares.
  */
-export function swapMagazine(
-  weapon: Weapon,
-  newMagazine: MagazineItem
-): SwapMagazineResult {
+export function swapMagazine(weapon: Weapon, newMagazine: MagazineItem): SwapMagazineResult {
   if (!weaponUsesAmmo(weapon)) {
     return {
       success: false,
@@ -350,11 +337,7 @@ export function loadMagazine(
   quantity?: number
 ): { magazine: MagazineItem; ammoItem: AmmunitionItem; roundsLoaded: number } {
   const spaceAvailable = magazine.capacity - magazine.currentRounds;
-  const roundsToLoad = Math.min(
-    quantity ?? spaceAvailable,
-    spaceAvailable,
-    ammoItem.quantity
-  );
+  const roundsToLoad = Math.min(quantity ?? spaceAvailable, spaceAvailable, ammoItem.quantity);
 
   return {
     magazine: {
@@ -377,10 +360,7 @@ export function loadMagazine(
 /**
  * Check if weapon can fire in the given mode.
  */
-export function canFire(
-  weapon: Weapon,
-  firingMode: string
-): { canFire: boolean; reason?: string } {
+export function canFire(weapon: Weapon, firingMode: string): { canFire: boolean; reason?: string } {
   if (!weaponUsesAmmo(weapon)) {
     // Melee weapons can always "fire" (attack)
     return { canFire: true };
@@ -457,9 +437,7 @@ export function getAmmoDamageModifiers(
     return { damageModifier: 0, apModifier: 0 };
   }
 
-  const ammoType = ammunitionCatalog.find(
-    (a) => a.catalogId === ammoState.loadedAmmoTypeId
-  );
+  const ammoType = ammunitionCatalog.find((a) => a.catalogId === ammoState.loadedAmmoTypeId);
 
   if (!ammoType) {
     return { damageModifier: 0, apModifier: 0 };
@@ -513,10 +491,7 @@ export function getEffectiveWeaponDamage(
 /**
  * Get ammo display string for UI (e.g., "15/15 APDS").
  */
-export function getAmmoDisplayString(
-  weapon: Weapon,
-  ammunitionCatalog?: AmmunitionItem[]
-): string {
+export function getAmmoDisplayString(weapon: Weapon, ammunitionCatalog?: AmmunitionItem[]): string {
   if (!weaponUsesAmmo(weapon)) {
     return "—";
   }
@@ -525,9 +500,7 @@ export function getAmmoDisplayString(
   let display = `${ammoState.currentRounds}/${ammoState.magazineCapacity}`;
 
   if (ammoState.loadedAmmoTypeId && ammunitionCatalog) {
-    const ammoType = ammunitionCatalog.find(
-      (a) => a.catalogId === ammoState.loadedAmmoTypeId
-    );
+    const ammoType = ammunitionCatalog.find((a) => a.catalogId === ammoState.loadedAmmoTypeId);
     if (ammoType) {
       display += ` ${ammoType.ammoType.toUpperCase()}`;
     }

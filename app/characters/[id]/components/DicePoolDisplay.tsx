@@ -114,14 +114,10 @@ export function DicePoolDisplay({
           {effectivePool}
         </span>
         {isLimited && (
-          <span className={`text-[10px] ${LIMIT_COLORS[limit.type]}`}>
-            [{limit.value}]
-          </span>
+          <span className={`text-[10px] ${LIMIT_COLORS[limit.type]}`}>[{limit.value}]</span>
         )}
         {woundModifier < 0 && (
-          <span className="text-[10px] text-red-400 opacity-70">
-            ({woundModifier})
-          </span>
+          <span className="text-[10px] text-red-400 opacity-70">({woundModifier})</span>
         )}
       </button>
     );
@@ -158,9 +154,7 @@ export function DicePoolDisplay({
           </span>
           {/* Limit indicator */}
           {limit && (
-            <span
-              className={`text-xs ${t.fonts.mono} ${LIMIT_COLORS[limit.type]}`}
-            >
+            <span className={`text-xs ${t.fonts.mono} ${LIMIT_COLORS[limit.type]}`}>
               [{limit.value}]
             </span>
           )}
@@ -211,11 +205,7 @@ export function DicePoolDisplay({
         <div className="border-t border-border/30 pt-1 mt-1">
           <div className="flex items-center justify-between font-bold">
             <span className="text-muted-foreground">Total</span>
-            <span
-              className={`tabular-nums ${
-                isLimited ? "text-amber-400 line-through" : ""
-              }`}
-            >
+            <span className={`tabular-nums ${isLimited ? "text-amber-400 line-through" : ""}`}>
               {totalPool}
             </span>
           </div>
@@ -230,4 +220,3 @@ export function DicePoolDisplay({
     </div>
   );
 }
-

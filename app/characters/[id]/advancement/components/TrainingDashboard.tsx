@@ -38,14 +38,11 @@ export function TrainingDashboard({ character, onCharacterUpdate }: TrainingDash
       setIsSubmitting(trainingId);
 
       try {
-        const response = await fetch(
-          `/api/characters/${character.id}/training/${trainingId}`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ action: "complete" }),
-          }
-        );
+        const response = await fetch(`/api/characters/${character.id}/training/${trainingId}`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ action: "complete" }),
+        });
 
         const result = await response.json();
 
@@ -69,9 +66,7 @@ export function TrainingDashboard({ character, onCharacterUpdate }: TrainingDash
       <div className="p-8 text-center rounded-lg border border-zinc-700 bg-zinc-800/50">
         <Clock className="h-12 w-12 text-zinc-500 mx-auto mb-4" />
         <p className="text-zinc-400">No active training periods</p>
-        <p className="text-sm text-zinc-500 mt-2">
-          Start an advancement to begin training
-        </p>
+        <p className="text-sm text-zinc-500 mt-2">Start an advancement to begin training</p>
       </div>
     );
   }
@@ -85,23 +80,14 @@ export function TrainingDashboard({ character, onCharacterUpdate }: TrainingDash
         const isInterrupted = training.status === "interrupted";
 
         return (
-          <div
-            key={training.id}
-            className="p-4 rounded-lg border border-zinc-700 bg-zinc-800/50"
-          >
+          <div key={training.id} className="p-4 rounded-lg border border-zinc-700 bg-zinc-800/50">
             <div className="flex items-start justify-between mb-3">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
                   <h3 className="font-semibold text-zinc-100">{training.targetName}</h3>
-                  {isCompleted && (
-                    <CheckCircle className="h-4 w-4 text-emerald-400" />
-                  )}
-                  {isInterrupted && (
-                    <Pause className="h-4 w-4 text-amber-400" />
-                  )}
-                  {!isCompleted && !isInterrupted && (
-                    <Clock className="h-4 w-4 text-blue-400" />
-                  )}
+                  {isCompleted && <CheckCircle className="h-4 w-4 text-emerald-400" />}
+                  {isInterrupted && <Pause className="h-4 w-4 text-amber-400" />}
+                  {!isCompleted && !isInterrupted && <Clock className="h-4 w-4 text-blue-400" />}
                 </div>
                 <div className="text-sm text-zinc-400">
                   {training.type === "attribute" ? "Attribute" : "Skill"} Advancement
@@ -173,4 +159,3 @@ export function TrainingDashboard({ character, onCharacterUpdate }: TrainingDash
     </div>
   );
 }
-

@@ -35,35 +35,23 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { error: "Not authorized to view this character" },
-        { status: 403 }
-      );
+      return NextResponse.json({ error: "Not authorized to view this character" }, { status: 403 });
     }
 
     const drones = character.drones ?? [];
@@ -74,9 +62,6 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get drones:", error);
-    return NextResponse.json(
-      { error: "Failed to get drones" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to get drones" }, { status: 500 });
   }
 }

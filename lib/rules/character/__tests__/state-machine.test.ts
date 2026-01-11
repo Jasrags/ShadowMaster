@@ -99,9 +99,7 @@ describe("VALID_TRANSITIONS", () => {
     expect(VALID_TRANSITIONS.length).toBeGreaterThan(0);
 
     // Check key transitions exist
-    const draftToActive = VALID_TRANSITIONS.find(
-      (t) => t.from === "draft" && t.to === "active"
-    );
+    const draftToActive = VALID_TRANSITIONS.find((t) => t.from === "draft" && t.to === "active");
     expect(draftToActive).toBeDefined();
     expect(draftToActive?.validator).toBeDefined();
 
@@ -127,9 +125,7 @@ describe("VALID_TRANSITIONS", () => {
   });
 
   it("should not allow draft to retired transition", () => {
-    const draftToRetired = VALID_TRANSITIONS.find(
-      (t) => t.from === "draft" && t.to === "retired"
-    );
+    const draftToRetired = VALID_TRANSITIONS.find((t) => t.from === "draft" && t.to === "retired");
     expect(draftToRetired).toBeUndefined();
   });
 
@@ -175,9 +171,7 @@ describe("validateCharacterComplete", () => {
     const result = validateCharacterComplete(character);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.code === "MISSING_ATTRIBUTES")).toBe(
-      true
-    );
+    expect(result.errors.some((e) => e.code === "MISSING_ATTRIBUTES")).toBe(true);
   });
 
   it("should fail when lifestyle is missing", () => {
@@ -185,9 +179,7 @@ describe("validateCharacterComplete", () => {
     const result = validateCharacterComplete(character);
 
     expect(result.valid).toBe(false);
-    expect(result.errors.some((e) => e.code === "MISSING_LIFESTYLE")).toBe(
-      true
-    );
+    expect(result.errors.some((e) => e.code === "MISSING_LIFESTYLE")).toBe(true);
   });
 
   it("should fail when identity is missing", () => {
@@ -214,9 +206,7 @@ describe("validateCharacterComplete", () => {
     });
     const result = validateCharacterComplete(character);
 
-    expect(result.warnings.some((w) => w.code === "MISSING_TRADITION")).toBe(
-      true
-    );
+    expect(result.warnings.some((w) => w.code === "MISSING_TRADITION")).toBe(true);
   });
 });
 
@@ -375,12 +365,8 @@ describe("executeTransition", () => {
 
     expect(result.character?.auditLog).toHaveLength(1);
     expect(result.character?.auditLog?.[0].action).toBe("finalized");
-    expect(result.character?.auditLog?.[0].stateTransition?.fromStatus).toBe(
-      "draft"
-    );
-    expect(result.character?.auditLog?.[0].stateTransition?.toStatus).toBe(
-      "active"
-    );
+    expect(result.character?.auditLog?.[0].stateTransition?.fromStatus).toBe("draft");
+    expect(result.character?.auditLog?.[0].stateTransition?.toStatus).toBe("active");
   });
 
   it("should fail when character is incomplete", async () => {

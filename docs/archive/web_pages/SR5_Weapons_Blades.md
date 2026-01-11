@@ -1,41 +1,41 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 Melee weapons are for ending the lives of people conveniently within arm’s reach (see Melee Combat, p. 184). Some runners swear by them, especially those who prefer to kill silently or are afraid of hackers bricking their guns. The damage value of most melee weapons is based on the wielder’s Strength, modified by the weapon.
 
-| Weapon | Acc | Reach | DV | AP | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| Ares "One" Monosword | 5 | 1 | (STR+3)P | -3 | 8R | 900¥ | SR5:R&G |
-| Ceramic Knife | 5 | – | (STR+2)P | -1 | 4 | 75¥ | SR5:HT |
-| Combat Axe | 4 | 2 | (STR+5)P | -4 | 12R | 4,000¥ | Core |
-| Combat Knife | 6 | – | (STR+2)P | -3 | 4 | 300¥ | Core |
-| Cougar Collapsible Spear | 5 | – / 3 | (STR+1 / 3)P | -1 / -2 | 14R | 1,250¥ | SR5:HT |
-| Cougar Fine Shortblade | 7 | – | (STR+2)P | -1 | 5R | 350¥ | SR5:R&G |
-| Cougar Fine Longblade | 7 | – | (STR+3)P | -1 | 7R | 600¥ | SR5:R&G |
-| Forearm Snap-Blades | 4 | – | (STR+2)P | -2 | 7R | 200¥ | Core |
-| Highland Forge Claymore | 5 | 2 | (STR+5)P | -5 | 14R | 4,500¥ | SR5:R&G |
-| Horizon-Flynn Rapier | 7 | 1 | (STR+2)P | -3 | 9R | 500¥ | SR5:R&G |
-| Katana | 7 | 1 | (STR+3)P | -3 | 9R | 1,000¥ | Core |
-| Knife | 5 | – | (STR+1)P | -1 | – | 10¥ | Core |
-| Lapel Dagger | 4 | – | (STR+1)P | -1 | 5 | 100¥ | SR5:CA |
-| Mortimer of London "Belgrave" Sword Cane | 5 | 1 | (STR+3)P | -2 | 8 | 450¥ | SR5:CA |
-| Plasteel Knife | 5 | – | (STR+2)P | -1 | 4 | 75¥ | SR5:HT |
-| Pole Arm | 5 | 3 | (STR+3)P | -2 | 6R | 1,000¥ | Core |
-| Sapphire Knife | 5 | – | (STR+2)P | -3 | 6R | 900¥ | SR5:HT |
-| Survival Knife | 5 | – | (STR+2)P | -1 | – | 100¥ | Core |
-| Sword | 6 | 1 | (STR+3)P | -2 | 5R | 500¥ | Core |
-| Vibro Knife | 5 | – | (STR+2)P | -2 | 6R | 1,000¥ | SR5:SASS |
-| Vibro Sword | 6 | 1 | (STR+4)P | -2 | 8F | 2,000¥ | SR5:SASS |
-| Victorinox Collapsible Hatchet | 5 | 1 | (STR+2)P | -1 | 4 | 250¥ | SR5:HT |
-| Victorinox Memory Dagger | 5 | – | (STR+1)P | -2 | 14R | 1,250¥ | SR5:R&G |
-| Victorinox Memory Sword | 5 | 1 | (STR+2)P | -2 | 14R | 1,500¥ | SR5:R&G |
+| Weapon                                   | Acc | Reach | DV           | AP      | Avail | Cost   | Source   |
+| ---------------------------------------- | --- | ----- | ------------ | ------- | ----- | ------ | -------- |
+| Ares "One" Monosword                     | 5   | 1     | (STR+3)P     | -3      | 8R    | 900¥   | SR5:R&G  |
+| Ceramic Knife                            | 5   | –     | (STR+2)P     | -1      | 4     | 75¥    | SR5:HT   |
+| Combat Axe                               | 4   | 2     | (STR+5)P     | -4      | 12R   | 4,000¥ | Core     |
+| Combat Knife                             | 6   | –     | (STR+2)P     | -3      | 4     | 300¥   | Core     |
+| Cougar Collapsible Spear                 | 5   | – / 3 | (STR+1 / 3)P | -1 / -2 | 14R   | 1,250¥ | SR5:HT   |
+| Cougar Fine Shortblade                   | 7   | –     | (STR+2)P     | -1      | 5R    | 350¥   | SR5:R&G  |
+| Cougar Fine Longblade                    | 7   | –     | (STR+3)P     | -1      | 7R    | 600¥   | SR5:R&G  |
+| Forearm Snap-Blades                      | 4   | –     | (STR+2)P     | -2      | 7R    | 200¥   | Core     |
+| Highland Forge Claymore                  | 5   | 2     | (STR+5)P     | -5      | 14R   | 4,500¥ | SR5:R&G  |
+| Horizon-Flynn Rapier                     | 7   | 1     | (STR+2)P     | -3      | 9R    | 500¥   | SR5:R&G  |
+| Katana                                   | 7   | 1     | (STR+3)P     | -3      | 9R    | 1,000¥ | Core     |
+| Knife                                    | 5   | –     | (STR+1)P     | -1      | –     | 10¥    | Core     |
+| Lapel Dagger                             | 4   | –     | (STR+1)P     | -1      | 5     | 100¥   | SR5:CA   |
+| Mortimer of London "Belgrave" Sword Cane | 5   | 1     | (STR+3)P     | -2      | 8     | 450¥   | SR5:CA   |
+| Plasteel Knife                           | 5   | –     | (STR+2)P     | -1      | 4     | 75¥    | SR5:HT   |
+| Pole Arm                                 | 5   | 3     | (STR+3)P     | -2      | 6R    | 1,000¥ | Core     |
+| Sapphire Knife                           | 5   | –     | (STR+2)P     | -3      | 6R    | 900¥   | SR5:HT   |
+| Survival Knife                           | 5   | –     | (STR+2)P     | -1      | –     | 100¥   | Core     |
+| Sword                                    | 6   | 1     | (STR+3)P     | -2      | 5R    | 500¥   | Core     |
+| Vibro Knife                              | 5   | –     | (STR+2)P     | -2      | 6R    | 1,000¥ | SR5:SASS |
+| Vibro Sword                              | 6   | 1     | (STR+4)P     | -2      | 8F    | 2,000¥ | SR5:SASS |
+| Victorinox Collapsible Hatchet           | 5   | 1     | (STR+2)P     | -1      | 4     | 250¥   | SR5:HT   |
+| Victorinox Memory Dagger                 | 5   | –     | (STR+1)P     | -2      | 14R   | 1,250¥ | SR5:R&G  |
+| Victorinox Memory Sword                  | 5   | 1     | (STR+2)P     | -2      | 14R   | 1,500¥ | SR5:R&G  |
 
 ## Combat Axe
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 2 | (STR+5)P | -4 | 12R | 4,000¥ | Core |
@@ -44,7 +44,7 @@ A two-handed tungsten-alloy monster, available single- or double-bladed. A harde
 
 ## Combat Knife
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 6 | – | (STR+2)P | -3 | 4 | 300¥ | Core |
@@ -53,19 +53,19 @@ A long, KA-BAR-style fighting knife with a blacked-out blade and a chisel point 
 
 ## Forearm Snap-Blades
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 4 | – | (STR+2)P | -2 | 7R | 200¥ | Core |
 
 Wireless
-:   Readying the forearm snap blades is a Free Action instead of a Simple Action.
+: Readying the forearm snap blades is a Free Action instead of a Simple Action.
 
 These are essentially like spurs, only they’re external—painless to install or remove. A forearm sheath conceals three blades that can be extended or retracted via wireless link or muscle movement commands.
 
 ## Katana
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 7 | 1 | (STR+3)P | -3 | 9R | 1,000¥ | Core |
@@ -74,7 +74,7 @@ The legendary two-handed sword of the samurai. The katana has become synonymous 
 
 ## Knife
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | – | (STR+1)P | -1 | – | 10¥ | Core |
@@ -83,7 +83,7 @@ Your basic, all-purpose street cutter. It comes in a bewildering array of styles
 
 ## Pole Arm
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 3 | (STR+3)P | -2 | 6R | 1,000¥ | Core |
@@ -92,19 +92,19 @@ This is, at its very essence, a blade on the end of a very long stick. It usuall
 
 ## Survival Knife
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | – | (STR+2)P | -1 | – | 100¥ | Core |
 
 Wireless
-:   The knife displays an ARO of local maps, your GPS position, and can be used to make commcalls.
+: The knife displays an ARO of local maps, your GPS position, and can be used to make commcalls.
 
 A fine quality blade—smooth on one edge, serrated on the other—with several accessories, including a GPS monitor, mini-multitool, micro-lighter, and a hidden compartment in the handle. The sides of the steel are coated with a non-toxic chemical that blacks out the blade when inert to prevent unwanted reflection, but can be activated to provide two hours of phosphorescent light. All knives can cut flesh, but a survival knife is better at cutting rope and wood, or otherwise being used as a tool. The survival knife is the kind of gadget that no professional should be without.
 
 ## Sword
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 6 | 1 | (STR+3)P | -2 | 5R | 500¥ | Core |
@@ -113,13 +113,13 @@ It’s sharp, it’s heavy, and it will fragging cut you wide open. Available in
 
 ## Highland Forge Claymore
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 2 | (STR+5)P | -5 | 14R | 4,500¥ | SR5:R&G |
 
 Complex Action
-:   Ready Weapon with Standard Scabbard
+: Ready Weapon with Standard Scabbard
 
 Quality killing in the classic Scottish fashion. An ideal accessory for your Heritage Line clothing or for the troll who thinks a regular sword makes a better toothpick. The Highland Forge Claymore comes with a classic leather scabbard to add that authentic look. The blade is custom-forged with a proprietary technique even the masters of Damascus would be unable to match.
 
@@ -131,7 +131,7 @@ Quality killing in the classic Scottish fashion. An ideal accessory for your Her
 
 ## Horizon-Flynn Rapier
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 7 | 1 | (STR+2)P | -3 | 9R | 500¥ | SR5:R&G |
@@ -146,22 +146,22 @@ Not every street samurai studies the art of kenjutsu. Some prefer the more elega
 
 ## Victorinox Memory Sword
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 1 | (STR+2)P | -2 | 14R | 1,500¥ | SR5:R&G |
 
 Complex Action
-:   To Harden or become flexible
+: To Harden or become flexible
 
 Simple Action
-:   To ready or draw
+: To ready or draw
 
 Conceal Weapons Grip
-:   -4 Concealability to detect.
+: -4 Concealability to detect.
 
 Change the shape of the blade
-:   Software+Logic[Mental](8,1 minute)
+: Software+Logic[Mental](8,1 minute)
 
 Is it a belt, or is it a deadly weapon? A strange question, but one you must ask yourself when it comes to the Memory Blade. Victorinox uses their SmartSteel technology to provide a flexible material that can be commanded to stiffen and form a blade. They currently have two “self-defense” designs available for special order. The Belt, a sword length design worn around the waist, and the Bracelet, a design aimed at lady execs who want a little extra protection. Mostly found on executives with too much money, they often find their way into the shadow market after extraction ops.
 
@@ -170,26 +170,26 @@ Is it a belt, or is it a deadly weapon? A strange question, but one you must ask
 
 #### Victorinox Memory Dagger
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | – | (STR+1)P | -2 | 14R | 1,250¥ | SR5:R&G |
 
 Complex Action
-:   To Harden or become flexible
+: To Harden or become flexible
 
 Simple Action
-:   To ready or draw
+: To ready or draw
 
 Conceal Weapons Grip
-:   -4 Concealability to detect.
+: -4 Concealability to detect.
 
 Change the shape of the blade
-:   Software+Logic[Mental](8,1 minute)
+: Software+Logic[Mental](8,1 minute)
 
 ## Ares "One" Monosword
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 1 | (STR+3)P | -3 | 8R | 900¥ | SR5:R&G |
@@ -200,14 +200,14 @@ Change the shape of the blade
 
 ### Cougar Fine Shortblade
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 7 | – | (STR+2)P | -1 | 5R | 350¥ | SR5:R&G |
 
 ### Cougar Fine Longblade
 
-|  |
+| |
 | Acc | Reach | DV | AP | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- |
 | 7 | – | (STR+3)P | -1 | 7R | 600¥ | SR5:R&G |
@@ -216,10 +216,10 @@ Finely crafted but also expensive, the Fineblade line of Cougar products are usu
 
 ---
 
-| Weapons |
-| --- |
-| Melee | Blades // Clubs // Exotic // Implant // Improvised // Misc. |
-| Ranged | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing |
-| Firearms | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // *Misc.* ( Exotic / Implant ) |
-| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile ) |
-| *Misc.* | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles ) |
+| Weapons                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Melee                     | Blades // Clubs // Exotic // Implant // Improvised // Misc.                                                                                                                      |
+| Ranged                    | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing                                                                                                           |
+| Firearms                  | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // _Misc._ ( Exotic / Implant ) |
+| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile )                                                                                                                              |
+| _Misc._                   | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles )                                                                  |

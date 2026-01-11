@@ -22,4 +22,4 @@
 - Additional language skills follow standard skill rating rules and link to Intuition.
 - The Bilingual positive quality grants an extra native language during character creation.
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_

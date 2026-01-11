@@ -44,10 +44,7 @@ async function getUserAuditEntries(userId: string): Promise<UserAuditEntry[]> {
 /**
  * Save audit entries for a specific user
  */
-async function saveUserAuditEntries(
-  userId: string,
-  entries: UserAuditEntry[]
-): Promise<void> {
+async function saveUserAuditEntries(userId: string, entries: UserAuditEntry[]): Promise<void> {
   await ensureDirectory(AUDIT_DIR);
   const filePath = getUserAuditFilePath(userId);
   await writeJsonFile(filePath, entries);
@@ -99,8 +96,7 @@ export async function getUserAuditLog(
 
   // Sort by timestamp
   entries.sort((a, b) => {
-    const comparison =
-      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+    const comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
     return order === "asc" ? comparison : -comparison;
   });
 
@@ -159,24 +155,19 @@ export async function getAllUserAuditEntries(
 
   if (fromDate) {
     const fromTime = new Date(fromDate).getTime();
-    filteredEntries = filteredEntries.filter(
-      (e) => new Date(e.timestamp).getTime() >= fromTime
-    );
+    filteredEntries = filteredEntries.filter((e) => new Date(e.timestamp).getTime() >= fromTime);
   }
 
   if (toDate) {
     const toTime = new Date(toDate).getTime();
-    filteredEntries = filteredEntries.filter(
-      (e) => new Date(e.timestamp).getTime() <= toTime
-    );
+    filteredEntries = filteredEntries.filter((e) => new Date(e.timestamp).getTime() <= toTime);
   }
 
   const total = filteredEntries.length;
 
   // Sort by timestamp
   filteredEntries.sort((a, b) => {
-    const comparison =
-      new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
+    const comparison = new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime();
     return order === "asc" ? comparison : -comparison;
   });
 
@@ -232,10 +223,7 @@ export async function archiveUserAuditLog(
   // Save to archive location
   const archiveDir = path.join(process.cwd(), "data", "audit", "users-archived");
   await ensureDirectory(archiveDir);
-  const archivePath = path.join(
-    archiveDir,
-    `${userId}-${Date.now()}.json`
-  );
+  const archivePath = path.join(archiveDir, `${userId}-${Date.now()}.json`);
   await writeJsonFile(archivePath, entries);
 
   // Remove the active audit log

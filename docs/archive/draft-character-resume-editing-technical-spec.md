@@ -19,6 +19,7 @@ This document provides technical implementation details for the draft character 
 **Location:** `character.metadata.creationState`
 
 **Structure:**
+
 ```typescript
 interface Character {
   // ... other fields
@@ -30,6 +31,7 @@ interface Character {
 ```
 
 **CreationState Type:**
+
 ```typescript
 interface CreationState {
   characterId: ID;
@@ -48,6 +50,7 @@ interface CreationState {
 ### 2. PATCH /api/characters/[characterId] - Update Character with CreationState
 
 **Request:**
+
 ```typescript
 PATCH /api/characters/{characterId}
 Content-Type: application/json
@@ -57,7 +60,7 @@ Content-Type: application/json
   name?: string;
   attributes?: Record<string, number>;
   // ... other character fields
-  
+
   // CreationState update (optional, only during creation)
   metadata?: {
     creationState?: CreationState;
@@ -66,6 +69,7 @@ Content-Type: application/json
 ```
 
 **Response (Success):**
+
 ```typescript
 {
   success: true;
@@ -74,24 +78,29 @@ Content-Type: application/json
 ```
 
 **Response (Error - Unauthorized):**
+
 ```typescript
 {
   success: false;
   error: "Unauthorized";
 }
 ```
+
 Status: 401
 
 **Response (Error - Character Not Found):**
+
 ```typescript
 {
   success: false;
   error: "Character not found";
 }
 ```
+
 Status: 404
 
 **Response (Error - Validation Failed):**
+
 ```typescript
 {
   success: false;
@@ -102,9 +111,11 @@ Status: 404
   }[];
 }
 ```
+
 Status: 400
 
 **Validation Rules:**
+
 1. `characterId` in `creationState` must match route parameter `characterId`
 2. `creationState.creationMethodId` must match `character.creationMethodId`
 3. `creationState.characterId` must match `character.id`
@@ -116,6 +127,7 @@ Status: 400
 9. `updatedAt` must be a valid ISO date string
 
 **Implementation Notes:**
+
 - The PATCH endpoint already exists at `/app/api/characters/[characterId]/route.ts`
 - The `updateCharacter` function in `/lib/storage/characters.ts` already supports partial updates
 - Metadata updates are merged with existing metadata (not replaced)
@@ -124,11 +136,13 @@ Status: 400
 ### 3. GET /api/characters/[characterId] - Retrieve Character with CreationState
 
 **Request:**
+
 ```
 GET /api/characters/{characterId}
 ```
 
 **Response:**
+
 ```typescript
 {
   success: true;
@@ -137,6 +151,7 @@ GET /api/characters/{characterId}
 ```
 
 **Notes:**
+
 - The existing GET endpoint already returns the full character object
 - No changes needed - `metadata.creationState` will be included automatically if present
 - Client should check `character.metadata?.creationState` to determine if draft can be resumed
@@ -150,6 +165,7 @@ GET /api/characters/{characterId}
 **Chosen Approach:** Use `/characters/[id]/edit` for resuming drafts
 
 **Rationale:**
+
 - Clear separation: `/characters/create` always creates new, `/characters/[id]/edit` resumes existing
 - RESTful pattern: edit route for existing resources
 - Easy to detect mode: presence of `id` in route indicates resume mode
@@ -160,6 +176,7 @@ GET /api/characters/{characterId}
 **File:** `/app/characters/[id]/edit/page.tsx`
 
 **Route Detection Logic:**
+
 ```typescript
 // In the edit page component
 const { id } = useParams();
@@ -170,8 +187,8 @@ useEffect(() => {
   if (isResumeMode) {
     // Fetch character with creationState
     fetch(`/api/characters/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         if (data.character.metadata?.creationState) {
           // Resume from saved state
           setInitialState(data.character.metadata.creationState);
@@ -185,6 +202,7 @@ useEffect(() => {
 ```
 
 **Navigation Flow:**
+
 1. User clicks draft character in `/characters` list
 2. Navigate to `/characters/[id]/edit`
 3. Page loads character and checks for `metadata.creationState`
@@ -192,6 +210,7 @@ useEffect(() => {
 5. If absent: Show error (character is not a draft or state is missing)
 
 **Alternative Route (Not Chosen):**
+
 - `/characters/create?resume=[id]` - Rejected because:
   - Less RESTful
   - Requires query param parsing
@@ -207,12 +226,14 @@ useEffect(() => {
 **Current Approach:** Store `creationState` as-is, no versioning initially
 
 **Future Considerations:**
+
 1. Add `creationStateVersion` field to `CreationState` interface
 2. Store version when saving: `creationState.version = "1.0.0"`
 3. On load, check version and migrate if needed
 4. Migration functions in `/lib/rules/migration.ts`
 
 **Initial Implementation:**
+
 - No versioning required for MVP
 - Assume all `creationState` objects are compatible
 - If incompatible state detected, fall back to error handling (see Error Recovery)
@@ -220,6 +241,7 @@ useEffect(() => {
 ### Schema Evolution Strategy
 
 **Breaking Changes:**
+
 - If `CreationState` interface changes significantly, old drafts may be incompatible
 - Options:
   1. **Migration:** Write migration functions to transform old state to new format
@@ -227,11 +249,13 @@ useEffect(() => {
   3. **Fallback:** Start fresh if state is incompatible (lose progress)
 
 **Recommended Approach (MVP):**
+
 - Use validation to detect incompatible state
 - Show user-friendly error: "This draft was created with an older version and cannot be resumed. Please start a new character."
 - Optionally: Allow user to delete the draft and start fresh
 
 **Future Enhancement:**
+
 - Implement migration system when needed
 - Track `creationStateVersion` in metadata
 - Provide migration functions for each version bump
@@ -240,19 +264,19 @@ useEffect(() => {
 
 ```typescript
 function isCreationStateCompatible(state: unknown): state is CreationState {
-  if (!state || typeof state !== 'object') return false;
-  
+  if (!state || typeof state !== "object") return false;
+
   const s = state as Partial<CreationState>;
-  
+
   // Required fields
   if (!s.characterId || !s.creationMethodId) return false;
-  if (typeof s.currentStep !== 'number') return false;
+  if (typeof s.currentStep !== "number") return false;
   if (!Array.isArray(s.completedSteps)) return false;
-  if (!s.budgets || typeof s.budgets !== 'object') return false;
-  if (!s.selections || typeof s.selections !== 'object') return false;
+  if (!s.budgets || typeof s.budgets !== "object") return false;
+  if (!s.selections || typeof s.selections !== "object") return false;
   if (!Array.isArray(s.errors)) return false;
   if (!Array.isArray(s.warnings)) return false;
-  
+
   return true;
 }
 ```
@@ -268,32 +292,36 @@ function isCreationStateCompatible(state: unknown): state is CreationState {
 **Chosen Strategy:** Last-write-wins with optimistic updates
 
 **Implementation:**
+
 1. **Auto-save on state change:** Debounced (500ms delay)
 2. **No locking mechanism:** MVP doesn't require file locking
 3. **Optimistic updates:** UI updates immediately, server update happens async
 4. **Conflict resolution:** Last PATCH request wins (simple overwrite)
 
 **User Experience:**
+
 - If user edits in Tab A, then Tab B, Tab B's changes will overwrite Tab A's
 - This is acceptable for MVP - users should use one tab at a time
 - Future: Add conflict detection and user notification
 
 **Auto-save Implementation:**
+
 ```typescript
 // In CreationWizard component
 useEffect(() => {
   if (!characterId) return; // Only auto-save if character exists
-  
+
   const timeoutId = setTimeout(() => {
     // Debounced save
     saveCreationState(state);
   }, 500);
-  
+
   return () => clearTimeout(timeoutId);
 }, [state, characterId]);
 ```
 
 **Future Enhancement:**
+
 - Add `updatedAt` timestamp comparison
 - Detect conflicts: if server `updatedAt` > client `updatedAt`, show conflict dialog
 - Allow user to choose: "Keep my changes" or "Load server version"
@@ -305,11 +333,13 @@ useEffect(() => {
 **Debounce Delay:** 500ms
 
 **Rationale:**
+
 - Balances responsiveness with server load
 - Prevents excessive API calls during rapid user input
 - Ensures state is saved within 500ms of last change
 
 **Manual Save:**
+
 - No explicit "Save" button needed for MVP
 - Auto-save handles all persistence
 - Future: Add "Save" button for explicit user control
@@ -323,14 +353,16 @@ useEffect(() => {
 **Situation:** Character exists but `metadata.creationState` is missing
 
 **Detection:**
+
 ```typescript
 const character = await getCharacter(userId, characterId);
-if (character.status === 'draft' && !character.metadata?.creationState) {
+if (character.status === "draft" && !character.metadata?.creationState) {
   // Missing creationState
 }
 ```
 
 **Recovery Options:**
+
 1. **Show Error (Recommended):**
    - Display: "This draft character's creation state is missing. Please start a new character."
    - Provide "Delete Draft" and "Start New Character" buttons
@@ -348,6 +380,7 @@ if (character.status === 'draft' && !character.metadata?.creationState) {
 **Situation:** `metadata.creationState` exists but is invalid/malformed
 
 **Detection:**
+
 ```typescript
 function validateCreationState(state: unknown): state is CreationState {
   // Use isCreationStateCompatible() from above
@@ -356,6 +389,7 @@ function validateCreationState(state: unknown): state is CreationState {
 ```
 
 **Recovery:**
+
 - Same as Scenario 1: Show error with recovery options
 - Log error for debugging: `console.error('Corrupted creationState:', state)`
 
@@ -364,10 +398,12 @@ function validateCreationState(state: unknown): state is CreationState {
 **Situation:** `creationState` structure doesn't match current `CreationState` interface
 
 **Detection:**
+
 - Validation fails during `isCreationStateCompatible()` check
 - Specific field type mismatches detected
 
 **Recovery:**
+
 - Show user-friendly error: "This draft was created with an older version and cannot be resumed."
 - Options: "Delete Draft" or "Start New Character"
 - Future: Implement migration to convert old format
@@ -377,10 +413,12 @@ function validateCreationState(state: unknown): state is CreationState {
 **Situation:** User navigates to `/characters/[id]/edit` but character doesn't exist
 
 **Detection:**
+
 - API returns 404
 - `getCharacter()` returns null
 
 **Recovery:**
+
 - Show 404 error page
 - Link back to characters list
 - Standard Next.js error handling
@@ -390,16 +428,18 @@ function validateCreationState(state: unknown): state is CreationState {
 **Situation:** Auto-save PATCH request fails (network error, server error)
 
 **Detection:**
+
 ```typescript
 try {
   await saveCreationState(state);
 } catch (error) {
   // Network or server error
-  setSaveError('Failed to save draft. Please try again.');
+  setSaveError("Failed to save draft. Please try again.");
 }
 ```
 
 **Recovery:**
+
 1. **Show Error Banner:**
    - Display: "Failed to save draft. Your changes may be lost if you leave this page."
    - Retry button: "Retry Save"
@@ -415,6 +455,7 @@ try {
    - Warning persists until save succeeds
 
 **Implementation:**
+
 ```typescript
 const [saveError, setSaveError] = useState<string | null>(null);
 const [retryCount, setRetryCount] = useState(0);
@@ -428,11 +469,11 @@ async function saveWithRetry(state: CreationState, maxRetries = 3) {
     if (retryCount < maxRetries) {
       const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
       setTimeout(() => {
-        setRetryCount(prev => prev + 1);
+        setRetryCount((prev) => prev + 1);
         saveWithRetry(state, maxRetries);
       }, delay);
     } else {
-      setSaveError('Failed to save draft after multiple attempts.');
+      setSaveError("Failed to save draft after multiple attempts.");
     }
   }
 }
@@ -443,14 +484,16 @@ async function saveWithRetry(state: CreationState, maxRetries = 3) {
 **Situation:** User resumes draft, but character was finalized in another session
 
 **Detection:**
+
 ```typescript
 const character = await getCharacter(userId, characterId);
-if (character.status !== 'draft') {
+if (character.status !== "draft") {
   // Character is no longer a draft
 }
 ```
 
 **Recovery:**
+
 - Show message: "This character has been finalized and cannot be edited in creation mode."
 - Redirect to character detail page: `/characters/[id]`
 - Don't allow creation wizard to load
@@ -460,6 +503,7 @@ if (character.status !== 'draft') {
 ## Implementation Checklist
 
 ### Phase 1: Core Functionality
+
 - [ ] Update `CreationWizard` to accept optional `characterId` prop
 - [ ] Add `initialState` prop to `CreationWizard` for resuming
 - [ ] Implement state loading from `character.metadata.creationState`
@@ -469,18 +513,21 @@ if (character.status !== 'draft') {
 - [ ] Update character list to navigate drafts to edit route
 
 ### Phase 2: Error Handling
+
 - [ ] Implement `isCreationStateCompatible()` validation
 - [ ] Add error UI for missing/corrupted `creationState`
 - [ ] Add network error handling with retry logic
 - [ ] Add status check (prevent resuming non-draft characters)
 
 ### Phase 3: UX Enhancements
+
 - [ ] Add "Resume Editing" button to draft character cards
 - [ ] Show save status indicator (saving/saved/error)
 - [ ] Add progress indicator on draft cards (optional)
 - [ ] Update character detail page to show "Resume Creation" for drafts
 
 ### Phase 4: Testing & Polish
+
 - [ ] Test resume flow end-to-end
 - [ ] Test error scenarios
 - [ ] Test concurrent tab editing
@@ -533,9 +580,9 @@ if (character.status !== 'draft') {
 ## Questions & Decisions
 
 ### Open Questions
+
 1. Should we allow resuming drafts that were created with different creation method versions?
    - **Decision:** No - show error if `creationMethodId` doesn't match current method
-   
 2. What happens if user deletes a draft while editing it in another tab?
    - **Decision:** Show error on next save attempt, redirect to characters list
 
@@ -543,6 +590,7 @@ if (character.status !== 'draft') {
    - **Decision:** No for MVP - remove on finalization. Future: optional retention
 
 ### Decisions Made
+
 1. ✅ Use `/characters/[id]/edit` route (not query param)
 2. ✅ Store `CreationState` in `metadata.creationState` (not separate table)
 3. ✅ Last-write-wins for concurrency (no locking for MVP)
@@ -552,5 +600,4 @@ if (character.status !== 'draft') {
 
 ---
 
-*Last updated: 2025-01-10*
-
+_Last updated: 2025-01-10_

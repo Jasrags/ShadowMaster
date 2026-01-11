@@ -1,7 +1,9 @@
 # Feature Request Template
+
 ## (Tailored for Game/Character Management Applications)
 
 ## Overview
+
 **Feature Name:** User Authentication System (Signup, Signin, Signout)
 **Requested By:** Jason Ragsdale
 **Date:** 2025-12-04
@@ -12,24 +14,28 @@
 ---
 
 ## Problem Statement
+
 **What problem does this solve?**
 Currently, users cannot create accounts, authenticate, or maintain persistent sessions. This prevents users from saving their characters, accessing their data across sessions, and having personalized experiences. Without authentication, all data is ephemeral and cannot be associated with specific users.
 
 **Who would benefit from this?**
+
 - **Target users:** All users (Players, GMs, Character Builders)
-- **Use cases:** 
+- **Use cases:**
   - Players creating and saving multiple characters
   - GMs managing multiple campaigns and characters
   - Users accessing their data from different devices
   - Long-term character progression tracking
 
 **Current Workaround:**
+
 - Users cannot save their work persistently
 - All character data is lost when the session ends
 - No way to retrieve previously created characters
 - Users must recreate characters from scratch each time
 
 **Game Impact:**
+
 - Prevents long-term character development and progression
 - Limits the ability to manage multiple characters
 - Reduces user engagement and retention
@@ -38,10 +44,12 @@ Currently, users cannot create accounts, authenticate, or maintain persistent se
 ---
 
 ## Proposed Solution
+
 **Feature Description:**
 Implement a complete user authentication system that allows users to create accounts (signup), authenticate (signin), and end sessions (signout). User records will be stored in JSON format, allowing for easy retrieval, backup, and migration. The system will manage user credentials securely and provide session management capabilities.
 
 **User Stories:**
+
 - As a new user, I want to create an account so that I can save my characters and access them later
 - As a returning user, I want to sign in so that I can access my saved characters and data
 - As a user, I want to sign out so that I can securely end my session on shared devices
@@ -49,6 +57,7 @@ Implement a complete user authentication system that allows users to create acco
 - As a user, I want to retrieve my user record so that I can access my profile information and associated data
 
 **Key Functionality:**
+
 1. **User Signup:** Create new user accounts with email/username and password
 2. **User Signin:** Authenticate existing users with credentials
 3. **User Signout:** Securely end user sessions
@@ -60,17 +69,21 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Game Mechanics Integration
+
 **Related Game Rules:**
+
 - Not directly related to game rules, but foundational for character management
 - Enables per-user character storage and retrieval
 - Supports multi-user scenarios (players, GMs)
 
 **Rules Compliance:**
+
 - Authentication system must not interfere with game rule calculations
 - User data storage must preserve character data integrity
 - Session management must respect user privacy and security
 
 **Edition Considerations:**
+
 - Authentication is edition-agnostic
 - User accounts can contain characters from multiple editions
 - Storage format must accommodate edition-specific character data
@@ -78,9 +91,11 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## User Experience
+
 **User Flow:**
 
 **Signup Flow:**
+
 1. User navigates to `/signup` (rendered by `app/signup/page.tsx`)
 2. User enters email/username and password in form (React Aria Components)
 3. Client-side validation (email format, password strength)
@@ -95,6 +110,7 @@ Implement a complete user authentication system that allows users to create acco
 10. User is redirected to main application (`app/page.tsx`)
 
 **Signin Flow:**
+
 1. User navigates to `/signin` (rendered by `app/signin/page.tsx`)
 2. User enters credentials in form (React Aria Components)
 3. Form submission calls `POST /api/auth/signin` (Server Action or API route)
@@ -103,6 +119,7 @@ Implement a complete user authentication system that allows users to create acco
 6. User is redirected to main application with their data loaded
 
 **Signout Flow:**
+
 1. User clicks signout button (Client Component)
 2. Client calls `POST /api/auth/signout` (Server Action or API route)
 3. Server clears authentication cookie
@@ -110,6 +127,7 @@ Implement a complete user authentication system that allows users to create acco
 5. All user-specific data is cleared from client state
 
 **UI/UX Considerations:**
+
 - **Key screens:** Signup page (`app/signup/page.tsx`), Signin page (`app/signin/page.tsx`), User profile/settings
 - **Component architecture:**
   - Use React Aria Components for accessible form primitives (TextField, Button, etc.)
@@ -117,7 +135,7 @@ Implement a complete user authentication system that allows users to create acco
   - Use Server Components for layout and data fetching
   - Style with Tailwind CSS 4 utility classes
   - Leverage Geist fonts via CSS variables (`--font-geist-sans`)
-- **Visual feedback:** 
+- **Visual feedback:**
   - Clear error messages for invalid credentials
   - Success confirmation on signup/signin
   - Loading states during authentication
@@ -131,11 +149,13 @@ Implement a complete user authentication system that allows users to create acco
   - Dark mode support via Tailwind CSS `prefers-color-scheme`
 
 **Character Sheet Integration:**
+
 - Character data automatically associated with authenticated user
 - User can only access their own characters when signed in
 - Character list filtered by current user
 
 **Example/Inspiration:**
+
 - Next.js 16 App Router authentication patterns
 - JSON-based storage similar to local-first applications
 - Next.js cookie-based session management
@@ -144,7 +164,9 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Technical Considerations
+
 **Technical Approach:**
+
 - Implement authentication API routes using Next.js 16 App Router (`app/api/auth/*/route.ts`)
 - Use TypeScript 5 for type-safe implementation throughout
 - Use JSON file-based storage for user records (e.g., `data/users/{userId}.json`)
@@ -160,9 +182,11 @@ Implement a complete user authentication system that allows users to create acco
 - Style with Tailwind CSS 4 utility classes
 
 **Calculation Engine:**
+
 - N/A (authentication feature, not calculation-based)
 
 **Data Requirements:**
+
 - **User record structure:**
   ```json
   {
@@ -189,6 +213,7 @@ Implement a complete user authentication system that allows users to create acco
   - TypeScript type definitions for user records
 
 **Performance:**
+
 - Fast authentication response times (< 500ms)
 - Efficient JSON parsing and serialization using Node.js native `JSON.parse/stringify`
 - Index user records by email/username for quick lookups (maintain lookup file or scan directory)
@@ -196,6 +221,7 @@ Implement a complete user authentication system that allows users to create acco
 - Leverage Next.js Server Component caching where appropriate
 
 **Integration Points:**
+
 - **API routes (Next.js App Router):**
   - `app/api/auth/signup/route.ts` - POST handler for user signup
   - `app/api/auth/signin/route.ts` - POST handler for user signin
@@ -216,6 +242,7 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Acceptance Criteria
+
 - [ ] User can create a new account with email/username and password
 - [ ] System validates email format and password strength on signup
 - [ ] Passwords are securely hashed before storage (never stored in plain text)
@@ -237,7 +264,9 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Success Metrics
+
 **How will we measure success?**
+
 - **User adoption:** % of users who create accounts vs. anonymous usage
 - **Time saved:** Reduction in time spent recreating characters
 - **Accuracy:** Zero authentication failures for valid credentials
@@ -245,6 +274,7 @@ Implement a complete user authentication system that allows users to create acco
 - **Data persistence:** 100% of user data successfully saved and retrieved
 
 **Target Goals:**
+
 - 80%+ of active users create accounts
 - Authentication success rate > 99.5%
 - Signup completion rate > 70%
@@ -253,7 +283,9 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Game Rules Validation
+
 **Test Cases:**
+
 - Create account with valid email and strong password
 - Attempt signup with duplicate email (should fail)
 - Attempt signup with invalid email format (should fail)
@@ -271,6 +303,7 @@ Implement a complete user authentication system that allows users to create acco
 - Role persists across application restarts
 
 **Rules Compliance Verification:**
+
 - Verify password hashing implementation follows security best practices
 - Verify JSON storage format is valid and parseable
 - Verify user data isolation (users cannot access other users' data)
@@ -279,38 +312,47 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Alternatives Considered
+
 **Alternative 1: Database-based storage (SQLite, PostgreSQL)**
+
 - **Description:** Use a traditional database instead of JSON files
 - **Why this wasn't chosen:** JSON storage is simpler for initial implementation, easier to backup/migrate, and sufficient for MVP. Can migrate to database later if needed.
 
 **Alternative 2: Third-party authentication (OAuth, Auth0)**
+
 - **Description:** Use external authentication providers
 - **Why this wasn't chosen:** Adds external dependencies, may have cost implications, and JSON storage requirement suggests self-hosted solution is preferred.
 
 **Alternative 3: No authentication (local storage only)**
+
 - **Description:** Store data only in browser local storage
 - **Why this wasn't chosen:** Doesn't allow data access across devices, limited storage capacity, and doesn't meet requirement for JSON storage and retrieval of user records.
 
 ---
 
 ## Additional Context
+
 **Related Features:**
+
 - Character creation and management (depends on user authentication)
 - Character storage and retrieval (requires user accounts)
 - Multi-user support (enabled by authentication)
 - Data export/import (can leverage JSON storage format)
 
 **Game System Context:**
+
 - This is a foundational feature that enables all user-specific functionality
 - Required before implementing character persistence
 - Enables future features like character sharing, campaigns, etc.
 
 **Community Feedback:**
+
 - Users need to save their characters between sessions
 - Users want to access their data from multiple devices
 - Users want to manage multiple characters per account
 
 **Timeline Considerations:**
+
 - **Urgency:** High - blocks other user-specific features
 - **Dependencies:** None - can be implemented independently
 - **Ruleset data availability:** N/A - not dependent on game rules data
@@ -318,6 +360,7 @@ Implement a complete user authentication system that allows users to create acco
 ---
 
 ## Questions
+
 - [x] Should we support password reset functionality in initial implementation?
   - **Answer:** Not yet - deferred to future release
 - [x] What password strength requirements should we enforce?
@@ -344,4 +387,3 @@ Implement a complete user authentication system that allows users to create acco
   - **Answer:** Eventually yes in campaign management - deferred for now
 - [x] Should roles be assignable during signup or only by administrators?
   - **Answer:** Role changes by administrators only for now (first user gets administrator automatically)
-

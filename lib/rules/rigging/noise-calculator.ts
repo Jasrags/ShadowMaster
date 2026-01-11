@@ -7,11 +7,7 @@
  * SR5 Core Rulebook p. 231
  */
 
-import type {
-  DistanceBand,
-  TerrainModifier,
-  NoiseCalculation,
-} from "@/lib/types/rigging";
+import type { DistanceBand, TerrainModifier, NoiseCalculation } from "@/lib/types/rigging";
 
 // =============================================================================
 // CONSTANTS - DISTANCE NOISE (SR5 p. 231)
@@ -188,17 +184,11 @@ export function calculateNoise(input: NoiseCalculationInput): NoiseCalculation {
   const distanceBand = getDistanceBand(input.distanceMeters);
   const distanceNoise = DISTANCE_NOISE[distanceBand];
 
-  const terrainNoise = input.terrainModifiers
-    ? calculateTerrainNoise(input.terrainModifiers)
-    : 0;
+  const terrainNoise = input.terrainModifiers ? calculateTerrainNoise(input.terrainModifiers) : 0;
 
-  const spamZoneNoise = input.spamZone
-    ? SPAM_ZONE_NOISE[input.spamZone]
-    : 0;
+  const spamZoneNoise = input.spamZone ? SPAM_ZONE_NOISE[input.spamZone] : 0;
 
-  const staticZoneNoise = input.staticZone
-    ? STATIC_ZONE_NOISE[input.staticZone]
-    : 0;
+  const staticZoneNoise = input.staticZone ? STATIC_ZONE_NOISE[input.staticZone] : 0;
 
   const additionalNoise = input.additionalNoise ?? 0;
   const noiseReduction = input.noiseReduction ?? 0;

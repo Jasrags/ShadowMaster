@@ -270,9 +270,7 @@ export async function authorizeCharacter(
     campaign,
     role,
     permissions,
-    error: hasRequiredPermission
-      ? undefined
-      : `Permission denied: ${requiredPermission}`,
+    error: hasRequiredPermission ? undefined : `Permission denied: ${requiredPermission}`,
     status: hasRequiredPermission ? 200 : 403,
   };
 }

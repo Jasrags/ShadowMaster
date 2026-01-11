@@ -1,9 +1,9 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Critters | Infected List | Critter Powers | Critter Weaknesses |
-| --- | --- | --- | --- |
+| -------- | ------------- | -------------- | ------------------ |
 
 Not all things metaphysical are helpful to a critter. Here are some of the weaknesses the creatures of the Awakened World can suffer.
 
@@ -32,7 +32,7 @@ Like characters, many critters suffer allergies to particular substances or cond
 ## Evanescence
 
 | Source |
-| --- |
+| ------ |
 | SR5:SG |
 
 Extraplanar beings want a physical anchor, and staying in full spirit form is hard on them. Evanescence reflects the difficulty some of these creatures have in staying in our midst. For every twenty-four hours that a spirit with Evanescence remains in full astral form, their Force is permanently reduced by one. If the spirit’s Force reaches 0, it dissipates, either destroyed or returned to its home plane (for purposes of us on the prime material, the two results are pretty much the same).

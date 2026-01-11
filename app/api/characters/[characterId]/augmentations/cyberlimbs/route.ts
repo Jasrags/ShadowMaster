@@ -26,7 +26,11 @@ import {
   isCyberlimbCatalogItem,
 } from "@/lib/rules/augmentations/cyberlimb";
 import { calculateTotalEssenceLoss, roundEssence } from "@/lib/rules/augmentations/essence";
-import { shouldTrackEssenceHole, updateEssenceHoleOnInstall, getCharacterEssenceHole } from "@/lib/rules/augmentations/essence-hole";
+import {
+  shouldTrackEssenceHole,
+  updateEssenceHoleOnInstall,
+  getCharacterEssenceHole,
+} from "@/lib/rules/augmentations/essence-hole";
 import type { Character, CyberwareGrade } from "@/lib/types";
 import type { CyberlimbCatalogItem } from "@/lib/types/edition";
 import type { CyberlimbItem, CyberlimbLocation } from "@/lib/types/cyberlimb";
@@ -133,7 +137,13 @@ export async function GET(
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json(
-        { success: false, cyberlimbs: [], totalCMBonus: 0, totalEssenceLost: 0, error: "Unauthorized" },
+        {
+          success: false,
+          cyberlimbs: [],
+          totalCMBonus: 0,
+          totalEssenceLost: 0,
+          error: "Unauthorized",
+        },
         { status: 401 }
       );
     }
@@ -142,7 +152,13 @@ export async function GET(
     const character = await getCharacter(userId, characterId);
     if (!character) {
       return NextResponse.json(
-        { success: false, cyberlimbs: [], totalCMBonus: 0, totalEssenceLost: 0, error: "Character not found" },
+        {
+          success: false,
+          cyberlimbs: [],
+          totalCMBonus: 0,
+          totalEssenceLost: 0,
+          error: "Character not found",
+        },
         { status: 404 }
       );
     }
@@ -150,7 +166,13 @@ export async function GET(
     // Check ownership
     if (character.ownerId !== userId) {
       return NextResponse.json(
-        { success: false, cyberlimbs: [], totalCMBonus: 0, totalEssenceLost: 0, error: "Not authorized" },
+        {
+          success: false,
+          cyberlimbs: [],
+          totalCMBonus: 0,
+          totalEssenceLost: 0,
+          error: "Not authorized",
+        },
         { status: 403 }
       );
     }
@@ -168,7 +190,13 @@ export async function GET(
   } catch (error) {
     console.error("Failed to get cyberlimbs:", error);
     return NextResponse.json(
-      { success: false, cyberlimbs: [], totalCMBonus: 0, totalEssenceLost: 0, error: "Failed to get cyberlimbs" },
+      {
+        success: false,
+        cyberlimbs: [],
+        totalCMBonus: 0,
+        totalEssenceLost: 0,
+        error: "Failed to get cyberlimbs",
+      },
       { status: 500 }
     );
   }
@@ -187,19 +215,13 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
@@ -216,22 +238,13 @@ export async function POST(
 
     // Validate required fields
     if (!catalogId) {
-      return NextResponse.json(
-        { success: false, error: "catalogId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "catalogId is required" }, { status: 400 });
     }
     if (!location) {
-      return NextResponse.json(
-        { success: false, error: "location is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "location is required" }, { status: 400 });
     }
     if (!grade) {
-      return NextResponse.json(
-        { success: false, error: "grade is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "grade is required" }, { status: 400 });
     }
 
     // Load ruleset to get catalog
@@ -261,20 +274,14 @@ export async function POST(
     if (customization) {
       const customResult = validateCustomization(character, customization);
       if (!customResult.valid) {
-        return NextResponse.json(
-          { success: false, error: customResult.error },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: customResult.error }, { status: 400 });
       }
     }
 
     // Check for location conflicts
     const conflicts = checkLocationConflicts(character, location, catalogItem.limbType);
     if (conflicts.blockingLimb) {
-      return NextResponse.json(
-        { success: false, error: conflicts.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: conflicts.error }, { status: 400 });
     }
 
     // If there are limbs to replace, require confirmation
@@ -282,8 +289,8 @@ export async function POST(
       return NextResponse.json(
         {
           success: false,
-          error: `Installing this cyberlimb will replace: ${conflicts.limbsToReplace.map(l => l.name).join(", ")}. Set confirmReplacement: true to proceed.`,
-          warnings: [`Will replace: ${conflicts.limbsToReplace.map(l => l.name).join(", ")}`],
+          error: `Installing this cyberlimb will replace: ${conflicts.limbsToReplace.map((l) => l.name).join(", ")}. Set confirmReplacement: true to proceed.`,
+          warnings: [`Will replace: ${conflicts.limbsToReplace.map((l) => l.name).join(", ")}`],
         },
         { status: 400 }
       );
@@ -301,10 +308,7 @@ export async function POST(
     );
 
     if (!validationResult.valid) {
-      return NextResponse.json(
-        { success: false, error: validationResult.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: validationResult.error }, { status: 400 });
     }
 
     // Create the cyberlimb
@@ -313,15 +317,21 @@ export async function POST(
 
     // Remove replaced limbs
     const existingLimbs = character.cyberlimbs ?? [];
-    const limbsToRemoveIds = conflicts.limbsToReplace.map(l => l.id ?? l.catalogId);
+    const limbsToRemoveIds = conflicts.limbsToReplace.map((l) => l.id ?? l.catalogId);
     const updatedLimbs = existingLimbs.filter(
-      l => !limbsToRemoveIds.includes(l.id ?? l.catalogId)
+      (l) => !limbsToRemoveIds.includes(l.id ?? l.catalogId)
     );
     updatedLimbs.push(newLimb);
 
     // Calculate new essence
-    const cyberwareEssence = (character.cyberware ?? []).reduce((sum, item) => sum + item.essenceCost, 0);
-    const biowareEssence = (character.bioware ?? []).reduce((sum, item) => sum + item.essenceCost, 0);
+    const cyberwareEssence = (character.cyberware ?? []).reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
+    const biowareEssence = (character.bioware ?? []).reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
     const cyberlimbEssence = updatedLimbs.reduce((sum, limb) => sum + limb.essenceCost, 0);
     const totalEssenceLoss = cyberwareEssence + biowareEssence + cyberlimbEssence;
     const newEssence = roundEssence(6 - totalEssenceLoss);
@@ -345,12 +355,14 @@ export async function POST(
     const updatedSpecialAttributes = {
       ...character.specialAttributes,
       essence: newEssence,
-      ...(magicLoss && character.specialAttributes?.magic !== undefined && {
-        magic: Math.max(0, character.specialAttributes.magic - magicLoss),
-      }),
-      ...(magicLoss && character.specialAttributes?.resonance !== undefined && {
-        resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
-      }),
+      ...(magicLoss &&
+        character.specialAttributes?.magic !== undefined && {
+          magic: Math.max(0, character.specialAttributes.magic - magicLoss),
+        }),
+      ...(magicLoss &&
+        character.specialAttributes?.resonance !== undefined && {
+          resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
+        }),
     };
 
     // Save the updated character with audit trail
@@ -373,7 +385,7 @@ export async function POST(
           customization,
           essenceChange: -newLimb.essenceCost,
           magicLoss,
-          replacedLimbs: conflicts.limbsToReplace.map(l => l.name),
+          replacedLimbs: conflicts.limbsToReplace.map((l) => l.name),
         },
         note: `Installed ${catalogItem.name} at ${location} (${grade} grade)`,
       }
@@ -381,13 +393,13 @@ export async function POST(
 
     const warnings: string[] = [];
     if (conflicts.limbsToReplace.length > 0) {
-      warnings.push(`Replaced: ${conflicts.limbsToReplace.map(l => l.name).join(", ")}`);
+      warnings.push(`Replaced: ${conflicts.limbsToReplace.map((l) => l.name).join(", ")}`);
     }
 
     return NextResponse.json({
       success: true,
       installedLimb: limbToSummary(newLimb),
-      removedLimbs: conflicts.limbsToReplace.map(l => l.name),
+      removedLimbs: conflicts.limbsToReplace.map((l) => l.name),
       essenceChange: -newLimb.essenceCost,
       magicLoss,
       warnings: warnings.length > 0 ? warnings : undefined,

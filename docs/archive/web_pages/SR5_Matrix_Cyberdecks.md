@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC  |
+| ------ | ----------------- | ------- | ------ | ---------- | -------- | ------ | ------------- | ------ | ------- | ------------- | --- |
 
 If you’re a decker, your cyberdeck is your life’s blood, your all-in-one ticket to controlling the Matrix. It provides you with your Matrix attributes, especially the Attack and Sleaze that are vital to hacking. It also has a built-in sim module, so all you need is a DNI to use it for VR right out of the box. Other important features include a universal data connector and about a meter of retractable data cable, so you can connect to other devices directly. A cyberdeck usually has a small screen for displaying status messages. It is most often a flat rectangle, but it can be just about any shape that has the same volume as a small book; the “hackpack” model, a cyberdeck in a belt pack, is popular for deckers on the go.
 

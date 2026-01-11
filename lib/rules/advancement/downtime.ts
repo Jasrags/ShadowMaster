@@ -29,9 +29,7 @@ export function getDowntimeEventById(
   events: CampaignEvent[],
   downtimeId: string
 ): CampaignEvent | null {
-  const downtime = events.find(
-    (event) => event.type === "downtime" && event.id === downtimeId
-  );
+  const downtime = events.find((event) => event.type === "downtime" && event.id === downtimeId);
   return downtime || null;
 }
 
@@ -48,12 +46,13 @@ export function countDowntimeAdvancements(
   downtimeId: string,
   advancementType: "attribute" | "skill" | "skillGroup"
 ): number {
-  const downtimeAdvancements = character.advancementHistory?.filter(
-    (a) =>
-      a.type === advancementType &&
-      a.downtimePeriodId === downtimeId &&
-      a.trainingStatus !== "interrupted" // Don't count interrupted advancements
-  ) || [];
+  const downtimeAdvancements =
+    character.advancementHistory?.filter(
+      (a) =>
+        a.type === advancementType &&
+        a.downtimePeriodId === downtimeId &&
+        a.trainingStatus !== "interrupted" // Don't count interrupted advancements
+    ) || [];
 
   return downtimeAdvancements.length;
 }
@@ -119,13 +118,8 @@ export function validateDowntimeLimits(
  * @param downtimeId - ID of the downtime period
  * @returns Array of training periods linked to this downtime
  */
-export function getDowntimeTraining(
-  character: Character,
-  downtimeId: string
-): TrainingPeriod[] {
-  return character.activeTraining?.filter(
-    (t) => t.downtimePeriodId === downtimeId
-  ) || [];
+export function getDowntimeTraining(character: Character, downtimeId: string): TrainingPeriod[] {
+  return character.activeTraining?.filter((t) => t.downtimePeriodId === downtimeId) || [];
 }
 
 /**
@@ -139,8 +133,5 @@ export function getDowntimeAdvancements(
   character: Character,
   downtimeId: string
 ): AdvancementRecord[] {
-  return character.advancementHistory?.filter(
-    (a) => a.downtimePeriodId === downtimeId
-  ) || [];
+  return character.advancementHistory?.filter((a) => a.downtimePeriodId === downtimeId) || [];
 }
-

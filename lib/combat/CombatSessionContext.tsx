@@ -17,11 +17,7 @@ import React, {
   useMemo,
   type ReactNode,
 } from "react";
-import type {
-  CombatSession,
-  CombatParticipant,
-  ActionAllocation,
-} from "@/lib/types";
+import type { CombatSession, CombatParticipant, ActionAllocation } from "@/lib/types";
 
 // =============================================================================
 // Types
@@ -111,25 +107,22 @@ export function CombatSessionProvider({
   }, [session, participant]);
 
   // Fetch session data
-  const fetchSession = useCallback(
-    async (sessionId: string): Promise<CombatSession | null> => {
-      try {
-        const response = await fetch(`/api/combat/${sessionId}`);
-        const data = await response.json();
+  const fetchSession = useCallback(async (sessionId: string): Promise<CombatSession | null> => {
+    try {
+      const response = await fetch(`/api/combat/${sessionId}`);
+      const data = await response.json();
 
-        if (!data.success) {
-          throw new Error(data.error || "Failed to fetch session");
-        }
-
-        return data.session;
-      } catch (err) {
-        const message = err instanceof Error ? err.message : "Failed to fetch session";
-        setError(message);
-        return null;
+      if (!data.success) {
+        throw new Error(data.error || "Failed to fetch session");
       }
-    },
-    []
-  );
+
+      return data.session;
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Failed to fetch session";
+      setError(message);
+      return null;
+    }
+  }, []);
 
   // Refresh current session
   const refreshSession = useCallback(async () => {
@@ -204,10 +197,9 @@ export function CombatSessionProvider({
     setError(null);
 
     try {
-      const response = await fetch(
-        `/api/combat/${session.id}/participants/${participant.id}`,
-        { method: "DELETE" }
-      );
+      const response = await fetch(`/api/combat/${session.id}/participants/${participant.id}`, {
+        method: "DELETE",
+      });
 
       const data = await response.json();
 
@@ -475,11 +467,7 @@ export function CombatSessionProvider({
     ]
   );
 
-  return (
-    <CombatSessionContext.Provider value={value}>
-      {children}
-    </CombatSessionContext.Provider>
-  );
+  return <CombatSessionContext.Provider value={value}>{children}</CombatSessionContext.Provider>;
 }
 
 // =============================================================================
@@ -526,7 +514,9 @@ export function useActionEconomy(): ActionAllocation | null {
 /**
  * Hook to check if a specific action type is available
  */
-export function useCanPerformAction(actionType: "free" | "simple" | "complex" | "interrupt"): boolean {
+export function useCanPerformAction(
+  actionType: "free" | "simple" | "complex" | "interrupt"
+): boolean {
   const actions = useActionEconomy();
 
   if (!actions) return false;

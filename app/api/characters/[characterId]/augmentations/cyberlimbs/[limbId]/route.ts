@@ -166,9 +166,7 @@ function findLimb(
   character: { cyberlimbs?: CyberlimbItem[] },
   limbId: string
 ): CyberlimbItem | undefined {
-  return (character.cyberlimbs ?? []).find(
-    (l) => l.id === limbId || l.catalogId === limbId
-  );
+  return (character.cyberlimbs ?? []).find((l) => l.id === limbId || l.catalogId === limbId);
 }
 
 // =============================================================================
@@ -188,36 +186,24 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Not authorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Find the limb
     const limb = findLimb(character, limbId);
     if (!limb) {
-      return NextResponse.json(
-        { success: false, error: "Cyberlimb not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Cyberlimb not found" }, { status: 404 });
     }
 
     return NextResponse.json({
@@ -226,10 +212,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get cyberlimb:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to get cyberlimb" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to get cyberlimb" }, { status: 500 });
   }
 }
 
@@ -246,27 +229,18 @@ export async function PATCH(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Not authorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Find the limb
@@ -274,10 +248,7 @@ export async function PATCH(
       (l) => l.id === limbId || l.catalogId === limbId
     );
     if (limbIndex === -1) {
-      return NextResponse.json(
-        { success: false, error: "Cyberlimb not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Cyberlimb not found" }, { status: 404 });
     }
 
     // Parse request body
@@ -342,27 +313,18 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Not authorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Find the limb
@@ -370,10 +332,7 @@ export async function DELETE(
       (l) => l.id === limbId || l.catalogId === limbId
     );
     if (limbIndex === -1) {
-      return NextResponse.json(
-        { success: false, error: "Cyberlimb not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Cyberlimb not found" }, { status: 404 });
     }
 
     const removedLimb = character.cyberlimbs![limbIndex];
@@ -383,8 +342,14 @@ export async function DELETE(
     const updatedLimbs = (character.cyberlimbs ?? []).filter((_, i) => i !== limbIndex);
 
     // Calculate new essence
-    const cyberwareEssence = (character.cyberware ?? []).reduce((sum, item) => sum + item.essenceCost, 0);
-    const biowareEssence = (character.bioware ?? []).reduce((sum, item) => sum + item.essenceCost, 0);
+    const cyberwareEssence = (character.cyberware ?? []).reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
+    const biowareEssence = (character.bioware ?? []).reduce(
+      (sum, item) => sum + item.essenceCost,
+      0
+    );
     const cyberlimbEssence = updatedLimbs.reduce((sum, limb) => sum + limb.essenceCost, 0);
     const totalEssenceLoss = cyberwareEssence + biowareEssence + cyberlimbEssence;
     const newEssence = roundEssence(6 - totalEssenceLoss);

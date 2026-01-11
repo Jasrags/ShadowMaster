@@ -1,9 +1,9 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 One of the strangest and most alien kinds of spirits that has ever been seen in the Sixth World is the shedim. Shedim are spirits that occupy the bodies of the deceased in order to anchor themselves in the physical world from whatever deep and distant metaplane serves as their home. Their very nature seems to defy identification, or any known expectations of spirit behavior. Prior to the arrival of shedim, all other spirits have viewed the physical plane as a place to escape, or as a breeding/feeding ground. Shedim have shown a desire to travel to the physical plane, though it is extremely difficult for them to stay there, but have also shown nothing but utter hatred for mortals. They come to where life exists so that they may extinguish it.
 
@@ -15,42 +15,42 @@ Reported shedim activity has declined since the closing of the Watergate Rift. T
 
 ## Spirits of Shedim
 
-| B | A | R | S | W | L | I | C | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| F | F | F+2 | F+1 | F | F | F | F | SR5:SG |
-| Initiative | (F*2)+2+1D6 |
-| Astral Initiative | (Fx3)+3D6 |
+| B                 | A            | R   | S   | W   | L   | I   | C   | Source |
+| ----------------- | ------------ | --- | --- | --- | --- | --- | --- | ------ |
+| F                 | F            | F+2 | F+1 | F   | F   | F   | F   | SR5:SG |
+| Initiative        | (F\*2)+2+1D6 |
+| Astral Initiative | (Fx3)+3D6    |
 
 Weaknesses
-:   Allergy (Sunlight, Mild), Evanescence
+: Allergy (Sunlight, Mild), Evanescence
 
 Skills
-:   Assensing, Astral Combat, Perception, Unarmed Combat
+: Assensing, Astral Combat, Perception, Unarmed Combat
 
 Powers
-:   Astral Form, Deathly Aura, Energy Drain (Karma, Touch range, Physical damage), Fear, Immunity (Age, Pathogens, Toxins), Paralyzing Touch, Possession (Dead or Abandoned Vessels), Sapience
+: Astral Form, Deathly Aura, Energy Drain (Karma, Touch range, Physical damage), Fear, Immunity (Age, Pathogens, Toxins), Paralyzing Touch, Possession (Dead or Abandoned Vessels), Sapience
 
 Optional Powers
-:   Accident, Aura Masking, Compulsion, Regeneration, Search, Shadow Cloak, Silence
+: Accident, Aura Masking, Compulsion, Regeneration, Search, Shadow Cloak, Silence
 
 ## Spirits of Master
 
-| B | A | R | S | W | L | I | C | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| F | F | F+2 | F+1 | F | F+1 | F+1 | F | SR5:SG |
-| Initiative | (F*2)+3+1D6 |
-| Astral Initiative | (Fx3)+3D6 |
+| B                 | A            | R   | S   | W   | L   | I   | C   | Source |
+| ----------------- | ------------ | --- | --- | --- | --- | --- | --- | ------ |
+| F                 | F            | F+2 | F+1 | F   | F+1 | F+1 | F   | SR5:SG |
+| Initiative        | (F\*2)+3+1D6 |
+| Astral Initiative | (Fx3)+3D6    |
 
 Weaknesses
-:   Allergy (Sunlight, Mild), Evanescence
+: Allergy (Sunlight, Mild), Evanescence
 
 Skills
-:   Assensing, Astral Combat, Counterspelling, Gymnastics, Perception, Spellcasting, Unarmed Combat
+: Assensing, Astral Combat, Counterspelling, Gymnastics, Perception, Spellcasting, Unarmed Combat
 
 Powers
-:   Astral Form, Astral Gateway, Aura Masking, Banishing Resistance, Compulsion, Deathly Aura, Energy Drain (Karma, Touch range, Physical damage), Fear, Immunity (Age, Pathogens, Toxins), Possession (Dead or Abandoned Vessels), Regeneration, Sapience, Shadow Cloak, Spirit Pact
+: Astral Form, Astral Gateway, Aura Masking, Banishing Resistance, Compulsion, Deathly Aura, Energy Drain (Karma, Touch range, Physical damage), Fear, Immunity (Age, Pathogens, Toxins), Possession (Dead or Abandoned Vessels), Regeneration, Sapience, Shadow Cloak, Spirit Pact
 
 Optional Powers
-:   Accident, Noxious Breath, Search, Silence
+: Accident, Noxious Breath, Search, Silence
 
 Master shedim are aspected magicians (Sorcery). The gamemaster determines what spells the master shedim knows.

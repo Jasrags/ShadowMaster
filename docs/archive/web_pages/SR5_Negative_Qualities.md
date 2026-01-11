@@ -1,12 +1,12 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Positive Qualities | Negative Qualities | Martial Arts |
-| --- | --- | --- |
+| ------------------ | ------------------ | ------------ |
 
 | Positive Metagenic Qualities | Negative Metagenic Qualities |
-| --- | --- |
+| ---------------------------- | ---------------------------- |
 
 ## Contents
 
@@ -236,20 +236,20 @@ A character with the Addiction quality is hooked on chemical substances, such as
 At the lower end of the spectrum for the Addiction quality (Mild, Moderate), it is easier to hide the effects of an Addiction. At the most severe levels (Severe, Burnout), there are noticeable physical and mental signs of Addiction. These signs negatively impact his Social Tests even if he is not suffering the effects of withdrawal.
 
 Mild (4 Karma)
-:   1 dose or 1 hour of habit-related activity
-:   Mild cravings occur once a month for the character. If a character fails his Withdrawal Test, he suffers symptoms of withdrawal and must actively seek out and use the substance or engage in the activity to find relief. On a run, this could mean delaying plans that the runner team may have meticulously put together for a job, especially if the character is busy gambling with a bookie or slotting a BTL instead of being available for the run. While the character is suffering withdrawal symptoms, apply a –2 dice pool modifier to all of the character’s Mental-attribute-based tests (if psychological dependency) or to all the character’s Physical-attribute-based tests (if physiological dependency). If the character succeeds on his Withdrawal Test, the character does not suffer withdrawal symptoms and does not need the substance or participate in that habit until the character makes their next Withdrawal Test (in one month). He is able to stay clean for that month.
+: 1 dose or 1 hour of habit-related activity
+: Mild cravings occur once a month for the character. If a character fails his Withdrawal Test, he suffers symptoms of withdrawal and must actively seek out and use the substance or engage in the activity to find relief. On a run, this could mean delaying plans that the runner team may have meticulously put together for a job, especially if the character is busy gambling with a bookie or slotting a BTL instead of being available for the run. While the character is suffering withdrawal symptoms, apply a –2 dice pool modifier to all of the character’s Mental-attribute-based tests (if psychological dependency) or to all the character’s Physical-attribute-based tests (if physiological dependency). If the character succeeds on his Withdrawal Test, the character does not suffer withdrawal symptoms and does not need the substance or participate in that habit until the character makes their next Withdrawal Test (in one month). He is able to stay clean for that month.
 
 Moderate (9 Karma)
-:   1 dose or 1 hour of habit-related activity
-:   A craving at the Moderate level occurs roughly every two weeks. If the character experiences withdrawal, he suffers a –4 to all Mental-attribute-based tests (if psychological dependency) or –4 to all Physical-attribute-based tests (if physiological dependency) until the craving is satisfied.
+: 1 dose or 1 hour of habit-related activity
+: A craving at the Moderate level occurs roughly every two weeks. If the character experiences withdrawal, he suffers a –4 to all Mental-attribute-based tests (if psychological dependency) or –4 to all Physical-attribute-based tests (if physiological dependency) until the craving is satisfied.
 
 Severe (20 Karma)
-:   2 doses or 2 hours of habit-related activity
-:   The addiction is spiraling out of control. The addict experiences cravings once a week. If he fails a Withdrawal Test, he suffers a –4 dice pool modifier to either their Mental- or Physical-based tests (as appropriate for their dependency) while in withdrawal. In addition, he suffers a –2 dice pool modifier to all Social Tests, whether he is in withdrawal or not. It is all but impossible now for the character to hide his addiction, even when he’s had his fix. The physical and psychological symptoms of the damage caused by his Addiction are readily apparent to the close observer.
+: 2 doses or 2 hours of habit-related activity
+: The addiction is spiraling out of control. The addict experiences cravings once a week. If he fails a Withdrawal Test, he suffers a –4 dice pool modifier to either their Mental- or Physical-based tests (as appropriate for their dependency) while in withdrawal. In addition, he suffers a –2 dice pool modifier to all Social Tests, whether he is in withdrawal or not. It is all but impossible now for the character to hide his addiction, even when he’s had his fix. The physical and psychological symptoms of the damage caused by his Addiction are readily apparent to the close observer.
 
 Burnout (25 Karma)
-:   3 doses/3 hours (minimum) of habit-related activity
-:   Burnout is the final progression of the Addiction quality. The addict exper iences cravings for their drug or habit of choice every day. Until they satisfy their craving with a fix, the character suf fers a –6 penalty to either his Mental- or Physical-based tests (whichever one is appropr iate for their dependency) while in withdrawal.
+: 3 doses/3 hours (minimum) of habit-related activity
+: Burnout is the final progression of the Addiction quality. The addict exper iences cravings for their drug or habit of choice every day. Until they satisfy their craving with a fix, the character suf fers a –6 penalty to either his Mental- or Physical-based tests (whichever one is appropr iate for their dependency) while in withdrawal.
 
 Because his Addiction is now obvious to even the most casual observer, the character suffers a –3 dice pool modifier for all Social Tests, whether he is in withdrawal or not.
 
@@ -274,13 +274,13 @@ The gamemaster has discretion as to whether or not she should call for Withdrawa
 **ALLERGY TABLE**
 
 | CONDITION | VALUE |
-| --- | --- |
-| Uncommon | 2 |
-| Common | 7 |
-| Mild | 3 |
-| Moderate | 8 |
-| Severe | 13 |
-| Extreme | 18 |
+| --------- | ----- |
+| Uncommon  | 2     |
+| Common    | 7     |
+| Mild      | 3     |
+| Moderate  | 8     |
+| Severe    | 13    |
+| Extreme   | 18    |
 
 | **BONUS** :5 TO 25 KARMA | Resistance Test -1 DP Modifier per Severity |
 | **REQUIRES** :NONE |
@@ -290,34 +290,34 @@ The gamemaster has discretion as to whether or not she should call for Withdrawa
 A character with the Allergy quality is allergic to a substance or condition found in their environment. The value of this quality depends on two factors. The first is whether the substance or condition is Uncommon (2 Karma) or Common (7 Karma). Next, determine the severity of the symptoms: Mild (3 Karma), Moderate (8 Karma), Severe (13 Karma), or Extreme (18 Karma). Add the appropriate point values together to find the final value. For example, the value of an Uncommon Moderate Allergy (Silver) is 10 Karma (2+8 Karma). If a character is attacked with a substance to which they are allergic, they lose 1 die from their Resistance Test for each stage of severity of the Allergy (e.g., 1 die for a Mild allergy, 2 dice for a Moderate allergy, etc.).
 
 Uncommon
-:   The substance or condition is rare for the local environment
+: The substance or condition is rare for the local environment
 
     Examples
     :   silver, gold, antibiotics, grass.
 
 Common
-:   The substance or condition is prevalent in the local environment.
+: The substance or condition is prevalent in the local environment.
 
     Examples
     :   sunlight, seafood, bees, pollen, pollutants, Wi-Fi sensitivity, soy, wheat.
 
 Mild
-:   Symptoms are discomfiting and distracting.
-:   Apply a –2 dice pool modifier to the character’s Physical Tests while under the effects of the Allergy.
+: Symptoms are discomfiting and distracting.
+: Apply a –2 dice pool modifier to the character’s Physical Tests while under the effects of the Allergy.
 
 Moderate
-:   Contact with the allergen produces intense pain.
-:   Apply a –4 dice pool modifier to all Physical Tests made while a character experiences the symptoms.
+: Contact with the allergen produces intense pain.
+: Apply a –4 dice pool modifier to all Physical Tests made while a character experiences the symptoms.
 
 Severe
-:   Contact with the allergen results in extreme pain and actual physical damage.
-:   Apply a –4 dice pool modifier to all tests made while a character experiences symptoms.
-:   The character also suffers 1 box of Physical Damage (unresisted) for every 1 minute they are exposed to the allergen.
+: Contact with the allergen results in extreme pain and actual physical damage.
+: Apply a –4 dice pool modifier to all tests made while a character experiences symptoms.
+: The character also suffers 1 box of Physical Damage (unresisted) for every 1 minute they are exposed to the allergen.
 
 Extreme
-:   A character at this level, when exposed to the allergen, goes into full anaphylactic shock.
-:   The character receives a –6 dice pool modifier for anything they do. The character is considered to be in excruciating agony.
-:   The character suffers 1 box of Physical Damage (unresisted) for every 30 seconds they are exposed to the allergen. First Aid, Medicine, or magical means can stop the damage taken from the anaphylactic shock.
+: A character at this level, when exposed to the allergen, goes into full anaphylactic shock.
+: The character receives a –6 dice pool modifier for anything they do. The character is considered to be in excruciating agony.
+: The character suffers 1 box of Physical Damage (unresisted) for every 30 seconds they are exposed to the allergen. First Aid, Medicine, or magical means can stop the damage taken from the anaphylactic shock.
 
 ## Astral Beacon
 
@@ -366,10 +366,10 @@ If a person in the character’s chosen group is killed, whether intentionally o
 The Code of Honor can take other forms as well. For example:
 
 Assassin’s Creed
-:   A character never kills anyone that they are not paid to kill. Being precise as an assassin, not leaving collateral damage, and being invisible are important hallmarks of those who believe in the Assassin’s Creed. Characters who take this version of Code of Honor lose 1 point of Karma for every unintentional and/or unpaid murder they commit, and their Public Awareness goes up by 1 for each such death.
+: A character never kills anyone that they are not paid to kill. Being precise as an assassin, not leaving collateral damage, and being invisible are important hallmarks of those who believe in the Assassin’s Creed. Characters who take this version of Code of Honor lose 1 point of Karma for every unintentional and/or unpaid murder they commit, and their Public Awareness goes up by 1 for each such death.
 
 Warrior’s Code
-:   The character who follows a Warrior’s Code maintains a strict sense of personal honor. In 2075, this likely means a character will not kill an unarmed person, take lethal action against an opponent who is unaware or unprepared for an attack (i.e., a guard who doesn’t know the runner is there), or knowingly take an action that could kill someone who is defenseless (i.e., from a stray bullet or allow someone to be killed from a sniper shot). The character loses 1 Karma per unarmed or defenseless person that they kill or allow to be killed through their actions.
+: The character who follows a Warrior’s Code maintains a strict sense of personal honor. In 2075, this likely means a character will not kill an unarmed person, take lethal action against an opponent who is unaware or unprepared for an attack (i.e., a guard who doesn’t know the runner is there), or knowingly take an action that could kill someone who is defenseless (i.e., from a stray bullet or allow someone to be killed from a sniper shot). The character loses 1 Karma per unarmed or defenseless person that they kill or allow to be killed through their actions.
 
 ## Codeblock
 
@@ -391,7 +391,7 @@ A character with Combat Paralysis freezes in combat. On the character’s first 
 
 ## Dependents
 
-| **BONUS** :3, 6, OR 9 KARMA |  |
+| **BONUS** :3, 6, OR 9 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -419,7 +419,7 @@ This quality is physical in nature and does not apply to astral searches. This q
 
 ## Elf Poser
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -449,7 +449,7 @@ The effect only applies to external equipment and does not affect cyberware, bio
 
 ## Incompetent
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -466,7 +466,7 @@ Incompetent may be purchased only once.
 
 ## Insomnia
 
-| **BONUS** :10 OR 15 KARMA |  |
+| **BONUS** :10 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -479,7 +479,7 @@ At the 15 Karma level, a failed Willpower + Intuition (4) Test means that all ef
 
 ## Loss Of Confidence
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -488,7 +488,7 @@ The Loss of Confidence quality means something has caused the character to lose 
 
 ## Low Pain Tolerance
 
-| **BONUS** :9 KARMA |  |
+| **BONUS** :9 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -497,7 +497,7 @@ Characters with Low Pain Tolerance are particularly sensitive to pain; they incu
 
 ## Ork Poser
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -510,16 +510,16 @@ Only humans and elves may take the Ork Poser quality.
 
 **PREJUDICED TABLES**
 
-| PREVALENCE OF TARGET GROUP | KARMA VALUE |
-| --- | --- |
-| Common target group (e.g, humans, metahumans) | 5 Karma |
-| Specific target group (e.g., the Awakened, technomancers, shapeshifters, aspected magicians) | 3 Karma |
-| DEGREE | KARMA VALUE |
-| Biased (e.g., closet meta-hater) | 0 Karma |
-| Outspoken (e.g., typical member of Humanis) | 2 Karma |
-| Radical (e.g., racial supremacist) | 5 Karma |
+| PREVALENCE OF TARGET GROUP                                                                   | KARMA VALUE |
+| -------------------------------------------------------------------------------------------- | ----------- |
+| Common target group (e.g, humans, metahumans)                                                | 5 Karma     |
+| Specific target group (e.g., the Awakened, technomancers, shapeshifters, aspected magicians) | 3 Karma     |
+| DEGREE                                                                                       | KARMA VALUE |
+| Biased (e.g., closet meta-hater)                                                             | 0 Karma     |
+| Outspoken (e.g., typical member of Humanis)                                                  | 2 Karma     |
+| Radical (e.g., racial supremacist)                                                           | 5 Karma     |
 
-| **BONUS** :3 TO 10 KARMA |  |
+| **BONUS** :3 TO 10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -532,7 +532,7 @@ When dealing with the target of their prejudice, a character receives a –2 dic
 
 ## Scorched
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -545,13 +545,13 @@ To take the Scorched quality for Black and/or Psychotropic IC, the character mus
 
 **SCORCHED PHYSICAL / SIDE EFFECTS TABLE**
 
-| GAME RULES | EFFECT |
-| --- | --- |
+| GAME RULES               | EFFECT                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| ------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | Memory Loss (short term) | The character does not remember slotting a BTL chip. The character makes another Withdrawal Test immediately. A failed test means the craving comes back immediately, as do the symptoms of withdrawal. Character must slot another chip. For encountering IC, a character must make a Memory Test with a threshold increased by +1. A failed Memory Test results in gaps in memory and possible disorientation while in host. |
-| Memory Loss (long term) | The same effects of Memory Loss (short term) apply. In addition, for the duration of the effect, the character loses access to one active skill. He simply does not remember how to use it (for example, the Pistols skill). Treat as unaware in that skill until symptoms abate. |
-| Blackout | For the duration of the effect, the character retains no memories of events during that time frame. Memory cannot be restored by technological or magical means. |
-| Migraines | The character receives –2 to all Physical and Mental tests, sensitivity to light, and nausea (p. 409). |
-| Paranoia/Anxiety | Character must make Social Tests for even basic interactions. These are Success Tests with a threshold of 5. If no apparent skill applies, the character must default to Charisma –1. Failure means the character reacts with paranoia or anxiety in that situation for the duration of the effect. |
+| Memory Loss (long term)  | The same effects of Memory Loss (short term) apply. In addition, for the duration of the effect, the character loses access to one active skill. He simply does not remember how to use it (for example, the Pistols skill). Treat as unaware in that skill until symptoms abate.                                                                                                                                              |
+| Blackout                 | For the duration of the effect, the character retains no memories of events during that time frame. Memory cannot be restored by technological or magical means.                                                                                                                                                                                                                                                               |
+| Migraines                | The character receives –2 to all Physical and Mental tests, sensitivity to light, and nausea (p. 409).                                                                                                                                                                                                                                                                                                                         |
+| Paranoia/Anxiety         | Character must make Social Tests for even basic interactions. These are Success Tests with a threshold of 5. If no apparent skill applies, the character must default to Charisma –1. Failure means the character reacts with paranoia or anxiety in that situation for the duration of the effect.                                                                                                                            |
 
 ## Sensitive System
 
@@ -573,7 +573,7 @@ Characters who suffer from Simsense Vertigo experience feelings of disorientatio
 
 ## Sinner (layered)
 
-| **BONUS** :5 TO 25 KARMA |  |
+| **BONUS** :5 TO 25 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -598,7 +598,7 @@ At the 25 Karma level is the Corporate Born SIN. The character with this ID was 
 
 ## Social Stress
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -627,7 +627,7 @@ The character with the Uncouth quality has difficulty interacting with others. H
 
 ## Uneducated
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -636,7 +636,7 @@ An Uneducated character is not mentally impaired—she just never had the opport
 
 ## Unsteady Hands
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -645,7 +645,7 @@ A character with Unsteady Hands has mild shakes that affect the dexterity and fi
 
 ## Weak Immune System
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -654,7 +654,7 @@ A character with a Weak Immune System has reduced resistance to infections and d
 
 ## Spirit Pariah
 
-| **BONUS** :14 KARMA |  |
+| **BONUS** :14 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -663,7 +663,7 @@ Something you did slotted of the spirit world something fierce, so spirits reall
 
 ## Combat Junkie
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -687,7 +687,7 @@ Make an Edge (3) Test at the beginning of each game session. Success means no co
 
 ## Earther
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -696,7 +696,7 @@ Some people are just not meant to explore the stars. Space flight training usual
 
 ## Albinism
 
-| **BONUS** :4 OR 8 KARMA |  |
+| **BONUS** :4 OR 8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -711,7 +711,7 @@ Characters who gain cybereyes at any point in the character creation process onl
 
 ## Amnesia
 
-| **BONUS** :4 OR 8 KARMA |  |
+| **BONUS** :4 OR 8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -719,12 +719,12 @@ Characters who gain cybereyes at any point in the character creation process onl
 More than just one night of drunken partying or even a few days’ blackout from a healthy dose of laés, this level of memory loss is far deeper and more profound. The loss can be from injury, magic, drugs, or something unknown and sinister (cough … CFD … cough), and it can be either a simple surface memory loss or a complete neural deletion. The two levels of loss offer differing Karma values and differing levels of difficulty for the mind-wiped shadowrunner.
 
 Surface Loss (4 Karma)
-:   This character suffers from the classic movie amnesia where they don’t remember who they are or their life before a certain moment, but they retain knowledge of their skills and general abilities. They aren’t quite sure how they learned them, or where, but they at least have those abilities at their disposal. What they lack are knowledge skills. The gamemaster determines a back-story based on the character the player creates and notes their knowledge skills. As a skill becomes relevant to the game, the gamemaster can make a secret roll for the character and provide the information in a flash of realization.
-:   But these skills don’t just appear out of thin air for nothing. In order to access a Knowledge skill, a character needs to decide to buy it. If the skill is already on their list, 2 Karma buys an additional rank of the skill and that small bit of their history can be revealed. If the skill is not on their list they pay for it normally. A player could choose to never buy back their skills and always be at the mercy of the gamemaster, or simply build up their new identity with what they learn on the streets.
+: This character suffers from the classic movie amnesia where they don’t remember who they are or their life before a certain moment, but they retain knowledge of their skills and general abilities. They aren’t quite sure how they learned them, or where, but they at least have those abilities at their disposal. What they lack are knowledge skills. The gamemaster determines a back-story based on the character the player creates and notes their knowledge skills. As a skill becomes relevant to the game, the gamemaster can make a secret roll for the character and provide the information in a flash of realization.
+: But these skills don’t just appear out of thin air for nothing. In order to access a Knowledge skill, a character needs to decide to buy it. If the skill is already on their list, 2 Karma buys an additional rank of the skill and that small bit of their history can be revealed. If the skill is not on their list they pay for it normally. A player could choose to never buy back their skills and always be at the mercy of the gamemaster, or simply build up their new identity with what they learn on the streets.
 
 Neural Deletion (8 Karma)
-:   This is something that should be discussed and worked out with the gamemaster before choosing it, or can be part of a gamemaster’s plan for starting a new campaign with willing (note that word!) players. The player(s) start with a very limited level of knowledge as to what their character(s) can do. A nice gamemaster may allow for a list of skills they seem to know something about, or they can choose to reveal nothing but the basics, such as Physical Attributes and gear. Mental Attributes, skills, qualities, and even Edge should start as a mystery, and players learn about their character as they go.
-:   One of the most important things to remember about choosing this is that your history is out of your hands and, at times, so is your character creation. If you want this level of Amnesia, talk to your gamemaster and then wait for your character sheet and hold on for dear life because you’re in for a bumpy and wildly fun ride.
+: This is something that should be discussed and worked out with the gamemaster before choosing it, or can be part of a gamemaster’s plan for starting a new campaign with willing (note that word!) players. The player(s) start with a very limited level of knowledge as to what their character(s) can do. A nice gamemaster may allow for a list of skills they seem to know something about, or they can choose to reveal nothing but the basics, such as Physical Attributes and gear. Mental Attributes, skills, qualities, and even Edge should start as a mystery, and players learn about their character as they go.
+: One of the most important things to remember about choosing this is that your history is out of your hands and, at times, so is your character creation. If you want this level of Amnesia, talk to your gamemaster and then wait for your character sheet and hold on for dear life because you’re in for a bumpy and wildly fun ride.
 
 The player can only fully regain control of their character by spending the Karma to buy off this quality and completing whatever in-game goals the gamemaster designs.
 
@@ -737,7 +737,7 @@ The player can only fully regain control of their character by spending the Karm
 | **4 boxes:** Chest tightness; further Fatigue damage resisted with only Willpower |
 | **8 boxes:** Wracking cough; –1 dice pool modifier to all Actions; Social Limit decreased by 1 additional point |
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -748,7 +748,7 @@ Characters with asthma suffer additional, and more rapid, effects from all forms
 
 ## Bi-polar
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -761,7 +761,7 @@ Medication to stabilize Bi-polar characters is available at a cost of 500 nuyen 
 
 ## Big Regret
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -770,7 +770,7 @@ Mistakes happen. Sometime in the character’s past they did something serious t
 
 ## Blind
 
-| **BONUS** :5 OR 15 KARMA |  |
+| **BONUS** :5 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -783,7 +783,7 @@ Since astral sight is not a truly visual sense, Awakened characters who are blin
 
 ## Borrowed Time
 
-| **BONUS** :20 KARMA |  |
+| **BONUS** :20 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -794,7 +794,7 @@ This quality cannot be bought off. If the player changes their mind and wants th
 
 ## Computer Illiterate
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -803,7 +803,7 @@ There are characters who aren’t tech-savvy and characters who just don’t und
 
 ## Creature Of Comfort
 
-| **BONUS** :10, 17, OR 25 KARMA |  |
+| **BONUS** :10, 17, OR 25 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -817,12 +817,12 @@ For every day that the character must spend “slumming” it in a lower Lifesty
 **DAY JOB TABLE**
 
 | KARMA VALUES | SALARY/MONTH | HOURS/WEEK |
-| --- | --- | --- |
-| 5 | 1,000¥ | 10 |
-| 10 | 2,500¥ | 20 |
-| 15 | 5,000¥ | 40 |
+| ------------ | ------------ | ---------- |
+| 5            | 1,000¥       | 10         |
+| 10           | 2,500¥       | 20         |
+| 15           | 5,000¥       | 40         |
 
-| **BONUS** :5 TO 15 KARMA |  |
+| **BONUS** :5 TO 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -837,7 +837,7 @@ During runs, the gamemaster should keep track of how many consecutive days are b
 
 ## Deaf
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -846,7 +846,7 @@ Characters with this quality are completely deaf and can perceive no sound at al
 
 ## Did You Just Call Me Dumb?
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -855,7 +855,7 @@ The character can’t resist camouflaging insults into well-spoken words. The ch
 
 ## Dimmer Bulb
 
-| **BONUS** :5 KARMA PER LEVEL |  |
+| **BONUS** :5 KARMA PER LEVEL | |
 | **REQUIRES** :NONE |
 | **RATING** :(MAX 3 LEVELS) |
 | **SOURCE** :SR5:RF |
@@ -864,7 +864,7 @@ Maybe it was one too many hits to the head, maybe the character’s mother dropp
 
 ## Driven
 
-| **BONUS** :2 KARMA |  |
+| **BONUS** :2 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -873,7 +873,7 @@ The character has an obsession, something that drives them forward. Everything t
 
 ## Emotional Attachment
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -882,7 +882,7 @@ The character has an irrational emotional attachment to a piece of gear. The cha
 
 ## Ex-con
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -899,7 +899,7 @@ If the character ever gets past their parole or creates a new life for him- or h
 
 ## Flashbacks
 
-| **BONUS** :7 OR 15 KARMA |  |
+| **BONUS** :7 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -910,7 +910,7 @@ During character creation, work with the gamemaster to determine the stimulus an
 
 ## Hobo With A Shotgun
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -919,7 +919,7 @@ The character has survived on the streets for so long that anything else makes t
 
 ## Hung Out To Dry
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -930,7 +930,7 @@ If other members of the team start to ask around as to why the character is on t
 
 ## Illiterate
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -939,7 +939,7 @@ Though literacy is not really necessary thanks to the advances of the Sixth Worl
 
 ## In Debt
 
-| **BONUS** :1 TO 15 KARMA |  |
+| **BONUS** :1 TO 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -952,7 +952,7 @@ The quality can be bought off if the character has both enough Karma and cash to
 
 ## Incomplete Deprogramming
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -967,7 +967,7 @@ As if all of this wasn’t bad enough, behaviors like this look an awful lot lik
 
 ## Infirm
 
-| **BONUS** :5 TO 25 KARMA |  |
+| **BONUS** :5 TO 25 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -978,7 +978,7 @@ The effects of this quality stack with those of the Aged quality from Bullets & 
 
 ## Liar
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -987,7 +987,7 @@ You’d never make it as Pinocchio. Everyone around knows the character to be a 
 
 ## Night Blindness
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -998,7 +998,7 @@ This quality is incompatible with any other quality that affects the eyes of the
 
 ## Oblivious
 
-| **BONUS** :6 OR 10 KARMA |  |
+| **BONUS** :6 OR 10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1007,7 +1007,7 @@ The character with this quality fails to notice the troll in the corner with the
 
 ## Pacifist
 
-| **BONUS** :10 OR 15 KARMA |  |
+| **BONUS** :10 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1018,7 +1018,7 @@ At the 15 Karma level, the character will not commit any violence regardless of 
 
 ## Paranoia
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1027,7 +1027,7 @@ It’s only paranoia if they aren’t out to get you. In the shadows, being caut
 
 ## Paraplegic
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1043,16 +1043,16 @@ The quality does not affect the character’s abilities in astral space or the M
 
 **PHOBIA TABLE**
 
-| CONDITION | KARMA | DESCRIPTION |
-| --- | --- | --- |
-| Uncommon | 2 | The triggering condition is relatively rare, such as the smell of roses or specific insects. |
-| Common | 5 | The triggering condition is commonly encountered, such as sunlight, trolls, insects in general, magic, the outdoors, or crowds. |
-| SEVERITY | KARMA | EFFECTS |
-| Mild | 3 | –1 dice pool modifier to all actions |
-| Moderate | 5 | –3 dice pool modifier to all actions; Composure (2) Test or must get away from the source |
-| Severe | 10 | –6 dice pool modifier; Composure (5) Test or must flee from the source for (5 – hits) Combat Turns |
+| CONDITION | KARMA | DESCRIPTION                                                                                                                     |
+| --------- | ----- | ------------------------------------------------------------------------------------------------------------------------------- |
+| Uncommon  | 2     | The triggering condition is relatively rare, such as the smell of roses or specific insects.                                    |
+| Common    | 5     | The triggering condition is commonly encountered, such as sunlight, trolls, insects in general, magic, the outdoors, or crowds. |
+| SEVERITY  | KARMA | EFFECTS                                                                                                                         |
+| Mild      | 3     | –1 dice pool modifier to all actions                                                                                            |
+| Moderate  | 5     | –3 dice pool modifier to all actions; Composure (2) Test or must get away from the source                                       |
+| Severe    | 10    | –6 dice pool modifier; Composure (5) Test or must flee from the source for (5 – hits) Combat Turns                              |
 
-| **BONUS** :5 TO 15 KARMA |  |
+| **BONUS** :5 TO 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1063,7 +1063,7 @@ Mild phobias cause a –1 dice pool modifier to all actions while in the presenc
 
 ## Pie Iesu Domine. Dona Eis Requiem.
 
-| **BONUS** :2 KARMA |  |
+| **BONUS** :2 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1072,7 +1072,7 @@ The character is a flagellant, believing in causing himself pain to serve a grea
 
 ## Poor Self Control
 
-| **BONUS** :4 TO 12 KARMA |  |
+| **BONUS** :4 TO 12 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF/SR5:CF |
@@ -1080,33 +1080,33 @@ The character is a flagellant, believing in causing himself pain to serve a grea
 Whether they’re a boaster, an adrenaline junkie, or just can’t stand disorder, characters with this quality span a variety of mental ticks that all boil down to the inability to control one’s actions. The Karma costs vary based on the threshold of the Composure test involved in restraining the character’s actions. The quality can be taken multiple times, but only once for each form of control issue.
 
 Braggart (5 Karma)
-:   No one has ever done it bigger or better than her. The character will always try to top anyone else’s claims of success, even to the point of lying about it. This may result in them being ignored, considered infantile, or challenged to prove their superiority, but without a Composure (3) Test they won’t back down from the brag.
+: No one has ever done it bigger or better than her. The character will always try to top anyone else’s claims of success, even to the point of lying about it. This may result in them being ignored, considered infantile, or challenged to prove their superiority, but without a Composure (3) Test they won’t back down from the brag.
 
 Thrill-Seeker (4 Karma)
-:   It’s all about the rush. The character will always take the most dangerous and risky option in any situation if they don’t succeed at a Composure (2) Test. There is a slight payoff, as the adrenaline rush provides a +1 to their Initiative Score for 5 Combat Turns (meaning that is how long the bonus lasts, not that the character gets an additional bonus each turn).
+: It’s all about the rush. The character will always take the most dangerous and risky option in any situation if they don’t succeed at a Composure (2) Test. There is a slight payoff, as the adrenaline rush provides a +1 to their Initiative Score for 5 Combat Turns (meaning that is how long the bonus lasts, not that the character gets an additional bonus each turn).
 
 Compulsive (4 To 12 Karma)
-:   There is an order to all things that must be maintained, and the character feels the need to exert their sense of order on everything. The value of this mental malady comes from how severe the compulsion is and how much of a negative impact it can have on the character. Maybe she likes a tidy house, maybe she sees a necessary order to the items on the tables out in the world, or maybe she feels the need to practice her skills (be they hacking, casting, shooting, talking, stealing, sneaking, etc.) every chance she gets. The character must make a Composure (2) test to resist the compulsion. The base Karma value is (2 x threshold needed for Composure Test; must be from 1 to 4); then add 2 for things in the character’s personal environment (e.g., placement of furniture and minor appliances), 3 for a single aspect of the public environment (e.g., correcting bad apostrophes on signs, counting every Ford Americar they see), or 4 for a broad aspect of the public environment (e.g., touching every light post they walk by, hacking into every camera they see).
+: There is an order to all things that must be maintained, and the character feels the need to exert their sense of order on everything. The value of this mental malady comes from how severe the compulsion is and how much of a negative impact it can have on the character. Maybe she likes a tidy house, maybe she sees a necessary order to the items on the tables out in the world, or maybe she feels the need to practice her skills (be they hacking, casting, shooting, talking, stealing, sneaking, etc.) every chance she gets. The character must make a Composure (2) test to resist the compulsion. The base Karma value is (2 x threshold needed for Composure Test; must be from 1 to 4); then add 2 for things in the character’s personal environment (e.g., placement of furniture and minor appliances), 3 for a single aspect of the public environment (e.g., correcting bad apostrophes on signs, counting every Ford Americar they see), or 4 for a broad aspect of the public environment (e.g., touching every light post they walk by, hacking into every camera they see).
 
 Vindictive (5 Karma)
-:   Though best served cold, the thought of vengeance sure makes your blood boil. No matter how small the slight, it cannot go unreturned, and the escalation factor must always be considered. An insult may be returned with a calm threat, a threat might get the same or may require a payment in pain, and any injurious assault must be brought back upon your enemies two-fold (or more). To resist the urge for instant payback, the character must make a successful Composure (2) Test, and even when resisted, the character must add the offender’s name to their hit list for the future.
+: Though best served cold, the thought of vengeance sure makes your blood boil. No matter how small the slight, it cannot go unreturned, and the escalation factor must always be considered. An insult may be returned with a calm threat, a threat might get the same or may require a payment in pain, and any injurious assault must be brought back upon your enemies two-fold (or more). To resist the urge for instant payback, the character must make a successful Composure (2) Test, and even when resisted, the character must add the offender’s name to their hit list for the future.
 
 Combat Monster (10 Karma)
-:   The red rage blinds to all but victory. A character with this quality loses much of her self-control once a fight has begun. She’ll fight until all her opponents are disabled, even if outnumbered and losing, unless she can make a Composure (3) Test to clear her head enough to break off the fight.
+: The red rage blinds to all but victory. A character with this quality loses much of her self-control once a fight has begun. She’ll fight until all her opponents are disabled, even if outnumbered and losing, unless she can make a Composure (3) Test to clear her head enough to break off the fight.
 
 #### SR5:CF
 
 Attention-Seeking (5 Karma)
-:   The spotlight is the character’s natural habitat, like a fish in water—and she suffers just as much when she’s not in it. The character goes out of her way to be vivacious and gain approval from others. Unless
+: The spotlight is the character’s natural habitat, like a fish in water—and she suffers just as much when she’s not in it. The character goes out of her way to be vivacious and gain approval from others. Unless
 
 she succeeds at a Composure (3) Test, the character seeks to be the center of attention whenever possible (this may or may not include combat situations, at the gamemaster’s discretion).
 
 Sadistic (8 Karma)
-:   As a child, the character bullied others and tortured small animals. As an adult, she’s moved on to inflicting pain and suffering on those around her, physical and mental, whenever she has the chance. A Composure (3) Test is required to stop from inflicting some form of pain whenever the character has the reasonable chance to do so without incurring danger, even when it might interfere with her own safety, like when the team’s face is trying to talk their way out of a firefight.
+: As a child, the character bullied others and tortured small animals. As an adult, she’s moved on to inflicting pain and suffering on those around her, physical and mental, whenever she has the chance. A Composure (3) Test is required to stop from inflicting some form of pain whenever the character has the reasonable chance to do so without incurring danger, even when it might interfere with her own safety, like when the team’s face is trying to talk their way out of a firefight.
 
 ## Records On File
 
-| **BONUS** :1 KARMA PER RATING |  |
+| **BONUS** :1 KARMA PER RATING | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1116,7 +1116,7 @@ For every point of Karma spent on this quality, one of the Big 10 megacorps poss
 
 ## Reduced (sense)
 
-| **BONUS** :2 TO 29 KARMA |  |
+| **BONUS** :2 TO 29 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1127,7 +1127,7 @@ If the sense is ever repaired or corrected permanently, the quality must be boug
 
 ## Sensory Overload Syndrome
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1138,7 +1138,7 @@ The condition can possibly be prevented by deactivating enhancement systems, the
 
 ## Signature
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1147,7 +1147,7 @@ The origami swan can mean only one thing. For some reason, a character with this
 
 ## Vendetta
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1158,7 +1158,7 @@ Whenever the character encounters the target of her ire, she must make a Composu
 
 ## Wanted
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1169,7 +1169,7 @@ If for some reason the bounty ever goes away, like the character is turned in or
 
 ## Code Of Honor: Like A Boss
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :Minimum Hacking Skill Of 3 Or Technomancer |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1178,7 +1178,7 @@ Bricking someone’s gear, that’s easy. There’s no finesse to it. Anyone can
 
 ## Curiosity Killed The Cat
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :Minimum Hacking Skill Of 3 |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1189,7 +1189,7 @@ But wait, it’s not all bad! You get +2 dice to all Crack File tests.
 
 ## Data Liberator
 
-| **BONUS** :12 KARMA |  |
+| **BONUS** :12 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1204,7 +1204,7 @@ The character is likely to make friends as well as enemies fairly quickly doing 
 
 ## Decaying Dissonance
 
-| **BONUS** :25 KARMA |  |
+| **BONUS** :25 KARMA | |
 | **REQUIRES** :Technomancers Only |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1223,7 +1223,7 @@ This quality can be bought off, but only as part of a Submersion. Eliminating th
 
 ## Electronic Witness
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1236,7 +1236,7 @@ In any situation where the character cannot record or turns off wifi on his gear
 
 ## Faraday Himself
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1245,7 +1245,7 @@ Maybe it’s your diet. Too much iron in it? Maybe it’s your cyberware, causin
 
 ## Latest And Greatest
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1256,7 +1256,7 @@ The character must spend at least sixty percent of her earnings on these upgrade
 
 ## Leeeeeeeroy Jenkins
 
-| **BONUS** :20 KARMA |  |
+| **BONUS** :20 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1273,7 +1273,7 @@ If the character roars his or her name as a Free Action right before the first b
 
 ## Nerdrage
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1286,7 +1286,7 @@ This quality can be bought off following the normal rules at any time, the chara
 
 ## Prank Warrior
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1297,7 +1297,7 @@ This quality should come into play at least once per play session.
 
 ## Wanted By God
 
-| **BONUS** :12 KARMA |  |
+| **BONUS** :12 KARMA | |
 | **REQUIRES** :Minimum Hacking Skill Of 3. Cannot Be Technomancer |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1308,7 +1308,7 @@ You will suffer convergence when your Overwatch Score hits 30, instead of the no
 
 ## Accident Prone
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1317,7 +1317,7 @@ This driving thing—it may not be for you. You have a talent for steering any v
 
 ## Motion Sickness
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1326,7 +1326,7 @@ Yes, there is a strong benefit from being able to move from place to place, but 
 
 ## Too Much Data
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1335,7 +1335,7 @@ With a few vehicles under your control, everything is fine. Once you get too man
 
 ## Antipathy
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1344,7 +1344,7 @@ Your parents always told you to think about how others feel, but whether you wan
 
 ## Aips
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1353,7 +1353,7 @@ Diagnosed with artificially induced psychotropic schizophrenia syndrome after th
 
 ## Blank Slate
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1362,7 +1362,7 @@ The character in question has abused personasofts to the degree they no longer h
 
 ## Cyberpsychosis
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :Antipathy Negative Quality, minimum 5 |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1373,7 +1373,7 @@ Note: Characters augmented heavily enough to risk cyberpsychosis may suffer nega
 
 ## Cyber-Snob
 
-| **BONUS** :12 KARMA |  |
+| **BONUS** :12 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1382,7 +1382,7 @@ There are augmentations, and then there are augmentations, chummer. If you’re 
 
 ## Dead Emotion
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1391,7 +1391,7 @@ The character has abused BTL-level moodsofts and can no longer feel one specific
 
 ## Dry Addict
 
-| **BONUS** :2 TO 13 KARMA |  |
+| **BONUS** :2 TO 13 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1402,7 +1402,7 @@ The Dry Addict quality includes the following levels, just like addiction: Mild,
 
 ## Family Curse
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1411,7 +1411,7 @@ Your parent(s) liked their drugs. A lot. So did theirs, and their parents before
 
 ## Implant-Induced Immune Deficiency
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1420,7 +1420,7 @@ Cyberware and bioware users sometimes suffer from a number of health problems as
 
 ## Lack Of Focus
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1431,7 +1431,7 @@ Failing the Composure Test indicates the character can no longer focus and must 
 
 ## Lightweight
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1440,7 +1440,7 @@ On the bright side, this quality means it’s easy, and cheap, to get drunk. On 
 
 ## One Of Them
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1453,7 +1453,7 @@ While this quality can be bought off with Karma as per normal rules, until this 
 
 ## Quasimodo
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1462,7 +1462,7 @@ The Sixth World is full of things that endanger normal genome expression, includ
 
 ## So Jacked Up
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1477,7 +1477,7 @@ If the character has the wrong mood at the wrong time, they incur a –2 penalty
 
 ## Superhuman Psychosis
 
-| **BONUS** :2 KARMA |  |
+| **BONUS** :2 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1498,7 +1498,7 @@ Characters with Superhuman Psychosis cannot take any Code of Honor quality, as t
 
 ## TLE-X
 
-| **BONUS** :15 KARMA |  |
+| **BONUS** :15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1509,7 +1509,7 @@ The biomedical AEXD (p. 179) grants a +3 bonus to dice pools to resist the onset
 
 ## Tough And Targeted
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1520,7 +1520,7 @@ The Professional Rating of the guy who comes looking for him is equal to the cha
 
 ## Code of Honor: Avenging Angel
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |
@@ -1529,7 +1529,7 @@ You only accept contracts to kill those who you believe deserve death. You will 
 
 ## Faceless
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |
@@ -1538,7 +1538,7 @@ You have worn disguises so frequently and for so long that being out in public w
 
 ## Impassive
 
-| **BONUS** :7 KARMA |  |
+| **BONUS** :7 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |

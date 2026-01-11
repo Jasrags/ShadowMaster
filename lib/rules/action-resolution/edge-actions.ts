@@ -217,11 +217,7 @@ export function executeSecondChance(
   }
 
   // Perform reroll
-  const rollResult = executeReroll(
-    originalResult.dice,
-    rules,
-    originalResult.pool.limit
-  );
+  const rollResult = executeReroll(originalResult.dice, rules, originalResult.pool.limit);
 
   return {
     success: true,

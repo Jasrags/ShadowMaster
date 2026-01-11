@@ -118,7 +118,10 @@ export function ContactFormModal({
   const archetypeList = archetypes?.map((a) => a.name) || DEFAULT_ARCHETYPES;
 
   const handleAddSpecialization = () => {
-    if (specializationInput.trim() && !formData.specializations?.includes(specializationInput.trim())) {
+    if (
+      specializationInput.trim() &&
+      !formData.specializations?.includes(specializationInput.trim())
+    ) {
       setFormData({
         ...formData,
         specializations: [...(formData.specializations || []), specializationInput.trim()],
@@ -212,7 +215,8 @@ export function ContactFormModal({
                     <div className="flex items-center justify-between text-xs font-mono">
                       <span>Contact Cost: {pointCost} points</span>
                       <span>
-                        Available: {maxContactPoints - usedContactPoints + currentContactPoints} points
+                        Available: {maxContactPoints - usedContactPoints + currentContactPoints}{" "}
+                        points
                       </span>
                     </div>
                   </div>
@@ -385,9 +389,7 @@ export function ContactFormModal({
 
                 {/* Notes */}
                 <TextField className="space-y-1">
-                  <Label className="text-xs font-mono text-muted-foreground uppercase">
-                    Notes
-                  </Label>
+                  <Label className="text-xs font-mono text-muted-foreground uppercase">Notes</Label>
                   <TextArea
                     value={formData.notes || ""}
                     onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
@@ -398,7 +400,9 @@ export function ContactFormModal({
               </div>
 
               {/* Footer */}
-              <div className={`flex items-center justify-end gap-3 p-4 border-t ${t.colors.border}`}>
+              <div
+                className={`flex items-center justify-end gap-3 p-4 border-t ${t.colors.border}`}
+              >
                 <Button
                   type="button"
                   onPress={close}

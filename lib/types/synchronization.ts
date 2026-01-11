@@ -39,11 +39,7 @@ export type DriftSeverity = "none" | "non-breaking" | "breaking";
  * - invalid: Breaking changes require reconciliation before gameplay
  * - migrating: Active migration in progress (transient state)
  */
-export type SyncStatus =
-  | "synchronized"
-  | "outdated"
-  | "invalid"
-  | "migrating";
+export type SyncStatus = "synchronized" | "outdated" | "invalid" | "migrating";
 
 /**
  * Rules compliance status for gameplay eligibility
@@ -52,11 +48,7 @@ export type SyncStatus =
  * - invalid: Requires reconciliation before gameplay
  * - legacy: Locked to obsolete ruleset version (no migration path)
  */
-export type LegalityStatus =
-  | "rules-legal"
-  | "draft"
-  | "invalid"
-  | "legacy";
+export type LegalityStatus = "rules-legal" | "draft" | "invalid" | "legacy";
 
 // =============================================================================
 // VERSION TRACKING
@@ -198,11 +190,7 @@ export interface MigrationRecommendation {
  * - archive: Move to legacy storage, preserve for reference
  * - remove: Remove from character (with karma refund if applicable)
  */
-export type MigrationStrategy =
-  | "auto-update"
-  | "manual-select"
-  | "archive"
-  | "remove";
+export type MigrationStrategy = "auto-update" | "manual-select" | "archive" | "remove";
 
 /**
  * A selectable option for manual migration decisions

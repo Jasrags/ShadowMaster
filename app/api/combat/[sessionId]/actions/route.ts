@@ -30,9 +30,7 @@ import {
   calculateStateModifiers,
   type ValidationResult,
 } from "@/lib/rules/action-resolution";
-import {
-  processDamageApplication,
-} from "@/lib/rules/action-resolution/combat";
+import { processDamageApplication } from "@/lib/rules/action-resolution/combat";
 import type {
   ActionDefinition,
   Character,
@@ -59,18 +57,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -85,10 +77,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
 
     // Check access
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Parse query params
@@ -105,10 +94,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!participant) {
-      return NextResponse.json(
-        { success: false, error: "Participant not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Participant not found" }, { status: 404 });
     }
 
     // Load ruleset
@@ -148,7 +134,8 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Categorize actions by availability
     const actionsRemaining = participant.actionsRemaining;
     const availableActions: (ActionDefinition & { canPerform: boolean; blockers: string[] })[] = [];
-    const unavailableActions: (ActionDefinition & { canPerform: boolean; blockers: string[] })[] = [];
+    const unavailableActions: (ActionDefinition & { canPerform: boolean; blockers: string[] })[] =
+      [];
 
     for (const action of allActions) {
       // Check if action type is available
@@ -240,18 +227,12 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -266,10 +247,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Check ownership
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Check session is active
@@ -282,12 +260,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Parse body
     const body = await request.json();
-    const {
-      actionId,
-      participantId,
-      targetId,
-      modifiers,
-    } = body;
+    const { actionId, participantId, targetId, modifiers } = body;
 
     // Validate required fields
     if (!actionId) {
@@ -306,10 +279,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     }
 
     if (!participant) {
-      return NextResponse.json(
-        { success: false, error: "Participant not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Participant not found" }, { status: 404 });
     }
 
     // Check participant is active

@@ -24,10 +24,7 @@ const effectHandlers: Partial<Record<EffectType, EffectHandler>> = {};
 /**
  * Register an effect handler for a specific type
  */
-export function registerEffectHandler(
-  type: EffectType,
-  handler: EffectHandler
-): void {
+export function registerEffectHandler(type: EffectType, handler: EffectHandler): void {
   effectHandlers[type] = handler;
 }
 
@@ -44,7 +41,9 @@ export function getEffectHandler(type: EffectType): EffectHandler | undefined {
  * @param resolvedEffect - Resolved effect to process
  * @returns Processed value (number, string, or object)
  */
-export function processEffect(resolvedEffect: ResolvedEffect): number | string | Record<string, unknown> {
+export function processEffect(
+  resolvedEffect: ResolvedEffect
+): number | string | Record<string, unknown> {
   const handler = getEffectHandler(resolvedEffect.effect.type);
 
   if (handler) {
@@ -239,4 +238,3 @@ registerEffectHandler("special", (effect, resolvedEffect) => {
     description: effect.description,
   };
 });
-

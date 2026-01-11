@@ -149,12 +149,7 @@ interface QuickNPCPanelProps {
   onNPCRemoved?: (participantId: string) => void;
 }
 
-export function QuickNPCPanel({
-  sessionId,
-  theme,
-  onNPCAdded,
-  onNPCRemoved,
-}: QuickNPCPanelProps) {
+export function QuickNPCPanel({ sessionId, theme, onNPCAdded, onNPCRemoved }: QuickNPCPanelProps) {
   const { session, isInCombat } = useCombatSession();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
@@ -163,9 +158,7 @@ export function QuickNPCPanel({
   // Get NPCs in current session
   const sessionNPCs = useMemo(() => {
     if (!session) return [];
-    return session.participants.filter(
-      (p) => p.type === "npc" || p.type === "grunt"
-    );
+    return session.participants.filter((p) => p.type === "npc" || p.type === "grunt");
   }, [session]);
 
   // Add NPC to session
@@ -184,13 +177,8 @@ export function QuickNPCPanel({
         const initiative = rollNPCInitiative(template);
 
         // Generate unique name
-        const existingCount = sessionNPCs.filter((n) =>
-          n.name.startsWith(template.name)
-        ).length;
-        const name =
-          existingCount > 0
-            ? `${template.name} ${existingCount + 1}`
-            : template.name;
+        const existingCount = sessionNPCs.filter((n) => n.name.startsWith(template.name)).length;
+        const name = existingCount > 0 ? `${template.name} ${existingCount + 1}` : template.name;
 
         // Add to session via API
         const response = await fetch(`/api/combat/${session.id}/participants`, {
@@ -236,10 +224,9 @@ export function QuickNPCPanel({
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/combat/${session.id}/participants/${participantId}`,
-          { method: "DELETE" }
-        );
+        const response = await fetch(`/api/combat/${session.id}/participants/${participantId}`, {
+          method: "DELETE",
+        });
 
         const data = await response.json();
 
@@ -291,11 +278,11 @@ export function QuickNPCPanel({
       >
         <div className="flex items-center gap-3">
           <Bot className={`w-5 h-5 ${theme.colors.accent}`} />
-          <span className={`font-medium ${theme.colors.heading}`}>
-            Quick NPCs
-          </span>
+          <span className={`font-medium ${theme.colors.heading}`}>Quick NPCs</span>
           {sessionNPCs.length > 0 && (
-            <span className={`text-xs px-1.5 py-0.5 rounded ${theme.fonts.mono} bg-muted text-muted-foreground`}>
+            <span
+              className={`text-xs px-1.5 py-0.5 rounded ${theme.fonts.mono} bg-muted text-muted-foreground`}
+            >
               {sessionNPCs.length}
             </span>
           )}
@@ -312,7 +299,9 @@ export function QuickNPCPanel({
         <div className={`p-4 space-y-4 border-t ${theme.colors.border}`}>
           {/* Error Display */}
           {error && (
-            <div className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}>
+            <div
+              className={`flex items-center gap-2 p-2 rounded text-xs border ${theme.components.badge.negative}`}
+            >
               {error}
             </div>
           )}
@@ -338,9 +327,7 @@ export function QuickNPCPanel({
                       ) : (
                         <Bot className="w-4 h-4 text-blue-500" />
                       )}
-                      <span className={`text-sm ${theme.colors.heading}`}>
-                        {npc.name}
-                      </span>
+                      <span className={`text-sm ${theme.colors.heading}`}>{npc.name}</span>
                       {npc.status === "out" ? (
                         <span className="text-xs text-red-500">out</span>
                       ) : (
@@ -388,9 +375,7 @@ export function QuickNPCPanel({
                       ) : (
                         <Bot className="w-4 h-4 text-blue-500" />
                       )}
-                      <span className={`font-medium ${theme.colors.heading}`}>
-                        {template.name}
-                      </span>
+                      <span className={`font-medium ${theme.colors.heading}`}>{template.name}</span>
                     </div>
                     {isLoading ? (
                       <Loader2 className="w-4 h-4 animate-spin text-muted-foreground" />

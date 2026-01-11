@@ -118,10 +118,16 @@ export function CharacterInfoCard({ state, updateState }: CharacterInfoCardProps
         {/* Word count indicators */}
         <div className="flex justify-between text-xs text-zinc-400">
           <span>
-            Description: {description.length > 0 ? `${description.split(/\s+/).filter(Boolean).length} words` : "—"}
+            Description:{" "}
+            {description.length > 0
+              ? `${description.split(/\s+/).filter(Boolean).length} words`
+              : "—"}
           </span>
           <span>
-            Background: {background.length > 0 ? `${background.split(/\s+/).filter(Boolean).length} words` : "—"}
+            Background:{" "}
+            {background.length > 0
+              ? `${background.split(/\s+/).filter(Boolean).length} words`
+              : "—"}
           </span>
         </div>
       </div>

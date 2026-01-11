@@ -106,17 +106,23 @@ function createGear(weight: number, stored = false): GearItem {
 describe("Encumbrance Calculator", () => {
   describe("calculateMaxCapacity", () => {
     it("should calculate capacity as Strength × 10", () => {
-      const character = createTestCharacter({ attributes: { ...createTestCharacter().attributes!, strength: 4 } });
+      const character = createTestCharacter({
+        attributes: { ...createTestCharacter().attributes!, strength: 4 },
+      });
       expect(calculateMaxCapacity(character)).toBe(40);
     });
 
     it("should handle high strength", () => {
-      const character = createTestCharacter({ attributes: { ...createTestCharacter().attributes!, strength: 10 } });
+      const character = createTestCharacter({
+        attributes: { ...createTestCharacter().attributes!, strength: 10 },
+      });
       expect(calculateMaxCapacity(character)).toBe(100);
     });
 
     it("should handle minimum strength", () => {
-      const character = createTestCharacter({ attributes: { ...createTestCharacter().attributes!, strength: 1 } });
+      const character = createTestCharacter({
+        attributes: { ...createTestCharacter().attributes!, strength: 1 },
+      });
       expect(calculateMaxCapacity(character)).toBe(10);
     });
 
@@ -246,9 +252,30 @@ describe("Encumbrance Calculator", () => {
     it("should round weight to 2 decimal places", () => {
       const character = createTestCharacter({
         gear: [
-          { id: "g1", name: "Gear 1", category: "gear", quantity: 1, cost: 10, weight: 0.333 } as GearItem,
-          { id: "g2", name: "Gear 2", category: "gear", quantity: 1, cost: 10, weight: 0.333 } as GearItem,
-          { id: "g3", name: "Gear 3", category: "gear", quantity: 1, cost: 10, weight: 0.333 } as GearItem,
+          {
+            id: "g1",
+            name: "Gear 1",
+            category: "gear",
+            quantity: 1,
+            cost: 10,
+            weight: 0.333,
+          } as GearItem,
+          {
+            id: "g2",
+            name: "Gear 2",
+            category: "gear",
+            quantity: 1,
+            cost: 10,
+            weight: 0.333,
+          } as GearItem,
+          {
+            id: "g3",
+            name: "Gear 3",
+            category: "gear",
+            quantity: 1,
+            cost: 10,
+            weight: 0.333,
+          } as GearItem,
         ],
       });
 

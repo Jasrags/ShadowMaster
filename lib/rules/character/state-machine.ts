@@ -15,12 +15,7 @@
 
 import { v4 as uuidv4 } from "uuid";
 import type { Character, CharacterStatus } from "@/lib/types/character";
-import type {
-  AuditEntry,
-  AuditActor,
-  ActorRole,
-  CreateAuditEntryParams,
-} from "@/lib/types/audit";
+import type { AuditEntry, AuditActor, ActorRole, CreateAuditEntryParams } from "@/lib/types/audit";
 import type { ID } from "@/lib/types/core";
 
 // =============================================================================
@@ -173,9 +168,7 @@ export const VALID_TRANSITIONS: StateTransition[] = [
 /**
  * Validates that a character has all required fields for finalization
  */
-export function validateCharacterComplete(
-  character: Character
-): ValidationResult {
+export function validateCharacterComplete(character: Character): ValidationResult {
   const errors: ValidationError[] = [];
   const warnings: ValidationWarning[] = [];
 
@@ -269,10 +262,7 @@ export function findTransition(
 /**
  * Check if a transition is valid (exists in the transition table)
  */
-export function isValidTransition(
-  from: CharacterStatus,
-  to: CharacterStatus
-): boolean {
+export function isValidTransition(from: CharacterStatus, to: CharacterStatus): boolean {
   return findTransition(from, to) !== undefined;
 }
 
@@ -467,10 +457,7 @@ export function createAuditEntry(params: CreateAuditEntryParams): AuditEntry {
  * Append an audit entry to a character
  * Returns a new character object (does not mutate)
  */
-export function appendAuditEntry(
-  character: Character,
-  entry: AuditEntry
-): Character {
+export function appendAuditEntry(character: Character, entry: AuditEntry): Character {
   return {
     ...character,
     auditLog: [...(character.auditLog || []), entry],

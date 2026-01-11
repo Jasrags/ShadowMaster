@@ -5,36 +5,35 @@
 
 ## **1. Ruleset Isolation & Edition-Specific Data**
 
-Each Shadowrun edition must exist as a **self-contained, sandboxed ruleset** that does *not* assume the presence of mechanics or content from other editions.
+Each Shadowrun edition must exist as a **self-contained, sandboxed ruleset** that does _not_ assume the presence of mechanics or content from other editions.
 
 ### **Key Requirements**
 
-* **No cross-contamination**:
-  SR5 can have *bioware* and *limits*; SR2/SR3 might not.
-  SR6 has *Edge economy*; SR4/SR5 do not share that exact system.
-* **Each ruleset must define ALL of the following independently**:
-
-  * Attributes
-  * Skills
-  * Skill groups (if applicable)
-  * Derived stats
-  * Damage systems
-  * Combat turn structure
-  * Item systems (gear, weapons, armor)
-  * Cyberware / Bioware / Nanotech (per edition capability)
-  * Magic/Resonance structures
-  * Priority or point-buy rules
-  * Metatypes and their costs/limits
-  * Availability rules
-  * Karma advancement rules
-  * Edge mechanics (SR6 only)
-  * Matrix/rigger action sets (edition-specific)
+- **No cross-contamination**:
+  SR5 can have _bioware_ and _limits_; SR2/SR3 might not.
+  SR6 has _Edge economy_; SR4/SR5 do not share that exact system.
+- **Each ruleset must define ALL of the following independently**:
+  - Attributes
+  - Skills
+  - Skill groups (if applicable)
+  - Derived stats
+  - Damage systems
+  - Combat turn structure
+  - Item systems (gear, weapons, armor)
+  - Cyberware / Bioware / Nanotech (per edition capability)
+  - Magic/Resonance structures
+  - Priority or point-buy rules
+  - Metatypes and their costs/limits
+  - Availability rules
+  - Karma advancement rules
+  - Edge mechanics (SR6 only)
+  - Matrix/rigger action sets (edition-specific)
 
 ### **Version Containment**
 
-* Each ruleset is versioned by **Edition → Book → Release**
+- Each ruleset is versioned by **Edition → Book → Release**
   Example: `SR5.Core.1.0` or `SR3.MagicInTheShadows.1.2`
-* Updating data for one edition cannot break a campaign or character tied to another.
+- Updating data for one edition cannot break a campaign or character tied to another.
 
 ---
 
@@ -48,51 +47,51 @@ These define the **baseline ruleset for an edition**.
 
 #### Content Provided
 
-* Base attributes, skills, derived stats
-* Combat and action economy
-* Base spells and adept powers
-* Base cyberware/bioware/nanotech
-* Base gear, weapons, armor
-* Metatypes
-* Magic and resonance mechanics
-* Matrix rules
-* Priority/point buy creation methods
-* Lifestyle, contacts, and core game systems
-* Equipment availability and cost rules
+- Base attributes, skills, derived stats
+- Combat and action economy
+- Base spells and adept powers
+- Base cyberware/bioware/nanotech
+- Base gear, weapons, armor
+- Metatypes
+- Magic and resonance mechanics
+- Matrix rules
+- Priority/point buy creation methods
+- Lifestyle, contacts, and core game systems
+- Equipment availability and cost rules
 
 #### Requirements
 
-* The **Core Rulebook becomes the foundation bundle** for a ruleset.
-* All characters for that edition require this bundle.
-* Additional books extend the core (never replace it).
+- The **Core Rulebook becomes the foundation bundle** for a ruleset.
+- All characters for that edition require this bundle.
+- Additional books extend the core (never replace it).
 
 ---
 
 ### **2.2 Sourcebooks (Optional Rule Expansions + Gear + Lore)**
 
-Each sourcebook provides *optional* or *expanded* systems for its edition.
+Each sourcebook provides _optional_ or _expanded_ systems for its edition.
 
 #### Examples
 
-* **Arsenal (SR4)** — new weapons, mods, vehicles
-* **Street Grimoire (SR5)** — new spells, traditions, metamagic
-* **Run & Gun (SR5)** — combat maneuvers, armor mods
-* **Man & Machine (SR3)** — in SR3 this may be core bioware/cyberware
+- **Arsenal (SR4)** — new weapons, mods, vehicles
+- **Street Grimoire (SR5)** — new spells, traditions, metamagic
+- **Run & Gun (SR5)** — combat maneuvers, armor mods
+- **Man & Machine (SR3)** — in SR3 this may be core bioware/cyberware
 
 #### Content Provided
 
-* Additional gear, spells, magic traditions
-* Optional rule modules (e.g., advanced recoil, martial arts)
-* New character creation options
-* New qualities / flaws
-* Additional metatypes or variants
-* New mechanics (e.g., drug use, toxins, advanced combat)
+- Additional gear, spells, magic traditions
+- Optional rule modules (e.g., advanced recoil, martial arts)
+- New character creation options
+- New qualities / flaws
+- Additional metatypes or variants
+- New mechanics (e.g., drug use, toxins, advanced combat)
 
 #### Requirements
 
-* A user (or GM) can toggle **sourcebook modules** on/off per campaign.
-* Characters must validate against whichever modules the GM enables.
-* Data conflicts resolved by “last defined wins” or book priority rules.
+- A user (or GM) can toggle **sourcebook modules** on/off per campaign.
+- Characters must validate against whichever modules the GM enables.
+- Data conflicts resolved by “last defined wins” or book priority rules.
 
 ---
 
@@ -102,20 +101,19 @@ These are narrative expansions but also may include mechanical content.
 
 #### Content Provided
 
-* NPCs
-* Locations
-* Pre-written encounters
-* Maps and scene descriptions
-* New spells / items (occasionally)
-* New gear or weapons relevant to the adventure
+- NPCs
+- Locations
+- Pre-written encounters
+- Maps and scene descriptions
+- New spells / items (occasionally)
+- New gear or weapons relevant to the adventure
 
 #### Requirements
 
-* Adventures import as **campaign components**, not global rules.
-* Any mechanical content included must be:
-
-  * Either tagged as **adventure-specific**
-  * Or pushed to the global ruleset only if GM chooses to allow it
+- Adventures import as **campaign components**, not global rules.
+- Any mechanical content included must be:
+  - Either tagged as **adventure-specific**
+  - Or pushed to the global ruleset only if GM chooses to allow it
 
 ---
 
@@ -123,15 +121,15 @@ These are narrative expansions but also may include mechanical content.
 
 These rarely introduce hard rules, but can include:
 
-* Named characters
-* Corporate history
-* Lore bits
-* Weapons or cyberware mentioned in fiction
+- Named characters
+- Corporate history
+- Lore bits
+- Weapons or cyberware mentioned in fiction
 
 #### Requirements (Optional)
 
-* Novels may be included as **lore-only modules**.
-* No mechanical changes unless GM opts into a “fiction content pack.”
+- Novels may be included as **lore-only modules**.
+- No mechanical changes unless GM opts into a “fiction content pack.”
 
 (You can deprioritize novels unless you later want a lore database.)
 
@@ -143,16 +141,16 @@ Mission books resemble mini-campaigns or episodic content.
 
 #### Content Provided
 
-* NPCs
-* Locations
-* Mission structure
-* Encounter templates
-* Occasionally new gear or minor rules adjustments
+- NPCs
+- Locations
+- Mission structure
+- Encounter templates
+- Occasionally new gear or minor rules adjustments
 
 #### Requirements
 
-* Missions import like Adventures → as campaign content only.
-* Their mechanical content is opt-in, not global by default.
+- Missions import like Adventures → as campaign content only.
+- Their mechanical content is opt-in, not global by default.
 
 ---
 
@@ -162,10 +160,10 @@ Mission books resemble mini-campaigns or episodic content.
 
 Each ruleset edition must consist of:
 
-* **Core Bundle** (mandatory)
-* Zero or more **Sourcebook Bundles**
-* Zero or more **Adventure/Mission Bundles**
-* Zero or more **Lore Bundles (Novels)**
+- **Core Bundle** (mandatory)
+- Zero or more **Sourcebook Bundles**
+- Zero or more **Adventure/Mission Bundles**
+- Zero or more **Lore Bundles (Novels)**
 
 A “bundle” contains:
 
@@ -181,21 +179,21 @@ A “bundle” contains:
 
 ### **Requirement**
 
-A player selecting *Shadowrun 3E* should only ever see:
+A player selecting _Shadowrun 3E_ should only ever see:
 
-* SR3 core content
-* SR3-compatible sourcebooks
-* SR3 adventures (if linked to a campaign)
-* No bioware (unless using a book that adds it!)
-* No 4E/5E/6E mechanics
+- SR3 core content
+- SR3-compatible sourcebooks
+- SR3 adventures (if linked to a campaign)
+- No bioware (unless using a book that adds it!)
+- No 4E/5E/6E mechanics
 
 ### GM Controls
 
 The GM chooses:
 
-* Which edition the campaign uses
-* Which book bundles are enabled
-* Which optional rules apply
+- Which edition the campaign uses
+- Which book bundles are enabled
+- Which optional rules apply
 
 Players’ characters must always validate against that set.
 
@@ -205,25 +203,23 @@ Players’ characters must always validate against that set.
 
 ## **4.1 Character Creation**
 
-* The system loads **only the books/bundles allowed by the GM or user** for that character.
-* Validation uses:
-
-  * Edition → Core → Active Sourcebooks
-  * Optional rules toggles
+- The system loads **only the books/bundles allowed by the GM or user** for that character.
+- Validation uses:
+  - Edition → Core → Active Sourcebooks
+  - Optional rules toggles
 
 ## **4.2 Campaign Management**
 
-* The GM picks an edition and selects which bundles apply:
-
-  * Core Rulebook (mandatory)
-  * Sourcebooks (toggle)
-  * Optional rules (toggle)
-  * Adventure/Mission content (auto-loaded but optional to expose)
+- The GM picks an edition and selects which bundles apply:
+  - Core Rulebook (mandatory)
+  - Sourcebooks (toggle)
+  - Optional rules (toggle)
+  - Adventure/Mission content (auto-loaded but optional to expose)
 
 ## **4.3 Dice and Automation Engine**
 
-* Every mechanical calculation consults the **edition’s ruleset sandbox**.
-* No shared assumptions across editions.
+- Every mechanical calculation consults the **edition’s ruleset sandbox**.
+- No shared assumptions across editions.
 
 ---
 
@@ -231,11 +227,11 @@ Players’ characters must always validate against that set.
 
 ### **AI-based rules linking**
 
-* Automatically link characters, gear, spells, and cyberware to page references in the books.
+- Automatically link characters, gear, spells, and cyberware to page references in the books.
 
 ### **Module Marketplace**
 
-* Homebrew books or content packs could be added later.
+- Homebrew books or content packs could be added later.
 
 ---
 

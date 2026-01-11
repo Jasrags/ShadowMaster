@@ -18,6 +18,7 @@ import {
   useBioware,
   useCyberwareGrades,
   useBiowareGrades,
+  useSkills,
   calculateCyberwareEssenceCost,
   calculateCyberwareCost,
   calculateCyberwareAvailability,
@@ -39,6 +40,7 @@ import {
   isBlockedByExisting,
 } from "@/lib/types/cyberlimb";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
+import { BaseModalRoot } from "@/components/ui";
 import { X, Search, Cpu, Heart, AlertTriangle, Zap, Plus, Ban } from "lucide-react";
 import { RatingSelector } from "../shared";
 
@@ -102,6 +104,8 @@ export interface AugmentationSelection {
   appearance?: CyberlimbAppearance;
   baseStrength?: number;
   baseAgility?: number;
+  // Skill-linked bioware fields
+  targetSkill?: string;
 }
 
 /** Simplified cyberlimb info for conflict checking */
@@ -110,6 +114,12 @@ export interface InstalledCyberlimb {
   name: string;
   location: CyberlimbLocation;
   limbType: CyberlimbType;
+}
+
+/** Installed skill-linked bioware for duplicate checking */
+export interface InstalledSkillLinkedBioware {
+  catalogId: string;
+  targetSkill: string;
 }
 
 interface AugmentationModalProps {
@@ -126,6 +136,8 @@ interface AugmentationModalProps {
   currentResonance?: number;
   /** Installed cyberlimbs for conflict checking */
   installedCyberlimbs?: InstalledCyberlimb[];
+  /** Installed skill-linked bioware for duplicate skill checking */
+  installedSkillLinkedBioware?: InstalledSkillLinkedBioware[];
 }
 
 // =============================================================================
@@ -144,10 +156,7 @@ function formatEssence(value: number): string {
   return value.toFixed(2);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -177,7 +186,11 @@ function getLocationConflict(
   location: CyberlimbLocation,
   limbType: CyberlimbType,
   installedCyberlimbs: InstalledCyberlimb[]
-): { type: "blocked" | "replaces" | "none"; by?: InstalledCyberlimb; replaces?: InstalledCyberlimb[] } {
+): {
+  type: "blocked" | "replaces" | "none";
+  by?: InstalledCyberlimb;
+  replaces?: InstalledCyberlimb[];
+} {
   const side = LOCATION_SIDE[location];
 
   // Check each installed cyberlimb on the same side
@@ -233,11 +246,13 @@ export function AugmentationModal({
   currentMagic = 0,
   currentResonance = 0,
   installedCyberlimbs = [],
+  installedSkillLinkedBioware = [],
 }: AugmentationModalProps) {
   const cyberwareCatalog = useCyberware({ excludeForbidden: false });
   const biowareCatalog = useBioware({ excludeForbidden: false });
   const cyberwareGrades = useCyberwareGrades();
   const biowareGrades = useBiowareGrades();
+  const { activeSkills } = useSkills();
 
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const [grade, setGrade] = useState<CyberwareGrade | BiowareGrade>("standard");
@@ -245,6 +260,7 @@ export function AugmentationModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRating, setSelectedRating] = useState<number>(1);
   const [selectedLocation, setSelectedLocation] = useState<CyberlimbLocation | null>(null);
+  const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
 
   const isCyberware = augmentationType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
@@ -258,6 +274,7 @@ export function AugmentationModal({
     setSearchQuery("");
     setSelectedRating(1);
     setSelectedLocation(null);
+    setSelectedSkill(null);
   }, []);
 
   // Available grades based on type
@@ -286,8 +303,7 @@ export function AugmentationModal({
       const query = searchQuery.toLowerCase();
       items = items.filter(
         (item) =>
-          item.name.toLowerCase().includes(query) ||
-          item.description?.toLowerCase().includes(query)
+          item.name.toLowerCase().includes(query) || item.description?.toLowerCase().includes(query)
       );
     }
 
@@ -336,7 +352,9 @@ export function AugmentationModal({
   // Get the limb type of the selected cyberlimb
   const selectedLimbType = useMemo((): CyberlimbType | null => {
     if (!isCyberlimb || !rawSelectedItem) return null;
-    return (rawSelectedItem as CyberwareCatalogItemData & { limbType?: CyberlimbType }).limbType ?? null;
+    return (
+      (rawSelectedItem as CyberwareCatalogItemData & { limbType?: CyberlimbType }).limbType ?? null
+    );
   }, [isCyberlimb, rawSelectedItem]);
 
   // Get valid locations for the selected cyberlimb
@@ -363,6 +381,51 @@ export function AugmentationModal({
     return getLocationConflict(selectedLocation, selectedLimbType, installedCyberlimbs);
   }, [selectedLocation, selectedLimbType, installedCyberlimbs]);
 
+  // Check if selected bioware requires skill selection
+  const requiresSkillSelection = useMemo(() => {
+    if (!rawSelectedItem || isCyberware) return false;
+    return (rawSelectedItem as BiowareCatalogItemData).requiresSkillTarget === true;
+  }, [rawSelectedItem, isCyberware]);
+
+  // Get skills already taken by this specific bioware type
+  const takenSkillsForBioware = useMemo(() => {
+    if (!rawSelectedItem) return new Set<string>();
+    return new Set(
+      installedSkillLinkedBioware
+        .filter((b) => b.catalogId === rawSelectedItem.id)
+        .map((b) => b.targetSkill)
+    );
+  }, [rawSelectedItem, installedSkillLinkedBioware]);
+
+  // Get valid skills filtered by attribute filter (excludes already-taken skills)
+  const filteredSkills = useMemo(() => {
+    if (!requiresSkillSelection || !rawSelectedItem) return [];
+    const biowareItem = rawSelectedItem as BiowareCatalogItemData;
+    const attributeFilter = biowareItem.skillAttributeFilter ?? [];
+
+    let skills = activeSkills;
+
+    // Filter by linked attribute if specified
+    if (attributeFilter.length > 0) {
+      skills = skills.filter((skill) =>
+        attributeFilter.includes(skill.linkedAttribute.toLowerCase())
+      );
+    }
+
+    // Exclude skills already taken by the same bioware type
+    // (e.g., can't have two Reflex Recorders for Pistols)
+    skills = skills.filter((skill) => !takenSkillsForBioware.has(skill.id));
+
+    return skills;
+  }, [requiresSkillSelection, rawSelectedItem, activeSkills, takenSkillsForBioware]);
+
+  // Reset skill when item changes or when switching to non-skill-linked bioware
+  useEffect(() => {
+    if (!requiresSkillSelection) {
+      setSelectedSkill(null);
+    }
+  }, [requiresSkillSelection]);
+
   // Selected item with calculated values (including rating-based values)
   const selectedItem = useMemo(() => {
     if (!rawSelectedItem) return null;
@@ -371,6 +434,8 @@ export function AugmentationModal({
     let baseCost: number;
     let baseAvailability: number;
     let capacity: number | undefined;
+    let attributeBonuses: Record<string, number> | undefined;
+    let initiativeDiceBonus: number | undefined;
 
     // Check if item uses unified ratings table
     if (hasUnifiedRatings(rawSelectedItem)) {
@@ -383,11 +448,26 @@ export function AugmentationModal({
         baseCost = firstValue?.cost ?? 0;
         baseAvailability = firstValue?.availability ?? 0;
         capacity = firstValue?.capacity;
+        attributeBonuses =
+          firstValue?.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+        initiativeDiceBonus =
+          firstValue?.effects?.initiativeDice ??
+          (isCyberware
+            ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
+            : undefined);
       } else {
         baseEssenceCost = ratingValue.essenceCost ?? 0;
         baseCost = ratingValue.cost ?? 0;
         baseAvailability = ratingValue.availability ?? 0;
         capacity = ratingValue.capacity;
+        // Extract rating-specific effects, fall back to top-level values
+        attributeBonuses =
+          ratingValue.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+        initiativeDiceBonus =
+          ratingValue.effects?.initiativeDice ??
+          (isCyberware
+            ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
+            : undefined);
       }
     } else {
       // Legacy item without unified ratings
@@ -395,6 +475,10 @@ export function AugmentationModal({
       baseCost = rawSelectedItem.cost ?? 0;
       baseAvailability = rawSelectedItem.availability ?? 0;
       capacity = isCyberware ? (rawSelectedItem as CyberwareCatalogItemData).capacity : undefined;
+      attributeBonuses = rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus = isCyberware
+        ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
+        : undefined;
     }
 
     // Apply grade modifiers
@@ -435,15 +519,10 @@ export function AugmentationModal({
       availability,
       capacity,
       baseEssenceCost,
+      attributeBonuses,
+      initiativeDiceBonus,
     };
-  }, [
-    rawSelectedItem,
-    selectedRating,
-    grade,
-    isCyberware,
-    cyberwareGrades,
-    biowareGrades,
-  ]);
+  }, [rawSelectedItem, selectedRating, grade, isCyberware, cyberwareGrades, biowareGrades]);
 
   // Calculate magic/resonance loss
   const projectedMagicLoss = useMemo(() => {
@@ -460,8 +539,16 @@ export function AugmentationModal({
   const hasEssence = selectedItem ? selectedItem.essenceCost <= remainingEssence : true;
   const meetsAvailability = selectedItem ? selectedItem.availability <= maxAvailability : true;
   const hasRequiredLocation = isCyberlimb ? selectedLocation !== null : true;
+  const hasRequiredSkill = requiresSkillSelection ? selectedSkill !== null : true;
   const isNotBlocked = locationConflict.type !== "blocked";
-  const canAdd = selectedItem && canAfford && hasEssence && meetsAvailability && hasRequiredLocation && isNotBlocked;
+  const canAdd =
+    selectedItem &&
+    canAfford &&
+    hasEssence &&
+    meetsAvailability &&
+    hasRequiredLocation &&
+    hasRequiredSkill &&
+    isNotBlocked;
 
   // Handle add
   const handleAdd = useCallback(() => {
@@ -475,9 +562,24 @@ export function AugmentationModal({
 
     // Extract effects from rating table if applicable
     let armorBonus: number | undefined;
+    let attributeBonuses: Record<string, number> | undefined;
+    let initiativeDiceBonus: number | undefined;
     if (isRatedItem) {
       const ratingValue = getRatingTableValue(rawSelectedItem, selectedRating);
       armorBonus = ratingValue?.effects?.armorBonus;
+      // Use rating-specific effects if available, otherwise fall back to top-level
+      attributeBonuses = ratingValue?.effects?.attributeBonuses ?? rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus =
+        ratingValue?.effects?.initiativeDice ??
+        (isCyberware
+          ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
+          : undefined);
+    } else {
+      // Non-rated items use top-level values
+      attributeBonuses = rawSelectedItem.attributeBonuses;
+      initiativeDiceBonus = isCyberware
+        ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
+        : undefined;
     }
 
     // Extract cyberlimb-specific fields
@@ -490,10 +592,16 @@ export function AugmentationModal({
         })
       : null;
 
-    // Build display name with location for cyberlimbs
+    // Build display name with location for cyberlimbs or skill for skill-linked bioware
     let finalDisplayName = displayName;
     if (isCyberlimb && selectedLocation) {
       finalDisplayName = `${displayName} (${LOCATION_LABELS[selectedLocation]})`;
+    } else if (requiresSkillSelection && selectedSkill) {
+      // Add skill name to display for skill-linked bioware
+      const skillData = activeSkills.find((s) => s.id === selectedSkill);
+      if (skillData) {
+        finalDisplayName = `${displayName} (${skillData.name})`;
+      }
     }
 
     const selection: AugmentationSelection = {
@@ -509,20 +617,20 @@ export function AugmentationModal({
       legality: rawSelectedItem.legality,
       capacity: selectedItem.capacity,
       rating: isRatedItem ? selectedRating : undefined,
-      attributeBonuses: rawSelectedItem.attributeBonuses,
-      initiativeDiceBonus: isCyberware
-        ? (rawSelectedItem as CyberwareCatalogItemData).initiativeDiceBonus
-        : undefined,
+      attributeBonuses,
+      initiativeDiceBonus,
       wirelessBonus: isCyberware
         ? (rawSelectedItem as CyberwareCatalogItemData).wirelessBonus
         : undefined,
       armorBonus,
       // Cyberlimb-specific fields
-      location: isCyberlimb ? selectedLocation ?? undefined : undefined,
+      location: isCyberlimb ? (selectedLocation ?? undefined) : undefined,
       limbType: cyberlimbData?.limbType,
       appearance: cyberlimbData?.appearance,
       baseStrength: cyberlimbData?.baseStrength,
       baseAgility: cyberlimbData?.baseAgility,
+      // Skill-linked bioware fields
+      targetSkill: requiresSkillSelection ? (selectedSkill ?? undefined) : undefined,
     };
 
     onAdd(selection);
@@ -536,6 +644,9 @@ export function AugmentationModal({
     isCyberlimb,
     selectedRating,
     selectedLocation,
+    requiresSkillSelection,
+    selectedSkill,
+    activeSkills,
     augmentationType,
     grade,
     onAdd,
@@ -549,452 +660,504 @@ export function AugmentationModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex h-[80vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="flex items-center gap-3">
-            <div
-              className={`rounded-lg p-2 ${
-                isCyberware
-                  ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-300"
-                  : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-300"
-              }`}
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
+      {({ close }) => (
+        <div className="flex h-[80vh] flex-col overflow-hidden">
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
+            <div className="flex items-center gap-3">
+              <div
+                className={`rounded-lg p-2 ${
+                  isCyberware
+                    ? "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-300"
+                    : "bg-pink-100 text-pink-600 dark:bg-pink-900/50 dark:text-pink-300"
+                }`}
+              >
+                <TypeIcon className="h-5 w-5" />
+              </div>
+              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                Add {isCyberware ? "Cyberware" : "Bioware"}
+              </h2>
+            </div>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
             >
-              <TypeIcon className="h-5 w-5" />
-            </div>
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              Add {isCyberware ? "Cyberware" : "Bioware"}
-            </h2>
+              <X className="h-5 w-5" />
+            </button>
           </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
 
-        {/* Content - Split Pane */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Panel - List */}
-          <div className="flex w-1/2 flex-col border-r border-zinc-200 dark:border-zinc-700">
-            {/* Search and Filters */}
-            <div className="space-y-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
-              {/* Search */}
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                <input
-                  type="text"
-                  placeholder={`Search ${isCyberware ? "cyberware" : "bioware"}...`}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                />
-              </div>
+          {/* Content - Split Pane */}
+          <div className="flex flex-1 overflow-hidden">
+            {/* Left Panel - List */}
+            <div className="flex w-1/2 flex-col border-r border-zinc-200 dark:border-zinc-700">
+              {/* Search and Filters */}
+              <div className="space-y-3 border-b border-zinc-100 p-4 dark:border-zinc-800">
+                {/* Search */}
+                <div className="relative">
+                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                  <input
+                    type="text"
+                    placeholder={`Search ${isCyberware ? "cyberware" : "bioware"}...`}
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-9 pr-3 text-sm text-zinc-900 placeholder-zinc-400 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                  />
+                </div>
 
-              {/* Category Filter */}
-              <div className="flex flex-wrap gap-1">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setCategory(cat.id)}
-                    className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                      category === cat.id
-                        ? isCyberware
-                          ? "bg-cyan-500 text-white"
-                          : "bg-pink-500 text-white"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                    }`}
-                  >
-                    {cat.name}
-                  </button>
-                ))}
-              </div>
-
-              {/* Grade Selector */}
-              <div className="flex items-center gap-2">
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">Grade:</span>
-                <select
-                  value={grade}
-                  onChange={(e) => setGrade(e.target.value as CyberwareGrade | BiowareGrade)}
-                  className="flex-1 rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-xs dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                >
-                  {availableGrades.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {GRADE_DISPLAY[g.id]} ({g.essenceMultiplier}x ESS, {g.costMultiplier}x cost)
-                    </option>
+                {/* Category Filter */}
+                <div className="flex flex-wrap gap-1">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setCategory(cat.id)}
+                      className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                        category === cat.id
+                          ? isCyberware
+                            ? "bg-cyan-500 text-white"
+                            : "bg-pink-500 text-white"
+                          : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                      }`}
+                    >
+                      {cat.name}
+                    </button>
                   ))}
-                </select>
+                </div>
+
+                {/* Grade Selector */}
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-zinc-500 dark:text-zinc-400">Grade:</span>
+                  <select
+                    value={grade}
+                    onChange={(e) => setGrade(e.target.value as CyberwareGrade | BiowareGrade)}
+                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-2 py-1.5 text-xs dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                  >
+                    {availableGrades.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {GRADE_DISPLAY[g.id]} ({g.essenceMultiplier}x ESS, {g.costMultiplier}x cost)
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Item List */}
+              <div className="flex-1 overflow-y-auto p-2">
+                {filteredItems.length === 0 ? (
+                  <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
+                    No {isCyberware ? "cyberware" : "bioware"} found
+                  </div>
+                ) : (
+                  <div className="space-y-1">
+                    {filteredItems.map((item) => {
+                      const isSelected = selectedItemId === item.id;
+                      const isRatedItem = hasUnifiedRatings(item);
+
+                      // Get base values - for rated items, show minimum rating values
+                      let baseEssence: number;
+                      let baseCost: number;
+                      let baseAvail: number;
+
+                      if (isRatedItem) {
+                        const minRating = item.minRating ?? 1;
+                        const ratingValue = getRatingTableValue(item, minRating);
+                        baseEssence = ratingValue?.essenceCost ?? 0;
+                        baseCost = ratingValue?.cost ?? 0;
+                        baseAvail = ratingValue?.availability ?? 0;
+                      } else {
+                        baseEssence = item.essenceCost ?? 0;
+                        baseCost = item.cost ?? 0;
+                        baseAvail = item.availability ?? 0;
+                      }
+
+                      // Calculate display values with grade modifiers
+                      let displayEssence: number;
+                      let displayCost: number;
+                      let displayAvail: number;
+
+                      if (isCyberware) {
+                        displayEssence = calculateCyberwareEssenceCost(
+                          baseEssence,
+                          grade as CyberwareGrade,
+                          cyberwareGrades
+                        );
+                        displayCost = calculateCyberwareCost(
+                          baseCost,
+                          grade as CyberwareGrade,
+                          cyberwareGrades
+                        );
+                        displayAvail = calculateCyberwareAvailability(
+                          baseAvail,
+                          grade as CyberwareGrade,
+                          cyberwareGrades
+                        );
+                      } else {
+                        displayEssence = calculateBiowareEssenceCost(
+                          baseEssence,
+                          grade as BiowareGrade,
+                          biowareGrades
+                        );
+                        displayCost = calculateBiowareCost(
+                          baseCost,
+                          grade as BiowareGrade,
+                          biowareGrades
+                        );
+                        displayAvail = calculateBiowareAvailability(
+                          baseAvail,
+                          grade as BiowareGrade,
+                          biowareGrades
+                        );
+                      }
+
+                      const affordable = displayCost <= remainingNuyen;
+                      const fitsEssence = displayEssence <= remainingEssence;
+                      const isDisabled = !affordable || !fitsEssence;
+
+                      return (
+                        <button
+                          key={item.id}
+                          onClick={() => setSelectedItemId(item.id)}
+                          disabled={isDisabled}
+                          className={`flex w-full items-start justify-between rounded-lg p-3 text-left transition-colors ${
+                            isSelected
+                              ? isCyberware
+                                ? "border border-cyan-500 bg-cyan-50 dark:border-cyan-400 dark:bg-cyan-900/20"
+                                : "border border-pink-500 bg-pink-50 dark:border-pink-400 dark:bg-pink-900/20"
+                              : isDisabled
+                                ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
+                                : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                          }`}
+                        >
+                          <div className="min-w-0 flex-1">
+                            <span className="block truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                              {item.name}
+                              {isRatedItem && (
+                                <span className="ml-1 text-xs font-normal text-zinc-500 dark:text-zinc-400">
+                                  (R{item.minRating}-{item.maxRating})
+                                </span>
+                              )}
+                            </span>
+                            <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
+                              <span
+                                className={
+                                  isCyberware
+                                    ? "text-cyan-600 dark:text-cyan-400"
+                                    : "text-pink-600 dark:text-pink-400"
+                                }
+                              >
+                                {formatEssence(displayEssence)}
+                                {isRatedItem ? "+" : ""} ESS
+                              </span>
+                              <span>
+                                {formatCurrency(displayCost)}
+                                {isRatedItem ? "+" : ""}¥
+                              </span>
+                              <span>
+                                Avail {getAvailabilityDisplay(displayAvail, item.legality)}
+                                {isRatedItem ? "+" : ""}
+                              </span>
+                            </div>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             </div>
 
-            {/* Item List */}
-            <div className="flex-1 overflow-y-auto p-2">
-              {filteredItems.length === 0 ? (
-                <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
-                  No {isCyberware ? "cyberware" : "bioware"} found
-                </div>
-              ) : (
-                <div className="space-y-1">
-                  {filteredItems.map((item) => {
-                    const isSelected = selectedItemId === item.id;
-                    const isRatedItem = hasUnifiedRatings(item);
+            {/* Right Panel - Details */}
+            <div className="flex w-1/2 flex-col">
+              {selectedItem ? (
+                <>
+                  {/* Item Details */}
+                  <div className="flex-1 overflow-y-auto p-4">
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {selectedItem.name}
+                    </h3>
 
-                    // Get base values - for rated items, show minimum rating values
-                    let baseEssence: number;
-                    let baseCost: number;
-                    let baseAvail: number;
+                    {selectedItem.description && (
+                      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        {selectedItem.description}
+                      </p>
+                    )}
 
-                    if (isRatedItem) {
-                      const minRating = item.minRating ?? 1;
-                      const ratingValue = getRatingTableValue(item, minRating);
-                      baseEssence = ratingValue?.essenceCost ?? 0;
-                      baseCost = ratingValue?.cost ?? 0;
-                      baseAvail = ratingValue?.availability ?? 0;
-                    } else {
-                      baseEssence = item.essenceCost ?? 0;
-                      baseCost = item.cost ?? 0;
-                      baseAvail = item.availability ?? 0;
-                    }
+                    {/* Rating Selector for rated items */}
+                    {rawSelectedItem && hasUnifiedRatings(rawSelectedItem) && (
+                      <div className="mt-4">
+                        <RatingSelector
+                          item={rawSelectedItem}
+                          selectedRating={selectedRating}
+                          onRatingChange={setSelectedRating}
+                          maxAvailability={maxAvailability}
+                          showCostPreview={false}
+                          showEssencePreview={false}
+                          label="Rating"
+                        />
+                      </div>
+                    )}
 
-                    // Calculate display values with grade modifiers
-                    let displayEssence: number;
-                    let displayCost: number;
-                    let displayAvail: number;
+                    {/* Location Selector for cyberlimbs */}
+                    {isCyberlimb && validLocations.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                          Installation Location <span className="text-red-500">*</span>
+                        </h4>
+                        <div className="mt-2 grid grid-cols-2 gap-2">
+                          {validLocations.map((location) => {
+                            const conflict = getLocationConflict(
+                              location,
+                              selectedLimbType!,
+                              installedCyberlimbs
+                            );
+                            const isSelected = selectedLocation === location;
+                            const isBlocked = conflict.type === "blocked";
+                            const willReplace = conflict.type === "replaces";
 
-                    if (isCyberware) {
-                      displayEssence = calculateCyberwareEssenceCost(
-                        baseEssence,
-                        grade as CyberwareGrade,
-                        cyberwareGrades
-                      );
-                      displayCost = calculateCyberwareCost(
-                        baseCost,
-                        grade as CyberwareGrade,
-                        cyberwareGrades
-                      );
-                      displayAvail = calculateCyberwareAvailability(
-                        baseAvail,
-                        grade as CyberwareGrade,
-                        cyberwareGrades
-                      );
-                    } else {
-                      displayEssence = calculateBiowareEssenceCost(
-                        baseEssence,
-                        grade as BiowareGrade,
-                        biowareGrades
-                      );
-                      displayCost = calculateBiowareCost(
-                        baseCost,
-                        grade as BiowareGrade,
-                        biowareGrades
-                      );
-                      displayAvail = calculateBiowareAvailability(
-                        baseAvail,
-                        grade as BiowareGrade,
-                        biowareGrades
-                      );
-                    }
+                            return (
+                              <button
+                                key={location}
+                                onClick={() => !isBlocked && setSelectedLocation(location)}
+                                disabled={isBlocked}
+                                className={`relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition-colors ${
+                                  isSelected
+                                    ? "border-cyan-500 bg-cyan-50 text-cyan-700 dark:border-cyan-400 dark:bg-cyan-900/30 dark:text-cyan-300"
+                                    : isBlocked
+                                      ? "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
+                                      : willReplace
+                                        ? "border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
+                                        : "border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+                                }`}
+                              >
+                                <span>{LOCATION_LABELS[location]}</span>
+                                {isBlocked && <Ban className="h-4 w-4 text-zinc-400" />}
+                                {willReplace && !isSelected && (
+                                  <AlertTriangle className="h-4 w-4 text-amber-500" />
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
 
-                    const affordable = displayCost <= remainingNuyen;
-                    const fitsEssence = displayEssence <= remainingEssence;
-                    const isDisabled = !affordable || !fitsEssence;
-
-                    return (
-                      <button
-                        key={item.id}
-                        onClick={() => setSelectedItemId(item.id)}
-                        disabled={isDisabled}
-                        className={`flex w-full items-start justify-between rounded-lg p-3 text-left transition-colors ${
-                          isSelected
-                            ? isCyberware
-                              ? "border border-cyan-500 bg-cyan-50 dark:border-cyan-400 dark:bg-cyan-900/20"
-                              : "border border-pink-500 bg-pink-50 dark:border-pink-400 dark:bg-pink-900/20"
-                            : isDisabled
-                              ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                              : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-                        }`}
-                      >
-                        <div className="min-w-0 flex-1">
-                          <span className="block truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                            {item.name}
-                            {isRatedItem && (
-                              <span className="ml-1 text-xs font-normal text-zinc-500 dark:text-zinc-400">
-                                (R{item.minRating}-{item.maxRating})
-                              </span>
-                            )}
-                          </span>
-                          <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500 dark:text-zinc-400">
-                            <span
-                              className={
-                                isCyberware
-                                  ? "text-cyan-600 dark:text-cyan-400"
-                                  : "text-pink-600 dark:text-pink-400"
-                              }
-                            >
-                              {formatEssence(displayEssence)}{isRatedItem ? "+" : ""} ESS
+                        {/* Conflict Messages */}
+                        {locationConflict.type === "blocked" && locationConflict.by && (
+                          <div className="mt-2 flex items-start gap-2 rounded-lg bg-red-50 p-2 text-xs dark:bg-red-900/20">
+                            <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
+                            <span className="text-red-700 dark:text-red-300">
+                              Blocked by existing {locationConflict.by.name}. Remove it first to
+                              install here.
                             </span>
-                            <span>{formatCurrency(displayCost)}{isRatedItem ? "+" : ""}¥</span>
-                            <span>Avail {getAvailabilityDisplay(displayAvail, item.legality)}{isRatedItem ? "+" : ""}</span>
                           </div>
-                        </div>
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Right Panel - Details */}
-          <div className="flex w-1/2 flex-col">
-            {selectedItem ? (
-              <>
-                {/* Item Details */}
-                <div className="flex-1 overflow-y-auto p-4">
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedItem.name}
-                  </h3>
-
-                  {selectedItem.description && (
-                    <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                      {selectedItem.description}
-                    </p>
-                  )}
-
-                  {/* Rating Selector for rated items */}
-                  {rawSelectedItem && hasUnifiedRatings(rawSelectedItem) && (
-                    <div className="mt-4">
-                      <RatingSelector
-                        item={rawSelectedItem}
-                        selectedRating={selectedRating}
-                        onRatingChange={setSelectedRating}
-                        maxAvailability={maxAvailability}
-                        showCostPreview={false}
-                        showEssencePreview={false}
-                        label="Rating"
-                      />
-                    </div>
-                  )}
-
-                  {/* Location Selector for cyberlimbs */}
-                  {isCyberlimb && validLocations.length > 0 && (
-                    <div className="mt-4">
-                      <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        Installation Location <span className="text-red-500">*</span>
-                      </h4>
-                      <div className="mt-2 grid grid-cols-2 gap-2">
-                        {validLocations.map((location) => {
-                          const conflict = getLocationConflict(location, selectedLimbType!, installedCyberlimbs);
-                          const isSelected = selectedLocation === location;
-                          const isBlocked = conflict.type === "blocked";
-                          const willReplace = conflict.type === "replaces";
-
-                          return (
-                            <button
-                              key={location}
-                              onClick={() => !isBlocked && setSelectedLocation(location)}
-                              disabled={isBlocked}
-                              className={`relative flex items-center justify-between rounded-lg border px-3 py-2 text-sm transition-colors ${
-                                isSelected
-                                  ? "border-cyan-500 bg-cyan-50 text-cyan-700 dark:border-cyan-400 dark:bg-cyan-900/30 dark:text-cyan-300"
-                                  : isBlocked
-                                    ? "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
-                                    : willReplace
-                                      ? "border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
-                                      : "border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
-                              }`}
-                            >
-                              <span>{LOCATION_LABELS[location]}</span>
-                              {isBlocked && (
-                                <Ban className="h-4 w-4 text-zinc-400" />
-                              )}
-                              {willReplace && !isSelected && (
-                                <AlertTriangle className="h-4 w-4 text-amber-500" />
-                              )}
-                            </button>
-                          );
-                        })}
+                        )}
+                        {locationConflict.type === "replaces" && locationConflict.replaces && (
+                          <div className="mt-2 flex items-start gap-2 rounded-lg bg-amber-50 p-2 text-xs dark:bg-amber-900/20">
+                            <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
+                            <span className="text-amber-700 dark:text-amber-300">
+                              Will replace:{" "}
+                              {locationConflict.replaces.map((l) => l.name).join(", ")}
+                            </span>
+                          </div>
+                        )}
+                        {!selectedLocation && (
+                          <p className="mt-2 text-xs text-red-500">
+                            Please select where to install this cyberlimb
+                          </p>
+                        )}
                       </div>
+                    )}
 
-                      {/* Conflict Messages */}
-                      {locationConflict.type === "blocked" && locationConflict.by && (
-                        <div className="mt-2 flex items-start gap-2 rounded-lg bg-red-50 p-2 text-xs dark:bg-red-900/20">
-                          <Ban className="mt-0.5 h-3.5 w-3.5 shrink-0 text-red-500" />
-                          <span className="text-red-700 dark:text-red-300">
-                            Blocked by existing {locationConflict.by.name}. Remove it first to install here.
-                          </span>
-                        </div>
-                      )}
-                      {locationConflict.type === "replaces" && locationConflict.replaces && (
-                        <div className="mt-2 flex items-start gap-2 rounded-lg bg-amber-50 p-2 text-xs dark:bg-amber-900/20">
-                          <AlertTriangle className="mt-0.5 h-3.5 w-3.5 shrink-0 text-amber-500" />
-                          <span className="text-amber-700 dark:text-amber-300">
-                            Will replace: {locationConflict.replaces.map(l => l.name).join(", ")}
-                          </span>
-                        </div>
-                      )}
-                      {!selectedLocation && (
-                        <p className="mt-2 text-xs text-red-500">
-                          Please select where to install this cyberlimb
+                    {/* Skill Selector for skill-linked bioware (e.g., Reflex Recorder) */}
+                    {requiresSkillSelection && filteredSkills.length > 0 && (
+                      <div className="mt-4">
+                        <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                          Target Skill <span className="text-red-500">*</span>
+                        </h4>
+                        <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
+                          Select the skill this bioware will enhance
                         </p>
-                      )}
-                    </div>
-                  )}
+                        <select
+                          value={selectedSkill ?? ""}
+                          onChange={(e) => setSelectedSkill(e.target.value || null)}
+                          className="mt-2 w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                        >
+                          <option value="">Select a skill...</option>
+                          {filteredSkills.map((skill) => (
+                            <option key={skill.id} value={skill.id}>
+                              {skill.name} ({skill.linkedAttribute})
+                            </option>
+                          ))}
+                        </select>
+                        {!selectedSkill && (
+                          <p className="mt-2 text-xs text-red-500">
+                            Please select a target skill for this bioware
+                          </p>
+                        )}
+                      </div>
+                    )}
 
-                  {/* Stats Grid */}
-                  <div className="mt-4 grid grid-cols-3 gap-3">
-                    <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
-                      <div className="text-xs text-zinc-500 dark:text-zinc-400">Essence</div>
-                      <div
-                        className={`mt-1 text-xl font-bold ${
-                          hasEssence
-                            ? isCyberware
-                              ? "text-cyan-600 dark:text-cyan-400"
-                              : "text-pink-600 dark:text-pink-400"
-                            : "text-red-600 dark:text-red-400"
-                        }`}
-                      >
-                        {formatEssence(selectedItem.essenceCost)}
+                    {/* Stats Grid */}
+                    <div className="mt-4 grid grid-cols-3 gap-3">
+                      <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
+                        <div className="text-xs text-zinc-500 dark:text-zinc-400">Essence</div>
+                        <div
+                          className={`mt-1 text-xl font-bold ${
+                            hasEssence
+                              ? isCyberware
+                                ? "text-cyan-600 dark:text-cyan-400"
+                                : "text-pink-600 dark:text-pink-400"
+                              : "text-red-600 dark:text-red-400"
+                          }`}
+                        >
+                          {formatEssence(selectedItem.essenceCost)}
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
+                        <div className="text-xs text-zinc-500 dark:text-zinc-400">Cost</div>
+                        <div
+                          className={`mt-1 text-xl font-bold ${
+                            canAfford
+                              ? "text-zinc-900 dark:text-zinc-100"
+                              : "text-red-600 dark:text-red-400"
+                          }`}
+                        >
+                          {formatCurrency(selectedItem.cost)}¥
+                        </div>
+                      </div>
+                      <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
+                        <div className="text-xs text-zinc-500 dark:text-zinc-400">Availability</div>
+                        <div
+                          className={`mt-1 text-xl font-bold ${
+                            meetsAvailability
+                              ? "text-zinc-900 dark:text-zinc-100"
+                              : "text-red-600 dark:text-red-400"
+                          }`}
+                        >
+                          {getAvailabilityDisplay(selectedItem.availability, selectedItem.legality)}
+                        </div>
                       </div>
                     </div>
-                    <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
-                      <div className="text-xs text-zinc-500 dark:text-zinc-400">Cost</div>
-                      <div
-                        className={`mt-1 text-xl font-bold ${
-                          canAfford
-                            ? "text-zinc-900 dark:text-zinc-100"
-                            : "text-red-600 dark:text-red-400"
-                        }`}
-                      >
-                        {formatCurrency(selectedItem.cost)}¥
-                      </div>
-                    </div>
-                    <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
-                      <div className="text-xs text-zinc-500 dark:text-zinc-400">Availability</div>
-                      <div
-                        className={`mt-1 text-xl font-bold ${
-                          meetsAvailability
-                            ? "text-zinc-900 dark:text-zinc-100"
-                            : "text-red-600 dark:text-red-400"
-                        }`}
-                      >
-                        {getAvailabilityDisplay(selectedItem.availability, selectedItem.legality)}
-                      </div>
-                    </div>
-                  </div>
 
-                  {/* Capacity info for cyberware */}
-                  {isCyberware && (selectedItem as CyberwareCatalogItemData).capacity && (
-                    <div className="mt-3 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 dark:bg-blue-900/20">
-                      <Zap className="h-4 w-4 text-blue-500" />
-                      <span className="text-xs text-blue-700 dark:text-blue-300">
-                        Capacity: {(selectedItem as CyberwareCatalogItemData).capacity} - Can install
-                        enhancements
-                      </span>
-                    </div>
-                  )}
+                    {/* Capacity info for cyberware */}
+                    {isCyberware && (selectedItem as CyberwareCatalogItemData).capacity && (
+                      <div className="mt-3 flex items-center gap-2 rounded-lg bg-blue-50 px-3 py-2 dark:bg-blue-900/20">
+                        <Zap className="h-4 w-4 text-blue-500" />
+                        <span className="text-xs text-blue-700 dark:text-blue-300">
+                          Capacity: {(selectedItem as CyberwareCatalogItemData).capacity} - Can
+                          install enhancements
+                        </span>
+                      </div>
+                    )}
 
-                  {/* Attribute bonuses */}
-                  {selectedItem.attributeBonuses &&
-                    Object.keys(selectedItem.attributeBonuses).length > 0 && (
+                    {/* Attribute bonuses and Initiative dice */}
+                    {((selectedItem.attributeBonuses &&
+                      Object.keys(selectedItem.attributeBonuses).length > 0) ||
+                      selectedItem.initiativeDiceBonus) && (
                       <div className="mt-3">
                         <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                          Attribute Bonuses
+                          Bonuses
                         </h4>
                         <div className="mt-1 flex flex-wrap gap-1">
-                          {Object.entries(selectedItem.attributeBonuses).map(([attr, bonus]) => (
-                            <span
-                              key={attr}
-                              className="rounded bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
-                            >
-                              {attr}: +{bonus}
+                          {selectedItem.attributeBonuses &&
+                            Object.entries(selectedItem.attributeBonuses).map(([attr, bonus]) => (
+                              <span
+                                key={attr}
+                                className="rounded bg-emerald-100 px-2 py-0.5 text-xs font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300"
+                              >
+                                {attr}: +{bonus}
+                              </span>
+                            ))}
+                          {selectedItem.initiativeDiceBonus && (
+                            <span className="rounded bg-purple-100 px-2 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                              +{selectedItem.initiativeDiceBonus}D6 Initiative
                             </span>
-                          ))}
+                          )}
                         </div>
                       </div>
                     )}
 
-                  {/* Wireless bonus */}
-                  {isCyberware && (selectedItem as CyberwareCatalogItemData).wirelessBonus && (
-                    <div className="mt-3">
-                      <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-                        Wireless Bonus
-                      </h4>
-                      <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
-                        {(selectedItem as CyberwareCatalogItemData).wirelessBonus}
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Magic/Resonance warning */}
-                  {(isAwakened || isTechnomancer) && projectedMagicLoss > 0 && (
-                    <div className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
-                      <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
-                      <div className="text-xs text-amber-800 dark:text-amber-200">
-                        <p className="font-medium">
-                          {isAwakened ? "Magic" : "Resonance"} will be reduced by {projectedMagicLoss}
-                        </p>
-                        <p className="mt-0.5">
-                          New rating: {Math.max(0, (isAwakened ? currentMagic : currentResonance) - projectedMagicLoss)}
+                    {/* Wireless bonus */}
+                    {isCyberware && (selectedItem as CyberwareCatalogItemData).wirelessBonus && (
+                      <div className="mt-3">
+                        <h4 className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
+                          Wireless Bonus
+                        </h4>
+                        <p className="mt-1 text-xs text-zinc-600 dark:text-zinc-400">
+                          {(selectedItem as CyberwareCatalogItemData).wirelessBonus}
                         </p>
                       </div>
-                    </div>
-                  )}
+                    )}
 
-                  {/* Validation errors */}
-                  {!canAfford && (
-                    <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                      Not enough nuyen ({formatCurrency(remainingNuyen)}¥ remaining)
-                    </div>
-                  )}
-                  {!hasEssence && (
-                    <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                      Not enough essence ({formatEssence(remainingEssence)} remaining)
-                    </div>
-                  )}
-                  {!meetsAvailability && (
-                    <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
-                      Exceeds availability limit ({maxAvailability})
-                    </div>
-                  )}
-                </div>
+                    {/* Magic/Resonance warning */}
+                    {(isAwakened || isTechnomancer) && projectedMagicLoss > 0 && (
+                      <div className="mt-4 flex items-start gap-2 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
+                        <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                        <div className="text-xs text-amber-800 dark:text-amber-200">
+                          <p className="font-medium">
+                            {isAwakened ? "Magic" : "Resonance"} will be reduced by{" "}
+                            {projectedMagicLoss}
+                          </p>
+                          <p className="mt-0.5">
+                            New rating:{" "}
+                            {Math.max(
+                              0,
+                              (isAwakened ? currentMagic : currentResonance) - projectedMagicLoss
+                            )}
+                          </p>
+                        </div>
+                      </div>
+                    )}
 
-                {/* Add Button */}
-                <div className="border-t border-zinc-200 p-4 dark:border-zinc-700">
-                  <button
-                    onClick={handleAdd}
-                    disabled={!canAdd}
-                    className={`flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
-                      canAdd
-                        ? isCyberware
-                          ? "bg-cyan-500 text-white hover:bg-cyan-600"
-                          : "bg-pink-500 text-white hover:bg-pink-600"
-                        : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-                    }`}
-                  >
-                    <Plus className="h-4 w-4" />
-                    Add {isCyberware ? "Cyberware" : "Bioware"}
-                  </button>
+                    {/* Validation errors */}
+                    {!canAfford && (
+                      <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
+                        Not enough nuyen ({formatCurrency(remainingNuyen)}¥ remaining)
+                      </div>
+                    )}
+                    {!hasEssence && (
+                      <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
+                        Not enough essence ({formatEssence(remainingEssence)} remaining)
+                      </div>
+                    )}
+                    {!meetsAvailability && (
+                      <div className="mt-3 rounded-lg bg-red-50 p-2 text-xs text-red-700 dark:bg-red-900/20 dark:text-red-300">
+                        Exceeds availability limit ({maxAvailability})
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Add Button */}
+                  <div className="border-t border-zinc-200 p-4 dark:border-zinc-700">
+                    <button
+                      onClick={handleAdd}
+                      disabled={!canAdd}
+                      className={`flex w-full items-center justify-center gap-2 rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                        canAdd
+                          ? isCyberware
+                            ? "bg-cyan-500 text-white hover:bg-cyan-600"
+                            : "bg-pink-500 text-white hover:bg-pink-600"
+                          : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                      }`}
+                    >
+                      <Plus className="h-4 w-4" />
+                      Add {isCyberware ? "Cyberware" : "Bioware"}
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <div className="flex flex-1 items-center justify-center p-8 text-center">
+                  <div>
+                    <TypeIcon className="mx-auto h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+                    <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
+                      Select {isCyberware ? "cyberware" : "bioware"} from the list to see details
+                    </p>
+                  </div>
                 </div>
-              </>
-            ) : (
-              <div className="flex flex-1 items-center justify-center p-8 text-center">
-                <div>
-                  <TypeIcon className="mx-auto h-12 w-12 text-zinc-300 dark:text-zinc-600" />
-                  <p className="mt-4 text-sm text-zinc-500 dark:text-zinc-400">
-                    Select {isCyberware ? "cyberware" : "bioware"} from the list to see details
-                  </p>
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      )}
+    </BaseModalRoot>
   );
 }

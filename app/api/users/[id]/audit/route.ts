@@ -27,10 +27,7 @@ export async function GET(
     // Validate user exists
     const existingUser = await getUserById(id);
     if (!existingUser) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Get audit log
@@ -45,11 +42,11 @@ export async function GET(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     console.error("Get user audit log error:", error);

@@ -87,15 +87,13 @@ flowchart TD
 Create a function to determine available mount points based on weapon subcategory:
 
 ```typescript
-export function getAvailableMountsForWeaponType(
-  subcategory: string
-): WeaponMountType[] {
+export function getAvailableMountsForWeaponType(subcategory: string): WeaponMountType[] {
   // Hold-outs: no mounts
   if (subcategory === "holdouts") return [];
-  
+
   // Light pistols: top and barrel only
   if (subcategory === "light-pistols") return ["top", "barrel"];
-  
+
   // Heavy pistols, SMGs, rifles, shotguns, etc.: all mounts
   return ["top", "under", "side", "barrel", "stock", "internal"];
 }

@@ -103,7 +103,7 @@ Stacks provide better configuration management and multi-service deployments.
 4. **Stack file content**:
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   shadow-master:
@@ -119,7 +119,8 @@ services:
       # - API_KEY=your_api_key
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
+      test:
+        ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -170,11 +171,13 @@ API_KEY=your-api-key-here
 ### Setting Variables in Portainer
 
 **For Containers**:
+
 1. Go to container settings
 2. Scroll to **Env** section
 3. Add variables in key-value format
 
 **For Stacks**:
+
 1. Edit stack
 2. Add variables in the `environment:` section
 3. Or use the **Environment variables** tab
@@ -199,7 +202,6 @@ API_KEY=your-api-key-here
 1. **Pull the new image**:
    - Go to **Stacks** → Select `shadow-master`
    - Click **Pull and redeploy**
-   
 2. **Alternative method**:
    - Click **Editor**
    - Update image tag if needed (e.g., `:v1.0.0` → `:v1.1.0`)
@@ -216,7 +218,7 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - WATCHTOWER_POLL_INTERVAL=300  # Check every 5 minutes
+      - WATCHTOWER_POLL_INTERVAL=300 # Check every 5 minutes
       - WATCHTOWER_CLEANUP=true
     restart: unless-stopped
 ```
@@ -229,6 +231,7 @@ services:
 ### Container won't start
 
 1. **Check logs**:
+
    ```bash
    docker logs shadow-master-app
    ```
@@ -279,11 +282,12 @@ services:
 ### Performance issues
 
 1. **Set resource limits**:
+
    ```yaml
    deploy:
      resources:
        limits:
-         cpus: '1'
+         cpus: "1"
          memory: 512M
        reservations:
          memory: 256M
@@ -303,6 +307,7 @@ services:
 ## Security Best Practices
 
 > [!CAUTION]
+>
 > - Never commit secrets or API keys to version control
 > - Use Portainer's secrets management for sensitive data
 > - Keep your Personal Access Token secure and rotate regularly

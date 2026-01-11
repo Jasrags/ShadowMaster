@@ -221,7 +221,8 @@ export async function POST(
         magicLost: 0,
       };
       // Calculate what magic loss would occur
-      const totalCurrentLoss = (character.cyberware ?? []).reduce((sum, c) => sum + c.essenceCost, 0) +
+      const totalCurrentLoss =
+        (character.cyberware ?? []).reduce((sum, c) => sum + c.essenceCost, 0) +
         (character.bioware ?? []).reduce((sum, b) => sum + b.essenceCost, 0);
       const newTotalLoss = totalCurrentLoss + essenceCost;
       const newPeakLoss = Math.max(currentEssenceHole.peakEssenceLoss, newTotalLoss);

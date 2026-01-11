@@ -7,21 +7,18 @@ Scope:
 Validate and report on the following categories:
 
 1. Type Errors
-
    - Static type mismatches
    - Invalid generics or interfaces
    - Unsafe casts or assumptions
    - Missing or incorrect type definitions
 
 2. Lint Errors & Warnings
-
    - Violations of configured lint rules
    - Code patterns that degrade maintainability or clarity
    - Unused, unreachable, or dead code
    - Inconsistent formatting that could mask errors
 
 3. Test Failures
-
    - Failing unit, integration, or system tests
    - Flaky or nondeterministic tests
    - Tests that contradict documented capabilities or ADRs

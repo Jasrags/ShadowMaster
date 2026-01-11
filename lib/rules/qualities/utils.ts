@@ -10,22 +10,18 @@ import type { Quality, MergedRuleset } from "@/lib/types";
 /**
  * Get quality definition from ruleset catalog
  */
-export function getQualityDefinition(
-  ruleset: MergedRuleset,
-  qualityId: string
-): Quality | null {
+export function getQualityDefinition(ruleset: MergedRuleset, qualityId: string): Quality | null {
   // Access modules directly to avoid importing from merge.ts (which imports server-only code)
-  const qualitiesModule = ruleset.modules.qualities as {
-    positive: Quality[];
-    negative: Quality[];
-  } | undefined;
+  const qualitiesModule = ruleset.modules.qualities as
+    | {
+        positive: Quality[];
+        negative: Quality[];
+      }
+    | undefined;
 
   if (!qualitiesModule) return null;
 
-  const allQualities = [
-    ...(qualitiesModule.positive || []),
-    ...(qualitiesModule.negative || []),
-  ];
+  const allQualities = [...(qualitiesModule.positive || []), ...(qualitiesModule.negative || [])];
 
   return allQualities.find((q) => q.id === qualityId) || null;
 }
@@ -61,9 +57,8 @@ export function findQualitySelection(
   ];
 
   return (
-    allQualities.find(
-      (q) => (q.qualityId || q.id)?.toLowerCase() === qualityId.toLowerCase()
-    ) || null
+    allQualities.find((q) => (q.qualityId || q.id)?.toLowerCase() === qualityId.toLowerCase()) ||
+    null
   );
 }
 
@@ -97,8 +92,5 @@ export function getAllQualityIds(character: Character): string[] {
     ...(character.negativeQualities || []),
   ];
 
-  return allQualities
-    .map((q) => q.qualityId || q.id)
-    .filter((id): id is string => !!id);
+  return allQualities.map((q) => q.qualityId || q.id).filter((id): id is string => !!id);
 }
-

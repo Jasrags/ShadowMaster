@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -37,89 +37,89 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 10 | 1,250¥ | SR5:CF |
+| TYPE | AVAIL | COST   | SOURCE |
+| ---- | ----- | ------ | ------ |
+| Hard | 10    | 1,250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Altskin (Armor)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | +3 | +500¥ | SR5:CF |
+| TYPE | AVAIL | COST  | SOURCE |
+| ---- | ----- | ----- | ------ |
+| -    | +3    | +500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Altskin (Chameleon)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | +2 | +250¥ | SR5:CF |
+| TYPE | AVAIL | COST  | SOURCE |
+| ---- | ----- | ----- | ------ |
+| -    | +2    | +250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Altskin (Newprint)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | +4F | +(Rating x 200¥ | SR5:CF |
+| TYPE | AVAIL | COST            | SOURCE |
+| ---- | ----- | --------------- | ------ |
+| -    | +4F   | +(Rating x 200¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Altskin (Sealer)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | +1 | +250¥ | SR5:CF |
+| TYPE | AVAIL | COST  | SOURCE |
+| ---- | ----- | ----- | ------ |
+| -    | +1    | +250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Altskin (Shifter)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | +2 | +250¥ | SR5:CF |
+| TYPE | AVAIL | COST  | SOURCE |
+| ---- | ----- | ----- | ------ |
+| -    | +2    | +250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Etchers
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 8 | 500¥ | SR5:CF |
+| ---- | ----- | ---- | ------ |
+| Hard | 8     | 500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Monowire (Per Meter)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 14R | 1,000¥ | SR5:CF |
+| TYPE | AVAIL | COST   | SOURCE |
+| ---- | ----- | ------ | ------ |
+| Hard | 14R   | 1,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanopaste Disguise
 
@@ -128,85 +128,85 @@
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 12F | 350¥ | SR5:CF |
+| ---- | ----- | ---- | ------ |
+| Hard | 12F   | 350¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Nanopaste Disguise Container (Large)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 16F | 700¥ | SR5:CF |
+| ---- | ----- | ---- | ------ |
+| Hard | 16F   | 700¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanoscanner
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 8 | As Sensor¥ | SR5:CF |
+| TYPE | AVAIL | COST       | SOURCE |
+| ---- | ----- | ---------- | ------ |
+| -    | 8     | As Sensor¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## NanoSpy (Per Application)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 14F | 10,000¥ | SR5:CF |
+| TYPE | AVAIL | COST    | SOURCE |
+| ---- | ----- | ------- | ------ |
+| Hard | 14F   | 10,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Savior Medkit
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| - | 6 | 2,000¥ | SR5:CF |
+| TYPE | AVAIL | COST   | SOURCE |
+| ---- | ----- | ------ | ------ |
+| -    | 6     | 2,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Savior Medkit Supplies
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 4 | 300¥ | SR5:CF |
+| ---- | ----- | ---- | ------ |
+| Hard | 4     | 300¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Smart Corrosives (Per Application)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Soft | 10R | 4,000¥ | SR5:CF |
+| TYPE | AVAIL | COST   | SOURCE |
+| ---- | ----- | ------ | ------ |
+| Soft | 10R   | 4,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Universal Sealant (Per Application)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | TYPE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| Hard | 10 | 250¥ | SR5:CF |
+| ---- | ----- | ---- | ------ |
+| Hard | 10    | 250¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |

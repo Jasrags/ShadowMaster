@@ -9,11 +9,7 @@
  * @see /docs/capabilities/campaign.social-governance.md
  */
 
-import type {
-  SocialContact,
-  ContactArchetype,
-  ContactStatus,
-} from "../types/contacts";
+import type { SocialContact, ContactArchetype, ContactStatus } from "../types/contacts";
 
 // =============================================================================
 // NETWORK ANALYSIS
@@ -80,8 +76,7 @@ export function analyzeContactNetwork(contacts: SocialContact[]): NetworkAnalysi
 
     // Location distribution
     if (contact.location) {
-      locationDistribution[contact.location] =
-        (locationDistribution[contact.location] || 0) + 1;
+      locationDistribution[contact.location] = (locationDistribution[contact.location] || 0) + 1;
     }
 
     // Only count active contacts for averages
@@ -99,8 +94,7 @@ export function analyzeContactNetwork(contacts: SocialContact[]): NetworkAnalysi
 
   const averageConnection = activeCount > 0 ? totalConnection / activeCount : 0;
   const averageLoyalty = activeCount > 0 ? totalLoyalty / activeCount : 0;
-  const burnedPercentage =
-    contacts.length > 0 ? (burnedCount / contacts.length) * 100 : 0;
+  const burnedPercentage = contacts.length > 0 ? (burnedCount / contacts.length) * 100 : 0;
 
   // Generate warnings
   if (burnedPercentage > 30) {
@@ -115,13 +109,9 @@ export function analyzeContactNetwork(contacts: SocialContact[]): NetworkAnalysi
     warnings.push("Very small network - limited access to services");
   }
 
-  const lowLoyaltyContacts = contacts.filter(
-    (c) => c.status === "active" && c.loyalty === 1
-  );
+  const lowLoyaltyContacts = contacts.filter((c) => c.status === "active" && c.loyalty === 1);
   if (lowLoyaltyContacts.length > 0) {
-    warnings.push(
-      `${lowLoyaltyContacts.length} contact(s) with loyalty 1 - betrayal risk`
-    );
+    warnings.push(`${lowLoyaltyContacts.length} contact(s) with loyalty 1 - betrayal risk`);
   }
 
   // Calculate health score (0-100)
@@ -185,9 +175,7 @@ export function findContactBySpecialization(
       );
 
       // Check archetype
-      const archetypeMatches = contact.archetype
-        ?.toLowerCase()
-        .includes(searchLower);
+      const archetypeMatches = contact.archetype?.toLowerCase().includes(searchLower);
 
       // Check notes (might contain specialization info)
       const notesMatch = contact.notes?.toLowerCase().includes(searchLower);
@@ -196,12 +184,8 @@ export function findContactBySpecialization(
     })
     .sort((a, b) => {
       // Prioritize exact specialization matches
-      const aExact = a.specializations?.some(
-        (s) => s.toLowerCase() === searchLower
-      );
-      const bExact = b.specializations?.some(
-        (s) => s.toLowerCase() === searchLower
-      );
+      const aExact = a.specializations?.some((s) => s.toLowerCase() === searchLower);
+      const bExact = b.specializations?.some((s) => s.toLowerCase() === searchLower);
 
       if (aExact && !bExact) return -1;
       if (!aExact && bExact) return 1;
@@ -248,9 +232,7 @@ export function findContactByService(
 
       // Check if archetype matches service
       const archetypeMatches = targetArchetypes.some(
-        (a) =>
-          archetypeLower.includes(a) ||
-          a.includes(archetypeLower)
+        (a) => archetypeLower.includes(a) || a.includes(archetypeLower)
       );
 
       // Check specializations
@@ -294,14 +276,9 @@ const CORE_ARCHETYPES = [
  * @param editionCode - Edition (for specific recommendations)
  * @returns Suggested archetypes to fill gaps
  */
-export function suggestContactGaps(
-  contacts: SocialContact[],
-  editionCode: string
-): string[] {
+export function suggestContactGaps(contacts: SocialContact[], editionCode: string): string[] {
   const activeContacts = contacts.filter((c) => c.status === "active");
-  const archetypes = new Set(
-    activeContacts.map((c) => c.archetype?.toLowerCase() || "")
-  );
+  const archetypes = new Set(activeContacts.map((c) => c.archetype?.toLowerCase() || ""));
 
   const suggestions: string[] = [];
 
@@ -314,11 +291,8 @@ export function suggestContactGaps(
         // Check common aliases
         (core.id === "street-doc" && (arch.includes("doc") || arch.includes("medic"))) ||
         (core.id === "information" &&
-          (arch.includes("decker") ||
-            arch.includes("journalist") ||
-            arch.includes("bartender"))) ||
-        (core.id === "transportation" &&
-          (arch.includes("smuggler") || arch.includes("rigger"))) ||
+          (arch.includes("decker") || arch.includes("journalist") || arch.includes("bartender"))) ||
+        (core.id === "transportation" && (arch.includes("smuggler") || arch.includes("rigger"))) ||
         (core.id === "technical" &&
           (arch.includes("decker") || arch.includes("rigger") || arch.includes("technomancer"))) ||
         (core.id === "legal" &&
@@ -362,9 +336,7 @@ export function getNetworkRecommendations(
 
   // Low loyalty recommendations
   if (analysis.averageLoyalty < 3) {
-    const lowLoyaltyContacts = contacts.filter(
-      (c) => c.status === "active" && c.loyalty < 3
-    );
+    const lowLoyaltyContacts = contacts.filter((c) => c.status === "active" && c.loyalty < 3);
     if (lowLoyaltyContacts.length > 0) {
       recommendations.push(
         `Consider investing karma in improving loyalty for ${lowLoyaltyContacts[0].name} ` +
@@ -375,9 +347,7 @@ export function getNetworkRecommendations(
 
   // High burn rate
   if (analysis.burnedPercentage > 20) {
-    recommendations.push(
-      "High contact burn rate - consider being more careful with risky favors"
-    );
+    recommendations.push("High contact burn rate - consider being more careful with risky favors");
   }
 
   // Low connection average
@@ -402,9 +372,7 @@ export function getNetworkRecommendations(
   // Small network
   const activeCount = contacts.filter((c) => c.status === "active").length;
   if (activeCount < 5) {
-    recommendations.push(
-      "Small contact network limits options - spend time networking to expand"
-    );
+    recommendations.push("Small contact network limits options - spend time networking to expand");
   }
 
   // High value but low loyalty
@@ -463,16 +431,13 @@ export function sortContacts(
         comparison = a.loyalty - b.loyalty;
         break;
       case "value":
-        comparison =
-          a.connection + a.loyalty - (b.connection + b.loyalty);
+        comparison = a.connection + a.loyalty - (b.connection + b.loyalty);
         break;
       case "favorBalance":
         comparison = (a.favorBalance || 0) - (b.favorBalance || 0);
         break;
       case "lastContacted":
-        comparison = (a.lastContactedAt || "").localeCompare(
-          b.lastContactedAt || ""
-        );
+        comparison = (a.lastContactedAt || "").localeCompare(b.lastContactedAt || "");
         break;
     }
 

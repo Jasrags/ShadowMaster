@@ -17,8 +17,8 @@ import type {
   RatingTable,
   RatingTableValue,
   UnifiedRatingConfig,
-} from '../types/ratings';
-import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from '../types/ratings';
+} from "../types/ratings";
+import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from "../types/ratings";
 
 // =============================================================================
 // CORE CALCULATION FUNCTIONS
@@ -27,10 +27,7 @@ import { hasUnifiedRatings, getRatingTableValue, getAvailableRatings } from '../
 /**
  * Calculate a scaled value based on rating
  */
-export function calculateRatedValue(
-  scaling: RatingScalingConfig,
-  rating: number
-): number {
+export function calculateRatedValue(scaling: RatingScalingConfig, rating: number): number {
   // If not scaling with rating, return base value
   if (!scaling.perRating) {
     return scaling.baseValue;
@@ -39,15 +36,15 @@ export function calculateRatedValue(
   let value: number;
 
   switch (scaling.scalingType) {
-    case 'squared':
+    case "squared":
       value = scaling.baseValue * rating * rating;
       break;
 
-    case 'flat':
+    case "flat":
       value = scaling.baseValue;
       break;
 
-    case 'table':
+    case "table":
       if (scaling.valueLookup && scaling.valueLookup[rating] !== undefined) {
         value = scaling.valueLookup[rating];
       } else {
@@ -56,13 +53,13 @@ export function calculateRatedValue(
       }
       break;
 
-    case 'formula':
+    case "formula":
       // Future: implement formula parser
       // For now, fall through to linear
       value = scaling.baseValue * rating;
       break;
 
-    case 'linear':
+    case "linear":
     default:
       value = scaling.baseValue * rating;
       break;
@@ -149,7 +146,7 @@ export function validateRating(
   if (!ratingConfig.hasRating) {
     return {
       valid: false,
-      error: 'Item does not support ratings',
+      error: "Item does not support ratings",
     };
   }
 
@@ -178,7 +175,7 @@ export function validateRating(
   if (ratingConfig.integerOnly !== false && !Number.isInteger(rating)) {
     return {
       valid: false,
-      error: 'Rating must be a whole number',
+      error: "Rating must be a whole number",
       suggestedValue: Math.round(rating),
     };
   }
@@ -231,15 +228,15 @@ export function validateRatingAvailability(
  */
 export function getRatingLabel(semanticType?: RatingSemanticType): string {
   switch (semanticType) {
-    case 'force':
-      return 'Force';
-    case 'deviceRating':
-      return 'Device Rating';
-    case 'capacity':
-      return 'Capacity';
-    case 'rating':
+    case "force":
+      return "Force";
+    case "deviceRating":
+      return "Device Rating";
+    case "capacity":
+      return "Capacity";
+    case "rating":
     default:
-      return 'Rating';
+      return "Rating";
   }
 }
 
@@ -253,7 +250,7 @@ export function formatRating(
 ): string {
   const label = options?.customLabel ?? getRatingLabel(config?.semanticType);
 
-  let result = '';
+  let result = "";
 
   if (options?.showLabel !== false) {
     result = `${label} ${rating}`;
@@ -394,7 +391,7 @@ export function getRatingOptions(
 
   const range = getRatingRange(spec.rating);
 
-  return range.map(rating => {
+  return range.map((rating) => {
     const values = calculateRatedItemValues(spec, rating);
     const validation = validateRatingAvailability(spec, rating, context ?? {});
 
@@ -538,7 +535,10 @@ export function getItemCapacityCostAtRating(item: RatedItem, rating: number): nu
 /**
  * Get power point cost at a specific rating (adept powers)
  */
-export function getItemPowerPointCostAtRating(item: RatedItem & { powerPointCost?: number }, rating: number): number | undefined {
+export function getItemPowerPointCostAtRating(
+  item: RatedItem & { powerPointCost?: number },
+  rating: number
+): number | undefined {
   // Check for unified ratings table first
   if (hasUnifiedRatings(item)) {
     const ratingValue = getRatingTableValue(item, rating);
@@ -593,13 +593,15 @@ export function isRatingValid(item: RatedItem, rating: number): boolean {
 /**
  * Get all rating values for a unified rated item
  */
-export function getAllRatingValues(item: RatedItem): Array<{ rating: number; values: RatingTableValue }> {
+export function getAllRatingValues(
+  item: RatedItem
+): Array<{ rating: number; values: RatingTableValue }> {
   if (!hasUnifiedRatings(item)) {
     return [];
   }
 
   const ratings = getAvailableRatings(item);
-  return ratings.map(rating => ({
+  return ratings.map((rating) => ({
     rating,
     values: getRatingTableValue(item, rating)!,
   }));
@@ -694,4 +696,3 @@ export function getRatingOptionsUnified(
 
   return options;
 }
-

@@ -11,10 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
 import { getCharacter } from "@/lib/storage/characters";
-import {
-  getCharacterContacts,
-  addCharacterContact,
-} from "@/lib/storage/contacts";
+import { getCharacterContacts, addCharacterContact } from "@/lib/storage/contacts";
 import { getSocialCapital } from "@/lib/storage/social-capital";
 import {
   validateContact,
@@ -31,18 +28,12 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId } = await params;
@@ -50,10 +41,7 @@ export async function GET(
     // Get character to verify ownership
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Parse query parameters for filtering
@@ -68,9 +56,7 @@ export async function GET(
 
     // Apply filters
     if (archetype) {
-      contacts = contacts.filter(
-        (c) => c.archetype.toLowerCase() === archetype.toLowerCase()
-      );
+      contacts = contacts.filter((c) => c.archetype.toLowerCase() === archetype.toLowerCase());
     }
 
     if (status) {
@@ -85,9 +71,7 @@ export async function GET(
     }
 
     if (location) {
-      contacts = contacts.filter(
-        (c) => c.location?.toLowerCase() === location.toLowerCase()
-      );
+      contacts = contacts.filter((c) => c.location?.toLowerCase() === location.toLowerCase());
     }
 
     return NextResponse.json({
@@ -97,10 +81,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get contacts:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to get contacts" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to get contacts" }, { status: 500 });
   }
 }
 
@@ -112,18 +93,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId } = await params;
@@ -131,10 +106,7 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Parse body

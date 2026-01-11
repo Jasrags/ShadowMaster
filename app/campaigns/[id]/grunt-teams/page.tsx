@@ -3,16 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
-import {
-  ArrowLeft,
-  Plus,
-  Loader2,
-  Search,
-  Filter,
-  LayoutGrid,
-  List,
-  Users,
-} from "lucide-react";
+import { ArrowLeft, Plus, Loader2, Search, Filter, LayoutGrid, List, Users } from "lucide-react";
 import { GruntTeamCard } from "./components/GruntTeamCard";
 import type { GruntTeam, ProfessionalRating, Campaign } from "@/lib/types";
 
@@ -164,13 +155,9 @@ export default function GruntTeamsPage() {
       {/* Header */}
       <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
-            Grunt Teams
-          </h1>
+          <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Grunt Teams</h1>
           {campaign && (
-            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-              {campaign.title}
-            </p>
+            <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{campaign.title}</p>
           )}
         </div>
         {isGM && (
@@ -279,11 +266,7 @@ export default function GruntTeamsPage() {
         </div>
       ) : (
         <div
-          className={
-            viewMode === "grid"
-              ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3"
-              : "space-y-4"
-          }
+          className={viewMode === "grid" ? "grid gap-6 sm:grid-cols-2 lg:grid-cols-3" : "space-y-4"}
         >
           {teams.map((team) => (
             <GruntTeamCard

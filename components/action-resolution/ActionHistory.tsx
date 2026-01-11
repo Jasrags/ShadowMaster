@@ -48,13 +48,7 @@ interface ActionEntryProps {
   size: "sm" | "md" | "lg";
 }
 
-function DiceDisplay({
-  dice,
-  size,
-}: {
-  dice: ActionResult["dice"];
-  size: "sm" | "md" | "lg";
-}) {
+function DiceDisplay({ dice, size }: { dice: ActionResult["dice"]; size: "sm" | "md" | "lg" }) {
   const sizeClasses = {
     sm: "w-5 h-5 text-xs",
     md: "w-6 h-6 text-sm",
@@ -119,11 +113,7 @@ function ActionEntry({
     return date.toLocaleDateString([], { month: "short", day: "numeric" });
   }, [action.timestamp]);
 
-  const canReroll =
-    showReroll &&
-    onReroll &&
-    action.rerollCount === 0 &&
-    !action.isCriticalGlitch;
+  const canReroll = showReroll && onReroll && action.rerollCount === 0 && !action.isCriticalGlitch;
 
   const hasGlitch = action.isGlitch || action.isCriticalGlitch;
 
@@ -172,9 +162,7 @@ function ActionEntry({
             <div className={`font-medium text-foreground ${s.text}`}>
               {action.context?.actionType || "Action"}{" "}
               {action.context?.skillUsed && (
-                <span className="text-muted-foreground">
-                  ({action.context.skillUsed})
-                </span>
+                <span className="text-muted-foreground">({action.context.skillUsed})</span>
               )}
             </div>
             <div className={`text-muted-foreground ${s.text}`}>
@@ -251,9 +239,7 @@ function ActionEntry({
               <div className="font-mono font-bold text-emerald-500 dark:text-emerald-400">
                 {action.hits}
                 {action.rawHits !== action.hits && (
-                  <span className="text-muted-foreground text-sm">
-                    ({action.rawHits})
-                  </span>
+                  <span className="text-muted-foreground text-sm">({action.rawHits})</span>
                 )}
               </div>
             </div>
@@ -265,9 +251,7 @@ function ActionEntry({
             </div>
             <div className="bg-muted/50 rounded p-2">
               <div className={`text-muted-foreground ${s.text}`}>Pool</div>
-              <div className="font-mono font-bold text-foreground">
-                {action.pool.basePool}
-              </div>
+              <div className="font-mono font-bold text-foreground">{action.pool.basePool}</div>
             </div>
             <div className="bg-muted/50 rounded p-2">
               <div className={`text-muted-foreground ${s.text}`}>Edge Spent</div>
@@ -280,9 +264,7 @@ function ActionEntry({
           {/* Pool breakdown */}
           {action.pool.modifiers.length > 0 && (
             <div className="mb-3">
-              <div className={`text-muted-foreground ${s.text} mb-2`}>
-                Pool Breakdown
-              </div>
+              <div className={`text-muted-foreground ${s.text} mb-2`}>Pool Breakdown</div>
               <div className="space-y-1">
                 <div className="flex justify-between text-foreground">
                   <span>Base Pool</span>
@@ -319,9 +301,7 @@ function ActionEntry({
                     Target: {action.context.targetName}
                   </div>
                 )}
-                {action.context.description && (
-                  <div>{action.context.description}</div>
-                )}
+                {action.context.description && <div>{action.context.description}</div>}
               </div>
             </div>
           )}
@@ -386,9 +366,7 @@ export function ActionHistory({
   const visibleActions = useMemo(() => {
     let filtered = actions;
     if (filterType) {
-      filtered = actions.filter(
-        (a) => a.context?.actionType === filterType
-      );
+      filtered = actions.filter((a) => a.context?.actionType === filterType);
     }
     if (!showAll && filtered.length > maxVisible) {
       return filtered.slice(0, maxVisible);
@@ -399,9 +377,7 @@ export function ActionHistory({
   const hiddenCount = useMemo(() => {
     let filtered = actions;
     if (filterType) {
-      filtered = actions.filter(
-        (a) => a.context?.actionType === filterType
-      );
+      filtered = actions.filter((a) => a.context?.actionType === filterType);
     }
     return Math.max(0, filtered.length - maxVisible);
   }, [actions, filterType, maxVisible]);
@@ -426,9 +402,7 @@ export function ActionHistory({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <History className="w-5 h-5 text-muted-foreground" />
-          <span className={`font-medium text-foreground ${s.text}`}>
-            Action History
-          </span>
+          <span className={`font-medium text-foreground ${s.text}`}>Action History</span>
           <span className="text-muted-foreground">({actions.length})</span>
         </div>
 
@@ -437,9 +411,7 @@ export function ActionHistory({
             <Filter className="w-4 h-4 text-muted-foreground" />
             <select
               value={filterType || ""}
-              onChange={(e) =>
-                onFilterChange(e.target.value || undefined)
-              }
+              onChange={(e) => onFilterChange(e.target.value || undefined)}
               className={`
                 bg-muted border border-border rounded px-2 py-1
                 text-foreground ${s.text}
@@ -466,9 +438,7 @@ export function ActionHistory({
             onReroll={onReroll}
             showReroll={showReroll}
             isExpanded={expandedId === action.id}
-            onToggle={() =>
-              setExpandedId(expandedId === action.id ? null : action.id)
-            }
+            onToggle={() => setExpandedId(expandedId === action.id ? null : action.id)}
             size={size}
           />
         ))}

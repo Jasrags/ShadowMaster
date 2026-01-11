@@ -181,9 +181,9 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
 
     return {
       // Limits
-      physicalLimit: Math.ceil(((strength * 2) + body + reaction) / 3),
-      mentalLimit: Math.ceil(((logic * 2) + intuition + willpower) / 3),
-      socialLimit: Math.ceil(((charisma * 2) + willpower + Math.ceil(essence)) / 3),
+      physicalLimit: Math.ceil((strength * 2 + body + reaction) / 3),
+      mentalLimit: Math.ceil((logic * 2 + intuition + willpower) / 3),
+      socialLimit: Math.ceil((charisma * 2 + willpower + Math.ceil(essence)) / 3),
       // Initiative
       initiative: intuition + reaction,
       initiativeDice,
@@ -357,9 +357,7 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
         {/* Essence (if there's essence loss) */}
         {augmentationEffects.essenceLoss > 0 && (
           <div className="rounded border border-amber-200 bg-amber-50 p-2 text-center dark:border-amber-800 dark:bg-amber-900/20">
-            <div className="text-xs font-medium text-amber-600 dark:text-amber-400">
-              Essence
-            </div>
+            <div className="text-xs font-medium text-amber-600 dark:text-amber-400">Essence</div>
             <div className="font-bold text-amber-700 dark:text-amber-300">
               {derivedStats.essence.toFixed(2)}
             </div>

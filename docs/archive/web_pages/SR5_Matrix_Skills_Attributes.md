@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC  |
+| ------ | ----------------- | ------- | ------ | ---------- | -------- | ------ | ------------- | ------ | ------- | ------------- | --- |
 
 ## Contents
 

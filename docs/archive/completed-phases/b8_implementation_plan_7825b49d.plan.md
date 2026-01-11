@@ -330,7 +330,7 @@ This plan implements Phase B8 from the beta implementation plan, focusing on UI/
 
 ## Notes
 
-- **Sidebar Widths**: 
+- **Sidebar Widths**:
 - Expanded: 256px (StepperSidebar) or 240px (main app sidebars)
 - Collapsed: ~64px (icon-only mode)
 
@@ -350,7 +350,7 @@ This plan implements Phase B8 from the beta implementation plan, focusing on UI/
 
 - **GearStep Improvements**: Already complete (B8.1.4-6), verify they work correctly
 
-- **Dependencies**: 
+- **Dependencies**:
 - B8.2.3 depends on B4 (Combat Tracker)
 - B8.2.4 depends on B3 (Inventory Management)
 - These can be implemented when those phases are complete

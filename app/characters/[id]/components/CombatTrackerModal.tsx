@@ -31,14 +31,8 @@ export function CombatTrackerModal({
   theme,
   characterId,
 }: CombatTrackerModalProps) {
-  const {
-    session,
-    participant,
-    isLoading,
-    refreshSession,
-    endTurn,
-    delayTurn,
-  } = useCombatSession();
+  const { session, participant, isLoading, refreshSession, endTurn, delayTurn } =
+    useCombatSession();
 
   const [isFullscreen, setIsFullscreen] = React.useState(false);
 
@@ -67,7 +61,9 @@ export function CombatTrackerModal({
           {({ close }) => (
             <>
               {/* Header */}
-              <div className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}>
+              <div
+                className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}
+              >
                 <div className="flex items-center gap-3">
                   <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
                     Combat Tracker

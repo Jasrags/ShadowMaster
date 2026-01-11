@@ -22,11 +22,7 @@ import type {
   FavorTransactionType,
   CreateFavorTransactionRequest,
 } from "../types/contacts";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile } from "./base";
 
 // =============================================================================
 // PATH UTILITIES
@@ -59,10 +55,7 @@ function getFavorLedgerPath(userId: ID, characterId: ID): string {
  * @param characterId - Character ID
  * @returns Favor ledger (created if doesn't exist)
  */
-export async function getFavorLedger(
-  userId: ID,
-  characterId: ID
-): Promise<FavorLedger> {
+export async function getFavorLedger(userId: ID, characterId: ID): Promise<FavorLedger> {
   const filePath = getFavorLedgerPath(userId, characterId);
   const ledger = await readJsonFile<FavorLedger>(filePath);
 
@@ -81,10 +74,7 @@ export async function getFavorLedger(
  * @param characterId - Character ID
  * @returns New favor ledger
  */
-export async function initializeFavorLedger(
-  userId: ID,
-  characterId: ID
-): Promise<FavorLedger> {
+export async function initializeFavorLedger(userId: ID, characterId: ID): Promise<FavorLedger> {
   const dir = getCharacterDataDir(userId, characterId);
   await ensureDirectory(dir);
 
@@ -290,9 +280,7 @@ export async function approveFavorTransaction(
   const ledger = await getFavorLedger(userId, characterId);
   const now = new Date().toISOString();
 
-  const transactionIndex = ledger.transactions.findIndex(
-    (t) => t.id === transactionId
-  );
+  const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
 
   if (transactionIndex === -1) {
     throw new Error(`Transaction ${transactionId} not found`);
@@ -344,9 +332,7 @@ export async function rejectFavorTransaction(
   const ledger = await getFavorLedger(userId, characterId);
   const now = new Date().toISOString();
 
-  const transactionIndex = ledger.transactions.findIndex(
-    (t) => t.id === transactionId
-  );
+  const transactionIndex = ledger.transactions.findIndex((t) => t.id === transactionId);
 
   if (transactionIndex === -1) {
     throw new Error(`Transaction ${transactionId} not found`);
@@ -386,10 +372,7 @@ export async function rejectFavorTransaction(
  * @param characterId - Character ID
  * @returns Updated ledger with recalculated aggregates
  */
-export async function recalculateAggregates(
-  userId: ID,
-  characterId: ID
-): Promise<FavorLedger> {
+export async function recalculateAggregates(userId: ID, characterId: ID): Promise<FavorLedger> {
   const ledger = await getFavorLedger(userId, characterId);
   const now = new Date().toISOString();
 
@@ -452,8 +435,7 @@ export async function getFavorStatistics(
   // Count transactions per contact
   const contactTransactionCounts: Record<ID, number> = {};
   for (const t of ledger.transactions) {
-    contactTransactionCounts[t.contactId] =
-      (contactTransactionCounts[t.contactId] || 0) + 1;
+    contactTransactionCounts[t.contactId] = (contactTransactionCounts[t.contactId] || 0) + 1;
   }
 
   // Find most active contact

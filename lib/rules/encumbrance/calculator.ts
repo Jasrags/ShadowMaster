@@ -33,9 +33,7 @@ export const MAX_ENCUMBRANCE_PENALTY = -10;
  * Check if an item is currently being carried (not stored).
  * Stored items don't count toward encumbrance.
  */
-export function isItemCarried(
-  item: { state?: { readiness: EquipmentReadiness } }
-): boolean {
+export function isItemCarried(item: { state?: { readiness: EquipmentReadiness } }): boolean {
   if (!item.state) {
     // Legacy items without state default to carried
     return true;
@@ -56,9 +54,7 @@ export function getItemWeight(item: { weight?: number }): number {
  * Only includes carried weapons (not stored).
  */
 export function calculateWeaponWeight(weapons: Weapon[]): number {
-  return weapons
-    .filter(isItemCarried)
-    .reduce((total, weapon) => total + getItemWeight(weapon), 0);
+  return weapons.filter(isItemCarried).reduce((total, weapon) => total + getItemWeight(weapon), 0);
 }
 
 /**
@@ -66,9 +62,7 @@ export function calculateWeaponWeight(weapons: Weapon[]): number {
  * Only includes carried armor (not stored).
  */
 export function calculateArmorWeight(armor: ArmorItem[]): number {
-  return armor
-    .filter(isItemCarried)
-    .reduce((total, item) => total + getItemWeight(item), 0);
+  return armor.filter(isItemCarried).reduce((total, item) => total + getItemWeight(item), 0);
 }
 
 /**
@@ -121,10 +115,7 @@ export function calculateMaxCapacity(character: Character): number {
  * Calculate the dice pool penalty for being over capacity.
  * -1 per kg over capacity, capped at MAX_ENCUMBRANCE_PENALTY.
  */
-export function calculateEncumbrancePenalty(
-  currentWeight: number,
-  maxCapacity: number
-): number {
+export function calculateEncumbrancePenalty(currentWeight: number, maxCapacity: number): number {
   if (currentWeight <= maxCapacity) {
     return 0;
   }
@@ -167,9 +158,7 @@ export function calculateEncumbrance(character: Character): EncumbranceState {
 /**
  * Get encumbrance status description for UI display.
  */
-export function getEncumbranceStatus(
-  encumbrance: EncumbranceState
-): {
+export function getEncumbranceStatus(encumbrance: EncumbranceState): {
   status: "light" | "normal" | "heavy" | "overloaded";
   description: string;
   color: string;
@@ -207,15 +196,7 @@ export function getEncumbranceStatus(
  * Check if a physical action should have encumbrance penalty applied.
  * Encumbrance affects all physical actions.
  */
-export function shouldApplyEncumbrancePenalty(
-  actionCategory: string
-): boolean {
-  const physicalCategories = [
-    "combat",
-    "physical",
-    "athletics",
-    "stealth",
-    "vehicle",
-  ];
+export function shouldApplyEncumbrancePenalty(actionCategory: string): boolean {
+  const physicalCategories = ["combat", "physical", "athletics", "stealth", "vehicle"];
   return physicalCategories.includes(actionCategory.toLowerCase());
 }

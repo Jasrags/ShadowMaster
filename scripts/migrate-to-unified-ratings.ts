@@ -91,7 +91,10 @@ interface AdeptPowerEntry {
   [key: string]: unknown;
 }
 
-interface MigratedAugmentation extends Omit<AugmentationEntry, "essenceCost" | "cost" | "availability" | "availabilitySuffix" | "capacity"> {
+interface MigratedAugmentation extends Omit<
+  AugmentationEntry,
+  "essenceCost" | "cost" | "availability" | "availabilitySuffix" | "capacity"
+> {
   hasRating?: boolean;
   minRating?: number;
   maxRating?: number;
@@ -239,8 +242,22 @@ function migrateAugmentationCatalog(catalog: AugmentationEntry[]): {
 
     // Copy any other properties that aren't rating-specific
     for (const [key, value] of Object.entries(template)) {
-      if (!["id", "name", "category", "description", "wirelessBonus", "page",
-            "essenceCost", "cost", "availability", "availabilitySuffix", "capacity", "capacityCost"].includes(key)) {
+      if (
+        ![
+          "id",
+          "name",
+          "category",
+          "description",
+          "wirelessBonus",
+          "page",
+          "essenceCost",
+          "cost",
+          "availability",
+          "availabilitySuffix",
+          "capacity",
+          "capacityCost",
+        ].includes(key)
+      ) {
         (migrated as Record<string, unknown>)[key] = value;
       }
     }
@@ -377,7 +394,10 @@ function migrateQuality(quality: QualityEntry): { quality: MigratedQuality; conv
 /**
  * Migrate all qualities
  */
-function migrateQualities(qualities: QualityEntry[]): { qualities: MigratedQuality[]; converted: number } {
+function migrateQualities(qualities: QualityEntry[]): {
+  qualities: MigratedQuality[];
+  converted: number;
+} {
   const migrated: MigratedQuality[] = [];
   let converted = 0;
 
@@ -397,7 +417,10 @@ function migrateQualities(qualities: QualityEntry[]): { qualities: MigratedQuali
 /**
  * Convert adept power with perLevel cost to ratings table
  */
-function migrateAdeptPower(power: AdeptPowerEntry): { power: MigratedAdeptPower; converted: boolean } {
+function migrateAdeptPower(power: AdeptPowerEntry): {
+  power: MigratedAdeptPower;
+  converted: boolean;
+} {
   if (power.costType !== "perLevel" || !power.maxLevel || power.maxLevel <= 1) {
     // Keep fixed cost powers as-is, just rename cost to powerPointCost
     const { costType, maxLevel, cost, ...rest } = power;
@@ -434,7 +457,10 @@ function migrateAdeptPower(power: AdeptPowerEntry): { power: MigratedAdeptPower;
 /**
  * Migrate all adept powers
  */
-function migrateAdeptPowers(powers: AdeptPowerEntry[]): { powers: MigratedAdeptPower[]; converted: number } {
+function migrateAdeptPowers(powers: AdeptPowerEntry[]): {
+  powers: MigratedAdeptPower[];
+  converted: number;
+} {
   const migrated: MigratedAdeptPower[] = [];
   let converted = 0;
 
@@ -481,7 +507,9 @@ function migrateEditionData(
     if (!dryRun) {
       cyberwareModule.payload.catalog = result.items as AugmentationEntry[];
     }
-    console.log(`    Consolidated ${stats.cyberware.consolidated} entries: ${stats.cyberware.before} -> ${stats.cyberware.after}`);
+    console.log(
+      `    Consolidated ${stats.cyberware.consolidated} entries: ${stats.cyberware.before} -> ${stats.cyberware.after}`
+    );
   }
 
   // Migrate bioware
@@ -493,7 +521,9 @@ function migrateEditionData(
     if (!dryRun) {
       biowareModule.payload.catalog = result.items as AugmentationEntry[];
     }
-    console.log(`    Consolidated ${stats.bioware.consolidated} entries: ${stats.bioware.before} -> ${stats.bioware.after}`);
+    console.log(
+      `    Consolidated ${stats.bioware.consolidated} entries: ${stats.bioware.before} -> ${stats.bioware.after}`
+    );
   }
 
   // Migrate gear (multiple categories)
@@ -516,7 +546,9 @@ function migrateEditionData(
   }
 
   // Migrate qualities
-  const qualitiesModule = modules.qualities as { payload?: { positive?: QualityEntry[]; negative?: QualityEntry[] } };
+  const qualitiesModule = modules.qualities as {
+    payload?: { positive?: QualityEntry[]; negative?: QualityEntry[] };
+  };
   if (qualitiesModule?.payload) {
     console.log("  Migrating qualities...");
     if (qualitiesModule.payload.positive) {
@@ -566,7 +598,9 @@ function main(): void {
   const editionCode = args.find((arg) => !arg.startsWith("--"));
 
   if (!editionCode) {
-    console.error("Usage: pnpm tsx scripts/migrate-to-unified-ratings.ts <edition-code> [--dry-run]");
+    console.error(
+      "Usage: pnpm tsx scripts/migrate-to-unified-ratings.ts <edition-code> [--dry-run]"
+    );
     console.error("Example: pnpm tsx scripts/migrate-to-unified-ratings.ts sr5 --dry-run");
     process.exit(1);
   }
@@ -587,8 +621,12 @@ function main(): void {
     const { data: migratedData, stats } = migrateEditionData(inputData, dryRun);
 
     console.log("\n=== Migration Summary ===");
-    console.log(`Cyberware: ${stats.cyberware.before} -> ${stats.cyberware.after} (consolidated ${stats.cyberware.consolidated})`);
-    console.log(`Bioware: ${stats.bioware.before} -> ${stats.bioware.after} (consolidated ${stats.bioware.consolidated})`);
+    console.log(
+      `Cyberware: ${stats.cyberware.before} -> ${stats.cyberware.after} (consolidated ${stats.cyberware.consolidated})`
+    );
+    console.log(
+      `Bioware: ${stats.bioware.before} -> ${stats.bioware.after} (consolidated ${stats.bioware.consolidated})`
+    );
     console.log(`Gear: ${stats.gear.converted} items converted to ratings tables`);
     console.log(`Qualities: ${stats.qualities.converted} qualities converted`);
     console.log(`Adept Powers: ${stats.adeptPowers.converted} powers converted`);

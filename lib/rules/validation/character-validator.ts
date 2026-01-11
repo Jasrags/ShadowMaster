@@ -190,8 +190,7 @@ const magicValidator: ValidatorDefinition = {
 
     // Full mage or mystic adept should have tradition
     if (
-      (character.magicalPath === "full-mage" ||
-        character.magicalPath === "mystic-adept") &&
+      (character.magicalPath === "full-mage" || character.magicalPath === "mystic-adept") &&
       !character.tradition
     ) {
       issues.push({
@@ -205,8 +204,7 @@ const magicValidator: ValidatorDefinition = {
 
     // Adepts and mystic adepts should have adept powers
     if (
-      (character.magicalPath === "adept" ||
-        character.magicalPath === "mystic-adept") &&
+      (character.magicalPath === "adept" || character.magicalPath === "mystic-adept") &&
       (!character.adeptPowers || character.adeptPowers.length === 0)
     ) {
       issues.push({
@@ -220,8 +218,7 @@ const magicValidator: ValidatorDefinition = {
 
     // Full mages and mystic adepts should have spells
     if (
-      (character.magicalPath === "full-mage" ||
-        character.magicalPath === "mystic-adept") &&
+      (character.magicalPath === "full-mage" || character.magicalPath === "mystic-adept") &&
       (!character.spells || character.spells.length === 0)
     ) {
       issues.push({

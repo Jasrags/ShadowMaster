@@ -88,7 +88,10 @@ const PATH_INFO: Record<string, { description: string; features: string[] }> = {
   },
   mundane: {
     description: "Focus your build on physical, technical, or social strengths",
-    features: ["No essence concerns for cyberware/bioware", "Street Samurai, Rigger, Decker, Face archetypes"],
+    features: [
+      "No essence concerns for cyberware/bioware",
+      "Street Samurai, Rigger, Decker, Face archetypes",
+    ],
   },
 };
 
@@ -253,9 +256,7 @@ function MagicPathModal({
         {/* Description */}
         {info && (
           <>
-            <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">
-              {info.description}
-            </p>
+            <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">{info.description}</p>
             <p className="mt-1 pl-8 text-xs text-zinc-500 dark:text-zinc-500">
               {info.features.join(" • ")}
             </p>
@@ -268,10 +269,7 @@ function MagicPathModal({
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
       {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        onClick={handleClose}
-      />
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={handleClose} />
 
       {/* Modal */}
       <div className="relative max-h-[90vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
@@ -482,10 +480,13 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       if (!MENTOR_SPIRIT_PATHS.includes(pathId)) {
         delete updates["mentor-spirit"];
         // Remove mentor spirit quality
-        const newPositiveQualities = (updates.positiveQualities as string[] || positiveQualities)
-          .filter((q: string) => q !== MENTOR_SPIRIT_QUALITY_ID);
+        const newPositiveQualities = (
+          (updates.positiveQualities as string[]) || positiveQualities
+        ).filter((q: string) => q !== MENTOR_SPIRIT_QUALITY_ID);
         updates.positiveQualities = newPositiveQualities;
-        const newQualitySpecs = { ...(updates.qualitySpecifications as Record<string, string> || qualitySpecifications) };
+        const newQualitySpecs = {
+          ...((updates.qualitySpecifications as Record<string, string>) || qualitySpecifications),
+        };
         delete newQualitySpecs[MENTOR_SPIRIT_QUALITY_ID];
         updates.qualitySpecifications = newQualitySpecs;
       }
@@ -581,7 +582,8 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const karmaSpentPositive = (state.budgets["karma-spent-positive"] as number) || 0;
   const karmaGainedNegative = (state.budgets["karma-gained-negative"] as number) || 0;
   const availableKarma = karmaBase + karmaGainedNegative - karmaSpentPositive;
-  const canAffordMentorSpirit = hasMentorSpiritQuality || availableKarma >= MENTOR_SPIRIT_KARMA_COST;
+  const canAffordMentorSpirit =
+    hasMentorSpiritQuality || availableKarma >= MENTOR_SPIRIT_KARMA_COST;
 
   // UI helpers
   const canSelectTradition = selectedPath && TRADITION_PATHS.includes(selectedPath);
@@ -604,9 +606,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       <CreationCard title="Magic / Resonance" description="Select magical path" status="pending">
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
           <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Set Magic priority first
-          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Set Magic priority first</p>
         </div>
       </CreationCard>
     );
@@ -627,15 +627,13 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
             <span className="font-semibold uppercase text-emerald-900 dark:text-emerald-100">
               Mundane
             </span>
-            <span className="text-sm text-emerald-600 dark:text-emerald-400">
-              (auto)
-            </span>
+            <span className="text-sm text-emerald-600 dark:text-emerald-400">(auto)</span>
           </div>
 
           {/* Info text */}
           <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            No magical or resonance abilities available at Priority E.
-            Move Magic/Resonance to a higher priority for awakened options.
+            No magical or resonance abilities available at Priority E. Move Magic/Resonance to a
+            higher priority for awakened options.
           </p>
         </div>
       </CreationCard>
@@ -669,8 +667,8 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                   selectedPath === "mundane"
                     ? "border-emerald-200 bg-emerald-50 hover:border-emerald-300 hover:bg-emerald-100 dark:border-emerald-800 dark:bg-emerald-900/20 dark:hover:border-emerald-700 dark:hover:bg-emerald-900/30"
                     : isResonancePath
-                    ? "border-cyan-200 bg-cyan-50 hover:border-cyan-300 hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-900/20 dark:hover:border-cyan-700 dark:hover:bg-cyan-900/30"
-                    : "border-purple-200 bg-purple-50 hover:border-purple-300 hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-900/20 dark:hover:border-purple-700 dark:hover:bg-purple-900/30"
+                      ? "border-cyan-200 bg-cyan-50 hover:border-cyan-300 hover:bg-cyan-100 dark:border-cyan-800 dark:bg-cyan-900/20 dark:hover:border-cyan-700 dark:hover:bg-cyan-900/30"
+                      : "border-purple-200 bg-purple-50 hover:border-purple-300 hover:bg-purple-100 dark:border-purple-800 dark:bg-purple-900/20 dark:hover:border-purple-700 dark:hover:bg-purple-900/30"
                 }`}
               >
                 <span
@@ -678,8 +676,8 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                     selectedPath === "mundane"
                       ? "text-emerald-900 dark:text-emerald-100"
                       : isResonancePath
-                      ? "text-cyan-900 dark:text-cyan-100"
-                      : "text-purple-900 dark:text-purple-100"
+                        ? "text-cyan-900 dark:text-cyan-100"
+                        : "text-purple-900 dark:text-purple-100"
                   }`}
                 >
                   {selectedPathData.name}
@@ -689,8 +687,8 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                     selectedPath === "mundane"
                       ? "text-emerald-600 dark:text-emerald-400"
                       : isResonancePath
-                      ? "text-cyan-600 dark:text-cyan-400"
-                      : "text-purple-600 dark:text-purple-400"
+                        ? "text-cyan-600 dark:text-cyan-400"
+                        : "text-purple-600 dark:text-purple-400"
                   }`}
                 >
                   Change
@@ -866,8 +864,8 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                               isSelected
                                 ? "bg-indigo-100 dark:bg-indigo-900/30"
                                 : canSelect
-                                ? "hover:bg-zinc-50 dark:hover:bg-zinc-700"
-                                : "cursor-not-allowed opacity-50"
+                                  ? "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                                  : "cursor-not-allowed opacity-50"
                             }`}
                           >
                             <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
@@ -891,9 +889,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                 onClick={() => setIsModalOpen(true)}
                 className="flex w-full items-center justify-between rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 px-4 py-3 text-left transition-colors hover:border-zinc-400 hover:bg-zinc-100 dark:border-zinc-600 dark:bg-zinc-800 dark:hover:border-zinc-500 dark:hover:bg-zinc-700"
               >
-                <span className="text-zinc-500 dark:text-zinc-400">
-                  Choose path...
-                </span>
+                <span className="text-zinc-500 dark:text-zinc-400">Choose path...</span>
                 <span className="flex items-center gap-1 text-sm font-medium text-zinc-600 dark:text-zinc-300">
                   Select
                   <ChevronRight className="h-4 w-4" />

@@ -7,7 +7,6 @@ Instructions:
 
 1. Analyze the spec content. If it overlaps with an existing capability, reference it; otherwise, propose a new capability.
 2. Structure the Capability document as:
-
    - **Purpose:** Abstract, outcome-focused; avoid procedural verbs.
    - **Guarantees:** MUST / MUST NOT / SHOULD statements.
    - **Requirements:** Subdivide into logical domains; declarative and precise.

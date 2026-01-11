@@ -8,11 +8,14 @@
  * - Split-pane design (list left, details right)
  * - Rating selection
  * - Shows skills in the group
+ *
+ * Uses BaseModal for accessibility (focus trapping, keyboard handling).
  */
 
 import { useMemo, useState, useCallback } from "react";
 import { useSkills } from "@/lib/rules";
-import { X, Search, Plus, Minus, Check, Users } from "lucide-react";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Search, Plus, Minus, Check, Users, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -33,6 +36,7 @@ interface SkillGroupModalProps {
   hasMagic: boolean;
   hasResonance: boolean;
   remainingGroupPoints: number;
+  incompetentGroupId?: string; // Skill group the character is incompetent in
 }
 
 // =============================================================================
@@ -48,6 +52,7 @@ export function SkillGroupModal({
   hasMagic,
   hasResonance,
   remainingGroupPoints,
+  incompetentGroupId,
 }: SkillGroupModalProps) {
   const { skillGroups, activeSkills } = useSkills();
 
@@ -119,212 +124,212 @@ export function SkillGroupModal({
     onClose();
   }, [resetState, onClose]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Add Skill Group
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl" className="max-w-3xl">
+      {({ close }) => (
+        <>
+          <ModalHeader title="Add Skill Group" onClose={close} />
 
-        {/* Search */}
-        <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search skill groups..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
-          </div>
-        </div>
-
-        {/* Content - Split Pane */}
-        <div className="flex flex-1 overflow-hidden">
-          {/* Left Pane - Group List */}
-          <div className="w-1/2 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700">
-            <div className="sticky top-0 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-              Available Groups
+          {/* Search */}
+          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search skill groups..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              />
             </div>
-            {filteredGroups.map((group) => {
-              const isSelected = selectedGroupId === group.id;
-              const isAlreadyAdded = existingGroupIds.includes(group.id);
-
-              return (
-                <button
-                  key={group.id}
-                  onClick={() => !isAlreadyAdded && setSelectedGroupId(group.id)}
-                  disabled={isAlreadyAdded}
-                  className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${
-                    isSelected
-                      ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                      : isAlreadyAdded
-                        ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                        : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
-                  }`}
-                >
-                  <div>
-                    <div className={`font-medium ${isAlreadyAdded ? "line-through" : ""}`}>
-                      {group.name}
-                    </div>
-                    <div className="mt-0.5 text-xs text-zinc-400">
-                      {group.skills.length} skills
-                    </div>
-                  </div>
-                  {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
-                </button>
-              );
-            })}
-            {filteredGroups.length === 0 && (
-              <div className="p-8 text-center text-sm text-zinc-500">
-                No skill groups found
-              </div>
-            )}
           </div>
 
-          {/* Right Pane - Group Details */}
-          <div className="w-1/2 overflow-y-auto p-6">
-            {selectedGroup ? (
-              <div className="space-y-6">
-                {/* Group Info */}
-                <div>
-                  <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedGroup.name}
-                  </h3>
-                  <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                    Adding this group sets all skills to the same rating. More efficient
-                    than buying skills individually.
-                  </p>
+          <ModalBody scrollable={false}>
+            {/* Content - Split Pane */}
+            <div className="flex flex-1 overflow-hidden">
+              {/* Left Pane - Group List */}
+              <div className="w-1/2 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700">
+                <div className="sticky top-0 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                  Available Groups
                 </div>
+                {filteredGroups.map((group) => {
+                  const isSelected = selectedGroupId === group.id;
+                  const isAlreadyAdded = existingGroupIds.includes(group.id);
+                  const isIncompetent = group.id === incompetentGroupId;
+                  const isDisabled = isAlreadyAdded || isIncompetent;
 
-                {/* Skills in Group */}
-                <div>
-                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    Skills in Group
-                  </label>
-                  <div className="mt-2 space-y-1">
-                    {groupSkills.map((skill) => {
-                      const hasConflict = existingSkillIds.includes(skill.id);
-                      return (
-                        <div
-                          key={skill.id}
-                          className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
-                            hasConflict
-                              ? "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300"
-                              : "bg-zinc-50 text-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300"
+                  return (
+                    <button
+                      key={group.id}
+                      onClick={() => !isDisabled && setSelectedGroupId(group.id)}
+                      disabled={isDisabled}
+                      className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${
+                        isSelected
+                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                          : isIncompetent
+                            ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
+                            : isAlreadyAdded
+                              ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                              : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                      }`}
+                    >
+                      <div>
+                        <div className={`font-medium ${isAlreadyAdded ? "line-through" : ""}`}>
+                          {group.name}
+                        </div>
+                        <div className="mt-0.5 text-xs text-zinc-400">
+                          {group.skills.length} skills
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
+                        {isIncompetent && (
+                          <span className="flex items-center gap-0.5 text-[10px] text-red-500">
+                            <AlertTriangle className="h-3 w-3" />
+                            incompetent
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+                {filteredGroups.length === 0 && (
+                  <div className="p-8 text-center text-sm text-zinc-500">No skill groups found</div>
+                )}
+              </div>
+
+              {/* Right Pane - Group Details */}
+              <div className="w-1/2 overflow-y-auto p-6">
+                {selectedGroup ? (
+                  <div className="space-y-6">
+                    {/* Group Info */}
+                    <div>
+                      <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+                        {selectedGroup.name}
+                      </h3>
+                      <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+                        Adding this group sets all skills to the same rating. More efficient than
+                        buying skills individually.
+                      </p>
+                    </div>
+
+                    {/* Skills in Group */}
+                    <div>
+                      <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Skills in Group
+                      </label>
+                      <div className="mt-2 space-y-1">
+                        {groupSkills.map((skill) => {
+                          const hasConflict = existingSkillIds.includes(skill.id);
+                          return (
+                            <div
+                              key={skill.id}
+                              className={`flex items-center justify-between rounded-lg px-3 py-2 text-sm ${
+                                hasConflict
+                                  ? "bg-amber-50 text-amber-700 dark:bg-amber-900/20 dark:text-amber-300"
+                                  : "bg-zinc-50 text-zinc-700 dark:bg-zinc-800/50 dark:text-zinc-300"
+                              }`}
+                            >
+                              <span>{skill.name}</span>
+                              <span className="text-xs text-zinc-400">
+                                {skill.linkedAttribute.toUpperCase().slice(0, 3)}
+                              </span>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+
+                    {/* Conflict Warning */}
+                    {hasConflicts && (
+                      <div className="rounded-lg bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+                        <strong>Warning:</strong> You already have individual ratings for{" "}
+                        {conflictingSkills.length} skill{conflictingSkills.length !== 1 ? "s" : ""}{" "}
+                        in this group. Remove them first to add the group.
+                      </div>
+                    )}
+
+                    {/* Rating Selection */}
+                    <div>
+                      <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Group Rating
+                      </label>
+                      <div className="mt-2 flex items-center gap-3">
+                        <button
+                          onClick={() => setRating(Math.max(1, rating - 1))}
+                          disabled={rating <= 1}
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+                            rating > 1
+                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                           }`}
                         >
-                          <span>{skill.name}</span>
-                          <span className="text-xs text-zinc-400">
-                            {skill.linkedAttribute.toUpperCase().slice(0, 3)}
-                          </span>
+                          <Minus className="h-4 w-4" />
+                        </button>
+                        <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                          {rating}
                         </div>
-                      );
-                    })}
+                        <button
+                          onClick={() => setRating(Math.min(MAX_GROUP_RATING, rating + 1))}
+                          disabled={rating >= MAX_GROUP_RATING}
+                          className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
+                            rating < MAX_GROUP_RATING
+                              ? "bg-purple-500 text-white hover:bg-purple-600"
+                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                          }`}
+                        >
+                          <Plus className="h-4 w-4" />
+                        </button>
+                        <span className="text-xs text-zinc-400">Max: {MAX_GROUP_RATING}</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-
-                {/* Conflict Warning */}
-                {hasConflicts && (
-                  <div className="rounded-lg bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
-                    <strong>Warning:</strong> You already have individual ratings for{" "}
-                    {conflictingSkills.length} skill{conflictingSkills.length !== 1 ? "s" : ""} in
-                    this group. Remove them first to add the group.
+                ) : (
+                  <div className="flex h-full flex-col items-center justify-center text-zinc-400">
+                    <Users className="h-12 w-12" />
+                    <p className="mt-4 text-sm">Select a skill group from the list</p>
                   </div>
                 )}
-
-                {/* Rating Selection */}
-                <div>
-                  <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                    Group Rating
-                  </label>
-                  <div className="mt-2 flex items-center gap-3">
-                    <button
-                      onClick={() => setRating(Math.max(1, rating - 1))}
-                      disabled={rating <= 1}
-                      className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                        rating > 1
-                          ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                      }`}
-                    >
-                      <Minus className="h-4 w-4" />
-                    </button>
-                    <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                      {rating}
-                    </div>
-                    <button
-                      onClick={() => setRating(Math.min(MAX_GROUP_RATING, rating + 1))}
-                      disabled={rating >= MAX_GROUP_RATING}
-                      className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                        rating < MAX_GROUP_RATING
-                          ? "bg-purple-500 text-white hover:bg-purple-600"
-                          : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                      }`}
-                    >
-                      <Plus className="h-4 w-4" />
-                    </button>
-                    <span className="text-xs text-zinc-400">Max: {MAX_GROUP_RATING}</span>
-                  </div>
-                </div>
               </div>
-            ) : (
-              <div className="flex h-full flex-col items-center justify-center text-zinc-400">
-                <Users className="h-12 w-12" />
-                <p className="mt-4 text-sm">Select a skill group from the list</p>
-              </div>
-            )}
-          </div>
-        </div>
+            </div>
+          </ModalBody>
 
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            {selectedGroup && (
-              <>
-                Cost:{" "}
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                  {groupCost} group point{groupCost !== 1 ? "s" : ""}
-                </span>
-                <span className="ml-2 text-zinc-400">
-                  ({groupSkills.length} skills at rating {rating})
-                </span>
-              </>
-            )}
-          </div>
-          <div className="flex gap-3">
-            <button
-              onClick={handleClose}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleAddGroup}
-              disabled={!selectedGroup || !canAfford || hasConflicts}
-              className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                selectedGroup && canAfford && !hasConflicts
-                  ? "bg-purple-500 text-white hover:bg-purple-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-              }`}
-            >
-              Add Skill Group
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+          <ModalFooter>
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              {selectedGroup && (
+                <>
+                  Cost:{" "}
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                    {groupCost} group point{groupCost !== 1 ? "s" : ""}
+                  </span>
+                  <span className="ml-2 text-zinc-400">
+                    ({groupSkills.length} skills at rating {rating})
+                  </span>
+                </>
+              )}
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleAddGroup}
+                disabled={!selectedGroup || !canAfford || hasConflicts}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  selectedGroup && canAfford && !hasConflicts
+                    ? "bg-purple-500 text-white hover:bg-purple-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                Add Skill Group
+              </button>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

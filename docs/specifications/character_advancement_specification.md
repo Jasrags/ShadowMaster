@@ -15,6 +15,7 @@
 Character advancement is the post-creation system for improving characters using Karma earned during gameplay. This specification defines how characters grow over time through attribute improvements, skill development, quality acquisition, magical advancement, and other progression paths.
 
 **Key Features:**
+
 - Karma-based advancement with edition-specific costs
 - Campaign-integrated reward distribution
 - GM approval workflows for significant changes
@@ -23,13 +24,13 @@ Character advancement is the post-creation system for improving characters using
 - Advancement validation against prerequisites and limits
 
 **Integration Points:**
+
 - **Campaigns:** GMs award karma, set house rules, approve advancements
 - **Character Sheets:** Display advancement options and karma balance
 - **Gameplay Actions:** Low-level karma transactions
 - **Ruleset System:** Edition-specific costs and constraints
 
 ---
-
 
 ## Advancement Rules (SR5)
 
@@ -39,57 +40,57 @@ The following tables define karma costs for Shadowrun 5th Edition. Other edition
 
 #### Attribute Improvement
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| Physical/Mental Attribute | New Rating × 5 | Cannot exceed racial maximum |
-| Special Attribute (Edge) | New Rating × 5 | Cannot exceed racial maximum |
-| Special Attribute (Magic/Resonance) | New Rating × 5 | Requires Awakened/Emerged |
+| Improvement                         | Karma Cost     | Notes                        |
+| ----------------------------------- | -------------- | ---------------------------- |
+| Physical/Mental Attribute           | New Rating × 5 | Cannot exceed racial maximum |
+| Special Attribute (Edge)            | New Rating × 5 | Cannot exceed racial maximum |
+| Special Attribute (Magic/Resonance) | New Rating × 5 | Requires Awakened/Emerged    |
 
 **Example:** Raising Agility from 4 to 5 costs 5 × 5 = 25 karma.
 
 **Cumulative Costs (Starting → Target):**
 
 | From | To 2 | To 3 | To 4 | To 5 | To 6 | To 7 | To 8 | To 9 | To 10 |
-|------|------|------|------|------|------|------|------|------|-------|
-| 1 | 10 | 25 | 45 | 70 | 100 | 135 | 175 | 220 | 270 |
-| 2 | — | 15 | 35 | 60 | 90 | 125 | 165 | 210 | 260 |
-| 3 | — | — | 20 | 45 | 75 | 110 | 150 | 195 | 245 |
-| 4 | — | — | — | 25 | 55 | 90 | 130 | 175 | 225 |
-| 5 | — | — | — | — | 30 | 65 | 105 | 150 | 200 |
-| 6 | — | — | — | — | — | 35 | 75 | 120 | 170 |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ----- |
+| 1    | 10   | 25   | 45   | 70   | 100  | 135  | 175  | 220  | 270   |
+| 2    | —    | 15   | 35   | 60   | 90   | 125  | 165  | 210  | 260   |
+| 3    | —    | —    | 20   | 45   | 75   | 110  | 150  | 195  | 245   |
+| 4    | —    | —    | —    | 25   | 55   | 90   | 130  | 175  | 225   |
+| 5    | —    | —    | —    | —    | 30   | 65   | 105  | 150  | 200   |
+| 6    | —    | —    | —    | —    | —    | 35   | 75   | 120  | 170   |
 
 #### Skill Improvement
 
-| Skill Type | Karma Cost | Notes |
-|------------|------------|-------|
-| Active Skill | New Rating × 2 | Max rating = linked attribute |
-| Skill Group | New Rating × 5 | All skills must be at same rating |
-| Knowledge Skill | New Rating × 1 | — |
-| Language Skill | New Rating × 1 | — |
+| Skill Type      | Karma Cost     | Notes                             |
+| --------------- | -------------- | --------------------------------- |
+| Active Skill    | New Rating × 2 | Max rating = linked attribute     |
+| Skill Group     | New Rating × 5 | All skills must be at same rating |
+| Knowledge Skill | New Rating × 1 | —                                 |
+| Language Skill  | New Rating × 1 | —                                 |
 
 **Example:** Raising Pistols from 4 to 5 costs 5 × 2 = 10 karma.
 
 **Cumulative Costs (Active Skills):**
 
 | From | To 1 | To 2 | To 3 | To 4 | To 5 | To 6 | To 7 | To 8 | To 9 | To 10 | To 11 | To 12 |
-|------|------|------|------|------|------|------|------|------|------|-------|-------|-------|
-| 0 | 2 | 6 | 12 | 20 | 30 | 42 | 56 | 72 | 90 | 110 | 132 | 156 |
+| ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ---- | ----- | ----- | ----- |
+| 0    | 2    | 6    | 12   | 20   | 30   | 42   | 56   | 72   | 90   | 110   | 132   | 156   |
 
 #### New Skills and Specializations
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| New Active Skill (Rating 1) | 2 | Must have linked attribute ≥ 1 |
-| New Knowledge/Language Skill | 1 | — |
-| New Specialization | 7 | Skill must be Rating 1+ |
-| New Expertise | 14 | Requires specialization first (optional rule) |
+| Improvement                  | Karma Cost | Notes                                         |
+| ---------------------------- | ---------- | --------------------------------------------- |
+| New Active Skill (Rating 1)  | 2          | Must have linked attribute ≥ 1                |
+| New Knowledge/Language Skill | 1          | —                                             |
+| New Specialization           | 7          | Skill must be Rating 1+                       |
+| New Expertise                | 14         | Requires specialization first (optional rule) |
 
 #### Qualities
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| New Positive Quality | Quality Cost × 2 | Subject to prerequisites and GM approval |
-| Buy Off Negative Quality | Bonus Value × 2 | Subject to story justification |
+| Improvement              | Karma Cost       | Notes                                    |
+| ------------------------ | ---------------- | ---------------------------------------- |
+| New Positive Quality     | Quality Cost × 2 | Subject to prerequisites and GM approval |
+| Buy Off Negative Quality | Bonus Value × 2  | Subject to story justification           |
 
 **Example:** Acquiring Ambidextrous (4 karma at creation) costs 4 × 2 = 8 karma post-creation.
 
@@ -97,26 +98,26 @@ The following tables define karma costs for Shadowrun 5th Edition. Other edition
 
 #### Magic and Resonance
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| New Spell | 5 | Requires Spellcasting skill |
-| New Ritual | 5 | Requires Ritual Spellcasting skill |
-| New Preparation Formula | 5 | Requires Alchemy skill |
-| New Complex Form | 4 | Technomancers only |
-| New Adept Power | Power Point cost × ? | See Adept section |
-| New Initiate Grade | 10 + (Grade × 3) | Awakened only |
-| New Submersion Grade | 10 + (Grade × 3) | Technomancers only |
+| Improvement             | Karma Cost           | Notes                              |
+| ----------------------- | -------------------- | ---------------------------------- |
+| New Spell               | 5                    | Requires Spellcasting skill        |
+| New Ritual              | 5                    | Requires Ritual Spellcasting skill |
+| New Preparation Formula | 5                    | Requires Alchemy skill             |
+| New Complex Form        | 4                    | Technomancers only                 |
+| New Adept Power         | Power Point cost × ? | See Adept section                  |
+| New Initiate Grade      | 10 + (Grade × 3)     | Awakened only                      |
+| New Submersion Grade    | 10 + (Grade × 3)     | Technomancers only                 |
 
 **Initiation/Submersion Costs:**
 
 | Grade | Base Cost | With Ordeal/Task | With Group |
-|-------|-----------|------------------|------------|
-| 1 | 13 | 10 | 10 |
-| 2 | 16 | 13 | 13 |
-| 3 | 19 | 15 | 15 |
-| 4 | 22 | 18 | 18 |
-| 5 | 25 | 20 | 20 |
-| 6 | 28 | 22 | 22 |
+| ----- | --------- | ---------------- | ---------- |
+| 1     | 13        | 10               | 10         |
+| 2     | 16        | 13               | 13         |
+| 3     | 19        | 15               | 15         |
+| 4     | 22        | 18               | 18         |
+| 5     | 25        | 20               | 20         |
+| 6     | 28        | 22               | 22         |
 
 **Ordeal Discount:** −10% (round down)
 **Group Discount:** −10% (round down)
@@ -126,19 +127,19 @@ The following tables define karma costs for Shadowrun 5th Edition. Other edition
 
 Adepts gain Power Points equal to their Magic attribute. Additional Power Points can be purchased:
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| Power Point | 5 | Cannot exceed Magic rating |
+| Improvement | Karma Cost | Notes                      |
+| ----------- | ---------- | -------------------------- |
+| Power Point | 5          | Cannot exceed Magic rating |
 
 Adept powers cost Power Points, not karma directly. The PP cost varies by power.
 
 #### Contacts
 
-| Improvement | Karma Cost | Notes |
-|-------------|------------|-------|
-| New Contact | (Connection + Loyalty) × 1 | Subject to narrative justification |
-| Increase Connection | New Rating × 1 | Requires story interaction |
-| Increase Loyalty | New Rating × 1 | Requires story interaction |
+| Improvement         | Karma Cost                 | Notes                              |
+| ------------------- | -------------------------- | ---------------------------------- |
+| New Contact         | (Connection + Loyalty) × 1 | Subject to narrative justification |
+| Increase Connection | New Rating × 1             | Requires story interaction         |
+| Increase Loyalty    | New Rating × 1             | Requires story interaction         |
 
 ---
 
@@ -176,17 +177,17 @@ Adept powers cost Power Points, not karma directly. The PP cost varies by power.
 
 Some campaigns use training time to pace advancement. When enabled:
 
-| Improvement | Training Time | Notes |
-|-------------|---------------|-------|
-| Attribute | (New Rating) weeks | May require trainer |
-| Active Skill | (New Rating) days | May require trainer or practice |
-| Skill Group | (New Rating) weeks | All skills train together |
-| New Skill (Rating 1) | 1 week | May require instruction |
-| Specialization | 1 week | Focused practice |
-| Spell/Ritual | 1 week | Study or instruction |
-| Complex Form | 1 week | Resonance meditation |
-| Initiation | 1 month minimum | Ordeal, group ritual, or solo quest |
-| Quality | Varies | GM discretion based on narrative |
+| Improvement          | Training Time      | Notes                               |
+| -------------------- | ------------------ | ----------------------------------- |
+| Attribute            | (New Rating) weeks | May require trainer                 |
+| Active Skill         | (New Rating) days  | May require trainer or practice     |
+| Skill Group          | (New Rating) weeks | All skills train together           |
+| New Skill (Rating 1) | 1 week             | May require instruction             |
+| Specialization       | 1 week             | Focused practice                    |
+| Spell/Ritual         | 1 week             | Study or instruction                |
+| Complex Form         | 1 week             | Resonance meditation                |
+| Initiation           | 1 month minimum    | Ordeal, group ritual, or solo quest |
+| Quality              | Varies             | GM discretion based on narrative    |
 
 **Trainer Bonus:** Having a qualified trainer reduces time by 25-50% (GM discretion).
 
@@ -453,6 +454,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Get character's advancement history and available options
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -471,6 +473,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Request a character advancement
 
 **Request:**
+
 ```typescript
 {
   type: AdvancementType;
@@ -482,6 +485,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -494,6 +498,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Validation:**
+
 - Character must belong to authenticated user
 - Character must have sufficient karma
 - Target must exist and be improvable
@@ -508,10 +513,12 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Get available advancement options with costs
 
 **Query Parameters:**
+
 - `type?: AdvancementType` - Filter by type
 - `affordable?: boolean` - Only show affordable options
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -534,6 +541,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Validate an advancement request without executing it
 
 **Request:**
+
 ```typescript
 {
   type: AdvancementType;
@@ -544,6 +552,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -561,12 +570,14 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Get character's karma ledger
 
 **Query Parameters:**
+
 - `limit?: number` - Number of transactions (default 50)
 - `offset?: number` - Pagination offset
 - `category?: KarmaCategory` - Filter by category
 - `type?: "award" | "expense"` - Filter by type
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -584,6 +595,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Record a karma transaction (award or manual expense)
 
 **Request:**
+
 ```typescript
 {
   type: "award" | "expense";
@@ -596,6 +608,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -606,6 +619,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Validation:**
+
 - GM or character owner can award karma
 - Only character owner can spend karma (via advancement endpoints)
 - Amount must be positive
@@ -620,6 +634,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Get advancement log for entire campaign (GM only)
 
 **Query Parameters:**
+
 - `status?: "pending" | "approved" | "completed"` - Filter by status
 - `characterId?: ID` - Filter by character
 - `type?: AdvancementType` - Filter by type
@@ -627,6 +642,7 @@ export interface CampaignAdvancementSettings {
 - `offset?: number` - Pagination offset
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -644,6 +660,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Award karma to multiple characters at once (GM only)
 
 **Request:**
+
 ```typescript
 {
   characterIds: ID[];        // Characters to award (empty = all active)
@@ -655,6 +672,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -670,6 +688,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Approve or reject a pending advancement (GM only)
 
 **Request:**
+
 ```typescript
 {
   action: "approve" | "reject";
@@ -678,6 +697,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -693,6 +713,7 @@ export interface CampaignAdvancementSettings {
 **Purpose:** Update campaign advancement settings (GM only)
 
 **Request:**
+
 ```typescript
 {
   settings: Partial<CampaignAdvancementSettings>;
@@ -700,6 +721,7 @@ export interface CampaignAdvancementSettings {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -719,6 +741,7 @@ export interface CampaignAdvancementSettings {
 **Description:** Main panel for viewing and managing character advancement.
 
 **Features:**
+
 - Karma summary display (total, current, breakdown)
 - Quick advancement shortcuts for common improvements
 - Pending advancement queue (if any awaiting approval)
@@ -726,6 +749,7 @@ export interface CampaignAdvancementSettings {
 - Context-aware suggestions based on character build
 
 **Props:**
+
 ```typescript
 interface AdvancementPanelProps {
   character: Character;
@@ -743,6 +767,7 @@ interface AdvancementPanelProps {
 **Description:** Compact display of karma status.
 
 **Features:**
+
 - Current karma prominently displayed
 - Total earned karma
 - Pie chart or bar showing spent by category
@@ -758,6 +783,7 @@ interface AdvancementPanelProps {
 **Description:** Modal dialog for executing an advancement.
 
 **Features:**
+
 - Target selection (attribute, skill, etc.)
 - Current and new value display
 - Cost calculation with breakdown
@@ -775,6 +801,7 @@ interface AdvancementPanelProps {
 **Description:** Grid/list of available advancement options.
 
 **Sections:**
+
 - Attributes (grouped by category)
 - Skills (grouped by group, with linked attribute shown)
 - Qualities (positive available for purchase)
@@ -782,6 +809,7 @@ interface AdvancementPanelProps {
 - Contacts (improvement options)
 
 **Features:**
+
 - Cost display for each option
 - Affordable/unaffordable visual distinction
 - Prerequisites indicator
@@ -797,6 +825,7 @@ interface AdvancementPanelProps {
 **Description:** Full karma transaction history.
 
 **Features:**
+
 - Chronological transaction list
 - Category filters
 - Type filters (awards vs expenses)
@@ -813,6 +842,7 @@ interface AdvancementPanelProps {
 **Description:** Campaign-wide advancement history (GM view).
 
 **Features:**
+
 - All character advancements in one view
 - Pending approvals queue
 - Filter by character, type, status
@@ -828,6 +858,7 @@ interface AdvancementPanelProps {
 **Description:** GM dialog for awarding post-session karma.
 
 **Features:**
+
 - Session selection (from calendar)
 - Character checklist (select who participated)
 - Karma amount input
@@ -845,6 +876,7 @@ interface AdvancementPanelProps {
 **Description:** Card showing a pending advancement awaiting GM approval.
 
 **Features:**
+
 - Character name and advancement summary
 - Cost and impact preview
 - Player notes/justification
@@ -945,12 +977,12 @@ function validateAttributeAdvancement(
   if (newRating !== currentRating + 1) {
     errors.push({
       message: "Can only increase attribute by 1 at a time",
-      field: "newRating"
+      field: "newRating",
     });
   }
 
   // Get racial maximum
-  const metatype = ruleset.metatypes.find(m => m.id === character.metatypeId);
+  const metatype = ruleset.metatypes.find((m) => m.id === character.metatypeId);
   const racialMax = metatype?.attributeLimits?.[attributeId]?.max || 6;
   const exceptionalMax = characterHasQuality(character, "exceptional_attribute", attributeId)
     ? racialMax + 1
@@ -960,7 +992,7 @@ function validateAttributeAdvancement(
   if (newRating > exceptionalMax) {
     errors.push({
       message: `Cannot exceed racial maximum of ${exceptionalMax}`,
-      field: "newRating"
+      field: "newRating",
     });
   }
 
@@ -971,14 +1003,14 @@ function validateAttributeAdvancement(
   if (character.karmaCurrent < cost) {
     errors.push({
       message: `Insufficient karma. Need ${cost}, have ${character.karmaCurrent}`,
-      field: "karma"
+      field: "karma",
     });
   }
 
   // Check campaign restrictions
   if (campaign?.advancementSettings?.restrictedAdvancements?.includes("attribute")) {
     errors.push({
-      message: "Attribute advancement is restricted in this campaign"
+      message: "Attribute advancement is restricted in this campaign",
     });
   }
 
@@ -994,8 +1026,8 @@ function validateAttributeAdvancement(
     : undefined;
 
   // Determine if approval needed
-  const requiresApproval = campaign?.advancementSettings?.requireApprovalFor?.includes("attribute")
-    ?? false;
+  const requiresApproval =
+    campaign?.advancementSettings?.requireApprovalFor?.includes("attribute") ?? false;
 
   return {
     valid: errors.length === 0,
@@ -1004,7 +1036,7 @@ function validateAttributeAdvancement(
     cost: finalCost,
     trainingTime,
     requiresApproval,
-    prerequisites: []
+    prerequisites: [],
   };
 }
 ```
@@ -1023,13 +1055,13 @@ function validateSkillAdvancement(
   const prerequisites: Array<{ met: boolean; description: string }> = [];
 
   // Get skill definition
-  const skill = ruleset.skills.find(s => s.id === skillId);
+  const skill = ruleset.skills.find((s) => s.id === skillId);
   if (!skill) {
     return {
       valid: false,
       errors: [{ message: `Skill '${skillId}' not found` }],
       cost: 0,
-      requiresApproval: false
+      requiresApproval: false,
     };
   }
 
@@ -1040,7 +1072,7 @@ function validateSkillAdvancement(
   if (newRating !== currentRating + 1) {
     errors.push({
       message: "Can only increase skill by 1 at a time",
-      field: "newRating"
+      field: "newRating",
     });
   }
 
@@ -1053,13 +1085,13 @@ function validateSkillAdvancement(
 
   prerequisites.push({
     met: newRating <= attributeRating,
-    description: `${linkedAttribute} must be at least ${newRating}`
+    description: `${linkedAttribute} must be at least ${newRating}`,
   });
 
   if (newRating > maxRating) {
     errors.push({
       message: `Cannot exceed skill maximum of ${maxRating}`,
-      field: "newRating"
+      field: "newRating",
     });
   }
 
@@ -1067,7 +1099,7 @@ function validateSkillAdvancement(
   if (skill.groupId && character.skillGroups?.[skill.groupId]) {
     // Breaking from group - that's allowed but warn
     warnings.push({
-      message: "This will break the skill group"
+      message: "This will break the skill group",
     });
   }
 
@@ -1079,7 +1111,7 @@ function validateSkillAdvancement(
   if (character.karmaCurrent < cost) {
     errors.push({
       message: `Insufficient karma. Need ${cost}, have ${character.karmaCurrent}`,
-      field: "karma"
+      field: "karma",
     });
   }
 
@@ -1090,7 +1122,8 @@ function validateSkillAdvancement(
 
   // Approval threshold
   const autoApproveThreshold = campaign?.advancementSettings?.autoApproveThreshold ?? 6;
-  const requiresApproval = newRating > autoApproveThreshold ||
+  const requiresApproval =
+    newRating > autoApproveThreshold ||
     campaign?.advancementSettings?.requireApprovalFor?.includes("active_skill");
 
   return {
@@ -1100,7 +1133,7 @@ function validateSkillAdvancement(
     cost,
     trainingTime,
     requiresApproval,
-    prerequisites
+    prerequisites,
   };
 }
 ```
@@ -1137,6 +1170,7 @@ When a session is marked complete in the campaign calendar:
 ### Character Creation Karma
 
 Characters created for a campaign start with 0 post-creation karma. Any leftover karma from creation (if the creation method allows) should be recorded as:
+
 - Type: "award"
 - Category: "other"
 - Description: "Leftover karma from character creation"
@@ -1171,16 +1205,26 @@ export function getKarmaSummary(characterId: ID): KarmaSummary;
 // Advancement records
 export function getAdvancementHistory(characterId: ID, options?: QueryOptions): AdvancementRecord[];
 export function createAdvancementRecord(record: Omit<AdvancementRecord, "id">): AdvancementRecord;
-export function updateAdvancementRecord(recordId: ID, updates: Partial<AdvancementRecord>): AdvancementRecord;
+export function updateAdvancementRecord(
+  recordId: ID,
+  updates: Partial<AdvancementRecord>
+): AdvancementRecord;
 export function getPendingAdvancements(campaignId: ID): AdvancementRecord[];
 
 // Campaign-level queries
-export function getCampaignAdvancementLog(campaignId: ID, options?: QueryOptions): AdvancementRecord[];
-export function awardKarmaToCampaign(campaignId: ID, amount: number, description: string, characterIds?: ID[]): KarmaTransaction[];
+export function getCampaignAdvancementLog(
+  campaignId: ID,
+  options?: QueryOptions
+): AdvancementRecord[];
+export function awardKarmaToCampaign(
+  campaignId: ID,
+  amount: number,
+  description: string,
+  characterIds?: ID[]
+): KarmaTransaction[];
 ```
 
 ---
-
 
 ## Security Considerations
 
@@ -1285,6 +1329,7 @@ export function awardKarmaToCampaign(campaignId: ID, amount: number, description
 ## Change Log
 
 ### 2025-01-27
+
 - Initial specification created
 - Defined SR5 karma cost formulas
 - Designed data models for transactions and records
@@ -1294,4 +1339,4 @@ export function awardKarmaToCampaign(campaignId: ID, amount: number, description
 
 ---
 
-*This specification is a living document and will be updated as the advancement system evolves.*
+_This specification is a living document and will be updated as the advancement system evolves._

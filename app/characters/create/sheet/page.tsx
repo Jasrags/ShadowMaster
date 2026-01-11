@@ -10,12 +10,13 @@
  * See ADR-011: Sheet-Driven Creation for design rationale.
  */
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { RulesetProvider, useRulesetStatus, useRuleset, usePriorityTable } from "@/lib/rules";
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
+import { CreationErrorBoundary } from "@/components/creation/CreationErrorBoundary";
 import type { EditionCode, Campaign, CreationState, ID } from "@/lib/types";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -49,7 +50,11 @@ interface SheetCreationContentProps {
   existingCharacter?: { id: string; editionCode: string; creationState?: CreationState } | null;
 }
 
-function SheetCreationContent({ campaignId, campaign, existingCharacter }: SheetCreationContentProps) {
+function SheetCreationContent({
+  campaignId,
+  campaign,
+  existingCharacter,
+}: SheetCreationContentProps) {
   const router = useRouter();
   const [selectedEdition, setSelectedEdition] = useState<EditionCode | null>(
     (existingCharacter?.editionCode as EditionCode) || campaign?.editionCode || null
@@ -68,6 +73,10 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
   const [characterId, setCharacterId] = useState<ID | null>(existingCharacter?.id || null);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+
+  // Refs for managing auto-save race conditions
+  const abortControllerRef = useRef<AbortController | null>(null);
+  const saveVersionRef = useRef(0);
 
   // Auto-load ruleset if campaign or existing character is provided
   useEffect(() => {
@@ -105,14 +114,24 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
     [creationState.budgets, updateState]
   );
 
-  // Auto-save draft to server (debounced)
+  // Auto-save draft to server (debounced with race condition protection)
   useEffect(() => {
     // Only save if we have priorities set (meaningful progress)
     if (!creationState.priorities || Object.keys(creationState.priorities).length === 0) {
       return;
     }
 
+    // Increment version for this save attempt
+    const currentVersion = ++saveVersionRef.current;
+
     const saveTimeout = setTimeout(async () => {
+      // Abort any in-flight request before starting a new one
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+      abortControllerRef.current = new AbortController();
+      const signal = abortControllerRef.current.signal;
+
       setIsSaving(true);
       try {
         if (characterId) {
@@ -128,6 +147,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
                 creationMode: "sheet",
               },
             }),
+            signal,
           });
         } else {
           // Create new draft
@@ -141,13 +161,18 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
               name: (creationState.selections.characterName as string) || "Unnamed Runner",
               campaignId,
             }),
+            signal,
           });
           const data = await res.json();
           if (data.success && data.character?.id) {
+            // Ignore response if a newer save has started
+            if (currentVersion !== saveVersionRef.current) return;
+
             setCharacterId(data.character.id);
             updateState({ characterId: data.character.id });
             // Save the creation state to the new character
-            const newCharacterName = (creationState.selections.characterName as string) || undefined;
+            const newCharacterName =
+              (creationState.selections.characterName as string) || undefined;
             await fetch(`/api/characters/${data.character.id}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
@@ -161,14 +186,26 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
                   creationMode: "sheet",
                 },
               }),
+              signal,
             });
           }
         }
-        setLastSaved(new Date());
+
+        // Only update lastSaved if this is still the current version
+        if (currentVersion === saveVersionRef.current) {
+          setLastSaved(new Date());
+        }
       } catch (e) {
+        // Ignore aborted requests
+        if (e instanceof Error && e.name === "AbortError") {
+          return;
+        }
         console.error("Failed to save draft:", e);
       } finally {
-        setIsSaving(false);
+        // Only update isSaving if this is still the current version
+        if (currentVersion === saveVersionRef.current) {
+          setIsSaving(false);
+        }
       }
     }, 1000); // 1 second debounce
 
@@ -207,9 +244,7 @@ function SheetCreationContent({ campaignId, campaign, existingCharacter }: Sheet
       <div className="flex min-h-[400px] items-center justify-center">
         <div className="text-center">
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-emerald-500" />
-          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">
-            Loading ruleset...
-          </p>
+          <p className="mt-4 text-sm text-zinc-600 dark:text-zinc-400">Loading ruleset...</p>
         </div>
       </div>
     );
@@ -283,7 +318,11 @@ export default function SheetCreationPage() {
   const campaignId = searchParams.get("campaignId") || undefined;
   const existingCharacterId = searchParams.get("characterId") || undefined;
   const [campaign, setCampaign] = useState<Campaign | null>(null);
-  const [existingCharacter, setExistingCharacter] = useState<{ id: string; editionCode: string; creationState?: CreationState } | null>(null);
+  const [existingCharacter, setExistingCharacter] = useState<{
+    id: string;
+    editionCode: string;
+    creationState?: CreationState;
+  } | null>(null);
   const [loading, setLoading] = useState(!!campaignId || !!existingCharacterId);
 
   // Load campaign and/or existing character if IDs are provided
@@ -337,7 +376,7 @@ export default function SheetCreationPage() {
     <div className="min-h-screen bg-zinc-50 dark:bg-zinc-950">
       {/* Header */}
       <header className="sticky top-0 z-40 border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-zinc-900/80">
-        <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto flex h-16 max-w-screen-2xl items-center justify-between px-4 sm:px-6 lg:px-6">
           <div className="flex items-center gap-4">
             <Link
               href="/characters"
@@ -356,18 +395,19 @@ export default function SheetCreationPage() {
               </span>
             )}
           </div>
-
         </div>
       </header>
 
-      {/* Content wrapped in RulesetProvider */}
-      <main className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      {/* Content wrapped in RulesetProvider and ErrorBoundary */}
+      <main className="mx-auto max-w-screen-2xl px-4 py-6 sm:px-6 lg:px-6">
         <RulesetProvider>
-          <SheetCreationContent
-            campaignId={campaignId}
-            campaign={campaign}
-            existingCharacter={existingCharacter}
-          />
+          <CreationErrorBoundary characterId={existingCharacterId}>
+            <SheetCreationContent
+              campaignId={campaignId}
+              campaign={campaign}
+              existingCharacter={existingCharacter}
+            />
+          </CreationErrorBoundary>
         </RulesetProvider>
       </main>
     </div>

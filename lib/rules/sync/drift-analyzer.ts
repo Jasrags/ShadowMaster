@@ -172,25 +172,29 @@ export function analyzeMetatypeDrift(
   // Find the current metatype definition
   const currentMetatype = Object.values(metatypes).find(
     (m: unknown) => (m as { id: string }).id === characterSnapshot.id
-  ) as {
-    id: string;
-    attributeModifiers?: Record<string, number>;
-    specialAbilities?: string[];
-    racialQualities?: string[];
-  } | undefined;
+  ) as
+    | {
+        id: string;
+        attributeModifiers?: Record<string, number>;
+        specialAbilities?: string[];
+        racialQualities?: string[];
+      }
+    | undefined;
 
   if (!currentMetatype) {
     // Metatype was removed!
-    changes.push(createDriftChange({
-      module: "metatypes",
-      changeType: "removed",
-      severity: "breaking",
-      itemId: characterSnapshot.id,
-      itemType: "metatypes",
-      previousValue: characterSnapshot,
-      currentValue: null,
-      description: `Metatype '${characterSnapshot.id}' has been removed from the ruleset`,
-    }));
+    changes.push(
+      createDriftChange({
+        module: "metatypes",
+        changeType: "removed",
+        severity: "breaking",
+        itemId: characterSnapshot.id,
+        itemType: "metatypes",
+        previousValue: characterSnapshot,
+        currentValue: null,
+        description: `Metatype '${characterSnapshot.id}' has been removed from the ruleset`,
+      })
+    );
     return changes;
   }
 
@@ -204,16 +208,18 @@ export function analyzeMetatypeDrift(
     for (const [attr, { previous, current }] of Object.entries(modifierChanges)) {
       if (previous !== undefined && current !== undefined) {
         const isDecrease = current < previous;
-        changes.push(createDriftChange({
-          module: "metatypes",
-          changeType: "modified",
-          severity: isDecrease ? "breaking" : "non-breaking",
-          itemId: characterSnapshot.id,
-          itemType: "metatypes",
-          previousValue: { [attr]: previous },
-          currentValue: { [attr]: current },
-          description: `Metatype attribute modifier for ${attr} ${isDecrease ? "decreased" : "increased"} from ${previous} to ${current}`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "metatypes",
+            changeType: "modified",
+            severity: isDecrease ? "breaking" : "non-breaking",
+            itemId: characterSnapshot.id,
+            itemType: "metatypes",
+            previousValue: { [attr]: previous },
+            currentValue: { [attr]: current },
+            description: `Metatype attribute modifier for ${attr} ${isDecrease ? "decreased" : "increased"} from ${previous} to ${current}`,
+          })
+        );
       }
     }
   }
@@ -228,29 +234,33 @@ export function analyzeMetatypeDrift(
     );
 
     for (const ability of removedAbilities) {
-      changes.push(createDriftChange({
-        module: "metatypes",
-        changeType: "removed",
-        severity: "breaking",
-        itemId: characterSnapshot.id,
-        itemType: "metatypes",
-        previousValue: ability,
-        currentValue: null,
-        description: `Special ability '${ability}' removed from metatype`,
-      }));
+      changes.push(
+        createDriftChange({
+          module: "metatypes",
+          changeType: "removed",
+          severity: "breaking",
+          itemId: characterSnapshot.id,
+          itemType: "metatypes",
+          previousValue: ability,
+          currentValue: null,
+          description: `Special ability '${ability}' removed from metatype`,
+        })
+      );
     }
 
     for (const ability of addedAbilities) {
-      changes.push(createDriftChange({
-        module: "metatypes",
-        changeType: "added",
-        severity: "non-breaking",
-        itemId: characterSnapshot.id,
-        itemType: "metatypes",
-        previousValue: null,
-        currentValue: ability,
-        description: `New special ability '${ability}' added to metatype`,
-      }));
+      changes.push(
+        createDriftChange({
+          module: "metatypes",
+          changeType: "added",
+          severity: "non-breaking",
+          itemId: characterSnapshot.id,
+          itemType: "metatypes",
+          previousValue: null,
+          currentValue: ability,
+          description: `New special ability '${ability}' added to metatype`,
+        })
+      );
     }
   }
 
@@ -279,55 +289,63 @@ export function analyzeSkillDrift(
     if (rating <= 0) continue;
 
     const snapshotSkill = characterSnapshot.skills?.[skillId];
-    const currentSkill = (currentSkills as Record<string, unknown>)[skillId] as {
-      id: string;
-      name: string;
-      attribute?: string;
-      group?: string;
-      maxRating?: number;
-    } | undefined;
+    const currentSkill = (currentSkills as Record<string, unknown>)[skillId] as
+      | {
+          id: string;
+          name: string;
+          attribute?: string;
+          group?: string;
+          maxRating?: number;
+        }
+      | undefined;
 
     if (!currentSkill && snapshotSkill) {
       // Skill was removed
-      changes.push(createDriftChange({
-        module: "skills",
-        changeType: "removed",
-        severity: "breaking",
-        itemId: skillId,
-        itemType: "skills",
-        previousValue: snapshotSkill,
-        currentValue: null,
-        description: `Skill '${snapshotSkill.name || skillId}' has been removed from the ruleset`,
-      }));
+      changes.push(
+        createDriftChange({
+          module: "skills",
+          changeType: "removed",
+          severity: "breaking",
+          itemId: skillId,
+          itemType: "skills",
+          previousValue: snapshotSkill,
+          currentValue: null,
+          description: `Skill '${snapshotSkill.name || skillId}' has been removed from the ruleset`,
+        })
+      );
       continue;
     }
 
     if (currentSkill && snapshotSkill) {
       // Check for modifications
       if (currentSkill.attribute !== snapshotSkill.attribute) {
-        changes.push(createDriftChange({
-          module: "skills",
-          changeType: "modified",
-          severity: "breaking",
-          itemId: skillId,
-          itemType: "skills",
-          previousValue: { attribute: snapshotSkill.attribute },
-          currentValue: { attribute: currentSkill.attribute },
-          description: `Skill '${skillId}' linked attribute changed from ${snapshotSkill.attribute} to ${currentSkill.attribute}`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "skills",
+            changeType: "modified",
+            severity: "breaking",
+            itemId: skillId,
+            itemType: "skills",
+            previousValue: { attribute: snapshotSkill.attribute },
+            currentValue: { attribute: currentSkill.attribute },
+            description: `Skill '${skillId}' linked attribute changed from ${snapshotSkill.attribute} to ${currentSkill.attribute}`,
+          })
+        );
       }
 
       if (currentSkill.group !== snapshotSkill.group) {
-        changes.push(createDriftChange({
-          module: "skills",
-          changeType: "modified",
-          severity: "non-breaking",
-          itemId: skillId,
-          itemType: "skills",
-          previousValue: { group: snapshotSkill.group },
-          currentValue: { group: currentSkill.group },
-          description: `Skill '${skillId}' group changed from ${snapshotSkill.group} to ${currentSkill.group}`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "skills",
+            changeType: "modified",
+            severity: "non-breaking",
+            itemId: skillId,
+            itemType: "skills",
+            previousValue: { group: snapshotSkill.group },
+            currentValue: { group: currentSkill.group },
+            description: `Skill '${skillId}' group changed from ${snapshotSkill.group} to ${currentSkill.group}`,
+          })
+        );
       }
 
       // Check max rating
@@ -337,16 +355,18 @@ export function analyzeSkillDrift(
         const isDecrease = currMax < prevMax;
         // Breaking if rating exceeds new max
         const isBreakingForCharacter = isDecrease && rating > currMax;
-        changes.push(createDriftChange({
-          module: "skills",
-          changeType: "modified",
-          severity: isBreakingForCharacter ? "breaking" : "non-breaking",
-          itemId: skillId,
-          itemType: "skills",
-          previousValue: { maxRating: prevMax },
-          currentValue: { maxRating: currMax },
-          description: `Skill '${skillId}' max rating ${isDecrease ? "decreased" : "increased"} from ${prevMax} to ${currMax}`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "skills",
+            changeType: "modified",
+            severity: isBreakingForCharacter ? "breaking" : "non-breaking",
+            itemId: skillId,
+            itemType: "skills",
+            previousValue: { maxRating: prevMax },
+            currentValue: { maxRating: currMax },
+            description: `Skill '${skillId}' max rating ${isDecrease ? "decreased" : "increased"} from ${prevMax} to ${currMax}`,
+          })
+        );
       }
     }
   }
@@ -375,55 +395,63 @@ export function analyzeQualityDrift(
   for (const quality of characterQualities) {
     const qualityId = quality.id;
     const snapshotQuality = characterSnapshot.qualities?.[qualityId];
-    const currentQuality = (currentQualities as Record<string, unknown>)[qualityId] as {
-      id: string;
-      name: string;
-      karmaCost?: number;
-      effects?: unknown;
-    } | undefined;
+    const currentQuality = (currentQualities as Record<string, unknown>)[qualityId] as
+      | {
+          id: string;
+          name: string;
+          karmaCost?: number;
+          effects?: unknown;
+        }
+      | undefined;
 
     if (!currentQuality && snapshotQuality) {
       // Quality was removed
-      changes.push(createDriftChange({
-        module: "qualities",
-        changeType: "removed",
-        severity: "breaking",
-        itemId: qualityId,
-        itemType: "qualities",
-        previousValue: snapshotQuality,
-        currentValue: null,
-        description: `Quality '${snapshotQuality.name || qualityId}' has been removed from the ruleset`,
-      }));
+      changes.push(
+        createDriftChange({
+          module: "qualities",
+          changeType: "removed",
+          severity: "breaking",
+          itemId: qualityId,
+          itemType: "qualities",
+          previousValue: snapshotQuality,
+          currentValue: null,
+          description: `Quality '${snapshotQuality.name || qualityId}' has been removed from the ruleset`,
+        })
+      );
       continue;
     }
 
     if (currentQuality && snapshotQuality) {
       // Check for karma cost changes
       if (currentQuality.karmaCost !== snapshotQuality.karmaCost) {
-        changes.push(createDriftChange({
-          module: "qualities",
-          changeType: "modified",
-          severity: "non-breaking", // Cost changes don't affect existing characters
-          itemId: qualityId,
-          itemType: "qualities",
-          previousValue: { karmaCost: snapshotQuality.karmaCost },
-          currentValue: { karmaCost: currentQuality.karmaCost },
-          description: `Quality '${qualityId}' karma cost changed from ${snapshotQuality.karmaCost} to ${currentQuality.karmaCost}`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "qualities",
+            changeType: "modified",
+            severity: "non-breaking", // Cost changes don't affect existing characters
+            itemId: qualityId,
+            itemType: "qualities",
+            previousValue: { karmaCost: snapshotQuality.karmaCost },
+            currentValue: { karmaCost: currentQuality.karmaCost },
+            description: `Quality '${qualityId}' karma cost changed from ${snapshotQuality.karmaCost} to ${currentQuality.karmaCost}`,
+          })
+        );
       }
 
       // Check for effect changes (deep comparison)
       if (!deepEqual(currentQuality.effects, snapshotQuality.effects)) {
-        changes.push(createDriftChange({
-          module: "qualities",
-          changeType: "modified",
-          severity: "breaking",
-          itemId: qualityId,
-          itemType: "qualities",
-          previousValue: { effects: snapshotQuality.effects },
-          currentValue: { effects: currentQuality.effects },
-          description: `Quality '${qualityId}' effects have been modified`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: "qualities",
+            changeType: "modified",
+            severity: "breaking",
+            itemId: qualityId,
+            itemType: "qualities",
+            previousValue: { effects: snapshotQuality.effects },
+            currentValue: { effects: currentQuality.effects },
+            description: `Quality '${qualityId}' effects have been modified`,
+          })
+        );
       }
     }
   }
@@ -500,32 +528,36 @@ function compareRulesetModules(
     // Check for removed items
     for (const key of baseKeys) {
       if (!targetKeys.includes(key)) {
-        changes.push(createDriftChange({
-          module: moduleType,
-          changeType: "removed",
-          severity: "breaking",
-          itemId: key,
-          itemType: moduleType,
-          previousValue: (baseModule as Record<string, unknown>)[key],
-          currentValue: null,
-          description: `${moduleType} item '${key}' has been removed`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: moduleType,
+            changeType: "removed",
+            severity: "breaking",
+            itemId: key,
+            itemType: moduleType,
+            previousValue: (baseModule as Record<string, unknown>)[key],
+            currentValue: null,
+            description: `${moduleType} item '${key}' has been removed`,
+          })
+        );
       }
     }
 
     // Check for added items
     for (const key of targetKeys) {
       if (!baseKeys.includes(key)) {
-        changes.push(createDriftChange({
-          module: moduleType,
-          changeType: "added",
-          severity: "non-breaking",
-          itemId: key,
-          itemType: moduleType,
-          previousValue: null,
-          currentValue: (targetModule as Record<string, unknown>)[key],
-          description: `New ${moduleType} item '${key}' has been added`,
-        }));
+        changes.push(
+          createDriftChange({
+            module: moduleType,
+            changeType: "added",
+            severity: "non-breaking",
+            itemId: key,
+            itemType: moduleType,
+            previousValue: null,
+            currentValue: (targetModule as Record<string, unknown>)[key],
+            description: `New ${moduleType} item '${key}' has been added`,
+          })
+        );
       }
     }
   }
@@ -659,9 +691,7 @@ function deduplicateChanges(changes: DriftChange[]): DriftChange[] {
 /**
  * Generate migration recommendations from changes
  */
-function generateMigrationRecommendations(
-  changes: DriftChange[]
-): MigrationRecommendation[] {
+function generateMigrationRecommendations(changes: DriftChange[]): MigrationRecommendation[] {
   return changes.map((change) => {
     const strategy = determineStrategy(change);
     const autoApplicable = isAutoResolvable(change);

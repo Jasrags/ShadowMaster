@@ -14,11 +14,7 @@
 import path from "path";
 import type { ID } from "../types";
 import type { SocialCapital, ContactStatus } from "../types/contacts";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile } from "./base";
 import { getCharacterContacts, calculateContactPoints } from "./contacts";
 
 // =============================================================================
@@ -52,10 +48,7 @@ function getSocialCapitalPath(userId: ID, characterId: ID): string {
  * @param characterId - Character ID
  * @returns Social capital data or null if not initialized
  */
-export async function getSocialCapital(
-  userId: ID,
-  characterId: ID
-): Promise<SocialCapital | null> {
+export async function getSocialCapital(userId: ID, characterId: ID): Promise<SocialCapital | null> {
   const filePath = getSocialCapitalPath(userId, characterId);
   return readJsonFile<SocialCapital>(filePath);
 }
@@ -109,10 +102,7 @@ export async function initializeSocialCapital(
     (c) => c.status === "inactive" || c.status === "missing"
   );
 
-  const usedPoints = activeContacts.reduce(
-    (sum, c) => sum + calculateContactPoints(c),
-    0
-  );
+  const usedPoints = activeContacts.reduce((sum, c) => sum + calculateContactPoints(c), 0);
 
   const socialCapital: SocialCapital = {
     characterId,
@@ -208,10 +198,7 @@ export async function recalculateSocialCapital(
 
   // Calculate used points (only active contacts count)
   const activeContacts = contacts.filter((c) => c.status === "active");
-  const usedPoints = activeContacts.reduce(
-    (sum, c) => sum + calculateContactPoints(c),
-    0
-  );
+  const usedPoints = activeContacts.reduce((sum, c) => sum + calculateContactPoints(c), 0);
 
   const maxPoints = existing?.maxContactPoints ?? 0;
 
@@ -370,8 +357,7 @@ export async function applyInfluenceModifiers(
 
   return updateSocialCapital(userId, characterId, {
     networkingBonus: (existing.networkingBonus || 0) + (modifiers.networkingBonus || 0),
-    socialLimitModifier:
-      (existing.socialLimitModifier || 0) + (modifiers.socialLimitModifier || 0),
+    socialLimitModifier: (existing.socialLimitModifier || 0) + (modifiers.socialLimitModifier || 0),
     loyaltyBonus: (existing.loyaltyBonus || 0) + (modifiers.loyaltyBonus || 0),
   });
 }

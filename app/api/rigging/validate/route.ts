@@ -51,18 +51,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Parse request
@@ -79,10 +73,7 @@ export async function POST(
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
@@ -94,32 +85,24 @@ export async function POST(
     }
 
     // Find the vehicle or drone
-    const vehicle = (character.vehicles ?? []).find(v => v.id === vehicleId);
-    const drone = (character.drones ?? []).find(d => d.id === vehicleId);
+    const vehicle = (character.vehicles ?? []).find((v) => v.id === vehicleId);
+    const drone = (character.drones ?? []).find((d) => d.id === vehicleId);
 
     if (!vehicle && !drone) {
-      return NextResponse.json(
-        { error: "Vehicle or drone not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Vehicle or drone not found" }, { status: 404 });
     }
 
     // Validate the action
-    const validation = validateVehicleAction(
-      character,
-      riggingState,
-      actionType,
-      vehicleId
-    );
+    const validation = validateVehicleAction(character, riggingState, actionType, vehicleId);
 
     // If valid, calculate dice pool
     let dicePoolResult;
     if (validation.valid) {
       const target = vehicle || drone;
-      
+
       // Build appropriate catalog item based on whether it's a vehicle or drone
       let catalogItem: VehicleCatalogItem | DroneCatalogItem;
-      
+
       if (drone) {
         catalogItem = {
           id: drone.id ?? vehicleId,
@@ -172,8 +155,8 @@ export async function POST(
 
     const response: ValidateActionResponse = {
       valid: validation.valid,
-      errors: validation.errors.map(e => ({ code: e.code, message: e.message })),
-      warnings: validation.warnings.map(w => ({ code: w.code, message: w.message })),
+      errors: validation.errors.map((e) => ({ code: e.code, message: e.message })),
+      warnings: validation.warnings.map((w) => ({ code: w.code, message: w.message })),
       dicePool: dicePoolResult,
       controlMode: validation.controlMode,
     };
@@ -181,9 +164,6 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to validate action:", error);
-    return NextResponse.json(
-      { error: "Failed to validate action" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to validate action" }, { status: 500 });
   }
 }

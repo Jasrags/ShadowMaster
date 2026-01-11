@@ -10,7 +10,10 @@ import { getUserById } from "@/lib/storage/users";
 import { getCharacter } from "@/lib/storage/characters";
 import { getCampaignEvents, getCampaignById } from "@/lib/storage/campaigns";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { advanceSpecialization, type AdvanceSpecializationOptions } from "@/lib/rules/advancement/specializations";
+import {
+  advanceSpecialization,
+  type AdvanceSpecializationOptions,
+} from "@/lib/rules/advancement/specializations";
 import { requiresGMApproval } from "@/lib/rules/advancement/approval";
 
 export async function POST(
@@ -21,18 +24,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId } = await params;
@@ -40,10 +37,7 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Character must be active (not draft)
@@ -74,7 +68,11 @@ export async function POST(
       );
     }
 
-    if (!specializationName || typeof specializationName !== "string" || !specializationName.trim()) {
+    if (
+      !specializationName ||
+      typeof specializationName !== "string" ||
+      !specializationName.trim()
+    ) {
       return NextResponse.json(
         { success: false, error: "Missing or invalid specializationName" },
         { status: 400 }
@@ -82,10 +80,7 @@ export async function POST(
     }
 
     // Load ruleset for character's edition
-    const mergeResult = await loadAndMergeRuleset(
-      character.editionCode,
-      character.attachedBookIds
-    );
+    const mergeResult = await loadAndMergeRuleset(character.editionCode, character.attachedBookIds);
 
     if (!mergeResult.success || !mergeResult.ruleset) {
       return NextResponse.json(
@@ -120,7 +115,11 @@ export async function POST(
     if (needsApproval && gmApproved) {
       // Players cannot self-approve - only GM can approve via approval endpoint
       return NextResponse.json(
-        { success: false, error: "GM approval is required for campaign characters. Please request approval from your GM." },
+        {
+          success: false,
+          error:
+            "GM approval is required for campaign characters. Please request approval from your GM.",
+        },
         { status: 403 }
       );
     }
@@ -161,19 +160,11 @@ export async function POST(
     } catch (error) {
       const errorMessage =
         error instanceof Error ? error.message : "Failed to learn specialization";
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
   } catch (error) {
     console.error("Failed to learn specialization:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to learn specialization";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : "Failed to learn specialization";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }
-

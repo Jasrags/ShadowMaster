@@ -106,10 +106,7 @@ export function getPersonaAttribute(
  * @param matrixState - Current matrix state
  * @returns Limit value
  */
-export function calculateMatrixLimit(
-  action: MatrixAction,
-  matrixState: MatrixState
-): number {
+export function calculateMatrixLimit(action: MatrixAction, matrixState: MatrixState): number {
   return getPersonaAttribute(matrixState, action.limitAttribute);
 }
 
@@ -226,9 +223,7 @@ export function calculateNoiseModifier(noiseRating: number): PoolModifier | null
  * @param isRunningSilent - Whether character is running silent
  * @returns Pool modifier for running silent
  */
-export function calculateRunningSilentModifier(
-  isRunningSilent: boolean
-): PoolModifier | null {
+export function calculateRunningSilentModifier(isRunningSilent: boolean): PoolModifier | null {
   if (!isRunningSilent) {
     return null;
   }
@@ -248,9 +243,7 @@ export function calculateRunningSilentModifier(
  * @param matrixState - Current matrix state
  * @returns Pool modifier for hot-sim
  */
-export function calculateHotSimBonus(
-  matrixState: MatrixState
-): PoolModifier | null {
+export function calculateHotSimBonus(matrixState: MatrixState): PoolModifier | null {
   if (matrixState.connectionMode !== "hot-sim-vr") {
     return null;
   }
@@ -574,10 +567,7 @@ export function buildSnoopPool(
  * @param matrixState - Current matrix state
  * @returns Defense dice pool
  */
-export function buildMatrixDefensePool(
-  character: Character,
-  matrixState: MatrixState
-): ActionPool {
+export function buildMatrixDefensePool(character: Character, matrixState: MatrixState): ActionPool {
   const willpower = getAttributeValue(character, "willpower");
   const firewall = getPersonaAttribute(matrixState, "firewall");
 

@@ -20,23 +20,19 @@ import {
   type GearModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, GearItem } from "@/lib/types";
+import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "../shared";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
-import { Lock, Plus, Backpack, Minus } from "lucide-react";
+import { Lock, Plus, Backpack } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const KARMA_TO_NUYEN_RATE = 2000;
-const MAX_KARMA_CONVERSION = 10;
 
 // =============================================================================
 // HELPERS
@@ -57,141 +53,6 @@ function formatCurrency(value: number): string {
 interface GearPanelProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET DISPLAY COMPONENT
-// =============================================================================
-
-function BudgetDisplay({
-  spent,
-  total,
-  remaining,
-  isOver,
-  karmaConversion = 0,
-}: {
-  spent: number;
-  total: number;
-  remaining: number;
-  isOver: boolean;
-  karmaConversion?: number;
-}) {
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining === 0 && !isOver;
-
-  return (
-    <div
-      className={`rounded-lg border p-3 ${
-        isOver
-          ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
-        <span
-          className={`font-medium ${
-            isOver
-              ? "text-red-600 dark:text-red-400"
-              : isComplete
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-zinc-900 dark:text-zinc-100"
-          }`}
-        >
-          {formatCurrency(spent)}¥ spent
-          <span className="text-zinc-400"> • </span>
-          {formatCurrency(Math.max(0, remaining))}¥ left
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : isComplete
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Note for karma conversion */}
-      {karmaConversion > 0 && (
-        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
-// KARMA CONVERSION COMPONENT
-// =============================================================================
-
-function KarmaConversion({
-  karmaConversion,
-  karmaRemaining,
-  convertedNuyen,
-  onConvert,
-}: {
-  karmaConversion: number;
-  karmaRemaining: number;
-  convertedNuyen: number;
-  onConvert: (delta: number) => void;
-}) {
-  return (
-    <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
-      <div className="flex items-center justify-between">
-        <div>
-          <div className="text-sm font-medium text-amber-800 dark:text-amber-200">
-            Karma → Nuyen
-          </div>
-          <div className="text-xs text-amber-600 dark:text-amber-400">
-            {formatCurrency(KARMA_TO_NUYEN_RATE)}¥ per karma (max{" "}
-            {MAX_KARMA_CONVERSION})
-          </div>
-        </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => onConvert(-1)}
-            disabled={karmaConversion <= 0}
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              karmaConversion > 0
-                ? "bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Minus className="h-4 w-4" />
-          </button>
-          <div className="flex h-8 w-10 items-center justify-center rounded bg-white text-base font-bold text-amber-700 dark:bg-zinc-800 dark:text-amber-300">
-            {karmaConversion}
-          </div>
-          <button
-            onClick={() => onConvert(1)}
-            disabled={
-              karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0
-            }
-            className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-              karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
-                ? "bg-amber-500 text-white hover:bg-amber-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Plus className="h-4 w-4" />
-          </button>
-        </div>
-      </div>
-      {convertedNuyen > 0 && (
-        <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-          +{formatCurrency(convertedNuyen)}¥ from {karmaConversion} karma
-        </div>
-      )}
-    </div>
-  );
 }
 
 // =============================================================================
@@ -248,63 +109,29 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     cost: number;
   }>;
 
-  const gearSpent = selectedGear.reduce(
-    (sum, g) => sum + g.cost * g.quantity,
-    0
-  );
+  const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
-    const modCost =
-      w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
+    const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
     const ammoCost =
-      w.purchasedAmmunition?.reduce(
-        (a, ammo) => a + ammo.cost * ammo.quantity,
-        0
-      ) || 0;
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => {
     const baseCost = a.cost * a.quantity;
-    const modCost =
-      a.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
+    const modCost = a.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
     return sum + baseCost + modCost;
   }, 0);
   const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
   const augmentationSpent =
     selectedCyberware.reduce((s, i) => s + i.cost, 0) +
     selectedBioware.reduce((s, i) => s + i.cost, 0);
-  const lifestyleSpent =
-    (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
+  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
 
   const totalSpent =
-    gearSpent +
-    weaponsSpent +
-    armorSpent +
-    fociSpent +
-    augmentationSpent +
-    lifestyleSpent;
+    gearSpent + weaponsSpent + armorSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
-
-  // Handle karma conversion (manual +/- buttons)
-  const handleKarmaConversion = useCallback(
-    (delta: number) => {
-      const newConversion = Math.max(
-        0,
-        Math.min(MAX_KARMA_CONVERSION, karmaConversion + delta)
-      );
-      // Check if we have enough karma for increase
-      if (delta > 0 && karmaRemaining + karmaConversion < newConversion) return;
-
-      updateState({
-        budgets: {
-          ...state.budgets,
-          "karma-spent-gear": newConversion,
-        },
-      });
-    },
-    [karmaConversion, karmaRemaining, state.budgets, updateState]
-  );
 
   // Karma conversion hook for purchase prompts
   const handleKarmaConvert = useCallback(
@@ -327,64 +154,78 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   });
 
   // Calculate gear cost based on rating
-  const calculateGearCost = useCallback(
-    (gearData: GearItemData, rating?: number) => {
-      const hasRatingFlag =
-        gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
-      const effectiveRating = rating || 1;
-      let cost = gearData.cost;
+  const calculateGearCost = useCallback((gearData: GearItemData, rating?: number) => {
+    // Unified ratings - look up from table
+    if (hasUnifiedRatings(gearData)) {
+      const r = rating ?? gearData.minRating ?? 1;
+      const ratingValue = getRatingTableValue(gearData, r);
+      return ratingValue?.cost ?? 0;
+    }
 
-      if (hasRatingFlag) {
-        if (gearData.ratingSpec?.costScaling?.perRating) {
-          cost =
-            (gearData.ratingSpec.costScaling.baseValue || gearData.cost) *
-            effectiveRating;
-        } else if (gearData.costPerRating) {
-          cost = gearData.cost * effectiveRating;
-        }
+    const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+    const effectiveRating = rating || 1;
+    let cost = gearData.cost ?? 0;
+
+    if (hasRatingFlag) {
+      if (gearData.ratingSpec?.costScaling?.perRating) {
+        cost = (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) * effectiveRating;
+      } else if (gearData.costPerRating) {
+        cost = (gearData.cost || 0) * effectiveRating;
       }
+    }
 
-      return cost;
-    },
-    []
-  );
+    return cost;
+  }, []);
 
   // Add gear (actual implementation)
   const actuallyAddGear = useCallback(
     (gearData: GearItemData, rating?: number) => {
-      const hasRatingFlag =
-        gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+      const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
       const effectiveRating = rating || 1;
-      let cost = gearData.cost;
-      let availability = gearData.availability;
+      let cost = gearData.cost ?? 0;
+      let availability = gearData.availability ?? 0;
+      let capacity = gearData.capacity;
 
-      if (hasRatingFlag) {
+      // Handle unified ratings - look up from table
+      if (hasUnifiedRatings(gearData)) {
+        const ratingValue = getRatingTableValue(gearData, effectiveRating);
+        cost = ratingValue?.cost ?? 0;
+        availability = ratingValue?.availability ?? 0;
+        if (ratingValue?.capacity !== undefined) {
+          capacity = ratingValue.capacity;
+        } else if (gearData.capacityPerRating) {
+          // Handle capacity scaling for unified ratings items
+          capacity = (gearData.capacity ?? 0) * effectiveRating;
+        }
+      } else if (hasRatingFlag) {
+        // Legacy cost scaling
         if (gearData.ratingSpec?.costScaling?.perRating) {
           cost =
-            (gearData.ratingSpec.costScaling.baseValue || gearData.cost) *
-            effectiveRating;
+            (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) * effectiveRating;
         } else if (gearData.costPerRating) {
-          cost = gearData.cost * effectiveRating;
+          cost = (gearData.cost || 0) * effectiveRating;
         }
 
+        // Legacy availability scaling
         if (gearData.ratingSpec?.availabilityScaling?.perRating) {
           availability =
-            (gearData.ratingSpec.availabilityScaling.baseValue ||
-              gearData.availability) * effectiveRating;
+            (gearData.ratingSpec.availabilityScaling.baseValue || gearData.availability || 0) *
+            effectiveRating;
         }
       }
 
       const newGear: GearItem = {
         id: `${gearData.id}-${Date.now()}`,
-        name: hasRatingFlag
-          ? `${gearData.name} (Rating ${effectiveRating})`
-          : gearData.name,
+        name:
+          hasRatingFlag || hasUnifiedRatings(gearData)
+            ? `${gearData.name} (Rating ${effectiveRating})`
+            : gearData.name,
         category: gearData.category,
         cost,
         availability,
         quantity: 1,
-        rating: hasRatingFlag ? effectiveRating : gearData.rating,
-        capacity: gearData.capacity,
+        rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
+        capacity,
         capacityUsed: 0,
         modifications: [],
       };
@@ -415,8 +256,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       // Check if karma conversion could help
       const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
       if (conversionInfo?.canConvert) {
-        const hasRatingFlag =
-          gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
+        const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
         const effectiveRating = rating || 1;
         const itemName = hasRatingFlag
           ? `${gearData.name} (Rating ${effectiveRating})`
@@ -486,8 +326,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         : mod.capacityCost || 1;
 
       // Check capacity
-      const capacityRemaining =
-        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      const capacityRemaining = (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
       if (capacityCost > capacityRemaining) return;
 
       // Calculate cost
@@ -497,7 +336,8 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       }
 
       const installedMod = {
-        id: mod.id,
+        id: crypto.randomUUID(),
+        catalogId: mod.id,
         name: mod.hasRating ? `${mod.name} (Rating ${effectiveRating})` : mod.name,
         rating: mod.hasRating ? effectiveRating : undefined,
         cost,
@@ -535,8 +375,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         : mod.capacityCost || 1;
 
       // Check capacity first (this is a hard limit, not fixable by karma)
-      const capacityRemaining =
-        (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
+      const capacityRemaining = (modifyingGear.capacity || 0) - (modifyingGear.capacityUsed || 0);
       if (capacityCost > capacityRemaining) return;
 
       // Calculate cost
@@ -554,9 +393,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       // Check if karma conversion could help
       const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
       if (conversionInfo?.canConvert) {
-        const modName = mod.hasRating
-          ? `${mod.name} (Rating ${effectiveRating})`
-          : mod.name;
+        const modName = mod.hasRating ? `${mod.name} (Rating ${effectiveRating})` : mod.name;
         karmaConversionPrompt.promptConversion(modName, cost, () => {
           actuallyInstallMod(mod, rating);
         });
@@ -576,21 +413,14 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
   }, [isOverBudget, selectedGear.length]);
 
   // Check prerequisites
-  const hasPriorities =
-    state.priorities?.metatype && state.priorities?.resources;
+  const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
   if (!hasPriorities) {
     return (
-      <CreationCard
-        title="Gear"
-        description="Purchase equipment"
-        status="pending"
-      >
+      <CreationCard title="Gear" description="Purchase equipment" status="pending">
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -601,7 +431,6 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     <>
       <CreationCard
         title="Gear"
-        description={`${selectedGear.length} item${selectedGear.length !== 1 ? "s" : ""}`}
         status={validationStatus}
         headerAction={
           <button
@@ -613,24 +442,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           </button>
         }
       >
-        <div className="space-y-4">
-          {/* Budget Display */}
-          <BudgetDisplay
-            spent={gearSpent}
-            total={totalNuyen}
-            remaining={remaining}
-            isOver={isOverBudget}
-            karmaConversion={karmaConversion}
-          />
-
-          {/* Karma Conversion */}
-          <KarmaConversion
-            karmaConversion={karmaConversion}
-            karmaRemaining={karmaRemaining}
-            convertedNuyen={convertedNuyen}
-            onConvert={handleKarmaConversion}
-          />
-
+        <div className="space-y-3">
           {/* Gear List */}
           {selectedGear.length > 0 ? (
             <div className="space-y-2">
@@ -647,9 +459,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
               <Backpack className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                No gear purchased
-              </p>
+              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No gear purchased</p>
               <button
                 onClick={() => setIsPurchaseModalOpen(true)}
                 className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"
@@ -660,11 +470,13 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
             </div>
           )}
 
-          {/* Gear Spent Summary */}
+          {/* Summary */}
           {selectedGear.length > 0 && (
-            <div className="flex items-center justify-between border-t border-zinc-100 pt-2 text-sm text-zinc-500 dark:border-zinc-800 dark:text-zinc-400">
-              <span>Total spent on gear</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Total: {selectedGear.length} item{selectedGear.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(gearSpent)}¥
               </span>
             </div>

@@ -11,13 +11,13 @@
 
 ### By Priority
 
-| Priority | Count | Description |
-|----------|-------|-------------|
-| 1 | 38 | Missing items |
-| 2 | 15 | Data mismatches |
-| 3 | 0 | Duplicates |
-| 4 | 355 | Invalid source |
-| 5 | 0 | Naming issues |
+| Priority | Count | Description     |
+| -------- | ----- | --------------- |
+| 1        | 38    | Missing items   |
+| 2        | 15    | Data mismatches |
+| 3        | 0     | Duplicates      |
+| 4        | 355   | Invalid source  |
+| 5        | 0     | Naming issues   |
 
 ## Priority 1: Missing Items
 

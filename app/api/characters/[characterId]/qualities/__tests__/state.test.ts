@@ -28,11 +28,14 @@ import type { Character, User } from "@/lib/types";
 
 // Helper to create mock request
 function createMockRequest(characterId: string, qualityId: string, body: unknown): NextRequest {
-  return new NextRequest(`http://localhost/api/characters/${characterId}/qualities/${qualityId}/state`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  });
+  return new NextRequest(
+    `http://localhost/api/characters/${characterId}/qualities/${qualityId}/state`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    }
+  );
 }
 
 // Sample test data
@@ -65,10 +68,10 @@ const mockCharacter: Partial<Character> = {
           withdrawalPenalty: 0,
           daysClean: 0,
           recoveryAttempts: 0,
-        }
-      }
-    }
-  ]
+        },
+      },
+    },
+  ],
 };
 
 describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () => {
@@ -85,8 +88,8 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
       vi.mocked(getSession).mockResolvedValue(null);
 
       const request = createMockRequest("char-1", "addiction", { severity: "severe" });
-      const response = await PATCH(request, { 
-        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }) 
+      const response = await PATCH(request, {
+        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }),
       });
       const data = await response.json();
 
@@ -100,8 +103,8 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
       vi.mocked(getCharacter).mockResolvedValue(null);
 
       const request = createMockRequest("char-1", "addiction", { severity: "severe" });
-      const response = await PATCH(request, { 
-        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }) 
+      const response = await PATCH(request, {
+        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }),
       });
       const data = await response.json();
 
@@ -115,36 +118,35 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
       vi.mocked(getSession).mockResolvedValue("user-1");
       vi.mocked(getUserById).mockResolvedValue(mockUser as User);
       vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
-      
+
       const updatedChar = { ...mockCharacter };
       vi.mocked(updateQualityDynamicState).mockResolvedValue(updatedChar as Character);
 
       const request = createMockRequest("char-1", "addiction", { severity: "severe" });
-      const response = await PATCH(request, { 
-        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }) 
+      const response = await PATCH(request, {
+        params: Promise.resolve({ characterId: "char-1", qualityId: "addiction" }),
       });
       const data = await response.json();
 
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
-      expect(updateQualityDynamicState).toHaveBeenCalledWith(
-        "user-1",
-        "char-1",
-        "addiction",
-        { severity: "severe" }
-      );
+      expect(updateQualityDynamicState).toHaveBeenCalledWith("user-1", "char-1", "addiction", {
+        severity: "severe",
+      });
     });
 
     it("returns 400 if update fails (e.g. quality not found)", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
       vi.mocked(getUserById).mockResolvedValue(mockUser as User);
       vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
-      
-      vi.mocked(updateQualityDynamicState).mockRejectedValue(new Error("Quality not found or has no dynamic state"));
+
+      vi.mocked(updateQualityDynamicState).mockRejectedValue(
+        new Error("Quality not found or has no dynamic state")
+      );
 
       const request = createMockRequest("char-1", "wrong-id", { severity: "severe" });
-      const response = await PATCH(request, { 
-        params: Promise.resolve({ characterId: "char-1", qualityId: "wrong-id" }) 
+      const response = await PATCH(request, {
+        params: Promise.resolve({ characterId: "char-1", qualityId: "wrong-id" }),
       });
       const data = await response.json();
 

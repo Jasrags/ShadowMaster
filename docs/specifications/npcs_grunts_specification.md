@@ -15,6 +15,7 @@
 This document specifies the implementation requirements for supporting Non-Player Characters (NPCs), specifically **Grunts**, in Shadow Master. Grunts are simplified NPCs designed for quick combat encounters and streamlined gameplay management. They represent nameless antagonists (go-gangs, security teams, etc.) that can be managed as groups rather than individuals.
 
 **Key Features:**
+
 - Simplified condition tracking (single monitor for Physical and Stun damage)
 - Group management with shared attributes, skills, and Edge pool
 - Professional Rating system (0-6) determining team quality and morale
@@ -28,30 +29,33 @@ This document specifies the implementation requirements for supporting Non-Playe
 
 ---
 
-
 ## Page Structure
 
 ### Routes
 
 #### Grunt Teams List Page
+
 - **Path:** `/app/campaigns/[campaignId]/grunt-teams/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
 - **Description:** Lists all grunt teams for a campaign
 
 #### Grunt Team Detail Page
+
 - **Path:** `/app/campaigns/[campaignId]/grunt-teams/[teamId]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Shows grunt team details, stats, and combat tracker
 
 #### Create Grunt Team Page
+
 - **Path:** `/app/campaigns/[campaignId]/grunt-teams/create/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route, GM-only)
 - **Description:** Wizard/form for creating a new grunt team
 
 #### Combat Tracker Page
+
 - **Path:** `/app/campaigns/[campaignId]/encounters/[encounterId]/combat/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
@@ -96,58 +100,58 @@ This document specifies the implementation requirements for supporting Non-Playe
  */
 export interface GruntTeam {
   id: ID;
-  
+
   /** Campaign or encounter this team belongs to */
   campaignId?: ID;
   encounterId?: ID;
-  
+
   /** Team metadata */
   name: string; // e.g., "Knight Errant Patrol", "Halloweeners Gang"
   description?: string;
-  
+
   /** Professional Rating (0-6) */
   professionalRating: number; // 0-6
-  
+
   /** Group Edge pool (equals Professional Rating) */
   groupEdge: number;
   groupEdgeMax: number; // Usually equals professionalRating
-  
+
   /** Base grunt statistics (shared by all grunts in team) */
   baseGrunts: GruntStats;
-  
+
   /** Optional lieutenant (enhanced grunt) */
   lieutenant?: LieutenantStats;
-  
+
   /** Optional specialists (1-2 per team) */
   specialists?: GruntSpecialist[];
-  
+
   /** Current team state */
   state: {
     /** Number of active grunts remaining */
     activeCount: number;
-    
+
     /** Number of grunts taken out */
     casualties: number;
-    
+
     /** Current group initiative (if using group initiative) */
     groupInitiative?: number;
-    
+
     /** Whether team has broken/morale failed */
     moraleBroken: boolean;
   };
-  
+
   /** Optional rules flags */
   options?: {
     /** Use group initiative (default: true) */
     useGroupInitiative?: boolean;
-    
+
     /** Use "mowing them down" simplified rules */
     useSimplifiedRules?: boolean;
   };
-  
+
   createdAt: ISODateString;
   updatedAt?: ISODateString;
-  
+
   /** Extensible metadata */
   metadata?: Metadata;
 }
@@ -171,37 +175,37 @@ export interface GruntStats {
     intuition: number;
     charisma: number;
   };
-  
+
   /** Special attributes */
   essence: number;
   magic?: number; // If awakened
   resonance?: number; // If emerged
-  
+
   /** Active skills (keyed by skill name/code) */
   skills: Record<string, number>; // e.g., { "firearms": 4, "unarmed": 3 }
-  
+
   /** Knowledge skills (optional) */
   knowledgeSkills?: Record<string, number>;
-  
+
   /** Qualities (positive and negative) */
   positiveQualities?: string[];
   negativeQualities?: string[];
-  
+
   /** Equipment (standard loadout) */
   gear: GearItem[];
   weapons: Weapon[];
   armor: ArmorItem[];
-  
+
   /** Augmentations (if any) */
   cyberware?: CyberwareItem[];
   bioware?: BiowareItem[];
-  
+
   /** Magic/Resonance (if applicable) */
   magicalPath?: MagicalPath;
   spells?: string[];
   adeptPowers?: AdeptPower[];
   complexForms?: string[];
-  
+
   /** Condition monitor size (calculated: 8 + ceil(max(Body, Willpower) / 2)) */
   conditionMonitorSize: number;
 }
@@ -218,10 +222,10 @@ export interface GruntStats {
 export interface LieutenantStats extends GruntStats {
   /** Leadership skill rating (if present) */
   leadershipSkill?: number;
-  
+
   /** Can use Leadership to boost team Professional Rating by +1 */
   canBoostProfessionalRating: boolean;
-  
+
   /** Makes own initiative test (doesn't use group initiative) */
   usesIndividualInitiative: boolean;
 }
@@ -236,13 +240,13 @@ export interface LieutenantStats extends GruntStats {
  */
 export interface GruntSpecialist {
   id: ID;
-  
+
   /** Type of specialist */
   type: string; // e.g., "street-witch", "assault-rifle", "technomancer"
-  
+
   /** Description of specialization */
   description: string;
-  
+
   /** Modified stats from base grunt */
   statModifications?: {
     attributes?: Partial<GruntStats["attributes"]>;
@@ -250,7 +254,7 @@ export interface GruntSpecialist {
     gear?: GearItem[];
     weapons?: Weapon[];
   };
-  
+
   /** Makes own initiative test (if augmented) */
   usesIndividualInitiative?: boolean;
 }
@@ -264,15 +268,18 @@ export interface GruntSpecialist {
  */
 export interface IndividualGrunts {
   /** Map of grunt IDs to their individual condition */
-  grunts: Map<ID, {
-    conditionMonitor: boolean[]; // Array of boxes (filled = true, empty = false)
-    currentDamage: number;
-    isStunned: boolean;
-    isDead: boolean;
-    lastDamageType?: "physical" | "stun";
-    initiative?: number; // If using individual initiative (injury modifiers)
-  }>;
-  
+  grunts: Map<
+    ID,
+    {
+      conditionMonitor: boolean[]; // Array of boxes (filled = true, empty = false)
+      currentDamage: number;
+      isStunned: boolean;
+      isDead: boolean;
+      lastDamageType?: "physical" | "stun";
+      initiative?: number; // If using individual initiative (injury modifiers)
+    }
+  >;
+
   /** Lieutenant condition (if present) */
   lieutenant?: {
     conditionMonitor: boolean[];
@@ -282,16 +289,19 @@ export interface IndividualGrunts {
     lastDamageType?: "physical" | "stun";
     initiative: number;
   };
-  
+
   /** Specialist conditions (if present) */
-  specialists?: Map<ID, {
-    conditionMonitor: boolean[];
-    currentDamage: number;
-    isStunned: boolean;
-    isDead: boolean;
-    lastDamageType?: "physical" | "stun";
-    initiative?: number;
-  }>;
+  specialists?: Map<
+    ID,
+    {
+      conditionMonitor: boolean[];
+      currentDamage: number;
+      isStunned: boolean;
+      isDead: boolean;
+      lastDamageType?: "physical" | "stun";
+      initiative?: number;
+    }
+  >;
 }
 ```
 
@@ -304,16 +314,16 @@ export interface IndividualGrunts {
 export interface SimplifiedGruntsRules {
   /** Single wound takes grunt down */
   oneHitKill: boolean;
-  
+
   /** All rolls against grunts are unopposed */
   unopposedRolls: boolean;
-  
+
   /** Grunts don't dodge ranged attacks */
   noDodge: boolean;
-  
+
   /** Any hits on Sneaking = automatic surprise */
   autoSurprise: boolean;
-  
+
   /** Grunt ambushes automatically fail */
   ambushFails: boolean;
 }
@@ -328,6 +338,7 @@ export interface SimplifiedGruntsRules {
 **Location:** `/app/campaigns/[campaignId]/grunt-teams/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display campaign's grunt teams
 - Filter teams by Professional Rating
 - Search teams by name
@@ -335,6 +346,7 @@ export interface SimplifiedGruntsRules {
 - Link to grunt team detail pages
 
 **State:**
+
 - `teams: GruntTeam[]` - All grunt teams for campaign
 - `filterRating: number | "all"` - Current Professional Rating filter
 - `searchQuery: string` - Search input
@@ -352,6 +364,7 @@ export interface SimplifiedGruntsRules {
 **Description:** Individual grunt team display card in list view.
 
 **Features:**
+
 - Team name and description preview
 - Professional Rating badge
 - Active count and casualties
@@ -360,6 +373,7 @@ export interface SimplifiedGruntsRules {
 - Link to encounter (if linked)
 
 **Props:**
+
 ```typescript
 interface GruntTeamCardProps {
   team: GruntTeam;
@@ -376,12 +390,14 @@ interface GruntTeamCardProps {
 **Location:** `/app/campaigns/[campaignId]/grunt-teams/[teamId]/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display grunt team details
 - Render appropriate tab content
 - Handle user actions (edit, delete, apply damage)
 - Check user permissions (GM vs player)
 
 **State:**
+
 - `team: GruntTeam | null` - Grunt team data
 - `activeTab: GruntTeamTab` - Currently active tab
 - `individualGrunts: IndividualGrunts | null` - Combat tracking state
@@ -399,6 +415,7 @@ interface GruntTeamCardProps {
 **Description:** Grunt team header with name, metadata, and actions.
 
 **Features:**
+
 - Team name and description
 - Professional Rating badge
 - Campaign/encounter link
@@ -408,6 +425,7 @@ interface GruntTeamCardProps {
   - Player: View only
 
 **Props:**
+
 ```typescript
 interface GruntTeamHeaderProps {
   team: GruntTeam;
@@ -427,11 +445,13 @@ interface GruntTeamHeaderProps {
 **Description:** Tab navigation for grunt team detail sections.
 
 **Tabs:**
+
 - **Stats** - Base statistics, attributes, skills, gear
 - **Combat Tracker** - Condition monitors, damage application, initiative
 - **Templates** - Save/load templates (GM-only)
 
 **Props:**
+
 ```typescript
 interface GruntTeamTabsProps {
   activeTab: GruntTeamTab;
@@ -449,6 +469,7 @@ interface GruntTeamTabsProps {
 **Description:** Display grunt team statistics and configuration.
 
 **Sections:**
+
 - Base grunt statistics (attributes, skills, gear)
 - Lieutenant statistics (if present)
 - Specialist statistics (if present)
@@ -457,6 +478,7 @@ interface GruntTeamTabsProps {
 - Condition monitor size calculation
 
 **Props:**
+
 ```typescript
 interface GruntTeamStatsTabProps {
   team: GruntTeam;
@@ -473,6 +495,7 @@ interface GruntTeamStatsTabProps {
 **Description:** Combat tracking interface for grunt teams.
 
 **Features:**
+
 - Individual grunt condition monitors
 - Damage application interface (amount + type)
 - Bulk damage application
@@ -482,6 +505,7 @@ interface GruntTeamStatsTabProps {
 - Simplified rules toggle (GM-only)
 
 **Props:**
+
 ```typescript
 interface GruntTeamCombatTrackerTabProps {
   team: GruntTeam;
@@ -502,6 +526,7 @@ interface GruntTeamCombatTrackerTabProps {
 **Description:** Step-by-step wizard for creating a new grunt team.
 
 **Steps:**
+
 1. **Basic Info** - Name, description, Professional Rating
 2. **Template Selection** - Choose from pre-built templates (0-6) or custom
 3. **Base Stats** - Attributes, skills, gear (if custom)
@@ -510,12 +535,14 @@ interface GruntTeamCombatTrackerTabProps {
 6. **Review** - Review all settings and create
 
 **State:**
+
 - `currentStep: number` - Current wizard step
 - `formData: Partial<GruntTeam>` - Accumulated form data
 - `selectedTemplate?: GruntTemplate` - Selected template
 - `validationErrors: Record<string, string>` - Form validation errors
 
 **Props:**
+
 ```typescript
 interface CreateGruntTeamWizardProps {
   campaignId: ID;
@@ -535,11 +562,13 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** List all grunt teams for a campaign
 
 **Query Parameters:**
+
 - `encounterId?: ID` - Filter by encounter
 - `professionalRating?: number` - Filter by Professional Rating
 - `search?: string` - Search teams by name
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -557,6 +586,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Get detailed grunt team information
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -575,6 +605,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Create a new grunt team
 
 **Request:**
+
 ```typescript
 {
   name: string;
@@ -589,6 +620,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -600,6 +632,7 @@ interface CreateGruntTeamWizardProps {
 **Implementation:** New endpoint - create grunt team, set `campaignId`, initialize state
 
 **Validation:**
+
 - Name required (1-100 characters)
 - Professional Rating must be 0-6
 - Base grunts must have valid attributes
@@ -613,6 +646,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Update grunt team (GM-only)
 
 **Request:**
+
 ```typescript
 {
   name?: string;
@@ -626,6 +660,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -645,6 +680,7 @@ interface CreateGruntTeamWizardProps {
 **Request:** None (team ID from route)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -661,6 +697,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Update grunt team combat state
 
 **Request:**
+
 ```typescript
 {
   activeCount?: number;
@@ -672,6 +709,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -689,6 +727,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Apply damage to an individual grunt
 
 **Request:**
+
 ```typescript
 {
   damage: number;
@@ -697,6 +736,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -716,6 +756,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Apply damage to multiple grunts simultaneously
 
 **Request:**
+
 ```typescript
 {
   gruntIds: ID[];
@@ -725,6 +766,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -746,6 +788,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Spend Group Edge
 
 **Request:**
+
 ```typescript
 {
   amount: number;
@@ -754,6 +797,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -771,6 +815,7 @@ interface CreateGruntTeamWizardProps {
 **Purpose:** Roll initiative for grunt team
 
 **Request:**
+
 ```typescript
 {
   type: "group" | "individual";
@@ -779,6 +824,7 @@ interface CreateGruntTeamWizardProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -795,6 +841,7 @@ interface CreateGruntTeamWizardProps {
 ### Storage Layer
 
 **File Structure:**
+
 ```
 data/campaigns/{campaignId}/
 ├── grunt-teams/
@@ -816,10 +863,7 @@ export function createGruntTeam(
 
 export function getGruntTeam(teamId: ID): GruntTeam | null;
 
-export function updateGruntTeam(
-  teamId: ID,
-  updates: Partial<GruntTeam>
-): GruntTeam;
+export function updateGruntTeam(teamId: ID, updates: Partial<GruntTeam>): GruntTeam;
 
 export function deleteGruntTeam(teamId: ID): void;
 
@@ -839,10 +883,7 @@ export function updateIndividualGrunts(
 // Template operations
 export function getGruntTemplates(professionalRating?: number): GruntTemplate[];
 
-export function saveGruntTemplate(
-  userId: ID,
-  template: GruntTemplate
-): GruntTemplate;
+export function saveGruntTemplate(userId: ID, template: GruntTemplate): GruntTemplate;
 ```
 
 ---
@@ -988,10 +1029,7 @@ data/editions/sr5/
 
 ```typescript
 // Condition monitor calculation
-export function calculateGruntsConditionMonitorSize(
-  body: number,
-  willpower: number
-): number;
+export function calculateGruntsConditionMonitorSize(body: number, willpower: number): number;
 
 // Damage application
 export function applyDamageToGrunts(
@@ -1009,10 +1047,7 @@ export function spendGroupEdge(team: GruntTeam, amount: number): boolean;
 export function refreshGroupEdge(team: GruntTeam): void;
 
 // Initiative rolling
-export function rollGroupInitiative(
-  team: GruntTeam,
-  baseInitiative: number
-): number;
+export function rollGroupInitiative(team: GruntTeam, baseInitiative: number): number;
 export function rollLieutenantInitiative(
   lieutenant: LieutenantStats,
   baseInitiative: number
@@ -1023,21 +1058,16 @@ export function validateLieutenantStats(
   lieutenant: LieutenantStats,
   baseGrunts: GruntStats
 ): boolean;
-export function useLeadershipBoost(
-  team: GruntTeam,
-  lieutenant: LieutenantStats
-): boolean;
+export function useLeadershipBoost(team: GruntTeam, lieutenant: LieutenantStats): boolean;
 
 // Simplified rules
-export function applySimplifiedRules(
-  team: GruntTeam,
-  rules: SimplifiedGruntsRules
-): void;
+export function applySimplifiedRules(team: GruntTeam, rules: SimplifiedGruntsRules): void;
 ```
 
 ### Validation Rules
 
 **Grunt Team Creation:**
+
 - Name: 1-100 characters, required
 - Professional Rating: Must be 0-6
 - Base grunts: Must have valid attributes (all 8 attributes)
@@ -1045,16 +1075,17 @@ export function applySimplifiedRules(
 - Lieutenant: Stats must be +4 over base grunts (attributes and skills)
 
 **Damage Application:**
+
 - Damage must be positive number
 - Damage type must be "physical" or "stun"
 - Cannot apply damage to dead grunts
 
 **Group Edge:**
+
 - Cannot spend more edge than available
 - Edge refreshes at start of session/scenario
 
 ---
-
 
 ## Security Considerations
 
@@ -1160,6 +1191,7 @@ export function applySimplifiedRules(
 **Priority:** Medium  
 **Estimated Effort:** 10-14 days  
 **Dependencies:**
+
 - Campaign system (for campaign context)
 - Type definitions (extend with Grunt types)
 - Storage layer (add grunts.ts)

@@ -161,8 +161,7 @@ export async function searchTemplates(
 
   return templates.filter(
     (t) =>
-      t.name.toLowerCase().includes(queryLower) ||
-      t.description.toLowerCase().includes(queryLower)
+      t.name.toLowerCase().includes(queryLower) || t.description.toLowerCase().includes(queryLower)
   );
 }
 
@@ -189,9 +188,7 @@ export async function hasTemplates(editionCode: EditionCode): Promise<boolean> {
  * @param editionCode - Edition to query
  * @returns Array of unique category names
  */
-export async function getTemplateCategories(
-  editionCode: EditionCode
-): Promise<string[]> {
+export async function getTemplateCategories(editionCode: EditionCode): Promise<string[]> {
   const templates = await getGruntTemplates(editionCode);
   const categories = new Set<string>();
 

@@ -10,6 +10,7 @@
 This document identifies what data already exists in the ruleset and what additional data structures are needed to implement the B11 Identity/Lifestyle/SIN system per SR5 rules.
 
 **Status:**
+
 - ✅ **Available:** Basic lifestyles, fake SIN/license gear, SINner quality
 - ❌ **Missing:** Lifestyle modifications catalog, subscriptions catalog
 - ⚠️ **Optional:** License type examples for UI guidance
@@ -23,6 +24,7 @@ This document identifies what data already exists in the ruleset and what additi
 **Location:** `/data/editions/sr5/core-rulebook.json` (lines 4641-4692)
 
 **Existing Data:**
+
 - 6 lifestyle types with monthly costs:
   - Street: 0¥/month
   - Squatter: 500¥/month
@@ -36,6 +38,7 @@ This document identifies what data already exists in the ruleset and what additi
   - Troll: 2.0× multiplier
 
 **Data Structure:**
+
 ```typescript
 interface LifestyleData {
   id: string;
@@ -55,18 +58,19 @@ interface LifestyleData {
 **Location:** `/data/editions/sr5/core-rulebook.json` (lines 6054-6072)
 
 **Existing Data:**
+
 - Fake SIN gear item:
   - ID: `fake-sin`
-  - Cost: Rating*2,500¥
-  - Availability: Rating*3F
+  - Cost: Rating\*2,500¥
+  - Availability: Rating\*3F
   - Forbidden: true
   - Rating: 4 (max rating)
   - Description: "Forged identity (Rating 1-4)"
 
 - Fake License gear item:
   - ID: `fake-license`
-  - Cost: Rating*200¥
-  - Availability: Rating*3F
+  - Cost: Rating\*200¥
+  - Availability: Rating\*3F
   - Forbidden: true
   - Rating: 4 (max rating)
   - Description: "Forged permit or license (Rating 1-4)"
@@ -82,28 +86,30 @@ interface LifestyleData {
 **Location:** `/data/editions/sr5/core-rulebook.json` (lines 4566-4592)
 
 **Existing Data:**
+
 - Quality ID: `sinner`
 - Name: "SINner"
 - Layered quality with 4 levels:
 
-| Level | Name | Karma Bonus |
-|-------|------|-------------|
-| 1 | National | 5 |
-| 2 | Criminal | 10 |
-| 3 | Corporate Limited | 15 |
-| 4 | Corporate Born | 25 |
+| Level | Name              | Karma Bonus |
+| ----- | ----------------- | ----------- |
+| 1     | National          | 5           |
+| 2     | Criminal          | 10          |
+| 3     | Corporate Limited | 15          |
+| 4     | Corporate Born    | 25          |
 
 **Data Structure:**
+
 ```json
 {
   "id": "sinner",
   "name": "SINner",
   "karmaBonus": 5,
   "levels": [
-    {"level": 1, "name": "National", "karma": 5},
-    {"level": 2, "name": "Criminal", "karma": 10},
-    {"level": 3, "name": "Corporate Limited", "karma": 15},
-    {"level": 4, "name": "Corporate Born", "karma": 25}
+    { "level": 1, "name": "National", "karma": 5 },
+    { "level": 2, "name": "Criminal", "karma": 10 },
+    { "level": 3, "name": "Corporate Limited", "karma": 15 },
+    { "level": 4, "name": "Corporate Born", "karma": 25 }
   ]
 }
 ```
@@ -119,6 +125,7 @@ interface LifestyleData {
 **Status:** ❌ **Missing**
 
 **Required Data Structure:**
+
 ```typescript
 interface LifestyleModificationData {
   id: string;
@@ -133,15 +140,16 @@ interface LifestyleModificationData {
 
 **Required Modifications (From SR5 Rules):**
 
-| Name | Type | Modifier | Description | Effects |
-|------|------|----------|-------------|---------|
-| Special Work Area | Positive | +1,000¥ | Dedicated workspace for skills | +2 limit to relevant skill tests |
-| Extra Secure | Positive | +20% | Enhanced security | Improves security response tier |
-| Obscure/Difficult to Find | Positive | +10% | Hard to locate | -2 dice on intruders' Sneaking tests |
-| Cramped | Negative | -10% | Limited space | -2 to Logic-linked test limits |
-| Dangerous Area | Negative | -20% | High crime neighborhood | Degrades security response tier |
+| Name                      | Type     | Modifier | Description                    | Effects                              |
+| ------------------------- | -------- | -------- | ------------------------------ | ------------------------------------ |
+| Special Work Area         | Positive | +1,000¥  | Dedicated workspace for skills | +2 limit to relevant skill tests     |
+| Extra Secure              | Positive | +20%     | Enhanced security              | Improves security response tier      |
+| Obscure/Difficult to Find | Positive | +10%     | Hard to locate                 | -2 dice on intruders' Sneaking tests |
+| Cramped                   | Negative | -10%     | Limited space                  | -2 to Logic-linked test limits       |
+| Dangerous Area            | Negative | -20%     | High crime neighborhood        | Degrades security response tier      |
 
 **Implementation Location:**
+
 - Add to `/data/editions/sr5/core-rulebook.json` in `lifestyle` module
 - Extract via `/lib/rules/loader.ts`
 - Expose via `/lib/rules/RulesetContext.tsx` hook: `useLifestyleModifications()`
@@ -155,6 +163,7 @@ interface LifestyleModificationData {
 **Status:** ❌ **Missing**
 
 **Required Data Structure:**
+
 ```typescript
 interface SubscriptionData {
   id: string;
@@ -167,17 +176,18 @@ interface SubscriptionData {
 
 **Required Subscriptions (From SR5 Rules):**
 
-| Name | Monthly Cost | Description | Category |
-|------|-------------|-------------|----------|
-| DocWagon Contract (Basic) | 5,000¥/year | Medical response service (Zone 1-2) | Medical |
-| DocWagon Contract (Gold) | 25,000¥/year | Medical response service (Zone 1-6) | Medical |
-| DocWagon Contract (Platinum) | 50,000¥/year | Medical response service (Zone 1-8) | Medical |
-| DocWagon Contract (Super-Platinum) | 100,000¥/year | Medical response service (Zone 1-8) | Medical |
-| Food Service (Basic) | Rating*200¥/month | Basic meal delivery service | Food |
+| Name                               | Monthly Cost       | Description                         | Category |
+| ---------------------------------- | ------------------ | ----------------------------------- | -------- |
+| DocWagon Contract (Basic)          | 5,000¥/year        | Medical response service (Zone 1-2) | Medical  |
+| DocWagon Contract (Gold)           | 25,000¥/year       | Medical response service (Zone 1-6) | Medical  |
+| DocWagon Contract (Platinum)       | 50,000¥/year       | Medical response service (Zone 1-8) | Medical  |
+| DocWagon Contract (Super-Platinum) | 100,000¥/year      | Medical response service (Zone 1-8) | Medical  |
+| Food Service (Basic)               | Rating\*200¥/month | Basic meal delivery service         | Food     |
 
 **Note:** This is a starting list. SR5 sourcebooks may have additional subscription services.
 
 **Implementation Location:**
+
 - Add to `/data/editions/sr5/core-rulebook.json` in `lifestyle` module
 - Extract via `/lib/rules/loader.ts`
 - Expose via `/lib/rules/RulesetContext.tsx` hook: `useSubscriptions()`
@@ -193,6 +203,7 @@ interface SubscriptionData {
 **Purpose:** Provide example license types for UI guidance/autocomplete when players create licenses
 
 **Suggested Examples:**
+
 - Firearms License
 - Magic User License
 - Driver's License
@@ -207,6 +218,7 @@ interface SubscriptionData {
 - Media License (journalist credentials)
 
 **Implementation:**
+
 - Can be hardcoded in UI component or added as example data
 - Not required for validation (licenses are custom-name)
 - Improves UX by suggesting common license types
@@ -224,6 +236,7 @@ interface SubscriptionData {
 **Section:** `lifestyle` module (around line 4641)
 
 **Current Structure:**
+
 ```json
 {
   "lifestyle": {
@@ -237,6 +250,7 @@ interface SubscriptionData {
 ```
 
 **Proposed Extended Structure:**
+
 ```json
 {
   "lifestyle": {
@@ -278,6 +292,7 @@ interface SubscriptionData {
 **File:** `/lib/types/edition.ts`
 
 **Add:**
+
 ```typescript
 export interface LifestyleModificationData {
   id: string;
@@ -301,9 +316,13 @@ export interface SubscriptionData {
 **File:** `/lib/rules/loader.ts`
 
 **Add extraction functions:**
+
 ```typescript
 export function extractLifestyleModifications(ruleset: LoadedRuleset): LifestyleModificationData[] {
-  const ruleModule = extractModule<{ modifications: LifestyleModificationData[] }>(ruleset, "lifestyle");
+  const ruleModule = extractModule<{ modifications: LifestyleModificationData[] }>(
+    ruleset,
+    "lifestyle"
+  );
   return ruleModule?.modifications || [];
 }
 
@@ -316,6 +335,7 @@ export function extractSubscriptions(ruleset: LoadedRuleset): SubscriptionData[]
 **File:** `/lib/rules/RulesetContext.tsx`
 
 **Add to RulesetData interface:**
+
 ```typescript
 export interface RulesetData {
   // ... existing fields
@@ -325,6 +345,7 @@ export interface RulesetData {
 ```
 
 **Add hooks:**
+
 ```typescript
 export function useLifestyleModifications(): LifestyleModificationData[] {
   const { data } = useRuleset();
@@ -340,6 +361,7 @@ export function useSubscriptions(): SubscriptionData[] {
 **File:** `/app/api/rulesets/[editionCode]/route.ts`
 
 **Add to API response:**
+
 ```typescript
 lifestyleModifications: extractLifestyleModifications(loadedRuleset),
 subscriptions: extractSubscriptions(loadedRuleset),
@@ -352,14 +374,17 @@ subscriptions: extractSubscriptions(loadedRuleset),
 **Issue:** Current gear catalog shows cost for Rating 4 fake SIN/license. Need to determine pricing formula for Ratings 1-4.
 
 **Current Data:**
+
 - Fake SIN (Rating 4): 2,500¥
 - Fake License (Rating 4): 200¥
 
 **SR5 Rules:**
+
 - Fake SIN cost typically scales with rating
 - Common formula: Base cost × (Rating/4) or similar scaling
 
 **Recommendation:**
+
 1. Research SR5 core rulebook for exact pricing formula
 2. Implement cost calculation function that takes rating (1-4) and returns cost
 3. Update gear catalog to support rating-based costs or add separate entries per rating
@@ -403,16 +428,19 @@ subscriptions: extractSubscriptions(loadedRuleset),
 ## 6. Summary
 
 ### ✅ Available Data
+
 - Basic lifestyles (6 types) ✅
 - Metatype lifestyle modifiers ✅
 - Fake SIN/license gear items ✅
 - SINner quality (all 4 levels) ✅
 
 ### ❌ Missing Critical Data
+
 - Lifestyle modifications catalog ❌
 - Subscriptions catalog ❌
 
 ### ⚠️ Needs Verification/Enhancement
+
 - Fake SIN/license cost formula for ratings 1-4 ⚠️
 - License type examples (optional) ⚠️
 

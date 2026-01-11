@@ -239,9 +239,7 @@ export default function Home() {
                 Terms
               </Link>
             </nav>
-            <p className="text-sm text-zinc-600 dark:text-zinc-400">
-              © 2024 Shadow Master
-            </p>
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">© 2024 Shadow Master</p>
           </div>
         </div>
       </footer>
@@ -250,7 +248,17 @@ export default function Home() {
 }
 
 // Authenticated Homepage Component
-function AuthenticatedHomepage({ user }: { user: { username: string; email: string; role: string[]; createdAt: string; lastLogin?: string | null } }) {
+function AuthenticatedHomepage({
+  user,
+}: {
+  user: {
+    username: string;
+    email: string;
+    role: string[];
+    createdAt: string;
+    lastLogin?: string | null;
+  };
+}) {
   return (
     <AuthenticatedLayout>
       {/* Welcome Section */}
@@ -275,23 +283,39 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
 
       {/* Quick Actions / Dashboard */}
       <section className="mb-8">
-        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">Quick Actions</h2>
+        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          Quick Actions
+        </h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Link
             href="/characters/create/sheet"
             className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
-            <svg className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            <svg
+              className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 4v16m8-8H4"
+              />
             </svg>
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Create New Character</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+              Create New Character
+            </span>
           </Link>
           <Link
             href="/characters"
             className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
             <UserIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">Browse Characters</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+              Browse Characters
+            </span>
           </Link>
           {/* Rulesets */}
           <Link
@@ -299,17 +323,31 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
             className="flex flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center transition-all hover:border-zinc-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700 dark:focus:ring-zinc-400"
           >
             <BookIcon className="mb-2 h-8 w-8 text-zinc-600 dark:text-zinc-400" />
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">View Rulesets</span>
+            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-50">
+              View Rulesets
+            </span>
           </Link>
           {/* Recent Activity - Coming Soon */}
           <div
             className="flex cursor-not-allowed flex-col items-center justify-center rounded-lg border border-zinc-200 bg-zinc-50 p-6 text-center opacity-60 dark:border-zinc-800 dark:bg-zinc-900"
             title="Coming soon"
           >
-            <svg className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            <svg
+              className="mb-2 h-8 w-8 text-zinc-400 dark:text-zinc-600"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+              />
             </svg>
-            <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">Recent Activity</span>
+            <span className="text-sm font-medium text-zinc-400 dark:text-zinc-600">
+              Recent Activity
+            </span>
             <span className="mt-1 rounded bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
               Soon
             </span>
@@ -319,7 +357,9 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
 
       {/* Character List / Overview */}
       <section>
-        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">Your Characters</h2>
+        <h2 className="mb-4 text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+          Your Characters
+        </h2>
         {/* Empty State */}
         <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-12 text-center dark:border-zinc-800 dark:bg-zinc-950">
           <svg
@@ -336,7 +376,9 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
               d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
             />
           </svg>
-          <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-50">No characters yet</h3>
+          <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-50">
+            No characters yet
+          </h3>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             Get started by creating your first Shadowrun character.
           </p>
@@ -357,7 +399,12 @@ function AuthenticatedHomepage({ user }: { user: { username: string; email: stri
 function UserIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+      />
     </svg>
   );
 }
@@ -365,9 +412,12 @@ function UserIcon({ className }: { className?: string }) {
 function BookIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+      />
     </svg>
   );
 }
-
-

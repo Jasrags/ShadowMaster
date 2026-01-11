@@ -109,7 +109,7 @@ describe("GET /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await GET(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -127,7 +127,7 @@ describe("GET /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await GET(request, {
-      params: Promise.resolve({ characterId, weaponId: "non-existent" })
+      params: Promise.resolve({ characterId, weaponId: "non-existent" }),
     });
     const data = await response.json();
 
@@ -143,7 +143,7 @@ describe("GET /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await GET(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -222,7 +222,7 @@ describe("POST /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await POST(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -244,7 +244,7 @@ describe("POST /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await POST(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -263,7 +263,7 @@ describe("POST /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await POST(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -283,7 +283,7 @@ describe("POST /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await POST(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -344,7 +344,7 @@ describe("DELETE /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await DELETE(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -393,7 +393,7 @@ describe("DELETE /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await DELETE(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -468,7 +468,7 @@ describe("PATCH /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await PATCH(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -488,7 +488,7 @@ describe("PATCH /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await PATCH(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 
@@ -508,7 +508,7 @@ describe("PATCH /api/characters/[characterId]/weapons/[weaponId]/ammo", () => {
     );
 
     const response = await PATCH(request, {
-      params: Promise.resolve({ characterId, weaponId })
+      params: Promise.resolve({ characterId, weaponId }),
     });
     const data = await response.json();
 

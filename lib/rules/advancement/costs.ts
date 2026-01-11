@@ -26,8 +26,7 @@ export function calculateAttributeCost(
   if (newRating < 1) {
     throw new Error("Attribute rating must be at least 1");
   }
-  const multiplier =
-    settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
+  const multiplier = settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
@@ -48,8 +47,7 @@ export function calculateActiveSkillCost(
   if (newRating < 1) {
     throw new Error("Skill rating must be at least 1");
   }
-  const multiplier =
-    settings?.skillKarmaMultiplier ?? ruleset?.skillKarmaMultiplier ?? 2;
+  const multiplier = settings?.skillKarmaMultiplier ?? ruleset?.skillKarmaMultiplier ?? 2;
   return newRating * multiplier;
 }
 
@@ -71,9 +69,7 @@ export function calculateKnowledgeSkillCost(
     throw new Error("Skill rating must be at least 1");
   }
   const multiplier =
-    settings?.knowledgeSkillKarmaMultiplier ??
-    ruleset?.knowledgeSkillKarmaMultiplier ??
-    1;
+    settings?.knowledgeSkillKarmaMultiplier ?? ruleset?.knowledgeSkillKarmaMultiplier ?? 1;
   return newRating * multiplier;
 }
 
@@ -94,8 +90,7 @@ export function calculateSkillGroupCost(
   if (newRating < 1) {
     throw new Error("Skill group rating must be at least 1");
   }
-  const multiplier =
-    settings?.skillGroupKarmaMultiplier ?? ruleset?.skillGroupKarmaMultiplier ?? 5;
+  const multiplier = settings?.skillGroupKarmaMultiplier ?? ruleset?.skillGroupKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
@@ -130,8 +125,7 @@ export function calculateEdgeCost(
   if (newRating < 1) {
     throw new Error("Edge rating must be at least 1");
   }
-  const multiplier =
-    settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
+  const multiplier = settings?.attributeKarmaMultiplier ?? ruleset?.attributeKarmaMultiplier ?? 5;
   return newRating * multiplier;
 }
 
@@ -247,4 +241,3 @@ export function calculateAdvancementCost(
       throw new Error(`Unknown advancement type: ${type}`);
   }
 }
-

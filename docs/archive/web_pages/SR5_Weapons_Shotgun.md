@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -8,34 +8,34 @@ Use the Longarms skill when firing shotguns. The stats for these shotguns are fo
 
 **Range Table**
 
-| DP Modifier | Short +0 | Medium -1 | Long -3 | Extreme -6 |
-| --- | --- | --- | --- | --- |
-| Longarms | Range in Meters |
-| Shotguns (flechette) | 0–15 | 16–30 | 31–45 | 45–60 |
-| Shotguns (slug) | 0–10 | 11–40 | 41–80 | 81–150 |
+| DP Modifier          | Short +0        | Medium -1 | Long -3 | Extreme -6 |
+| -------------------- | --------------- | --------- | ------- | ---------- |
+| Longarms             | Range in Meters |
+| Shotguns (flechette) | 0–15            | 16–30     | 31–45   | 45–60      |
+| Shotguns (slug)      | 0–10            | 11–40     | 41–80   | 81–150     |
 
-| Weapon | Acc | DV | AP | Modes | RC | Ammo | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Auto-Assault 16 | 4 | 13P | -1 | SA/BF/FA | 2 | 10 ( c ) or 32 ( d ) | 18F | 1,800¥ | SR5:R&G |
-| Cavalier Falchion | 5 (7) | 12P | -1 | SS | – | 8 ( m ) | 9R | 1,200¥ | SR5:GH3 |
-| Defiance T-250 | 4 | 10P | -1 | SS/SA | – | 5 ( m ) | 4R | 450¥ | Core |
-| Defiance T-250, short-barreled | 4 | 9P | -1 | SS/SA | – | 5 ( m ) | 4R | 450¥ | Core |
-| Enfield AS-7 | 4 (5) | 13P | -1 | SA/BF | – | 10 ( c ) or 24 ( d ) | 12F | 1,100¥ | Core |
-| Franchi SPAS-24 | 4 (6) | 12P | -1 | SA/BF/FA | 1 | 10 ( c ) | 12F | 1,050¥ | SR5:R&G |
-| HK XM30, Shotgun | 3 (5) | 10P | -1 | SA | – (1) | 10 ( c ) | 15F | 4,500¥ | SR5:R&G |
-| Krime Boss | 3 | 13P | -1 | SA | 1 | 15 ( d ) | 11R | 600¥ | SR5:GH3 |
-| Mossberg AM-CMDT | 5 (7) | 12P | -1 | SA/BF/FA | – | 10 ( c ) | 12F | 1,400¥ | SR5:R&G |
-| Nissan Optimum II, Shotgun | 4 (6) | 10P | -1 | SA | 1 | 5 ( m ) | – | – | SR5:R&G |
-| PJSS Model 55 | 6 | 11P | -1 | SS | – (1) | 2 ( b ) | 9R | 1,000¥ | Core |
-| Remington 990 | 4 | 11P | -1 | SA | – | 8 ( c ) | 6R | 950¥ | SR5:R&G |
-| Shiawase Arms Rain | 4 | 10P | -1 | SA | – (1) | 5 ( ml ) | 4R | 450¥ | SR5:GH3 |
-| Winchester Model 201 | 8 | 11P | -1 | SA | – | 2 ( b ) | 8R | 1,300¥ | SR5:GH3 |
-| Winchester Model 2054 | 4 (5) | 11P | -1 | SA | – (1) | 7 ( m ) | 6R | 900¥ | SR5:GH3 |
-| Winchester Model 2066 | 4 | 11P | -1 | SS | – | 5 ( m ) | 4R | 1,000¥ | SR5:GH3 |
+| Weapon                         | Acc   | DV  | AP  | Modes    | RC    | Ammo                 | Avail | Cost   | Source  |
+| ------------------------------ | ----- | --- | --- | -------- | ----- | -------------------- | ----- | ------ | ------- |
+| Auto-Assault 16                | 4     | 13P | -1  | SA/BF/FA | 2     | 10 ( c ) or 32 ( d ) | 18F   | 1,800¥ | SR5:R&G |
+| Cavalier Falchion              | 5 (7) | 12P | -1  | SS       | –     | 8 ( m )              | 9R    | 1,200¥ | SR5:GH3 |
+| Defiance T-250                 | 4     | 10P | -1  | SS/SA    | –     | 5 ( m )              | 4R    | 450¥   | Core    |
+| Defiance T-250, short-barreled | 4     | 9P  | -1  | SS/SA    | –     | 5 ( m )              | 4R    | 450¥   | Core    |
+| Enfield AS-7                   | 4 (5) | 13P | -1  | SA/BF    | –     | 10 ( c ) or 24 ( d ) | 12F   | 1,100¥ | Core    |
+| Franchi SPAS-24                | 4 (6) | 12P | -1  | SA/BF/FA | 1     | 10 ( c )             | 12F   | 1,050¥ | SR5:R&G |
+| HK XM30, Shotgun               | 3 (5) | 10P | -1  | SA       | – (1) | 10 ( c )             | 15F   | 4,500¥ | SR5:R&G |
+| Krime Boss                     | 3     | 13P | -1  | SA       | 1     | 15 ( d )             | 11R   | 600¥   | SR5:GH3 |
+| Mossberg AM-CMDT               | 5 (7) | 12P | -1  | SA/BF/FA | –     | 10 ( c )             | 12F   | 1,400¥ | SR5:R&G |
+| Nissan Optimum II, Shotgun     | 4 (6) | 10P | -1  | SA       | 1     | 5 ( m )              | –     | –      | SR5:R&G |
+| PJSS Model 55                  | 6     | 11P | -1  | SS       | – (1) | 2 ( b )              | 9R    | 1,000¥ | Core    |
+| Remington 990                  | 4     | 11P | -1  | SA       | –     | 8 ( c )              | 6R    | 950¥   | SR5:R&G |
+| Shiawase Arms Rain             | 4     | 10P | -1  | SA       | – (1) | 5 ( ml )             | 4R    | 450¥   | SR5:GH3 |
+| Winchester Model 201           | 8     | 11P | -1  | SA       | –     | 2 ( b )              | 8R    | 1,300¥ | SR5:GH3 |
+| Winchester Model 2054          | 4 (5) | 11P | -1  | SA       | – (1) | 7 ( m )              | 6R    | 900¥   | SR5:GH3 |
+| Winchester Model 2066          | 4     | 11P | -1  | SS       | –     | 5 ( m )              | 4R    | 1,000¥ | SR5:GH3 |
 
 ## Auto-Assault 16
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 13P | -1 | SA/BF/FA | 2 | 10(c) or 32(d) | 18F | 1,800¥ | SR5:R&G |
@@ -50,13 +50,13 @@ A favorite among military and mercenary units, the rugged and deadly AA-16 is th
 
 ## Cavalier Falchion
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 (7) | 12P | –1 | SS | – | 8(m) | 9R | 1,200¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Advanced Safety, Melee Hardening, Smartlink, Trigger Removal
+: Advanced Safety, Melee Hardening, Smartlink, Trigger Removal
 
 Cavalier’s companion to the Sheriff, the Falchion is designed to be part of a shooter’s integrated Personal Area Network. The Falchion’s smartlink system painlessly synchronizes with the user’s commlink, providing visual cues when performing a weapon switch in a tactical situation. The advanced safety system and lack of manual controls ensures the weapon cannot be turned against its user. Also, in keeping with the Sheriff’s popular visual customization options, the Falchion is available in a number of different colors and decorative patterns.
 
@@ -71,43 +71,43 @@ Cavalier’s companion to the Sheriff, the Falchion is designed to be part of a 
 
 ## Defiance T-250
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 10P | –1 | SS/SA | – | 5(m) | 4R | 450¥ | Core |
 
 Modifiers
-:   Gas Operated
-:   Pump Operated
+: Gas Operated
+: Pump Operated
 
 Short Barreled Version
-:   Concealability +4
-:   Heavy Pistol Range
-:   DV 4
+: Concealability +4
+: Heavy Pistol Range
+: DV 4
 
 A common sight on the mean streets when things escalate beyond pistols and knives, this semi-automatic shotgun is available in either a normal-length or short-barreled version. It is gas operated, but also features a secondary pump action for situations where preventing jams is more important than quickly firing a second shot. The short-barreled version has the Concealability of +4, the range of a heavy pistol, and a damage code of 9P.
 
 ## Enfield AS-7
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4(5) | 13P | –1 | SA/BF | – | 10(c) or 24(d) | 12F | 1,100¥ | Core |
 
 Modifiers
-:   **TOP**:Laser Sight
+: **TOP**:Laser Sight
 
 This military assault shotgun provides its user with massive firepower. As a close-quarters weapon and general combat gun, it is universally feared. It can either be loaded with ten-round ammo clips or a special twenty-four-round drum. The Enfield AS-7 comes equipped with a built-in, top-mounted laser sight.
 
 ## Franchi SPAS-24
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4(6) | 12P | -1 | SA/BF/FA | 1 | 10(c) | 12F | 1,050¥ | SR5:R&G |
 
 Standard upgrades
-:   Shock pad, smartgun system
+: Shock pad, smartgun system
 
 An upgraded version of the classic SPAS-22, the -24 is a rugged, pump-action combat gun comes standard with a smartgun system and integrated weapon light mounted in the fore-stock. But instead of the traditional folding stock, the -24 comes with a rigid stock and shock pad.
 
@@ -116,13 +116,13 @@ An upgraded version of the classic SPAS-22, the -24 is a rugged, pump-action com
 
 ## Krime Boss
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 3 | 13P | –1 | SA | 1 | 15(d) | 11R | 600¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Metahuman Customization
+: Metahuman Customization
 
 This drum-fed instrument of death is the latest manufacturing marvel released by Krime for the civilian arms enthusiast. The large frame design absorbs the recoil produced by the shotgun’s rapid-fire capability, allowing the shooter to keep the barrel aimed at their target, whether it’s a paper silhouette, clay pigeon, or an Awakened critter. The Krime Boss makes sure you come out on top of the heap.
 
@@ -137,13 +137,13 @@ This drum-fed instrument of death is the latest manufacturing marvel released by
 
 ## Mossberg AM-CMDT
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5(7) | 12P | -1 | SA/BF/FA | – | 10(c) | 12F | 1,400¥ | SR5:R&G |
 
 Standard upgrades
-:   Smartlink
+: Smartlink
 
 Shotguns aren’t known for their accuracy, but Mossberg hopes the latest version of their venerable AM-CMDT will change that. After merging their classic combat shotgun design with the latest in smartgun technology, Mossberg recently began a marketing campaign aimed at law enforcement and security agencies that declared the AM-CMDT a “perfect balance between accuracy and firepower.” While previous versions of the CMDT only used flechette ammunition, the current one is capable of accepting all standard shotgun rounds.
 
@@ -152,19 +152,19 @@ Shotguns aren’t known for their accuracy, but Mossberg hopes the latest versio
 
 ## PJSS Model 55
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6 | 11P | –1 | SS | (1) | 2(b) | 9R | 1,000¥ | Core |
 
 Modifiers
-:   Rigid Stock with Shock Pad
+: Rigid Stock with Shock Pad
 
 This is a weapon of classic style for a classic sport. Produced only in small numbers, it’s renowned among European hunters and trap shooters as a precise and prestigious weapon. The weapon’s rigid stock comes equipped with an integrated shock pad. Both barrels can be shot at once as a short burst (see Not Enough Bullets, p. 180).
 
 ## Remington 990
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 11P | -1 | SA | – | 8(c) | 6R | 950¥ | SR5:R&G |
@@ -182,13 +182,13 @@ Whether you’re on a budget and need a good solid boom-stick, or looking for a 
 
 ## Shiawase Arms Rain
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 10P | –1 | SA | (1) | 5(ml) | 4R | 450¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Retractable Stock
+: Retractable Stock
 
 Shiawase’s latest entry into the civilian arms market, the Rain features the “Magazine Barrel” popular with many organizations, as it simplifies record keeping and maintenance as the barrel is replaced at the same time as the ammunition. The Rain currently has a number of different shot types available, with Matrix support recommendations based on the laws of your particular locale.
 
@@ -203,13 +203,13 @@ Shiawase’s latest entry into the civilian arms market, the Rain features the �
 
 ## Winchester Model 201
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 8 | 11P | –1 | SA | – | 2(b) | 8R | 1,300¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   None
+: None
 
 A hand-finished over-under double-barrel shotgun, the Model 201 is a fine continuation of the line. Commonly sold to sportsmen around the world, this shotgun is manufactured with a number of different iron sights for traditional competition and hunting. The foregrip’s checker pattern has nine variations available, along with custom carving for those customers who desire a unique look for an heirloom-quality firearm.
 
@@ -224,13 +224,13 @@ A hand-finished over-under double-barrel shotgun, the Model 201 is a fine contin
 
 ## Winchester Model 2054
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 (5) | 11P | –1 | SA | (1) | 7(m) | 6R | 900¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Laser Sight, Retractable Stock
+: Laser Sight, Retractable Stock
 
 The Model 2054 is a semi-automatic design, originally submitted to the Ute Nation for possible use by their military police. The shotgun features an integral laser sight and retractable stock and can easily be upgraded with a smartgun system. While the Ute Nation ordered the first production runs, the shotgun was made available to civilian purchasers in 2056, after the initial military contract was completed.
 
@@ -245,13 +245,13 @@ The Model 2054 is a semi-automatic design, originally submitted to the Ute Natio
 
 ## Winchester Model 2066
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 11P | –1 | SS | – | 5(m) | 4R | 1,000¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   None
+: None
 
 Featured in the recent trid hit “Mad AIs at Dawn,” the Model 2066 is a development of a classic Winchester shotgun design, modernized for today’s sportsman, combined with a robot slayer. The receiver is constructed with high-tensile steel, improving the weapon’s ability to handle custom hunting loads, while the case-ejection system has been strengthened for shooters who prefer the modern, longer cartridges. The level-action has been designed with self-lubricating parts to ensure smooth operation and loading, which is a critical factor for those caught by surprise in wild country.
 
@@ -266,10 +266,10 @@ Featured in the recent trid hit “Mad AIs at Dawn,” the Model 2066 is a devel
 
 ---
 
-| Weapons |
-| --- |
-| Melee | Blades // Clubs // Exotic // Implant // Improvised // Misc. |
-| Ranged | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing |
-| Firearms | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // *Misc.* ( Exotic / Implant ) |
-| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile ) |
-| *Misc.* | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles ) |
+| Weapons                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Melee                     | Blades // Clubs // Exotic // Implant // Improvised // Misc.                                                                                                                      |
+| Ranged                    | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing                                                                                                           |
+| Firearms                  | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // _Misc._ ( Exotic / Implant ) |
+| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile )                                                                                                                              |
+| _Misc._                   | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles )                                                                  |

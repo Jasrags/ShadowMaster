@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 /**
  * Spellbook - Displays character's known spells organized by category
- * 
+ *
  * Used on the character sheet to show spells with details like
  * range, duration, drain formula, and type.
  */
 
-import { useState } from 'react';
-import type { SpellCategory } from '@/lib/types/magic';
-import type { SpellData } from '@/lib/rules/loader-types';
+import { useState } from "react";
+import type { SpellCategory } from "@/lib/types/magic";
+import type { SpellData } from "@/lib/rules/loader-types";
 
 interface SpellbookProps {
   spells: SpellData[];
@@ -17,20 +17,28 @@ interface SpellbookProps {
   onCastSpell?: (spell: SpellData) => void;
 }
 
-const SPELL_CATEGORIES: SpellCategory[] = ['combat', 'detection', 'health', 'illusion', 'manipulation'];
+const SPELL_CATEGORIES: SpellCategory[] = [
+  "combat",
+  "detection",
+  "health",
+  "illusion",
+  "manipulation",
+];
 
-export function Spellbook({ spells, className = '', onCastSpell }: SpellbookProps) {
-  const [activeCategory, setActiveCategory] = useState<SpellCategory | 'all'>('all');
+export function Spellbook({ spells, className = "", onCastSpell }: SpellbookProps) {
+  const [activeCategory, setActiveCategory] = useState<SpellCategory | "all">("all");
 
   // Group spells by category
-  const spellsByCategory = SPELL_CATEGORIES.reduce((acc, category) => {
-    acc[category] = spells.filter(s => s.category === category);
-    return acc;
-  }, {} as Record<SpellCategory, SpellData[]>);
+  const spellsByCategory = SPELL_CATEGORIES.reduce(
+    (acc, category) => {
+      acc[category] = spells.filter((s) => s.category === category);
+      return acc;
+    },
+    {} as Record<SpellCategory, SpellData[]>
+  );
 
-  const filteredSpells = activeCategory === 'all' 
-    ? spells 
-    : spellsByCategory[activeCategory] ?? [];
+  const filteredSpells =
+    activeCategory === "all" ? spells : (spellsByCategory[activeCategory] ?? []);
 
   if (spells.length === 0) {
     return (
@@ -44,23 +52,23 @@ export function Spellbook({ spells, className = '', onCastSpell }: SpellbookProp
   return (
     <div className={`spellbook ${className}`}>
       <h3 className="spellbook__title">Spellbook ({spells.length} spells)</h3>
-      
+
       {/* Category Tabs */}
       <div className="spellbook__tabs" role="tablist">
         <button
           role="tab"
-          aria-selected={activeCategory === 'all'}
-          className={`spellbook__tab ${activeCategory === 'all' ? 'spellbook__tab--active' : ''}`}
-          onClick={() => setActiveCategory('all')}
+          aria-selected={activeCategory === "all"}
+          className={`spellbook__tab ${activeCategory === "all" ? "spellbook__tab--active" : ""}`}
+          onClick={() => setActiveCategory("all")}
         >
           All ({spells.length})
         </button>
-        {SPELL_CATEGORIES.map(category => (
+        {SPELL_CATEGORIES.map((category) => (
           <button
             key={category}
             role="tab"
             aria-selected={activeCategory === category}
-            className={`spellbook__tab ${activeCategory === category ? 'spellbook__tab--active' : ''}`}
+            className={`spellbook__tab ${activeCategory === category ? "spellbook__tab--active" : ""}`}
             onClick={() => setActiveCategory(category)}
           >
             {formatCategory(category)} ({spellsByCategory[category].length})
@@ -70,10 +78,10 @@ export function Spellbook({ spells, className = '', onCastSpell }: SpellbookProp
 
       {/* Spell List */}
       <div className="spellbook__list" role="tabpanel">
-        {filteredSpells.map(spell => (
-          <SpellCard 
-            key={spell.id} 
-            spell={spell} 
+        {filteredSpells.map((spell) => (
+          <SpellCard
+            key={spell.id}
+            spell={spell}
             onCast={onCastSpell ? () => onCastSpell(spell) : undefined}
           />
         ))}
@@ -94,7 +102,7 @@ function SpellCard({ spell, onCast }: SpellCardProps) {
         <h4 className="spell-card__name">{spell.name}</h4>
         <span className="spell-card__category">{formatCategory(spell.category)}</span>
       </div>
-      
+
       <div className="spell-card__details">
         <div className="spell-card__detail">
           <span className="spell-card__label">Type:</span>
@@ -114,16 +122,10 @@ function SpellCard({ spell, onCast }: SpellCardProps) {
         </div>
       </div>
 
-      {spell.description && (
-        <p className="spell-card__description">{spell.description}</p>
-      )}
+      {spell.description && <p className="spell-card__description">{spell.description}</p>}
 
       {onCast && (
-        <button 
-          className="spell-card__cast-btn"
-          onClick={onCast}
-          aria-label={`Cast ${spell.name}`}
-        >
+        <button className="spell-card__cast-btn" onClick={onCast} aria-label={`Cast ${spell.name}`}>
           Cast Spell
         </button>
       )}

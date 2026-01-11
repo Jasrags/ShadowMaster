@@ -14,7 +14,11 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacter } from "@/lib/storage/characters";
 import { analyzeCharacterDrift } from "@/lib/rules/sync/drift-analyzer";
-import { getLegalityShield, getQuickSyncStatus, getQuickLegalityStatus } from "@/lib/rules/sync/legality-validator";
+import {
+  getLegalityShield,
+  getQuickSyncStatus,
+  getQuickLegalityStatus,
+} from "@/lib/rules/sync/legality-validator";
 import { generateMigrationPlan } from "@/lib/rules/sync/migration-engine";
 import { SnapshotCache } from "@/lib/storage/snapshot-cache";
 
@@ -29,18 +33,12 @@ interface RouteParams {
  *
  * Returns the current sync status for a character
  */
-export async function GET(
-  _request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+export async function GET(_request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Verify session
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -48,10 +46,7 @@ export async function GET(
     // Get character (fast path using userId)
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Get quick status
@@ -74,10 +69,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Error getting sync status:", error);
-    return NextResponse.json(
-      { error: "Failed to get sync status" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to get sync status" }, { status: 500 });
   }
 }
 
@@ -86,18 +78,12 @@ export async function GET(
  *
  * Triggers drift analysis and returns a report with migration plan
  */
-export async function POST(
-  _request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+export async function POST(_request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Verify session
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -105,10 +91,7 @@ export async function POST(
     // Get character (fast path using userId)
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Create request-scoped cache to avoid redundant disk reads
@@ -127,9 +110,6 @@ export async function POST(
     });
   } catch (error) {
     console.error("Error analyzing drift:", error);
-    return NextResponse.json(
-      { error: "Failed to analyze drift" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to analyze drift" }, { status: 500 });
   }
 }

@@ -7,20 +7,17 @@ Instructions:
 
 1. Process the input Capabilities and ADRs to understand the system invariants and design constraints.
 2. Generate an `implementation_plan.md` artifact following the standard project structure:
-
    - Goal Description
    - User Review Required (Critical architectural shifts or breaking changes)
    - Proposed Changes (Grouped by component/file)
    - Verification Plan (Automated and manual steps)
 
 3. Each proposed change MUST:
-
    - Reference the specific Capability Requirement or Guarantee it satisfies.
    - Respect all relevant ADRs (cite ADR IDs where applicable).
    - Define exact file paths and primary TypeScript interfaces.
 
 4. The Verification Plan MUST:
-
    - Define how to prove the Capability guarantees remain intact.
    - Include specific test cases for edge cases or constraints mentioned in the Capability docs.
 

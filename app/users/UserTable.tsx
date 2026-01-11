@@ -364,13 +364,19 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           <tbody>
             {loading && users.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                <td
+                  colSpan={7}
+                  className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400"
+                >
                   Loading users...
                 </td>
               </tr>
             ) : users.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400">
+                <td
+                  colSpan={7}
+                  className="px-4 py-8 text-center text-sm text-zinc-600 dark:text-zinc-400"
+                >
                   No users found
                 </td>
               </tr>
@@ -384,16 +390,20 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                     <span className="text-sm text-zinc-900 dark:text-zinc-50">{user.username}</span>
                   </td>
                   <td className="px-4 py-3">
-                    <span className="text-sm text-zinc-900 dark:text-zinc-50">{formatRole(user.role)}</span>
+                    <span className="text-sm text-zinc-900 dark:text-zinc-50">
+                      {formatRole(user.role)}
+                    </span>
+                  </td>
+                  <td className="px-4 py-3">{getStatusBadge(user.accountStatus)}</td>
+                  <td className="px-4 py-3">
+                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                      {formatDate(user.createdAt)}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
-                    {getStatusBadge(user.accountStatus)}
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">{formatDate(user.createdAt)}</span>
-                  </td>
-                  <td className="px-4 py-3">
-                    <span className="text-sm text-zinc-600 dark:text-zinc-400">{formatDate(user.lastLogin)}</span>
+                    <span className="text-sm text-zinc-600 dark:text-zinc-400">
+                      {formatDate(user.lastLogin)}
+                    </span>
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex justify-end">
@@ -530,4 +540,3 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     </div>
   );
 }
-

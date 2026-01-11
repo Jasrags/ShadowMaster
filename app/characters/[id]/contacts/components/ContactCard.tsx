@@ -120,16 +120,12 @@ export function ContactCard({ contact, characterId, theme, onCallFavor }: Contac
             </div>
             <div>
               <div className="text-[10px] text-muted-foreground uppercase font-mono">Loy</div>
-              <div className="text-lg font-bold font-mono text-pink-400">
-                {contact.loyalty}
-              </div>
+              <div className="text-lg font-bold font-mono text-pink-400">{contact.loyalty}</div>
             </div>
           </div>
 
           {/* Favor balance */}
-          <div className={`text-[10px] font-mono ${favorStyle.color}`}>
-            {favorStyle.text}
-          </div>
+          <div className={`text-[10px] font-mono ${favorStyle.color}`}>{favorStyle.text}</div>
         </div>
       </div>
 

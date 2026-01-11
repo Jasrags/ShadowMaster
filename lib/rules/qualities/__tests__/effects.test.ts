@@ -5,7 +5,7 @@
  * template variable substitution, and effect filtering.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 import type {
   Quality,
   QualitySelection,
@@ -13,8 +13,8 @@ import type {
   EffectTrigger,
   EffectTarget,
   EffectCondition,
-} from '@/lib/types';
-import type { TestContext, CombatContext, MagicContext, MatrixContext } from '@/lib/types/gameplay';
+} from "@/lib/types";
+import type { TestContext, CombatContext, MagicContext, MatrixContext } from "@/lib/types/gameplay";
 import {
   resolveTemplateVariable,
   resolveEffectValue,
@@ -25,113 +25,113 @@ import {
   getActiveEffects,
   filterEffectsByTrigger,
   filterEffectsByTarget,
-} from '../effects';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../effects";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
-describe('Quality Effects Resolution', () => {
+describe("Quality Effects Resolution", () => {
   let quality: Quality;
   let selection: QualitySelection;
 
   beforeEach(() => {
     quality = {
-      id: 'test-quality',
-      name: 'Test Quality',
-      type: 'positive',
+      id: "test-quality",
+      name: "Test Quality",
+      type: "positive",
       karmaCost: 5,
-      summary: 'A test quality',
+      summary: "A test quality",
     };
 
     selection = {
-      qualityId: 'test-quality',
-      source: 'creation',
+      qualityId: "test-quality",
+      source: "creation",
     };
   });
 
-  describe('resolveTemplateVariable', () => {
-    it('should return number as-is', () => {
+  describe("resolveTemplateVariable", () => {
+    it("should return number as-is", () => {
       const result = resolveTemplateVariable(42, quality, selection);
       expect(result).toBe(42);
     });
 
-    it('should replace {{rating}} template variable', () => {
+    it("should replace {{rating}} template variable", () => {
       const selectionWithRating: QualitySelection = {
         ...selection,
         rating: 3,
       };
 
-      const result = resolveTemplateVariable('{{rating}}', quality, selectionWithRating);
+      const result = resolveTemplateVariable("{{rating}}", quality, selectionWithRating);
       expect(result).toBe(3);
     });
 
-    it('should use 1 as default rating when rating not specified', () => {
-      const result = resolveTemplateVariable('{{rating}}', quality, selection);
+    it("should use 1 as default rating when rating not specified", () => {
+      const result = resolveTemplateVariable("{{rating}}", quality, selection);
       expect(result).toBe(1);
     });
 
-    it('should replace {{specification}} template variable', () => {
+    it("should replace {{specification}} template variable", () => {
       const selectionWithSpec: QualitySelection = {
         ...selection,
-        specification: 'Firearms',
+        specification: "Firearms",
       };
 
-      const result = resolveTemplateVariable('{{specification}}', quality, selectionWithSpec);
-      expect(result).toBe('Firearms');
+      const result = resolveTemplateVariable("{{specification}}", quality, selectionWithSpec);
+      expect(result).toBe("Firearms");
     });
 
-    it('should replace {{specificationId}} template variable', () => {
+    it("should replace {{specificationId}} template variable", () => {
       const selectionWithSpecId: QualitySelection = {
         ...selection,
-        specificationId: 'firearms',
+        specificationId: "firearms",
       };
 
-      const result = resolveTemplateVariable('{{specificationId}}', quality, selectionWithSpecId);
-      expect(result).toBe('firearms');
+      const result = resolveTemplateVariable("{{specificationId}}", quality, selectionWithSpecId);
+      expect(result).toBe("firearms");
     });
 
-    it('should replace multiple template variables', () => {
+    it("should replace multiple template variables", () => {
       const selectionWithBoth: QualitySelection = {
         ...selection,
         rating: 2,
-        specification: 'Firearms',
+        specification: "Firearms",
       };
 
       const result = resolveTemplateVariable(
-        'Rating {{rating}} for {{specification}}',
+        "Rating {{rating}} for {{specification}}",
         quality,
         selectionWithBoth
       );
-      expect(result).toBe('Rating 2 for Firearms');
+      expect(result).toBe("Rating 2 for Firearms");
     });
 
-    it('should parse numeric result as number', () => {
+    it("should parse numeric result as number", () => {
       const selectionWithRating: QualitySelection = {
         ...selection,
         rating: 3,
       };
 
-      const result = resolveTemplateVariable('{{rating}}', quality, selectionWithRating);
-      expect(typeof result).toBe('number');
+      const result = resolveTemplateVariable("{{rating}}", quality, selectionWithRating);
+      expect(typeof result).toBe("number");
       expect(result).toBe(3);
     });
 
-    it('should return string for non-numeric results', () => {
+    it("should return string for non-numeric results", () => {
       const selectionWithSpec: QualitySelection = {
         ...selection,
-        specification: 'Firearms',
+        specification: "Firearms",
       };
 
-      const result = resolveTemplateVariable('{{specification}}', quality, selectionWithSpec);
-      expect(typeof result).toBe('string');
-      expect(result).toBe('Firearms');
+      const result = resolveTemplateVariable("{{specification}}", quality, selectionWithSpec);
+      expect(typeof result).toBe("string");
+      expect(result).toBe("Firearms");
     });
   });
 
-  describe('resolveEffectValue', () => {
-    it('should return numeric value as-is', () => {
+  describe("resolveEffectValue", () => {
+    it("should return numeric value as-is", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'always',
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "always",
         target: {},
         value: 2,
       };
@@ -140,13 +140,13 @@ describe('Quality Effects Resolution', () => {
       expect(result).toBe(2);
     });
 
-    it('should resolve template variable in value', () => {
+    it("should resolve template variable in value", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'always',
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "always",
         target: {},
-        value: '{{rating}}',
+        value: "{{rating}}",
       };
 
       const selectionWithRating: QualitySelection = {
@@ -158,13 +158,13 @@ describe('Quality Effects Resolution', () => {
       expect(result).toBe(3);
     });
 
-    it('should handle negative template expressions', () => {
+    it("should handle negative template expressions", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'always',
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "always",
         target: {},
-        value: '-{{rating}}',
+        value: "-{{rating}}",
       };
 
       const selectionWithRating: QualitySelection = {
@@ -176,13 +176,13 @@ describe('Quality Effects Resolution', () => {
       expect(result).toBe(-2);
     });
 
-    it('should return 0 for unresolvable values', () => {
+    it("should return 0 for unresolvable values", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'always',
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "always",
         target: {},
-        value: 'invalid-expression',
+        value: "invalid-expression",
       };
 
       const result = resolveEffectValue(effect, quality, selection);
@@ -190,161 +190,161 @@ describe('Quality Effects Resolution', () => {
     });
   });
 
-  describe('resolveEffectTarget', () => {
-    it('should return target as-is when no template variables', () => {
+  describe("resolveEffectTarget", () => {
+    it("should return target as-is when no template variables", () => {
       const target: EffectTarget = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const result = resolveEffectTarget(target, quality, selection);
       expect(result).toEqual(target);
     });
 
-    it('should resolve template variable in skill target', () => {
+    it("should resolve template variable in skill target", () => {
       const target: EffectTarget = {
-        skill: '{{specification}}',
+        skill: "{{specification}}",
       };
 
       const selectionWithSpec: QualitySelection = {
         ...selection,
-        specification: 'firearms',
+        specification: "firearms",
       };
 
       const result = resolveEffectTarget(target, quality, selectionWithSpec);
-      expect(result.skill).toBe('firearms');
+      expect(result.skill).toBe("firearms");
     });
 
-    it('should resolve template variable in limit target', () => {
+    it("should resolve template variable in limit target", () => {
       const target: EffectTarget = {
-        limit: '{{specification}}' as 'physical' | 'mental' | 'social' | 'astral',
+        limit: "{{specification}}" as "physical" | "mental" | "social" | "astral",
       };
 
       const selectionWithSpec: QualitySelection = {
         ...selection,
-        specification: 'physical',
+        specification: "physical",
       };
 
       const result = resolveEffectTarget(target, quality, selectionWithSpec);
-      expect(result.limit).toBe('physical');
+      expect(result.limit).toBe("physical");
     });
 
-    it('should resolve template variable in attribute target', () => {
+    it("should resolve template variable in attribute target", () => {
       const target: EffectTarget = {
-        attribute: '{{specification}}',
+        attribute: "{{specification}}",
       };
 
       const selectionWithSpec: QualitySelection = {
         ...selection,
-        specification: 'agility',
+        specification: "agility",
       };
 
       const result = resolveEffectTarget(target, quality, selectionWithSpec);
-      expect(result.attribute).toBe('agility');
+      expect(result.attribute).toBe("agility");
     });
   });
 
-  describe('matchesCondition', () => {
-    it('should return true when no condition specified', () => {
+  describe("matchesCondition", () => {
+    it("should return true when no condition specified", () => {
       const context: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const result = matchesCondition(undefined, context);
       expect(result).toBe(true);
     });
 
-    it('should match environment condition', () => {
+    it("should match environment condition", () => {
       const condition: EffectCondition = {
-        environment: ['dim-light', 'darkness'],
+        environment: ["dim-light", "darkness"],
       };
 
       const context1: TestContext = {
-        skill: 'firearms',
-        environment: ['dim-light'],
+        skill: "firearms",
+        environment: ["dim-light"],
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
-        environment: ['bright-light'],
+        skill: "firearms",
+        environment: ["bright-light"],
       };
 
       expect(matchesCondition(condition, context1)).toBe(true);
       expect(matchesCondition(condition, context2)).toBe(false);
     });
 
-    it('should match target type condition', () => {
+    it("should match target type condition", () => {
       const condition: EffectCondition = {
-        targetType: ['spirit', 'awakened'],
+        targetType: ["spirit", "awakened"],
       };
 
       const context1: TestContext = {
-        skill: 'firearms',
-        targetType: ['spirit'],
+        skill: "firearms",
+        targetType: ["spirit"],
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
-        targetType: ['mundane'],
+        skill: "firearms",
+        targetType: ["mundane"],
       };
 
       expect(matchesCondition(condition, context1)).toBe(true);
       expect(matchesCondition(condition, context2)).toBe(false);
     });
 
-    it('should match character state condition', () => {
+    it("should match character state condition", () => {
       const condition: EffectCondition = {
-        characterState: ['astrally-projecting'],
+        characterState: ["astrally-projecting"],
       };
 
       const context1: TestContext = {
-        skill: 'firearms',
-        characterState: ['astrally-projecting'],
+        skill: "firearms",
+        characterState: ["astrally-projecting"],
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
-        characterState: ['in-combat'],
+        skill: "firearms",
+        characterState: ["in-combat"],
       };
 
       expect(matchesCondition(condition, context1)).toBe(true);
       expect(matchesCondition(condition, context2)).toBe(false);
     });
 
-    it('should match opposed by condition', () => {
+    it("should match opposed by condition", () => {
       const condition: EffectCondition = {
-        opposedBy: 'assensing',
+        opposedBy: "assensing",
       };
 
       const context1: TestContext = {
-        skill: 'firearms',
-        opposedBy: 'assensing',
+        skill: "firearms",
+        opposedBy: "assensing",
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
-        opposedBy: 'perception',
+        skill: "firearms",
+        opposedBy: "perception",
       };
 
       expect(matchesCondition(condition, context1)).toBe(true);
       expect(matchesCondition(condition, context2)).toBe(false);
     });
 
-    it('should match multiple conditions', () => {
+    it("should match multiple conditions", () => {
       const condition: EffectCondition = {
-        environment: ['dim-light'],
-        targetType: ['spirit'],
+        environment: ["dim-light"],
+        targetType: ["spirit"],
       };
 
       const context1: TestContext = {
-        skill: 'firearms',
-        environment: ['dim-light'],
-        targetType: ['spirit'],
+        skill: "firearms",
+        environment: ["dim-light"],
+        targetType: ["spirit"],
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
-        environment: ['dim-light'],
-        targetType: ['mundane'],
+        skill: "firearms",
+        environment: ["dim-light"],
+        targetType: ["mundane"],
       };
 
       expect(matchesCondition(condition, context1)).toBe(true);
@@ -352,54 +352,54 @@ describe('Quality Effects Resolution', () => {
     });
   });
 
-  describe('matchesTrigger', () => {
+  describe("matchesTrigger", () => {
     it('should always match "always" trigger', () => {
       const context: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
-      expect(matchesTrigger('always', context)).toBe(true);
+      expect(matchesTrigger("always", context)).toBe(true);
     });
 
-    it('should match skill-test trigger', () => {
+    it("should match skill-test trigger", () => {
       const context1: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const context2: TestContext = {
-        skillGroup: 'combat',
+        skillGroup: "combat",
       };
 
       const context3: TestContext = {
-        testCategory: 'combat',
+        testCategory: "combat",
       };
 
       const context4: TestContext = {
-        attribute: 'agility',
+        attribute: "agility",
       };
 
-      expect(matchesTrigger('skill-test', context1)).toBe(true);
-      expect(matchesTrigger('skill-test', context2)).toBe(true);
-      expect(matchesTrigger('skill-test', context3)).toBe(true);
-      expect(matchesTrigger('skill-test', context4)).toBe(false);
+      expect(matchesTrigger("skill-test", context1)).toBe(true);
+      expect(matchesTrigger("skill-test", context2)).toBe(true);
+      expect(matchesTrigger("skill-test", context3)).toBe(true);
+      expect(matchesTrigger("skill-test", context4)).toBe(false);
     });
 
-    it('should match attribute-test trigger', () => {
+    it("should match attribute-test trigger", () => {
       const context1: TestContext = {
-        attribute: 'agility',
+        attribute: "agility",
       };
 
       const context2: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
-      expect(matchesTrigger('attribute-test', context1)).toBe(true);
-      expect(matchesTrigger('attribute-test', context2)).toBe(false);
+      expect(matchesTrigger("attribute-test", context1)).toBe(true);
+      expect(matchesTrigger("attribute-test", context2)).toBe(false);
     });
 
-    it('should match combat-action trigger', () => {
+    it("should match combat-action trigger", () => {
       const context1: CombatContext = {
-        actionType: 'melee-attack',
+        actionType: "melee-attack",
       };
 
       const context2: CombatContext = {
@@ -411,16 +411,16 @@ describe('Quality Effects Resolution', () => {
       };
 
       const context4: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
-      expect(matchesTrigger('combat-action', context1)).toBe(true);
-      expect(matchesTrigger('combat-action', context2)).toBe(true);
-      expect(matchesTrigger('combat-action', context3)).toBe(true);
-      expect(matchesTrigger('combat-action', context4)).toBe(false);
+      expect(matchesTrigger("combat-action", context1)).toBe(true);
+      expect(matchesTrigger("combat-action", context2)).toBe(true);
+      expect(matchesTrigger("combat-action", context3)).toBe(true);
+      expect(matchesTrigger("combat-action", context4)).toBe(false);
     });
 
-    it('should match defense-test trigger', () => {
+    it("should match defense-test trigger", () => {
       const context1: TestContext = {
         isDefenseTest: true,
       };
@@ -429,11 +429,11 @@ describe('Quality Effects Resolution', () => {
         isDefenseTest: false,
       };
 
-      expect(matchesTrigger('defense-test', context1)).toBe(true);
-      expect(matchesTrigger('defense-test', context2)).toBe(false);
+      expect(matchesTrigger("defense-test", context1)).toBe(true);
+      expect(matchesTrigger("defense-test", context2)).toBe(false);
     });
 
-    it('should match resistance-test trigger', () => {
+    it("should match resistance-test trigger", () => {
       const context1: TestContext = {
         isResistanceTest: true,
       };
@@ -442,120 +442,120 @@ describe('Quality Effects Resolution', () => {
         isResistanceTest: false,
       };
 
-      expect(matchesTrigger('resistance-test', context1)).toBe(true);
-      expect(matchesTrigger('resistance-test', context2)).toBe(false);
+      expect(matchesTrigger("resistance-test", context1)).toBe(true);
+      expect(matchesTrigger("resistance-test", context2)).toBe(false);
     });
 
-    it('should match social-test trigger', () => {
+    it("should match social-test trigger", () => {
       const context1: TestContext = {
-        testCategory: 'social',
+        testCategory: "social",
       };
 
       const context2: TestContext = {
-        testCategory: 'combat',
+        testCategory: "combat",
       };
 
-      expect(matchesTrigger('social-test', context1)).toBe(true);
-      expect(matchesTrigger('social-test', context2)).toBe(false);
+      expect(matchesTrigger("social-test", context1)).toBe(true);
+      expect(matchesTrigger("social-test", context2)).toBe(false);
     });
 
-    it('should match magic-use trigger', () => {
+    it("should match magic-use trigger", () => {
       const context1: MagicContext = {
-        actionType: 'casting',
+        actionType: "casting",
       };
 
       const context2: MagicContext = {
-        actionType: 'summoning',
+        actionType: "summoning",
       };
 
       const context3: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
-      expect(matchesTrigger('magic-use', context1)).toBe(true);
-      expect(matchesTrigger('magic-use', context2)).toBe(true);
-      expect(matchesTrigger('magic-use', context3)).toBe(false);
+      expect(matchesTrigger("magic-use", context1)).toBe(true);
+      expect(matchesTrigger("magic-use", context2)).toBe(true);
+      expect(matchesTrigger("magic-use", context3)).toBe(false);
     });
 
-    it('should match matrix-action trigger', () => {
+    it("should match matrix-action trigger", () => {
       const context1: MatrixContext = {
-        matrixAction: 'hack',
+        matrixAction: "hack",
       };
 
       const context2: MatrixContext = {
-        matrixMode: 'vr-hot',
+        matrixMode: "vr-hot",
       };
 
       const context3: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
-      expect(matchesTrigger('matrix-action', context1)).toBe(true);
-      expect(matchesTrigger('matrix-action', context2)).toBe(true);
-      expect(matchesTrigger('matrix-action', context3)).toBe(false);
+      expect(matchesTrigger("matrix-action", context1)).toBe(true);
+      expect(matchesTrigger("matrix-action", context2)).toBe(true);
+      expect(matchesTrigger("matrix-action", context3)).toBe(false);
     });
   });
 
-  describe('shouldApplyEffect', () => {
-    it('should apply effect when trigger and condition match', () => {
+  describe("shouldApplyEffect", () => {
+    it("should apply effect when trigger and condition match", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'skill-test',
-        target: { skill: 'firearms' },
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "skill-test",
+        target: { skill: "firearms" },
         condition: {
-          environment: ['dim-light'],
+          environment: ["dim-light"],
         },
         value: 1,
       };
 
       const context: TestContext = {
-        skill: 'firearms',
-        environment: ['dim-light'],
+        skill: "firearms",
+        environment: ["dim-light"],
       };
 
       expect(shouldApplyEffect(effect, context)).toBe(true);
     });
 
-    it('should not apply when trigger does not match', () => {
+    it("should not apply when trigger does not match", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'skill-test',
-        target: { skill: 'firearms' },
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "skill-test",
+        target: { skill: "firearms" },
         value: 1,
       };
 
       const context: TestContext = {
-        attribute: 'agility',
+        attribute: "agility",
       };
 
       expect(shouldApplyEffect(effect, context)).toBe(false);
     });
 
-    it('should not apply when condition does not match', () => {
+    it("should not apply when condition does not match", () => {
       const effect: QualityEffect = {
-        id: 'test-effect',
-        type: 'dice-pool-modifier',
-        trigger: 'skill-test',
-        target: { skill: 'firearms' },
+        id: "test-effect",
+        type: "dice-pool-modifier",
+        trigger: "skill-test",
+        target: { skill: "firearms" },
         condition: {
-          environment: ['dim-light'],
+          environment: ["dim-light"],
         },
         value: 1,
       };
 
       const context: TestContext = {
-        skill: 'firearms',
-        environment: ['bright-light'],
+        skill: "firearms",
+        environment: ["bright-light"],
       };
 
       expect(shouldApplyEffect(effect, context)).toBe(false);
     });
   });
 
-  describe('getActiveEffects', () => {
-    it('should return empty array for inactive quality', () => {
+  describe("getActiveEffects", () => {
+    it("should return empty array for inactive quality", () => {
       const inactiveSelection: QualitySelection = {
         ...selection,
         active: false,
@@ -565,9 +565,9 @@ describe('Quality Effects Resolution', () => {
         ...quality,
         effects: [
           {
-            id: 'test-effect',
-            type: 'dice-pool-modifier',
-            trigger: 'always',
+            id: "test-effect",
+            type: "dice-pool-modifier",
+            trigger: "always",
             target: {},
             value: 2,
           },
@@ -575,7 +575,7 @@ describe('Quality Effects Resolution', () => {
       };
 
       const context: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const result = getActiveEffects(
@@ -587,30 +587,30 @@ describe('Quality Effects Resolution', () => {
       expect(result).toHaveLength(0);
     });
 
-    it('should return active effects that match context', () => {
+    it("should return active effects that match context", () => {
       const qualityWithEffects: Quality = {
         ...quality,
         effects: [
           {
-            id: 'effect-1',
-            type: 'dice-pool-modifier',
-            trigger: 'skill-test',
-            target: { skill: 'firearms' },
+            id: "effect-1",
+            type: "dice-pool-modifier",
+            trigger: "skill-test",
+            target: { skill: "firearms" },
             value: 2,
           },
           {
-            id: 'effect-2',
-            type: 'dice-pool-modifier',
-            trigger: 'skill-test',
-            target: { skill: 'stealth' },
+            id: "effect-2",
+            type: "dice-pool-modifier",
+            trigger: "skill-test",
+            target: { skill: "stealth" },
             value: 1,
           },
         ],
       };
 
       const context: TestContext = {
-        skill: 'firearms',
-        testCategory: 'combat',
+        skill: "firearms",
+        testCategory: "combat",
       };
 
       const result = getActiveEffects(
@@ -620,24 +620,24 @@ describe('Quality Effects Resolution', () => {
         context
       );
       // Should only return effect-1 since it targets firearms
-      const firearmsEffects = result.filter((e) => e.effect.id === 'effect-1');
+      const firearmsEffects = result.filter((e) => e.effect.id === "effect-1");
       expect(firearmsEffects).toHaveLength(1);
       expect(firearmsEffects[0].value).toBe(2);
     });
 
-    it('should use level-specific effects when rating specified', () => {
+    it("should use level-specific effects when rating specified", () => {
       const qualityWithLevels: Quality = {
         ...quality,
         levels: [
           {
             level: 1,
-            name: 'Rating 1',
+            name: "Rating 1",
             karma: 5,
             effects: [
               {
-                id: 'level-1-effect',
-                type: 'dice-pool-modifier',
-                trigger: 'always',
+                id: "level-1-effect",
+                type: "dice-pool-modifier",
+                trigger: "always",
                 target: {},
                 value: 1,
               },
@@ -645,13 +645,13 @@ describe('Quality Effects Resolution', () => {
           },
           {
             level: 2,
-            name: 'Rating 2',
+            name: "Rating 2",
             karma: 10,
             effects: [
               {
-                id: 'level-2-effect',
-                type: 'dice-pool-modifier',
-                trigger: 'always',
+                id: "level-2-effect",
+                type: "dice-pool-modifier",
+                trigger: "always",
                 target: {},
                 value: 2,
               },
@@ -667,7 +667,7 @@ describe('Quality Effects Resolution', () => {
       };
 
       const context: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const result = getActiveEffects(
@@ -677,20 +677,20 @@ describe('Quality Effects Resolution', () => {
         context
       );
       expect(result).toHaveLength(1);
-      expect(result[0].effect.id).toBe('level-2-effect');
+      expect(result[0].effect.id).toBe("level-2-effect");
       expect(result[0].value).toBe(2);
     });
 
-    it('should resolve template variables in effects', () => {
+    it("should resolve template variables in effects", () => {
       const qualityWithTemplate: Quality = {
         ...quality,
         effects: [
           {
-            id: 'template-effect',
-            type: 'dice-pool-modifier',
-            trigger: 'always',
-            target: { skill: '{{specification}}' },
-            value: '{{rating}}',
+            id: "template-effect",
+            type: "dice-pool-modifier",
+            trigger: "always",
+            target: { skill: "{{specification}}" },
+            value: "{{rating}}",
           },
         ],
       };
@@ -698,11 +698,11 @@ describe('Quality Effects Resolution', () => {
       const selectionWithData: QualitySelection = {
         ...selection,
         rating: 3,
-        specification: 'firearms',
+        specification: "firearms",
       };
 
       const context: TestContext = {
-        skill: 'firearms',
+        skill: "firearms",
       };
 
       const result = getActiveEffects(
@@ -713,18 +713,18 @@ describe('Quality Effects Resolution', () => {
       );
       expect(result).toHaveLength(1);
       expect(result[0].value).toBe(3);
-      expect(result[0].target.skill).toBe('firearms');
+      expect(result[0].target.skill).toBe("firearms");
     });
   });
 
-  describe('filterEffectsByTrigger', () => {
-    it('should filter effects by trigger type', () => {
+  describe("filterEffectsByTrigger", () => {
+    it("should filter effects by trigger type", () => {
       const effects = [
         {
           effect: {
-            id: 'effect-1',
-            type: 'dice-pool-modifier' as const,
-            trigger: 'always' as EffectTrigger,
+            id: "effect-1",
+            type: "dice-pool-modifier" as const,
+            trigger: "always" as EffectTrigger,
             target: {},
             value: 1,
           },
@@ -735,9 +735,9 @@ describe('Quality Effects Resolution', () => {
         },
         {
           effect: {
-            id: 'effect-2',
-            type: 'dice-pool-modifier' as const,
-            trigger: 'skill-test' as EffectTrigger,
+            id: "effect-2",
+            type: "dice-pool-modifier" as const,
+            trigger: "skill-test" as EffectTrigger,
             target: {},
             value: 2,
           },
@@ -748,47 +748,46 @@ describe('Quality Effects Resolution', () => {
         },
       ];
 
-      const filtered = filterEffectsByTrigger(effects, 'always');
+      const filtered = filterEffectsByTrigger(effects, "always");
       expect(filtered).toHaveLength(1);
-      expect(filtered[0].effect.id).toBe('effect-1');
+      expect(filtered[0].effect.id).toBe("effect-1");
     });
   });
 
-  describe('filterEffectsByTarget', () => {
-    it('should filter effects by target matcher', () => {
+  describe("filterEffectsByTarget", () => {
+    it("should filter effects by target matcher", () => {
       const effects = [
         {
           effect: {
-            id: 'effect-1',
-            type: 'dice-pool-modifier' as const,
-            trigger: 'always' as EffectTrigger,
-            target: { skill: 'firearms' },
+            id: "effect-1",
+            type: "dice-pool-modifier" as const,
+            trigger: "always" as EffectTrigger,
+            target: { skill: "firearms" },
             value: 1,
           },
           value: 1,
-          target: { skill: 'firearms' },
+          target: { skill: "firearms" },
           quality,
           selection,
         },
         {
           effect: {
-            id: 'effect-2',
-            type: 'dice-pool-modifier' as const,
-            trigger: 'always' as EffectTrigger,
-            target: { skill: 'stealth' },
+            id: "effect-2",
+            type: "dice-pool-modifier" as const,
+            trigger: "always" as EffectTrigger,
+            target: { skill: "stealth" },
             value: 2,
           },
           value: 2,
-          target: { skill: 'stealth' },
+          target: { skill: "stealth" },
           quality,
           selection,
         },
       ];
 
-      const filtered = filterEffectsByTarget(effects, (target) => target.skill === 'firearms');
+      const filtered = filterEffectsByTarget(effects, (target) => target.skill === "firearms");
       expect(filtered).toHaveLength(1);
-      expect(filtered[0].effect.id).toBe('effect-1');
+      expect(filtered[0].effect.id).toBe("effect-1");
     });
   });
 });
-

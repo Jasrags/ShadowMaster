@@ -44,10 +44,7 @@ export function GruntTeamCard({
 
   return (
     <div className="rounded-lg border border-zinc-200 bg-white hover:border-zinc-300 transition-colors dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-700">
-      <Link
-        href={`/campaigns/${campaignId}/grunt-teams/${team.id}`}
-        className="block p-4"
-      >
+      <Link href={`/campaigns/${campaignId}/grunt-teams/${team.id}`} className="block p-4">
         {/* Header */}
         <div className="flex items-start justify-between gap-2 mb-2">
           <div className="flex-1 min-w-0">
@@ -74,9 +71,7 @@ export function GruntTeamCard({
               {activeCount}/{totalSize}
             </span>
             {casualties > 0 && (
-              <span className="text-red-500 dark:text-red-400">
-                (-{casualties})
-              </span>
+              <span className="text-red-500 dark:text-red-400">(-{casualties})</span>
             )}
           </div>
 

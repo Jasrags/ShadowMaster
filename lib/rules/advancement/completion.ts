@@ -36,9 +36,7 @@ export function completeTraining(
   trainingPeriodId: string
 ): CompleteTrainingResult {
   // Find the training period
-  const trainingPeriod = character.activeTraining?.find(
-    (t) => t.id === trainingPeriodId
-  );
+  const trainingPeriod = character.activeTraining?.find((t) => t.id === trainingPeriodId);
 
   if (!trainingPeriod) {
     throw new Error(`Training period ${trainingPeriodId} not found or not active`);
@@ -50,9 +48,7 @@ export function completeTraining(
   );
 
   if (!advancementRecord) {
-    throw new Error(
-      `Advancement record ${trainingPeriod.advancementRecordId} not found`
-    );
+    throw new Error(`Advancement record ${trainingPeriod.advancementRecordId} not found`);
   }
 
   // Check if training is already completed
@@ -62,9 +58,7 @@ export function completeTraining(
 
   // Check if training is interrupted (can't complete interrupted training directly)
   if (trainingPeriod.status === "interrupted") {
-    throw new Error(
-      `Training period ${trainingPeriodId} is interrupted and must be resumed first`
-    );
+    throw new Error(`Training period ${trainingPeriodId} is interrupted and must be resumed first`);
   }
 
   // Requirement 9: Restrict final execution until approval
@@ -73,7 +67,9 @@ export function completeTraining(
   if (campaignRequired && !advancementRecord.gmApproved) {
     // Note: This check might need to be more nuanced if some advancements don't require approval
     // But per requirements, unapproved advancements are restricted from final execution.
-    throw new Error(`Advancement ${advancementRecord.id} requires GM approval before it can be completed.`);
+    throw new Error(
+      `Advancement ${advancementRecord.id} requires GM approval before it can be completed.`
+    );
   }
 
   const now = new Date().toISOString();
@@ -103,9 +99,8 @@ export function completeTraining(
   ) || [completedAdvancementRecord];
 
   // Remove the completed training period from activeTraining
-  updatedCharacter.activeTraining = character.activeTraining?.filter(
-    (t) => t.id !== trainingPeriodId
-  ) || [];
+  updatedCharacter.activeTraining =
+    character.activeTraining?.filter((t) => t.id !== trainingPeriodId) || [];
 
   return {
     updatedCharacter,
@@ -121,9 +116,10 @@ export function completeTraining(
  * @returns Array of active training periods
  */
 export function getActiveTraining(character: Character): TrainingPeriod[] {
-  return character.activeTraining?.filter(
-    (t) => t.status === "pending" || t.status === "in-progress"
-  ) || [];
+  return (
+    character.activeTraining?.filter((t) => t.status === "pending" || t.status === "in-progress") ||
+    []
+  );
 }
 
 /**
@@ -135,9 +131,10 @@ export function getActiveTraining(character: Character): TrainingPeriod[] {
 export function getCompletedTraining(
   character: Character
 ): Array<{ advancementRecord: AdvancementRecord; trainingPeriod?: TrainingPeriod }> {
-  const completed = character.advancementHistory?.filter(
-    (a) => a.trainingStatus === "completed" && a.trainingRequired
-  ) || [];
+  const completed =
+    character.advancementHistory?.filter(
+      (a) => a.trainingStatus === "completed" && a.trainingRequired
+    ) || [];
 
   // Try to find training periods for completed advancements (they may have been removed from activeTraining)
   // For now, we'll just return the advancement records
@@ -148,4 +145,3 @@ export function getCompletedTraining(
     // In a future enhancement, we might store completed training periods in a separate history
   }));
 }
-

@@ -1,0 +1,21 @@
+# Dependencies
+node_modules/
+
+# Build outputs
+.next/
+dist/
+build/
+
+# Cache
+.eslintcache
+*.tsbuildinfo
+
+# Coverage
+coverage/
+
+# Playwright
+test-results/
+playwright-report/
+
+# pnpm
+pnpm-lock.yaml

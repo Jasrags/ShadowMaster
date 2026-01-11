@@ -42,11 +42,7 @@ export type MatrixMode = "ar" | "cold-sim-vr" | "hot-sim-vr";
  * - rcc: Rigger command console for drone control
  * - technomancer-living-persona: Technomancer's innate matrix presence
  */
-export type MatrixDeviceType =
-  | "cyberdeck"
-  | "commlink"
-  | "rcc"
-  | "technomancer-living-persona";
+export type MatrixDeviceType = "cyberdeck" | "commlink" | "rcc" | "technomancer-living-persona";
 
 // =============================================================================
 // CYBERDECK ATTRIBUTE CONFIGURATION

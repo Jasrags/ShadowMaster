@@ -166,9 +166,10 @@ const inputFile = args.find((arg) => !arg.startsWith("--"));
 const outputFile = args.filter((arg) => !arg.startsWith("--"))[1];
 
 if (!inputFile || !outputFile) {
-  console.error("Usage: pnpm tsx scripts/migrate-rating-format.ts <input-file> <output-file> [--dry-run]");
+  console.error(
+    "Usage: pnpm tsx scripts/migrate-rating-format.ts <input-file> <output-file> [--dry-run]"
+  );
   process.exit(1);
 }
 
 migrateFile(inputFile, outputFile, dryRun);
-

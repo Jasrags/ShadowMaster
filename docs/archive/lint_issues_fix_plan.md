@@ -12,6 +12,7 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 - **Completion:** 15.5%
 
 **Quick Stats:**
+
 - ✅ High Priority Fixed: 5/5 (H1, L2, H3, H2, H4) - **ALL HIGH PRIORITY COMPLETE!**
 - ✅ Medium Priority Fixed: 1/2 (M2)
 - ⏳ Medium Priority Remaining: 1/2 (M1)
@@ -21,15 +22,15 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 
 ## Issue Summary
 
-| Rule | Count | Severity | Priority | Status |
-|------|-------|----------|----------|--------|
-| `@typescript-eslint/no-unused-vars` | 39 | Warning | Low | ⏳ Pending |
-| `react-hooks/exhaustive-deps` | 20 | Warning | Medium | ⏳ Pending |
-| `@next/next/no-assign-module-variable` | 0 | Warning | High | ✅ **FIXED** |
-| `react-hooks/preserve-manual-memoization` | 0 | Warning | Medium | ✅ **FIXED** |
-| `react-hooks/error-boundaries` | 0 | Warning | High | ✅ **FIXED** |
-| `react-hooks/set-state-in-effect` | 0 | Warning | High | ✅ **FIXED** |
-| `react/no-unescaped-entities` | 0 | Warning | Low | ✅ **FIXED** |
+| Rule                                      | Count | Severity | Priority | Status       |
+| ----------------------------------------- | ----- | -------- | -------- | ------------ |
+| `@typescript-eslint/no-unused-vars`       | 39    | Warning  | Low      | ⏳ Pending   |
+| `react-hooks/exhaustive-deps`             | 20    | Warning  | Medium   | ⏳ Pending   |
+| `@next/next/no-assign-module-variable`    | 0     | Warning  | High     | ✅ **FIXED** |
+| `react-hooks/preserve-manual-memoization` | 0     | Warning  | Medium   | ✅ **FIXED** |
+| `react-hooks/error-boundaries`            | 0     | Warning  | High     | ✅ **FIXED** |
+| `react-hooks/set-state-in-effect`         | 0     | Warning  | High     | ✅ **FIXED** |
+| `react/no-unescaped-entities`             | 0     | Warning  | Low      | ✅ **FIXED** |
 
 ## High Priority (Recommended First)
 
@@ -52,7 +53,8 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 
 **Problem:** JSX constructed inside try/catch blocks - React errors won't be caught.
 
-**Fix:** 
+**Fix:**
+
 - Moved server-side error handling (auth, data fetching) before JSX construction
 - Created `ErrorBoundary` component for client-side React errors
 - Wrapped `UserTable` in `ErrorBoundary` to catch rendering errors
@@ -105,6 +107,7 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 **Problem:** Missing or unstable dependencies in `useMemo`/`useCallback` hooks.
 
 **Fix:**
+
 - Add missing dependencies
 - Wrap unstable values in `useMemo` before using as dependencies
 - Use `useCallback` for function dependencies
@@ -119,7 +122,8 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 
 **Problem:** React Compiler can't preserve existing `useMemo` because inferred deps don't match source.
 
-**Fix:** 
+**Fix:**
+
 - **SkillsStep.tsx:** Changed dependency from `state.priorities?.magic` to `state.priorities` (whole object)
 - **RulesetContext.tsx (useCyberware):** Changed from individual `options` properties to `options` (whole object)
 - **RulesetContext.tsx (useBioware):** Changed from individual `options` properties to `options` (whole object)
@@ -138,6 +142,7 @@ Prioritized plan to address lint issues. **Current Status: 71 warnings** (down f
 **Problem:** Defined variables/imports not being used.
 
 **Categories:**
+
 - Unused imports (remove them)
 - Unused function parameters (prefix with `_`)
 - Unused assigned variables (remove or use)
@@ -177,6 +182,7 @@ pnpm lint --fix
 8. ⏳ **M1** - Hook dependencies (1-2 hours, most complex) - **NEXT**
 
 **Progress Summary:**
+
 - ✅ Completed: 6 issues (H1, L2, H3, H2, H4, M2) - **ALL HIGH PRIORITY + 1 MEDIUM DONE!**
 - ⏳ Remaining: 58 warnings
 - 📊 Completion: 15.5% (13/84)

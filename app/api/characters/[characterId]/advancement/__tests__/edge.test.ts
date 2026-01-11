@@ -5,32 +5,32 @@
  * karma spending, and advancement record creation.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from '../edge/route';
-import { NextRequest } from 'next/server';
-import * as sessionModule from '@/lib/auth/session';
-import * as userStorageModule from '@/lib/storage/users';
-import * as characterStorageModule from '@/lib/storage/characters';
-import * as rulesModule from '@/lib/rules/merge';
-import * as advancementModule from '@/lib/rules/advancement/edge';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { POST } from "../edge/route";
+import { NextRequest } from "next/server";
+import * as sessionModule from "@/lib/auth/session";
+import * as userStorageModule from "@/lib/storage/users";
+import * as characterStorageModule from "@/lib/storage/characters";
+import * as rulesModule from "@/lib/rules/merge";
+import * as advancementModule from "@/lib/rules/advancement/edge";
 
-import type { Character, MergedRuleset, AdvancementRecord } from '@/lib/types';
-import { createMockCharacter, createMockUser } from '@/__tests__/mocks/storage';
-import { createMockMergedRuleset } from '@/__tests__/mocks/rulesets';
+import type { Character, MergedRuleset, AdvancementRecord } from "@/lib/types";
+import { createMockCharacter, createMockUser } from "@/__tests__/mocks/storage";
+import { createMockMergedRuleset } from "@/__tests__/mocks/rulesets";
 
 // Mock dependencies
-vi.mock('@/lib/auth/session');
-vi.mock('@/lib/storage/users');
-vi.mock('@/lib/storage/characters');
-vi.mock('@/lib/rules/merge');
-vi.mock('@/lib/rules/advancement/edge');
+vi.mock("@/lib/auth/session");
+vi.mock("@/lib/storage/users");
+vi.mock("@/lib/storage/characters");
+vi.mock("@/lib/rules/merge");
+vi.mock("@/lib/rules/advancement/edge");
 
 // Helper to create a NextRequest with JSON body
-function createMockRequest(url: string, body?: unknown, method = 'POST'): NextRequest {
+function createMockRequest(url: string, body?: unknown, method = "POST"): NextRequest {
   const request = new NextRequest(url, {
     method,
     body: body ? JSON.stringify(body) : undefined,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
   });
 
   // Mock json() method if body is provided
@@ -41,9 +41,9 @@ function createMockRequest(url: string, body?: unknown, method = 'POST'): NextRe
   return request;
 }
 
-describe('POST /api/characters/[characterId]/advancement/edge', () => {
-  const userId = 'test-user-id';
-  const characterId = 'test-character-id';
+describe("POST /api/characters/[characterId]/advancement/edge", () => {
+  const userId = "test-user-id";
+  const characterId = "test-character-id";
   let mockCharacter: Character;
   let mockRuleset: MergedRuleset;
 
@@ -53,7 +53,7 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     mockCharacter = createMockCharacter({
       id: characterId,
       ownerId: userId,
-      status: 'active',
+      status: "active",
       karmaCurrent: 50,
       specialAttributes: {
         edge: 2,
@@ -64,11 +64,13 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     mockRuleset = createMockMergedRuleset();
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
-      id: userId,
-      email: 'test@example.com',
-      username: 'testuser',
-    }));
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(
+      createMockUser({
+        id: userId,
+        email: "test@example.com",
+        username: "testuser",
+      })
+    );
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
     vi.mocked(rulesModule.loadAndMergeRuleset).mockResolvedValue({
       success: true,
@@ -76,18 +78,18 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     });
   });
 
-  it('should successfully advance Edge', async () => {
+  it("should successfully advance Edge", async () => {
     const mockAdvancementRecord: AdvancementRecord = {
-      id: 'advancement-1',
-      type: 'edge',
-      targetId: 'edge',
-      targetName: 'Edge',
+      id: "advancement-1",
+      type: "edge",
+      targetId: "edge",
+      targetName: "Edge",
       previousValue: 2,
       newValue: 3,
       karmaCost: 15,
       karmaSpentAt: new Date().toISOString(),
       trainingRequired: false,
-      trainingStatus: 'completed',
+      trainingStatus: "completed",
       gmApproved: false,
       createdAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
@@ -109,7 +111,6 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     });
 
     vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
-    
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
       newRating: 3,
@@ -137,10 +138,9 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
       })
     );
     expect(characterStorageModule.saveCharacter).toHaveBeenCalled();
-    
   });
 
-  it('should return 401 if user is not authenticated', async () => {
+  it("should return 401 if user is not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
@@ -154,10 +154,10 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(401);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
+    expect(data.error).toBe("Unauthorized");
   });
 
-  it('should return 404 if user is not found', async () => {
+  it("should return 404 if user is not found", async () => {
     vi.mocked(userStorageModule.getUserById).mockResolvedValue(null);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
@@ -171,10 +171,10 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(404);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe('User not found');
+    expect(data.error).toBe("User not found");
   });
 
-  it('should return 404 if character is not found', async () => {
+  it("should return 404 if character is not found", async () => {
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(null);
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
@@ -188,13 +188,13 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(404);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Character not found');
+    expect(data.error).toBe("Character not found");
   });
 
-  it('should return 400 if character is draft', async () => {
+  it("should return 400 if character is draft", async () => {
     const draftCharacter = {
       ...mockCharacter,
-      status: 'draft' as const,
+      status: "draft" as const,
     };
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(draftCharacter);
 
@@ -209,10 +209,10 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(400);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Cannot advance Edge during character creation');
+    expect(data.error).toBe("Cannot advance Edge during character creation");
   });
 
-  it('should return 400 if newRating is missing', async () => {
+  it("should return 400 if newRating is missing", async () => {
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {});
 
     const response = await POST(request, {
@@ -222,10 +222,10 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(400);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toContain('newRating');
+    expect(data.error).toContain("newRating");
   });
 
-  it('should return 400 if newRating is invalid', async () => {
+  it("should return 400 if newRating is invalid", async () => {
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
       newRating: 0,
     });
@@ -237,13 +237,13 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(400);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toContain('newRating');
+    expect(data.error).toContain("newRating");
   });
 
-  it('should return 500 if ruleset loading fails', async () => {
+  it("should return 500 if ruleset loading fails", async () => {
     vi.mocked(rulesModule.loadAndMergeRuleset).mockResolvedValue({
       success: false,
-      error: 'Failed to load ruleset',
+      error: "Failed to load ruleset",
     });
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
@@ -257,12 +257,12 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(500);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Failed to load ruleset');
+    expect(data.error).toBe("Failed to load ruleset");
   });
 
-  it('should return 400 if advancement validation fails', async () => {
+  it("should return 400 if advancement validation fails", async () => {
     vi.mocked(advancementModule.advanceEdge).mockImplementation(() => {
-      throw new Error('Cannot advance Edge: Not enough karma');
+      throw new Error("Cannot advance Edge: Not enough karma");
     });
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
@@ -276,24 +276,24 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
     expect(response.status).toBe(400);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toContain('Cannot advance Edge');
+    expect(data.error).toContain("Cannot advance Edge");
   });
 
-  it('should handle options (campaignSessionId, gmApproved, notes)', async () => {
+  it("should handle options (campaignSessionId, gmApproved, notes)", async () => {
     const mockAdvancementRecord: AdvancementRecord = {
-      id: 'advancement-1',
-      type: 'edge',
-      targetId: 'edge',
-      targetName: 'Edge',
+      id: "advancement-1",
+      type: "edge",
+      targetId: "edge",
+      targetName: "Edge",
       previousValue: 2,
       newValue: 3,
       karmaCost: 15,
       karmaSpentAt: new Date().toISOString(),
       trainingRequired: false,
-      trainingStatus: 'completed',
+      trainingStatus: "completed",
       gmApproved: true,
-      campaignSessionId: 'session-123',
-      notes: 'GM approved',
+      campaignSessionId: "session-123",
+      notes: "GM approved",
       createdAt: new Date().toISOString(),
       completedAt: new Date().toISOString(),
     };
@@ -318,9 +318,9 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
 
     const request = createMockRequest(`/api/characters/${characterId}/advancement/edge`, {
       newRating: 3,
-      campaignSessionId: 'session-123',
+      campaignSessionId: "session-123",
       gmApproved: true,
-      notes: 'GM approved',
+      notes: "GM approved",
     });
 
     const response = await POST(request, {
@@ -333,11 +333,10 @@ describe('POST /api/characters/[characterId]/advancement/edge', () => {
       3,
       mockRuleset,
       expect.objectContaining({
-        campaignSessionId: 'session-123',
+        campaignSessionId: "session-123",
         gmApproved: true,
-        notes: 'GM approved',
+        notes: "GM approved",
       })
     );
   });
 });
-

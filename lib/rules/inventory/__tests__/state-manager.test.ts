@@ -396,18 +396,33 @@ describe("Equipment State Manager", () => {
   describe("getEquipmentStateSummary", () => {
     it("should count equipment states", () => {
       const character = createCharacter({
-        weapons: [
-          createWeapon("readied"),
-          createWeapon("holstered"),
-          createWeapon("stored"),
-        ],
-        armor: [
-          createArmor("worn"),
-          createArmor("stored"),
-        ],
+        weapons: [createWeapon("readied"), createWeapon("holstered"), createWeapon("stored")],
+        armor: [createArmor("worn"), createArmor("stored")],
         cyberware: [
-          { id: "cyber-1", catalogId: "c1", name: "Cyberarm", category: "cyberlimbs", grade: "standard", baseEssenceCost: 1, essenceCost: 1, cost: 1000, availability: 5, wirelessEnabled: true },
-          { id: "cyber-2", catalogId: "c2", name: "Cybereyes", category: "eyeware", grade: "standard", baseEssenceCost: 0.5, essenceCost: 0.5, cost: 500, availability: 3, wirelessEnabled: false },
+          {
+            id: "cyber-1",
+            catalogId: "c1",
+            name: "Cyberarm",
+            category: "cyberlimbs",
+            grade: "standard",
+            baseEssenceCost: 1,
+            essenceCost: 1,
+            cost: 1000,
+            availability: 5,
+            wirelessEnabled: true,
+          },
+          {
+            id: "cyber-2",
+            catalogId: "c2",
+            name: "Cybereyes",
+            category: "eyeware",
+            grade: "standard",
+            baseEssenceCost: 0.5,
+            essenceCost: 0.5,
+            cost: 500,
+            availability: 3,
+            wirelessEnabled: false,
+          },
         ] as Character["cyberware"],
       });
 
@@ -426,11 +441,46 @@ describe("Equipment State Manager", () => {
       // Create character with minimal cyberdeck/commlink properties needed for test
       const character = createCharacter({
         cyberdecks: [
-          { id: "deck-1", catalogId: "deck-1", name: "Deck 1", deviceRating: 3, attributeArray: [1,2,3,4], currentConfig: { attack: 1, sleaze: 2, dataProcessing: 3, firewall: 4 }, programSlots: 3, loadedPrograms: [], cost: 10000, availability: 8, condition: "bricked" as DeviceCondition },
-          { id: "deck-2", catalogId: "deck-2", name: "Deck 2", deviceRating: 3, attributeArray: [1,2,3,4], currentConfig: { attack: 1, sleaze: 2, dataProcessing: 3, firewall: 4 }, programSlots: 3, loadedPrograms: [], cost: 10000, availability: 8, condition: "functional" as DeviceCondition },
+          {
+            id: "deck-1",
+            catalogId: "deck-1",
+            name: "Deck 1",
+            deviceRating: 3,
+            attributeArray: [1, 2, 3, 4],
+            currentConfig: { attack: 1, sleaze: 2, dataProcessing: 3, firewall: 4 },
+            programSlots: 3,
+            loadedPrograms: [],
+            cost: 10000,
+            availability: 8,
+            condition: "bricked" as DeviceCondition,
+          },
+          {
+            id: "deck-2",
+            catalogId: "deck-2",
+            name: "Deck 2",
+            deviceRating: 3,
+            attributeArray: [1, 2, 3, 4],
+            currentConfig: { attack: 1, sleaze: 2, dataProcessing: 3, firewall: 4 },
+            programSlots: 3,
+            loadedPrograms: [],
+            cost: 10000,
+            availability: 8,
+            condition: "functional" as DeviceCondition,
+          },
         ] as Character["cyberdecks"],
         commlinks: [
-          { id: "link-1", catalogId: "link-1", name: "Link 1", deviceRating: 3, dataProcessing: 3, firewall: 3, cost: 500, availability: 4, loadedPrograms: [], condition: "bricked" as DeviceCondition },
+          {
+            id: "link-1",
+            catalogId: "link-1",
+            name: "Link 1",
+            deviceRating: 3,
+            dataProcessing: 3,
+            firewall: 3,
+            cost: 500,
+            availability: 4,
+            loadedPrograms: [],
+            condition: "bricked" as DeviceCondition,
+          },
         ] as Character["commlinks"],
       });
 

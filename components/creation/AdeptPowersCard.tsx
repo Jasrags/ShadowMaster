@@ -20,7 +20,7 @@ import { useAdeptPowers, usePriorityTable } from "@/lib/rules";
 import type { CreationState, AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
+import { CreationCard, BudgetIndicator } from "./shared";
 import { Lock, Search, Plus, Minus, X, Zap, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -39,74 +39,6 @@ const ADEPT_PATHS = ["adept", "mystic-adept"];
 interface AdeptPowersCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  description,
-  spent,
-  total,
-  source,
-  displayFormat = "decimal",
-}: {
-  label: string;
-  description: string;
-  spent: number;
-  total: number;
-  source: string;
-  displayFormat?: "decimal" | "integer";
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining <= 0;
-
-  const formatValue = (value: number) => {
-    return displayFormat === "decimal" ? value.toFixed(2) : Math.round(value).toString();
-  };
-
-  return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {label}
-        </div>
-        <div className={`text-lg font-bold ${
-          isComplete
-            ? "text-emerald-600 dark:text-emerald-400"
-            : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatValue(remaining)}
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {source}
-        <span className="float-right">
-          of {formatValue(total)} remaining
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isComplete
-              ? "bg-emerald-500"
-              : "bg-violet-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -134,7 +66,8 @@ function PowerRow({
   onDecrease?: () => void;
   onRemove: () => void;
 }) {
-  const canIncrease = isLeveled && rating !== undefined && maxLevel !== undefined && rating < maxLevel;
+  const canIncrease =
+    isLeveled && rating !== undefined && maxLevel !== undefined && rating < maxLevel;
   const canDecrease = isLeveled && rating !== undefined && rating > 1;
 
   return (
@@ -150,9 +83,7 @@ function PowerRow({
             </span>
           </div>
 
-          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-            {power.description}
-          </div>
+          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{power.description}</div>
 
           {power.activation && (
             <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
@@ -173,13 +104,14 @@ function PowerRow({
               <button
                 onClick={onDecrease}
                 disabled={!canDecrease}
+                aria-label={`Decrease ${power.name} level`}
                 className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                   canDecrease
                     ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                     : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
               >
-                <Minus className="h-3 w-3" />
+                <Minus className="h-3 w-3" aria-hidden="true" />
               </button>
               <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                 {rating}
@@ -187,13 +119,14 @@ function PowerRow({
               <button
                 onClick={onIncrease}
                 disabled={!canIncrease}
+                aria-label={`Increase ${power.name} level`}
                 className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                   canIncrease
                     ? "bg-violet-500 text-white hover:bg-violet-600"
                     : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                 }`}
               >
-                <Plus className="h-3 w-3" />
+                <Plus className="h-3 w-3" aria-hidden="true" />
               </button>
             </div>
           )}
@@ -201,6 +134,7 @@ function PowerRow({
           {/* Remove button */}
           <button
             onClick={onRemove}
+            aria-label={`Remove ${power.name}`}
             className="text-xs text-zinc-400 hover:text-red-500"
           >
             Remove
@@ -253,7 +187,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   const karmaPurchasedPP = Math.floor(karmaSpentPowerPoints / POWER_POINT_KARMA_COST);
 
   const basePowerPointBudget = isMysticAdept
-    ? ((state.selections["power-points-allocation"] as number) || 0)
+    ? (state.selections["power-points-allocation"] as number) || 0
     : magicRating;
 
   const powerPointBudget = basePowerPointBudget + karmaPurchasedPP;
@@ -280,9 +214,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     if (!searchQuery.trim()) return adeptPowersCatalog;
     const search = searchQuery.toLowerCase();
     return adeptPowersCatalog.filter(
-      (p) =>
-        p.name.toLowerCase().includes(search) ||
-        p.description.toLowerCase().includes(search)
+      (p) => p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search)
     );
   }, [adeptPowersCatalog, searchQuery]);
 
@@ -293,19 +225,16 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   );
 
   // Calculate cost for power at level
-  const calculateCost = useCallback(
-    (power: AdeptPowerCatalogItem, level: number): number => {
-      if (power.costType === "table" && power.levels) {
-        const levelData = power.levels.find((l) => l.level === level);
-        return levelData?.cost || 0;
-      }
-      if (power.costType === "perLevel") {
-        return (power.cost || 0) * level;
-      }
-      return power.cost || 0;
-    },
-    []
-  );
+  const calculateCost = useCallback((power: AdeptPowerCatalogItem, level: number): number => {
+    if (power.costType === "table" && power.levels) {
+      const levelData = power.levels.find((l) => l.level === level);
+      return levelData?.cost || 0;
+    }
+    if (power.costType === "perLevel") {
+      return (power.cost || 0) * level;
+    }
+    return power.cost || 0;
+  }, []);
 
   // Check if power is already selected
   const isPowerSelected = useCallback(
@@ -332,7 +261,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       id: `${selectedPowerId}-${Date.now()}`,
       catalogId: selectedPowerId,
       name: power.name,
-      rating: power.costType === "perLevel" || power.costType === "table" ? selectedLevel : undefined,
+      rating:
+        power.costType === "perLevel" || power.costType === "table" ? selectedLevel : undefined,
       powerPointCost: cost,
       specification: selectedSpec || undefined,
     };
@@ -410,9 +340,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       if (costDiff > ppRemaining) return;
 
       const updatedPowers = selectedPowers.map((p) =>
-        p.id === powerId
-          ? { ...p, rating: newLevel, powerPointCost: newCost }
-          : p
+        p.id === powerId ? { ...p, rating: newLevel, powerPointCost: newCost } : p
       );
 
       updateState({
@@ -426,7 +354,16 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
         },
       });
     },
-    [selectedPowers, getPowerById, calculateCost, ppRemaining, ppSpent, state.selections, state.budgets, updateState]
+    [
+      selectedPowers,
+      getPowerById,
+      calculateCost,
+      ppRemaining,
+      ppSpent,
+      state.selections,
+      state.budgets,
+      updateState,
+    ]
   );
 
   // Purchase power point with karma (mystic adepts only)
@@ -513,13 +450,15 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     >
       <div className="space-y-4">
         {/* Power Point Budget */}
-        <BudgetProgressBar
+        <BudgetIndicator
           label="Power Points"
           description="Allocate power points to adept powers"
           spent={ppSpent}
           total={powerPointBudget}
           source={budgetSource}
-          displayFormat="decimal"
+          mode="card"
+          displayFormat="decimal2"
+          variant="violet"
         />
 
         {/* Mystic Adept Allocation */}
@@ -598,7 +537,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                 const catalogPower = getPowerById(power.catalogId);
                 if (!catalogPower) return null;
 
-                const isLeveled = catalogPower.costType === "perLevel" || catalogPower.costType === "table";
+                const isLeveled =
+                  catalogPower.costType === "perLevel" || catalogPower.costType === "table";
 
                 return (
                   <PowerRow
@@ -698,9 +638,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                     const isSelected = selectedPowerId === power.id;
                     const alreadyHas = isPowerSelected(power.id);
                     const baseCost =
-                      power.costType === "table"
-                        ? power.levels?.[0]?.cost || 0
-                        : power.cost || 0;
+                      power.costType === "table" ? power.levels?.[0]?.cost || 0 : power.cost || 0;
                     const costDisplay =
                       power.costType === "perLevel"
                         ? `${baseCost.toFixed(2)}/level`
@@ -759,7 +697,8 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                   </div>
 
                   {/* Level selector */}
-                  {(selectedPowerData.costType === "perLevel" || selectedPowerData.costType === "table") && (
+                  {(selectedPowerData.costType === "perLevel" ||
+                    selectedPowerData.costType === "table") && (
                     <div className="mb-3">
                       <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
                         Level
@@ -839,11 +778,13 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
 
                   {/* Cost and add button */}
                   <div className="flex items-center justify-between pt-2">
-                    <span className={`text-sm font-medium ${
-                      selectedCost > ppRemaining
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-violet-700 dark:text-violet-300"
-                    }`}>
+                    <span
+                      className={`text-sm font-medium ${
+                        selectedCost > ppRemaining
+                          ? "text-red-600 dark:text-red-400"
+                          : "text-violet-700 dark:text-violet-300"
+                      }`}
+                    >
                       Cost: {selectedCost.toFixed(2)} PP
                       {selectedCost > ppRemaining && " (insufficient PP)"}
                     </span>

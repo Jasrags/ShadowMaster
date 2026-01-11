@@ -1,19 +1,19 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 | Devices | Restraints | B&E Gear | Grapple Guns | Communications | Battering Rams |
-| --- | --- | --- | --- | --- | --- |
+| ------- | ---------- | -------- | ------------ | -------------- | -------------- |
 
-| TYPE | NAME | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| **Device** | **Key/Combination lock (Rating 1-6)** | Rating | Rating x 10¥ | Core |
-| **Device** | **Maglock** | Rating | Rating x 100¥ | Core |
-| **Device** | **Keypad or card reader** | - | +50¥ | Core |
-| **Device** | **Anti-tamper circuits (Rating 1-4)** | +Rating | +(Rating x 250)¥ | Core |
-| **Device** | **Biometric reader** | +4 | +200¥ | Core |
+| TYPE       | NAME                                  | AVAIL   | COST             | SOURCE |
+| ---------- | ------------------------------------- | ------- | ---------------- | ------ |
+| **Device** | **Key/Combination lock (Rating 1-6)** | Rating  | Rating x 10¥     | Core   |
+| **Device** | **Maglock**                           | Rating  | Rating x 100¥    | Core   |
+| **Device** | **Keypad or card reader**             | -       | +50¥             | Core   |
+| **Device** | **Anti-tamper circuits (Rating 1-4)** | +Rating | +(Rating x 250)¥ | Core   |
+| **Device** | **Biometric reader**                  | +4      | +200¥            | Core   |
 
 ## Contents
 
@@ -28,12 +28,12 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| AVAIL | COST | SOURCE |
-| --- | --- | --- |
-| Rating | Rating x 10¥ | Core |
+| AVAIL  | COST         | SOURCE |
+| ------ | ------------ | ------ |
+| Rating | Rating x 10¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 Key locks are the simplest kind, involving the use of tumblers and metal keys or combination code dials to open doors instead of cards or some other device. They are also not in very common use due to reliance on more sophisticated means of security, but some places (like private safes or low-end businesses) may still use them out of nostalgia, because they can’t afford better, or because rarity equates to better security. Defeating a key lock requires a Locksmith + Agility [Physical] (Lock Rating, 1 Combat Turn) Extended Test. [Autopickers](/Shadowrun/index.php/SR5:Security:B%26E_Gear#Autopicker_.28Rating_1-6.29 "SR5:Security:B&E Gear") add their Rating in dice to this test; you may also roll their Rating in place of the Locksmith skill.
 
@@ -43,12 +43,12 @@ Transponder-embedded keys contain a calibrated resistor that completes a circuit
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| AVAIL | COST | SOURCE |
-| --- | --- | --- |
-| Rating | Rating x 100¥ | Core |
+| AVAIL  | COST          | SOURCE |
+| ------ | ------------- | ------ |
+| Rating | Rating x 100¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 Powered magnetic locks, maglocks, are widespread in 2075 and come in a wide range of sophistication. Maglock “keys” can be physical (keypad, swipe card, proximity card, memory string), biometric (see below), or any combination thereof. Maglocks are often accessible via the local network (wired or wireless) and may be monitored by a security hacker/rigger. Maglock systems often log all usages, keeping track of the time, date, and identity of each user. The first step to bypassing a maglock is to remove the case and access the maglock’s electronic guts. This requires a successful Locksmith + Agility [Physical] (Maglock Rating x 2, 1 Combat Turn) Extended Test. If all else fails, the case can be smashed or shot off; treat the case as if it has a Barrier rating equal to the maglock rating. Overzealous attempts to break the case may harm the electronics inside. Re-assembling the case afterwards requires the same test.
 
@@ -56,12 +56,12 @@ Powered magnetic locks, maglocks, are widespread in 2075 and come in a wide rang
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| AVAIL | COST | SOURCE |
-| --- | --- | --- |
-| +Rating | +Rating x 250¥ | Core |
+| AVAIL   | COST           | SOURCE |
+| ------- | -------------- | ------ |
+| +Rating | +Rating x 250¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 Some maglock systems come equipped with anti-tamper systems, rated between 1 and 4. In order to bypass the anti-tamper circuits, an additional Locksmith + Agility [Physical] (anti-tamper system rating) Test must be made. If this fails, an alarm is triggered.
 
@@ -70,11 +70,11 @@ Some maglock systems come equipped with anti-tamper systems, rated between 1 and
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | AVAIL | COST | SOURCE |
-| --- | --- | --- |
-| - | +50¥ | Core |
+| ----- | ---- | ------ |
+| -     | +50¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 Keypads utilize an access code (often different access codes for different users). Unless the code is known, defeating a keypad requires rewiring the internal electronics. This means cracking open the case (see above) and then rewiring the circuits-another Locksmith + Agility [Physical] (Maglock Rating x 2, 1 Combat Turn) Extended Test. A [maglock sequencer](/Shadowrun/index.php/SR5:Security:B%26E_Gear#Sequencer_.28Rating_1-6.29 "SR5:Security:B&E Gear") may also be used instead; make an Opposed Test between the sequencer and maglock ratings. If the sequencer wins, the maglock opens. (Note that the case must still be opened for a sequencer to be applied.)
 
@@ -84,12 +84,12 @@ Cardreaders verify the authenticity of swipe cards or RFID proximity cards. They
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| AVAIL | COST | SOURCE |
-| --- | --- | --- |
-| +4 | +200¥ | Core |
+| AVAIL | COST  | SOURCE |
+| ----- | ----- | ------ |
+| +4    | +200¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 Print scanners scan fingerprints, palm prints, retinal prints, or even the pattern of blood vessels in the face or palm. One method to defeat a print scanner is to coerce an authorized user to apply their prints. Alternately, a synthetic print glove-like membrane (a “sleeve”) can be manufactured for fingerprints and thumbprints with a [cellular glove molder](/Shadowrun/index.php/SR5:Security:B%26E_Gear#Cellular_glove_molder_.28Rating_1-4.29 "SR5:Security:B&E Gear") (an authorized print is necessary to copy from). Retinal prints may also be duplicated with the [retinal duplication cybereye accessory](/Shadowrun/index.php/SR5:Cyberware:Eye#Retinal_Duplication_.28Rating_1-6.29 "SR5:Cyberware:Eye"). If a fake print is used, make an Opposed Test between the duplicate and the maglock rating; if the fake wins, the maglock accepts it.
 

@@ -215,9 +215,7 @@ async function addToIndex(record: ViolationRecord): Promise<void> {
  * @param input - Violation data (without id and timestamp)
  * @returns The created violation record
  */
-export async function recordViolation(
-  input: ViolationRecordInput
-): Promise<ViolationRecord> {
+export async function recordViolation(input: ViolationRecordInput): Promise<ViolationRecord> {
   await ensureDataDir();
 
   const record: ViolationRecord = {
@@ -227,10 +225,7 @@ export async function recordViolation(
   };
 
   // Write the full record
-  await fs.writeFile(
-    getViolationFilePath(record.id),
-    JSON.stringify(record, null, 2)
-  );
+  await fs.writeFile(getViolationFilePath(record.id), JSON.stringify(record, null, 2));
 
   // Update index for efficient queries
   await addToIndex(record);
@@ -259,13 +254,9 @@ export async function getViolationById(id: ID): Promise<ViolationRecord | null> 
  * @param characterId - Character ID
  * @returns Array of violation records
  */
-export async function getViolationsByCharacter(
-  characterId: ID
-): Promise<ViolationRecord[]> {
+export async function getViolationsByCharacter(characterId: ID): Promise<ViolationRecord[]> {
   const index = await readIndex();
-  const matchingIds = index
-    .filter((e) => e.characterId === characterId)
-    .map((e) => e.id);
+  const matchingIds = index.filter((e) => e.characterId === characterId).map((e) => e.id);
 
   const records: ViolationRecord[] = [];
   for (const id of matchingIds) {
@@ -275,9 +266,7 @@ export async function getViolationsByCharacter(
     }
   }
 
-  return records.sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  return records.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 }
 
 /**
@@ -286,13 +275,9 @@ export async function getViolationsByCharacter(
  * @param campaignId - Campaign ID
  * @returns Array of violation records
  */
-export async function getViolationsByCampaign(
-  campaignId: ID
-): Promise<ViolationRecord[]> {
+export async function getViolationsByCampaign(campaignId: ID): Promise<ViolationRecord[]> {
   const index = await readIndex();
-  const matchingIds = index
-    .filter((e) => e.campaignId === campaignId)
-    .map((e) => e.id);
+  const matchingIds = index.filter((e) => e.campaignId === campaignId).map((e) => e.id);
 
   const records: ViolationRecord[] = [];
   for (const id of matchingIds) {
@@ -302,9 +287,7 @@ export async function getViolationsByCampaign(
     }
   }
 
-  return records.sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  return records.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 }
 
 /**
@@ -352,9 +335,7 @@ export async function queryViolations(
   }
 
   // Sort by timestamp descending (newest first)
-  filtered.sort(
-    (a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime()
-  );
+  filtered.sort((a, b) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime());
 
   // Apply pagination
   const offset = options.offset ?? 0;

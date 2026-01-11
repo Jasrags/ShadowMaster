@@ -10,13 +10,7 @@
  * - Range modifiers
  */
 
-import type {
-  Character,
-  Weapon,
-  ActionPool,
-  PoolModifier,
-  EditionDiceRules,
-} from "@/lib/types";
+import type { Character, Weapon, ActionPool, PoolModifier, EditionDiceRules } from "@/lib/types";
 import {
   buildActionPool,
   buildDefensePool,
@@ -342,10 +336,7 @@ export function parseDamage(damageString: string): {
 /**
  * Calculate base recoil compensation from character and weapon
  */
-export function calculateRecoilCompensation(
-  character: Character,
-  weapon: Weapon
-): number {
+export function calculateRecoilCompensation(character: Character, weapon: Weapon): number {
   // Base: 1 (everyone gets 1 free)
   let compensation = 1;
 
@@ -397,10 +388,7 @@ export function calculateRecoilPenalty(
 /**
  * Determine range category based on weapon and distance
  */
-export function getRangeCategory(
-  _weapon: Weapon,
-  distance: number
-): RangeCategory {
+export function getRangeCategory(_weapon: Weapon, distance: number): RangeCategory {
   // Default ranges (should ideally come from weapon data)
   // Short: 0-50m, Medium: 51-100m, Long: 101-250m, Extreme: 251+m
   if (distance <= 50) return "short";
@@ -578,19 +566,13 @@ export function processWeaponAttack(
   const attackPool = calculateAttackPool(attacker, weapon, request, rules);
 
   // Calculate defense pool
-  const defensePool = calculateDefensePool(
-    defender,
-    attackType,
-    request,
-    rules
-  );
+  const defensePool = calculateDefensePool(defender, attackType, request, rules);
 
   // Parse damage
   const damage = parseDamage(weapon.damage);
 
   // Calculate ammo expended
-  const ammoExpended =
-    request.firingMode ? AMMO_CONSUMPTION[request.firingMode] : 0;
+  const ammoExpended = request.firingMode ? AMMO_CONSUMPTION[request.firingMode] : 0;
 
   // Calculate recoil for this attack
   const recoilComp = calculateRecoilCompensation(attacker, weapon);

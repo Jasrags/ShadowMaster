@@ -25,7 +25,6 @@ The Qualities system manages positive and negative character traits that provide
 
 ---
 
-
 ## Data Models
 
 ### Quality Catalog Entry

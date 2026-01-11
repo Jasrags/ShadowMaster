@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -8,17 +8,17 @@
 
 | **Centaurs** | **Nagas** | **Pixies** | **Sasquatches** | **Changelings** | **Shapeshifters** |
 
-| CHARACTERS AND TROLL CULTURE |
-| --- |
+| CHARACTERS AND TROLL CULTURE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Playing the big dumb troll is typical, but so is playing the smart troll. Being a troll isn’t really about intelligence—it’s about isolation. Try to play up the fact that you really don’t fit into other people’s vehicles and that the world just isn’t built for you. Depression would be common, along with anger at the world for not fitting and being too small or delicate for you. One thing you can do when playing a troll is ask the gamemaster not to give you the oversized glass of soybeer; instead tell him you’d rather it was made a point that you’re forced to drink regular-size glasses, which look like kids’ cups in your hands, and cost you a fortune to drink enough. Gamemasters, remember the world doesn’t adjust for the large-and-ungainly five percent, unless they have money. Which is not the case for most trolls. |
 
 | **World Population:** 5% |
 
 HOMO SAPIENS SAPIENS
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Troll | 5/10 | 1/5 | 1/6 | 5/10 | 1/6 | 1/5 | 1/5 | 1/4 | 1/6 | 6 | REA+INT |
+| RACE                                                                                              | BODY | AGI | REA | STR  | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ------------------------------------------------------------------------------------------------- | ---- | --- | --- | ---- | --- | --- | --- | --- | ---- | --- | ------- |
+| Troll                                                                                             | 5/10 | 1/5 | 1/6 | 5/10 | 1/6 | 1/5 | 1/5 | 1/4 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Thermographic Vision, +1 Reach, +1 dermal armor, +50% gear and Lifestyle costs |
 
 When I hear people say trolls are uncultured, I don’t hear it as the derogatory slight they are often intending. Instead, I hear that trolls, as a metatype, lack a culture. That truth is hard to deny. As the least numerous of the metatypes and the most disproportionate from the original model, they struggle to find a place just to fit in, let alone develop a culture. If anything, segregation, struggle, strife, and separation are the foundations of the culture they have managed to develop in most areas.
@@ -59,9 +59,9 @@ HOMO SAPIENS INGENTIS
 
 ## Cyclops
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Cyclops | 5/10 | 1/5 | 1/6 | 6/11 | 1/6 | 1/4 | 1/5 | 1/4 | 1/6 | 6 | REA+INT |
+| RACE                                       | BODY | AGI | REA | STR  | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ------------------------------------------ | ---- | --- | --- | ---- | --- | --- | --- | --- | ---- | --- | ------- |
+| Cyclops                                    | 5/10 | 1/5 | 1/6 | 6/11 | 1/6 | 1/4 | 1/5 | 1/4 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Cyclopean Eye, +1 Reach |
 
 **Physical Characteristics:** The cyclopean metavariant possesses the increased size and thermographic vision of the primary ingentis subspecies, but they have a singular eye, greater muscular bulk, minimal hair growth, and variable horn growth, and they lack dermal deposits. Cyclopes are often larger and more muscular than even the primary ingentis. They grow little to no hair, a trait common to both males and females. If a horn is present, cyclopes tend to develop a singular horn, but the majority of this metavariant do not grow horns at all, especially females. Cyclopes lack the distinctive dermal deposits of the ingentis subspecies, and their skin tends to carry a bronze hue that looks almost metallic when they perspire. The most significant variation for this metavariant is the singular eye. This eye is larger than both standard ingentis eyes combined and is located in the center of the forehead. This alteration leads to an altered skull and cranial shape. Studies have shown that the cyclopean brain lacks the structures necessary for processing binocular vision; while their single eye can provide limited depth perception for nearby objects, but distance evaluations remain difficult.
@@ -76,9 +76,9 @@ HOMO SAPIENS INGENTIS
 
 ## Fomorian
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Fomorian | 4/9 | 1/5 | 1/6 | 5/10 | 1/5 | 1/4 | 1/4 | 1/5 | 1/6 | 6 | REA+INT |
+| RACE                                                                   | BODY | AGI | REA | STR  | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ---------------------------------------------------------------------- | ---- | --- | --- | ---- | --- | --- | --- | --- | ---- | --- | ------- |
+| Fomorian                                                               | 4/9  | 1/5 | 1/6 | 5/10 | 1/5 | 1/4 | 1/4 | 1/5 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Arcane Arrester (1), Thermographic Vision, +1 Reach |
 
 **Physical Characteristics:** The fomorian metavariant possess the standard thermographic vision, increased muscular bulk, pronounced horns, and enlarged lower canines of the primary subspecies. They vary in their shorter stature and lack of dermal deposits. The average fomori is only 2.35 meters in height, and ninety-five percent of the adult population falls within ten centimeters of this average. Fomori also lack the dermal deposits of the base ingentis, a feature that, when combined with their smaller stature, makes the metavariant appear less “monstrous” to other metahumans.
@@ -93,9 +93,9 @@ HOMO SAPIENS INGENTIS
 
 ## Giant
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Giant | 5/10 | 1/5 | 1/5 | 5/10 | 1/6 | 1/5 | 1/5 | 1/5 | 1/6 | 6 | REA+INT |
+| RACE                                                                        | BODY | AGI | REA | STR  | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| --------------------------------------------------------------------------- | ---- | --- | --- | ---- | --- | --- | --- | --- | ---- | --- | ------- |
+| Giant                                                                       | 5/10 | 1/5 | 1/5 | 5/10 | 1/6 | 1/5 | 1/5 | 1/5 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Dermal Alteration (Bark), Thermographic Vision, +1 Reach |
 
 **Physical Characteristics:** The giant metavariant possesses the same increased muscular bulk, enlarged lower canines, and thermographic vision of the primary subspecies. They possess greater height, increased epidermal density and hair growth, but they lack dermal deposits and horns. While the average ingentis stands 2.5 meters, the average giant measures 3.0 meters, with the tallest recorded being 3.65 meters. The increased height spreads out their increased muscular bulk, leaving them with a more slender appearance than the standard ingentis without any loss of strength. Instead of dermal deposits, giants possess thickened skin with a density similar to a rhinoceros and a barklike appearance. Giants have increased facial hair thickness; most males grow full beards that are often braided or trimmed in a pattern. The giant metavariant is unique among metavariants and base metatypes in its frequency of genetic reversion to the base sapiens species. Studies have revealed one-fourth of female giant offspring results in a sapiens expression. This only occurs in females, as no male reversions have been recorded to date.
@@ -109,9 +109,9 @@ This mass migration has led European giants to join their Scandinavian kin, swel
 
 ## Minotaur
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Minotaur | 6/11 | 1/5 | 1/6 | 5/10 | 1/6 | 1/5 | 1/6 | 1/4 | 1/6 | 6 | REA+INT |
+| RACE                                                            | BODY | AGI | REA | STR  | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| --------------------------------------------------------------- | ---- | --- | --- | ---- | --- | --- | --- | --- | ---- | --- | ------- |
+| Minotaur                                                        | 6/11 | 1/5 | 1/6 | 5/10 | 1/6 | 1/5 | 1/6 | 1/4 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Goring Horns, Thermographic Vision, +1 Reach |
 
 **Physical Characteristics:** The minotaur metavariant possesses the enhanced muscle mass and thermographic vision of the primary ingentis subspecies. Variance occurs in their facial and horn structures, height, body hair, and dermal deposit formation. Minotaurs get their name from their wide, flattened nasal structure, wide-set eyes, and symmetrical horns, which resemble a bull’s face. Minotaur horns are longer than those of trolls, set at a more forward angle and anchored into thick bone plates that allow the horns to withstand greater impact. They are also nearly four times denser than standard ingentis horns. These features allow minotaurs to use their horns in more aggressive ways. Minotaurs also average 10 centimeters shorter than trolls but tend to carry the same bulk with added width, further lending to their bullish appearance. This ingentis metavariant usually possesses profuse body hair and a distinct lack of the dermal deposits common to the base subspecies.

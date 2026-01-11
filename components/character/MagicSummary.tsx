@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
 /**
  * MagicSummary - Displays character's magical state on the character sheet
- * 
+ *
  * Includes: Tradition, drain attributes, Magic rating, initiate grade,
  * power points (for adepts), sustained spells, and bound spirits.
  */
 
-import type { Character } from '@/lib/types/character';
-import type { TraditionData } from '@/lib/rules/loader-types';
-import { getDrainAttributes } from '@/lib/rules/magic/tradition-validator';
+import type { Character } from "@/lib/types/character";
+import type { TraditionData } from "@/lib/rules/loader-types";
+import { getDrainAttributes } from "@/lib/rules/magic/tradition-validator";
 
 interface MagicSummaryProps {
   character: Character;
@@ -17,11 +17,17 @@ interface MagicSummaryProps {
   className?: string;
 }
 
-export function MagicSummary({ character, tradition, className = '' }: MagicSummaryProps) {
-  const { magicalPath, specialAttributes, initiateGrade = 0, sustainedSpells = [], spirits = [] } = character;
-  
+export function MagicSummary({ character, tradition, className = "" }: MagicSummaryProps) {
+  const {
+    magicalPath,
+    specialAttributes,
+    initiateGrade = 0,
+    sustainedSpells = [],
+    spirits = [],
+  } = character;
+
   // Non-magical characters
-  if (magicalPath === 'mundane') {
+  if (magicalPath === "mundane") {
     return (
       <div className={`magic-summary magic-summary--mundane ${className}`}>
         <h3 className="magic-summary__title">Magic</h3>
@@ -32,32 +38,31 @@ export function MagicSummary({ character, tradition, className = '' }: MagicSumm
 
   // Calculate derived values
   const magicRating = specialAttributes?.magic ?? 0;
-  const drainAttributes = tradition 
-    ? getDrainAttributes(tradition, character)
-    : undefined;
-  
+  const drainAttributes = tradition ? getDrainAttributes(tradition, character) : undefined;
+
   const sustainedPenalty = (sustainedSpells?.length ?? 0) * -2;
-  const boundSpirits = spirits?.filter(s => s.bound) ?? [];
-  const activeSpirits = spirits?.filter(s => !s.bound) ?? [];
+  const boundSpirits = spirits?.filter((s) => s.bound) ?? [];
+  const activeSpirits = spirits?.filter((s) => !s.bound) ?? [];
 
   // Power points for adepts/mystic adepts
-  const isAdept = magicalPath === 'adept' || magicalPath === 'mystic-adept';
+  const isAdept = magicalPath === "adept" || magicalPath === "mystic-adept";
   const powerPointsTotal = isAdept ? magicRating : 0;
-  const powerPointsSpent = character.adeptPowers?.reduce((sum, p) => {
-    // Simplified: assume rating * 0.5 PP average
-    return sum + (p.rating ?? 1) * 0.5;
-  }, 0) ?? 0;
+  const powerPointsSpent =
+    character.adeptPowers?.reduce((sum, p) => {
+      // Simplified: assume rating * 0.5 PP average
+      return sum + (p.rating ?? 1) * 0.5;
+    }, 0) ?? 0;
 
   return (
     <div className={`magic-summary ${className}`}>
       <h3 className="magic-summary__title">Magic</h3>
-      
+
       {/* Path and Tradition */}
       <div className="magic-summary__row">
         <span className="magic-summary__label">Path:</span>
         <span className="magic-summary__value">{formatMagicalPath(magicalPath)}</span>
       </div>
-      
+
       {tradition && (
         <div className="magic-summary__row">
           <span className="magic-summary__label">Tradition:</span>
@@ -69,7 +74,7 @@ export function MagicSummary({ character, tradition, className = '' }: MagicSumm
       {drainAttributes && (
         <div className="magic-summary__row">
           <span className="magic-summary__label">Drain Resist:</span>
-          <span className="magic-summary__value">{drainAttributes.join(' + ')}</span>
+          <span className="magic-summary__value">{drainAttributes.join(" + ")}</span>
         </div>
       )}
 
@@ -146,14 +151,14 @@ export function MagicSummary({ character, tradition, className = '' }: MagicSumm
 }
 
 function formatMagicalPath(path: string | undefined): string {
-  if (!path) return 'Unknown';
+  if (!path) return "Unknown";
   const paths: Record<string, string> = {
-    'mundane': 'Mundane',
-    'full-mage': 'Magician',
-    'aspected-mage': 'Aspected Magician',
-    'adept': 'Adept',
-    'mystic-adept': 'Mystic Adept',
-    'technomancer': 'Technomancer'
+    mundane: "Mundane",
+    "full-mage": "Magician",
+    "aspected-mage": "Aspected Magician",
+    adept: "Adept",
+    "mystic-adept": "Mystic Adept",
+    technomancer: "Technomancer",
   };
   return paths[path] ?? path;
 }

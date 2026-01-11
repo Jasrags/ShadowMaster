@@ -19,7 +19,7 @@ export interface User {
   timezone?: string;
   createdAt: string; // ISO
   updatedAt?: string;
-  roles: Array<'player'|'gm'|'admin'>;
+  roles: Array<"player" | "gm" | "admin">;
   settings?: Record<string, unknown>;
 }
 
@@ -39,7 +39,7 @@ export interface Book {
   releaseYear?: number;
   isbn?: string;
   isCore: boolean;
-  categories: Array<'core'|'sourcebook'|'adventure'|'mission'|'novel'>;
+  categories: Array<"core" | "sourcebook" | "adventure" | "mission" | "novel">;
   metadata?: Record<string, unknown>;
   // pointer to payload file (JSON rules)
   payloadRef: string; // path or storage key
@@ -50,9 +50,20 @@ export interface Book {
 ```ts
 // types/rules.ts
 export type RuleModuleType =
-  | 'attributes' | 'skills' | 'combat' | 'matrix' | 'magic'
-  | 'cyberware' | 'bioware' | 'gear' | 'creationMethods' | 'limits'
-  | 'vehicles' | 'spells' | 'qualities' | 'lore';
+  | "attributes"
+  | "skills"
+  | "combat"
+  | "matrix"
+  | "magic"
+  | "cyberware"
+  | "bioware"
+  | "gear"
+  | "creationMethods"
+  | "limits"
+  | "vehicles"
+  | "spells"
+  | "qualities"
+  | "lore";
 
 export interface RuleModule {
   id: ID;
@@ -71,7 +82,7 @@ export interface RuleOverride {
   bookId: ID;
   moduleId: ID;
   overridePayload: Record<string, unknown>;
-  mergeStrategy: 'replace' | 'merge' | 'append' | 'remove';
+  mergeStrategy: "replace" | "merge" | "append" | "remove";
   reason?: string; // e.g., "errata", "expansion"
   createdAt: string;
 }
@@ -108,7 +119,10 @@ export interface Character {
   skills: Record<string, number>;
   qualities?: string[]; // ids or names
   gear?: Array<{ itemId?: ID; name: string; qty?: number; metadata?: Record<string, unknown> }>;
-  magicalPath?: { type: 'mundane'|'mage'|'adept'|'technomancer'|'druid'; rating?: number } | null;
+  magicalPath?: {
+    type: "mundane" | "mage" | "adept" | "technomancer" | "druid";
+    rating?: number;
+  } | null;
   resources?: { nuyen: number; essence?: number; edge?: number };
   derived?: Record<string, number>;
   attachedBooks?: ID[]; // books used during creation
@@ -131,7 +145,7 @@ export interface Campaign {
   createdAt: string;
   updatedAt?: string;
   settings?: {
-    visibility: 'private'|'invite'|'public';
+    visibility: "private" | "invite" | "public";
     allowHomebrew?: boolean;
     allowBookOverrides?: boolean;
   };
@@ -165,9 +179,7 @@ Example `book-payload.json` skeleton:
     "skills": {
       "mergeStrategy": "merge",
       "payload": {
-        "skills": [
-          { "id": "vehicledriving", "name": "Vehicle Driving", "group": "vehicle" }
-        ]
+        "skills": [{ "id": "vehicledriving", "name": "Vehicle Driving", "group": "vehicle" }]
       }
     },
     "creationMethods": {
@@ -178,7 +190,9 @@ Example `book-payload.json` skeleton:
             "id": "life-modules",
             "name": "Life Modules",
             "version": "1.0",
-            "payload": { /* full creation method descriptor */ }
+            "payload": {
+              /* full creation method descriptor */
+            }
           }
         ]
       }
@@ -189,9 +203,9 @@ Example `book-payload.json` skeleton:
 
 Key rules:
 
-* `modules` maps module types to payloads + merge hints.
-* `mergeStrategy` may be provided per module.
-* Each payload must be schema-validated against the edition's module schema.
+- `modules` maps module types to payloads + merge hints.
+- `mergeStrategy` may be provided per module.
+- Each payload must be schema-validated against the edition's module schema.
 
 ---
 
@@ -227,9 +241,9 @@ Key rules:
 
 Notes:
 
-* Rules Engine: load/merge rules, produce immutable merged ruleset per campaign session, used for validation and dice calculations.
-* Persistence: relational store for entities (users, characters, campaigns) + JSONB for rule modules and book payloads.
-* Real-time: WebSocket service (or P2P/SSE) for live sessions and dice sharing.
+- Rules Engine: load/merge rules, produce immutable merged ruleset per campaign session, used for validation and dice calculations.
+- Persistence: relational store for entities (users, characters, campaigns) + JSONB for rule modules and book payloads.
+- Real-time: WebSocket service (or P2P/SSE) for live sessions and dice sharing.
 
 #### Ruleset loading & merging flow
 
@@ -254,8 +268,8 @@ Notes:
 
 Key constraints:
 
-* Book load order matters; GM chooses order or system defines canonical order (core first, then sourcebooks sorted by release or GM choice).
-* Merged ruleset is cached per campaign (and versioned) to ensure reproducible validation.
+- Book load order matters; GM chooses order or system defines canonical order (core first, then sourcebooks sorted by release or GM choice).
+- Merged ruleset is cached per campaign (and versioned) to ensure reproducible validation.
 
 ---
 
@@ -263,9 +277,9 @@ Key constraints:
 
 **Inputs**
 
-* `baseModules`: dict moduleType->modulePayload (from core)
-* `bookOverrides`: ordered list of book payloads each containing overrides per module
-* `mergeStrategy` default = `deepMerge`
+- `baseModules`: dict moduleType->modulePayload (from core)
+- `bookOverrides`: ordered list of book payloads each containing overrides per module
+- `mergeStrategy` default = `deepMerge`
 
 **Pseudocode**
 
@@ -284,19 +298,19 @@ function produceMergedRuleset(baseModules, bookOverrides):
 
 `applyOverride(base, overridePayload, strategy)`:
 
-* `replace` => return deepClone(overridePayload)
-* `merge` => deepMerge(base, overridePayload)
+- `replace` => return deepClone(overridePayload)
+- `merge` => deepMerge(base, overridePayload)
+  - objects: recursive merge
+  - arrays: if array elements have `id`, merge by id; otherwise append
+  - scalars: override
 
-  * objects: recursive merge
-  * arrays: if array elements have `id`, merge by id; otherwise append
-  * scalars: override
-* `append` => base + override (append arrays or add keys)
-* `remove` => remove keys/ids referenced in overridePayload
+- `append` => base + override (append arrays or add keys)
+- `remove` => remove keys/ids referenced in overridePayload
 
 Edge cases:
 
-* Conflicting IDs: if two sourcebooks introduce same `id`, system must either namespace by book or require GM resolution.
-* Validation: after merge run JSON schema validations for each module.
+- Conflicting IDs: if two sourcebooks introduce same `id`, system must either namespace by book or require GM resolution.
+- Validation: after merge run JSON schema validations for each module.
 
 ---
 
@@ -313,21 +327,21 @@ Below is a compressed but structured PRD skeleton. Use this to expand into a ful
 
 ## High-level features
 
-* Multi-edition rule sandboxing
-* Book-based data bundles + overrides
-* Modular creation methods
-* GM campaign control, invites, session tools (combat tracker, dice engine)
-* Player-facing character sheets & mobile-friendly UI
+- Multi-edition rule sandboxing
+- Book-based data bundles + overrides
+- Modular creation methods
+- GM campaign control, invites, session tools (combat tracker, dice engine)
+- Player-facing character sheets & mobile-friendly UI
 
 ## Success metrics
 
-* Launch MVP supporting SR5 core + 2 sourcebooks
-* 1,000 registered users in first 6 months (example)
-* Average session length ≥ 45 minutes for active GMs
+- Launch MVP supporting SR5 core + 2 sourcebooks
+- 1,000 registered users in first 6 months (example)
+- Average session length ≥ 45 minutes for active GMs
 
 ## Stakeholders
 
-* Product manager, Lead Engineer, Rules SME, Designer, QA
+- Product manager, Lead Engineer, Rules SME, Designer, QA
 
 ## Timeline (see roadmap below)
 
@@ -346,6 +360,7 @@ High-level milestones with recommended scope.
 The MVP delivers a fully functional SR5 Priority-based character creation system. This section details the specific components required based on the SR5 Core Rulebook (p. 62-107).
 
 ##### Status Legend
+
 - ✅ Complete — Feature fully implemented
 - ⚠️ Partial — Basic implementation, minor features missing
 - 🔜 Deferred — Intentionally moved to Beta phase
@@ -354,11 +369,13 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 ##### Overall Progress Summary (Updated: December 2024)
 
 **Core Character Creation:** ~95% Complete
+
 - All 10 creation steps implemented and functional
 - Full wizard flow with auto-save and draft recovery
 - Character saving and finalization working
 
 **Key Completed Phases:**
+
 - Phase 6.2: Knowledge & Language skills
 - Phase 6.3: Skill specializations
 - Phase 6.4: Derived stats calculation
@@ -366,6 +383,7 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 - Phase 8: Gear & Resources with lifestyle selection
 
 **Deferred to Beta:**
+
 - Cyberware/Bioware (Augmentations)
 - Adept Powers allocation
 - Spirit/Sprite binding
@@ -373,23 +391,23 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 
 ##### MVP Completion Status
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Priority Selection Grid | ✅ Complete | A-E assignment across 5 categories |
-| Metatype Selection | ✅ Complete | Based on priority, shows racial traits |
-| Physical/Mental Attributes | ✅ Complete | Point allocation with metatype limits |
-| Special Attributes (Edge/Magic/Resonance) | ✅ Complete | SpecialAttributeAllocator component |
-| Magic/Resonance Path Selection | ✅ Complete | Path selection based on priority |
-| Active Skills | ✅ Complete | Individual + group point allocation |
-| Skill Specializations | ✅ Complete | +2 dice bonus, 1 point cost |
-| Knowledge & Language Skills | ✅ Complete | (INT+LOG)×2 free points, native language free |
-| Qualities Selection | ✅ Complete | Positive/Negative with 25 Karma caps |
-| Contacts System | ✅ Complete | Connection + Loyalty, CHA×3 free Karma |
-| Gear & Resources | ✅ Complete | Catalog, lifestyle, Karma-to-Nuyen |
-| Spells/Complex Forms | ✅ Complete | Karma purchase, priority-based free items |
-| Derived Stats | ✅ Complete | Limits, condition monitors, initiative |
-| Review Step | ✅ Complete | Full summary with validation |
-| Draft Auto-save | ✅ Complete | LocalStorage persistence |
+| Component                                 | Status      | Notes                                         |
+| ----------------------------------------- | ----------- | --------------------------------------------- |
+| Priority Selection Grid                   | ✅ Complete | A-E assignment across 5 categories            |
+| Metatype Selection                        | ✅ Complete | Based on priority, shows racial traits        |
+| Physical/Mental Attributes                | ✅ Complete | Point allocation with metatype limits         |
+| Special Attributes (Edge/Magic/Resonance) | ✅ Complete | SpecialAttributeAllocator component           |
+| Magic/Resonance Path Selection            | ✅ Complete | Path selection based on priority              |
+| Active Skills                             | ✅ Complete | Individual + group point allocation           |
+| Skill Specializations                     | ✅ Complete | +2 dice bonus, 1 point cost                   |
+| Knowledge & Language Skills               | ✅ Complete | (INT+LOG)×2 free points, native language free |
+| Qualities Selection                       | ✅ Complete | Positive/Negative with 25 Karma caps          |
+| Contacts System                           | ✅ Complete | Connection + Loyalty, CHA×3 free Karma        |
+| Gear & Resources                          | ✅ Complete | Catalog, lifestyle, Karma-to-Nuyen            |
+| Spells/Complex Forms                      | ✅ Complete | Karma purchase, priority-based free items     |
+| Derived Stats                             | ✅ Complete | Limits, condition monitors, initiative        |
+| Review Step                               | ✅ Complete | Full summary with validation                  |
+| Draft Auto-save                           | ✅ Complete | LocalStorage persistence                      |
 
 ##### MVP Remaining Work — SR5 Character Creation Steps
 
@@ -491,92 +509,92 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 
 ##### MVP — Other Systems
 
-* User accounts & campaign creation
-* GM invites and player approval flow
-* Dice roller + simple logs
-* Simple rulebook ingestion (manual JSON payload upload)
-* Basic character sheet (SR5 layout)
-* Web UI for desktop
+- User accounts & campaign creation
+- GM invites and player approval flow
+- Dice roller + simple logs
+- Simple rulebook ingestion (manual JSON payload upload)
+- Basic character sheet (SR5 layout)
+- Web UI for desktop
 
 ---
 
 #### **Beta (6–9 months)** — Goal: Richer GM Tools + Sourcebook Support
 
-* **Sourcebook merging** (Run Faster, Street Grimoire)
+- **Sourcebook merging** (Run Faster, Street Grimoire)
   - Metavariants from Run Faster
   - Additional qualities, skills, gear
-* **Combat tracker** (initiative order, rounds, damage application)
-* **Full inventory management** 
+- **Combat tracker** (initiative order, rounds, damage application)
+- **Full inventory management**
   - Ammunition tracking
   - Gear modification system
   - Damage tracking on gear
-* **Cyberware/Bioware system** (full implementation)
+- **Cyberware/Bioware system** (full implementation)
   - Grade selection (Standard, Alpha, Beta, Delta)
   - Capacity tracking
   - Essence hole tracking for magic users
-* **Adept Powers system**
+- **Adept Powers system**
   - Power Point allocation
   - Power selection catalog
   - Level-based powers
-* **Spell management**
+- **Spell management**
   - Spell catalog with full details
   - Ritual spells
   - Alchemical preparations
-* **Complex Forms catalog** (Technomancers)
-* **Mobile-responsive UI** improvements
-* **Basic session persistence** and WebSockets
+- **Complex Forms catalog** (Technomancers)
+- **Mobile-responsive UI** improvements
+- **Basic session persistence** and WebSockets
 
 ---
 
 #### **v1 (9–12 months)** — Goal: Multi-Edition + Advanced Features
 
-* **SR6 support** (new priority table, Edge system)
-* **SR4A support** (Build Points system)
-* **Advanced creation methods**
+- **SR6 support** (new priority table, Edge system)
+- **SR4A support** (Build Points system)
+- **Advanced creation methods**
   - Life Modules (Run Faster)
   - Sum-to-Ten variant
   - Karma Point-Buy (Run Faster p.64)
-* **Street-Level / Prime Runner variants**
+- **Street-Level / Prime Runner variants**
   - Modified resource tables
   - Adjusted Karma pools
   - Different availability limits
-* **NPC manager** + encounter templates
-* **Spirits & Sprites system**
+- **NPC manager** + encounter templates
+- **Spirits & Sprites system**
   - Spirit summoning and binding
   - Sprite compiling and registering
   - Service/task tracking
-* **Foci system**
+- **Foci system**
   - Bonding costs
   - Force limits
   - Addiction rules
-* **Module marketplace** (homebrew bundles)
-* **Integration hooks** for VTTs (Foundry/other)
-* **Permissions & billing** (if monetizing)
-* **Improved analytics & monitoring**
+- **Module marketplace** (homebrew bundles)
+- **Integration hooks** for VTTs (Foundry/other)
+- **Permissions & billing** (if monetizing)
+- **Improved analytics & monitoring**
 
 ---
 
 #### **v2 (12–24 months)** — Goal: Deep Automation + Content
 
-* **Matrix automation**
+- **Matrix automation**
   - Cyberdeck programs
   - Matrix actions
   - IC and host rules
-* **Rigger subsystems**
+- **Rigger subsystems**
   - Vehicle customization
   - Drone control
   - Jumped-in rules
-* **Spells automation**
+- **Spells automation**
   - Drain calculation
   - Sustained spell tracking
   - Spell defense
-* **Mentor Spirits** system
-* **AI-assisted rule linking** & search (map item to book page)
-* **Offline capabilities**, native mobile apps
-* **Expanded edition support** (SR1–SR3 + Anarchy)
-* **Third-party plugin API**
-* **Character import/export** (Chummer, HeroLab formats)
-* **Export PDF character sheet**
+- **Mentor Spirits** system
+- **AI-assisted rule linking** & search (map item to book page)
+- **Offline capabilities**, native mobile apps
+- **Expanded edition support** (SR1–SR3 + Anarchy)
+- **Third-party plugin API**
+- **Character import/export** (Chummer, HeroLab formats)
+- **Export PDF character sheet**
 
 ---
 
@@ -584,17 +602,17 @@ The MVP delivers a fully functional SR5 Priority-based character creation system
 
 **Player Persona — “Riley, the Runner”**
 
-* Age: 30; plays weekly
-* Goals: Create detailed run-ready characters quickly, track gear, and use during live sessions on mobile
-* Frustrations: Inconsistent rules across sites, heavy manual tracking, mismatched info between books
-* Needs: Fast character creation, edition accuracy, mobile-friendly quick-roll buttons
+- Age: 30; plays weekly
+- Goals: Create detailed run-ready characters quickly, track gear, and use during live sessions on mobile
+- Frustrations: Inconsistent rules across sites, heavy manual tracking, mismatched info between books
+- Needs: Fast character creation, edition accuracy, mobile-friendly quick-roll buttons
 
 **GM Persona — “Sam, the Deckmaster”**
 
-* Age: 36; runs weekly campaigns
-* Goals: Manage campaign content, enable specific sourcebooks, prepare encounters, and keep secrets for players
-* Frustrations: Tools that force a single edition or don't allow homebrew, clumsy combat trackers
-* Needs: Per-campaign book control, NPC templates, encounter/scene manager, private notes
+- Age: 36; runs weekly campaigns
+- Goals: Manage campaign content, enable specific sourcebooks, prepare encounters, and keep secrets for players
+- Frustrations: Tools that force a single edition or don't allow homebrew, clumsy combat trackers
+- Needs: Per-campaign book control, NPC templates, encounter/scene manager, private notes
 
 ---
 
@@ -623,7 +641,10 @@ A concise example JSON Schema (draft-07 style) for a CreationMethod payload. Thi
         "properties": {
           "id": { "type": "string" },
           "title": { "type": "string" },
-          "type": { "type": "string", "enum": ["select","allocate","choose","validate","info"] },
+          "type": {
+            "type": "string",
+            "enum": ["select", "allocate", "choose", "validate", "info"]
+          },
           "payload": { "type": "object" }
         }
       }
@@ -632,7 +653,7 @@ A concise example JSON Schema (draft-07 style) for a CreationMethod payload. Thi
       "type": "array",
       "items": {
         "type": "object",
-        "required": ["id","label","initialValue"],
+        "required": ["id", "label", "initialValue"],
         "properties": {
           "id": { "type": "string" },
           "label": { "type": "string" },
@@ -658,17 +679,17 @@ This allows creation methods to declare ordered `steps`, budgets (BP, karma, pri
 
 Same engine as general merging but with character-focused steps:
 
-* Resolve edition + enabled books
-* Produce merged creation method set (books can add/modify creation methods)
-* Validate chosen creationMethodId for campaign
-* During creation:
+- Resolve edition + enabled books
+- Produce merged creation method set (books can add/modify creation methods)
+- Validate chosen creationMethodId for campaign
+- During creation:
+  - For each step in creationMethod.payload.steps:
+    - Render UI from `step.type` and `step.payload`
+    - Run step-level validators (constraints)
 
-  * For each step in creationMethod.payload.steps:
+  - After all steps, run global validators (budgets, attribute caps, item availability)
 
-    * Render UI from `step.type` and `step.payload`
-    * Run step-level validators (constraints)
-  * After all steps, run global validators (budgets, attribute caps, item availability)
-* Persist character with `attachedBooks` and `creationMethodVersion` for reproducibility
+- Persist character with `attachedBooks` and `creationMethodVersion` for reproducibility
 
 Important: Freeze the merged ruleset snapshot used for creation and store a `rulesetSnapshotId` in the Character so future changes don't break legacy characters.
 
@@ -696,16 +717,16 @@ User -> Select Campaign -> (Campaign edition + enabled books)
 
 **Edition selection UX**
 
-* Screen with card grid for each edition; each card shows core features, whether bioware exists, and sample creation methods.
-* Filter: show only editions enabled for selected campaign (GM-controlled).
+- Screen with card grid for each edition; each card shows core features, whether bioware exists, and sample creation methods.
+- Filter: show only editions enabled for selected campaign (GM-controlled).
 
 **Wizard essentials**
 
-* Left-side stepper (sticky) with step names (dynamic)
-* Main pane shows step-specific UI + contextual help (book references)
-* Right-side validation panel showing resource spend (nuyen, BP, karma) and live warnings
-* Top toolbar shows edition and active books (click to expand book details)
-* Save as Draft, Validate, Finalize buttons
+- Left-side stepper (sticky) with step names (dynamic)
+- Main pane shows step-specific UI + contextual help (book references)
+- Right-side validation panel showing resource spend (nuyen, BP, karma) and live warnings
+- Top toolbar shows edition and active books (click to expand book details)
+- Save as Draft, Validate, Finalize buttons
 
 ---
 
@@ -732,9 +753,9 @@ App
 
 Notes:
 
-* Each step component reads rules from `RulesetContext` which contains the merged ruleset snapshot.
-* Use `react-hook-form` for step-level forms with custom validators sourced from JSON schema constraints.
-* Persist drafts to backend via autosave.
+- Each step component reads rules from `RulesetContext` which contains the merged ruleset snapshot.
+- Use `react-hook-form` for step-level forms with custom validators sourced from JSON schema constraints.
+- Persist drafts to backend via autosave.
 
 ---
 
@@ -750,8 +771,8 @@ Notes:
 
 If you want, I’ll:
 
-* Expand any of the above into a **downloadable markdown file** (one-per-artifact or a single bundle)
-* Produce a **detailed sequence diagram** for the merging and validation algorithm (SVG or mermaid)
-* Create a **starter backend repo scaffold** (Express + TypeORM + rules engine stub) with the TypeScript types wired in
+- Expand any of the above into a **downloadable markdown file** (one-per-artifact or a single bundle)
+- Produce a **detailed sequence diagram** for the merging and validation algorithm (SVG or mermaid)
+- Create a **starter backend repo scaffold** (Express + TypeORM + rules engine stub) with the TypeScript types wired in
 
 Which one should I generate next as files?

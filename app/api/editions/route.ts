@@ -1,6 +1,6 @@
 /**
  * API Route: GET /api/editions
- * 
+ *
  * Returns list of available editions.
  */
 
@@ -13,10 +13,6 @@ export async function GET() {
     return NextResponse.json({ success: true, editions });
   } catch (error) {
     console.error("Failed to load editions:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to load editions" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to load editions" }, { status: 500 });
   }
 }
-

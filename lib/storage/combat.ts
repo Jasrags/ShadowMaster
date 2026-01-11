@@ -22,13 +22,7 @@ import type {
   OpposedTest,
   DEFAULT_ACTION_ALLOCATION,
 } from "../types";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-  deleteFile,
-  listJsonFiles,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, listJsonFiles } from "./base";
 
 // =============================================================================
 // CONSTANTS
@@ -259,9 +253,7 @@ export async function getCombatSession(sessionId: ID): Promise<CombatSession | n
 /**
  * List combat sessions with optional filters
  */
-export async function listCombatSessions(
-  query: CombatSessionQuery = {}
-): Promise<CombatSession[]> {
+export async function listCombatSessions(query: CombatSessionQuery = {}): Promise<CombatSession[]> {
   const index = await readIndex();
   let sessionIds: ID[] = [];
 

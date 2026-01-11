@@ -537,6 +537,8 @@ export interface CyberwareCatalogItemData {
   source?: string;
   parentType?: string;
   requirements?: string[];
+  /** Compatible cyberlimb types for accessories (e.g., ["full-arm", "lower-arm"]) */
+  compatibleLimbs?: string[];
 
   // -------------------------------------------------------------------------
   // UNIFIED RATINGS TABLE (Preferred Approach)
@@ -597,6 +599,12 @@ export interface CyberwareCatalogItemData {
    * @deprecated Consider using ratings table instead
    */
   initiativeDiceBonusPerRating?: number;
+
+  /**
+   * List of augmentation IDs that are incompatible with this cyberware.
+   * e.g., Skillwires is incompatible with Reflex Recorder bioware.
+   */
+  incompatibleWith?: string[];
 }
 
 /**
@@ -629,7 +637,6 @@ export interface BiowareGradeData {
   costMultiplier: number;
   availabilityModifier: number;
 }
-
 
 /**
  * Bioware catalog item data structure (from ruleset)
@@ -699,6 +706,36 @@ export interface BiowareCatalogItemData {
    * @deprecated Use ratings table or ratingSpec.attributeBonusScaling instead
    */
   attributeBonusesPerRating?: Record<string, number>;
+
+  // -------------------------------------------------------------------------
+  // COMPATIBILITY & SKILL-LINKED BIOWARE
+  // -------------------------------------------------------------------------
+
+  /**
+   * List of augmentation IDs that are incompatible with this bioware.
+   * e.g., Reflex Recorder is incompatible with Skillwires.
+   */
+  incompatibleWith?: string[];
+
+  /**
+   * Whether this bioware requires selecting a target skill.
+   * When true, user must choose a skill during purchase.
+   * The bioware then provides its bonus to that specific skill.
+   */
+  requiresSkillTarget?: boolean;
+
+  /**
+   * Filter for which skill attributes are valid targets.
+   * Only skills with a linkedAttribute in this list can be selected.
+   * e.g., ["agility", "body", "reaction", "strength"] for Physical skills
+   */
+  skillAttributeFilter?: string[];
+
+  /**
+   * Bonus to apply to the target skill rating.
+   * Defaults to 1 if not specified (e.g., Reflex Recorder gives +1).
+   */
+  skillBonus?: number;
 }
 
 /**
@@ -795,12 +832,12 @@ export interface TraditionData {
   id: string;
   name: string;
   drainAttributes: [string, string];
-   
+
   spiritTypes: TraditionSpiritTypes;
   description: string;
   source?: string;
   isPossessionTradition?: boolean;
-   
+
   drainVariant?: DrainVariant;
 }
 
@@ -919,7 +956,7 @@ export interface DroneSizeData {
 /**
  * Handling rating - can be single value or on-road/off-road pair
  */
- 
+
 export type HandlingRatingData = number | { onRoad: number; offRoad: number };
 
 /**
@@ -949,7 +986,7 @@ export interface VehicleCatalogItemData {
 /**
  * Drone weapon mount configuration
  */
- 
+
 export interface DroneWeaponMountsData {
   standard?: number;
   heavy?: number;
@@ -1088,7 +1125,7 @@ export interface FocusCatalogItemData {
 /**
  * Spirit type data structure
  */
- 
+
 export interface SpiritTypeData {
   type: SpiritType;
   name: string;

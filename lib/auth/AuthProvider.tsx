@@ -32,7 +32,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     try {
       const response = await fetch("/api/auth/me");
       const data: AuthResponse = await response.json();
-      
+
       if (data.success && data.user) {
         setUser(data.user);
       } else {
@@ -50,55 +50,61 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     fetchUser();
   }, [fetchUser]);
 
-  const signIn = useCallback(async (credentials: SigninRequest) => {
-    try {
-      const response = await fetch("/api/auth/signin", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(credentials),
-      });
+  const signIn = useCallback(
+    async (credentials: SigninRequest) => {
+      try {
+        const response = await fetch("/api/auth/signin", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(credentials),
+        });
 
-      const data: AuthResponse = await response.json();
+        const data: AuthResponse = await response.json();
 
-      if (data.success && data.user) {
-        setUser(data.user);
-        router.push("/");
-        return { success: true };
-      } else {
-        return { success: false, error: data.error || "Sign in failed" };
+        if (data.success && data.user) {
+          setUser(data.user);
+          router.push("/");
+          return { success: true };
+        } else {
+          return { success: false, error: data.error || "Sign in failed" };
+        }
+      } catch (error) {
+        console.error("Sign in error:", error);
+        return { success: false, error: "An error occurred during sign in" };
       }
-    } catch (error) {
-      console.error("Sign in error:", error);
-      return { success: false, error: "An error occurred during sign in" };
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
-  const signUp = useCallback(async (data: SignupRequest) => {
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+  const signUp = useCallback(
+    async (data: SignupRequest) => {
+      try {
+        const response = await fetch("/api/auth/signup", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
 
-      const result: AuthResponse = await response.json();
+        const result: AuthResponse = await response.json();
 
-      if (result.success && result.user) {
-        setUser(result.user);
-        router.push("/");
-        return { success: true };
-      } else {
-        return { success: false, error: result.error || "Sign up failed" };
+        if (result.success && result.user) {
+          setUser(result.user);
+          router.push("/");
+          return { success: true };
+        } else {
+          return { success: false, error: result.error || "Sign up failed" };
+        }
+      } catch (error) {
+        console.error("Sign up error:", error);
+        return { success: false, error: "An error occurred during sign up" };
       }
-    } catch (error) {
-      console.error("Sign up error:", error);
-      return { success: false, error: "An error occurred during sign up" };
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
   const signOut = useCallback(async () => {
     try {
@@ -131,4 +137,3 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     </AuthContext.Provider>
   );
 }
-

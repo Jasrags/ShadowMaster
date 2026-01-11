@@ -1,12 +1,12 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Positive Qualities | Negative Qualities | Martial Arts |
-| --- | --- | --- |
+| ------------------ | ------------------ | ------------ |
 
 | Positive Metagenic Qualities | Negative Metagenic Qualities |
-| --- | --- |
+| ---------------------------- | ---------------------------- |
 
 ## Contents
 
@@ -300,7 +300,7 @@ With the Astral Chameleon quality, the character’s astral signature blends int
 
 ## Bilingual
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -347,7 +347,7 @@ A Double-Jointed character has unusually flexible joints and can bend and contor
 
 ## Exceptional Attribute
 
-| **COST** :14 KARMA |  |
+| **COST** :14 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -401,7 +401,7 @@ High Pain Tolerance lets a character keep delivering the pain even if she’s ha
 
 ## Home Ground
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -409,31 +409,31 @@ High Pain Tolerance lets a character keep delivering the pain even if she’s ha
 If a character knows her neighborhood better than anyone—the shortcuts, the hiding places, and the people she can trust—then she probably has the Home Ground quality. She knows the families who live there, their stories, and what the kids who moved out are doing; she knows the streets better than GridGuide, knows things that aren’t on GridGuide, and knows when GridGuide is wrong. She knows the politics of the gangs, who’s running for whom and who’s running from whom. But it’s not just the physical streets. Depending on the character, her Home Ground quality can manifest in ways specific to who and what she is. When choosing this quality, select one of the bonuses below:
 
 Astral Acclimation
-:   The character has become acclimated to the background count of her Home Ground. Through a lifetime of familiarity she’s learned to work around it, enabling her to ignore up to two points of background count.
+: The character has become acclimated to the background count of her Home Ground. Through a lifetime of familiarity she’s learned to work around it, enabling her to ignore up to two points of background count.
 
     Example
     :   For example, if the background count on her Home Ground is 3, she sees only a reduction of 1 to her Magic tests; if the background count is 5, for her it is only a 3, and so on. This quality works only on her Home Ground and has no benefit anywhere else.
 
 You Know a Guy
-:   The character has built up long-lasting relationships with people from her neighborhood. These people are not contacts, but they know her as one of their own and are more likely to do favors for or talk to her. NPCs from the character’s Home Ground neighborhood are considered friendly toward her wherever she encounters them (unless she has done something to change that).The character receives +2 Street Cred for any Negotiation with people from her Home Ground.
+: The character has built up long-lasting relationships with people from her neighborhood. These people are not contacts, but they know her as one of their own and are more likely to do favors for or talk to her. NPCs from the character’s Home Ground neighborhood are considered friendly toward her wherever she encounters them (unless she has done something to change that).The character receives +2 Street Cred for any Negotiation with people from her Home Ground.
 
 Digital Turf
-:   This is for a decker or technomancer who has a specific host that she calls her own. She may actually own the spot, or it can be a place she frequents enough to consider home. The character receives a +2 bonus to Matrix Tests while in her Home Ground host. Bonuses from other Qualities may stack with Home Ground. If the character has not frequented this host for more than six months, she loses the Home Ground quality because she is no longer as familiar as she should be.
+: This is for a decker or technomancer who has a specific host that she calls her own. She may actually own the spot, or it can be a place she frequents enough to consider home. The character receives a +2 bonus to Matrix Tests while in her Home Ground host. Bonuses from other Qualities may stack with Home Ground. If the character has not frequented this host for more than six months, she loses the Home Ground quality because she is no longer as familiar as she should be.
 
 The Transporter
-:   This character knows the layout of streets, back alleys, service tunnels, etc., like the back of her hand. She knows when GridGuide is wrong and when GridGuide is out of date. When the transporter is on her Home Ground, she has a +2 dice pool modifier for Evasion Tests.
+: This character knows the layout of streets, back alleys, service tunnels, etc., like the back of her hand. She knows when GridGuide is wrong and when GridGuide is out of date. When the transporter is on her Home Ground, she has a +2 dice pool modifier for Evasion Tests.
 
 On the Lam
-:   Hiding out and lying low are part of a shadowrunner’s daily life. On the Lam means a character has an encyclopedic knowledge of safehouses, bolt holes, abandoned buildings, just about any out-of-the-way place not claimed by gangs or squatters. When she needs to find a safe location in a hurry, this character receives a +2 dice pool bonus to her Intuition + appropriate street knowledge skill to find a suitable place to hole up fast.
+: Hiding out and lying low are part of a shadowrunner’s daily life. On the Lam means a character has an encyclopedic knowledge of safehouses, bolt holes, abandoned buildings, just about any out-of-the-way place not claimed by gangs or squatters. When she needs to find a safe location in a hurry, this character receives a +2 dice pool bonus to her Intuition + appropriate street knowledge skill to find a suitable place to hole up fast.
 
 Street Politics
-:   This character knows the street gangs, the criminal operations, and the beneath-the-surface affiliations that are the social and political fabric of her Home Ground. She receives a +2 dice pool modifier for Knowledge Tests relating to gangs or their operations.
+: This character knows the street gangs, the criminal operations, and the beneath-the-surface affiliations that are the social and political fabric of her Home Ground. She receives a +2 dice pool modifier for Knowledge Tests relating to gangs or their operations.
 
 This quality can be taken multiple times, selecting one of the categories above each time.
 
 ## Human-looking
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -481,7 +481,7 @@ The dice roll and the coin flips this character’s way more often than not, giv
 
 ## Magic Resistance
 
-| **COST** :6 KARMA PER RATING | Spell Resistance Tests +1 DP Modifier Limitation Never a *voluntary subject* |
+| **COST** :6 KARMA PER RATING | Spell Resistance Tests +1 DP Modifier Limitation Never a _voluntary subject_ |
 | **PREREQUISITES:** NONE |
 | **RATING** :(MAX RATING 4) |
 | **SOURCE** :Core |
@@ -492,7 +492,7 @@ Characters with a Magic rating cannot take this quality.
 
 ## Mentor Spirit
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** Must have Magic Attribute Rating |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -521,7 +521,7 @@ This quality makes the character’s neural structure resistant to feedback. Thi
 
 ## Natural Immunity
 
-| **COST** :4 OR 10 KARMA |  |
+| **COST** :4 OR 10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :Core |
@@ -588,7 +588,7 @@ For each rating point in Will to Live, the character gains 1 additional Damage O
 
 ## The Artisan’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -599,7 +599,7 @@ Artisans may choose to use their Way discount bonus on the following skills: Ana
 
 ## The Artist’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -610,7 +610,7 @@ Artists may choose to use their Way discount bonus on the following skills: Astr
 
 ## The Athlete’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -619,7 +619,7 @@ These adepts focus their energy on only one thing: honing their bodies for maxim
 
 ## The Beast’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -632,7 +632,7 @@ Followers of the Beast’s Way may choose from the following skills for their di
 
 ## The Burnout’s Way
 
-| **COST** :15 KARMA |  |
+| **COST** :15 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -645,7 +645,7 @@ As long as the adept still has a Magic Rating, he can still continue to initiate
 
 ## The Invisible Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -656,7 +656,7 @@ Followers of the Invisible Way may choose from the following skills for their di
 
 ## The Spiritual Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -667,7 +667,7 @@ Because of their more spiritual outlook, adepts of the Spiritual Way have an abo
 
 ## The Warrior’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -678,7 +678,7 @@ Bonding a weapon focus costs two less Karma than normal for those following the 
 
 ## The Magician’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -689,7 +689,7 @@ Unlike their physical counterparts, mystic adepts following this Way have access
 
 ## The Speaker’s Way
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** Adept |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -700,7 +700,7 @@ Speakers can apply their Way discount bonuses to the following powers: Analytics
 
 ## Spirit Champion
 
-| **COST** :14 KARMA |  |
+| **COST** :14 KARMA | |
 | **PREREQUISITES:** Able to Summon |
 | **RATING** :NONE |
 | **SOURCE** :SR5:SG |
@@ -709,7 +709,7 @@ Something you did had a lasting, positive effect on the astral plane, and the wh
 
 ## Acrobatic Defender
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -718,7 +718,7 @@ Duck, dive, twist, and twirl, just put on a good enough floor show to keep whate
 
 ## Agile Defender
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -727,7 +727,7 @@ Speed kills, but quickness and agility can be the key to avoiding a speedy death
 
 ## Brand Loyalty
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -738,7 +738,7 @@ On the downside, due to this narrow focus the character suffers a –1 dice pool
 
 ## One Trick Pony
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -747,7 +747,7 @@ You’ve watched the same action trid or chipped your way through the same simse
 
 ## Perceptive Defender
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -756,7 +756,7 @@ Sometimes keeping yourself alive is about staying alert and keeping an eye out f
 
 ## Sharpshooter
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -765,7 +765,7 @@ Through focus and vigilance it’s possible to hone a shooting skill to the poin
 
 ## Too Pretty To Hit
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -774,7 +774,7 @@ It’s more about force of personality than actually being pretty—sometimes a 
 
 ## Radiation Sponge
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -785,7 +785,7 @@ For example, Glowboy is a Radiation Sponge who makes a two-minute jaunt into the
 
 ## Rad-tolerant
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -794,7 +794,7 @@ Sometimes characters are just different. Being able to stand on the outskirts of
 
 ## Spacer
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R&G |
@@ -803,7 +803,7 @@ Some people are just naturally comfortable in alternative-gravity environments. 
 
 ## Adrenaline Surge
 
-| **COST** :12 KARMA |  |
+| **COST** :12 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -812,7 +812,7 @@ Hit first, hit last, that’s your style. Adrenaline Surge allows a character to
 
 ## Animal Empathy
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -821,7 +821,7 @@ Characters with this quality have a natural knack for working with animals. The 
 
 ## Black Market Pipeline
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -830,7 +830,7 @@ During character creation, the player chooses one existing individual contact an
 
 ## Born Rich
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -839,7 +839,7 @@ Richie Rich has fallen into the shadows. The character came from an affluent bac
 
 ## City Slicker
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -848,7 +848,7 @@ A character with this quality has the asphalt and concrete of the sprawl in his 
 
 ## College Education
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -857,7 +857,7 @@ The halls of academe are well known to your character. Thanks to time spent actu
 
 ## Common Sense
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -866,7 +866,7 @@ The halls of academe are well known to your character. Thanks to time spent actu
 
 ## Daredevil
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -875,7 +875,7 @@ Better to be lucky than good, when you’re living on the edge. A character with
 
 ## Digital Doppelganger
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -884,7 +884,7 @@ The Matrix is a big place, and with a world so connected and so tied to identity
 
 ## Disgraced
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -893,7 +893,7 @@ The character used to be a figure of authority, feared in the streets and public
 
 ## Erased
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -904,7 +904,7 @@ This is a double-edged sword. The character can never maintain a Lifestyle highe
 
 ## Fame
 
-| **COST** :4 TO 16 KARMA |  |
+| **COST** :4 TO 16 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -916,28 +916,28 @@ First, on the pro side, Fame offers benefits within certain social circles and a
 That may sound nice, but being well known is not a great way to get work in the shadows, and therefore causes problems on the darker side of life. Characters with this quality are more likely to be recognized by passers-by or others who see them during a run, which can be a problem. And remember that Fame often involves strings; one of the biggest is having a SIN. Characters who choose this quality must have the SINner quality or a Rating 3 fake SIN.
 
 Local Fame (4 Karma)
-:   City politics, hometown sports teams, and local news stations are some of the most common sources of local fame. Select a single sprawl at character creation to be the base of the character’s fame. In the public eye of that sprawl, the character gains a 1-point increase to their Social Limit and a +1 dice pool modifier on all Social Skill tests to positively influence someone who knows of their fame.
-:   The downside is that anyone from the chosen sprawl can identify famous characters with an Intuition + Logic (2) Test, so characters need to be careful about who sees them when they are on the job. The character’s Public Awareness is increased by 2.
-:   If the character has the Day Job quality, they multiply their income by 2.
+: City politics, hometown sports teams, and local news stations are some of the most common sources of local fame. Select a single sprawl at character creation to be the base of the character’s fame. In the public eye of that sprawl, the character gains a 1-point increase to their Social Limit and a +1 dice pool modifier on all Social Skill tests to positively influence someone who knows of their fame.
+: The downside is that anyone from the chosen sprawl can identify famous characters with an Intuition + Logic (2) Test, so characters need to be careful about who sees them when they are on the job. The character’s Public Awareness is increased by 2.
+: If the character has the Day Job quality, they multiply their income by 2.
 
 National Fame (8 Karma)
-:   National politics, championship sports teams, and the entertainment industry supply the bulk of nationally famous folks. At character creation, select a nation to be famous within and a sprawl of origin within that nation (it needs to be a place related to the character’s story and the languages they speak—characters need at least four ranks in the native language of the country in which they are famous). In the selected sprawl, characters gain a 1-point increase to their Social Limit and a +2 dice pool modifier on all Social Skill tests to positively influence someone who knows of their fame. In the chosen nation, the character has a 2-point Social Limit increase and a +1 dice pool modifier as above.
-:   Anyone from the character’s home sprawl can identify the character with an Intuition + Logic (1) Test; people from the nation need to make an Intuition + Logic (2) Test. The character’s Public Awareness is increased by 3.
-:   If the character has the Day Job quality, they multiply their income by 4 and also increase their required workload by 10 percent.
+: National politics, championship sports teams, and the entertainment industry supply the bulk of nationally famous folks. At character creation, select a nation to be famous within and a sprawl of origin within that nation (it needs to be a place related to the character’s story and the languages they speak—characters need at least four ranks in the native language of the country in which they are famous). In the selected sprawl, characters gain a 1-point increase to their Social Limit and a +2 dice pool modifier on all Social Skill tests to positively influence someone who knows of their fame. In the chosen nation, the character has a 2-point Social Limit increase and a +1 dice pool modifier as above.
+: Anyone from the character’s home sprawl can identify the character with an Intuition + Logic (1) Test; people from the nation need to make an Intuition + Logic (2) Test. The character’s Public Awareness is increased by 3.
+: If the character has the Day Job quality, they multiply their income by 4 and also increase their required workload by 10 percent.
 
 Megacorporate Fame (12 Karma)
-:   Megacorporate sports teams, the international entertainment industry, and megacorporate politics bring corporate citizens into the spotlight. At character creation, choose a home megacorporation, home sprawl, and home nation where the character’s fame originated and grew. In the character’s megacorporation, they gain a 2-point Social Limit bonus and a +2 dice pool modifier on all Social Skills tests to positively influence someone who knows of their fame. In the nation and sprawl they came from, the Social Limit increase is 1 and the dice pool modifier is +1.
-:   Citizens of their megacorporation and their home sprawl need only succeed at an Intuition + Logic (1) test to identify the character. Citizens of other megacorporations and their home nation can identify them with an Intuition + Logic (2) Test. The character’s Public Awareness is increased by 5.
-:   If the character has the Day Job quality, they multiply their income by 6 and also require a 10 percent increase in workload.
+: Megacorporate sports teams, the international entertainment industry, and megacorporate politics bring corporate citizens into the spotlight. At character creation, choose a home megacorporation, home sprawl, and home nation where the character’s fame originated and grew. In the character’s megacorporation, they gain a 2-point Social Limit bonus and a +2 dice pool modifier on all Social Skills tests to positively influence someone who knows of their fame. In the nation and sprawl they came from, the Social Limit increase is 1 and the dice pool modifier is +1.
+: Citizens of their megacorporation and their home sprawl need only succeed at an Intuition + Logic (1) test to identify the character. Citizens of other megacorporations and their home nation can identify them with an Intuition + Logic (2) Test. The character’s Public Awareness is increased by 5.
+: If the character has the Day Job quality, they multiply their income by 6 and also require a 10 percent increase in workload.
 
 Global Fame (16 Karma)
-:   This kind of fame is not easy to avoid. International blockbuster simstars, multi-platinum-selling music artists, megacorporate executives, and international political figures fit this kind of bill. Characters with this level of fame gain a 3-point increase to their Social Limit and a +3 dice pool modifier to all Social Skills tests to positively influence anyone who knows their identity. Identifying the character requires an Intuition + Logic (2) Test or any rank in an appropriate Knowledge Skill.
-:   If the character has the Day Job quality, they multiply their income by 10 and also require a 25 percent increase in workload. The character’s Public Awareness is increased by 8.
-:   Characters can create their own runner persona to try and hide their true identity, but it will involve a disguise or mask of some sort. Identifying the star becomes an Opposed Test with the initial Disguise + Intuition [Mental] Test, setting the threshold to identify the character with a Perception + Intuition [Mental] Test.
+: This kind of fame is not easy to avoid. International blockbuster simstars, multi-platinum-selling music artists, megacorporate executives, and international political figures fit this kind of bill. Characters with this level of fame gain a 3-point increase to their Social Limit and a +3 dice pool modifier to all Social Skills tests to positively influence anyone who knows their identity. Identifying the character requires an Intuition + Logic (2) Test or any rank in an appropriate Knowledge Skill.
+: If the character has the Day Job quality, they multiply their income by 10 and also require a 25 percent increase in workload. The character’s Public Awareness is increased by 8.
+: Characters can create their own runner persona to try and hide their true identity, but it will involve a disguise or mask of some sort. Identifying the star becomes an Opposed Test with the initial Disguise + Intuition [Mental] Test, setting the threshold to identify the character with a Perception + Intuition [Mental] Test.
 
 ## Friends In High Places
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -946,7 +946,7 @@ Global Fame (16 Karma)
 
 ## Hawk Eye
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -955,7 +955,7 @@ Characters with the Hawk Eye quality have exceptionally keen natural vision. The
 
 ## Inspired
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -964,7 +964,7 @@ Slapping paint on a canvas or words on a page is easy and requires only a medium
 
 ## Jack Of All Trades, Master Of None
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -973,7 +973,7 @@ The character has an incredible aptitude for learning new skills. Unfortunately,
 
 ## Lightning Reflexes
 
-| **COST** :20 KARMA |  |
+| **COST** :20 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -982,7 +982,7 @@ Some people are just born fast. This quality provides an unaugmented character t
 
 ## Linguist
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -991,7 +991,7 @@ Nothing impresses an out-of-town Johnson more than negotiating in their native t
 
 ## Made Man
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1000,7 +1000,7 @@ As a minor member of an organized crime syndicate, the character can occasionall
 
 ## Night Vision
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1009,7 +1009,7 @@ The name says it all. This quality provides characters with the advantages of lo
 
 ## Outdoorsman
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1018,7 +1018,7 @@ A character with this quality is often described as woodsy. They are far more co
 
 ## Overclocker
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1027,7 +1027,7 @@ The character is able to coax more juice out of his gear. The character may add 
 
 ## Perceptive
 
-| **COST** :5 TO 10 KARMA |  |
+| **COST** :5 TO 10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1036,7 +1036,7 @@ The devil is in the details, and you see those horns regularly. This quality is 
 
 ## Perfect Time
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1045,7 +1045,7 @@ Who needs a watch when you’re around? The character with this quality always k
 
 ## Poor Link
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1054,7 +1054,7 @@ There’s a haze to the character’s aura that makes connecting over a distance
 
 ## Privileged Family Name
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1063,7 +1063,7 @@ With this quality the character’s family is exceptionally well-connected, and 
 
 ## Restricted Gear
 
-| **COST** :10 KARMA PER ITEM |  |
+| **COST** :10 KARMA PER ITEM | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1072,7 +1072,7 @@ Right place, right time, right friend, or the stars aligned. No matter the reaso
 
 ## School Of Hard Knocks
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1081,7 +1081,7 @@ The streets were this character’s classroom. Thanks to all the time spent tryi
 
 ## Sense Of Direction
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1090,7 +1090,7 @@ Sometimes the compass asks you which way is north. This quality allows even the 
 
 ## Sensei
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1103,7 +1103,7 @@ with a limit of 8. The Sensei charges nothing for her services to the character,
 
 ## Solid/legendary Rep
 
-| **COST** :2 TO 4 KARMA |  |
+| **COST** :2 TO 4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1112,7 +1112,7 @@ The character has a solid (2 Karma) or legendary (4 Karma) reputation within a c
 
 ## Speed Reading
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1121,7 +1121,7 @@ When you found out the professor was offering an open-book final that could coun
 
 ## Privileged Family Name
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1130,7 +1130,7 @@ With this quality the character’s family is exceptionally well-connected, and 
 
 ## Restricted Gear
 
-| **COST** :10 KARMA PER ITEM |  |
+| **COST** :10 KARMA PER ITEM | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1140,7 +1140,7 @@ No matter the reason, the character has managed to acquire or get a line on one 
 
 ## School Of Hard Knocks
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1149,7 +1149,7 @@ The streets were this character’s classroom. Thanks to all the time spent tryi
 
 ## Sense Of Direction
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1158,7 +1158,7 @@ Sometimes the compass asks you which way is north. This quality allows even the 
 
 ## Sensei
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1167,7 +1167,7 @@ You don’t know what you don’t know. This quality gives you someone who knows
 
 ## Solid/legendary Rep
 
-| **COST** :2 TO 4 KARMA |  |
+| **COST** :2 TO 4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1176,7 +1176,7 @@ The character has a solid (2 Karma) or legendary (4 Karma) reputation within a c
 
 ## Speed Reading
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1185,7 +1185,7 @@ When you found out the professor was offering an open-book final that could coun
 
 ## Trust Fund
 
-| **COST** :5, 10, 15, OR 20 KARMA |  |
+| **COST** :5, 10, 15, OR 20 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1194,7 +1194,7 @@ Everyone knows you’re in the shadows for the rush or to fulfill some kind of B
 
 ## Trustworthy
 
-| **COST** :15 KARMA |  |
+| **COST** :15 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1203,7 +1203,7 @@ There’s just something about your baby face, good manners, or personality that
 
 ## Vehicle Empathy
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1212,7 +1212,7 @@ Sometimes you feel like your heart pumps 108 octane instead of simple blood. Cha
 
 ## Water Sprite
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1221,7 +1221,7 @@ You sure you’re not part merrow? This quality provides a +2 dice pool modifier
 
 ## Witness My Hate
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** Magicians Only |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -1230,7 +1230,7 @@ All of a spellcasting character’s single-target Direct Damage spells are resol
 
 ## Data Anomaly
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1248,7 +1248,7 @@ When the opposition starts getting marks on you, you know the hurt isn’t far b
 
 ## Go Big Or Go Home
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1257,7 +1257,7 @@ You don’t have time to mess around. When you strike, you strike to kill. Whene
 
 ## Golden Screwdriver
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1266,7 +1266,7 @@ It happens to everyone: You meet more hacking opposition that you expected, and 
 
 ## I C U
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1275,7 +1275,7 @@ In the shadows, everyone always runs silent, right? To you, what gives them away
 
 ## Ninja Vanish
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1284,7 +1284,7 @@ Even the best sometimes get clipped. Maybe you’re in a host, holding off some 
 
 ## Online Fame
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1295,7 +1295,7 @@ Any character who is able to see both your icon and your physical self is thrown
 
 ## Otaku To Techomancer
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1304,7 +1304,7 @@ You were an otaku, a child of the Matrix, bending the Matrix to the will of your
 
 ## Pain Is Gain
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1315,7 +1315,7 @@ The character gains +2 to their current Initiative Score on any turn she suffers
 
 ## Prime Datahaven Membership
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1326,7 +1326,7 @@ When choosing this quality, pick one of these famous datahavens. It will act as 
 
 ## Profiler
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1339,7 +1339,7 @@ The downside to the character’s ability to profile others so well is an inabil
 
 ## Quick Config
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:DT |
@@ -1347,11 +1347,11 @@ The downside to the character’s ability to profile others so well is an inabil
 Maybe you’re just nova-hot at moving your fingers around, or maybe your mind is highly organized. Whatever the case, reconfiguring your deck is something you do with freakish rapidity. Whenever you reconfigure your deck (p. 228, SR5), you can make two changes with a single Free Action. So, you may switch two programs for two others, or you can swap two pairs of cyberdeck attributes. You can also swap one program and one attribute pair. Note that a single attribute can only be swapped once, so there is still a limit to how much the new config can achieve.
 
 Example
-:   Trix has the Quick Config quality and is currently running a Novatech Navigator with Attack 6, Sleaze 5, Data Processing 4, and Firewall 3 (6/5/4/3). She could use a Free Action to reconfigure her deck and swap Attack and Sleaze and then Data Processing and Firewall to end up with 5/6/3/4). What she could not do is swap Attack and Sleaze and then Sleaze with Firewall (5/3/4/6).
+: Trix has the Quick Config quality and is currently running a Novatech Navigator with Attack 6, Sleaze 5, Data Processing 4, and Firewall 3 (6/5/4/3). She could use a Free Action to reconfigure her deck and swap Attack and Sleaze and then Data Processing and Firewall to end up with 5/6/3/4). What she could not do is swap Attack and Sleaze and then Sleaze with Firewall (5/3/4/6).
 
 ## Chaser
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1360,7 +1360,7 @@ Something about reeling in a car, boat, or plane that is trying to get away from
 
 ## Dealer Connection
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1369,7 +1369,7 @@ At some point in your wide travels and extra-legal activities, you met someone w
 
 ## Grease Monkey
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1378,7 +1378,7 @@ When you were young, you would much rather make a trip to the junkyard than the 
 
 ## Speed Demon
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1387,7 +1387,7 @@ Pushing your vehicle to its limits makes the hair on the back of your neck stand
 
 ## Stunt Driver
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1396,7 +1396,7 @@ Whether it’s because you spent some time working for a trip studio in LA or be
 
 ## Subtle (Vehicle) Pilot
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:R5.0 |
@@ -1405,7 +1405,7 @@ Other riggers can be flashy or showy, but you know the value of getting your wor
 
 ## Better To Be Feared Than Loved
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1418,7 +1418,7 @@ The downside, however, is that should a blackmailed contact gather enough nerve 
 
 ## Biocompatibility
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1427,7 +1427,7 @@ Something about the character’s body is exceptionally accepting of either biow
 
 ## Cyber Singularity Seeker
 
-| **COST** :12 KARMA |  |
+| **COST** :12 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1436,7 +1436,7 @@ In the Sixth World, many accept cyberware as a means to an end, as a way to augm
 
 ## Drug Tolerant
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1445,7 +1445,7 @@ The character has a higher-than-average tolerance for drugs (sometimes called Oz
 
 ## Prototype Transhuman
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1460,7 +1460,7 @@ This quality can only be taken during character creation.
 
 ## Redliner
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1469,7 +1469,7 @@ Any cyberlimbs you have installed are jacked-to-themax, with safety limits disab
 
 ## Revels In Murder
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1482,7 +1482,7 @@ To qualify, the target must be aware of the possibility of damage and not willin
 
 ## Uncanny Healer
 
-| **COST** :12 KARMA |  |
+| **COST** :12 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:CF |
@@ -1491,7 +1491,7 @@ The character has always been a fast healer, recovering from injuries with almos
 
 ## Barrens Rat
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |
@@ -1500,7 +1500,7 @@ Growing up on the streets, you learned quickly that to keep what little you had,
 
 ## Elemental Focus
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |
@@ -1509,7 +1509,7 @@ Your magic manifests more easily with one element than the rest. Choose an eleme
 
 ## Poisoner
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |
@@ -1518,7 +1518,7 @@ Your experience with using poison has taught you a few tricks to make it more ef
 
 ## Practice, Practice, Practice
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:HT |

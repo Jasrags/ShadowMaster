@@ -14,7 +14,16 @@
 
 import { useState } from "react";
 import type { CyberwareItem, BiowareItem, CyberwareGrade, BiowareGrade } from "@/lib/types";
-import { Cpu, Heart, Wifi, WifiOff, ChevronDown, ChevronUp, Trash2, ArrowUpCircle } from "lucide-react";
+import {
+  Cpu,
+  Heart,
+  Wifi,
+  WifiOff,
+  ChevronDown,
+  ChevronUp,
+  Trash2,
+  ArrowUpCircle,
+} from "lucide-react";
 
 // =============================================================================
 // TYPES
@@ -118,13 +127,15 @@ export function AugmentationCard({
   const hasEnhancements = isCyberwareItem && item.enhancements && item.enhancements.length > 0;
   const hasCapacity = isCyberwareItem && item.capacity && item.capacity > 0;
   const hasWirelessBonus = isCyberwareItem && item.wirelessBonus;
-  const hasAttributeBonuses = item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0;
+  const hasAttributeBonuses =
+    item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0;
 
   // Available upgrade grades (only higher grades)
   const upgradeGrades: (CyberwareGrade | BiowareGrade)[] = [];
-  const gradeOrder = type === "cyberware"
-    ? ["used", "standard", "alpha", "beta", "delta"]
-    : ["standard", "alpha", "beta", "delta"];
+  const gradeOrder =
+    type === "cyberware"
+      ? ["used", "standard", "alpha", "beta", "delta"]
+      : ["standard", "alpha", "beta", "delta"];
   const currentIndex = gradeOrder.indexOf(item.grade);
   for (let i = currentIndex + 1; i < gradeOrder.length; i++) {
     upgradeGrades.push(gradeOrder[i] as CyberwareGrade | BiowareGrade);
@@ -143,10 +154,16 @@ export function AugmentationCard({
           {/* Type Icon */}
           <div
             className={`flex-shrink-0 p-1.5 rounded ${
-              type === "cyberware" ? "bg-cyan-500/10 text-cyan-400" : "bg-emerald-500/10 text-emerald-400"
+              type === "cyberware"
+                ? "bg-cyan-500/10 text-cyan-400"
+                : "bg-emerald-500/10 text-emerald-400"
             }`}
           >
-            {type === "cyberware" ? <Cpu className="w-3.5 h-3.5" /> : <Heart className="w-3.5 h-3.5" />}
+            {type === "cyberware" ? (
+              <Cpu className="w-3.5 h-3.5" />
+            ) : (
+              <Heart className="w-3.5 h-3.5" />
+            )}
           </div>
 
           {/* Name and Grade */}
@@ -348,7 +365,9 @@ export function AugmentationCardCompact({
       <div className="flex items-center gap-2 min-w-0">
         <div
           className={`p-1 rounded ${
-            type === "cyberware" ? "bg-cyan-500/10 text-cyan-400" : "bg-emerald-500/10 text-emerald-400"
+            type === "cyberware"
+              ? "bg-cyan-500/10 text-cyan-400"
+              : "bg-emerald-500/10 text-emerald-400"
           }`}
         >
           {type === "cyberware" ? <Cpu className="w-3 h-3" /> : <Heart className="w-3 h-3" />}
@@ -357,9 +376,7 @@ export function AugmentationCardCompact({
         <span className={`text-[10px] ${getGradeColor(item.grade)}`}>
           {getGradeDisplayName(item.grade)}
         </span>
-        {item.rating && (
-          <span className="text-[10px] text-amber-400">R{item.rating}</span>
-        )}
+        {item.rating && <span className="text-[10px] text-amber-400">R{item.rating}</span>}
       </div>
       <div className="flex items-center gap-2">
         <span className="text-xs font-mono text-red-400">{formatEssence(item.essenceCost)}</span>

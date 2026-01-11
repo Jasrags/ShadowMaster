@@ -98,16 +98,22 @@ export async function DELETE(
     // Find the modification to get its cost for potential refund
     const modToRemove = weapon.modifications?.find((m) => m.catalogId === modId);
     if (!modToRemove) {
-      return NextResponse.json({ success: false, error: "Modification not found on weapon" }, { status: 404 });
+      return NextResponse.json(
+        { success: false, error: "Modification not found on weapon" },
+        { status: 404 }
+      );
     }
 
     // Attempt removal
     const result = removeModification(weapon, modId);
     if (!result.success) {
-      return NextResponse.json({
-        success: false,
-        error: result.error || "Failed to remove modification",
-      }, { status: 400 });
+      return NextResponse.json(
+        {
+          success: false,
+          error: result.error || "Failed to remove modification",
+        },
+        { status: 400 }
+      );
     }
 
     // Calculate nuyen refund (optional: could be a campaign setting)
@@ -155,6 +161,9 @@ export async function DELETE(
     });
   } catch (error) {
     console.error("Failed to remove modification:", error);
-    return NextResponse.json({ success: false, error: "Failed to remove modification" }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: "Failed to remove modification" },
+      { status: 500 }
+    );
   }
 }

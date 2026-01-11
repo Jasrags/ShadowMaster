@@ -1,21 +1,15 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Button, 
-  Dialog, 
-  Heading, 
-  Modal, 
-  ModalOverlay 
-} from "react-aria-components";
+import { Button, Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import { X, Settings2 } from "lucide-react";
-import type { 
-  Character, 
+import type {
+  Character,
   QualitySelection,
   AddictionState,
   AllergyState,
   DependentState,
-  CodeOfHonorState
+  CodeOfHonorState,
 } from "@/lib/types";
 import { AddictionTracker } from "./trackers/AddictionTracker";
 import { AllergyTracker } from "./trackers/AllergyTracker";
@@ -30,16 +24,18 @@ interface DynamicStateModalProps {
   onUpdate: (updatedCharacter: Character) => void;
 }
 
-export function DynamicStateModal({ 
-  character, 
-  selection, 
-  isOpen, 
+export function DynamicStateModal({
+  character,
+  selection,
+  isOpen,
   onOpenChange,
-  onUpdate 
+  onUpdate,
 }: DynamicStateModalProps) {
   const [error, setError] = useState<string | null>(null);
 
-  const handleUpdate = async (updates: Partial<AddictionState | AllergyState | DependentState | CodeOfHonorState>) => {
+  const handleUpdate = async (
+    updates: Partial<AddictionState | AllergyState | DependentState | CodeOfHonorState>
+  ) => {
     try {
       setError(null);
       const response = await fetch(
@@ -70,7 +66,7 @@ export function DynamicStateModal({
     const type = selection.dynamicState?.type;
     const props = {
       selection,
-      onUpdate: handleUpdate
+      onUpdate: handleUpdate,
     };
 
     switch (type) {
@@ -97,15 +93,15 @@ export function DynamicStateModal({
       onOpenChange={onOpenChange}
       className={({ isEntering, isExiting }) => `
         fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm
-        ${isEntering ? 'animate-in fade-in duration-200' : ''}
-        ${isExiting ? 'animate-out fade-out duration-150' : ''}
+        ${isEntering ? "animate-in fade-in duration-200" : ""}
+        ${isExiting ? "animate-out fade-out duration-150" : ""}
       `}
     >
       <Modal
         className={({ isEntering, isExiting }) => `
           w-full max-w-md bg-card border border-border rounded-xl shadow-2xl overflow-hidden
-          ${isEntering ? 'animate-in zoom-in-95 duration-200' : ''}
-          ${isExiting ? 'animate-out zoom-out-95 duration-150' : ''}
+          ${isEntering ? "animate-in zoom-in-95 duration-200" : ""}
+          ${isExiting ? "animate-out zoom-out-95 duration-150" : ""}
         `}
       >
         <Dialog className="outline-none">
@@ -117,7 +113,10 @@ export function DynamicStateModal({
                   <div className="p-1.5 rounded bg-amber-500/10 text-amber-500">
                     <Settings2 className="w-4 h-4" />
                   </div>
-                  <Heading slot="title" className="text-sm font-bold text-foreground uppercase tracking-wider">
+                  <Heading
+                    slot="title"
+                    className="text-sm font-bold text-foreground uppercase tracking-wider"
+                  >
                     Manage Quality State
                   </Heading>
                 </div>

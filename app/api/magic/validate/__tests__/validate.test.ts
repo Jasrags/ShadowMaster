@@ -1,6 +1,6 @@
 /**
  * Magic Validate API Tests
- * 
+ *
  * Tests for POST /api/magic/validate endpoint
  */
 
@@ -99,27 +99,31 @@ describe("POST /api/magic/validate", () => {
   it("should validate tradition eligibility", async () => {
     const mockRuleset = {
       edition: { code: "sr5" },
-      books: [{
-        payload: {
-          modules: {
-            traditions: {
-              payload: {
-                traditions: [{
-                  id: "hermetic",
-                  name: "Hermetic",
-                  drainAttributes: ["LOG", "WIL"],
-                  spiritTypes: {},
-                }],
+      books: [
+        {
+          payload: {
+            modules: {
+              traditions: {
+                payload: {
+                  traditions: [
+                    {
+                      id: "hermetic",
+                      name: "Hermetic",
+                      drainAttributes: ["LOG", "WIL"],
+                      spiritTypes: {},
+                    },
+                  ],
+                },
               },
-            },
-            magic: {
-              payload: {
-                spells: { combat: [], detection: [], health: [], illusion: [], manipulation: [] },
+              magic: {
+                payload: {
+                  spells: { combat: [], detection: [], health: [], illusion: [], manipulation: [] },
+                },
               },
             },
           },
         },
-      }],
+      ],
     };
 
     mockLoadRuleset.mockResolvedValue({ success: true, ruleset: mockRuleset });
@@ -141,23 +145,25 @@ describe("POST /api/magic/validate", () => {
   it("should validate spell allocation", async () => {
     const mockRuleset = {
       edition: { code: "sr5" },
-      books: [{
-        payload: {
-          modules: {
-            magic: {
-              payload: {
-                spells: {
-                  combat: [{ id: "manabolt", name: "Manabolt" }],
-                  detection: [],
-                  health: [],
-                  illusion: [],
-                  manipulation: [],
+      books: [
+        {
+          payload: {
+            modules: {
+              magic: {
+                payload: {
+                  spells: {
+                    combat: [{ id: "manabolt", name: "Manabolt" }],
+                    detection: [],
+                    health: [],
+                    illusion: [],
+                    manipulation: [],
+                  },
                 },
               },
             },
           },
         },
-      }],
+      ],
     };
 
     mockLoadRuleset.mockResolvedValue({ success: true, ruleset: mockRuleset });
@@ -202,11 +208,13 @@ describe("POST /api/magic/validate", () => {
 
     const mockRuleset = {
       edition: { code: "sr5" },
-      books: [{
-        payload: {
-          modules: {},
+      books: [
+        {
+          payload: {
+            modules: {},
+          },
         },
-      }],
+      ],
     };
 
     mockGetCharacter.mockResolvedValue(mockCharacter);

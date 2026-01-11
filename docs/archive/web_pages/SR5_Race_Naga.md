@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -10,9 +10,9 @@
 
 CUSTOS SERPENS
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Naga | 3/8 | 1/4 | 2/7 | 4/9 | 2/7 | 1/6 | 1/6 | 2/7 | 1/5 | 1 | 6 | REA+INT |
+| RACE                                                                                                                        | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | MAG | ESS | INIT    |
+| --------------------------------------------------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | --- | ------- |
+| Naga                                                                                                                        | 3/8  | 1/4 | 2/7 | 4/9 | 2/7 | 1/6 | 1/6 | 2/7 | 1/5  | 1   | 6   | REA+INT |
 | **Racial Traits:** Armor 8, Cold-Blooded, Dual Natured, Guard, Natural Weapon (Bite: DV (STR + 1)P, AP –2, Reach –1), Venom |
 
 The Sixth World tale of the naga is one of metahuman hubris at its finest. Originally naga were thought to be an intelligent, trainable, and Awakened ten-meter-long snake species. Various security companies caught naga and trained them to work as guard animals. Little did these companies know the naga were listening and learning about metahuman society from their handlers and others they came into contact with. These interactions—including those in southeast Asia and the Indian subcontinent, where the naga were often revered and worshipped in local tradition— allowed naga to gain an understanding of the new powers in the world around them. All they had to do was endure tedious, occasionally dangerous jobs.

@@ -21,11 +21,7 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-} from "../shared";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
@@ -67,71 +63,6 @@ interface ArmorPanelProps {
 }
 
 // =============================================================================
-// BUDGET DISPLAY COMPONENT
-// =============================================================================
-
-function BudgetDisplay({
-  spent,
-  total,
-  remaining,
-  isOver,
-  karmaConversion = 0,
-}: {
-  spent: number;
-  total: number;
-  remaining: number;
-  isOver: boolean;
-  karmaConversion?: number;
-}) {
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining === 0 && !isOver;
-
-  return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
-        <span className={`font-medium ${
-          isOver
-            ? "text-red-600 dark:text-red-400"
-            : isComplete
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatCurrency(spent)}¥ spent
-          <span className="text-zinc-400"> • </span>
-          {formatCurrency(Math.max(0, remaining))}¥ left
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : isComplete
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Note for karma conversion */}
-      {karmaConversion > 0 && (
-        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
 // COMPONENT
 // =============================================================================
 
@@ -145,10 +76,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const [modifyingArmorId, setModifyingArmorId] = useState<string | null>(null);
 
   // Get armor catalog
-  const armorCatalog = useMemo(
-    () => getArmorCatalog(gearCatalog),
-    [gearCatalog]
-  );
+  const armorCatalog = useMemo(() => getArmorCatalog(gearCatalog), [gearCatalog]);
 
   // Get selected armor from state
   const selectedArmor = useMemo(
@@ -182,7 +110,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
-    const ammoCost = w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
+    const ammoCost =
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
@@ -192,7 +121,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     selectedBioware.reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
 
-  const totalSpent = armorSpent + weaponsSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+  const totalSpent =
+    armorSpent + weaponsSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
@@ -348,7 +278,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       if (mod.noCapacityCost) {
         capacityCost = 0;
       } else if (mod.ratingSpec?.capacityCostScaling?.perRating && rating) {
-        capacityCost = (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
+        capacityCost =
+          (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
       } else if (mod.capacityPerRating && rating) {
         capacityCost = (mod.capacityCost || 0) * rating;
       }
@@ -369,7 +300,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Calculate availability
       let modAvailability = mod.availability || 0;
       if (mod.ratingSpec?.availabilityScaling?.perRating && rating) {
-        modAvailability = (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
+        modAvailability =
+          (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
       }
 
       // Create installed mod
@@ -422,7 +354,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       if (mod.noCapacityCost) {
         capacityCost = 0;
       } else if (mod.ratingSpec?.capacityCostScaling?.perRating && rating) {
-        capacityCost = (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
+        capacityCost =
+          (mod.ratingSpec.capacityCostScaling.baseValue || mod.capacityCost || 0) * rating;
       } else if (mod.capacityPerRating && rating) {
         capacityCost = (mod.capacityCost || 0) * rating;
       }
@@ -476,9 +409,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -489,7 +420,6 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     <>
       <CreationCard
         title="Armor"
-        description={`${selectedArmor.length} item${selectedArmor.length !== 1 ? "s" : ""}`}
         status={validationStatus}
         headerAction={
           <button
@@ -501,16 +431,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
           </button>
         }
       >
-        <div className="space-y-4">
-          {/* Budget Display */}
-          <BudgetDisplay
-            spent={armorSpent}
-            total={totalNuyen}
-            remaining={remaining}
-            isOver={isOverBudget}
-            karmaConversion={karmaConversion}
-          />
-
+        <div className="space-y-3">
           {/* Armor List */}
           {selectedArmor.length > 0 ? (
             <div className="space-y-2">
@@ -527,9 +448,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
           ) : (
             <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
               <Shield className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                No armor purchased
-              </p>
+              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No armor purchased</p>
               <button
                 onClick={() => setIsPurchaseModalOpen(true)}
                 className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"
@@ -540,11 +459,13 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
             </div>
           )}
 
-          {/* Armor Spent Summary */}
+          {/* Summary */}
           {selectedArmor.length > 0 && (
-            <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-              <span>Total spent on armor</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
+              </span>
+              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(armorSpent)}¥
               </span>
             </div>

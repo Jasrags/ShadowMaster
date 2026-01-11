@@ -6,6 +6,7 @@ This walkthrough audits the implementation of the **Campaign Management** capabi
 
 **Capability Document:** [campaign.management.md](../campaign.management.md)  
 **Implementation Locations:**
+
 - `/lib/storage/campaigns.ts` - Campaign CRUD operations
 - `/lib/auth/campaign.ts` - Campaign authorization
 - `/lib/rules/campaign-validation.ts` - Character-campaign compliance
@@ -17,12 +18,12 @@ This walkthrough audits the implementation of the **Campaign Management** capabi
 
 ### Guarantees
 
-| Guarantee | Code Location | Status | Evidence |
-|-----------|---------------|--------|----------|
-| Campaign MUST enforce singular, immutable ruleset foundation | `app/api/campaigns/[id]/route.ts:120-147` | ✅ Met | Edition change blocked: "Edition cannot be changed after campaign initialization" |
-| Character attributes/advancement MUST remain compliant with campaign configuration | `lib/rules/campaign-validation.ts:21-136` `validateCharacterCampaignCompliance()` | ✅ Met | Validates edition matching, book availability, creation methods, rating caps |
-| Participant access/authority MUST be governed by defined campaign roles | `lib/auth/campaign.ts:20-110` `authorizeCampaign()` | ✅ Met | Role determination (`gm`, `player`, `null`) with `requireGM`, `requireMember` options |
-| Campaign history and state MUST be persistent and auditable | `lib/storage/campaigns.ts:251-257`, `lib/storage/activity.ts` | ✅ Met | Atomic file writes with `updatedAt` timestamps; activity logging |
+| Guarantee                                                                          | Code Location                                                                     | Status | Evidence                                                                              |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- | ------ | ------------------------------------------------------------------------------------- |
+| Campaign MUST enforce singular, immutable ruleset foundation                       | `app/api/campaigns/[id]/route.ts:120-147`                                         | ✅ Met | Edition change blocked: "Edition cannot be changed after campaign initialization"     |
+| Character attributes/advancement MUST remain compliant with campaign configuration | `lib/rules/campaign-validation.ts:21-136` `validateCharacterCampaignCompliance()` | ✅ Met | Validates edition matching, book availability, creation methods, rating caps          |
+| Participant access/authority MUST be governed by defined campaign roles            | `lib/auth/campaign.ts:20-110` `authorizeCampaign()`                               | ✅ Met | Role determination (`gm`, `player`, `null`) with `requireGM`, `requireMember` options |
+| Campaign history and state MUST be persistent and auditable                        | `lib/storage/campaigns.ts:251-257`, `lib/storage/activity.ts`                     | ✅ Met | Atomic file writes with `updatedAt` timestamps; activity logging                      |
 
 ---
 
@@ -30,82 +31,82 @@ This walkthrough audits the implementation of the **Campaign Management** capabi
 
 #### Ruleset Integrity
 
-| Requirement | Code Location | Status | Evidence |
-|-------------|---------------|--------|----------|
-| Campaign MUST designate exactly one game edition as its core ruleset | `lib/storage/campaigns.ts:226-228` | ✅ Met | `editionId` and `editionCode` set at creation |
-| System MUST restrict available source material to enabled subset | `lib/rules/campaign-validation.ts:40-54` | ✅ Met | Validates `attachedBookIds` against `campaign.enabledBookIds` |
-| Characters MUST NOT maintain active status if configuration deviates | `lib/rules/campaign-validation.ts:29-36` | ✅ Met | Returns error for edition mismatch |
-| Ruleset modification MUST trigger validity check for associated characters | `lib/storage/campaigns.ts:294-298` | ✅ Met | `rulesetChanged` detection triggers character validation |
+| Requirement                                                                | Code Location                            | Status | Evidence                                                      |
+| -------------------------------------------------------------------------- | ---------------------------------------- | ------ | ------------------------------------------------------------- |
+| Campaign MUST designate exactly one game edition as its core ruleset       | `lib/storage/campaigns.ts:226-228`       | ✅ Met | `editionId` and `editionCode` set at creation                 |
+| System MUST restrict available source material to enabled subset           | `lib/rules/campaign-validation.ts:40-54` | ✅ Met | Validates `attachedBookIds` against `campaign.enabledBookIds` |
+| Characters MUST NOT maintain active status if configuration deviates       | `lib/rules/campaign-validation.ts:29-36` | ✅ Met | Returns error for edition mismatch                            |
+| Ruleset modification MUST trigger validity check for associated characters | `lib/storage/campaigns.ts:294-298`       | ✅ Met | `rulesetChanged` detection triggers character validation      |
 
 #### Participant Governance
 
-| Requirement | Code Location | Status | Evidence |
-|-------------|---------------|--------|----------|
-| System MUST recognize primary authority (GM) with exclusive rights | `lib/auth/campaign.ts:51-59` | ✅ Met | `if (campaign.gmId === userId) { role = "gm" }` with full access |
-| Participant entry MUST be verified through campaign-specific credentials | `app/api/campaigns/[id]/join/route.ts:59-80` | ✅ Met | Invite code validation for `invite-only` campaigns |
-| System MUST maintain persistent record of membership | `lib/storage/campaigns.ts:234` | ✅ Met | `playerIds: []` initialized and persisted |
-| Campaign visibility MUST be restricted per owner-defined privacy settings | `lib/auth/campaign.ts:85-107` | ✅ Met | `private`, `invite-only`, `public` visibility enforcement |
+| Requirement                                                               | Code Location                                | Status | Evidence                                                         |
+| ------------------------------------------------------------------------- | -------------------------------------------- | ------ | ---------------------------------------------------------------- |
+| System MUST recognize primary authority (GM) with exclusive rights        | `lib/auth/campaign.ts:51-59`                 | ✅ Met | `if (campaign.gmId === userId) { role = "gm" }` with full access |
+| Participant entry MUST be verified through campaign-specific credentials  | `app/api/campaigns/[id]/join/route.ts:59-80` | ✅ Met | Invite code validation for `invite-only` campaigns               |
+| System MUST maintain persistent record of membership                      | `lib/storage/campaigns.ts:234`               | ✅ Met | `playerIds: []` initialized and persisted                        |
+| Campaign visibility MUST be restricted per owner-defined privacy settings | `lib/auth/campaign.ts:85-107`                | ✅ Met | `private`, `invite-only`, `public` visibility enforcement        |
 
 #### Advancement and Rewards
 
-| Requirement | Code Location | Status | Evidence |
-|-------------|---------------|--------|----------|
-| System-level rewards MUST be attributable to characters | `lib/storage/campaigns.ts:517-521` `getCampaignEvents()` | ✅ Met | `CampaignEvent` records with character associations |
-| Character advancement MUST be subject to owner-defined approval workflows | `app/api/campaigns/[id]/advancements/` routes | ✅ Met | GM approval/rejection endpoints; `advancementSettings.requireApproval` |
-| System MUST preserve immutable log of advancement events | `lib/rules/advancement/ledger.ts` | ✅ Met | `advancementHistory` array on character records |
+| Requirement                                                               | Code Location                                            | Status | Evidence                                                               |
+| ------------------------------------------------------------------------- | -------------------------------------------------------- | ------ | ---------------------------------------------------------------------- |
+| System-level rewards MUST be attributable to characters                   | `lib/storage/campaigns.ts:517-521` `getCampaignEvents()` | ✅ Met | `CampaignEvent` records with character associations                    |
+| Character advancement MUST be subject to owner-defined approval workflows | `app/api/campaigns/[id]/advancements/` routes            | ✅ Met | GM approval/rejection endpoints; `advancementSettings.requireApproval` |
+| System MUST preserve immutable log of advancement events                  | `lib/rules/advancement/ledger.ts`                        | ✅ Met | `advancementHistory` array on character records                        |
 
 #### Shared Knowledge
 
-| Requirement | Code Location | Status | Evidence |
-|-------------|---------------|--------|----------|
-| System MUST provide central repository for shared campaign information | `lib/storage/campaigns.ts:483-512` | ✅ Met | `getCampaignPosts()`, `createCampaignPost()` |
-| Access to shared information MUST be sensitive to participant roles | `app/api/campaigns/[id]/posts/route.ts` | ✅ Met | Role-based access via `authorizeCampaign()` |
-| Shared locations and entities MUST be persistent within campaign scope | `lib/storage/locations.ts`, `lib/storage/grunts.ts`, `lib/storage/contacts.ts` | ✅ Met | Campaign-scoped storage directories |
+| Requirement                                                            | Code Location                                                                  | Status | Evidence                                     |
+| ---------------------------------------------------------------------- | ------------------------------------------------------------------------------ | ------ | -------------------------------------------- |
+| System MUST provide central repository for shared campaign information | `lib/storage/campaigns.ts:483-512`                                             | ✅ Met | `getCampaignPosts()`, `createCampaignPost()` |
+| Access to shared information MUST be sensitive to participant roles    | `app/api/campaigns/[id]/posts/route.ts`                                        | ✅ Met | Role-based access via `authorizeCampaign()`  |
+| Shared locations and entities MUST be persistent within campaign scope | `lib/storage/locations.ts`, `lib/storage/grunts.ts`, `lib/storage/contacts.ts` | ✅ Met | Campaign-scoped storage directories          |
 
 ---
 
 ### Constraints
 
-| Constraint | Code Location | Status | Evidence |
-|------------|---------------|--------|----------|
-| Character MUST NOT be associated with more than one active campaign ruleset | Campaign + character linking logic | ⚠️ Partial | Character has `campaignId` field; multi-campaign not blocked at storage level |
-| Ruleset modifications MUST NOT result in silent data corruption | `lib/storage/campaigns.ts:294-324` | ✅ Met | `rulesetChanged` triggers validation; character validation on join |
-| Privacy constraints MUST ensure non-participants have no access to private data | `lib/auth/campaign.ts:86-93` | ✅ Met | `if (campaign.visibility === "private")` returns 403 |
+| Constraint                                                                      | Code Location                      | Status     | Evidence                                                                      |
+| ------------------------------------------------------------------------------- | ---------------------------------- | ---------- | ----------------------------------------------------------------------------- |
+| Character MUST NOT be associated with more than one active campaign ruleset     | Campaign + character linking logic | ⚠️ Partial | Character has `campaignId` field; multi-campaign not blocked at storage level |
+| Ruleset modifications MUST NOT result in silent data corruption                 | `lib/storage/campaigns.ts:294-324` | ✅ Met     | `rulesetChanged` triggers validation; character validation on join            |
+| Privacy constraints MUST ensure non-participants have no access to private data | `lib/auth/campaign.ts:86-93`       | ✅ Met     | `if (campaign.visibility === "private")` returns 403                          |
 
 ---
 
 ### Non-Goals Verification
 
-| Non-Goal | Status | Evidence |
-|----------|--------|----------|
-| Does not define real-time interaction or combat resolution | ✅ Respected | No WebSocket/SSE code in campaign management |
-| Does not cover migration of characters between campaign rulesets | ✅ Respected | No migration logic present |
-| Does not address visual presentation or social promotion | ✅ Respected | No UI code in storage/API layers |
+| Non-Goal                                                         | Status       | Evidence                                     |
+| ---------------------------------------------------------------- | ------------ | -------------------------------------------- |
+| Does not define real-time interaction or combat resolution       | ✅ Respected | No WebSocket/SSE code in campaign management |
+| Does not cover migration of characters between campaign rulesets | ✅ Respected | No migration logic present                   |
+| Does not address visual presentation or social promotion         | ✅ Respected | No UI code in storage/API layers             |
 
 ---
 
 ## API Routes Coverage
 
-| Route | Method | Purpose | Auth |
-|-------|--------|---------|------|
-| `/api/campaigns` | GET | List user's campaigns | Member |
-| `/api/campaigns` | POST | Create campaign | Authenticated |
-| `/api/campaigns/[id]` | GET | Get campaign details | Member/Public |
-| `/api/campaigns/[id]` | PUT | Update campaign | GM |
-| `/api/campaigns/[id]` | DELETE | Delete campaign | GM |
-| `/api/campaigns/[id]/join` | POST | Join campaign | Authenticated |
-| `/api/campaigns/[id]/leave` | POST | Leave campaign | Member |
-| `/api/campaigns/[id]/validate` | POST | Validate character compliance | Member |
-| `/api/campaigns/[id]/advancements` | GET | List pending advancements | GM |
-| `/api/campaigns/[id]/advancements/[recordId]/approve` | POST | Approve advancement | GM |
-| `/api/campaigns/[id]/advancements/[recordId]/reject` | POST | Reject advancement | GM |
-| `/api/campaigns/[id]/posts` | GET/POST | Campaign posts | Member |
-| `/api/campaigns/[id]/notes` | GET/POST | Campaign notes | Member |
-| `/api/campaigns/[id]/events` | GET/POST | Campaign events | Member |
-| `/api/campaigns/[id]/sessions` | GET/POST | Campaign sessions | Member |
-| `/api/campaigns/[id]/locations` | GET/POST | Campaign locations | Member |
-| `/api/campaigns/[id]/characters` | GET | Campaign characters | Member |
-| `/api/campaigns/public` | GET | List public campaigns | Authenticated |
+| Route                                                 | Method   | Purpose                       | Auth          |
+| ----------------------------------------------------- | -------- | ----------------------------- | ------------- |
+| `/api/campaigns`                                      | GET      | List user's campaigns         | Member        |
+| `/api/campaigns`                                      | POST     | Create campaign               | Authenticated |
+| `/api/campaigns/[id]`                                 | GET      | Get campaign details          | Member/Public |
+| `/api/campaigns/[id]`                                 | PUT      | Update campaign               | GM            |
+| `/api/campaigns/[id]`                                 | DELETE   | Delete campaign               | GM            |
+| `/api/campaigns/[id]/join`                            | POST     | Join campaign                 | Authenticated |
+| `/api/campaigns/[id]/leave`                           | POST     | Leave campaign                | Member        |
+| `/api/campaigns/[id]/validate`                        | POST     | Validate character compliance | Member        |
+| `/api/campaigns/[id]/advancements`                    | GET      | List pending advancements     | GM            |
+| `/api/campaigns/[id]/advancements/[recordId]/approve` | POST     | Approve advancement           | GM            |
+| `/api/campaigns/[id]/advancements/[recordId]/reject`  | POST     | Reject advancement            | GM            |
+| `/api/campaigns/[id]/posts`                           | GET/POST | Campaign posts                | Member        |
+| `/api/campaigns/[id]/notes`                           | GET/POST | Campaign notes                | Member        |
+| `/api/campaigns/[id]/events`                          | GET/POST | Campaign events               | Member        |
+| `/api/campaigns/[id]/sessions`                        | GET/POST | Campaign sessions             | Member        |
+| `/api/campaigns/[id]/locations`                       | GET/POST | Campaign locations            | Member        |
+| `/api/campaigns/[id]/characters`                      | GET      | Campaign characters           | Member        |
+| `/api/campaigns/public`                               | GET      | List public campaigns         | Authenticated |
 
 ---
 
@@ -184,17 +185,18 @@ Non-member: Access based on visibility (public/invite-only/private)
 
 ## Gaps and Technical Debt
 
-| Issue | Severity | Notes |
-|-------|----------|-------|
-| Multi-campaign character not explicitly blocked | Medium | Character has `campaignId` but can technically be reassigned |
-| No co-GM support | Low | Single GM model; may need expansion for larger groups |
-| Character validation is on-demand | Low | Validation triggered at specific points, not continuous |
+| Issue                                           | Severity | Notes                                                        |
+| ----------------------------------------------- | -------- | ------------------------------------------------------------ |
+| Multi-campaign character not explicitly blocked | Medium   | Character has `campaignId` but can technically be reassigned |
+| No co-GM support                                | Low      | Single GM model; may need expansion for larger groups        |
+| Character validation is on-demand               | Low      | Validation triggered at specific points, not continuous      |
 
 ---
 
 ## Conclusion
 
 The Campaign Management capability is **fully implemented** with comprehensive coverage of:
+
 - Ruleset integrity (immutable edition, restricted source material)
 - Participant governance (GM authority, invite codes, visibility)
 - Advancement workflows (approval/rejection via dedicated routes)
@@ -204,4 +206,3 @@ All guarantees and requirements are satisfied. Minor gaps exist around multi-cam
 
 **Verification Date:** 2025-12-30  
 **Verified By:** AI Audit
-

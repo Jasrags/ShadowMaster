@@ -28,12 +28,12 @@ Each ledger entry contains:
 
 ```typescript
 interface LedgerEntry {
-  id: ID;                    // Unique entry identifier
-  timestamp: string;         // ISO 8601 creation time
-  type: TransactionType;     // e.g., "spend", "earn", "refund"
-  amount: number;            // Quantity (positive or negative)
-  reason: string;            // Human-readable description
-  sourceId?: ID;             // Reference to originating entity
+  id: ID; // Unique entry identifier
+  timestamp: string; // ISO 8601 creation time
+  type: TransactionType; // e.g., "spend", "earn", "refund"
+  amount: number; // Quantity (positive or negative)
+  reason: string; // Human-readable description
+  sourceId?: ID; // Reference to originating entity
   metadata?: Record<string, unknown>; // Additional context
 }
 ```
@@ -43,10 +43,7 @@ interface LedgerEntry {
 Current balance is derived by summing all entries:
 
 ```typescript
-const currentBalance = ledger.entries.reduce(
-  (sum, entry) => sum + entry.amount,
-  initialBalance
-);
+const currentBalance = ledger.entries.reduce((sum, entry) => sum + entry.amount, initialBalance);
 ```
 
 ### Corrections via Compensating Entries
@@ -76,12 +73,12 @@ To "undo" a transaction (e.g., GM rejects an advancement):
 
 ## Implementation Locations
 
-| Ledger Type | File Location | Key Functions |
-|-------------|---------------|---------------|
-| Karma | Character JSON (`advancementHistory`) | `spendKarma()`, `recordAdvancement()` |
-| Favor | `data/characters/{userId}/{charId}/favor-ledger.json` | `addFavorTransaction()` |
-| Action | `data/characters/{userId}/{charId}/action-history.json` | `recordAction()` |
-| Audit | `data/audit/{date}.log` | `AuditLogger.log()` |
+| Ledger Type | File Location                                           | Key Functions                         |
+| ----------- | ------------------------------------------------------- | ------------------------------------- |
+| Karma       | Character JSON (`advancementHistory`)                   | `spendKarma()`, `recordAdvancement()` |
+| Favor       | `data/characters/{userId}/{charId}/favor-ledger.json`   | `addFavorTransaction()`               |
+| Action      | `data/characters/{userId}/{charId}/action-history.json` | `recordAction()`                      |
+| Audit       | `data/audit/{date}.log`                                 | `AuditLogger.log()`                   |
 
 ## Alternatives Considered
 
@@ -100,4 +97,3 @@ To "undo" a transaction (e.g., GM rejects an advancement):
 ## Related ADRs
 
 - ADR-006: File-Based Persistence (ledgers stored as JSON files)
-

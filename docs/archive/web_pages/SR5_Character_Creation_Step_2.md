@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |
@@ -24,7 +24,7 @@ Edge starts at the value for each metatype listed in the Metatype Attribute Tabl
 **Priority Table**
 
 | PRIORITY | METATYPE | ATTRIBUTES | MAGIC OR RESONANCE | SKILLS | RESOURCES |
-| --- | --- | --- | --- | --- | --- |
+| -------- | -------- | ---------- | ------------------ | ------ | --------- |
 
 | Magician or Mystic Adept: Magic 6, two Rating 5 Magical skills, 10 spells |
 | Technomancer: Resonance 6, two Rating 5 Resonance skills, 5 complex forms |
@@ -62,65 +62,65 @@ Edge starts at the value for each metatype listed in the Metatype Attribute Tabl
 
 **EXTENDED 'A' PRIORITY METAVARIANTS / Source: SR5:Run Faster**
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (8) | 0 | Cyclopean (5) | 2 |
-| Dryad (8) | 0 | Fomorian (5) | 12 |
-| Nocturna (8) | 0 | Giant (5) | 2 |
-| Wakyambi (8) | 12 | Minotaur (5) | 2 |
-| Xapiri Thëpë (8) | 0 | Centaur (6) | 25 |
-| Gnome (7) | 7 | Naga (4) | 25 |
-| Hanuman (7) | 5 | Pixie (6) | 15 |
-| Koborokuru (7) | 0 | Sasquatch (5) | 20 |
-| Menehune (7) | 2 | Shapeshifter [Bovine; Vulpine] (8) | 5 |
-| Hobgoblin (7) | 5 | Shapeshifter [Canine;Falconine] (7) | 10 |
-| Ogre (7) | 8 | Shapeshifter[Lupine; Equine] (6) | 15 |
-| Oni (7) | 4 | Shapeshifter [Ursine;Leonine] (4) | 20 |
-| Satyr (7) | 10 | Shapeshifter [Pantherine;Tigrine] (4) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (8)      | 0                     | Cyclopean (5)                         | 2                     |
+| Dryad (8)        | 0                     | Fomorian (5)                          | 12                    |
+| Nocturna (8)     | 0                     | Giant (5)                             | 2                     |
+| Wakyambi (8)     | 12                    | Minotaur (5)                          | 2                     |
+| Xapiri Thëpë (8) | 0                     | Centaur (6)                           | 25                    |
+| Gnome (7)        | 7                     | Naga (4)                              | 25                    |
+| Hanuman (7)      | 5                     | Pixie (6)                             | 15                    |
+| Koborokuru (7)   | 0                     | Sasquatch (5)                         | 20                    |
+| Menehune (7)     | 2                     | Shapeshifter [Bovine; Vulpine] (8)    | 5                     |
+| Hobgoblin (7)    | 5                     | Shapeshifter [Canine;Falconine] (7)   | 10                    |
+| Ogre (7)         | 8                     | Shapeshifter[Lupine; Equine] (6)      | 15                    |
+| Oni (7)          | 4                     | Shapeshifter [Ursine;Leonine] (4)     | 20                    |
+| Satyr (7)        | 10                    | Shapeshifter [Pantherine;Tigrine] (4) | 25                    |
 
 **EXTENDED 'B' PRIORITY METAVARIANTS / Source: SR5:Run Faster**
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (6) | 0 | Cyclopean (0) | 2 |
-| Dryad (6) | 0 | Fomorian (0) | 12 |
-| Nocturna (6) | 0 | Giant (0) | 2 |
-| Wakyambi (6) | 12 | Minotaur (0) | 2 |
-| Xapiri Thëpë (6) | 0 | Centaur (3) | 25 |
-| Gnome (4) | 7 | Naga (2) | 25 |
-| Hanuman (4) | 5 | Pixie (3) | 15 |
-| Koborokuru (4) | 0 | Sasquatch (2) | 20 |
-| Menehune (4) | 2 | Shapeshifter [Bovine;Vulpine] (6) | 5 |
-| Hobgoblin (4) | 5 | Shapeshifter [Canine;Falconine] (5) | 10 |
-| Ogre (4) | 8 | Shapeshifter [Lupine;Equine] (4) | 15 |
-| Oni (4) | 4 | Shapeshifter [Ursine;Leonine] (2) | 20 |
-| Satyr (4) | 10 | Shapeshifter [Pantherine;Tigrine] (2) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (6)      | 0                     | Cyclopean (0)                         | 2                     |
+| Dryad (6)        | 0                     | Fomorian (0)                          | 12                    |
+| Nocturna (6)     | 0                     | Giant (0)                             | 2                     |
+| Wakyambi (6)     | 12                    | Minotaur (0)                          | 2                     |
+| Xapiri Thëpë (6) | 0                     | Centaur (3)                           | 25                    |
+| Gnome (4)        | 7                     | Naga (2)                              | 25                    |
+| Hanuman (4)      | 5                     | Pixie (3)                             | 15                    |
+| Koborokuru (4)   | 0                     | Sasquatch (2)                         | 20                    |
+| Menehune (4)     | 2                     | Shapeshifter [Bovine;Vulpine] (6)     | 5                     |
+| Hobgoblin (4)    | 5                     | Shapeshifter [Canine;Falconine] (5)   | 10                    |
+| Ogre (4)         | 8                     | Shapeshifter [Lupine;Equine] (4)      | 15                    |
+| Oni (4)          | 4                     | Shapeshifter [Ursine;Leonine] (2)     | 20                    |
+| Satyr (4)        | 10                    | Shapeshifter [Pantherine;Tigrine] (2) | 25                    |
 
 **EXTENDED 'C' PRIORITY METAVARIANTS / Source: SR5:Run Faster**
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (4) | 0 | Oni (0) | +4 |
-| Dryad (3) | 0 | Satyr (0) | 10 |
-| Nocturna (3) | 0 | Centaur (0) | 25 |
-| Wakyambi (3) | 12 | Naga (0) | 25 |
-| Xapiri Thëpë (3) | 0 | Pixie (0) | 15 |
-| Gnome (1) | 7 | Sasquatch (0) | 20 |
-| Hanuman (1) | 5 | Shapeshifter [Bovine;Vulpine] (4) | 5 |
-| Koborokuru (1) | 0 | Shapeshifter [Canine;Falconine] (3) | 10 |
-| Menehune (1) | 2 | Shapeshifter[Lupine; Equine] (2) | 15 |
-| Hobgoblin (0) | +5 | Shapeshifter [Ursine;Leonine] (0) | 20 |
-| Ogre (0) | 8 | Shapeshifter [Pantherine;Tigrine] (0) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (4)      | 0                     | Oni (0)                               | +4                    |
+| Dryad (3)        | 0                     | Satyr (0)                             | 10                    |
+| Nocturna (3)     | 0                     | Centaur (0)                           | 25                    |
+| Wakyambi (3)     | 12                    | Naga (0)                              | 25                    |
+| Xapiri Thëpë (3) | 0                     | Pixie (0)                             | 15                    |
+| Gnome (1)        | 7                     | Sasquatch (0)                         | 20                    |
+| Hanuman (1)      | 5                     | Shapeshifter [Bovine;Vulpine] (4)     | 5                     |
+| Koborokuru (1)   | 0                     | Shapeshifter [Canine;Falconine] (3)   | 10                    |
+| Menehune (1)     | 2                     | Shapeshifter[Lupine; Equine] (2)      | 15                    |
+| Hobgoblin (0)    | +5                    | Shapeshifter [Ursine;Leonine] (0)     | 20                    |
+| Ogre (0)         | 8                     | Shapeshifter [Pantherine;Tigrine] (0) | 25                    |
 
 **EXTENDED 'D' & 'E' PRIORITY METAVARIANTS / Source: SR5:Run Faster**
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (2) | 0 | Wakyambi (0) | 12 |
-| Dryad (0) | 0 | Xapiri Thëpë (0) | 0 |
-| Nocturna (0) | 0 |
+| METATYPE     | ADDITIONAL KARMA COST | METATYPE         | ADDITIONAL KARMA COST |
+| ------------ | --------------------- | ---------------- | --------------------- |
+| Nartaki (2)  | 0                     | Wakyambi (0)     | 12                    |
+| Dryad (0)    | 0                     | Xapiri Thëpë (0) | 0                     |
+| Nocturna (0) | 0                     |
 | 'E' Priority |
-| Nartaki (1) | 0 |
+| Nartaki (1)  | 0                     |
 
 Edge, of course, is beneficial to all characters. Special attribute points may be spent entirely on Edge if the player chooses not to play a magic user or a technomancer, or they may split these points as they see fit between their Edge and Magic or Resonance attribute ratings if the player so chooses. These Special Attribute Points may only be allocated on Special Attributes. They may never be used to raise Mental or Physical attributes. Any unspent Special Attribute points disappear following the character creation process. If the player chooses an option that provides 0 special attribute points, don’t worry. Players may elect to spend the Karma given to them during the character creation process to raise these special attributes by following the standard Character Advancement rules (p. 103).
 
@@ -152,24 +152,24 @@ ASSIGNING ATTRIBUTE POINTS
 James thinks the human metatype is best suited to the role of technomancer, and he has decided to use row D in the Metatype column. As a human character, he receives 3 Special Attribute Points that he wants to spend on Edge and Resonance. James assigns 2 Special Attribute points to Resonance (giving it a rating of 2) and assigns 1 Special Attribute point to Edge. Consulting the Metatype Attribute Table, he sees that the starting Edge rating for a human is 2, so the point he spent raises the rating to 3.James then moves on to the Attribute column of the Priority Table and decides to assign row C to his Mental and Physical Attributes. That gives him 16 Attribute Points to raise his Mental and Physical attribute ratings. After distributing the points, James’ attributes look like this:
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Body | 2 | 1/6 | 3 |
-| Agility | 1 | 1/6 | 2 |
-| Reaction | 1 | 1/6 | 2 |
-| Strength | 2 | 1/6 | 3 |
-| Charisma | 2 | 1/6 | 3 |
-| Intuition | 3 | 1/6 | 4 |
-| Logic | 3 | 1/6 | 4 |
-| Willpower | 2 | 1/6 | 3 |
-| Essence | — | 6 | 6 |
-| Total | 16 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Body        | 2            | 1/6                       | 3           |
+| Agility     | 1            | 1/6                       | 2           |
+| Reaction    | 1            | 1/6                       | 2           |
+| Strength    | 2            | 1/6                       | 3           |
+| Charisma    | 2            | 1/6                       | 3           |
+| Intuition   | 3            | 1/6                       | 4           |
+| Logic       | 3            | 1/6                       | 4           |
+| Willpower   | 2            | 1/6                       | 3           |
+| Essence     | —            | 6                         | 6           |
+| Total       | 16           |
 
 **Special Attributes (so far)**
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Edge | 1 | 2/7 | 2 |
-| Resonance | 2 | 1/6 | 3 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Edge        | 1            | 2/7                       | 2           |
+| Resonance   | 2            | 1/6                       | 3           |
 
 Racial Bonuses/Disadvantages: None
 
@@ -178,23 +178,23 @@ Racial Bonuses/Disadvantages: None
 Rob has decided to build a troll street samurai and has chosen Priority B for his metatype, even though this priority level does not give any Special Attribute Points to a troll character. If he desires to raise his Edge, Rob will need to spend his bonus Karma later on in the character creation process to do so. Rob chooses Priority A for his Attributes category, giving him 24 Attribute Points to spend on his Mental and Physical attributes. After Rob has spent all his points, he reviews his character. He intends to take the Exceptional Attribute quality, which would allow him to take his Strength up to 11, and the gamemaster has given Rob permission to take this quality at character creation. Knowing this ahead of time, Rob has spent the points to give his character Strength 11. Rob checks his character, and makes sure he only has one Physical attribute that is at (or in this case, above) his character’s natural attribute maximum limit. Rob’s attributes look like this:
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Body | 4 | 5/10 | 9 |
-| Agility | 3 | 1/5 | 4 |
-| Reaction | 2 | 1/6 | 3 |
-| Strength | 6 | 5/10 (11) | 11 |
-| Charisma | 2 | 1/4 | 3 |
-| Intuition | 2 | 1/5 | 3 |
-| Logic | 2 | 1/5 | 3 |
-| Willpower | 3 | 1/6 | 4 |
-| Essence | — | 6 | 6 |
-| Total | 24 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Body        | 4            | 5/10                      | 9           |
+| Agility     | 3            | 1/5                       | 4           |
+| Reaction    | 2            | 1/6                       | 3           |
+| Strength    | 6            | 5/10 (11)                 | 11          |
+| Charisma    | 2            | 1/4                       | 3           |
+| Intuition   | 2            | 1/5                       | 3           |
+| Logic       | 2            | 1/5                       | 3           |
+| Willpower   | 3            | 1/6                       | 4           |
+| Essence     | —            | 6                         | 6           |
+| Total       | 24           |
 
 **Special Attributes (so far)**
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Edge | 0 | 1/6 | 1 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Edge        | 0            | 1/6                       | 1           |
 
 Racial Bonuses/Disadvantages: Thermographic Vision, +1 Reach, +1 dermal armor, +50% gear and Lifestyle costs
 
@@ -203,22 +203,22 @@ Racial Bonuses/Disadvantages: Thermographic Vision, +1 Reach, +1 dermal armor, +
 Kyra has decided her character will be an elf. Scanning the Priority Table, Kyra decides on Priority Level D for metatype. Like Rob’s troll character, Kyra’s elf character will receive no extra Special Attribute Points. For her to raise her special attributes, she will need to use Karma later on. Kyra settles on Priority B for her Attribute Points. This gives Kyra 20 Attribute Points to improve her character. Checking her character, none of her Mental or Physical attributes are at their natural maximum limit. After spending her points, these are her character’s attributes:
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Body | 2 | 1/6 | 3 |
-| Agility | 4 | 2/7 | 6 |
-| Reaction | 2 | 1/6 | 3 |
-| Strength | 1 | 1/6 | 2 |
-| Charisma | 3 | 3/8 | 6 |
-| Intuition | 3 | 1/6 | 4 |
-| Logic | 2 | 1/6 | 3 |
-| Willpower | 3 | 1/6 | 4 |
-| Essence | — | 6 | 6 |
-| Total | 20 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Body        | 2            | 1/6                       | 3           |
+| Agility     | 4            | 2/7                       | 6           |
+| Reaction    | 2            | 1/6                       | 3           |
+| Strength    | 1            | 1/6                       | 2           |
+| Charisma    | 3            | 3/8                       | 6           |
+| Intuition   | 3            | 1/6                       | 4           |
+| Logic       | 2            | 1/6                       | 3           |
+| Willpower   | 3            | 1/6                       | 4           |
+| Essence     | —            | 6                         | 6           |
+| Total       | 20           |
 
 **Special Attributes (so far)**
 
 | !ATTRIBUTES | POINTS SPENT | RACIAL BASE/NATURAL LIMIT | NEW RATINGS |
-| --- | --- | --- | --- |
-| Edge | 0 | 1/6 | 1 |
+| ----------- | ------------ | ------------------------- | ----------- |
+| Edge        | 0            | 1/6                       | 1           |
 
 Racial Bonuses/Disadvantages: Low-Light Vision

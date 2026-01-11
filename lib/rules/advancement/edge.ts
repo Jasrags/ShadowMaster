@@ -54,20 +54,12 @@ export function advanceEdge(
   const advancementRules = ruleset.modules.advancement as unknown as AdvancementRulesData;
 
   // Validate advancement
-  const validation = validateAttributeAdvancement(
-    character,
-    "edge",
-    newRating,
-    ruleset,
-    {
-      settings: options.settings,
-      ruleset: advancementRules,
-    }
-  );
+  const validation = validateAttributeAdvancement(character, "edge", newRating, ruleset, {
+    settings: options.settings,
+    ruleset: advancementRules,
+  });
   if (!validation.valid) {
-    throw new Error(
-      `Cannot advance Edge: ${validation.errors.map((e) => e.message).join(", ")}`
-    );
+    throw new Error(`Cannot advance Edge: ${validation.errors.map((e) => e.message).join(", ")}`);
   }
 
   const cost = validation.cost;
@@ -108,4 +100,3 @@ export function advanceEdge(
     updatedCharacter,
   };
 }
-

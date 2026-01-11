@@ -27,15 +27,7 @@ import type { WirelessEffect } from "./wireless-effects";
 /**
  * Supported Shadowrun edition identifiers
  */
-export type EditionCode =
-  | "sr1"
-  | "sr2"
-  | "sr3"
-  | "sr4"
-  | "sr4a"
-  | "sr5"
-  | "sr6"
-  | "anarchy";
+export type EditionCode = "sr1" | "sr2" | "sr3" | "sr4" | "sr4a" | "sr5" | "sr6" | "anarchy";
 
 /**
  * An Edition represents a top-level ruleset for a specific
@@ -421,6 +413,11 @@ export interface CyberwareCatalogItem {
   parentType?: string;
   /** Special requirements or notes */
   requirements?: string[];
+  /**
+   * List of augmentation IDs that are incompatible with this cyberware.
+   * e.g., Skillwires is incompatible with Reflex Recorder bioware.
+   */
+  incompatibleWith?: string[];
 }
 
 /**
@@ -508,6 +505,36 @@ export interface BiowareCatalogItem {
   source?: string;
   /** Special requirements or notes */
   requirements?: string[];
+
+  // -------------------------------------------------------------------------
+  // COMPATIBILITY & SKILL-LINKED BIOWARE
+  // -------------------------------------------------------------------------
+
+  /**
+   * List of augmentation IDs that are incompatible with this bioware.
+   * e.g., Reflex Recorder is incompatible with Skillwires.
+   */
+  incompatibleWith?: string[];
+
+  /**
+   * Whether this bioware requires selecting a target skill.
+   * When true, user must choose a skill during purchase.
+   * The bioware then provides its bonus to that specific skill.
+   */
+  requiresSkillTarget?: boolean;
+
+  /**
+   * Filter for which skill attributes are valid targets.
+   * Only skills with a linkedAttribute in this list can be selected.
+   * e.g., ["agility", "body", "reaction", "strength"] for Physical skills
+   */
+  skillAttributeFilter?: string[];
+
+  /**
+   * Bonus to apply to the target skill rating.
+   * Defaults to 1 if not specified (e.g., Reflex Recorder gives +1).
+   */
+  skillBonus?: number;
 }
 
 /**
@@ -634,7 +661,15 @@ export interface CyberImplantWeaponCatalogItem extends CyberwareCatalogItem {
  * Quality catalog item in ruleset data
  * @see Quality in ./qualities.ts for full type definition
  */
-export type { Quality, QualityCatalog, QualityEffect, QualityPrerequisites, QualityLevel, SourceReference, DynamicStateType };
+export type {
+  Quality,
+  QualityCatalog,
+  QualityEffect,
+  QualityPrerequisites,
+  QualityLevel,
+  SourceReference,
+  DynamicStateType,
+};
 
 // =============================================================================
 // FOCI TYPES (for ruleset data)
@@ -742,11 +777,11 @@ export interface Spirit {
  * Mount points for weapon accessories
  */
 export type WeaponMountType =
-  | "top"       // Top rail mount
-  | "under"     // Underbarrel mount
-  | "side"      // Side mount
-  | "barrel"    // Barrel modifications
-  | "stock"     // Stock modifications
+  | "top" // Top rail mount
+  | "under" // Underbarrel mount
+  | "side" // Side mount
+  | "barrel" // Barrel modifications
+  | "stock" // Stock modifications
   | "internal"; // Internal modifications
 
 /**
@@ -953,4 +988,3 @@ export interface MergedRuleset {
   /** When this snapshot was created */
   createdAt: ISODateString;
 }
-

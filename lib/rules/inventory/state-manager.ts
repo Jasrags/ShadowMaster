@@ -9,11 +9,7 @@
  */
 
 import type { Weapon, ArmorItem, GearItem, Character } from "@/lib/types";
-import type {
-  GearState,
-  EquipmentReadiness,
-  DeviceCondition,
-} from "@/lib/types/gear-state";
+import type { GearState, EquipmentReadiness, DeviceCondition } from "@/lib/types/gear-state";
 
 // =============================================================================
 // CONSTANTS
@@ -166,9 +162,7 @@ export function isValidTransition(
  * Set equipment readiness state.
  * Returns the updated item and action cost.
  */
-export function setEquipmentReadiness<
-  T extends { state?: GearState }
->(
+export function setEquipmentReadiness<T extends { state?: GearState }>(
   item: T,
   newState: EquipmentReadiness,
   gearType: string = "gear"
@@ -248,9 +242,7 @@ export function toggleWireless<T extends { state?: GearState }>(
 /**
  * Toggle wireless for cyberware/bioware (uses wirelessEnabled directly).
  */
-export function toggleAugmentationWireless<
-  T extends { wirelessEnabled?: boolean }
->(
+export function toggleAugmentationWireless<T extends { wirelessEnabled?: boolean }>(
   item: T,
   enabled: boolean
 ): { item: T; result: WirelessToggleResult } {
@@ -276,10 +268,7 @@ export function toggleAugmentationWireless<
  * Set wireless state for all items on a character.
  * Respects the global wirelessBonusesEnabled flag.
  */
-export function setAllWireless(
-  character: Character,
-  enabled: boolean
-): Character {
+export function setAllWireless(character: Character, enabled: boolean): Character {
   return {
     ...character,
     wirelessBonusesEnabled: enabled,
@@ -293,9 +282,7 @@ export function setAllWireless(
 /**
  * Set device condition for a Matrix-capable device.
  */
-export function setDeviceCondition<
-  T extends { condition?: DeviceCondition; state?: GearState }
->(
+export function setDeviceCondition<T extends { condition?: DeviceCondition; state?: GearState }>(
   device: T,
   condition: DeviceCondition
 ): { device: T; result: DeviceConditionResult } {
@@ -304,9 +291,7 @@ export function setDeviceCondition<
   const updatedDevice = {
     ...device,
     condition,
-    state: device.state
-      ? { ...device.state, condition }
-      : undefined,
+    state: device.state ? { ...device.state, condition } : undefined,
   };
 
   return {
@@ -322,18 +307,18 @@ export function setDeviceCondition<
 /**
  * Brick a device (set condition to 'bricked').
  */
-export function brickDevice<
-  T extends { condition?: DeviceCondition; state?: GearState }
->(device: T): { device: T; result: DeviceConditionResult } {
+export function brickDevice<T extends { condition?: DeviceCondition; state?: GearState }>(
+  device: T
+): { device: T; result: DeviceConditionResult } {
   return setDeviceCondition(device, "bricked");
 }
 
 /**
  * Repair a bricked device (set condition back to 'functional').
  */
-export function repairDevice<
-  T extends { condition?: DeviceCondition; state?: GearState }
->(device: T): { device: T; result: DeviceConditionResult } {
+export function repairDevice<T extends { condition?: DeviceCondition; state?: GearState }>(
+  device: T
+): { device: T; result: DeviceConditionResult } {
   const currentCondition = device.condition ?? device.state?.condition ?? "functional";
 
   // Cannot repair destroyed devices
@@ -354,9 +339,10 @@ export function repairDevice<
 /**
  * Check if a device is usable (functional).
  */
-export function isDeviceUsable(
-  device: { condition?: DeviceCondition; state?: GearState }
-): boolean {
+export function isDeviceUsable(device: {
+  condition?: DeviceCondition;
+  state?: GearState;
+}): boolean {
   const condition = device.condition ?? device.state?.condition ?? "functional";
   return condition === "functional";
 }
@@ -369,9 +355,7 @@ export function isDeviceUsable(
  * Ready all carried weapons (holstered -> readied).
  * Useful for combat initialization.
  */
-export function readyAllWeapons(
-  weapons: Weapon[]
-): { weapons: Weapon[]; totalActionCost: number } {
+export function readyAllWeapons(weapons: Weapon[]): { weapons: Weapon[]; totalActionCost: number } {
   let simpleActions = 0;
   const complexActions = 0;
 
@@ -414,9 +398,7 @@ export function holsterAllWeapons(weapons: Weapon[]): Weapon[] {
 /**
  * Get a summary of equipment states for UI display.
  */
-export function getEquipmentStateSummary(
-  character: Character
-): {
+export function getEquipmentStateSummary(character: Character): {
   readiedWeapons: number;
   holsteredWeapons: number;
   storedWeapons: number;

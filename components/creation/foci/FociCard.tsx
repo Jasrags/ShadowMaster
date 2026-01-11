@@ -16,18 +16,7 @@ import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard } from "../shared";
 import { FocusModal, type FocusSelection } from "./FocusModal";
-import {
-  Plus,
-  X,
-  Sparkles,
-  Sword,
-  BookOpen,
-  Ghost,
-  Wand2,
-  Zap,
-  Check,
-  Square,
-} from "lucide-react";
+import { Plus, X, Sparkles, Sword, BookOpen, Ghost, Wand2, Zap, Check, Square } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -147,8 +136,7 @@ export function FociCard({ state, updateState }: FociCardProps) {
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
   const hasMagic =
-    magicPath &&
-    ["magician", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
+    magicPath && ["magician", "aspected-mage", "mystic-adept", "adept"].includes(magicPath);
   const isAdept = magicPath === "adept" || magicPath === "mystic-adept";
 
   // Get character's known spells for spell focus linking
@@ -236,11 +224,7 @@ export function FociCard({ state, updateState }: FociCardProps) {
   // Check if character has magic
   if (!hasMagic) {
     return (
-      <CreationCard
-        title="Foci"
-        description="Requires magical tradition"
-        status="pending"
-      >
+      <CreationCard title="Foci" description="Requires magical tradition" status="pending">
         <div className="rounded-lg border-2 border-dashed border-zinc-200 p-6 text-center dark:border-zinc-700">
           <Sparkles className="mx-auto h-8 w-8 text-zinc-400" />
           <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
@@ -266,9 +250,7 @@ export function FociCard({ state, updateState }: FociCardProps) {
           {/* Karma Summary */}
           {foci.length > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-purple-50 px-3 py-2 dark:bg-purple-900/20">
-              <span className="text-sm text-purple-700 dark:text-purple-300">
-                Bonding Karma
-              </span>
+              <span className="text-sm text-purple-700 dark:text-purple-300">Bonding Karma</span>
               <span className="text-sm font-medium text-purple-700 dark:text-purple-300">
                 {bondedKarma} / {totalBondingKarma} karma
               </span>
@@ -310,9 +292,7 @@ export function FociCard({ state, updateState }: FociCardProps) {
           {/* Total */}
           {foci.length > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">
-                Total Cost
-              </span>
+              <span className="text-sm text-zinc-600 dark:text-zinc-400">Total Cost</span>
               <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
                 {totalCost.toLocaleString()}¥
               </span>

@@ -142,4 +142,3 @@ export interface ResolvedEffect {
   /** Quality selection on character */
   selection: import("./qualities").QualitySelection;
 }
-

@@ -232,13 +232,7 @@ export function getSpellDefinition(
 
 ```typescript
 export interface DrainCalculationInput {
-  action:
-    | "spellcasting"
-    | "summoning"
-    | "banishing"
-    | "binding"
-    | "ritual"
-    | "adept-power";
+  action: "spellcasting" | "summoning" | "banishing" | "binding" | "ritual" | "adept-power";
   force: number;
   spellId?: string;
   spiritType?: SpiritType;
@@ -275,10 +269,7 @@ export function calculateDrain(
 /**
  * Calculate drain resistance pool (Tradition Drain Attributes)
  */
-export function calculateDrainResistance(
-  character: Character,
-  tradition: TraditionData
-): number;
+export function calculateDrainResistance(character: Character, tradition: TraditionData): number;
 
 /**
  * Parse drain formula (e.g., "F-3", "F/2+1", "F") and calculate value
@@ -288,10 +279,7 @@ export function parseDrainFormula(formula: string, force: number): number;
 /**
  * Determine if drain is physical (exceeds Magic rating) or stun
  */
-export function getDrainType(
-  drainValue: number,
-  magicRating: number
-): "stun" | "physical";
+export function getDrainType(drainValue: number, magicRating: number): "stun" | "physical";
 ```
 
 **Satisfies:**
@@ -330,10 +318,7 @@ export function applyDrain(
 /**
  * Check for burnout condition (drain incapacitation risks)
  */
-export function checkBurnoutRisk(
-  character: Character,
-  pendingDrain: number
-): boolean;
+export function checkBurnoutRisk(character: Character, pendingDrain: number): boolean;
 
 /**
  * Track cumulative drain for session/scene
@@ -474,9 +459,7 @@ export function extractSpells(ruleset: LoadedRuleset): SpellsCatalogData;
 /**
  * Extract adept powers from a loaded ruleset
  */
-export function extractAdeptPowers(
-  ruleset: LoadedRuleset
-): AdeptPowerCatalogItem[];
+export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[];
 
 /**
  * Extract rituals from a loaded ruleset
@@ -486,16 +469,12 @@ export function extractRituals(ruleset: LoadedRuleset): RitualData[];
 /**
  * Extract mentor spirits from a loaded ruleset
  */
-export function extractMentorSpirits(
-  ruleset: LoadedRuleset
-): MentorSpiritData[];
+export function extractMentorSpirits(ruleset: LoadedRuleset): MentorSpiritData[];
 
 /**
  * Extract ritual keywords from a loaded ruleset
  */
-export function extractRitualKeywords(
-  ruleset: LoadedRuleset
-): RitualKeywordData[];
+export function extractRitualKeywords(ruleset: LoadedRuleset): RitualKeywordData[];
 ```
 
 ---
@@ -775,32 +754,27 @@ Display on character sheet:
 ### Manual Verification Checklist
 
 1. **Tradition Selection**
-
    - [ ] Create mage character and select Hermetic tradition
    - [ ] Verify drain attributes show LOG + WIL
    - [ ] Attempt to select tradition for Mundane character (should fail)
 
 2. **Spell Selection**
-
    - [ ] Select spells up to creation limit
    - [ ] Verify cannot exceed spell limit
    - [ ] Verify spell details match rulebook data
 
 3. **Adept Power Selection**
-
    - [ ] Create adept character
    - [ ] Select powers up to power point budget
    - [ ] Verify PP tracking updates correctly
    - [ ] Test leveled powers increment properly
 
 4. **Drain Calculation**
-
    - [ ] Cast spell at Force 6
    - [ ] Verify drain formula applied correctly
    - [ ] Verify drain type changes to physical when > Magic
 
 5. **Essence-Magic Link**
-
    - [ ] Install cyberware on mage (if Augmentation Systems implemented)
    - [ ] Verify Magic rating reduced appropriately
    - [ ] Verify power points reduced for adept

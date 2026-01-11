@@ -107,8 +107,6 @@ Implement comprehensive improvements to the code quality infrastructure to estab
 }
 ```
 
-
-
 #### 1.2 Add Prettier Ignore
 
 **File:** [`.prettierignore`](.prettierignore) (NEW)
@@ -121,8 +119,6 @@ data/
 coverage/
 playwright-report/
 ```
-
-
 
 #### 1.3 Add EditorConfig
 
@@ -143,8 +139,6 @@ insert_final_newline = true
 trim_trailing_whitespace = false
 ```
 
-
-
 #### 1.4 Update lint-staged Configuration
 
 **File:** [`package.json`](package.json)Modify `lint-staged` section:
@@ -156,8 +150,6 @@ trim_trailing_whitespace = false
 }
 ```
 
-
-
 #### 1.5 Add Formatting Scripts
 
 **File:** [`package.json`](package.json)Add scripts:
@@ -166,8 +158,6 @@ trim_trailing_whitespace = false
 "format": "prettier --write .",
 "format:check": "prettier --check ."
 ```
-
-
 
 #### 1.6 Install Dependencies
 
@@ -205,8 +195,6 @@ test: {
 }
 ```
 
-
-
 #### 2.2 Add Coverage Scripts
 
 **File:** [`package.json`](package.json)Add scripts:
@@ -216,8 +204,6 @@ test: {
 "test:coverage:watch": "vitest --coverage"
 ```
 
-
-
 #### 2.3 Update CI Test Script
 
 **File:** [`package.json`](package.json)Modify existing script:
@@ -226,8 +212,6 @@ test: {
 "test:ci": "vitest run --coverage --reporter=verbose"
 ```
 
-
-
 #### 2.4 Add Coverage to .gitignore
 
 **File:** [`.gitignore`](.gitignore)Ensure coverage directory is ignored (verify existing):
@@ -235,8 +219,6 @@ test: {
 ```javascript
 coverage/
 ```
-
-
 
 #### 2.5 Install Dependencies
 
@@ -255,8 +237,6 @@ coverage/
   run: pnpm type-check
 ```
 
-
-
 #### 3.2 Add Knip Check to CI
 
 **File:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml)Add step after type check:
@@ -265,8 +245,6 @@ coverage/
 - name: Check for unused code
   run: pnpm knip --max-issues 50
 ```
-
-
 
 #### 3.3 Add Security Audit to CI
 
@@ -278,8 +256,6 @@ coverage/
   continue-on-error: true
 ```
 
-
-
 #### 3.4 Add Prettier Check to CI
 
 **File:** [`.github/workflows/ci.yml`](.github/workflows/ci.yml)Add step after lint:
@@ -288,8 +264,6 @@ coverage/
 - name: Check formatting
   run: pnpm format:check
 ```
-
-
 
 #### 3.5 Add Coverage Upload to CI
 
@@ -302,8 +276,6 @@ coverage/
     files: ./coverage/lcov.info
     fail_ci_if_error: false
 ```
-
-
 
 #### 3.6 Add Codecov Configuration
 
@@ -335,63 +307,57 @@ comment:
 **File:** [`e2e/auth.spec.ts`](e2e/auth.spec.ts) (NEW)
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Authentication', () => {
-  test('should display sign in page', async ({ page }) => {
-    await page.goto('/signin');
-    await expect(page.getByRole('heading', { name: /sign in/i })).toBeVisible();
+test.describe("Authentication", () => {
+  test("should display sign in page", async ({ page }) => {
+    await page.goto("/signin");
+    await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   });
 
-  test('should show validation errors on invalid login', async ({ page }) => {
-    await page.goto('/signin');
-    await page.getByRole('button', { name: /sign in/i }).click();
+  test("should show validation errors on invalid login", async ({ page }) => {
+    await page.goto("/signin");
+    await page.getByRole("button", { name: /sign in/i }).click();
     await expect(page.getByText(/email.*required/i)).toBeVisible();
   });
 
-  test('should navigate to sign up from sign in', async ({ page }) => {
-    await page.goto('/signin');
-    await page.getByRole('link', { name: /sign up/i }).click();
-    await expect(page).toHaveURL('/signup');
+  test("should navigate to sign up from sign in", async ({ page }) => {
+    await page.goto("/signin");
+    await page.getByRole("link", { name: /sign up/i }).click();
+    await expect(page).toHaveURL("/signup");
   });
 });
 ```
-
-
 
 #### 4.2 Create Character Creation Smoke Test
 
 **File:** [`e2e/character-creation.spec.ts`](e2e/character-creation.spec.ts) (NEW)
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Character Creation', () => {
-  test('should display edition selector on create page', async ({ page }) => {
-    await page.goto('/characters/create');
+test.describe("Character Creation", () => {
+  test("should display edition selector on create page", async ({ page }) => {
+    await page.goto("/characters/create");
     await expect(page.getByText(/select.*edition/i)).toBeVisible();
   });
 });
 ```
-
-
 
 #### 4.3 Create Navigation Smoke Test
 
 **File:** [`e2e/navigation.spec.ts`](e2e/navigation.spec.ts) (NEW)
 
 ```typescript
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Navigation', () => {
-  test('should load home page', async ({ page }) => {
-    await page.goto('/');
+test.describe("Navigation", () => {
+  test("should load home page", async ({ page }) => {
+    await page.goto("/");
     await expect(page).toHaveTitle(/shadow master/i);
   });
 });
 ```
-
-
 
 #### 4.4 Add E2E to CI (Optional Job)
 
@@ -480,8 +446,6 @@ Review and address the 50 ESLint disable comments across 18 files:| File | Count
 ```bash
 pnpm knip --max-issues 0
 ```
-
-
 
 #### 6.3 Restore Downgraded ESLint Rules
 

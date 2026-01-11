@@ -15,11 +15,7 @@ import {
   Zap,
   Shield,
 } from "lucide-react";
-import type {
-  CombatSession,
-  CombatParticipant,
-  ActionAllocation,
-} from "@/lib/types";
+import type { CombatSession, CombatParticipant, ActionAllocation } from "@/lib/types";
 
 // =============================================================================
 // TYPES
@@ -66,7 +62,8 @@ function ActionEconomyBadges({
   actions: ActionAllocation;
   size: "sm" | "md" | "lg";
 }) {
-  const badgeSize = size === "sm" ? "w-5 h-5 text-xs" : size === "md" ? "w-6 h-6 text-xs" : "w-7 h-7 text-sm";
+  const badgeSize =
+    size === "sm" ? "w-5 h-5 text-xs" : size === "md" ? "w-6 h-6 text-xs" : "w-7 h-7 text-sm";
 
   return (
     <div className="flex items-center gap-1">
@@ -175,18 +172,14 @@ function ParticipantRow({
       `}
     >
       {/* Turn indicator */}
-      {isCurrentTurn && (
-        <ChevronRight className={`${s.icon} text-violet-400 flex-shrink-0`} />
-      )}
+      {isCurrentTurn && <ChevronRight className={`${s.icon} text-violet-400 flex-shrink-0`} />}
 
       {/* Status icon */}
       <div className="flex-shrink-0">{statusIcon}</div>
 
       {/* Name and type */}
       <div className="flex-1 text-left min-w-0">
-        <div className={`font-medium text-zinc-200 truncate ${s.text}`}>
-          {participant.name}
-        </div>
+        <div className={`font-medium text-zinc-200 truncate ${s.text}`}>{participant.name}</div>
         {participant.isGMControlled && (
           <div className={`text-zinc-500 ${size === "lg" ? "text-sm" : "text-xs"}`}>
             GM Controlled
@@ -199,9 +192,7 @@ function ParticipantRow({
         <div className={`font-mono font-bold text-zinc-300 ${s.text}`}>
           {participant.initiativeScore}
         </div>
-        <div className={`text-zinc-500 ${size === "lg" ? "text-sm" : "text-xs"}`}>
-          Init
-        </div>
+        <div className={`text-zinc-500 ${size === "lg" ? "text-sm" : "text-xs"}`}>Init</div>
       </div>
 
       {/* Wound modifier */}
@@ -277,18 +268,14 @@ export function CombatTracker({
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
           <Swords className="w-5 h-5 text-rose-400" />
-          <span className={`font-medium text-zinc-200 ${s.text}`}>
-            {session.name || "Combat"}
-          </span>
+          <span className={`font-medium text-zinc-200 ${s.text}`}>{session.name || "Combat"}</span>
           {isPaused && (
             <span className="px-2 py-0.5 rounded bg-amber-500/20 text-amber-400 text-xs">
               Paused
             </span>
           )}
           {isCompleted && (
-            <span className="px-2 py-0.5 rounded bg-zinc-500/20 text-zinc-400 text-xs">
-              Ended
-            </span>
+            <span className="px-2 py-0.5 rounded bg-zinc-500/20 text-zinc-400 text-xs">Ended</span>
           )}
         </div>
 
@@ -331,9 +318,7 @@ export function CombatTracker({
       {/* Participant List */}
       <div className={`space-y-1.5 mb-4 max-h-80 overflow-y-auto ${s.gap}`}>
         {sortedParticipants.length === 0 ? (
-          <div className={`text-center text-zinc-500 py-4 ${s.text}`}>
-            No participants yet
-          </div>
+          <div className={`text-center text-zinc-500 py-4 ${s.text}`}>No participants yet</div>
         ) : (
           sortedParticipants.map((participant) => (
             <ParticipantRow

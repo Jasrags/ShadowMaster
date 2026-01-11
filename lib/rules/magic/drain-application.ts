@@ -212,10 +212,7 @@ export function wouldIncapacitate(
 /**
  * Create a new drain tracking session
  */
-export function createDrainSession(
-  sessionId: string,
-  characterId: string
-): DrainSession {
+export function createDrainSession(sessionId: string, characterId: string): DrainSession {
   return {
     sessionId,
     characterId,

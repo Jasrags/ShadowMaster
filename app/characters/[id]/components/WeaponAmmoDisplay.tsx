@@ -70,7 +70,7 @@ function getAmmoTypeLabel(ammoType: string | null, ammoList?: AmmunitionItem[]):
   if (!ammoType) return "Empty";
 
   // Try to find the ammo name from the list
-  const ammoItem = ammoList?.find(a => a.catalogId === ammoType);
+  const ammoItem = ammoList?.find((a) => a.catalogId === ammoType);
   if (ammoItem) {
     return ammoItem.name;
   }
@@ -78,14 +78,17 @@ function getAmmoTypeLabel(ammoType: string | null, ammoList?: AmmunitionItem[]):
   // Format the ID as a readable name
   return ammoType
     .split("-")
-    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
     .join(" ");
 }
 
-function getAmmoModifiers(ammoType: string | null, ammoList?: AmmunitionItem[]): { damage: number; ap: number } | null {
+function getAmmoModifiers(
+  ammoType: string | null,
+  ammoList?: AmmunitionItem[]
+): { damage: number; ap: number } | null {
   if (!ammoType || !ammoList) return null;
 
-  const ammoItem = ammoList.find(a => a.catalogId === ammoType);
+  const ammoItem = ammoList.find((a) => a.catalogId === ammoType);
   if (!ammoItem || (ammoItem.damageModifier === 0 && ammoItem.apModifier === 0)) {
     return null;
   }
@@ -150,7 +153,7 @@ export function WeaponAmmoDisplay({
       const target = e.target as Node;
       const isInsideReloadButton = reloadButtonRef.current?.contains(target);
       const isInsideMagazineButton = magazineButtonRef.current?.contains(target);
-      const isInsidePortalMenu = (e.target as HTMLElement).closest?.('.fixed.z-\\[9999\\]');
+      const isInsidePortalMenu = (e.target as HTMLElement).closest?.(".fixed.z-\\[9999\\]");
 
       if (!isInsideReloadButton && !isInsideMagazineButton && !isInsidePortalMenu) {
         setShowReloadMenu(false);
@@ -175,7 +178,7 @@ export function WeaponAmmoDisplay({
   // Filter compatible ammo (based on weapon subcategory) - must be called before any early returns
   const compatibleAmmo = useMemo(() => {
     if (!weapon.subcategory) return availableAmmo;
-    return availableAmmo.filter(a => a.caliber === weapon.subcategory);
+    return availableAmmo.filter((a) => a.caliber === weapon.subcategory);
   }, [availableAmmo, weapon.subcategory]);
 
   // Check if weapon uses ammo
@@ -250,10 +253,16 @@ export function WeaponAmmoDisplay({
         {modifiers && (
           <div className="flex gap-2 text-amber-400">
             {modifiers.damage !== 0 && (
-              <span>{modifiers.damage > 0 ? "+" : ""}{modifiers.damage} DV</span>
+              <span>
+                {modifiers.damage > 0 ? "+" : ""}
+                {modifiers.damage} DV
+              </span>
             )}
             {modifiers.ap !== 0 && (
-              <span>{modifiers.ap > 0 ? "+" : ""}{modifiers.ap} AP</span>
+              <span>
+                {modifiers.ap > 0 ? "+" : ""}
+                {modifiers.ap} AP
+              </span>
             )}
           </div>
         )}
@@ -292,37 +301,42 @@ export function WeaponAmmoDisplay({
 
             {/* Reload menu - rendered via portal to avoid overflow clipping */}
             {/* Only render portal when position is calculated (width > 0) */}
-            {showReloadMenu && typeof document !== "undefined" && reloadMenuPosition.width > 0 && createPortal(
-              <div
-                className="fixed z-[9999] p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
-                style={{
-                  top: reloadMenuPosition.top,
-                  left: reloadMenuPosition.left,
-                  minWidth: reloadMenuPosition.width,
-                }}
-              >
-                {compatibleAmmo.map(ammo => (
-                  <button
-                    key={ammo.id}
-                    onClick={() => {
-                      onReload(ammo.id);
-                      setShowReloadMenu(false);
-                    }}
-                    className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
-                  >
-                    <div>
-                      <div className="text-xs text-zinc-100">{ammo.name}</div>
-                      <div className="text-[10px] text-zinc-400">
-                        {ammo.quantity} rounds
-                        {ammo.damageModifier !== 0 && ` | ${ammo.damageModifier > 0 ? "+" : ""}${ammo.damageModifier} DV`}
-                        {ammo.apModifier !== 0 && ` | ${ammo.apModifier > 0 ? "+" : ""}${ammo.apModifier} AP`}
+            {showReloadMenu &&
+              typeof document !== "undefined" &&
+              reloadMenuPosition.width > 0 &&
+              createPortal(
+                <div
+                  className="fixed z-[9999] p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
+                  style={{
+                    top: reloadMenuPosition.top,
+                    left: reloadMenuPosition.left,
+                    minWidth: reloadMenuPosition.width,
+                  }}
+                >
+                  {compatibleAmmo.map((ammo) => (
+                    <button
+                      key={ammo.id}
+                      onClick={() => {
+                        onReload(ammo.id);
+                        setShowReloadMenu(false);
+                      }}
+                      className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
+                    >
+                      <div>
+                        <div className="text-xs text-zinc-100">{ammo.name}</div>
+                        <div className="text-[10px] text-zinc-400">
+                          {ammo.quantity} rounds
+                          {ammo.damageModifier !== 0 &&
+                            ` | ${ammo.damageModifier > 0 ? "+" : ""}${ammo.damageModifier} DV`}
+                          {ammo.apModifier !== 0 &&
+                            ` | ${ammo.apModifier > 0 ? "+" : ""}${ammo.apModifier} AP`}
+                        </div>
                       </div>
-                    </div>
-                  </button>
-                ))}
-              </div>,
-              document.body
-            )}
+                    </button>
+                  ))}
+                </div>,
+                document.body
+              )}
           </div>
         )}
 
@@ -345,34 +359,35 @@ export function WeaponAmmoDisplay({
             </button>
 
             {/* Magazine menu - rendered via portal to avoid overflow clipping */}
-            {showMagazineMenu && typeof document !== "undefined" && magazineMenuPosition.width > 0 && createPortal(
-              <div
-                className="fixed z-[9999] w-48 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
-                style={{
-                  top: magazineMenuPosition.top,
-                  left: magazineMenuPosition.left,
-                }}
-              >
-                {spareMagazines.map(mag => (
-                  <button
-                    key={mag.id}
-                    onClick={() => {
-                      onSwapMagazine(mag.id);
-                      setShowMagazineMenu(false);
-                    }}
-                    className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
-                  >
-                    <div className="text-xs text-zinc-100">
-                      {mag.name || "Spare Magazine"}
-                    </div>
-                    <div className="text-xs text-zinc-400">
-                      {mag.currentRounds}/{mag.capacity}
-                    </div>
-                  </button>
-                ))}
-              </div>,
-              document.body
-            )}
+            {showMagazineMenu &&
+              typeof document !== "undefined" &&
+              magazineMenuPosition.width > 0 &&
+              createPortal(
+                <div
+                  className="fixed z-[9999] w-48 p-1 rounded-lg bg-zinc-900 border border-zinc-700 shadow-xl"
+                  style={{
+                    top: magazineMenuPosition.top,
+                    left: magazineMenuPosition.left,
+                  }}
+                >
+                  {spareMagazines.map((mag) => (
+                    <button
+                      key={mag.id}
+                      onClick={() => {
+                        onSwapMagazine(mag.id);
+                        setShowMagazineMenu(false);
+                      }}
+                      className="w-full flex items-center justify-between px-2 py-1.5 rounded text-left hover:bg-zinc-800 transition-colors"
+                    >
+                      <div className="text-xs text-zinc-100">{mag.name || "Spare Magazine"}</div>
+                      <div className="text-xs text-zinc-400">
+                        {mag.currentRounds}/{mag.capacity}
+                      </div>
+                    </button>
+                  ))}
+                </div>,
+                document.body
+              )}
           </div>
         )}
 

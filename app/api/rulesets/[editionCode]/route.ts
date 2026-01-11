@@ -1,12 +1,42 @@
 /**
  * API Route: GET /api/rulesets/[editionCode]
- * 
+ *
  * Returns merged ruleset for an edition.
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
-import { loadRuleset, extractMetatypes, extractSkills, extractQualities, extractPriorityTable, extractMagicPaths, extractTraditions, extractMentorSpirits, extractRituals, extractRitualKeywords, extractLifestyles, extractLifestyleModifiers, extractLifestyleSubscriptions, extractGear, extractModifications, extractSpells, extractComplexForms, extractSpriteTypes, extractSpritePowers, extractCyberware, extractBioware, extractAugmentationRules, extractContactTemplates, extractAdeptPowers, extractVehiclesCatalog, extractProgramsCatalog, extractFoci, extractSpirits, extractActions } from "@/lib/rules/loader";
+import {
+  loadRuleset,
+  extractMetatypes,
+  extractSkills,
+  extractQualities,
+  extractPriorityTable,
+  extractMagicPaths,
+  extractTraditions,
+  extractMentorSpirits,
+  extractRituals,
+  extractRitualKeywords,
+  extractLifestyles,
+  extractLifestyleModifiers,
+  extractLifestyleSubscriptions,
+  extractGear,
+  extractModifications,
+  extractSpells,
+  extractComplexForms,
+  extractSpriteTypes,
+  extractSpritePowers,
+  extractCyberware,
+  extractBioware,
+  extractAugmentationRules,
+  extractContactTemplates,
+  extractAdeptPowers,
+  extractVehiclesCatalog,
+  extractProgramsCatalog,
+  extractFoci,
+  extractSpirits,
+  extractActions,
+} from "@/lib/rules/loader";
 
 export async function GET(
   request: NextRequest,
@@ -18,7 +48,10 @@ export async function GET(
     const bookIds = searchParams.get("bookIds")?.split(",").filter(Boolean);
 
     // Load and merge ruleset
-    const result = await loadAndMergeRuleset(editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy", bookIds);
+    const result = await loadAndMergeRuleset(
+      editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy",
+      bookIds
+    );
 
     if (!result.success || !result.ruleset) {
       return NextResponse.json(
@@ -29,7 +62,15 @@ export async function GET(
 
     // Also load raw ruleset for creation methods and extracted data
     const loadResult = await loadRuleset({
-      editionCode: editionCode as "sr5" | "sr6" | "sr4a" | "sr4" | "sr3" | "sr2" | "sr1" | "anarchy",
+      editionCode: editionCode as
+        | "sr5"
+        | "sr6"
+        | "sr4a"
+        | "sr4"
+        | "sr3"
+        | "sr2"
+        | "sr1"
+        | "anarchy",
       bookIds,
     });
 
@@ -38,35 +79,35 @@ export async function GET(
     // Extract data for convenience
     const extractedData = loadedRuleset
       ? {
-        metatypes: extractMetatypes(loadedRuleset),
-        skills: extractSkills(loadedRuleset),
-        qualities: extractQualities(loadedRuleset),
-        priorityTable: extractPriorityTable(loadedRuleset),
-        magicPaths: extractMagicPaths(loadedRuleset),
-        traditions: extractTraditions(loadedRuleset),
-        mentorSpirits: extractMentorSpirits(loadedRuleset),
-        rituals: extractRituals(loadedRuleset),
-        ritualKeywords: extractRitualKeywords(loadedRuleset),
-        lifestyles: extractLifestyles(loadedRuleset),
-        lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
-        lifestyleSubscriptions: extractLifestyleSubscriptions(loadedRuleset),
-        gear: extractGear(loadedRuleset),
-        modifications: extractModifications(loadedRuleset),
-        spells: extractSpells(loadedRuleset),
-        complexForms: extractComplexForms(loadedRuleset),
-        spriteTypes: extractSpriteTypes(loadedRuleset),
-        spritePowers: extractSpritePowers(loadedRuleset),
-        cyberware: extractCyberware(loadedRuleset),
-        bioware: extractBioware(loadedRuleset),
-        augmentationRules: extractAugmentationRules(loadedRuleset),
-        contactTemplates: extractContactTemplates(loadedRuleset),
-        adeptPowers: extractAdeptPowers(loadedRuleset),
-        vehicles: extractVehiclesCatalog(loadedRuleset),
-        programs: extractProgramsCatalog(loadedRuleset),
-        foci: extractFoci(loadedRuleset),
-        spirits: extractSpirits(loadedRuleset),
-        actions: extractActions(loadedRuleset),
-      }
+          metatypes: extractMetatypes(loadedRuleset),
+          skills: extractSkills(loadedRuleset),
+          qualities: extractQualities(loadedRuleset),
+          priorityTable: extractPriorityTable(loadedRuleset),
+          magicPaths: extractMagicPaths(loadedRuleset),
+          traditions: extractTraditions(loadedRuleset),
+          mentorSpirits: extractMentorSpirits(loadedRuleset),
+          rituals: extractRituals(loadedRuleset),
+          ritualKeywords: extractRitualKeywords(loadedRuleset),
+          lifestyles: extractLifestyles(loadedRuleset),
+          lifestyleModifiers: extractLifestyleModifiers(loadedRuleset),
+          lifestyleSubscriptions: extractLifestyleSubscriptions(loadedRuleset),
+          gear: extractGear(loadedRuleset),
+          modifications: extractModifications(loadedRuleset),
+          spells: extractSpells(loadedRuleset),
+          complexForms: extractComplexForms(loadedRuleset),
+          spriteTypes: extractSpriteTypes(loadedRuleset),
+          spritePowers: extractSpritePowers(loadedRuleset),
+          cyberware: extractCyberware(loadedRuleset),
+          bioware: extractBioware(loadedRuleset),
+          augmentationRules: extractAugmentationRules(loadedRuleset),
+          contactTemplates: extractContactTemplates(loadedRuleset),
+          adeptPowers: extractAdeptPowers(loadedRuleset),
+          vehicles: extractVehiclesCatalog(loadedRuleset),
+          programs: extractProgramsCatalog(loadedRuleset),
+          foci: extractFoci(loadedRuleset),
+          spirits: extractSpirits(loadedRuleset),
+          actions: extractActions(loadedRuleset),
+        }
       : null;
 
     return NextResponse.json({
@@ -77,10 +118,6 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to load ruleset:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to load ruleset" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to load ruleset" }, { status: 500 });
   }
 }
-

@@ -1,47 +1,47 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 | Head | Eye | Ear | Body | Limb | Limb Accessories | Weapon | Other | Basic Bioware | Cultured Bioware | Other Bioware |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ---- | --- | --- | ---- | ---- | ---------------- | ------ | ----- | ------------- | ---------------- | ------------- |
 
 **NANOWARE**
 
-| Device | Rating | Availability | Cost | Source |
-| --- | --- | --- | --- | --- |
-| Anti-Tox | 1-9 | 16F | Rating x 5,000¥ | SR5:CF |
-| Carcerand Plus | 1-6 | 10F | Rating x 3,000¥(+ drug) | SR5:CF |
-| Nanosymbiotes | 1-3 | 16F | Rating x 6,000¥ | SR5:CF |
-| Nantidotes | 1-6 | 8F | Rating x 1,500¥ | SR5:CF |
-| Nanotattoos | 1-3 | 12F | Rating x 500¥ | SR5:CF |
-| Learning Stimulus | 1-3 | 14F | Rating x 5,000¥ | SR5:CF |
-| Limbic | 1-3 | 16F | Rating x 7,500¥ | SR5:CF |
-| Neocortical | 1-3 | 16F | Rating x 7,500¥ | SR5:CF |
-| Recall | 1-3 | 12F | Rating x 3,500¥ | SR5:CF |
-| O-Cells | 1-9 | 12F | Rating x 5,000¥ | SR5:CF |
-| Oxyrush | 1-5 | 12F | Rating x 1,500¥ | SR5:CF |
-| Anti-Rad | 1–6 | 14F | Rating x 6,000¥ | SR5:CF |
-| Control Rig Booster | 1–3 | 12F | Rating x 6,000¥ | SR5:CF |
-| Implant Medic | 1–6 | 12F | 10% of implant cost¥ | SR5:CF |
-| Nanite Hunters | 1–6 | 16R | Rating x 5,000¥ | SR5:CF |
-| Markers | 1–3 | 12 | Rating x 2,000¥ | SR5:CF |
-| Nanotattoos | 1–3 | 12F | Rating x 1,000¥ | SR5:CF |
-| Taggants | 1–3 | 12 | Rating x 600¥ | SR5:CF |
-| Trauma Control System | 1–6 | 12F | Rating x 4,000¥ | SR5:CF |
+| Device                | Rating | Availability | Cost                    | Source |
+| --------------------- | ------ | ------------ | ----------------------- | ------ |
+| Anti-Tox              | 1-9    | 16F          | Rating x 5,000¥         | SR5:CF |
+| Carcerand Plus        | 1-6    | 10F          | Rating x 3,000¥(+ drug) | SR5:CF |
+| Nanosymbiotes         | 1-3    | 16F          | Rating x 6,000¥         | SR5:CF |
+| Nantidotes            | 1-6    | 8F           | Rating x 1,500¥         | SR5:CF |
+| Nanotattoos           | 1-3    | 12F          | Rating x 500¥           | SR5:CF |
+| Learning Stimulus     | 1-3    | 14F          | Rating x 5,000¥         | SR5:CF |
+| Limbic                | 1-3    | 16F          | Rating x 7,500¥         | SR5:CF |
+| Neocortical           | 1-3    | 16F          | Rating x 7,500¥         | SR5:CF |
+| Recall                | 1-3    | 12F          | Rating x 3,500¥         | SR5:CF |
+| O-Cells               | 1-9    | 12F          | Rating x 5,000¥         | SR5:CF |
+| Oxyrush               | 1-5    | 12F          | Rating x 1,500¥         | SR5:CF |
+| Anti-Rad              | 1–6    | 14F          | Rating x 6,000¥         | SR5:CF |
+| Control Rig Booster   | 1–3    | 12F          | Rating x 6,000¥         | SR5:CF |
+| Implant Medic         | 1–6    | 12F          | 10% of implant cost¥    | SR5:CF |
+| Nanite Hunters        | 1–6    | 16R          | Rating x 5,000¥         | SR5:CF |
+| Markers               | 1–3    | 12           | Rating x 2,000¥         | SR5:CF |
+| Nanotattoos           | 1–3    | 12F          | Rating x 1,000¥         | SR5:CF |
+| Taggants              | 1–3    | 12           | Rating x 600¥           | SR5:CF |
+| Trauma Control System | 1–6    | 12F          | Rating x 4,000¥         | SR5:CF |
 
 **NANOCYBERNETICS**
 
-| Device | Rating | Essence | Availability | Cost | Source |
-| --- | --- | --- | --- | --- | --- |
-| Dynamic Handprints | - | 0.2 | 12F | Rating x 21,00¥ | SR5:CF |
-| Flashback System | - | 0.3 | 8R | 6,000¥ | SR5:CF |
-| Nanohive (Hard) | 1–6 | Rating x 0.25 | (Rating x 5)R | Rating x 12,000¥ | SR5:CF |
-| Nanohive (Soft) | 1–6 | Rating x 0.2 | (Rating x 5)R | Rating x 10,000¥ | SR5:CF |
-| Retinal Adjusters | - | 0.2 | 16F | Rating x 19,000¥ | SR5:CF |
-| Smartskin | 1–6 | Rating x 0.5 | (Rating x 5)F | Rating x 5,000¥ | SR5:CF |
-| Voice Mimic | 1–6 | 0.2 | 16F | Rating x 20,000¥ | SR5:CF |
+| Device             | Rating | Essence       | Availability  | Cost             | Source |
+| ------------------ | ------ | ------------- | ------------- | ---------------- | ------ |
+| Dynamic Handprints | -      | 0.2           | 12F           | Rating x 21,00¥  | SR5:CF |
+| Flashback System   | -      | 0.3           | 8R            | 6,000¥           | SR5:CF |
+| Nanohive (Hard)    | 1–6    | Rating x 0.25 | (Rating x 5)R | Rating x 12,000¥ | SR5:CF |
+| Nanohive (Soft)    | 1–6    | Rating x 0.2  | (Rating x 5)R | Rating x 10,000¥ | SR5:CF |
+| Retinal Adjusters  | -      | 0.2           | 16F           | Rating x 19,000¥ | SR5:CF |
+| Smartskin          | 1–6    | Rating x 0.5  | (Rating x 5)F | Rating x 5,000¥  | SR5:CF |
+| Voice Mimic        | 1–6    | 0.2           | 16F           | Rating x 20,000¥ | SR5:CF |
 
 ## Contents
 
@@ -85,56 +85,56 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-9 | 16F | Rating x 5,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-9    | 16F   | Rating x 5,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Carcerand Plus
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-6 | 10F | Rating x 3,000¥ (+ drug) | SR5:CF |
+| RATING | AVAIL | COST                     | SOURCE |
+| ------ | ----- | ------------------------ | ------ |
+| 1-6    | 10F   | Rating x 3,000¥ (+ drug) | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanosymbiotes
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 16F | Rating x 6,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-3    | 16F   | Rating x 6,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nantidotes
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-6 | 8F | Rating x 1,500¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-6    | 8F    | Rating x 1,500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanotattoos
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 12F | Rating x 500¥ | SR5:CF |
+| RATING | AVAIL | COST          | SOURCE |
+| ------ | ----- | ------------- | ------ |
+| 1-3    | 12F   | Rating x 500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Neural Amplifiers
 
@@ -142,67 +142,67 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 14F | Rating x 5,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-3    | 14F   | Rating x 5,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Limbic
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 16F | Rating x 7,500¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-3    | 16F   | Rating x 7,500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Neocortical
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 16F | Rating x 7,500¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-3    | 16F   | Rating x 7,500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Recall
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-3 | 12F | Rating x 3,500¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-3    | 12F   | Rating x 3,500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### O-Cells
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-9 | 12F | Rating x 5,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-9    | 12F   | Rating x 5,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Oxyrush
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1-5 | 12F | Rating x 1,500¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1-5    | 12F   | Rating x 1,500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 # Hard Nanoware
 
@@ -210,89 +210,89 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–6 | 14F | Rating x 6,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–6    | 14F   | Rating x 6,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Control Rig Booster
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–3 | 12F | Rating x 6,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–3    | 12F   | Rating x 6,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Implant Medic
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–6 | 12F | 10% of implant cost¥ | SR5:CF |
+| RATING | AVAIL | COST                 | SOURCE |
+| ------ | ----- | -------------------- | ------ |
+| 1–6    | 12F   | 10% of implant cost¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanite Hunters
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–6 | 16R | Rating x 5,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–6    | 16R   | Rating x 5,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Markers
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–3 | 12 | Rating x 2,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–3    | 12    | Rating x 2,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanotattoos
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–3 | 12F | Rating x 1,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–3    | 12F   | Rating x 1,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Taggants
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–3 | 12 | Rating x 600¥ | SR5:CF |
+| RATING | AVAIL | COST          | SOURCE |
+| ------ | ----- | ------------- | ------ |
+| 1–3    | 12    | Rating x 600¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Trauma Control System
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- |
-| 1–6 | 12F | Rating x 4,000¥ | SR5:CF |
+| RATING | AVAIL | COST            | SOURCE |
+| ------ | ----- | --------------- | ------ |
+| 1–6    | 12F   | Rating x 4,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 # NanoCybernetics
 
@@ -300,23 +300,23 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | 0.2 | 12F | Rating x 21,00¥ | SR5:CF |
+| RATING | ESSENCE | AVAIL | COST            | SOURCE |
+| ------ | ------- | ----- | --------------- | ------ |
+| -      | 0.2     | 12F   | Rating x 21,00¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Flashback System
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | 0.3 | 8R | 6,000¥ | SR5:CF |
+| RATING | ESSENCE | AVAIL | COST   | SOURCE |
+| ------ | ------- | ----- | ------ | ------ |
+| -      | 0.3     | 8R    | 6,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Nanohive
 
@@ -324,53 +324,53 @@
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1–6 | Rating x 0.25 | (Rating x 5)R | Rating x 12,000¥ | SR5:CF |
+| RATING | ESSENCE       | AVAIL         | COST             | SOURCE |
+| ------ | ------------- | ------------- | ---------------- | ------ |
+| 1–6    | Rating x 0.25 | (Rating x 5)R | Rating x 12,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ### Nanohive (Soft)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1–6 | Rating x 0.2 | (Rating x 5)R | Rating x 10,000¥ | SR5:CF |
+| RATING | ESSENCE      | AVAIL         | COST             | SOURCE |
+| ------ | ------------ | ------------- | ---------------- | ------ |
+| 1–6    | Rating x 0.2 | (Rating x 5)R | Rating x 10,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Retinal Adjusters
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | 0.2 | 16F | Rating x 19,000¥ | SR5:CF |
+| RATING | ESSENCE | AVAIL | COST             | SOURCE |
+| ------ | ------- | ----- | ---------------- | ------ |
+| -      | 0.2     | 16F   | Rating x 19,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Smartskin
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1–6 | Rating x 0.5 | (Rating x 5)F | Rating x 5,000¥ | SR5:CF |
+| RATING | ESSENCE      | AVAIL         | COST            | SOURCE |
+| ------ | ------------ | ------------- | --------------- | ------ |
+| 1–6    | Rating x 0.5 | (Rating x 5)F | Rating x 5,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Voice Mimic
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| RATING | ESSENCE | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1–6 | 0.2 | 16F | Rating x 20,000¥ | SR5:CF |
+| RATING | ESSENCE | AVAIL | COST             | SOURCE |
+| ------ | ------- | ----- | ---------------- | ------ |
+| 1–6    | 0.2     | 16F   | Rating x 20,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |

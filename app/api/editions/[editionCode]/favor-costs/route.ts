@@ -20,18 +20,12 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { editionCode } = await params;
@@ -51,8 +45,7 @@ export async function GET(
     const favorServicesModule = mergeResult.ruleset.modules?.favorServices as
       | { services?: FavorServiceDefinition[] }
       | undefined;
-    const allServices: FavorServiceDefinition[] =
-      favorServicesModule?.services || [];
+    const allServices: FavorServiceDefinition[] = favorServicesModule?.services || [];
 
     // Parse query parameters for filtering
     const searchParams = request.nextUrl.searchParams;

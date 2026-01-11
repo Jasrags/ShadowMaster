@@ -143,14 +143,8 @@ export function updateCombatSession(
 export function deleteCombatSession(sessionId: string): boolean;
 
 // Participant management
-export function addParticipant(
-  sessionId: string,
-  participant: CombatParticipant
-): CombatSession;
-export function removeParticipant(
-  sessionId: string,
-  participantId: string
-): CombatSession;
+export function addParticipant(sessionId: string, participant: CombatParticipant): CombatSession;
+export function removeParticipant(sessionId: string, participantId: string): CombatSession;
 export function updateParticipantActions(
   sessionId: string,
   participantId: string,
@@ -203,10 +197,7 @@ export function validatePrerequisites(
   prerequisites: ActionPrerequisite[]
 ): ValidationResult;
 
-export function calculateStateModifiers(
-  character: Character,
-  action: ActionDefinition
-): Modifier[];
+export function calculateStateModifiers(character: Character, action: ActionDefinition): Modifier[];
 ```
 
 **Satisfies:**
@@ -249,17 +240,11 @@ interface StateChange {
 }
 
 // Core execution
-export function executeAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult>;
+export function executeAction(request: ExecutionRequest): Promise<ExecutionResult>;
 
 // Domain-specific executors
-export function executeCombatAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult>;
-export function executeGeneralAction(
-  request: ExecutionRequest
-): Promise<ExecutionResult>;
+export function executeCombatAction(request: ExecutionRequest): Promise<ExecutionResult>;
+export function executeGeneralAction(request: ExecutionRequest): Promise<ExecutionResult>;
 
 // Result application
 export function applyStateChanges(changes: StateChange[]): Promise<void>;
@@ -321,20 +306,13 @@ export function calculateAttackPool(
   weapon: Weapon,
   request: WeaponAttackRequest
 ): ActionPool;
-export function calculateDefensePool(
-  defender: Character,
-  attackType: AttackType
-): ActionPool;
+export function calculateDefensePool(defender: Character, attackType: AttackType): ActionPool;
 export function calculateDamage(
   weapon: Weapon,
   netHits: number,
   calledShot?: CalledShotType
 ): DamageResult;
-export function applyRecoil(
-  weapon: Weapon,
-  firingMode: FiringMode,
-  previousShots: number
-): number;
+export function applyRecoil(weapon: Weapon, firingMode: FiringMode, previousShots: number): number;
 ```
 
 **Satisfies:**
@@ -364,18 +342,13 @@ interface DamageResult {
   overflow: number;
 }
 
-export function calculateResistance(
-  character: Character,
-  damage: DamageApplication
-): ActionPool;
+export function calculateResistance(character: Character, damage: DamageApplication): ActionPool;
 export function applyDamage(
   character: Character,
   damage: DamageApplication,
   resistanceHits: number
 ): DamageResult;
-export function calculateWoundModifier(
-  conditionMonitor: ConditionMonitorState
-): number;
+export function calculateWoundModifier(conditionMonitor: ConditionMonitorState): number;
 ```
 
 **Satisfies:**
@@ -738,27 +711,23 @@ See `/docs/capabilities/TODO.md` for details.
 ### Manual Verification Checklist
 
 1. **Action Economy Enforcement**
-
    - [ ] Create character with 2 simple actions
    - [ ] Execute 2 simple actions
    - [ ] Verify 3rd simple action is rejected
    - [ ] Verify 1 complex action consumes both simple actions
 
 2. **State Validation**
-
    - [ ] Apply wound to character
    - [ ] Verify dice pool reduced by wound modifier
    - [ ] Verify modifier displayed in UI
 
 3. **Damage Application**
-
    - [ ] Execute attack action
    - [ ] Verify damage recorded on target
    - [ ] Verify condition monitor updated
    - [ ] Verify wound modifier updated if applicable
 
 4. **Audit Trail**
-
    - [ ] Execute multiple actions
    - [ ] View action history
    - [ ] Verify all actions recorded with timestamps

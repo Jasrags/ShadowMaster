@@ -662,9 +662,7 @@ describe("calculateTotalCMBonus", () => {
 
   it("floors combined partial limb bonuses", () => {
     const char = createTestCharacter({
-      cyberlimbs: [
-        createTestCyberlimb({ limbType: "lower-arm", location: "left-lower-arm" }),
-      ],
+      cyberlimbs: [createTestCyberlimb({ limbType: "lower-arm", location: "left-lower-arm" })],
     });
 
     expect(calculateTotalCMBonus(char)).toBe(0); // 0.5 floors to 0
@@ -874,12 +872,7 @@ describe("validateCyberlimbInstallation", () => {
     const char = createTestCharacter();
     const catalogItem = createTestCatalogItem();
 
-    const result = validateCyberlimbInstallation(
-      char,
-      catalogItem,
-      "left-arm",
-      "standard"
-    );
+    const result = validateCyberlimbInstallation(char, catalogItem, "left-arm", "standard");
 
     expect(result.valid).toBe(true);
   });
@@ -923,12 +916,7 @@ describe("validateCyberlimbInstallation", () => {
       physicalCMBonus: 0,
     };
 
-    const result = validateCyberlimbInstallation(
-      char,
-      handCatalog,
-      "left-hand",
-      "standard"
-    );
+    const result = validateCyberlimbInstallation(char, handCatalog, "left-hand", "standard");
 
     expect(result.valid).toBe(false);
     expect(result.error).toContain("already exists");

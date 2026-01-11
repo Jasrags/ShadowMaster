@@ -1,10 +1,12 @@
 # Sheet-Driven Character Creation Implementation Plan
 
 **Capability Documents:**
+
 - [character.management.md](../character.management.md)
 - [character.sheet.md](../character.sheet.md)
 
 **ADRs:**
+
 - [ADR-005: Modular Step Wizard](../../decisions/005-character.modular-step-wizard.md) (context)
 - [ADR-011: Sheet-Driven Creation](../../decisions/011-character.sheet-driven-creation.md) (decision)
 
@@ -23,6 +25,7 @@ Implement a Sheet-Driven Character Creation Mode where character creation occurs
 This extends ADR-005's wizard system by providing an alternative creation paradigm. Both modes will coexist, allowing users to choose their preferred experience.
 
 **Key Outcomes:**
+
 1. Single interface for creation, viewing, and advancement
 2. All budgets visible simultaneously (karma, nuyen, attribute points, skill points)
 3. Component reuse across all character lifecycle states
@@ -34,20 +37,21 @@ This extends ADR-005's wizard system by providing an alternative creation paradi
 
 ### Existing Wizard Infrastructure
 
-| Component | Location | Reuse Potential |
-|-----------|----------|-----------------|
-| `CreationWizard.tsx` | `/app/characters/create/components/` | State management patterns, budget calculation |
-| `PriorityStep.tsx` | `/app/characters/create/components/steps/` | Priority assignment UI (drag-drop) |
-| `AttributesStep.tsx` | Same | Attribute allocation logic |
-| `SkillsStep.tsx` | Same | Skill/group point spending |
-| `QualitiesStep.tsx` | Same | Quality selection with karma tracking |
-| `GearStep.tsx` | Same | Gear purchasing with nuyen tracking |
-| `SpellsStep.tsx` | Same | Spell selection with slot tracking |
-| `ContactsStep.tsx` | Same | Contact point allocation |
-| `IdentitiesStep.tsx` | Same | SIN/license/lifestyle management |
-| `ValidationPanel.tsx` | Same | Budget display, shopping cart |
+| Component             | Location                                   | Reuse Potential                               |
+| --------------------- | ------------------------------------------ | --------------------------------------------- |
+| `CreationWizard.tsx`  | `/app/characters/create/components/`       | State management patterns, budget calculation |
+| `PriorityStep.tsx`    | `/app/characters/create/components/steps/` | Priority assignment UI (drag-drop)            |
+| `AttributesStep.tsx`  | Same                                       | Attribute allocation logic                    |
+| `SkillsStep.tsx`      | Same                                       | Skill/group point spending                    |
+| `QualitiesStep.tsx`   | Same                                       | Quality selection with karma tracking         |
+| `GearStep.tsx`        | Same                                       | Gear purchasing with nuyen tracking           |
+| `SpellsStep.tsx`      | Same                                       | Spell selection with slot tracking            |
+| `ContactsStep.tsx`    | Same                                       | Contact point allocation                      |
+| `IdentitiesStep.tsx`  | Same                                       | SIN/license/lifestyle management              |
+| `ValidationPanel.tsx` | Same                                       | Budget display, shopping cart                 |
 
 **Key Wizard Patterns to Preserve:**
+
 - `CreationState` as single source of truth
 - `updateState()` callback pattern for step communication
 - Debounced auto-save to server (1-second delay)
@@ -56,15 +60,16 @@ This extends ADR-005's wizard system by providing an alternative creation paradi
 
 ### Existing Sheet Components
 
-| Component | Location | Edit Support |
-|-----------|----------|--------------|
-| `Section.tsx` | `/app/characters/[id]/components/` | N/A (wrapper) |
-| `InteractiveConditionMonitor` | Same | Yes (`readonly` prop) |
-| `InventoryPanel.tsx` | Same | Yes (`showActions` prop) |
-| `QualitiesSection.tsx` | Same | Partial (dynamic state) |
-| `ActionPanel.tsx` | Same | View-only |
+| Component                     | Location                           | Edit Support             |
+| ----------------------------- | ---------------------------------- | ------------------------ |
+| `Section.tsx`                 | `/app/characters/[id]/components/` | N/A (wrapper)            |
+| `InteractiveConditionMonitor` | Same                               | Yes (`readonly` prop)    |
+| `InventoryPanel.tsx`          | Same                               | Yes (`showActions` prop) |
+| `QualitiesSection.tsx`        | Same                               | Partial (dynamic state)  |
+| `ActionPanel.tsx`             | Same                               | View-only                |
 
 **Key Sheet Patterns to Leverage:**
+
 - `Section` component for consistent styling
 - `readonly` prop pattern for edit toggling
 - Modal pattern for complex editing (DynamicStateModal)
@@ -72,16 +77,16 @@ This extends ADR-005's wizard system by providing an alternative creation paradi
 
 ### Gaps to Address
 
-| Gap | Description | Priority |
-|-----|-------------|----------|
-| Unified creation sheet page | New page combining all creation components | High |
-| Budget context provider | Global budget state accessible by all sections | High |
-| Creation-mode section components | Existing sheet sections with edit capabilities | High |
-| Inline validation display | Per-section error/warning indicators | High |
-| Priority selection component | Compact version for sheet (not modal) | High |
-| Cross-section dependency handling | Metatype affects attributes, magic affects spells | Medium |
-| Mode switching infrastructure | Draft vs active character display | Medium |
-| Mobile responsive layout | Three-column to single-column adaptation | Medium |
+| Gap                               | Description                                       | Priority |
+| --------------------------------- | ------------------------------------------------- | -------- |
+| Unified creation sheet page       | New page combining all creation components        | High     |
+| Budget context provider           | Global budget state accessible by all sections    | High     |
+| Creation-mode section components  | Existing sheet sections with edit capabilities    | High     |
+| Inline validation display         | Per-section error/warning indicators              | High     |
+| Priority selection component      | Compact version for sheet (not modal)             | High     |
+| Cross-section dependency handling | Metatype affects attributes, magic affects spells | Medium   |
+| Mode switching infrastructure     | Draft vs active character display                 | Medium   |
+| Mobile responsive layout          | Three-column to single-column adaptation          | Medium   |
 
 ---
 
@@ -143,9 +148,11 @@ The following decisions were reviewed and approved on 2026-01-01:
 **File:** `/lib/contexts/CreationBudgetContext.tsx`
 
 **Capability Reference:**
+
 - character.management: "Real-time validation MUST be enforced throughout the creation process"
 
 **Interface:**
+
 ```typescript
 interface BudgetState {
   total: number;
@@ -172,9 +179,11 @@ interface CreationBudgetContextValue {
 **File:** `/app/characters/create/sheet/page.tsx`
 
 **Capability Reference:**
+
 - character.sheet: "Character information MUST be organized into logical, domain-specific domains"
 
 **Structure:**
+
 ```typescript
 // Wraps with RulesetProvider and CreationBudgetProvider
 // Renders SheetCreationLayout with three columns
@@ -187,9 +196,11 @@ interface CreationBudgetContextValue {
 **File:** `/app/characters/create/sheet/components/SheetCreationLayout.tsx`
 
 **Capability Reference:**
+
 - character.sheet: "The layout MUST adapt dynamically to optimize for readability"
 
 **Structure:**
+
 - Three-column grid (responsive to 2-col tablet, 1-col mobile)
 - Column 1: Priority, Karma Summary, Qualities
 - Column 2: Attributes, Special Attributes, Magic/Technomancer
@@ -206,9 +217,11 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/PrioritySelectionCard.tsx`
 
 **Capability Reference:**
+
 - character.management: "Initialization MUST support multiple creation methods with method-specific constraints"
 
 **Features:**
+
 - Compact card showing current priority assignments
 - Drag-drop reordering within card (not modal)
 - Shows derived budgets inline
@@ -221,9 +234,11 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/AttributesCard.tsx`
 
 **Capability Reference:**
+
 - character.management: "Derived character attributes and characteristics MUST be calculated automatically"
 
 **Features:**
+
 - 8-attribute grid with +/- controls
 - Points remaining display
 - Metatype min/max enforcement
@@ -236,6 +251,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/SkillsCard.tsx`
 
 **Features:**
+
 - Skill list with rating selectors
 - Skill group section
 - Specialization management
@@ -248,6 +264,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/QualitiesCard.tsx`
 
 **Features:**
+
 - Positive/negative quality lists
 - Karma balance display
 - Add quality modal (from design doc)
@@ -266,6 +283,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/MagicPathCard.tsx`
 
 **Features:**
+
 - Path selection (Magician, Adept, Mystic Adept, Aspected, Technomancer, Mundane)
 - Tradition selection (for magicians)
 - Mentor spirit selection
@@ -278,6 +296,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/SpellsCard.tsx`
 
 **Features:**
+
 - Spell list with categories
 - Slots remaining display
 - Add spell modal
@@ -290,6 +309,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/AdeptPowersCard.tsx`
 
 **Features:**
+
 - Power point budget display
 - Power list with levels
 - Add power modal
@@ -299,6 +319,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/ComplexFormsCard.tsx`
 
 **Features:**
+
 - Technomancer forms
 - Living Persona display
 - Sprites section
@@ -314,6 +335,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/GearCard.tsx`
 
 **Features:**
+
 - Category tabs (Weapons, Armor, Electronics, etc.)
 - Shopping cart display
 - Nuyen remaining
@@ -326,6 +348,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/AugmentationsCard.tsx`
 
 **Features:**
+
 - Cyberware/Bioware tabs
 - Essence tracking with progress bar
 - Grade selection
@@ -338,6 +361,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/VehiclesCard.tsx`
 
 **Features:**
+
 - Vehicle list
 - Drone list
 - RCC display
@@ -354,6 +378,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/ContactsCard.tsx`
 
 **Features:**
+
 - Contact points budget (CHA × 3)
 - Contact list with Connection/Loyalty
 - Add contact modal
@@ -365,6 +390,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/IdentitiesCard.tsx`
 
 **Features:**
+
 - Street name field
 - Real SIN (from SINner quality)
 - Fake SINs with ratings
@@ -378,6 +404,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/CharacterInfoCard.tsx`
 
 **Features:**
+
 - Portrait upload
 - Physical description fields
 - Background/personality text areas
@@ -394,6 +421,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/BudgetSummaryCard.tsx`
 
 **Features:**
+
 - All budgets in compact display
 - Visual progress bars
 - Overall validation status
@@ -404,6 +432,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/DerivedStatsCard.tsx`
 
 **Features:**
+
 - Calculated limits
 - Initiative values
 - Condition monitor sizes
@@ -411,6 +440,7 @@ interface CreationBudgetContextValue {
 - Defense ratings
 
 **Capability Reference:**
+
 - character.sheet: "Derived stats, including limits and initiative, MUST be calculated according to active ruleset formulas"
 
 #### 6.3 ValidationSummaryCard Component
@@ -418,6 +448,7 @@ interface CreationBudgetContextValue {
 **File:** `/components/creation/ValidationSummaryCard.tsx`
 
 **Features:**
+
 - List of all errors (must fix)
 - List of all warnings (advisory)
 - Links to relevant sections
@@ -434,9 +465,11 @@ interface CreationBudgetContextValue {
 **File:** Update `/app/characters/create/sheet/page.tsx`
 
 **Capability Reference:**
+
 - character.management: "All character state modifications MUST be persistent and recoverable"
 
 **Implementation:**
+
 - Reuse debounced save logic from `CreationWizard.tsx`
 - Save to same endpoint: `POST/PATCH /api/characters`
 - Store `creationState` in character metadata
@@ -445,10 +478,12 @@ interface CreationBudgetContextValue {
 #### 7.2 Mode Switching Support
 
 **Files:**
+
 - `/app/characters/create/page.tsx` (add mode selector)
 - `/app/characters/[id]/edit/page.tsx` (support sheet mode resume)
 
 **Features:**
+
 - User can choose wizard or sheet mode at creation start
 - Existing drafts can be continued in either mode
 - Mode preference persisted in user settings (future)
@@ -458,6 +493,7 @@ interface CreationBudgetContextValue {
 **File:** `/app/characters/create/sheet/components/SheetCreationLayout.tsx`
 
 **Breakpoints:**
+
 - Desktop (>1280px): Three columns
 - Tablet (768-1280px): Two columns
 - Mobile (<768px): Single column with collapsible sections
@@ -465,6 +501,7 @@ interface CreationBudgetContextValue {
 #### 7.4 Keyboard Navigation
 
 **Features:**
+
 - Tab order flows logically through sections
 - Arrow keys for rating adjustments
 - Enter to open modals
@@ -478,45 +515,45 @@ interface CreationBudgetContextValue {
 
 #### Unit Tests
 
-| Test | File | Validates |
-|------|------|-----------|
-| Budget context calculations | `/lib/contexts/__tests__/CreationBudgetContext.test.ts` | Budget math, remaining calculation |
-| Priority budget derivation | Same | Priority table lookup produces correct budgets |
-| Attribute validation | `/components/creation/__tests__/AttributesCard.test.tsx` | Min/max enforcement, points tracking |
-| Quality karma tracking | `/components/creation/__tests__/QualitiesCard.test.tsx` | Positive/negative karma limits |
-| Cross-section dependencies | Integration tests | Metatype change updates attribute limits |
+| Test                        | File                                                     | Validates                                      |
+| --------------------------- | -------------------------------------------------------- | ---------------------------------------------- |
+| Budget context calculations | `/lib/contexts/__tests__/CreationBudgetContext.test.ts`  | Budget math, remaining calculation             |
+| Priority budget derivation  | Same                                                     | Priority table lookup produces correct budgets |
+| Attribute validation        | `/components/creation/__tests__/AttributesCard.test.tsx` | Min/max enforcement, points tracking           |
+| Quality karma tracking      | `/components/creation/__tests__/QualitiesCard.test.tsx`  | Positive/negative karma limits                 |
+| Cross-section dependencies  | Integration tests                                        | Metatype change updates attribute limits       |
 
 #### Integration Tests
 
-| Test | Validates |
-|------|-----------|
-| Full character creation flow | Can create valid character via sheet mode |
-| Budget exhaustion | Cannot exceed any budget |
-| Validation blocking | Cannot finalize with errors |
-| Auto-save recovery | Draft persists and can be resumed |
-| Mode switching | Draft started in wizard can continue in sheet |
+| Test                         | Validates                                     |
+| ---------------------------- | --------------------------------------------- |
+| Full character creation flow | Can create valid character via sheet mode     |
+| Budget exhaustion            | Cannot exceed any budget                      |
+| Validation blocking          | Cannot finalize with errors                   |
+| Auto-save recovery           | Draft persists and can be resumed             |
+| Mode switching               | Draft started in wizard can continue in sheet |
 
 ### Manual Verification
 
-| Scenario | Expected Outcome |
-|----------|------------------|
-| Create Elf Magician | All sections functional; spells visible; proper essence |
-| Create Ork Street Samurai | Cyberware works; gear purchasing; no magic sections |
-| Create Technomancer | Complex forms visible; living persona calculated |
-| Budget edge cases | Exactly 0 remaining allowed; negative blocked |
-| Mobile responsive | All sections accessible; no horizontal scroll |
-| Draft recovery | Close browser; reopen; draft intact |
+| Scenario                  | Expected Outcome                                        |
+| ------------------------- | ------------------------------------------------------- |
+| Create Elf Magician       | All sections functional; spells visible; proper essence |
+| Create Ork Street Samurai | Cyberware works; gear purchasing; no magic sections     |
+| Create Technomancer       | Complex forms visible; living persona calculated        |
+| Budget edge cases         | Exactly 0 remaining allowed; negative blocked           |
+| Mobile responsive         | All sections accessible; no horizontal scroll           |
+| Draft recovery            | Close browser; reopen; draft intact                     |
 
 ### Capability Guarantee Verification
 
-| Guarantee | Verification Method |
-|-----------|---------------------|
-| "controlled lifecycle" | Character status transitions draft → active only on finalize |
-| "consistent with edition" | All catalogs filter to selected edition |
-| "persistent and recoverable" | Auto-save test; browser refresh test |
-| "satisfy validation criteria" | Finalize blocked with errors; allowed with warnings |
-| "calculated automatically" | Derived stats update on attribute change |
-| "optimized for mobile, tablet, desktop" | Responsive layout tests |
+| Guarantee                               | Verification Method                                          |
+| --------------------------------------- | ------------------------------------------------------------ |
+| "controlled lifecycle"                  | Character status transitions draft → active only on finalize |
+| "consistent with edition"               | All catalogs filter to selected edition                      |
+| "persistent and recoverable"            | Auto-save test; browser refresh test                         |
+| "satisfy validation criteria"           | Finalize blocked with errors; allowed with warnings          |
+| "calculated automatically"              | Derived stats update on attribute change                     |
+| "optimized for mobile, tablet, desktop" | Responsive layout tests                                      |
 
 ---
 
@@ -586,13 +623,13 @@ flowchart TD
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Performance with all sections mounted | Medium | Medium | Virtualize long lists; lazy load catalogs |
-| Validation race conditions | Low | High | Debounce validation; atomic state updates |
-| State sync between sections | Medium | High | Single source of truth in context |
-| Mobile layout complexity | Medium | Medium | Progressive enhancement; desktop-first |
-| Wizard/sheet state incompatibility | Low | Medium | Shared CreationState; mode flag only |
+| Risk                                  | Likelihood | Impact | Mitigation                                |
+| ------------------------------------- | ---------- | ------ | ----------------------------------------- |
+| Performance with all sections mounted | Medium     | Medium | Virtualize long lists; lazy load catalogs |
+| Validation race conditions            | Low        | High   | Debounce validation; atomic state updates |
+| State sync between sections           | Medium     | High   | Single source of truth in context         |
+| Mobile layout complexity              | Medium     | Medium | Progressive enhancement; desktop-first    |
+| Wizard/sheet state incompatibility    | Low        | Medium | Shared CreationState; mode flag only      |
 
 ---
 

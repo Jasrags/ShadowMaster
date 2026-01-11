@@ -79,7 +79,9 @@ function createMagicalCharacter(overrides: Partial<Character> = {}): Character {
   });
 }
 
-function createTestCyberwareCatalog(overrides: Partial<CyberwareCatalogItem> = {}): CyberwareCatalogItem {
+function createTestCyberwareCatalog(
+  overrides: Partial<CyberwareCatalogItem> = {}
+): CyberwareCatalogItem {
   return {
     id: "datajack",
     name: "Datajack",

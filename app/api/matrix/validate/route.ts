@@ -35,18 +35,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
     // Parse request
@@ -55,33 +49,21 @@ export async function POST(
 
     // Validate required fields
     if (!characterId) {
-      return NextResponse.json(
-        { error: "characterId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "characterId is required" }, { status: 400 });
     }
 
     if (!deckId) {
-      return NextResponse.json(
-        { error: "deckId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "deckId is required" }, { status: 400 });
     }
 
     if (!config) {
-      return NextResponse.json(
-        { error: "config is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "config is required" }, { status: 400 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
@@ -94,15 +76,10 @@ export async function POST(
 
     // Find the specified deck
     const cyberdecks = getCharacterCyberdecks(character);
-    const deck = cyberdecks.find(
-      (d) => d.id === deckId || d.catalogId === deckId
-    );
+    const deck = cyberdecks.find((d) => d.id === deckId || d.catalogId === deckId);
 
     if (!deck) {
-      return NextResponse.json(
-        { error: "Cyberdeck not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Cyberdeck not found" }, { status: 404 });
     }
 
     // Validate deck configuration
@@ -125,23 +102,13 @@ export async function POST(
         );
       }
 
-      programValidation = validateProgramAllocation(
-        character,
-        programIds,
-        loadResult.ruleset
-      );
+      programValidation = validateProgramAllocation(character, programIds, loadResult.ruleset);
     }
 
     // Combine results
-    const allErrors = [
-      ...deckValidation.errors,
-      ...(programValidation?.errors ?? []),
-    ];
+    const allErrors = [...deckValidation.errors, ...(programValidation?.errors ?? [])];
 
-    const allWarnings = [
-      ...deckValidation.warnings,
-      ...(programValidation?.warnings ?? []),
-    ];
+    const allWarnings = [...deckValidation.warnings, ...(programValidation?.warnings ?? [])];
 
     const response: ValidateMatrixConfigResponse = {
       valid: allErrors.length === 0,
@@ -153,9 +120,6 @@ export async function POST(
     return NextResponse.json(response);
   } catch (error) {
     console.error("Failed to validate matrix config:", error);
-    return NextResponse.json(
-      { error: "Failed to validate matrix configuration" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to validate matrix configuration" }, { status: 500 });
   }
 }

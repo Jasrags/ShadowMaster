@@ -51,10 +51,7 @@ test.describe("Sign Up", () => {
     await expect(page.locator("#email")).toHaveAttribute("required", "");
     await expect(page.locator("#username")).toHaveAttribute("required", "");
     await expect(page.locator("#password")).toHaveAttribute("required", "");
-    await expect(page.locator("#confirmPassword")).toHaveAttribute(
-      "required",
-      ""
-    );
+    await expect(page.locator("#confirmPassword")).toHaveAttribute("required", "");
   });
 
   test("should have email type for email field", async ({ page }) => {
@@ -95,9 +92,7 @@ test.describe("Sign Up", () => {
     await expect(page.locator("#username-error")).toContainText(/username/i);
   });
 
-  test("should successfully create account and redirect to home", async ({
-    page,
-  }) => {
+  test("should successfully create account and redirect to home", async ({ page }) => {
     const user = generateTestUser();
 
     await page.locator("#email").fill(user.email);
@@ -107,9 +102,7 @@ test.describe("Sign Up", () => {
     await page.getByRole("button", { name: "Sign Up" }).click();
 
     // Should show loading state
-    await expect(
-      page.getByRole("button", { name: "Creating Account..." })
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Creating Account..." })).toBeVisible();
 
     // Should redirect to home page after successful signup
     await page.waitForURL("/", { timeout: 15000 });
@@ -187,9 +180,7 @@ test.describe("Sign In", () => {
     await page.getByRole("button", { name: "Sign In" }).click();
 
     // Should show loading state
-    await expect(
-      page.getByRole("button", { name: "Signing In..." })
-    ).toBeVisible();
+    await expect(page.getByRole("button", { name: "Signing In..." })).toBeVisible();
 
     // Should redirect to home page after successful sign in
     await page.waitForURL("/", { timeout: 15000 });
@@ -244,9 +235,7 @@ test.describe("Sign Out", () => {
 });
 
 test.describe("Auth Flow Integration", () => {
-  test("should complete full signup -> signout -> signin flow", async ({
-    page,
-  }) => {
+  test("should complete full signup -> signout -> signin flow", async ({ page }) => {
     const user = generateTestUser();
 
     // Sign up

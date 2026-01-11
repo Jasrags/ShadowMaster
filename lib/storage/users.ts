@@ -3,7 +3,23 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { User, UserRole, AccountStatus } from "../types/user";
 
-export type NewUserData = Omit<User, "id" | "createdAt" | "lastLogin" | "characters" | "failedLoginAttempts" | "lockoutUntil" | "sessionVersion" | "preferences" | "accountStatus" | "statusChangedAt" | "statusChangedBy" | "statusReason" | "lastRoleChangeAt" | "lastRoleChangeBy">;
+export type NewUserData = Omit<
+  User,
+  | "id"
+  | "createdAt"
+  | "lastLogin"
+  | "characters"
+  | "failedLoginAttempts"
+  | "lockoutUntil"
+  | "sessionVersion"
+  | "preferences"
+  | "accountStatus"
+  | "statusChangedAt"
+  | "statusChangedBy"
+  | "statusReason"
+  | "lastRoleChangeAt"
+  | "lastRoleChangeBy"
+>;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
 
@@ -156,9 +172,7 @@ async function isFirstUser(): Promise<boolean> {
 /**
  * Create a new user
  */
-export async function createUser(
-  userData: NewUserData
-): Promise<User> {
+export async function createUser(userData: NewUserData): Promise<User> {
   await ensureDataDirectory();
 
   const isFirst = await isFirstUser();
@@ -211,10 +225,7 @@ export async function createUser(
 /**
  * Update user
  */
-export async function updateUser(
-  userId: string,
-  updates: Partial<User>
-): Promise<User> {
+export async function updateUser(userId: string, updates: Partial<User>): Promise<User> {
   const user = await getUserById(userId);
   if (!user) {
     throw new Error(`User with ID ${userId} not found`);
@@ -353,11 +364,7 @@ export async function isLastAdmin(userId: string): Promise<boolean> {
  * @param reason - The reason for suspension
  * @throws Error if user is the last administrator
  */
-export async function suspendUser(
-  userId: string,
-  actorId: string,
-  reason: string
-): Promise<User> {
+export async function suspendUser(userId: string, actorId: string, reason: string): Promise<User> {
   const user = await getUserById(userId);
   if (!user) throw new Error("User not found");
 
@@ -399,10 +406,7 @@ export async function suspendUser(
  * @param userId - The user to reactivate
  * @param actorId - The admin performing the reactivation
  */
-export async function reactivateUser(
-  userId: string,
-  actorId: string
-): Promise<User> {
+export async function reactivateUser(userId: string, actorId: string): Promise<User> {
   const user = await getUserById(userId);
   if (!user) throw new Error("User not found");
 
@@ -577,4 +581,3 @@ export async function updateUsername(
 
   return updatedUser;
 }
-

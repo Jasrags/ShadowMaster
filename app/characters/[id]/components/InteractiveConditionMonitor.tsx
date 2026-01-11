@@ -76,33 +76,34 @@ export function InteractiveConditionMonitor({
   }
 
   // Calculate wound modifier for display
-  const woundModifier = type !== "overflow"
-    ? -Math.floor(localCurrent / penaltyInterval)
-    : 0;
+  const woundModifier = type !== "overflow" ? -Math.floor(localCurrent / penaltyInterval) : 0;
 
   // Color classes based on type
   const colorClasses = {
     physical: {
       filled: "bg-red-500 border-red-400 shadow-red-500/50",
-      empty: t.id === "modern-card"
-        ? "border-red-200 bg-red-50 hover:bg-red-100"
-        : "border-red-900/50 bg-red-950/30 hover:bg-red-900/50",
+      empty:
+        t.id === "modern-card"
+          ? "border-red-200 bg-red-50 hover:bg-red-100"
+          : "border-red-900/50 bg-red-950/30 hover:bg-red-900/50",
       text: "text-red-500 dark:text-red-400",
       penalty: "text-red-400",
     },
     stun: {
       filled: "bg-amber-500 border-amber-400 shadow-amber-500/50",
-      empty: t.id === "modern-card"
-        ? "border-amber-200 bg-amber-50 hover:bg-amber-100"
-        : "border-amber-900/50 bg-amber-950/30 hover:bg-amber-900/50",
+      empty:
+        t.id === "modern-card"
+          ? "border-amber-200 bg-amber-50 hover:bg-amber-100"
+          : "border-amber-900/50 bg-amber-950/30 hover:bg-amber-900/50",
       text: "text-amber-600 dark:text-amber-400",
       penalty: "text-amber-400",
     },
     overflow: {
       filled: "bg-zinc-500 border-zinc-400 shadow-zinc-500/50",
-      empty: t.id === "modern-card"
-        ? "border-zinc-200 bg-zinc-50 hover:bg-zinc-100"
-        : "border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800",
+      empty:
+        t.id === "modern-card"
+          ? "border-zinc-200 bg-zinc-50 hover:bg-zinc-100"
+          : "border-zinc-800 bg-zinc-900/50 hover:bg-zinc-800",
       text: "text-zinc-500 dark:text-zinc-400",
       penalty: "text-zinc-400",
     },
@@ -256,8 +257,7 @@ export function InteractiveConditionMonitor({
             style={
               t.id === "neon-rain"
                 ? {
-                    clipPath:
-                      "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)",
+                    clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)",
                   }
                 : undefined
             }
@@ -271,9 +271,7 @@ export function InteractiveConditionMonitor({
       rows.push(
         <div key={i} className="flex items-center gap-1.5">
           <div className="flex gap-1">{boxesInRow}</div>
-          <span
-            className={`text-[9px] font-bold ${colors.penalty} tabular-nums w-5 text-right`}
-          >
+          <span className={`text-[9px] font-bold ${colors.penalty} tabular-nums w-5 text-right`}>
             -{penalty}
           </span>
         </div>
@@ -306,8 +304,7 @@ export function InteractiveConditionMonitor({
           style={
             t.id === "neon-rain"
               ? {
-                  clipPath:
-                    "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)",
+                  clipPath: "polygon(15% 0, 100% 0, 100% 85%, 85% 100%, 0 100%, 0 15%)",
                 }
               : undefined
           }
@@ -359,10 +356,7 @@ export function InteractiveConditionMonitor({
       {content}
 
       {/* Error display */}
-      {error && (
-        <div className="mt-2 text-xs text-red-500 font-medium">{error}</div>
-      )}
+      {error && <div className="mt-2 text-xs text-red-500 font-medium">{error}</div>}
     </div>
   );
 }
-

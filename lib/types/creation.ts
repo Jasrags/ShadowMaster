@@ -8,6 +8,7 @@
 
 import type { ID, ISODateString, Metadata } from "./core";
 import type { EditionCode } from "./edition";
+import type { CreationSelections } from "./creation-selections";
 
 // =============================================================================
 // CREATION METHOD
@@ -423,8 +424,8 @@ export interface CreationState {
   /** Current budget values (remaining) */
   budgets: Record<string, number>;
 
-  /** Selections made per step */
-  selections: Record<string, unknown>;
+  /** Selections made per step (typed interface for type-safe access) */
+  selections: CreationSelections;
 
   /** Priority assignments (for priority system) */
   priorities?: Record<string, string>; // { "metatype": "B", "attributes": "A", ... }
@@ -446,4 +447,3 @@ export interface ValidationError {
   message: string;
   severity: "error" | "warning";
 }
-

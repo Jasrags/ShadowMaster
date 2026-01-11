@@ -41,9 +41,7 @@ export function interruptTraining(
   reason?: string
 ): InterruptTrainingResult {
   // Find the training period
-  const trainingPeriod = character.activeTraining?.find(
-    (t) => t.id === trainingPeriodId
-  );
+  const trainingPeriod = character.activeTraining?.find((t) => t.id === trainingPeriodId);
 
   if (!trainingPeriod) {
     throw new Error(`Training period ${trainingPeriodId} not found or not active`);
@@ -74,9 +72,7 @@ export function interruptTraining(
   );
 
   if (!advancementRecord) {
-    throw new Error(
-      `Advancement record ${trainingPeriod.advancementRecordId} not found`
-    );
+    throw new Error(`Advancement record ${trainingPeriod.advancementRecordId} not found`);
   }
 
   const updatedAdvancementRecord: AdvancementRecord = {
@@ -117,9 +113,7 @@ export function resumeTraining(
   trainingPeriodId: string
 ): ResumeTrainingResult {
   // Find the training period
-  const trainingPeriod = character.activeTraining?.find(
-    (t) => t.id === trainingPeriodId
-  );
+  const trainingPeriod = character.activeTraining?.find((t) => t.id === trainingPeriodId);
 
   if (!trainingPeriod) {
     throw new Error(`Training period ${trainingPeriodId} not found or not active`);
@@ -145,9 +139,7 @@ export function resumeTraining(
   );
 
   if (!advancementRecord) {
-    throw new Error(
-      `Advancement record ${trainingPeriod.advancementRecordId} not found`
-    );
+    throw new Error(`Advancement record ${trainingPeriod.advancementRecordId} not found`);
   }
 
   const updatedAdvancementRecord: AdvancementRecord = {
@@ -172,4 +164,3 @@ export function resumeTraining(
     updatedAdvancementRecord,
   };
 }
-

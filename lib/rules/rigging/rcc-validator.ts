@@ -110,30 +110,27 @@ export function buildRCCConfiguration(
 ): RCCConfiguration {
   // Resolve running autosoft IDs to full autosoft data
   const runningAutosoftIds = rcc.runningAutosofts ?? [];
-  const runningAutosofts: RunningAutosoft[] = runningAutosoftIds
-    .map((autosoftId) => {
-      // Find the autosoft in character's owned autosofts
-      const autosoft = autosofts?.find(
-        (a) => a.id === autosoftId || a.catalogId === autosoftId
-      );
-      if (!autosoft) {
-        // Return placeholder if not found
-        return {
-          autosoftId,
-          name: autosoftId,
-          rating: 1,
-          category: "perception" as const,
-          target: undefined,
-        };
-      }
+  const runningAutosofts: RunningAutosoft[] = runningAutosoftIds.map((autosoftId) => {
+    // Find the autosoft in character's owned autosofts
+    const autosoft = autosofts?.find((a) => a.id === autosoftId || a.catalogId === autosoftId);
+    if (!autosoft) {
+      // Return placeholder if not found
       return {
-        autosoftId: autosoft.catalogId,
-        name: autosoft.name,
-        rating: autosoft.rating,
-        category: autosoft.category,
-        target: autosoft.target,
+        autosoftId,
+        name: autosoftId,
+        rating: 1,
+        category: "perception" as const,
+        target: undefined,
       };
-    });
+    }
+    return {
+      autosoftId: autosoft.catalogId,
+      name: autosoft.name,
+      rating: autosoft.rating,
+      category: autosoft.category,
+      target: autosoft.target,
+    };
+  });
 
   return {
     rccId: rcc.catalogId,
@@ -327,10 +324,7 @@ export function hasAutosoft(character: Character, autosoftId: string): boolean {
  * Check if RCC can support remote vehicle control
  * RCC always supports remote control of slaved drones
  */
-export function canRemoteControl(
-  _dataProcessing: number,
-  slavedDroneCount: number
-): boolean {
+export function canRemoteControl(_dataProcessing: number, slavedDroneCount: number): boolean {
   return slavedDroneCount > 0;
 }
 
@@ -338,20 +332,14 @@ export function canRemoteControl(
  * Get effective firewall for a slaved drone
  * Slaved drones use the higher of their Device Rating or RCC's Firewall
  */
-export function getEffectiveFirewall(
-  droneDeviceRating: number,
-  rccFirewall: number
-): number {
+export function getEffectiveFirewall(droneDeviceRating: number, rccFirewall: number): number {
   return Math.max(droneDeviceRating, rccFirewall);
 }
 
 /**
  * Check if RCC is at capacity
  */
-export function isRCCAtCapacity(
-  dataProcessing: number,
-  slavedDroneCount: number
-): boolean {
+export function isRCCAtCapacity(dataProcessing: number, slavedDroneCount: number): boolean {
   const maxDrones = calculateMaxSlavedDrones(dataProcessing);
   return slavedDroneCount >= maxDrones;
 }

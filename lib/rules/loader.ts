@@ -134,10 +134,7 @@ export async function loadAllEditions(): Promise<Edition[]> {
 /**
  * Load a single book's payload
  */
-export async function loadBook(
-  editionCode: EditionCode,
-  bookId: ID
-): Promise<BookPayload | null> {
+export async function loadBook(editionCode: EditionCode, bookId: ID): Promise<BookPayload | null> {
   return getBookPayload(editionCode, bookId);
 }
 
@@ -161,9 +158,7 @@ export async function loadCreationMethod(
 /**
  * Load all creation methods for an edition
  */
-export async function loadAllCreationMethods(
-  editionCode: EditionCode
-): Promise<CreationMethod[]> {
+export async function loadAllCreationMethods(editionCode: EditionCode): Promise<CreationMethod[]> {
   return getAllCreationMethods(editionCode);
 }
 
@@ -343,14 +338,19 @@ export function extractLifestyles(ruleset: LoadedRuleset): LifestyleData[] {
  * Load lifestyle metatype modifiers from a ruleset
  */
 export function extractLifestyleModifiers(ruleset: LoadedRuleset): Record<string, number> {
-  const ruleModule = extractModule<{ metatypeModifiers: Record<string, number> }>(ruleset, "lifestyle");
+  const ruleModule = extractModule<{ metatypeModifiers: Record<string, number> }>(
+    ruleset,
+    "lifestyle"
+  );
   return ruleModule?.metatypeModifiers || {};
 }
 
 /**
  * Load lifestyle subscriptions from a ruleset
  */
-export function extractLifestyleSubscriptions(ruleset: LoadedRuleset): LifestyleSubscriptionCatalogItem[] {
+export function extractLifestyleSubscriptions(
+  ruleset: LoadedRuleset
+): LifestyleSubscriptionCatalogItem[] {
   const ruleModule = extractModule<LifestyleSubscriptionsCatalogData>(ruleset, "lifestyle");
   return ruleModule?.subscriptions || [];
 }
@@ -481,7 +481,10 @@ import type { ContactTemplateData } from "../types";
  * Load contact templates from a ruleset
  */
 export function extractContactTemplates(ruleset: LoadedRuleset): ContactTemplateData[] {
-  const ruleModule = extractModule<{ templates: ContactTemplateData[] }>(ruleset, "contactTemplates");
+  const ruleModule = extractModule<{ templates: ContactTemplateData[] }>(
+    ruleset,
+    "contactTemplates"
+  );
   return ruleModule?.templates || [];
 }
 
@@ -751,7 +754,9 @@ import type {
 /**
  * Load weapon modifications from a ruleset
  */
-export function extractWeaponModifications(ruleset: LoadedRuleset): WeaponModificationCatalogItemData[] {
+export function extractWeaponModifications(
+  ruleset: LoadedRuleset
+): WeaponModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.weaponMods || [];
 }
@@ -759,7 +764,9 @@ export function extractWeaponModifications(ruleset: LoadedRuleset): WeaponModifi
 /**
  * Load armor modifications from a ruleset
  */
-export function extractArmorModifications(ruleset: LoadedRuleset): ArmorModificationCatalogItemData[] {
+export function extractArmorModifications(
+  ruleset: LoadedRuleset
+): ArmorModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.armorMods || [];
 }
@@ -767,7 +774,9 @@ export function extractArmorModifications(ruleset: LoadedRuleset): ArmorModifica
 /**
  * Load cyberware modifications from a ruleset
  */
-export function extractCyberwareModifications(ruleset: LoadedRuleset): CyberwareModificationCatalogItemData[] {
+export function extractCyberwareModifications(
+  ruleset: LoadedRuleset
+): CyberwareModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.cyberwareMods || [];
 }
@@ -775,7 +784,9 @@ export function extractCyberwareModifications(ruleset: LoadedRuleset): Cyberware
 /**
  * Load gear modifications from a ruleset
  */
-export function extractGearModifications(ruleset: LoadedRuleset): GearModificationCatalogItemData[] {
+export function extractGearModifications(
+  ruleset: LoadedRuleset
+): GearModificationCatalogItemData[] {
   const ruleModule = extractModule<ModificationsCatalogData>(ruleset, "modifications");
   return ruleModule?.gearMods || [];
 }

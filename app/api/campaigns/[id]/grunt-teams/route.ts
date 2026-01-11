@@ -10,10 +10,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { authorizeCampaign } from "@/lib/auth/campaign";
-import {
-  createGruntTeam,
-  getGruntTeamsByCampaign,
-} from "@/lib/storage/grunts";
+import { createGruntTeam, getGruntTeamsByCampaign } from "@/lib/storage/grunts";
 import { getGruntTemplate } from "@/lib/storage/grunt-templates";
 import { validateGruntTeam } from "@/lib/rules/grunts";
 import type {
@@ -54,10 +51,7 @@ export async function GET(
     );
 
     if (!authorized) {
-      return NextResponse.json(
-        { success: false, teams: [], error },
-        { status }
-      );
+      return NextResponse.json({ success: false, teams: [], error }, { status });
     }
 
     // Parse query parameters
@@ -66,9 +60,7 @@ export async function GET(
     const search = searchParams.get("search") || undefined;
     const encounterId = searchParams.get("encounterId") || undefined;
 
-    const professionalRating = prParam
-      ? (parseInt(prParam, 10) as ProfessionalRating)
-      : undefined;
+    const professionalRating = prParam ? (parseInt(prParam, 10) as ProfessionalRating) : undefined;
 
     // Get teams with filters
     let teams = await getGruntTeamsByCampaign(campaignId, {
@@ -116,11 +108,9 @@ export async function POST(
     }
 
     const { id: campaignId } = await params;
-    const { authorized, campaign, error, status } = await authorizeCampaign(
-      campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, campaign, error, status } = await authorizeCampaign(campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -132,10 +122,7 @@ export async function POST(
     if (body.templateId && !body.baseGrunts) {
       const template = await getGruntTemplate(campaign!.editionCode, body.templateId);
       if (!template) {
-        return NextResponse.json(
-          { success: false, error: "Template not found" },
-          { status: 404 }
-        );
+        return NextResponse.json({ success: false, error: "Template not found" }, { status: 404 });
       }
       body.baseGrunts = template.baseGrunts;
       body.professionalRating = template.professionalRating;
@@ -177,9 +164,6 @@ export async function POST(
   } catch (error) {
     console.error("Create grunt team error:", error);
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

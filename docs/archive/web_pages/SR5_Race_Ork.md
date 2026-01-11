@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -8,17 +8,17 @@
 
 | **Centaurs** | **Nagas** | **Pixies** | **Sasquatches** | **Changelings** | **Shapeshifters** |
 
-| CHARACTERS AND ORK CULTURE |
-| --- |
+| CHARACTERS AND ORK CULTURE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Being an ork is about making a choice about which ork you want to be, or accepting the role you’ve been stuffed into. Society doesn’t care how big you are. Yes, the locals may run or avoid looking at you as you intimidate them, but no one gives a devil rat’s hoop about you, or they’ll all slap the PanicButton to get you chased off by the local tin star. This means you can play the role and act the ignorant brute (or maybe it’s not an act) or you can work to elevate yourself. Stop fighting on the street corners, hanging at the local temp agency to snag some day-laborer work, or opting for a beatdown to get into the local gang. Instead, step up alongside your fellow orks to be the bigger metahuman, get together to demand a better wage, or look to those tusked brothers, your pack of orks, instead of the local gangers for a sense of meaning, home, and family. Orks live a life that they know is going to be too short, but they fight to make it meaningful in the little time they have. |
 
 | **World Population:** 22% |
 
 HOMO SAPIENS ROBUSTUS
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Ork | 4/9 | 1/6 | 1/6 | 3/8 | 1/6 | 1/5 | 1/6 | 1/6 | 1/5 | 6 | REA+INT |
+| RACE                                | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ----------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Ork                                 | 4/9  | 1/6 | 1/6 | 3/8 | 1/6 | 1/5 | 1/6 | 1/6 | 1/5  | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision |
 
 Orks have the highest birth rate but shortest natural lifespan of any metahuman race. Add an over-representative number of orks performing for physically taxing jobs and a cultural propensity for confrontation to this biological brevity and you’ll find a difficult window within which to make meaningful change or even to develop a lasting cultural identity of one’s own. For the bulk of the past fifty-five years, orks have been simply trying to exist in a world where they don’t have the time to develop a culture because they have to put so much effort into just living. Thus far they have a culture of carpe diem, or more accurately ad diem vivunt: live for the day.
@@ -71,9 +71,9 @@ On the other side of the coin you have the orks who live in the wilder edges of 
 
 ## Hobgoblin
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Hobgoblin | 1/6 | 1/6 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT |
+| RACE                                                                                         | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| -------------------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Hobgoblin                                                                                    | 1/6  | 1/6 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Fangs, Low-Light Vision, Extravagant Eyes, Poor Self Control (Vindictive) |
 
 **Physical Characteristics:** The hobgoblin metavariant shares the low-light vision trait of the H. sapiens robustus line but very few other characteristics. They are shorter, less muscular, and possess a smaller frame than the standard robustus. Along with this lessened stature, hobgoblins possesses a green skin hue and a decrease in overall body hair. Instead of enlarged lower canines and a broad jaw, hobgoblins possesses a mouthful of sharp teeth and a narrow, tapered jaw. Hobgoblin eyes are completely black, with no distinction between pupil, cornea, or sclera. The metavariant also possesses minimal body hair compared to their primary species.
@@ -86,9 +86,9 @@ On the other side of the coin you have the orks who live in the wilder edges of 
 
 ## Ogre
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Ogre | 4/9 | 1/6 | 1/5 | 3/8 | 2/7 | 1/5 | 1/6 | 1/4 | 1/6 | 6 | REA+INT |
+| RACE                                              | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Ogre                                              | 4/9  | 1/6 | 1/5 | 3/8 | 2/7 | 1/5 | 1/6 | 1/4 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision, Ogre Stomach |
 
 **Physical Characteristics:** The ogre metavariant possesses the standard low-light vision, muscular bulk, enlarged lower canines, and pointed aural helix of their primary subspecies. The variations on standard H. sapiens robustus come in a shorter stature, smoother skin, a protruding jaw, a wider mouth, and a stomach similar to the tin-can-eating goats of urban legend. The ogre metavariant stands at a height similar to standard H. sapiens, though the muscular robustness of the species is still present. Ogres seem even closer to their H. sapiens progenitors due the smoothness of their skin, a trait lacking in the standard robustus, whose skin is often thick and rough. The jawline and wider mouth of the ogre originally spawned urban legends of cannibalism; these rumors were proven false by the ‘40s but those raised during the era of its prevalence still feel the effects of this misconception. This urban legend was aided by the fact that ogres can digest almost anything they can swallow. The ability to digest anything leads to obesity, and even the most athletic ogres have a healthy paunch.
@@ -103,9 +103,9 @@ On the other side of the coin you have the orks who live in the wilder edges of 
 
 ## Oni
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Oni | 3/8 | 2/7 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT |
+| RACE                                                            | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| --------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Oni                                                             | 3/8  | 2/7 | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision, Striking Skin Pigmentation |
 
 **Physical Characteristics:** Oni share the same enhanced vision and muscular bulk of the basic robustus subspecies, but that is where the similarities end. This metavariant has variations in skin tone, eye structure, ear shape, and most notably, possesses horns similar to the ingentis metatype. While the base robustus metatype has skin tone ranges similar to that of the sapiens base type, oni skin tones occur in only three shades: bright red, blue, or orange—all vibrant shades and impossible to hide without a full face mask. Beyond that, oni possess protuberant eyes, a second difficult-to-hide facial feature. Adding to the oni’s massive physical variation are ears with a greatly extended aural helix, similar to that of the nobilis metatype. An oni’s horns always rise vertically from the temples instead of exhibiting the kind of variety in shape seen in ingentis.
@@ -119,9 +119,9 @@ metavariant in Japan, and thus the dominant ork subtype on the island of Yomi wh
 
 ## Satyr
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Satyr | 2/7 | 1/6 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6 | 6 | REA+INT |
+| RACE                                            | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ----------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Satyr                                           | 2/7  | 1/6 | 2/7 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision, Satyr Legs |
 
 **Physical Characteristics:** Another robustus metavariant that varies greatly from the basic phenotypic characteristics, satyr maintain their low-light vision and some additional muscular bulk but vary in facial shape, leg structure, overall body mass, and the presence of horns. While satyr also seem to lack longevity similar to their primary subspecies, several cases approaching their sixtieth birthdays with no medical assistance were still spry. A satyr’s face is slightly elongated at the jaw, has a more slender nose, smaller lower canines, and a greater extension of the aural helix. Satyr horns are usually short and sweep back over the head, but a wide variety of variations have been documented. The greatest difference in structure between the base robustus and the satyr metavariant is their leg and foot structure. Satyrs, like the creature of legend, possess caprine leg and foot structure, complete with cloven hooves. This variation gives them an interesting gait while providing exceptional running speed and enhanced vertical and horizontal jumping capabilities.

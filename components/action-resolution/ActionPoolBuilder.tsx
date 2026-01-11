@@ -14,12 +14,7 @@ import {
   Shield,
   Crosshair,
 } from "lucide-react";
-import type {
-  ActionPool,
-  PoolModifier,
-  EdgeActionType,
-  ActionContext,
-} from "@/lib/types";
+import type { ActionPool, PoolModifier, EdgeActionType, ActionContext } from "@/lib/types";
 
 interface ActionPoolBuilderProps {
   /** Character's attribute values */
@@ -63,14 +58,7 @@ interface ModifierInputProps {
   size: "sm" | "md" | "lg";
 }
 
-function ModifierInput({
-  label,
-  value,
-  onChange,
-  min = -10,
-  max = 10,
-  size,
-}: ModifierInputProps) {
+function ModifierInput({ label, value, onChange, min = -10, max = 10, size }: ModifierInputProps) {
   const sizeClasses = {
     sm: { text: "text-xs", button: "w-6 h-6" },
     md: { text: "text-sm", button: "w-8 h-8" },
@@ -140,7 +128,9 @@ export function ActionPoolBuilder({
   const [selectedAttribute, setSelectedAttribute] = useState<string>("");
   const [selectedSkill, setSelectedSkill] = useState<string>("");
   const [selectedSpecialization, setSelectedSpecialization] = useState<string>("");
-  const [selectedLimit, setSelectedLimit] = useState<"physical" | "mental" | "social" | "none">("none");
+  const [selectedLimit, setSelectedLimit] = useState<"physical" | "mental" | "social" | "none">(
+    "none"
+  );
 
   // Modifier state
   const [situationalMod, setSituationalMod] = useState(0);
@@ -255,9 +245,8 @@ export function ActionPoolBuilder({
     const totalDice = Math.max(0, totalModifiers);
 
     // Get limit
-    const limit = selectedLimit !== "none" && limits?.[selectedLimit]
-      ? limits[selectedLimit]
-      : undefined;
+    const limit =
+      selectedLimit !== "none" && limits?.[selectedLimit] ? limits[selectedLimit] : undefined;
 
     return {
       basePool,
@@ -381,7 +370,9 @@ export function ActionPoolBuilder({
       {/* Specialization */}
       {specializations.length > 0 && (
         <div className="mb-4">
-          <label className={`block text-muted-foreground ${s.text} mb-1`}>Specialization (+2)</label>
+          <label className={`block text-muted-foreground ${s.text} mb-1`}>
+            Specialization (+2)
+          </label>
           <select
             value={selectedSpecialization}
             onChange={(e) => setSelectedSpecialization(e.target.value)}
@@ -424,7 +415,9 @@ export function ActionPoolBuilder({
                 {limitType === "physical" && <Crosshair className="w-3 h-3" />}
                 {limitType === "mental" && <Target className="w-3 h-3" />}
                 {limitType === "social" && <Shield className="w-3 h-3" />}
-                {limitType === "none" ? "None" : `${limitType.charAt(0).toUpperCase() + limitType.slice(1)} (${limits[limitType] || 0})`}
+                {limitType === "none"
+                  ? "None"
+                  : `${limitType.charAt(0).toUpperCase() + limitType.slice(1)} (${limits[limitType] || 0})`}
               </Button>
             ))}
           </div>
@@ -475,12 +468,7 @@ export function ActionPoolBuilder({
                 onChange={setEquipmentMod}
                 size={size}
               />
-              <ModifierInput
-                label="Other"
-                value={customMod}
-                onChange={setCustomMod}
-                size={size}
-              />
+              <ModifierInput label="Other" value={customMod} onChange={setCustomMod} size={size} />
             </div>
           )}
         </div>
@@ -498,11 +486,7 @@ export function ActionPoolBuilder({
             `}
           >
             <span>Context</span>
-            {showContext ? (
-              <ChevronUp className="w-4 h-4" />
-            ) : (
-              <ChevronDown className="w-4 h-4" />
-            )}
+            {showContext ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
           </button>
 
           {showContext && (
@@ -636,12 +620,8 @@ export function ActionPoolBuilder({
           </div>
           {edgeAction && (
             <p className={`mt-2 text-muted-foreground ${s.text}`}>
-              {edgeAction === "push_the_limit" && (
-                <>Add Edge to pool, no limit, exploding 6s</>
-              )}
-              {edgeAction === "blitz" && (
-                <>Go first in combat (5 initiative dice)</>
-              )}
+              {edgeAction === "push_the_limit" && <>Add Edge to pool, no limit, exploding 6s</>}
+              {edgeAction === "blitz" && <>Go first in combat (5 initiative dice)</>}
             </p>
           )}
         </div>
@@ -679,9 +659,7 @@ export function ActionPoolBuilder({
             <Dice1 className="w-5 h-5" />
             Roll {pool.totalDice}d6
             {useEdge && edgeAction && (
-              <span className="ml-1 text-rose-300">
-                + {edgeAction.replace("_", " ")}
-              </span>
+              <span className="ml-1 text-rose-300">+ {edgeAction.replace("_", " ")}</span>
             )}
           </>
         )}

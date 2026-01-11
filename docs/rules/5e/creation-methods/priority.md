@@ -7,6 +7,7 @@ The Priority system is the standard character creation method for Shadowrun 5th 
 ## Overview
 
 Each priority level (A through E) grants specific benefits:
+
 - **Priority A:** Highest tier benefits
 - **Priority B:** Strong benefits
 - **Priority C:** Moderate benefits

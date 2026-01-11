@@ -81,7 +81,8 @@ export function CyberlimbAccessoryModal({
 
   // Calculate remaining capacity
   const remainingCapacity = useMemo(() => {
-    const used = limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0) +
+    const used =
+      limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0) +
       limb.accessories.reduce((sum, a) => sum + a.capacityUsed, 0) +
       limb.weapons.reduce((sum, w) => sum + w.capacityUsed, 0);
     return limb.baseCapacity - used;
@@ -113,8 +114,7 @@ export function CyberlimbAccessoryModal({
     const query = searchQuery.toLowerCase();
     return availableAccessories.filter(
       (item) =>
-        item.name.toLowerCase().includes(query) ||
-        item.description?.toLowerCase().includes(query)
+        item.name.toLowerCase().includes(query) || item.description?.toLowerCase().includes(query)
     );
   }, [availableAccessories, searchQuery]);
 
@@ -154,7 +154,9 @@ export function CyberlimbAccessoryModal({
     const errors: string[] = [];
 
     if (calculations.capacityCost > remainingCapacity) {
-      errors.push(`Not enough capacity (need ${calculations.capacityCost}, have ${remainingCapacity})`);
+      errors.push(
+        `Not enough capacity (need ${calculations.capacityCost}, have ${remainingCapacity})`
+      );
     }
     if (calculations.cost > availableNuyen) {
       errors.push(`Not enough nuyen (need ${formatCurrency(calculations.cost)}¥)`);
@@ -263,13 +265,14 @@ export function CyberlimbAccessoryModal({
                           </span>
                           <div className="mt-0.5 flex flex-wrap gap-x-2 gap-y-0.5 text-[10px] text-zinc-500">
                             <span className="text-blue-400">
-                              [{item.capacityCost}{item.capacityPerRating ? "/R" : ""}]
+                              [{item.capacityCost}
+                              {item.capacityPerRating ? "/R" : ""}]
                             </span>
-                            <span>{formatCurrency(item.cost || 0)}¥{item.costPerRating ? "/R" : ""}</span>
+                            <span>
+                              {formatCurrency(item.cost || 0)}¥{item.costPerRating ? "/R" : ""}
+                            </span>
                             {item.hasRating && (
-                              <span className="text-amber-400">
-                                R1-{item.maxRating || 6}
-                              </span>
+                              <span className="text-amber-400">R1-{item.maxRating || 6}</span>
                             )}
                           </div>
                         </div>
@@ -291,15 +294,11 @@ export function CyberlimbAccessoryModal({
                     <div className="p-2 rounded-lg bg-blue-500/10">
                       <Package className="w-5 h-5 text-blue-400" />
                     </div>
-                    <h3 className="text-lg font-semibold text-zinc-100">
-                      {selectedItem.name}
-                    </h3>
+                    <h3 className="text-lg font-semibold text-zinc-100">{selectedItem.name}</h3>
                   </div>
 
                   {selectedItem.description && (
-                    <p className="text-sm text-zinc-400 mb-4">
-                      {selectedItem.description}
-                    </p>
+                    <p className="text-sm text-zinc-400 mb-4">{selectedItem.description}</p>
                   )}
 
                   {/* Rating Selector */}
@@ -307,7 +306,9 @@ export function CyberlimbAccessoryModal({
                     <div className="mb-4">
                       <label className="mb-2 block text-sm font-medium text-zinc-300">
                         Rating
-                        <span className="text-xs text-zinc-500 ml-2">(max {selectedItem.maxRating || 6})</span>
+                        <span className="text-xs text-zinc-500 ml-2">
+                          (max {selectedItem.maxRating || 6})
+                        </span>
                       </label>
                       <div className="flex items-center gap-3">
                         <button
@@ -327,7 +328,9 @@ export function CyberlimbAccessoryModal({
                           </span>
                         </div>
                         <button
-                          onClick={() => setRating(Math.min(selectedItem.maxRating || 6, rating + 1))}
+                          onClick={() =>
+                            setRating(Math.min(selectedItem.maxRating || 6, rating + 1))
+                          }
                           disabled={rating >= (selectedItem.maxRating || 6)}
                           className={`p-2 rounded-lg ${
                             rating < (selectedItem.maxRating || 6)
@@ -345,31 +348,35 @@ export function CyberlimbAccessoryModal({
                   <div className="grid grid-cols-3 gap-3 mb-4">
                     <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                       <div className="text-[10px] text-zinc-500 uppercase">Capacity</div>
-                      <div className={`text-xl font-bold font-mono ${
-                        calculations.capacityCost > remainingCapacity
-                          ? "text-red-400"
-                          : "text-blue-400"
-                      }`}>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.capacityCost > remainingCapacity
+                            ? "text-red-400"
+                            : "text-blue-400"
+                        }`}
+                      >
                         [{calculations.capacityCost}]
                       </div>
                     </div>
                     <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                       <div className="text-[10px] text-zinc-500 uppercase">Cost</div>
-                      <div className={`text-xl font-bold font-mono ${
-                        calculations.cost > availableNuyen
-                          ? "text-red-400"
-                          : "text-zinc-100"
-                      }`}>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-100"
+                        }`}
+                      >
                         {formatCurrency(calculations.cost)}¥
                       </div>
                     </div>
                     <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                       <div className="text-[10px] text-zinc-500 uppercase">Avail</div>
-                      <div className={`text-xl font-bold font-mono ${
-                        calculations.availability > maxAvailability
-                          ? "text-red-400"
-                          : "text-zinc-100"
-                      }`}>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.availability > maxAvailability
+                            ? "text-red-400"
+                            : "text-zinc-100"
+                        }`}
+                      >
                         {getAvailabilityDisplay(calculations.availability, selectedItem.legality)}
                       </div>
                     </div>
@@ -386,12 +393,17 @@ export function CyberlimbAccessoryModal({
                   {/* Validation Errors */}
                   {!validation.valid && validation.errors.length > 0 && (
                     <div className="space-y-1">
-                      {validation.errors.filter(e => e !== "Select an accessory").map((error, idx) => (
-                        <div key={idx} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30">
-                          <AlertTriangle className="w-4 h-4 text-red-400" />
-                          <span className="text-xs text-red-400">{error}</span>
-                        </div>
-                      ))}
+                      {validation.errors
+                        .filter((e) => e !== "Select an accessory")
+                        .map((error, idx) => (
+                          <div
+                            key={idx}
+                            className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30"
+                          >
+                            <AlertTriangle className="w-4 h-4 text-red-400" />
+                            <span className="text-xs text-red-400">{error}</span>
+                          </div>
+                        ))}
                     </div>
                   )}
                 </div>
@@ -416,9 +428,7 @@ export function CyberlimbAccessoryModal({
               <div className="flex flex-1 items-center justify-center p-8 text-center">
                 <div>
                   <Package className="mx-auto h-12 w-12 text-zinc-600" />
-                  <p className="mt-4 text-sm text-zinc-500">
-                    Select an accessory from the list
-                  </p>
+                  <p className="mt-4 text-sm text-zinc-500">Select an accessory from the list</p>
                 </div>
               </div>
             )}

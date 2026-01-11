@@ -16,15 +16,8 @@
 import { useMemo, useCallback, useState } from "react";
 import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
 import { useSkills } from "@/lib/rules";
-import { CreationCard } from "./shared";
-import {
-  Minus,
-  Plus,
-  X,
-  Book,
-  Languages,
-  AlertTriangle,
-} from "lucide-react";
+import { CreationCard, BudgetIndicator } from "./shared";
+import { Minus, Plus, X, Book, Languages, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -66,88 +59,21 @@ const COMMON_LANGUAGES = [
 
 const MAX_SKILL_RATING = 6;
 
+// Abbreviated category labels for compact display
+const CATEGORY_ABBREVS: Record<KnowledgeCategory, string> = {
+  academic: "Acad",
+  interests: "Int",
+  professional: "Prof",
+  street: "Str",
+};
+
 interface KnowledgeLanguagesCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
 }
 
 // =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  description,
-  spent,
-  total,
-  isOver,
-}: {
-  label: string;
-  description: string;
-  spent: number;
-  total: number;
-  isOver: boolean;
-}) {
-  const remaining = total - spent;
-  const percentage = total > 0 ? Math.min(100, (spent / total) * 100) : 0;
-
-  return (
-    <div
-      className={`rounded-lg border p-3 ${
-        isOver
-          ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {label}
-        </div>
-        <div
-          className={`text-lg font-bold ${
-            isOver
-              ? "text-amber-600 dark:text-amber-400"
-              : remaining === 0
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-          }`}
-        >
-          {remaining}
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-        <span className="float-right">of {total} remaining</span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-amber-500"
-              : remaining === 0
-              ? "bg-emerald-500"
-              : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Over budget warning */}
-      {isOver && (
-        <div className="mt-2 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
-          <AlertTriangle className="h-3.5 w-3.5" />
-          <span>{Math.abs(remaining)} points over budget</span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
-// LANGUAGE ROW COMPONENT
+// LANGUAGE ROW COMPONENT (Compact single-row layout)
 // =============================================================================
 
 function LanguageRow({
@@ -164,39 +90,24 @@ function LanguageRow({
   const canDecrease = !isNative && language.rating > 1;
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Languages className="h-4 w-4 text-zinc-400" />
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {language.name}
+    <div className="flex items-center justify-between py-1.5">
+      {/* Language info */}
+      <div className="flex items-center gap-1.5">
+        <Languages className="h-3.5 w-3.5 text-emerald-500" />
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {language.name}
+        </span>
+        {isNative && (
+          <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[9px] font-semibold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+            Native
           </span>
-          {isNative && (
-            <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-              Native
-            </span>
-          )}
-        </div>
-
-        {!isNative && (
-          <button
-            onClick={onRemove}
-            className="text-zinc-400 hover:text-red-500 dark:hover:text-red-400"
-            title="Remove language"
-          >
-            <X className="h-4 w-4" />
-          </button>
         )}
       </div>
 
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {isNative ? "Native language (free)" : "Learned language"}
-      </div>
-
-      {/* Rating controls */}
-      <div className="mt-2 flex items-center justify-end gap-2">
+      {/* Controls */}
+      <div className="flex items-center gap-1">
         {isNative ? (
-          <div className="flex h-8 w-10 items-center justify-center rounded bg-purple-100 text-base font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+          <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
             N
           </div>
         ) : (
@@ -204,29 +115,37 @@ function LanguageRow({
             <button
               onClick={() => onRatingChange(-1)}
               disabled={!canDecrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+              aria-label={`Decrease ${language.name} rating`}
+              className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 canDecrease
                   ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Minus className="h-4 w-4" />
+              <Minus className="h-3 w-3" aria-hidden="true" />
             </button>
-
-            <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+            <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
               {language.rating}
             </div>
-
             <button
               onClick={() => onRatingChange(1)}
               disabled={!canIncrease}
-              className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+              aria-label={`Increase ${language.name} rating`}
+              className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
                 canIncrease
                   ? "bg-emerald-500 text-white hover:bg-emerald-600"
                   : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
               }`}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="h-3 w-3" aria-hidden="true" />
+            </button>
+            <button
+              onClick={onRemove}
+              aria-label={`Remove ${language.name}`}
+              className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+              title="Remove language"
+            >
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
             </button>
           </>
         )}
@@ -236,7 +155,7 @@ function LanguageRow({
 }
 
 // =============================================================================
-// KNOWLEDGE SKILL ROW COMPONENT
+// KNOWLEDGE SKILL ROW COMPONENT (Compact single-row layout)
 // =============================================================================
 
 function KnowledgeSkillRow({
@@ -250,61 +169,63 @@ function KnowledgeSkillRow({
 }) {
   const canIncrease = skill.rating < MAX_SKILL_RATING;
   const canDecrease = skill.rating > 1;
+  const isAtMax = skill.rating >= MAX_SKILL_RATING;
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <Book className="h-4 w-4 text-zinc-400" />
-          <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-            {skill.name}
-          </span>
-          <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-            {CATEGORY_LABELS[skill.category]}
-          </span>
-        </div>
-
-        <button
-          onClick={onRemove}
-          className="text-zinc-400 hover:text-red-500 dark:hover:text-red-400"
-          title="Remove skill"
+    <div className="flex items-center justify-between py-1.5">
+      {/* Skill info */}
+      <div className="flex items-center gap-1.5">
+        <Book className="h-3.5 w-3.5 text-amber-500" />
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{skill.name}</span>
+        <span
+          className="text-[10px] text-zinc-400 dark:text-zinc-500"
+          title={CATEGORY_LABELS[skill.category]}
         >
-          <X className="h-4 w-4" />
-        </button>
+          {CATEGORY_ABBREVS[skill.category]}
+        </span>
       </div>
 
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        Knowledge skill
-      </div>
-
-      {/* Rating controls */}
-      <div className="mt-2 flex items-center justify-end gap-2">
+      {/* Controls */}
+      <div className="flex items-center gap-1">
+        {isAtMax && (
+          <span className="rounded bg-emerald-100 px-1.5 py-0.5 text-[9px] font-semibold text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
+            MAX
+          </span>
+        )}
         <button
           onClick={() => onRatingChange(-1)}
           disabled={!canDecrease}
-          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+          aria-label={`Decrease ${skill.name} rating`}
+          className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
             canDecrease
               ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Minus className="h-4 w-4" />
+          <Minus className="h-3 w-3" aria-hidden="true" />
         </button>
-
-        <div className="flex h-8 w-10 items-center justify-center rounded bg-zinc-100 text-base font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+        <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
           {skill.rating}
         </div>
-
         <button
           onClick={() => onRatingChange(1)}
           disabled={!canIncrease}
-          className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
+          aria-label={`Increase ${skill.name} rating`}
+          className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
             canIncrease
-              ? "bg-emerald-500 text-white hover:bg-emerald-600"
+              ? "bg-amber-500 text-white hover:bg-amber-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Plus className="h-4 w-4" />
+          <Plus className="h-3 w-3" aria-hidden="true" />
+        </button>
+        <button
+          onClick={onRemove}
+          aria-label={`Remove ${skill.name}`}
+          className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+          title="Remove skill"
+        >
+          <X className="h-3.5 w-3.5" aria-hidden="true" />
         </button>
       </div>
     </div>
@@ -338,9 +259,7 @@ function AddLanguageModal({
   // Filter out already-added languages
   const availableExamples = useMemo(() => {
     if (!exampleLanguages) return [];
-    return exampleLanguages.filter(
-      (lang) => !existingLanguages.includes(lang.name)
-    );
+    return exampleLanguages.filter((lang) => !existingLanguages.includes(lang.name));
   }, [exampleLanguages, existingLanguages]);
 
   const handleSelectFromDropdown = (langName: string) => {
@@ -375,9 +294,7 @@ function AddLanguageModal({
       <div className="flex max-h-[85vh] w-full max-w-md flex-col overflow-hidden rounded-lg bg-white shadow-xl dark:bg-zinc-900">
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
-          <h3 className="text-lg font-semibold text-amber-700 dark:text-amber-400">
-            Add Language
-          </h3>
+          <h3 className="text-lg font-semibold text-amber-700 dark:text-amber-400">Add Language</h3>
           <button
             onClick={handleClose}
             className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
@@ -457,15 +374,12 @@ function AddLanguageModal({
                   <span className="font-medium text-zinc-700 dark:text-zinc-300">
                     Native language
                   </span>{" "}
-                  is free and has no rating. Other languages cost 1 point per
-                  rating.
+                  is free and has no rating. Other languages cost 1 point per rating.
                 </p>
               ) : (
                 <p>
                   Languages cost 1 knowledge point per rating level.{" "}
-                  <span className="font-medium">
-                    {pointsRemaining} points remaining.
-                  </span>
+                  <span className="font-medium">{pointsRemaining} points remaining.</span>
                 </p>
               )}
             </div>
@@ -533,14 +447,15 @@ function AddKnowledgeSkillModal({
   if (!isOpen) return null;
 
   // Use ruleset categories if available, otherwise fallback
-  const categoryOptions = knowledgeCategories?.length > 0
-    ? knowledgeCategories
-    : [
-        { id: "academic", name: "Academic" },
-        { id: "interests", name: "Interests" },
-        { id: "professional", name: "Professional" },
-        { id: "street", name: "Street" },
-      ];
+  const categoryOptions =
+    knowledgeCategories?.length > 0
+      ? knowledgeCategories
+      : [
+          { id: "academic", name: "Academic" },
+          { id: "interests", name: "Interests" },
+          { id: "professional", name: "Professional" },
+          { id: "street", name: "Street" },
+        ];
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
@@ -630,9 +545,7 @@ function AddKnowledgeSkillModal({
               <div className="flex gap-2">
                 <select
                   value={category}
-                  onChange={(e) =>
-                    setCategory(e.target.value as KnowledgeCategory)
-                  }
+                  onChange={(e) => setCategory(e.target.value as KnowledgeCategory)}
                   className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
                 >
                   {categoryOptions.map((cat) => (
@@ -659,9 +572,7 @@ function AddKnowledgeSkillModal({
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               <p>
                 Knowledge skills cost 1 point per rating level.{" "}
-                <span className="font-medium">
-                  {pointsRemaining} points remaining.
-                </span>
+                <span className="font-medium">{pointsRemaining} points remaining.</span>
               </p>
             </div>
           </div>
@@ -685,10 +596,7 @@ function AddKnowledgeSkillModal({
 // MAIN COMPONENT
 // =============================================================================
 
-export function KnowledgeLanguagesCard({
-  state,
-  updateState,
-}: KnowledgeLanguagesCardProps) {
+export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguagesCardProps) {
   const [showAddLanguage, setShowAddLanguage] = useState(false);
   const [showAddKnowledge, setShowAddKnowledge] = useState(false);
 
@@ -715,29 +623,13 @@ export function KnowledgeLanguagesCard({
   // Calculate points spent (languages + knowledge skills ratings)
   // Native language is free
   const knowledgePointsSpent = useMemo(() => {
-    const langPoints = languages
-      .filter((l) => !l.isNative)
-      .reduce((sum, l) => sum + l.rating, 0);
+    const langPoints = languages.filter((l) => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
     const skillPoints = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0);
     return langPoints + skillPoints;
   }, [languages, knowledgeSkills]);
 
   const knowledgePointsRemaining = knowledgePointsTotal - knowledgePointsSpent;
   const isOverBudget = knowledgePointsRemaining < 0;
-
-  // Group knowledge skills by category
-  const skillsByCategory = useMemo(() => {
-    const grouped: Record<KnowledgeCategory, KnowledgeSkill[]> = {
-      street: [],
-      professional: [],
-      academic: [],
-      interests: [],
-    };
-    knowledgeSkills.forEach((skill) => {
-      grouped[skill.category].push(skill);
-    });
-    return grouped;
-  }, [knowledgeSkills]);
 
   // Handle language rating change
   const handleLanguageRatingChange = useCallback(
@@ -799,7 +691,9 @@ export function KnowledgeLanguagesCard({
   const hasBilingualQuality = useMemo(() => {
     // Qualities are stored separately as positiveQualities and negativeQualities
     // Bilingual is a positive quality
-    const positiveQualities = state.selections.positiveQualities as Array<{ id: string }> | undefined;
+    const positiveQualities = state.selections.positiveQualities as
+      | Array<{ id: string }>
+      | undefined;
     if (!positiveQualities) return false;
     return positiveQualities.some((q) => q.id === "bilingual");
   }, [state.selections.positiveQualities]);
@@ -877,23 +771,21 @@ export function KnowledgeLanguagesCard({
   const hasAttributes = intuition > 1 || logic > 1;
 
   return (
-    <CreationCard
-      title="Knowledge & Languages"
-      description={
-        knowledgePointsRemaining === 0
-          ? "All points allocated"
-          : `${knowledgePointsRemaining} of ${knowledgePointsTotal} points remaining`
-      }
-      status={validationStatus}
-    >
+    <CreationCard title="Knowledge & Languages" status={validationStatus}>
       <div className="space-y-4">
         {/* Budget indicator */}
-        <BudgetProgressBar
+        <BudgetIndicator
           label="Knowledge Points"
-          description={`Based on (INT ${intuition} + LOG ${logic}) × 2`}
+          tooltip={`Based on (INT ${intuition} + LOG ${logic}) × 2`}
           spent={knowledgePointsSpent}
           total={knowledgePointsTotal}
-          isOver={isOverBudget}
+          note={
+            isOverBudget
+              ? `${Math.abs(knowledgePointsTotal - knowledgePointsSpent)} points over budget`
+              : undefined
+          }
+          noteStyle="warning"
+          compact
         />
 
         {!hasAttributes && (
@@ -904,111 +796,79 @@ export function KnowledgeLanguagesCard({
 
         {/* Languages section */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="mb-1 flex items-center justify-between">
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Languages
             </h4>
+            <button
+              onClick={() => setShowAddLanguage(true)}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Language
+            </button>
           </div>
-
-          <div className="space-y-2">
-            {languages.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No languages added. Add your native language first.
-              </p>
-            ) : (
-              languages.map((lang, index) => (
+          {languages.length === 0 ? (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">
+              No languages added. Add your native language first.
+            </p>
+          ) : (
+            <div className="rounded-lg border border-zinc-200 bg-white px-3 py-1 dark:border-zinc-700 dark:bg-zinc-900">
+              {languages.map((lang, index) => (
                 <LanguageRow
                   key={`${lang.name}-${index}`}
                   language={lang}
-                  onRatingChange={(delta) =>
-                    handleLanguageRatingChange(index, delta)
-                  }
+                  onRatingChange={(delta) => handleLanguageRatingChange(index, delta)}
                   onRemove={() => handleRemoveLanguage(index)}
                 />
-              ))
-            )}
-          </div>
-
-          <button
-            onClick={() => setShowAddLanguage(true)}
-            className="mt-2 flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
-          >
-            <Plus className="h-4 w-4" />
-            Add Language
-          </button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Knowledge Skills section */}
         <div>
-          <div className="mb-2 flex items-center justify-between">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+          <div className="mb-1 flex items-center justify-between">
+            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
               Knowledge Skills
             </h4>
+            <button
+              onClick={() => setShowAddKnowledge(true)}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3.5 w-3.5" />
+              Skill
+            </button>
           </div>
-
-          <div className="space-y-3">
-            {knowledgeSkills.length === 0 ? (
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                No knowledge skills added.
-              </p>
-            ) : (
-              (Object.keys(CATEGORY_LABELS) as KnowledgeCategory[]).map(
-                (category) =>
-                  skillsByCategory[category].length > 0 && (
-                    <div key={category}>
-                      <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                        {CATEGORY_LABELS[category]}
-                      </div>
-                      <div className="space-y-2">
-                        {skillsByCategory[category].map((skill, idx) => {
-                          const globalIndex = knowledgeSkills.findIndex(
-                            (s) => s === skill
-                          );
-                          return (
-                            <KnowledgeSkillRow
-                              key={`${skill.name}-${idx}`}
-                              skill={skill}
-                              onRatingChange={(delta) =>
-                                handleKnowledgeRatingChange(globalIndex, delta)
-                              }
-                              onRemove={() =>
-                                handleRemoveKnowledge(globalIndex)
-                              }
-                            />
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )
-              )
-            )}
-          </div>
-
-          <button
-            onClick={() => setShowAddKnowledge(true)}
-            className="mt-2 flex items-center gap-1 text-sm text-emerald-600 hover:text-emerald-700 dark:text-emerald-400 dark:hover:text-emerald-300"
-          >
-            <Plus className="h-4 w-4" />
-            Add Knowledge Skill
-          </button>
+          {knowledgeSkills.length === 0 ? (
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">No knowledge skills added.</p>
+          ) : (
+            <div className="rounded-lg border border-zinc-200 bg-white px-3 py-1 dark:border-zinc-700 dark:bg-zinc-900">
+              {knowledgeSkills.map((skill, index) => (
+                <KnowledgeSkillRow
+                  key={`${skill.name}-${index}`}
+                  skill={skill}
+                  onRatingChange={(delta) => handleKnowledgeRatingChange(index, delta)}
+                  onRemove={() => handleRemoveKnowledge(index)}
+                />
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Summary */}
         {(languages.length > 0 || knowledgeSkills.length > 0) && (
-          <div className="rounded-lg bg-emerald-50 p-3 dark:bg-emerald-900/20">
-            <span className="text-xs font-medium text-emerald-700 dark:text-emerald-300">
+          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total:{" "}
               {languages.length > 0 &&
                 `${languages.length} language${languages.length !== 1 ? "s" : ""}`}
-              {nativeLanguageCount > 0 && (
-                <span className="text-emerald-600 dark:text-emerald-400">
-                  {" "}({nativeLanguageCount} native)
-                </span>
-              )}
               {languages.length > 0 && knowledgeSkills.length > 0 && ", "}
               {knowledgeSkills.length > 0 &&
-                `${knowledgeSkills.length} knowledge skill${
-                  knowledgeSkills.length !== 1 ? "s" : ""
-                }`}
+                `${knowledgeSkills.length} skill${knowledgeSkills.length !== 1 ? "s" : ""}`}
+            </span>
+            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
+              {knowledgePointsSpent} pts
             </span>
           </div>
         )}

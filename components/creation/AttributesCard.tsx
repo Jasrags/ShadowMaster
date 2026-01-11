@@ -14,38 +14,60 @@
  * - Metatype min/max enforcement with MAX badge
  */
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback } from "react";
 import { useMetatypes, usePriorityTable, useMagicPaths } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "./shared";
-import {
-  Lock,
-  Minus,
-  Plus,
-  AlertTriangle,
-  Info,
-  Star,
-  Sparkles,
-  Cpu,
-} from "lucide-react";
+import { CreationCard, BudgetIndicator } from "./shared";
+import { Tooltip } from "@/components/ui";
+import { Lock, Minus, Plus, Info, Star, Sparkles, Cpu } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const PHYSICAL_ATTRIBUTES = [
-  { id: "body", name: "Body", abbr: "BOD", description: "Physical health and resistance to damage" },
-  { id: "agility", name: "Agility", abbr: "AGI", description: "Coordination and fine motor skills" },
+  {
+    id: "body",
+    name: "Body",
+    abbr: "BOD",
+    description: "Physical health and resistance to damage",
+  },
+  {
+    id: "agility",
+    name: "Agility",
+    abbr: "AGI",
+    description: "Coordination and fine motor skills",
+  },
   { id: "reaction", name: "Reaction", abbr: "REA", description: "Response time and reflexes" },
   { id: "strength", name: "Strength", abbr: "STR", description: "Raw physical power" },
 ] as const;
 
 const MENTAL_ATTRIBUTES = [
-  { id: "willpower", name: "Willpower", abbr: "WIL", description: "Mental fortitude and resistance to magic" },
-  { id: "logic", name: "Logic", abbr: "LOG", description: "Problem solving and analytical thinking" },
-  { id: "intuition", name: "Intuition", abbr: "INT", description: "Gut feelings and situational awareness" },
-  { id: "charisma", name: "Charisma", abbr: "CHA", description: "Social influence and personal magnetism" },
+  {
+    id: "willpower",
+    name: "Willpower",
+    abbr: "WIL",
+    description: "Mental fortitude and resistance to magic",
+  },
+  {
+    id: "logic",
+    name: "Logic",
+    abbr: "LOG",
+    description: "Problem solving and analytical thinking",
+  },
+  {
+    id: "intuition",
+    name: "Intuition",
+    abbr: "INT",
+    description: "Gut feelings and situational awareness",
+  },
+  {
+    id: "charisma",
+    name: "Charisma",
+    abbr: "CHA",
+    description: "Social influence and personal magnetism",
+  },
 ] as const;
 
 const SPECIAL_ATTR_CONFIG = {
@@ -104,100 +126,6 @@ interface AttributesCardProps {
 }
 
 // =============================================================================
-// TOOLTIP COMPONENT
-// =============================================================================
-
-function Tooltip({ content, children }: { content: string; children: React.ReactNode }) {
-  const [isVisible, setIsVisible] = useState(false);
-
-  return (
-    <div className="relative inline-flex">
-      <div
-        onMouseEnter={() => setIsVisible(true)}
-        onMouseLeave={() => setIsVisible(false)}
-      >
-        {children}
-      </div>
-      {isVisible && (
-        <div className="absolute bottom-full left-1/2 z-50 mb-2 w-48 -translate-x-1/2 rounded-lg bg-zinc-900 px-3 py-2 text-xs text-white shadow-lg dark:bg-zinc-700">
-          {content}
-          <div className="absolute left-1/2 top-full -translate-x-1/2 border-4 border-transparent border-t-zinc-900 dark:border-t-zinc-700" />
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
-// COMPACT BUDGET BAR
-// =============================================================================
-
-function CompactBudgetBar({
-  label,
-  spent,
-  total,
-  source,
-  isOver,
-  karmaRequired,
-}: {
-  label: string;
-  spent: number;
-  total: number;
-  source: string;
-  isOver: boolean;
-  karmaRequired?: number;
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-
-  return (
-    <div
-      className={`rounded-lg border p-2 ${
-        isOver
-          ? "border-amber-200 bg-amber-50 dark:border-amber-800 dark:bg-amber-900/20"
-          : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-      }`}
-    >
-      <div className="flex items-center justify-between text-xs">
-        <span className="font-medium text-zinc-700 dark:text-zinc-300">{label}</span>
-        <span
-          className={`font-bold ${
-            isOver
-              ? "text-amber-600 dark:text-amber-400"
-              : remaining === 0
-                ? "text-emerald-600 dark:text-emerald-400"
-                : "text-zinc-900 dark:text-zinc-100"
-          }`}
-        >
-          {remaining} remaining
-        </span>
-      </div>
-      <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-amber-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-      <div className="mt-1 flex items-center justify-between text-[10px] text-zinc-500 dark:text-zinc-400">
-        <span>{source}</span>
-        {isOver && karmaRequired && (
-          <span className="flex items-center gap-1 text-amber-600 dark:text-amber-400">
-            <AlertTriangle className="h-3 w-3" />
-            {karmaRequired} karma needed
-          </span>
-        )}
-      </div>
-    </div>
-  );
-}
-
-// =============================================================================
 // INLINE ATTRIBUTE ROW
 // =============================================================================
 
@@ -236,11 +164,18 @@ function InlineAttributeRow({
       {/* Name with tooltip */}
       <div className="flex items-center gap-1.5">
         {Icon && <Icon className={`h-3.5 w-3.5 ${iconColor}`} />}
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {name}
-        </span>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{name}</span>
         <Tooltip content={`${name} (${abbr}): ${description}`}>
-          <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
+          <button
+            type="button"
+            aria-label={`Info about ${name}`}
+            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          >
+            <Info
+              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              aria-hidden="true"
+            />
+          </button>
         </Tooltip>
       </div>
 
@@ -250,33 +185,52 @@ function InlineAttributeRow({
           {min}-{max}
         </span>
 
-        <div className="flex items-center gap-1">
+        <div
+          className="flex items-center gap-1"
+          role="group"
+          aria-label={`${name} controls`}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+              e.preventDefault();
+              if (canDecrease) onDecrease();
+            } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+              e.preventDefault();
+              if (canIncrease) onIncrease();
+            }
+          }}
+        >
           <button
             onClick={onDecrease}
             disabled={!canDecrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Decrease ${name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canDecrease
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
 
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+          <div
+            className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             {value}
           </div>
 
           <button
             onClick={onIncrease}
             disabled={!canIncrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Increase ${name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canIncrease
                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
 
@@ -321,11 +275,18 @@ function SpecialAttributeRow({
     <div className="flex items-center justify-between py-1.5">
       <div className="flex items-center gap-1.5">
         <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {config.name}
-        </span>
+        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{config.name}</span>
         <Tooltip content={`${config.name} (${config.abbr}): ${config.description}`}>
-          <Info className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300" />
+          <button
+            type="button"
+            aria-label={`Info about ${config.name}`}
+            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
+          >
+            <Info
+              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+              aria-hidden="true"
+            />
+          </button>
         </Tooltip>
       </div>
 
@@ -334,21 +295,37 @@ function SpecialAttributeRow({
           {min}-{max}
         </span>
 
-        <div className="flex items-center gap-1">
+        <div
+          className="flex items-center gap-1"
+          role="group"
+          aria-label={`${config.name} controls`}
+          onKeyDown={(e) => {
+            if (e.key === "ArrowLeft" || e.key === "ArrowDown") {
+              e.preventDefault();
+              if (canDecrease) onDecrease();
+            } else if (e.key === "ArrowRight" || e.key === "ArrowUp") {
+              e.preventDefault();
+              if (canIncrease) onIncrease();
+            }
+          }}
+        >
           <button
             onClick={onDecrease}
             disabled={!canDecrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Decrease ${config.name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canDecrease
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200 dark:hover:bg-zinc-600"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
 
           <div
             className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${config.bgColor} ${config.textColor}`}
+            aria-live="polite"
+            aria-atomic="true"
           >
             {value}
           </div>
@@ -356,13 +333,14 @@ function SpecialAttributeRow({
           <button
             onClick={onIncrease}
             disabled={!canIncrease}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+            aria-label={`Increase ${config.name}`}
+            className={`flex h-6 w-6 items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 ${
               canIncrease
                 ? `${config.buttonColor} text-white`
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
 
@@ -533,16 +511,24 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
   // Calculate special attribute points spent
   const specialPointsSpent = useMemo(
-    () => availableSpecialAttributes.reduce((sum, attrId) => sum + getSpecialAllocatedPoints(attrId), 0),
+    () =>
+      availableSpecialAttributes.reduce(
+        (sum, attrId) => sum + getSpecialAllocatedPoints(attrId),
+        0
+      ),
     [availableSpecialAttributes, getSpecialAllocatedPoints]
   );
 
   const corePointsRemaining = attributePoints - corePointsSpent;
   const specialPointsRemaining = specialAttributePoints - specialPointsSpent;
   const isCoreOverBudget = corePointsRemaining < 0;
-  const karmaRequired = isCoreOverBudget ? Math.abs(corePointsRemaining) * KARMA_PER_ATTRIBUTE_POINT : 0;
+  const karmaRequired = isCoreOverBudget
+    ? Math.abs(corePointsRemaining) * KARMA_PER_ATTRIBUTE_POINT
+    : 0;
 
   // Handle core attribute change
+  // Phase 4.2: Store coreAttributePointsSpent in selections (not budgets)
+  // The CreationBudgetContext derives attribute-points from selections.coreAttributePointsSpent
   const handleCoreAttributeChange = useCallback(
     (attrId: CoreAttributeId, delta: number) => {
       const limits = getAttributeLimits(attrId);
@@ -553,6 +539,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
       const newAttributes = { ...attributes, [attrId]: newValue };
 
+      // Calculate new spent points
       let newSpent = 0;
       [...PHYSICAL_ATTRIBUTES, ...MENTAL_ATTRIBUTES].forEach((attr) => {
         const val = attr.id === attrId ? newValue : getAttributeValue(attr.id);
@@ -560,19 +547,22 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
         newSpent += val - lim.min;
       });
 
+      // Store both attribute values and spent points in selections
+      // Context derives budget from coreAttributePointsSpent
       updateState({
-        selections: { ...state.selections, attributes: newAttributes },
-        budgets: {
-          ...state.budgets,
-          "attribute-points-spent": newSpent,
-          "attribute-points-total": attributePoints,
+        selections: {
+          ...state.selections,
+          attributes: newAttributes,
+          coreAttributePointsSpent: newSpent,
         },
       });
     },
-    [attributes, getAttributeValue, getAttributeLimits, state.selections, state.budgets, attributePoints, updateState]
+    [attributes, getAttributeValue, getAttributeLimits, state.selections, updateState]
   );
 
   // Handle special attribute change
+  // Phase 4.2: Only update selections, not budgets
+  // The CreationBudgetContext derives special-attribute-points from selections.specialAttributes
   const handleSpecialAttributeChange = useCallback(
     (attrId: SpecialAttributeId, delta: number) => {
       const currentAllocated = getSpecialAllocatedPoints(attrId);
@@ -588,13 +578,9 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
 
       const newSpecialAttributes = { ...specialAttributes, [attrId]: newAllocated };
 
-      const newSpent = availableSpecialAttributes.reduce((sum, id) => {
-        return sum + (id === attrId ? newAllocated : getSpecialAllocatedPoints(id));
-      }, 0);
-
+      // Only update selections - context derives spent from specialAttributes values
       updateState({
         selections: { ...state.selections, specialAttributes: newSpecialAttributes },
-        budgets: { ...state.budgets, "special-attribute-points-spent": newSpent },
       });
     },
     [
@@ -602,9 +588,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
       getSpecialAttributeLimits,
       specialPointsRemaining,
       specialAttributes,
-      availableSpecialAttributes,
       state.selections,
-      state.budgets,
       updateState,
     ]
   );
@@ -642,18 +626,6 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     if (!metatypePriority) return "";
     return "Metatype";
   }, [metatypePriority]);
-
-  // Build description string
-  const descriptionText = useMemo(() => {
-    const parts: string[] = [];
-    if (attributePoints > 0) {
-      parts.push(`${corePointsRemaining} of ${attributePoints} pts`);
-    }
-    if (specialAttributePoints > 0) {
-      parts.push(`${specialPointsRemaining} of ${specialAttributePoints} special`);
-    }
-    return parts.join(" │ ") || "Awaiting priority";
-  }, [attributePoints, corePointsRemaining, specialAttributePoints, specialPointsRemaining]);
 
   // Render core attribute row
   const renderCoreAttribute = (attr: {
@@ -703,12 +675,12 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
     return (
       <CreationCard title="Attributes" description="Awaiting metatype" status="pending">
         <div className="space-y-3">
-          <CompactBudgetBar
+          <BudgetIndicator
             label="Attribute Points"
             spent={0}
             total={attributePoints}
-            source={attributePrioritySource}
-            isOver={false}
+            tooltip={attributePrioritySource}
+            compact
           />
           <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
             <Lock className="h-4 w-4 text-blue-500" />
@@ -722,16 +694,16 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   }
 
   return (
-    <CreationCard title="Attributes" description={descriptionText} status={validationStatus}>
+    <CreationCard title="Attributes" status={validationStatus}>
       <div className="space-y-4">
         {/* Core Attribute Budget */}
-        <CompactBudgetBar
+        <BudgetIndicator
           label="Attribute Points"
           spent={corePointsSpent}
           total={attributePoints}
-          source={attributePrioritySource}
-          isOver={isCoreOverBudget}
-          karmaRequired={karmaRequired}
+          tooltip={attributePrioritySource}
+          karmaRequired={isCoreOverBudget ? karmaRequired : undefined}
+          compact
         />
 
         {/* Physical Attributes */}
@@ -759,12 +731,12 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
           <>
             {/* Special Attribute Budget */}
             {specialAttributePoints > 0 && (
-              <CompactBudgetBar
+              <BudgetIndicator
                 label="Special Attr Points"
                 spent={specialPointsSpent}
                 total={specialAttributePoints}
-                source={specialPrioritySource}
-                isOver={false}
+                tooltip={specialPrioritySource}
+                compact
               />
             )}
 

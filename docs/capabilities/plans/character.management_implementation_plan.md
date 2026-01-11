@@ -49,13 +49,16 @@ The following architectural decisions have been approved:
 #### 1.1 Character State Machine
 
 **Files to Create:**
+
 - `/lib/rules/character/state-machine.ts` - State transition logic
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "The system MUST enforce a controlled lifecycle for every character entity"
 - **Requirement:** "The system MUST track and enforce character status transitions"
 
 **Interface Definition:**
+
 ```typescript
 // /lib/rules/character/state-machine.ts
 
@@ -72,7 +75,7 @@ export const VALID_TRANSITIONS: StateTransition[] = [
   { from: "draft", to: "active", validator: validateCharacterComplete },
   { from: "active", to: "retired" },
   { from: "active", to: "deceased" },
-  { from: "retired", to: "active" },  // GM can reactivate
+  { from: "retired", to: "active" }, // GM can reactivate
   { from: "deceased", to: "active", requiresGMApproval: true }, // Resurrection
 ];
 
@@ -89,6 +92,7 @@ export function executeTransition(
 ```
 
 **Implementation Steps:**
+
 1. Create state machine module with transition definitions
 2. Implement `canTransition()` with validation callbacks
 3. Implement `executeTransition()` with authorization checks
@@ -97,14 +101,17 @@ export function executeTransition(
 #### 1.2 Update API Routes to Use State Machine
 
 **Files to Modify:**
+
 - `/app/api/characters/[characterId]/route.ts`
 - `/app/api/characters/[characterId]/finalize/route.ts`
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Every character transition to an active state MUST satisfy the full set of ruleset-defined validation criteria"
 - **Constraint:** "Character entities MUST NOT be promoted to an active state until all mandatory selections and attributes are finalized"
 
 **Changes:**
+
 ```typescript
 // /app/api/characters/[characterId]/route.ts - PATCH handler
 
@@ -113,11 +120,10 @@ const updated = await updateCharacter(userId, characterId, updates);
 
 // AFTER: Status changes go through state machine
 if (updates.status && updates.status !== existing.status) {
-  const transitionResult = await executeTransition(
-    existing,
-    updates.status,
-    { userId, role: "owner" }
-  );
+  const transitionResult = await executeTransition(existing, updates.status, {
+    userId,
+    role: "owner",
+  });
   if (!transitionResult.success) {
     return NextResponse.json(
       { error: "Invalid state transition", details: transitionResult.errors },
@@ -131,23 +137,20 @@ if (updates.status && updates.status !== existing.status) {
 #### 1.3 Authorization Guard Middleware
 
 **Files to Create:**
+
 - `/lib/auth/character-authorization.ts` - Character-specific authorization
 
 **Requirements Satisfied:**
+
 - **Requirement:** "Access to character modification and deletion operations MUST be restricted to authorized owners"
 - **Requirement:** "Authentication and authorization MUST be verified for every operation"
 
 **Interface Definition:**
+
 ```typescript
 // /lib/auth/character-authorization.ts
 
-export type CharacterPermission =
-  | "view"
-  | "edit"
-  | "delete"
-  | "finalize"
-  | "retire"
-  | "advance";
+export type CharacterPermission = "view" | "edit" | "delete" | "finalize" | "retire" | "advance";
 
 export interface AuthorizationContext {
   userId: ID;
@@ -182,15 +185,18 @@ export function getCharacterPermissions(
 #### 2.1 Character Validation Engine
 
 **Files to Create:**
+
 - `/lib/rules/validation/character-validator.ts` - Comprehensive validation
 - `/lib/rules/validation/types.ts` - Validation types
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Character data MUST remain consistent with the selected game edition and creation method"
 - **Requirement:** "Real-time validation MUST be enforced throughout the creation process"
 - **Constraint:** "Validation failures MUST prevent character finalization"
 
 **Interface Definition:**
+
 ```typescript
 // /lib/rules/validation/character-validator.ts
 
@@ -226,6 +232,7 @@ export function validateGear(character: Character, ruleset: MergedRuleset): Vali
 ```
 
 **Validation Checks:**
+
 1. **Budget Constraints:**
    - Attribute points within priority allocation
    - Skill points within priority allocation
@@ -248,14 +255,17 @@ export function validateGear(character: Character, ruleset: MergedRuleset): Vali
 #### 2.2 Server-Side Validation on Finalization
 
 **Files to Modify:**
+
 - `/app/api/characters/[characterId]/finalize/route.ts`
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "Every character transition to an active state MUST satisfy the full set of ruleset-defined validation criteria"
 - **Constraint:** "Core ruleset integrity MUST NOT be bypassed during the creation or management lifecycle"
 - **Ref: Ruleset Integrity Capability:** "Character creation and advancement MUST be continuously validated against the current combination of active ruleset bundles"
 
 **Current State (Gap):**
+
 ```typescript
 // Current finalize route - INSUFFICIENT VALIDATION
 if (existing.status !== "draft") {
@@ -265,6 +275,7 @@ if (existing.status !== "draft") {
 ```
 
 **Proposed Implementation:**
+
 ```typescript
 // /app/api/characters/[characterId]/finalize/route.ts
 
@@ -284,12 +295,15 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
   });
 
   if (!validationResult.valid) {
-    return NextResponse.json({
-      error: "Character validation failed",
-      errors: validationResult.errors,
-      warnings: validationResult.warnings,
-      completeness: validationResult.completeness,
-    }, { status: 400 });
+    return NextResponse.json(
+      {
+        error: "Character validation failed",
+        errors: validationResult.errors,
+        warnings: validationResult.warnings,
+        completeness: validationResult.completeness,
+      },
+      { status: 400 }
+    );
   }
 
   // State machine transition (draft → active)
@@ -310,14 +324,17 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 #### 2.3 Real-Time Validation API Endpoint
 
 **Files to Create:**
+
 - `/app/api/characters/[characterId]/validate/route.ts`
 
 **Requirements Satisfied:**
+
 - **Requirement:** "Real-time validation MUST be enforced throughout the creation process, providing feedback on budget allocations and rule compliance"
 
 **Purpose:** Allow the CreationWizard to call server-side validation without finalizing, enabling real-time feedback.
 
 **Interface:**
+
 ```typescript
 // POST /api/characters/[characterId]/validate
 // Request body: { character: Partial<Character>, step?: string }
@@ -331,13 +348,16 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 #### 3.1 Enhanced Character Retrieval API
 
 **Files to Modify:**
+
 - `/app/api/characters/route.ts`
 
 **Requirements Satisfied:**
+
 - **Requirement:** "Character entities MUST be discoverable and retrievable through multi-criteria searching, filtering, and sorting"
 - **Requirement:** "Character data MUST be accessible in multiple presentation formats"
 
 **Current State (Gap):**
+
 ```typescript
 // Current - Limited filtering
 const status = searchParams.get("status");
@@ -345,6 +365,7 @@ const edition = searchParams.get("edition");
 ```
 
 **Proposed Query Parameters:**
+
 ```typescript
 interface CharacterQueryParams {
   // Existing
@@ -353,8 +374,8 @@ interface CharacterQueryParams {
   campaignId?: ID;
 
   // New filters
-  search?: string;          // Full-text search (name, metatype, path)
-  metatype?: string;        // Filter by metatype
+  search?: string; // Full-text search (name, metatype, path)
+  metatype?: string; // Filter by metatype
   magicalPath?: MagicalPath; // Filter by magical tradition
 
   // Sorting
@@ -362,8 +383,8 @@ interface CharacterQueryParams {
   sortOrder?: "asc" | "desc";
 
   // Pagination
-  limit?: number;           // Default: 20, Max: 100
-  offset?: number;          // For pagination
+  limit?: number; // Default: 20, Max: 100
+  offset?: number; // For pagination
 
   // Presentation
   format?: "summary" | "full"; // Summary for list, full for details
@@ -371,6 +392,7 @@ interface CharacterQueryParams {
 ```
 
 **Implementation Steps:**
+
 1. Add new query parameter parsing to GET handler
 2. Implement search function in storage layer
 3. Add sorting support with multiple fields
@@ -380,9 +402,11 @@ interface CharacterQueryParams {
 #### 3.2 Storage Layer Search Functions
 
 **Files to Modify:**
+
 - `/lib/storage/characters.ts`
 
 **New Functions:**
+
 ```typescript
 // /lib/storage/characters.ts
 
@@ -427,14 +451,17 @@ export function toCharacterSummary(character: Character): CharacterSummary;
 #### 4.1 Audit Log Implementation
 
 **Files to Create:**
+
 - `/lib/storage/audit.ts` - Audit log management
 - `/lib/types/audit.ts` - Audit type definitions
 
 **Requirements Satisfied:**
+
 - **Guarantee:** "All character state modifications MUST be persistent and recoverable"
 - **Ref: Ruleset Integrity:** "The system MUST maintain a record of which ruleset version and bundles were active at the time of any character state change"
 
 **Interface Definition:**
+
 ```typescript
 // /lib/types/audit.ts
 
@@ -469,6 +496,7 @@ export type AuditAction =
 ```
 
 **Storage Approach (Option A from User Review):**
+
 ```typescript
 // Character entity now includes audit log
 interface Character {
@@ -480,9 +508,11 @@ interface Character {
 #### 4.2 Audit-Aware Operations
 
 **Files to Modify:**
+
 - `/lib/storage/characters.ts`
 
 **Changes:**
+
 ```typescript
 // Wrap existing functions to add audit entries
 
@@ -522,15 +552,16 @@ export async function updateCharacterWithAudit(
 
 #### Unit Tests
 
-| Test File | Coverage Target | Requirements Verified |
-|-----------|-----------------|----------------------|
-| `/lib/rules/character/__tests__/state-machine.test.ts` | All transition paths | Lifecycle Governance |
-| `/lib/rules/validation/__tests__/character-validator.test.ts` | All validation rules | Ruleset-Driven Creation |
-| `/lib/auth/__tests__/character-authorization.test.ts` | All permission scenarios | Authorization |
-| `/lib/storage/__tests__/characters.search.test.ts` | Search/filter/sort | Retrieval & Management |
-| `/lib/storage/__tests__/audit.test.ts` | Audit log operations | Data Integrity |
+| Test File                                                     | Coverage Target          | Requirements Verified   |
+| ------------------------------------------------------------- | ------------------------ | ----------------------- |
+| `/lib/rules/character/__tests__/state-machine.test.ts`        | All transition paths     | Lifecycle Governance    |
+| `/lib/rules/validation/__tests__/character-validator.test.ts` | All validation rules     | Ruleset-Driven Creation |
+| `/lib/auth/__tests__/character-authorization.test.ts`         | All permission scenarios | Authorization           |
+| `/lib/storage/__tests__/characters.search.test.ts`            | Search/filter/sort       | Retrieval & Management  |
+| `/lib/storage/__tests__/audit.test.ts`                        | Audit log operations     | Data Integrity          |
 
 **State Machine Tests:**
+
 ```typescript
 describe("CharacterStateMachine", () => {
   describe("canTransition", () => {
@@ -553,6 +584,7 @@ describe("CharacterStateMachine", () => {
 ```
 
 **Validation Tests:**
+
 ```typescript
 describe("CharacterValidator", () => {
   describe("validateCharacter", () => {
@@ -570,13 +602,14 @@ describe("CharacterValidator", () => {
 
 #### Integration Tests
 
-| Test File | Scenarios | Requirements Verified |
-|-----------|-----------|----------------------|
-| `/app/api/characters/__tests__/finalize.integration.test.ts` | End-to-end finalization flow | Validation + State Machine |
-| `/app/api/characters/__tests__/search.integration.test.ts` | Multi-criteria search | Retrieval |
-| `/app/api/characters/__tests__/authorization.integration.test.ts` | Permission enforcement | Authorization |
+| Test File                                                         | Scenarios                    | Requirements Verified      |
+| ----------------------------------------------------------------- | ---------------------------- | -------------------------- |
+| `/app/api/characters/__tests__/finalize.integration.test.ts`      | End-to-end finalization flow | Validation + State Machine |
+| `/app/api/characters/__tests__/search.integration.test.ts`        | Multi-criteria search        | Retrieval                  |
+| `/app/api/characters/__tests__/authorization.integration.test.ts` | Permission enforcement       | Authorization              |
 
 **Finalization Integration Test:**
+
 ```typescript
 describe("POST /api/characters/[id]/finalize", () => {
   it("rejects incomplete characters with validation errors");
@@ -591,15 +624,16 @@ describe("POST /api/characters/[id]/finalize", () => {
 
 #### E2E Tests (Playwright)
 
-| Test File | User Flow | Requirements Verified |
-|-----------|-----------|----------------------|
-| `/e2e/character-creation-finalization.spec.ts` | Complete creation wizard → finalize | Full lifecycle |
-| `/e2e/character-list-search.spec.ts` | Search, filter, sort characters | Retrieval |
-| `/e2e/character-authorization.spec.ts` | Owner vs non-owner access | Authorization |
+| Test File                                      | User Flow                           | Requirements Verified |
+| ---------------------------------------------- | ----------------------------------- | --------------------- |
+| `/e2e/character-creation-finalization.spec.ts` | Complete creation wizard → finalize | Full lifecycle        |
+| `/e2e/character-list-search.spec.ts`           | Search, filter, sort characters     | Retrieval             |
+| `/e2e/character-authorization.spec.ts`         | Owner vs non-owner access           | Authorization         |
 
 ### Manual Testing Checklist
 
 #### Lifecycle Governance
+
 - [ ] Create character, verify status is "draft"
 - [ ] Attempt to finalize incomplete character, verify rejection with errors
 - [ ] Complete all required fields, finalize successfully
@@ -609,6 +643,7 @@ describe("POST /api/characters/[id]/finalize", () => {
 - [ ] Verify audit log contains all state transitions
 
 #### Ruleset Validation
+
 - [ ] Select qualities that exceed karma limit, verify validation error
 - [ ] Select incompatible qualities, verify validation error
 - [ ] Allocate more attribute points than allowed, verify error
@@ -616,6 +651,7 @@ describe("POST /api/characters/[id]/finalize", () => {
 - [ ] Complete valid character, verify no errors on finalize
 
 #### Search and Retrieval
+
 - [ ] Create 5+ characters with different metatypes/paths
 - [ ] Search by name substring, verify results
 - [ ] Filter by status, verify correct characters shown
@@ -624,6 +660,7 @@ describe("POST /api/characters/[id]/finalize", () => {
 - [ ] Verify pagination works with > 20 characters
 
 #### Authorization
+
 - [ ] Access own characters (should work)
 - [ ] Attempt to access another user's character (should 404)
 - [ ] As GM, view campaign character (should work)
@@ -658,34 +695,37 @@ Phase 4: Data Integrity
 ## Files Summary
 
 ### Files to Create
-| Path | Purpose |
-|------|---------|
-| `/lib/rules/character/state-machine.ts` | Character lifecycle state machine |
-| `/lib/auth/character-authorization.ts` | Character permission management |
-| `/lib/rules/validation/character-validator.ts` | Comprehensive validation engine |
-| `/lib/rules/validation/types.ts` | Validation type definitions |
-| `/lib/types/audit.ts` | Audit log type definitions |
-| `/lib/storage/audit.ts` | Audit log storage functions |
-| `/app/api/characters/[characterId]/validate/route.ts` | Real-time validation endpoint |
+
+| Path                                                  | Purpose                           |
+| ----------------------------------------------------- | --------------------------------- |
+| `/lib/rules/character/state-machine.ts`               | Character lifecycle state machine |
+| `/lib/auth/character-authorization.ts`                | Character permission management   |
+| `/lib/rules/validation/character-validator.ts`        | Comprehensive validation engine   |
+| `/lib/rules/validation/types.ts`                      | Validation type definitions       |
+| `/lib/types/audit.ts`                                 | Audit log type definitions        |
+| `/lib/storage/audit.ts`                               | Audit log storage functions       |
+| `/app/api/characters/[characterId]/validate/route.ts` | Real-time validation endpoint     |
 
 ### Files to Modify
-| Path | Changes |
-|------|---------|
-| `/app/api/characters/[characterId]/route.ts` | Add state machine, authorization |
-| `/app/api/characters/[characterId]/finalize/route.ts` | Add validation, audit |
-| `/app/api/characters/route.ts` | Add search, filter, sort, pagination |
-| `/lib/storage/characters.ts` | Add search functions, audit integration |
-| `/lib/types/character.ts` | Add auditLog field |
+
+| Path                                                  | Changes                                 |
+| ----------------------------------------------------- | --------------------------------------- |
+| `/app/api/characters/[characterId]/route.ts`          | Add state machine, authorization        |
+| `/app/api/characters/[characterId]/finalize/route.ts` | Add validation, audit                   |
+| `/app/api/characters/route.ts`                        | Add search, filter, sort, pagination    |
+| `/lib/storage/characters.ts`                          | Add search functions, audit integration |
+| `/lib/types/character.ts`                             | Add auditLog field                      |
 
 ### Test Files to Create
-| Path | Purpose |
-|------|---------|
-| `/lib/rules/character/__tests__/state-machine.test.ts` | State machine unit tests |
-| `/lib/rules/validation/__tests__/character-validator.test.ts` | Validation unit tests |
-| `/lib/auth/__tests__/character-authorization.test.ts` | Authorization unit tests |
-| `/lib/storage/__tests__/characters.search.test.ts` | Search function tests |
-| `/app/api/characters/__tests__/finalize.integration.test.ts` | Finalization integration |
-| `/e2e/character-lifecycle.spec.ts` | E2E lifecycle tests |
+
+| Path                                                          | Purpose                  |
+| ------------------------------------------------------------- | ------------------------ |
+| `/lib/rules/character/__tests__/state-machine.test.ts`        | State machine unit tests |
+| `/lib/rules/validation/__tests__/character-validator.test.ts` | Validation unit tests    |
+| `/lib/auth/__tests__/character-authorization.test.ts`         | Authorization unit tests |
+| `/lib/storage/__tests__/characters.search.test.ts`            | Search function tests    |
+| `/app/api/characters/__tests__/finalize.integration.test.ts`  | Finalization integration |
+| `/e2e/character-lifecycle.spec.ts`                            | E2E lifecycle tests      |
 
 ---
 

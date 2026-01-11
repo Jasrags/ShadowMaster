@@ -4,12 +4,13 @@
  * WeaponsPanel
  *
  * Card for weapon purchasing in sheet-driven creation.
- * Provides enhanced weapon management with:
- * - Expandable weapon rows with full stats
- * - Split-pane purchase modal
- * - Wireless bonus display
- * - Modification slots (Phase 3)
- * - Ammunition tracking (Phase 4)
+ * Follows the Augmentations pattern with:
+ * - Nuyen budget bar at top
+ * - Category sections (Ranged, Melee, Throwing/Grenades)
+ * - Type badges and icon tags for stats
+ * - Per-category add buttons
+ * - Legality warnings
+ * - Modal-driven weapon selection
  *
  * Shares budget with GearCard via state.budgets["nuyen"]
  */
@@ -21,23 +22,64 @@ import {
   type GearCatalogData,
   type WeaponModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { CreationState, Weapon, InstalledWeaponMod, WeaponMount, PurchasedAmmunitionItem } from "@/lib/types";
+import type {
+  CreationState,
+  Weapon,
+  InstalledWeaponMod,
+  WeaponMount,
+  PurchasedAmmunitionItem,
+} from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
+import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
 import {
-  CreationCard,
-  KarmaConversionModal,
-  useKarmaConversionPrompt,
-  MAX_KARMA_CONVERSION,
-} from "./shared";
-import { WeaponRow, WeaponPurchaseModal, WeaponModificationModal, AmmunitionModal } from "./weapons";
-import { Lock, Plus, Sword } from "lucide-react";
+  WeaponRow,
+  WeaponPurchaseModal,
+  WeaponModificationModal,
+  AmmunitionModal,
+} from "./weapons";
+import {
+  Lock,
+  Plus,
+  Sword,
+  Crosshair,
+  Target,
+  Bomb,
+  AlertTriangle,
+  Info,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const KARMA_TO_NUYEN_RATE = 2000;
+
+// Weapon category configuration
+const WEAPON_CATEGORIES = {
+  ranged: {
+    label: "Ranged Weapons",
+    icon: Crosshair,
+    color: "blue",
+    subcategories: ["pistols", "smgs", "rifles", "shotguns", "sniperRifles"],
+  },
+  melee: {
+    label: "Melee Weapons",
+    icon: Sword,
+    color: "amber",
+    subcategories: ["melee"],
+  },
+  throwing: {
+    label: "Throwing & Grenades",
+    icon: Bomb,
+    color: "red",
+    subcategories: ["throwingWeapons", "grenades"],
+  },
+} as const;
+
+type WeaponCategoryKey = keyof typeof WEAPON_CATEGORIES;
 
 // =============================================================================
 // HELPERS
@@ -68,6 +110,26 @@ function getWeaponsCatalog(catalog: GearCatalogData | null) {
   return catalog.weapons;
 }
 
+// Categorize a weapon based on its subcategory
+function getWeaponCategory(weapon: Weapon): WeaponCategoryKey {
+  const subcategory = weapon.subcategory?.toLowerCase() || weapon.category?.toLowerCase() || "";
+
+  // Check melee categories
+  if (["blade", "club", "exotic-melee", "unarmed", "melee"].includes(subcategory)) {
+    return "melee";
+  }
+
+  // Check throwing/grenades
+  if (
+    ["grenade", "throwing", "throwing-weapon", "grenades", "throwingweapons"].includes(subcategory)
+  ) {
+    return "throwing";
+  }
+
+  // Default to ranged
+  return "ranged";
+}
+
 // =============================================================================
 // TYPES
 // =============================================================================
@@ -78,72 +140,115 @@ interface WeaponsPanelProps {
 }
 
 // =============================================================================
-// BUDGET DISPLAY COMPONENT
+// WEAPON CATEGORY SECTION COMPONENT
 // =============================================================================
 
-function BudgetDisplay({
-  spent,
-  total,
-  remaining,
-  isOver,
-  karmaConversion = 0,
-}: {
-  spent: number;
-  total: number;
-  remaining: number;
-  isOver: boolean;
-  karmaConversion?: number;
-}) {
-  const percentage = Math.min(100, (spent / total) * 100);
-  const isComplete = remaining === 0 && !isOver;
+interface WeaponCategorySectionProps {
+  categoryKey: WeaponCategoryKey;
+  weapons: Weapon[];
+  onAddClick: () => void;
+  onRemove: (id: string) => void;
+  onAddMod: (weaponId: string) => void;
+  onRemoveMod: (weaponId: string, modIndex: number) => void;
+  onAddAmmo: (weaponId: string) => void;
+  onRemoveAmmo: (weaponId: string, ammoIndex: number) => void;
+}
+
+function WeaponCategorySection({
+  categoryKey,
+  weapons,
+  onAddClick,
+  onRemove,
+  onAddMod,
+  onRemoveMod,
+  onAddAmmo,
+  onRemoveAmmo,
+}: WeaponCategorySectionProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+  const category = WEAPON_CATEGORIES[categoryKey];
+  const Icon = category.icon;
+
+  const colorClasses = {
+    blue: {
+      icon: "text-blue-500",
+      badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",
+    },
+    amber: {
+      icon: "text-amber-500",
+      badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
+    },
+    red: {
+      icon: "text-red-500",
+      badge: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
+    },
+  }[category.color];
 
   return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between text-sm">
-        <span className="text-zinc-600 dark:text-zinc-400">Nuyen</span>
-        <span className={`font-medium ${
-          isOver
-            ? "text-red-600 dark:text-red-400"
-            : isComplete
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatCurrency(spent)}¥ spent
-          <span className="text-zinc-400"> • </span>
-          {formatCurrency(Math.max(0, remaining))}¥ left
-        </span>
+    <div>
+      <div className="mb-2 flex items-center justify-between">
+        <button
+          onClick={() => setIsCollapsed(!isCollapsed)}
+          className="flex items-center gap-2 hover:opacity-80"
+        >
+          <div className="text-zinc-400">
+            {isCollapsed ? (
+              <ChevronRight className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronDown className="h-3.5 w-3.5" />
+            )}
+          </div>
+          <Icon className={`h-3.5 w-3.5 ${colorClasses.icon}`} />
+          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            {category.label}
+          </span>
+          {weapons.length > 0 && (
+            <span
+              className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${colorClasses.badge}`}
+            >
+              {weapons.length}
+            </span>
+          )}
+        </button>
+        <button
+          onClick={onAddClick}
+          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+        >
+          <Plus className="h-3 w-3" />
+          Add
+        </button>
       </div>
 
-      {/* Progress bar */}
-      <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : isComplete
-                ? "bg-emerald-500"
-                : "bg-blue-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Note for karma conversion */}
-      {karmaConversion > 0 && (
-        <div className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-          +{formatCurrency(karmaConversion * KARMA_TO_NUYEN_RATE)}¥ from karma
-        </div>
+      {!isCollapsed && (
+        <>
+          {weapons.length > 0 ? (
+            <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
+              {weapons.map((weapon) => (
+                <WeaponRow
+                  key={weapon.id}
+                  weapon={weapon}
+                  onRemove={onRemove}
+                  onAddMod={onAddMod}
+                  onRemoveMod={onRemoveMod}
+                  onAddAmmo={onAddAmmo}
+                  onRemoveAmmo={onRemoveAmmo}
+                />
+              ))}
+            </div>
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No {category.label.toLowerCase()} purchased
+              </p>
+            </div>
+          )}
+        </>
       )}
     </div>
   );
 }
 
 // =============================================================================
-// COMPONENT
+// MAIN COMPONENT
 // =============================================================================
 
 export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
@@ -153,20 +258,34 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
+  const [purchaseCategory, setPurchaseCategory] = useState<WeaponCategoryKey | null>(null);
   const [modifyingWeaponId, setModifyingWeaponId] = useState<string | null>(null);
   const [ammoWeaponId, setAmmoWeaponId] = useState<string | null>(null);
 
   // Get weapons catalog
-  const weaponsCatalog = useMemo(
-    () => getWeaponsCatalog(gearCatalog),
-    [gearCatalog]
-  );
+  const weaponsCatalog = useMemo(() => getWeaponsCatalog(gearCatalog), [gearCatalog]);
 
   // Get selected weapons from state
   const selectedWeapons = useMemo(
     () => (state.selections?.weapons || []) as Weapon[],
     [state.selections?.weapons]
   );
+
+  // Group weapons by category
+  const weaponsByCategory = useMemo(() => {
+    const grouped: Record<WeaponCategoryKey, Weapon[]> = {
+      ranged: [],
+      melee: [],
+      throwing: [],
+    };
+
+    for (const weapon of selectedWeapons) {
+      const category = getWeaponCategory(weapon);
+      grouped[category].push(weapon);
+    }
+
+    return grouped;
+  }, [selectedWeapons]);
 
   // Calculate budget (shared with GearCard)
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -175,16 +294,29 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const totalNuyen = baseNuyen + convertedNuyen;
 
   // Calculate total spent across all gear categories
-  const selectedGear = (state.selections?.gear || []) as Array<{ cost: number; quantity: number }>;
-  const selectedArmor = (state.selections?.armor || []) as Array<{ cost: number; quantity: number }>;
-  const selectedFoci = (state.selections?.foci || []) as Array<{ cost: number }>;
-  const selectedCyberware = (state.selections?.cyberware || []) as Array<{ cost: number }>;
-  const selectedBioware = (state.selections?.bioware || []) as Array<{ cost: number }>;
+  const selectedGear = (state.selections?.gear || []) as Array<{
+    cost: number;
+    quantity: number;
+  }>;
+  const selectedArmor = (state.selections?.armor || []) as Array<{
+    cost: number;
+    quantity: number;
+  }>;
+  const selectedFoci = (state.selections?.foci || []) as Array<{
+    cost: number;
+  }>;
+  const selectedCyberware = (state.selections?.cyberware || []) as Array<{
+    cost: number;
+  }>;
+  const selectedBioware = (state.selections?.bioware || []) as Array<{
+    cost: number;
+  }>;
 
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
-    const ammoCost = w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
+    const ammoCost =
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => sum + a.cost * a.quantity, 0);
@@ -194,10 +326,55 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     selectedCyberware.reduce((s, i) => s + i.cost, 0) +
     selectedBioware.reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
+  const vehiclesSpent =
+    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    ) +
+    ((state.selections?.drones as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    );
 
-  const totalSpent = weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+  const totalSpent =
+    weaponsSpent +
+    armorSpent +
+    gearSpent +
+    fociSpent +
+    augmentationSpent +
+    lifestyleSpent +
+    vehiclesSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
+
+  // Calculate legality warnings
+  const legalityWarnings = useMemo(() => {
+    const restricted: Weapon[] = [];
+    const forbidden: Weapon[] = [];
+
+    for (const weapon of selectedWeapons) {
+      // Check weapon legality
+      const legality = (weapon as Weapon & { legality?: string }).legality;
+      if (legality === "restricted") {
+        restricted.push(weapon);
+      } else if (legality === "forbidden") {
+        forbidden.push(weapon);
+      }
+
+      // Check mod legality
+      for (const mod of weapon.modifications || []) {
+        if (mod.legality === "restricted" && !restricted.includes(weapon)) {
+          restricted.push(weapon);
+        } else if (mod.legality === "forbidden" && !forbidden.includes(weapon)) {
+          forbidden.push(weapon);
+        }
+      }
+    }
+
+    return { restricted, forbidden };
+  }, [selectedWeapons]);
 
   // Karma conversion hook
   const karmaRemaining = karmaBudget?.remaining ?? 0;
@@ -220,6 +397,12 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
   });
+
+  // Open purchase modal for a specific category
+  const openPurchaseModal = useCallback((category: WeaponCategoryKey) => {
+    setPurchaseCategory(category);
+    setIsPurchaseModalOpen(true);
+  }, []);
 
   // Add weapon (actual implementation - called after affordability check)
   const actuallyAddWeapon = useCallback(
@@ -252,6 +435,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
       // Close modal after purchase
       setIsPurchaseModalOpen(false);
+      setPurchaseCategory(null);
     },
     [selectedWeapons, state.selections, updateState]
   );
@@ -324,7 +508,8 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       // Calculate availability
       let availability = mod.availability || 0;
       if (rating && mod.ratingSpec?.availabilityScaling?.perRating) {
-        availability = (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
+        availability =
+          (mod.ratingSpec.availabilityScaling.baseValue || mod.availability || 0) * rating;
       }
 
       // Create installed mod
@@ -580,9 +765,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -591,80 +774,127 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
   return (
     <>
-      <CreationCard
-        title="Weapons"
-        description={`${selectedWeapons.length} weapon${selectedWeapons.length !== 1 ? "s" : ""}`}
-        status={validationStatus}
-        headerAction={
-          <button
-            onClick={() => setIsPurchaseModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-          >
-            <Plus className="h-3.5 w-3.5" />
-            Weapon
-          </button>
-        }
-      >
+      <CreationCard title="Weapons" status={validationStatus}>
         <div className="space-y-4">
-          {/* Budget Display */}
-          <BudgetDisplay
-            spent={weaponsSpent}
-            total={totalNuyen}
-            remaining={remaining}
-            isOver={isOverBudget}
-            karmaConversion={karmaConversion}
-          />
-
-          {/* Weapon List */}
-          {selectedWeapons.length > 0 ? (
-            <div className="space-y-2">
-              {selectedWeapons.map((weapon) => (
-                <WeaponRow
-                  key={weapon.id}
-                  weapon={weapon}
-                  onRemove={removeWeapon}
-                  onAddMod={handleAddMod}
-                  onRemoveMod={handleRemoveMod}
-                  onAddAmmo={handleAddAmmo}
-                  onRemoveAmmo={handleRemoveAmmo}
-                />
-              ))}
-            </div>
-          ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
-              <Sword className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">
-                No weapons purchased
-              </p>
-              <button
-                onClick={() => setIsPurchaseModalOpen(true)}
-                className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"
-              >
-                <Plus className="h-4 w-4" />
-                Add your first weapon
-              </button>
-            </div>
-          )}
-
-          {/* Weapon Spent Summary */}
-          {selectedWeapons.length > 0 && (
-            <div className="flex items-center justify-between text-sm text-zinc-500 dark:text-zinc-400 pt-2 border-t border-zinc-100 dark:border-zinc-800">
-              <span>Total spent on weapons</span>
+          {/* Nuyen Budget Bar */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                <span>Nuyen</span>
+                <span className="group relative">
+                  <Info className="h-3 w-3 cursor-help text-zinc-400" />
+                  <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                    Total nuyen spent on all gear
+                  </span>
+                </span>
+                {karmaConversion > 0 && (
+                  <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                    (+{(karmaConversion * KARMA_TO_NUYEN_RATE).toLocaleString()}¥ karma)
+                  </span>
+                )}
+              </span>
               <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(weaponsSpent)}¥
+                {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
               </span>
             </div>
+            <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+              <div
+                className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
+                style={{
+                  width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%`,
+                }}
+              />
+            </div>
+          </div>
+
+          {/* Legality Warnings */}
+          {(legalityWarnings.restricted.length > 0 || legalityWarnings.forbidden.length > 0) && (
+            <div className="space-y-2">
+              {legalityWarnings.forbidden.length > 0 && (
+                <div className="flex items-start gap-2 rounded-lg bg-red-50 p-2 dark:bg-red-900/20">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
+                  <div className="text-xs">
+                    <span className="font-medium text-red-700 dark:text-red-300">
+                      {legalityWarnings.forbidden.length} forbidden item
+                      {legalityWarnings.forbidden.length !== 1 ? "s" : ""}
+                    </span>
+                    <span className="text-red-600 dark:text-red-400"> - illegal to possess</span>
+                  </div>
+                </div>
+              )}
+              {legalityWarnings.restricted.length > 0 && (
+                <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-2 dark:bg-amber-900/20">
+                  <AlertTriangle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
+                  <div className="text-xs">
+                    <span className="font-medium text-amber-700 dark:text-amber-300">
+                      {legalityWarnings.restricted.length} restricted item
+                      {legalityWarnings.restricted.length !== 1 ? "s" : ""}
+                    </span>
+                    <span className="text-amber-600 dark:text-amber-400"> - requires license</span>
+                  </div>
+                </div>
+              )}
+            </div>
           )}
+
+          {/* Weapon Category Sections */}
+          <WeaponCategorySection
+            categoryKey="ranged"
+            weapons={weaponsByCategory.ranged}
+            onAddClick={() => openPurchaseModal("ranged")}
+            onRemove={removeWeapon}
+            onAddMod={handleAddMod}
+            onRemoveMod={handleRemoveMod}
+            onAddAmmo={handleAddAmmo}
+            onRemoveAmmo={handleRemoveAmmo}
+          />
+
+          <WeaponCategorySection
+            categoryKey="melee"
+            weapons={weaponsByCategory.melee}
+            onAddClick={() => openPurchaseModal("melee")}
+            onRemove={removeWeapon}
+            onAddMod={handleAddMod}
+            onRemoveMod={handleRemoveMod}
+            onAddAmmo={handleAddAmmo}
+            onRemoveAmmo={handleRemoveAmmo}
+          />
+
+          <WeaponCategorySection
+            categoryKey="throwing"
+            weapons={weaponsByCategory.throwing}
+            onAddClick={() => openPurchaseModal("throwing")}
+            onRemove={removeWeapon}
+            onAddMod={handleAddMod}
+            onRemoveMod={handleRemoveMod}
+            onAddAmmo={handleAddAmmo}
+            onRemoveAmmo={handleRemoveAmmo}
+          />
+
+          {/* Footer Summary */}
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedWeapons.length} item
+              {selectedWeapons.length !== 1 ? "s" : ""}
+            </span>
+            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(weaponsSpent)}¥
+            </span>
+          </div>
         </div>
       </CreationCard>
 
       {/* Purchase Modal */}
       <WeaponPurchaseModal
         isOpen={isPurchaseModalOpen}
-        onClose={() => setIsPurchaseModalOpen(false)}
+        onClose={() => {
+          setIsPurchaseModalOpen(false);
+          setPurchaseCategory(null);
+        }}
         weapons={weaponsCatalog}
         remaining={remaining}
         onPurchase={addWeapon}
+        initialCategory={purchaseCategory}
       />
 
       {/* Modification Modal */}

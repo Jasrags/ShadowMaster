@@ -12,16 +12,7 @@
 
 import React, { useState, useMemo } from "react";
 import { Button, Dialog, DialogTrigger, Modal, ModalOverlay, Heading } from "react-aria-components";
-import {
-  Target,
-  X,
-  Shield,
-  Heart,
-  AlertTriangle,
-  User,
-  Bot,
-  Skull,
-} from "lucide-react";
+import { Target, X, Shield, Heart, AlertTriangle, User, Bot, Skull } from "lucide-react";
 import { useCombatSession } from "@/lib/combat";
 import type { CombatParticipant } from "@/lib/types";
 import type { Theme } from "@/lib/themes";
@@ -95,19 +86,22 @@ function TargetCard({ participant, isSelected, onSelect, theme }: TargetCardProp
       isDisabled={isDefeated}
       className={`
         w-full flex items-center gap-3 p-3 rounded border transition-all
-        ${isSelected
-          ? "border-amber-500 bg-amber-500/20 text-amber-500"
-          : isDefeated
-            ? "border-red-500/30 bg-red-500/10 opacity-50 cursor-not-allowed"
-            : `${theme.components.card.wrapper} ${theme.components.card.border} ${theme.components.card.hover}`
+        ${
+          isSelected
+            ? "border-amber-500 bg-amber-500/20 text-amber-500"
+            : isDefeated
+              ? "border-red-500/30 bg-red-500/10 opacity-50 cursor-not-allowed"
+              : `${theme.components.card.wrapper} ${theme.components.card.border} ${theme.components.card.hover}`
         }
       `}
     >
       {/* Participant Icon */}
-      <div className={`
+      <div
+        className={`
         w-8 h-8 rounded-full flex items-center justify-center
         ${isSelected ? "bg-amber-500/30" : "bg-muted"}
-      `}>
+      `}
+      >
         {getParticipantIcon(participant.type)}
       </div>
 
@@ -118,16 +112,16 @@ function TargetCard({ participant, isSelected, onSelect, theme }: TargetCardProp
             {participant.name}
           </span>
           {participant.isGMControlled && (
-            <span className={`text-[9px] px-1 py-0.5 rounded ${theme.fonts.mono} bg-muted text-muted-foreground`}>
+            <span
+              className={`text-[9px] px-1 py-0.5 rounded ${theme.fonts.mono} bg-muted text-muted-foreground`}
+            >
               GM
             </span>
           )}
         </div>
         <div className="flex items-center gap-3 text-xs text-muted-foreground mt-0.5">
           <span className="capitalize">{participant.type}</span>
-          <span className={getStatusColor(participant.status)}>
-            {participant.status}
-          </span>
+          <span className={getStatusColor(participant.status)}>{participant.status}</span>
           {participant.woundModifier !== 0 && (
             <span className="text-red-400 flex items-center gap-0.5">
               <Heart className="w-3 h-3" />
@@ -140,7 +134,9 @@ function TargetCard({ participant, isSelected, onSelect, theme }: TargetCardProp
       {/* Initiative Score */}
       <div className="text-right">
         <div className={`text-xs ${theme.fonts.mono} ${theme.colors.muted}`}>Init</div>
-        <div className={`font-bold ${theme.fonts.mono} ${isSelected ? "text-amber-500" : theme.colors.accent}`}>
+        <div
+          className={`font-bold ${theme.fonts.mono} ${isSelected ? "text-amber-500" : theme.colors.accent}`}
+        >
           {participant.initiativeScore}
         </div>
       </div>
@@ -196,7 +192,9 @@ export function TargetSelector({
   // If not in combat, show disabled state
   if (!session || !participant) {
     return (
-      <div className={`p-3 rounded border ${theme.components.card.wrapper} ${theme.components.card.border}`}>
+      <div
+        className={`p-3 rounded border ${theme.components.card.wrapper} ${theme.components.card.border}`}
+      >
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Target className="w-4 h-4" />
           <span>Start combat to select targets</span>
@@ -208,7 +206,9 @@ export function TargetSelector({
   // No valid targets
   if (validTargets.length === 0) {
     return (
-      <div className={`p-3 rounded border ${theme.components.card.wrapper} ${theme.components.card.border}`}>
+      <div
+        className={`p-3 rounded border ${theme.components.card.wrapper} ${theme.components.card.border}`}
+      >
         <div className="flex items-center gap-2 text-sm text-muted-foreground">
           <Target className="w-4 h-4" />
           <span>No targets available</span>
@@ -248,9 +248,10 @@ export function TargetSelector({
       <Button
         className={`
           w-full flex items-center justify-between gap-2 p-3 rounded border
-          ${selectedTarget
-            ? "border-amber-500/50 bg-amber-500/10"
-            : `${theme.components.card.wrapper} ${theme.components.card.border}`
+          ${
+            selectedTarget
+              ? "border-amber-500/50 bg-amber-500/10"
+              : `${theme.components.card.wrapper} ${theme.components.card.border}`
           }
           ${theme.components.card.hover}
           transition-colors
@@ -273,22 +274,24 @@ export function TargetSelector({
         isDismissable
         className={({ isEntering, isExiting }) => `
           fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm
-          ${isEntering ? 'animate-in fade-in duration-300' : ''}
-          ${isExiting ? 'animate-out fade-out duration-200' : ''}
+          ${isEntering ? "animate-in fade-in duration-300" : ""}
+          ${isExiting ? "animate-out fade-out duration-200" : ""}
         `}
       >
         <Modal
           className={({ isEntering, isExiting }) => `
             w-full max-w-md overflow-hidden rounded-xl border border-border bg-background shadow-2xl
-            ${isEntering ? 'animate-in zoom-in-95 duration-300' : ''}
-            ${isExiting ? 'animate-out zoom-out-95 duration-200' : ''}
+            ${isEntering ? "animate-in zoom-in-95 duration-300" : ""}
+            ${isExiting ? "animate-out zoom-out-95 duration-200" : ""}
           `}
         >
           <Dialog className="outline-none">
             {({ close }) => (
               <div className="flex flex-col max-h-[80vh]">
                 {/* Header */}
-                <div className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}>
+                <div
+                  className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}
+                >
                   <div className="flex items-center gap-2">
                     <Target className={`w-5 h-5 ${theme.colors.accent}`} />
                     <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>

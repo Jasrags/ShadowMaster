@@ -40,10 +40,7 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -51,10 +48,7 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Parse request body
@@ -68,9 +62,7 @@ export async function POST(
     const mode: ValidationMode = body.mode || "creation";
 
     // Merge updates if provided (for validating pending changes)
-    const characterToValidate = body.updates
-      ? { ...character, ...body.updates }
-      : character;
+    const characterToValidate = body.updates ? { ...character, ...body.updates } : character;
 
     // Load ruleset
     const rulesetResult = await loadAndMergeRuleset(character.editionCode);
@@ -95,9 +87,7 @@ export async function POST(
     }
 
     // Get creation state from character metadata
-    const creationState = characterToValidate.metadata?.creationState as
-      | CreationState
-      | undefined;
+    const creationState = characterToValidate.metadata?.creationState as CreationState | undefined;
 
     // Load campaign if character is in one
     let campaign: Campaign | undefined;

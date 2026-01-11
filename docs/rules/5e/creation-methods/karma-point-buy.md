@@ -21,6 +21,7 @@ Once you have purchased your metatype, set your attributes at the minimum levels
 **Starting Budget:** Characters start with **800 Karma** to allocate.
 
 **Key Constraints:**
+
 - Must purchase a metatype from the **Metatype Cost Table**.
 - Attributes begin at racial minimums; Karma is used to improve them just like post-creation advancement.
 - Magic/Resonance capacities require buying specific qualities (Adept, Aspected Magician, Magician, Mystic Adept, Technomancer).
@@ -32,13 +33,13 @@ Once you have purchased your metatype, set your attributes at the minimum levels
 
 ## Metatype Cost Table
 
-| Metatype | Cost |
-|----------|------|
-| Human | 0 Karma |
-| Dwarf | 50 Karma |
-| Elf | 40 Karma |
-| Ork | 50 Karma |
-| Troll | 90 Karma |
+| Metatype | Cost     |
+| -------- | -------- |
+| Human    | 0 Karma  |
+| Dwarf    | 50 Karma |
+| Elf      | 40 Karma |
+| Ork      | 50 Karma |
+| Troll    | 90 Karma |
 
 ---
 
@@ -47,18 +48,23 @@ Once you have purchased your metatype, set your attributes at the minimum levels
 The things that must be taken in consideration are the following: First, as with the Priority System, characters at creation may only have 1 Mental or Physical attribute at their natural maximum (the special attributes—Edge, Magic, and Resonance—do not fall under this limit). Second, if characters want to use Magic or the Resonance, they must buy one of the additional qualities below:
 
 ### Adept (20 Karma)
+
 This makes a character an adept, able to channel mana into physical abilities. They get a Magic Rating of 1 and can buy more ranks with Karma. As with customary character creation, the character gets free power points equal to their Magic Rating. For more information on adepts, see p. 69, SR5.
 
 ### Aspected Magician (15 Karma)
+
 Selecting this quality allows a character to be an aspected magician, meaning they are skilled in one particular area of magic—Sorcery, Conjuring, or Enchanting. They get a Magic Rating of 1 and can buy more ranks with Karma. For more information on the abilities and limitations of aspected magicians, see p. 69, SR5.
 
 ### Magician (30 Karma)
+
 This makes the character a magic-user, able to cast spells, conjure spirits, and use other magical abilities. They get a Magic Rating of 1 and can buy more ranks with Karma. For more information on magicians and what they can do, see p. 69, SR5.
 
 ### Mystic Adept (35 Karma)
+
 This makes the character a mystic adept, a hybrid of magician and adept who can cast spells while also gaining some of the physical abilities of an adept. They get a Magic Rating of 1 and can buy more ranks with Karma. They do not gain free power points; instead, they need to buy power points at a cost of 5 Karma per power point (to a maximum number equal to their Magic Rating).
 
 ### Technomancer (15 Karma)
+
 With this quality, a character becomes a technomancer. They gain the Resonance attribute at a level of 1 and can buy more ranks with Karma. For more information on technomancers, see the Life as a Technomancer in 2075 sidebar on p. 69, SR5, as well as game rules starting on p. 249, SR5.
 
 ---
@@ -72,6 +78,7 @@ Note that leftover Karma from the point-buy process cannot be carried over from 
 ## Implementation Specification
 
 ### Availability
+
 Campaigns with `edition="sr5"` and `creation_method="karma"` (name aligns with book's "Point Buy").
 
 ### Data Requirements

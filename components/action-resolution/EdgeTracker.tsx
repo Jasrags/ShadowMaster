@@ -140,9 +140,7 @@ export function EdgeTracker({
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Zap className={`${s.icon} text-rose-500 dark:text-rose-400`} />
-          <span className={`font-mono text-muted-foreground uppercase ${s.text}`}>
-            Edge
-          </span>
+          <span className={`font-mono text-muted-foreground uppercase ${s.text}`}>Edge</span>
         </div>
         <span className={`font-mono font-bold text-rose-500 dark:text-rose-400 ${s.text}`}>
           {current} / {maximum}

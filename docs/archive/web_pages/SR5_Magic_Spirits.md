@@ -1,11 +1,11 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Spellcasting** | **Preparations** | **Adepts** | **Spirits** | **Traditions** | **Initiation** | **Dark Magic** |
 
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 Spirits are naturally astral forms, much like you’re naturally a physical form. A spirit exists entirely in astral space, with astral attributes equal to its Force. A spirit can manifest (p. 314), use astral travel (p. 313), and get blocked by mana barriers (p. 315), just like any other astral form. Its appearance strongly reflects its type and the tradition of the magician who summoned it. A hermetic fire spirit might look like a traditional fire elemental, while a shaman’s spirit of air might appear as an eagle or a butterfly.
 
@@ -112,38 +112,38 @@ The services a spirit can perform are based on whether or not it’s bound to yo
 
 **SPIRIT SERVICES TABLE**
 
-| UNBOUND SPIRIT Services | BOUND SPIRIT SERVICES |
-| --- | --- |
-| Combat | Any Unbound Spirit Service |
-| Power Use | Aid Alchemy |
-| Physical Task | Aid Sorcery |
-| Remote Service | Spell Binding |
-|  | Spell Sustaining |
+| UNBOUND SPIRIT Services | BOUND SPIRIT SERVICES      |
+| ----------------------- | -------------------------- |
+| Combat                  | Any Unbound Spirit Service |
+| Power Use               | Aid Alchemy                |
+| Physical Task           | Aid Sorcery                |
+| Remote Service          | Spell Binding              |
+|                         | Spell Sustaining           |
 
 ### UNBOUND SPIRIT SERVICES
 
 Combat
-:   You can have a spirit fight on your side in combat. The entire fight counts as a single service.Power use: You can have a spirit use one of its powers on a target or targets of your choosing. If the power is sustained, it counts as one service no matter how long it’s sustained. If the spirit uses a power as part of another task (often in combat), then the power use doesn’t count as a separate service.
+: You can have a spirit fight on your side in combat. The entire fight counts as a single service.Power use: You can have a spirit use one of its powers on a target or targets of your choosing. If the power is sustained, it counts as one service no matter how long it’s sustained. If the spirit uses a power as part of another task (often in combat), then the power use doesn’t count as a separate service.
 
 Physical task
-:   A spirit can materialize to perform actions on the physical plane for you.
+: A spirit can materialize to perform actions on the physical plane for you.
 
 Remote service
-:   If you send a spirit to complete a service beyond your Magic rating x 100 meters, it’s a remote service. Once the spirit is done with a remote service, it is released and goes to its home metaplane, no matter how many services it still owes you.
+: If you send a spirit to complete a service beyond your Magic rating x 100 meters, it’s a remote service. Once the spirit is done with a remote service, it is released and goes to its home metaplane, no matter how many services it still owes you.
 
 ### BOUND SPIRIT SERVICES
 
 Unbound spirit service
-:   You can have a bound spirit do any of the things an unbound spirit can do for you. If you have a bound spirit perform a remote service, you don’t lose any extra services when it’s done, and it comes back to you when it’s finished.
+: You can have a bound spirit do any of the things an unbound spirit can do for you. If you have a bound spirit perform a remote service, you don’t lose any extra services when it’s done, and it comes back to you when it’s finished.
 
 Aid Alchemy, Sorcery, and Study
-:   As a service, the spirit can add its Force as a dice pool bonus to your Alchemy, Spellcasting, Ritual Spellcasting (for spell rituals), and Learning Tests if its type matches the spell’s category, as listed under your tradition (p. 279).
+: As a service, the spirit can add its Force as a dice pool bonus to your Alchemy, Spellcasting, Ritual Spellcasting (for spell rituals), and Learning Tests if its type matches the spell’s category, as listed under your tradition (p. 279).
 
 Spell sustaining
-:   You can have a spirit sustain a spell for you after you cast it. It takes the –2 dice pool penalty per sustained spell, instead of you. It can’t do this forever—only for its Force in Combat Turns for each service you spend on spell sustaining.
+: You can have a spirit sustain a spell for you after you cast it. It takes the –2 dice pool penalty per sustained spell, instead of you. It can’t do this forever—only for its Force in Combat Turns for each service you spend on spell sustaining.
 
 Spell binding
-:   This is like spell sustaining, but for a lot longer, at the cost of the spirit’s own Force. The spell you hand off is sustained indefinitely, but the spirit’s Force is irrevocably reduced by 1 each day (or part thereof) of spell binding. If the spirit’s Force is reduced to 0 this way it dissipates forever. This is very painful for spirits and
+: This is like spell sustaining, but for a lot longer, at the cost of the spirit’s own Force. The spell you hand off is sustained indefinitely, but the spirit’s Force is irrevocably reduced by 1 each day (or part thereof) of spell binding. If the spirit’s Force is reduced to 0 this way it dissipates forever. This is very painful for spirits and
 
 generally considered to be abusive—if you use this don’t forget that word gets around in the spirit world.
 

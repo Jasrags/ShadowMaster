@@ -102,9 +102,7 @@ export function canStillUseMagic(character: Partial<Character>): boolean {
  * @param tradition - The tradition to validate against
  * @returns True if essence supports the tradition
  */
-export function validateEssenceForTradition(
-  character: Partial<Character>
-): boolean {
+export function validateEssenceForTradition(character: Partial<Character>): boolean {
   const currentEssence = character.specialAttributes?.essence ?? DEFAULT_MAX_ESSENCE;
 
   // Standard rule: essence must be > 0
@@ -292,10 +290,7 @@ function getBaseMagicRating(character: Partial<Character>): number {
 /**
  * Calculate Magic loss based on essence lost
  */
-function calculateMagicLoss(
-  essenceLost: number,
-  editionRules?: AugmentationRulesData
-): number {
+function calculateMagicLoss(essenceLost: number, editionRules?: AugmentationRulesData): number {
   const formula = editionRules?.magicReductionFormula ?? DEFAULT_REDUCTION_FORMULA;
 
   switch (formula) {

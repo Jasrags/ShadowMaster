@@ -76,9 +76,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
     if (!searchQuery.trim()) return complexFormsCatalog;
     const search = searchQuery.toLowerCase();
     return complexFormsCatalog.filter(
-      (f) =>
-        f.name.toLowerCase().includes(search) ||
-        f.description?.toLowerCase().includes(search)
+      (f) => f.name.toLowerCase().includes(search) || f.description?.toLowerCase().includes(search)
     );
   }, [complexFormsCatalog, searchQuery]);
 
@@ -175,9 +173,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
       <CreationCard title="Complex Forms" description="Technomancer only" status="pending">
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
           <Lock className="h-5 w-5 text-zinc-400" />
-          <p className="text-sm text-zinc-500 dark:text-zinc-400">
-            Select Technomancer path first
-          </p>
+          <p className="text-sm text-zinc-500 dark:text-zinc-400">Select Technomancer path first</p>
         </div>
       </CreationCard>
     );
@@ -259,8 +255,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
           {filteredForms.map((form) => {
             const isSelected = selectedForms.includes(form.id);
             const willBeFree = selectedForms.length < freeForms;
-            const canSelect =
-              isSelected || willBeFree || karmaRemaining >= COMPLEX_FORM_KARMA_COST;
+            const canSelect = isSelected || willBeFree || karmaRemaining >= COMPLEX_FORM_KARMA_COST;
 
             return (
               <button
@@ -271,8 +266,8 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
                   isSelected
                     ? "bg-cyan-50 ring-1 ring-cyan-300 dark:bg-cyan-900/30 dark:ring-cyan-700"
                     : canSelect
-                    ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                    : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
+                      ? "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
+                      : "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
                 }`}
               >
                 <div className="flex items-center gap-2">
@@ -286,9 +281,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
                     {isSelected && <Check className="h-3 w-3" />}
                   </div>
                   <div>
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">
-                      {form.name}
-                    </span>
+                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{form.name}</span>
                     <div className="flex gap-2 text-[10px] text-zinc-500 dark:text-zinc-400">
                       <span>Target: {form.target}</span>
                       <span>•</span>
@@ -296,9 +289,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
                     </div>
                   </div>
                 </div>
-                <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                  {form.fading}
-                </span>
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">{form.fading}</span>
               </button>
             );
           })}

@@ -73,10 +73,7 @@ export function KarmaConversionModal({
 
   // Calculate if conversion is possible
   const canConvert =
-    karmaToConvert > 0 &&
-    karmaToConvert <= karmaAvailable &&
-    !wouldExceedMax &&
-    !isAtMaxConversion;
+    karmaToConvert > 0 && karmaToConvert <= karmaAvailable && !wouldExceedMax && !isAtMaxConversion;
 
   return (
     <ModalOverlay
@@ -113,9 +110,7 @@ export function KarmaConversionModal({
                     You don&apos;t have enough nuyen to purchase:
                   </p>
                   <div className="mt-2 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800">
-                    <div className="font-medium text-zinc-900 dark:text-zinc-100">
-                      {itemName}
-                    </div>
+                    <div className="font-medium text-zinc-900 dark:text-zinc-100">{itemName}</div>
                     <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
                       Cost: {formatCurrency(itemCost)}¥
                     </div>
@@ -125,17 +120,13 @@ export function KarmaConversionModal({
                 {/* Balance info */}
                 <div className="space-y-1 text-sm">
                   <div className="flex justify-between">
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      Current Balance:
-                    </span>
+                    <span className="text-zinc-600 dark:text-zinc-400">Current Balance:</span>
                     <span className="font-medium text-zinc-900 dark:text-zinc-100">
                       {formatCurrency(currentRemaining)}¥
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      Shortfall:
-                    </span>
+                    <span className="text-zinc-600 dark:text-zinc-400">Shortfall:</span>
                     <span className="font-medium text-red-600 dark:text-red-400">
                       {formatCurrency(shortfall)}¥
                     </span>
@@ -149,18 +140,17 @@ export function KarmaConversionModal({
                 {canConvert ? (
                   <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
                     <div className="flex items-center gap-2 text-amber-800 dark:text-amber-200">
-                      <span className="font-medium">
-                        Convert {karmaToConvert} karma
-                      </span>
+                      <span className="font-medium">Convert {karmaToConvert} karma</span>
                       <ArrowRight className="h-4 w-4" />
-                      <span className="font-medium">
-                        {formatCurrency(nuyenGained)}¥
-                      </span>
+                      <span className="font-medium">{formatCurrency(nuyenGained)}¥</span>
                     </div>
                     <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
                       {karmaAfterConversion} karma remaining after conversion
                       {currentKarmaConversion > 0 && (
-                        <> ({newTotalConversion}/{maxKarmaConversion} total converted)</>
+                        <>
+                          {" "}
+                          ({newTotalConversion}/{maxKarmaConversion} total converted)
+                        </>
                       )}
                     </p>
                   </div>

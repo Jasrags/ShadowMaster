@@ -34,23 +34,23 @@ Decisions made during design exploration:
 
 ### Priority Component
 
-| Question | Decision |
-|----------|----------|
-| Where does this component live? | Top left, first component on the sheet |
-| What triggers when priority changes? | Validation warnings shown; overspent points convert to karma per creation rules |
+| Question                                              | Decision                                                                          |
+| ----------------------------------------------------- | --------------------------------------------------------------------------------- |
+| Where does this component live?                       | Top left, first component on the sheet                                            |
+| What triggers when priority changes?                  | Validation warnings shown; overspent points convert to karma per creation rules   |
 | How to handle invalid metatype after priority change? | Validation error explaining required priority (e.g., "Dwarf requires Priority C") |
-| Default vs. blank state? | Default A-B-C-D-E order, but no metatype or magic/resonance selection made |
-| Show priority impact downstream? | Yes, e.g., "20 points (from Priority B)" in Attributes section |
+| Default vs. blank state?                              | Default A-B-C-D-E order, but no metatype or magic/resonance selection made        |
+| Show priority impact downstream?                      | Yes, e.g., "20 points (from Priority B)" in Attributes section                    |
 
 ### Interaction Patterns
 
-| Pattern | Decision |
-|---------|----------|
-| Priority changes | Not destructive - user can change back quickly |
-| Drag preview | No budget preview while dragging; just trigger validation on drop |
-| Undo support | Not needed - changes aren't destructive |
-| Complex selections (metatype, magic path) | Modals preferred over dropdowns for better detail |
-| Purchase components (spells, skills, gear) | Header + "Add" button that opens modal with valid options |
+| Pattern                                    | Decision                                                          |
+| ------------------------------------------ | ----------------------------------------------------------------- |
+| Priority changes                           | Not destructive - user can change back quickly                    |
+| Drag preview                               | No budget preview while dragging; just trigger validation on drop |
+| Undo support                               | Not needed - changes aren't destructive                           |
+| Complex selections (metatype, magic path)  | Modals preferred over dropdowns for better detail                 |
+| Purchase components (spells, skills, gear) | Header + "Add" button that opens modal with valid options         |
 
 ---
 
@@ -978,14 +978,14 @@ When no priority is set for attributes, component is non-interactive:
 
 ### Validation Summary
 
-| State | Indicator | Behavior |
-|-------|-----------|----------|
-| At minimum | (−) disabled | Cannot decrease below metatype minimum |
-| At maximum | (+) disabled, "MAX" badge | Cannot exceed metatype maximum |
-| Budget exceeded (karma available) | ⚠ Over budget | Shows karma conversion cost |
-| Budget exceeded (no karma) | ⚠ Error | Shows error, requires reduction |
-| No metatype selected | ○ Awaiting metatype | Default 1-6 ranges, info notice |
-| No priority selected | ○ Awaiting priority | Component locked/non-interactive |
+| State                             | Indicator                 | Behavior                               |
+| --------------------------------- | ------------------------- | -------------------------------------- |
+| At minimum                        | (−) disabled              | Cannot decrease below metatype minimum |
+| At maximum                        | (+) disabled, "MAX" badge | Cannot exceed metatype maximum         |
+| Budget exceeded (karma available) | ⚠ Over budget             | Shows karma conversion cost            |
+| Budget exceeded (no karma)        | ⚠ Error                   | Shows error, requires reduction        |
+| No metatype selected              | ○ Awaiting metatype       | Default 1-6 ranges, info notice        |
+| No priority selected              | ○ Awaiting priority       | Component locked/non-interactive       |
 
 ---
 
@@ -994,6 +994,7 @@ When no priority is set for attributes, component is non-interactive:
 Based on existing wizard design. Skills have multiple budget pools and categories.
 
 **Budget types:**
+
 - Skill Points (from Priority, e.g., 22 from D)
 - Skill Group Points (from Priority, e.g., 5 from B, 0 from D)
 - Knowledge/Language Points (from (INT + LOG) × 2)
@@ -1288,16 +1289,16 @@ For Mundane - magical skills hidden:
 
 ### Skills Validation Summary
 
-| State | Indicator | Behavior |
-|-------|-----------|----------|
-| At maximum (6) | (+) disabled, "MAX" badge | Cannot exceed 6 at creation |
-| Budget exceeded (karma ok) | ⚠ Over budget | Shows karma conversion (2 karma/point) |
-| Budget exceeded (no karma) | ⚠ Error | Shows error, requires reduction |
-| Group broken | ⚠ Broken | Individual points break group rating |
-| Skill from group | "Group: X (+N)" | Shows group contribution |
-| Free skill | "Free N" badge | From magic priority allocation |
-| Awaiting priority | ○ Awaiting priority | Component locked |
-| No magical ability | Section hidden | Magical skills not shown for mundane |
+| State                      | Indicator                 | Behavior                               |
+| -------------------------- | ------------------------- | -------------------------------------- |
+| At maximum (6)             | (+) disabled, "MAX" badge | Cannot exceed 6 at creation            |
+| Budget exceeded (karma ok) | ⚠ Over budget             | Shows karma conversion (2 karma/point) |
+| Budget exceeded (no karma) | ⚠ Error                   | Shows error, requires reduction        |
+| Group broken               | ⚠ Broken                  | Individual points break group rating   |
+| Skill from group           | "Group: X (+N)"           | Shows group contribution               |
+| Free skill                 | "Free N" badge            | From magic priority allocation         |
+| Awaiting priority          | ○ Awaiting priority       | Component locked                       |
+| No magical ability         | Section hidden            | Magical skills not shown for mundane   |
 
 ---
 
@@ -2014,13 +2015,13 @@ Weapons and armor can have modifications added:
 
 All purchase components follow a consistent pattern:
 
-| Component | Budget Source | Free Items | Extra Cost | Categories |
-|-----------|---------------|------------|------------|------------|
-| Spells | Magic Priority | 5-10 spells | 5 karma each | Combat, Detection, Health, Illusion, Manipulation |
-| Adept Powers | Magic Rating | Power Points | N/A (PP only) | Combat, Physical, Perception, etc. |
-| Complex Forms | Resonance Priority | 1-5 forms | 4 karma each | (Technomancer equivalent of spells) |
-| Qualities | Karma | None | Karma cost/grant | Physical, Mental, Social, Magical |
-| Gear | Resources Priority | None | Nuyen cost | Weapons, Armor, Electronics, Cyberware, etc. |
+| Component     | Budget Source      | Free Items   | Extra Cost       | Categories                                        |
+| ------------- | ------------------ | ------------ | ---------------- | ------------------------------------------------- |
+| Spells        | Magic Priority     | 5-10 spells  | 5 karma each     | Combat, Detection, Health, Illusion, Manipulation |
+| Adept Powers  | Magic Rating       | Power Points | N/A (PP only)    | Combat, Physical, Perception, etc.                |
+| Complex Forms | Resonance Priority | 1-5 forms    | 4 karma each     | (Technomancer equivalent of spells)               |
+| Qualities     | Karma              | None         | Karma cost/grant | Physical, Mental, Social, Magical                 |
+| Gear          | Resources Priority | None         | Nuyen cost       | Weapons, Armor, Electronics, Cyberware, etc.      |
 
 ### Consistent Modal Pattern
 
@@ -2034,14 +2035,14 @@ All purchase components follow a consistent pattern:
 
 ### Validation States for Purchase Components
 
-| State | Indicator | Behavior |
-|-------|-----------|----------|
-| Within budget | Normal | Items can be added freely |
-| Over budget (karma available) | ⚠ Karma spend | Shows karma conversion |
-| Over budget (no karma) | ⚠ Over budget | Error, must reduce |
-| Unavailable (prereq) | ☒ crossed out | Shows reason, cannot select |
-| Already added | ☑ grayed | Shows "(already added)", cannot re-add |
-| Path not available | Section message | "No X available — [reason]" |
+| State                         | Indicator       | Behavior                               |
+| ----------------------------- | --------------- | -------------------------------------- |
+| Within budget                 | Normal          | Items can be added freely              |
+| Over budget (karma available) | ⚠ Karma spend   | Shows karma conversion                 |
+| Over budget (no karma)        | ⚠ Over budget   | Error, must reduce                     |
+| Unavailable (prereq)          | ☒ crossed out   | Shows reason, cannot select            |
+| Already added                 | ☑ grayed        | Shows "(already added)", cannot re-add |
+| Path not available            | Section message | "No X available — [reason]"            |
 
 ---
 
@@ -2049,13 +2050,13 @@ All purchase components follow a consistent pattern:
 
 Consistent indicators used across components:
 
-| Indicator | Meaning | Visual |
-|-----------|---------|--------|
-| `○ Selection needed` | Required field, not yet set | Empty circle |
-| `○ Optional` | Optional field, not set | Empty circle (different context) |
-| `◐ Partially complete` | Some sub-selections needed | Half-filled circle |
-| `● Complete` | All required selections made | Filled circle |
-| `⚠ Conflict` | Validation error needs resolution | Warning triangle |
+| Indicator              | Meaning                           | Visual                           |
+| ---------------------- | --------------------------------- | -------------------------------- |
+| `○ Selection needed`   | Required field, not yet set       | Empty circle                     |
+| `○ Optional`           | Optional field, not set           | Empty circle (different context) |
+| `◐ Partially complete` | Some sub-selections needed        | Half-filled circle               |
+| `● Complete`           | All required selections made      | Filled circle                    |
+| `⚠ Conflict`           | Validation error needs resolution | Warning triangle                 |
 
 ---
 
@@ -2417,11 +2418,13 @@ The layout uses a two-column approach with Priority at top-left driving the rest
 ### Layout Notes (Two-Column)
 
 **Two-Column Layout (Top Section):**
+
 - Left column: Priority Selection, Karma tracker, Qualities
 - Right column: Attributes, Skills
 - Priority drives all other components via their budgets
 
 **Full-Width Sections (Bottom):**
+
 - Spells/Adept Powers + Gear (side by side when both fit)
 - Knowledge & Languages (full width)
 - Validation summary (always visible at bottom)
@@ -2434,11 +2437,11 @@ A three-column layout provides better horizontal space usage and clearer visual 
 
 ### Column Organization
 
-| Column 1 (Left) | Column 2 (Center) | Column 3 (Right) |
-|-----------------|-------------------|------------------|
-| Priority Selection | Attributes | Skills |
-| Karma Summary | Special Attributes | Knowledge & Languages |
-| Qualities | Spells / Adept Powers | Gear |
+| Column 1 (Left)    | Column 2 (Center)     | Column 3 (Right)      |
+| ------------------ | --------------------- | --------------------- |
+| Priority Selection | Attributes            | Skills                |
+| Karma Summary      | Special Attributes    | Knowledge & Languages |
+| Qualities          | Spells / Adept Powers | Gear                  |
 
 ### Example: Elf Magician (Three-Column)
 
@@ -2714,31 +2717,37 @@ A three-column layout provides better horizontal space usage and clearer visual 
 ### Layout Notes (Three-Column)
 
 **Column 1 - Character Foundation:**
+
 - Priority Selection (drives all budgets)
 - Karma Summary (shows spending from qualities)
 - Qualities (positive/negative)
 
 **Column 2 - Core Stats:**
+
 - Attributes (physical, mental, special)
 - Essence Tracker (for characters with cyberware)
 - Spells / Adept Powers (for awakened characters)
 
 **Column 3 - Abilities & Equipment:**
+
 - Skills (active, groups, specializations)
 - Knowledge & Languages
 - Gear (full width when column 2 has less content)
 
 **Gear Section:**
+
 - For mundane characters with Priority A Resources, Gear expands to span columns 2-3
 - This gives more room for extensive equipment lists
 - Uses card-based layout with items in rows
 
 **Responsive Behavior:**
+
 - Desktop (1400px+): Full three-column layout
 - Tablet (1024-1400px): Two columns (merge columns 2+3)
 - Mobile (<1024px): Single column, stacked vertically
 
 **Key Differences from Two-Column:**
+
 - More horizontal space utilization
 - Gear section can expand for equipment-heavy builds
 - Better visual grouping (foundation | stats | abilities)
@@ -2931,6 +2940,7 @@ Manages the character's System Identification Numbers (legal and fake),
 attached licenses, and associated lifestyles.
 
 **Key Rules (SR5):**
+
 - **Fake SINs:** Rating 1-4 only, cost = Rating × 2,500¥
 - **Fake Licenses:** Rating 1-4 only, cost = Rating × 200¥
 - **Real SIN:** From SINner negative quality (National, Criminal, Corporate Limited, Corporate Born)
@@ -3073,6 +3083,7 @@ Modal for creating a new identity with SIN type selection.
 ```
 
 **Conditional Display:**
+
 - "Fake SIN Rating" section only shows when "Fake SIN" is selected
 - Warning about gear only shows if no fake SINs purchased in Gear step
 - "Real SIN" option is disabled/grayed if character doesn't have SINner quality
@@ -3133,6 +3144,7 @@ Modal for adding a license to an identity.
 ```
 
 **Conditional Display:**
+
 - License Rating dropdown only shows for fake licenses (real licenses have no rating)
 - Rating options are 1-4 only
 - License Type field is read-only, auto-set based on identity's SIN type
@@ -3186,6 +3198,7 @@ Modal for associating a lifestyle with an identity.
 
 **Lifestyle Modifications:**
 When "+ Add Modification" is clicked, show options like:
+
 - Special Work Area (+1,000¥/month)
 - Extra Secure (+20%)
 - Obscure/Difficult to Find (+10%)
@@ -3247,14 +3260,14 @@ When character has SINner quality but no real SIN identity created:
 
 ### Cost Reference
 
-| Item | Cost Formula |
-|------|--------------|
-| Fake SIN | Rating × 2,500¥ |
-| Fake License | Rating × 200¥ |
-| Real SIN | Free (from SINner quality karma cost) |
-| Real License | Free (no rating) |
-| Lifestyle (monthly) | Base cost per type |
-| Lifestyle (permanent) | 100 × monthly cost |
+| Item                  | Cost Formula                          |
+| --------------------- | ------------------------------------- |
+| Fake SIN              | Rating × 2,500¥                       |
+| Fake License          | Rating × 200¥                         |
+| Real SIN              | Free (from SINner quality karma cost) |
+| Real License          | Free (no rating)                      |
+| Lifestyle (monthly)   | Base cost per type                    |
+| Lifestyle (permanent) | 100 × monthly cost                    |
 
 ---
 
@@ -4150,10 +4163,10 @@ For rigger characters who control vehicles and drones via Rigger Command Console
 
 ### Resolved Decisions
 
-| Question | Decision | Date |
-|----------|----------|------|
-| Single-page vs. stepped modal for Magician | Single-page modal | 2026-01-01 |
-| Where is "Remain Mundane" option? | Inside the path selection modal as a choice | 2026-01-01 |
-| Priority E with only Mundane available | Auto-selected, no modal shown | 2026-01-01 |
-| Modal close without selection | Close allowed; validation warning shown on priority card | 2026-01-01 |
+| Question                                      | Decision                                                                                                                 | Date       |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------- |
+| Single-page vs. stepped modal for Magician    | Single-page modal                                                                                                        | 2026-01-01 |
+| Where is "Remain Mundane" option?             | Inside the path selection modal as a choice                                                                              | 2026-01-01 |
+| Priority E with only Mundane available        | Auto-selected, no modal shown                                                                                            | 2026-01-01 |
+| Modal close without selection                 | Close allowed; validation warning shown on priority card                                                                 | 2026-01-01 |
 | Changing tradition/mentor after configuration | Full modal reopens with current selections; changing path updates options dynamically; Mundane clears all sub-selections | 2026-01-01 |

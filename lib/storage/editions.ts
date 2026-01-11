@@ -12,18 +12,8 @@
  */
 
 import path from "path";
-import type {
-  Edition,
-  EditionCode,
-  Book,
-  BookPayload,
-  CreationMethod,
-} from "../types";
-import {
-  readJsonFile,
-  listSubdirectories,
-  directoryExists,
-} from "./base";
+import type { Edition, EditionCode, Book, BookPayload, CreationMethod } from "../types";
+import { readJsonFile, listSubdirectories, directoryExists } from "./base";
 
 const EDITIONS_DIR = path.join(process.cwd(), "data", "editions");
 
@@ -95,10 +85,7 @@ export async function editionExists(editionCode: EditionCode): Promise<boolean> 
  * Get a book's metadata from an edition
  * Note: Book metadata is stored within the edition.json or book payload
  */
-export async function getBook(
-  editionCode: EditionCode,
-  bookId: string
-): Promise<Book | null> {
+export async function getBook(editionCode: EditionCode, bookId: string): Promise<Book | null> {
   const edition = await getEdition(editionCode);
   if (!edition) return null;
 
@@ -168,9 +155,7 @@ export async function getBookPayload(
 /**
  * Get all book payloads for an edition
  */
-export async function getAllBookPayloads(
-  editionCode: EditionCode
-): Promise<BookPayload[]> {
+export async function getAllBookPayloads(editionCode: EditionCode): Promise<BookPayload[]> {
   const edition = await getEdition(editionCode);
   if (!edition) return [];
 
@@ -211,9 +196,7 @@ export async function getCreationMethod(
 /**
  * Get all creation methods available for an edition
  */
-export async function getAllCreationMethods(
-  editionCode: EditionCode
-): Promise<CreationMethod[]> {
+export async function getAllCreationMethods(editionCode: EditionCode): Promise<CreationMethod[]> {
   const edition = await getEdition(editionCode);
   if (!edition) return [];
 
@@ -250,11 +233,7 @@ export async function getDefaultCreationMethod(
 // DISCOVERY OPERATIONS (Content Summarization)
 // =============================================================================
 
-import type {
-  ContentSummary,
-  ContentCategory,
-  BookSummary,
-} from "../types/discovery";
+import type { ContentSummary, ContentCategory, BookSummary } from "../types/discovery";
 
 /**
  * Get a content summary for an edition
@@ -267,7 +246,7 @@ export async function getEditionContentSummary(
   if (!edition) return null;
 
   const payloads = await getAllBookPayloads(editionCode);
-  
+
   // Aggregate counts across all books
   let metatypeCount = 0;
   let skillCount = 0;
@@ -276,7 +255,7 @@ export async function getEditionContentSummary(
   let gearCount = 0;
   let augmentationCount = 0;
   let vehicleCount = 0;
-  
+
   const categoryCounts: Record<string, number> = {};
 
   for (const payload of payloads) {
@@ -286,23 +265,28 @@ export async function getEditionContentSummary(
     const metatypesPayload = modules.metatypes?.payload as { metatypes?: unknown[] } | undefined;
     if (metatypesPayload?.metatypes) {
       metatypeCount += metatypesPayload.metatypes.length;
-      categoryCounts["metatypes"] = (categoryCounts["metatypes"] || 0) + metatypesPayload.metatypes.length;
+      categoryCounts["metatypes"] =
+        (categoryCounts["metatypes"] || 0) + metatypesPayload.metatypes.length;
     }
 
     // Count skills
     const skillsPayload = modules.skills?.payload as { activeSkills?: unknown[] } | undefined;
     if (skillsPayload?.activeSkills) {
       skillCount += skillsPayload.activeSkills.length;
-      categoryCounts["skills"] = (categoryCounts["skills"] || 0) + skillsPayload.activeSkills.length;
+      categoryCounts["skills"] =
+        (categoryCounts["skills"] || 0) + skillsPayload.activeSkills.length;
     }
 
     // Count qualities
-    const qualitiesPayload = modules.qualities?.payload as { positive?: unknown[]; negative?: unknown[] } | undefined;
+    const qualitiesPayload = modules.qualities?.payload as
+      | { positive?: unknown[]; negative?: unknown[] }
+      | undefined;
     if (qualitiesPayload) {
       const positiveCount = qualitiesPayload.positive?.length || 0;
       const negativeCount = qualitiesPayload.negative?.length || 0;
       qualityCount += positiveCount + negativeCount;
-      categoryCounts["qualities"] = (categoryCounts["qualities"] || 0) + positiveCount + negativeCount;
+      categoryCounts["qualities"] =
+        (categoryCounts["qualities"] || 0) + positiveCount + negativeCount;
     }
 
     // Count spells
@@ -313,19 +297,22 @@ export async function getEditionContentSummary(
     }
 
     // Count gear
-    const gearPayload = modules.gear?.payload as { 
-      weapons?: unknown[]; 
-      armor?: unknown[]; 
-      electronics?: unknown[];
-      miscellaneous?: unknown[];
-    } | undefined;
+    const gearPayload = modules.gear?.payload as
+      | {
+          weapons?: unknown[];
+          armor?: unknown[];
+          electronics?: unknown[];
+          miscellaneous?: unknown[];
+        }
+      | undefined;
     if (gearPayload) {
       const weaponCount = gearPayload.weapons?.length || 0;
       const armorCount = gearPayload.armor?.length || 0;
       const electronicsCount = gearPayload.electronics?.length || 0;
       const miscCount = gearPayload.miscellaneous?.length || 0;
       gearCount += weaponCount + armorCount + electronicsCount + miscCount;
-      categoryCounts["gear"] = (categoryCounts["gear"] || 0) + weaponCount + armorCount + electronicsCount + miscCount;
+      categoryCounts["gear"] =
+        (categoryCounts["gear"] || 0) + weaponCount + armorCount + electronicsCount + miscCount;
     }
 
     // Count augmentations (cyberware + bioware)
@@ -335,11 +322,14 @@ export async function getEditionContentSummary(
     const bioCount = biowarePayload?.items?.length || 0;
     augmentationCount += cyberCount + bioCount;
     if (cyberCount > 0 || bioCount > 0) {
-      categoryCounts["augmentations"] = (categoryCounts["augmentations"] || 0) + cyberCount + bioCount;
+      categoryCounts["augmentations"] =
+        (categoryCounts["augmentations"] || 0) + cyberCount + bioCount;
     }
 
     // Count vehicles
-    const vehiclesPayload = modules.vehicles?.payload as { vehicles?: unknown[]; drones?: unknown[] } | undefined;
+    const vehiclesPayload = modules.vehicles?.payload as
+      | { vehicles?: unknown[]; drones?: unknown[] }
+      | undefined;
     if (vehiclesPayload) {
       const vCount = vehiclesPayload.vehicles?.length || 0;
       const dCount = vehiclesPayload.drones?.length || 0;
@@ -395,7 +385,9 @@ export async function getBookSummary(
   ];
 
   for (const { key, name, countPath } of moduleTypes) {
-    const modulePayload = modules[key as keyof typeof modules]?.payload as Record<string, unknown[]> | undefined;
+    const modulePayload = modules[key as keyof typeof modules]?.payload as
+      | Record<string, unknown[]>
+      | undefined;
     if (modulePayload) {
       let count = 0;
       for (const path of countPath) {
@@ -418,4 +410,3 @@ export async function getBookSummary(
     contentContributions: contributions,
   };
 }
-

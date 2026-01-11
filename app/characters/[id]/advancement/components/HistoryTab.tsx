@@ -14,8 +14,14 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
   const [isSubmitting, setIsSubmitting] = useState<string | null>(null);
 
   // Get all advancement records
-  const allRecords = useMemo(() => character.advancementHistory || [], [character.advancementHistory]);
-  const completedRecords = useMemo(() => allRecords.filter((r) => r.trainingStatus === "completed" && r.gmApproved), [allRecords]);
+  const allRecords = useMemo(
+    () => character.advancementHistory || [],
+    [character.advancementHistory]
+  );
+  const completedRecords = useMemo(
+    () => allRecords.filter((r) => r.trainingStatus === "completed" && r.gmApproved),
+    [allRecords]
+  );
   const rejectedRecords = useMemo(() => allRecords.filter((r) => r.rejectionReason), [allRecords]);
 
   // Filter records
@@ -23,9 +29,7 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
     if (filter === "all") return allRecords;
     if (filter === "completed") return completedRecords;
     if (filter === "rejected") return rejectedRecords;
-    return allRecords.filter(
-      (r) => !r.gmApproved && !r.rejectionReason
-    );
+    return allRecords.filter((r) => !r.gmApproved && !r.rejectionReason);
   }, [allRecords, completedRecords, rejectedRecords, filter]);
 
   // Format date
@@ -42,11 +46,14 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
         rejectionReason = window.prompt("Reason for rejection:") || "Rejected by GM";
       }
 
-      const response = await fetch(`/api/characters/${character.id}/advancement/${recordId}/${action}`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: action === "reject" ? JSON.stringify({ reason: rejectionReason }) : undefined,
-      });
+      const response = await fetch(
+        `/api/characters/${character.id}/advancement/${recordId}/${action}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: action === "reject" ? JSON.stringify({ reason: rejectionReason }) : undefined,
+        }
+      );
 
       const result = await response.json();
       if (!result.success) throw new Error(result.error || `Failed to ${action} advancement`);
@@ -125,11 +132,11 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
             <div
               key={record.id}
               className={`p-4 rounded-lg border ${
-                record.rejectionReason 
-                  ? "border-red-900/50 bg-red-900/10" 
-                  : record.gmApproved 
-                  ? "border-zinc-700 bg-zinc-800/50"
-                  : "border-blue-900/30 bg-blue-900/10"
+                record.rejectionReason
+                  ? "border-red-900/50 bg-red-900/10"
+                  : record.gmApproved
+                    ? "border-zinc-700 bg-zinc-800/50"
+                    : "border-blue-900/30 bg-blue-900/10"
               }`}
             >
               <div className="flex items-start justify-between">
@@ -167,9 +174,7 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
                     <div>
                       Karma Cost: <span className="text-amber-400">{record.karmaCost}</span>
                     </div>
-                    <div className="text-xs">
-                      Date: {formatDate(record.karmaSpentAt)}
-                    </div>
+                    <div className="text-xs">Date: {formatDate(record.karmaSpentAt)}</div>
                     {record.rejectionReason && (
                       <div className="mt-2 p-2 rounded bg-red-900/20 border border-red-900/30 text-red-400 text-xs italic">
                         Reason: {record.rejectionReason}
@@ -209,4 +214,3 @@ export function HistoryTab({ character, isGM, onCharacterUpdate }: HistoryTabPro
     </div>
   );
 }
-

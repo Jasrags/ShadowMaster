@@ -35,18 +35,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -63,10 +57,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
     // For now, just check ownership - campaign access would require campaign membership check
     if (session.ownerId !== user.id) {
       // TODO: Add campaign membership check for multiplayer support
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     return NextResponse.json({
@@ -97,18 +88,12 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -123,10 +108,7 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
 
     // Check ownership
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Parse body
@@ -197,18 +179,12 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId } = await params;
@@ -223,19 +199,13 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // Check ownership
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Parse query params
     const { searchParams } = new URL(request.url);
     const action = searchParams.get("action") || "end";
-    const reason = searchParams.get("reason") as
-      | "completed"
-      | "abandoned"
-      | null;
+    const reason = searchParams.get("reason") as "completed" | "abandoned" | null;
 
     if (action === "delete") {
       // Permanently delete

@@ -14,14 +14,14 @@ Build a new `WeaponsPanel` component for the sheet-driven character creation (`/
 
 ## Data Availability (Verified)
 
-| Data | Status | Location |
-|------|--------|----------|
-| Weapons catalog | ✅ Complete | `core-rulebook.json` → weapons section |
-| Weapon modifications | ✅ 18+ mods | `core-rulebook.json` → modifications.weaponMods |
-| Ammunition | ✅ 15+ types | `core-rulebook.json` → gear.ammunition |
+| Data                 | Status           | Location                                                  |
+| -------------------- | ---------------- | --------------------------------------------------------- |
+| Weapons catalog      | ✅ Complete      | `core-rulebook.json` → weapons section                    |
+| Weapon modifications | ✅ 18+ mods      | `core-rulebook.json` → modifications.weaponMods           |
+| Ammunition           | ✅ 15+ types     | `core-rulebook.json` → gear.ammunition                    |
 | Holsters/Accessories | ✅ In weaponMods | concealable-holster, quick-draw-holster, hidden-arm-slide |
-| Mount points | ✅ Defined | top, barrel, under, stock, internal |
-| Concealability | ⚠️ On mods only | Need to add base conceal to weapons |
+| Mount points         | ✅ Defined       | top, barrel, under, stock, internal                       |
+| Concealability       | ⚠️ On mods only  | Need to add base conceal to weapons                       |
 
 ---
 
@@ -41,6 +41,7 @@ Build a new `WeaponsPanel` component for the sheet-driven character creation (`/
 - [ ] 1.8 Integrate into `SheetCreationLayout.tsx` below `GearCard`
 
 ### Files Created
+
 - `components/creation/WeaponsPanel.tsx`
 - `components/creation/weapons/WeaponRow.tsx`
 - `components/creation/weapons/WeaponPurchaseModal.tsx`
@@ -60,6 +61,7 @@ Build a new `WeaponsPanel` component for the sheet-driven character creation (`/
 - [ ] 2.5 Add placeholder sections for Modifications and Ammunition
 
 ### Files Created
+
 - `components/creation/weapons/WeaponDetailFlyout.tsx`
 
 ---
@@ -79,6 +81,7 @@ Build a new `WeaponsPanel` component for the sheet-driven character creation (`/
 - [ ] 3.7 Add modification cost to budget calculations
 
 ### Files Created
+
 - `lib/rules/hooks/useWeaponModifications.ts`
 - `components/creation/weapons/WeaponModificationModal.tsx`
 
@@ -99,6 +102,7 @@ Build a new `WeaponsPanel` component for the sheet-driven character creation (`/
 - [ ] 4.7 Add ammo cost to budget calculations
 
 ### Files Created
+
 - `lib/rules/hooks/useAmmunition.ts`
 - `components/creation/weapons/AmmunitionModal.tsx`
 
@@ -143,12 +147,18 @@ lib/rules/hooks/
 In `SheetCreationLayout.tsx` (around line 455):
 
 ```tsx
-{/* Gear - Phase 4 */}
-<GearCard state={creationState} updateState={updateState} />
+{
+  /* Gear - Phase 4 */
+}
+<GearCard state={creationState} updateState={updateState} />;
 
-{/* NEW: Weapons Panel */}
-<WeaponsPanel state={creationState} updateState={updateState} />
+{
+  /* NEW: Weapons Panel */
+}
+<WeaponsPanel state={creationState} updateState={updateState} />;
 
-{/* Augmentations - Phase 4 */}
-<AugmentationsCard state={creationState} updateState={updateState} />
+{
+  /* Augmentations - Phase 4 */
+}
+<AugmentationsCard state={creationState} updateState={updateState} />;
 ```

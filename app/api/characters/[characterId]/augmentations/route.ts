@@ -13,10 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
 import { loadRuleset, extractCyberware, extractBioware } from "@/lib/rules/loader";
-import {
-  installCyberware,
-  installBioware,
-} from "@/lib/rules/augmentations/management";
+import { installCyberware, installBioware } from "@/lib/rules/augmentations/management";
 import {
   validateAugmentationInstall,
   DEFAULT_AUGMENTATION_RULES,
@@ -28,10 +25,7 @@ import type {
   CyberwareItem,
   BiowareItem,
 } from "@/lib/types";
-import type {
-  CyberwareCatalogItem,
-  BiowareCatalogItem,
-} from "@/lib/types/edition";
+import type { CyberwareCatalogItem, BiowareCatalogItem } from "@/lib/types/edition";
 
 // =============================================================================
 // TYPES
@@ -184,19 +178,13 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
@@ -220,17 +208,11 @@ export async function POST(
     }
 
     if (!catalogId) {
-      return NextResponse.json(
-        { success: false, error: "catalogId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "catalogId is required" }, { status: 400 });
     }
 
     if (!grade) {
-      return NextResponse.json(
-        { success: false, error: "grade is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "grade is required" }, { status: 400 });
     }
 
     // Load ruleset to get catalog
@@ -286,19 +268,20 @@ export async function POST(
     }
 
     // Install the augmentation
-    const result = type === "cyberware"
-      ? installCyberware(
-          character,
-          catalogItem as CyberwareCatalogItem,
-          grade as CyberwareGrade,
-          rating
-        )
-      : installBioware(
-          character,
-          catalogItem as BiowareCatalogItem,
-          grade as BiowareGrade,
-          rating
-        );
+    const result =
+      type === "cyberware"
+        ? installCyberware(
+            character,
+            catalogItem as CyberwareCatalogItem,
+            grade as CyberwareGrade,
+            rating
+          )
+        : installBioware(
+            character,
+            catalogItem as BiowareCatalogItem,
+            grade as BiowareGrade,
+            rating
+          );
 
     if (!result.success) {
       return NextResponse.json(

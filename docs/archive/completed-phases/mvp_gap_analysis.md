@@ -1,6 +1,6 @@
 # MVP Gap Analysis: SR5 Character Creation
 
-*Last updated: 2025-01-27*
+_Last updated: 2025-01-27_
 
 This document captures the gap analysis between the SR5 character creation documentation (`docs/rules/5e/character-creation.md`) and the current implementation, identifying remaining work to complete the MVP.
 
@@ -18,35 +18,35 @@ The character creation wizard has a solid foundation with the core flow implemen
 
 ### 🔴 Critical Gaps (Blocks Valid Character Creation)
 
-| Gap | Description | Effort | Reference |
-|-----|-------------|--------|-----------|
-| **Special Attribute Allocation** | No UI to allocate special attribute points to Edge/Magic/Resonance | Medium | p. 66 |
-| **Knowledge/Language Skills** | Free points (INT+LOG)×2 not tracked or spent | Medium | p. 88-89 |
-| **Contacts System** | No way to create contacts with Connection/Loyalty | Medium | p. 98, 386 |
-| **Gear Step** | Only placeholder UI, no actual gear purchasing | Large | p. 94 |
-| **Final Calculations** | Derived stats not computed or stored | Small | p. 101 |
+| Gap                              | Description                                                        | Effort | Reference  |
+| -------------------------------- | ------------------------------------------------------------------ | ------ | ---------- |
+| **Special Attribute Allocation** | No UI to allocate special attribute points to Edge/Magic/Resonance | Medium | p. 66      |
+| **Knowledge/Language Skills**    | Free points (INT+LOG)×2 not tracked or spent                       | Medium | p. 88-89   |
+| **Contacts System**              | No way to create contacts with Connection/Loyalty                  | Medium | p. 98, 386 |
+| **Gear Step**                    | Only placeholder UI, no actual gear purchasing                     | Large  | p. 94      |
+| **Final Calculations**           | Derived stats not computed or stored                               | Small  | p. 101     |
 
 ### 🟡 Important Gaps (Affects Character Validity)
 
-| Gap | Description | Effort | Reference |
-|-----|-------------|--------|-----------|
-| **Leftover Karma Step** | No UI for Karma-based purchases | Medium | p. 98-100 |
-| **Skill Specializations** | Can't add specializations to skills | Small | p. 88 |
-| **Spell Selection** | Magicians can't choose their spells | Medium | p. 280 |
-| **Complex Forms** | Technomancers can't choose complex forms | Medium | p. 250 |
-| **One Attribute at Max** | Not validated during creation | Small | p. 66 |
-| **All Points Spent** | Warning only, not enforced | Small | p. 66 |
+| Gap                       | Description                              | Effort | Reference |
+| ------------------------- | ---------------------------------------- | ------ | --------- |
+| **Leftover Karma Step**   | No UI for Karma-based purchases          | Medium | p. 98-100 |
+| **Skill Specializations** | Can't add specializations to skills      | Small  | p. 88     |
+| **Spell Selection**       | Magicians can't choose their spells      | Medium | p. 280    |
+| **Complex Forms**         | Technomancers can't choose complex forms | Medium | p. 250    |
+| **One Attribute at Max**  | Not validated during creation            | Small  | p. 66     |
+| **All Points Spent**      | Warning only, not enforced               | Small  | p. 66     |
 
 ### 🟢 Nice-to-Have Gaps (Polish Items)
 
-| Gap | Description | Effort | Reference |
-|-----|-------------|--------|-----------|
-| **Adept Powers** | Power selection for Adepts | Medium | p. 308 |
-| **Tradition Selection** | Magicians should choose tradition | Small | p. 278 |
-| **Bound Spirits** | Spirit binding at creation | Small | p. 300 |
-| **Registered Sprites** | Sprite registration at creation | Small | p. 254 |
-| **Foci Bonding** | Foci bonding at creation | Medium | p. 318 |
-| **Starting Nuyen Roll** | Roll based on lifestyle | Tiny | p. 95 |
+| Gap                     | Description                       | Effort | Reference |
+| ----------------------- | --------------------------------- | ------ | --------- |
+| **Adept Powers**        | Power selection for Adepts        | Medium | p. 308    |
+| **Tradition Selection** | Magicians should choose tradition | Small  | p. 278    |
+| **Bound Spirits**       | Spirit binding at creation        | Small  | p. 300    |
+| **Registered Sprites**  | Sprite registration at creation   | Small  | p. 254    |
+| **Foci Bonding**        | Foci bonding at creation          | Medium | p. 318    |
+| **Starting Nuyen Roll** | Roll based on lifestyle           | Tiny   | p. 95     |
 
 ---
 
@@ -57,6 +57,7 @@ The character creation wizard has a solid foundation with the core flow implemen
 **Current State:** Metatype selection works. Special attribute points are calculated but not allocated.
 
 **Missing:**
+
 - `SpecialAttributeAllocator` component
 - Edge starts at 1 (2 for Humans)
 - Magic starts at value from Magic priority
@@ -82,6 +83,7 @@ specialAttributes: {
 **Current State:** `SkillsStep.tsx` only handles Active Skills.
 
 **Missing:**
+
 - Knowledge Skills section
   - Academic knowledge (Logic-linked)
   - Interest knowledge (Intuition-linked)
@@ -98,6 +100,7 @@ specialAttributes: {
   - Cannot apply to skill groups
 
 **Data Model:** Character type already supports these:
+
 ```typescript
 knowledgeSkills?: KnowledgeSkill[];
 languages?: LanguageSkill[];
@@ -111,6 +114,7 @@ skillSpecializations?: Record<string, string[]>;
 **Current State:** `GearStep.tsx` shows placeholder only.
 
 **Missing:**
+
 - Gear catalog with search/filter
 - Shopping cart functionality
 - Nuyen budget tracking
@@ -129,6 +133,7 @@ skillSpecializations?: Record<string, string[]>;
 - Starting nuyen roll
 
 **Cyberware/Bioware (can be separate step):**
+
 - Essence cost tracking
 - Essence loss reduces Magic/Resonance
 - Grade selection (Standard/Alpha at creation)
@@ -141,6 +146,7 @@ skillSpecializations?: Record<string, string[]>;
 **Current State:** Not implemented. Karma is tracked but can't be spent.
 
 **Missing:**
+
 - Karma management UI
 - Contacts creation
   - Free Karma = Charisma × 3
@@ -167,18 +173,18 @@ skillSpecializations?: Record<string, string[]>;
 
 **Missing Calculations:**
 
-| Stat | Formula |
-|------|---------|
-| Initiative | Intuition + Reaction |
-| Physical Limit | ceil((STR×2 + BOD + REA) / 3) |
-| Mental Limit | ceil((LOG×2 + INT + WIL) / 3) |
-| Social Limit | ceil((CHA×2 + WIL + ceil(ESS)) / 3) |
-| Physical CM | ceil(BOD / 2) + 8 |
-| Stun CM | ceil(WIL / 2) + 8 |
-| Overflow | Body + augmentation bonuses |
-| Astral Initiative | INT × 2 + 2d6 |
-| Matrix Initiative (Cold) | Data Processing + INT + 3d6 |
-| Matrix Initiative (Hot) | Data Processing + INT + 4d6 |
+| Stat                     | Formula                             |
+| ------------------------ | ----------------------------------- |
+| Initiative               | Intuition + Reaction                |
+| Physical Limit           | ceil((STR×2 + BOD + REA) / 3)       |
+| Mental Limit             | ceil((LOG×2 + INT + WIL) / 3)       |
+| Social Limit             | ceil((CHA×2 + WIL + ceil(ESS)) / 3) |
+| Physical CM              | ceil(BOD / 2) + 8                   |
+| Stun CM                  | ceil(WIL / 2) + 8                   |
+| Overflow                 | Body + augmentation bonuses         |
+| Astral Initiative        | INT × 2 + 2d6                       |
+| Matrix Initiative (Cold) | Data Processing + INT + 3d6         |
+| Matrix Initiative (Hot)  | Data Processing + INT + 4d6         |
 
 **Living Persona (Technomancers):**
 | Stat | Attribute |
@@ -193,24 +199,24 @@ skillSpecializations?: Record<string, string[]>;
 
 ## Validation Rules Not Yet Enforced
 
-| Rule | Current State | Required |
-|------|---------------|----------|
-| Each Priority (A-E) used once | ✅ Enforced | — |
-| One attribute at natural max | ❌ Not checked | Block save |
-| All attribute points spent | ⚠️ Warning only | Enforce |
-| All skill points spent | ⚠️ Warning only | Enforce |
-| Max 25 Karma positive qualities | ✅ Enforced | — |
-| Max 25 Karma negative qualities | ✅ Enforced | — |
-| Max 7 Karma carryover | ❌ Not checked | Enforce |
-| Max 5,000¥ carryover | ❌ Not checked | Enforce |
-| Gear Availability ≤12 | ❌ Not checked | Enforce |
-| Device Rating ≤6 | ❌ Not checked | Enforce |
-| Augmentation bonus ≤+4/attr | ❌ Not checked | Enforce |
-| Max bound spirits = CHA | ❌ Not checked | Enforce |
-| Max registered sprites = CHA | ❌ Not checked | Enforce |
-| Max complex forms = LOG | ❌ Not checked | Enforce |
-| Max spells = MAG × 2 | ❌ Not checked | Enforce |
-| Max foci Force = MAG × 2 | ❌ Not checked | Enforce |
+| Rule                            | Current State   | Required   |
+| ------------------------------- | --------------- | ---------- |
+| Each Priority (A-E) used once   | ✅ Enforced     | —          |
+| One attribute at natural max    | ❌ Not checked  | Block save |
+| All attribute points spent      | ⚠️ Warning only | Enforce    |
+| All skill points spent          | ⚠️ Warning only | Enforce    |
+| Max 25 Karma positive qualities | ✅ Enforced     | —          |
+| Max 25 Karma negative qualities | ✅ Enforced     | —          |
+| Max 7 Karma carryover           | ❌ Not checked  | Enforce    |
+| Max 5,000¥ carryover            | ❌ Not checked  | Enforce    |
+| Gear Availability ≤12           | ❌ Not checked  | Enforce    |
+| Device Rating ≤6                | ❌ Not checked  | Enforce    |
+| Augmentation bonus ≤+4/attr     | ❌ Not checked  | Enforce    |
+| Max bound spirits = CHA         | ❌ Not checked  | Enforce    |
+| Max registered sprites = CHA    | ❌ Not checked  | Enforce    |
+| Max complex forms = LOG         | ❌ Not checked  | Enforce    |
+| Max spells = MAG × 2            | ❌ Not checked  | Enforce    |
+| Max foci Force = MAG × 2        | ❌ Not checked  | Enforce    |
 
 ---
 
@@ -246,22 +252,21 @@ skillSpecializations?: Record<string, string[]>;
 
 ## File References
 
-| Component | File |
-|-----------|------|
-| Creation Wizard | `app/characters/create/components/CreationWizard.tsx` |
-| Priority Step | `app/characters/create/components/steps/PriorityStep.tsx` |
-| Metatype Step | `app/characters/create/components/steps/MetatypeStep.tsx` |
+| Component       | File                                                        |
+| --------------- | ----------------------------------------------------------- |
+| Creation Wizard | `app/characters/create/components/CreationWizard.tsx`       |
+| Priority Step   | `app/characters/create/components/steps/PriorityStep.tsx`   |
+| Metatype Step   | `app/characters/create/components/steps/MetatypeStep.tsx`   |
 | Attributes Step | `app/characters/create/components/steps/AttributesStep.tsx` |
-| Magic Step | `app/characters/create/components/steps/MagicStep.tsx` |
-| Skills Step | `app/characters/create/components/steps/SkillsStep.tsx` |
-| Qualities Step | `app/characters/create/components/steps/QualitiesStep.tsx` |
-| Gear Step | `app/characters/create/components/steps/GearStep.tsx` |
-| Review Step | `app/characters/create/components/steps/ReviewStep.tsx` |
-| Character Types | `lib/types/character.ts` |
-| Creation Types | `lib/types/creation.ts` |
-| SR5 Rules Docs | `docs/rules/5e/character-creation.md` |
+| Magic Step      | `app/characters/create/components/steps/MagicStep.tsx`      |
+| Skills Step     | `app/characters/create/components/steps/SkillsStep.tsx`     |
+| Qualities Step  | `app/characters/create/components/steps/QualitiesStep.tsx`  |
+| Gear Step       | `app/characters/create/components/steps/GearStep.tsx`       |
+| Review Step     | `app/characters/create/components/steps/ReviewStep.tsx`     |
+| Character Types | `lib/types/character.ts`                                    |
+| Creation Types  | `lib/types/creation.ts`                                     |
+| SR5 Rules Docs  | `docs/rules/5e/character-creation.md`                       |
 
 ---
 
-*This document should be updated as gaps are addressed. Mark items as complete by changing their status in the tables above.*
-
+_This document should be updated as gaps are addressed. Mark items as complete by changing their status in the tables above._

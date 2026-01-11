@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * MatrixSummary - Displays character's matrix equipment and status
@@ -7,9 +7,9 @@
  * current overwatch score, and marks on targets.
  */
 
-import type { Character } from '@/lib/types/character';
-import type { CharacterCyberdeck } from '@/lib/types/matrix';
-import { OVERWATCH_THRESHOLD } from '@/lib/types/matrix';
+import type { Character } from "@/lib/types/character";
+import type { CharacterCyberdeck } from "@/lib/types/matrix";
+import { OVERWATCH_THRESHOLD } from "@/lib/types/matrix";
 
 interface MatrixSummaryProps {
   character: Character;
@@ -22,7 +22,7 @@ export function MatrixSummary({
   character,
   activeDeck,
   overwatchScore = 0,
-  className = ''
+  className = "",
 }: MatrixSummaryProps) {
   const { cyberdecks = [], commlinks = [], programs = [] } = character;
 
@@ -48,10 +48,13 @@ export function MatrixSummary({
   // Get overwatch warning level
   const osPercentage = overwatchScore / OVERWATCH_THRESHOLD;
   const osWarningClass =
-    osPercentage >= 0.9 ? 'matrix-summary__os--critical' :
-    osPercentage >= 0.75 ? 'matrix-summary__os--warning' :
-    osPercentage >= 0.5 ? 'matrix-summary__os--elevated' :
-    '';
+    osPercentage >= 0.9
+      ? "matrix-summary__os--critical"
+      : osPercentage >= 0.75
+        ? "matrix-summary__os--warning"
+        : osPercentage >= 0.5
+          ? "matrix-summary__os--elevated"
+          : "";
 
   return (
     <div className={`matrix-summary ${className}`}>
@@ -62,9 +65,7 @@ export function MatrixSummary({
         <>
           <div className="matrix-summary__row">
             <span className="matrix-summary__label">Device:</span>
-            <span className="matrix-summary__value">
-              {deck.customName ?? deck.name}
-            </span>
+            <span className="matrix-summary__value">{deck.customName ?? deck.name}</span>
           </div>
 
           <div className="matrix-summary__row">
@@ -78,15 +79,11 @@ export function MatrixSummary({
             <div className="matrix-summary__asdf">
               <div className="matrix-summary__asdf-item">
                 <span className="matrix-summary__asdf-label">A</span>
-                <span className="matrix-summary__asdf-value">
-                  {deck.currentConfig.attack}
-                </span>
+                <span className="matrix-summary__asdf-value">{deck.currentConfig.attack}</span>
               </div>
               <div className="matrix-summary__asdf-item">
                 <span className="matrix-summary__asdf-label">S</span>
-                <span className="matrix-summary__asdf-value">
-                  {deck.currentConfig.sleaze}
-                </span>
+                <span className="matrix-summary__asdf-value">{deck.currentConfig.sleaze}</span>
               </div>
               <div className="matrix-summary__asdf-item">
                 <span className="matrix-summary__asdf-label">D</span>
@@ -96,9 +93,7 @@ export function MatrixSummary({
               </div>
               <div className="matrix-summary__asdf-item">
                 <span className="matrix-summary__asdf-label">F</span>
-                <span className="matrix-summary__asdf-value">
-                  {deck.currentConfig.firewall}
-                </span>
+                <span className="matrix-summary__asdf-value">{deck.currentConfig.firewall}</span>
               </div>
             </div>
           </div>
@@ -117,7 +112,7 @@ export function MatrixSummary({
               <span className="matrix-summary__label">Running:</span>
               <ul className="matrix-summary__list">
                 {loadedPrograms.map((programId) => {
-                  const program = programs.find(p => p.catalogId === programId);
+                  const program = programs.find((p) => p.catalogId === programId);
                   return (
                     <li key={programId} className="matrix-summary__list-item">
                       {program?.name ?? programId}
@@ -152,17 +147,17 @@ export function MatrixSummary({
       <div className="matrix-summary__footer">
         {cyberdecks.length > 0 && (
           <span className="matrix-summary__count">
-            {cyberdecks.length} cyberdeck{cyberdecks.length > 1 ? 's' : ''}
+            {cyberdecks.length} cyberdeck{cyberdecks.length > 1 ? "s" : ""}
           </span>
         )}
         {commlinks.length > 0 && (
           <span className="matrix-summary__count">
-            {commlinks.length} commlink{commlinks.length > 1 ? 's' : ''}
+            {commlinks.length} commlink{commlinks.length > 1 ? "s" : ""}
           </span>
         )}
         {programs.length > 0 && (
           <span className="matrix-summary__count">
-            {programs.length} program{programs.length > 1 ? 's' : ''} owned
+            {programs.length} program{programs.length > 1 ? "s" : ""} owned
           </span>
         )}
       </div>

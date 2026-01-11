@@ -22,11 +22,13 @@ Document the rules, data structures, and interaction patterns for Matrix gamepla
 ## Interaction Modes
 
 ### Augmented Reality (AR)
+
 - Overlay digital objects (AROs) onto the physical world via commlinks, cyberdecks, or smart optics.
 - Supports interactive tasks (self-checkout, directories, overlays) while maintaining physical situational awareness—critical for mobile hacking alongside a runner team.
 - Implement UX cues for mixed-reality operation: highlight actionable AROs, manage opacity, ensure accessibility for users opting out of overlays.
 
 ### Virtual Reality (VR)
+
 - Provides full sensory immersion; essential for high-speed hacking, rigging, and intensive Matrix operations.
 - Requires hot-sim/cold-sim gear, offering enhanced initiative and feedback at the cost of physical vulnerability.
 - Record safety considerations (biofeedback, dumpshock) and ensure persona transition workflow between AR and VR.
@@ -69,15 +71,16 @@ Every icon in the Matrix is one of six things: a persona, a device, a PAN, a fil
 
 ### User Modes
 
-| USER MODE | INITIATIVE | INITIATIVE DICE | NOTES |
-| --- | --- | --- | --- |
-| Augmented Reality | Physical Initiative | Physical Initiative Dice | can be distracting |
-| Cold-Sim | Data Processing + Intuition | 3D6 |  |
-| Hot-Sim | Data Processing + Intuition | 4D6 | +2 dice pool bonus to Matrix actions |
+| USER MODE         | INITIATIVE                  | INITIATIVE DICE          | NOTES                                |
+| ----------------- | --------------------------- | ------------------------ | ------------------------------------ |
+| Augmented Reality | Physical Initiative         | Physical Initiative Dice | can be distracting                   |
+| Cold-Sim          | Data Processing + Intuition | 3D6                      |                                      |
+| Hot-Sim           | Data Processing + Intuition | 4D6                      | +2 dice pool bonus to Matrix actions |
 
 ## Matrix Actions Overview
 
 Categorize actions per SR5 core rules:
+
 - **Sleaze Actions**: Hack on the Fly, Brute Force, Spoof Command, etc. (Opposed tests, OS gain on failure).
 - **Data Processing Actions**: Matrix Perception, Edit File, Browse.
 - **Attack Actions**: Data Spike, Blackout, Crash Program/IC.
@@ -92,59 +95,60 @@ Categorize actions per SR5 core rules:
 
 ### Simple Actions
 
-| ACTION | FUNCTION | TEST | LIMIT | MARKS |
-| --- | --- | --- | --- | --- |
-| Change Icon | Misc |  | Data Processing | Owner |
-| Jack Out | Misc | Hardware + Willpower vs. Attack + Logic | Firewall | Owner |
-| Invite Mark | Mark Manipulation |  | Data Processing | Owner |
-| Send Message | Misc |  | Data Processing | 1 |
-| Switch Interface Mode | Misc |  | Data Processing | Owner |
+| ACTION                | FUNCTION          | TEST                                    | LIMIT           | MARKS |
+| --------------------- | ----------------- | --------------------------------------- | --------------- | ----- |
+| Change Icon           | Misc              |                                         | Data Processing | Owner |
+| Jack Out              | Misc              | Hardware + Willpower vs. Attack + Logic | Firewall        | Owner |
+| Invite Mark           | Mark Manipulation |                                         | Data Processing | Owner |
+| Send Message          | Misc              |                                         | Data Processing | 1     |
+| Switch Interface Mode | Misc              |                                         | Data Processing | Owner |
 
 ### Complex Actions
 
-| ACTION | FUNCTION | TEST | LIMIT | MARKS |
-| --- | --- | --- | --- | --- |
-| Brute Force | Mark Manipulation | Cybercombat + Logic vs. Firewall + Willpower | Attack | None |
-| Check Overwatch Score | Information Gathering | Electronic Warfare + Logic | Sleaze | None |
-| Crack File | File Manipulation | Hacking + Logic vs. 2 * Protection Rating | Attack | 1 |
-| Crash Program | Matrix Combat | Cybercombat + Logic vs. Firewall + Intuition | Attack | 1 |
-| Data Spike | Matrix Combat | Cybercombat + Logic vs. Firewall + Intuition | Attack | None |
-| Disarm Data Bomb | File Manipulation | Software + Intuition vs. 2 * Data Bomb Rating | Firewall | None |
-| Edit File | File Manipulation | Computer + Logic vs. Firewall + Intuition | Data Processing | 1 |
-| Enter/Exit Host | Misc |  | Data Processing | 1 |
-| Erase Mark | Mark Manipulation | Cybercombat + Logic vs. Firewall + Willpower | Attack | Special |
-| Erase Matrix Signature | Mark Manipulation | Computer + Resonance vs. 2 * Signature Rating | Attack | None |
-| Format Device | Device Manipulation | Computer + Logic vs. Firewall + Willpower | Sleaze | 3 |
-| Grid-Hop | Misc |  | Data Processing | None |
-| Hack on the Fly | Mark Manipulation | Hacking + Logic vs. Firewall + Intuition | Sleaze | None |
-| Hide | Misc | Electronic Warfare + Intuition vs. Data Processing + Intuition | Sleaze | 0 |
-| Jam Signals | Misc | Electronic Warfare + Logic | Attack | Owner |
-| Jump Into Rigged Device | Misc | Electronic Warfare + Logic vs. Firewall + Willpower | Data Processing | 3 |
-| Matrix Perception | Information Gathering | Computer + Intuition (vs. Sleaze + Logic if Running Silent) | Data Processing | None |
-| Reboot Device | Device Manipulation | Computer + Logic vs. Firewall + Willpower | Data Processing | 3 |
-| Set Data Bomb | File Manipulation | Cybercombat + Logic vs. 2 * Device Rating | Sleaze | 1 |
-| Snoop | Information Gathering | Electronic Warfare + Intuition vs. Firewall + Logic | Sleaze | 1 |
-| Spoof Command | Device Manipulation | Hacking + Intuition vs. Firewall + Logic | Sleaze | 1 |
-| Trace Icon | Information Gathering | Computer + Intuition vs. Sleaze + Willpower | Data Processing | 2 |
+| ACTION                  | FUNCTION              | TEST                                                           | LIMIT           | MARKS   |
+| ----------------------- | --------------------- | -------------------------------------------------------------- | --------------- | ------- |
+| Brute Force             | Mark Manipulation     | Cybercombat + Logic vs. Firewall + Willpower                   | Attack          | None    |
+| Check Overwatch Score   | Information Gathering | Electronic Warfare + Logic                                     | Sleaze          | None    |
+| Crack File              | File Manipulation     | Hacking + Logic vs. 2 \* Protection Rating                     | Attack          | 1       |
+| Crash Program           | Matrix Combat         | Cybercombat + Logic vs. Firewall + Intuition                   | Attack          | 1       |
+| Data Spike              | Matrix Combat         | Cybercombat + Logic vs. Firewall + Intuition                   | Attack          | None    |
+| Disarm Data Bomb        | File Manipulation     | Software + Intuition vs. 2 \* Data Bomb Rating                 | Firewall        | None    |
+| Edit File               | File Manipulation     | Computer + Logic vs. Firewall + Intuition                      | Data Processing | 1       |
+| Enter/Exit Host         | Misc                  |                                                                | Data Processing | 1       |
+| Erase Mark              | Mark Manipulation     | Cybercombat + Logic vs. Firewall + Willpower                   | Attack          | Special |
+| Erase Matrix Signature  | Mark Manipulation     | Computer + Resonance vs. 2 \* Signature Rating                 | Attack          | None    |
+| Format Device           | Device Manipulation   | Computer + Logic vs. Firewall + Willpower                      | Sleaze          | 3       |
+| Grid-Hop                | Misc                  |                                                                | Data Processing | None    |
+| Hack on the Fly         | Mark Manipulation     | Hacking + Logic vs. Firewall + Intuition                       | Sleaze          | None    |
+| Hide                    | Misc                  | Electronic Warfare + Intuition vs. Data Processing + Intuition | Sleaze          | 0       |
+| Jam Signals             | Misc                  | Electronic Warfare + Logic                                     | Attack          | Owner   |
+| Jump Into Rigged Device | Misc                  | Electronic Warfare + Logic vs. Firewall + Willpower            | Data Processing | 3       |
+| Matrix Perception       | Information Gathering | Computer + Intuition (vs. Sleaze + Logic if Running Silent)    | Data Processing | None    |
+| Reboot Device           | Device Manipulation   | Computer + Logic vs. Firewall + Willpower                      | Data Processing | 3       |
+| Set Data Bomb           | File Manipulation     | Cybercombat + Logic vs. 2 \* Device Rating                     | Sleaze          | 1       |
+| Snoop                   | Information Gathering | Electronic Warfare + Intuition vs. Firewall + Logic            | Sleaze          | 1       |
+| Spoof Command           | Device Manipulation   | Hacking + Intuition vs. Firewall + Logic                       | Sleaze          | 1       |
+| Trace Icon              | Information Gathering | Computer + Intuition vs. Sleaze + Willpower                    | Data Processing | 2       |
 
 ### Variable Actions
 
-| ACTION | FUNCTION | TEST | LIMIT | MARKS |
-| --- | --- | --- | --- | --- |
-| Control Device | Device Manipulation |  | Data Processing * | Varies |
-| Matrix Search | Information Gathering | Computer + Intuition | Data Processing | Special |
+| ACTION         | FUNCTION              | TEST                 | LIMIT              | MARKS   |
+| -------------- | --------------------- | -------------------- | ------------------ | ------- |
+| Control Device | Device Manipulation   |                      | Data Processing \* | Varies  |
+| Matrix Search  | Information Gathering | Computer + Intuition | Data Processing    | Special |
 
-*Control Device may or may not use Data Processing as its limit
+\*Control Device may or may not use Data Processing as its limit
 
 ### Interrupt Actions
 
-| ACTION | FUNCTION | LIMIT | INIT COST | MARKS |
-| --- | --- | --- | --- | --- |
-| Full Matrix Defense | Matrix Combat | Firewall | -10 | Owner |
+| ACTION              | FUNCTION      | LIMIT    | INIT COST | MARKS |
+| ------------------- | ------------- | -------- | --------- | ----- |
+| Full Matrix Defense | Matrix Combat | Firewall | -10       | Owner |
 
 ### Matrix Perception
 
 When you take a Matrix Perception action, each hit can reveal one piece of information you ask of your gamemaster. Matrix Perception can tell you:
+
 - Spot a target icon you're looking for
 - The most recent edit date of a file
 - The number of boxes of Matrix damage on the target's Condition Monitor
@@ -164,38 +168,39 @@ When you take a Matrix Perception action, each hit can reveal one piece of infor
 
 ### Matrix Search
 
-| INFORMATION IS | THRESHOLD | TIME |
-| --- | --- | --- |
-| General Knowledge or Public | 1 | 1 minute |
-| Limited Interest or Not Publicized | 3 | 30 minutes |
-| Hidden or Actively Hunted and Erased | 6 | 12 hours |
-| Protected or Secret | N/A | N/A |
+| INFORMATION IS                       | THRESHOLD | TIME       |
+| ------------------------------------ | --------- | ---------- |
+| General Knowledge or Public          | 1         | 1 minute   |
+| Limited Interest or Not Publicized   | 3         | 30 minutes |
+| Hidden or Actively Hunted and Erased | 6         | 12 hours   |
+| Protected or Secret                  | N/A       | N/A        |
 
 **Dice Pool Modifiers:**
+
 - Intricate or Specialized: –1
 - Obscure: –2
 - On another grid: –2
 
 ### Matrix Spotting
 
-| TARGET IS | NOT RUNNING SILENT | RUNNING SILENT |
-| --- | --- | --- |
-| Within 100 meters | Automatic | Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze Test |
-| Outside 100 meters | Simple Computer + Intuition [Data Processing] |  |
-| A Host | Automatic |  |
+| TARGET IS          | NOT RUNNING SILENT                            | RUNNING SILENT                                                        |
+| ------------------ | --------------------------------------------- | --------------------------------------------------------------------- |
+| Within 100 meters  | Automatic                                     | Opposed Computer + Intuition [Data Processing] v. Logic + Sleaze Test |
+| Outside 100 meters | Simple Computer + Intuition [Data Processing] |                                                                       |
+| A Host             | Automatic                                     |                                                                       |
 
 ## Technomancer Actions
 
 ### Complex Actions
 
-| ACTION | TEST | LIMIT |
-| --- | --- | --- |
-| Compile Sprite | Compiling + Resonance vs. Spirit Level | Level |
-| Decompile Sprite | Decompiling + Resonance vs. Spirit Level (+ Compiler's Resonance if Registered) | Level |
-| Erase Resonance Signature | Computer + Resonance vs. 2 * Signature Rating | Attack |
-| Kill Complex Form | Software + Resonance vs. Complex Form Level + Resonance | Level |
-| Register Sprite | Registering + Resonance vs. 2 * Spirit Level | Level |
-| Thread Complex Form | Software + Resonance vs. | Level |
+| ACTION                    | TEST                                                                            | LIMIT  |
+| ------------------------- | ------------------------------------------------------------------------------- | ------ |
+| Compile Sprite            | Compiling + Resonance vs. Spirit Level                                          | Level  |
+| Decompile Sprite          | Decompiling + Resonance vs. Spirit Level (+ Compiler's Resonance if Registered) | Level  |
+| Erase Resonance Signature | Computer + Resonance vs. 2 \* Signature Rating                                  | Attack |
+| Kill Complex Form         | Software + Resonance vs. Complex Form Level + Resonance                         | Level  |
+| Register Sprite           | Registering + Resonance vs. 2 \* Spirit Level                                   | Level  |
+| Thread Complex Form       | Software + Resonance vs.                                                        | Level  |
 
 ### Simple Actions
 
@@ -205,6 +210,7 @@ When you take a Matrix Perception action, each hit can reveal one piece of infor
 ## Complex Forms
 
 Technomancers can thread complex forms, which are unique abilities that technomancers can use. Common complex forms include:
+
 - Cleaner
 - Coriolis
 - Derezz
@@ -226,6 +232,7 @@ Technomancers can thread complex forms, which are unique abilities that technoma
 - Transcendent Grid
 
 Each complex form entry should store:
+
 - Target
 - Duration
 - Fading Value
@@ -234,6 +241,7 @@ Each complex form entry should store:
 ## Sprites
 
 Sprites are Matrix entities created by technomancers. They have attributes based on their Level (L) and type. Common sprite types include:
+
 - Crack Sprite: Attack L, Sleaze L+3, Data Processing L+1, Firewall L+2
 - Data Sprite: Attack L, Sleaze L+3, Data Processing L+2, Firewall L+1
 - Fault Sprite: Attack L-1, Sleaze L, Data Processing L+4, Firewall L+1
@@ -241,6 +249,7 @@ Sprites are Matrix entities created by technomancers. They have attributes based
 - Task Sprite: Attack L+1, Sleaze L, Data Processing L+3, Firewall L+2
 
 Each action entry should store:
+
 - Test notation (dice pool, limit, opposed pool).
 - Required marks or permissions.
 - OS impact, noise interaction.
@@ -284,4 +293,4 @@ Each action entry should store:
 - Technomancer complex forms, sprites, and living persona specifics require dedicated subsections.
 - Rigging rules may warrant a separate spec once vehicle catalogs are in place.
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_
