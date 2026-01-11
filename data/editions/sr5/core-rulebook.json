@@ -6814,42 +6814,106 @@
             "name": "Street",
             "monthlyCost": 0,
             "startingNuyen": "1d6 × 20",
-            "description": "Living on the streets with no permanent shelter."
+            "description": "Living on the streets with no permanent shelter.",
+            "page": 373,
+            "source": "Core"
           },
           {
             "id": "squatter",
             "name": "Squatter",
             "monthlyCost": 500,
             "startingNuyen": "2d6 × 40",
-            "description": "Abandoned buildings or makeshift shelter."
+            "description": "Abandoned buildings or makeshift shelter.",
+            "page": 373,
+            "source": "Core"
           },
           {
             "id": "low",
             "name": "Low",
             "monthlyCost": 2000,
             "startingNuyen": "3d6 × 60",
-            "description": "A small apartment in a rough neighborhood."
+            "description": "A small apartment in a rough neighborhood.",
+            "page": 373,
+            "source": "Core"
           },
           {
-            "id": "medium",
-            "name": "Medium",
+            "id": "middle",
+            "name": "Middle",
             "monthlyCost": 5000,
             "startingNuyen": "4d6 × 100",
-            "description": "A comfortable apartment with basic amenities."
+            "description": "A comfortable apartment with basic amenities.",
+            "page": 373,
+            "source": "Core"
           },
           {
             "id": "high",
             "name": "High",
             "monthlyCost": 10000,
             "startingNuyen": "5d6 × 500",
-            "description": "Upscale housing in a secure neighborhood."
+            "description": "Upscale housing in a secure neighborhood.",
+            "page": 373,
+            "source": "Core"
           },
           {
             "id": "luxury",
             "name": "Luxury",
             "monthlyCost": 100000,
             "startingNuyen": "6d6 × 1000",
-            "description": "The finest accommodations money can buy."
+            "description": "The finest accommodations money can buy.",
+            "page": 373,
+            "source": "Core"
+          }
+        ],
+        "lifestyleOptions": [
+          {
+            "id": "special-work-area",
+            "name": "Special Work Area",
+            "costType": "flat",
+            "costModifier": 1000,
+            "description": "A workshop, garage, office, studio, or other specialized work space. Skill checks relevant to the setting have their Limit increased by 2 when performed in this space.",
+            "effects": "+2 Limit to relevant skill checks in this space",
+            "page": 374,
+            "source": "Core"
+          },
+          {
+            "id": "extra-secure",
+            "name": "Extra Secure",
+            "costType": "percentage",
+            "costModifier": 20,
+            "description": "Security is particularly tight - walls, vigilant contractors, patrols, or powerful neighbors. All High Threat Response and security response rolls are made at one level better than normal.",
+            "effects": "Security response one level better",
+            "page": 374,
+            "source": "Core"
+          },
+          {
+            "id": "obscure-difficult-to-find",
+            "name": "Obscure/Difficult to Find",
+            "costType": "percentage",
+            "costModifier": 10,
+            "description": "Your place is particularly difficult to find or in an obscure area. Everyone needs directions or a good map. Any Sneaking tests (owner excluded) in the vicinity are made with a -2 penalty.",
+            "effects": "-2 penalty to Sneaking tests by visitors",
+            "page": 374,
+            "source": "Core"
+          },
+          {
+            "id": "cramped",
+            "name": "Cramped",
+            "costType": "percentage",
+            "costModifier": -10,
+            "description": "Just enough space to live, not much else. Forget hobbies or work. Any skill checks tied to Logic have their Limit reduced by 2 (minimum 1) in this space.",
+            "effects": "-2 Limit to Logic-based skill checks (min 1)",
+            "page": 374,
+            "source": "Core"
+          },
+          {
+            "id": "dangerous-area",
+            "name": "Dangerous Area",
+            "costType": "percentage",
+            "costModifier": -20,
+            "description": "The area is prone to crime and violence. Security and law enforcement are overwhelmed and slow to respond. Any High Threat Response or security response rolls are made as if one level lower.",
+            "effects": "Security response one level worse",
+            "page": 374,
+            "source": "Core"
           }
         ],
         "metatypeModifiers": {
