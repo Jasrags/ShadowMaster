@@ -9195,72 +9195,97 @@
             "name": "Headphones",
             "category": "audio-devices",
             "hasRating": true,
-            "maxRating": 6,
-            "capacity": 1,
-            "capacityPerRating": true,
-            "description": "Over-ear audio device.",
             "minRating": 1,
+            "maxRating": 6,
+            "description": "Full headset with adjustable headband strap or attached to helmet. Harder to spot than ear buds, but packs more capacity. Rating determines capacity for audio enhancements.",
+            "page": 445,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              },
-              "4": {
-                "cost": 200,
-                "availability": 0
-              },
-              "5": {
-                "cost": 250,
-                "availability": 0
-              },
-              "6": {
-                "cost": 300,
-                "availability": 0
-              }
+              "1": { "cost": 50, "availability": 0, "capacity": 1 },
+              "2": { "cost": 100, "availability": 0, "capacity": 2 },
+              "3": { "cost": 150, "availability": 0, "capacity": 3 },
+              "4": { "cost": 200, "availability": 0, "capacity": 4 },
+              "5": { "cost": 250, "availability": 0, "capacity": 5 },
+              "6": { "cost": 300, "availability": 0, "capacity": 6 }
             }
           },
           {
             "id": "laser-microphone",
             "name": "Laser Microphone",
-            "category": "electronics",
+            "category": "audio-devices",
             "hasRating": true,
-            "maxRating": 6,
-            "description": "Long-range audio surveillance (Capacity 1-6).",
-            "legality": "restricted",
             "minRating": 1,
+            "maxRating": 6,
+            "legality": "restricted",
+            "maxRange": 100,
+            "rangeUnit": "meters",
+            "description": "Sophisticated sensor that bounces a laser beam against a solid object like a windowpane, reads surface vibrations, and translates them into sounds. Max range 100 meters. Cannot fit spatial recognizer enhancement. Rating determines capacity.",
+            "page": 445,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 100,
-                "availability": 6
-              },
-              "2": {
-                "cost": 200,
-                "availability": 6
-              },
-              "3": {
-                "cost": 300,
-                "availability": 6
-              },
-              "4": {
-                "cost": 400,
-                "availability": 6
-              },
-              "5": {
-                "cost": 500,
-                "availability": 6
-              },
-              "6": {
-                "cost": 600,
-                "availability": 6
-              }
+              "1": { "cost": 100, "availability": 6, "capacity": 1 },
+              "2": { "cost": 200, "availability": 6, "capacity": 2 },
+              "3": { "cost": 300, "availability": 6, "capacity": 3 },
+              "4": { "cost": 400, "availability": 6, "capacity": 4 },
+              "5": { "cost": 500, "availability": 6, "capacity": 5 },
+              "6": { "cost": 600, "availability": 6, "capacity": 6 }
+            },
+            "restrictions": ["no-spatial-recognizer"]
+          },
+          {
+            "id": "directional-microphone",
+            "name": "Directional Microphone",
+            "category": "audio-devices",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "maxRange": 100,
+            "rangeUnit": "meters",
+            "description": "Lets you listen in on distant conversations as if you were up to 100 meters closer. Solid objects or loud sounds along the line interfere. Rating determines capacity for audio enhancements.",
+            "page": 445,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 50, "availability": 4, "capacity": 1 },
+              "2": { "cost": 100, "availability": 4, "capacity": 2 },
+              "3": { "cost": 150, "availability": 4, "capacity": 3 },
+              "4": { "cost": 200, "availability": 4, "capacity": 4 },
+              "5": { "cost": 250, "availability": 4, "capacity": 5 },
+              "6": { "cost": 300, "availability": 4, "capacity": 6 }
+            }
+          },
+          {
+            "id": "ear-buds",
+            "name": "Ear Buds",
+            "category": "audio-devices",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "description": "Ergonomic ear plugs that are hard to spot and harder to differentiate from standard music player/commlink ear buds. Rating determines capacity for audio enhancements.",
+            "page": 445,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 50, "availability": 0, "capacity": 1 },
+              "2": { "cost": 100, "availability": 0, "capacity": 2 },
+              "3": { "cost": 150, "availability": 0, "capacity": 3 }
+            }
+          },
+          {
+            "id": "omni-directional-microphone",
+            "name": "Omni-directional Microphone",
+            "category": "audio-devices",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Standard omni-directional audio pickup and recorder. Usually incorporated into, connected to, or wirelessly linked with a commlink or other recording device. Micro versions (Capacity 1) have max range of 5 meters. Rating determines capacity.",
+            "page": 445,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 50, "availability": 0, "capacity": 1 },
+              "2": { "cost": 100, "availability": 0, "capacity": 2 },
+              "3": { "cost": 150, "availability": 0, "capacity": 3 },
+              "4": { "cost": 200, "availability": 0, "capacity": 4 },
+              "5": { "cost": 250, "availability": 0, "capacity": 5 },
+              "6": { "cost": 300, "availability": 0, "capacity": 6 }
             }
           },
           {
@@ -9579,6 +9604,53 @@
             "description": "Provides telescopic zoom capability for distant viewing.",
             "page": 444,
             "source": "Core"
+          }
+        ],
+        "audioEnhancements": [
+          {
+            "id": "audio-enhancement",
+            "name": "Audio Enhancement",
+            "category": "audio-enhancements",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "description": "Allows hearing a broader spectrum of audio frequencies including high and low frequencies outside normal metahuman range. Fine discrimination of nuances and ability to block out distracting background noise. Adds rating to limit in audio Perception Tests.",
+            "page": 445,
+            "source": "Core",
+            "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
+            "ratings": {
+              "1": { "cost": 500, "availability": 2, "capacityCost": 1 },
+              "2": { "cost": 1000, "availability": 4, "capacityCost": 2 },
+              "3": { "cost": 1500, "availability": 6, "capacityCost": 3 }
+            }
+          },
+          {
+            "id": "select-sound-filter",
+            "name": "Select Sound Filter",
+            "category": "audio-enhancements",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "description": "Block out background noise and focus on specific sounds or patterns. Includes speech, word, and sound pattern recognition. Each rating point lets you select a single sound group and focus on it. Can record others for playback or set triggered monitoring.",
+            "page": 445,
+            "source": "Core",
+            "ratings": {
+              "1": { "cost": 250, "availability": 3, "capacityCost": 1 },
+              "2": { "cost": 500, "availability": 6, "capacityCost": 2 },
+              "3": { "cost": 750, "availability": 9, "capacityCost": 3 }
+            }
+          },
+          {
+            "id": "spatial-recognizer",
+            "name": "Spatial Recognizer",
+            "category": "audio-enhancements",
+            "capacityCost": 2,
+            "cost": 1000,
+            "availability": 4,
+            "description": "Pinpoints the source of a sound. Provides +2 bonus on limit in Perception Tests to find the source of a specific sound. Cannot be installed in laser microphones.",
+            "page": 445,
+            "source": "Core",
+            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source."
           }
         ],
         "tools": [
