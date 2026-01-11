@@ -42,9 +42,13 @@ interface ContactModalProps {
 // CONSTANTS
 // =============================================================================
 
-const MAX_CONNECTION = 6;
+// SR5 CRB p.387: Connection 1-12, Loyalty 1-6
+// Contact cost = Connection + Loyalty (CRB p.98)
+const MAX_CONNECTION = 12;
 const MAX_LOYALTY = 6;
-const MAX_KARMA_PER_CONTACT = 7;
+// Maximum individual contact cost (Connection 12 + Loyalty 6 = 18)
+// In practice, limited by available karma (CHA×3 free + general karma)
+const MAX_KARMA_PER_CONTACT = 18;
 const MIN_KARMA_PER_CONTACT = 2;
 
 // =============================================================================
@@ -315,7 +319,7 @@ function ContactModal({
                   }`}
                 >
                   {contactCost} / {availableKarma} Karma
-                  {contactCost > MAX_KARMA_PER_CONTACT && " (max 7)"}
+                  {contactCost > MAX_KARMA_PER_CONTACT && ` (max ${MAX_KARMA_PER_CONTACT})`}
                   {contactCost <= MAX_KARMA_PER_CONTACT &&
                     contactCost > availableKarma &&
                     " (not enough)"}

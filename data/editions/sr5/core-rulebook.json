@@ -4529,7 +4529,20 @@
             "id": "ambidextrous",
             "name": "Ambidextrous",
             "karmaCost": 4,
-            "summary": "Ignore off-hand penalties; both hands treated equally."
+            "summary": "Ignore off-hand penalties; both hands treated equally.",
+            "effects": [
+              {
+                "id": "ambidextrous-off-hand",
+                "type": "dice-pool-modifier",
+                "trigger": "off-hand-action",
+                "target": {
+                  "action": "off-hand"
+                },
+                "value": 2,
+                "negates": "off-hand-penalty",
+                "description": "Negates the -2 dice pool modifier for actions performed with the off-hand."
+              }
+            ]
           },
           {
             "id": "analytical-mind",
@@ -4663,7 +4676,19 @@
             "id": "first-impression",
             "name": "First Impression",
             "karmaCost": 11,
-            "summary": "+2 dice to Social tests during first meetings."
+            "summary": "+2 dice to Social tests during first meetings.",
+            "effects": [
+              {
+                "id": "first-impression-social-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "first-meeting",
+                "target": {
+                  "skillCategory": "social"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to Social tests when meeting someone for the first time."
+              }
+            ]
           },
           {
             "id": "focused-concentration",
@@ -4710,13 +4735,60 @@
             "id": "gearhead",
             "name": "Gearhead",
             "karmaCost": 11,
-            "summary": "+20% Speed or +1 Handling; +2 to stunts."
+            "summary": "+20% Speed or +1 Handling; +2 to stunts.",
+            "effects": [
+              {
+                "id": "gearhead-vehicle-boost",
+                "type": "vehicle-modifier",
+                "trigger": "vehicle-operation",
+                "target": {
+                  "choice": ["speed", "handling"]
+                },
+                "value": {
+                  "speed": "20%",
+                  "handling": 1
+                },
+                "description": "Increase vehicle Speed by 20% OR Handling by 1 (choose one per vehicle)."
+              },
+              {
+                "id": "gearhead-stunt-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "vehicle-stunt",
+                "target": {
+                  "action": "vehicle-stunt"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier when performing vehicle stunts."
+              }
+            ]
           },
           {
             "id": "guts",
             "name": "Guts",
             "karmaCost": 10,
-            "summary": "+2 dice to resist fear and intimidation."
+            "summary": "+2 dice to resist fear and intimidation.",
+            "effects": [
+              {
+                "id": "guts-fear-resistance",
+                "type": "dice-pool-modifier",
+                "trigger": "resist-fear",
+                "target": {
+                  "test": "fear-resistance"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to resist fear effects."
+              },
+              {
+                "id": "guts-intimidation-resistance",
+                "type": "dice-pool-modifier",
+                "trigger": "resist-intimidation",
+                "target": {
+                  "test": "intimidation-resistance"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to resist Intimidation tests."
+              }
+            ]
           },
           {
             "id": "high-pain-tolerance",
@@ -4773,6 +4845,24 @@
             "id": "indomitable",
             "name": "Indomitable",
             "summary": "+1 to Inherent Limits per level (Mental, Physical, or Social).",
+            "requiresSelection": {
+              "type": "inherent-limit",
+              "options": ["mental", "physical", "social"],
+              "perRating": true
+            },
+            "effects": [
+              {
+                "id": "indomitable-limit-increase",
+                "type": "limit-modifier",
+                "trigger": "always",
+                "target": {
+                  "limitType": "selected"
+                },
+                "value": 1,
+                "perRating": true,
+                "description": "+1 to chosen Inherent Limit per rating level. Each rating level can boost a different limit."
+              }
+            ],
             "hasRating": true,
             "minRating": 1,
             "maxRating": 3,
@@ -4811,12 +4901,38 @@
             "id": "lucky",
             "name": "Lucky",
             "karmaCost": 12,
-            "summary": "Raise Edge natural maximum by 1."
+            "summary": "Raise Edge natural maximum by 1.",
+            "effects": [
+              {
+                "id": "lucky-edge-max",
+                "type": "attribute-maximum",
+                "trigger": "always",
+                "target": {
+                  "attribute": "edge"
+                },
+                "value": 1,
+                "description": "Increase the natural maximum for Edge by 1."
+              }
+            ]
           },
           {
             "id": "magical-resistance",
             "name": "Magical Resistance",
             "summary": "+1 die to Spell Resistance Tests per rating. Cannot be turned off.",
+            "forbidsMagic": true,
+            "effects": [
+              {
+                "id": "magical-resistance-spell-defense",
+                "type": "dice-pool-modifier",
+                "trigger": "spell-resistance",
+                "target": {
+                  "test": "spell-resistance"
+                },
+                "value": "rating",
+                "alwaysActive": true,
+                "description": "+1 die to Spell Resistance Tests per rating. This bonus cannot be turned off and applies to beneficial spells as well."
+              }
+            ],
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
@@ -4857,7 +4973,29 @@
             "id": "natural-athlete",
             "name": "Natural Athlete",
             "karmaCost": 7,
-            "summary": "+2 dice to Running and Gymnastics."
+            "summary": "+2 dice to Running and Gymnastics.",
+            "effects": [
+              {
+                "id": "natural-athlete-running",
+                "type": "dice-pool-modifier",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "running"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to Running tests."
+              },
+              {
+                "id": "natural-athlete-gymnastics",
+                "type": "dice-pool-modifier",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "gymnastics"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to Gymnastics tests."
+              }
+            ]
           },
           {
             "id": "natural-hardening",
@@ -4891,7 +5029,29 @@
             "id": "photographic-memory",
             "name": "Photographic Memory",
             "karmaCost": 6,
-            "summary": "Perfect recall; +2 dice to Memory tests."
+            "summary": "Perfect recall; +2 dice to Memory tests.",
+            "effects": [
+              {
+                "id": "photographic-memory-recall",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "memory"
+                },
+                "value": "perfect-recall",
+                "description": "Perfect recall of anything seen or heard. The character can make a Memory test whenever their player needs to remember something, and any information held in memory returns in perfect detail."
+              },
+              {
+                "id": "photographic-memory-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "memory-test",
+                "target": {
+                  "test": "memory"
+                },
+                "value": 2,
+                "description": "+2 dice pool modifier to Memory tests."
+              }
+            ]
           },
           {
             "id": "quick-healer",
@@ -4950,7 +5110,20 @@
             "id": "toughness",
             "name": "Toughness",
             "karmaCost": 9,
-            "summary": "+1 die to Body for Damage Resistance."
+            "summary": "+1 die to Body for Damage Resistance.",
+            "effects": [
+              {
+                "id": "toughness-damage-resistance",
+                "type": "dice-pool-modifier",
+                "trigger": "damage-resistance",
+                "target": {
+                  "test": "damage-resistance",
+                  "attribute": "body"
+                },
+                "value": 1,
+                "description": "+1 die to Body when making Damage Resistance tests."
+              }
+            ]
           },
           {
             "id": "will-to-live",
@@ -5076,7 +5249,20 @@
             "id": "bad-luck",
             "name": "Bad Luck",
             "karmaBonus": 12,
-            "summary": "Edge occasionally backfires (1 on d6)."
+            "summary": "Edge occasionally backfires (1 on d6).",
+            "effects": [
+              {
+                "id": "bad-luck-edge-backfire",
+                "type": "edge-modifier",
+                "trigger": "edge-use",
+                "target": {
+                  "resource": "edge"
+                },
+                "value": "backfire-chance",
+                "backfireChance": "1-on-d6",
+                "description": "Whenever Edge is used, roll 1d6. On a result of 1, the Edge use backfires dramatically—the gamemaster decides the exact nature of the mishap."
+              }
+            ]
           },
           {
             "id": "bad-rep",
@@ -5104,7 +5290,29 @@
             "id": "combat-paralysis",
             "name": "Combat Paralysis",
             "karmaBonus": 12,
-            "summary": "First Initiative halved; –3 on Surprise tests."
+            "summary": "First Initiative halved; –3 on Surprise tests.",
+            "effects": [
+              {
+                "id": "combat-paralysis-initiative",
+                "type": "initiative-modifier",
+                "trigger": "first-combat-turn",
+                "target": {
+                  "stat": "initiative"
+                },
+                "value": "halved",
+                "description": "Initiative is halved during the first Combat Turn of any combat encounter."
+              },
+              {
+                "id": "combat-paralysis-surprise",
+                "type": "dice-pool-modifier",
+                "trigger": "surprise-test",
+                "target": {
+                  "test": "surprise"
+                },
+                "value": -3,
+                "description": "–3 dice pool modifier to Surprise tests."
+              }
+            ]
           },
           {
             "id": "dependents",
@@ -5219,7 +5427,20 @@
             "id": "low-pain-tolerance",
             "name": "Low Pain Tolerance",
             "karmaBonus": 9,
-            "summary": "Wound modifiers every 2 boxes instead of 3."
+            "summary": "Wound modifiers every 2 boxes instead of 3.",
+            "effects": [
+              {
+                "id": "low-pain-tolerance-wound-threshold",
+                "type": "wound-modifier",
+                "trigger": "always",
+                "target": {
+                  "stat": "wound-threshold"
+                },
+                "value": 2,
+                "replaces": "default-wound-threshold",
+                "description": "Receive wound modifiers for every 2 boxes of damage instead of the normal 3."
+              }
+            ]
           },
           {
             "id": "ork-poser",
@@ -5282,13 +5503,48 @@
             "id": "sensitive-system",
             "name": "Sensitive System",
             "karmaBonus": 12,
-            "summary": "Double Essence cost for cyberware. Bioware rejected."
+            "summary": "Double Essence cost for cyberware. Bioware rejected.",
+            "effects": [
+              {
+                "id": "sensitive-system-cyberware-cost",
+                "type": "essence-modifier",
+                "trigger": "cyberware-installation",
+                "target": {
+                  "augmentationType": "cyberware"
+                },
+                "value": 2,
+                "multiplier": true,
+                "description": "Double the Essence cost of all cyberware implants."
+              },
+              {
+                "id": "sensitive-system-bioware-rejection",
+                "type": "restriction",
+                "trigger": "always",
+                "target": {
+                  "augmentationType": "bioware"
+                },
+                "value": "forbidden",
+                "description": "Cannot have bioware implanted. The body rejects all bioware."
+              }
+            ]
           },
           {
             "id": "simsense-vertigo",
             "name": "Simsense Vertigo",
             "karmaBonus": 5,
-            "summary": "-2 to tests when using AR/VR/Simsense."
+            "summary": "-2 to tests when using AR/VR/Simsense.",
+            "effects": [
+              {
+                "id": "simsense-vertigo-penalty",
+                "type": "dice-pool-modifier",
+                "trigger": "simsense-use",
+                "target": {
+                  "mode": ["ar", "vr", "simsense"]
+                },
+                "value": -2,
+                "description": "–2 dice pool modifier to all tests while using augmented reality, virtual reality, or simsense."
+              }
+            ]
           },
           {
             "id": "sinner",

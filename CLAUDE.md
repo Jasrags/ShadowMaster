@@ -460,6 +460,7 @@ This project has MCP servers configured in the workspace `.mcp.json` file. These
 | Server                 | Purpose                      | When to Use                                                           |
 | ---------------------- | ---------------------------- | --------------------------------------------------------------------- |
 | **context7**           | Library documentation lookup | Query up-to-date docs for libraries/frameworks (React, Next.js, etc.) |
+| **github**             | GitHub API operations        | PRs, issues, repos, commits, code search via GitHub API               |
 | **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase          |
 | **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs              |
 | **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                          |
@@ -540,12 +541,84 @@ Use `mcp__sequentialthinking__sequentialthinking` for:
 - Designing new edition support
 - Any problem requiring step-by-step reasoning with revision
 
-### Git Server Usage
+### Git & GitHub Tool Selection Guide
 
-Prefer MCP git tools over bash for cleaner integration:
+Three tools available for version control and GitHub operations. Choose based on the task:
 
-- `mcp__git__git_status` - Check working tree
-- `mcp__git__git_diff` - View changes
-- `mcp__git__git_log` - View history
-- `mcp__git__git_commit` - Create commits
-- `mcp__git__git_branch` - List branches
+| Task | Use This | Why |
+|------|----------|-----|
+| View status, diff, log | **Git MCP** | Clean structured output |
+| Create commits | **Git MCP** | Proper message formatting |
+| List/switch branches | **Git MCP** | Simple operations |
+| Push to remote | **Bash `git push`** | MCP doesn't support push |
+| Create PRs | **GitHub MCP** | Rich API integration |
+| Create/update issues | **GitHub MCP** | Full issue management |
+| Add issue comments | **GitHub MCP** | Direct API access |
+| Search code on GitHub | **GitHub MCP** | Cross-repo search |
+| List/manage milestones | **Bash `gh api`** | No MCP milestone support |
+| Complex git operations | **Bash `git`** | Rebase, cherry-pick, etc. |
+
+### Git MCP Server
+
+Use for local repository operations:
+
+```
+mcp__git__git_status      # Working tree status
+mcp__git__git_diff        # View changes (staged/unstaged)
+mcp__git__git_log         # Commit history
+mcp__git__git_commit      # Create commits
+mcp__git__git_branch      # List branches
+mcp__git__git_checkout    # Switch branches
+mcp__git__git_add         # Stage files
+```
+
+**Limitations:** Cannot push, pull, fetch, or perform remote operations.
+
+### GitHub MCP Server
+
+Use for GitHub API operations (requires `GITHUB_PERSONAL_ACCESS_TOKEN`):
+
+```
+mcp__github__create_issue           # Create new issues
+mcp__github__update_issue           # Update issue state/labels/milestone
+mcp__github__add_issue_comment      # Add comments to issues
+mcp__github__list_issues            # List/filter issues
+mcp__github__create_pull_request    # Create PRs
+mcp__github__get_pull_request       # Get PR details
+mcp__github__search_code            # Search code across repos
+mcp__github__get_file_contents      # Read files from remote
+```
+
+**Limitations:** No milestone CRUD (use `gh api` for milestones).
+
+### Bash git/gh CLI
+
+Use when MCP tools don't support the operation:
+
+```bash
+# Remote operations (not in Git MCP)
+git push origin branch-name
+git pull origin main
+git fetch --all
+
+# Milestone management (not in GitHub MCP)
+gh api repos/OWNER/REPO/milestones -X POST -f title="v1.0"
+gh api repos/OWNER/REPO/milestones --jq '.[] | ...'
+
+# Complex git operations
+git rebase -i HEAD~3
+git cherry-pick abc123
+git stash push -m "message"
+```
+
+### Decision Flowchart
+
+```
+Is it a GitHub.com operation (issues, PRs, remote files)?
+├─ Yes → Use GitHub MCP
+│        └─ Unless it's milestones → Use `gh api`
+└─ No → Is it a local git operation?
+        ├─ Yes → Use Git MCP
+        │        └─ Unless it's push/pull/fetch → Use `git` in Bash
+        └─ No → Use Bash
+```

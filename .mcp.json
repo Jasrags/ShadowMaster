@@ -53,6 +53,14 @@
       "type": "stdio",
       "command": "node",
       "args": ["./node_modules/@knip/mcp/src/cli.js"]
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
     }
   }
 }

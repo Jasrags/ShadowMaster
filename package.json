@@ -78,6 +78,7 @@
     "lint-staged": "^15.0.0",
     "next-devtools-mcp": "^0.3.7",
     "nodemon": "^3.1.11",
+    "postcss": "^8.5.6",
     "prettier": "^3.7.4",
     "tailwindcss": "^4",
     "typescript": "^5",
