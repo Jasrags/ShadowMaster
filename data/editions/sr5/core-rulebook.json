@@ -4548,7 +4548,7 @@
             "id": "analytical-mind",
             "name": "Analytical Mind",
             "karmaCost": 5,
-            "summary": "+2 dice to Logic tests involving pattern analysis.",
+            "summary": "+2 dice to Logic tests involving pattern analysis; halves problem-solving time.",
             "effects": [
               {
                 "id": "analytical-mind-logic-bonus",
@@ -4561,7 +4561,17 @@
                 "condition": {
                   "customCondition": "pattern-analysis"
                 },
-                "description": "+2 dice to Logic tests involving pattern analysis, evidence, or clues."
+                "description": "+2 dice to Logic tests involving pattern recognition, evidence analysis, clue hunting, or solving puzzles."
+              },
+              {
+                "id": "analytical-mind-time-reduction",
+                "type": "time-modifier",
+                "trigger": "problem-solving",
+                "target": {
+                  "action": "problem-solving"
+                },
+                "value": 0.5,
+                "description": "Reduces the time it takes the character to solve a problem by half."
               }
             ]
           },
@@ -4670,7 +4680,9 @@
                 "value": 1,
                 "description": "Raise the natural maximum for one chosen attribute by 1."
               }
-            ]
+            ],
+            "limit": 1,
+            "requiresGMApproval": true
           },
           {
             "id": "first-impression",
@@ -4735,7 +4747,7 @@
             "id": "gearhead",
             "name": "Gearhead",
             "karmaCost": 11,
-            "summary": "+20% Speed or +1 Handling; +2 to stunts.",
+            "summary": "+20% Speed or +1 Handling; +2 to stunts. Lasts 1d6 minutes.",
             "effects": [
               {
                 "id": "gearhead-vehicle-boost",
@@ -4748,7 +4760,8 @@
                   "speed": "20%",
                   "handling": 1
                 },
-                "description": "Increase vehicle Speed by 20% OR Handling by 1 (choose one per vehicle)."
+                "duration": "1d6-minutes",
+                "description": "Increase vehicle Speed by 20% OR Handling by 1 (choose one per vehicle). Lasts 1d6 minutes."
               },
               {
                 "id": "gearhead-stunt-bonus",
@@ -4759,6 +4772,21 @@
                 },
                 "value": 2,
                 "description": "+2 dice pool modifier when performing vehicle stunts."
+              },
+              {
+                "id": "gearhead-extend-duration",
+                "type": "special-ability",
+                "trigger": "duration-expiry",
+                "target": {
+                  "ability": "gearhead-vehicle-boost"
+                },
+                "value": "extend",
+                "cost": {
+                  "type": "stun-damage",
+                  "value": 1,
+                  "per": "combat-turn"
+                },
+                "description": "After 1d6 minutes, may extend boost by taking 1 Stun damage (unresisted) per Combat Turn."
               }
             ]
           },
@@ -4831,15 +4859,128 @@
             "id": "home-ground",
             "name": "Home Ground",
             "karmaCost": 10,
-            "summary": "Bonus in specific turf (Astral Acclimation, Digital Turf, etc.).",
+            "summary": "Bonus in specific turf. Choose one benefit type and a specific location.",
             "requiresSpecification": true,
-            "specificationLabel": "Category/Location"
+            "specificationLabel": "Location",
+            "requiresSelection": {
+              "type": "home-ground-benefit",
+              "label": "Benefit Type",
+              "options": [
+                {
+                  "id": "astral-acclimation",
+                  "name": "Astral Acclimation",
+                  "description": "+2 dice to all Astral tests within home ground. Requires Magic rating.",
+                  "requiresMagic": true,
+                  "effects": [
+                    {
+                      "id": "home-ground-astral",
+                      "type": "dice-pool-modifier",
+                      "trigger": "astral-test",
+                      "target": { "category": "astral" },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                },
+                {
+                  "id": "you-know-a-guy",
+                  "name": "You Know a Guy",
+                  "description": "+2 dice to all Etiquette and Negotiation tests within home ground.",
+                  "effects": [
+                    {
+                      "id": "home-ground-social",
+                      "type": "dice-pool-modifier",
+                      "trigger": "skill-test",
+                      "target": { "skills": ["etiquette", "negotiation"] },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                },
+                {
+                  "id": "digital-turf",
+                  "name": "Digital Turf",
+                  "description": "+2 dice to all Matrix actions within home ground. Requires technomancer or decker.",
+                  "effects": [
+                    {
+                      "id": "home-ground-matrix",
+                      "type": "dice-pool-modifier",
+                      "trigger": "matrix-action",
+                      "target": { "category": "matrix" },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                },
+                {
+                  "id": "the-transporter",
+                  "name": "The Transporter",
+                  "description": "+2 dice to all Vehicle tests within home ground.",
+                  "effects": [
+                    {
+                      "id": "home-ground-vehicle",
+                      "type": "dice-pool-modifier",
+                      "trigger": "vehicle-test",
+                      "target": { "category": "vehicle" },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                },
+                {
+                  "id": "on-the-lam",
+                  "name": "On the Lam",
+                  "description": "+2 dice to Sneaking and Perception tests within home ground.",
+                  "effects": [
+                    {
+                      "id": "home-ground-stealth",
+                      "type": "dice-pool-modifier",
+                      "trigger": "skill-test",
+                      "target": { "skills": ["sneaking", "perception"] },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                },
+                {
+                  "id": "street-politics",
+                  "name": "Street Politics",
+                  "description": "+2 dice to all Leadership and Intimidation tests within home ground.",
+                  "effects": [
+                    {
+                      "id": "home-ground-leadership",
+                      "type": "dice-pool-modifier",
+                      "trigger": "skill-test",
+                      "target": { "skills": ["leadership", "intimidation"] },
+                      "value": 2,
+                      "condition": { "location": "home-ground" }
+                    }
+                  ]
+                }
+              ]
+            }
           },
           {
             "id": "human-looking",
             "name": "Human-Looking",
             "karmaCost": 6,
-            "summary": "Pass for human. Restricted to Elf, Dwarf, Ork."
+            "summary": "Pass for human without close inspection.",
+            "metatypeRestrictions": {
+              "allowed": ["elf", "dwarf", "ork"],
+              "forbidden": ["human", "troll"]
+            },
+            "effects": [
+              {
+                "id": "human-looking-disguise",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "metatype-appearance"
+                },
+                "value": "pass-as-human",
+                "description": "Character appears human without close inspection. May avoid metatype-based prejudice and restrictions."
+              }
+            ]
           },
           {
             "id": "indomitable",
@@ -4888,7 +5029,31 @@
             "id": "juryrigger",
             "name": "Juryrigger",
             "karmaCost": 10,
-            "summary": "+2 dice to Mechanics for temporary fixes."
+            "summary": "+2 dice and -1 threshold for temporary mechanical fixes.",
+            "effects": [
+              {
+                "id": "juryrigger-dice-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "mechanics",
+                  "condition": "temporary-fix"
+                },
+                "value": 2,
+                "description": "+2 dice to Mechanics tests for temporary fixes."
+              },
+              {
+                "id": "juryrigger-threshold-reduction",
+                "type": "threshold-modifier",
+                "trigger": "skill-test",
+                "target": {
+                  "skill": "mechanics",
+                  "condition": "temporary-fix"
+                },
+                "value": -1,
+                "description": "-1 to threshold for Mechanics tests involving temporary fixes."
+              }
+            ]
           },
           {
             "id": "low-light-vision",
@@ -4967,7 +5132,8 @@
             "requiresMagic": true,
             "requiresSpecification": true,
             "specificationLabel": "Spirit",
-            "specificationSource": "mentorSpirits"
+            "specificationSource": "mentorSpirits",
+            "limit": 1
           },
           {
             "id": "natural-athlete",
@@ -5016,14 +5182,39 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 4
+                "karmaCost": 4,
+                "description": "Immunity to natural pathogens/toxins only"
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 10
+                "karmaCost": 10,
+                "description": "Immunity to both natural and synthetic versions"
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "natural-immunity-protection",
+                "type": "immunity",
+                "trigger": "exposure",
+                "target": {
+                  "substance": "specification"
+                },
+                "value": "immune",
+                "description": "Character is immune to the specified disease or toxin."
+              },
+              {
+                "id": "natural-immunity-recovery",
+                "type": "special-ability",
+                "trigger": "exposure",
+                "target": {
+                  "condition": "immunity-overwhelmed"
+                },
+                "value": "recovery",
+                "duration": "6-hours",
+                "description": "If immunity is somehow bypassed, character recovers fully within 6 hours."
+              }
+            ]
           },
           {
             "id": "photographic-memory",
@@ -5074,7 +5265,7 @@
           {
             "id": "resistance-pathogens-toxins",
             "name": "Resistance to Pathogens/Toxins",
-            "summary": "+1 dice pool modifier to Resistance Tests.",
+            "summary": "+1 dice pool modifier to Resistance Tests against pathogens or toxins.",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 2,
@@ -5082,29 +5273,89 @@
               "1": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 4
+                "karmaCost": 4,
+                "description": "Resistance to either pathogens OR toxins (choose one)"
               },
               "2": {
                 "cost": 0,
                 "availability": 0,
-                "karmaCost": 8
+                "karmaCost": 8,
+                "description": "Resistance to both pathogens AND toxins"
               }
-            }
+            },
+            "incompatibilities": ["weak-immune-system"],
+            "effects": [
+              {
+                "id": "resistance-pathogens-toxins-bonus",
+                "type": "dice-pool-modifier",
+                "trigger": "resistance-test",
+                "target": {
+                  "test": "pathogen-toxin-resistance"
+                },
+                "value": "rating",
+                "description": "+1 dice pool modifier per rating to Resistance Tests against pathogens and/or toxins."
+              }
+            ]
           },
           {
             "id": "spirit-affinity",
             "name": "Spirit Affinity",
             "karmaCost": 7,
             "summary": "Attuned to one spirit type; +1 service/binding bonus.",
+            "requiresMagic": true,
             "requiresSpecification": true,
-            "specificationLabel": "Spirit Type"
+            "specificationLabel": "Spirit Type",
+            "specificationSource": "spiritTypes",
+            "incompatibilities": {
+              "quality": "spirit-bane",
+              "condition": "same-specification"
+            },
+            "effects": [
+              {
+                "id": "spirit-affinity-service-bonus",
+                "type": "summoning-modifier",
+                "trigger": "spirit-summoning",
+                "target": {
+                  "spiritType": "specification"
+                },
+                "value": 1,
+                "description": "+1 service when summoning spirits of the specified type."
+              }
+            ]
           },
           {
             "id": "thermographic-vision",
             "name": "Thermographic Vision",
             "karmaCost": 5,
             "isRacial": true,
-            "summary": "See heat signatures."
+            "summary": "See heat signatures; reduces visibility penalties.",
+            "metatypeRestrictions": {
+              "allowed": ["human"],
+              "note": "Other metatypes have this as a racial ability"
+            },
+            "effects": [
+              {
+                "id": "thermographic-vision-sight",
+                "type": "special-ability",
+                "trigger": "always",
+                "target": {
+                  "ability": "vision"
+                },
+                "value": "thermographic",
+                "description": "Can see heat signatures, allowing detection of living beings and heat sources through darkness, smoke, or similar visual obstructions."
+              },
+              {
+                "id": "thermographic-vision-visibility",
+                "type": "visibility-modifier",
+                "trigger": "visibility-check",
+                "target": {
+                  "condition": "darkness-or-smoke"
+                },
+                "value": -1,
+                "unit": "visibility-category",
+                "description": "Reduces visibility penalty by one category when heat signatures are relevant."
+              }
+            ]
           },
           {
             "id": "toughness",
@@ -5148,7 +5399,19 @@
                 "availability": 0,
                 "karmaCost": 9
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "will-to-live-overflow",
+                "type": "derived-stat-modifier",
+                "trigger": "always",
+                "target": {
+                  "stat": "overflow"
+                },
+                "value": "rating",
+                "description": "+1 Overflow box per rating level."
+              }
+            ]
           }
         ],
         "negative": [
