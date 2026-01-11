@@ -10222,34 +10222,18 @@
             "name": "Chemsuit",
             "category": "survival",
             "hasRating": true,
-            "maxRating": 6,
-            "description": "Protection from chemical hazards (Rating 1-6).",
             "minRating": 1,
+            "maxRating": 6,
+            "description": "Impermeable coverall worn over clothes or armor providing chemical protection equal to its Rating. Not vacuum sealed like a hazmat suit. If worn on top of chemical-resistant armor, only the highest chemical protection rating applies.",
+            "page": 449,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 150,
-                "availability": 2
-              },
-              "2": {
-                "cost": 300,
-                "availability": 4
-              },
-              "3": {
-                "cost": 450,
-                "availability": 6
-              },
-              "4": {
-                "cost": 600,
-                "availability": 8
-              },
-              "5": {
-                "cost": 750,
-                "availability": 10
-              },
-              "6": {
-                "cost": 900,
-                "availability": 12
-              }
+              "1": { "cost": 150, "availability": 2 },
+              "2": { "cost": 300, "availability": 4 },
+              "3": { "cost": 450, "availability": 6 },
+              "4": { "cost": 600, "availability": 8 },
+              "5": { "cost": 750, "availability": 10 },
+              "6": { "cost": 900, "availability": 12 }
             }
           },
           {
@@ -10258,15 +10242,19 @@
             "category": "survival",
             "cost": 200,
             "availability": 0,
-            "description": "Rope, carabiners, harness."
+            "description": "Backpack full of rope (400-kilo test), ascent/descent harness, gloves, carabiners, crampons, and other gear for assisted climbing.",
+            "page": 449,
+            "source": "Core"
           },
           {
             "id": "rappelling-gloves",
             "name": "Rappelling Gloves",
             "category": "survival",
-            "cost": 70,
+            "cost": 50,
             "availability": 0,
-            "description": "Reinforced gloves for rope work."
+            "description": "Special fabric gloves providing +2 dice pool bonus on tests to hold grip on a grapple line. Required for using microwire safely.",
+            "page": 449,
+            "source": "Core"
           },
           {
             "id": "flashlight",
@@ -10274,40 +10262,167 @@
             "category": "survival",
             "cost": 25,
             "availability": 0,
-            "description": "Standard handheld light."
+            "description": "Long-lasting, super bright flashlight. Available in low-light and infrared versions. Can be mounted to weapon's top or under-barrel mount.",
+            "page": 449,
+            "source": "Core"
           },
           {
-            "id": "low-light-flashlight",
-            "name": "Low Light Flashlight",
+            "id": "diving-gear",
+            "name": "Diving Gear",
             "category": "survival",
-            "cost": 50,
-            "availability": 2,
-            "description": "IR-capable flashlight."
+            "cost": 2000,
+            "availability": 6,
+            "description": "Diving suit, partial facemask with snorkel, breathing regulator, air tank with 2 hours of air, and inflatable vest. Regulator and tank protect against inhalation toxins. Wet suit provides Rating 1 resistance to Cold damage.",
+            "page": 449,
+            "source": "Core"
+          },
+          {
+            "id": "gecko-tape-gloves",
+            "name": "Gecko Tape Gloves",
+            "category": "survival",
+            "cost": 250,
+            "availability": 12,
+            "description": "Dry adhesive gloves, kneepads, and slip-on-soles with millions of microscopic hairs that bond to surfaces. Allows assisted climbing. Useless when wet. Wireless: adhesive can be neutralized with wireless signal.",
+            "page": 449,
+            "source": "Core",
+            "wirelessBonus": "Adhesive outer layer can be temporarily neutralized with a wireless signal, useful for getting on and off without sticking."
+          },
+          {
+            "id": "hazmat-suit",
+            "name": "Hazmat Suit",
+            "category": "survival",
+            "cost": 3000,
+            "availability": 8,
+            "description": "Full body suit with internal air tank (4 hours). Provides chemical seal and protects from contact and inhalation vector toxins. Many include Geiger counter.",
+            "page": 449,
+            "source": "Core",
+            "wirelessBonus": "Analyzes and transmits information about the environment you're not touching or breathing."
+          },
+          {
+            "id": "light-stick",
+            "name": "Light Stick",
+            "category": "survival",
+            "cost": 25,
+            "availability": 0,
+            "description": "Bend, snap, and shake for three hours of soft chemical illumination covering a ten-meter radius.",
+            "page": 449,
+            "source": "Core"
+          },
+          {
+            "id": "magnesium-torch",
+            "name": "Magnesium Torch",
+            "category": "survival",
+            "cost": 5,
+            "availability": 0,
+            "description": "Strike and activate for five minutes of bright torchlight.",
+            "page": 449,
+            "source": "Core"
+          },
+          {
+            "id": "micro-flare-launcher",
+            "name": "Micro Flare Launcher",
+            "category": "survival",
+            "cost": 175,
+            "availability": 0,
+            "description": "Shoots colored flares 200 meters into the air, illuminating a city block for a couple minutes and negating poor/low lighting modifiers. Uses Exotic Ranged Weapon skill; deals 5P Fire damage if shot at someone.",
+            "page": 449,
+            "source": "Core",
+            "weaponStats": {
+              "accuracy": 3,
+              "damage": "5P",
+              "damageType": "fire",
+              "ap": -5,
+              "mode": "SS",
+              "ammo": "1(ml)"
+            }
+          },
+          {
+            "id": "micro-flares",
+            "name": "Micro Flares",
+            "category": "survival",
+            "cost": 25,
+            "availability": 0,
+            "description": "Ammunition for micro flare launcher.",
+            "page": 449,
+            "source": "Core"
           },
           {
             "id": "grapple-gun",
             "name": "Grapple Gun",
-            "category": "survival",
+            "category": "grapple-gun",
             "cost": 500,
             "availability": 8,
-            "description": "Pneumatic grapple launcher.",
-            "legality": "restricted"
+            "legality": "restricted",
+            "description": "Shoots a grappling hook and attached rope using Light Crossbow ranges. Includes internal winch to pull back the grapple or pull up small loads. Uses Exotic Ranged Weapon skill.",
+            "page": 450,
+            "source": "Core",
+            "weaponStats": {
+              "accuracy": 3,
+              "damage": "7S",
+              "ap": -2,
+              "mode": "SS",
+              "ammo": "1(ml)"
+            }
+          },
+          {
+            "id": "catalyst-stick",
+            "name": "Catalyst Stick",
+            "category": "grapple-gun",
+            "cost": 120,
+            "availability": 8,
+            "legality": "forbidden",
+            "description": "Reusable stick that triggers a chemical reaction in stealth rope, crumbling it to dust within seconds and leaving almost no trace.",
+            "page": 450,
+            "source": "Core"
           },
           {
             "id": "microwire",
             "name": "Microwire (100m)",
-            "category": "survival",
+            "category": "grapple-gun",
             "cost": 50,
             "availability": 4,
-            "description": "High-strength micro wire."
+            "maxWeight": 100,
+            "weightUnit": "kg",
+            "description": "Extremely thin (nearly monofilament) resilient fiber rope. Can only be grabbed with rappelling gloves; without them it inflicts 8P damage AP -8. Supports up to 100 kg.",
+            "page": 450,
+            "source": "Core"
+          },
+          {
+            "id": "myomeric-rope",
+            "name": "Myomeric Rope (10m)",
+            "category": "grapple-gun",
+            "cost": 200,
+            "availability": 10,
+            "maxLength": 30,
+            "lengthUnit": "meters",
+            "description": "Made of special myomeric fiber, this rope's movement can be controlled remotely (max 30m). Can wind like a snake to reach around obstacles or tie to ledges. Moves at 2 meters per Combat Turn.",
+            "page": 450,
+            "source": "Core"
           },
           {
             "id": "standard-rope",
             "name": "Standard Rope (100m)",
-            "category": "survival",
+            "category": "grapple-gun",
             "cost": 50,
             "availability": 0,
-            "description": "Heavy-duty climbing rope."
+            "maxWeight": 400,
+            "weightUnit": "kg",
+            "description": "Standard climbing rope supporting up to 400 kg.",
+            "page": 450,
+            "source": "Core"
+          },
+          {
+            "id": "stealth-rope",
+            "name": "Stealth Rope (100m)",
+            "category": "grapple-gun",
+            "cost": 85,
+            "availability": 8,
+            "legality": "forbidden",
+            "maxWeight": 400,
+            "weightUnit": "kg",
+            "description": "Special rope that crumbles to dust when touched with a catalyst stick, leaving almost no trace. Supports up to 400 kg.",
+            "page": 450,
+            "source": "Core"
           },
           {
             "id": "survival-kit",
@@ -10315,41 +10430,27 @@
             "category": "survival",
             "cost": 200,
             "availability": 4,
-            "description": "Wilderness survival essentials."
+            "description": "Rugged bag containing knife, lighter, matches, compass, lightweight thermal blanket, several days' worth of ration bars, water-purification unit, and more. Good for a go-bag.",
+            "page": 449,
+            "source": "Core"
           },
           {
             "id": "respirator",
             "name": "Respirator",
             "category": "survival",
             "hasRating": true,
-            "maxRating": 6,
-            "description": "Air filtration mask (Rating 1-6).",
             "minRating": 1,
+            "maxRating": 6,
+            "description": "Filter-mask worn over mouth and nose protecting against inhalation-vector toxins. Adds rating to toxin resistance tests against inhalation-vector toxins.",
+            "page": 449,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              },
-              "4": {
-                "cost": 200,
-                "availability": 0
-              },
-              "5": {
-                "cost": 250,
-                "availability": 0
-              },
-              "6": {
-                "cost": 300,
-                "availability": 0
-              }
+              "1": { "cost": 50, "availability": 0 },
+              "2": { "cost": 100, "availability": 0 },
+              "3": { "cost": 150, "availability": 0 },
+              "4": { "cost": 200, "availability": 0 },
+              "5": { "cost": 250, "availability": 0 },
+              "6": { "cost": 300, "availability": 0 }
             }
           },
           {
@@ -10358,7 +10459,44 @@
             "category": "survival",
             "cost": 200,
             "availability": 0,
-            "description": "Full face protection."
+            "description": "Air-supplied re-breather covering your face, providing immunity to inhalation-vector toxin attacks. Includes one-hour clean-air supply (replacements 40¥). Can attach to larger air tanks. Cannot be combined with a respirator.",
+            "page": 449,
+            "source": "Core",
+            "wirelessBonus": "Analyzes and gives information about the surrounding air that you're not breathing."
+          }
+        ],
+        "industrialChemicals": [
+          {
+            "id": "glue-solvent",
+            "name": "Glue Solvent",
+            "category": "industrial-chemicals",
+            "cost": 90,
+            "availability": 2,
+            "description": "Spray can with enough solvent to dissolve about a square meter of fast-drying aerosol superglue.",
+            "page": 448,
+            "source": "Core"
+          },
+          {
+            "id": "glue-sprayer",
+            "name": "Glue Sprayer",
+            "category": "industrial-chemicals",
+            "cost": 150,
+            "availability": 2,
+            "description": "Fast-drying aerosol superglue for gluing two rigid surfaces together. Holds enough for about a square meter (an exterior door or picture window). Takes 1 Combat Turn to harden. Glue has Body and Strength 5 for forcing (Opposed Body + Strength Test).",
+            "page": 448,
+            "source": "Core"
+          },
+          {
+            "id": "thermite-burning-bar",
+            "name": "Thermite Burning Bar",
+            "category": "industrial-chemicals",
+            "cost": 500,
+            "availability": 16,
+            "legality": "restricted",
+            "description": "Thermite gel incendiary material on a rod with handle and frame used to melt holes in iron, steel, and plasteel. Inflicts Fire Damage DV 30P. Must be set carefully; cannot be used as a weapon unless target is tied up or unconscious.",
+            "page": 448,
+            "source": "Core",
+            "wirelessBonus": "Can be activated wirelessly."
           }
         ],
         "medical": [
@@ -10567,10 +10705,53 @@
           {
             "id": "biomonitor",
             "name": "Biomonitor",
-            "category": "medical",
+            "category": "biotech",
             "cost": 300,
             "availability": 3,
-            "description": "Tracks vital signs."
+            "description": "Compact device measuring life signs (heart rate, blood pressure, temperature, etc.) and analyzing blood, sweat, and skin samples. Worn as armband/wristband or integrated into clothing/commlinks.",
+            "page": 450,
+            "source": "Core",
+            "wirelessBonus": "Shares information with designated wireless devices and can auto-alert DocWagon or other ambulance services if life signs reach certain thresholds."
+          },
+          {
+            "id": "disposable-syringe",
+            "name": "Disposable Syringe",
+            "category": "biotech",
+            "cost": 10,
+            "availability": 3,
+            "description": "Plastic syringe with metal needle for single use. Can apply injection-vector toxins. Uncooperative victims may need to be immobilized or grappled first.",
+            "page": 450,
+            "source": "Core"
+          },
+          {
+            "id": "medkit",
+            "name": "Medkit",
+            "category": "biotech",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 6,
+            "description": "Drug supplies, bandages, tools, and doctor expert system advising on medical emergencies. Rating 3 or lower fits in pocket; Rating 4+ is handheld case. Needs restocking after (Rating) uses. Add rating to limit on First Aid tests.",
+            "page": 450,
+            "source": "Core",
+            "wirelessBonus": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating.",
+            "ratings": {
+              "1": { "cost": 250, "availability": 1 },
+              "2": { "cost": 500, "availability": 2 },
+              "3": { "cost": 750, "availability": 3 },
+              "4": { "cost": 1000, "availability": 4 },
+              "5": { "cost": 1250, "availability": 5 },
+              "6": { "cost": 1500, "availability": 6 }
+            }
+          },
+          {
+            "id": "medkit-supplies",
+            "name": "Medkit Supplies",
+            "category": "biotech",
+            "cost": 100,
+            "availability": 0,
+            "description": "Replacement supplies for medkit after use.",
+            "page": 450,
+            "source": "Core"
           }
         ],
         "security": [
