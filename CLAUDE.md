@@ -6,7 +6,26 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 
 **Shadow Master** is a character management system for the Shadowrun tabletop RPG, supporting all editions (1E-6E plus Anarchy). The application provides multi-edition character creation with edition-specific rules, flexible ruleset system supporting sourcebooks and errata, and character lifecycle management.
 
-**Current Status:** MVP phase focusing on SR5 Priority-based character creation.
+**Current Status:** Post-MVP with full SR5 support including character creation, advancement, combat tracking, campaign management, and GM tools.
+
+## Implemented Features
+
+Beyond character creation, Shadow Master includes:
+
+| Feature | Description |
+|---------|-------------|
+| **Combat Tracking** | Initiative, actions, damage tracking, condition monitors |
+| **Grunt/NPC System** | Pre-built templates (PR0-PR6) for encounter management |
+| **Contact Network** | Relationships, loyalty/connection ratings, favor economy |
+| **Wireless/Matrix** | Matrix hacking and wireless operations |
+| **Augmentations** | Cyberlimb system with essence tracking |
+| **Campaign Management** | Sessions, locations, notes, posts, grunt teams |
+| **Character Advancement** | Karma spending for attributes, skills, magic, edge |
+| **Account Security** | Password changes, import/export, account deletion |
+| **Activity Feed** | User action logging and tracking |
+| **Character Cloning** | Duplicate characters for templates/backups |
+| **Ruleset Snapshots** | Version control for rulesets |
+| **Audit Trail** | Full audit logging for compliance |
 
 ## Development Commands
 
@@ -14,13 +33,19 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 
 - `pnpm dev` - Start development server (http://localhost:3000)
 - `pnpm dev:all` - Start dev server with type-check and lint watch
+- `pnpm dev:full` - Full dev mode with knip watch for dead code detection
 - `pnpm build` - Create production build
 - `pnpm start` - Run production server
 - `pnpm lint` - Run ESLint
 - `pnpm type-check` - Run TypeScript type checking
+- `pnpm check` - Combined linting, type-check, and knip analysis
+- `pnpm check:ci` - CI pipeline script with tests
 - `pnpm test` - Run unit tests (Vitest)
 - `pnpm test:watch` - Run tests in watch mode
 - `pnpm test:e2e` - Run E2E tests (Playwright)
+- `pnpm knip` - Dead code detection
+- `pnpm knip:watch` - Watch mode for dead code
+- `pnpm verify-data` - Validate JSON data files
 
 ### Development Workflow
 
@@ -50,30 +75,77 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 
 ```
 /app                    # Next.js App Router pages and API routes
-  /api                  # API route handlers
-    /characters/[characterId]/advancement  # Advancement API endpoints
+  /api                  # API route handlers (~160 endpoints)
+    /account            # Account management (delete, import/export, preferences)
+    /audit              # Audit logging endpoints
+    /combat             # Combat session management
+    /characters/[characterId]
+      /advancement      # Karma advancement endpoints
+      /actions          # Action execution
+      /augmentations    # Cyberlimb and augmentation management
+      /contacts         # Contact management
+      /training         # Training tracking
+      /weapons          # Weapon management
+      /wireless         # Matrix/wireless operations
+    /campaigns/[id]
+      /grunt-teams      # NPC grunt team management
+      /locations        # Location management
+      /notes            # Campaign notes
+      /posts            # Campaign posts
+      /sessions         # Session management
+    /editions/[editionCode]
+      /grunt-templates  # Grunt template data
+      /content          # Dynamic content loading
   /characters           # Character management pages
     /create             # Character creation (redirects to sheet)
     /create/sheet       # Sheet-based character creation
     /[id]               # Character sheet view/edit
+    /[id]/edit          # Character editing interface
     /[id]/advancement   # Character advancement UI
   /campaigns            # Campaign management pages
+    /discover           # Campaign discovery
+    /[id]/grunt-teams   # Grunt team management UI
   /users                # User management (admin)
   /signin, /signup      # Authentication pages
 /lib                    # Core business logic
   /types                # TypeScript type definitions
-  /storage              # File-based data persistence layer
+  /storage              # File-based data persistence (~20 modules)
   /rules                # Ruleset loading and merging system
-    /advancement        # Karma advancement logic (attributes, skills, edge)
+    /action-resolution  # Action execution framework
+    /advancement        # Karma advancement (attributes, skills, edge, magic)
+    /augmentations      # Cyberlimb and augmentation systems
+    /encumbrance        # Weight/carry limits
     /qualities          # Quality effects and validation
+    /ratings            # Unified ratings system
+    /sync               # Ruleset synchronization
+    /validation         # Character validation framework
+    /wireless           # Matrix/wireless rules
   /auth                 # Authentication and session management
+  /combat               # Combat session management
+  /security             # Rate limiting, audit logging
+  /migrations           # Data migration framework
+  /themes.ts            # Theming system (neon-rain, modern-card)
 /components             # Shared React components
+  /combat               # Combat UI components
+  /creation             # Character creation cards (45+ components)
+  /cyberlimbs           # Cyberlimb-specific UI
+  /sync                 # Character sync components
+  /ThemeProvider.tsx    # Global theming
 /data                   # JSON file storage (acts as database)
   /users                # User records
   /characters           # Character records (organized by userId)
   /campaigns            # Campaign records
   /editions             # Edition metadata and ruleset data
+    /{editionCode}/grunt-templates  # Pre-built NPC templates (PR0-PR6)
 /docs                   # Architecture documentation
+  /architecture         # Core architecture docs
+  /archive              # Completed phases
+  /capabilities         # Feature documentation
+  /data_tables          # Game rule reference tables
+  /specifications       # Feature specs
+  /features             # Feature documentation
+  /decisions            # Architecture decisions
+  /audits               # Audit documentation
 /__tests__              # Test files (Vitest)
 /e2e                    # E2E tests (Playwright)
 ```
@@ -134,7 +206,7 @@ Sheet-based, single-page character creation with all sections visible simultaneo
 
 - `/app/characters/create/sheet/page.tsx` - Entry point
 - `/app/characters/create/sheet/components/SheetCreationLayout.tsx` - Main layout
-- `/components/creation/` - Creation card components (28+ components)
+- `/components/creation/` - Creation card components (45+ components)
 - `/lib/types/creation.ts` - Creation method and state types
 - `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking context
 
@@ -185,7 +257,62 @@ User requests advancement
   → (If campaign-linked) Submit for GM approval
 ```
 
-### 4. Data Management Layers
+### 4. Combat System
+
+Full combat tracking with initiative, actions, and damage resolution.
+
+**Key Concepts:**
+
+- **Combat Session**: Tracks all combatants, turn order, and combat state
+- **Action Resolution**: Executes and validates combat actions
+- **Initiative Tracking**: Automatic turn management with initiative passes
+- **Damage Tracking**: Condition monitor integration
+
+**Critical Files:**
+
+- `/lib/combat/CombatSessionContext.tsx` - Combat state management
+- `/lib/rules/action-resolution/` - Action execution framework
+- `/app/api/combat/` - Combat session API endpoints
+- `/components/combat/` - Combat UI (tracker, dice pools, quick reference)
+
+### 5. Grunt/NPC System
+
+Pre-built NPC templates for GMs with professional rating tiers.
+
+**Key Concepts:**
+
+- **Professional Rating (PR)**: PR0 (street rabble) to PR6 (dragon guard)
+- **Grunt Templates**: Pre-configured NPCs with stats, gear, and skills
+- **Grunt Teams**: Groups of NPCs for encounter management
+
+**Critical Files:**
+
+- `/lib/rules/grunts.ts` - Grunt mechanics and validation
+- `/lib/storage/grunt-templates.ts` - Template persistence
+- `/data/editions/{editionCode}/grunt-templates/` - PR0-PR6 template files
+- `/app/campaigns/[id]/grunt-teams/` - Team management UI
+- `/app/api/campaigns/[id]/grunt-teams/` - Grunt team API
+
+### 6. Contact Network System
+
+Contact relationships and favor economy for social gameplay.
+
+**Key Concepts:**
+
+- **Contact Network**: Relationships with NPCs and their loyalty/connection ratings
+- **Favor Economy**: Tracking favors owed and earned
+- **Social Capital**: Reputation and influence mechanics
+
+**Critical Files:**
+
+- `/lib/rules/contact-network.ts` - Contact relationship logic
+- `/lib/rules/favors.ts` - Favor economy system
+- `/lib/rules/social-actions.ts` - Social interaction mechanics
+- `/lib/storage/contacts.ts` - Contact persistence
+- `/lib/storage/favor-ledger.ts` - Favor tracking
+- `/app/api/characters/[characterId]/contacts/` - Contact API
+
+### 7. Data Management Layers
 
 **Authentication State** (`/lib/auth/AuthProvider.tsx`):
 
@@ -204,16 +331,29 @@ User requests advancement
 - User preferences and UI state
 - Draft recovery handled server-side via auto-save
 
-### 4. File-Based Storage Pattern
+### 8. File-Based Storage Pattern
 
 **Design:** JSON files on disk with atomic writes (temp file + rename pattern)
 
 **Storage Layer** (`/lib/storage/`):
 
+Core modules:
 - `base.ts` - Core utilities: `readJsonFile()`, `writeJsonFile()`, `ensureDirectory()`
 - `users.ts` - User CRUD operations
 - `characters.ts` - Character CRUD + specialized operations (damage, karma, etc.)
+- `campaigns.ts` - Campaign CRUD operations
 - `editions.ts` - Edition and ruleset loading
+
+Extended modules:
+- `contacts.ts`, `favor-ledger.ts` - Contact system persistence
+- `combat.ts`, `action-history.ts` - Combat session storage
+- `grunt-templates.ts`, `grunts.ts` - NPC system storage
+- `notifications.ts`, `activity.ts` - User activity tracking
+- `audit.ts`, `user-audit.ts` - Audit trail logging
+- `ruleset-snapshots.ts`, `snapshot-cache.ts` - Ruleset versioning
+- `locations.ts` - Campaign location storage
+- `social-capital.ts` - Social capital tracking
+- `violation-record.ts` - Rule violation tracking
 
 **Storage Structure:**
 
@@ -221,15 +361,38 @@ User requests advancement
 /data
 ├── /users/{userId}.json
 ├── /characters/{userId}/{characterId}.json
+├── /campaigns/{campaignId}.json
 └── /editions/{editionCode}/
     ├── edition.json
     ├── core-rulebook.json
-    └── {sourcebook}.json
+    ├── {sourcebook}.json
+    └── /grunt-templates/
+        └── pr{0-6}-{name}.json
 ```
 
 **Important:** This is NOT production-scalable. File I/O happens on every request. Future migration to a database is planned.
 
-### 5. API Route Patterns
+### 9. Security Infrastructure
+
+**Rate Limiting** (`/lib/security/rate-limit.ts`):
+- DDoS protection for API endpoints
+- Configurable limits per endpoint
+
+**Audit Logging** (`/lib/security/audit-logger.ts`):
+- Full audit trail for user actions
+- Security event tracking
+- Stored via `/lib/storage/audit.ts`
+
+**Character Authorization** (`/lib/auth/character-authorization.ts`):
+- Granular character access control
+- Owner, campaign GM, and viewer permissions
+
+**Additional Auth Modules** (`/lib/auth/`):
+- `validation.ts` - Auth validation logic
+- `middleware.ts` - Auth middleware
+- `campaign.ts` - Campaign-specific authorization
+
+### 10. API Route Patterns
 
 All API routes follow this pattern:
 
@@ -333,7 +496,11 @@ All domain entities have TypeScript interfaces in `/lib/types/`:
 Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 
 - `AuthProvider` - User session management
+- `ThemeProvider` - Global Shadowrun theming (neon-rain, modern-card themes)
+- `I18nProvider` - Internationalization via react-aria-components
 - `RulesetProvider` - Loaded ruleset caching (nested in pages that need it)
+- `CombatSessionContext` - Combat state management (in combat pages)
+- `CreationBudgetContext` - Real-time budget tracking during character creation
 
 ## Development Guidelines
 
@@ -391,10 +558,12 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 /lib/auth/__tests__/                  # Auth unit tests
 /lib/storage/__tests__/               # Storage layer tests
 /lib/rules/__tests__/                 # Rules engine tests
-/lib/rules/advancement/__tests__/     # Advancement logic tests
+/lib/rules/advancement/__tests__/     # Advancement logic tests (7+ test files)
 /lib/rules/qualities/__tests__/       # Quality system tests
+/lib/rules/ratings/__tests__/         # Ratings system tests
+/lib/combat/__tests__/                # Combat system tests
 /app/api/**/__tests__/                # API route tests
-/e2e/                                 # Playwright E2E tests
+/e2e/                                 # Playwright E2E tests (sign-in, sign-up flows)
 ```
 
 **Running Tests:**
@@ -417,15 +586,33 @@ pnpm test:e2e:ui       # E2E with visual UI
 
 ## Documentation
 
-Comprehensive architecture docs in `/docs/`:
+Comprehensive documentation in `/docs/`:
 
-- `architecture-overview.md` - Tech stack and design principles
-- `character_creation_framework.md` - Creation method design
-- `edition_support_and_ruleset_architecture.md` - Ruleset system details
-- `ruleset_architecture_and_source_material_system.md` - Book-based overrides
-- `merging_algorithm.md` - Merge strategy details
-- `implementation_roadmap.md` - Feature roadmap
-- `mvp_gap_analysis.md` - Current vs. target features
+```
+/docs/
+├── /architecture/      # Core architecture docs
+│   ├── architecture-overview.md
+│   ├── character_creation_framework.md
+│   ├── edition_support_and_ruleset_architecture.md
+│   ├── ruleset_architecture_and_source_material_system.md
+│   └── merging_algorithm.md
+├── /archive/           # Completed phases and historical docs
+├── /capabilities/      # Feature documentation
+│   ├── campaign.*.md   # Campaign system docs
+│   ├── character.*.md  # Character system docs
+│   ├── mechanics.*.md  # Game mechanics docs
+│   ├── security.*.md   # Security documentation
+│   ├── /plans/         # Implementation plans
+│   ├── /walkthroughs/  # Feature guides
+│   └── /prompts/       # AI prompt templates
+├── /data_tables/       # Game rule reference tables
+│   ├── combat/, creation/, magic/, matrix/
+│   └── equipment/, environment/, etc.
+├── /specifications/    # Feature specifications
+├── /features/          # Feature documentation
+├── /decisions/         # Architecture decision records
+└── /audits/            # Audit documentation
+```
 
 **Always consult these docs when making architectural changes.**
 
@@ -441,15 +628,35 @@ Comprehensive architecture docs in `/docs/`:
 
 ## Key Files to Understand First
 
+**Core Types & Storage:**
 1. `/lib/types/index.ts` - All data structures
-2. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
-3. `/lib/rules/advancement/` - Karma advancement system
-4. `/lib/storage/base.ts` - Storage abstraction
-5. `/app/characters/create/sheet/page.tsx` - Character creation entry point
-6. `/components/creation/` - Character creation card components
-7. `/lib/auth/AuthProvider.tsx` - Authentication context
-8. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
-9. `/docs/architecture/` - Architecture documentation
+2. `/lib/storage/base.ts` - Storage abstraction
+3. `/lib/storage/characters.ts` - Character persistence
+
+**Ruleset System:**
+4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
+5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
+6. `/lib/rules/advancement/` - Karma advancement system
+7. `/lib/rules/ratings/` - Unified ratings system
+
+**Character Creation:**
+8. `/app/characters/create/sheet/page.tsx` - Character creation entry point
+9. `/components/creation/` - Character creation card components (45+)
+10. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
+
+**Combat & GM Tools:**
+11. `/lib/combat/CombatSessionContext.tsx` - Combat state management
+12. `/lib/rules/grunts.ts` - NPC/grunt system
+13. `/lib/rules/action-resolution/` - Action execution
+
+**Authentication & Security:**
+14. `/lib/auth/AuthProvider.tsx` - Authentication context
+15. `/lib/security/rate-limit.ts` - Rate limiting
+16. `/lib/security/audit-logger.ts` - Audit logging
+
+**Documentation:**
+17. `/docs/architecture/` - Architecture documentation
+18. `/docs/capabilities/` - Feature documentation
 
 ## MCP Servers
 
