@@ -197,6 +197,13 @@ async function createNewUser(
     process.exit(1);
   }
 
+  // Validate role if specified
+  const validRoles: UserRole[] = ["user", "gamemaster", "administrator"];
+  if (role && !validRoles.includes(role as UserRole)) {
+    console.error(`Error: Invalid role "${role}". Valid roles: ${validRoles.join(", ")}`);
+    process.exit(1);
+  }
+
   // Hash password and create user
   console.log(`Creating user "${username}" (${email})...`);
   const passwordHash = await hashPassword(password);
@@ -205,18 +212,8 @@ async function createNewUser(
     email,
     username,
     passwordHash,
+    role: [(role as UserRole) || "user"],
   });
-
-  // Set role if specified (and not default)
-  if (role && role !== "user") {
-    const validRoles: UserRole[] = ["user", "gamemaster", "administrator"];
-    if (!validRoles.includes(role as UserRole)) {
-      console.error(`Error: Invalid role "${role}". Valid roles: ${validRoles.join(", ")}`);
-      process.exit(1);
-    }
-
-    await updateUser(user.id, { role: [role as UserRole] });
-  }
 
   console.log(`
 User created successfully!
