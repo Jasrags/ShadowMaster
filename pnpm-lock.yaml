@@ -5,7 +5,9 @@ settings:
   excludeLinksFromLockfile: false
 
 overrides:
+  '@modelcontextprotocol/sdk@<1.25.2': '>=1.25.2'
   next@>=16.0.0-beta.0 <16.0.9: '>=16.0.9'
+  qs@<6.14.1: '>=6.14.1'
 
 importers:
 
@@ -40,8 +42,8 @@ importers:
         specifier: ^0.0.9
         version: 0.0.9(@types/node@20.19.25)(hono@4.11.1)(typescript@5.9.3)
       '@modelcontextprotocol/sdk':
-        specifier: ^1.25.1
-        version: 1.25.1(hono@4.11.1)(zod@4.1.13)
+        specifier: '>=1.25.2'
+        version: 1.25.2(hono@4.11.1)(zod@4.1.13)
       '@modelcontextprotocol/server-filesystem':
         specifier: ^2025.12.18
         version: 2025.12.18(hono@4.11.1)(zod@4.1.13)
@@ -110,7 +112,7 @@ importers:
         version: 15.5.2
       next-devtools-mcp:
         specifier: ^0.3.7
-        version: 0.3.7
+        version: 0.3.7(hono@4.11.1)
       nodemon:
         specifier: ^3.1.11
         version: 3.1.11
@@ -688,18 +690,8 @@ packages:
     engines: {node: '>=18.18.0'}
     hasBin: true
 
-  '@modelcontextprotocol/sdk@1.24.3':
-    resolution: {integrity: sha512-YgSHW29fuzKKAHTGe9zjNoo+yF8KaQPzDC2W9Pv41E7/57IfY+AMGJ/aDFlgTLcVVELoggKE4syABCE75u3NCw==}
-    engines: {node: '>=18'}
-    peerDependencies:
-      '@cfworker/json-schema': ^4.1.1
-      zod: ^3.25 || ^4.0
-    peerDependenciesMeta:
-      '@cfworker/json-schema':
-        optional: true
-
-  '@modelcontextprotocol/sdk@1.25.1':
-    resolution: {integrity: sha512-yO28oVFFC7EBoiKdAn+VqRm+plcfv4v0xp6osG/VsCB0NlPZWi87ajbCZZ8f/RvOFLEu7//rSRmuZZ7lMoe3gQ==}
+  '@modelcontextprotocol/sdk@1.25.2':
+    resolution: {integrity: sha512-LZFeo4F9M5qOhC/Uc1aQSrBHxMrvxett+9KLHt7OhcExtoiRN9DKgbZffMP/nxjutWDQpfMDfP3nkHI4X9ijww==}
     engines: {node: '>=18'}
     peerDependencies:
       '@cfworker/json-schema': ^4.1.1
@@ -3565,8 +3557,8 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  qs@6.14.0:
-    resolution: {integrity: sha512-YWWTjgABSKcvs/nWBi9PycY/JiPJqOD4JA6o9Sej2AtvSGarXxKC3OQSk4pAarbdQlKAh5D4FCQkJNkW+GAn3w==}
+  qs@6.14.1:
+    resolution: {integrity: sha512-4EK3+xJl8Ts67nLYNwqw/dsFVnCf+qR7RgXSK9jEEm9unao3njwMDdmsdvoKBKHzxd7tCYz5e5M+SnMjdtXGQQ==}
     engines: {node: '>=0.6'}
 
   queue-microtask@1.2.3:
@@ -4776,7 +4768,7 @@ snapshots:
 
   '@knip/mcp@0.0.9(@types/node@20.19.25)(hono@4.11.1)(typescript@5.9.3)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.1)(zod@4.1.13)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
       knip: 5.77.1(@types/node@20.19.25)(typescript@5.9.3)
       zod: 4.1.13
     transitivePeerDependencies:
@@ -4786,8 +4778,9 @@ snapshots:
       - supports-color
       - typescript
 
-  '@modelcontextprotocol/sdk@1.24.3(zod@3.25.76)':
+  '@modelcontextprotocol/sdk@1.25.2(hono@4.11.1)(zod@3.25.76)':
     dependencies:
+      '@hono/node-server': 1.19.7(hono@4.11.1)
       ajv: 8.17.1
       ajv-formats: 3.0.1(ajv@8.17.1)
       content-type: 1.0.5
@@ -4798,14 +4791,16 @@ snapshots:
       express: 5.2.1
       express-rate-limit: 7.5.1(express@5.2.1)
       jose: 6.1.3
+      json-schema-typed: 8.0.2
       pkce-challenge: 5.0.1
       raw-body: 3.0.2
       zod: 3.25.76
       zod-to-json-schema: 3.25.0(zod@3.25.76)
     transitivePeerDependencies:
+      - hono
       - supports-color
 
-  '@modelcontextprotocol/sdk@1.25.1(hono@4.11.1)(zod@4.1.13)':
+  '@modelcontextprotocol/sdk@1.25.2(hono@4.11.1)(zod@4.1.13)':
     dependencies:
       '@hono/node-server': 1.19.7(hono@4.11.1)
       ajv: 8.17.1
@@ -4829,7 +4824,7 @@ snapshots:
 
   '@modelcontextprotocol/server-filesystem@2025.12.18(hono@4.11.1)(zod@4.1.13)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.1)(zod@4.1.13)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
       diff: 5.2.0
       glob: 10.5.0
       minimatch: 10.1.1
@@ -4842,7 +4837,7 @@ snapshots:
 
   '@modelcontextprotocol/server-memory@2025.11.25(hono@4.11.1)(zod@4.1.13)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.1)(zod@4.1.13)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - hono
@@ -4851,7 +4846,7 @@ snapshots:
 
   '@modelcontextprotocol/server-sequential-thinking@2025.12.18(hono@4.11.1)(zod@4.1.13)':
     dependencies:
-      '@modelcontextprotocol/sdk': 1.25.1(hono@4.11.1)(zod@4.1.13)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
       chalk: 5.6.2
       yargs: 17.7.2
     transitivePeerDependencies:
@@ -6648,7 +6643,7 @@ snapshots:
       http-errors: 2.0.1
       iconv-lite: 0.7.1
       on-finished: 2.4.1
-      qs: 6.14.0
+      qs: 6.14.1
       raw-body: 3.0.2
       type-is: 2.0.1
     transitivePeerDependencies:
@@ -7305,7 +7300,7 @@ snapshots:
       once: 1.4.0
       parseurl: 1.3.3
       proxy-addr: 2.0.7
-      qs: 6.14.0
+      qs: 6.14.1
       range-parser: 1.2.1
       router: 2.2.0
       send: 1.2.1
@@ -8030,15 +8025,16 @@ snapshots:
 
   negotiator@1.0.0: {}
 
-  next-devtools-mcp@0.3.7:
+  next-devtools-mcp@0.3.7(hono@4.11.1):
     dependencies:
-      '@modelcontextprotocol/sdk': 1.24.3(zod@3.25.76)
+      '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@3.25.76)
       find-process: 2.0.0
       pid-port: 2.0.0
       undici: 7.16.0
       zod: 3.25.76
     transitivePeerDependencies:
       - '@cfworker/json-schema'
+      - hono
       - supports-color
 
   next@16.1.0(@babel/core@7.28.5)(@playwright/test@1.57.0)(react-dom@19.2.0(react@19.2.0))(react@19.2.0):
@@ -8292,7 +8288,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  qs@6.14.0:
+  qs@6.14.1:
     dependencies:
       side-channel: 1.1.0
 

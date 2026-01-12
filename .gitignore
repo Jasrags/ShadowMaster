@@ -55,6 +55,9 @@ next-env.d.ts
 /data/activity
 /data/security
 /data/combat
+
+# backups
+/backups
 .cursor/
 .claude/
 !.claude/skills/
