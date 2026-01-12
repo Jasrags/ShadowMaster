@@ -8943,6 +8943,16 @@
             }
           },
           {
+            "id": "binoculars-optical",
+            "name": "Binoculars, Optical",
+            "category": "optical-devices",
+            "cost": 50,
+            "availability": 0,
+            "description": "Simple optical binoculars without electronic enhancements.",
+            "page": 444,
+            "source": "Core"
+          },
+          {
             "id": "bug-scanner",
             "name": "Bug Scanner",
             "category": "electronics",
@@ -9168,9 +9178,9 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 100, "availability": 6, "capacity": 1 },
-              "2": { "cost": 200, "availability": 6, "capacity": 2 },
-              "3": { "cost": 300, "availability": 6, "capacity": 3 }
+              "1": { "cost": 200, "availability": 6, "capacity": 1 },
+              "2": { "cost": 400, "availability": 6, "capacity": 2 },
+              "3": { "cost": 600, "availability": 6, "capacity": 3 }
             }
           },
           {
@@ -9205,8 +9215,8 @@
             "id": "mage-sight-goggles",
             "name": "Mage Sight Goggles",
             "category": "optical-devices",
-            "cost": 2000,
-            "availability": 14,
+            "cost": 3000,
+            "availability": 12,
             "legality": "restricted",
             "description": "Goggles that allow non-Awakened users to see astral forms with an Assensing Test.",
             "page": 444,
@@ -9327,28 +9337,18 @@
           {
             "id": "monocle",
             "name": "Monocle",
-            "category": "electronics",
+            "category": "optical-devices",
             "hasRating": true,
             "maxRating": 4,
-            "legality": "restricted",
             "minRating": 1,
+            "description": "Single-eye optical device with capacity for vision enhancements. Capacity equals rating.",
+            "page": 444,
+            "source": "Core",
             "ratings": {
-              "1": {
-                "cost": 3000,
-                "availability": 12
-              },
-              "2": {
-                "cost": 6000,
-                "availability": 12
-              },
-              "3": {
-                "cost": 9000,
-                "availability": 12
-              },
-              "4": {
-                "cost": 12000,
-                "availability": 12
-              }
+              "1": { "cost": 120, "availability": 0, "capacity": 1 },
+              "2": { "cost": 240, "availability": 0, "capacity": 2 },
+              "3": { "cost": 360, "availability": 0, "capacity": 3 },
+              "4": { "cost": 480, "availability": 0, "capacity": 4 }
             }
           },
           {
@@ -9561,7 +9561,7 @@
             "category": "vision-enhancements",
             "capacityCost": 1,
             "cost": 25,
-            "availability": 4,
+            "availability": 0,
             "description": "Allows overlaying AR imagery on your vision.",
             "page": 444,
             "source": "Core"
@@ -9570,7 +9570,7 @@
             "id": "low-light-vision",
             "name": "Low-Light Vision",
             "category": "vision-enhancements",
-            "capacityCost": 2,
+            "capacityCost": 1,
             "cost": 500,
             "availability": 4,
             "description": "Amplifies existing light, allowing vision in dim conditions.",
@@ -9581,7 +9581,7 @@
             "id": "smartlink",
             "name": "Smartlink",
             "category": "vision-enhancements",
-            "capacityCost": 2,
+            "capacityCost": 1,
             "cost": 2000,
             "availability": 4,
             "legality": "restricted",
@@ -9593,7 +9593,7 @@
             "id": "thermographic-vision",
             "name": "Thermographic Vision",
             "category": "vision-enhancements",
-            "capacityCost": 2,
+            "capacityCost": 1,
             "cost": 500,
             "availability": 6,
             "description": "Allows seeing heat signatures, useful in darkness or through smoke.",
@@ -11510,7 +11510,7 @@
             "name": "Periscope",
             "mount": "top",
             "availability": 3,
-            "cost": 70,
+            "cost": 50,
             "description": "Allows targeting around corners with -2 dice pool penalty instead of -3.",
             "page": 433,
             "source": "Core"
