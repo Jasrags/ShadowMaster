@@ -15,19 +15,13 @@
       "command": "node",
       "args": [
         "./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
-        "/Users/jrags/Code/Jasrags/ShadowMaster"
+        "."
       ]
     },
     "git": {
       "type": "stdio",
-      "command": "/Users/jrags/.local/bin/uv",
-      "args": [
-        "tool",
-        "run",
-        "mcp-server-git",
-        "--repository",
-        "/Users/jrags/Code/Jasrags/ShadowMaster"
-      ]
+      "command": "uvx",
+      "args": ["mcp-server-git", "--repository", "."]
     },
     "memory": {
       "type": "stdio",
@@ -39,15 +33,10 @@
       "command": "node",
       "args": ["./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
     },
-    "time": {
-      "type": "stdio",
-      "command": "/Users/jrags/.local/bin/uv",
-      "args": ["tool", "run", "mcp-server-time"]
-    },
     "spec-lint": {
       "type": "stdio",
       "command": "node",
-      "args": ["/Users/jrags/Code/Jasrags/ShadowMaster/tools/spec-lint-mcp.mjs"]
+      "args": ["./tools/spec-lint-mcp.mjs"]
     },
     "knip": {
       "type": "stdio",
