@@ -387,10 +387,10 @@ function QualitySelectionModal({
       specification || undefined,
       hasLevels(selectedQuality) ? selectedLevel : undefined
     );
+    // Reset selection but keep modal open for adding more qualities
     setSelectedQualityId(null);
     setSpecification("");
     setSelectedLevel(1);
-    onClose();
   };
 
   const canAdd = useMemo(() => {
@@ -754,7 +754,7 @@ function QualitySelectionModal({
                 onClick={close}
                 className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
-                Cancel
+                Done
               </button>
               <button
                 onClick={handleAdd}
@@ -765,7 +765,7 @@ function QualitySelectionModal({
                     : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
                 }`}
               >
-                Add Quality
+                Add
               </button>
             </div>
           </ModalFooter>

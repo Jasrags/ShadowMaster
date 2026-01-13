@@ -107,9 +107,19 @@ function LanguageRow({
       {/* Controls */}
       <div className="flex items-center gap-1">
         {isNative ? (
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-            N
-          </div>
+          <>
+            <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+              N
+            </div>
+            <button
+              onClick={onRemove}
+              aria-label={`Remove ${language.name}`}
+              className="ml-1 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+              title="Remove native language"
+            >
+              <X className="h-3.5 w-3.5" aria-hidden="true" />
+            </button>
+          </>
         ) : (
           <>
             <button
@@ -652,12 +662,9 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
     [languages, state.selections, updateState]
   );
 
-  // Handle remove language
+  // Handle remove language (including native languages)
   const handleRemoveLanguage = useCallback(
     (index: number) => {
-      const lang = languages[index];
-      if (lang.isNative) return; // Can't remove native language
-
       const newLanguages = languages.filter((_, i) => i !== index);
       updateState({
         selections: {
@@ -691,11 +698,13 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
   const hasBilingualQuality = useMemo(() => {
     // Qualities are stored separately as positiveQualities and negativeQualities
     // Bilingual is a positive quality
-    const positiveQualities = state.selections.positiveQualities as
-      | Array<{ id: string }>
-      | undefined;
-    if (!positiveQualities) return false;
-    return positiveQualities.some((q) => q.id === "bilingual");
+    const positiveQualities = state.selections.positiveQualities;
+    if (!positiveQualities || !Array.isArray(positiveQualities)) return false;
+    // Handle both old format (string[]) and new format (SelectedQuality[])
+    return positiveQualities.some((q) => {
+      if (typeof q === "string") return q === "bilingual";
+      return q.id === "bilingual";
+    });
   }, [state.selections.positiveQualities]);
 
   // Count native languages and check if max reached
