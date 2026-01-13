@@ -12,7 +12,7 @@
  */
 
 import { useMemo, useCallback, useState, useEffect } from "react";
-import { Plus, X, Edit2, Trash2, Info, User } from "lucide-react";
+import { Plus, X, Edit2, Info, User } from "lucide-react";
 import type { CreationState, Contact, ContactTemplateData } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { useContactTemplates, useMetatypes } from "@/lib/rules";
@@ -690,21 +690,25 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                       </div>
                     </div>
 
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-1">
                       <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
                         {cost}K
                       </span>
                       <button
                         onClick={() => handleOpenEditModal(index)}
                         className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+                        title="Edit contact"
                       >
                         <Edit2 className="h-3.5 w-3.5" />
                       </button>
+                      {/* Separator */}
+                      <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
                       <button
                         onClick={() => handleRemoveContact(index)}
                         className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                        title="Remove contact"
                       >
-                        <Trash2 className="h-3.5 w-3.5" />
+                        <X className="h-3.5 w-3.5" />
                       </button>
                     </div>
                   </div>

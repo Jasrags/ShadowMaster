@@ -124,12 +124,16 @@ export function GearRow({ gear, onRemove, onAddMod, onRemoveMod }: GearRowProps)
           {formatCurrency(totalCost)}¥
         </span>
 
+        {/* Separator */}
+        <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600 flex-shrink-0" />
+
         {/* Remove Button */}
         <button
           onClick={() => {
             if (gear.id) onRemove(gear.id);
           }}
           className="flex-shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+          title="Remove gear"
         >
           <X className="h-4 w-4" />
         </button>
