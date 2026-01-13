@@ -29,21 +29,48 @@ const config: KnipConfig = {
 
   // Ignore patterns
   ignore: [
+    // Test files
     "**/*.test.{ts,tsx}",
     "**/*.spec.{ts,tsx}",
     "**/__tests__/**",
     "**/e2e/**",
+
+    // Build artifacts
     "**/node_modules/**",
     "**/.next/**",
     "**/dist/**",
     "**/build/**",
-    "**/data/**",
-    "**/docs/**",
     "**/test-results/**",
     "**/playwright-report/**",
     "**/.eslintcache/**",
     "next-env.d.ts",
     "tsconfig.tsbuildinfo",
+
+    // Non-code directories
+    "**/data/**",
+    "**/docs/**",
+
+    // Work-in-progress gameplay features (not yet integrated into UI)
+    // These are complete modules awaiting character sheet integration
+    "app/campaigns/[id]/components/CampaignSessionsTab.tsx", // Campaign sessions UI
+    "app/characters/[id]/components/ActionResultToast.tsx", // Combat action feedback
+    "app/characters/[id]/components/AugmentationsPanel.tsx", // Augmentations display
+    "app/characters/[id]/components/CombatModeIndicator.tsx", // Combat state indicator
+    "app/characters/[id]/components/CombatTrackerModal.tsx", // Initiative tracker
+    "components/AugmentationCard.tsx", // Augmentation display card
+    "components/EssenceDisplay.tsx", // Essence meter component
+    "components/character/**", // Character sheet sub-components (Matrix, Rigging, Magic)
+    "components/combat/**", // Combat UI components
+    "components/cyberlimbs/**", // Cyberlimb management UI
+
+    // Work-in-progress rules engines (complete, awaiting UI integration)
+    "lib/migrations/**", // Data migration utilities
+    "lib/rules/augmentations/**", // Augmentation rules (used by API, not UI)
+    "lib/rules/contact-network.ts", // Contact networking rules
+    "lib/rules/gear/index.ts", // Gear barrel (submodules used directly)
+    "lib/rules/matrix/**", // Matrix action rules
+    "lib/rules/rigging/**", // Rigging/drone rules
+    "lib/rules/sync/**", // Character sync/migration rules
   ],
 
   // Path aliases (matching tsconfig.json)
