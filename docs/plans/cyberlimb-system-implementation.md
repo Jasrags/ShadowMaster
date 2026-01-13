@@ -11,6 +11,7 @@
 Implement a complete cyberlimb system for Shadowrun 5th Edition that satisfies all guarantees from `character.augmentation-systems` capability, adheres to ADR-010 (Inventory State Management) and ADR-011 (Sheet-Driven Creation), and accurately represents the SR5 Core Rulebook cyberlimb rules.
 
 **Key Outcomes:**
+
 1. Characters can install cyberlimbs with proper location tracking and hierarchy
 2. Cyberlimbs have independent STR/AGI attributes with customization and enhancement support
 3. Capacity system tracks enhancements, accessories, and weapons within limbs
@@ -61,27 +62,37 @@ Implement a complete cyberlimb system for Shadowrun 5th Edition that satisfies a
 
 // Location tracking for installed limbs
 export type CyberlimbLocation =
-  | "left-arm" | "right-arm"
-  | "left-leg" | "right-leg"
-  | "left-hand" | "right-hand"
-  | "left-foot" | "right-foot"
-  | "left-lower-arm" | "right-lower-arm"
-  | "left-lower-leg" | "right-lower-leg"
+  | "left-arm"
+  | "right-arm"
+  | "left-leg"
+  | "right-leg"
+  | "left-hand"
+  | "right-hand"
+  | "left-foot"
+  | "right-foot"
+  | "left-lower-arm"
+  | "right-lower-arm"
+  | "left-lower-leg"
+  | "right-lower-leg"
   | "torso"
   | "skull";
 
 // Limb type determines base capacity and CM bonus
 export type CyberlimbType =
-  | "full-arm" | "full-leg"
-  | "lower-arm" | "lower-leg"
-  | "hand" | "foot"
-  | "torso" | "skull";
+  | "full-arm"
+  | "full-leg"
+  | "lower-arm"
+  | "lower-leg"
+  | "hand"
+  | "foot"
+  | "torso"
+  | "skull";
 
 // Appearance affects capacity and concealment
 export type CyberlimbAppearance = "obvious" | "synthetic";
 
 // Extended interface for installed cyberlimbs
-export interface CyberlimbItem extends Omit<CyberwareItem, 'category'> {
+export interface CyberlimbItem extends Omit<CyberwareItem, "category"> {
   category: "cyberlimb";
 
   // Location tracking
@@ -94,8 +105,8 @@ export interface CyberlimbItem extends Omit<CyberwareItem, 'category'> {
   baseAgility: 3;
 
   // Customization (set at purchase, immutable)
-  customStrength: number;  // 0 to (racial max - 3)
-  customAgility: number;   // 0 to (racial max - 3)
+  customStrength: number; // 0 to (racial max - 3)
+  customAgility: number; // 0 to (racial max - 3)
 
   // Capacity tracking
   baseCapacity: number;
@@ -120,9 +131,9 @@ export interface CyberlimbEnhancement {
   catalogId: string;
   name: string;
   type: "agility" | "strength" | "armor";
-  rating: number;          // 1-3
-  capacityCost: number;    // Equals rating
-  cost: number;            // After grade multiplier
+  rating: number; // 1-3
+  capacityCost: number; // Equals rating
+  cost: number; // After grade multiplier
   availability: number;
   legality?: ItemLegality;
 }
@@ -148,8 +159,8 @@ export interface CyberImplantWeapon {
   catalogId: string;
   name: string;
   weaponType: "melee" | "ranged";
-  capacityCost: number;    // For limb installation
-  essenceCost: number;     // For meat installation
+  capacityCost: number; // For limb installation
+  essenceCost: number; // For meat installation
   damage: string;
   ap: number;
   cost: number;
@@ -178,26 +189,27 @@ export const LIMB_HIERARCHY: Record<CyberlimbType, CyberlimbType[]> = {
   "full-leg": ["lower-leg", "foot"],
   "lower-arm": ["hand"],
   "lower-leg": ["foot"],
-  "hand": [],
-  "foot": [],
-  "torso": [],
-  "skull": [],
+  hand: [],
+  foot: [],
+  torso: [],
+  skull: [],
 };
 
 // Physical CM bonus per limb type
 export const LIMB_CM_BONUS: Record<CyberlimbType, number> = {
   "full-arm": 1,
   "full-leg": 1,
-  "torso": 1,
-  "skull": 1,
+  torso: 1,
+  skull: 1,
   "lower-arm": 0.5,
   "lower-leg": 0.5,
-  "hand": 0,
-  "foot": 0,
+  hand: 0,
+  foot: 0,
 };
 ```
 
 **Capability Requirement Satisfied:**
+
 - REQ: "Cybernetic limbs MUST manage internal capacity constraints for secondary enhancements and specialized accessories"
 - REQ: "The system MUST maintain a persistent and auditable record of all installed modifications"
 
@@ -239,18 +251,18 @@ export * from "./cyberlimbs";
 
 **Changes per Reference Material (docs/rules/5e/game-mechanics/cyberlimbs.md):**
 
-| Item ID | Field | Current | Correct | Source |
-|---------|-------|---------|---------|--------|
-| `cyberlimb-arm` | capacity | 10 | 15 | SR5 Core p.458 |
-| `cyberlimb-leg` | capacity | 12 | 20 | SR5 Core p.458 |
-| `cyberlimb-hand` | capacity | 2 | 4 | SR5 Core p.458 |
-| `cyberlimb-foot` | capacity | 2 | 4 | SR5 Core p.458 |
-| `cyberlimb-lower-arm` | capacity | 5 | 10 | SR5 Core p.458 |
-| `cyberlimb-lower-leg` | capacity | 6 | 12 | SR5 Core p.458 |
-| `cyberlimb-arm-synthetic` | capacity | 5 | 8 | SR5 Core p.458 |
-| `cyberlimb-leg-synthetic` | capacity | 6 | 10 | SR5 Core p.458 |
-| `cyberlimb-torso` | availability | 6 | 12 | SR5 Core p.458 |
-| `cyberlimb-skull` | availability | 4 | 16 | SR5 Core p.458 |
+| Item ID                   | Field        | Current | Correct | Source         |
+| ------------------------- | ------------ | ------- | ------- | -------------- |
+| `cyberlimb-arm`           | capacity     | 10      | 15      | SR5 Core p.458 |
+| `cyberlimb-leg`           | capacity     | 12      | 20      | SR5 Core p.458 |
+| `cyberlimb-hand`          | capacity     | 2       | 4       | SR5 Core p.458 |
+| `cyberlimb-foot`          | capacity     | 2       | 4       | SR5 Core p.458 |
+| `cyberlimb-lower-arm`     | capacity     | 5       | 10      | SR5 Core p.458 |
+| `cyberlimb-lower-leg`     | capacity     | 6       | 12      | SR5 Core p.458 |
+| `cyberlimb-arm-synthetic` | capacity     | 5       | 8       | SR5 Core p.458 |
+| `cyberlimb-leg-synthetic` | capacity     | 6       | 10      | SR5 Core p.458 |
+| `cyberlimb-torso`         | availability | 6       | 12      | SR5 Core p.458 |
+| `cyberlimb-skull`         | availability | 4       | 16      | SR5 Core p.458 |
 
 ---
 
@@ -260,13 +272,13 @@ export * from "./cyberlimbs";
 
 **Changes:**
 
-| Item ID | Field | Current | Correct | Source |
-|---------|-------|---------|---------|--------|
-| `cyberlimb-agility` | cost | 3000 | 6500 | SR5 Core p.458 |
-| `cyberlimb-strength` | cost | 3000 | 6500 | SR5 Core p.458 |
-| `cyberlimb-agility` | availability | 8 | `(Rating x 3)R` | SR5 Core p.458 |
-| `cyberlimb-strength` | availability | 8 | `(Rating x 3)R` | SR5 Core p.458 |
-| `cyberlimb-armor` | availability | 8 | `Rating x 5` | SR5 Core p.458 |
+| Item ID              | Field        | Current | Correct         | Source         |
+| -------------------- | ------------ | ------- | --------------- | -------------- |
+| `cyberlimb-agility`  | cost         | 3000    | 6500            | SR5 Core p.458 |
+| `cyberlimb-strength` | cost         | 3000    | 6500            | SR5 Core p.458 |
+| `cyberlimb-agility`  | availability | 8       | `(Rating x 3)R` | SR5 Core p.458 |
+| `cyberlimb-strength` | availability | 8       | `(Rating x 3)R` | SR5 Core p.458 |
+| `cyberlimb-armor`    | availability | 8       | `Rating x 5`    | SR5 Core p.458 |
 
 **Implementation Note:** Update `ratingSpec` structure to use per-rating availability calculation.
 
@@ -295,6 +307,7 @@ export * from "./cyberlimbs";
    - Cyber melee weapons (hand blade, hand razors, spurs, shock hand)
 
 **Capability Requirement Satisfied:**
+
 - REQ: "The system MUST provide a catalog-driven selection process for various augmentation categories including headware, cyberlimbs, and bioware"
 
 ---
@@ -368,25 +381,18 @@ export function getWeakestLimbAttribute(
  * Calculate Physical Condition Monitor bonus from cyberlimbs.
  * Returns floor(sum of all limb bonuses).
  */
-export function calculateCyberlimbCMBonus(
-  cyberlimbs: CyberlimbItem[]
-): number;
+export function calculateCyberlimbCMBonus(cyberlimbs: CyberlimbItem[]): number;
 
 /**
  * Calculate remaining capacity in a cyberlimb.
  */
-export function calculateRemainingCapacity(
-  limb: CyberlimbItem
-): number;
+export function calculateRemainingCapacity(limb: CyberlimbItem): number;
 
 /**
  * Calculate total limb cost including customization.
  * Formula: (Base × Grade) + (Custom Points × 5000) + Sum(Enhancement Costs)
  */
-export function calculateLimbTotalCost(
-  limb: CyberlimbItem,
-  gradeMultiplier: number
-): number;
+export function calculateLimbTotalCost(limb: CyberlimbItem, gradeMultiplier: number): number;
 
 /**
  * Calculate customization availability modifier.
@@ -399,6 +405,7 @@ export function calculateCustomizationAvailability(
 ```
 
 **Capability Requirement Satisfied:**
+
 - REQ: "Bonuses from installed augmentations MUST be automatically propagated to the character's primary and derived statistics"
 
 ---
@@ -426,10 +433,7 @@ export function validateLimbInstallation(
  * Validate customization is within racial limits.
  * Cannot exceed natural racial maximum.
  */
-export function validateCustomization(
-  customValue: number,
-  racialMaximum: number
-): ValidationResult;
+export function validateCustomization(customValue: number, racialMaximum: number): ValidationResult;
 
 /**
  * Validate enhancement fits within capacity.
@@ -442,9 +446,7 @@ export function validateEnhancementCapacity(
 /**
  * Validate availability for character creation (max 12).
  */
-export function validateCreationAvailability(
-  finalAvailability: number
-): ValidationResult;
+export function validateCreationAvailability(finalAvailability: number): ValidationResult;
 
 /**
  * Check if enhancement of same type already exists.
@@ -473,6 +475,7 @@ interface ValidationResult {
 ```
 
 **Capability Requirement Satisfied:**
+
 - REQ: "Augmented improvements MUST NOT exceed ruleset-defined maximums relative to the character's natural racial limits"
 - REQ: "Mutually exclusive augmentations MUST be identified and prevented by the system"
 
@@ -499,9 +502,7 @@ export function getReplacedLocations(
 /**
  * Get the parent limb for a partial limb location.
  */
-export function getParentLimb(
-  location: CyberlimbLocation
-): CyberlimbLocation | null;
+export function getParentLimb(location: CyberlimbLocation): CyberlimbLocation | null;
 
 /**
  * Check if a location is occupied by a full limb.
@@ -538,6 +539,7 @@ return baseCM + cyberlimbBonus;
 ```
 
 **Capability Requirement Satisfied:**
+
 - REQ: "Bonuses from installed augmentations MUST be automatically propagated to the character's primary and derived statistics"
 
 ---
@@ -550,20 +552,24 @@ return baseCM + cyberlimbBonus;
 
 ```typescript
 export function calculateTotalEssenceCost(character: Character): number {
-  const cyberwareEssence = (character.cyberware || [])
-    .reduce((sum, item) => sum + item.essenceCost, 0);
+  const cyberwareEssence = (character.cyberware || []).reduce(
+    (sum, item) => sum + item.essenceCost,
+    0
+  );
 
-  const cyberlimbEssence = (character.cyberlimbs || [])
-    .reduce((sum, limb) => sum + limb.essenceCost, 0);
+  const cyberlimbEssence = (character.cyberlimbs || []).reduce(
+    (sum, limb) => sum + limb.essenceCost,
+    0
+  );
 
-  const biowareEssence = (character.bioware || [])
-    .reduce((sum, item) => sum + item.essenceCost, 0);
+  const biowareEssence = (character.bioware || []).reduce((sum, item) => sum + item.essenceCost, 0);
 
   return cyberwareEssence + cyberlimbEssence + biowareEssence;
 }
 ```
 
 **Capability Requirement Satisfied:**
+
 - REQ: "Every augmentation MUST result in a verifiable reduction in the character's Essence according to ruleset-defined multipliers"
 
 ---
@@ -576,11 +582,11 @@ export function calculateTotalEssenceCost(character: Character): number {
 
 Per ADR-010, cyberlimb accessories with wireless bonuses need structured effects:
 
-| Accessory | Wireless Effect |
-|-----------|-----------------|
-| Gyromount | `{ "type": "action_economy", "action": "toggle_gyromount", "from": "simple", "to": "free" }` |
-| Cyber holster | `{ "type": "action_economy", "action": "ready_from_holster", "from": "simple", "to": "free" }` |
-| Hydraulic jacks | `{ "type": "dice_pool", "skills": ["jumping", "sprinting", "lifting"], "modifier": 1 }` |
+| Accessory                   | Wireless Effect                                                                                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------- |
+| Gyromount                   | `{ "type": "action_economy", "action": "toggle_gyromount", "from": "simple", "to": "free" }`      |
+| Cyber holster               | `{ "type": "action_economy", "action": "ready_from_holster", "from": "simple", "to": "free" }`    |
+| Hydraulic jacks             | `{ "type": "dice_pool", "skills": ["jumping", "sprinting", "lifting"], "modifier": 1 }`           |
 | Large smuggling compartment | `{ "type": "action_economy", "action": "access_compartment", "from": "complex", "to": "simple" }` |
 
 ---
@@ -594,11 +600,12 @@ Per ADR-010, cyberlimb accessories with wireless bonuses need structured effects
 **Purpose:** Visual body diagram for selecting limb installation location
 
 **Props:**
+
 ```typescript
 interface CyberlimbLocationPickerProps {
   occupiedLocations: CyberlimbLocation[];
   onSelectLocation: (location: CyberlimbLocation) => void;
-  allowedLocations?: CyberlimbLocation[];  // For partial limbs
+  allowedLocations?: CyberlimbLocation[]; // For partial limbs
   disabled?: boolean;
 }
 ```
@@ -614,6 +621,7 @@ interface CyberlimbLocationPickerProps {
 **Purpose:** Configure a cyberlimb's customization and enhancements
 
 **Props:**
+
 ```typescript
 interface CyberlimbCustomizerProps {
   limb: CyberlimbItem;
@@ -627,6 +635,7 @@ interface CyberlimbCustomizerProps {
 ```
 
 **Sections:**
+
 1. Base Info (name, location, grade, appearance)
 2. Attribute Customization (STR/AGI sliders up to racial max)
 3. Capacity Display (bar showing used/available)
@@ -643,6 +652,7 @@ interface CyberlimbCustomizerProps {
 **Purpose:** Display installed cyberlimb in character sheet/creation
 
 **Props:**
+
 ```typescript
 interface CyberlimbCardProps {
   limb: CyberlimbItem;
@@ -653,6 +663,7 @@ interface CyberlimbCardProps {
 ```
 
 **Display:**
+
 - Location icon and limb name
 - Grade badge
 - Final STR/AGI values
@@ -667,6 +678,7 @@ interface CyberlimbCardProps {
 **File:** `app/characters/create/components/steps/GearStep.tsx` (MODIFY)
 
 **Change:** Add cyberlimb browser section with:
+
 - Category filter for cyberlimbs
 - Location selection flow
 - Customization modal trigger
@@ -710,48 +722,48 @@ interface CyberlimbCardProps {
 
 **File:** `lib/rules/cyberlimbs/__tests__/calculations.test.ts`
 
-| Test Case | Description | Capability Reference |
-|-----------|-------------|---------------------|
-| `calculateLimbAttribute.basic` | Base 3 + custom 2 + enhancement 3 = 8 | Measurable bonuses |
-| `calculateLimbAttribute.noEnhancement` | Base 3 + custom 0 = 3 | Base attribute |
-| `calculateAveragedAttribute.mixedLimbs` | (Natural 5 + Cyber 6) / 2 = 5 (floor) | Attribute averaging |
-| `getWeakestLimbAttribute.coordination` | Returns lowest of all involved limbs | Coordinated actions |
-| `calculateCyberlimbCMBonus.fullSet` | 2 arms + 2 legs = 4 CM | CM bonus calculation |
-| `calculateCyberlimbCMBonus.partial` | 1 full arm + 2 lower legs = 2 CM | Partial limb bonus |
-| `calculateRemainingCapacity.withItems` | 15 - 8 - 3 = 4 remaining | Capacity management |
+| Test Case                               | Description                           | Capability Reference |
+| --------------------------------------- | ------------------------------------- | -------------------- |
+| `calculateLimbAttribute.basic`          | Base 3 + custom 2 + enhancement 3 = 8 | Measurable bonuses   |
+| `calculateLimbAttribute.noEnhancement`  | Base 3 + custom 0 = 3                 | Base attribute       |
+| `calculateAveragedAttribute.mixedLimbs` | (Natural 5 + Cyber 6) / 2 = 5 (floor) | Attribute averaging  |
+| `getWeakestLimbAttribute.coordination`  | Returns lowest of all involved limbs  | Coordinated actions  |
+| `calculateCyberlimbCMBonus.fullSet`     | 2 arms + 2 legs = 4 CM                | CM bonus calculation |
+| `calculateCyberlimbCMBonus.partial`     | 1 full arm + 2 lower legs = 2 CM      | Partial limb bonus   |
+| `calculateRemainingCapacity.withItems`  | 15 - 8 - 3 = 4 remaining              | Capacity management  |
 
 **File:** `lib/rules/cyberlimbs/__tests__/validation.test.ts`
 
-| Test Case | Description | Constraint Reference |
-|-----------|-------------|---------------------|
-| `validateLimbInstallation.noDuplicates` | Cannot install two left arms | No duplicates |
-| `validateLimbInstallation.fullReplacesPartial` | Full arm removes lower-arm and hand | Limb hierarchy |
-| `validateCustomization.exceedsMax` | Custom 5 with racial max 6 = invalid | Racial maximum |
-| `validateEnhancementCapacity.exceeds` | Rating 3 in limb with 2 capacity = invalid | Capacity budget |
-| `validateCreationAvailability.over12` | Avail 14 at creation = invalid | Creation availability |
-| `checkEnhancementDuplicate.blocked` | Two STR enhancements = duplicate | One per type |
-| `validatePairedInstallation.missingPair` | Left hydraulic jack without right = invalid | Paired requirement |
+| Test Case                                      | Description                                 | Constraint Reference  |
+| ---------------------------------------------- | ------------------------------------------- | --------------------- |
+| `validateLimbInstallation.noDuplicates`        | Cannot install two left arms                | No duplicates         |
+| `validateLimbInstallation.fullReplacesPartial` | Full arm removes lower-arm and hand         | Limb hierarchy        |
+| `validateCustomization.exceedsMax`             | Custom 5 with racial max 6 = invalid        | Racial maximum        |
+| `validateEnhancementCapacity.exceeds`          | Rating 3 in limb with 2 capacity = invalid  | Capacity budget       |
+| `validateCreationAvailability.over12`          | Avail 14 at creation = invalid              | Creation availability |
+| `checkEnhancementDuplicate.blocked`            | Two STR enhancements = duplicate            | One per type          |
+| `validatePairedInstallation.missingPair`       | Left hydraulic jack without right = invalid | Paired requirement    |
 
 **File:** `lib/rules/cyberlimbs/__tests__/hierarchy.test.ts`
 
-| Test Case | Description |
-|-----------|-------------|
-| `getReplacedLocations.fullArm` | Returns [lower-arm, hand] for same side |
-| `getReplacedLocations.lowerLeg` | Returns [foot] for same side |
-| `getParentLimb.hand` | Returns lower-arm or full-arm |
-| `isLocationOccupiedByFullLimb.true` | Left-hand occupied by left-full-arm |
+| Test Case                           | Description                             |
+| ----------------------------------- | --------------------------------------- |
+| `getReplacedLocations.fullArm`      | Returns [lower-arm, hand] for same side |
+| `getReplacedLocations.lowerLeg`     | Returns [foot] for same side            |
+| `getParentLimb.hand`                | Returns lower-arm or full-arm           |
+| `isLocationOccupiedByFullLimb.true` | Left-hand occupied by left-full-arm     |
 
 #### Integration Tests
 
 **File:** `app/api/characters/[characterId]/cyberlimbs/__tests__/route.test.ts`
 
-| Test Case | Description |
-|-----------|-------------|
-| `POST.installCyberlimb` | Creates limb, reduces essence, updates character |
-| `POST.installWithCustomization` | Validates custom values, calculates costs |
-| `DELETE.removeCyberlimb` | Removes limb, recovers essence |
-| `POST.addEnhancement` | Validates capacity, updates limb |
-| `POST.addEnhancement.capacityExceeded` | Returns 400 with error message |
+| Test Case                              | Description                                      |
+| -------------------------------------- | ------------------------------------------------ |
+| `POST.installCyberlimb`                | Creates limb, reduces essence, updates character |
+| `POST.installWithCustomization`        | Validates custom values, calculates costs        |
+| `DELETE.removeCyberlimb`               | Removes limb, recovers essence                   |
+| `POST.addEnhancement`                  | Validates capacity, updates limb                 |
+| `POST.addEnhancement.capacityExceeded` | Returns 400 with error message                   |
 
 ### Manual Testing Checklist
 

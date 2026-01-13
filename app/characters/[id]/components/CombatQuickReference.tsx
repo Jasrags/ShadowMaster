@@ -65,7 +65,12 @@ function calculateDodgePool(character: Character): number {
   return defensePool + gymnastics;
 }
 
-function calculateInitiative(character: Character): { base: number; dice: number; wirelessBonus: number; wirelessDice: number } {
+function calculateInitiative(character: Character): {
+  base: number;
+  dice: number;
+  wirelessBonus: number;
+  wirelessDice: number;
+} {
   const reaction = getAttributeValue(character, "reaction");
   const intuition = getAttributeValue(character, "intuition");
 
@@ -92,9 +97,7 @@ function calculateInitiative(character: Character): { base: number; dice: number
  * Get all armor items from character (both gear array and armor array)
  */
 function getArmorItems(character: Character): ArmorItem[] {
-  const gearArmor = character.gear?.filter((g): g is ArmorItem =>
-    g.category === "armor"
-  ) || [];
+  const gearArmor = character.gear?.filter((g): g is ArmorItem => g.category === "armor") || [];
   const separateArmor = character.armor || [];
   return [...gearArmor, ...separateArmor];
 }
@@ -147,7 +150,11 @@ function hasSmartgunWirelessBonus(character: Character, weapon: Weapon): boolean
 
   // Must be a ranged weapon (smartgun doesn't help melee)
   const subcategory = weapon.subcategory?.toLowerCase() || "";
-  if (subcategory.includes("melee") || subcategory.includes("blade") || subcategory.includes("club")) {
+  if (
+    subcategory.includes("melee") ||
+    subcategory.includes("blade") ||
+    subcategory.includes("club")
+  ) {
     return false;
   }
 
@@ -155,16 +162,19 @@ function hasSmartgunWirelessBonus(character: Character, weapon: Weapon): boolean
 }
 
 function getWeaponPools(character: Character, physicalLimit: number): CombatPool[] {
-  const weapons = (character.gear?.filter((g): g is Weapon =>
-    g.category === "weapons"
-  ) || []).slice(0, 3); // Limit to top 3 weapons
+  const weapons = (
+    character.gear?.filter((g): g is Weapon => g.category === "weapons") || []
+  ).slice(0, 3); // Limit to top 3 weapons
 
   return weapons.map((weapon) => {
     // Determine relevant skill based on weapon subcategory
     let skillId = "automatics";
     const attrId = "agility";
     const subcategory = weapon.subcategory?.toLowerCase() || "";
-    const isMelee = subcategory.includes("melee") || subcategory.includes("blade") || subcategory.includes("club");
+    const isMelee =
+      subcategory.includes("melee") ||
+      subcategory.includes("blade") ||
+      subcategory.includes("club");
 
     if (isMelee) {
       skillId = "blades";
@@ -315,34 +325,42 @@ export function CombatQuickReference({
     };
   }, [character, physicalLimit]);
 
-  const effectiveInit = combatData.initiative.base + combatData.initiative.wirelessBonus + woundModifier;
+  const effectiveInit =
+    combatData.initiative.base + combatData.initiative.wirelessBonus + woundModifier;
   const totalInitDice = combatData.initiative.dice + combatData.initiative.wirelessDice;
-  const hasWirelessBonus = combatData.initiative.wirelessBonus > 0 || combatData.initiative.wirelessDice > 0;
+  const hasWirelessBonus =
+    combatData.initiative.wirelessBonus > 0 || combatData.initiative.wirelessDice > 0;
 
   return (
     <div className="space-y-4">
       {/* Initiative & Armor Row */}
       <div className="grid grid-cols-2 gap-3">
-        <div
-          className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
-        >
-          <span className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
+        <div className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}>
+          <span
+            className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}
+          >
             Initiative
             {hasWirelessBonus && (
-              <span title="Wireless bonus active"><Wifi className="w-3 h-3 text-cyan-400" /></span>
+              <span title="Wireless bonus active">
+                <Wifi className="w-3 h-3 text-cyan-400" />
+              </span>
             )}
           </span>
-          <span className={`text-xl font-bold ${t.fonts.mono} ${
-            woundModifier < 0 ? "text-amber-400" : hasWirelessBonus ? "text-cyan-400" : t.colors.accent
-          }`}>
+          <span
+            className={`text-xl font-bold ${t.fonts.mono} ${
+              woundModifier < 0
+                ? "text-amber-400"
+                : hasWirelessBonus
+                  ? "text-cyan-400"
+                  : t.colors.accent
+            }`}
+          >
             {effectiveInit}+{totalInitDice}d6
           </span>
           {(woundModifier < 0 || hasWirelessBonus) && (
             <div className="flex items-center justify-center gap-2 mt-1">
               {woundModifier < 0 && (
-                <span className="text-[10px] text-red-400">
-                  ({woundModifier} wound)
-                </span>
+                <span className="text-[10px] text-red-400">({woundModifier} wound)</span>
               )}
               {combatData.initiative.wirelessBonus > 0 && (
                 <span className="text-[10px] text-cyan-400">
@@ -358,10 +376,10 @@ export function CombatQuickReference({
           )}
         </div>
 
-        <div
-          className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}
-        >
-          <span className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}>
+        <div className={`p-3 rounded border text-center ${t.colors.card} ${t.colors.border}`}>
+          <span
+            className={`flex items-center justify-center gap-1 text-xs ${t.fonts.mono} text-muted-foreground uppercase mb-1`}
+          >
             Armor
             {combatData.armorCalc.isEncumbered && (
               <span title="Encumbrance penalty active">
@@ -369,9 +387,11 @@ export function CombatQuickReference({
               </span>
             )}
           </span>
-          <span className={`text-xl font-bold ${t.fonts.mono} ${
-            combatData.armorCalc.isEncumbered ? "text-amber-400" : t.colors.heading
-          }`}>
+          <span
+            className={`text-xl font-bold ${t.fonts.mono} ${
+              combatData.armorCalc.isEncumbered ? "text-amber-400" : t.colors.heading
+            }`}
+          >
             {combatData.armor}
           </span>
           {/* Show armor breakdown if accessories are worn */}
@@ -397,10 +417,12 @@ export function CombatQuickReference({
           modifiers={combatData.defensePool.modifiers}
           woundModifier={woundModifier}
           theme={theme}
-          onClick={() => onPoolSelect?.(
-            combatData.defensePool.pool + woundModifier,
-            combatData.defensePool.context
-          )}
+          onClick={() =>
+            onPoolSelect?.(
+              combatData.defensePool.pool + woundModifier,
+              combatData.defensePool.context
+            )
+          }
         />
         <DicePoolDisplay
           label={combatData.fullDefensePool.label}
@@ -408,10 +430,12 @@ export function CombatQuickReference({
           modifiers={combatData.fullDefensePool.modifiers}
           woundModifier={woundModifier}
           theme={theme}
-          onClick={() => onPoolSelect?.(
-            combatData.fullDefensePool.pool + woundModifier,
-            combatData.fullDefensePool.context
-          )}
+          onClick={() =>
+            onPoolSelect?.(
+              combatData.fullDefensePool.pool + woundModifier,
+              combatData.fullDefensePool.context
+            )
+          }
         />
       </div>
 
@@ -422,18 +446,13 @@ export function CombatQuickReference({
         modifiers={combatData.soakPool.modifiers}
         woundModifier={0} // Soak is typically not affected by wounds
         theme={theme}
-        onClick={() => onPoolSelect?.(
-          combatData.soakPool.pool,
-          combatData.soakPool.context
-        )}
+        onClick={() => onPoolSelect?.(combatData.soakPool.pool, combatData.soakPool.context)}
       />
 
       {/* Weapon Attacks */}
       {combatData.weaponPools.length > 0 && (
         <div className="space-y-2">
-          <span className={`text-xs ${t.fonts.mono} text-muted-foreground uppercase`}>
-            Weapons
-          </span>
+          <span className={`text-xs ${t.fonts.mono} text-muted-foreground uppercase`}>Weapons</span>
           <div className="space-y-2">
             {combatData.weaponPools.map((weapon, idx) => (
               <DicePoolDisplay
@@ -445,10 +464,9 @@ export function CombatQuickReference({
                 limit={weapon.limit}
                 theme={theme}
                 hasWirelessBonus={weapon.hasWirelessBonus}
-                onClick={() => onPoolSelect?.(
-                  Math.max(0, weapon.pool + woundModifier),
-                  weapon.context
-                )}
+                onClick={() =>
+                  onPoolSelect?.(Math.max(0, weapon.pool + woundModifier), weapon.context)
+                }
               />
             ))}
           </div>
@@ -461,26 +479,31 @@ export function CombatQuickReference({
           Common Tests
         </span>
         <div className="grid grid-cols-3 gap-2">
-          {[combatData.composurePool, combatData.judgeIntentionsPool, combatData.memoryPool].map((pool, idx) => (
-            <button
-              key={idx}
-              type="button"
-              onClick={() => onPoolSelect?.(pool.pool + woundModifier, pool.context)}
-              className={`p-2 rounded border text-center transition-colors hover:border-emerald-500/50 ${t.colors.card} ${t.colors.border}`}
-            >
-              <span className={`block text-[10px] ${t.fonts.mono} text-muted-foreground uppercase mb-0.5 truncate`}>
-                {pool.label}
-              </span>
-              <span className={`text-sm font-bold ${t.fonts.mono} ${
-                woundModifier < 0 ? "text-amber-400" : t.colors.accent
-              }`}>
-                {pool.pool + woundModifier}
-              </span>
-            </button>
-          ))}
+          {[combatData.composurePool, combatData.judgeIntentionsPool, combatData.memoryPool].map(
+            (pool, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => onPoolSelect?.(pool.pool + woundModifier, pool.context)}
+                className={`p-2 rounded border text-center transition-colors hover:border-emerald-500/50 ${t.colors.card} ${t.colors.border}`}
+              >
+                <span
+                  className={`block text-[10px] ${t.fonts.mono} text-muted-foreground uppercase mb-0.5 truncate`}
+                >
+                  {pool.label}
+                </span>
+                <span
+                  className={`text-sm font-bold ${t.fonts.mono} ${
+                    woundModifier < 0 ? "text-amber-400" : t.colors.accent
+                  }`}
+                >
+                  {pool.pool + woundModifier}
+                </span>
+              </button>
+            )
+          )}
         </div>
       </div>
     </div>
   );
 }
-

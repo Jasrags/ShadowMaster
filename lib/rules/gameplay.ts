@@ -16,7 +16,7 @@
  */
 function parseWirelessBonus(bonusDescription: string): number {
   // Common pattern: "+Rating" or "+Rating to Perception"
-  if (bonusDescription.toLowerCase().includes('+rating')) {
+  if (bonusDescription.toLowerCase().includes("+rating")) {
     // Assume +Rating means +1 per rating (or could be item-specific)
     // For now, return 1 as a placeholder - this would need item context
     return 1;
@@ -86,10 +86,10 @@ export function getEffectiveRating(
  * Type of dice pool bonus from rated equipment
  */
 export type RatingBonusType =
-  | 'perception'  // Perception dice pools
-  | 'defense'     // Defense dice pools
-  | 'attack'      // Attack dice pools
-  | 'limit';      // Limit bonuses
+  | "perception" // Perception dice pools
+  | "defense" // Defense dice pools
+  | "attack" // Attack dice pools
+  | "limit"; // Limit bonuses
 
 /**
  * Get dice pool bonus from rated equipment
@@ -120,9 +120,7 @@ export function getItemDiceBonus(
   context?: EffectiveRatingContext
 ): number {
   // Use effective rating if context provided
-  const rating = context
-    ? getEffectiveRating(item, context)
-    : item.rating ?? 0;
+  const rating = context ? getEffectiveRating(item, context) : (item.rating ?? 0);
 
   // Item-specific handling could go here
   // For now, use generic rating bonus
@@ -137,30 +135,27 @@ export function getItemDiceBonus(
  * Type of test threshold
  */
 export type TestThresholdType =
-  | 'detect'   // Detection tests (threshold = rating)
-  | 'analyze'  // Analysis/extended tests (threshold = rating × 2)
-  | 'bypass';  // Bypass tests (threshold = rating + 2)
+  | "detect" // Detection tests (threshold = rating)
+  | "analyze" // Analysis/extended tests (threshold = rating × 2)
+  | "bypass"; // Bypass tests (threshold = rating + 2)
 
 /**
  * Calculate test threshold based on item rating
  * Used for detection tests, hacking attempts, etc.
  */
-export function getRatingThreshold(
-  item: { rating?: number },
-  testType: TestThresholdType
-): number {
+export function getRatingThreshold(item: { rating?: number }, testType: TestThresholdType): number {
   const rating = item.rating ?? 0;
 
   switch (testType) {
-    case 'detect':
+    case "detect":
       // Threshold equals rating for detection tests
       return rating;
 
-    case 'analyze':
+    case "analyze":
       // Extended test, rating × 2 hits needed
       return rating * 2;
 
-    case 'bypass':
+    case "bypass":
       // Rating + 2 to bypass
       return rating + 2;
 
@@ -192,7 +187,7 @@ export function getPerceptionBonus(
   item: { rating?: number; wirelessBonus?: string; name?: string },
   context?: EffectiveRatingContext
 ): number {
-  return getItemDiceBonus(item, 'perception', context);
+  return getItemDiceBonus(item, "perception", context);
 }
 
 /**
@@ -202,7 +197,7 @@ export function getDefenseBonus(
   item: { rating?: number; wirelessBonus?: string },
   context?: EffectiveRatingContext
 ): number {
-  return getItemDiceBonus(item, 'defense', context);
+  return getItemDiceBonus(item, "defense", context);
 }
 
 /**
@@ -212,7 +207,7 @@ export function getAttackBonus(
   item: { rating?: number; wirelessBonus?: string },
   context?: EffectiveRatingContext
 ): number {
-  return getItemDiceBonus(item, 'attack', context);
+  return getItemDiceBonus(item, "attack", context);
 }
 
 // =============================================================================
@@ -262,7 +257,7 @@ interface ArmorItemInput {
 function isArmorWorn(item: ArmorItemInput): boolean {
   // Check new state system first
   if (item.state?.readiness) {
-    return item.state.readiness === 'worn';
+    return item.state.readiness === "worn";
   }
   // Fall back to legacy equipped field
   return item.equipped === true;
@@ -290,8 +285,8 @@ export function calculateArmorTotal(
   const wornArmor = armorItems.filter(isArmorWorn);
 
   // Separate base armor from accessories
-  const baseArmorPieces = wornArmor.filter(a => !a.armorModifier);
-  const accessories = wornArmor.filter(a => a.armorModifier === true);
+  const baseArmorPieces = wornArmor.filter((a) => !a.armorModifier);
+  const accessories = wornArmor.filter((a) => a.armorModifier === true);
 
   // Find highest base armor
   let baseArmor = 0;
@@ -304,13 +299,8 @@ export function calculateArmorTotal(
   }
 
   // Sum accessory bonuses
-  const rawAccessoryBonus = accessories.reduce(
-    (sum, acc) => sum + (acc.armorRating || 0),
-    0
-  );
-  const accessoryNames = accessories
-    .map(a => a.name)
-    .filter((n): n is string => !!n);
+  const rawAccessoryBonus = accessories.reduce((sum, acc) => sum + (acc.armorRating || 0), 0);
+  const accessoryNames = accessories.map((a) => a.name).filter((n): n is string => !!n);
 
   // Cap accessory bonus at Strength
   const effectiveAccessoryBonus = Math.min(rawAccessoryBonus, strength);
@@ -336,10 +326,7 @@ export function calculateArmorTotal(
 /**
  * Quick helper to get just the total armor value
  */
-export function getTotalArmorValue(
-  armorItems: ArmorItemInput[],
-  strength: number
-): number {
+export function getTotalArmorValue(armorItems: ArmorItemInput[], strength: number): number {
   return calculateArmorTotal(armorItems, strength).totalArmor;
 }
 
@@ -349,11 +336,11 @@ export function getTotalArmorValue(
 
 /**
  * Calculate wound modifier for a character
- * 
+ *
  * Base calculation: every 3 boxes = -1 modifier
  * Modified by qualities like High Pain Tolerance (boxes ignored)
  * and Low Pain Tolerance (interval change)
- * 
+ *
  * @param damage - Current damage boxes
  * @param boxesIgnored - Boxes ignored before penalties apply (from High Pain Tolerance, etc.)
  * @param penaltyInterval - Boxes per -1 modifier (default 3, modified by Low Pain Tolerance)
@@ -367,4 +354,3 @@ export function calculateWoundModifier(
   const effectiveDamage = Math.max(0, damage - boxesIgnored);
   return -Math.floor(effectiveDamage / penaltyInterval);
 }
-

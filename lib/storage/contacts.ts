@@ -27,13 +27,7 @@ import type {
   UpdateContactRequest,
   ContactVisibility,
 } from "../types/contacts";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-  deleteFile,
-  readAllJsonFiles,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, readAllJsonFiles } from "./base";
 import { getCharacter, updateCharacter } from "./characters";
 
 // =============================================================================
@@ -67,10 +61,7 @@ function getCampaignContactPath(campaignId: ID, contactId: ID): string {
  * @param characterId - Character ID
  * @returns Array of contacts
  */
-export async function getCharacterContacts(
-  userId: ID,
-  characterId: ID
-): Promise<SocialContact[]> {
+export async function getCharacterContacts(userId: ID, characterId: ID): Promise<SocialContact[]> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     return [];
@@ -178,9 +169,7 @@ export async function updateCharacterContact(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -194,8 +183,10 @@ export async function updateCharacterContact(
     playerVisible: updates.visibility?.playerVisible ?? existingContact.visibility.playerVisible,
     showConnection: updates.visibility?.showConnection ?? existingContact.visibility.showConnection,
     showLoyalty: updates.visibility?.showLoyalty ?? existingContact.visibility.showLoyalty,
-    showFavorBalance: updates.visibility?.showFavorBalance ?? existingContact.visibility.showFavorBalance,
-    showSpecializations: updates.visibility?.showSpecializations ?? existingContact.visibility.showSpecializations,
+    showFavorBalance:
+      updates.visibility?.showFavorBalance ?? existingContact.visibility.showFavorBalance,
+    showSpecializations:
+      updates.visibility?.showSpecializations ?? existingContact.visibility.showSpecializations,
   };
 
   const updatedContact: SocialContact = {
@@ -272,9 +263,7 @@ export async function burnContact(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -322,9 +311,7 @@ export async function reactivateContact(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -376,9 +363,7 @@ export async function updateContactLoyalty(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -421,9 +406,7 @@ export async function updateContactConnection(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -466,9 +449,7 @@ export async function updateContactFavorBalance(
     throw new Error(`Character ${characterId} not found`);
   }
 
-  const contacts = (character.contacts || []).map((c) =>
-    ensureSocialContact(c, characterId)
-  );
+  const contacts = (character.contacts || []).map((c) => ensureSocialContact(c, characterId));
 
   const contactIndex = contacts.findIndex((c) => c.id === contactId);
   if (contactIndex === -1) {
@@ -501,9 +482,7 @@ export async function updateContactFavorBalance(
  * @param campaignId - Campaign ID
  * @returns Array of campaign contacts
  */
-export async function getCampaignContacts(
-  campaignId: ID
-): Promise<SocialContact[]> {
+export async function getCampaignContacts(campaignId: ID): Promise<SocialContact[]> {
   const dir = getCampaignContactsDir(campaignId);
   return readAllJsonFiles<SocialContact>(dir);
 }
@@ -599,7 +578,8 @@ export async function updateCampaignContact(
     showConnection: updates.visibility?.showConnection ?? contact.visibility.showConnection,
     showLoyalty: updates.visibility?.showLoyalty ?? contact.visibility.showLoyalty,
     showFavorBalance: updates.visibility?.showFavorBalance ?? contact.visibility.showFavorBalance,
-    showSpecializations: updates.visibility?.showSpecializations ?? contact.visibility.showSpecializations,
+    showSpecializations:
+      updates.visibility?.showSpecializations ?? contact.visibility.showSpecializations,
   };
 
   const updatedContact: SocialContact = {
@@ -624,10 +604,7 @@ export async function updateCampaignContact(
  * @param contactId - Contact ID
  * @returns True if deleted, false if not found
  */
-export async function deleteCampaignContact(
-  campaignId: ID,
-  contactId: ID
-): Promise<boolean> {
+export async function deleteCampaignContact(campaignId: ID, contactId: ID): Promise<boolean> {
   const filePath = getCampaignContactPath(campaignId, contactId);
   return deleteFile(filePath);
 }
@@ -659,9 +636,7 @@ export async function searchContacts(
   // Apply filters
   if (filters.archetype) {
     const archetypeLower = filters.archetype.toLowerCase();
-    contacts = contacts.filter(
-      (c) => c.archetype?.toLowerCase().includes(archetypeLower)
-    );
+    contacts = contacts.filter((c) => c.archetype?.toLowerCase().includes(archetypeLower));
   }
 
   if (filters.archetypeId) {
@@ -670,9 +645,7 @@ export async function searchContacts(
 
   if (filters.location) {
     const locationLower = filters.location.toLowerCase();
-    contacts = contacts.filter(
-      (c) => c.location?.toLowerCase().includes(locationLower)
-    );
+    contacts = contacts.filter((c) => c.location?.toLowerCase().includes(locationLower));
   }
 
   if (filters.locationId) {
@@ -681,9 +654,7 @@ export async function searchContacts(
 
   if (filters.organization) {
     const orgLower = filters.organization.toLowerCase();
-    contacts = contacts.filter(
-      (c) => c.organization?.toLowerCase().includes(orgLower)
-    );
+    contacts = contacts.filter((c) => c.organization?.toLowerCase().includes(orgLower));
   }
 
   if (filters.organizationId) {
@@ -750,9 +721,7 @@ export async function searchCampaignContacts(
   // Apply same filters as character contacts
   if (filters.archetype) {
     const archetypeLower = filters.archetype.toLowerCase();
-    contacts = contacts.filter(
-      (c) => c.archetype?.toLowerCase().includes(archetypeLower)
-    );
+    contacts = contacts.filter((c) => c.archetype?.toLowerCase().includes(archetypeLower));
   }
 
   if (filters.archetypeId) {
@@ -761,9 +730,7 @@ export async function searchCampaignContacts(
 
   if (filters.location) {
     const locationLower = filters.location.toLowerCase();
-    contacts = contacts.filter(
-      (c) => c.location?.toLowerCase().includes(locationLower)
-    );
+    contacts = contacts.filter((c) => c.location?.toLowerCase().includes(locationLower));
   }
 
   if (filters.minConnection !== undefined) {
@@ -813,22 +780,22 @@ function generateDeterministicId(characterId: string | undefined, name: string):
   let hash = 0;
   for (let i = 0; i < input.length; i++) {
     const char = input.charCodeAt(i);
-    hash = ((hash << 5) - hash) + char;
+    hash = (hash << 5) - hash + char;
     hash = hash & hash; // Convert to 32bit integer
   }
   // Format as UUID-like string for consistency
   const hex = Math.abs(hash).toString(16).padStart(8, "0");
-  return `legacy-${hex}-${name.toLowerCase().replace(/[^a-z0-9]/g, "").slice(0, 8)}`;
+  return `legacy-${hex}-${name
+    .toLowerCase()
+    .replace(/[^a-z0-9]/g, "")
+    .slice(0, 8)}`;
 }
 
 /**
  * Ensure a contact has all SocialContact fields
  * Handles conversion from legacy Contact type
  */
-function ensureSocialContact(
-  contact: SocialContact | Contact,
-  characterId?: ID
-): SocialContact {
+function ensureSocialContact(contact: SocialContact | Contact, characterId?: ID): SocialContact {
   // If it already has the id field and status, assume it's a SocialContact
   if ("id" in contact && "status" in contact && contact.id) {
     return contact as SocialContact;
@@ -870,10 +837,7 @@ export function calculateContactPoints(contact: SocialContact): number {
 /**
  * Calculate total contact points used by a character
  */
-export async function calculateTotalContactPoints(
-  userId: ID,
-  characterId: ID
-): Promise<number> {
+export async function calculateTotalContactPoints(userId: ID, characterId: ID): Promise<number> {
   const contacts = await getCharacterContacts(userId, characterId);
   return contacts
     .filter((c) => c.status === "active")

@@ -1,6 +1,6 @@
 /**
  * Karma transaction ledger service
- * 
+ *
  * Centralized service for spending and tracking character karma.
  * Ensures all karma transactions are recorded in the advancement history.
  */
@@ -18,7 +18,7 @@ export interface KarmaTransactionResult {
 
 /**
  * Spend karma for a character and record it in the ledger
- * 
+ *
  * @param character - Character spending karma
  * @param type - Type of advancement
  * @param targetId - ID of the target (attribute code, skill ID, etc.)
@@ -71,7 +71,10 @@ export function spendKarma(
     gmApproved: options.gmApproved ?? false,
     notes: options.notes,
     createdAt: now,
-    ...(options.trainingStatus === "completed" || (!options.trainingRequired && !options.trainingStatus) ? { completedAt: now } : {}),
+    ...(options.trainingStatus === "completed" ||
+    (!options.trainingRequired && !options.trainingStatus)
+      ? { completedAt: now }
+      : {}),
   };
 
   // Update character state
@@ -89,17 +92,13 @@ export function spendKarma(
 
 /**
  * Earn karma for a character
- * 
+ *
  * @param character - Character earning karma
  * @param amount - Amount of karma earned
  * @param source - Source of karma (e.g., "Session 12")
  * @returns Updated character
  */
-export function earnKarma(
-  character: Character,
-  amount: number,
-  source: string
-): Character {
+export function earnKarma(character: Character, amount: number, source: string): Character {
   if (amount < 0) {
     throw new Error("Cannot earn negative karma");
   }
@@ -110,6 +109,7 @@ export function earnKarma(
     ...character,
     karmaTotal: character.karmaTotal + amount,
     karmaCurrent: character.karmaCurrent + amount,
-    privateNotes: `${character.privateNotes || ""}\n[KARMA EARNED] +${amount} from ${source}`.trim(),
+    privateNotes:
+      `${character.privateNotes || ""}\n[KARMA EARNED] +${amount} from ${source}`.trim(),
   };
 }

@@ -1,15 +1,15 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Positive Qualities | Negative Qualities | Martial Arts |
-| --- | --- | --- |
+| ------------------ | ------------------ | ------------ |
 
 | Positive Metagenic Qualities | Negative Metagenic Qualities |
-| --- | --- |
+| ---------------------------- | ---------------------------- |
 
-| FREAKS |
-| --- |
+| FREAKS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Many of the Negative Metagenic Qualities provide serious social issues for characters since they look so strange. In a world of cookie-cutter corporate employees and ever-present surveillance, being different makes you stick out like a pink mohawk at a black trench coat convention. That, and everybody looks at you like you have two heads—which may well be one of the things you have. Getting down to chrome tacks, what this means is every time you take a quality that mentions this sidebar, you face a –1 dice pool modifier for all Social based tests, and for every three qualities, your Social limit decreases by 1. That’s the straight rules mechanic, but what does it mean to a character? Well, the character is going to be treated like an outsider or an eyesore, no matter where they go. Staring will be expected, whispers and pointing will occur, and frequent jeers are par for the course. Certain aspects of a characters freakish appearance may draw violent attention to them from more than just Humanis schmucks. Many changelings who ended up with insectoid or draconic features have suffered from the bug spirit attention (since the bugs often assume them to be rivals) and attacks from dragon-haters during the dragon civil war, pushing them to go into hiding. Some who hid poorly ended up being killed for their appearance alone. |
 
 SURGE can happen to anyone and anything. Creating a changeling character requires the player to choose a level of SURGE: Class I (10 Karma), Class II (15 Karma), or Class III (30 Karma). The chosen class indicates the Karma limit of chosen metagenic qualities and determines the variability of SURGE characteristics for the character. Select one of three class options to determine the actual Karma cost of this variation. The three options are based on how much control a player wants in the effects of the character’s SURGE. Players with Class III characters get to select the full range of qualities, both positive and negative, for the character. Players with Class II characters select the Positive Qualities to the Karma level of their choice; they then must roll Negative Qualities randomly to balance out the Positive Qualities selected. Players with Class I characters select all qualities randomly. They initially should roll random Positive Qualities until they have what they believe to be a sufficient amount (maximum Karma value of these qualities is 30). They then randomly roll Negative Qualities to balance out the Positive Qualities.
@@ -122,7 +122,7 @@ In any case, the player or gamemaster has to remember the general rule of each C
 
 ## 360-degree Eyesight
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -132,7 +132,7 @@ Characters with this quality will normally incur social modifiers (see Freaks si
 
 ## Animal Pelage
 
-| **COST** :3 TO 5 KARMA |  |
+| **COST** :3 TO 5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -140,19 +140,19 @@ Characters with this quality will normally incur social modifiers (see Freaks si
 A character with this quality develops hair follicles that grow an unusual fur, or pelage. This hair has not only cosmetic functions like Unusual Hair (p. 122) but an environmental benefit as well. Animal Pelage counts as Unusual Hair (p. 122) for rules purposes as well. Some possible options are listed here, but gamemasters and players are encouraged to come up with their own if they want, keeping in mind the natural counterpart requirement.
 
 Quills (5 Karma)
-:   These modified hairs are coated with thick keratin plates that resemble porcupine quills, interspersed with bristles, under fur and hair. Quills are 2 to 4 centimeters long, sharp as needles, and detach easily when used in close combat. Quills are used as a defensive mechanism to hold off attackers. If the character is successfully grappled in close combat (see Subduing, p. 195, SR5), the attacker makes a Damage Resistance Test against a DV of (STR + 1)P, AP +1, using the higher Strength attribute of the grappling pair. Quills can be wielded in melee combat using the Exotic Melee Weapon (Quills) skill, with the following stats: DV (STR + 1)P, Reach —, AP +1. The character’s arms or legs must be exposed and mobile to use any of these advantages. Quills is incompatible with other natural or artificial hair or skin modifications.
+: These modified hairs are coated with thick keratin plates that resemble porcupine quills, interspersed with bristles, under fur and hair. Quills are 2 to 4 centimeters long, sharp as needles, and detach easily when used in close combat. Quills are used as a defensive mechanism to hold off attackers. If the character is successfully grappled in close combat (see Subduing, p. 195, SR5), the attacker makes a Damage Resistance Test against a DV of (STR + 1)P, AP +1, using the higher Strength attribute of the grappling pair. Quills can be wielded in melee combat using the Exotic Melee Weapon (Quills) skill, with the following stats: DV (STR + 1)P, Reach —, AP +1. The character’s arms or legs must be exposed and mobile to use any of these advantages. Quills is incompatible with other natural or artificial hair or skin modifications.
 
 Insulating Pelt (4 Karma)
-:   This is a thick insulating pelt of fur covering the entire body. Pelts insulate the wearer from cold and immersion in water, providing characters with this quality a +2 dice pool modifier for Survival Tests in frigid environments (such as Arctic and Subarctic regions) and +4 Armor against Cold-based attacks. Characters face a –2 dice pool modifier for Survival Tests in extreme heat environments. Clothing and armor can be worn normally over this hair. Insulating Pelt is incompatible with other natural or artificial hair or skin modifications.
+: This is a thick insulating pelt of fur covering the entire body. Pelts insulate the wearer from cold and immersion in water, providing characters with this quality a +2 dice pool modifier for Survival Tests in frigid environments (such as Arctic and Subarctic regions) and +4 Armor against Cold-based attacks. Characters face a –2 dice pool modifier for Survival Tests in extreme heat environments. Clothing and armor can be worn normally over this hair. Insulating Pelt is incompatible with other natural or artificial hair or skin modifications.
 
 Camo Fur (3 Karma)
-:   Covered by dark or patterned fur, the character receives a +1 dice pool modifier for Sneaking Tests in any condition with decreased light levels and in environments appropriate to the pattern (stripes in tall grass, spots in a forest or jungle, etc.).
+: Covered by dark or patterned fur, the character receives a +1 dice pool modifier for Sneaking Tests in any condition with decreased light levels and in environments appropriate to the pattern (stripes in tall grass, spots in a forest or jungle, etc.).
 
 Camo Fur is incompatible with other natural or artificial hair or skin modifications.
 
 ## Arcane Arrester
 
-| **COST** :10 KARMA PER LEVEL (MAX 2) |  |
+| **COST** :10 KARMA PER LEVEL (MAX 2) | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -161,7 +161,7 @@ When targeted by a spell (including a critter’s Innate Spell), the character i
 
 ## Balance Receptor
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -170,7 +170,7 @@ This statocyst-like balance receptor works in conjunction with mammalian semicir
 
 ## Beak
 
-| **COST** :3 OR 5 KARMA |  |
+| **COST** :3 OR 5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -180,11 +180,11 @@ Instead of a mouth and nose, the middle and lower parts of the character’s fac
 Characters with the Beak quality (including Raptor Beak) suffer social stigma and modifiers (see Freaks sidebar, p. 123).
 
 Raptor Beak (5 Karma)
-:   Where a standard beak is not designed for combat, this beak is. It can be used with the Unarmed Combat Skill ((STR + 2)P, Reach –1, AP –2).
+: Where a standard beak is not designed for combat, this beak is. It can be used with the Unarmed Combat Skill ((STR + 2)P, Reach –1, AP –2).
 
 ## Bicardiac
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -193,7 +193,7 @@ Characters with this quality possess a second heart located in the right half of
 
 ## Biosonar
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -202,7 +202,7 @@ Characters with this quality possess all the natural organs for a sophisticated 
 
 ## Bone Spikes
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -211,7 +211,7 @@ Razor-sharp bony deposits grow from the character’s skeletal structure and pok
 
 ## Broadened Auditory Spectrum
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -224,7 +224,7 @@ Broadened Auditory Spectrum is incompatible with any earware (p. 453, SR5).
 
 ## Camouflage
 
-| **COST** :4 OR 8 KARMA |  |
+| **COST** :4 OR 8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -234,15 +234,15 @@ This quality provides characters with skin and hair pigmentation that can change
 Camouflage is incompatible with any other dermal modification, and characters with the Camouflage quality suffer social stigma and modifiers (see Freaks sidebar, p. 123).
 
 Basic Camouflage (4 Karma)
-:   The character’s skin changes color only when exposed for a prolonged time (1 minute) to a background with sharp contrasts, like colorful patterns, and it retains the new color for up to 4 hours total. If the background around it changes, the color fades and the creature’s coloration returns to normal within 10 minutes. While the camouflage is in effect, increase the threshold to see the character by 2, as long as they are standing still and not wearing clothing that would ruin the camouflage effect.
+: The character’s skin changes color only when exposed for a prolonged time (1 minute) to a background with sharp contrasts, like colorful patterns, and it retains the new color for up to 4 hours total. If the background around it changes, the color fades and the creature’s coloration returns to normal within 10 minutes. While the camouflage is in effect, increase the threshold to see the character by 2, as long as they are standing still and not wearing clothing that would ruin the camouflage effect.
 
 Dynamic Coloration (8 Karma)
-:   The character’s skin changes color slowly with the background, even as the character moves. This imposes a minus 2 to the visual perception test to see the character while moving and a minus 4 if stationary; the character can not be wearing any clothing that would ruin the camouflage effect.
-:   Even when clothed, any exposed skin will change with the background.
+: The character’s skin changes color slowly with the background, even as the character moves. This imposes a minus 2 to the visual perception test to see the character while moving and a minus 4 if stationary; the character can not be wearing any clothing that would ruin the camouflage effect.
+: Even when clothed, any exposed skin will change with the background.
 
 ## Celerity
 
-| **COST** :6 KARMA |  |
+| **COST** :6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -251,7 +251,7 @@ This quality results in a strengthening of the musculature involved in running, 
 
 ## Claws
 
-| **COST** :3, 5, OR 7 KARMA |  |
+| **COST** :3, 5, OR 7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -259,17 +259,17 @@ This quality results in a strengthening of the musculature involved in running, 
 The character’s fingernails and toenails harden and lengthen into claws.
 
 Digging Claws (3 Karma)
-:   These claws provide a +2 dice pool modifier to all tests involving digging or moving earth, but they aren’t as effective in combat (Unarmed Çombat skill, DV (STR)P, Reach —, AP +1). This quality is incompatible with any cyberweapon or limb replacement cyberware.
+: These claws provide a +2 dice pool modifier to all tests involving digging or moving earth, but they aren’t as effective in combat (Unarmed Çombat skill, DV (STR)P, Reach —, AP +1). This quality is incompatible with any cyberweapon or limb replacement cyberware.
 
 Razor Claws (5 Karma)
-:   These claws may be used to attack an opponent using the Unarmed Combat skill. Razor claws have a DV of (STR + 1)P, AP –1.
+: These claws may be used to attack an opponent using the Unarmed Combat skill. Razor claws have a DV of (STR + 1)P, AP –1.
 
 Retractable Claws (7 Karma)
-:   Retractable claws have the same effect as Razor Claws, but they can be retracted and hidden. Digging claws cannot be retracted.
+: Retractable claws have the same effect as Razor Claws, but they can be retracted and hidden. Digging claws cannot be retracted.
 
 ## Climate Adaptation
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -279,7 +279,7 @@ The character’s metabolic processes, skin tissue, and regulation cycles are ad
 
 ## Corrosive Spit
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -288,7 +288,7 @@ The character possesses salivary glands like certain paracritters that possess t
 
 ## Dermal Alteration
 
-| **COST** :3 TO 15 KARMA |  |
+| **COST** :3 TO 15 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -296,23 +296,23 @@ The character possesses salivary glands like certain paracritters that possess t
 Characters with this quality possess skin that looks and feels quite different from normal skin and has unique properties. Dermal Alteration is incompatible with any other natural or artificial skin modification.
 
 Bark Skin (5 Karma)
-:   This skin contains woven cellulose fibers and wooden filaments that make it resemble tree bark in appearance and hardness. Bark Skin confers +2 armor and is cumulative with any worn armor.
+: This skin contains woven cellulose fibers and wooden filaments that make it resemble tree bark in appearance and hardness. Bark Skin confers +2 armor and is cumulative with any worn armor.
 
 Blubber (3 Karma)
-:   This skin possesses a thick layer of vascularized fat underneath the surface that acts as an thermal insulator. The character receives a +2 armor bonus when resisting Cold damage, but he also suffers a –2 dice pool modifier to Perception Tests involving cold.
+: This skin possesses a thick layer of vascularized fat underneath the surface that acts as an thermal insulator. The character receives a +2 armor bonus when resisting Cold damage, but he also suffers a –2 dice pool modifier to Perception Tests involving cold.
 
 Dragon Skin (3 Karma)
-:   This skin forms a scaly hide that makes the character more heat resistant. The character receives a +2 armor when resisting Fire damage, but she also suffers a –2 dice pool modifier to Perception Tests involving heat.
+: This skin forms a scaly hide that makes the character more heat resistant. The character receives a +2 armor when resisting Fire damage, but she also suffers a –2 dice pool modifier to Perception Tests involving heat.
 
 Granite Shell (15 Karma)
-:   This skin contains massive calcite formations that make it appear grayish and hard as rock. Granite Shell provides +4 armor that functions as Hardened Armor (p. 397, SR5) but is not fully stackable with other worn armor. For Damage Resistance Tests; though Granite Shell does not stack with worn armor it does still provide 2 automatic hits from the Hardened Armor (p. 397, SR5).
+: This skin contains massive calcite formations that make it appear grayish and hard as rock. Granite Shell provides +4 armor that functions as Hardened Armor (p. 397, SR5) but is not fully stackable with other worn armor. For Damage Resistance Tests; though Granite Shell does not stack with worn armor it does still provide 2 automatic hits from the Hardened Armor (p. 397, SR5).
 
 Rhino Hide (7 Karma)
-:   This skin is hard, thick, and leathery like an elephant’s or rhinoceros’s. Rhino Hide grants +3 armor and is cumulative with any worn armor.
+: This skin is hard, thick, and leathery like an elephant’s or rhinoceros’s. Rhino Hide grants +3 armor and is cumulative with any worn armor.
 
 ## Dermal Deposits
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -321,7 +321,7 @@ Tough dermal deposits under or on the skin, similar to a troll, count as a natur
 
 ## Defensive Secretion
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -332,17 +332,17 @@ The character’s skin cells that allow her to exude a defensive liquid when agi
 
 **ELECTROCEPTION TABLE**
 
-| HITS | SENSE | INFORMATION |
-| --- | --- | --- |
-| 1 | Electrosense | Presence and direction of the electrical field’s source 1 Technosense Presence and direction of wirelesssignal(s) |
-| 2 | Electrosense | Relative size and type of the electrical source (biological or technological) |
-| 2 | Technosense | Strength of the wireless signals(active wireless or transmitter) |
-| 3 | Electrosense | Exact position of the field’s source or if the biological source has been augmented (cyberware, bioware change the “flavor” of the field) |
-| 3 | Technosense | Presence of cyberware implants or gear with active wireless4 Electrosense Personal orientation and height/ depth within 5 meters in relation to the earth’s magnetic field; type of biological source (metahuman type, animal size) |
-| 4 | Technosense | Type of device (RFID tag, commlink, smartlink, drone, identification of technomancer abilities present within observed area |
-| 5+ | Technosense | Presence of nanites; presence of stealth RFID tags; identification of a technomancer |
+| HITS | SENSE        | INFORMATION                                                                                                                                                                                                                         |
+| ---- | ------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1    | Electrosense | Presence and direction of the electrical field’s source 1 Technosense Presence and direction of wirelesssignal(s)                                                                                                                   |
+| 2    | Electrosense | Relative size and type of the electrical source (biological or technological)                                                                                                                                                       |
+| 2    | Technosense  | Strength of the wireless signals(active wireless or transmitter)                                                                                                                                                                    |
+| 3    | Electrosense | Exact position of the field’s source or if the biological source has been augmented (cyberware, bioware change the “flavor” of the field)                                                                                           |
+| 3    | Technosense  | Presence of cyberware implants or gear with active wireless4 Electrosense Personal orientation and height/ depth within 5 meters in relation to the earth’s magnetic field; type of biological source (metahuman type, animal size) |
+| 4    | Technosense  | Type of device (RFID tag, commlink, smartlink, drone, identification of technomancer abilities present within observed area                                                                                                         |
+| 5+   | Technosense  | Presence of nanites; presence of stealth RFID tags; identification of a technomancer                                                                                                                                                |
 
-| **COST** :4 OR 7 KARMA |  |
+| **COST** :4 OR 7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -350,16 +350,16 @@ The character’s skin cells that allow her to exude a defensive liquid when agi
 Characters with this quality have developed the capacity to sense electricity and changes to electrical fields in their vicinity. The ability allows the character to use an Observe in Detail Simple Action to make a Perception + Intuition [Mental] Test. Hits on the test are compared to the Electroception Table to determine results. The range of Electroception is (Essence) meters
 
 Electrosense (4 Karma)
-:   Similar to animals like fish or platypuses, the character has developed electroreceptor organs to detect electromagnetic fields. While current electronic devices have optical processors, they still require electrical energy in order to function, and that energy generates an electric field.
+: Similar to animals like fish or platypuses, the character has developed electroreceptor organs to detect electromagnetic fields. While current electronic devices have optical processors, they still require electrical energy in order to function, and that energy generates an electric field.
 
 Technosense (7 Karma)
-:   In a still-unknown organic process, the character can sense the higher energies of wireless technology like technomancers. While the character can sense wireless signals, they cannot manipulate them.
+: In a still-unknown organic process, the character can sense the higher energies of wireless technology like technomancers. While the character can sense wireless signals, they cannot manipulate them.
 
 Noise modifiers affect this Perception Test.
 
 ## Elongated Limbs
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -368,7 +368,7 @@ The character’s arms and legs are elongated, granting her a greater effective 
 
 ## Fangs
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -377,7 +377,7 @@ The character’s canine teeth are enlarged and sharpened like a carnivore’s. 
 
 ## Frog Tongue
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -386,7 +386,7 @@ The character possesses a long adhesive tongue, which can be extended in a sprin
 
 ## Functional Tail
 
-| **COST** :4 TO 7 KARMA |  |
+| **COST** :4 TO 7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -396,20 +396,20 @@ A tail grows from the base of the character’s spine; this may be scaly (like a
 The character’s clothing must accommodate the tail to gain any of the above effects. Sitting in certain positions for long periods of time will be uncomfortable and cause a –1 dice pool modifier to all actions while the character is sitting on his tail. The Functional Tail quality is incompatible with any other tail modification or quality. Characters with the Functional Tail quality suffer social stigma and modifiers (see Freaks sidebar, p. 123).
 
 Balance (6 Karma)
-:   Usually between one and two meters long, a tail used for balance is not under the character’s conscious control. Instead, it functions instinctively by twitching, swaying, and even wrapping around things at random in order to improve the character’s balance. Characters with a balance tail receive a +1 dice pool modifier for all Balance, Climbing, Gymnastics, or Jumping-related tests.
+: Usually between one and two meters long, a tail used for balance is not under the character’s conscious control. Instead, it functions instinctively by twitching, swaying, and even wrapping around things at random in order to improve the character’s balance. Characters with a balance tail receive a +1 dice pool modifier for all Balance, Climbing, Gymnastics, or Jumping-related tests.
 
 Paddle (4 Karma)
-:   This broad and scaly beaver-like tail can be used to steer and paddle when swimming, granting a +2 dice pool modifier for all Swimming Tests.
+: This broad and scaly beaver-like tail can be used to steer and paddle when swimming, granting a +2 dice pool modifier for all Swimming Tests.
 
 Prehensile (7 Karma)
-:   This tail functions like the Balance tail, except that the character can consciously manipulate it as if it were an extra limb. The tail can pick up items, though it lacks digits and has difficulty with fine manipulation. Apply a –4 dice pool modifier to any attempt at fine manipulation of an object with the tail, such as pressing a button or pulling a trigger. The tail has an effective Strength equal to half the character’s unaugmented Strength (round down), but it can hold the character’s entire body weight if he chooses to hang from it. Prehensile tails do not provide an extra attack.
+: This tail functions like the Balance tail, except that the character can consciously manipulate it as if it were an extra limb. The tail can pick up items, though it lacks digits and has difficulty with fine manipulation. Apply a –4 dice pool modifier to any attempt at fine manipulation of an object with the tail, such as pressing a button or pulling a trigger. The tail has an effective Strength equal to half the character’s unaugmented Strength (round down), but it can hold the character’s entire body weight if he chooses to hang from it. Prehensile tails do not provide an extra attack.
 
 Thagomizer (5 Karma)
-:   This powerfully muscled prehensile tail ends in an array of dermal spikes and can be used for a melee attack using the Exotic Melee Weapon (Thagomizer) skill, with the following stats: DV (STR + 3) P, Reach 1, AP –1.
+: This powerfully muscled prehensile tail ends in an array of dermal spikes and can be used for a melee attack using the Exotic Melee Weapon (Thagomizer) skill, with the following stats: DV (STR + 3) P, Reach 1, AP –1.
 
 ## Gills
 
-| **COST** :4 OR 6 KARMA |  |
+| **COST** :4 OR 6 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -418,7 +418,7 @@ Amphibian-like gills allow the character to breathe underwater. These can be loc
 
 ## Glamour
 
-| **COST** :12 KARMA |  |
+| **COST** :12 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -427,7 +427,7 @@ A character with Glamour is paranaturally gifted so that all sapient beings perc
 
 ## Goring Horns
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -436,7 +436,7 @@ A single horn or horns express on the character’s head. If the character alrea
 
 ## Greasy Skin
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -445,7 +445,7 @@ The character’s skin contains sweat glands that produce a greasy lubricant in 
 
 ## Keen-eared
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -454,7 +454,7 @@ Characters with this quality have extraordinarily keen hearing due to overly lar
 
 ## Larger Tusks
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -463,7 +463,7 @@ Larger tusks, bigger variants of normal metahuman tusks, resemble the tusks of e
 
 ## Low-light Vision
 
-| **COST** :2 OR 4 KARMA |  |
+| **COST** :2 OR 4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -474,7 +474,7 @@ Normal eyes resulting from the character’s metagenic background, such as elf o
 
 ## Magic Sense
 
-| **COST** :7 KARMA |  |
+| **COST** :7 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -483,7 +483,7 @@ The character possesses the ability to detect the use of magic in his vicinity. 
 
 ## Magnetoception
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -492,7 +492,7 @@ Similar to Electrosense, Magnetoception allows a character to sense changes in n
 
 ## Marsupial Pouch
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -501,7 +501,7 @@ The character develops a pocket-like pouch on her chest or abdomen, just like th
 
 ## Metagenic (attribute) Improvement
 
-| **COST** :15 KARMA |  |
+| **COST** :15 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -510,7 +510,7 @@ A character with Metagenic Improvement possesses a genetic expression that enhan
 
 ## Metahuman Traits
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -519,7 +519,7 @@ Characters with this quality possess metagenes that express as certain cosmetic 
 
 ## Monkey Paws
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -528,7 +528,7 @@ The character possesses monkey- or chameleon-like gripping feet with elongated, 
 
 ## Nasty Vibe
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -539,14 +539,14 @@ A character with this quality radiates the ultimate bad vibe. Sapient beings in 
 
 **ANIMAL TOXINS TABLE**
 
-| SEVERITY | KARMA COST | SPEED | POWER | EFFECT | PENETRATION |
-| --- | --- | --- | --- | --- | --- |
-| Mild | 3 | 1 Combat Turn | 8 | Disorientation; Stun Damage | 0 |
-| Moderate | 5 | 1 Combat Turn | 12 | Disorientation; Nausea; Stun Damage | –1 |
-| Serious | 10 | Immediate | 10 | Disorientation; Paralysis; Physical Damage | –2 |
-| Deadly | 15 | Immediate | 12 | Nausea; Paralysis; Physical Damage | –2 |
+| SEVERITY | KARMA COST | SPEED         | POWER | EFFECT                                     | PENETRATION |
+| -------- | ---------- | ------------- | ----- | ------------------------------------------ | ----------- |
+| Mild     | 3          | 1 Combat Turn | 8     | Disorientation; Stun Damage                | 0           |
+| Moderate | 5          | 1 Combat Turn | 12    | Disorientation; Nausea; Stun Damage        | –1          |
+| Serious  | 10         | Immediate     | 10    | Disorientation; Paralysis; Physical Damage | –2          |
+| Deadly   | 15         | Immediate     | 12    | Nausea; Paralysis; Physical Damage         | –2          |
 
-| **COST** :3 TO 20 KARMA |  |
+| **COST** :3 TO 20 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -555,7 +555,7 @@ The character’s body produces a naturally occurring animal toxin (to which the
 
 ## Ogre Stomach
 
-| **COST** :8 KARMA |  |
+| **COST** :8 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -564,7 +564,7 @@ The character’s unique stomach, intestinal organs, and unusual gut flora can d
 
 ## Photometabolism
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -573,7 +573,7 @@ The character possesses an organ, such as chloroplast skin or grasslike body hai
 
 ## Proboscis
 
-| **COST** :5 KARMA |  |
+| **COST** :5 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -582,7 +582,7 @@ The character possesses an prehensile nose or elephantine trunk instead of a typ
 
 ## Satyr Legs
 
-| **COST** :10 KARMA |  |
+| **COST** :10 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -593,7 +593,7 @@ Characters with the Satyr Legs quality suffer social stigma and modifiers (see F
 
 ## Setae
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -602,7 +602,7 @@ Also known as gecko hands, these hairlike structures on a character’s palms al
 
 ## Shiva Arms
 
-| **COST** :8 KARMA PER PAIR |  |
+| **COST** :8 KARMA PER PAIR | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -614,7 +614,7 @@ Characters with the Shiva Arms quality suffer social stigma and modifiers (see F
 
 ## Thermal Sensitivity
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -623,7 +623,7 @@ Like a snake, the character possesses infrared-sensitive receptors next to his o
 
 ## Thermographic Vision
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -632,7 +632,7 @@ A character with this quality has natural thermographic vision, just like dwarfs
 
 ## Thorns
 
-| **COST** :2 KARMA |  |
+| **COST** :2 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -641,7 +641,7 @@ Hard, sharp protrusions 1 centimeter long protrude through the character’s ski
 
 ## Underwater Vision
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -650,7 +650,7 @@ The character develops an additional, specially adapted membrane to the outer ey
 
 ## Vomeronasal Organ
 
-| **COST** :3 KARMA |  |
+| **COST** :3 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -659,7 +659,7 @@ The character’s nose contains additional olfactory organelles that augment her
 
 ## Webbed Digits
 
-| **COST** :4 KARMA |  |
+| **COST** :4 KARMA | |
 | **PREREQUISITES:** NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |

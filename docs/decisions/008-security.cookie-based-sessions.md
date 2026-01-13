@@ -9,6 +9,7 @@ session={userId}:{sessionVersion}
 ```
 
 Session validity is determined by:
+
 1. Presence of the session cookie
 2. Existence of the referenced user
 3. Match between the cookie's version and the user's current `sessionVersion` field
@@ -29,6 +30,7 @@ Shadow Master chose cookie-based sessions because:
 - **Automatic Transmission**: Browsers automatically include cookies in requests, simplifying client code.
 
 The session version mechanism provides a **global session kill switch**:
+
 - When a user changes their password, `sessionVersion` is incremented.
 - All existing cookies with the old version become invalid on next validation.
 - No session database or token blacklist is required.
@@ -51,14 +53,14 @@ The session version mechanism provides a **global session kill switch**:
 
 ## Session Configuration
 
-| Property | Value | Rationale |
-|----------|-------|-----------|
-| Name | `session` | Simple, conventional |
-| Duration | 7 days | Balance between convenience and security |
-| httpOnly | `true` | Prevent JavaScript access |
-| Secure | `true` (production) | HTTPS only in production |
-| SameSite | `Lax` | CSRF protection while allowing navigation |
-| Path | `/` | Available to all routes |
+| Property | Value               | Rationale                                 |
+| -------- | ------------------- | ----------------------------------------- |
+| Name     | `session`           | Simple, conventional                      |
+| Duration | 7 days              | Balance between convenience and security  |
+| httpOnly | `true`              | Prevent JavaScript access                 |
+| Secure   | `true` (production) | HTTPS only in production                  |
+| SameSite | `Lax`               | CSRF protection while allowing navigation |
+| Path     | `/`                 | Available to all routes                   |
 
 ## Alternatives Considered
 
@@ -75,4 +77,3 @@ The session version mechanism provides a **global session kill switch**:
 ## Related ADRs
 
 - ADR-001: Account Security Defense (defines the requirement for atomic session revocation)
-

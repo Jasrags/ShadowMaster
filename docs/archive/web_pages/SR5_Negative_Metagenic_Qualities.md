@@ -1,15 +1,15 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Positive Qualities | Negative Qualities | Martial Arts |
-| --- | --- | --- |
+| ------------------ | ------------------ | ------------ |
 
 | Positive Metagenic Qualities | Negative Metagenic Qualities |
-| --- | --- |
+| ---------------------------- | ---------------------------- |
 
-| FREAKS |
-| --- |
+| FREAKS                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Many of the Negative Metagenic Qualities provide serious social issues for characters since they look so strange. In a world of cookie-cutter corporate employees and ever-present surveillance, being different makes you stick out like a pink mohawk at a black trench coat convention. That, and everybody looks at you like you have two heads—which may well be one of the things you have. Getting down to chrome tacks, what this means is every time you take a quality that mentions this sidebar, you face a –1 dice pool modifier for all Social based tests, and for every three qualities, your Social limit decreases by 1. That’s the straight rules mechanic, but what does it mean to a character? Well, the character is going to be treated like an outsider or an eyesore, no matter where they go. Staring will be expected, whispers and pointing will occur, and frequent jeers are par for the course. Certain aspects of a characters freakish appearance may draw violent attention to them from more than just Humanis schmucks. Many changelings who ended up with insectoid or draconic features have suffered from the bug spirit attention (since the bugs often assume them to be rivals) and attacks from dragon-haters during the dragon civil war, pushing them to go into hiding. Some who hid poorly ended up being killed for their appearance alone. |
 
 SURGE can happen to anyone and anything. Creating a changeling character requires the player to choose a level of SURGE: Class I (10 Karma), Class II (15 Karma), or Class III (30 Karma). The chosen class indicates the Karma limit of chosen metagenic qualities and determines the variability of SURGE characteristics for the character. Select one of three class options to determine the actual Karma cost of this variation. The three options are based on how much control a player wants in the effects of the character’s SURGE. Players with Class III characters get to select the full range of qualities, both positive and negative, for the character. Players with Class II characters select the Positive Qualities to the Karma level of their choice; they then must roll Negative Qualities randomly to balance out the Positive Qualities selected. Players with Class I characters select all qualities randomly. They initially should roll random Positive Qualities until they have what they believe to be a sufficient amount (maximum Karma value of these qualities is 30). They then randomly roll Negative Qualities to balance out the Positive Qualities.
@@ -74,7 +74,7 @@ In any case, the player or gamemaster has to remember the general rule of each C
 
 ## Adiposis
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -83,7 +83,7 @@ The character is clinically obese due to metabolic or genetic dysfunction and po
 
 ## Astral Hazing
 
-| **BONUS** :5 OR 15 KARMA |  |
+| **BONUS** :5 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -94,7 +94,7 @@ A character with this quality has expressed metagenes that somehow catalyze and 
 
 ## Berserker
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -103,7 +103,7 @@ Characters with the Berserker quality have a very little self-control and are pr
 
 ## Bioluminescence
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -112,7 +112,7 @@ The character produces the pigment luciferin and the enzyme luciferase in her ha
 
 ## Cephalopod Skull
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -121,7 +121,7 @@ The character has a kraken-like head consisting of a nacre-like substance instea
 
 ## Cold-blooded
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -132,7 +132,7 @@ The bodies of characters with this quality have temperatures close to the air te
 
 ## Critter Spook
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -141,7 +141,7 @@ Something about the character’s presence or smell seems threatening to animals
 
 ## Cyclopean Eye
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -152,7 +152,7 @@ Characters with the Cyclopean Eye quality suffer social stigma and modifiers (se
 
 ## Deformity
 
-| **BONUS** :5 OR 15 KARMA |  |
+| **BONUS** :5 OR 15 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -161,7 +161,7 @@ A character with metagenic Deformity has abnormal and asymmetrical facial and bo
 
 ## Feathers
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -172,7 +172,7 @@ Characters with the Feathers quality suffer social stigma and modifiers (see Fre
 
 ## Impaired (attribute)
 
-| **BONUS** :8 KARMA |  |
+| **BONUS** :8 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -181,7 +181,7 @@ One of the character’s Mental or Physical attributes is Impaired, so it is imp
 
 ## Insectoid Features
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -190,7 +190,7 @@ The character possesses insectoid features such as compound eyes, mandibles, or 
 
 ## Mood Hair
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -199,7 +199,7 @@ Mood hair changes colors according to the character’s emotional state; for exa
 
 ## Neoteny
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -210,7 +210,7 @@ Characters with Neoteny need custom armor and equipment, causing a ten percent i
 
 ## Nocturnal
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -219,7 +219,7 @@ A character with this quality has an abnormal circadian rhythm. Instead of a typ
 
 ## Progeria
 
-| **BONUS** :9 KARMA |  |
+| **BONUS** :9 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -228,7 +228,7 @@ Progeria syndrome is an extremely rare condition in which some aspects of aging 
 
 ## Scales
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -239,7 +239,7 @@ Characters with the Scales quality suffer social stigma and modifiers (see Freak
 
 ## Scent Glands
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -248,7 +248,7 @@ The character possesses scent glands that produce a foul odor best described as 
 
 ## Slow Healer
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -257,7 +257,7 @@ A Slow Healer recuperates from wounds more sluggishly than normal characters do,
 
 ## Striking Skin Pigmentation
 
-| **BONUS** :4 KARMA |  |
+| **BONUS** :4 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -266,7 +266,7 @@ The character’s skin takes on an unusual color, either in its entirety or in p
 
 ## Stubby Arms
 
-| **BONUS** :10 KARMA |  |
+| **BONUS** :10 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -275,7 +275,7 @@ Instead of normal arm length, the character has stubby arms resulting from skele
 
 ## Symbiosis
 
-| **BONUS** :5 KARMA |  |
+| **BONUS** :5 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -288,7 +288,7 @@ Symbiosis provides the character with preternatural insight and connection to ev
 
 ## Third Eye
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -297,7 +297,7 @@ A third eye appears in the middle of the character’s forehead. This eye incurs
 
 ## Unusual Hair
 
-| **BONUS** :3 KARMA |  |
+| **BONUS** :3 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |
@@ -306,7 +306,7 @@ The character’s hair changes to an unusual color or texture, or it grows from 
 
 ## Vestigial Tail
 
-| **BONUS** :6 KARMA |  |
+| **BONUS** :6 KARMA | |
 | **REQUIRES** :NONE |
 | **RATING** :NONE |
 | **SOURCE** :SR5:RF |

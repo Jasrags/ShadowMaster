@@ -228,10 +228,7 @@ describe("User Suspend API", () => {
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.user.accountStatus).toBe("active");
-      expect(storageModule.reactivateUser).toHaveBeenCalledWith(
-        "target-user-id",
-        mockAdminUser.id
-      );
+      expect(storageModule.reactivateUser).toHaveBeenCalledWith("target-user-id", mockAdminUser.id);
     });
 
     it("should return 404 if user not found", async () => {

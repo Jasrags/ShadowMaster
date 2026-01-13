@@ -4,9 +4,9 @@
 
 We release patches for security vulnerabilities. Which versions are eligible for receiving such patches depends on the CVSS v3.0 Rating:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| Latest  | :white_check_mark: |
+| Version  | Supported          |
+| -------- | ------------------ |
+| Latest   | :white_check_mark: |
 | < Latest | :x:                |
 
 ## Reporting a Vulnerability
@@ -62,4 +62,3 @@ Contributors who report security vulnerabilities in a responsible manner may be 
 - ShadowMaster uses bcrypt for password hashing
 - Session cookies are HTTP-only and should be used over HTTPS in production
 - User-generated data (users, campaigns, characters) should be excluded from version control (see `.gitignore`)
-

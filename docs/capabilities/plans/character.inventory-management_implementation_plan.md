@@ -9,6 +9,7 @@ Implement a complete inventory management system that provides unified equipment
 **Related ADR:** `010-gear.inventory-state-management.md`
 
 **Current State:** The codebase has partial infrastructure:
+
 - `ArmorItem.equipped` boolean exists
 - `Character.wirelessBonusesEnabled` global toggle exists
 - `Weapon.currentAmmo` and `ammoCapacity` fields exist but no UI
@@ -22,13 +23,13 @@ Implement a complete inventory management system that provides unified equipment
 
 The following architectural decisions have been reviewed and approved per ADR-010:
 
-| Decision | Approved Choice | Rationale |
-|----------|-----------------|-----------|
-| **State Model** | Unified GearState interface | Consistency across all gear types |
-| **Wireless Bonuses** | Structured `wirelessEffects` in catalog | Machine-calculable, no text parsing |
-| **Magazine System** | Realistic with one included at purchase | Tactical depth, SR5 authenticity |
-| **Device Condition** | Three-state (functional/bricked/destroyed) | Sufficient for MVP, extensible |
-| **Encumbrance** | Strength × 10 kg capacity | SR5 rules compliant |
+| Decision             | Approved Choice                            | Rationale                           |
+| -------------------- | ------------------------------------------ | ----------------------------------- |
+| **State Model**      | Unified GearState interface                | Consistency across all gear types   |
+| **Wireless Bonuses** | Structured `wirelessEffects` in catalog    | Machine-calculable, no text parsing |
+| **Magazine System**  | Realistic with one included at purchase    | Tactical depth, SR5 authenticity    |
+| **Device Condition** | Three-state (functional/bricked/destroyed) | Sufficient for MVP, extensible      |
+| **Encumbrance**      | Strength × 10 kg capacity                  | SR5 rules compliant                 |
 
 ### Implementation Implications
 
@@ -49,28 +50,28 @@ The following architectural decisions have been reviewed and approved per ADR-01
 
 ```typescript
 /** Readiness state for equipment items */
-export type EquipmentReadiness = 
-  | 'readied'    // In hand, immediately usable
-  | 'holstered'  // Accessible, Simple Action to ready
-  | 'worn'       // Currently worn (armor, clothing)
-  | 'stored';    // In bag/vehicle, not readily accessible
+export type EquipmentReadiness =
+  | "readied" // In hand, immediately usable
+  | "holstered" // Accessible, Simple Action to ready
+  | "worn" // Currently worn (armor, clothing)
+  | "stored"; // In bag/vehicle, not readily accessible
 
 /** Condition state for Matrix-capable devices */
-export type DeviceCondition = 
-  | 'functional'  // Operating normally
-  | 'bricked'     // Disabled, repairable
-  | 'destroyed';  // Permanently disabled
+export type DeviceCondition =
+  | "functional" // Operating normally
+  | "bricked" // Disabled, repairable
+  | "destroyed"; // Permanently disabled
 
 /** Unified state for all gear items */
 export interface GearState {
   readiness: EquipmentReadiness;
   wirelessEnabled: boolean;
-  condition?: DeviceCondition;  // Only for Matrix-capable devices
+  condition?: DeviceCondition; // Only for Matrix-capable devices
 }
 
 /** State extension for weapons with ammunition */
 export interface WeaponAmmoState {
-  loadedAmmoTypeId: string | null;  // Catalog ID of loaded ammo
+  loadedAmmoTypeId: string | null; // Catalog ID of loaded ammo
   currentRounds: number;
   magazineCapacity: number;
 }
@@ -78,7 +79,7 @@ export interface WeaponAmmoState {
 /** Spare magazine as inventory item */
 export interface MagazineItem {
   id: string;
-  weaponCompatibility: string[];  // Weapon subcategory IDs
+  weaponCompatibility: string[]; // Weapon subcategory IDs
   capacity: number;
   loadedAmmoTypeId: string | null;
   currentRounds: number;
@@ -90,11 +91,11 @@ export interface AmmunitionItem {
   id: string;
   catalogId: string;
   name: string;
-  caliber: string;           // e.g., "9mm", ".45 ACP", "12 gauge"
-  ammoType: string;          // e.g., "regular", "apds", "ex-ex"
+  caliber: string; // e.g., "9mm", ".45 ACP", "12 gauge"
+  ammoType: string; // e.g., "regular", "apds", "ex-ex"
   quantity: number;
-  damageModifier: number;    // Added to base weapon damage
-  apModifier: number;        // Added to base weapon AP
+  damageModifier: number; // Added to base weapon damage
+  apModifier: number; // Added to base weapon AP
   cost: number;
   availability: number;
   restricted?: boolean;
@@ -103,14 +104,15 @@ export interface AmmunitionItem {
 
 /** Encumbrance calculation result */
 export interface EncumbranceState {
-  currentWeight: number;     // kg
-  maxCapacity: number;       // Strength × 10 kg
+  currentWeight: number; // kg
+  maxCapacity: number; // Strength × 10 kg
   overweightPenalty: number; // Pool modifier when over capacity
   isEncumbered: boolean;
 }
 ```
 
 **Satisfies:**
+
 - Requirement: "Every equipment item MUST have an authoritative readiness state"
 - Requirement: "Matrix-capable devices MUST track condition state"
 - Requirement: "Weapons with ammunition MUST track currently loaded ammunition type"
@@ -124,39 +126,40 @@ export interface EncumbranceState {
 ```typescript
 /** Types of bonuses wireless can provide */
 export type WirelessEffectType =
-  | 'attribute'       // Bonus to attribute (e.g., +1 Agility)
-  | 'initiative'      // Bonus to Initiative Score
-  | 'initiative_dice' // Bonus Initiative Dice
-  | 'attack_pool'     // Bonus to attack dice pools
-  | 'defense_pool'    // Bonus to defense dice pools
-  | 'damage_resist'   // Bonus to damage resistance
-  | 'armor'           // Bonus to armor rating
-  | 'limit'           // Bonus to a limit (Physical, Mental, Social)
-  | 'recoil'          // Recoil compensation bonus
-  | 'skill'           // Bonus to specific skill
-  | 'special';        // Complex effect requiring custom handling
+  | "attribute" // Bonus to attribute (e.g., +1 Agility)
+  | "initiative" // Bonus to Initiative Score
+  | "initiative_dice" // Bonus Initiative Dice
+  | "attack_pool" // Bonus to attack dice pools
+  | "defense_pool" // Bonus to defense dice pools
+  | "damage_resist" // Bonus to damage resistance
+  | "armor" // Bonus to armor rating
+  | "limit" // Bonus to a limit (Physical, Mental, Social)
+  | "recoil" // Recoil compensation bonus
+  | "skill" // Bonus to specific skill
+  | "special"; // Complex effect requiring custom handling
 
 /** Structured wireless bonus effect */
 export interface WirelessEffect {
   type: WirelessEffectType;
   modifier: number;
-  
+
   // Conditional fields based on type
-  attribute?: AttributeKey;        // For 'attribute' type
-  limit?: 'physical' | 'mental' | 'social';  // For 'limit' type
-  skill?: string;                  // For 'skill' type
-  condition?: string;              // When this applies (e.g., "ranged_attack")
-  description?: string;            // For 'special' type
+  attribute?: AttributeKey; // For 'attribute' type
+  limit?: "physical" | "mental" | "social"; // For 'limit' type
+  skill?: string; // For 'skill' type
+  condition?: string; // When this applies (e.g., "ranged_attack")
+  description?: string; // For 'special' type
 }
 
 /** Catalog item wireless bonus data */
 export interface WirelessBonusData {
-  wirelessBonus: string;           // Human-readable description
-  wirelessEffects?: WirelessEffect[];  // Machine-readable effects
+  wirelessBonus: string; // Human-readable description
+  wirelessEffects?: WirelessEffect[]; // Machine-readable effects
 }
 ```
 
 **Satisfies:**
+
 - Guarantee: "Wireless bonus effects MUST be mechanically calculable from structured catalog data"
 - ADR-010: Structured wireless effects over text parsing
 
@@ -170,7 +173,7 @@ export interface WirelessBonusData {
 // Update Weapon interface
 export interface Weapon extends GearItem {
   // ... existing fields ...
-  
+
   // NEW: State management
   state: GearState;
   ammoState?: WeaponAmmoState;
@@ -180,31 +183,31 @@ export interface Weapon extends GearItem {
 // Update ArmorItem interface
 export interface ArmorItem extends GearItem {
   // ... existing fields ...
-  
+
   // REPLACE: equipped boolean with state
-  state: GearState;  // was: equipped: boolean
+  state: GearState; // was: equipped: boolean
 }
 
 // Update CyberwareItem interface
 export interface CyberwareItem {
   // ... existing fields ...
-  
+
   // NEW: Wireless control
-  wirelessEnabled: boolean;  // Default: true
+  wirelessEnabled: boolean; // Default: true
 }
 
 // Update CharacterCyberdeck interface
 export interface CharacterCyberdeck {
   // ... existing fields ...
-  
+
   // NEW: Device condition
   condition: DeviceCondition;
 }
 
-// Update CharacterCommlink interface  
+// Update CharacterCommlink interface
 export interface CharacterCommlink {
   // ... existing fields ...
-  
+
   // NEW: Device condition
   condition: DeviceCondition;
 }
@@ -212,16 +215,17 @@ export interface CharacterCommlink {
 // Update Character interface
 export interface Character {
   // ... existing fields ...
-  
+
   // NEW: Ammunition inventory
   ammunition?: AmmunitionItem[];
-  
+
   // NEW: Encumbrance (calculated, cached)
   encumbrance?: EncumbranceState;
 }
 ```
 
 **Satisfies:**
+
 - Guarantee: "Equipment state MUST be persistent"
 - Requirement: "Every wireless-capable item MUST have an independent wireless state"
 
@@ -239,12 +243,13 @@ Add `weight` field to all gear catalog items:
 {
   "id": "ares-predator-v",
   "name": "Ares Predator V",
-  "weight": 1.5,
+  "weight": 1.5
   // ... existing fields ...
 }
 ```
 
 **Weight Categories (SR5 reference):**
+
 - Holdout Pistol: 0.25 kg
 - Light Pistol: 0.5 kg
 - Heavy Pistol: 1.5 kg
@@ -269,9 +274,7 @@ Add `wirelessEffects` to items with wireless bonuses:
   "id": "wired-reflexes-1",
   "name": "Wired Reflexes (Rating 1)",
   "wirelessBonus": "Gain +1 to your Initiative Score.",
-  "wirelessEffects": [
-    { "type": "initiative", "modifier": 1 }
-  ]
+  "wirelessEffects": [{ "type": "initiative", "modifier": 1 }]
 }
 ```
 
@@ -280,9 +283,7 @@ Add `wirelessEffects` to items with wireless bonuses:
   "id": "smartgun-system-internal",
   "name": "Smartgun System (Internal)",
   "wirelessBonus": "You gain a +2 dice pool bonus...",
-  "wirelessEffects": [
-    { "type": "attack_pool", "modifier": 2, "condition": "ranged_weapon" }
-  ]
+  "wirelessEffects": [{ "type": "attack_pool", "modifier": 2, "condition": "ranged_weapon" }]
 }
 ```
 
@@ -291,17 +292,16 @@ Add `wirelessEffects` to items with wireless bonuses:
   "id": "muscle-toner-2",
   "name": "Muscle Toner (Rating 2)",
   "wirelessBonus": "Gain +1 Agility.",
-  "wirelessEffects": [
-    { "type": "attribute", "attribute": "agility", "modifier": 1 }
-  ]
+  "wirelessEffects": [{ "type": "attribute", "attribute": "agility", "modifier": 1 }]
 }
 ```
 
 **Priority Items (high-impact wireless bonuses):**
+
 1. Wired Reflexes (1-3) - Initiative
 2. Smartgun System - Attack pool +2
 3. Muscle Toner - Agility
-4. Muscle Augmentation - Strength  
+4. Muscle Augmentation - Strength
 5. Synaptic Booster - Initiative + dice
 6. Reaction Enhancers - Reaction
 7. Cybereyes/ears with enhancements - Various
@@ -370,21 +370,15 @@ export function calculateEncumbrance(
   ruleset: MergedRuleset
 ): EncumbranceState;
 
-export function getItemWeight(
-  item: GearItem,
-  catalog: GearCatalog
-): number;
+export function getItemWeight(item: GearItem, catalog: GearCatalog): number;
 
-export function calculateEncumbrancePenalty(
-  encumbrance: EncumbranceState
-): number;
+export function calculateEncumbrancePenalty(encumbrance: EncumbranceState): number;
 
-export function isItemCarried(
-  item: { state: GearState }
-): boolean;
+export function isItemCarried(item: { state: GearState }): boolean;
 ```
 
 **Satisfies:**
+
 - Requirement: "Carrying capacity MUST be derived from character Strength"
 - Requirement: "Exceeding carrying capacity MUST apply pool penalties"
 
@@ -418,12 +412,11 @@ export function isItemWirelessActive(
   character: Character
 ): boolean;
 
-export function getWirelessEffects(
-  catalogItem: WirelessBonusData
-): WirelessEffect[];
+export function getWirelessEffects(catalogItem: WirelessBonusData): WirelessEffect[];
 ```
 
 **Satisfies:**
+
 - Guarantee: "Wireless bonus effects MUST be mechanically calculable"
 - Requirement: "The system MUST calculate and apply wireless bonuses to relevant pools"
 
@@ -468,6 +461,7 @@ export function getAmmoDamageModifiers(
 ```
 
 **Satisfies:**
+
 - Requirement: "Ammunition consumption MUST be enforced based on firing mode"
 - Requirement: "The system MUST validate ammunition compatibility"
 
@@ -491,10 +485,7 @@ export function setEquipmentReadiness(
   inCombat: boolean
 ): StateTransitionResult;
 
-export function toggleWireless(
-  item: { wirelessEnabled: boolean },
-  enabled: boolean
-): void;
+export function toggleWireless(item: { wirelessEnabled: boolean }, enabled: boolean): void;
 
 export function setDeviceCondition(
   device: CharacterCyberdeck | CharacterCommlink,
@@ -513,6 +504,7 @@ export function getTransitionActionCost(
 ```
 
 **Satisfies:**
+
 - Requirement: "The system MUST enforce state transition rules"
 - Constraint: "Equipment state changes MUST NOT bypass action economy"
 
@@ -532,13 +524,11 @@ function applyWirelessBonuses(
   actionType: string
 ): ActionPool;
 
-function applyEncumbrancePenalty(
-  pool: ActionPool,
-  encumbrance: EncumbranceState
-): ActionPool;
+function applyEncumbrancePenalty(pool: ActionPool, encumbrance: EncumbranceState): ActionPool;
 ```
 
 **Satisfies:**
+
 - Requirement: "The system MUST calculate and apply wireless bonuses to relevant pools"
 - Requirement: "Exceeding carrying capacity MUST apply pool penalties to physical actions"
 
@@ -588,6 +578,7 @@ function applyEncumbrancePenalty(
 **File:** `/app/characters/[id]/components/InventoryPanel.tsx` (NEW)
 
 Main inventory management interface with:
+
 - Tab navigation: Weapons | Armor | Augmentations | Electronics | Gear | Ammo
 - Per-item state controls (equip/holster/store)
 - Wireless toggle per item
@@ -628,6 +619,7 @@ Main inventory management interface with:
 **File:** `/app/characters/[id]/page.tsx` (MODIFY)
 
 Add to weapon display:
+
 - Ammo column: "15/15 APDS"
 - Ready state indicator
 - Wireless status icon
@@ -638,6 +630,7 @@ Add to weapon display:
 **File:** `/app/characters/[id]/components/CombatQuickReference.tsx` (MODIFY)
 
 Include wireless bonuses in:
+
 - Initiative display
 - Attack pool calculations
 - Defense pool calculations
@@ -647,6 +640,7 @@ Include wireless bonuses in:
 **File:** `/app/characters/[id]/page.tsx` (MODIFY)
 
 Add inventory management as either:
+
 - New tab in character sheet
 - Slide-out panel
 - Modal interface
@@ -660,9 +654,7 @@ Add inventory management as either:
 **File:** `/lib/migrations/add-gear-state.ts` (NEW)
 
 ```typescript
-export function migrateCharacterGearState(
-  character: Character
-): Character;
+export function migrateCharacterGearState(character: Character): Character;
 
 // Default state initialization:
 // - Weapons: readiness = 'holstered', wirelessEnabled = true
@@ -688,40 +680,40 @@ Batch migration endpoint for existing characters.
 
 **File:** `/lib/rules/encumbrance/__tests__/calculator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Calculate encumbrance from carried items | Requirement: "calculate total carried weight" |
-| Apply correct capacity formula | Requirement: "Strength × 10 kg base" |
-| Return correct penalty when over capacity | Requirement: "apply pool penalties" |
-| Exclude stored items from weight | Requirement: "non-stored equipment" |
+| Test Case                                 | Capability Reference                          |
+| ----------------------------------------- | --------------------------------------------- |
+| Calculate encumbrance from carried items  | Requirement: "calculate total carried weight" |
+| Apply correct capacity formula            | Requirement: "Strength × 10 kg base"          |
+| Return correct penalty when over capacity | Requirement: "apply pool penalties"           |
+| Exclude stored items from weight          | Requirement: "non-stored equipment"           |
 
 **File:** `/lib/rules/wireless/__tests__/bonus-calculator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Calculate bonuses from wirelessEffects | Guarantee: "mechanically calculable" |
-| Respect item wireless toggle | Requirement: "independent wireless state" |
-| Respect global wireless toggle | Requirement: "global toggle MUST override" |
-| Handle missing wirelessEffects gracefully | Robustness |
+| Test Case                                 | Capability Reference                       |
+| ----------------------------------------- | ------------------------------------------ |
+| Calculate bonuses from wirelessEffects    | Guarantee: "mechanically calculable"       |
+| Respect item wireless toggle              | Requirement: "independent wireless state"  |
+| Respect global wireless toggle            | Requirement: "global toggle MUST override" |
+| Handle missing wirelessEffects gracefully | Robustness                                 |
 
 **File:** `/lib/rules/combat/__tests__/ammunition-manager.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Load weapon with compatible ammo | Requirement: "validate ammunition compatibility" |
-| Reject incompatible ammo caliber | Constraint: robustness |
-| Consume correct ammo per firing mode | Requirement: "SS: 1, SA: 1, BF: 3, FA: 6+" |
+| Test Case                             | Capability Reference                                |
+| ------------------------------------- | --------------------------------------------------- |
+| Load weapon with compatible ammo      | Requirement: "validate ammunition compatibility"    |
+| Reject incompatible ammo caliber      | Constraint: robustness                              |
+| Consume correct ammo per firing mode  | Requirement: "SS: 1, SA: 1, BF: 3, FA: 6+"          |
 | Prevent firing with insufficient ammo | Constraint: "MUST NOT be consumed beyond available" |
-| Apply ammo damage modifiers correctly | Implicit from ammo tracking |
+| Apply ammo damage modifiers correctly | Implicit from ammo tracking                         |
 
 **File:** `/lib/rules/inventory/__tests__/state-manager.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Transition weapon readied → holstered | Requirement: "state transition rules" |
+| Test Case                                 | Capability Reference                  |
+| ----------------------------------------- | ------------------------------------- |
+| Transition weapon readied → holstered     | Requirement: "state transition rules" |
 | Return correct action cost for transition | Requirement: "Simple Action to ready" |
-| Prevent invalid state transitions | Constraint: robustness |
-| Toggle wireless state | Requirement: "Free Action" |
+| Prevent invalid state transitions         | Constraint: robustness                |
+| Toggle wireless state                     | Requirement: "Free Action"            |
 
 ---
 
@@ -729,12 +721,12 @@ Batch migration endpoint for existing characters.
 
 **File:** `/lib/rules/__tests__/inventory-combat-integration.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Wireless bonuses applied to attack pool | Integration with pool-builder |
-| Encumbrance penalty applied to physical actions | Integration with pool-builder |
-| Only readied weapons can fire | Requirement: "directly influence action eligibility" |
-| Ammo consumed during combat action | Integration with combat system |
+| Test Case                                       | Capability Reference                                 |
+| ----------------------------------------------- | ---------------------------------------------------- |
+| Wireless bonuses applied to attack pool         | Integration with pool-builder                        |
+| Encumbrance penalty applied to physical actions | Integration with pool-builder                        |
+| Only readied weapons can fire                   | Requirement: "directly influence action eligibility" |
+| Ammo consumed during combat action              | Integration with combat system                       |
 
 ---
 
@@ -818,6 +810,7 @@ Phase 7: Character Migration
 ## Dependencies
 
 **Existing Infrastructure:**
+
 - `/lib/rules/action-resolution/pool-builder.ts` - Pool calculations
 - `/lib/rules/action-resolution/combat/weapon-handler.ts` - Weapon attack logic
 - `/lib/storage/characters.ts` - Character persistence
@@ -826,6 +819,7 @@ Phase 7: Character Migration
 - `/data/editions/sr5/core-rulebook.json` - Ruleset data
 
 **Required Before Implementation:**
+
 - Catalog items with accurate weight values
 - Priority wireless effects identified and structured
 
@@ -841,13 +835,13 @@ Phase 7: Character Migration
 
 ## Risk Assessment
 
-| Risk | Mitigation |
-|------|------------|
-| Large catalog update effort | Start with priority items (weapons, common augmentations) |
-| Migration breaks existing characters | Defensive migration with sensible defaults |
-| Performance with encumbrance recalculation | Cache encumbrance, recalculate on gear change only |
-| Complex UI for inventory management | Start with essential actions, enhance iteratively |
-| Fire mode ammo consumption varies by weapon | Use constants, allow weapon-specific overrides |
+| Risk                                        | Mitigation                                                |
+| ------------------------------------------- | --------------------------------------------------------- |
+| Large catalog update effort                 | Start with priority items (weapons, common augmentations) |
+| Migration breaks existing characters        | Defensive migration with sensible defaults                |
+| Performance with encumbrance recalculation  | Cache encumbrance, recalculate on gear change only        |
+| Complex UI for inventory management         | Start with essential actions, enhance iteratively         |
+| Fire mode ammo consumption varies by weapon | Use constants, allow weapon-specific overrides            |
 
 ---
 

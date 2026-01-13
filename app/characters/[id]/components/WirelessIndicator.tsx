@@ -95,7 +95,8 @@ export function WirelessIndicator({
   const [showTooltip, setShowTooltip] = useState(false);
 
   // Effective state (considers global toggle and device condition)
-  const isEffectivelyEnabled = enabled && globalEnabled && condition !== "bricked" && condition !== "destroyed";
+  const isEffectivelyEnabled =
+    enabled && globalEnabled && condition !== "bricked" && condition !== "destroyed";
   const isDeviceBroken = condition === "bricked" || condition === "destroyed";
 
   const handleToggle = useCallback(() => {
@@ -158,16 +159,14 @@ export function WirelessIndicator({
           onClick={handleToggle}
           disabled={disabled || isDeviceBroken}
           className={`p-1 rounded transition-colors ${
-            disabled || isDeviceBroken
-              ? "cursor-not-allowed opacity-50"
-              : "hover:bg-muted"
+            disabled || isDeviceBroken ? "cursor-not-allowed opacity-50" : "hover:bg-muted"
           }`}
           title={
             isDeviceBroken
               ? `Device ${condition}`
               : isEffectivelyEnabled
-              ? "Wireless enabled"
-              : "Wireless disabled"
+                ? "Wireless enabled"
+                : "Wireless disabled"
           }
         >
           {renderIcon()}
@@ -214,23 +213,26 @@ export function WirelessIndicator({
             disabled || isDeviceBroken || !globalEnabled
               ? "bg-muted cursor-not-allowed"
               : isEffectivelyEnabled
-              ? "bg-cyan-500"
-              : "bg-muted hover:bg-muted/80"
+                ? "bg-cyan-500"
+                : "bg-muted hover:bg-muted/80"
           }`}
           title={
             !globalEnabled
               ? "Global wireless disabled"
               : isDeviceBroken
-              ? `Device ${condition}`
-              : isEffectivelyEnabled
-              ? "Click to disable wireless"
-              : "Click to enable wireless"
+                ? `Device ${condition}`
+                : isEffectivelyEnabled
+                  ? "Click to disable wireless"
+                  : "Click to enable wireless"
           }
         >
           <span
-            className={`absolute top-0.5 left-0.5 rounded-full bg-white transition-transform ${
-              dotSizes[size].split(" ").slice(0, 2).join(" ")
-            } ${isEffectivelyEnabled ? dotSizes[size].split(" ")[2] : "translate-x-0"}`}
+            className={`absolute top-0.5 left-0.5 rounded-full bg-white transition-transform ${dotSizes[
+              size
+            ]
+              .split(" ")
+              .slice(0, 2)
+              .join(" ")} ${isEffectivelyEnabled ? dotSizes[size].split(" ")[2] : "translate-x-0"}`}
           />
         </button>
       )}
@@ -243,10 +245,10 @@ export function WirelessIndicator({
               ? "Destroyed"
               : "Bricked"
             : !globalEnabled
-            ? "Disabled"
-            : isEffectivelyEnabled
-            ? "Enabled"
-            : "Off"}
+              ? "Disabled"
+              : isEffectivelyEnabled
+                ? "Enabled"
+                : "Off"}
         </span>
       )}
 

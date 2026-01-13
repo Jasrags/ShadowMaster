@@ -1,6 +1,6 @@
 # Shadow Master v1.0 Roadmap
 
-*Last updated: 2025-01-27*
+_Last updated: 2025-01-27_
 
 ## Overview
 
@@ -15,11 +15,13 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ## Release Strategy
 
 ### Version Progression
+
 - **v0.1.0 (MVP)** - Current: Basic SR5 Priority character creation
 - **v0.2.0 (Beta)** - SR5 completion + GM tools + sourcebook support
 - **v1.0.0** - Production-ready: Multi-edition foundation + complete SR5 + essential features
 
 ### Success Criteria for v1.0
+
 1. ✅ Complete SR5 Priority character creation (all archetypes)
 2. ✅ SR6 edition support (data structures + basic creation)
 3. ✅ GM campaign management tools
@@ -42,6 +44,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ### 1.1 Critical Character Creation Gaps
 
 #### Special Attribute Allocation
+
 - [ ] **SpecialAttributeAllocator Component**
   - Edge allocation (starts at 1, 2 for Humans)
   - Magic allocation (from Magic priority)
@@ -53,6 +56,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** Critical
 
 #### Knowledge & Language Skills
+
 - [ ] **KnowledgeSkillsStep Component**
   - Academic knowledge (Logic-linked)
   - Interest knowledge (Intuition-linked)
@@ -71,6 +75,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** Critical
 
 #### Contacts System
+
 - [ ] **ContactsStep Component**
   - Free Karma: Charisma × 3
   - Connection rating (1-6)
@@ -81,6 +86,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** Critical
 
 #### Gear & Resources
+
 - [ ] **Gear Catalog System**
   - Searchable/filterable gear database
   - Categories: Weapons, Armor, Electronics, Vehicles, etc.
@@ -104,6 +110,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** Critical
 
 #### Leftover Karma Step
+
 - [ ] **KarmaSpendingStep Component**
   - Karma management UI
   - Attribute purchases: new rating × 5
@@ -120,6 +127,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** High
 
 #### Magic & Resonance Features
+
 - [ ] **Spell Selection**
   - Spell catalog for Magicians/Mystic Adepts
   - Max spells = MAG × 2
@@ -142,6 +150,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - **Priority:** High
 
 #### Final Calculations & Validation
+
 - [ ] **Derived Stats Calculation**
   - Initiative: Intuition + Reaction
   - Physical Limit: ceil((STR×2 + BOD + REA) / 3)
@@ -427,6 +436,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ## Feature Prioritization Matrix
 
 ### Must-Have for v1.0 (P0)
+
 - Complete SR5 Priority character creation
 - SR6 edition support (basic)
 - GM campaign management
@@ -437,6 +447,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - Comprehensive validation
 
 ### Should-Have for v1.0 (P1)
+
 - Advanced creation methods (Life Modules, Sum-to-Ten)
 - Character editing post-creation
 - PDF export
@@ -445,6 +456,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - Foci system
 
 ### Nice-to-Have for v1.0 (P2)
+
 - Street-Level/Prime Runner variants
 - Character import
 - Advanced GM tools
@@ -455,40 +467,49 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ## Timeline Estimate
 
 ### Phase 1: MVP Completion
+
 **Duration:** 4-6 weeks
+
 - Critical gaps: 2-3 weeks
 - High priority features: 2-3 weeks
 
 ### Phase 2: Beta Features
+
 **Duration:** 6-8 weeks
+
 - Sourcebook system: 2 weeks
 - GM tools: 2-3 weeks
 - Advanced creation methods: 2-3 weeks
 - UI/UX improvements: 1-2 weeks
 
 ### Phase 3: v1.0 Foundation
+
 **Duration:** 8-10 weeks
+
 - SR6 support: 3-4 weeks
 - Multi-edition architecture: 2 weeks
 - Production readiness: 2-3 weeks
 - Additional features: 1-2 weeks
 
 ### Total Estimated Timeline
+
 **v0.1.0 → v1.0.0:** 18-24 weeks (4.5-6 months)
 
-*Note: Timeline assumes single developer. Parallel workstreams could reduce duration.*
+_Note: Timeline assumes single developer. Parallel workstreams could reduce duration._
 
 ---
 
 ## Risk Assessment
 
 ### High Risk Items
+
 1. **SR6 Edition Support** - Significant effort, may require architecture changes
 2. **Sourcebook Merging** - Complex merge logic, potential edge cases
 3. **Production Deployment** - Database migration if moving from file storage
 4. **Performance at Scale** - File-based storage may not scale
 
 ### Mitigation Strategies
+
 1. **SR6 Support:** Start early, validate architecture early, iterate
 2. **Sourcebook Merging:** Comprehensive test suite, incremental rollout
 3. **Deployment:** Plan migration early, test thoroughly, have rollback plan
@@ -499,18 +520,21 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ## Success Metrics
 
 ### User Metrics
+
 - Character creation completion rate >90%
 - Average character creation time <30 minutes
 - User satisfaction score >4/5
 - Mobile usage >30% of total usage
 
 ### Technical Metrics
+
 - Test coverage >80%
 - Page load time <2 seconds
 - API response time <500ms (p95)
 - Uptime >99.5%
 
 ### Feature Metrics
+
 - All SR5 archetypes creatable
 - SR6 basic creation functional
 - Sourcebook system operational
@@ -521,6 +545,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 ## Post-v1.0 Considerations
 
 ### v1.1 Potential Features
+
 - SR4A edition support
 - Advanced combat tracker
 - Matrix automation
@@ -530,6 +555,7 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 - VTT integration hooks
 
 ### v2.0 Vision
+
 - Full multi-edition support (SR1-SR6 + Anarchy)
 - Advanced automation
 - AI-assisted rule linking
@@ -548,8 +574,8 @@ This document outlines the roadmap to **Shadow Master v1.0**, a production-ready
 
 ---
 
-*For detailed implementation plans, see:*
+_For detailed implementation plans, see:_
+
 - `mvp_gap_analysis.md` - Detailed MVP gaps
 - `beta_implementation_plan_v2.md` - Beta phase details
 - `implementation_roadmap.md` - Overall roadmap context
-

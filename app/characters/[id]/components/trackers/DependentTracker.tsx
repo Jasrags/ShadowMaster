@@ -1,15 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  Heart, 
-  ShieldCheck, 
-  ShieldAlert, 
-  HelpCircle,
-  Clock,
-  Coins,
-  UserCheck
-} from "lucide-react";
+import { Heart, ShieldCheck, ShieldAlert, HelpCircle, Clock, Coins, UserCheck } from "lucide-react";
 import type { QualitySelection, DependentState } from "@/lib/types";
 
 interface DependentTrackerProps {
@@ -28,9 +20,9 @@ export function DependentTracker({ selection, onUpdate }: DependentTrackerProps)
   const handleUpdateStatus = async (status: DependentState["currentStatus"]) => {
     setIsUpdating(true);
     try {
-      await onUpdate({ 
+      await onUpdate({
         currentStatus: status,
-        lastCheckedIn: status === "safe" ? new Date().toISOString() : state.lastCheckedIn
+        lastCheckedIn: status === "safe" ? new Date().toISOString() : state.lastCheckedIn,
       });
     } finally {
       setIsUpdating(false);
@@ -39,11 +31,41 @@ export function DependentTracker({ selection, onUpdate }: DependentTrackerProps)
 
   const getStatusConfig = (status: string) => {
     switch (status) {
-      case "safe": return { icon: ShieldCheck, color: "text-emerald-500", bg: "bg-emerald-500/10", border: "border-emerald-500/20" };
-      case "needs-attention": return { icon: Clock, color: "text-amber-500", bg: "bg-amber-500/10", border: "border-amber-500/20" };
-      case "in-danger": return { icon: ShieldAlert, color: "text-red-500", bg: "bg-red-500/10", border: "border-red-500/20" };
-      case "missing": return { icon: HelpCircle, color: "text-purple-500", bg: "bg-purple-500/10", border: "border-purple-500/20" };
-      default: return { icon: HelpCircle, color: "text-muted-foreground", bg: "bg-muted/10", border: "border-border" };
+      case "safe":
+        return {
+          icon: ShieldCheck,
+          color: "text-emerald-500",
+          bg: "bg-emerald-500/10",
+          border: "border-emerald-500/20",
+        };
+      case "needs-attention":
+        return {
+          icon: Clock,
+          color: "text-amber-500",
+          bg: "bg-amber-500/10",
+          border: "border-amber-500/20",
+        };
+      case "in-danger":
+        return {
+          icon: ShieldAlert,
+          color: "text-red-500",
+          bg: "bg-red-500/10",
+          border: "border-red-500/20",
+        };
+      case "missing":
+        return {
+          icon: HelpCircle,
+          color: "text-purple-500",
+          bg: "bg-purple-500/10",
+          border: "border-purple-500/20",
+        };
+      default:
+        return {
+          icon: HelpCircle,
+          color: "text-muted-foreground",
+          bg: "bg-muted/10",
+          border: "border-border",
+        };
     }
   };
 
@@ -55,24 +77,26 @@ export function DependentTracker({ selection, onUpdate }: DependentTrackerProps)
       {/* Header Info */}
       <div className="flex items-start justify-between">
         <div className="flex gap-3">
-          <div className={`relative p-2 rounded ${currentStatusConfig.bg} ${currentStatusConfig.color}`}>
+          <div
+            className={`relative p-2 rounded ${currentStatusConfig.bg} ${currentStatusConfig.color}`}
+          >
             <Heart className="w-5 h-5 fill-current opacity-20" />
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
-               <Heart className="w-5 h-5" />
+              <Heart className="w-5 h-5" />
             </div>
           </div>
           <div>
-            <h4 className="text-sm font-bold text-foreground">
-              {state.name}
-            </h4>
+            <h4 className="text-sm font-bold text-foreground">{state.name}</h4>
             <p className="text-xs text-muted-foreground mt-0.5 uppercase tracking-wider font-mono">
               {state.relationship} • Tier {state.tier}
             </p>
           </div>
         </div>
-        <div className={`flex items-center gap-1.5 px-2 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest ${currentStatusConfig.bg} ${currentStatusConfig.color} ${currentStatusConfig.border}`}>
+        <div
+          className={`flex items-center gap-1.5 px-2 py-1 rounded-full border text-[10px] font-bold uppercase tracking-widest ${currentStatusConfig.bg} ${currentStatusConfig.color} ${currentStatusConfig.border}`}
+        >
           <StatusIcon className="w-3 h-3" />
-          {state.currentStatus.replace(/-/g, ' ')}
+          {state.currentStatus.replace(/-/g, " ")}
         </div>
       </div>
 
@@ -116,13 +140,13 @@ export function DependentTracker({ selection, onUpdate }: DependentTrackerProps)
                 disabled={isUpdating}
                 onClick={() => handleUpdateStatus(status)}
                 className={`flex items-center gap-2 p-2.5 rounded border transition-all text-xs font-bold ${
-                  isActive 
-                    ? `${config.bg} ${config.color} ${config.border} shadow-sm` 
-                    : 'bg-muted/30 border-border text-muted-foreground hover:bg-muted/50'
+                  isActive
+                    ? `${config.bg} ${config.color} ${config.border} shadow-sm`
+                    : "bg-muted/30 border-border text-muted-foreground hover:bg-muted/50"
                 }`}
               >
                 <Icon className="w-3.5 h-3.5" />
-                {status.charAt(0).toUpperCase() + status.slice(1).replace(/-/g, ' ')}
+                {status.charAt(0).toUpperCase() + status.slice(1).replace(/-/g, " ")}
               </button>
             );
           })}

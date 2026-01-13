@@ -21,11 +21,7 @@ import type {
 } from "@/lib/types";
 // Import directly from specific files to avoid pulling in server-only code
 // (action-executor.ts imports storage layer which uses Node.js 'fs')
-import {
-  buildActionPool,
-  calculateWoundModifier,
-  calculateLimit,
-} from "./pool-builder";
+import { buildActionPool, calculateWoundModifier, calculateLimit } from "./pool-builder";
 import { DEFAULT_DICE_RULES } from "./dice-engine";
 
 // =============================================================================
@@ -67,9 +63,7 @@ export interface UseActionResolverReturn {
 /**
  * Hook for managing action resolution with optional server persistence
  */
-export function useActionResolver(
-  options: UseActionResolverOptions = {}
-): UseActionResolverReturn {
+export function useActionResolver(options: UseActionResolverOptions = {}): UseActionResolverReturn {
   const { characterId, maxLocalHistory = 10, persistRolls = true } = options;
 
   const [currentResult, setCurrentResult] = useState<ActionResult | null>(null);
@@ -201,9 +195,7 @@ export function useActionResolver(
           const result = data.result as ActionResult;
           setCurrentResult(result);
           // Update the history entry
-          setHistory((prev) =>
-            prev.map((h) => (h.id === currentResult.id ? result : h))
-          );
+          setHistory((prev) => prev.map((h) => (h.id === currentResult.id ? result : h)));
           return result;
         } else {
           // Client-side reroll
@@ -229,9 +221,7 @@ export function useActionResolver(
           };
 
           setCurrentResult(result);
-          setHistory((prev) =>
-            prev.map((h) => (h.id === currentResult.id ? result : h))
-          );
+          setHistory((prev) => prev.map((h) => (h.id === currentResult.id ? result : h)));
           return result;
         }
       } catch (err) {
@@ -501,16 +491,9 @@ export function usePoolBuilder(
       }
 
       // Merge in tracked modifiers
-      const allModifiers = [
-        ...(options.situationalModifiers || []),
-        ...modifiers,
-      ];
+      const allModifiers = [...(options.situationalModifiers || []), ...modifiers];
 
-      return buildActionPool(
-        character,
-        { ...options, situationalModifiers: allModifiers },
-        rules
-      );
+      return buildActionPool(character, { ...options, situationalModifiers: allModifiers }, rules);
     },
     [character, modifiers, rules]
   );
@@ -592,9 +575,7 @@ export function useActionHistory(
           includeStats: includeStats.toString(),
         });
 
-        const response = await fetch(
-          `/api/characters/${characterId}/actions?${params}`
-        );
+        const response = await fetch(`/api/characters/${characterId}/actions?${params}`);
         const data = await response.json();
 
         if (data.success) {
@@ -627,9 +608,7 @@ export function useActionHistory(
         offset: newOffset.toString(),
       });
 
-      const response = await fetch(
-        `/api/characters/${characterId}/actions?${params}`
-      );
+      const response = await fetch(`/api/characters/${characterId}/actions?${params}`);
       const data = await response.json();
 
       if (data.success) {
@@ -655,9 +634,7 @@ export function useActionHistory(
         includeStats: includeStats.toString(),
       });
 
-      const response = await fetch(
-        `/api/characters/${characterId}/actions?${params}`
-      );
+      const response = await fetch(`/api/characters/${characterId}/actions?${params}`);
       const data = await response.json();
 
       if (data.success) {

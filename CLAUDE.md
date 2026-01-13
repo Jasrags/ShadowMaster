@@ -12,20 +12,20 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 
 Beyond character creation, Shadow Master includes:
 
-| Feature | Description |
-|---------|-------------|
-| **Combat Tracking** | Initiative, actions, damage tracking, condition monitors |
-| **Grunt/NPC System** | Pre-built templates (PR0-PR6) for encounter management |
-| **Contact Network** | Relationships, loyalty/connection ratings, favor economy |
-| **Wireless/Matrix** | Matrix hacking and wireless operations |
-| **Augmentations** | Cyberlimb system with essence tracking |
-| **Campaign Management** | Sessions, locations, notes, posts, grunt teams |
-| **Character Advancement** | Karma spending for attributes, skills, magic, edge |
-| **Account Security** | Password changes, import/export, account deletion |
-| **Activity Feed** | User action logging and tracking |
-| **Character Cloning** | Duplicate characters for templates/backups |
-| **Ruleset Snapshots** | Version control for rulesets |
-| **Audit Trail** | Full audit logging for compliance |
+| Feature                   | Description                                              |
+| ------------------------- | -------------------------------------------------------- |
+| **Combat Tracking**       | Initiative, actions, damage tracking, condition monitors |
+| **Grunt/NPC System**      | Pre-built templates (PR0-PR6) for encounter management   |
+| **Contact Network**       | Relationships, loyalty/connection ratings, favor economy |
+| **Wireless/Matrix**       | Matrix hacking and wireless operations                   |
+| **Augmentations**         | Cyberlimb system with essence tracking                   |
+| **Campaign Management**   | Sessions, locations, notes, posts, grunt teams           |
+| **Character Advancement** | Karma spending for attributes, skills, magic, edge       |
+| **Account Security**      | Password changes, import/export, account deletion        |
+| **Activity Feed**         | User action logging and tracking                         |
+| **Character Cloning**     | Duplicate characters for templates/backups               |
+| **Ruleset Snapshots**     | Version control for rulesets                             |
+| **Audit Trail**           | Full audit logging for compliance                        |
 
 ## Development Commands
 
@@ -338,6 +338,7 @@ Contact relationships and favor economy for social gameplay.
 **Storage Layer** (`/lib/storage/`):
 
 Core modules:
+
 - `base.ts` - Core utilities: `readJsonFile()`, `writeJsonFile()`, `ensureDirectory()`
 - `users.ts` - User CRUD operations
 - `characters.ts` - Character CRUD + specialized operations (damage, karma, etc.)
@@ -345,6 +346,7 @@ Core modules:
 - `editions.ts` - Edition and ruleset loading
 
 Extended modules:
+
 - `contacts.ts`, `favor-ledger.ts` - Contact system persistence
 - `combat.ts`, `action-history.ts` - Combat session storage
 - `grunt-templates.ts`, `grunts.ts` - NPC system storage
@@ -375,19 +377,23 @@ Extended modules:
 ### 9. Security Infrastructure
 
 **Rate Limiting** (`/lib/security/rate-limit.ts`):
+
 - DDoS protection for API endpoints
 - Configurable limits per endpoint
 
 **Audit Logging** (`/lib/security/audit-logger.ts`):
+
 - Full audit trail for user actions
 - Security event tracking
 - Stored via `/lib/storage/audit.ts`
 
 **Character Authorization** (`/lib/auth/character-authorization.ts`):
+
 - Granular character access control
 - Owner, campaign GM, and viewer permissions
 
 **Additional Auth Modules** (`/lib/auth/`):
+
 - `validation.ts` - Auth validation logic
 - `middleware.ts` - Auth middleware
 - `campaign.ts` - Campaign-specific authorization
@@ -629,34 +635,20 @@ Comprehensive documentation in `/docs/`:
 ## Key Files to Understand First
 
 **Core Types & Storage:**
+
 1. `/lib/types/index.ts` - All data structures
 2. `/lib/storage/base.ts` - Storage abstraction
 3. `/lib/storage/characters.ts` - Character persistence
 
-**Ruleset System:**
-4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
-5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
-6. `/lib/rules/advancement/` - Karma advancement system
-7. `/lib/rules/ratings/` - Unified ratings system
+**Ruleset System:** 4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core 5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context 6. `/lib/rules/advancement/` - Karma advancement system 7. `/lib/rules/ratings/` - Unified ratings system
 
-**Character Creation:**
-8. `/app/characters/create/sheet/page.tsx` - Character creation entry point
-9. `/components/creation/` - Character creation card components (45+)
-10. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
+**Character Creation:** 8. `/app/characters/create/sheet/page.tsx` - Character creation entry point 9. `/components/creation/` - Character creation card components (45+) 10. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
-**Combat & GM Tools:**
-11. `/lib/combat/CombatSessionContext.tsx` - Combat state management
-12. `/lib/rules/grunts.ts` - NPC/grunt system
-13. `/lib/rules/action-resolution/` - Action execution
+**Combat & GM Tools:** 11. `/lib/combat/CombatSessionContext.tsx` - Combat state management 12. `/lib/rules/grunts.ts` - NPC/grunt system 13. `/lib/rules/action-resolution/` - Action execution
 
-**Authentication & Security:**
-14. `/lib/auth/AuthProvider.tsx` - Authentication context
-15. `/lib/security/rate-limit.ts` - Rate limiting
-16. `/lib/security/audit-logger.ts` - Audit logging
+**Authentication & Security:** 14. `/lib/auth/AuthProvider.tsx` - Authentication context 15. `/lib/security/rate-limit.ts` - Rate limiting 16. `/lib/security/audit-logger.ts` - Audit logging
 
-**Documentation:**
-17. `/docs/architecture/` - Architecture documentation
-18. `/docs/capabilities/` - Feature documentation
+**Documentation:** 17. `/docs/architecture/` - Architecture documentation 18. `/docs/capabilities/` - Feature documentation
 
 ## MCP Servers
 
@@ -664,17 +656,18 @@ This project has MCP servers configured in the workspace `.mcp.json` file. These
 
 ### Available Servers
 
-| Server                 | Purpose                      | When to Use                                                  |
-| ---------------------- | ---------------------------- | ------------------------------------------------------------ |
+| Server                 | Purpose                      | When to Use                                                           |
+| ---------------------- | ---------------------------- | --------------------------------------------------------------------- |
 | **context7**           | Library documentation lookup | Query up-to-date docs for libraries/frameworks (React, Next.js, etc.) |
-| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase |
-| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs     |
-| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                 |
-| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues |
-| **git**                | Git operations               | Commits, diffs, branches, history viewing                    |
-| **filesystem**         | File operations              | Read/write project files                                     |
-| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                    |
-| **time**               | Timezone utilities           | Timestamps (rarely needed)                                   |
+| **github**             | GitHub API operations        | PRs, issues, repos, commits, code search via GitHub API               |
+| **knip**               | Dead code detection          | Find unused exports, dependencies, and files in the codebase          |
+| **spec-lint**          | Enforce spec immutability    | Automatically run to ensure no progress leaks into specs              |
+| **next-devtools**      | Next.js inspection           | Debugging React components and Next.js state                          |
+| **memory**             | Persistent knowledge graph   | Store/recall architectural decisions, patterns, known issues          |
+| **git**                | Git operations               | Commits, diffs, branches, history viewing                             |
+| **filesystem**         | File operations              | Read/write project files                                              |
+| **sequentialthinking** | Structured reasoning         | Complex debugging, architecture decisions                             |
+| **time**               | Timezone utilities           | Timestamps (rarely needed)                                            |
 
 ### Context7 Usage
 
@@ -687,6 +680,7 @@ get-library-docs: { libraryId: "/react/react", topic: "hooks" }
 ```
 
 Best for:
+
 - Checking current API signatures
 - Understanding library-specific patterns
 - Verifying framework best practices
@@ -704,6 +698,7 @@ get_knip_docs: { topic: "configuration" }
 ```
 
 Best for:
+
 - Finding unused exports before refactoring
 - Identifying dead code after feature removal
 - Cleaning up unused dependencies
@@ -745,12 +740,84 @@ Use `mcp__sequentialthinking__sequentialthinking` for:
 - Designing new edition support
 - Any problem requiring step-by-step reasoning with revision
 
-### Git Server Usage
+### Git & GitHub Tool Selection Guide
 
-Prefer MCP git tools over bash for cleaner integration:
+Three tools available for version control and GitHub operations. Choose based on the task:
 
-- `mcp__git__git_status` - Check working tree
-- `mcp__git__git_diff` - View changes
-- `mcp__git__git_log` - View history
-- `mcp__git__git_commit` - Create commits
-- `mcp__git__git_branch` - List branches
+| Task                   | Use This            | Why                       |
+| ---------------------- | ------------------- | ------------------------- |
+| View status, diff, log | **Git MCP**         | Clean structured output   |
+| Create commits         | **Git MCP**         | Proper message formatting |
+| List/switch branches   | **Git MCP**         | Simple operations         |
+| Push to remote         | **Bash `git push`** | MCP doesn't support push  |
+| Create PRs             | **GitHub MCP**      | Rich API integration      |
+| Create/update issues   | **GitHub MCP**      | Full issue management     |
+| Add issue comments     | **GitHub MCP**      | Direct API access         |
+| Search code on GitHub  | **GitHub MCP**      | Cross-repo search         |
+| List/manage milestones | **Bash `gh api`**   | No MCP milestone support  |
+| Complex git operations | **Bash `git`**      | Rebase, cherry-pick, etc. |
+
+### Git MCP Server
+
+Use for local repository operations:
+
+```
+mcp__git__git_status      # Working tree status
+mcp__git__git_diff        # View changes (staged/unstaged)
+mcp__git__git_log         # Commit history
+mcp__git__git_commit      # Create commits
+mcp__git__git_branch      # List branches
+mcp__git__git_checkout    # Switch branches
+mcp__git__git_add         # Stage files
+```
+
+**Limitations:** Cannot push, pull, fetch, or perform remote operations.
+
+### GitHub MCP Server
+
+Use for GitHub API operations (requires `GITHUB_PERSONAL_ACCESS_TOKEN`):
+
+```
+mcp__github__create_issue           # Create new issues
+mcp__github__update_issue           # Update issue state/labels/milestone
+mcp__github__add_issue_comment      # Add comments to issues
+mcp__github__list_issues            # List/filter issues
+mcp__github__create_pull_request    # Create PRs
+mcp__github__get_pull_request       # Get PR details
+mcp__github__search_code            # Search code across repos
+mcp__github__get_file_contents      # Read files from remote
+```
+
+**Limitations:** No milestone CRUD (use `gh api` for milestones).
+
+### Bash git/gh CLI
+
+Use when MCP tools don't support the operation:
+
+```bash
+# Remote operations (not in Git MCP)
+git push origin branch-name
+git pull origin main
+git fetch --all
+
+# Milestone management (not in GitHub MCP)
+gh api repos/OWNER/REPO/milestones -X POST -f title="v1.0"
+gh api repos/OWNER/REPO/milestones --jq '.[] | ...'
+
+# Complex git operations
+git rebase -i HEAD~3
+git cherry-pick abc123
+git stash push -m "message"
+```
+
+### Decision Flowchart
+
+```
+Is it a GitHub.com operation (issues, PRs, remote files)?
+├─ Yes → Use GitHub MCP
+│        └─ Unless it's milestones → Use `gh api`
+└─ No → Is it a local git operation?
+        ├─ Yes → Use Git MCP
+        │        └─ Unless it's push/pull/fetch → Use `git` in Bash
+        └─ No → Use Bash
+```

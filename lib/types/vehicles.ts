@@ -122,14 +122,7 @@ export interface Drone extends Omit<Vehicle, "category" | "seats"> {
   size: DroneSize;
 
   /** Drone type/category */
-  droneType:
-    | "surveillance"
-    | "combat"
-    | "utility"
-    | "anthroform"
-    | "aquatic"
-    | "ground"
-    | "aerial";
+  droneType: "surveillance" | "combat" | "utility" | "anthroform" | "aquatic" | "ground" | "aerial";
 
   /** Whether drone can fly */
   canFly?: boolean;

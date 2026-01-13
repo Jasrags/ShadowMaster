@@ -130,9 +130,7 @@ export interface CyberlimbInstallResult {
 /**
  * Check if a catalog item is a cyberlimb
  */
-export function isCyberlimbCatalogItem(
-  item: CyberwareCatalogItem
-): item is CyberlimbCatalogItem {
+export function isCyberlimbCatalogItem(item: CyberwareCatalogItem): item is CyberlimbCatalogItem {
   return item.category === "cyberlimb" && "limbType" in item;
 }
 
@@ -323,14 +321,8 @@ export function validateCustomization(
  * @returns Detailed capacity breakdown
  */
 export function getCapacityBreakdown(limb: CyberlimbItem): CyberlimbCapacityBreakdown {
-  const usedByEnhancements = limb.enhancements.reduce(
-    (sum, e) => sum + e.capacityUsed,
-    0
-  );
-  const usedByAccessories = limb.accessories.reduce(
-    (sum, a) => sum + a.capacityUsed,
-    0
-  );
+  const usedByEnhancements = limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0);
+  const usedByAccessories = limb.accessories.reduce((sum, a) => sum + a.capacityUsed, 0);
   const usedByWeapons = limb.weapons.reduce((sum, w) => sum + w.capacityUsed, 0);
   const totalUsed = usedByEnhancements + usedByAccessories + usedByWeapons;
 
@@ -404,9 +396,7 @@ export function validateEnhancementInstall(
   // Check for duplicate enhancement type
   const enhancementType = (enhancement as { enhancementType?: string }).enhancementType;
   if (enhancementType) {
-    const existing = limb.enhancements.find(
-      (e) => e.enhancementType === enhancementType
-    );
+    const existing = limb.enhancements.find((e) => e.enhancementType === enhancementType);
     if (existing) {
       return {
         valid: false,
@@ -485,10 +475,7 @@ export function addEnhancement(
  * @param enhancementId - ID of enhancement to remove
  * @returns Updated cyberlimb
  */
-export function removeEnhancement(
-  limb: CyberlimbItem,
-  enhancementId: string
-): CyberlimbItem {
+export function removeEnhancement(limb: CyberlimbItem, enhancementId: string): CyberlimbItem {
   const enhancement = limb.enhancements.find((e) => e.id === enhancementId);
   if (!enhancement) {
     return limb;
@@ -585,9 +572,7 @@ export function addAccessory(
   const capacityCost = hasRating
     ? (accessory.capacityCost ?? 1) * effectiveRating
     : (accessory.capacityCost ?? 1);
-  const cost = hasRating
-    ? accessory.cost * effectiveRating
-    : accessory.cost;
+  const cost = hasRating ? accessory.cost * effectiveRating : accessory.cost;
 
   const newAccessory: CyberlimbAccessory = {
     id: `${accessory.id}-${Date.now()}`,
@@ -627,10 +612,7 @@ export function addAccessory(
  * @param accessoryId - ID of accessory to remove
  * @returns Updated cyberlimb
  */
-export function removeAccessory(
-  limb: CyberlimbItem,
-  accessoryId: string
-): CyberlimbItem {
+export function removeAccessory(limb: CyberlimbItem, accessoryId: string): CyberlimbItem {
   const accessory = limb.accessories.find((a) => a.id === accessoryId);
   if (!accessory) {
     return limb;
@@ -739,9 +721,7 @@ export function calculateEffectiveAttribute(
   }
 
   // Find cyberlimbs at the involved locations
-  const involvedCyberlimbs = cyberlimbs.filter((limb) =>
-    involvedLimbs.includes(limb.location)
-  );
+  const involvedCyberlimbs = cyberlimbs.filter((limb) => involvedLimbs.includes(limb.location));
 
   if (involvedCyberlimbs.length === 0) {
     return naturalAttr;
@@ -749,9 +729,7 @@ export function calculateEffectiveAttribute(
 
   // Get attribute values from involved cyberlimbs
   const limbValues = involvedCyberlimbs.map((limb) =>
-    attribute === "strength"
-      ? getCyberlimbStrength(limb)
-      : getCyberlimbAgility(limb)
+    attribute === "strength" ? getCyberlimbStrength(limb) : getCyberlimbAgility(limb)
   );
 
   switch (mode) {
@@ -802,9 +780,7 @@ export function calculateAverageAttribute(
 
   for (const limb of cyberlimbs) {
     const limbValue =
-      attribute === "strength"
-        ? getCyberlimbStrength(limb)
-        : getCyberlimbAgility(limb);
+      attribute === "strength" ? getCyberlimbStrength(limb) : getCyberlimbAgility(limb);
 
     // Weight by limb type
     if (limb.limbType === "full-arm" || limb.limbType === "full-leg") {
@@ -857,8 +833,7 @@ export function createCyberlimb(
   const totalCost = baseCost + customizationCost;
 
   const baseAvailability = catalogItem.availability;
-  const customizationAvailability =
-    (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
+  const customizationAvailability = (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
   const gradeAvailability = applyGradeToAvailability(baseAvailability, grade, true);
   const totalAvailability = gradeAvailability + customizationAvailability;
 
@@ -938,17 +913,12 @@ export function calculateCyberlimbCosts(
   const strCustom = customization?.strengthCustomization ?? 0;
   const agiCustom = customization?.agilityCustomization ?? 0;
   const customizationCost = (strCustom + agiCustom) * CUSTOMIZATION_COST_PER_POINT;
-  const customizationAvailability =
-    (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
+  const customizationAvailability = (strCustom + agiCustom) * CUSTOMIZATION_AVAILABILITY_PER_POINT;
 
   const gradeMultiplier = getCyberwareGradeMultiplier(grade);
   const gradedEssence = roundEssence(catalogItem.essenceCost * gradeMultiplier);
   const gradedCost = applyGradeToCost(catalogItem.cost, grade, true);
-  const gradedAvailability = applyGradeToAvailability(
-    catalogItem.availability,
-    grade,
-    true
-  );
+  const gradedAvailability = applyGradeToAvailability(catalogItem.availability, grade, true);
 
   return {
     essenceCost: gradedEssence,
@@ -1018,10 +988,7 @@ export function validateCyberlimbInstallation(
   const costs = calculateCyberlimbCosts(catalogItem, grade, customization);
   const maxAvail = context?.maxAvailability ?? 12;
 
-  if (
-    context?.lifecycleStage === "creation" &&
-    costs.availability > maxAvail
-  ) {
+  if (context?.lifecycleStage === "creation" && costs.availability > maxAvail) {
     return {
       valid: false,
       error: `Availability ${costs.availability} exceeds maximum of ${maxAvail} at character creation.`,
@@ -1068,10 +1035,7 @@ export function getCyberlimbSummary(limb: CyberlimbItem): string {
  * @param enabled - New wireless state
  * @returns Updated cyberlimb
  */
-export function toggleCyberlimbWireless(
-  limb: CyberlimbItem,
-  enabled: boolean
-): CyberlimbItem {
+export function toggleCyberlimbWireless(limb: CyberlimbItem, enabled: boolean): CyberlimbItem {
   const modEntry: CyberlimbModificationEntry = {
     id: `mod-${Date.now()}`,
     timestamp: new Date().toISOString(),

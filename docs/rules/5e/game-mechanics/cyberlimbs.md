@@ -51,11 +51,11 @@ Synthetic limbs are disguised as natural limbs. The fact that they're cybernetic
 
 Cyberlimb enhancements use up to the Capacity of the cyberlimb they enhance. There are three types of enhancement:
 
-| Enhancement | Effect |
-|-------------|--------|
-| **Agility** | Adds Rating to the limb's Agility attribute |
-| **Armor** | Provides an Armor bonus equal to Rating, cumulative with other armor, without adding to Encumbrance |
-| **Strength** | Adds Rating to the limb's Strength attribute |
+| Enhancement  | Effect                                                                                              |
+| ------------ | --------------------------------------------------------------------------------------------------- |
+| **Agility**  | Adds Rating to the limb's Agility attribute                                                         |
+| **Armor**    | Provides an Armor bonus equal to Rating, cumulative with other armor, without adding to Encumbrance |
+| **Strength** | Adds Rating to the limb's Strength attribute                                                        |
 
 **Stacking Rules:** Each limb can have only one enhancement of each type (you can't stack two Strength 3 enhancements in the same cyberarm), but you can replace one you have with one you want.
 
@@ -90,6 +90,7 @@ You can hold a taser or any pistol- or smaller-sized weapon within the holster, 
 This implant requires you to have two cyberlegs with a hydraulic jack of identical Ratings in each leg.
 
 Each Rating point:
+
 - Adds **+1** to your Physical limit for jumping and sprinting
 - Adds **20%** to your maximum jump distance
 - Reduces your falling distance by **2 meters** for calculating falling damage
@@ -117,6 +118,7 @@ Depending on the size of the gun, cyberguns take up part of your forearm or repl
 **Concealment:** For extra concealment, cyberguns are built from mostly non-metallic compounds, and any metallic parts are incorporated into the (cyber) arm's structure.
 
 **Features:**
+
 - All cyberguns have internal magazines (m) and can be equipped with a hidden external ammo port
 - Once you attach a clip to the side of your forearm or the back of your elbow, the cybergun becomes kind of obvious
 - Laser sights and silencers/sound suppressors are available; other weapon accessories can't be installed in cyberguns
@@ -158,104 +160,105 @@ Like a shock glove built into the palm of your hand, perfect for inflicting a na
 
 ### Obvious Limbs
 
-| Limb | Essence | Capacity | Availability | Cost |
-|------|---------|----------|--------------|------|
-| Full arm | 1 | 15 | 4 | 15,000¥ |
-| Full leg | 1 | 20 | 4 | 15,000¥ |
-| Hand/foot | 0.25 | 4 | 2 | 5,000¥ |
-| Lower arm | 0.45 | 10 | 4 | 10,000¥ |
-| Lower leg | 0.45 | 12 | 4 | 10,000¥ |
-| Torso | 1.5 | 10 | 12 | 20,000¥ |
-| Skull | 0.75 | 4 | 16 | 10,000¥ |
+| Limb      | Essence | Capacity | Availability | Cost    |
+| --------- | ------- | -------- | ------------ | ------- |
+| Full arm  | 1       | 15       | 4            | 15,000¥ |
+| Full leg  | 1       | 20       | 4            | 15,000¥ |
+| Hand/foot | 0.25    | 4        | 2            | 5,000¥  |
+| Lower arm | 0.45    | 10       | 4            | 10,000¥ |
+| Lower leg | 0.45    | 12       | 4            | 10,000¥ |
+| Torso     | 1.5     | 10       | 12           | 20,000¥ |
+| Skull     | 0.75    | 4        | 16           | 10,000¥ |
 
 ### Synthetic Limbs
 
-| Limb | Essence | Capacity | Availability | Cost |
-|------|---------|----------|--------------|------|
-| Full arm | 1 | 8 | 4 | 20,000¥ |
-| Full leg | 1 | 10 | 4 | 20,000¥ |
-| Hand/foot | 0.25 | 2 | 2 | 6,000¥ |
-| Lower arm | 0.45 | 5 | 4 | 12,000¥ |
-| Lower leg | 0.45 | 6 | 4 | 12,000¥ |
-| Torso | 1.5 | 5 | 12 | 25,000¥ |
-| Skull | 0.75 | 2 | 16 | 15,000¥ |
+| Limb      | Essence | Capacity | Availability | Cost    |
+| --------- | ------- | -------- | ------------ | ------- |
+| Full arm  | 1       | 8        | 4            | 20,000¥ |
+| Full leg  | 1       | 10       | 4            | 20,000¥ |
+| Hand/foot | 0.25    | 2        | 2            | 6,000¥  |
+| Lower arm | 0.45    | 5        | 4            | 12,000¥ |
+| Lower leg | 0.45    | 6        | 4            | 12,000¥ |
+| Torso     | 1.5     | 5        | 12           | 25,000¥ |
+| Skull     | 0.75    | 2        | 16           | 15,000¥ |
 
 ### Customization
 
-| Customization | Essence | Capacity | Availability | Cost |
-|---------------|---------|----------|--------------|------|
-| Each STR or AGI point above 3 | — | — | Cyberlimb + 1 | +5,000¥ |
+| Customization                 | Essence | Capacity | Availability  | Cost    |
+| ----------------------------- | ------- | -------- | ------------- | ------- |
+| Each STR or AGI point above 3 | —       | —        | Cyberlimb + 1 | +5,000¥ |
 
 ## Cyberlimb Enhancements
 
-| Enhancement | Essence | Capacity | Availability | Cost |
-|-------------|---------|----------|--------------|------|
-| Agility (Rating 1-3) | — | Rating | (Rating x 3)R | Rating x 6,500¥ |
-| Armor (Rating 1-3) | — | Rating | Rating x 5 | Rating x 3,000¥ |
-| Strength (Rating 1-3) | — | Rating | (Rating x 3)R | Rating x 6,500¥ |
+| Enhancement           | Essence | Capacity | Availability  | Cost            |
+| --------------------- | ------- | -------- | ------------- | --------------- |
+| Agility (Rating 1-3)  | —       | Rating   | (Rating x 3)R | Rating x 6,500¥ |
+| Armor (Rating 1-3)    | —       | Rating   | Rating x 5    | Rating x 3,000¥ |
+| Strength (Rating 1-3) | —       | Rating   | (Rating x 3)R | Rating x 6,500¥ |
 
 ## Cyberlimb Accessories
 
-| Accessory | Essence | Capacity | Availability | Cost |
-|-----------|---------|----------|--------------|------|
-| Cyberarm gyromount | — | [8] | 12F | 6,000¥ |
-| Cyberarm slide | — | [3] | 12R | 3,000¥ |
-| Cyber holster | — | [5] | 8R | 2,000¥ |
-| Hydraulic jacks (Rating 1-6) | — | [Rating] | 9 | Rating x 2,500¥ |
-| Large smuggling compartment | — | [5] | 6 | 8,000¥ |
+| Accessory                    | Essence | Capacity | Availability | Cost            |
+| ---------------------------- | ------- | -------- | ------------ | --------------- |
+| Cyberarm gyromount           | —       | [8]      | 12F          | 6,000¥          |
+| Cyberarm slide               | —       | [3]      | 12R          | 3,000¥          |
+| Cyber holster                | —       | [5]      | 8R           | 2,000¥          |
+| Hydraulic jacks (Rating 1-6) | —       | [Rating] | 9            | Rating x 2,500¥ |
+| Large smuggling compartment  | —       | [5]      | 6            | 8,000¥          |
 
 ## Implant Weapons
 
 ### Cyberguns
 
-| Cybergun | Essence | Capacity | Availability | Cost |
-|----------|---------|----------|--------------|------|
-| Hold-out pistol | 0.1 | [2] | 8R | 2,000¥ |
-| Light pistol | 0.25 | [4] | 10R | 3,900¥ |
-| Machine pistol | 0.5 | [6] | 12R | 3,500¥ |
-| Heavy pistol | 0.5 | [6] | 12R | 4,300¥ |
-| Submachine gun | 1 | [8] | 12R | 4,800¥ |
-| Shotgun | 1.25 | [10] | 12R | 8,500¥ |
-| Grenade launcher | 1.5 | [15] | 20F | 30,000¥ |
-| External clip port | 0.1 | [1] | — | +1,000¥ |
-| Laser sight | — | [1] | — | +1,000¥ |
-| Silencer/suppressor | — | [2] | — | +1,000¥ |
+| Cybergun            | Essence | Capacity | Availability | Cost    |
+| ------------------- | ------- | -------- | ------------ | ------- |
+| Hold-out pistol     | 0.1     | [2]      | 8R           | 2,000¥  |
+| Light pistol        | 0.25    | [4]      | 10R          | 3,900¥  |
+| Machine pistol      | 0.5     | [6]      | 12R          | 3,500¥  |
+| Heavy pistol        | 0.5     | [6]      | 12R          | 4,300¥  |
+| Submachine gun      | 1       | [8]      | 12R          | 4,800¥  |
+| Shotgun             | 1.25    | [10]     | 12R          | 8,500¥  |
+| Grenade launcher    | 1.5     | [15]     | 20F          | 30,000¥ |
+| External clip port  | 0.1     | [1]      | —            | +1,000¥ |
+| Laser sight         | —       | [1]      | —            | +1,000¥ |
+| Silencer/suppressor | —       | [2]      | —            | +1,000¥ |
 
 ### Cybergun Weapon Stats
 
-| Cybergun | Accuracy | Damage | AP | Mode | RC | Ammo |
-|----------|----------|--------|-----|------|-----|------|
-| Cyber hold-out | 4 (6) | 6P | — | SA | — | 2 (m) / 6 (c) |
-| Light cyber pistol | 6 (8) | 7P | — | SA | — | 10 (m) / 15 (c) |
-| Cyber machine pistol | 4 (6) | 6P | — | SA / BF | 1 | 18 (m) / 32 (c) |
-| Heavy cyber pistol | 4 (6) | 7P | –1 | SA | — | 8 (m) / 12 (c) |
-| Cyber submachine gun | 4 (6) | 7P | — | SA / BF | 2 | 18 (m) / 32 (c) |
-| Cyber shotgun | 4 (6) | 10P | –1 | SS | — | 4 (m) / 10 (c) |
-| Cyber microgrenade launcher | 4 (6) | as Grenade | as Grenade | SS | — | 2 (m) / 6 (c) |
+| Cybergun                    | Accuracy | Damage     | AP         | Mode    | RC  | Ammo            |
+| --------------------------- | -------- | ---------- | ---------- | ------- | --- | --------------- |
+| Cyber hold-out              | 4 (6)    | 6P         | —          | SA      | —   | 2 (m) / 6 (c)   |
+| Light cyber pistol          | 6 (8)    | 7P         | —          | SA      | —   | 10 (m) / 15 (c) |
+| Cyber machine pistol        | 4 (6)    | 6P         | —          | SA / BF | 1   | 18 (m) / 32 (c) |
+| Heavy cyber pistol          | 4 (6)    | 7P         | –1         | SA      | —   | 8 (m) / 12 (c)  |
+| Cyber submachine gun        | 4 (6)    | 7P         | —          | SA / BF | 2   | 18 (m) / 32 (c) |
+| Cyber shotgun               | 4 (6)    | 10P        | –1         | SS      | —   | 4 (m) / 10 (c)  |
+| Cyber microgrenade launcher | 4 (6)    | as Grenade | as Grenade | SS      | —   | 2 (m) / 6 (c)   |
 
 ### Cyber Melee Weapons
 
-| Weapon | Essence | Capacity | Availability | Cost |
-|--------|---------|----------|--------------|------|
-| Hand blade (retractable) | 0.25 | [2] | 10F | 2,500¥ |
-| Hand razors (retractable) | 0.2 | [2] | 8F | 1,250¥ |
-| Spurs (retractable) | 0.3 | [3] | 12F | 5,000¥ |
-| Shock hand | 0.25 | [4] | 8R | 5,000¥ |
+| Weapon                    | Essence | Capacity | Availability | Cost   |
+| ------------------------- | ------- | -------- | ------------ | ------ |
+| Hand blade (retractable)  | 0.25    | [2]      | 10F          | 2,500¥ |
+| Hand razors (retractable) | 0.2     | [2]      | 8F           | 1,250¥ |
+| Spurs (retractable)       | 0.3     | [3]      | 12F          | 5,000¥ |
+| Shock hand                | 0.25    | [4]      | 8R           | 5,000¥ |
 
 ### Cyber Melee Weapon Stats
 
-| Weapon | Reach | Damage | AP |
-|--------|-------|--------|-----|
-| Hand blade | — | (STR + 2)P | –2 |
-| Hand razors | — | (STR + 1)P | –3 |
-| Spurs | — | (STR + 3)P | –2 |
-| Shock hand | — | 9S(e) | –5 |
+| Weapon      | Reach | Damage     | AP  |
+| ----------- | ----- | ---------- | --- |
+| Hand blade  | —     | (STR + 2)P | –2  |
+| Hand razors | —     | (STR + 1)P | –3  |
+| Spurs       | —     | (STR + 3)P | –2  |
+| Shock hand  | —     | 9S(e)      | –5  |
 
 ---
 
 # Implementation Guidance
 
 > **Governing Documents:**
+>
 > - [Capability: character.augmentation-systems](docs/capabilities/character.augmentation-systems.md)
 > - [ADR-010: Inventory State Management](docs/decisions/010-gear.inventory-state-management.md)
 > - [ADR-011: Sheet-Driven Creation](docs/decisions/011-character.sheet-driven-creation.md)
@@ -274,12 +277,12 @@ Per `character.augmentation-systems`, cyberlimb implementation MUST:
 
 ### Effective Attribute Determination
 
-| Scenario | Calculation |
-|----------|-------------|
-| Single limb action (e.g., punch with cyberarm) | Use that limb's STR or AGI |
-| Multiple limbs, general action | Average all involved limbs (natural = racial base) |
-| Coordinated action requiring precision | Use the **weakest** limb's value |
-| Partial limb (hand/foot) | Only applies to tests directly involving that part |
+| Scenario                                       | Calculation                                        |
+| ---------------------------------------------- | -------------------------------------------------- |
+| Single limb action (e.g., punch with cyberarm) | Use that limb's STR or AGI                         |
+| Multiple limbs, general action                 | Average all involved limbs (natural = racial base) |
+| Coordinated action requiring precision         | Use the **weakest** limb's value                   |
+| Partial limb (hand/foot)                       | Only applies to tests directly involving that part |
 
 ### Limb Attribute Formula
 
@@ -289,6 +292,7 @@ Limb AGI = Base (3) + Customization Bonus + Enhancement Bonus
 ```
 
 **Constraints:**
+
 - Customization: 0 to (Racial Maximum - 3), set at purchase, immutable
 - Enhancement: 0 to 3 (Rating of installed enhancement)
 - Total cannot exceed Racial Maximum + 4 (per augmentation rules)
@@ -296,6 +300,7 @@ Limb AGI = Base (3) + Customization Bonus + Enhancement Bonus
 ### Averaging Formula (Multiple Limbs)
 
 For actions involving multiple limbs:
+
 ```
 Effective Attribute = floor(sum(all involved limb attributes) / count(involved limbs))
 ```
@@ -304,30 +309,30 @@ Natural limbs use the character's racial base attribute (before augmentation bon
 
 ## Physical Condition Monitor Bonus
 
-| Limb Type | CM Bonus |
-|-----------|----------|
-| Full arm | +1 |
-| Full leg | +1 |
-| Torso | +1 |
-| Skull | +1 |
-| Lower arm | +0.5 |
-| Lower leg | +0.5 |
+| Limb Type | CM Bonus     |
+| --------- | ------------ |
+| Full arm  | +1           |
+| Full leg  | +1           |
+| Torso     | +1           |
+| Skull     | +1           |
+| Lower arm | +0.5         |
+| Lower leg | +0.5         |
 | Hand/foot | +0 (ignored) |
 
 **Formula:** `Extra CM Boxes = floor(sum of all limb bonuses)`
 
 ## Customization vs Enhancement
 
-| Aspect | Customization | Enhancement |
-|--------|---------------|-------------|
-| When applied | Purchase only | Post-purchase allowed |
-| Modifies | Base attribute | Adds to total |
-| Uses capacity | No | Yes (Rating per type) |
-| Availability impact | +1 per point | Separate availability check |
-| Cost impact | +5,000¥ per point | Rating × cost multiplier |
-| Maximum | Racial natural max | +3 per enhancement type |
-| Mutable | No | Yes (can replace) |
-| Grade affects | No (flat cost) | Yes (cost × grade multiplier) |
+| Aspect              | Customization      | Enhancement                   |
+| ------------------- | ------------------ | ----------------------------- |
+| When applied        | Purchase only      | Post-purchase allowed         |
+| Modifies            | Base attribute     | Adds to total                 |
+| Uses capacity       | No                 | Yes (Rating per type)         |
+| Availability impact | +1 per point       | Separate availability check   |
+| Cost impact         | +5,000¥ per point  | Rating × cost multiplier      |
+| Maximum             | Racial natural max | +3 per enhancement type       |
+| Mutable             | No                 | Yes (can replace)             |
+| Grade affects       | No (flat cost)     | Yes (cost × grade multiplier) |
 
 ## Capacity System
 
@@ -379,24 +384,24 @@ interface CyberlimbItem {
   name: string;
 
   // Location
-  location: CyberlimbLocation;        // e.g., "left-arm", "right-leg", "torso"
-  limbType: CyberlimbType;            // "full-arm" | "lower-arm" | "hand" | etc.
+  location: CyberlimbLocation; // e.g., "left-arm", "right-leg", "torso"
+  limbType: CyberlimbType; // "full-arm" | "lower-arm" | "hand" | etc.
   appearance: "obvious" | "synthetic";
 
   // Essence & Grade
   grade: CyberwareGrade;
   baseEssenceCost: number;
-  essenceCost: number;                // After grade multiplier
+  essenceCost: number; // After grade multiplier
 
   // Capacity
   baseCapacity: number;
   capacityUsed: number;
 
   // Attributes (Cyberlimb-specific)
-  baseStrength: 3;                    // Always 3
-  baseAgility: 3;                     // Always 3
-  customStrength: number;             // 0 to (racial max - 3)
-  customAgility: number;              // 0 to (racial max - 3)
+  baseStrength: 3; // Always 3
+  baseAgility: 3; // Always 3
+  customStrength: number; // 0 to (racial max - 3)
+  customAgility: number; // 0 to (racial max - 3)
 
   // Installed Items
   enhancements: CyberlimbEnhancement[];
@@ -417,12 +422,18 @@ interface CyberlimbItem {
 
 ```typescript
 type CyberlimbLocation =
-  | "left-arm" | "right-arm"
-  | "left-leg" | "right-leg"
-  | "left-hand" | "right-hand"
-  | "left-foot" | "right-foot"
-  | "left-lower-arm" | "right-lower-arm"
-  | "left-lower-leg" | "right-lower-leg"
+  | "left-arm"
+  | "right-arm"
+  | "left-leg"
+  | "right-leg"
+  | "left-hand"
+  | "right-hand"
+  | "left-foot"
+  | "right-foot"
+  | "left-lower-arm"
+  | "right-lower-arm"
+  | "left-lower-leg"
+  | "right-lower-leg"
   | "torso"
   | "skull";
 ```
@@ -442,12 +453,12 @@ lower-leg replaces: foot (same side)
 
 Per ADR-010, wireless bonuses require structured `wirelessEffects` for mechanical calculation:
 
-| Accessory | Wireless Bonus | Structured Effect |
-|-----------|----------------|-------------------|
-| Gyromount | Activate/deactivate as Free Action | `{ "type": "action_economy", "action": "toggle_gyromount", "from": "simple", "to": "free" }` |
-| Cyber holster | Ready weapon as Free Action | `{ "type": "action_economy", "action": "ready_from_holster", "from": "simple", "to": "free" }` |
-| Hydraulic jacks | +1 dice pool to jumping/sprinting/lifting | `{ "type": "dice_pool", "skills": ["jumping", "sprinting", "lifting"], "modifier": 1 }` |
-| Large smuggling compartment | Access as Simple Action | `{ "type": "action_economy", "action": "access_compartment", "from": "complex", "to": "simple" }` |
+| Accessory                   | Wireless Bonus                            | Structured Effect                                                                                 |
+| --------------------------- | ----------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| Gyromount                   | Activate/deactivate as Free Action        | `{ "type": "action_economy", "action": "toggle_gyromount", "from": "simple", "to": "free" }`      |
+| Cyber holster               | Ready weapon as Free Action               | `{ "type": "action_economy", "action": "ready_from_holster", "from": "simple", "to": "free" }`    |
+| Hydraulic jacks             | +1 dice pool to jumping/sprinting/lifting | `{ "type": "dice_pool", "skills": ["jumping", "sprinting", "lifting"], "modifier": 1 }`           |
+| Large smuggling compartment | Access as Simple Action                   | `{ "type": "action_economy", "action": "access_compartment", "from": "complex", "to": "simple" }` |
 
 ## Validation Rules
 
@@ -471,18 +482,21 @@ Per ADR-010, wireless bonuses require structured `wirelessEffects` for mechanica
 ### Partial Limb Attribute Application
 
 Partial limbs (hands, feet, lower arms/legs) only apply their attributes when:
+
 - The test **directly** involves that specific part
 - Example: Cyberhand STR applies to grip tests, but NOT to full-arm pushing
 
 ### Cyber Melee Weapon STR Reference
 
 When calculating damage for cyber melee weapons:
+
 - If installed in cyberlimb: Use **limb's STR**
 - If installed in meat: Use **character's natural STR**
 
 ### Mixed Limb Averaging
 
 When averaging across natural and cyber limbs:
+
 - Natural limbs use character's base racial attribute
 - Cyber limbs use their calculated total (base + custom + enhancement)
 - Round down after averaging
@@ -491,32 +505,32 @@ When averaging across natural and cyber limbs:
 
 The current `core-rulebook.json` has discrepancies from source material:
 
-| Item | Field | Current | Correct |
-|------|-------|---------|---------|
-| Obvious Cyberarm | capacity | 10 | 15 |
-| Obvious Cyberleg | capacity | 12 | 20 |
-| Obvious Cyberhand | capacity | 2 | 4 |
-| Obvious Cyberfoot | capacity | 2 | 4 |
-| Lower Cyberarm | capacity | 5 | 10 |
-| Lower Cyberleg | capacity | 6 | 12 |
-| Synthetic Cyberarm | capacity | 5 | 8 |
-| Synthetic Cyberleg | capacity | 6 | 10 |
-| Cybertorso | availability | 6 | 12 |
-| Cyberskull | availability | 4 | 16 |
-| Agility Enhancement | cost | 3,000¥ | 6,500¥ × Rating |
-| Strength Enhancement | cost | 3,000¥ | 6,500¥ × Rating |
-| Agility Enhancement | availability | 8 | (Rating × 3)R |
-| Strength Enhancement | availability | 8 | (Rating × 3)R |
-| Armor Enhancement | availability | 8 | Rating × 5 |
+| Item                 | Field        | Current | Correct         |
+| -------------------- | ------------ | ------- | --------------- |
+| Obvious Cyberarm     | capacity     | 10      | 15              |
+| Obvious Cyberleg     | capacity     | 12      | 20              |
+| Obvious Cyberhand    | capacity     | 2       | 4               |
+| Obvious Cyberfoot    | capacity     | 2       | 4               |
+| Lower Cyberarm       | capacity     | 5       | 10              |
+| Lower Cyberleg       | capacity     | 6       | 12              |
+| Synthetic Cyberarm   | capacity     | 5       | 8               |
+| Synthetic Cyberleg   | capacity     | 6       | 10              |
+| Cybertorso           | availability | 6       | 12              |
+| Cyberskull           | availability | 4       | 16              |
+| Agility Enhancement  | cost         | 3,000¥  | 6,500¥ × Rating |
+| Strength Enhancement | cost         | 3,000¥  | 6,500¥ × Rating |
+| Agility Enhancement  | availability | 8       | (Rating × 3)R   |
+| Strength Enhancement | availability | 8       | (Rating × 3)R   |
+| Armor Enhancement    | availability | 8       | Rating × 5      |
 
 ### Missing Items
 
-| Item | Category |
-|------|----------|
-| Hydraulic Jacks (R 1-6) | cyberlimb-accessory |
+| Item                        | Category            |
+| --------------------------- | ------------------- |
+| Hydraulic Jacks (R 1-6)     | cyberlimb-accessory |
 | Large Smuggling Compartment | cyberlimb-accessory |
-| Synthetic Hand/Foot | cyberlimb |
-| Synthetic Lower Arm | cyberlimb |
-| Synthetic Lower Leg | cyberlimb |
-| Synthetic Torso | cyberlimb |
-| Synthetic Skull | cyberlimb |
+| Synthetic Hand/Foot         | cyberlimb           |
+| Synthetic Lower Arm         | cyberlimb           |
+| Synthetic Lower Leg         | cyberlimb           |
+| Synthetic Torso             | cyberlimb           |
+| Synthetic Skull             | cyberlimb           |

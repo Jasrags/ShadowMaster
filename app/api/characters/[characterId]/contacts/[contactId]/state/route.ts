@@ -17,11 +17,7 @@ import {
   updateCharacterContact,
 } from "@/lib/storage/contacts";
 import { addFavorTransaction } from "@/lib/storage/favor-ledger";
-import {
-  canBurnContact,
-  canReactivateContact,
-  isValidTransition,
-} from "@/lib/rules/contacts";
+import { canBurnContact, canReactivateContact, isValidTransition } from "@/lib/rules/contacts";
 import type { ContactStatus } from "@/lib/types";
 
 interface StateTransitionRequest {
@@ -37,18 +33,12 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, contactId } = await params;
@@ -56,19 +46,13 @@ export async function POST(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Get contact
     const contact = await getCharacterContact(userId, characterId, contactId);
     if (!contact) {
-      return NextResponse.json(
-        { success: false, error: "Contact not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Contact not found" }, { status: 404 });
     }
 
     // Parse body
@@ -77,7 +61,10 @@ export async function POST(
 
     if (!action || !["burn", "reactivate", "mark-missing", "mark-deceased"].includes(action)) {
       return NextResponse.json(
-        { success: false, error: "Invalid action. Must be: burn, reactivate, mark-missing, or mark-deceased" },
+        {
+          success: false,
+          error: "Invalid action. Must be: burn, reactivate, mark-missing, or mark-deceased",
+        },
         { status: 400 }
       );
     }
@@ -118,14 +105,16 @@ export async function POST(
       // Check burn prerequisites
       const burnCheck = canBurnContact(contact);
       if (!burnCheck.allowed) {
-        return NextResponse.json(
-          { success: false, error: burnCheck.reason },
-          { status: 400 }
-        );
+        return NextResponse.json({ success: false, error: burnCheck.reason }, { status: 400 });
       }
 
       // Burn the contact
-      updatedContact = await burnContact(userId, characterId, contactId, reason || "No reason provided");
+      updatedContact = await burnContact(
+        userId,
+        characterId,
+        contactId,
+        reason || "No reason provided"
+      );
 
       // Record transaction
       transaction = await addFavorTransaction(userId, characterId, {

@@ -5,11 +5,13 @@
 Migrate all rated items in the character creation system to a unified ratings table structure, eliminating the current hybrid approach of formulas, level arrays, and duplicated entries.
 
 **Current State:** The codebase has three different patterns for handling rated items:
+
 1. **Gear with `ratingSpec`** - Linear formula-based (36 items)
 2. **Qualities with `levels[]`** - Explicit level arrays (14 items)
 3. **Augmentations with `(Rating X)` names** - Duplicated entries (99 entries representing 25 unique items)
 
 **Target State:** Single unified `ratings` object structure across all rated items:
+
 - Consistent data model for all rated items
 - Single code path in UI components
 - Data matches source books exactly (explicit values, not computed)
@@ -45,7 +47,7 @@ Migrate all rated items in the character creation system to a unified ratings ta
 interface RatingValue {
   cost: number;
   availability: number;
-  availabilitySuffix?: "R" | "F";  // Restricted/Forbidden
+  availabilitySuffix?: "R" | "F"; // Restricted/Forbidden
 
   // Augmentation-specific
   essenceCost?: number;
@@ -68,7 +70,7 @@ interface RatingValue {
 
 interface RatedItem {
   id: string;
-  name: string;  // Base name without "(Rating X)" suffix
+  name: string; // Base name without "(Rating X)" suffix
   // ... other common fields ...
 
   // Rating configuration
@@ -91,16 +93,46 @@ interface NonRatedItem {
 ### Example: Cybereyes (Current vs. New)
 
 **Current (4 separate entries):**
+
 ```json
 [
-  { "id": "cybereyes-1", "name": "Cybereyes (Rating 1)", "essenceCost": 0.2, "cost": 4000, "availability": 3, "capacity": 4 },
-  { "id": "cybereyes-2", "name": "Cybereyes (Rating 2)", "essenceCost": 0.3, "cost": 6000, "availability": 6, "capacity": 8 },
-  { "id": "cybereyes-3", "name": "Cybereyes (Rating 3)", "essenceCost": 0.4, "cost": 10000, "availability": 9, "capacity": 12 },
-  { "id": "cybereyes-4", "name": "Cybereyes (Rating 4)", "essenceCost": 0.5, "cost": 14000, "availability": 12, "capacity": 16 }
+  {
+    "id": "cybereyes-1",
+    "name": "Cybereyes (Rating 1)",
+    "essenceCost": 0.2,
+    "cost": 4000,
+    "availability": 3,
+    "capacity": 4
+  },
+  {
+    "id": "cybereyes-2",
+    "name": "Cybereyes (Rating 2)",
+    "essenceCost": 0.3,
+    "cost": 6000,
+    "availability": 6,
+    "capacity": 8
+  },
+  {
+    "id": "cybereyes-3",
+    "name": "Cybereyes (Rating 3)",
+    "essenceCost": 0.4,
+    "cost": 10000,
+    "availability": 9,
+    "capacity": 12
+  },
+  {
+    "id": "cybereyes-4",
+    "name": "Cybereyes (Rating 4)",
+    "essenceCost": 0.5,
+    "cost": 14000,
+    "availability": 12,
+    "capacity": 16
+  }
 ]
 ```
 
 **New (single entry with ratings table):**
+
 ```json
 {
   "id": "cybereyes",
@@ -124,6 +156,7 @@ interface NonRatedItem {
 ### Example: Area Jammer (Current Linear vs. New)
 
 **Current (formula-based):**
+
 ```json
 {
   "id": "area-jammer",
@@ -142,6 +175,7 @@ interface NonRatedItem {
 ```
 
 **New (explicit values):**
+
 ```json
 {
   "id": "area-jammer",
@@ -170,6 +204,7 @@ interface NonRatedItem {
 ### Phase 1: Type Definitions
 
 #### 1.1 Create Unified Rating Types
+
 **File:** `/lib/types/ratings.ts` (NEW)
 
 ```typescript
@@ -211,41 +246,53 @@ export function getRatingValue(item: RatingConfig, rating: number): RatingValue 
 ```
 
 #### 1.2 Update Augmentation Types
+
 **File:** `/lib/types/augmentation.ts`
 
 Remove:
+
 - `costPerRating`, `ratingSpec` fields from gear
 - `(Rating X)` naming convention expectation
 
 Add:
+
 - Import and extend `RatingConfig` for rated augmentations
 - Union type for rated vs non-rated augmentations
 
 #### 1.3 Update Gear Types
+
 **File:** `/lib/types/gear.ts`
 
 Remove:
+
 - `ratingSpec`, `costPerRating`, `costScaling`, `availabilityScaling` interfaces
 
 Add:
+
 - Import `RatingConfig` for rated gear items
 
 #### 1.4 Update Quality Types
+
 **File:** `/lib/types/quality.ts`
 
 Remove:
+
 - `levels[]` array structure
 
 Add:
+
 - `ratings` structure for leveled qualities
 
 #### 1.5 Update Adept Power Types
+
 **File:** `/lib/types/adeptPower.ts`
 
 Remove:
+
 - `costType: "perLevel"`, `maxLevel` pattern
 
 Add:
+
 - `ratings` structure for leveled powers
 
 ---
@@ -253,6 +300,7 @@ Add:
 ### Phase 2: Migration Script
 
 #### 2.1 Create Data Migration Script
+
 **File:** `/scripts/migrate-to-unified-ratings.ts` (NEW)
 
 Purpose: Transform existing data to new structure
@@ -269,19 +317,24 @@ async function migrateEditionData(editionCode: string): Promise<void>;
 ```
 
 Key transformations:
+
 1. **Augmentations:** Group by base name, extract rating from `(Rating X)`, build `ratings` object
 2. **Gear:** Compute explicit values from `ratingSpec` formulas
 3. **Qualities:** Convert `levels[]` array to `ratings` object
 4. **Adept Powers:** Convert `maxLevel` + `cost` to `ratings` object
 
 #### 2.2 Create Migration Validation Script
+
 **File:** `/scripts/validate-ratings-migration.ts` (NEW)
 
 Purpose: Verify migrated data matches original computed values
 
 ```typescript
 // Validation functions:
-function validateAugmentationMigration(original: OldAugmentation[], migrated: NewAugmentation[]): ValidationResult;
+function validateAugmentationMigration(
+  original: OldAugmentation[],
+  migrated: NewAugmentation[]
+): ValidationResult;
 function validateGearMigration(original: OldGear[], migrated: NewGear[]): ValidationResult;
 function validateTotalItemCounts(original: RulesetData, migrated: RulesetData): ValidationResult;
 ```
@@ -291,9 +344,11 @@ function validateTotalItemCounts(original: RulesetData, migrated: RulesetData): 
 ### Phase 3: Data Migration Execution
 
 #### 3.1 Migrate SR5 Core Rulebook
+
 **File:** `/data/editions/sr5/core-rulebook.json`
 
 Changes:
+
 - Cyberware catalog: 104 → ~77 items (37 rating entries consolidated to 10)
 - Bioware catalog: 70 → ~23 items (62 rating entries consolidated to 15)
 - Gear: Update 36 items from `ratingSpec` to `ratings`
@@ -301,9 +356,11 @@ Changes:
 - Adept Powers: Update 18 items from `maxLevel` to `ratings`
 
 #### 3.2 Update Grunt Templates
+
 **Files:** `/data/editions/sr5/grunt-templates/*.json`
 
 Update any character templates that reference rated items:
+
 - Change `"name": "Cybereyes (Rating 4)"` references
 - Add explicit `rating` field to item references
 
@@ -312,27 +369,35 @@ Update any character templates that reference rated items:
 ### Phase 4: Ruleset System Updates
 
 #### 4.1 Update Ruleset Loader
+
 **File:** `/lib/rules/loader.ts`
 
 Changes:
+
 - Remove formula computation for `ratingSpec`
 - Simplify item loading to direct object mapping
 - Add validation for `ratings` structure
 
 #### 4.2 Update Ruleset Merge Logic
+
 **File:** `/lib/rules/merge.ts`
 
 Changes:
+
 - Handle `ratings` object merging (sourcebook overrides specific ratings)
 - Remove `ratingSpec` merge handling
 
 #### 4.3 Create Rating Utility Functions
+
 **File:** `/lib/rules/ratings.ts` (NEW)
 
 ```typescript
 export function getItemCostAtRating(item: RatedItem, rating: number): number;
 export function getItemEssenceAtRating(item: RatedItem, rating: number): number;
-export function getItemAvailabilityAtRating(item: RatedItem, rating: number): { value: number; suffix?: string };
+export function getItemAvailabilityAtRating(
+  item: RatedItem,
+  rating: number
+): { value: number; suffix?: string };
 export function getAvailableRatings(item: RatedItem): number[];
 export function isRatingValid(item: RatedItem, rating: number): boolean;
 ```
@@ -342,6 +407,7 @@ export function isRatingValid(item: RatedItem, rating: number): boolean;
 ### Phase 5: UI Component Updates
 
 #### 5.1 Create Rating Selector Component
+
 **File:** `/components/creation/RatingSelector.tsx` (NEW)
 
 ```typescript
@@ -355,45 +421,58 @@ interface RatingSelectorProps {
 ```
 
 Features:
+
 - Dropdown or stepper for rating selection
 - Display cost/essence/availability for selected rating
 - Validate against min/max rating
 
 #### 5.2 Update Augmentation Selection Components
+
 **Files:**
+
 - `/app/characters/create/components/steps/AugmentationsStep.tsx`
 - `/components/creation/AugmentationCard.tsx`
 
 Changes:
+
 - Replace item list with base items + rating selector
 - Update selection state to store `{ itemId, rating }`
 - Calculate totals using rating utility functions
 
 #### 5.3 Update Gear Selection Components
+
 **Files:**
+
 - `/app/characters/create/components/steps/GearStep.tsx`
 - `/components/creation/GearCard.tsx`
 
 Changes:
+
 - Add rating selector for `hasRating` items
 - Remove formula computation display
 - Use `ratings[selectedRating]` for display values
 
 #### 5.4 Update Quality Selection Components
+
 **Files:**
+
 - `/app/characters/create/components/steps/QualitiesStep.tsx`
 - `/components/creation/QualityCard.tsx`
 
 Changes:
+
 - Replace level dropdown with rating selector
 - Update karma calculation to use `ratings[selectedRating].karmaCost`
 
 #### 5.5 Update Adept Power Selection Components
+
 **Files:**
+
 - `/app/characters/create/components/steps/AdeptPowersStep.tsx`
 - `/components/creation/AdeptPowerCard.tsx`
 
 Changes:
+
 - Add rating selector for powers with `hasRating`
 - Calculate power point cost from `ratings[selectedRating].powerPointCost`
 
@@ -402,9 +481,11 @@ Changes:
 ### Phase 6: Character Data Model Updates
 
 #### 6.1 Update Character Augmentation Storage
+
 **File:** `/lib/types/character.ts`
 
 Change selected augmentation format:
+
 ```typescript
 // Old
 selectedAugmentations: string[];  // ["cybereyes-3", "wired-reflexes-2"]
@@ -418,9 +499,11 @@ selectedAugmentations: Array<{
 ```
 
 #### 6.2 Update Character Gear Storage
+
 **File:** `/lib/types/character.ts`
 
 Change selected gear format for rated items:
+
 ```typescript
 // Old (implied from name or separate field)
 selectedGear: string[];
@@ -434,9 +517,11 @@ selectedGear: Array<{
 ```
 
 #### 6.3 Update Character Sheet Calculations
+
 **File:** `/lib/character/calculations.ts`
 
 Update functions:
+
 - `calculateTotalEssenceLoss()` - use rating lookup
 - `calculateTotalGearCost()` - use rating lookup
 - `calculateTotalKarmaCost()` - use rating lookup for qualities
@@ -446,41 +531,45 @@ Update functions:
 ### Phase 7: Validation and Testing
 
 #### 7.1 Unit Tests for Rating Utilities
+
 **File:** `/__tests__/lib/rules/ratings.test.ts` (NEW)
 
-| Test Case | Description |
-|-----------|-------------|
-| `getItemCostAtRating` returns correct value | Verify lookup works |
-| `getItemCostAtRating` throws for invalid rating | Error handling |
-| `isRatingValid` returns true for valid ratings | Boundary check |
-| `isRatingValid` returns false for out-of-range | Boundary check |
-| `getAvailableRatings` returns correct array | List generation |
+| Test Case                                       | Description         |
+| ----------------------------------------------- | ------------------- |
+| `getItemCostAtRating` returns correct value     | Verify lookup works |
+| `getItemCostAtRating` throws for invalid rating | Error handling      |
+| `isRatingValid` returns true for valid ratings  | Boundary check      |
+| `isRatingValid` returns false for out-of-range  | Boundary check      |
+| `getAvailableRatings` returns correct array     | List generation     |
 
 #### 7.2 Migration Validation Tests
+
 **File:** `/__tests__/scripts/migration-validation.test.ts` (NEW)
 
-| Test Case | Description |
-|-----------|-------------|
-| Migrated augmentation count matches unique items | Data integrity |
-| Migrated gear values match computed formulas | Formula accuracy |
-| All original item IDs are accessible | No data loss |
-| Rating values match source book tables | Accuracy check |
+| Test Case                                        | Description      |
+| ------------------------------------------------ | ---------------- |
+| Migrated augmentation count matches unique items | Data integrity   |
+| Migrated gear values match computed formulas     | Formula accuracy |
+| All original item IDs are accessible             | No data loss     |
+| Rating values match source book tables           | Accuracy check   |
 
 #### 7.3 Integration Tests
+
 **File:** `/__tests__/integration/rating-selection.test.ts` (NEW)
 
-| Test Case | Description |
-|-----------|-------------|
-| Select augmentation with rating updates essence correctly | End-to-end |
-| Change rating updates cost display | UI reactivity |
-| Character save includes rating in augmentation data | Persistence |
-| Character load restores correct rating selection | Data recovery |
+| Test Case                                                 | Description   |
+| --------------------------------------------------------- | ------------- |
+| Select augmentation with rating updates essence correctly | End-to-end    |
+| Change rating updates cost display                        | UI reactivity |
+| Character save includes rating in augmentation data       | Persistence   |
+| Character load restores correct rating selection          | Data recovery |
 
 ---
 
 ### Phase 8: Update Edition Data Author Skill
 
 #### 8.1 Update Data Format Documentation
+
 **Directory:** `/.claude/skills/edition-data-author/`
 
 Update the edition data author skill to document the new unified ratings table format:
@@ -493,6 +582,7 @@ Update the edition data author skill to document the new unified ratings table f
 #### 8.2 Example Updates
 
 **Before (Duplicate Entries):**
+
 ```json
 {
   "id": "cybereyes-1",
@@ -503,6 +593,7 @@ Update the edition data author skill to document the new unified ratings table f
 ```
 
 **After (Unified Ratings):**
+
 ```json
 {
   "id": "cybereyes",
@@ -519,11 +610,11 @@ Update the edition data author skill to document the new unified ratings table f
 
 #### 8.3 Files to Update
 
-| File | Changes |
-|------|---------|
-| `/.claude/skills/edition-data-author/*.md` | Update data format documentation |
-| Schema examples | Add ratings table examples |
-| Validation rules | Update to check for unified format |
+| File                                       | Changes                            |
+| ------------------------------------------ | ---------------------------------- |
+| `/.claude/skills/edition-data-author/*.md` | Update data format documentation   |
+| Schema examples                            | Add ratings table examples         |
+| Validation rules                           | Update to check for unified format |
 
 ---
 
@@ -532,11 +623,13 @@ Update the edition data author skill to document the new unified ratings table f
 ### Automated Verification
 
 1. **Run migration script in dry-run mode**
+
    ```bash
    pnpm run migrate:ratings --dry-run --edition sr5
    ```
 
 2. **Run validation script**
+
    ```bash
    pnpm run validate:ratings --edition sr5
    ```
@@ -596,59 +689,65 @@ UI and Character Model updates can proceed in parallel after Phase 4.
 
 ### New Files
 
-| File | Purpose |
-|------|---------|
-| `/lib/types/ratings.ts` | Unified rating type definitions |
-| `/lib/rules/ratings.ts` | Rating utility functions |
-| `/scripts/migrate-to-unified-ratings.ts` | Data migration script |
-| `/scripts/validate-ratings-migration.ts` | Migration validation script |
-| `/components/creation/RatingSelector.tsx` | Reusable rating selection UI |
-| `/__tests__/lib/rules/ratings.test.ts` | Rating utility tests |
-| `/__tests__/scripts/migration-validation.test.ts` | Migration tests |
-| `/__tests__/integration/rating-selection.test.ts` | Integration tests |
+| File                                              | Purpose                         |
+| ------------------------------------------------- | ------------------------------- |
+| `/lib/types/ratings.ts`                           | Unified rating type definitions |
+| `/lib/rules/ratings.ts`                           | Rating utility functions        |
+| `/scripts/migrate-to-unified-ratings.ts`          | Data migration script           |
+| `/scripts/validate-ratings-migration.ts`          | Migration validation script     |
+| `/components/creation/RatingSelector.tsx`         | Reusable rating selection UI    |
+| `/__tests__/lib/rules/ratings.test.ts`            | Rating utility tests            |
+| `/__tests__/scripts/migration-validation.test.ts` | Migration tests                 |
+| `/__tests__/integration/rating-selection.test.ts` | Integration tests               |
 
 ### Modified Files
 
-| File | Changes |
-|------|---------|
-| `/lib/types/augmentation.ts` | Remove ratingSpec, add RatingConfig |
-| `/lib/types/gear.ts` | Remove ratingSpec, add RatingConfig |
-| `/lib/types/quality.ts` | Remove levels[], add ratings |
-| `/lib/types/adeptPower.ts` | Remove maxLevel pattern, add ratings |
-| `/lib/types/character.ts` | Update selected item format to include rating |
-| `/lib/rules/loader.ts` | Remove formula computation |
-| `/lib/rules/merge.ts` | Update merge logic for ratings |
-| `/data/editions/sr5/core-rulebook.json` | Migrate all rated items |
-| `/app/characters/create/components/steps/AugmentationsStep.tsx` | Add rating selection |
-| `/app/characters/create/components/steps/GearStep.tsx` | Add rating selection |
-| `/app/characters/create/components/steps/QualitiesStep.tsx` | Update level selection |
-| `/components/creation/AugmentationCard.tsx` | Display rating selector |
-| `/components/creation/GearCard.tsx` | Display rating selector |
+| File                                                            | Changes                                       |
+| --------------------------------------------------------------- | --------------------------------------------- |
+| `/lib/types/augmentation.ts`                                    | Remove ratingSpec, add RatingConfig           |
+| `/lib/types/gear.ts`                                            | Remove ratingSpec, add RatingConfig           |
+| `/lib/types/quality.ts`                                         | Remove levels[], add ratings                  |
+| `/lib/types/adeptPower.ts`                                      | Remove maxLevel pattern, add ratings          |
+| `/lib/types/character.ts`                                       | Update selected item format to include rating |
+| `/lib/rules/loader.ts`                                          | Remove formula computation                    |
+| `/lib/rules/merge.ts`                                           | Update merge logic for ratings                |
+| `/data/editions/sr5/core-rulebook.json`                         | Migrate all rated items                       |
+| `/app/characters/create/components/steps/AugmentationsStep.tsx` | Add rating selection                          |
+| `/app/characters/create/components/steps/GearStep.tsx`          | Add rating selection                          |
+| `/app/characters/create/components/steps/QualitiesStep.tsx`     | Update level selection                        |
+| `/components/creation/AugmentationCard.tsx`                     | Display rating selector                       |
+| `/components/creation/GearCard.tsx`                             | Display rating selector                       |
 
 ### Deleted Files (Post-Migration Cleanup)
 
-| File | Reason |
-|------|--------|
-| N/A | No files deleted; old types removed inline |
+| File | Reason                                     |
+| ---- | ------------------------------------------ |
+| N/A  | No files deleted; old types removed inline |
 
 ---
 
 ## Risk Mitigation
 
 ### Risk: Data Loss During Migration
+
 **Mitigation:**
+
 - Backup `core-rulebook.json` before migration
 - Validation script compares item counts and spot-checks values
 - Dry-run mode for migration script
 
 ### Risk: Breaking Existing Characters
+
 **Mitigation:**
+
 - Character data migration function to update saved characters
 - Version field in character JSON to detect old format
 - Graceful fallback for legacy data during transition
 
 ### Risk: Sourcebook Compatibility
+
 **Mitigation:**
+
 - Document new data format for future sourcebook additions
 - Migration script handles sourcebook files as well as core
 

@@ -219,10 +219,11 @@ export function ActionPanel({
   const actionEconomy = useActionEconomy();
 
   // Get available actions for this character (combat domain only for now)
-  const { available: availableActions, unavailable: unavailableActions, all: allActions } = useAvailableActions(
-    character,
-    { domain: "combat" }
-  );
+  const {
+    available: availableActions,
+    unavailable: unavailableActions,
+    all: allActions,
+  } = useAvailableActions(character, { domain: "combat" });
 
   // Multi-step action flow state
   const [flowStep, setFlowStep] = useState<ActionFlowStep>("select");
@@ -239,16 +240,19 @@ export function ActionPanel({
   }, []);
 
   // Handle action selection
-  const handleSelectAction = useCallback((action: ActionDefinition) => {
-    setSelectedAction(action);
-    // Check if this is an attack action that needs a target
-    const needsTarget = action.subcategory === "ranged" || action.subcategory === "melee";
-    if (needsTarget && isInCombat) {
-      setFlowStep("target");
-    } else {
-      setFlowStep("confirm");
-    }
-  }, [isInCombat]);
+  const handleSelectAction = useCallback(
+    (action: ActionDefinition) => {
+      setSelectedAction(action);
+      // Check if this is an attack action that needs a target
+      const needsTarget = action.subcategory === "ranged" || action.subcategory === "melee";
+      if (needsTarget && isInCombat) {
+        setFlowStep("target");
+      } else {
+        setFlowStep("confirm");
+      }
+    },
+    [isInCombat]
+  );
 
   // Handle target selection
   const handleTargetSelect = useCallback((targetId: string, targetName: string) => {
@@ -258,10 +262,13 @@ export function ActionPanel({
   }, []);
 
   // Execute a combat action
-  const handleExecuteAction = useCallback(async (actionId: string) => {
-    if (!isInCombat) return;
-    await executeAction(actionId);
-  }, [isInCombat, executeAction]);
+  const handleExecuteAction = useCallback(
+    async (actionId: string) => {
+      if (!isInCombat) return;
+      await executeAction(actionId);
+    },
+    [isInCombat, executeAction]
+  );
 
   // Tab state for switching between Quick Rolls, Combat Actions, Advanced, and History
   const [activeTab, setActiveTab] = useState<"quick" | "combat" | "advanced" | "history">("quick");
@@ -292,8 +299,8 @@ export function ActionPanel({
     const persisted = persistedActions || [];
     // Merge and deduplicate by ID
     const all = [...local];
-    persisted.forEach(p => {
-      if (!all.find(a => a.id === p.id)) {
+    persisted.forEach((p) => {
+      if (!all.find((a) => a.id === p.id)) {
         all.push(p);
       }
     });
@@ -301,17 +308,16 @@ export function ActionPanel({
   }, [rollHistory, persistedActions]);
 
   // Handle roll from ActionPoolBuilder
-  const handleAdvancedRoll = useCallback(async (config: {
-    pool: ActionPool;
-    edgeAction?: EdgeActionType;
-    context?: ActionContext;
-  }) => {
-    const result = await executeRoll(config.pool, config.context, config.edgeAction);
-    if (result) {
-      // Open dice roller with the result
-      onOpenDiceRoller(result.pool.totalDice, config.context?.actionType || "Advanced Roll");
-    }
-  }, [executeRoll, onOpenDiceRoller]);
+  const handleAdvancedRoll = useCallback(
+    async (config: { pool: ActionPool; edgeAction?: EdgeActionType; context?: ActionContext }) => {
+      const result = await executeRoll(config.pool, config.context, config.edgeAction);
+      if (result) {
+        // Open dice roller with the result
+        onOpenDiceRoller(result.pool.totalDice, config.context?.actionType || "Advanced Roll");
+      }
+    },
+    [executeRoll, onOpenDiceRoller]
+  );
 
   // Transform skills for ActionPoolBuilder
   const skillsForBuilder = useMemo(() => {
@@ -328,31 +334,34 @@ export function ActionPanel({
   }, [character.skills, character.skillSpecializations]);
 
   // Calculate dice pool for an action based on its rollConfig
-  const calculateActionPool = useCallback((action: ActionDefinition): number => {
-    const attrs = character.attributes || {};
-    const skills = character.skills || {};
+  const calculateActionPool = useCallback(
+    (action: ActionDefinition): number => {
+      const attrs = character.attributes || {};
+      const skills = character.skills || {};
 
-    if (!action.rollConfig) return 0;
+      if (!action.rollConfig) return 0;
 
-    let pool = 0;
+      let pool = 0;
 
-    // Add attribute
-    if (action.rollConfig.attribute) {
-      const attrKey = action.rollConfig.attribute.toLowerCase();
-      pool += attrs[attrKey] || 0;
-    }
+      // Add attribute
+      if (action.rollConfig.attribute) {
+        const attrKey = action.rollConfig.attribute.toLowerCase();
+        pool += attrs[attrKey] || 0;
+      }
 
-    // Add skill
-    if (action.rollConfig.skill) {
-      const skillKey = action.rollConfig.skill.toLowerCase().replace(/ /g, "-");
-      pool += skills[skillKey] || 0;
-    }
+      // Add skill
+      if (action.rollConfig.skill) {
+        const skillKey = action.rollConfig.skill.toLowerCase().replace(/ /g, "-");
+        pool += skills[skillKey] || 0;
+      }
 
-    // Apply wound modifier
-    pool += woundModifier;
+      // Apply wound modifier
+      pool += woundModifier;
 
-    return Math.max(0, pool);
-  }, [character.attributes, character.skills, woundModifier]);
+      return Math.max(0, pool);
+    },
+    [character.attributes, character.skills, woundModifier]
+  );
 
   // Use Edge hook for real-time Edge management
   const {
@@ -395,31 +404,24 @@ export function ActionPanel({
     const skills = character.skills || {};
 
     // Attack pools (varies by weapon type - these are basic defaults)
-    const meleeAttack =
-      (attrs.agility || 1) + (skills["unarmed-combat"] || skills.blades || 0);
-    const rangedAttack =
-      (attrs.agility || 1) + (skills.pistols || skills.automatics || 0);
+    const meleeAttack = (attrs.agility || 1) + (skills["unarmed-combat"] || skills.blades || 0);
+    const rangedAttack = (attrs.agility || 1) + (skills.pistols || skills.automatics || 0);
 
     // Defense pool
     const defense = (attrs.reaction || 1) + (attrs.intuition || 1);
 
     // Dodge (defense + gymnastics)
-    const dodge =
-      (attrs.reaction || 1) + (attrs.intuition || 1) + (skills.gymnastics || 0);
+    const dodge = (attrs.reaction || 1) + (attrs.intuition || 1) + (skills.gymnastics || 0);
 
     // Block (unarmed combat)
     const block = (attrs.reaction || 1) + (skills["unarmed-combat"] || 0);
 
     // Full defense (willpower added to defense)
-    const fullDefense =
-      (attrs.reaction || 1) + (attrs.intuition || 1) + (attrs.willpower || 1);
+    const fullDefense = (attrs.reaction || 1) + (attrs.intuition || 1) + (attrs.willpower || 1);
 
     // Soak (body + armor)
     const totalArmor =
-      character.armor?.reduce(
-        (sum, a) => (a.equipped ? sum + a.armorRating : sum),
-        0
-      ) || 0;
+      character.armor?.reduce((sum, a) => (a.equipped ? sum + a.armorRating : sum), 0) || 0;
     const soak = (attrs.body || 1) + totalArmor;
 
     return {
@@ -465,24 +467,26 @@ export function ActionPanel({
       >
         <div className="flex items-center gap-3">
           <Dice1 className={`w-5 h-5 ${theme.colors.accent}`} />
-          <span className={`font-medium ${theme.colors.heading}`}>
-            Action Panel
-          </span>
+          <span className={`font-medium ${theme.colors.heading}`}>Action Panel</span>
         </div>
         <div className="flex items-center gap-3">
           {/* Edge Quick Display */}
           <div className="flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
-            <span className={`${theme.fonts.mono} text-sm font-bold text-rose-500 dark:text-rose-400`}>
+            <span
+              className={`${theme.fonts.mono} text-sm font-bold text-rose-500 dark:text-rose-400`}
+            >
               {edgeCurrent}/{edgeMaximum}
             </span>
           </div>
           {/* Wound Modifier Display */}
           {woundModifier !== 0 && (
-            <span className={`
+            <span
+              className={`
               text-xs ${theme.fonts.mono} px-2 py-0.5 rounded border
               ${theme.components.badge.negative}
-            `}>
+            `}
+            >
               {woundModifier}
             </span>
           )}
@@ -510,7 +514,9 @@ export function ActionPanel({
           />
 
           {/* Limits */}
-          <div className={`grid grid-cols-3 gap-2 p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
+          <div
+            className={`grid grid-cols-3 gap-2 p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+          >
             <div className="text-center">
               <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
                 Physical
@@ -543,9 +549,10 @@ export function ActionPanel({
               onClick={() => setActiveTab("quick")}
               className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
-                ${activeTab === "quick"
-                  ? `${theme.colors.accent} bg-background shadow-sm`
-                  : `${theme.colors.muted} hover:text-foreground`
+                ${
+                  activeTab === "quick"
+                    ? `${theme.colors.accent} bg-background shadow-sm`
+                    : `${theme.colors.muted} hover:text-foreground`
                 }
               `}
             >
@@ -556,9 +563,10 @@ export function ActionPanel({
               onClick={() => setActiveTab("combat")}
               className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
-                ${activeTab === "combat"
-                  ? `${theme.colors.accent} bg-background shadow-sm`
-                  : `${theme.colors.muted} hover:text-foreground`
+                ${
+                  activeTab === "combat"
+                    ? `${theme.colors.accent} bg-background shadow-sm`
+                    : `${theme.colors.muted} hover:text-foreground`
                 }
                 ${isInCombat ? "ring-1 ring-amber-500/50" : ""}
               `}
@@ -573,9 +581,10 @@ export function ActionPanel({
               onClick={() => setActiveTab("advanced")}
               className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
-                ${activeTab === "advanced"
-                  ? `${theme.colors.accent} bg-background shadow-sm`
-                  : `${theme.colors.muted} hover:text-foreground`
+                ${
+                  activeTab === "advanced"
+                    ? `${theme.colors.accent} bg-background shadow-sm`
+                    : `${theme.colors.muted} hover:text-foreground`
                 }
               `}
             >
@@ -586,9 +595,10 @@ export function ActionPanel({
               onClick={() => setActiveTab("history")}
               className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
-                ${activeTab === "history"
-                  ? `${theme.colors.accent} bg-background shadow-sm`
-                  : `${theme.colors.muted} hover:text-foreground`
+                ${
+                  activeTab === "history"
+                    ? `${theme.colors.accent} bg-background shadow-sm`
+                    : `${theme.colors.muted} hover:text-foreground`
                 }
               `}
             >
@@ -660,37 +670,55 @@ export function ActionPanel({
             <div className="space-y-4">
               {/* Action Economy Display (when in combat) */}
               {isInCombat && actionEconomy && (
-                <div className={`p-2 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
-                  <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-2`}>
+                <div
+                  className={`p-2 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+                >
+                  <div
+                    className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-2`}
+                  >
                     Actions Remaining
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1" title="Free Actions">
                       <span className="text-xs text-muted-foreground">F</span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
-                        actionEconomy.free > 0 ? "bg-emerald-500/20 text-emerald-500" : "bg-muted text-muted-foreground"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                          actionEconomy.free > 0
+                            ? "bg-emerald-500/20 text-emerald-500"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
                         {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
                       </span>
                     </div>
                     <div className="flex items-center gap-1" title="Simple Actions">
                       <span className="text-xs text-muted-foreground">S</span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
-                        actionEconomy.simple > 0 ? "bg-blue-500/20 text-blue-500" : "bg-muted text-muted-foreground"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                          actionEconomy.simple > 0
+                            ? "bg-blue-500/20 text-blue-500"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
                         {actionEconomy.simple}
                       </span>
                     </div>
                     <div className="flex items-center gap-1" title="Complex Actions">
                       <span className="text-xs text-muted-foreground">C</span>
-                      <span className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
-                        actionEconomy.complex > 0 ? "bg-purple-500/20 text-purple-500" : "bg-muted text-muted-foreground"
-                      }`}>
+                      <span
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                          actionEconomy.complex > 0
+                            ? "bg-purple-500/20 text-purple-500"
+                            : "bg-muted text-muted-foreground"
+                        }`}
+                      >
                         {actionEconomy.complex}
                       </span>
                     </div>
                     <div className="flex items-center gap-1" title="Interrupt Available">
-                      <Shield className={`w-4 h-4 ${actionEconomy.interrupt ? "text-amber-500" : "text-muted-foreground"}`} />
+                      <Shield
+                        className={`w-4 h-4 ${actionEconomy.interrupt ? "text-amber-500" : "text-muted-foreground"}`}
+                      />
                     </div>
                   </div>
                 </div>
@@ -702,14 +730,20 @@ export function ActionPanel({
                   {/* Available Actions */}
                   {availableActions.length > 0 && (
                     <div className="space-y-2">
-                      <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                      <div
+                        className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
+                      >
                         Available Actions
                       </div>
                       <div className="space-y-1">
                         {availableActions.map((result) => {
                           const action = result.action;
                           const pool = calculateActionPool(action);
-                          const actionType = action.type as "free" | "simple" | "complex" | "interrupt";
+                          const actionType = action.type as
+                            | "free"
+                            | "simple"
+                            | "complex"
+                            | "interrupt";
                           const canUse = canUseAction(actionType);
 
                           return (
@@ -739,14 +773,20 @@ export function ActionPanel({
                   {/* Unavailable Actions (grayed out with reasons) */}
                   {unavailableActions.length > 0 && (
                     <div className="space-y-2">
-                      <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted} flex items-center gap-2`}>
+                      <div
+                        className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted} flex items-center gap-2`}
+                      >
                         <Lock className="w-3 h-3" />
                         Unavailable Actions
                       </div>
                       <div className="space-y-1">
                         {unavailableActions.map((result) => {
                           const action = result.action;
-                          const actionType = action.type as "free" | "simple" | "complex" | "interrupt";
+                          const actionType = action.type as
+                            | "free"
+                            | "simple"
+                            | "complex"
+                            | "interrupt";
                           const typeColors: Record<string, string> = {
                             free: "border-emerald-500/20",
                             simple: "border-blue-500/20",
@@ -778,7 +818,9 @@ export function ActionPanel({
                               <span className="flex-1 text-left font-medium text-muted-foreground">
                                 {action.name}
                               </span>
-                              <span className={`text-[10px] ${theme.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}>
+                              <span
+                                className={`text-[10px] ${theme.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}
+                              >
                                 {typeLabels[actionType]}
                               </span>
                               <AlertCircle className="w-4 h-4 text-amber-500" />
@@ -797,7 +839,9 @@ export function ActionPanel({
                     <>
                       {/* Attack Actions */}
                       <div className="space-y-2">
-                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                        <div
+                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
+                        >
                           Attack Actions
                         </div>
                         <div className="space-y-1">
@@ -834,7 +878,9 @@ export function ActionPanel({
 
                       {/* Defense Actions */}
                       <div className="space-y-2">
-                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                        <div
+                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
+                        >
                           Defense Actions
                         </div>
                         <div className="space-y-1">
@@ -871,7 +917,9 @@ export function ActionPanel({
 
                       {/* Resistance */}
                       <div className="space-y-2">
-                        <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+                        <div
+                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
+                        >
                           Resistance
                         </div>
                         <div className="space-y-1">
@@ -942,7 +990,9 @@ export function ActionPanel({
                   <div className="flex items-center gap-2">
                     <Button
                       onPress={() => {
-                        const needsTarget = selectedAction.subcategory === "ranged" || selectedAction.subcategory === "melee";
+                        const needsTarget =
+                          selectedAction.subcategory === "ranged" ||
+                          selectedAction.subcategory === "melee";
                         if (needsTarget && isInCombat) {
                           setFlowStep("target");
                         } else {
@@ -959,7 +1009,9 @@ export function ActionPanel({
                   </div>
 
                   {/* Action Summary */}
-                  <div className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}>
+                  <div
+                    className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+                  >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                         {getActionIcon(selectedAction)}
@@ -978,9 +1030,7 @@ export function ActionPanel({
                     {selectedTargetName && (
                       <div className="flex items-center gap-2 mb-3 p-2 rounded bg-amber-500/10 border border-amber-500/30">
                         <Target className="w-4 h-4 text-amber-500" />
-                        <span className="text-sm text-amber-500">
-                          Target: {selectedTargetName}
-                        </span>
+                        <span className="text-sm text-amber-500">Target: {selectedTargetName}</span>
                       </div>
                     )}
 
@@ -1000,7 +1050,10 @@ export function ActionPanel({
                       if (isInCombat) {
                         await handleExecuteAction(selectedAction.id);
                       }
-                      onOpenDiceRoller(pool, `${selectedAction.name}${selectedTargetName ? ` vs ${selectedTargetName}` : ""}`);
+                      onOpenDiceRoller(
+                        pool,
+                        `${selectedAction.name}${selectedTargetName ? ` vs ${selectedTargetName}` : ""}`
+                      );
                       resetFlow();
                     }}
                     isDisabled={combatLoading}
@@ -1064,10 +1117,12 @@ export function ActionPanel({
 
           {/* Wound Modifier Warning */}
           {woundModifier !== 0 && (
-            <div className={`
+            <div
+              className={`
               flex items-center gap-2 p-2 rounded text-xs border
               ${theme.components.badge.negative}
-            `}>
+            `}
+            >
               <span>Wound Modifier:</span>
               <span className={`${theme.fonts.mono} font-bold`}>{woundModifier}</span>
               <span className={theme.colors.muted}>(applied to all tests)</span>

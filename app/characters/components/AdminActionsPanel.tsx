@@ -84,7 +84,9 @@ export default function AdminActionsPanel({
               </div>
               <div className="flex items-center gap-2">
                 <span className="text-muted-foreground">Status:</span>
-                <span className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusBadgeColor(character.status)}`}>
+                <span
+                  className={`rounded-full px-2 py-0.5 text-xs font-medium ${getStatusBadgeColor(character.status)}`}
+                >
                   {character.status}
                 </span>
               </div>

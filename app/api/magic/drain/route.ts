@@ -1,15 +1,13 @@
 /**
  * API Route: /api/magic/drain
- * 
+ *
  * POST - Calculate drain for a magical action
  */
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacterById } from "@/lib/storage/characters";
-import { 
-  calculateDrain
-} from "@/lib/rules/magic";
+import { calculateDrain } from "@/lib/rules/magic";
 import type { Character, DrainAction } from "@/lib/types";
 
 export async function POST(request: NextRequest) {
@@ -21,23 +19,26 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { 
-      characterId, 
+    const {
+      characterId,
       action, // "cast", "summoning", "binding", "ritual", "preparation"
       force,
       spellId,
       spiritType,
-      traditionId 
+      traditionId,
     } = body;
 
     if (!action || force === undefined) {
-      return NextResponse.json({ success: false, error: "Action and force are required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Action and force are required" },
+        { status: 400 }
+      );
     }
 
     // Load character if ID provided (preferred)
     let character = null;
     let editionCode = body.editionCode;
-    
+
     if (characterId) {
       character = await getCharacterById(characterId);
       if (!character) {
@@ -47,18 +48,24 @@ export async function POST(request: NextRequest) {
     }
 
     if (!editionCode) {
-      return NextResponse.json({ success: false, error: "Edition code is required" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Edition code is required" },
+        { status: 400 }
+      );
     }
 
     // Load ruleset
     const { loadRuleset } = await import("@/lib/rules/loader");
     const loadResult = await loadRuleset({
       editionCode: editionCode,
-      bookIds: character?.attachedBookIds
+      bookIds: character?.attachedBookIds,
     });
 
     if (!loadResult.success || !loadResult.ruleset) {
-      return NextResponse.json({ success: false, error: loadResult.error || "Failed to load ruleset" }, { status: 500 });
+      return NextResponse.json(
+        { success: false, error: loadResult.error || "Failed to load ruleset" },
+        { status: 500 }
+      );
     }
 
     const ruleset = loadResult.ruleset;
@@ -71,7 +78,7 @@ export async function POST(request: NextRequest) {
         action: action as DrainAction,
         force,
         spellId,
-        spiritType
+        spiritType,
       },
       ruleset
     );
@@ -93,10 +100,9 @@ export async function POST(request: NextRequest) {
       formula: drainResult.drainFormula,
       details: {
         // Since we don't return full breakdown in simple DrainResult, we provide what we have
-        formData: drainResult.drainFormula
-      }
+        formData: drainResult.drainFormula,
+      },
     });
-
   } catch (error) {
     console.error("Drain calculation error:", error);
     const message = error instanceof Error ? error.message : "Internal server error";

@@ -288,9 +288,7 @@ describe("CombatTracker", () => {
 
     it("highlights selected participant", () => {
       const session = createMockSession();
-      const { container } = render(
-        <CombatTracker session={session} selectedParticipantId="p2" />
-      );
+      const { container } = render(<CombatTracker session={session} selectedParticipantId="p2" />);
 
       // The selected participant should have different styling
       const selectedRow = container.querySelector('[class*="border-zinc-600"]');

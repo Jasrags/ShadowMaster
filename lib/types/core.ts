@@ -30,4 +30,3 @@ export type MagicalPath =
  * - undefined: Legal, no suffix
  */
 export type ItemLegality = "restricted" | "forbidden";
-

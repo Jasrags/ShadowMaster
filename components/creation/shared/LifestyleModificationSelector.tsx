@@ -85,7 +85,7 @@ export function LifestyleModificationSelector({
     (mod) => !existingModifications.some((existing) => existing.catalogId === mod.id)
   );
 
-  const handleSelect = (mod: typeof DEFAULT_MODIFICATIONS[0]) => {
+  const handleSelect = (mod: (typeof DEFAULT_MODIFICATIONS)[0]) => {
     const modification: LifestyleModification = {
       catalogId: mod.id,
       name: mod.name,

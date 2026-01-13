@@ -30,7 +30,7 @@ export interface ContentCategory {
  */
 export interface ContentSummary {
   editionCode: EditionCode;
-  
+
   /** Total counts by domain */
   metatypeCount: number;
   skillCount: number;
@@ -39,10 +39,10 @@ export interface ContentSummary {
   gearCount: number;
   augmentationCount: number;
   vehicleCount: number;
-  
+
   /** Detailed category breakdowns */
   categories: ContentCategory[];
-  
+
   /** When this summary was generated */
   generatedAt: string;
 }
@@ -80,13 +80,13 @@ export interface BookSummary {
 export interface EditionDiscoveryMetadata {
   /** Game philosophy/design approach abstract */
   philosophy?: string;
-  
+
   /** Key mechanical features of this edition */
   mechanicalHighlights?: string[];
-  
+
   /** Types of content supported (core, sourcebook, adventure) */
   supportedContentTypes?: BookCategory[];
-  
+
   /** Tags for categorization and filtering */
   tags?: string[];
 }

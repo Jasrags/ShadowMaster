@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |
@@ -22,31 +22,31 @@ To make sure your character is ready to rock with a minimum of complication and 
 
 **FINAL CALCULATIONS TABLE**
 
-| MECHANIC | FORMULA |
-| --- | --- |
-| Initiative | (Intuition + Reaction) + 1D6 |
-| Astral Initiative | (Intuition x 2) + 2D6 |
-| Matrix AR Initiative | (Intuition + Reaction) + 1D6 |
-| Matrix VR Initiative (Cold Sim) | (Data Processing + Intuition) + 3D6 |
-| Matrix VR Initiative (Hot Sim) | (Data Processing + Intuition) + 4D6 |
-| Inherent Limits | Add appropriate attribute(s); calculate as listed below |
-| Mental | [(Logic x 2) + Intuition + Willpower] / 3 (round up) |
-| Physical | [(Strength x 2) + Body + Reaction] / 3 (round up) |
-| Social | [(Charisma x 2) + Willpower + Essence] / 3 (round up) |
-| Condition Monitor Boxes | Calculate as listed below |
-| Physical | [Body / 2] + 8 |
-| Stun | [Willpower / 2] + 8 |
-| Overflow | Body + Augmentation bonuses |
-| Living Persona |
-| Attack | Charisma |
-| Data Processing | Logic |
-| Device Rating | Resonance |
-| Firewall | Willpower |
-| Sleaze | Intuition |
-| Reputation |
-| Notoriety |
-| Public Awareness |
-| Street Cred |
+| MECHANIC                        | FORMULA                                                 |
+| ------------------------------- | ------------------------------------------------------- |
+| Initiative                      | (Intuition + Reaction) + 1D6                            |
+| Astral Initiative               | (Intuition x 2) + 2D6                                   |
+| Matrix AR Initiative            | (Intuition + Reaction) + 1D6                            |
+| Matrix VR Initiative (Cold Sim) | (Data Processing + Intuition) + 3D6                     |
+| Matrix VR Initiative (Hot Sim)  | (Data Processing + Intuition) + 4D6                     |
+| Inherent Limits                 | Add appropriate attribute(s); calculate as listed below |
+| Mental                          | [(Logic x 2) + Intuition + Willpower] / 3 (round up)    |
+| Physical                        | [(Strength x 2) + Body + Reaction] / 3 (round up)       |
+| Social                          | [(Charisma x 2) + Willpower + Essence] / 3 (round up)   |
+| Condition Monitor Boxes         | Calculate as listed below                               |
+| Physical                        | [Body / 2] + 8                                          |
+| Stun                            | [Willpower / 2] + 8                                     |
+| Overflow                        | Body + Augmentation bonuses                             |
+| Living Persona                  |
+| Attack                          | Charisma                                                |
+| Data Processing                 | Logic                                                   |
+| Device Rating                   | Resonance                                               |
+| Firewall                        | Willpower                                               |
+| Sleaze                          | Intuition                                               |
+| Reputation                      |
+| Notoriety                       |
+| Public Awareness                |
+| Street Cred                     |
 
 - Make sure you choose each row of the Priority Table once.
 

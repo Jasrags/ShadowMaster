@@ -39,7 +39,8 @@ export default function SignupPage() {
     if (!password) {
       errors.password = "Password is required";
     } else if (!isStrongPassword(password)) {
-      errors.password = getPasswordStrengthError(password) || "Password does not meet strength requirements";
+      errors.password =
+        getPasswordStrengthError(password) || "Password does not meet strength requirements";
     }
 
     if (!confirmPassword) {
@@ -75,7 +76,6 @@ export default function SignupPage() {
     }
   };
 
-
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
       <main className="w-full max-w-md px-6 py-12">
@@ -92,7 +92,10 @@ export default function SignupPage() {
             )}
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="email" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -104,10 +107,11 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.email
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                }`}
                 placeholder="you@example.com"
               />
               {validationErrors.email && (
@@ -118,7 +122,10 @@ export default function SignupPage() {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="username" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="username"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Username <span className="text-red-500">*</span>
               </label>
               <input
@@ -130,21 +137,29 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.username}
                 aria-describedby={validationErrors.username ? "username-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.username
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.username
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                }`}
                 placeholder="username"
               />
               {validationErrors.username && (
-                <p id="username-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                <p
+                  id="username-error"
+                  className="text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
                   {validationErrors.username}
                 </p>
               )}
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="password" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -156,21 +171,29 @@ export default function SignupPage() {
                 required
                 aria-invalid={!!validationErrors.password}
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.password
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                }`}
                 placeholder="••••••••"
               />
               {validationErrors.password && (
-                <p id="password-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                <p
+                  id="password-error"
+                  className="text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
                   {validationErrors.password}
                 </p>
               )}
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="confirmPassword" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="confirmPassword"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Confirm Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -181,15 +204,22 @@ export default function SignupPage() {
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 required
                 aria-invalid={!!validationErrors.confirmPassword}
-                aria-describedby={validationErrors.confirmPassword ? "confirmPassword-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.confirmPassword
+                aria-describedby={
+                  validationErrors.confirmPassword ? "confirmPassword-error" : undefined
+                }
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.confirmPassword
                     ? "border-red-500 dark:border-red-500"
                     : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                }`}
                 placeholder="••••••••"
               />
               {validationErrors.confirmPassword && (
-                <p id="confirmPassword-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                <p
+                  id="confirmPassword-error"
+                  className="text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
                   {validationErrors.confirmPassword}
                 </p>
               )}
@@ -220,4 +250,3 @@ export default function SignupPage() {
     </div>
   );
 }
-

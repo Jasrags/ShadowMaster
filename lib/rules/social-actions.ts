@@ -548,15 +548,12 @@ export function propagateSocialConsequences(
         (c) =>
           c.id !== targetContactId &&
           c.status === "active" &&
-          (c.organization === targetContact.organization ||
-            c.location === targetContact.location)
+          (c.organization === targetContact.organization || c.location === targetContact.location)
       );
 
       for (const related of relatedContacts.slice(0, 3)) {
         loyaltyChanges.push({ contactId: related.id, change: -1 });
-        warnings.push(
-          `${related.name} heard about the situation with ${targetContact.name}`
-        );
+        warnings.push(`${related.name} heard about the situation with ${targetContact.name}`);
       }
     }
   }

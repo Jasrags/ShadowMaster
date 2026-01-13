@@ -16,7 +16,7 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: 'success' | 'error', text: string } | null>(null);
+  const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,9 +25,9 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
 
     try {
       await onUpdate({ username, email });
-      setMessage({ type: 'success', text: 'Account updated successfully.' });
+      setMessage({ type: "success", text: "Account updated successfully." });
     } catch {
-      setMessage({ type: 'error', text: 'Failed to update account.' });
+      setMessage({ type: "error", text: "Failed to update account." });
     } finally {
       setLoading(false);
     }
@@ -45,10 +45,13 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
       <form onSubmit={handleSubmit} className="p-6">
         <div className="space-y-6">
           {message && (
-            <div className={`rounded-md p-4 transition-colors ${message.type === 'success'
-              ? 'bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20'
-              : 'bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20'
-              }`}>
+            <div
+              className={`rounded-md p-4 transition-colors ${
+                message.type === "success"
+                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
+                  : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
+              }`}
+            >
               {message.text}
             </div>
           )}
@@ -93,17 +96,13 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-foreground/80">
-                Role
-              </label>
+              <label className="block text-sm font-medium text-foreground/80">Role</label>
               <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
                 {user.role.join(", ")}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground/80">
-                Member Since
-              </label>
+              <label className="block text-sm font-medium text-foreground/80">Member Since</label>
               <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
                 {new Date(user.createdAt).toLocaleDateString()}
               </div>
@@ -117,7 +116,9 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
             disabled={loading}
             className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-black"
           >
-            {loading ? "Saving..." : (
+            {loading ? (
+              "Saving..."
+            ) : (
               <>
                 <Save className="mr-2 h-4 w-4" />
                 Save Changes

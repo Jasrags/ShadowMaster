@@ -12,10 +12,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
 import { loadRuleset, extractCyberware } from "@/lib/rules/loader";
-import {
-  validateAccessoryInstall,
-  addAccessory,
-} from "@/lib/rules/augmentations/cyberlimb";
+import { validateAccessoryInstall, addAccessory } from "@/lib/rules/augmentations/cyberlimb";
 import type { CyberwareCatalogItem } from "@/lib/types/edition";
 import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 
@@ -73,36 +70,24 @@ export async function POST(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Not authorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Find the limb
     const limbResult = findLimb(character, limbId);
     if (!limbResult) {
-      return NextResponse.json(
-        { success: false, error: "Cyberlimb not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Cyberlimb not found" }, { status: 404 });
     }
     const { limb, index: limbIndex } = limbResult;
 
@@ -112,10 +97,7 @@ export async function POST(
 
     // Validate required fields
     if (!catalogId) {
-      return NextResponse.json(
-        { success: false, error: "catalogId is required" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "catalogId is required" }, { status: 400 });
     }
 
     // Load ruleset to get catalog
@@ -144,10 +126,7 @@ export async function POST(
     // Validate the accessory can be installed
     const validationResult = validateAccessoryInstall(limb, catalogItem, character);
     if (!validationResult.valid) {
-      return NextResponse.json(
-        { success: false, error: validationResult.error },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: validationResult.error }, { status: 400 });
     }
 
     // Add the accessory
@@ -194,9 +173,6 @@ export async function POST(
     });
   } catch (error) {
     console.error("Failed to add accessory:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to add accessory" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to add accessory" }, { status: 500 });
   }
 }

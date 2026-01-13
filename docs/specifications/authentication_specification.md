@@ -561,13 +561,11 @@ Implement rate limiting to prevent brute force attacks:
 **Implementation Options:**
 
 1. **In-memory store** (simple, single-server only)
-
    - Use Map with email → attempt count + timestamp
    - Clear expired entries periodically
    - Works for single-server deployments
 
 2. **Redis** (recommended for production)
-
    - Store attempt counts with TTL
    - Works across multiple servers
    - Better performance and scalability
@@ -850,7 +848,6 @@ lib/
 ### Dependencies
 
 - **Existing:**
-
   - `bcryptjs` - Password hashing
   - `next/server` - API routes, cookies
   - `react-aria-components` - Accessible UI components
@@ -875,7 +872,6 @@ lib/
 
 ---
 
-
 ## Related Documentation
 
 - **User Management:** `/docs/prompts/user-management-feature-request.md`
@@ -889,39 +885,30 @@ lib/
 ## Open Questions
 
 1. **Rate Limiting Implementation:** Should we use in-memory store (simple) or Redis (scalable)?
-
    - **Recommendation:** Start with in-memory for MVP, migrate to Redis when scaling
 
 2. **Session Duration:** Should "Remember me" extend session duration beyond 7 days?
-
    - **Recommendation:** Yes - 7 days normal, 30 days with "Remember me" (future enhancement)
 
 3. **Email Verification:** Should we require email verification before account activation?
-
    - **Recommendation:** Phase 2 feature - start without, add later for enhanced security
 
 4. **Password Reset:** What's the priority for password reset functionality?
-
    - **Recommendation:** High priority - users will need this, implement in Phase 2
 
 5. **Account Lockout:** Should we implement account lockout after failed attempts?
-
    - **Recommendation:** Yes, high priority security feature - implement with rate limiting
 
 6. **2FA:** When should we implement two-factor authentication?
-
    - **Recommendation:** Phase 3 - after core features are stable, for enhanced security
 
 7. **Session Management:** Should we move to session tokens instead of user IDs?
-
    - **Recommendation:** Phase 2 - improves security, allows session revocation
 
 8. **Logging:** What level of authentication event logging is needed?
-
    - **Recommendation:** Log all authentication events (sign-in, sign-up, failures) for security monitoring
 
 9. **Password Strength:** Should we add a visual password strength meter?
-
    - **Recommendation:** Yes, improves UX - implement in Phase 2
 
 10. **Social Login:** Should we support OAuth providers (Google, etc.)?
@@ -938,31 +925,26 @@ lib/
 **Recommended Next Steps (Priority Order):**
 
 1. **Rate Limiting** (Critical Security)
-
    - Implement rate limiting on sign-in endpoint
    - Implement rate limiting on sign-up endpoint
    - Estimated effort: 2-3 days
 
 2. **Account Lockout** (High Security)
-
    - Lock account after 5 failed attempts
    - Implement unlock mechanism
    - Estimated effort: 1-2 days
 
 3. **Password Reset** (High UX)
-
    - Implement password reset flow
    - Secure token generation and validation
    - Estimated effort: 3-4 days
 
 4. **Enhanced Logging** (Medium Security)
-
    - Log authentication events
    - Implement security monitoring
    - Estimated effort: 2-3 days
 
 5. **Email Verification** (Medium Security)
-
    - Send verification email
    - Require verification before activation
    - Estimated effort: 3-4 days

@@ -5,32 +5,32 @@
  * including authentication, validation, and training management operations.
  */
 
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { POST } from '@/app/api/characters/[characterId]/training/[trainingId]/route';
-import { GET as GET_TRAINING } from '@/app/api/characters/[characterId]/training/route';
-import { NextRequest } from 'next/server';
-import * as sessionModule from '@/lib/auth/session';
-import * as userStorageModule from '@/lib/storage/users';
-import * as characterStorageModule from '@/lib/storage/characters';
-import * as advancementModule from '@/lib/rules/advancement';
-import * as completionModule from '@/lib/rules/advancement/completion';
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { POST } from "@/app/api/characters/[characterId]/training/[trainingId]/route";
+import { GET as GET_TRAINING } from "@/app/api/characters/[characterId]/training/route";
+import { NextRequest } from "next/server";
+import * as sessionModule from "@/lib/auth/session";
+import * as userStorageModule from "@/lib/storage/users";
+import * as characterStorageModule from "@/lib/storage/characters";
+import * as advancementModule from "@/lib/rules/advancement";
+import * as completionModule from "@/lib/rules/advancement/completion";
 
-import type { Character, TrainingPeriod, AdvancementRecord } from '@/lib/types';
-import { createMockCharacter, createMockUser } from '@/__tests__/mocks/storage';
+import type { Character, TrainingPeriod, AdvancementRecord } from "@/lib/types";
+import { createMockCharacter, createMockUser } from "@/__tests__/mocks/storage";
 
 // Mock dependencies
-vi.mock('@/lib/auth/session');
-vi.mock('@/lib/storage/users');
-vi.mock('@/lib/storage/characters');
-vi.mock('@/lib/rules/advancement');
-vi.mock('@/lib/rules/advancement/completion');
+vi.mock("@/lib/auth/session");
+vi.mock("@/lib/storage/users");
+vi.mock("@/lib/storage/characters");
+vi.mock("@/lib/rules/advancement");
+vi.mock("@/lib/rules/advancement/completion");
 
 // Helper to create a NextRequest with JSON body
-function createMockRequest(url: string, body?: unknown, method = 'GET'): NextRequest {
+function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
   const request = new NextRequest(url, {
     method,
     body: body ? JSON.stringify(body) : undefined,
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
+    headers: body ? { "Content-Type": "application/json" } : undefined,
   });
 
   // Mock json() method if body is provided
@@ -41,9 +41,9 @@ function createMockRequest(url: string, body?: unknown, method = 'GET'): NextReq
   return request;
 }
 
-describe('GET /api/characters/[characterId]/training', () => {
-  const userId = 'test-user-id';
-  const characterId = 'test-character-id';
+describe("GET /api/characters/[characterId]/training", () => {
+  const userId = "test-user-id";
+  const characterId = "test-character-id";
   let mockCharacter: Character;
 
   beforeEach(() => {
@@ -52,30 +52,32 @@ describe('GET /api/characters/[characterId]/training', () => {
     mockCharacter = createMockCharacter({
       id: characterId,
       ownerId: userId,
-      status: 'active',
+      status: "active",
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
-      id: userId,
-      email: 'test@example.com',
-      username: 'testuser',
-    }));
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(
+      createMockUser({
+        id: userId,
+        email: "test@example.com",
+        username: "testuser",
+      })
+    );
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
   });
 
-  it('should return active and completed training', async () => {
+  it("should return active and completed training", async () => {
     const activeTraining: TrainingPeriod[] = [
       {
-        id: 'training-1',
-        advancementRecordId: 'advancement-1',
-        type: 'attribute',
-        targetId: 'body',
-        targetName: 'Body',
+        id: "training-1",
+        advancementRecordId: "advancement-1",
+        type: "attribute",
+        targetId: "body",
+        targetName: "Body",
         requiredTime: 28,
         timeSpent: 7,
         startDate: new Date().toISOString(),
-        status: 'in-progress',
+        status: "in-progress",
         createdAt: new Date().toISOString(),
       },
     ];
@@ -83,16 +85,16 @@ describe('GET /api/characters/[characterId]/training', () => {
     const completedTraining = [
       {
         advancementRecord: {
-          id: 'advancement-2',
-          type: 'skill' as const,
-          targetId: 'firearms',
-          targetName: 'Firearms',
+          id: "advancement-2",
+          type: "skill" as const,
+          targetId: "firearms",
+          targetName: "Firearms",
           previousValue: 2,
           newValue: 3,
           karmaCost: 6,
           karmaSpentAt: new Date().toISOString(),
           trainingRequired: true,
-          trainingStatus: 'completed' as const,
+          trainingStatus: "completed" as const,
           createdAt: new Date().toISOString(),
           completedAt: new Date().toISOString(),
           gmApproved: false,
@@ -106,7 +108,7 @@ describe('GET /api/characters/[characterId]/training', () => {
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training`,
       undefined,
-      'GET'
+      "GET"
     );
 
     const response = await GET_TRAINING(request, { params: Promise.resolve({ characterId }) });
@@ -118,13 +120,13 @@ describe('GET /api/characters/[characterId]/training', () => {
     expect(data.completedTraining).toEqual(completedTraining);
   });
 
-  it('should return 401 when not authenticated', async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training`,
       undefined,
-      'GET'
+      "GET"
     );
 
     const response = await GET_TRAINING(request, { params: Promise.resolve({ characterId }) });
@@ -132,16 +134,16 @@ describe('GET /api/characters/[characterId]/training', () => {
 
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
+    expect(data.error).toBe("Unauthorized");
   });
 
-  it('should return 404 when character not found', async () => {
+  it("should return 404 when character not found", async () => {
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(null);
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training`,
       undefined,
-      'GET'
+      "GET"
     );
 
     const response = await GET_TRAINING(request, { params: Promise.resolve({ characterId }) });
@@ -149,14 +151,14 @@ describe('GET /api/characters/[characterId]/training', () => {
 
     expect(response.status).toBe(404);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Character not found');
+    expect(data.error).toBe("Character not found");
   });
 });
 
-describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
-  const userId = 'test-user-id';
-  const characterId = 'test-character-id';
-  const trainingId = 'training-1';
+describe("POST /api/characters/[characterId]/training/[trainingId]", () => {
+  const userId = "test-user-id";
+  const characterId = "test-character-id";
+  const trainingId = "training-1";
   let mockCharacter: Character;
   let mockTrainingPeriod: TrainingPeriod;
   let mockAdvancementRecord: AdvancementRecord;
@@ -165,16 +167,16 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     vi.clearAllMocks();
 
     mockAdvancementRecord = {
-      id: 'advancement-1',
-      type: 'attribute',
-      targetId: 'body',
-      targetName: 'Body',
+      id: "advancement-1",
+      type: "attribute",
+      targetId: "body",
+      targetName: "Body",
       previousValue: 3,
       newValue: 4,
       karmaCost: 20,
       karmaSpentAt: new Date().toISOString(),
       trainingRequired: true,
-      trainingStatus: 'pending',
+      trainingStatus: "pending",
       trainingPeriodId: trainingId,
       createdAt: new Date().toISOString(),
       gmApproved: false,
@@ -183,44 +185,46 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     mockTrainingPeriod = {
       id: trainingId,
       advancementRecordId: mockAdvancementRecord.id,
-      type: 'attribute',
-      targetId: 'body',
-      targetName: 'Body',
+      type: "attribute",
+      targetId: "body",
+      targetName: "Body",
       requiredTime: 28,
       timeSpent: 0,
       startDate: new Date().toISOString(),
-      status: 'pending',
+      status: "pending",
       createdAt: new Date().toISOString(),
     };
 
     mockCharacter = createMockCharacter({
       id: characterId,
       ownerId: userId,
-      status: 'active',
+      status: "active",
       attributes: { body: 3 },
       advancementHistory: [mockAdvancementRecord],
       activeTraining: [mockTrainingPeriod],
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(userStorageModule.getUserById).mockResolvedValue(createMockUser({
-      id: userId,
-      email: 'test@example.com',
-      username: 'testuser',
-    }));
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(
+      createMockUser({
+        id: userId,
+        email: "test@example.com",
+        username: "testuser",
+      })
+    );
     vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
   });
 
-  it('should complete training successfully', async () => {
+  it("should complete training successfully", async () => {
     const completedTrainingPeriod: TrainingPeriod = {
       ...mockTrainingPeriod,
-      status: 'completed',
+      status: "completed",
       actualCompletionDate: new Date().toISOString(),
     };
 
     const completedAdvancementRecord: AdvancementRecord = {
       ...mockAdvancementRecord,
-      trainingStatus: 'completed',
+      trainingStatus: "completed",
       completedAt: new Date().toISOString(),
     };
 
@@ -243,8 +247,8 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'complete' },
-      'POST'
+      { action: "complete" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -260,17 +264,17 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     expect(data.character.attributes.body).toBe(4); // Attribute updated
   });
 
-  it('should interrupt training successfully', async () => {
+  it("should interrupt training successfully", async () => {
     const interruptedTrainingPeriod: TrainingPeriod = {
       ...mockTrainingPeriod,
-      status: 'interrupted',
+      status: "interrupted",
       interruptionDate: new Date().toISOString(),
-      interruptionReason: 'Emergency',
+      interruptionReason: "Emergency",
     };
 
     const updatedAdvancementRecord: AdvancementRecord = {
       ...mockAdvancementRecord,
-      trainingStatus: 'interrupted',
+      trainingStatus: "interrupted",
     };
 
     const updatedCharacter: Character = {
@@ -291,8 +295,8 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'interrupt', reason: 'Emergency' },
-      'POST'
+      { action: "interrupt", reason: "Emergency" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -303,24 +307,24 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.interruptedTrainingPeriod).toBeDefined();
-    expect(data.interruptedTrainingPeriod.status).toBe('interrupted');
+    expect(data.interruptedTrainingPeriod.status).toBe("interrupted");
   });
 
-  it('should resume training successfully', async () => {
+  it("should resume training successfully", async () => {
     const interruptedTrainingPeriod: TrainingPeriod = {
       ...mockTrainingPeriod,
-      status: 'interrupted',
+      status: "interrupted",
       interruptionDate: new Date().toISOString(),
     };
 
     const resumedTrainingPeriod: TrainingPeriod = {
       ...interruptedTrainingPeriod,
-      status: 'in-progress',
+      status: "in-progress",
     };
 
     const updatedAdvancementRecord: AdvancementRecord = {
       ...mockAdvancementRecord,
-      trainingStatus: 'in-progress',
+      trainingStatus: "in-progress",
     };
 
     const updatedCharacter: Character = {
@@ -341,8 +345,8 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'resume' },
-      'POST'
+      { action: "resume" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -353,16 +357,16 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
     expect(data.resumedTrainingPeriod).toBeDefined();
-    expect(data.resumedTrainingPeriod.status).toBe('in-progress');
+    expect(data.resumedTrainingPeriod.status).toBe("in-progress");
   });
 
-  it('should return 401 when not authenticated', async () => {
+  it("should return 401 when not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'complete' },
-      'POST'
+      { action: "complete" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -372,14 +376,14 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
-    expect(data.error).toBe('Unauthorized');
+    expect(data.error).toBe("Unauthorized");
   });
 
-  it('should return 400 when action is missing', async () => {
+  it("should return 400 when action is missing", async () => {
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
       {},
-      'POST'
+      "POST"
     );
 
     const response = await POST(request, {
@@ -389,14 +393,14 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toContain('Missing or invalid action');
+    expect(data.error).toContain("Missing or invalid action");
   });
 
-  it('should return 400 when action is invalid', async () => {
+  it("should return 400 when action is invalid", async () => {
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'invalid-action' },
-      'POST'
+      { action: "invalid-action" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -406,18 +410,18 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toContain('Invalid action');
+    expect(data.error).toContain("Invalid action");
   });
 
-  it('should return 400 when training operation fails', async () => {
+  it("should return 400 when training operation fails", async () => {
     vi.mocked(advancementModule.completeTraining).mockImplementation(() => {
-      throw new Error('Training period not found');
+      throw new Error("Training period not found");
     });
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/training/${trainingId}`,
-      { action: 'complete' },
-      'POST'
+      { action: "complete" },
+      "POST"
     );
 
     const response = await POST(request, {
@@ -427,7 +431,6 @@ describe('POST /api/characters/[characterId]/training/[trainingId]', () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toContain('Training period not found');
+    expect(data.error).toContain("Training period not found");
   });
 });
-

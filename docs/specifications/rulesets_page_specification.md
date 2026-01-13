@@ -25,7 +25,6 @@ This page is accessible from the main navigation sidebar.
 
 ---
 
-
 ## Implementation Record (MVP - 2025-01-27)
 
 The logic for this page was implemented as specified, with the following technical notes:
@@ -40,6 +39,7 @@ The logic for this page was implemented as specified, with the following technic
 ## Page Structure
 
 ### Route
+
 - **Path:** `/app/rulesets/page.tsx`
 - **Layout:** Uses `RulesetsLayout` (wrapping `AuthenticatedLayout`)
 - **Authentication:** Required (protected route)
@@ -83,12 +83,14 @@ The logic for this page was implemented as specified, with the following technic
 **Location:** `/app/rulesets/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display all available editions
 - Handle edition selection
 - Coordinate between edition browser and detail view
 - Manage loading and error states
 
 **State:**
+
 - `editions: Edition[]` - All available editions
 - `selectedEdition: EditionCode | null` - Currently selected edition
 - `loading: boolean` - Loading state
@@ -105,6 +107,7 @@ The logic for this page was implemented as specified, with the following technic
 **Description:** Grid/list view of all available editions, similar to `EditionSelector` but optimized for browsing rather than selection.
 
 **Features:**
+
 - Display all editions in a responsive grid
 - Show edition metadata (name, year, description)
 - Visual indicators for availability status
@@ -113,6 +116,7 @@ The logic for this page was implemented as specified, with the following technic
 - Badge showing creation methods count
 
 **Props:**
+
 ```typescript
 interface EditionBrowserProps {
   editions: Edition[];
@@ -122,6 +126,7 @@ interface EditionBrowserProps {
 ```
 
 **Visual Design:**
+
 - Card-based layout (similar to `EditionSelector`)
 - Hover effects with elevation
 - Active/selected state highlighting
@@ -138,6 +143,7 @@ interface EditionBrowserProps {
 **Sections:**
 
 #### 3.1 Edition Header
+
 - Edition name and year
 - Description
 - Version information
@@ -145,6 +151,7 @@ interface EditionBrowserProps {
 - Quick action: "Create Character with this Edition" button
 
 #### 3.2 Books Section
+
 - List of all books available for the edition
 - Core rulebook highlighted
 - Sourcebooks listed with categories
@@ -152,12 +159,14 @@ interface EditionBrowserProps {
 - Expandable book details (future: show rule modules in each book)
 
 #### 3.3 Creation Methods Section
+
 - List of available creation methods
 - Default method highlighted
 - Brief description of each method
 - Link to character creation with pre-selected method
 
 #### 3.4 Content Preview Tabs
+
 - **Metatypes:** List of playable races
 - **Skills:** Skill categories and counts
 - **Gear:** Equipment categories
@@ -167,6 +176,7 @@ interface EditionBrowserProps {
 - **Matrix:** Programs, complex forms count
 
 **Props:**
+
 ```typescript
 interface EditionDetailViewProps {
   editionCode: EditionCode;
@@ -176,6 +186,7 @@ interface EditionDetailViewProps {
 ```
 
 **State:**
+
 - `activeTab: ContentTab` - Currently active preview tab
 - `rulesetData: RulesetData | null` - Loaded ruleset data for preview
 
@@ -188,6 +199,7 @@ interface EditionDetailViewProps {
 **Description:** Individual book display card showing metadata and category.
 
 **Features:**
+
 - Book title and abbreviation
 - Category badge (Core, Sourcebook, Adventure, etc.)
 - Publisher and release year
@@ -195,6 +207,7 @@ interface EditionDetailViewProps {
 - Expandable details (future)
 
 **Props:**
+
 ```typescript
 interface BookCardProps {
   book: Book;
@@ -211,12 +224,14 @@ interface BookCardProps {
 **Description:** Display card for a character creation method.
 
 **Features:**
+
 - Method name and ID
 - Brief description
 - Default indicator if applicable
 - "Use this method" action button
 
 **Props:**
+
 ```typescript
 interface CreationMethodCardProps {
   method: CreationMethod;
@@ -234,6 +249,7 @@ interface CreationMethodCardProps {
 **Description:** Tabbed interface for previewing ruleset content without loading full ruleset.
 
 **Tabs:**
+
 - **Overview:** Summary statistics
 - **Metatypes:** List with basic stats
 - **Skills:** Categories and skill counts
@@ -244,6 +260,7 @@ interface CreationMethodCardProps {
 - **Matrix:** Programs and complex forms
 
 **Props:**
+
 ```typescript
 interface ContentPreviewTabsProps {
   editionCode: EditionCode;
@@ -260,9 +277,11 @@ interface ContentPreviewTabsProps {
 ### API Endpoints
 
 #### 1. GET `/api/editions`
+
 **Purpose:** List all available editions
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -275,9 +294,11 @@ interface ContentPreviewTabsProps {
 ---
 
 #### 2. GET `/api/editions/[editionCode]`
+
 **Purpose:** Get detailed edition information including books and creation methods
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -292,9 +313,11 @@ interface ContentPreviewTabsProps {
 ---
 
 #### 3. GET `/api/rulesets/[editionCode]/summary`
+
 **Purpose:** Get summary statistics about ruleset content without full load
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -400,7 +423,6 @@ app/rulesets/
 
 ---
 
-
 ## Future Enhancements
 
 ### Phase 2: Content Exploration
@@ -470,4 +492,3 @@ This feature enhances discoverability and user education but is not critical for
 - Consider adding analytics to track which editions users explore most
 - Future: Consider adding user ratings/reviews for editions (community feature)
 - Integration with campaign management (future): Allow GMs to specify which editions/books are allowed in their campaigns
-

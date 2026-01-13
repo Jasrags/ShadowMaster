@@ -20,18 +20,16 @@ import type { DrainResult } from "@/lib/types/magic";
 // TEST FIXTURES
 // =============================================================================
 
-function createMockCharacter(
-  overrides: Partial<Character> = {}
-): Partial<Character> {
+function createMockCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
     id: "test-character",
     name: "Test Character",
     attributes: {
-      body: 4,       // Physical track = 10
+      body: 4, // Physical track = 10
       agility: 4,
       reaction: 3,
       strength: 2,
-      willpower: 4,  // Stun track = 10
+      willpower: 4, // Stun track = 10
       logic: 5,
       intuition: 3,
       charisma: 3,
@@ -164,26 +162,17 @@ describe("applyDrain", () => {
 
 describe("checkBurnoutRisk", () => {
   it("should return true when close to stun incapacitation", () => {
-    const result = checkBurnoutRisk(
-      { stun: 8, physical: 0 },
-      { stunTrack: 10, physicalTrack: 10 }
-    );
+    const result = checkBurnoutRisk({ stun: 8, physical: 0 }, { stunTrack: 10, physicalTrack: 10 });
     expect(result).toBe(true);
   });
 
   it("should return true when close to physical incapacitation", () => {
-    const result = checkBurnoutRisk(
-      { stun: 0, physical: 8 },
-      { stunTrack: 10, physicalTrack: 10 }
-    );
+    const result = checkBurnoutRisk({ stun: 0, physical: 8 }, { stunTrack: 10, physicalTrack: 10 });
     expect(result).toBe(true);
   });
 
   it("should return false when plenty of track remaining", () => {
-    const result = checkBurnoutRisk(
-      { stun: 3, physical: 2 },
-      { stunTrack: 10, physicalTrack: 10 }
-    );
+    const result = checkBurnoutRisk({ stun: 3, physical: 2 }, { stunTrack: 10, physicalTrack: 10 });
     expect(result).toBe(false);
   });
 });
@@ -226,7 +215,7 @@ describe("createDrainSession", () => {
 describe("recordDrainEvent", () => {
   it("should add event to session", () => {
     let session = createDrainSession("session-1", "char-1");
-    
+
     session = recordDrainEvent(session, {
       action: "spellcasting",
       drainValue: 5,
@@ -244,7 +233,7 @@ describe("recordDrainEvent", () => {
 
   it("should accumulate drain across events", () => {
     let session = createDrainSession("session-1", "char-1");
-    
+
     session = recordDrainEvent(session, {
       action: "spellcasting",
       drainValue: 5,
@@ -252,7 +241,7 @@ describe("recordDrainEvent", () => {
       resistanceHits: 2,
       damageApplied: 3,
     });
-    
+
     session = recordDrainEvent(session, {
       action: "summoning",
       drainValue: 4,
@@ -269,7 +258,7 @@ describe("recordDrainEvent", () => {
 describe("getDrainSessionSummary", () => {
   it("should summarize session statistics", () => {
     let session = createDrainSession("session-1", "char-1");
-    
+
     session = recordDrainEvent(session, {
       action: "spellcasting",
       drainValue: 5,
@@ -277,7 +266,7 @@ describe("getDrainSessionSummary", () => {
       resistanceHits: 2,
       damageApplied: 3,
     });
-    
+
     session = recordDrainEvent(session, {
       action: "summoning",
       drainValue: 8,

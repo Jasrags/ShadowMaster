@@ -1,9 +1,9 @@
 # Vehicle Test Threshold Table
 
-| Situation | Threshold | Examples |
-| :-------- | :-------- | :------- |
-| Easy | 1 | Merging, passing, sudden stop, drift or gradual turn (less than 75 degrees) |
-| Average | 2 | Avoiding an obstacle, maneuvering through a narrow spot, tight turn (75-130 degrees) |
-| Hard | 3 | Hairpin turn, "stoppie" on a motorbike, driving through unusual places (mall), "dog leg" or hairpin turn (greater than 130 degrees) |
-| Extreme | 4+ | Jumping vehicle over an obstacle, driving through a space just big enough for the vehicle, while ramping a vehicle through the air rolling it *just enough* to have a hook from an overhanging crane knock a bomb off the bottom of the vehicle before it explodes |
-| Driver Jumped In with Control Rig | -Control Rig rating | A rigger using a Control Rig has a much easier time controlling a vehicle she can feel |
+| Situation                         | Threshold           | Examples                                                                                                                                                                                                                                                           |
+| :-------------------------------- | :------------------ | :----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Easy                              | 1                   | Merging, passing, sudden stop, drift or gradual turn (less than 75 degrees)                                                                                                                                                                                        |
+| Average                           | 2                   | Avoiding an obstacle, maneuvering through a narrow spot, tight turn (75-130 degrees)                                                                                                                                                                               |
+| Hard                              | 3                   | Hairpin turn, "stoppie" on a motorbike, driving through unusual places (mall), "dog leg" or hairpin turn (greater than 130 degrees)                                                                                                                                |
+| Extreme                           | 4+                  | Jumping vehicle over an obstacle, driving through a space just big enough for the vehicle, while ramping a vehicle through the air rolling it _just enough_ to have a hook from an overhanging crane knock a bomb off the bottom of the vehicle before it explodes |
+| Driver Jumped In with Control Rig | -Control Rig rating | A rigger using a Control Rig has a much easier time controlling a vehicle she can feel                                                                                                                                                                             |

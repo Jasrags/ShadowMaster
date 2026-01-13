@@ -15,6 +15,7 @@
 Cyberware and Bioware are augmentation systems that allow characters to enhance their physical and mental capabilities at the cost of Essence—their metaphysical connection to the world. This specification covers the complete lifecycle of augmentations in Shadow Master, from character creation through gameplay.
 
 **Key Features:**
+
 - Comprehensive cyberware catalog with 12+ categories
 - Bioware catalog with 6 categories (basic and cultured)
 - Grade system affecting essence cost, nuyen cost, and availability
@@ -28,8 +29,6 @@ Cyberware and Bioware are augmentation systems that allow characters to enhance 
 **Current Status:** Foundational types and data structures implemented. GearStep provides basic augmentation selection during character creation. See [Acceptance Criteria](#acceptance-criteria) for detailed status.
 
 ---
-
-
 
 ## Data Structures
 
@@ -270,6 +269,7 @@ interface AugmentationRulesData {
 **Purpose:** Dedicated step for selecting cyberware and bioware during character creation.
 
 **Props:**
+
 ```typescript
 interface AugmentationsStepProps {
   state: CreationState;
@@ -279,6 +279,7 @@ interface AugmentationsStepProps {
 ```
 
 **Sections:**
+
 1. **Essence Budget Display** - Visual progress bar showing essence spent/remaining
 2. **Cyberware Browser** - Categorized list with filters
 3. **Bioware Browser** - Categorized list with filters
@@ -286,6 +287,7 @@ interface AugmentationsStepProps {
 5. **Cyberlimb Customizer** - Modal/panel for configuring cyberlimbs
 
 **Features:**
+
 - Category accordion for navigation
 - Grade selector per item
 - Search/filter bar
@@ -301,6 +303,7 @@ interface AugmentationsStepProps {
 **Purpose:** Display a single augmentation option in the catalog browser.
 
 **Props:**
+
 ```typescript
 interface AugmentationCardProps {
   item: CyberwareCatalogItem | BiowareCatalogItem;
@@ -314,6 +317,7 @@ interface AugmentationCardProps {
 ```
 
 **Display:**
+
 - Item name and category
 - Base essence cost (with grade modifier preview)
 - Base cost (with grade modifier preview)
@@ -329,6 +333,7 @@ interface AugmentationCardProps {
 **Purpose:** Display an augmentation that has been selected/installed.
 
 **Props:**
+
 ```typescript
 interface InstalledAugmentationCardProps {
   item: CyberwareItem | BiowareItem;
@@ -339,6 +344,7 @@ interface InstalledAugmentationCardProps {
 ```
 
 **Display:**
+
 - Item name with grade badge
 - Final essence cost
 - Final nuyen cost
@@ -353,6 +359,7 @@ interface InstalledAugmentationCardProps {
 **Purpose:** Modal for configuring a cyberlimb with enhancements.
 
 **Props:**
+
 ```typescript
 interface CyberlimbCustomizerProps {
   cyberlimb: CyberwareItem;
@@ -363,6 +370,7 @@ interface CyberlimbCustomizerProps {
 ```
 
 **Features:**
+
 - Base stats display (STR 3, AGI 3)
 - Attribute customization (+1 to +3)
 - Capacity display and tracking
@@ -377,6 +385,7 @@ interface CyberlimbCustomizerProps {
 **Purpose:** Reusable essence tracking display.
 
 **Props:**
+
 ```typescript
 interface EssenceDisplayProps {
   maxEssence: number;
@@ -388,6 +397,7 @@ interface EssenceDisplayProps {
 ```
 
 **Display:**
+
 - Progress bar (full to empty)
 - Numeric display (e.g., "4.35 / 6.00")
 - Color coding (green > 4, yellow 2-4, red < 2)
@@ -403,6 +413,7 @@ interface EssenceDisplayProps {
 **Location:** Right column of character sheet
 
 **Display Structure:**
+
 ```
 ┌─────────────────────────────────────┐
 │ AUGMENTATIONS                       │
@@ -446,21 +457,25 @@ interface EssenceDisplayProps {
 Augmentations affect character derived stats:
 
 **Attributes:**
+
 - Muscle Toner: +AGI (up to +4)
 - Muscle Augmentation: +STR (up to +4)
 - Cerebral Booster: +LOG (up to +3)
 - Bone Density Augmentation: +Body for damage resistance
 
 **Initiative:**
+
 - Wired Reflexes: +REA and +1d6 per rating
 - Synaptic Booster: +REA and +1d6 per rating
 - Reaction Enhancers: +REA per rating
 
 **Limits:**
+
 - Cyberlimb Physical Limit: Uses limb's average attribute for Physical Limit
 - Bone Lacing: Increases unarmed damage
 
 **Defense:**
+
 - Dermal Plating: +Armor
 - Bone Lacing: +Armor (adamantium, titanium)
 - Orthoskin: +Armor
@@ -472,12 +487,14 @@ Augmentations affect character derived stats:
 ### Essence System
 
 **Core Rules:**
+
 1. Characters start with 6.0 Essence
 2. Each augmentation costs Essence (modified by grade)
 3. Essence cannot drop below 0.01 (death occurs at 0)
 4. Each full point of Essence loss reduces Magic/Resonance by 1
 
 **Essence Calculation:**
+
 ```typescript
 function calculateEssenceCost(
   baseCost: number,
@@ -493,29 +510,31 @@ function calculateEssenceCost(
 
 **Grade Multipliers:**
 
-| Grade | Cyberware | Bioware | Cost Multi | Avail Mod |
-|-------|-----------|---------|------------|-----------|
-| Used | 1.25x | N/A | 0.5x | -4 |
-| Standard | 1.0x | 1.0x | 1.0x | 0 |
-| Alpha | 0.8x | 0.8x | 2.0x | +2 |
-| Beta | 0.6x | 0.6x | 4.0x | +4 |
-| Delta | 0.5x | 0.5x | 10.0x | +8 |
+| Grade    | Cyberware | Bioware | Cost Multi | Avail Mod |
+| -------- | --------- | ------- | ---------- | --------- |
+| Used     | 1.25x     | N/A     | 0.5x       | -4        |
+| Standard | 1.0x      | 1.0x    | 1.0x       | 0         |
+| Alpha    | 0.8x      | 0.8x    | 2.0x       | +2        |
+| Beta     | 0.6x      | 0.6x    | 4.0x       | +4        |
+| Delta    | 0.5x      | 0.5x    | 10.0x      | +8        |
 
 ### Essence Holes (Magic Users)
 
 When a magic user loses Essence, their maximum Magic is reduced. If they later remove augmentations, the "essence hole" represents permanent Magic loss.
 
 **Tracking:**
+
 ```typescript
 interface EssenceHoleState {
-  peakEssenceLoss: number;    // Highest Essence ever lost
+  peakEssenceLoss: number; // Highest Essence ever lost
   currentEssenceLoss: number; // Current Essence lost
-  essenceHole: number;        // peakLoss - currentLoss
-  magicLost: number;          // Floor(peakEssenceLoss)
+  essenceHole: number; // peakLoss - currentLoss
+  magicLost: number; // Floor(peakEssenceLoss)
 }
 ```
 
 **Example:**
+
 1. Mage has Magic 6, Essence 6.0
 2. Installs cyberware costing 2.5 Essence → Essence 3.5, Magic reduced to 4
 3. Later removes 1.0 Essence of cyberware → Essence 4.5
@@ -525,11 +544,13 @@ interface EssenceHoleState {
 ### Cyberlimb System
 
 **Base Stats:**
+
 - All cyberlimbs start with AGI 3, STR 3
 - Can be customized up to natural racial maximum +4
 - Each +1 costs capacity and nuyen
 
 **Capacity:**
+
 ```
 | Limb Type        | Base Capacity |
 |------------------|---------------|
@@ -544,6 +565,7 @@ interface EssenceHoleState {
 ```
 
 **Enhancements (use capacity):**
+
 - Armor Enhancement (+1-3 armor, 1 cap/rating)
 - Strength Enhancement (+1-3 STR, 1 cap/rating)
 - Agility Enhancement (+1-3 AGI, 1 cap/rating)
@@ -555,16 +577,19 @@ interface EssenceHoleState {
 Most cyberware has wireless bonuses that provide extra benefits when connected to the Matrix:
 
 **Examples:**
+
 - **Wired Reflexes:** +1 to Initiative Score when wireless enabled
 - **Smartlink:** +2 to weapon accuracy (instead of +1)
 - **Cybereyes:** Real-time updates to visual data
 
 **Trade-offs:**
+
 - Wireless-enabled devices can be hacked
 - Noise penalties apply to wireless connections
 - EMP attacks can disable wireless functionality
 
 **Tracking:**
+
 ```typescript
 interface CyberwareItem {
   // ... other fields
@@ -580,6 +605,7 @@ interface CyberwareItem {
 ### Augmentation Operations
 
 **Add Augmentation (Post-Creation):**
+
 ```
 POST /api/characters/[id]/augmentations
 Body: {
@@ -597,6 +623,7 @@ Response: {
 ```
 
 **Remove Augmentation:**
+
 ```
 DELETE /api/characters/[id]/augmentations/[augId]
 Response: {
@@ -608,6 +635,7 @@ Response: {
 ```
 
 **Upgrade Grade:**
+
 ```
 PATCH /api/characters/[id]/augmentations/[augId]/grade
 Body: {
@@ -621,6 +649,7 @@ Response: {
 ```
 
 **Toggle Wireless:**
+
 ```
 PATCH /api/characters/[id]/augmentations/[augId]/wireless
 Body: {
@@ -664,11 +693,12 @@ Response: {
 function calculateCurrentEssence(character: Character): number {
   const maxEssence = 6.0;
 
-  const cyberwareEssence = (character.cyberware || [])
-    .reduce((sum, item) => sum + item.essenceCost, 0);
+  const cyberwareEssence = (character.cyberware || []).reduce(
+    (sum, item) => sum + item.essenceCost,
+    0
+  );
 
-  const biowareEssence = (character.bioware || [])
-    .reduce((sum, item) => sum + item.essenceCost, 0);
+  const biowareEssence = (character.bioware || []).reduce((sum, item) => sum + item.essenceCost, 0);
 
   return Math.max(0.01, maxEssence - cyberwareEssence - biowareEssence);
 }
@@ -676,13 +706,8 @@ function calculateCurrentEssence(character: Character): number {
 /**
  * Calculate Magic reduction from essence loss
  */
-function calculateMagicReduction(
-  essenceLoss: number,
-  formula: "roundDown" | "roundUp"
-): number {
-  return formula === "roundDown"
-    ? Math.floor(essenceLoss)
-    : Math.ceil(essenceLoss);
+function calculateMagicReduction(essenceLoss: number, formula: "roundDown" | "roundUp"): number {
+  return formula === "roundDown" ? Math.floor(essenceLoss) : Math.ceil(essenceLoss);
 }
 
 /**
@@ -738,6 +763,7 @@ function calculateAugmentationAvailability(
 ### Character Creation Wizard
 
 **Integration with CreationWizard.tsx:**
+
 - AugmentationsStep added to step list
 - CreationState includes cyberware[] and bioware[] arrays
 - Budget tracking includes essence spent
@@ -746,6 +772,7 @@ function calculateAugmentationAvailability(
 ### Character Sheet
 
 **Integration with Character Sheet:**
+
 - Augmentations section in right column
 - Derived stats reflect augmentation bonuses
 - Initiative includes cyberware bonuses
@@ -754,6 +781,7 @@ function calculateAugmentationAvailability(
 ### Dice Roller
 
 **Integration with Dice Roller:**
+
 - Attribute rolls use augmented values
 - Initiative rolls include bonus dice
 - Combat rolls apply cyberlimb stats
@@ -761,6 +789,7 @@ function calculateAugmentationAvailability(
 ### Magic System
 
 **Integration with Magic:**
+
 - Magic rating reduced by essence loss
 - Essence hole tracking for awakened
 - Tradition compatibility checks
@@ -772,27 +801,32 @@ function calculateAugmentationAvailability(
 ### Sourcebook Support
 
 **Chrome Flesh:**
+
 - Geneware (genetic modifications)
 - Nanoware expansions
 - Bioware symbionts
 - Additional cyberware categories
 
 **Run Faster:**
+
 - Metatype-specific augmentations
 - Quality interactions
 
 **Rigger 5.0:**
+
 - Vehicle control rig details
 - Drone integration
 
 ### Edition Differences
 
 **SR6:**
+
 - Simplified essence system
 - Different grade structure
 - Adjusted availability rules
 
 **SR4:**
+
 - Bio-index vs. essence
 - Different capacity rules
 - Wireless matrix differences
@@ -804,6 +838,7 @@ function calculateAugmentationAvailability(
 ### Unit Tests
 
 **Essence Calculations:**
+
 - Grade multiplier application
 - Rating scaling
 - Total essence from multiple items
@@ -811,11 +846,13 @@ function calculateAugmentationAvailability(
 - Essence hole tracking
 
 **Cost Calculations:**
+
 - Grade cost multipliers
 - Rating cost scaling
 - Availability modifiers
 
 **Validation:**
+
 - Availability limit enforcement
 - Forbidden item blocking
 - Duplicate detection
@@ -823,17 +860,20 @@ function calculateAugmentationAvailability(
 ### Integration Tests
 
 **Character Creation:**
+
 - Add/remove augmentations
 - Grade selection
 - Cyberlimb customization
 - Essence budget tracking
 
 **Character Sheet:**
+
 - Augmentation display
 - Derived stat calculation
 - Essence display
 
 **Gameplay:**
+
 - Post-creation modification
 - Wireless toggle
 - Damage tracking
@@ -841,6 +881,7 @@ function calculateAugmentationAvailability(
 ### E2E Tests
 
 **Full Creation Flow:**
+
 - Create character with augmentations
 - Verify essence calculations
 - Verify derived stats
@@ -862,6 +903,7 @@ function calculateAugmentationAvailability(
 ## Change Log
 
 ### 2025-12-21
+
 - Initial specification created
 - Documents existing type definitions and data structures
 - Defines complete lifecycle from creation through gameplay
@@ -889,4 +931,4 @@ function calculateAugmentationAvailability(
 
 ---
 
-*This specification is a living document and will be updated as the augmentation system evolves.*
+_This specification is a living document and will be updated as the augmentation system evolves._

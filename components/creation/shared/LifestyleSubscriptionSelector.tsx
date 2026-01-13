@@ -86,8 +86,8 @@ export function LifestyleSubscriptionSelector({
                       const displayCost = sub.costPerRating
                         ? `Rating × ${sub.monthlyCost?.toLocaleString() || 0}¥/month`
                         : sub.yearlyCost
-                        ? `${sub.yearlyCost.toLocaleString()}¥/year (${(sub.yearlyCost / 12).toFixed(2)}¥/month)`
-                        : `${sub.monthlyCost?.toLocaleString() || 0}¥/month`;
+                          ? `${sub.yearlyCost.toLocaleString()}¥/year (${(sub.yearlyCost / 12).toFixed(2)}¥/month)`
+                          : `${sub.monthlyCost?.toLocaleString() || 0}¥/month`;
 
                       return (
                         <button
@@ -143,7 +143,10 @@ export function LifestyleSubscriptionSelector({
                         onChange={(e) => {
                           const value = Math.max(
                             selectedSubData.minRating || 1,
-                            Math.min(selectedSubData.maxRating || 6, Number.parseInt(e.target.value) || 1)
+                            Math.min(
+                              selectedSubData.maxRating || 6,
+                              Number.parseInt(e.target.value) || 1
+                            )
                           );
                           setRating(value);
                         }}
@@ -152,7 +155,8 @@ export function LifestyleSubscriptionSelector({
                         className="mt-2 w-full rounded-md border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
                       />
                       <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
-                        Monthly cost: {((selectedSubData.monthlyCost || 0) * rating).toLocaleString()}¥
+                        Monthly cost:{" "}
+                        {((selectedSubData.monthlyCost || 0) * rating).toLocaleString()}¥
                       </p>
                     </div>
                   )}

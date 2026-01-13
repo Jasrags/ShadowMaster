@@ -19,7 +19,7 @@
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "check": "pnpm lint && pnpm type-check && pnpm knip",
-    "check:ci": "pnpm lint && pnpm type-check && pnpm test:ci && pnpm knip:ci",
+    "check:ci": "pnpm format:check && pnpm lint && pnpm type-check && pnpm test:ci && pnpm knip:ci",
     "knip": "knip",
     "knip:report": "knip",
     "knip:production": "knip --production",
@@ -27,6 +27,8 @@
     "knip:watch": "knip --watch",
     "knip:ci": "knip --max-issues 0",
     "verify-data": "pnpm dlx tsx scripts/verify-data.ts",
+    "format": "prettier --write \"**/*.{ts,tsx,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yml,yaml}\"",
     "backup": "pnpm dlx tsx scripts/backup.ts",
     "health-check": "pnpm dlx tsx scripts/health-check.ts",
     "seed-data": "pnpm dlx tsx scripts/seed-data.ts",
@@ -35,10 +37,15 @@
   },
   "lint-staged": {
     "*.{ts,tsx}": [
+      "prettier --write",
       "eslint --fix"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
     ]
   },
   "dependencies": {
+    "@tanstack/react-virtual": "^3.13.18",
     "bcryptjs": "^3.0.3",
     "lucide-react": "^0.561.0",
     "next": "16.0.7",
@@ -75,6 +82,8 @@
     "lint-staged": "^15.0.0",
     "next-devtools-mcp": "^0.3.7",
     "nodemon": "^3.1.11",
+    "postcss": "^8.5.6",
+    "prettier": "^3.7.4",
     "tailwindcss": "^4",
     "typescript": "^5",
     "vitest": "^4.0.15"

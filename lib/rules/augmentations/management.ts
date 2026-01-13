@@ -16,7 +16,11 @@ import type {
   CyberwareGrade,
   BiowareGrade,
 } from "@/lib/types/character";
-import type { CyberwareCatalogItem, BiowareCatalogItem, AugmentationRules } from "@/lib/types/edition";
+import type {
+  CyberwareCatalogItem,
+  BiowareCatalogItem,
+  AugmentationRules,
+} from "@/lib/types/edition";
 import {
   calculateCyberwareEssence,
   calculateBiowareEssence,
@@ -145,7 +149,8 @@ export function installCyberware(
 ): InstallResult | OperationError {
   // Build validation context
   const validationContext: ValidationContext = {
-    lifecycleStage: context?.lifecycleStage ?? (character.status === "draft" ? "creation" : "active"),
+    lifecycleStage:
+      context?.lifecycleStage ?? (character.status === "draft" ? "creation" : "active"),
     rules: context?.rules ?? DEFAULT_AUGMENTATION_RULES,
     allowRestricted: context?.allowRestricted,
     allowForbidden: context?.allowForbidden,
@@ -163,7 +168,7 @@ export function installCyberware(
   if (!validationResult.valid) {
     return {
       success: false,
-      error: validationResult.errors.map(e => e.message).join(" "),
+      error: validationResult.errors.map((e) => e.message).join(" "),
       code: validationResult.errors[0]?.code ?? "VALIDATION_FAILED",
       validationResult,
     };
@@ -201,10 +206,7 @@ export function installCyberware(
   let magicLoss: number | undefined;
 
   if (shouldTrackEssenceHole(character)) {
-    const holeResult = updateEssenceHoleOnInstall(
-      getCharacterEssenceHole(character),
-      essenceCost
-    );
+    const holeResult = updateEssenceHoleOnInstall(getCharacterEssenceHole(character), essenceCost);
     updatedEssenceHole = holeResult.essenceHole;
     if (holeResult.additionalMagicLost > 0) {
       magicLoss = holeResult.additionalMagicLost;
@@ -219,12 +221,14 @@ export function installCyberware(
       ...character.specialAttributes,
       essence: newEssence,
       // Reduce magic/resonance if applicable
-      ...(magicLoss && character.specialAttributes.magic !== undefined && {
-        magic: Math.max(0, character.specialAttributes.magic - magicLoss),
-      }),
-      ...(magicLoss && character.specialAttributes.resonance !== undefined && {
-        resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
-      }),
+      ...(magicLoss &&
+        character.specialAttributes.magic !== undefined && {
+          magic: Math.max(0, character.specialAttributes.magic - magicLoss),
+        }),
+      ...(magicLoss &&
+        character.specialAttributes.resonance !== undefined && {
+          resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
+        }),
     },
     essenceHole: updatedEssenceHole,
   };
@@ -257,7 +261,8 @@ export function installBioware(
 ): InstallResult | OperationError {
   // Build validation context
   const validationContext: ValidationContext = {
-    lifecycleStage: context?.lifecycleStage ?? (character.status === "draft" ? "creation" : "active"),
+    lifecycleStage:
+      context?.lifecycleStage ?? (character.status === "draft" ? "creation" : "active"),
     rules: context?.rules ?? DEFAULT_AUGMENTATION_RULES,
     allowRestricted: context?.allowRestricted,
     allowForbidden: context?.allowForbidden,
@@ -275,7 +280,7 @@ export function installBioware(
   if (!validationResult.valid) {
     return {
       success: false,
-      error: validationResult.errors.map(e => e.message).join(" "),
+      error: validationResult.errors.map((e) => e.message).join(" "),
       code: validationResult.errors[0]?.code ?? "VALIDATION_FAILED",
       validationResult,
     };
@@ -304,10 +309,7 @@ export function installBioware(
   let magicLoss: number | undefined;
 
   if (shouldTrackEssenceHole(character)) {
-    const holeResult = updateEssenceHoleOnInstall(
-      getCharacterEssenceHole(character),
-      essenceCost
-    );
+    const holeResult = updateEssenceHoleOnInstall(getCharacterEssenceHole(character), essenceCost);
     updatedEssenceHole = holeResult.essenceHole;
     if (holeResult.additionalMagicLost > 0) {
       magicLoss = holeResult.additionalMagicLost;
@@ -321,12 +323,14 @@ export function installBioware(
     specialAttributes: {
       ...character.specialAttributes,
       essence: newEssence,
-      ...(magicLoss && character.specialAttributes.magic !== undefined && {
-        magic: Math.max(0, character.specialAttributes.magic - magicLoss),
-      }),
-      ...(magicLoss && character.specialAttributes.resonance !== undefined && {
-        resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
-      }),
+      ...(magicLoss &&
+        character.specialAttributes.magic !== undefined && {
+          magic: Math.max(0, character.specialAttributes.magic - magicLoss),
+        }),
+      ...(magicLoss &&
+        character.specialAttributes.resonance !== undefined && {
+          resonance: Math.max(0, character.specialAttributes.resonance - magicLoss),
+        }),
     },
     essenceHole: updatedEssenceHole,
   };
@@ -356,9 +360,7 @@ export function removeCyberware(
   itemId: string
 ): RemovalResult | OperationError {
   const cyberware = character.cyberware ?? [];
-  const itemIndex = cyberware.findIndex(
-    item => item.id === itemId || item.catalogId === itemId
-  );
+  const itemIndex = cyberware.findIndex((item) => item.id === itemId || item.catalogId === itemId);
 
   if (itemIndex === -1) {
     return {
@@ -417,9 +419,7 @@ export function removeBioware(
   itemId: string
 ): RemovalResult | OperationError {
   const bioware = character.bioware ?? [];
-  const itemIndex = bioware.findIndex(
-    item => item.id === itemId || item.catalogId === itemId
-  );
+  const itemIndex = bioware.findIndex((item) => item.id === itemId || item.catalogId === itemId);
 
   if (itemIndex === -1) {
     return {
@@ -497,9 +497,7 @@ function upgradeCyberwareGrade(
   newGrade: CyberwareGrade
 ): UpgradeResult | OperationError {
   const cyberware = character.cyberware ?? [];
-  const itemIndex = cyberware.findIndex(
-    item => item.id === itemId || item.catalogId === itemId
-  );
+  const itemIndex = cyberware.findIndex((item) => item.id === itemId || item.catalogId === itemId);
 
   if (itemIndex === -1) {
     return {
@@ -585,9 +583,7 @@ function upgradeBiowareGrade(
   newGrade: BiowareGrade
 ): UpgradeResult | OperationError {
   const bioware = character.bioware ?? [];
-  const itemIndex = bioware.findIndex(
-    item => item.id === itemId || item.catalogId === itemId
-  );
+  const itemIndex = bioware.findIndex((item) => item.id === itemId || item.catalogId === itemId);
 
   if (itemIndex === -1) {
     return {
@@ -677,10 +673,7 @@ function upgradeBiowareGrade(
  * @param enabled - Whether wireless bonuses should be enabled
  * @returns Updated character
  */
-export function toggleGlobalWirelessBonus(
-  character: Character,
-  enabled: boolean
-): Character {
+export function toggleGlobalWirelessBonus(character: Character, enabled: boolean): Character {
   return {
     ...character,
     wirelessBonusesEnabled: enabled,
@@ -704,7 +697,9 @@ export function getWirelessBonusState(character: Partial<Character>): boolean {
  * @param character - The character to check
  * @returns Aggregated wireless bonuses
  */
-export function aggregateActiveWirelessBonuses(character: Partial<Character>): WirelessBonusAggregate {
+export function aggregateActiveWirelessBonuses(
+  character: Partial<Character>
+): WirelessBonusAggregate {
   const enabled = getWirelessBonusState(character);
 
   if (!enabled) {

@@ -6,7 +6,6 @@ Convert the following rationale, tradeoff, or architectural choice from a specif
 Instructions:
 
 1. Structure the ADR using the following sections:
-
    - **Title:** Concise, descriptive name of the decision
    - **Decision:** Clearly state the chosen approach or solution
    - **Context:** Describe the background, constraints, and motivating factors

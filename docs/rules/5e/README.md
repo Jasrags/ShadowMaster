@@ -5,6 +5,7 @@ Documentation for Shadowrun 5th Edition rules and mechanics implemented in Shado
 ## Contents
 
 ### Character Creation
+
 - **[Character Creation Guide](./character-creation.md)** - Complete SR5 character creation workflow and step-by-step process
 - **[Character Reference](./character.md)** - Character model and rules
 - **[Creation Methods](./creation-methods/)** - Character creation method details
@@ -15,6 +16,7 @@ Documentation for Shadowrun 5th Edition rules and mechanics implemented in Shado
 > **Note:** The [Character Creation Guide](./character-creation.md) provides the complete step-by-step workflow for all creation methods. The creation-methods files provide method-specific rules, validation requirements, and implementation details.
 
 ### Game Mechanics
+
 - **[Attributes](./game-mechanics/attributes.md)** - Primary and derived attributes
 - **[Skills](./game-mechanics/skills.md)** - Active, Knowledge, and Language skills
 - **[Qualities](./game-mechanics/qualities.md)** - Positive and negative qualities
@@ -24,6 +26,7 @@ Documentation for Shadowrun 5th Edition rules and mechanics implemented in Shado
 - **[Gear](./game-mechanics/gear.md)** - Equipment and gear rules
 
 ### Reference
+
 - **[Data Tables](./data-tables.md)** - Reference tables and data
 - **[Languages](./languages.md)** - Language rules
 - **[Game Concepts](./game-concepts.md)** - Core game concepts

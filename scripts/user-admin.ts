@@ -109,15 +109,15 @@ async function listUsers(jsonOutput: boolean): Promise<void> {
   }
 
   console.log(`\nFound ${users.length} user(s):\n`);
-  console.log("EMAIL                              USERNAME         ROLES                STATUS    CHARS  LAST LOGIN");
+  console.log(
+    "EMAIL                              USERNAME         ROLES                STATUS    CHARS  LAST LOGIN"
+  );
   console.log("-".repeat(110));
 
   for (const user of users) {
     const roles = user.role.join(", ");
     const charCount = user.characters?.length || 0;
-    const lastLogin = user.lastLogin
-      ? new Date(user.lastLogin).toLocaleDateString()
-      : "Never";
+    const lastLogin = user.lastLogin ? new Date(user.lastLogin).toLocaleDateString() : "Never";
 
     console.log(
       `${user.email.padEnd(35)}${user.username.padEnd(17)}${roles.padEnd(21)}${(user.accountStatus || "active").padEnd(10)}${String(charCount).padEnd(7)}${lastLogin}`
@@ -432,7 +432,9 @@ async function main(): Promise<void> {
       case "create":
         if (params.length < 3) {
           console.error("Error: Email, username, and password are required");
-          console.log("\nUsage: npx tsx scripts/user-admin.ts create <email> <username> <password>");
+          console.log(
+            "\nUsage: npx tsx scripts/user-admin.ts create <email> <username> <password>"
+          );
           process.exit(1);
         }
         await createNewUser(params[0], params[1], params[2], role);
@@ -450,7 +452,9 @@ async function main(): Promise<void> {
       case "change-password":
         if (params.length < 2) {
           console.error("Error: Email and new password are required");
-          console.log("\nUsage: npx tsx scripts/user-admin.ts change-password <email> <new-password>");
+          console.log(
+            "\nUsage: npx tsx scripts/user-admin.ts change-password <email> <new-password>"
+          );
           process.exit(1);
         }
         await changePassword(params[0], params[1]);

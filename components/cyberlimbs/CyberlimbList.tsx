@@ -202,9 +202,7 @@ export function CyberlimbList({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Cpu className="w-4 h-4 text-cyan-400" />
-          <span className="text-sm font-medium text-zinc-200">
-            Cyberlimbs
-          </span>
+          <span className="text-sm font-medium text-zinc-200">Cyberlimbs</span>
           <span className="text-xs text-zinc-500">({cyberlimbs.length})</span>
         </div>
 
@@ -257,9 +255,15 @@ export function CyberlimbList({
                     isActive={isActive}
                     onToggleWireless={onToggleWireless ? handleToggleWireless(limb.id!) : undefined}
                     onRemove={onRemoveLimb && limb.id ? handleRemove(limb.id) : undefined}
-                    onAddEnhancement={onAddEnhancement && limb.id ? handleAddEnhancement(limb.id) : undefined}
-                    onAddAccessory={onAddAccessory && limb.id ? handleAddAccessory(limb.id) : undefined}
-                    onViewDetails={onViewDetails && limb.id ? handleViewDetails(limb.id) : undefined}
+                    onAddEnhancement={
+                      onAddEnhancement && limb.id ? handleAddEnhancement(limb.id) : undefined
+                    }
+                    onAddAccessory={
+                      onAddAccessory && limb.id ? handleAddAccessory(limb.id) : undefined
+                    }
+                    onViewDetails={
+                      onViewDetails && limb.id ? handleViewDetails(limb.id) : undefined
+                    }
                   />
                 ))}
               </div>
@@ -277,7 +281,9 @@ export function CyberlimbList({
               isActive={isActive}
               onToggleWireless={onToggleWireless ? handleToggleWireless(limb.id!) : undefined}
               onRemove={onRemoveLimb && limb.id ? handleRemove(limb.id) : undefined}
-              onAddEnhancement={onAddEnhancement && limb.id ? handleAddEnhancement(limb.id) : undefined}
+              onAddEnhancement={
+                onAddEnhancement && limb.id ? handleAddEnhancement(limb.id) : undefined
+              }
               onAddAccessory={onAddAccessory && limb.id ? handleAddAccessory(limb.id) : undefined}
               onViewDetails={onViewDetails && limb.id ? handleViewDetails(limb.id) : undefined}
             />
@@ -309,7 +315,8 @@ export function CyberlimbList({
           </span>
         </div>
         <span>
-          Total: <span className="text-zinc-400">{new Intl.NumberFormat().format(totals.cost)}¥</span>
+          Total:{" "}
+          <span className="text-zinc-400">{new Intl.NumberFormat().format(totals.cost)}¥</span>
         </span>
       </div>
     </div>

@@ -61,9 +61,7 @@ export default function SigninPage() {
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
       <main className="w-full max-w-md px-6 py-12">
         <div className="rounded-lg bg-zinc-50 p-8 shadow-lg dark:bg-zinc-900">
-          <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">
-            Sign In
-          </h1>
+          <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Sign In</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
             {error && (
@@ -73,7 +71,10 @@ export default function SigninPage() {
             )}
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="email" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="email"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Email <span className="text-red-500">*</span>
               </label>
               <input
@@ -85,10 +86,11 @@ export default function SigninPage() {
                 required
                 aria-invalid={!!validationErrors.email}
                 aria-describedby={validationErrors.email ? "email-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.email
-                  ? "border-red-500 dark:border-red-500"
-                  : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.email
+                    ? "border-red-500 dark:border-red-500"
+                    : "border-zinc-200 dark:border-zinc-700"
+                }`}
                 placeholder="you@example.com"
               />
               {validationErrors.email && (
@@ -99,7 +101,10 @@ export default function SigninPage() {
             </div>
 
             <div className="flex flex-col gap-1">
-              <label htmlFor="password" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-zinc-700 dark:text-zinc-300"
+              >
                 Password <span className="text-red-500">*</span>
               </label>
               <input
@@ -111,14 +116,19 @@ export default function SigninPage() {
                 required
                 aria-invalid={!!validationErrors.password}
                 aria-describedby={validationErrors.password ? "password-error" : undefined}
-                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${validationErrors.password
-                  ? "border-red-500 dark:border-red-500"
-                  : "border-zinc-200 dark:border-zinc-700"
-                  }`}
+                className={`w-full rounded-md border px-3 py-2 text-zinc-900 placeholder-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:bg-zinc-800 dark:text-zinc-50 dark:placeholder-zinc-400 dark:focus:ring-zinc-600 ${
+                  validationErrors.password
+                    ? "border-red-500 dark:border-red-500"
+                    : "border-zinc-200 dark:border-zinc-700"
+                }`}
                 placeholder="••••••••"
               />
               {validationErrors.password && (
-                <p id="password-error" className="text-sm text-red-600 dark:text-red-400" role="alert">
+                <p
+                  id="password-error"
+                  className="text-sm text-red-600 dark:text-red-400"
+                  role="alert"
+                >
                   {validationErrors.password}
                 </p>
               )}
@@ -133,7 +143,10 @@ export default function SigninPage() {
                 onChange={(e) => setRememberMe(e.target.checked)}
                 className="h-5 w-5 rounded border-2 border-zinc-200 bg-zinc-50 text-zinc-950 focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:border-zinc-700 dark:bg-zinc-800 dark:checked:bg-zinc-50 dark:checked:border-zinc-50"
               />
-              <label htmlFor="rememberMe" className="text-sm text-zinc-700 dark:text-zinc-300 cursor-pointer">
+              <label
+                htmlFor="rememberMe"
+                className="text-sm text-zinc-700 dark:text-zinc-300 cursor-pointer"
+              >
                 Remember me
               </label>
             </div>
@@ -163,4 +176,3 @@ export default function SigninPage() {
     </div>
   );
 }
-

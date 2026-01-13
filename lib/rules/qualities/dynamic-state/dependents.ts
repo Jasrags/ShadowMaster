@@ -42,10 +42,7 @@ export function updateDependentStatus(
  * @param dependentId - Quality ID for the dependent
  * @returns Lifestyle cost modifier as percentage (e.g., 10 for +10%)
  */
-export function calculateLifestyleModifier(
-  character: Character,
-  dependentId: string
-): number {
+export function calculateLifestyleModifier(character: Character, dependentId: string): number {
   const state = getDynamicState(character, dependentId);
   if (state?.type !== "dependent") {
     return 0;
@@ -87,10 +84,7 @@ export function calculateTotalLifestyleModifier(character: Character): number {
  * @param dependentId - Quality ID for the dependent
  * @returns Time commitment in hours per week
  */
-export function calculateTimeCommitment(
-  character: Character,
-  dependentId: string
-): number {
+export function calculateTimeCommitment(character: Character, dependentId: string): number {
   const state = getDynamicState(character, dependentId);
   if (state?.type !== "dependent") {
     return 0;
@@ -124,4 +118,3 @@ export function calculateTotalTimeCommitment(character: Character): number {
 
   return totalHours;
 }
-

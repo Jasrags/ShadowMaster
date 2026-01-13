@@ -1,10 +1,10 @@
 These prompts are optimized for:
 
-* long documents
-* complex technical plans
-* multi-file TypeScript projects
-* step-by-step implementation
-* dependency-based reasoning
+- long documents
+- complex technical plans
+- multi-file TypeScript projects
+- step-by-step implementation
+- dependency-based reasoning
 
 Use them exactly as written and they will dramatically improve output quality.
 
@@ -26,7 +26,7 @@ Reference the implementation plan instead of re-describing requirements.
 
 ### **Suggestion**
 
-Don’t load the entire document — tell the AI *which parts* to use.
+Don’t load the entire document — tell the AI _which parts_ to use.
 
 ### **Best Prompt**
 
@@ -52,7 +52,7 @@ AI is best at producing diffs, not whole rewrites.
 
 ### **Suggestion**
 
-Have AI *validate* code you wrote, not just generate more.
+Have AI _validate_ code you wrote, not just generate more.
 
 ### **Best Prompt**
 
@@ -207,4 +207,3 @@ Just tell me:
 or
 
 ### **“Do all of them and generate Version 2.0.”**
-

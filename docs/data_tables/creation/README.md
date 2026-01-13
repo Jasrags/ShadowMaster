@@ -57,11 +57,13 @@ Use proper markdown tables. Note any modified values with asterisks and explain 
 ### Naming Convention
 
 Example character files should follow this pattern:
+
 ```
 example-character-[archetype]-[metatype].md
 ```
 
 Examples:
+
 - `example-character-street-samurai-ork.md`
 - `example-character-decker-human.md`
 - `example-character-mage-elf.md`

@@ -102,7 +102,8 @@ export function calculateSkillDicePool(
       );
       if (withdrawalPenalty > 0) {
         // Withdrawal penalties apply to Physical and Mental tests
-        const isPhysicalOrMental = ["body", "agility", "reaction", "strength"].includes(attribute) ||
+        const isPhysicalOrMental =
+          ["body", "agility", "reaction", "strength"].includes(attribute) ||
           ["logic", "intuition", "willpower"].includes(attribute);
         if (isPhysicalOrMental) {
           pool -= withdrawalPenalty;
@@ -148,21 +149,21 @@ export function calculateLimit(
       const strength = character.attributes.strength || 1;
       const body = character.attributes.body || 1;
       const reaction = character.attributes.reaction || 1;
-      baseLimit = Math.ceil(((strength * 2) + body + reaction) / 3);
+      baseLimit = Math.ceil((strength * 2 + body + reaction) / 3);
       break;
     }
     case "mental": {
       const logic = character.attributes.logic || 1;
       const intuition = character.attributes.intuition || 1;
       const willpower = character.attributes.willpower || 1;
-      baseLimit = Math.ceil(((logic * 2) + intuition + willpower) / 3);
+      baseLimit = Math.ceil((logic * 2 + intuition + willpower) / 3);
       break;
     }
     case "social": {
       const charisma = character.attributes.charisma || 1;
       const willpower = character.attributes.willpower || 1;
       const essence = Math.ceil(character.specialAttributes?.essence || 6);
-      baseLimit = Math.ceil(((charisma * 2) + willpower + essence) / 3);
+      baseLimit = Math.ceil((charisma * 2 + willpower + essence) / 3);
       break;
     }
     case "astral": {
@@ -170,7 +171,7 @@ export function calculateLimit(
       const logic = character.attributes.logic || 1;
       const intuition = character.attributes.intuition || 1;
       const willpower = character.attributes.willpower || 1;
-      baseLimit = Math.ceil(((logic * 2) + intuition + willpower) / 3);
+      baseLimit = Math.ceil((logic * 2 + intuition + willpower) / 3);
       break;
     }
   }
@@ -228,12 +229,7 @@ export function calculateHealingDicePool(
   affectsSelf: boolean,
   basePool: number
 ): number {
-  const qualityModifiers = getHealingModifiers(
-    character,
-    ruleset,
-    healingType,
-    affectsSelf
-  );
+  const qualityModifiers = getHealingModifiers(character, ruleset, healingType, affectsSelf);
 
   return Math.max(0, basePool + qualityModifiers);
 }
@@ -276,4 +272,3 @@ export function calculateAttributeMaximum(
 
   return baseMaximum + qualityModifiers;
 }
-

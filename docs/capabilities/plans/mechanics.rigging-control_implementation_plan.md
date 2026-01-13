@@ -33,14 +33,14 @@ Implement a complete Rigging Control system that governs vehicle interactions, d
 
 The following architectural decisions require user approval:
 
-| Decision | Proposed Choice | Rationale |
-|----------|-----------------|-----------|
-| **VCR Validation** | Validated at action time, not gear purchase | Allows character flexibility; VCR can be acquired later |
-| **Jumped-In State** | Ephemeral (scene-level, not persisted) | Rigger vulnerable state should reset between sessions |
-| **Drone Condition Tracking** | Per-drone with Body-derived condition monitors | Matches SR5 rules; each drone has its own damage track |
-| **RCC Autosoft Sharing** | Automatic to all slaved drones | Per SR5 rules; simplifies management |
-| **Biofeedback Damage** | Integrates with character condition tracking | Consistent with matrix biofeedback handling |
-| **Noise Calculation** | Calculated at action time from distance/terrain | Dynamic based on scenario; not persisted |
+| Decision                     | Proposed Choice                                 | Rationale                                               |
+| ---------------------------- | ----------------------------------------------- | ------------------------------------------------------- |
+| **VCR Validation**           | Validated at action time, not gear purchase     | Allows character flexibility; VCR can be acquired later |
+| **Jumped-In State**          | Ephemeral (scene-level, not persisted)          | Rigger vulnerable state should reset between sessions   |
+| **Drone Condition Tracking** | Per-drone with Body-derived condition monitors  | Matches SR5 rules; each drone has its own damage track  |
+| **RCC Autosoft Sharing**     | Automatic to all slaved drones                  | Per SR5 rules; simplifies management                    |
+| **Biofeedback Damage**       | Integrates with character condition tracking    | Consistent with matrix biofeedback handling             |
+| **Noise Calculation**        | Calculated at action time from distance/terrain | Dynamic based on scenario; not persisted                |
 
 ---
 
@@ -497,6 +497,7 @@ export interface RiggingEquipmentResponse {
 ```
 
 **Satisfies:**
+
 - Guarantee: "Rigger identity and presence MUST be authoritative and bound to a specific vehicle control interface or drone command node"
 - Requirement: "The system MUST enforce mandatory hardware-specific attribute requirements"
 
@@ -559,16 +560,12 @@ export interface VCRValidationResult {
 /**
  * Check if character has a valid VCR installed
  */
-export function hasVehicleControlRig(
-  character: Character
-): boolean;
+export function hasVehicleControlRig(character: Character): boolean;
 
 /**
  * Get VCR details from character's augmentations
  */
-export function getVehicleControlRig(
-  character: Character
-): VehicleControlRig | null;
+export function getVehicleControlRig(character: Character): VehicleControlRig | null;
 
 /**
  * Validate VCR requirements for jumping in
@@ -588,6 +585,7 @@ export function calculateVCRBonuses(
 ```
 
 **Satisfies:**
+
 - Constraint: "A character MUST NOT engage in rigging control without a valid VCR or RCC interface"
 - Requirement: "The system MUST enforce mandatory hardware-specific attribute requirements"
 
@@ -611,17 +609,12 @@ export interface RCCValidationResult {
 /**
  * Validate RCC configuration
  */
-export function validateRCCConfig(
-  rcc: OwnedRCC,
-  slavedDroneCount: number
-): RCCValidationResult;
+export function validateRCCConfig(rcc: OwnedRCC, slavedDroneCount: number): RCCValidationResult;
 
 /**
  * Calculate maximum slaved drones for RCC
  */
-export function calculateMaxSlavedDrones(
-  dataProcessing: number
-): number;
+export function calculateMaxSlavedDrones(dataProcessing: number): number;
 
 /**
  * Validate drone slaving to RCC
@@ -643,6 +636,7 @@ export function validateAutosoftOnRCC(
 ```
 
 **Satisfies:**
+
 - Requirement: "Control interfaces MUST be uniquely identified and linked to a verifiable source of command authority"
 - Requirement: "Hardware-specific limits MUST be automatically applied to all relevant rigging actions"
 
@@ -675,17 +669,12 @@ export function calculateNoise(
 /**
  * Get distance band from meters
  */
-export function getDistanceBand(
-  distanceMeters: number
-): DistanceBand;
+export function getDistanceBand(distanceMeters: number): DistanceBand;
 
 /**
  * Apply noise to dice pool
  */
-export function applyNoiseToPool(
-  basePool: number,
-  noise: number
-): number;
+export function applyNoiseToPool(basePool: number, noise: number): number;
 ```
 
 ---
@@ -706,11 +695,7 @@ export interface DroneNetworkResult {
 /**
  * Create a new drone network for RCC
  */
-export function createDroneNetwork(
-  characterId: string,
-  rccId: string,
-  rcc: OwnedRCC
-): DroneNetwork;
+export function createDroneNetwork(characterId: string, rccId: string, rcc: OwnedRCC): DroneNetwork;
 
 /**
  * Slave a drone to the network
@@ -724,10 +709,7 @@ export function slaveDroneToNetwork(
 /**
  * Release a drone from the network
  */
-export function releaseDroneFromNetwork(
-  network: DroneNetwork,
-  droneId: string
-): DroneNetwork;
+export function releaseDroneFromNetwork(network: DroneNetwork, droneId: string): DroneNetwork;
 
 /**
  * Share autosoft from RCC to all slaved drones
@@ -767,6 +749,7 @@ export function updateDronePosition(
 ```
 
 **Satisfies:**
+
 - Guarantee: "Drone network (WAN) states MUST be persistent, governing the coordination and limits of multiple subordinate entities"
 - Requirement: "Coordinated drone actions MUST be constrained by RCC-specific processing limits and active program sets"
 
@@ -787,9 +770,7 @@ export interface DroneConditionResult {
 /**
  * Calculate drone condition monitor from Body
  */
-export function calculateDroneConditionMonitor(
-  body: number
-): number;
+export function calculateDroneConditionMonitor(body: number): number;
 
 /**
  * Apply damage to drone
@@ -803,24 +784,17 @@ export function applyDroneDamage(
 /**
  * Repair drone damage
  */
-export function repairDroneDamage(
-  drone: SlavedDrone,
-  healAmount: number
-): SlavedDrone;
+export function repairDroneDamage(drone: SlavedDrone, healAmount: number): SlavedDrone;
 
 /**
  * Get damage modifier for drone (wound penalties)
  */
-export function getDroneDamageModifier(
-  drone: SlavedDrone
-): number;
+export function getDroneDamageModifier(drone: SlavedDrone): number;
 
 /**
  * Check if drone is destroyed
  */
-export function isDroneDestroyed(
-  drone: SlavedDrone
-): boolean;
+export function isDroneDestroyed(drone: SlavedDrone): boolean;
 ```
 
 ---
@@ -852,9 +826,7 @@ export function jumpIn(
 /**
  * Jump out of current vehicle/drone
  */
-export function jumpOut(
-  riggingState: RiggingState
-): RiggingState;
+export function jumpOut(riggingState: RiggingState): RiggingState;
 
 /**
  * Handle forced ejection (dumpshock)
@@ -883,12 +855,11 @@ export function calculateJumpedInInitiative(
 /**
  * Check if rigger body is vulnerable
  */
-export function isRiggerBodyVulnerable(
-  jumpedInState: JumpedInState
-): boolean;
+export function isRiggerBodyVulnerable(jumpedInState: JumpedInState): boolean;
 ```
 
 **Satisfies:**
+
 - Guarantee: "The system MUST enforce authoritative 'Biofeedback' resolution to ensure rigger safety and state integrity during digital-physical transitions"
 - Requirement: "'Jumped In' status MUST be persistent and verifiable, impacting both the rigger's physical state and the vehicle's maneuverability"
 
@@ -931,16 +902,15 @@ export function applyBiofeedbackDamage(
 /**
  * Determine damage type from VR mode
  */
-export function getBiofeedbackDamageType(
-  vrMode: RiggerVRMode
-): "stun" | "physical";
+export function getBiofeedbackDamageType(vrMode: RiggerVRMode): "stun" | "physical";
 
 /**
  * Calculate dumpshock damage
  */
-export function calculateDumpshockDamage(
-  vrMode: RiggerVRMode
-): { damage: number; damageType: "stun" | "physical" };
+export function calculateDumpshockDamage(vrMode: RiggerVRMode): {
+  damage: number;
+  damageType: "stun" | "physical";
+};
 ```
 
 ---
@@ -980,17 +950,12 @@ export function validateVehicleAction(
 /**
  * Get control mode bonuses for action
  */
-export function getControlModeBonus(
-  controlMode: ControlMode,
-  vcrRating?: number
-): number;
+export function getControlModeBonus(controlMode: ControlMode, vcrRating?: number): number;
 
 /**
  * Check if action requires jumped-in status
  */
-export function requiresJumpedIn(
-  actionType: VehicleActionType
-): boolean;
+export function requiresJumpedIn(actionType: VehicleActionType): boolean;
 
 /**
  * Get applicable autosofts for action
@@ -1003,6 +968,7 @@ export function getApplicableAutosofts(
 ```
 
 **Satisfies:**
+
 - Guarantee: "Vehicle interactions MUST adhere to strictly defined control protocols and action economy rules"
 - Requirement: "The system MUST provide Authoritative resolution for rigging actions"
 
@@ -1078,6 +1044,7 @@ export function applySensorBonus(
 ```
 
 **Satisfies:**
+
 - Requirement: "Hardware-specific limits MUST be automatically applied to all relevant rigging actions"
 - Requirement: "The system MUST automatically update rigger potential based on active sensor modifications and hardware state transitions"
 
@@ -1100,9 +1067,7 @@ export function useVehicles(): VehicleCatalogItem[];
 /**
  * Hook to get vehicles by category
  */
-export function useVehiclesByCategory(
-  category: VehicleCategory
-): VehicleCatalogItem[];
+export function useVehiclesByCategory(category: VehicleCategory): VehicleCatalogItem[];
 
 /**
  * Hook to get all drones from the ruleset
@@ -1112,9 +1077,7 @@ export function useDrones(): DroneCatalogItem[];
 /**
  * Hook to get drones by size
  */
-export function useDronesBySize(
-  size: DroneSize
-): DroneCatalogItem[];
+export function useDronesBySize(size: DroneSize): DroneCatalogItem[];
 
 /**
  * Hook to get all RCCs from the ruleset
@@ -1129,9 +1092,7 @@ export function useAutosofts(): AutosoftCatalogItem[];
 /**
  * Hook to get autosofts by category
  */
-export function useAutosoftsByCategory(
-  category: AutosoftCategory
-): AutosoftCatalogItem[];
+export function useAutosoftsByCategory(category: AutosoftCategory): AutosoftCatalogItem[];
 
 /**
  * Hook to get vehicle modifications
@@ -1151,30 +1112,22 @@ Add extraction functions for rigging content:
 /**
  * Extract vehicles from a loaded ruleset
  */
-export function extractVehicles(
-  ruleset: LoadedRuleset
-): VehicleCatalogItem[];
+export function extractVehicles(ruleset: LoadedRuleset): VehicleCatalogItem[];
 
 /**
  * Extract drones from a loaded ruleset
  */
-export function extractDrones(
-  ruleset: LoadedRuleset
-): DroneCatalogItem[];
+export function extractDrones(ruleset: LoadedRuleset): DroneCatalogItem[];
 
 /**
  * Extract RCCs from a loaded ruleset
  */
-export function extractRCCs(
-  ruleset: LoadedRuleset
-): RCCCatalogItem[];
+export function extractRCCs(ruleset: LoadedRuleset): RCCCatalogItem[];
 
 /**
  * Extract autosofts from a loaded ruleset
  */
-export function extractAutosofts(
-  ruleset: LoadedRuleset
-): AutosoftCatalogItem[];
+export function extractAutosofts(ruleset: LoadedRuleset): AutosoftCatalogItem[];
 
 /**
  * Extract vehicle modifications from a loaded ruleset
@@ -1256,6 +1209,7 @@ export function extractVehicleModifications(
 **File:** [NEW] `/components/character/RiggingSummary.tsx`
 
 Display on character sheet:
+
 - VCR status and rating
 - Active RCC and attributes
 - Drone network count (slaved/max)
@@ -1320,56 +1274,56 @@ Display on character sheet:
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/vcr-validator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Validates VCR presence for jump-in | Constraint: "MUST NOT engage without valid VCR" |
+| Test Case                              | Capability Reference                                    |
+| -------------------------------------- | ------------------------------------------------------- |
+| Validates VCR presence for jump-in     | Constraint: "MUST NOT engage without valid VCR"         |
 | Calculates VCR control bonus correctly | Requirement: "hardware-specific attribute requirements" |
-| Validates VR mode affects initiative | Requirement: "Jumped In status impacts maneuverability" |
-| Rejects jump-in without VCR | Constraint: "MUST NOT engage without valid VCR" |
+| Validates VR mode affects initiative   | Requirement: "Jumped In status impacts maneuverability" |
+| Rejects jump-in without VCR            | Constraint: "MUST NOT engage without valid VCR"         |
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/rcc-validator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Validates RCC drone slave limit | Requirement: "constrained by RCC-specific limits" |
-| Calculates max drones from DP × 3 | Requirement: "RCC Data Processing limits" |
-| Validates autosoft compatibility | Requirement: "active program sets" |
-| Rejects exceeding slave limit | Requirement: "constrained by RCC-specific limits" |
+| Test Case                         | Capability Reference                              |
+| --------------------------------- | ------------------------------------------------- |
+| Validates RCC drone slave limit   | Requirement: "constrained by RCC-specific limits" |
+| Calculates max drones from DP × 3 | Requirement: "RCC Data Processing limits"         |
+| Validates autosoft compatibility  | Requirement: "active program sets"                |
+| Rejects exceeding slave limit     | Requirement: "constrained by RCC-specific limits" |
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/drone-network.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Creates network correctly | Guarantee: "WAN states MUST be persistent" |
-| Slaves drones within limit | Requirement: "constrained by RCC-specific limits" |
-| Shares autosofts to network | Requirement: "coordinated drone actions" |
-| Issues network commands | Requirement: "coordinated drone actions" |
+| Test Case                   | Capability Reference                              |
+| --------------------------- | ------------------------------------------------- |
+| Creates network correctly   | Guarantee: "WAN states MUST be persistent"        |
+| Slaves drones within limit  | Requirement: "constrained by RCC-specific limits" |
+| Shares autosofts to network | Requirement: "coordinated drone actions"          |
+| Issues network commands     | Requirement: "coordinated drone actions"          |
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/jumped-in-manager.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Tracks jumped-in state correctly | Requirement: "persistent and verifiable" |
-| Handles forced ejection | Guarantee: "Biofeedback resolution" |
-| Calculates biofeedback correctly | Guarantee: "Biofeedback resolution" |
-| Marks body as vulnerable | Requirement: "impacts rigger's physical state" |
+| Test Case                        | Capability Reference                           |
+| -------------------------------- | ---------------------------------------------- |
+| Tracks jumped-in state correctly | Requirement: "persistent and verifiable"       |
+| Handles forced ejection          | Guarantee: "Biofeedback resolution"            |
+| Calculates biofeedback correctly | Guarantee: "Biofeedback resolution"            |
+| Marks body as vulnerable         | Requirement: "impacts rigger's physical state" |
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/noise-calculator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
+| Test Case                       | Capability Reference                    |
+| ------------------------------- | --------------------------------------- |
 | Calculates distance noise bands | Requirement: "hardware-specific limits" |
-| Applies RCC noise reduction | Requirement: "RCC Noise Reduction" |
-| Combines terrain modifiers | Requirement: "hardware-specific limits" |
+| Applies RCC noise reduction     | Requirement: "RCC Noise Reduction"      |
+| Combines terrain modifiers      | Requirement: "hardware-specific limits" |
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/dice-pool-calculator.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
+| Test Case                     | Capability Reference                    |
+| ----------------------------- | --------------------------------------- |
 | Calculates vehicle test pools | Requirement: "Authoritative resolution" |
-| Applies control mode bonus | Requirement: "control protocols" |
-| Includes autosoft ratings | Requirement: "sensor modifications" |
-| Applies noise penalty | Requirement: "hardware-specific limits" |
+| Applies control mode bonus    | Requirement: "control protocols"        |
+| Includes autosoft ratings     | Requirement: "sensor modifications"     |
+| Applies noise penalty         | Requirement: "hardware-specific limits" |
 
 ---
 
@@ -1377,12 +1331,12 @@ Display on character sheet:
 
 **File:** [NEW] `/lib/rules/rigging/__tests__/rigging-flow.integration.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
-| Full rigger with VCR + RCC + drones | Full system integration |
-| Drone network session lifecycle | Guarantee: "WAN states MUST be persistent" |
-| Jump-in/out with biofeedback | Guarantee: "Biofeedback resolution" |
-| Vehicle destruction handling | Guarantee: "rigger safety" |
+| Test Case                           | Capability Reference                       |
+| ----------------------------------- | ------------------------------------------ |
+| Full rigger with VCR + RCC + drones | Full system integration                    |
+| Drone network session lifecycle     | Guarantee: "WAN states MUST be persistent" |
+| Jump-in/out with biofeedback        | Guarantee: "Biofeedback resolution"        |
+| Vehicle destruction handling        | Guarantee: "rigger safety"                 |
 
 ---
 
@@ -1390,11 +1344,11 @@ Display on character sheet:
 
 **File:** [NEW] `/app/api/characters/[characterId]/rigging/__tests__/route.test.ts`
 
-| Test Case | Capability Reference |
-|-----------|---------------------|
+| Test Case                 | Capability Reference                        |
+| ------------------------- | ------------------------------------------- |
 | Returns rigging equipment | Requirement: "hardware-specific attributes" |
-| Updates rigging state | Requirement: "control protocols" |
-| Requires authentication | Security requirement |
+| Updates rigging state     | Requirement: "control protocols"            |
+| Requires authentication   | Security requirement                        |
 
 ---
 

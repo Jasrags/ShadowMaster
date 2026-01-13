@@ -75,6 +75,7 @@ All creation happens on the character sheet. Budget summaries and validation sta
 > These notes are for context only; implementation details belong in plans, not ADRs.
 
 The sheet-driven mode requires:
+
 - Components that accept an `editable` or `mode` prop to switch between view/edit states
 - A unified budget tracking context that all purchase components can read
 - Inline validation feedback rather than step-gate validation

@@ -23,10 +23,7 @@ import type {
   InstalledGearMod,
   ItemLegality,
 } from "@/lib/types";
-import type {
-  CharacterCyberdeck,
-  CharacterCommlink,
-} from "@/lib/types/matrix";
+import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
 import type { CharacterRCC } from "@/lib/types/character";
 
 // =============================================================================
@@ -162,12 +159,7 @@ function validateGearItems(
   for (const item of items) {
     // Check base item availability
     if (item.availability !== undefined) {
-      const availResult = validateAvailability(
-        item.availability,
-        item.name,
-        "gear",
-        context
-      );
+      const availResult = validateAvailability(item.availability, item.name, "gear", context);
       if (availResult) errors.push(availResult);
     }
 
@@ -183,21 +175,13 @@ function validateGearItems(
 /**
  * Validate weapons and their modifications
  */
-function validateWeapons(
-  weapons: Weapon[],
-  context: GearValidationContext
-): GearValidationError[] {
+function validateWeapons(weapons: Weapon[], context: GearValidationContext): GearValidationError[] {
   const errors: GearValidationError[] = [];
 
   for (const weapon of weapons) {
     // Check base weapon availability
     if (weapon.availability !== undefined) {
-      const availResult = validateAvailability(
-        weapon.availability,
-        weapon.name,
-        "weapon",
-        context
-      );
+      const availResult = validateAvailability(weapon.availability, weapon.name, "weapon", context);
       if (availResult) errors.push(availResult);
     }
 
@@ -222,12 +206,7 @@ function validateArmor(
   for (const armor of armorItems) {
     // Check base armor availability
     if (armor.availability !== undefined) {
-      const availResult = validateAvailability(
-        armor.availability,
-        armor.name,
-        "armor",
-        context
-      );
+      const availResult = validateAvailability(armor.availability, armor.name, "armor", context);
       if (availResult) errors.push(availResult);
     }
 
@@ -267,12 +246,7 @@ function validateCyberdecks(
     }
 
     // Check device rating
-    const ratingResult = validateDeviceRating(
-      deck.deviceRating,
-      deck.name,
-      "cyberdeck",
-      context
-    );
+    const ratingResult = validateDeviceRating(deck.deviceRating, deck.name, "cyberdeck", context);
     if (ratingResult) errors.push(ratingResult);
   }
 
@@ -316,10 +290,7 @@ function validateCommlinks(
 /**
  * Validate RCCs for device rating and availability
  */
-function validateRCCs(
-  rccs: CharacterRCC[],
-  context: GearValidationContext
-): GearValidationError[] {
+function validateRCCs(rccs: CharacterRCC[], context: GearValidationContext): GearValidationError[] {
   const errors: GearValidationError[] = [];
 
   for (const rcc of rccs) {
@@ -336,12 +307,7 @@ function validateRCCs(
     }
 
     // Check device rating
-    const ratingResult = validateDeviceRating(
-      rcc.deviceRating,
-      rcc.name,
-      "rcc",
-      context
-    );
+    const ratingResult = validateDeviceRating(rcc.deviceRating, rcc.name, "rcc", context);
     if (ratingResult) errors.push(ratingResult);
   }
 
@@ -451,7 +417,11 @@ function validateAvailability(
   }
 
   // Check restricted at creation
-  if (legality === "restricted" && context.lifecycleStage === "creation" && !context.allowRestricted) {
+  if (
+    legality === "restricted" &&
+    context.lifecycleStage === "creation" &&
+    !context.allowRestricted
+  ) {
     return {
       code: "AVAILABILITY_RESTRICTED",
       message: `${itemName} is restricted (R) and cannot be purchased during character creation without GM approval.`,
@@ -503,7 +473,11 @@ function validateModAvailability(
   }
 
   // Check restricted at creation
-  if (legality === "restricted" && context.lifecycleStage === "creation" && !context.allowRestricted) {
+  if (
+    legality === "restricted" &&
+    context.lifecycleStage === "creation" &&
+    !context.allowRestricted
+  ) {
     return {
       code: "MOD_RESTRICTED",
       message: `${modName} on ${parentName} is restricted (R) and cannot be purchased during character creation without GM approval.`,

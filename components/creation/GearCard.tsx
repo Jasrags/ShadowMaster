@@ -31,7 +31,20 @@ import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, RatingSelector } from "./shared";
 import { getRatedItemValuesUnified, type RatedItem } from "@/lib/rules/ratings";
-import { Lock, Search, X, Plus, Minus, ShoppingCart, Sword, Shield, Backpack, Gem, AlertTriangle } from "lucide-react";
+import {
+  Lock,
+  Search,
+  X,
+  Plus,
+  Minus,
+  ShoppingCart,
+  Sword,
+  Shield,
+  Backpack,
+  Gem,
+  AlertTriangle,
+  Info,
+} from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -62,10 +75,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -102,87 +112,6 @@ interface GearCardProps {
 }
 
 // =============================================================================
-// BUDGET PROGRESS BAR COMPONENT
-// =============================================================================
-
-function BudgetProgressBar({
-  label,
-  description,
-  spent,
-  total,
-  source,
-  isOver,
-}: {
-  label: string;
-  description: string;
-  spent: number;
-  total: number;
-  source: string;
-  isOver: boolean;
-}) {
-  const remaining = total - spent;
-  const percentage = Math.min(100, (spent / total) * 100);
-
-  return (
-    <div className={`rounded-lg border p-3 ${
-      isOver
-        ? "border-red-200 bg-red-50 dark:border-red-800 dark:bg-red-900/20"
-        : "border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-    }`}>
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-          {label}
-        </div>
-        <div className={`text-lg font-bold ${
-          isOver
-            ? "text-red-600 dark:text-red-400"
-            : remaining === 0
-              ? "text-emerald-600 dark:text-emerald-400"
-              : "text-zinc-900 dark:text-zinc-100"
-        }`}>
-          {formatCurrency(remaining)}¥
-        </div>
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {description}
-      </div>
-
-      <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-        {source}
-        <span className="float-right">
-          of {formatCurrency(total)}¥ remaining
-        </span>
-      </div>
-
-      {/* Progress bar */}
-      <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
-        <div
-          className={`h-full rounded-full transition-all ${
-            isOver
-              ? "bg-red-500"
-              : remaining === 0
-                ? "bg-emerald-500"
-                : "bg-amber-500"
-          }`}
-          style={{ width: `${percentage}%` }}
-        />
-      </div>
-
-      {/* Over budget warning */}
-      {isOver && (
-        <div className="mt-2 flex items-center gap-1.5 text-xs text-red-600 dark:text-red-400">
-          <AlertTriangle className="h-3.5 w-3.5" />
-          <span>
-            {formatCurrency(Math.abs(remaining))}¥ over budget
-          </span>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
 // GEAR ITEM ROW COMPONENT
 // =============================================================================
 
@@ -212,9 +141,7 @@ function GearItemRow({
       }`}
     >
       <div className="flex-1 min-w-0">
-        <div className="font-medium text-zinc-900 dark:text-zinc-100">
-          {name}
-        </div>
+        <div className="font-medium text-zinc-900 dark:text-zinc-100">{name}</div>
         <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
           {stats}
           <span>Avail: {availability}</span>
@@ -285,7 +212,9 @@ function RatedGearItemRow({
         <div className="flex-1 min-w-0">
           <div className="font-medium text-zinc-900 dark:text-zinc-100">
             {item.name}
-            <span className="ml-1.5 text-xs text-zinc-500">(R{minRating}-{maxRating})</span>
+            <span className="ml-1.5 text-xs text-zinc-500">
+              (R{minRating}-{maxRating})
+            </span>
           </div>
           <div className="mt-0.5 flex flex-wrap gap-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span>{item.category}</span>
@@ -306,13 +235,14 @@ function RatedGearItemRow({
           <button
             onClick={() => setSelectedRating(Math.max(minRating, selectedRating - 1))}
             disabled={selectedRating <= minRating}
+            aria-label={`Decrease ${item.name} rating`}
             className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
               selectedRating > minRating
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Minus className="h-3 w-3" />
+            <Minus className="h-3 w-3" aria-hidden="true" />
           </button>
           <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
             {selectedRating}
@@ -320,25 +250,27 @@ function RatedGearItemRow({
           <button
             onClick={() => setSelectedRating(Math.min(maxRating, selectedRating + 1))}
             disabled={selectedRating >= maxRating}
+            aria-label={`Increase ${item.name} rating`}
             className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
               selectedRating < maxRating
                 ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
             }`}
           >
-            <Plus className="h-3 w-3" />
+            <Plus className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
         <button
           onClick={() => onAdd(selectedRating)}
           disabled={!canAfford}
+          aria-label={`Add ${item.name} to cart`}
           className={`flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
             canAfford
               ? "bg-emerald-500 text-white hover:bg-emerald-600"
               : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
           }`}
         >
-          <Plus className="h-3 w-3" />
+          <Plus className="h-3 w-3" aria-hidden="true" />
           Add
         </button>
       </div>
@@ -361,9 +293,7 @@ function CartItemRow({
 }) {
   return (
     <div className="flex items-center justify-between py-1.5">
-      <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">
-        {name}
-      </span>
+      <span className="truncate text-sm text-zinc-700 dark:text-zinc-300">{name}</span>
       <div className="flex items-center gap-2">
         <span className="text-xs text-zinc-500">{formatCurrency(cost)}¥</span>
         <button
@@ -444,15 +374,20 @@ export function GearCard({ state, updateState }: GearCardProps) {
   const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
   const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
   const augmentationSpent =
-    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    ) +
     ((state.selections?.bioware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const totalSpent = weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+  const totalSpent =
+    weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
   // Total item count
-  const totalItems = selectedWeapons.length + selectedArmor.length + selectedGear.length + selectedFoci.length;
+  const totalItems =
+    selectedWeapons.length + selectedArmor.length + selectedGear.length + selectedFoci.length;
 
   // Priority source
   const prioritySource = useMemo(() => {
@@ -724,9 +659,7 @@ export function GearCard({ state, updateState }: GearCardProps) {
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              Set priorities first
-            </p>
+            <p className="text-sm text-zinc-500 dark:text-zinc-400">Set priorities first</p>
           </div>
         </div>
       </CreationCard>
@@ -753,60 +686,72 @@ export function GearCard({ state, updateState }: GearCardProps) {
       }
     >
       <div className="space-y-4">
-        {/* Nuyen Budget */}
-        <BudgetProgressBar
-          label="Nuyen Budget"
-          description="Purchase weapons, armor, gear, and other equipment"
-          spent={totalSpent}
-          total={totalNuyen}
-          source={prioritySource}
-          isOver={isOverBudget}
-        />
-
-        {/* Karma conversion */}
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
-          <div className="flex items-center justify-between">
-            <div>
-              <div className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                Karma → Nuyen
-              </div>
-              <div className="text-xs text-amber-600 dark:text-amber-400">
-                {formatCurrency(KARMA_TO_NUYEN_RATE)}¥ per karma (max {MAX_KARMA_CONVERSION})
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => handleKarmaConversion(-1)}
-                disabled={karmaConversion <= 0}
-                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                  karmaConversion > 0
-                    ? "bg-amber-100 text-amber-700 hover:bg-amber-200 dark:bg-amber-900/40 dark:text-amber-300"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Minus className="h-4 w-4" />
-              </button>
-              <div className="flex h-8 w-10 items-center justify-center rounded bg-white text-base font-bold text-amber-700 dark:bg-zinc-800 dark:text-amber-300">
-                {karmaConversion}
-              </div>
-              <button
-                onClick={() => handleKarmaConversion(1)}
-                disabled={karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0}
-                className={`flex h-7 w-7 items-center justify-center rounded transition-colors ${
-                  karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
-                    ? "bg-amber-500 text-white hover:bg-amber-600"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Plus className="h-4 w-4" />
-              </button>
-            </div>
+        {/* Nuyen bar - compact style */}
+        <div className="space-y-1">
+          <div className="flex items-center justify-between text-xs">
+            <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+              <span>Nuyen</span>
+              <span className="group relative">
+                <Info className="h-3 w-3 cursor-help text-zinc-400" />
+                <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
+                  Total nuyen spent across all gear categories
+                </span>
+              </span>
+              {karmaConversion > 0 && (
+                <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                  (+{formatCurrency(convertedNuyen)}¥ karma)
+                </span>
+              )}
+            </span>
+            <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
+            </span>
           </div>
-          {convertedNuyen > 0 && (
-            <div className="mt-2 text-xs text-amber-600 dark:text-amber-400">
-              +{formatCurrency(convertedNuyen)}¥ from {karmaConversion} karma
+          <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div
+              className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
+              style={{ width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%` }}
+            />
+          </div>
+        </div>
+
+        {/* Karma conversion - compact */}
+        <div className="flex items-center justify-between rounded-lg bg-amber-50 px-3 py-2 dark:bg-amber-900/20">
+          <div className="flex items-center gap-2 text-xs">
+            <span className="font-medium text-amber-800 dark:text-amber-200">Karma → Nuyen</span>
+            <span className="text-amber-600 dark:text-amber-400">
+              ({formatCurrency(KARMA_TO_NUYEN_RATE)}¥/karma)
+            </span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <button
+              onClick={() => handleKarmaConversion(-1)}
+              disabled={karmaConversion <= 0}
+              aria-label="Decrease karma to nuyen conversion"
+              className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+                karmaConversion > 0
+                  ? "bg-amber-200 text-amber-700 hover:bg-amber-300 dark:bg-amber-900/60 dark:text-amber-300"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <Minus className="h-3 w-3" aria-hidden="true" />
+            </button>
+            <div className="flex h-6 w-8 items-center justify-center rounded bg-white text-sm font-bold text-amber-700 dark:bg-zinc-800 dark:text-amber-300">
+              {karmaConversion}
             </div>
-          )}
+            <button
+              onClick={() => handleKarmaConversion(1)}
+              disabled={karmaConversion >= MAX_KARMA_CONVERSION || karmaRemaining <= 0}
+              aria-label="Increase karma to nuyen conversion"
+              className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+                karmaConversion < MAX_KARMA_CONVERSION && karmaRemaining > 0
+                  ? "bg-amber-500 text-white hover:bg-amber-600"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <Plus className="h-3 w-3" aria-hidden="true" />
+            </button>
+          </div>
         </div>
 
         {/* Shopping cart */}
@@ -866,10 +811,15 @@ export function GearCard({ state, updateState }: GearCardProps) {
 
             const Icon = tab.icon;
             const count =
-              tab.id === "weapons" ? selectedWeapons.length :
-              tab.id === "armor" ? selectedArmor.length :
-              tab.id === "gear" ? selectedGear.length :
-              tab.id === "foci" ? selectedFoci.length : 0;
+              tab.id === "weapons"
+                ? selectedWeapons.length
+                : tab.id === "armor"
+                  ? selectedArmor.length
+                  : tab.id === "gear"
+                    ? selectedGear.length
+                    : tab.id === "foci"
+                      ? selectedFoci.length
+                      : 0;
 
             return (
               <button
@@ -889,11 +839,11 @@ export function GearCard({ state, updateState }: GearCardProps) {
                 <Icon className="h-3.5 w-3.5" />
                 <span>{tab.label}</span>
                 {count > 0 && (
-                  <span className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] ${
-                    activeTab === tab.id
-                      ? "bg-white/20"
-                      : "bg-amber-200/50 dark:bg-amber-800/50"
-                  }`}>
+                  <span
+                    className={`ml-0.5 rounded-full px-1.5 py-0.5 text-[10px] ${
+                      activeTab === tab.id ? "bg-white/20" : "bg-amber-200/50 dark:bg-amber-800/50"
+                    }`}
+                  >
                     {count}
                   </span>
                 )}

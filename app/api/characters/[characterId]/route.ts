@@ -11,15 +11,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import {
-  getCharacter,
-  updateCharacter,
-  deleteCharacter,
-} from "@/lib/storage/characters";
-import {
-  authorizeOwnerAccess,
-  type CharacterPermission,
-} from "@/lib/auth/character-authorization";
+import { getCharacter, updateCharacter, deleteCharacter } from "@/lib/storage/characters";
+import { authorizeOwnerAccess, type CharacterPermission } from "@/lib/auth/character-authorization";
 import { createAuditEntry, appendAuditEntry } from "@/lib/rules/character/state-machine";
 
 export async function GET(
@@ -30,21 +23,13 @@ export async function GET(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize view access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "view"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -59,10 +44,7 @@ export async function GET(
     });
   } catch (error) {
     console.error("Failed to get character:", error);
-    return NextResponse.json(
-      { success: false, error: "Failed to get character" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "Failed to get character" }, { status: 500 });
   }
 }
 
@@ -74,21 +56,13 @@ export async function PATCH(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize edit access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "edit"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "edit");
 
     if (!authResult.authorized) {
       return NextResponse.json(
@@ -178,21 +152,13 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
 
     // Authorize delete access
-    const authResult = await authorizeOwnerAccess(
-      userId,
-      userId,
-      characterId,
-      "delete"
-    );
+    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "delete");
 
     if (!authResult.authorized) {
       return NextResponse.json(

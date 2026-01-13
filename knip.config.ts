@@ -29,21 +29,48 @@ const config: KnipConfig = {
 
   // Ignore patterns
   ignore: [
+    // Test files
     "**/*.test.{ts,tsx}",
     "**/*.spec.{ts,tsx}",
     "**/__tests__/**",
     "**/e2e/**",
+
+    // Build artifacts
     "**/node_modules/**",
     "**/.next/**",
     "**/dist/**",
     "**/build/**",
-    "**/data/**",
-    "**/docs/**",
     "**/test-results/**",
     "**/playwright-report/**",
     "**/.eslintcache/**",
     "next-env.d.ts",
     "tsconfig.tsbuildinfo",
+
+    // Non-code directories
+    "**/data/**",
+    "**/docs/**",
+
+    // Work-in-progress gameplay features (not yet integrated into UI)
+    // These are complete modules awaiting character sheet integration
+    "app/campaigns/[id]/components/CampaignSessionsTab.tsx", // Campaign sessions UI
+    "app/characters/[id]/components/ActionResultToast.tsx", // Combat action feedback
+    "app/characters/[id]/components/AugmentationsPanel.tsx", // Augmentations display
+    "app/characters/[id]/components/CombatModeIndicator.tsx", // Combat state indicator
+    "app/characters/[id]/components/CombatTrackerModal.tsx", // Initiative tracker
+    "components/AugmentationCard.tsx", // Augmentation display card
+    "components/EssenceDisplay.tsx", // Essence meter component
+    "components/character/**", // Character sheet sub-components (Matrix, Rigging, Magic)
+    "components/combat/**", // Combat UI components
+    "components/cyberlimbs/**", // Cyberlimb management UI
+
+    // Work-in-progress rules engines (complete, awaiting UI integration)
+    "lib/migrations/**", // Data migration utilities
+    "lib/rules/augmentations/**", // Augmentation rules (used by API, not UI)
+    "lib/rules/contact-network.ts", // Contact networking rules
+    "lib/rules/gear/index.ts", // Gear barrel (submodules used directly)
+    "lib/rules/matrix/**", // Matrix action rules
+    "lib/rules/rigging/**", // Rigging/drone rules
+    "lib/rules/sync/**", // Character sync/migration rules
   ],
 
   // Path aliases (matching tsconfig.json)
@@ -52,38 +79,24 @@ const config: KnipConfig = {
   },
 
   // Ignore dependencies that are used but not imported directly
+  // Note: Many dependencies are now auto-detected by Knip plugins
   ignoreDependencies: [
-    // Next.js internal dependencies
-    "eslint-config-next",
     // server-only is used via Next.js convention (prevents client-side imports)
     "server-only",
-    // MCP servers are used by the MCP system, not directly imported
+    // MCP servers and SDK are used by the MCP system, not directly imported
     "@knip/mcp",
+    "@modelcontextprotocol/sdk",
     "@modelcontextprotocol/server-filesystem",
     "@modelcontextprotocol/server-memory",
     "@modelcontextprotocol/server-sequential-thinking",
     "next-devtools-mcp",
-    // Build tools (used by config files, not imported in code)
-    "@vitejs/plugin-react", // Used in vitest.config.ts
-    "@vitest/ui", // Used via Vitest CLI
-    // Type definitions that might be used indirectly
-    "@types/node",
-    "@types/react",
-    "@types/react-dom",
     // Testing libraries are used in test files (which we ignore)
-    "@testing-library/react",
     "@testing-library/user-event",
     // Type stubs (bcryptjs and uuid provide their own types)
     "@types/bcryptjs",
     "@types/uuid",
-    // Tailwind is used via PostCSS (Tailwind v4)
+    // Tailwind v4 is used via @tailwindcss/postcss plugin, not imported directly
     "tailwindcss",
-    "@tailwindcss/postcss", // Tailwind v4 PostCSS plugin
-    // Development tools (used in scripts/config, not imported)
-    "nodemon", // Used in lint:watch script
-    "concurrently", // Used in dev:all script
-    "husky", // Used for git hooks
-    "lint-staged", // Used in package.json lint-staged config
   ],
 
   // Ignore specific exports that are used but not detected
@@ -91,4 +104,3 @@ const config: KnipConfig = {
 };
 
 export default config;
-

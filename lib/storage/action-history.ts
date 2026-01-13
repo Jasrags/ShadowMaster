@@ -7,11 +7,7 @@
 
 import path from "path";
 import type { ID, ActionHistory, ActionResult, ActionHistoryStats } from "../types";
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile } from "./base";
 
 // =============================================================================
 // CONSTANTS
@@ -45,10 +41,7 @@ function getCharacterDir(userId: ID, characterId: ID): string {
 /**
  * Get action history for a character
  */
-export async function getActionHistory(
-  userId: ID,
-  characterId: ID
-): Promise<ActionHistory | null> {
+export async function getActionHistory(userId: ID, characterId: ID): Promise<ActionHistory | null> {
   const filePath = getActionHistoryPath(userId, characterId);
   return readJsonFile<ActionHistory>(filePath);
 }
@@ -90,10 +83,7 @@ export async function getAction(
 /**
  * Initialize action history for a character
  */
-export async function initializeActionHistory(
-  userId: ID,
-  characterId: ID
-): Promise<ActionHistory> {
+export async function initializeActionHistory(userId: ID, characterId: ID): Promise<ActionHistory> {
   const characterDir = getCharacterDir(userId, characterId);
   await ensureDirectory(characterDir);
 
@@ -326,10 +316,7 @@ export async function queryActionHistory(
 /**
  * Clear action history for a character
  */
-export async function clearActionHistory(
-  userId: ID,
-  characterId: ID
-): Promise<void> {
+export async function clearActionHistory(userId: ID, characterId: ID): Promise<void> {
   const history = await getActionHistory(userId, characterId);
   if (!history) {
     return;
@@ -345,10 +332,7 @@ export async function clearActionHistory(
 /**
  * Delete action history file for a character
  */
-export async function deleteActionHistory(
-  userId: ID,
-  characterId: ID
-): Promise<boolean> {
+export async function deleteActionHistory(userId: ID, characterId: ID): Promise<boolean> {
   const filePath = getActionHistoryPath(userId, characterId);
   try {
     const fs = await import("fs/promises");

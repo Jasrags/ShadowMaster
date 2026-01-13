@@ -134,11 +134,7 @@ function ActionCard({
           }}
           className="flex-shrink-0 p-1 rounded hover:bg-zinc-700/50 text-zinc-500"
         >
-          {expanded ? (
-            <ChevronDown className={s.icon} />
-          ) : (
-            <ChevronRight className={s.icon} />
-          )}
+          {expanded ? <ChevronDown className={s.icon} /> : <ChevronRight className={s.icon} />}
         </button>
 
         {/* Category icon */}
@@ -146,7 +142,9 @@ function ActionCard({
 
         {/* Action info */}
         <div className="flex-1 min-w-0">
-          <div className={`font-medium ${action.canPerform ? "text-zinc-200" : "text-zinc-500"} ${s.text}`}>
+          <div
+            className={`font-medium ${action.canPerform ? "text-zinc-200" : "text-zinc-500"} ${s.text}`}
+          >
             {action.name}
           </div>
           {action.subcategory && (
@@ -190,9 +188,7 @@ function ActionCard({
       {expanded && (
         <div className={`border-t border-zinc-700/50 ${s.padding} space-y-2`}>
           {/* Description */}
-          {action.description && (
-            <p className={`text-zinc-400 ${s.text}`}>{action.description}</p>
-          )}
+          {action.description && <p className={`text-zinc-400 ${s.text}`}>{action.description}</p>}
 
           {/* Blockers */}
           {!action.canPerform && action.blockers.length > 0 && (
@@ -222,7 +218,9 @@ function ActionCard({
             <div className="flex items-center gap-2 text-zinc-500">
               <Zap className="w-4 h-4" />
               <span className={s.text}>
-                {action.cost.resourceCosts.map((rc) => rc.description || `${rc.amount} ${rc.type}`).join(", ")}
+                {action.cost.resourceCosts
+                  .map((rc) => rc.description || `${rc.amount} ${rc.type}`)
+                  .join(", ")}
               </span>
             </div>
           )}
@@ -247,7 +245,9 @@ export function ActionSelector({
   showUnavailable = true,
   defaultCategory = "all",
 }: ActionSelectorProps) {
-  const [categoryFilter, setCategoryFilter] = useState<ActionCategory>(defaultCategory as ActionCategory);
+  const [categoryFilter, setCategoryFilter] = useState<ActionCategory>(
+    defaultCategory as ActionCategory
+  );
   const [searchQuery, setSearchQuery] = useState("");
   const [expandedActions, setExpandedActions] = useState<Set<string>>(new Set());
 
@@ -392,9 +392,7 @@ export function ActionSelector({
       {/* Action list */}
       <div className="space-y-4 max-h-96 overflow-y-auto">
         {filteredActions.length === 0 ? (
-          <div className={`text-center text-zinc-500 py-4 ${s.text}`}>
-            No matching actions
-          </div>
+          <div className={`text-center text-zinc-500 py-4 ${s.text}`}>No matching actions</div>
         ) : (
           Object.entries(groupedActions).map(([type, actions]) => {
             if (actions.length === 0) return null;

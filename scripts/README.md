@@ -4,15 +4,15 @@ Administrative and development scripts for managing the Shadow Master applicatio
 
 ## Quick Reference
 
-| Script | Purpose | Common Usage |
-|--------|---------|--------------|
-| `backup.ts` | Backup/restore data | `pnpm backup create` |
-| `health-check.ts` | Data integrity check | `pnpm health-check` |
-| `seed-data.ts` | Create test data | `pnpm seed-data` |
-| `user-admin.ts` | User management | `pnpm user-admin list` |
+| Script              | Purpose                      | Common Usage                             |
+| ------------------- | ---------------------------- | ---------------------------------------- |
+| `backup.ts`         | Backup/restore data          | `pnpm backup create`                     |
+| `health-check.ts`   | Data integrity check         | `pnpm health-check`                      |
+| `seed-data.ts`      | Create test data             | `pnpm seed-data`                         |
+| `user-admin.ts`     | User management              | `pnpm user-admin list`                   |
 | `sync-character.ts` | Sync character with rulebook | `npx tsx scripts/sync-character.ts <id>` |
-| `verify-data.ts` | Validate ruleset data | `pnpm verify-data` |
-| `migrate-*.ts` | Data migration utilities | See individual scripts |
+| `verify-data.ts`    | Validate ruleset data        | `pnpm verify-data`                       |
+| `migrate-*.ts`      | Data migration utilities     | See individual scripts                   |
 
 ---
 
@@ -36,16 +36,19 @@ npx tsx scripts/backup.ts restore backup-2024-01-15T10-30-00 --force
 ```
 
 **Options:**
+
 - `--output <dir>` - Directory for backups (default: `./backups`)
 - `--force` - Skip confirmation prompts on restore
 - `--help` - Show help
 
 **What gets backed up:**
+
 - Users (`data/users/`)
 - Characters (`data/characters/`)
 - Campaigns (`data/campaigns/`)
 
 **Not backed up:**
+
 - Edition data (static ruleset files)
 
 ---
@@ -69,12 +72,14 @@ npx tsx scripts/health-check.ts --json
 ```
 
 **Options:**
+
 - `--fix` - Attempt to fix issues (remove orphaned data)
 - `--verbose, -v` - Show detailed output
 - `--json` - Output results as JSON
 - `--help` - Show help
 
 **Checks performed:**
+
 - Directory structure validation
 - JSON file integrity
 - Orphaned characters (characters with invalid owner)
@@ -102,12 +107,14 @@ npx tsx scripts/seed-data.ts --minimal
 ```
 
 **Options:**
+
 - `--clean` - Remove existing user data before seeding
 - `--dry-run` - Preview changes without writing files
 - `--minimal` - Create minimal seed data
 - `--help` - Show help
 
 **Default seed data:**
+
 - 3 users: `admin@shadowmaster.test`, `player@shadowmaster.test`, `gm@shadowmaster.test`
 - 6 characters (various metatypes and statuses)
 - 2 campaigns
@@ -148,6 +155,7 @@ npx tsx scripts/user-admin.ts reactivate user@example.com
 ```
 
 **Commands:**
+
 - `list` - List all users
 - `info <email>` - Show user details
 - `create <email> <username> <password>` - Create user
@@ -158,6 +166,7 @@ npx tsx scripts/user-admin.ts reactivate user@example.com
 - `reactivate <email>` - Reactivate suspended user
 
 **Options:**
+
 - `--json` - JSON output (list, info)
 - `--force` - Skip confirmation (delete)
 - `--role <role>` - Initial role (create)
@@ -183,11 +192,13 @@ npx tsx scripts/sync-character.ts <character-id> --dry-run --verbose
 ```
 
 **Options:**
+
 - `--dry-run` - Preview changes without saving
 - `--verbose, -v` - Show detailed sync information
 - `--help` - Show help
 
 **What gets synchronized:**
+
 - Weapons (damage, accuracy, AP, etc.)
 - Armor (ratings, capacity)
 - Gear (availability, cost)
@@ -195,6 +206,7 @@ npx tsx scripts/sync-character.ts <character-id> --dry-run --verbose
 - Qualities (verified against rulebook)
 
 **What is preserved:**
+
 - Character-specific data (quantity, equipped status)
 - Custom modifications
 - Character ownership and ID
@@ -223,6 +235,7 @@ npx tsx scripts/verify-data.ts --report-only
 ```
 
 **Options:**
+
 - `--sources <codes>` - Comma-separated source codes
 - `--categories <cats>` - Comma-separated categories
 - `--output <dir>` - Output directory for reports
@@ -244,6 +257,7 @@ npx tsx scripts/migrate-rating-format.ts input.json output.json
 ```
 
 **Options:**
+
 - `--dry-run` - Preview changes without writing
 
 ---
@@ -261,9 +275,11 @@ npx tsx scripts/migrate-to-unified-ratings.ts sr5
 ```
 
 **Options:**
+
 - `--dry-run` - Preview changes without writing
 
 **Migration types:**
+
 - Consolidates duplicate "(Rating X)" entries
 - Converts gear ratingSpec formulas to explicit tables
 - Converts quality levels[] arrays to rating tables
@@ -351,6 +367,7 @@ main();
 ### Common Patterns
 
 **Dry-run mode:**
+
 ```typescript
 if (dryRun) {
   console.log("[DRY RUN] No changes will be made");
@@ -361,6 +378,7 @@ if (dryRun) {
 ```
 
 **Force flag for destructive operations:**
+
 ```typescript
 if (!force) {
   console.log("Use --force to confirm this action");
@@ -369,6 +387,7 @@ if (!force) {
 ```
 
 **JSON output option:**
+
 ```typescript
 if (jsonOutput) {
   console.log(JSON.stringify(data, null, 2));
@@ -382,27 +401,35 @@ if (jsonOutput) {
 ## Troubleshooting
 
 ### Script not found
+
 Ensure you're running from the project root:
+
 ```bash
 cd /path/to/ShadowMaster
 npx tsx scripts/backup.ts
 ```
 
 ### Permission denied
+
 Scripts may need data directory access:
+
 ```bash
 # Check data directory permissions
 ls -la data/
 ```
 
 ### TypeScript errors
+
 Run type check:
+
 ```bash
 pnpm type-check
 ```
 
 ### Missing dependencies
+
 Install dependencies:
+
 ```bash
 pnpm install
 ```

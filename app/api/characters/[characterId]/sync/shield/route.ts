@@ -24,18 +24,12 @@ interface RouteParams {
  *
  * Returns the stability shield status for UI display
  */
-export async function GET(
-  _request: NextRequest,
-  { params }: RouteParams
-): Promise<NextResponse> {
+export async function GET(_request: NextRequest, { params }: RouteParams): Promise<NextResponse> {
   try {
     // Verify session
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
     const { characterId } = await params;
@@ -43,10 +37,7 @@ export async function GET(
     // Get character (fast path using userId)
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ error: "Character not found" }, { status: 404 });
     }
 
     // Create request-scoped cache to avoid redundant disk reads
@@ -58,9 +49,6 @@ export async function GET(
     return NextResponse.json(shield);
   } catch (error) {
     console.error("Error getting shield status:", error);
-    return NextResponse.json(
-      { error: "Failed to get shield status" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "Failed to get shield status" }, { status: 500 });
   }
 }

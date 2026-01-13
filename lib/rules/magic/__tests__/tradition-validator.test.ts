@@ -74,9 +74,7 @@ function createMockRuleset(traditions: TraditionData[] = []): LoadedRuleset {
   } as LoadedRuleset;
 }
 
-function createMockCharacter(
-  overrides: Partial<Character> = {}
-): Partial<Character> {
+function createMockCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
     id: "test-character",
     name: "Test Character",
@@ -164,9 +162,7 @@ describe("validateTraditionEligibility", () => {
     const result = validateTraditionEligibility(character, "hermetic", mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "PATH_NO_TRADITION" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "PATH_NO_TRADITION" }));
   });
 
   it("should reject adept character", () => {
@@ -174,9 +170,7 @@ describe("validateTraditionEligibility", () => {
     const result = validateTraditionEligibility(character, "hermetic", mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "PATH_NO_TRADITION" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "PATH_NO_TRADITION" }));
   });
 
   it("should reject technomancer", () => {
@@ -187,9 +181,7 @@ describe("validateTraditionEligibility", () => {
     const result = validateTraditionEligibility(character, "hermetic", mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "PATH_NO_TRADITION" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "PATH_NO_TRADITION" }));
   });
 
   it("should reject character without magical path", () => {
@@ -197,9 +189,7 @@ describe("validateTraditionEligibility", () => {
     const result = validateTraditionEligibility(character, "hermetic", mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "NO_MAGICAL_PATH" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "NO_MAGICAL_PATH" }));
   });
 
   it("should reject character with zero Magic rating", () => {
@@ -210,18 +200,12 @@ describe("validateTraditionEligibility", () => {
     const result = validateTraditionEligibility(character, "hermetic", mockRuleset);
 
     expect(result.valid).toBe(false);
-    expect(result.errors).toContainEqual(
-      expect.objectContaining({ code: "NO_MAGIC_RATING" })
-    );
+    expect(result.errors).toContainEqual(expect.objectContaining({ code: "NO_MAGIC_RATING" }));
   });
 
   it("should reject non-existent tradition", () => {
     const character = createMockCharacter();
-    const result = validateTraditionEligibility(
-      character,
-      "nonexistent-tradition",
-      mockRuleset
-    );
+    const result = validateTraditionEligibility(character, "nonexistent-tradition", mockRuleset);
 
     expect(result.valid).toBe(false);
     expect(result.errors).toContainEqual(
@@ -286,9 +270,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "MUNDANE_HAS_MAGIC" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "MUNDANE_HAS_MAGIC" }));
     });
 
     it("should reject mundane with spells", () => {
@@ -300,9 +282,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "MUNDANE_HAS_SPELLS" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "MUNDANE_HAS_SPELLS" }));
     });
   });
 
@@ -335,9 +315,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "ADEPT_HAS_SPELLS" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "ADEPT_HAS_SPELLS" }));
     });
 
     it("should reject adept without Magic rating", () => {
@@ -348,9 +326,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "ADEPT_NO_MAGIC" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "ADEPT_NO_MAGIC" }));
     });
   });
 
@@ -443,9 +419,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "TECHNO_HAS_MAGIC" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "TECHNO_HAS_MAGIC" }));
     });
 
     it("should reject technomancer with spells", () => {
@@ -457,9 +431,7 @@ describe("validateMagicalPathConsistency", () => {
 
       const result = validateMagicalPathConsistency(character, mockRuleset);
       expect(result.valid).toBe(false);
-      expect(result.errors).toContainEqual(
-        expect.objectContaining({ code: "TECHNO_HAS_SPELLS" })
-      );
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "TECHNO_HAS_SPELLS" }));
     });
   });
 });

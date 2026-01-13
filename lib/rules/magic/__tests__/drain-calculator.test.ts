@@ -93,9 +93,7 @@ function createMockRuleset(): LoadedRuleset {
   } as LoadedRuleset;
 }
 
-function createMockCharacter(
-  overrides: Partial<Character> = {}
-): Partial<Character> {
+function createMockCharacter(overrides: Partial<Character> = {}): Partial<Character> {
   return {
     id: "test-character",
     name: "Test Character",
@@ -364,18 +362,13 @@ describe("calculateDrainPreview", () => {
 
   it("should calculate drain for multiple spells", () => {
     const character = createMockCharacter();
-    const results = calculateDrainPreview(
-      character,
-      ["fireball", "stunball"],
-      5,
-      mockRuleset
-    );
+    const results = calculateDrainPreview(character, ["fireball", "stunball"], 5, mockRuleset);
 
     expect(results.size).toBe(2);
-    
+
     const fireballResult = results.get("fireball");
     expect(fireballResult?.drainValue).toBe(4); // F-1 = 5-1
-    
+
     const stunballResult = results.get("stunball");
     expect(stunballResult?.drainValue).toBe(2); // F-3 = 5-3 = 2 (minimum)
   });

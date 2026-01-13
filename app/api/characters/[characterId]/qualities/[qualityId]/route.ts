@@ -19,18 +19,12 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { characterId, qualityId } = await params;
@@ -38,10 +32,7 @@ export async function DELETE(
     // Get character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Character must be active (not draft)
@@ -62,10 +53,7 @@ export async function DELETE(
     }
 
     // Load ruleset for character's edition
-    const mergeResult = await loadAndMergeRuleset(
-      character.editionCode,
-      character.attachedBookIds
-    );
+    const mergeResult = await loadAndMergeRuleset(character.editionCode, character.attachedBookIds);
 
     if (!mergeResult.success || !mergeResult.ruleset) {
       return NextResponse.json(
@@ -107,21 +95,12 @@ export async function DELETE(
         cost: result.cost,
       });
     } catch (error) {
-      const errorMessage =
-        error instanceof Error ? error.message : "Failed to buy off quality";
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 400 }
-      );
+      const errorMessage = error instanceof Error ? error.message : "Failed to buy off quality";
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
   } catch (error) {
     console.error("Failed to buy off quality:", error);
-    const errorMessage =
-      error instanceof Error ? error.message : "Failed to buy off quality";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    const errorMessage = error instanceof Error ? error.message : "Failed to buy off quality";
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }
-

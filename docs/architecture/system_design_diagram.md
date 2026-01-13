@@ -29,5 +29,5 @@
 
 ## Notes
 
--   Ruleset is immutable after merge.
--   Character sheet generator references module metadata.
+- Ruleset is immutable after merge.
+- Character sheet generator references module metadata.

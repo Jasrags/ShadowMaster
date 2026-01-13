@@ -137,7 +137,8 @@ export function CyberlimbEnhancementModal({
 
   // Calculate remaining capacity
   const remainingCapacity = useMemo(() => {
-    const used = limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0) +
+    const used =
+      limb.enhancements.reduce((sum, e) => sum + e.capacityUsed, 0) +
       limb.accessories.reduce((sum, a) => sum + a.capacityUsed, 0) +
       limb.weapons.reduce((sum, w) => sum + w.capacityUsed, 0);
     return limb.baseCapacity - used;
@@ -164,12 +165,12 @@ export function CyberlimbEnhancementModal({
       return MAX_ARMOR_RATING;
     }
     // For STR/AGI, max is augmented max (natural max + 4) minus current value
-    const augmentedMax = selectedType === "strength"
-      ? naturalMaxStrength + 4
-      : naturalMaxAgility + 4;
-    const currentValue = selectedType === "strength"
-      ? limb.baseStrength + limb.customStrength
-      : limb.baseAgility + limb.customAgility;
+    const augmentedMax =
+      selectedType === "strength" ? naturalMaxStrength + 4 : naturalMaxAgility + 4;
+    const currentValue =
+      selectedType === "strength"
+        ? limb.baseStrength + limb.customStrength
+        : limb.baseAgility + limb.customAgility;
     return Math.max(1, augmentedMax - currentValue);
   }, [selectedType, naturalMaxStrength, naturalMaxAgility, limb]);
 
@@ -179,7 +180,8 @@ export function CyberlimbEnhancementModal({
     const baseCost = rating * ENHANCEMENT_COST_PER_RATING;
     const gradeMult = GRADE_COST_MULTIPLIERS[limb.grade] || 1;
     const cost = Math.round(baseCost * gradeMult);
-    const availability = ENHANCEMENT_BASE_AVAILABILITY + (rating * ENHANCEMENT_AVAILABILITY_PER_RATING);
+    const availability =
+      ENHANCEMENT_BASE_AVAILABILITY + rating * ENHANCEMENT_AVAILABILITY_PER_RATING;
 
     return { capacityCost, cost, availability };
   }, [rating, limb.grade]);
@@ -189,10 +191,14 @@ export function CyberlimbEnhancementModal({
     const errors: string[] = [];
 
     if (installedTypes.has(selectedType)) {
-      errors.push(`${ENHANCEMENT_TYPES.find((t) => t.type === selectedType)?.name} already installed`);
+      errors.push(
+        `${ENHANCEMENT_TYPES.find((t) => t.type === selectedType)?.name} already installed`
+      );
     }
     if (calculations.capacityCost > remainingCapacity) {
-      errors.push(`Not enough capacity (need ${calculations.capacityCost}, have ${remainingCapacity})`);
+      errors.push(
+        `Not enough capacity (need ${calculations.capacityCost}, have ${remainingCapacity})`
+      );
     }
     if (calculations.cost > availableNuyen) {
       errors.push(`Not enough nuyen (need ${formatCurrency(calculations.cost)}¥)`);
@@ -202,7 +208,14 @@ export function CyberlimbEnhancementModal({
     }
 
     return { valid: errors.length === 0, errors };
-  }, [selectedType, installedTypes, calculations, remainingCapacity, availableNuyen, maxAvailability]);
+  }, [
+    selectedType,
+    installedTypes,
+    calculations,
+    remainingCapacity,
+    availableNuyen,
+    maxAvailability,
+  ]);
 
   // Reset rating when type changes
   const handleTypeChange = useCallback((type: CyberlimbEnhancementType) => {
@@ -311,7 +324,9 @@ export function CyberlimbEnhancementModal({
                 >
                   <Minus className="w-5 h-5" />
                 </button>
-                <div className={`w-20 h-16 flex items-center justify-center rounded-lg ${selectedTypeData.bgColor}`}>
+                <div
+                  className={`w-20 h-16 flex items-center justify-center rounded-lg ${selectedTypeData.bgColor}`}
+                >
                   <span className={`text-3xl font-bold font-mono ${selectedTypeData.color}`}>
                     {rating}
                   </span>
@@ -348,25 +363,31 @@ export function CyberlimbEnhancementModal({
             <div className="grid grid-cols-3 gap-3">
               <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                 <div className="text-[10px] text-zinc-500 uppercase">Capacity</div>
-                <div className={`text-xl font-bold font-mono ${
-                  calculations.capacityCost > remainingCapacity ? "text-red-400" : "text-cyan-400"
-                }`}>
+                <div
+                  className={`text-xl font-bold font-mono ${
+                    calculations.capacityCost > remainingCapacity ? "text-red-400" : "text-cyan-400"
+                  }`}
+                >
                   [{calculations.capacityCost}]
                 </div>
               </div>
               <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                 <div className="text-[10px] text-zinc-500 uppercase">Cost</div>
-                <div className={`text-xl font-bold font-mono ${
-                  calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-200"
-                }`}>
+                <div
+                  className={`text-xl font-bold font-mono ${
+                    calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-200"
+                  }`}
+                >
                   {formatCurrency(calculations.cost)}¥
                 </div>
               </div>
               <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
                 <div className="text-[10px] text-zinc-500 uppercase">Avail</div>
-                <div className={`text-xl font-bold font-mono ${
-                  calculations.availability > maxAvailability ? "text-red-400" : "text-zinc-200"
-                }`}>
+                <div
+                  className={`text-xl font-bold font-mono ${
+                    calculations.availability > maxAvailability ? "text-red-400" : "text-zinc-200"
+                  }`}
+                >
                   {calculations.availability}
                 </div>
               </div>
@@ -377,7 +398,10 @@ export function CyberlimbEnhancementModal({
           {!validation.valid && (
             <div className="space-y-1">
               {validation.errors.map((error, idx) => (
-                <div key={idx} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30">
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30"
+                >
                   <AlertTriangle className="w-4 h-4 text-red-400" />
                   <span className="text-xs text-red-400">{error}</span>
                 </div>

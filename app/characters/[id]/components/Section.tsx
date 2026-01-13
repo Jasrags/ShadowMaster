@@ -29,10 +29,10 @@ export function Section({ title, icon, children, className = "", theme }: Sectio
       <div className={t.components.section.wrapper}>
         <div className={`flex items-center gap-2 px-4 py-2 ${t.components.section.header}`}>
           {icon}
-          <h3 className={t.components.section.title}>
-            {title}
-          </h3>
-          <div className={`flex-1 h-px ml-2 ${t.id === 'modern-card' ? 'bg-stone-200 dark:bg-stone-800' : 'bg-linear-to-r from-emerald-500/20 to-transparent'}`} />
+          <h3 className={t.components.section.title}>{title}</h3>
+          <div
+            className={`flex-1 h-px ml-2 ${t.id === "modern-card" ? "bg-stone-200 dark:bg-stone-800" : "bg-linear-to-r from-emerald-500/20 to-transparent"}`}
+          />
         </div>
         <div className="p-4">{children}</div>
       </div>

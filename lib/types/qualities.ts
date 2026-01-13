@@ -345,4 +345,3 @@ export type QualityDynamicState =
   | { type: "code-of-honor"; state: CodeOfHonorState }
   | { type: "reputation"; state: Record<string, unknown> }
   | { type: "custom"; state: Record<string, unknown> };
-

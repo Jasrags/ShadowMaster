@@ -24,12 +24,14 @@ interface PendingAdvancement {
 export async function GET(
   request: NextRequest,
   { params }: { params: Promise<{ id: string }> }
-): Promise<NextResponse<{
-  success: boolean;
-  pendingAdvancements?: PendingAdvancement[];
-  count?: number;
-  error?: string
-}>> {
+): Promise<
+  NextResponse<{
+    success: boolean;
+    pendingAdvancements?: PendingAdvancement[];
+    count?: number;
+    error?: string;
+  }>
+> {
   try {
     const userId = await getSession();
     if (!userId) {
@@ -41,20 +43,14 @@ export async function GET(
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { id } = await params;
     const campaign = await getCampaignById(id);
 
     if (!campaign) {
-      return NextResponse.json(
-        { success: false, error: "Campaign not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
     }
 
     // Only GMs can view pending advancements
@@ -94,8 +90,9 @@ export async function GET(
     }
 
     // Sort by creation date (newest first)
-    pendingAdvancements.sort((a, b) =>
-      new Date(b.advancement.createdAt).getTime() - new Date(a.advancement.createdAt).getTime()
+    pendingAdvancements.sort(
+      (a, b) =>
+        new Date(b.advancement.createdAt).getTime() - new Date(a.advancement.createdAt).getTime()
     );
 
     return NextResponse.json({
@@ -105,9 +102,6 @@ export async function GET(
     });
   } catch (error) {
     console.error("Get pending advancements error:", error);
-    return NextResponse.json(
-      { success: false, error: "An error occurred" },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: "An error occurred" }, { status: 500 });
   }
 }

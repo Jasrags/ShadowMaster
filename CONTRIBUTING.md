@@ -134,4 +134,3 @@ make test-coverage
 ## License
 
 By contributing, you agree that your contributions will be licensed under the GNU General Public License v3.0, the same license as the project.
-

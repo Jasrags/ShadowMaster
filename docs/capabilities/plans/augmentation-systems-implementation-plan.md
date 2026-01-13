@@ -10,27 +10,30 @@ Implement a complete augmentation system that enables characters to install, man
 
 The following architectural decisions have been confirmed:
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| **Essence Precision Model** | Floating-point with 2 decimal precision | Standard approach matching rulebook notation (e.g., 5.73). All essence calculations will use `toFixed(2)` for display and rounding. |
-| **Cyberlimb Customization Scope** | Full customization in Phase 1 | Include complete STR/AGI per-limb customization from the start to avoid later refactoring. |
-| **Wireless Bonus Toggle** | Global toggle | Single character-level `wirelessBonusesEnabled: boolean` flag. Simplifies UI and matches common gameplay patterns. Per-augmentation control deferred to future enhancement. |
+| Decision                          | Choice                                  | Rationale                                                                                                                                                                   |
+| --------------------------------- | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Essence Precision Model**       | Floating-point with 2 decimal precision | Standard approach matching rulebook notation (e.g., 5.73). All essence calculations will use `toFixed(2)` for display and rounding.                                         |
+| **Cyberlimb Customization Scope** | Full customization in Phase 1           | Include complete STR/AGI per-limb customization from the start to avoid later refactoring.                                                                                  |
+| **Wireless Bonus Toggle**         | Global toggle                           | Single character-level `wirelessBonusesEnabled: boolean` flag. Simplifies UI and matches common gameplay patterns. Per-augmentation control deferred to future enhancement. |
 
 ### Implementation Notes from Decisions
 
 **Essence Precision:**
+
 - Store as `number` type (JavaScript float)
 - Round to 2 decimal places on all calculations: `Math.round(value * 100) / 100`
 - Display using `toFixed(2)` for consistent formatting
 - Minimum viable essence threshold: `0.01`
 
 **Cyberlimb Customization:**
+
 - Each cyberlimb tracks individual `strength` and `agility` attributes
 - Base values equal to character's natural attributes
 - Customization points can increase attributes up to racial maximum + 3
 - Customization costs capacity (1 capacity per +1 attribute point)
 
 **Global Wireless:**
+
 - Add `wirelessBonusesEnabled: boolean` to Character type
 - When enabled, all wireless bonuses from augmentations apply
 - When disabled, no wireless bonuses apply (but augmentations still function)
@@ -40,15 +43,15 @@ The following architectural decisions have been confirmed:
 
 ### Already Implemented
 
-| Component | Location | Status |
-|-----------|----------|--------|
-| CyberwareItem/BiowareItem types | `/lib/types/character.ts` | Complete |
-| CyberwareCatalogItem/BiowareCatalogItem | `/lib/types/edition.ts` | Complete |
-| Grade multiplier constants | `/lib/types/character.ts` | Complete |
-| EssenceHole interface | `/lib/types/character.ts` | Complete |
-| Essence-magic link calculations | `/lib/rules/magic/essence-magic-link.ts` | Partial |
-| Cyberware/Bioware catalogs | `/data/editions/sr5/core-rulebook.json` | Complete |
-| Character storage fields | `/lib/storage/characters.ts` | Basic |
+| Component                               | Location                                 | Status   |
+| --------------------------------------- | ---------------------------------------- | -------- |
+| CyberwareItem/BiowareItem types         | `/lib/types/character.ts`                | Complete |
+| CyberwareCatalogItem/BiowareCatalogItem | `/lib/types/edition.ts`                  | Complete |
+| Grade multiplier constants              | `/lib/types/character.ts`                | Complete |
+| EssenceHole interface                   | `/lib/types/character.ts`                | Complete |
+| Essence-magic link calculations         | `/lib/rules/magic/essence-magic-link.ts` | Partial  |
+| Cyberware/Bioware catalogs              | `/data/editions/sr5/core-rulebook.json`  | Complete |
+| Character storage fields                | `/lib/storage/characters.ts`             | Basic    |
 
 ### Needs Implementation
 
@@ -460,85 +463,85 @@ Phase 7 (Ruleset Hooks)
 
 **File:** `/lib/rules/augmentations/__tests__/essence.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| `calculateCyberwareEssence` returns correct value for standard grade | Guarantee #1 |
-| `calculateCyberwareEssence` applies grade multipliers correctly | Requirement: grade definitions |
-| `calculateRemainingEssence` enforces minimum 0.01 threshold | Requirement: minimum threshold |
-| Rated augmentations scale essence correctly | Requirement: rating formulas |
-| All essence values rounded to exactly 2 decimal places | Precision decision |
-| `roundEssence(0.125)` returns 0.13 (proper rounding) | Precision implementation |
-| `formatEssence(5.7)` returns "5.70" (display formatting) | Precision display |
-| Essence calculations avoid floating-point accumulation errors | Precision robustness |
+| Test Case                                                            | Validates                      |
+| -------------------------------------------------------------------- | ------------------------------ |
+| `calculateCyberwareEssence` returns correct value for standard grade | Guarantee #1                   |
+| `calculateCyberwareEssence` applies grade multipliers correctly      | Requirement: grade definitions |
+| `calculateRemainingEssence` enforces minimum 0.01 threshold          | Requirement: minimum threshold |
+| Rated augmentations scale essence correctly                          | Requirement: rating formulas   |
+| All essence values rounded to exactly 2 decimal places               | Precision decision             |
+| `roundEssence(0.125)` returns 0.13 (proper rounding)                 | Precision implementation       |
+| `formatEssence(5.7)` returns "5.70" (display formatting)             | Precision display              |
+| Essence calculations avoid floating-point accumulation errors        | Precision robustness           |
 
 **File:** `/lib/rules/augmentations/__tests__/essence-hole.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| Essence hole increases on augmentation install | Requirement: essence hole mechanism |
-| Essence hole persists after augmentation removal | Guarantee #2: permanent magic loss |
-| Magic loss calculated correctly per edition formula | Guarantee #2 |
-| Essence hole only tracked for awakened/emerged | Edge case |
+| Test Case                                           | Validates                           |
+| --------------------------------------------------- | ----------------------------------- |
+| Essence hole increases on augmentation install      | Requirement: essence hole mechanism |
+| Essence hole persists after augmentation removal    | Guarantee #2: permanent magic loss  |
+| Magic loss calculated correctly per edition formula | Guarantee #2                        |
+| Essence hole only tracked for awakened/emerged      | Edge case                           |
 
 **File:** `/lib/rules/augmentations/__tests__/validation.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| Rejects installation when essence < 0 | Constraint: minimum threshold |
-| Rejects augmentation exceeding attribute max | Constraint: ruleset maximums |
-| Rejects forbidden items at creation | Constraint: availability |
-| Identifies mutually exclusive augmentations | Constraint: mutual exclusivity |
-| Allows restricted items in active play | Lifecycle stage handling |
+| Test Case                                    | Validates                      |
+| -------------------------------------------- | ------------------------------ |
+| Rejects installation when essence < 0        | Constraint: minimum threshold  |
+| Rejects augmentation exceeding attribute max | Constraint: ruleset maximums   |
+| Rejects forbidden items at creation          | Constraint: availability       |
+| Identifies mutually exclusive augmentations  | Constraint: mutual exclusivity |
+| Allows restricted items in active play       | Lifecycle stage handling       |
 
 **File:** `/lib/rules/augmentations/__tests__/cyberlimb.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| Calculates cyberlimb capacity correctly | Requirement: capacity constraints |
-| Rejects enhancement exceeding capacity | Requirement: capacity constraints |
-| Enhancement removal frees capacity | Post-creation management |
-| Cyberlimb STR customization within racial max + 3 | Full customization decision |
-| Cyberlimb AGI customization within racial max + 3 | Full customization decision |
-| Customization costs 1 capacity per +1 attribute | Customization capacity cost |
-| Rejects customization when insufficient capacity | Capacity vs customization conflict |
-| Base attributes match character's natural values | Customization initialization |
-| Capacity breakdown shows enhancements vs customization separately | Capacity accounting |
+| Test Case                                                         | Validates                          |
+| ----------------------------------------------------------------- | ---------------------------------- |
+| Calculates cyberlimb capacity correctly                           | Requirement: capacity constraints  |
+| Rejects enhancement exceeding capacity                            | Requirement: capacity constraints  |
+| Enhancement removal frees capacity                                | Post-creation management           |
+| Cyberlimb STR customization within racial max + 3                 | Full customization decision        |
+| Cyberlimb AGI customization within racial max + 3                 | Full customization decision        |
+| Customization costs 1 capacity per +1 attribute                   | Customization capacity cost        |
+| Rejects customization when insufficient capacity                  | Capacity vs customization conflict |
+| Base attributes match character's natural values                  | Customization initialization       |
+| Capacity breakdown shows enhancements vs customization separately | Capacity accounting                |
 
 **File:** `/lib/rules/augmentations/__tests__/management.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
+| Test Case                                                         | Validates                         |
+| ----------------------------------------------------------------- | --------------------------------- |
 | Install updates character essence correctly (2 decimal precision) | Guarantee #1 + precision decision |
-| Install adds item to character arrays | Guarantee #4: auditable record |
-| Remove restores essence correctly | Post-creation management |
-| Grade upgrade recalculates essence | Post-creation management |
-| Global wireless toggle enables all wireless bonuses | Global wireless decision |
-| Global wireless toggle disables all wireless bonuses | Global wireless decision |
-| Wireless bonus aggregation only when globally enabled | Functional integration |
+| Install adds item to character arrays                             | Guarantee #4: auditable record    |
+| Remove restores essence correctly                                 | Post-creation management          |
+| Grade upgrade recalculates essence                                | Post-creation management          |
+| Global wireless toggle enables all wireless bonuses               | Global wireless decision          |
+| Global wireless toggle disables all wireless bonuses              | Global wireless decision          |
+| Wireless bonus aggregation only when globally enabled             | Functional integration            |
 
 #### Integration Tests
 
 **File:** `/app/api/characters/[characterId]/augmentations/__tests__/route.test.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| POST creates augmentation with correct essence | API correctness |
-| POST validates before installation | Validation enforcement |
-| DELETE removes augmentation and updates essence | API correctness |
-| PUT grade upgrade recalculates costs | API correctness |
-| Unauthorized access returns 401 | Security |
+| Test Case                                       | Validates              |
+| ----------------------------------------------- | ---------------------- |
+| POST creates augmentation with correct essence  | API correctness        |
+| POST validates before installation              | Validation enforcement |
+| DELETE removes augmentation and updates essence | API correctness        |
+| PUT grade upgrade recalculates costs            | API correctness        |
+| Unauthorized access returns 401                 | Security               |
 
 #### E2E Tests
 
 **File:** `/e2e/augmentations.spec.ts`
 
-| Test Case | Validates |
-|-----------|-----------|
-| Complete cyberware installation flow | Full user journey |
-| Essence display updates in real-time | UI responsiveness |
-| Magic user sees magic reduction warning | UX for awakened |
-| Cyberlimb enhancement installation | Capacity system |
-| Character sheet shows installed augmentations | Data persistence |
+| Test Case                                     | Validates         |
+| --------------------------------------------- | ----------------- |
+| Complete cyberware installation flow          | Full user journey |
+| Essence display updates in real-time          | UI responsiveness |
+| Magic user sees magic reduction warning       | UX for awakened   |
+| Cyberlimb enhancement installation            | Capacity system   |
+| Character sheet shows installed augmentations | Data persistence  |
 
 ### Manual Verification Steps
 
@@ -567,30 +570,30 @@ Phase 7 (Ruleset Hooks)
 
 ## Capability Reference Matrix
 
-| Capability Requirement | Implementation Location | Test File |
-|------------------------|------------------------|-----------|
-| Verifiable Essence reduction | `essence.ts:calculateCyberwareEssence` | `essence.test.ts` |
-| Permanent Magic/Resonance link | `essence-hole.ts:calculateMagicLoss` | `essence-hole.test.ts` |
-| Measurable bonuses by grade | `grades.ts:applyGradeToEssence` | `grades.test.ts` |
-| Auditable modification record | `management.ts:installCyberware` | `management.test.ts` |
-| High-precision Essence tracking | `essence.ts` (all functions) | `essence.test.ts` |
-| Catalog-driven selection | `RulesetContext.tsx:useCyberwareCatalog` | Integration tests |
-| Rating-based scaling | `essence.ts:calculateCyberwareEssence` | `essence.test.ts` |
-| Cyberlimb capacity constraints | `cyberlimb.ts` | `cyberlimb.test.ts` |
-| Automatic bonus propagation | `derived-stats.ts:applyAugmentationBonusesToStats` | Integration tests |
-| Wireless bonus tracking | `management.ts:toggleGlobalWirelessBonus` | `management.test.ts` |
-| Availability constraints | `validation.ts:validateAvailabilityConstraint` | `validation.test.ts` |
-| Mutual exclusivity enforcement | `validation.ts:validateMutualExclusion` | `validation.test.ts` |
+| Capability Requirement          | Implementation Location                            | Test File              |
+| ------------------------------- | -------------------------------------------------- | ---------------------- |
+| Verifiable Essence reduction    | `essence.ts:calculateCyberwareEssence`             | `essence.test.ts`      |
+| Permanent Magic/Resonance link  | `essence-hole.ts:calculateMagicLoss`               | `essence-hole.test.ts` |
+| Measurable bonuses by grade     | `grades.ts:applyGradeToEssence`                    | `grades.test.ts`       |
+| Auditable modification record   | `management.ts:installCyberware`                   | `management.test.ts`   |
+| High-precision Essence tracking | `essence.ts` (all functions)                       | `essence.test.ts`      |
+| Catalog-driven selection        | `RulesetContext.tsx:useCyberwareCatalog`           | Integration tests      |
+| Rating-based scaling            | `essence.ts:calculateCyberwareEssence`             | `essence.test.ts`      |
+| Cyberlimb capacity constraints  | `cyberlimb.ts`                                     | `cyberlimb.test.ts`    |
+| Automatic bonus propagation     | `derived-stats.ts:applyAugmentationBonusesToStats` | Integration tests      |
+| Wireless bonus tracking         | `management.ts:toggleGlobalWirelessBonus`          | `management.test.ts`   |
+| Availability constraints        | `validation.ts:validateAvailabilityConstraint`     | `validation.test.ts`   |
+| Mutual exclusivity enforcement  | `validation.ts:validateMutualExclusion`            | `validation.test.ts`   |
 
 ## Risk Assessment
 
-| Risk | Likelihood | Impact | Mitigation |
-|------|------------|--------|------------|
-| Essence floating-point rounding errors | Low | Medium | Consistent use of `roundEssence()` utility, comprehensive edge case tests |
-| Cyberlimb capacity + customization edge cases | Medium | Medium | Document all edge cases, add validation for capacity vs customization conflicts |
-| Magic reduction formula inconsistency | Low | High | Test against official rulebook examples |
-| Cyberlimb attribute averaging complexity | Medium | Medium | Clear documentation of when averaging applies (multiple limbs) |
-| Performance with many augmentations | Low | Low | Optimize aggregation functions if needed |
+| Risk                                          | Likelihood | Impact | Mitigation                                                                      |
+| --------------------------------------------- | ---------- | ------ | ------------------------------------------------------------------------------- |
+| Essence floating-point rounding errors        | Low        | Medium | Consistent use of `roundEssence()` utility, comprehensive edge case tests       |
+| Cyberlimb capacity + customization edge cases | Medium     | Medium | Document all edge cases, add validation for capacity vs customization conflicts |
+| Magic reduction formula inconsistency         | Low        | High   | Test against official rulebook examples                                         |
+| Cyberlimb attribute averaging complexity      | Medium     | Medium | Clear documentation of when averaging applies (multiple limbs)                  |
+| Performance with many augmentations           | Low        | Low    | Optimize aggregation functions if needed                                        |
 
 ## Open Questions
 
@@ -600,12 +603,12 @@ Phase 7 (Ruleset Hooks)
 
 ## Resolved Questions
 
-| Question | Decision | Date |
-|----------|----------|------|
-| Essence precision model | Floating-point with 2 decimal precision | 2025-12-30 |
-| Cyberlimb customization scope | Full STR/AGI per-limb in Phase 1 | 2025-12-30 |
-| Wireless bonus granularity | Global character-level toggle | 2025-12-30 |
+| Question                      | Decision                                | Date       |
+| ----------------------------- | --------------------------------------- | ---------- |
+| Essence precision model       | Floating-point with 2 decimal precision | 2025-12-30 |
+| Cyberlimb customization scope | Full STR/AGI per-limb in Phase 1        | 2025-12-30 |
+| Wireless bonus granularity    | Global character-level toggle           | 2025-12-30 |
 
 ---
 
-*Generated following capability specification: `/docs/capabilities/character.augmentation-systems.md`*
+_Generated following capability specification: `/docs/capabilities/character.augmentation-systems.md`_

@@ -127,10 +127,7 @@ export function rollDiceExploding(
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): DiceResult[] {
   const dice: DiceResult[] = [];
-  let diceToRoll = Math.max(
-    rules.minDicePool ?? 1,
-    Math.min(rules.maxDicePool ?? 50, poolSize)
-  );
+  let diceToRoll = Math.max(rules.minDicePool ?? 1, Math.min(rules.maxDicePool ?? 50, poolSize));
 
   // Maximum explosions to prevent infinite loops (rare but possible)
   const maxExplosions = 100;
@@ -169,10 +166,7 @@ export function rollDiceExploding(
 /**
  * Count hits in a dice pool
  */
-export function calculateHits(
-  dice: DiceResult[],
-  hitThreshold: number = 5
-): number {
+export function calculateHits(dice: DiceResult[], hitThreshold: number = 5): number {
   return dice.filter((d) => d.value >= hitThreshold).length;
 }
 
@@ -233,8 +227,7 @@ export function calculateGlitch(
   const isGlitch = ones > glitchThresholdValue;
 
   // Critical glitch: glitch AND zero hits
-  const isCriticalGlitch =
-    isGlitch && (rules.criticalGlitchRequiresZeroHits ? hits === 0 : true);
+  const isCriticalGlitch = isGlitch && (rules.criticalGlitchRequiresZeroHits ? hits === 0 : true);
 
   return {
     isGlitch,
@@ -366,11 +359,7 @@ export function executeReroll(
   const dice = rerollNonHits(originalDice, rules);
 
   // Calculate hits
-  const { hits, rawHits, limitApplied } = calculateHitsWithLimit(
-    dice,
-    rules.hitThreshold,
-    limit
-  );
+  const { hits, rawHits, limitApplied } = calculateHitsWithLimit(dice, rules.hitThreshold, limit);
 
   // Calculate glitch (on new dice, not original)
   const glitchResult = calculateGlitch(dice, hits, rules);
@@ -406,10 +395,7 @@ export function expectedHits(poolSize: number, hitThreshold: number = 5): number
 /**
  * Calculate probability of glitching for a given pool size
  */
-export function glitchProbability(
-  poolSize: number,
-  glitchThreshold: number = 0.5
-): number {
+export function glitchProbability(poolSize: number, glitchThreshold: number = 0.5): number {
   // Probability of rolling a 1 on d6 = 1/6
   const oneProbability = 1 / 6;
   const threshold = Math.floor(poolSize * glitchThreshold);

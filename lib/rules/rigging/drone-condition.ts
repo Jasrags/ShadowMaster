@@ -87,10 +87,7 @@ export function getDroneConditionStatus(drone: SlavedDrone): DroneConditionResul
  * Apply damage to a drone
  * Returns updated drone and overflow damage
  */
-export function applyDroneDamage(
-  drone: SlavedDrone,
-  damage: number
-): DamageApplicationResult {
+export function applyDroneDamage(drone: SlavedDrone, damage: number): DamageApplicationResult {
   const previousDamage = drone.conditionDamageTaken;
   const newDamage = previousDamage + damage;
   const overflow = Math.max(0, newDamage - drone.conditionMonitorMax);
@@ -143,10 +140,7 @@ export function applyDamageToNetworkDrone(
  * Repair drone damage
  * Repairs cannot exceed the current damage
  */
-export function repairDroneDamage(
-  drone: SlavedDrone,
-  healAmount: number
-): RepairResult {
+export function repairDroneDamage(drone: SlavedDrone, healAmount: number): RepairResult {
   const previousDamage = drone.conditionDamageTaken;
   const actualHeal = Math.min(healAmount, previousDamage);
   const currentDamage = previousDamage - actualHeal;

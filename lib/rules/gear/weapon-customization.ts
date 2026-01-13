@@ -82,7 +82,7 @@ export const DEFAULT_MOUNT_REGISTRY: WeaponSubcategoryMountRegistry = {
     size: "heavy-pistol",
     availableMounts: ["barrel", "top", "under"],
   },
-  "smg": {
+  smg: {
     size: "smg",
     availableMounts: ["barrel", "top", "under", "stock"],
   },
@@ -98,7 +98,7 @@ export const DEFAULT_MOUNT_REGISTRY: WeaponSubcategoryMountRegistry = {
     size: "rifle",
     availableMounts: ["barrel", "top", "under", "stock"],
   },
-  "shotgun": {
+  shotgun: {
     size: "rifle",
     availableMounts: ["barrel", "top", "under", "stock"],
   },
@@ -155,9 +155,7 @@ export function validateModInstallation(
 
   // Check if weapon supports customization
   if (!mountConfig) {
-    errors.push(
-      `Weapon subcategory "${weapon.subcategory}" does not support modifications.`
-    );
+    errors.push(`Weapon subcategory "${weapon.subcategory}" does not support modifications.`);
     return { valid: false, errors, warnings };
   }
 
@@ -177,9 +175,7 @@ export function validateModInstallation(
     for (const mount of requiredMounts) {
       // Check if mount is available on this weapon type
       if (!mountConfig.availableMounts.includes(mount)) {
-        errors.push(
-          `Mount point "${mount}" is not available on ${weapon.subcategory} weapons.`
-        );
+        errors.push(`Mount point "${mount}" is not available on ${weapon.subcategory} weapons.`);
         continue;
       }
 
@@ -209,9 +205,7 @@ export function validateModInstallation(
       (weapon.catalogId && mod.compatibleWeapons.includes(weapon.catalogId));
 
     if (!isCompatible) {
-      errors.push(
-        `This modification is not compatible with ${weapon.subcategory} weapons.`
-      );
+      errors.push(`This modification is not compatible with ${weapon.subcategory} weapons.`);
     }
   }
 
@@ -229,9 +223,7 @@ export function validateModInstallation(
   }
 
   // Check for duplicate modification
-  const existingMod = weapon.modifications?.find(
-    (m) => m.catalogId === mod.id
-  );
+  const existingMod = weapon.modifications?.find((m) => m.catalogId === mod.id);
   if (existingMod) {
     warnings.push(
       `A modification of this type is already installed. Some weapons allow multiple instances.`
@@ -258,9 +250,7 @@ export function getAvailableMounts(
   }
 
   const occupiedMounts = weapon.occupiedMounts ?? [];
-  return mountConfig.availableMounts.filter(
-    (mount) => !occupiedMounts.includes(mount)
-  );
+  return mountConfig.availableMounts.filter((mount) => !occupiedMounts.includes(mount));
 }
 
 /**
@@ -336,10 +326,7 @@ export function applyBuiltInModifications(
  * Remove a modification from a weapon.
  * Returns an error if the modification is built-in (immutable).
  */
-export function removeModification(
-  weapon: Weapon,
-  modId: string
-): ModRemovalResult {
+export function removeModification(weapon: Weapon, modId: string): ModRemovalResult {
   const modifications = weapon.modifications ?? [];
   const modIndex = modifications.findIndex((m) => m.catalogId === modId);
 
@@ -450,18 +437,13 @@ export function installModification(
  */
 export function calculateModificationCost(weapon: Weapon): number {
   const modifications = weapon.modifications ?? [];
-  return modifications
-    .filter((m) => !m.isBuiltIn)
-    .reduce((total, m) => total + m.cost, 0);
+  return modifications.filter((m) => !m.isBuiltIn).reduce((total, m) => total + m.cost, 0);
 }
 
 /**
  * Get all modifications of a specific type installed on a weapon.
  */
-export function getModificationsByMount(
-  weapon: Weapon,
-  mount: WeaponMount
-): InstalledWeaponMod[] {
+export function getModificationsByMount(weapon: Weapon, mount: WeaponMount): InstalledWeaponMod[] {
   const modifications = weapon.modifications ?? [];
   return modifications.filter((m) => m.mount === mount);
 }

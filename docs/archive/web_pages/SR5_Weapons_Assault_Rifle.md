@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -8,31 +8,31 @@ Use the Automatics skill when firing an assault rifle. Assault rifles can take t
 
 **Range Table**
 
-| DP Modifier | Short +0 | Medium -1 | Long -3 | Extreme -6 |
-| --- | --- | --- | --- | --- |
-| Automatics | Range in Meters |
-| Assault Rifles | 0–25 | 26–150 | 151–350 | 351–550 |
+| DP Modifier    | Short +0        | Medium -1 | Long -3 | Extreme -6 |
+| -------------- | --------------- | --------- | ------- | ---------- |
+| Automatics     | Range in Meters |
+| Assault Rifles | 0–25            | 26–150    | 151–350 | 351–550    |
 
-| Weapon | Acc | DV | AP | Modes | RC | Ammo | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| AK-97 | 4 | 10P | -2 | SA/BF/FA | – | 38 ( c ) | 4R | 950¥ | Core |
-| AK-98 | 5 | 10P | -2 | SA/BF/FA | – | 38 ( c ) | 8F | 1,250¥ | SR5:R&G |
-| Ares Alpha | 5 (7) | 11P | -2 | SA/BF/FA | 2 | 42 ( c ) | 11F | 2,650¥ | Core |
-| Ares HVAR | 5 (7) | 8P | – | SA/BF/FA | 3 (4) | 50 ( c ) | 11F | 2,400¥ | SR5:R&G |
-| Colt Inception | 7 (8) | 10P | -1 | SA/BF | 1 (3) | 35 ( c ) | 11R | 2,250¥ | SR5:GH3 |
-| Colt M23 | 4 | 9P | -2 | SA/BF/FA | – | 40 ( c ) | 4R | 550¥ | Core |
-| FN HAR | 5 (6) | 10P | -2 | SA/BF/FA | 2 | 35 ( c ) | 8R | 1,500¥ | Core |
-| HK XM30, Assault Rifle | 6 (8) | 9P | -2 | SA/BF/FA | – (1) | 30 ( c ) | 15F | 4,500¥ | SR5:R&G |
-| Krupp Arms Kriegfaust | 8 | 9P | -1 | SA/BF | 1 | 25 ( d ) | 10R | 1,300¥ | SR5:GH3 |
-| Nissan Optimum II | 5 (7) | 9P | -2 | SA/BF/FA | 1 | 30 ( c ) | 10F | 2,300¥ | SR5:R&G |
-| SBD-44 | 3 | 10P | -1 | SA/BF/FA | – | 32 ( c ) | 4R | 500¥ | SR5:GH3 |
-| Shiawase Arms Monsoon | 5 | 10P | -1 | SA/BF | 1 | 20 ( ml )×6 | 10F | 1,900¥ | SR5:GH3 |
-| Ultimax Rain Forest Carbine | 7 | 14P | -4 | SA | – (1) | 18 ( c ) | 5R | 2,800¥ | SR5:GH3 |
-| Yamaha Raiden | 6 (8) | 11P | -2 | BF/FA | 2 | 60 ( c ) | 14F | 2,600¥ | Core |
+| Weapon                      | Acc   | DV  | AP  | Modes    | RC    | Ammo        | Avail | Cost   | Source  |
+| --------------------------- | ----- | --- | --- | -------- | ----- | ----------- | ----- | ------ | ------- |
+| AK-97                       | 4     | 10P | -2  | SA/BF/FA | –     | 38 ( c )    | 4R    | 950¥   | Core    |
+| AK-98                       | 5     | 10P | -2  | SA/BF/FA | –     | 38 ( c )    | 8F    | 1,250¥ | SR5:R&G |
+| Ares Alpha                  | 5 (7) | 11P | -2  | SA/BF/FA | 2     | 42 ( c )    | 11F   | 2,650¥ | Core    |
+| Ares HVAR                   | 5 (7) | 8P  | –   | SA/BF/FA | 3 (4) | 50 ( c )    | 11F   | 2,400¥ | SR5:R&G |
+| Colt Inception              | 7 (8) | 10P | -1  | SA/BF    | 1 (3) | 35 ( c )    | 11R   | 2,250¥ | SR5:GH3 |
+| Colt M23                    | 4     | 9P  | -2  | SA/BF/FA | –     | 40 ( c )    | 4R    | 550¥   | Core    |
+| FN HAR                      | 5 (6) | 10P | -2  | SA/BF/FA | 2     | 35 ( c )    | 8R    | 1,500¥ | Core    |
+| HK XM30, Assault Rifle      | 6 (8) | 9P  | -2  | SA/BF/FA | – (1) | 30 ( c )    | 15F   | 4,500¥ | SR5:R&G |
+| Krupp Arms Kriegfaust       | 8     | 9P  | -1  | SA/BF    | 1     | 25 ( d )    | 10R   | 1,300¥ | SR5:GH3 |
+| Nissan Optimum II           | 5 (7) | 9P  | -2  | SA/BF/FA | 1     | 30 ( c )    | 10F   | 2,300¥ | SR5:R&G |
+| SBD-44                      | 3     | 10P | -1  | SA/BF/FA | –     | 32 ( c )    | 4R    | 500¥   | SR5:GH3 |
+| Shiawase Arms Monsoon       | 5     | 10P | -1  | SA/BF    | 1     | 20 ( ml )×6 | 10F   | 1,900¥ | SR5:GH3 |
+| Ultimax Rain Forest Carbine | 7     | 14P | -4  | SA       | – (1) | 18 ( c )    | 5R    | 2,800¥ | SR5:GH3 |
+| Yamaha Raiden               | 6 (8) | 11P | -2  | BF/FA    | 2     | 60 ( c )    | 14F   | 2,600¥ | Core    |
 
 ## AK-97
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 10P | –2 | SA/BF/FA | – | 38(c) | 4R | 950¥ | Core |
@@ -41,17 +41,17 @@ The AK-97 is a legendary weapon with storied reliability—you can bury it for t
 
 ## AK-98
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 10P | -2 | SA/BF/FA | – | 38(c) | 8F | 1,250¥ | SR5:R&G |
 
 ### AK98 Grenade Launcher
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| 3 | * | * | – | – | 6(m) | – | ¥ | SR5:R&G |
+| 3 | _ | _ | – | – | 6(m) | – | ¥ | SR5:R&G |
 
 As Grenade
 
@@ -73,23 +73,23 @@ This rifle is an AK-97 with an integral under-barrel grenade launcher. Recently 
 
 #### Ares Alpha Grenade Launcher
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5(7) | 11P | –2 | SA/BF/FA | 2 | 42(c) | 11F | 2,650¥ | Core |
 
 Modifiers
-:   **UNDERBARREL**:Grenade Launcher
-:   SmartGun
+: **UNDERBARREL**:Grenade Launcher
+: SmartGun
 
 Grenade Launcher
-:   DV 4(6), Mode SS, Ammo 6(c)
+: DV 4(6), Mode SS, Ammo 6(c)
 
 Specially designed for Ares Firewatch special forces, the Alpha has since become a multi-platinum best-selling success the world over, seeing use with UCAS Special Forces. In part, this is due to its exceptional brand awareness, and also because of its underbarrel grenade launcher, smartgun system, and an expensive chamber design that provides 2 points of Recoil Compensation.
 
 ## Ares HVAR
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5(7) | 8P | – | SA/BF/FA | 3(4) | 50(c) | 11F | 2,400¥ | SR5:R&G |
@@ -104,13 +104,13 @@ The longest continually produced member of Ares’ hyper velocity line, the HVAR
 
 ## Colt Inception
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 7 (8) | 10P | –1 | SA/BF | 1 (3) | 35(c) | 11R | 2,250¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Bipod, Electronic Firing, Laser Sight, Melee Hardening
+: Bipod, Electronic Firing, Laser Sight, Melee Hardening
 
 Colt’s latest entry into the para-military market, the Inception replaces the venerable M23 and asserts Colt’s continued dominance in new this lucrative market segment. The Inception comes with an integral bipod for long-range engagements, which only serves to further amplify its exceptional accuracy. The titanium alloy, reinforced polymer frame can withstand the impacts beyond those typical of a service weapon and remain functional. The Inception is a new way forward for Colt, another reason to Trust the Legend™.
 
@@ -128,7 +128,7 @@ Colt’s latest entry into the para-military market, the Inception replaces the 
 
 ## Colt M23
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 9P | –2 | SA/BF/FA | – | 40(c) | 4R | 550¥ | Core |
@@ -137,14 +137,14 @@ This cheap, mass-produced, no-frills assault rifle is loved both by the gangbang
 
 ## FN HAR
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5(6) | 10P | –2 | SA/BF/FA | 2 | 35(c) | 8R | 1,500¥ | Core |
 
 Modifiers
-:   Laser Sight
-:   Gas-Vent (2)
+: Laser Sight
+: Gas-Vent (2)
 
 This assault rifle is supremely popular with private security forces and corporate threat-response teams. It features a laser sight and a gas-vent 2 system.
 
@@ -152,51 +152,51 @@ This assault rifle is supremely popular with private security forces and corpora
 
 #### HK XM30, Assault Rifle
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6(8) | 9P | -2 | SA/BF/FA | (1) | 30(c) | 15F | 4,500¥ | SR5:R&G |
 
 #### HK XM30, Carbine
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6(8) | 9P | -2 | SA/BF/FA | (1) | 30(c) | – | ¥ | SR5:R&G |
 
 #### HK XM30, Sniper
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 7(9) | 9P | -2 | – | 2(3) | 10(c) | – | ¥ | SR5:R&G |
 
 #### HK XM30, LMG
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6(8) | 9P | -2 | BF/FA | 2(3) | 100(belt) | – | ¥ | SR5:R&G |
 
 #### HK XM30, Shotgun
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 3(5) | 10P | -1 | SA | (1) | 10(c) | – | ¥ | SR5:R&G |
 
 #### HK XM30, Grenade Launcher
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | – | – | SS | – | 6(c) | – | ¥ | SR5:R&G |
 
 Standard upgrades
-:   Imaging scope, shock pad, smartlink
+: Imaging scope, shock pad, smartlink
 
 Refit Configuration
-:   XM30The XM30 takes an Automatics + Agility (5, 1 minute) Extended Test to refit to a new configuration. The Carbine uses the SMG range table.
+: XM30The XM30 takes an Automatics + Agility (5, 1 minute) Extended Test to refit to a new configuration. The Carbine uses the SMG range table.
 
 As Grenade
 
@@ -210,13 +210,13 @@ The XM30 is H&K’s modular weapon system. Each kit comes with a shock-pad-equip
 
 ## Krupp Arms Kriegfaust
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 8 | 9P | –1 | SA/BF | 1 | 25(d) | 10R | 1,300¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Metahuman Customization, Melee Hardening, Imaging Scope (w/ Vision Enhancement 1, Vision Magnification)
+: Metahuman Customization, Melee Hardening, Imaging Scope (w/ Vision Enhancement 1, Vision Magnification)
 
 A veteran of the Kilamanjaro cleansing, the Kriegfaust was designed to equip the larger members of a military command with a robust weapon suited to their needs. The drum magazine is better suited to larger hands and less likely to be dropped in high-adrenaline situations. The Kriegfaust also has a frame-mounted imaging scope, to ensure the shooter is able to get the maximum ballistic performance from the weapon’s large-caliber rounds.
 
@@ -231,14 +231,14 @@ A veteran of the Kilamanjaro cleansing, the Kriegfaust was designed to equip the
 
 ## Nissan Optimum II
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5(7) | 9P | -2 | SA/BF/FA | 1 | 30(c) | 10F | 2,300¥ | SR5:R&G |
 
 #### Nissan Optimum II, Shotgun
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4(6) | 10P | -1 | SA | 1 | 5(m) | – | ¥ | SR5:R&G |
@@ -260,13 +260,13 @@ weapon gained mass-media fame with General Saito’s troop’s performance in Sa
 
 ## SBD-44
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 3 | 10P | –1 | SA/BF/FA | – | 32(c) | 4R | 500¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Vintage
+: Vintage
 
 A footnote of Euro War history, the SBD-44 was a hastily constructed weapon developed to equip Germany’s equally hastily raised panzer grenadier units. Inspired by a weapon developed for equally desperate times and updated to fire modern ammunition, the SBd-44 was primarily constructed with a focus on quantity rather than the accuracy or quality typically associated with German manufactured items. The weapon was also rapidly phased out of production following the Alliance’s disintegration, making original production run versions rare today. Krupp still offers the weapon in their corporate security catalog, but no known orders have been processed in nearly twenty years.
 
@@ -281,13 +281,13 @@ A footnote of Euro War history, the SBD-44 was a hastily constructed weapon deve
 
 ## Shiawase Arms Monsoon
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 10P | –1 | SA/FA | 1 | 20(ml)x6 | 10F | 1,900¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Smartlink, Electronic Firing, Melee Hardening
+: Smartlink, Electronic Firing, Melee Hardening
 
 The latest addition to Shiawase’s “Magazine Barrel” line, the Monsoon is a soldier’s dream, with the ammunition contained within the barrels. The Monsoon resists the environment’s harshest conditions and remains nearly maintenance free. As long as the user simply needs to ensure the barrels are not heavily plugged up and the bullets will fly toward their intended target, aided by the integral smartlink system, which is protected in its own shock-proof housing.
 
@@ -302,13 +302,13 @@ The latest addition to Shiawase’s “Magazine Barrel” line, the Monsoon is a
 
 ## Ultimax Rain Forest Carbine
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 7 | 14P | –4 | SA | (1) | 18(c) | 5R | 2,800¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   Imaging Scope (w/ flare compensation, image link, low-light vision), Retractable Stock
+: Imaging Scope (w/ flare compensation, image link, low-light vision), Retractable Stock
 
 The Ultimax Rain Forest is a short-barreled rifle designed to meet a design requirement for the Sumatran Alliance. The weapon met all of the government’s criteria and has been purchased to equip the constabulary. The Rain Forest features a deep magazine well to protect the magazine from the moisture and dirt common in jungle climates. Integrating night-vision technology, the carbine is well adapted to operations under the double and triple canopies frequently encountered by users. The carbine is available through Matrix purchases as well as local retailers.
 
@@ -326,23 +326,23 @@ The Ultimax Rain Forest is a short-barreled rifle designed to meet a design requ
 
 ## Yamaha Raiden
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6(8) | 11P | –2 | BF/FA | 1 | 60(c) | 14F | 2,600¥ | Core |
 
 Modifiers
-:   Sound Suppressor
-:   SmartGun
+: Sound Suppressor
+: SmartGun
 
 This electronic-firing assault rifle is state-of-the-art. The Raiden is very accurate and is quickly being adopted by japanacorp security forces and the Japanese Imperial Marines. It features an integral sound suppressor and smartgun system, and the electronic firing mechanism and design provides 1 point of Recoil Compensation.
 
 ---
 
-| Weapons |
-| --- |
-| Melee | Blades // Clubs // Exotic // Implant // Improvised // Misc. |
-| Ranged | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing |
-| Firearms | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // *Misc.* ( Exotic / Implant ) |
-| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile ) |
-| *Misc.* | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles ) |
+| Weapons                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Melee                     | Blades // Clubs // Exotic // Implant // Improvised // Misc.                                                                                                                      |
+| Ranged                    | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing                                                                                                           |
+| Firearms                  | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // _Misc._ ( Exotic / Implant ) |
+| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile )                                                                                                                              |
+| _Misc._                   | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles )                                                                  |

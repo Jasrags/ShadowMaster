@@ -43,7 +43,7 @@ todos:
 ## Current State
 
 - **Unused exports:** ~224
-- **Unused types:** ~78  
+- **Unused types:** ~78
 - **Unused files:** ~46
 - **Root cause:** Backend/hooks/types built ahead of UI implementation
 
@@ -105,7 +105,7 @@ Integrate the pre-built action resolution components and hooks into the characte
 **Not integrated (causing unused exports):**
 
 - `ActionPoolBuilder` component
-- `ActionHistory` component  
+- `ActionHistory` component
 - `EdgeTracker` component
 - `useActionResolver` hook
 - `usePoolBuilder` hook
@@ -120,7 +120,7 @@ flowchart TB
         B[useEdge hook]
         A --> B
     end
-    
+
     subgraph enhanced [Enhanced Integration]
         C[ActionPanel Enhanced]
         D[ActionPoolBuilder]
@@ -129,7 +129,7 @@ flowchart TB
         G[useActionResolver]
         H[usePoolBuilder]
         I[useActionHistory]
-        
+
         C --> D
         C --> E
         C --> F
@@ -139,8 +139,6 @@ flowchart TB
         F --> I
     end
 ```
-
-
 
 ### 2.3 Integration Tasks
 
@@ -176,8 +174,6 @@ const { roll, currentResult, isRolling, history } = useActionResolver({
   persistRolls: true,
 });
 ```
-
-
 
 ### 2.4 Files to Modify
 
@@ -219,8 +215,6 @@ const { roll, currentResult, isRolling, history } = useActionResolver({
 pnpm knip > knip-post-phase2.txt
 diff knip-baseline-phase1.txt knip-post-phase2.txt
 ```
-
-
 
 ### 3.2 Update Tracking Document
 

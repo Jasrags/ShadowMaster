@@ -140,7 +140,8 @@ export function RatingSelector({
 
     if (showPowerPointPreview && opt.values.karmaCost !== undefined) {
       // For adept powers, karmaCost field holds PP cost in the unified format
-      const ppCost = (opt.values as { powerPointCost?: number }).powerPointCost ?? opt.values.karmaCost;
+      const ppCost =
+        (opt.values as { powerPointCost?: number }).powerPointCost ?? opt.values.karmaCost;
       if (ppCost !== undefined) {
         parts.push(`${ppCost.toFixed(2)} PP`);
       }
@@ -161,9 +162,7 @@ export function RatingSelector({
   if (compact) {
     return (
       <div className={`flex items-center gap-2 ${className}`}>
-        <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-          {label}:
-        </label>
+        <label className="text-xs font-medium text-zinc-500 dark:text-zinc-400">{label}:</label>
         <select
           value={selectedRating}
           onChange={handleChange}
@@ -184,9 +183,7 @@ export function RatingSelector({
   // Full variant with value preview
   return (
     <div className={`space-y-1.5 ${className}`}>
-      <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
-        {label}
-      </label>
+      <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">{label}</label>
       <select
         value={selectedRating}
         onChange={handleChange}
@@ -212,12 +209,8 @@ export function RatingSelector({
         {showEssencePreview && currentValues.essence !== undefined && (
           <span>Essence: {formatEssence(currentValues.essence)}</span>
         )}
-        {currentValues.availability > 0 && (
-          <span>Avail: {currentValues.availability}</span>
-        )}
-        {currentValues.capacity !== undefined && (
-          <span>Capacity: {currentValues.capacity}</span>
-        )}
+        {currentValues.availability > 0 && <span>Avail: {currentValues.availability}</span>}
+        {currentValues.capacity !== undefined && <span>Capacity: {currentValues.capacity}</span>}
       </div>
     </div>
   );

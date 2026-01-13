@@ -28,13 +28,15 @@ import type { VehicleActionValidation, ActionBonus } from "../action-validator";
 /**
  * Create a minimal test character with skills
  */
-function createTestCharacter(options: {
-  reaction?: number;
-  agility?: number;
-  logic?: number;
-  pilotSkill?: number;
-  gunnerySkill?: number;
-} = {}): Character {
+function createTestCharacter(
+  options: {
+    reaction?: number;
+    agility?: number;
+    logic?: number;
+    pilotSkill?: number;
+    gunnerySkill?: number;
+  } = {}
+): Character {
   return {
     id: "test-char-1",
     ownerId: "test-user-1",
@@ -128,12 +130,14 @@ function createTestRiggingState(vcrRating: number = 2, isJumpedIn: boolean = fal
 /**
  * Create a test vehicle catalog item
  */
-function createTestVehicle(options: {
-  handling?: number;
-  speed?: number;
-  sensor?: number;
-  category?: string;
-} = {}): VehicleCatalogItem {
+function createTestVehicle(
+  options: {
+    handling?: number;
+    speed?: number;
+    sensor?: number;
+    category?: string;
+  } = {}
+): VehicleCatalogItem {
   return {
     id: "test-vehicle-1",
     name: "Test Vehicle",
@@ -153,12 +157,14 @@ function createTestVehicle(options: {
 /**
  * Create a test drone catalog item
  */
-function createTestDroneCatalog(options: {
-  handling?: number;
-  speed?: number;
-  sensor?: number;
-  pilot?: number;
-} = {}): DroneCatalogItem {
+function createTestDroneCatalog(
+  options: {
+    handling?: number;
+    speed?: number;
+    sensor?: number;
+    pilot?: number;
+  } = {}
+): DroneCatalogItem {
   return {
     id: "test-drone-1",
     name: "Test Drone",
@@ -179,12 +185,14 @@ function createTestDroneCatalog(options: {
 /**
  * Create a test slaved drone
  */
-function createTestSlavedDrone(options: {
-  pilotRating?: number;
-  noisePenalty?: number;
-  damage?: number;
-  autosofts?: SharedAutosoft[];
-} = {}): SlavedDrone {
+function createTestSlavedDrone(
+  options: {
+    pilotRating?: number;
+    noisePenalty?: number;
+    damage?: number;
+    autosofts?: SharedAutosoft[];
+  } = {}
+): SlavedDrone {
   return {
     droneId: "drone-1",
     catalogId: "test-drone-1",
@@ -196,24 +204,27 @@ function createTestSlavedDrone(options: {
     conditionMonitorMax: 10,
     distanceFromRigger: 100,
     noisePenalty: options.noisePenalty || 0,
-    installedAutosofts: options.autosofts?.map(a => ({
-      autosoftId: a.autosoftId,
-      name: a.name,
-      rating: a.rating,
-      category: a.category,
-      target: a.target,
-    })) || [],
+    installedAutosofts:
+      options.autosofts?.map((a) => ({
+        autosoftId: a.autosoftId,
+        name: a.name,
+        rating: a.rating,
+        category: a.category,
+        target: a.target,
+      })) || [],
   };
 }
 
 /**
  * Create a test validation result
  */
-function createTestValidation(options: {
-  controlMode?: "manual" | "remote" | "jumped-in";
-  noisePenalty?: number;
-  bonuses?: ActionBonus[];
-} = {}): VehicleActionValidation {
+function createTestValidation(
+  options: {
+    controlMode?: "manual" | "remote" | "jumped-in";
+    noisePenalty?: number;
+    bonuses?: ActionBonus[];
+  } = {}
+): VehicleActionValidation {
   return {
     valid: true,
     errors: [],
@@ -274,13 +285,7 @@ describe("dice-pool-calculator", () => {
       const vehicle = createTestVehicle({ category: "cars" });
       const validation = createTestValidation({ controlMode: "manual" });
 
-      const result = calculateVehicleDicePool(
-        character,
-        undefined,
-        "control",
-        vehicle,
-        validation
-      );
+      const result = calculateVehicleDicePool(character, undefined, "control", vehicle, validation);
 
       // Reaction 5 + Pilot Ground Craft 4 = 9
       expect(result.pool).toBe(9);
@@ -303,28 +308,22 @@ describe("dice-pool-calculator", () => {
 
       // Reaction 5 + Pilot 4 + VCR 2 = 11
       expect(result.pool).toBe(11);
-      expect(result.breakdown.some(b => b.source === "Vehicle Control Rig")).toBe(true);
+      expect(result.breakdown.some((b) => b.source === "Vehicle Control Rig")).toBe(true);
     });
 
     it("should apply noise penalty", () => {
       const character = createTestCharacter({ reaction: 5, pilotSkill: 4 });
       const vehicle = createTestVehicle();
-      const validation = createTestValidation({ 
+      const validation = createTestValidation({
         controlMode: "remote",
         noisePenalty: 3,
       });
 
-      const result = calculateVehicleDicePool(
-        character,
-        undefined,
-        "control",
-        vehicle,
-        validation
-      );
+      const result = calculateVehicleDicePool(character, undefined, "control", vehicle, validation);
 
       // Reaction 5 + Pilot 4 - Noise 3 = 6
       expect(result.pool).toBe(6);
-      expect(result.penalties.some(p => p.source === "Signal Noise")).toBe(true);
+      expect(result.penalties.some((p) => p.source === "Signal Noise")).toBe(true);
     });
 
     it("should use agility for gunnery tests", () => {
@@ -332,13 +331,7 @@ describe("dice-pool-calculator", () => {
       const vehicle = createTestVehicle();
       const validation = createTestValidation({ controlMode: "manual" });
 
-      const result = calculateVehicleDicePool(
-        character,
-        undefined,
-        "gunnery",
-        vehicle,
-        validation
-      );
+      const result = calculateVehicleDicePool(character, undefined, "gunnery", vehicle, validation);
 
       // Agility 6 + Gunnery 5 = 11
       expect(result.pool).toBe(11);
@@ -350,17 +343,11 @@ describe("dice-pool-calculator", () => {
       const vehicle = createTestVehicle();
       const validation = createTestValidation({ controlMode: "manual" });
 
-      const result = calculateVehicleDicePool(
-        character,
-        undefined,
-        "control",
-        vehicle,
-        validation
-      );
+      const result = calculateVehicleDicePool(character, undefined, "control", vehicle, validation);
 
       // Reaction 5 - Defaulting 1 = 4
       expect(result.pool).toBe(4);
-      expect(result.penalties.some(p => p.source === "Defaulting")).toBe(true);
+      expect(result.penalties.some((p) => p.source === "Defaulting")).toBe(true);
     });
 
     it("should include correct limit", () => {
@@ -368,13 +355,7 @@ describe("dice-pool-calculator", () => {
       const vehicle = createTestVehicle({ handling: 7 });
       const validation = createTestValidation({ controlMode: "manual" });
 
-      const result = calculateVehicleDicePool(
-        character,
-        undefined,
-        "control",
-        vehicle,
-        validation
-      );
+      const result = calculateVehicleDicePool(character, undefined, "control", vehicle, validation);
 
       expect(result.limit).toBe(7);
       expect(result.limitType).toBe("handling");
@@ -394,12 +375,7 @@ describe("dice-pool-calculator", () => {
       const drone = createTestSlavedDrone({ pilotRating: 3, autosofts });
       const droneCatalog = createTestDroneCatalog();
 
-      const result = calculateDroneDicePool(
-        drone,
-        "control",
-        [],
-        droneCatalog
-      );
+      const result = calculateDroneDicePool(drone, "control", [], droneCatalog);
 
       // Pilot 3 + Autosoft 4 = 7
       expect(result.pool).toBe(7);
@@ -417,12 +393,7 @@ describe("dice-pool-calculator", () => {
       ];
       const droneCatalog = createTestDroneCatalog();
 
-      const result = calculateDroneDicePool(
-        drone,
-        "control",
-        sharedAutosofts,
-        droneCatalog
-      );
+      const result = calculateDroneDicePool(drone, "control", sharedAutosofts, droneCatalog);
 
       // Pilot 3 + Shared Autosoft 5 = 8
       expect(result.pool).toBe(8);
@@ -437,23 +408,18 @@ describe("dice-pool-calculator", () => {
           category: "movement",
         },
       ];
-      const drone = createTestSlavedDrone({ 
-        pilotRating: 3, 
+      const drone = createTestSlavedDrone({
+        pilotRating: 3,
         noisePenalty: 2,
         autosofts,
       });
       const droneCatalog = createTestDroneCatalog();
 
-      const result = calculateDroneDicePool(
-        drone,
-        "control",
-        [],
-        droneCatalog
-      );
+      const result = calculateDroneDicePool(drone, "control", [], droneCatalog);
 
       // Pilot 3 + Autosoft 4 - Noise 2 = 5
       expect(result.pool).toBe(5);
-      expect(result.penalties.some(p => p.source === "Signal Noise")).toBe(true);
+      expect(result.penalties.some((p) => p.source === "Signal Noise")).toBe(true);
     });
 
     it("should apply damage modifier", () => {
@@ -465,39 +431,29 @@ describe("dice-pool-calculator", () => {
           category: "movement",
         },
       ];
-      const drone = createTestSlavedDrone({ 
-        pilotRating: 3, 
+      const drone = createTestSlavedDrone({
+        pilotRating: 3,
         damage: 4, // 4 boxes = -2 modifier (4/3 rounded up)
         autosofts,
       });
       const droneCatalog = createTestDroneCatalog();
 
-      const result = calculateDroneDicePool(
-        drone,
-        "control",
-        [],
-        droneCatalog
-      );
+      const result = calculateDroneDicePool(drone, "control", [], droneCatalog);
 
       // Pilot 3 + Autosoft 4 - Damage 2 = 5
       expect(result.pool).toBe(5);
-      expect(result.penalties.some(p => p.source === "Damage")).toBe(true);
+      expect(result.penalties.some((p) => p.source === "Damage")).toBe(true);
     });
 
     it("should return pool with no autosoft", () => {
       const drone = createTestSlavedDrone({ pilotRating: 3 });
       const droneCatalog = createTestDroneCatalog();
 
-      const result = calculateDroneDicePool(
-        drone,
-        "control",
-        [],
-        droneCatalog
-      );
+      const result = calculateDroneDicePool(drone, "control", [], droneCatalog);
 
       // Pilot 3 only (no autosoft)
       expect(result.pool).toBe(3);
-      expect(result.penalties.some(p => p.source === "No Autosoft")).toBe(true);
+      expect(result.penalties.some((p) => p.source === "No Autosoft")).toBe(true);
     });
   });
 
@@ -562,9 +518,7 @@ describe("dice-pool-calculator", () => {
         limit: 6,
         limitType: "handling" as const,
         controlMode: "remote" as const,
-        penalties: [
-          { source: "Signal Noise", value: -2 },
-        ],
+        penalties: [{ source: "Signal Noise", value: -2 }],
       };
 
       const formatted = formatDicePoolResult(result);
@@ -610,9 +564,7 @@ describe("dice-pool-calculator", () => {
         limit: 6,
         limitType: "handling" as const,
         controlMode: "remote" as const,
-        penalties: [
-          { source: "Signal Noise", value: -2 },
-        ],
+        penalties: [{ source: "Signal Noise", value: -2 }],
       };
 
       const summary = getPoolSummary(result);

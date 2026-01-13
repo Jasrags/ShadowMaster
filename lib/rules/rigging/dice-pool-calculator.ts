@@ -370,11 +370,7 @@ export function calculateDroneDicePool(
   // Find the best applicable autosoft
   // Convert test type to action type for autosoft lookup
   const actionType = getActionForTestType(testType);
-  const applicableAutosofts = getApplicableAutosofts(
-    actionType,
-    drone,
-    sharedAutosofts
-  );
+  const applicableAutosofts = getApplicableAutosofts(actionType, drone, sharedAutosofts);
 
   // Use the highest rated applicable autosoft
   if (applicableAutosofts.length > 0) {
@@ -517,9 +513,7 @@ export function formatDicePoolResult(result: VehicleDicePoolResult): string {
   parts.push(`Formula: ${result.formula}`);
 
   if (result.penalties.length > 0) {
-    const penaltyStr = result.penalties
-      .map((p) => `${p.source}: ${p.value}`)
-      .join(", ");
+    const penaltyStr = result.penalties.map((p) => `${p.source}: ${p.value}`).join(", ");
     parts.push(`Penalties: ${penaltyStr}`);
   }
 

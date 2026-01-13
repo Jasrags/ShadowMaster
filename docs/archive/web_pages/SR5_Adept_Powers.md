@@ -1,10 +1,10 @@
 | Spell List | Ritual List | Spirit List | Adept Powers List | Mentor Spirits List | Metamagics List | Traditions List |
-| --- | --- | --- | --- | --- | --- | --- |
+| ---------- | ----------- | ----------- | ----------------- | ------------------- | --------------- | --------------- |
 
 Some powers are activated, and some are intrinsic. Adept powers that need to be activated before they have any effect have an activation cost listed in the power’s description (usually an action of some sort). When a power doesn’t list an activation cost, their effect is intrinsic—you don’t have to take any action to gain the benefit of the power.
 
 Adept Drain
-:   Some powers cause Drain. The Drain from adept powers is Stun unless specified in the description, and is resisted with Body + Willpower.
+: Some powers cause Drain. The Drain from adept powers is Stun unless specified in the description, and is resisted with Body + Willpower.
 
 ## Contents
 
@@ -202,45 +202,45 @@ Adept Drain
 
 ## Adept Accident
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:HT   |
 
 This power allows an adept to disrupt the mana flows within a target they have touched. Activating this power is a Simple Action and can be activated any time within (Magic) minutes from the time the target is touched (meaning the adept must have succeeded in a touch attack. The adept rolls Magic + Willpower [Astral] vs. Reaction + Intuition [Physical]. If the adept wins, the target suffers a glitch or accident as determined by the gamemaster. If the adept scores 4 or more net hits, it is considered a critical glitch with potentially catastrophic results. The adept must resist Drain (Body + Willpower) equal to the number of hits (not net hits).
 
 ## Adept Spell
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:HT   |
 
 The adept has learned to cast a single spell like a mage. You learn one spell for free when acquiring this power. The maximum Force of the spell is your Magic Rating, and the Drain is always physical, resisted with Body + Willpower. This ability otherwise follows the standard rules for spellcasting. The adept can take ranks in the Spellcasting skill and is required to take at least one rank to use this power. This power can only be taken once.
 
 ## Adrenaline Boost
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 pp per level |
-| Activation | Free Action |
-| Duration | 1 Combat Turn |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 pp per level |
+| Activation   | Free Action       |
+| Duration     | 1 Combat Turn     |
+| Source       | Core              |
 
 This power lets you accomplish more in one Combat Turn. You get +2 to your Initiative Score for the current Combat Turn for every level of this power you have. At the beginning of the next turn after the Adrenaline Boost, you take Drain equal to the number of levels you have in this power.
 
 ## Analytics
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP Per Level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | SR5:SG           |
 
 Adepts with this power can easily analyze, detect, recognize, and solve ciphers, patterns, or puzzles. This allows them to recognize clues or evidence during an investigation. For ever y level purchased, Analytics grants a +1 modifier to any test that involves pattern recognition, evidence analysis, obser vation, puzzle solving, or logic-based problems. It does not add dice to Technological Skill tests except for identification purposes. For example, Analytics doesn’t help with repairing a firearm, but it will help the adept recognize a knock-off.)
 
@@ -248,34 +248,34 @@ Analytics is not an immediate or instant solution to every problem. Rather, it�
 
 ## Animal Empathy
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 This power gives the adept a greater affinity for all non-sentient animals, both normal and paranormal. For every level purchased, the adept gains +1 die to all Animal Handling tests. This power can also be used to intimidate or frighten animals.
 
 ## Astral Perception
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE          |
+| ------------ | ------------- |
+| Cost         | 1 PP          |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | Core          |
 
 This power allows you to bridge the gap between the physical and astral realms and see into the astral plane. Since you’re dual-natured while you’re using astral perception, you can attack astral forms when you use this power. Follow all the normal rules for astral perception (p. 312).
 
 ## Attribute Boost (Attribute)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | Simple Action |
-| Duration | 2xBoost Hits |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP per level |
+| Activation   | Simple Action     |
+| Duration     | 2xBoost Hits      |
+| Source       | Core              |
 
 You call upon inner strength to perform amazing physical feats beyond their normal abilities. Attribute Boost must be purchased for a specific Physical Attribute (Agility, Body, Reaction, or Strength); separate Attribute Boost powers may be bought for different attributes. This power cannot be purchased for a Mental or Special Attribute.
 
@@ -283,78 +283,78 @@ When you activate this power, make a Magic + Attribute Boost Rating Test. Each h
 
 ## Authoritative Tone
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.50 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.50 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:SG                    |
 
 Adepts with this power can speak in a way that immediately makes people want to believe them and follow their orders. For every level of this power, an adept gains +1 die to any Opposed Social Skill Test that they initiate (normal limits apply).
 
 ## Berserk
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE          |
+| ------------ | ------------- |
+| Cost         | 1 PP          |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | SR5:SG        |
 
 The adept can voluntarily enter a frenzied mental state to increase his physical abilities. While in this state, the adept gains a +1 to all Physical attributes but suffers a temporary loss of –1 to all Mental attributes (minimum of 1; this power cannot be used by adepts with any Mental attributes starting at 1). Note: this also affects the adept’s Physical and Mental limits. Once activated, the adept remains in this state for (Magic x 2) Combat Turns or until any enemy targets are down. Adepts can attempt to leave this state early with a Willpower + Charisma (Magic x 0.5) Test. When the power wears off, adepts must resist Drain equal to (Magic x 0.5, rounded up).
 
 ## Berserker's Rage
 
-| Prerequisite | Berserk |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | Berserk        |
+| ------------ | -------------- |
+| Cost         | 1 PP           |
+| Activation   | Complex Action |
+| Duration     | Constant       |
+| Source       | SR5:SG         |
 
 The adept passes melee berserking and delves deeper into a frenzied mental state. All bonuses and penalties from the Berserker power are increased to +2, and the duration is increased to (Magic x 4) minutes. To exit this state early requires a Willpower + Charisma Test. The threshold is 9 – the adept’s Magic Rating, with a minimum threshold of 3. If successful, the adept can use her full Mental attributes to resist Drain. Regardless of when she exits this state, the adept will have to resist a Drain Value of (Magic x 0.5). Any Wound Modifiers apply. A glitch on an exit attempt increases the duration to (Magic x 3) minutes.
 
 ## Blind Fighting
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Drawing on a special kind of sixth sense, an adept with this power is able to continue fighting even when he is blinded or deprived of vision. It reduces the penalty for Blind Fighting by 1. This power can be combined with the Strike the Darkness martial arts technique for a cumulative reduction of 2 (p. 141, Run & Gun).
 
 ## Cloak
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 Using the Cloak power, the adept has an increased chance of avoiding magical detection. For every level of this power, the adept gains a +1 die for opposing a Detection spell being used against her (see p. 285, SR5). Cloak does not prevent a magician or mystic adept from reading the adept’s aura through astral perception or viewing her from astral space; it just makes it more difficult to zero in on the targeted adept.
 
 ## Combat Sense
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 Combat Sense provides an instinctive sense of any potential threats nearby. In defending against ranged and melee attacks, you get a +1 dice pool bonus to defense tests per level of this power. Adepts with this power are always allowed a Perception Test before a possible surprise situation, gaining the benefit of being alerted if the test is successful.
 
 ## Commanding Voice (SR5:SG)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:SG                    |
 
 Adepts with this power have a knack for convincing people to believe them or do things for them in certain situations. For every level of this power, an adept gains a +1 die to any Opposed Intimidation or Leadership tests that they initiate (normal limits apply). If the adept succeeds, then the target(s) will agree to or follow the adept’s next suggestion or command, within reason and depending on the situation. A subject won’t normally harm himself for example, but he may be persuaded that the pretty-boy elf over there was making moves on his girl/guy and that punching said elf is a good idea. Or an adept may convince a corporate secretary to give up some dirt on her boss.
 
@@ -362,89 +362,89 @@ To keep this power in check, gamemasters can also grant targets a situational bo
 
 ## Commanding Voice (SR5:SSo)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SSo |
+| Prerequisite | NONE           |
+| ------------ | -------------- |
+| Cost         | 1 PP           |
+| Activation   | Complex Action |
+| Duration     | Constant       |
+| Source       | SR5:SSo        |
 
 This power channels the adept’s magic into his voice to enhance the modulation and pitch, subliminally influencing the actions of any listeners. The adept takes a Complex Action to give a simple but forceful command (five words or less) to the target, making an Opposed Test with Leadership + Charisma against the target(s) Willpower + Intuition. If the adept succeeds in the test, the target uses his next action to either carry out the command or stands confused (gamemaster’s choice, but the more net hits achieved the more likely it is for the target to obey the adept’s command). Such commands carry no weight beyond the immediate impetus, and the affected characters will quickly reassert their wits, returning to their original course of action. If multiple individuals are targeted, use the largest dice pool among the defenders and add 1 die per additional target (to a maximum of six individuals). Commanding Voice may only be used on metahumans who can directly hear and understand the adept’s words. It has no effect when the voice is amplified or broadcast via technological means (e.g., wireless transmission or loudspeaker). It is also less effective on subsequent uses against the same target. Apply a cumulative –2 dice pool penalty for each use within the preceding 24 hours.
 
 ## Cool Resolve
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1.0 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 1.0 PP Per Level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | SR5:SG           |
 
 Adepts with this power are extremely confident and self-assured in social interactions. This includes situations such as negotiations with a Mr. Johnson, running a con on the street, staying in-character while undercover, or resisting the tender inquiries of a professional interrogator. Each level gives the adept +1 die in all Opposed Tests involving Social skills, regardless of whether they initiated the action or are resisting someone else’s social skills.
 
 ## Counterstrike
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1.0 PP Per Level |
-| Activation | Interrupt Action (–5 From Initiative Score) |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                                        |
+| ------------ | ------------------------------------------- |
+| Cost         | 1.0 PP Per Level                            |
+| Activation   | Interrupt Action (–5 From Initiative Score) |
+| Duration     | Constant                                    |
+| Source       | SR5:SG                                      |
 
 Counterstrike is an extremely potent ability that allows an adept in unarmed combat to redirect an attacker’s energy through a combination of skill, intuition, and magical ability. To employ this power, an adept must first use a successful Block action against an incoming attack and spend her next available action to make a melee combat attack. For the adept’s next melee combat attack test, add a number of dice equal to her levels in Counterstrike and the net hits from the Block. Engaging in any other action before attacking, even Dodge or Full Defense, negates the bonuses gained from this power. This power cannot be combined with the Counterstrike and Opposing Force martial arts techniques (p. 124 and 139, Run & Gun).
 
 ## Critical Strike (Skill)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | Core     |
 
 This power improves a specific melee skill: either Unarmed Combat, Clubs, Blades, Astral Combat, or a particular Exotic Melee weapon skill. The specific skill is chosen when you buy the power. Increase the DV of your attacks with the selected skill by 1. Critical Strike is compatible with weapons and other adept powers. The power may be selected multiple times, each time for a different melee skill.
 
 ## Danger Sense
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP per level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | Core              |
 
 You are instinctively sensitive of your surroundings and of impending threats that may not be immediately visible. It’s the bad feeling that the character gets before walking into a trap, the gut instinct that makes them jump an instant before trouble hits. For each level of this power, you get +1 die on Surprise Tests.
 
 ## Demara
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | 1 hour |
-| Duration | Magic hours |
-| Source | SR5:SSp |
+| Prerequisite | NONE        |
+| ------------ | ----------- |
+| Cost         | 0.5 PP      |
+| Activation   | 1 hour      |
+| Duration     | Magic hours |
+| Source       | SR5:SSp     |
 
 This power grants the adept the ability to use an untrained skill at minimal effectiveness after watching a person or recording of a person using the desired skill. Once the adept has watched their reference material for at least one hour, they can use the skill as if they have a skill rating one. This knowledge remains effective for a number of hours equal to the adept’s Magic Attribute. The ability does not provide any Karma assistance in learning a skill through character creation or advancement.
 
 ## Eidetic Sense Memory
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSp  |
 
 An adept with Eidetic Sense Memory is capable of memorizing all sensory input, including tastes, smells and textures in addition to the more traditional visual ability. The adept is capable of perfectly recalling any sensory stimulus, or combination thereof. The memories can be recalled at will. The adept also has the ability to photo-read, making it a great trick for those Awakened who like book clubs.
 
 ## Elemental Body
 
 | Prerequisite | Elemental Strike |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| ------------ | ---------------- |
+| Cost         | 1 PP             |
+| Activation   | Complex Action   |
+| Duration     | Constant         |
+| Source       | SR5:SG           |
 
 An evolved version of Elemental Strike and similar to the critter power Elemental Attack, Elemental Body creates an elemental field that envelops the adept. This field forms approximately three to five centimeters from the adept’s body and can be used offensively and defensively.
 
@@ -455,33 +455,33 @@ Elemental Body lasts for (Magic) Initiative Passes or until the adept is rendere
 ## Elemental Strike
 
 | Prerequisite | Killing Hands |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| ------------ | ------------- |
+| Cost         | 0.5 PP        |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | SR5:SG        |
 
 Elemental Strike enhances the damage caused by an unarmed Killing Hands strike by channeling an elemental effect into the attack. Activating this power requires a Simple Action and the effect remains active for (Magic) Combat Turns or until the adept deactivates it with. Free Action or is rendered unconscious. While active, the chosen elemental effect wreathes the hand, foot, or other body part the adept uses to strike. Only one effect can be used at a time and can’t be combined with any other adept striking power except Killing Hands. Each elemental effect must be purchased as a separate power.
 
 ## Elemental Weapon
 
-| Prerequisite | Weapon Foci |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | Weapon Foci   |
+| ------------ | ------------- |
+| Cost         | 0.5 PP        |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | SR5:SG        |
 
 Similar to Elemental or Toxic Strike, Elemental Weapon allows an adept to channel an elemental effect (normal or toxic) through her weapon focus instead of her hands. A Simple Action is required to first channel the desired elemental effect. Elemental Weapon remains active for (Magic) Combat Turns or until the adept deactivates it with a Free Action or is rendered unconscious. Only one elemental effect can be used at a time, and each elemental effect must be purchased as a separate power. This power can also be used with other powers that enhance an adept ’s Accuracy or skills related to foci.
 
 ## Empathic Healing
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | See Text |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | See Text |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Used only in the direst of circumstances, the Empathic Healing power allows an adept to literally take on the wounds of another in order to heal them. To accomplish this, the adept rolls a Magic + Willpower Test. For every hit, one box of Physical damage transfers from the wounded target to the adept’s damage track. Only Physical damage can be healed in this way.
 
@@ -489,34 +489,34 @@ Subjects with lower than normal Essence, due to augmentations or Essence loss, a
 
 ## Enhanced Accuracy (Skill)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | Core     |
 
 A weapon in your hands becomes an extension of your body. When you buy this power, choose a Combat Skill (Pistols, Clubs, Heavy Weapons, etc.). When you use the skill, add 1 to the Accuracy of the weapon you’re using. This power cannot be used with Unarmed Combat, but it can be purchased multiple times with a different skill each time.
 
 ## Enhanced Perception
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 This power sharpens all your senses. Add +1 die per level to all Perception Tests and Assensing Tests.
 
 ## Enthralling Performance
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSp  |
 
 This adept power is used in conjunction with an artistic skill, such as Artisan or Gymnastics, which the adept must also possess. This power can be selected multiple times, with each selection pertaining to a different artistic skill. If the gamemaster allows, this power may also be linked to Unarmed Combat (Martial Arts) or Con (Impersonation).
 
@@ -524,12 +524,12 @@ The power permeates the adept’s performance with a subtle magic aura, mesmeriz
 
 ## Facial Sculpt
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | Complex Action    |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 This power allows an adept to change his appearance by shifting the muscles, bone structure, and cartilage in his face. Each level purchased gives the adept a +1 dice pool modifier for Disguise Tests. The effect can be sustained for (Magic) hours.
 
@@ -537,111 +537,111 @@ Common changes include altering ear shape, changing nose shape, raising/lowering
 
 ## Feign Death
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 power point |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:BB |
+| Prerequisite | NONE          |
+| ------------ | ------------- |
+| Cost         | 1 power point |
+| Activation   | -             |
+| Duration     | Constant      |
+| Source       | SR5:BB        |
 
 Like the Feign Illness power, Feign Death allows the adept to mimic death with enough accuracy to fool observers, biomonitors, and even medkits. The adept can maintain the power for a number of hours equal to her Magic attribute. The adept sets a time limit when she will come out of the comatose state; the only way to wake her up early is to send a message via a Mindlink spell containing a pre-arranged trigger phrase. Physical contact, injury, loud noise, and so on have no effect on the death-mimicking adept. Any attempts to diagnose signs of life must exceed a threshold equal to the adept’s Magic attribute. The adept is unaware of her surroundings while in this state; she doesn’t hear any conversations taking place or see who is coming and going in their surroundings.
 
 ## Feign Illness
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 power points |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:BB |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 power points |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | SR5:BB           |
 
 This power allows an adept to mimic the signs and symptoms of an illness with enough accuracy to convince all but the most skilled observer. The power even creates real physiological changes such as fever and increased heart rate, which can fool a biomonitor or medkit. The adept can maintain the power for a number of hours equal to his Magic attribute. Any attempts to diagnose the illness as false must exceed a threshold equal to the adept’s Magic attribute.
 
 ## Flexibility
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:SG                    |
 
 Adepts with the Flexibility power can bend or twist their bodies past the metahuman norm, which allows them to squeeze through openings smaller than the adept (gamemaster’s discretion) and escape restraints easier. It also makes and adept harder to subdue during unarmed combat. For every level of Flexibility the adept possesses, the threshold for moving through cramped corners or getting out of restraints is lowered by one. During unarmed combat, if someone is attempting to subdue the adept, the adept gains +1 die per level of Flexibility to prevent being subdued; normal limits still apply.
 
 ## Focused Archery
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:HT                    |
 
 This ability allows an adept to focus their qi and draw a bow that they normally would not be strong enough to use. Solely for the purposes of determining the maximum Rating of bow they are able to fire without penalty, an adept can treat their Strength as 1 higher for each level they have in this power. If an adept using this power fires a bow more than once in a Combat Turn, they must resist Drain equal to twice the number of levels they have in this power at the beginning of the next Combat Turn.
 
 ## Freefall
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 This power helps adepts absorb the damage from a fall or jump down for a specific distance. This ability does not help the adept increase the distance he is jumping, such as with the Light Body power. Every level of Freefall allows the adept to fall or jump down 3 additional meters without any adverse effects (beyond the three meters normally allowed). When calculating fall damage past his personal distance threshold, subtract the overall level bonus from the Damage Value of the fall and then apply damage normally (see p. 172, SR5). This means that an adept with Freefall receives no damage from a fall of six meters or less, rather than the typical three meters. Beyond that, if an adept with two levels of Freefall falls 15 meters, the power negates 6 points of damage from the fall, changing the Damage Value of the fall from 15P to 9P (the fall’s AP remains unchanged). As long as the adept experiences no damage from the fall (either because the fall was short enough to cause no damage or because they successfully resisted all applicable damage using Body + Armor, the fall counts as a normal move action, and can be combined with an attack. Any other means of dealing with the damage does not allow this opportunity. Longer falls count as a Complex Action.
 
 ## Hang Time
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | See Description |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | See Description   |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 Adepts with this power receive two benefits. First, for each level of this power, the adept gains a +1 dice pool bonus for all Climbing Tests. Second, the adept can temporarily adhere to surfaces, such as walls. For each level of this power, the adept can attach himself to a surface and hang out for approximately five minutes, provided he remains motionless and keeps physical contact with the surface in question with hands, feet, knees, or elbows. The adept must spend a Simple Action to bond his magical energy with the surface; normal clothing such as gloves or boots does not interfere with this power, but the use of heavy armor (armor with a Rating of 13 or higher) will. Moving the attached body parts on the surface they’re adhering to, such as a moving vehicle, breaks the bond, making the adept fall off.
 
 ## Heightened Concern
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE           |
+| ------------ | -------------- |
+| Cost         | 0.5 PP         |
+| Activation   | Complex Action |
+| Duration     | Constant       |
+| Source       | SR5:SSp        |
 
 The adept can ignore a single distraction while performing another task. This power negates a single situational modifier of a value of up to half (rounded up) of their Magic Attribute. It takes a Complex Action to activate and may be combined with the Adept Centering metamagic.
 
 ## Improved Ability (Skill)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 This power increases the Rating of a specific Combat, Physical, Social, Technical, or Vehicle skill per level of the power. You need to know the skill in order to buy this power for it, and you can’t buy it for skill groups. The maximum improvement possible is your current skill level x 1.5 (rounded up).
 
 ## Improved Physical Attribute
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE           |
+| ------------ | -------------- |
+| Cost         | 1 PP per level |
+| Activation   | -              |
+| Duration     | Constant       |
+| Source       | Core           |
 
 This power allows you to increase a physical attribute (Body, Agility, Reaction, and Strength). This augments your attribute, so your Physical limit may also increase with the new Attribute rating. This power allows you to exceed your natural Attribute maximum, up to your augmented maximum.
 
 ## Improved Potential (Limit)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 This power allows an adept to raise one of your inherent limits (Physical, Mental, or Social), specified when you buy the power, by 1. You may buy this power multiple times, once per inherent limit.
 
@@ -649,175 +649,175 @@ This power allows an adept to raise one of your inherent limits (Physical, Menta
 
 **IMPROVED REFLEXES TABLE**
 
-| PP COST | LEVEL |
-| --- | --- |
-| 1.5 | Level 1 |
-| 2.5 | Level 2 |
-| 3.5 | Level 3 |
+| PP COST | LEVEL   |
+| ------- | ------- |
+| 1.5     | Level 1 |
+| 2.5     | Level 2 |
+| 3.5     | Level 3 |
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | Variable, see table |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE                |
+| ------------ | ------------------- |
+| Cost         | Variable, see table |
+| Activation   | -                   |
+| Duration     | Constant            |
+| Source       | Core                |
 
 This power increases the speed at which you react, just like wired reflexes. For each level, you receive +1 to Reaction (this also affects Initiative) and +1D6 Initiative Die (to a maximum of 5D6). The maximum rating of Improved Reflexes is 3, and the increase cannot be combined with other technological or magical increases to Initiative.
 
 ## Improved Sense
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP each |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE         |
+| ------------ | ------------ |
+| Cost         | 0.25 PP each |
+| Activation   | -            |
+| Duration     | Constant     |
+| Source       | Core         |
 
 This power gives you sensory improvements not normally possessed by your character ’s metatype. These improvements may include low-light or thermographic vision, high or low frequency hearing, and so on. Any sense enhancement provided by cyberware or bioware can be provided by this power, unless that enhancement either gives you bonus dice to Perception Tests or needs wireless to work (or both).
 
 In addition to the sensory enhancements listed for cyberware and bioware, other improvements that can be selected include:
 
 Direction Sense
-:   Add +2 dice to Navigational skill tests when traveling. In addition, with a Perception + Intuition (2) Test, you can identify the direction you’re facing and if you’re above or below the mean sea level.
+: Add +2 dice to Navigational skill tests when traveling. In addition, with a Perception + Intuition (2) Test, you can identify the direction you’re facing and if you’re above or below the mean sea level.
 
 Improved Tactile
-:   The adept’s fingers are sensitive to imperfections on the surface of an object, allowing you to notice something as subtle the indentation of writing on a piece of paper (even paper on a pad beneath the sheet that was actually written on). Add +2 dice to tactile Perception Tests.
+: The adept’s fingers are sensitive to imperfections on the surface of an object, allowing you to notice something as subtle the indentation of writing on a piece of paper (even paper on a pad beneath the sheet that was actually written on). Add +2 dice to tactile Perception Tests.
 
 Perfect Pitch
-:   With a Perception + Intuition (2) Test, you can recognize a musical tone either from hearing it or even feeling the vibration frequency. This doesn’t mean that you’re a good singer, just that you can recognize when you’re off key.
+: With a Perception + Intuition (2) Test, you can recognize a musical tone either from hearing it or even feeling the vibration frequency. This doesn’t mean that you’re a good singer, just that you can recognize when you’re off key.
 
 Human Scale
-:   With a Perception + Intuition (2) Test, the adept can figure out the weight of an object down to the gram if he is able to lift or carry the object. Can be useful for carnival barkers and arcano-archaeologists trying to figure out how much that statue they’re trying to snatch off a pressure plate weighs.
+: With a Perception + Intuition (2) Test, the adept can figure out the weight of an object down to the gram if he is able to lift or carry the object. Can be useful for carnival barkers and arcano-archaeologists trying to figure out how much that statue they’re trying to snatch off a pressure plate weighs.
 
 ## Indomitable Will
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SSp           |
 
 The adept has an increased resistance to fear and torture. The adept gains a +1 dice pool modifier to Opposed Tests to resist Intimidation and fear-inducing effects or powers for each level of this power.
 
 ## Inertia Strike
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Free Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE        |
+| ------------ | ----------- |
+| Cost         | 0.5 PP      |
+| Activation   | Free Action |
+| Duration     | Constant    |
+| Source       | SR5:SG      |
 
 This power allows an adept to generate and channel extra energy into an unarmed or melee strike specifically intended to knock a target down. To use this power, the adept must first declare her intention by spending a Free Action before the actual strike to channel the necessary energy. If the adept is successful with the attack, she adds (Magic x 0.5) to her Damage Value solely to determine if a knockdown occurs (p.194, SR5) Inetia Strike does not change the actual Damage Value of the attack. Using this power is considered a Called Shot (see p. 195, SR5). Note: This power cannot be combined with the Imposing Stone Martial Arts Technique (p. 138, Run & Gun).
 
 ## Iron Gut
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SSp           |
 
 This power greatly increases the strength of the adept’s digestive tract, allowing them to ingest and metabolize a wider array of substances than the metahuman norm. The power grants the adept a +1 dice pool modifier on any ingested Toxin Resistance Test (p. 409, SR5) per level of the ability.
 
 ## Iron Lungs
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SSp           |
 
 This power increases the adept’s lung capacity. When attempting to hold one’s breath, each level of Iron Lungs increases the base time of holding one’s breath by 20 seconds. When wanting to extend past the base time, each level adds an additional 6 seconds for each net hit on a Swimming + Willpower Test (added on top of the normal 15 additional seconds per net hit). So at four levels, the adept’s base time is 140 seconds (60 seconds normally, plus 80 (that is, 4 x 20) seconds from the power). Each net hit on a Swimming + Willpower Test extends the clock by 39 seconds (15 seconds as a base plus 4 x 6, or 24). The power also adds a +1 dice pool modifier to Body to resist Fatigue damage from Running (p. 172, SR5) per level.
 
 ## Iron Will
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP Per Level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | SR5:SSp          |
 
 This power makes the adept more resistant to external influences. The character may add the power’s level as a dice pool modifier in tests to resist mental manipulation or mind control, whether originating from spells, adept powers, or spirit powers.
 
 ## Keratin Control
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP Per Level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | SR5:SG           |
 
 The adept has the ability to accelerate their hair, nail, and horn growth within the limits of the adept’s metatype. The adept can go from short, professional appearance to street chic in a matter of hours. The power also allows any hair grown to be straight or curly at the adept’s discretion. Full beards and long hair normally take six hours to grow, but the growth can be accelerated at the cost of one unresisted box of Stun Damage per hour reduction in growth time.
 
 ## Kiai
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 6) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 6) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:HT                    |
 
 The adept summons up their qi to let out a terrifying battle cry that can send their foes fleeing. This power affects everyone who hears it, whether friend or foe, within a radius of (Magic) meters. The adept makes an Opposed Test using its Magic + Kiai Rating against the target’s Logic + Willpower. Any bonuses against fear, such as the Guts quality, are added to the target’s Opposed Test. If the target wins, they suffer no ill effects. If the adept wins, the victim takes a –2 penalty to all actions for a number of Combat Turns equal to the net hits. If the adept’s net hits exceed the target’s Willpower, the victim flees in terror until they are safely away and out of sight of the adept. Even once the fear fades, the target must succeed in a Willpower + Logic (adept’s net hits) Test to gather the nerve to face the adept again. At the end of the Combat Turn, the adept takes Drain equal to the level of this power. They may attempt to soak the drain with Body + Willpower.
 
 ## Killing Hands
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Free Action |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE        |
+| ------------ | ----------- |
+| Cost         | 0.5 PP      |
+| Activation   | Free Action |
+| Duration     | Constant    |
+| Source       | Core        |
 
 This power lets you inflict lethal damage with your unarmed attacks. When inflicting damage on the target of an unarmed attack, you may choose whether to cause Stun or Physical damage. Killing Hands may be combined with other adept powers that increase unarmed damage. Your Killing Hands attacks are magical, so they can bypass a creature’s magical defenses against attack, such as the Immunity to Normal Weapons power, and may be used by adepts with Astral Perception during astral combat.
 
 ## Kinesics
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP per level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | Core              |
 
 Kinesics grants you complete control over your body’s nonverbal and subconscious communication and social cues, even when you’re in stressful social situations. It includes facial expressions, body movements, eye movements, fluctuations in heart rate and blood pressure, and even control over sweat glands, making it difficult to gauge your emotional state and truthfulness. Add +1 to resist Social Tests and tests to read your emotions like Judge Intentions, assensing, or truthfulness tests.
 
 ## Kinesics Mastery
 
 | Prerequisite | Kinesics |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 An advanced version of Kinesics (p. 310, SR5), this power allows two adepts with this ability to communicate with each other while using solely non-verbal cues, such as body language and minute facial expressions, and natural subconscious cues. While general messages and mental states are easily relayed, those with Kinesics Mastery can relay specific, detailed information such as locations, names, places, or numbers. Communication in this way requires adepts to have direct line of sight and be close enough to read each other’s facial features and body language, whether through natural, augmented, or magical means.
 
 ## Light Body
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP per level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | Core              |
 
 Light Body is used to make incredible jumps over long distances. Add the power’s level to your Agility before calculating maximum distance you can jump. Also, add 1 die per level to your Gymnastics Test when you make your jump. If you should happen to fall, reduce the effective distance of a fall by the level in meters when calculating your falling damage.
 
 ## Light Touch
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSo |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SSo           |
 
 Light Touch allows the adept greater control in palming or pickpocketing an object and preventing anyone from perceiving the act. It imposes a –1 Perception dice pool modifier per level of Light Touch to anyone observing or being targeted by the adept.
 
@@ -825,95 +825,95 @@ Light Touch allows the adept greater control in palming or pickpocketing an obje
 
 **LINGUISTICS TABLE**
 
-| LANGUAGE | THRESHOLD |
-| --- | --- |
-| Common (English, Japanese, Spanish) | 1 |
-| Uncommon (Latin, Or’zet, Sperethiel) | 2 |
-| Obscure (Aramaic, Lapp, Berber) | 3 |
+| LANGUAGE                             | THRESHOLD |
+| ------------------------------------ | --------- |
+| Common (English, Japanese, Spanish)  | 1         |
+| Uncommon (Latin, Or’zet, Sperethiel) | 2         |
+| Obscure (Aramaic, Lapp, Berber)      | 3         |
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Through enhanced memory and mimicry, adepts with this power are able to learn new languages after a minimal amount of exposure to it, without spending Karma. To learn a new language, an adept must be exposed to the new language for (12 – Magic Rating) hours, (minimum 1 hour). The adept then makes a Logic + Intuition Test using the Linguistics Table. If successful, the adept gains the language at Rating 1. Further development of the new language requires normal Karma expenditure.
 
 ## Living Focus
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSp  |
 
 This power allows the adept to sustain a spell in a manner that simulates a Sustaining Focus. The casting magician does not need to maintain the spell but can transfer the spell to the adept with a Simple Action, with the adept providing the mana to power the spell. The spell cannot be further transferred, even if the recipient has the Living Focus power. The spell’s Force cannot exceed the adept’s Magic Attribute, and while sustaining the spell the adept suffers a –2 dice pool modifier to all actions while they sustain the spell. Counterspelling the sustained spell is handled with Dispelling (p. 296, SR5)
 
 ## Magic Sense
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Magic Sense allows an adept to detect the use of magic in her vicinity. Treat this power as the Detect Magic spell (p. 287, SR5) but with a range equal to (Magic x 10) meters. Adepts with the Astral Perception power can also use Magic Sense to detect astral forms while perceiving the astral plane.
 
 ## Maintain Warmth
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSp  |
 
 Maintain Warmth allows the adept to delay the onset of hypothermia and other cold-related ailments. This eliminates any modifiers to the Survival Test due to weather (see **Survival Test Table**, p. 137, SR5).
 
 ## Master Archer
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:HT   |
 
 An adept with this ability has no equal when wielding a bow. Any Action Phase in which the adept uses the Fire Bow Simple Action or the Load and Fire Bow complex action, they can ignore 2 points of negative dice pool modifiers due to their own movement. In addition, any ranged attacks the adept makes with a bow gains +1 die.
 
 ## Melanin Control
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 This power allows the adept to change the color of his skin and/or hair to that of another ethnicity/metatype, limited to the colors normally found in metahuman genetic expressions. The shift costs a Complex Action and lasts for (Magic) hours.
 
 ## Memory Displacement
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | Complex Action |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE           |
+| ------------ | -------------- |
+| Cost         | 0.25 PP        |
+| Activation   | Complex Action |
+| Duration     | Constant       |
+| Source       | SR5:SSp        |
 
 This adept power allows an adept to temporarily remove selected memories for a predetermined amount of time with the use of a Complex Action. While the memory is displaced, the adept has no recollection of the erasure or its contents, rendering attempts at Intimidation, Interrogation, or mental manipulation spells ineffective, except for any physical trauma caused. Once the predetermined time has elapsed, the memory returns.
 
 ## Metabolic Control
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 An adept with this power has the ability to enter a deep meditative state where all metabolic processes are slowed. This has two benefits. The first is to reduce the amount of rest the adept needs. In game terms, for every hour the adept in this state, she increases the interval for taking fatigue damage from sleep deprivation by another three hours (see p. 172, SR5).
 
@@ -921,34 +921,34 @@ The second benefit preserves the adept’s life in emergency situations. When th
 
 ## Mimic
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 6) |
-| Activation | 1 minute to rank minutes |
-| Duration | Magic minutes |
-| Source | SR5:SSo |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 6) |
+| Activation   | 1 minute to rank minutes  |
+| Duration     | Magic minutes             |
+| Source       | SR5:SSo                   |
 
 Mimic allows an adept to be able to mystically copy fingerprints, palm prints, and retinal prints and temporarily imprint those patterns onto his own body. For each level of Mimic, the character can receive 1 die to use to fool a print scanner. The adept must spend 1 minute in physical contact with the target, with each minute increasing the quality of the copy. The highest copy that can be produced of these prints is Rating 6 (which requires 6 minutes of contact with the target). The copies of the prints last for (Magic Rating of the adept) minutes before the adept’s body reverts back to its natural patterns.
 
 ## Missile Mastery
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 In the hands of an adept with Missile Mastery, everyday items such as bottles, credsticks, tools, empty clips, flashlights, cooking utensils, and so on can be turned into deadly weapons. Such improvised weapons have a Damage Value of (STR)P with an Accuracy of 3. The adept can also declare whether these weapons do Physical or Stun damage. Additionally, adepts with this ability have a greater affinity for throwing weapons. For ranged attacks with non-explosive throwing weapons, the adept gains +1 die and adds +1 to the weapon’s Damage Value.
 
 ## Missile Parry
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | Interrupt Action (–5 from Initiative Score) |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE                                        |
+| ------------ | ------------------------------------------- |
+| Cost         | 0.25 PP per level                           |
+| Activation   | Interrupt Action (–5 from Initiative Score) |
+| Duration     | Constant                                    |
+| Source       | Core                                        |
 
 You can catch slow-moving projectiles such as arrows, thrown knives, grenades, or shuriken out of the air. When using this power, add +1 die per level to your defense pool against the attacker’s ranged attack test. If you generate net hits, you pluck the missile out of the air. You need to have at least one empty hand to use Missile Party.
 
@@ -956,19 +956,19 @@ You can catch slow-moving projectiles such as arrows, thrown knives, grenades, o
 
 **MOTION SENSE TABLE**
 
-| MOVING THING IS | THRESHOLD |
-| --- | --- |
-| Smaller than dog/cat | 3 |
-| Smaller than average metahuman (dwarf) | 2 |
-| Average metahuman (human, ork, elf) | 1 |
-| Larger than average (troll) | Automatic success |
+| MOVING THING IS                        | THRESHOLD         |
+| -------------------------------------- | ----------------- |
+| Smaller than dog/cat                   | 3                 |
+| Smaller than average metahuman (dwarf) | 2                 |
+| Average metahuman (human, ork, elf)    | 1                 |
+| Larger than average (troll)            | Automatic success |
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Able to sense movement in her immediate vicinity, an adept with this power becomes a living motion sensor and is very difficult to sneak up on or ambush. Through a combination of natural and magical senses, the adept feels the movement of people, animals, or objects by their displacement of air molecules, changes in ambient barometric pressure, vibrations, or the minute disruption of the local mana field. This feeling alerts the adept to movement around her equal to (Magic) meters and can be used to detect living beings or objects that would otherwise be hidden by normal senses such as sight, sound, or smell. The size of the target also directly affects the adept’s ability to sense it.
 
@@ -976,34 +976,34 @@ To use this power, the adept must first make a Perception + Magic [Mental] test.
 
 ## Mystic Armor
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 This power protects you from physical attacks. For every level, this power gives you 1 point of Armor (cumulative with other armor, but not adding to encumbrance) that also protects against damage you take in astral combat.
 
 ## Natural Immunity
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP per level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | Core              |
 
 Add +1 die per level to your tests to resist toxins and disease.
 
 ## Nerve Strike (SR5:SG)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 By targeting various nerve clusters in his opponent’s body, an adept with this ability can disable or subdue on opponent without causing physical injury or death. To use this power, the adept must first declare his intention to employ it and then make a normal melee attack. If successful, the adept may choose to reduce his opponent’s Agility or Reaction (attacker’s choice) by 1 per net hit instead of inflicting Physical or Stun damage. If the targeted attribute reaches 0, the target is rendered paralyzed. An attacker must choose only one attribute to target per attack. The target regains lost attribute points with rest: 1 hour of rest recovers 1 lost point.
 
@@ -1011,122 +1011,122 @@ Nerve Strike works best on metahumans but can also be used against critters. A c
 
 ## Nerve Strike (SR5:SSo)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSo |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSo  |
 
 This power allows an adept to inflict a paralyzing attack, temporarily crippling an opponent by targeting vital nerve clusters. The adept declares he is using the power and makes a normal unarmed melee attack. Instead of inflicting damage, each net hit reduces her opponent’s Agility or Reaction (attacker’s choice) by 1. If a character’s Agility or Reaction is reduced to 0, she is paralyzed and unable to move. Nerve Strike is most effective against metahuman opponents; when used against critters, reduce Agility or Reaction by 1 for every 2 net hits instead. Targets that lack a functional nervous system such as spirits and drones are immune to this power. Subjects that have lost Agility or Reaction in this manner must rest for at least one hour. At the end of the hour, they must make a Body + Willpower Test, with each hit returning 1 point of Agility or Reaction (character’s choice). The character makes another Body + Willpower Test each hour until all Agility and/or Reaction has been restored. Magical healing and First Aid may assist in speeding up this recovery.
 
 ## Nimble Fingers (SR5:SG)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Adepts with this ability have exceptional manual dexterity. In game terms, this grants +1 die to Palming Tests, Performance Tests where the adept plays a musical instruments that requires the use of fingers, or any tests where small tools or items are used (gamemaster’s discretion). Additionally, the Simple Actions Change Gun Mode, Insert Clip, Remove Clip, and Use Simple Device are now considered Free Actions.
 
 ## Nimble Fingers (SR5:SSo)
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSo |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSo  |
 
 The Nimble Fingers power allows the adept to perform simple reflex and timing tricks more efficiently and effectively. It adds a +1 dice pool modifier to Palming and other slight-of-hand tests involving manual dexterity. Additionally, Insert Clip, Pick Up/Put Down Object, Remove Clip, and Use Simple Object are considered Free Actions for the adept.
 
 ## Pain Relief
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Similar to Nerve Strike but nicer, an adept channels mana into qi/chakra points to relieve tension, pain, and muscle fatigue. In game terms, this means removing the effects of Stun damage from a target. To use this power, the adept makes a Magic + Agility Test against a target. Every net hit temporarily removes one box of Stun damage from the target; normal rules for healing patients with implants still apply (p. 208, SR5). This effect only lasts for (Magic) hours or until the actual damage is healed, whichever comes first. The time necessary to complete the process is five minutes per box removed, and the adept must maintain contact with the target. Should the adept lose contact with the target for any reason before the process is complete, all benefits are immediately lost and the adept must repeat the process.
 
 ## Pain Resistance
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 Pain resistance allows you to ignore the effects of injury (but not the actual damage). For every level of pain resistance, the wound modifiers on the Condition Monitor move one box farther down the chart, so that with 1 level of this power, you take the –1 penalty after 4 boxes of damage instead of 3. If you have 2 levels of the power, the penalty doesn’t kick in until you have 5 boxes of damage. Pain Resistance works equally on the Physical and Stun Condition Monitors. Pain Resistance also allows you to resist pain from torture, magic, illness, etc. Each level adds +2 dice to any test you make to withstand suffering.
 
 ## Penetrating Strike
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 4) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 4) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:SG                    |
 
 This ability allows an adept to focus and project an unarmed attack a short distance forward, bypassing armor the target may have or punching through their thick, stubborn hide. In essence, this gives the adept’s attack an AP rating equal to the levels she has in this power (maximum 4). This power can be used in conjunction with the Killing Hands power but not Elemental Strike.
 
 ## Piercing Senses
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE           |
+| ------------ | -------------- |
+| Cost         | 0.25 Per Level |
+| Activation   | -              |
+| Duration     | Constant       |
+| Source       | SR5:SSp        |
 
 This power grants the adept an increased ability to identify illusions and related effects. The adept gains a +1 dice pool modifier to resist illusion-based effects for each level of this power.
 
 ## Power Swimming
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SSp  |
 
 Adepts with this power are banned from Olympic events, as they swim with the grace and speed of a marine mammal. The adept’s swimming rate is doubled (p. 137, SR5), and each hit on a Swimming Test gains an additional 2 meters of distance, 4 meters for elves and trolls.
 
 ## Plague Cloud
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Free Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE        |
+| ------------ | ----------- |
+| Cost         | 0.5 PP      |
+| Activation   | Free Action |
+| Duration     | Constant    |
+| Source       | SR5:SG      |
 
 This power surrounds the adept in a dense cloud of fumes, insects, or other pollutants or toxins. All ranged attacks made while the power is active (either against or by the adept) are considered to be in at least Moderate Fog/Smoke (see Ranged Attack Modifiers, p. 173, SR5). If anyone makes a successful melee attack against an adept with this power is active, the attacker must resist the damage effects of pollution (see sidebar, p. 105).
 
 ## Precision Throwing
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:HT |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:HT                    |
 
 Adepts with this power go far beyond the limit of their physical form when it comes to getting their thrown weapons to strike their targets. For the purposes of determining Range only, treat the adept as having 2 additional Strength per level of this power.
 
 ## Rapid Draw
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 No longer limited to pistols, the Rapid Draw power can be used by the adept to rapidly and more easily employ a variety of weapons in combat. Any weapon that is properly holstered can be quick-drawn; this includes blades, pistols, and throwing weapons. To use this ability, the adept makes a standard quick draw test (p. 165, SR5) but the threshold for this test is decreased by 1; this is cumulative with the use of a quick-draw holster. Also, with this power, a Quick Draw action is considered a Free Action.
 
@@ -1134,122 +1134,122 @@ For the purposes of this power, larger weapons such as SMGs, shotguns, or assaul
 
 ## Rapid Healing
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 You recover from damage more quickly, magically healing yourself over periods of time. Add +1 die per level to your Body for Healing Tests. Also add +1 die per level to any tests made to heal you through magical or mundane means (such as a Heal spell or the First Aid skill), whether the attempt is made by you or another character.
 
 ## Riposte
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP Per Level |
-| Activation | Interrupt Action (–5 FROM INITIATIVE SCORE) |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                                        |
+| ------------ | ------------------------------------------- |
+| Cost         | 0.5 PP Per Level                            |
+| Activation   | Interrupt Action (–5 FROM INITIATIVE SCORE) |
+| Duration     | Constant                                    |
+| Source       | SR5:SG                                      |
 
 Similar to Counterstrike, Riposte is used during armed melee combat to redirect an attacker’s energy against them. To employ this power, an adept must first use a successful Parry action against an incoming attack and spend his next available action to make a melee combat attack. For the adept’s next melee combat attack test, add a number of dice equal to his levels in Riposte and the net hits from the Parry. Engaging in any other action before attacking, even Dodge or Full Defense, negates the bonuses gained from this power. Note: This power cannot be combined with the Riposte and Yielding Force Martial Arts techniques (p. 125 and 141, Run & Gun).
 
 ## Rooting
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | Simple Action;Deactivate:Free Action |
-| Duration | Constant |
-| Source | SR5:SSp |
+| Prerequisite | NONE                                 |
+| ------------ | ------------------------------------ |
+| Cost         | 0.25 PP Per Level                    |
+| Activation   | Simple Action;Deactivate:Free Action |
+| Duration     | Constant                             |
+| Source       | SR5:SSp                              |
 
 Rooting allows an adept to become a nearly immovable object with a Simple Action. The power provides +1 to the adept’s Physical Limit for Knockdown (p. 194, SR5) only. It also provides a +1 dice pool modifier to any test resisting being knocked down, levitated, or otherwise being displaced against their will. The adept cannot move while the power is active, and she takes a –3 dice pool penalty to Dodge, Block or Parry tests while the power is active. The power can be canceled with a Free Action.
 
 ## Skate
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 This power is a minor form of levitation that gives an adept the ability to run across a surface that she normally wouldn’t be able to, such as thin ice, a fragile structure, or water. The adept pushes off with her first step as she moves across the target surface before she stops. The distance an adept can traverse is equal to her Magic rating in meters. Attempting to traverse further distances requires the adept to find a stable surface or landing area to repeat the process; those who fail to find such a surface fall through whatever they are moving across. An adept attempting an acrobatic move or defensive Interrupt Action while using this power suffers a –3 dice pool penalty to her dice pool for the acrobatic or interrupt test.
 
 ## Smashing Blow
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Adepts with this power focus their magic into a single unarmed strike to break through obstacles. Multiply the adept’s base DV by 2 when attacking a barrier or other static structure. This applies to both physical and magical barriers.
 
 ## Spell Resistance
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 You are inherently resistant to spells. Add +1 die per level to Resistance Tests against spells, spell rituals, alchemical preparations, or Innate Spell critter power (but not other critter powers). Spell Resistance does not interfere with spells that you choose not to resist.
 
 ## Spirit Claw
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | Free Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE        |
+| ------------ | ----------- |
+| Cost         | 0.25 PP     |
+| Activation   | Free Action |
+| Duration     | Constant    |
+| Source       | SR5:SG      |
 
 Named by the Beast’s Way Sioux adept that discovered it, Spirit Claw allows the adept to temporarily create a small weapon of spiritual energy for use against spirits. While the discoverer’s manifestation of this power appeared as a set of oversized claws, others with this power have learned to form whatever weapon they desire—clubs, hammers, daggers, spikes, and so on—based on their particular Way or paradigm. Activated with a Free Action, Spirit Claw adds (Magic x 0.5) to the adept’s unarmed DV against spirits (regardless of whether the combat is physical or astral). It remains active for (Magic x 0.5) Combat Turns or when the adept deactivates it with a Free Action or strikes with it. To use Spirit Claw again, the energies must be re-channeled by spending another Free Action. Against spirits, this power can only be combined with the Killing Hands power.
 
 ## Spirit Ram
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE          |
+| ------------ | ------------- |
+| Cost         | 0.5 PP        |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | SR5:SG        |
 
 Similar to Spirit Claw, Spirit Ram creates a temporary, ram shape—horns, ram’s head, wedge, spikes, and so forth—in front of the adept for charge attacks against spirits in either physical or astral combat. The Reach of this weapon is (Magic x 0.5) meters, and its DV is (Magic) with AP – (Magic x 0.5). Spirit Ram moves with the adept and remains active for (Magic x 0.5) Combat Turns or when the adept deactivates it with a Free Action or strikes with it. To use Spirit Ram again, the energies must be re-channeled by spending another Simple Action.
 
 ## Stillness
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level (MAX 3) |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE                      |
+| ------------ | ------------------------- |
+| Cost         | 0.25 PP Per Level (MAX 3) |
+| Activation   | -                         |
+| Duration     | Constant                  |
+| Source       | SR5:SG                    |
 
 This power allows an adept to exert control over her body to avoid detection. By slowing her physiological processes (heart rate, breathing, and the need to flex muscles) and entering a relaxed state, the adept becomes completely motionless for a specific amount of time. Her body’s heat signature is also lessened, making the adept harder to detect by thermographic means. For every level of this power, the adept can remain in this state for approximately one hour. Anyone using auditory or thermographic means to locate or perceive an adept using this power receives a negative penalty equal to the level of the adept’s power. Visual searches or Perception Tests are unaffected by this power. This power is negated as soon as the adept moves.
 
 ## Sustenance
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.25 PP  |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Adepts with this power have exceptional metabolisms and can function with less food and water than normal. An average metahuman requires approximately three meals per day to maintain normal functions before fatigue damage begins. An adept with this power needs only one meal per day. In game terms, the intervals for hunger and thirst are increased to seven days for hunger and three days for thirst (p. 172, SR5).
 
 ## Temperature Tolerance
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.25 PP Per Level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE              |
+| ------------ | ----------------- |
+| Cost         | 0.25 PP Per Level |
+| Activation   | -                 |
+| Duration     | Constant          |
+| Source       | SR5:SG            |
 
 This power allows adepts to better withstand the effects of extreme temperatures. For every level in this power, the adept gains a +1 dice pool bonus for resisting damage caused by extreme temperature exposure (p. 172, SR5). This also can be used against magical effects such as elemental fire or cold (p. 170–171, SR5).
 
@@ -1258,19 +1258,19 @@ This power allows adepts to better withstand the effects of extreme temperatures
 **THREE DIMENSIONAL MEMORY TABLE**
 
 | THRESHOLD | TIME PASSED |
-| --- | --- |
-| 1 | 24 hours |
-| 2 | 1 week |
-| 3 | 1 month |
-| 4 | 1 year |
-| 5 | Over a year |
+| --------- | ----------- |
+| 1         | 24 hours    |
+| 2         | 1 week      |
+| 3         | 1 month     |
+| 4         | 1 year      |
+| 5         | Over a year |
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:SG |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 0.5 PP   |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | SR5:SG   |
 
 Three-Dimensional Memory allows an adept to mentally record an area he has visited and then later recall it in ultra-clear detail. This ability is favored by adept investigators and recon specialists. To use this ability, the adept in question must use a Complex Action to view the targeted area in detail. This includes what he actually observed, but also any sensations he felt. The range of what the adept can observe is (Magic x Magic) cubic meters. He can record a number of areas equal to his Magic rating.
 
@@ -1279,44 +1279,44 @@ To recall what he recorded, the adept requires a Perception + Magic [Mental] tes
 ## Toxic Strike
 
 | Prerequisite | Killing Hands |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Simple Action |
-| Duration | Constant |
-| Source | SR5:SG |
+| ------------ | ------------- |
+| Cost         | 0.5 PP        |
+| Activation   | Simple Action |
+| Duration     | Constant      |
+| Source       | SR5:SG        |
 
 Toxic adepts with this power can channel either pollutants or radiation to an Unarmed Combat attack to cause extra elemental damage. The use of this ability follows the same rules and guidelines as the Elemental Strike power (p. 170). Each toxic elemental effect must be purchased as a separate power.
 
 ## Traceless Walk
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 1 PP |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE     |
+| ------------ | -------- |
+| Cost         | 1 PP     |
+| Activation   | -        |
+| Duration     | Constant |
+| Source       | Core     |
 
 You can move over surfaces—even snow, sand, or thin paper—without leaving visible traces. You make no noise through contact with the floor (though movement may still cause other sounds), and any hearing-based Perception Tests to detect you suffer a –4 dice pool penalty. You don’t trip ground-vibration or pressure sensors. You can’t walk across liquid surfaces—you’re magical, not miraculous—but you can walk across deep snow without sinking. While you can be tracked by non-visual cues such as scent, even those Track Tests are more difficult and get a –2 dice pool penalty.
 
 ## Transmit Damage
 
 | Prerequisite | Killing Hands |
-| --- | --- |
-| Cost | 1 per level |
-| Activation | - |
-| Duration | Constant |
-| Source | SR5:BB |
+| ------------ | ------------- |
+| Cost         | 1 per level   |
+| Activation   | -             |
+| Duration     | Constant      |
+| Source       | SR5:BB        |
 
 This power allows an adept with Killing Hands to channel any physical damage he has taken into an unarmed attack and transmit it into his target. The attack is resolved using the standard rules for unarmed combat. For each box of unresisted physical damage the adept deals to his opponent, remove one box from his Physical Condition Monitor. The maximum number of boxes that can be transferred in this way is equal to the adept’s level in the power. Stun damage cannot be transmitted.
 
 ## Voice Control
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP per level |
-| Activation | - |
-| Duration | Constant |
-| Source | Core |
+| Prerequisite | NONE             |
+| ------------ | ---------------- |
+| Cost         | 0.5 PP per level |
+| Activation   | -                |
+| Duration     | Constant         |
+| Source       | Core             |
 
 You get an amazing level of control over the properties of your voice. You can change your voice’s pitch, modulation and tone at will, as well as increase your volume. You can mask your voice and imitate sounds within the normal range of metahuman vocalization (no infrasound or ultrasound) and mimic the voices of others. If you use this trick to fool a person or a voice recognition system, make an Opposed Test using your Impersonation + Charisma [Mental] against the voice recognition system’s Rating x 2, or against the Perception + Intuition of characters the adept is attempting to fool, adding the level of this power as a bonus to your dice pool.
 
@@ -1324,11 +1324,11 @@ You can also adjust your voice to generate positive social effects, giving you +
 
 ## Wall Running
 
-| Prerequisite | NONE |
-| --- | --- |
-| Cost | 0.5 PP |
-| Activation | Simple Action |
-| Duration | Single Action Phase |
-| Source | Core |
+| Prerequisite | NONE                |
+| ------------ | ------------------- |
+| Cost         | 0.5 PP              |
+| Activation   | Simple Action       |
+| Duration     | Single Action Phase |
+| Source       | Core                |
 
 You can run up sheer walls or other vertical surfaces a limited distance. Make a Running + Strength [Magic] Test, with hits indicating the number of meters you may climb up in an action phase. If you want to run up longer distances, you’ll need steps, ledges, or somewhere you can stop and then use this power again. If you want to run across a vertical surface instead of up it, you can do so by combining this power with a Sprint action (p. 162). At the end of your movement, you fall off the wall, whether you made it as far as you wanted or not.

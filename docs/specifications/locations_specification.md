@@ -15,6 +15,7 @@
 This document specifies the implementation requirements for supporting **Locations** in Shadow Master. Locations represent places within a Shadowrun campaign world, including physical locations, Matrix hosts, astral spaces, and other significant places that characters may visit, interact with, or reference during gameplay.
 
 **Key Features:**
+
 - Campaign-specific location management
 - Multiple location types (physical, Matrix, astral, etc.)
 - Location hierarchies and relationships
@@ -28,30 +29,33 @@ This document specifies the implementation requirements for supporting **Locatio
 
 ---
 
-
 ## Page Structure
 
 ### Routes
 
 #### Locations List Page
+
 - **Path:** `/app/campaigns/[campaignId]/locations/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
 - **Description:** Lists all locations for a campaign with filtering and search
 
 #### Location Detail Page
+
 - **Path:** `/app/campaigns/[campaignId]/locations/[locationId]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Shows location details, relationships, and associated content
 
 #### Create Location Page
+
 - **Path:** `/app/campaigns/[campaignId]/locations/create/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route, GM-only)
 - **Description:** Form/wizard for creating a new location
 
 #### Location Templates Page
+
 - **Path:** `/app/campaigns/[campaignId]/locations/templates/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route, GM-only)
@@ -95,18 +99,18 @@ This document specifies the implementation requirements for supporting **Locatio
  * Location type/category
  */
 export type LocationType =
-  | "physical"        // Physical locations (buildings, districts, cities)
-  | "matrix-host"     // Matrix hosts
-  | "astral"          // Astral spaces
-  | "safe-house"      // Safe houses
-  | "meeting-place"   // Meeting locations
-  | "corporate"       // Corporate facilities
-  | "gang-territory"  // Gang territories
-  | "residential"     // Residential areas
-  | "commercial"      // Commercial districts
-  | "industrial"      // Industrial areas
-  | "underground"     // Underground/undercity locations
-  | "other";           // Other/uncategorized
+  | "physical" // Physical locations (buildings, districts, cities)
+  | "matrix-host" // Matrix hosts
+  | "astral" // Astral spaces
+  | "safe-house" // Safe houses
+  | "meeting-place" // Meeting locations
+  | "corporate" // Corporate facilities
+  | "gang-territory" // Gang territories
+  | "residential" // Residential areas
+  | "commercial" // Commercial districts
+  | "industrial" // Industrial areas
+  | "underground" // Underground/undercity locations
+  | "other"; // Other/uncategorized
 
 /**
  * Location visibility
@@ -118,18 +122,18 @@ export type LocationVisibility = "gm-only" | "players" | "public";
  */
 export interface Location {
   id: ID;
-  
+
   /** Campaign this location belongs to */
   campaignId: ID;
-  
+
   /** Location metadata */
   name: string;
   type: LocationType;
   description?: string;
-  
+
   /** Visibility control */
   visibility: LocationVisibility;
-  
+
   /** GM-only content */
   gmNotes?: string;
   gmOnlyContent?: {
@@ -142,61 +146,61 @@ export interface Location {
     /** Additional GM-only notes */
     notes?: string;
   };
-  
+
   // -------------------------------------------------------------------------
   // Physical Properties
   // -------------------------------------------------------------------------
-  
+
   /** Physical address or location description */
   address?: string;
-  
+
   /** Geographic coordinates (optional) */
   coordinates?: {
     latitude: number;
     longitude: number;
   };
-  
+
   /** District/area this location is in */
   district?: string;
-  
+
   /** City/metroplex this location is in */
   city?: string;
-  
+
   /** Country/nation this location is in */
   country?: string;
-  
+
   // -------------------------------------------------------------------------
   // Hierarchy & Relationships
   // -------------------------------------------------------------------------
-  
+
   /** Parent location (if this is a sub-location) */
   parentLocationId?: ID;
-  
+
   /** Child locations (sub-locations within this location) */
   childLocationIds?: ID[];
-  
+
   /** Related/connected locations */
   relatedLocationIds?: ID[];
-  
+
   /** NPCs associated with this location */
   npcIds?: ID[];
-  
+
   /** Grunt teams associated with this location */
   gruntTeamIds?: ID[];
-  
+
   /** Encounters that occurred at this location */
   encounterIds?: ID[];
-  
+
   /** Sessions that referenced this location */
   sessionIds?: ID[];
-  
+
   // -------------------------------------------------------------------------
   // Game Mechanics
   // -------------------------------------------------------------------------
-  
+
   /** Security rating (1-10, if applicable) */
   securityRating?: number;
-  
+
   /** Matrix host details (if Matrix location) */
   matrixHost?: {
     hostRating: number;
@@ -204,69 +208,69 @@ export interface Location {
     ic?: string[]; // IC types present
     patrol?: number; // Patrol IC rating
   };
-  
+
   /** Astral properties (if astral location) */
   astralProperties?: {
     backgroundCount?: number;
     manaLevel?: "low" | "normal" | "high" | "very-high";
     barrierRating?: number;
   };
-  
+
   /** Location-specific modifiers or rules */
   modifiers?: Record<string, unknown>;
-  
+
   // -------------------------------------------------------------------------
   // Media & References
   // -------------------------------------------------------------------------
-  
+
   /** Location image URL */
   imageUrl?: string;
-  
+
   /** Additional images */
   images?: string[];
-  
+
   /** Map image URL */
   mapUrl?: string;
-  
+
   /** External references (sourcebook pages, etc.) */
   references?: Array<{
     source: string;
     page?: number;
     note?: string;
   }>;
-  
+
   // -------------------------------------------------------------------------
   // Tags & Organization
   // -------------------------------------------------------------------------
-  
+
   /** Tags for categorization and search */
   tags?: string[];
-  
+
   /** Custom fields (extensible) */
   customFields?: Record<string, unknown>;
-  
+
   // -------------------------------------------------------------------------
   // History & Tracking
   // -------------------------------------------------------------------------
-  
+
   /** When this location was first created */
   createdAt: ISODateString;
-  
+
   /** When this location was last updated */
   updatedAt?: ISODateString;
-  
+
   /** When this location was first visited (in-game) */
   firstVisitedAt?: ISODateString;
-  
+
   /** When this location was last visited (in-game) */
   lastVisitedAt?: ISODateString;
-  
+
   /** Characters who have visited this location */
   visitedByCharacterIds?: ID[];
-  
+
   /** Visit count */
   visitCount?: number;
-  
+
   /** Extensible metadata */
   metadata?: Metadata;
 }
@@ -280,31 +284,42 @@ export interface Location {
  */
 export interface LocationTemplate {
   id: ID;
-  
+
   /** Template creator (user ID) */
   createdBy: ID;
-  
+
   /** Template name */
   name: string;
-  
+
   /** Template description */
   description?: string;
-  
+
   /** Template type */
   type: LocationType;
-  
+
   /** Template data (location structure without campaign-specific IDs) */
-  templateData: Omit<Location, "id" | "campaignId" | "createdAt" | "updatedAt" | "npcIds" | "gruntTeamIds" | "encounterIds" | "sessionIds" | "visitedByCharacterIds">;
-  
+  templateData: Omit<
+    Location,
+    | "id"
+    | "campaignId"
+    | "createdAt"
+    | "updatedAt"
+    | "npcIds"
+    | "gruntTeamIds"
+    | "encounterIds"
+    | "sessionIds"
+    | "visitedByCharacterIds"
+  >;
+
   /** Template tags */
   tags?: string[];
-  
+
   /** Is this template public (shared) or private */
   isPublic: boolean;
-  
+
   /** Usage count (how many times template has been used) */
   usageCount: number;
-  
+
   createdAt: ISODateString;
   updatedAt?: ISODateString;
 }
@@ -336,6 +351,7 @@ export interface LocationConnection {
 **Location:** `/app/campaigns/[campaignId]/locations/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display campaign's locations
 - Filter locations by type, tags, visibility
 - Search locations by name, description
@@ -344,6 +360,7 @@ export interface LocationConnection {
 - Display location hierarchy (tree view option)
 
 **State:**
+
 - `locations: Location[]` - All locations for campaign
 - `filterType: LocationType | "all"` - Current type filter
 - `filterVisibility: LocationVisibility | "all"` - Current visibility filter
@@ -363,6 +380,7 @@ export interface LocationConnection {
 **Description:** Individual location display card in list view.
 
 **Features:**
+
 - Location name and type badge
 - Description preview
 - Visibility indicator (GM-only badge if applicable)
@@ -371,6 +389,7 @@ export interface LocationConnection {
 - Parent/child location indicators
 
 **Props:**
+
 ```typescript
 interface LocationCardProps {
   location: Location;
@@ -388,6 +407,7 @@ interface LocationCardProps {
 **Location:** `/app/campaigns/[campaignId]/locations/[locationId]/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display location details
 - Render appropriate tab content
 - Handle user actions (edit, delete, link content)
@@ -395,6 +415,7 @@ interface LocationCardProps {
 - Filter GM-only content for players
 
 **State:**
+
 - `location: Location | null` - Location data
 - `activeTab: LocationTab` - Currently active tab
 - `relatedLocations: Location[]` - Related locations
@@ -414,6 +435,7 @@ interface LocationCardProps {
 **Description:** Location header with name, metadata, and actions.
 
 **Features:**
+
 - Location name and type badge
 - Visibility indicator
 - Address/coordinates display
@@ -423,6 +445,7 @@ interface LocationCardProps {
   - Player: View only
 
 **Props:**
+
 ```typescript
 interface LocationHeaderProps {
   location: Location;
@@ -443,12 +466,14 @@ interface LocationHeaderProps {
 **Description:** Tab navigation for location detail sections.
 
 **Tabs:**
+
 - **Overview** - Description, images, basic info
 - **Details** - Physical properties, game mechanics, modifiers
 - **Connections** - Related locations, NPCs, encounters
 - **History** - Visit history, session references (GM-only)
 
 **Props:**
+
 ```typescript
 interface LocationTabsProps {
   activeTab: LocationTab;
@@ -466,6 +491,7 @@ interface LocationTabsProps {
 **Description:** Overview of location information.
 
 **Sections:**
+
 - Location description (rich text)
 - Image gallery
 - Address and coordinates
@@ -474,6 +500,7 @@ interface LocationTabsProps {
 - Basic statistics (visit count, related content)
 
 **Props:**
+
 ```typescript
 interface LocationOverviewTabProps {
   location: Location;
@@ -490,6 +517,7 @@ interface LocationOverviewTabProps {
 **Description:** Detailed location properties and game mechanics.
 
 **Sections:**
+
 - Physical properties (address, coordinates, district, city)
 - Hierarchy (parent/child locations)
 - Security rating
@@ -500,6 +528,7 @@ interface LocationOverviewTabProps {
 - GM-only content (if GM)
 
 **Props:**
+
 ```typescript
 interface LocationDetailsTabProps {
   location: Location;
@@ -516,6 +545,7 @@ interface LocationDetailsTabProps {
 **Description:** Display location relationships and connections.
 
 **Features:**
+
 - Related locations list (with connection types)
 - Associated NPCs list
 - Associated grunt teams list
@@ -524,6 +554,7 @@ interface LocationDetailsTabProps {
 - Visual connection diagram (future)
 
 **Props:**
+
 ```typescript
 interface LocationConnectionsTabProps {
   location: Location;
@@ -546,6 +577,7 @@ interface LocationConnectionsTabProps {
 **Description:** Location visit history and session references (GM-only).
 
 **Features:**
+
 - Visit timeline
 - Characters who visited
 - Sessions that referenced location
@@ -554,6 +586,7 @@ interface LocationConnectionsTabProps {
 - GM notes about visits
 
 **Props:**
+
 ```typescript
 interface LocationHistoryTabProps {
   location: Location;
@@ -572,6 +605,7 @@ interface LocationHistoryTabProps {
 **Description:** Form for creating a new location.
 
 **Sections:**
+
 - Basic Info (name, type, description, visibility)
 - Physical Properties (address, coordinates, district, city)
 - Hierarchy (parent location selection)
@@ -581,11 +615,13 @@ interface LocationHistoryTabProps {
 - GM Notes (GM-only section)
 
 **State:**
+
 - `formData: Partial<Location>` - Form data
 - `selectedTemplate?: LocationTemplate` - Selected template
 - `validationErrors: Record<string, string>` - Form validation errors
 
 **Props:**
+
 ```typescript
 interface CreateLocationFormProps {
   campaignId: ID;
@@ -604,6 +640,7 @@ interface CreateLocationFormProps {
 **Description:** Manage location templates and create locations from templates.
 
 **Features:**
+
 - Template list (user templates + public templates)
 - Create template from existing location
 - Create location from template
@@ -612,6 +649,7 @@ interface CreateLocationFormProps {
 - Template search and filtering
 
 **Props:**
+
 ```typescript
 interface LocationTemplatesPageProps {
   campaignId: ID;
@@ -631,6 +669,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** List all locations for a campaign
 
 **Query Parameters:**
+
 - `type?: LocationType` - Filter by type
 - `visibility?: LocationVisibility` - Filter by visibility
 - `tags?: string[]` - Filter by tags (comma-separated)
@@ -639,6 +678,7 @@ interface LocationTemplatesPageProps {
 - `includeChildren?: boolean` - Include child locations
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -656,9 +696,11 @@ interface LocationTemplatesPageProps {
 **Purpose:** Get detailed location information
 
 **Query Parameters:**
+
 - `includeRelated?: boolean` - Include related locations, NPCs, etc.
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -680,6 +722,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Create a new location
 
 **Request:**
+
 ```typescript
 {
   name: string;
@@ -706,6 +749,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -717,6 +761,7 @@ interface LocationTemplatesPageProps {
 **Implementation:** New endpoint - create location, set `campaignId`, initialize defaults
 
 **Validation:**
+
 - Name required (1-200 characters)
 - Type must be valid LocationType
 - Visibility must be valid LocationVisibility
@@ -730,6 +775,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Update location (GM-only)
 
 **Request:**
+
 ```typescript
 {
   name?: string;
@@ -756,6 +802,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -775,6 +822,7 @@ interface LocationTemplatesPageProps {
 **Request:** None (location ID from route)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -791,6 +839,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Link content to location (GM-only)
 
 **Request:**
+
 ```typescript
 {
   type: "npc" | "grunt" | "encounter" | "session";
@@ -799,6 +848,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -816,6 +866,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Unlink content from location (GM-only)
 
 **Request:**
+
 ```typescript
 {
   type: "npc" | "grunt" | "encounter" | "session";
@@ -824,6 +875,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -841,6 +893,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Record a location visit
 
 **Request:**
+
 ```typescript
 {
   characterId: ID;
@@ -850,6 +903,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -867,12 +921,14 @@ interface LocationTemplatesPageProps {
 **Purpose:** List location templates
 
 **Query Parameters:**
+
 - `userId?: ID` - Filter by user (for user's templates)
 - `public?: boolean` - Filter public templates
 - `type?: LocationType` - Filter by type
 - `search?: string` - Search templates
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -890,6 +946,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Create a location template (GM-only)
 
 **Request:**
+
 ```typescript
 {
   name: string;
@@ -902,6 +959,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -919,6 +977,7 @@ interface LocationTemplatesPageProps {
 **Purpose:** Create template from existing location (GM-only)
 
 **Request:**
+
 ```typescript
 {
   name: string;
@@ -928,6 +987,7 @@ interface LocationTemplatesPageProps {
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -943,6 +1003,7 @@ interface LocationTemplatesPageProps {
 ### Storage Layer
 
 **File Structure:**
+
 ```
 data/campaigns/{campaignId}/
 ├── locations/
@@ -967,28 +1028,16 @@ export function createLocation(
 
 export function getLocation(locationId: ID): Location | null;
 
-export function updateLocation(
-  locationId: ID,
-  updates: Partial<Location>
-): Location;
+export function updateLocation(locationId: ID, updates: Partial<Location>): Location;
 
 export function deleteLocation(locationId: ID): void;
 
 // Query operations
-export function getLocationsByCampaign(
-  campaignId: ID,
-  filters?: LocationFilters
-): Location[];
+export function getLocationsByCampaign(campaignId: ID, filters?: LocationFilters): Location[];
 
-export function getLocationHierarchy(
-  campaignId: ID,
-  rootLocationId?: ID
-): Location[];
+export function getLocationHierarchy(campaignId: ID, rootLocationId?: ID): Location[];
 
-export function searchLocations(
-  campaignId: ID,
-  query: string
-): Location[];
+export function searchLocations(campaignId: ID, query: string): Location[];
 
 // Relationship operations
 export function linkContentToLocation(
@@ -1004,11 +1053,7 @@ export function unlinkContentFromLocation(
 ): Location;
 
 // Visit tracking
-export function recordLocationVisit(
-  locationId: ID,
-  characterId: ID,
-  sessionId?: ID
-): Location;
+export function recordLocationVisit(locationId: ID, characterId: ID, sessionId?: ID): Location;
 
 // Template operations
 export function createLocationTemplate(
@@ -1016,9 +1061,7 @@ export function createLocationTemplate(
   template: Omit<LocationTemplate, "id" | "createdBy" | "createdAt" | "updatedAt" | "usageCount">
 ): LocationTemplate;
 
-export function getLocationTemplates(
-  filters?: TemplateFilters
-): LocationTemplate[];
+export function getLocationTemplates(filters?: TemplateFilters): LocationTemplate[];
 
 export function createLocationFromTemplate(
   campaignId: ID,
@@ -1165,6 +1208,7 @@ app/api/locations/
 ### Validation Rules
 
 **Location Creation:**
+
 - Name: 1-200 characters, required
 - Type: Must be valid LocationType
 - Visibility: Must be valid LocationVisibility
@@ -1173,12 +1217,12 @@ app/api/locations/
 - Parent location: Must exist and belong to same campaign
 
 **Content Linking:**
+
 - NPC/Grunt/Encounter must exist
 - Cannot link same content twice
 - Content must belong to same campaign (if applicable)
 
 ---
-
 
 ## Security Considerations
 
@@ -1286,6 +1330,7 @@ app/api/locations/
 **Priority:** Medium  
 **Estimated Effort:** 8-12 days  
 **Dependencies:**
+
 - Campaign system (for campaign context)
 - Type definitions (extend with Location types)
 - Storage layer (add locations.ts)
@@ -1310,30 +1355,37 @@ This feature enables GMs to build rich campaign worlds with detailed locations, 
 - Location hierarchies support complex world structures (cities → districts → buildings → rooms)
 - Edition support: Location concepts are edition-agnostic, though specific mechanics (Matrix hosts, astral properties) may vary by edition
 
-
 ## Implemented Features (Phase 5-7 Additions)
 
 ### 12. Location Templates System
+
 **Location:** `/app/campaigns/[campaignId]/locations/templates/page.tsx`
+
 - **Create Template:** Create reusable templates from existing locations or from scratch.
 - **Save as Template:** "Save as Template" button on Location Detail page.
 - **Public/Private:** Share templates visibly or keep them private.
 - **Usage:** Create new locations pre-filled from selected templates.
 
 ### 13. Export/Import System
+
 **API Routes:**
+
 - `GET /api/campaigns/[campaignId]/locations/export`: Download full campaign location data as JSON.
 - `POST /api/campaigns/[campaignId]/locations/import`: Import location data from JSON.
 
 **UI:**
+
 - **Export Button:** On Locations List page header.
 - **Import Button:** Opens `LocationImportDialog` to paste or upload JSON.
 
 ### 14. Location Tree View
+
 **Location:** `/app/campaigns/[campaignId]/locations/components/LocationTree.tsx`
+
 - **Visualization:** Recursive tree display of location hierarchy.
 - **Interaction:** Expand/collapse nodes, click to view details.
 - **Toggle:** Switch between List and Tree views on the main locations page.
 
 ### 15. Content Generation
+
 - **Seattle Data:** Pre-generated `seattle-locations.json` included in repository for quick start.

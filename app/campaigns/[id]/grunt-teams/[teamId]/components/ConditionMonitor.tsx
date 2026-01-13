@@ -71,9 +71,7 @@ export function ConditionMonitor({
   // Group boxes into rows of 3 (SR5 standard)
   const rows: number[][] = [];
   for (let i = 0; i < maxBoxes; i += 3) {
-    rows.push(
-      Array.from({ length: Math.min(3, maxBoxes - i) }, (_, j) => i + j)
-    );
+    rows.push(Array.from({ length: Math.min(3, maxBoxes - i) }, (_, j) => i + j));
   }
 
   return (

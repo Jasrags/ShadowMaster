@@ -17,7 +17,10 @@ export async function POST(req: NextRequest) {
     const { currentPassword, newPassword } = await req.json();
 
     if (!currentPassword || !newPassword) {
-      return NextResponse.json({ success: false, error: "Missing required fields" }, { status: 400 });
+      return NextResponse.json(
+        { success: false, error: "Missing required fields" },
+        { status: 400 }
+      );
     }
 
     const user = await getUserById(userId);
@@ -28,7 +31,10 @@ export async function POST(req: NextRequest) {
     // Verify current password
     const isPasswordCorrect = await verifyPassword(currentPassword, user.passwordHash);
     if (!isPasswordCorrect) {
-      return NextResponse.json({ success: false, error: "Incorrect current password" }, { status: 401 });
+      return NextResponse.json(
+        { success: false, error: "Incorrect current password" },
+        { status: 401 }
+      );
     }
 
     // Hash new password

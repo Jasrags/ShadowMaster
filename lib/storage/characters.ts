@@ -86,13 +86,7 @@ export interface CharacterSummary {
   createdAt: string;
   updatedAt?: string;
 }
-import {
-  ensureDirectory,
-  readJsonFile,
-  writeJsonFile,
-  deleteFile,
-  readAllJsonFiles,
-} from "./base";
+import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, readAllJsonFiles } from "./base";
 
 const CHARACTERS_DIR = path.join(process.cwd(), "data", "characters");
 
@@ -117,10 +111,7 @@ function getCharacterFilePath(userId: ID, characterId: ID): string {
 /**
  * Get a character by ID
  */
-export async function getCharacter(
-  userId: ID,
-  characterId: ID
-): Promise<Character | null> {
+export async function getCharacter(userId: ID, characterId: ID): Promise<Character | null> {
   const filePath = getCharacterFilePath(userId, characterId);
   return readJsonFile<Character>(filePath);
 }
@@ -129,9 +120,7 @@ export async function getCharacter(
  * Get a character by ID without knowing the owner (for GM/admin access)
  * This iterates through all users, so use sparingly.
  */
-export async function getCharacterById(
-  characterId: ID
-): Promise<Character | null> {
+export async function getCharacterById(characterId: ID): Promise<Character | null> {
   const allCharacters = await getAllCharacters();
   return allCharacters.find((c) => c.id === characterId) || null;
 }
@@ -199,10 +188,7 @@ export async function getCharactersByEdition(
 /**
  * Get characters in a specific campaign
  */
-export async function getCharactersByCampaign(
-  userId: ID,
-  campaignId: ID
-): Promise<Character[]> {
+export async function getCharactersByCampaign(userId: ID, campaignId: ID): Promise<Character[]> {
   const characters = await getUserCharacters(userId);
   return characters.filter((c) => c.campaignId === campaignId);
 }
@@ -417,10 +403,7 @@ export async function addAuditEntry(
 /**
  * Finalize a draft character (change status from draft to active)
  */
-export async function finalizeCharacter(
-  userId: ID,
-  characterId: ID
-): Promise<Character> {
+export async function finalizeCharacter(userId: ID, characterId: ID): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -598,11 +581,7 @@ export function getMaxEdge(character: Character): number {
 /**
  * Spend Edge points
  */
-export async function spendEdge(
-  userId: ID,
-  characterId: ID,
-  amount: number
-): Promise<Character> {
+export async function spendEdge(userId: ID, characterId: ID, amount: number): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -624,11 +603,7 @@ export async function spendEdge(
 /**
  * Restore Edge points
  */
-export async function restoreEdge(
-  userId: ID,
-  characterId: ID,
-  amount: number
-): Promise<Character> {
+export async function restoreEdge(userId: ID, characterId: ID, amount: number): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -649,10 +624,7 @@ export async function restoreEdge(
 /**
  * Fully restore Edge to maximum
  */
-export async function restoreFullEdge(
-  userId: ID,
-  characterId: ID
-): Promise<Character> {
+export async function restoreFullEdge(userId: ID, characterId: ID): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -671,11 +643,7 @@ export async function restoreFullEdge(
 /**
  * Spend karma
  */
-export async function spendKarma(
-  userId: ID,
-  characterId: ID,
-  amount: number
-): Promise<Character> {
+export async function spendKarma(userId: ID, characterId: ID, amount: number): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -693,11 +661,7 @@ export async function spendKarma(
 /**
  * Award karma
  */
-export async function awardKarma(
-  userId: ID,
-  characterId: ID,
-  amount: number
-): Promise<Character> {
+export async function awardKarma(userId: ID, characterId: ID, amount: number): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -712,11 +676,7 @@ export async function awardKarma(
 /**
  * Award nuyen
  */
-export async function awardNuyen(
-  userId: ID,
-  characterId: ID,
-  amount: number
-): Promise<Character> {
+export async function awardNuyen(userId: ID, characterId: ID, amount: number): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -781,7 +741,7 @@ export async function killCharacter(userId: ID, characterId: ID): Promise<Charac
  */
 export async function saveCharacter(character: Character): Promise<Character> {
   const filePath = getCharacterFilePath(character.ownerId, character.id);
-  
+
   const updatedCharacter: Character = {
     ...character,
     updatedAt: new Date().toISOString(),
@@ -818,22 +778,16 @@ export async function addAdvancementRecord(
 
   // Build updates
   const updates: Partial<Character> = {
-    advancementHistory: [
-      ...(character.advancementHistory || []),
-      advancementRecord,
-    ],
+    advancementHistory: [...(character.advancementHistory || []), advancementRecord],
   };
 
   // Add training period if provided
   if (trainingPeriod) {
-    updates.activeTraining = [
-      ...(character.activeTraining || []),
-      trainingPeriod,
-    ];
+    updates.activeTraining = [...(character.activeTraining || []), trainingPeriod];
   }
 
   // Update karma if provided
-  // Note: If karma was already spent in the passed advancementRecord, 
+  // Note: If karma was already spent in the passed advancementRecord,
   // this might be redundant if not careful. For legacy compatibility, we keep it.
   if (karmaSpent !== undefined) {
     updates.karmaCurrent = character.karmaCurrent - karmaSpent;
@@ -864,9 +818,7 @@ export async function updateTrainingPeriod(
     throw new Error(`Character with ID ${characterId} not found`);
   }
 
-  const trainingPeriod = character.activeTraining?.find(
-    (t) => t.id === trainingPeriodId
-  );
+  const trainingPeriod = character.activeTraining?.find((t) => t.id === trainingPeriodId);
 
   if (!trainingPeriod) {
     throw new Error(`Training period ${trainingPeriodId} not found`);
@@ -909,9 +861,7 @@ export async function updateAdvancementRecord(
     throw new Error(`Character with ID ${characterId} not found`);
   }
 
-  const advancementRecord = character.advancementHistory?.find(
-    (a) => a.id === advancementRecordId
-  );
+  const advancementRecord = character.advancementHistory?.find((a) => a.id === advancementRecordId);
 
   if (!advancementRecord) {
     throw new Error(`Advancement record ${advancementRecordId} not found`);
@@ -949,9 +899,8 @@ export async function removeTrainingPeriod(
     throw new Error(`Character with ID ${characterId} not found`);
   }
 
-  const updatedActiveTraining = character.activeTraining?.filter(
-    (t) => t.id !== trainingPeriodId
-  ) || [];
+  const updatedActiveTraining =
+    character.activeTraining?.filter((t) => t.id !== trainingPeriodId) || [];
 
   return updateCharacter(userId, characterId, {
     activeTraining: updatedActiveTraining,
@@ -1125,24 +1074,18 @@ export async function searchCharacters(
   const { userId, filters, sort, pagination, format } = options;
 
   // Get characters - either for a specific user or all users (admin mode)
-  let characters = userId
-    ? await getUserCharacters(userId)
-    : await getAllCharacters();
+  let characters = userId ? await getUserCharacters(userId) : await getAllCharacters();
 
   // Apply filters
   if (filters) {
     // Status filter (array)
     if (filters.status && filters.status.length > 0) {
-      characters = characters.filter((c) =>
-        filters.status!.includes(c.status)
-      );
+      characters = characters.filter((c) => filters.status!.includes(c.status));
     }
 
     // Edition filter (array)
     if (filters.edition && filters.edition.length > 0) {
-      characters = characters.filter((c) =>
-        filters.edition!.includes(c.editionCode)
-      );
+      characters = characters.filter((c) => filters.edition!.includes(c.editionCode));
     }
 
     // Campaign filter
@@ -1153,9 +1096,7 @@ export async function searchCharacters(
     // Metatype filter (case-insensitive contains)
     if (filters.metatype) {
       const metatypeLower = filters.metatype.toLowerCase();
-      characters = characters.filter(
-        (c) => c.metatype?.toLowerCase().includes(metatypeLower)
-      );
+      characters = characters.filter((c) => c.metatype?.toLowerCase().includes(metatypeLower));
     }
 
     // Magical path filter
@@ -1312,12 +1253,7 @@ export async function storeDriftReport(
   }
 
   // Store drift report in separate directory
-  const reportsDir = path.join(
-    process.cwd(),
-    "data",
-    "drift-reports",
-    userId
-  );
+  const reportsDir = path.join(process.cwd(), "data", "drift-reports", userId);
   await ensureDirectory(reportsDir);
 
   const reportPath = path.join(reportsDir, `${report.id}.json`);
@@ -1339,17 +1275,8 @@ export async function storeDriftReport(
  * @param reportId - Drift report ID
  * @returns The drift report or null if not found
  */
-export async function getDriftReport(
-  userId: ID,
-  reportId: ID
-): Promise<DriftReport | null> {
-  const reportPath = path.join(
-    process.cwd(),
-    "data",
-    "drift-reports",
-    userId,
-    `${reportId}.json`
-  );
+export async function getDriftReport(userId: ID, reportId: ID): Promise<DriftReport | null> {
+  const reportPath = path.join(process.cwd(), "data", "drift-reports", userId, `${reportId}.json`);
   return readJsonFile<DriftReport>(reportPath);
 }
 
@@ -1360,10 +1287,7 @@ export async function getDriftReport(
  * @param characterId - Character ID
  * @returns Updated character
  */
-export async function clearPendingMigration(
-  userId: ID,
-  characterId: ID
-): Promise<Character> {
+export async function clearPendingMigration(userId: ID, characterId: ID): Promise<Character> {
   const character = await getCharacter(userId, characterId);
   if (!character) {
     throw new Error(`Character with ID ${characterId} not found`);
@@ -1441,12 +1365,7 @@ export async function applyMigration(
   }
 
   // Store the migration record for potential rollback
-  const migrationsDir = path.join(
-    process.cwd(),
-    "data",
-    "migrations",
-    userId
-  );
+  const migrationsDir = path.join(process.cwd(), "data", "migrations", userId);
   await ensureDirectory(migrationsDir);
 
   const migrationPath = path.join(migrationsDir, `${migration.plan.id}.json`);
@@ -1484,24 +1403,16 @@ export async function getAppliedMigrations(
   userId: ID,
   characterId: ID
 ): Promise<AppliedMigration[]> {
-  const migrationsDir = path.join(
-    process.cwd(),
-    "data",
-    "migrations",
-    userId
-  );
+  const migrationsDir = path.join(process.cwd(), "data", "migrations", userId);
 
   const migrations = await readAllJsonFiles<AppliedMigration>(migrationsDir);
 
   // Filter to only this character's migrations
-  const characterMigrations = migrations.filter(
-    (m) => m.plan.characterId === characterId
-  );
+  const characterMigrations = migrations.filter((m) => m.plan.characterId === characterId);
 
   // Sort by applied date, most recent first
   return characterMigrations.sort(
-    (a, b) =>
-      new Date(b.appliedAt).getTime() - new Date(a.appliedAt).getTime()
+    (a, b) => new Date(b.appliedAt).getTime() - new Date(a.appliedAt).getTime()
   );
 }
 
@@ -1512,10 +1423,7 @@ export async function getAppliedMigrations(
  * @param characterId - Character ID
  * @returns Updated character after rollback, or null if no rollback available
  */
-export async function rollbackMigration(
-  userId: ID,
-  characterId: ID
-): Promise<Character | null> {
+export async function rollbackMigration(userId: ID, characterId: ID): Promise<Character | null> {
   const migrations = await getAppliedMigrations(userId, characterId);
 
   if (migrations.length === 0) {
@@ -1536,12 +1444,7 @@ export async function rollbackMigration(
   await writeJsonFile(filePath, previousState);
 
   // Mark migration as rolled back
-  const migrationsDir = path.join(
-    process.cwd(),
-    "data",
-    "migrations",
-    userId
-  );
+  const migrationsDir = path.join(process.cwd(), "data", "migrations", userId);
   const migrationPath = path.join(migrationsDir, `${lastMigration.plan.id}.json`);
   await writeJsonFile(migrationPath, {
     ...lastMigration,
@@ -1551,4 +1454,3 @@ export async function rollbackMigration(
 
   return previousState;
 }
-

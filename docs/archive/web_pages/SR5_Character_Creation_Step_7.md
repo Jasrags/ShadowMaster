@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Step 1-CHOOSE CONCEPT** | **Step 2-METATYPE & SPECIAL ATTRIBUTES** | **Step 3-MAGIC OR RESONANCE** | **Step 4-PURCHASE QUALITIES** |
@@ -37,15 +37,15 @@ Each Contact has a Connection and a Loyalty rating. Any Contacts a player buys m
 
 **ADDITIONAL PURCHASES & RESTRICTIONS / (AT CHARACTER CREATION)**
 
-| ITEM | KARMA COST |
-| --- | --- |
-| Bound Spirits | 1 Karma per service (Force of spirit is equal to Character’s Magic Attribute rating) |
-| *Can only have a number of bound spirits equal to Charisma* |
-| Complex Forms | 4 Karma per complex form |
-| Spells | 5 Karma per spell |
-| Bond Foci | Variable; see p. 318 for bonding costs of foci |
-| Contacts | 1 Karma for each point of Connections Rating, 1 Karma for each Loyalty Rating (minimum Karma requirement = 2) |
-| Registering Sprites | 1 Karma per task (Level of Sprite equal to Character’s Resonance Rating) |
+| ITEM                                                        | KARMA COST                                                                                                    |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Bound Spirits                                               | 1 Karma per service (Force of spirit is equal to Character’s Magic Attribute rating)                          |
+| _Can only have a number of bound spirits equal to Charisma_ |
+| Complex Forms                                               | 4 Karma per complex form                                                                                      |
+| Spells                                                      | 5 Karma per spell                                                                                             |
+| Bond Foci                                                   | Variable; see p. 318 for bonding costs of foci                                                                |
+| Contacts                                                    | 1 Karma for each point of Connections Rating, 1 Karma for each Loyalty Rating (minimum Karma requirement = 2) |
+| Registering Sprites                                         | 1 Karma per task (Level of Sprite equal to Character’s Resonance Rating)                                      |
 
 - Maximum number of complex forms at character creation equal to Logic Attribute
 
@@ -69,11 +69,11 @@ James is ready to spend his final 26 Karma on his character. He notes he is miss
 
 James now needs to pick out contacts. Based on his Charisma score, James has 9 Karma to spend on his contacts’ Connection and Loyalty ratings. James has decided that his character is a neo-anarchist. His contacts will be a neo-anarchist lieutenant, a fixer, and a fence. James assigns 4 Karma to his neo-anarchist lieutenant, 2 Karma to his fence, and 3 Karma to his fixer, as follows:
 
-| CONTACT | CONNECTION | LOYALTY |
-| --- | --- | --- |
-| Neo-Anarchist Lieutenant | 2 | 2 |
-| Fence | 1 | 1 |
-| Fixer | 2 | 1 |
+| CONTACT                  | CONNECTION | LOYALTY |
+| ------------------------ | ---------- | ------- |
+| Neo-Anarchist Lieutenant | 2          | 2       |
+| Fence                    | 1          | 1       |
+| Fixer                    | 2          | 1       |
 
 ### ROB
 
@@ -81,10 +81,10 @@ Rob’s street samurai has 16 Karma left to spend, and Rob knows he cannot affor
 
 With his character’s Charisma attribute of 3, Rob has 9 Karma to spend on contacts. He keeps it simple:
 
-| CONTACT | CONNECTION | LOYALTY |
-| --- | --- | --- |
-| Street Doc | 3 | 2 |
-| Fixer | 2 | 2 |
+| CONTACT    | CONNECTION | LOYALTY |
+| ---------- | ---------- | ------- |
+| Street Doc | 3          | 2       |
+| Fixer      | 2          | 2       |
 
 ### KYRA
 
@@ -92,10 +92,10 @@ Kyra also has 16 Karma left for improving her character. She increases her Etiqu
 
 Kyra has 18 Karma to spend on contacts (Charisma 6 x 3). Because she has ties with the Ancients, an all-elven go-gang, she decides to have two contacts with them—a lieutenant and a rank-and-file gag member. Kyra’s character also needs a drug dealer for her mild addiction to the street drug bliss, a talismonger from whom she can purchase magic goods, and a street doc who knows how to treat Awakened. These are the contacts Kyra has selected for her character:
 
-| CONTACT | CONNECTION | LOYALTY |
-| --- | --- | --- |
-| Ancients lieutenant | 3 | 3 |
-| Ancients member | 1 | 2 |
-| Drug dealer | 1 | 1 |
-| Talismonger | 2 | 1 |
-| Street doc | 3 | 1 |
+| CONTACT             | CONNECTION | LOYALTY |
+| ------------------- | ---------- | ------- |
+| Ancients lieutenant | 3          | 3       |
+| Ancients member     | 1          | 2       |
+| Drug dealer         | 1          | 1       |
+| Talismonger         | 2          | 1       |
+| Street doc          | 3          | 1       |

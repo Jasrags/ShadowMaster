@@ -45,12 +45,23 @@ const LIMB_TYPES: { value: CyberlimbType; label: string; capacity: number; essen
   { value: "skull", label: "Skull", capacity: 4, essence: 0.75 },
 ];
 
-const APPEARANCES: { value: CyberlimbAppearance; label: string; capacityMod: number; costMod: number }[] = [
+const APPEARANCES: {
+  value: CyberlimbAppearance;
+  label: string;
+  capacityMod: number;
+  costMod: number;
+}[] = [
   { value: "obvious", label: "Obvious", capacityMod: 0, costMod: 1 },
   { value: "synthetic", label: "Synthetic", capacityMod: -5, costMod: 1.5 },
 ];
 
-const GRADES: { value: CyberwareGrade; label: string; essenceMod: number; costMod: number; availMod: number }[] = [
+const GRADES: {
+  value: CyberwareGrade;
+  label: string;
+  essenceMod: number;
+  costMod: number;
+  availMod: number;
+}[] = [
   { value: "standard", label: "Standard", essenceMod: 1.0, costMod: 1.0, availMod: 0 },
   { value: "alpha", label: "Alphaware", essenceMod: 0.8, costMod: 1.2, availMod: 2 },
   { value: "beta", label: "Betaware", essenceMod: 0.7, costMod: 1.5, availMod: 4 },
@@ -195,16 +206,19 @@ export function CyberlimbInstallModal({
   }, [limbType]);
 
   // Reset location when limb type changes
-  const handleLimbTypeChange = useCallback((newType: CyberlimbType) => {
-    setLimbType(newType);
-    const newValidLocations = LIMB_TYPE_LOCATIONS[newType] || [];
-    if (newValidLocations.length > 0 && !newValidLocations.includes(location)) {
-      setLocation(newValidLocations[0]);
-    }
-    // Reset customization when type changes
-    setCustomStrength(0);
-    setCustomAgility(0);
-  }, [location]);
+  const handleLimbTypeChange = useCallback(
+    (newType: CyberlimbType) => {
+      setLimbType(newType);
+      const newValidLocations = LIMB_TYPE_LOCATIONS[newType] || [];
+      if (newValidLocations.length > 0 && !newValidLocations.includes(location)) {
+        setLocation(newValidLocations[0]);
+      }
+      // Reset customization when type changes
+      setCustomStrength(0);
+      setCustomAgility(0);
+    },
+    [location]
+  );
 
   // Check for conflicts with existing cyberlimbs
   const conflicts = useMemo(() => {
@@ -267,10 +281,13 @@ export function CyberlimbInstallModal({
 
     // Cost includes: base + appearance modifier + grade modifier + customization
     const customizationCost = (customStrength + customAgility) * CUSTOMIZATION_COST_PER_POINT;
-    const cost = Math.round((baseCost * appearanceData.costMod * gradeData.costMod) + customizationCost);
+    const cost = Math.round(
+      baseCost * appearanceData.costMod * gradeData.costMod + customizationCost
+    );
 
     // Availability includes: base + grade modifier + customization
-    const customizationAvail = Math.max(customStrength, customAgility) * CUSTOMIZATION_AVAIL_PER_POINT;
+    const customizationAvail =
+      Math.max(customStrength, customAgility) * CUSTOMIZATION_AVAIL_PER_POINT;
     const availability = baseAvail + gradeData.availMod + customizationAvail;
 
     return {
@@ -291,7 +308,9 @@ export function CyberlimbInstallModal({
       errors.push(`Cannot install: blocked by existing ${conflicts.blockedBy?.name}`);
     }
     if (calculations.essenceCost > availableEssence) {
-      errors.push(`Not enough Essence (need ${formatEssence(calculations.essenceCost)}, have ${formatEssence(availableEssence)})`);
+      errors.push(
+        `Not enough Essence (need ${formatEssence(calculations.essenceCost)}, have ${formatEssence(availableEssence)})`
+      );
     }
     if (calculations.cost > availableNuyen) {
       errors.push(`Not enough nuyen (need ${formatCurrency(calculations.cost)}¥)`);
@@ -323,7 +342,18 @@ export function CyberlimbInstallModal({
       capacity: calculations.capacity,
     });
     onClose();
-  }, [validation.valid, calculations, limbType, location, appearance, grade, customStrength, customAgility, onInstall, onClose]);
+  }, [
+    validation.valid,
+    calculations,
+    limbType,
+    location,
+    appearance,
+    grade,
+    customStrength,
+    customAgility,
+    onInstall,
+    onClose,
+  ]);
 
   // Reset state on close
   const handleClose = useCallback(() => {
@@ -487,7 +517,9 @@ export function CyberlimbInstallModal({
                     {3 + customStrength}
                   </span>
                   <button
-                    onClick={() => setCustomStrength(Math.min(maxCustomization, customStrength + 1))}
+                    onClick={() =>
+                      setCustomStrength(Math.min(maxCustomization, customStrength + 1))
+                    }
                     disabled={customStrength >= maxCustomization}
                     className={`p-1 rounded ${
                       customStrength < maxCustomization
@@ -535,7 +567,8 @@ export function CyberlimbInstallModal({
             </div>
             {(customStrength > 0 || customAgility > 0) && (
               <p className="text-[10px] text-zinc-500 mt-2">
-                Customization: +{formatCurrency((customStrength + customAgility) * CUSTOMIZATION_COST_PER_POINT)}¥,
+                Customization: +
+                {formatCurrency((customStrength + customAgility) * CUSTOMIZATION_COST_PER_POINT)}¥,
                 +{Math.max(customStrength, customAgility) * CUSTOMIZATION_AVAIL_PER_POINT} Avail
               </p>
             )}
@@ -565,7 +598,10 @@ export function CyberlimbInstallModal({
           {!validation.valid && (
             <div className="space-y-1">
               {validation.errors.map((error, idx) => (
-                <div key={idx} className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30">
+                <div
+                  key={idx}
+                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30"
+                >
                   <X className="w-4 h-4 text-red-400" />
                   <span className="text-xs text-red-400">{error}</span>
                 </div>
@@ -582,25 +618,31 @@ export function CyberlimbInstallModal({
               <div className="grid grid-cols-4 gap-6 text-center">
                 <div>
                   <div className="text-[10px] text-zinc-500 uppercase">Essence</div>
-                  <div className={`text-lg font-bold font-mono ${
-                    calculations.essenceCost > availableEssence ? "text-red-400" : "text-red-400"
-                  }`}>
+                  <div
+                    className={`text-lg font-bold font-mono ${
+                      calculations.essenceCost > availableEssence ? "text-red-400" : "text-red-400"
+                    }`}
+                  >
                     {formatEssence(calculations.essenceCost)}
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-zinc-500 uppercase">Cost</div>
-                  <div className={`text-lg font-bold font-mono ${
-                    calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-200"
-                  }`}>
+                  <div
+                    className={`text-lg font-bold font-mono ${
+                      calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-200"
+                    }`}
+                  >
                     {formatCurrency(calculations.cost)}¥
                   </div>
                 </div>
                 <div>
                   <div className="text-[10px] text-zinc-500 uppercase">Availability</div>
-                  <div className={`text-lg font-bold font-mono ${
-                    calculations.availability > maxAvailability ? "text-red-400" : "text-zinc-200"
-                  }`}>
+                  <div
+                    className={`text-lg font-bold font-mono ${
+                      calculations.availability > maxAvailability ? "text-red-400" : "text-zinc-200"
+                    }`}
+                  >
                     {calculations.availability}
                   </div>
                 </div>

@@ -5,14 +5,14 @@
  * prerequisites, combat context, and state modifier calculation.
  */
 
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from "vitest";
 import type {
   Character,
   ActionDefinition,
   CombatSession,
   CombatParticipant,
   ActionAllocation,
-} from '@/lib/types';
+} from "@/lib/types";
 import {
   validateCharacterState,
   validateActionEconomy,
@@ -24,24 +24,22 @@ import {
   canPerformAction,
   getActionBlockers,
   ValidationErrorCodes,
-} from '../action-validator';
-import { createMockCharacter } from '@/__tests__/mocks/storage';
+} from "../action-validator";
+import { createMockCharacter } from "@/__tests__/mocks/storage";
 
 // =============================================================================
 // TEST HELPERS
 // =============================================================================
 
-function createMockActionDefinition(
-  overrides?: Partial<ActionDefinition>
-): ActionDefinition {
+function createMockActionDefinition(overrides?: Partial<ActionDefinition>): ActionDefinition {
   return {
-    id: 'test-action',
-    name: 'Test Action',
-    description: 'A test action',
-    type: 'simple',
-    domain: 'general',
+    id: "test-action",
+    name: "Test Action",
+    description: "A test action",
+    type: "simple",
+    domain: "general",
     cost: {
-      actionType: 'simple',
+      actionType: "simple",
     },
     prerequisites: [],
     modifiers: [],
@@ -50,19 +48,17 @@ function createMockActionDefinition(
   };
 }
 
-function createMockCombatSession(
-  overrides?: Partial<CombatSession>
-): CombatSession {
+function createMockCombatSession(overrides?: Partial<CombatSession>): CombatSession {
   return {
-    id: 'test-session',
-    ownerId: 'test-user',
-    editionCode: 'sr5',
+    id: "test-session",
+    ownerId: "test-user",
+    editionCode: "sr5",
     participants: [],
     initiativeOrder: [],
     currentTurn: 0,
-    currentPhase: 'action',
+    currentPhase: "action",
     round: 1,
-    status: 'active',
+    status: "active",
     environment: {},
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -70,14 +66,12 @@ function createMockCombatSession(
   };
 }
 
-function createMockParticipant(
-  overrides?: Partial<CombatParticipant>
-): CombatParticipant {
+function createMockParticipant(overrides?: Partial<CombatParticipant>): CombatParticipant {
   return {
-    id: 'test-participant',
-    type: 'character',
-    entityId: 'test-character-id',
-    name: 'Test Character',
+    id: "test-participant",
+    type: "character",
+    entityId: "test-character-id",
+    name: "Test Character",
     initiativeScore: 10,
     actionsRemaining: {
       free: 999,
@@ -86,8 +80,8 @@ function createMockParticipant(
       interrupt: true,
     },
     interruptsPending: [],
-    status: 'active',
-    controlledBy: 'test-user',
+    status: "active",
+    controlledBy: "test-user",
     isGMControlled: false,
     woundModifier: 0,
     conditions: [],
@@ -99,10 +93,10 @@ function createMockParticipant(
 // CHARACTER STATE VALIDATION
 // =============================================================================
 
-describe('validateCharacterState', () => {
-  it('should pass for healthy character', () => {
+describe("validateCharacterState", () => {
+  it("should pass for healthy character", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       condition: {
         physicalDamage: 0,
         stunDamage: 0,
@@ -115,9 +109,9 @@ describe('validateCharacterState', () => {
     expect(result.errors).toHaveLength(0);
   });
 
-  it('should fail for deceased character', () => {
+  it("should fail for deceased character", () => {
     const character = createMockCharacter({
-      status: 'deceased',
+      status: "deceased",
     });
 
     const result = validateCharacterState(character);
@@ -126,9 +120,9 @@ describe('validateCharacterState', () => {
     expect(result.errors[0].code).toBe(ValidationErrorCodes.DEAD);
   });
 
-  it('should fail for incapacitated character (physical overflow)', () => {
+  it("should fail for incapacitated character (physical overflow)", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       derivedStats: {
         physicalConditionMonitor: 10,
       },
@@ -144,9 +138,9 @@ describe('validateCharacterState', () => {
     expect(result.errors[0].code).toBe(ValidationErrorCodes.INCAPACITATED);
   });
 
-  it('should fail for unconscious character (stun overflow)', () => {
+  it("should fail for unconscious character (stun overflow)", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       derivedStats: {
         stunConditionMonitor: 10,
       },
@@ -162,9 +156,9 @@ describe('validateCharacterState', () => {
     expect(result.errors[0].code).toBe(ValidationErrorCodes.UNCONSCIOUS);
   });
 
-  it('should warn about wound penalties', () => {
+  it("should warn about wound penalties", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       derivedStats: {
         physicalConditionMonitor: 10,
         stunConditionMonitor: 10,
@@ -179,7 +173,7 @@ describe('validateCharacterState', () => {
 
     expect(result.valid).toBe(true);
     expect(result.warnings.length).toBeGreaterThan(0);
-    expect(result.warnings[0].code).toBe('WOUNDED');
+    expect(result.warnings[0].code).toBe("WOUNDED");
   });
 });
 
@@ -187,8 +181,8 @@ describe('validateCharacterState', () => {
 // ACTION ECONOMY VALIDATION
 // =============================================================================
 
-describe('validateActionEconomy', () => {
-  it('should pass for free action with available free actions', () => {
+describe("validateActionEconomy", () => {
+  it("should pass for free action with available free actions", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 2,
@@ -196,12 +190,12 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'free');
+    const result = validateActionEconomy(actions, "free");
 
     expect(result.valid).toBe(true);
   });
 
-  it('should pass for simple action with available simple actions', () => {
+  it("should pass for simple action with available simple actions", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 2,
@@ -209,12 +203,12 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'simple');
+    const result = validateActionEconomy(actions, "simple");
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail for simple action with no simple actions remaining', () => {
+  it("should fail for simple action with no simple actions remaining", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 0,
@@ -222,13 +216,13 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'simple');
+    const result = validateActionEconomy(actions, "simple");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.INSUFFICIENT_ACTIONS);
   });
 
-  it('should pass for complex action with available complex action', () => {
+  it("should pass for complex action with available complex action", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 2,
@@ -236,12 +230,12 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'complex');
+    const result = validateActionEconomy(actions, "complex");
 
     expect(result.valid).toBe(true);
   });
 
-  it('should pass for complex action using two simple actions', () => {
+  it("should pass for complex action using two simple actions", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 2,
@@ -249,12 +243,12 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'complex');
+    const result = validateActionEconomy(actions, "complex");
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail for complex action with insufficient actions', () => {
+  it("should fail for complex action with insufficient actions", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 1, // Only 1 simple
@@ -262,13 +256,13 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'complex');
+    const result = validateActionEconomy(actions, "complex");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.INSUFFICIENT_ACTIONS);
   });
 
-  it('should pass for interrupt action when available', () => {
+  it("should pass for interrupt action when available", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 0,
@@ -276,12 +270,12 @@ describe('validateActionEconomy', () => {
       interrupt: true,
     };
 
-    const result = validateActionEconomy(actions, 'interrupt');
+    const result = validateActionEconomy(actions, "interrupt");
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail for interrupt action when already used', () => {
+  it("should fail for interrupt action when already used", () => {
     const actions: ActionAllocation = {
       free: 999,
       simple: 2,
@@ -289,7 +283,7 @@ describe('validateActionEconomy', () => {
       interrupt: false, // Already used
     };
 
-    const result = validateActionEconomy(actions, 'interrupt');
+    const result = validateActionEconomy(actions, "interrupt");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.INTERRUPT_UNAVAILABLE);
@@ -300,42 +294,38 @@ describe('validateActionEconomy', () => {
 // PREREQUISITE VALIDATION
 // =============================================================================
 
-describe('validatePrerequisites', () => {
-  it('should pass with no prerequisites', () => {
+describe("validatePrerequisites", () => {
+  it("should pass with no prerequisites", () => {
     const character = createMockCharacter();
     const result = validatePrerequisites(character, []);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should pass when skill prerequisite is met', () => {
+  it("should pass when skill prerequisite is met", () => {
     const character = createMockCharacter({
       skills: {
         pistols: 4,
       },
     });
 
-    const result = validatePrerequisites(character, [
-      { type: 'skill', requirement: 'pistols' },
-    ]);
+    const result = validatePrerequisites(character, [{ type: "skill", requirement: "pistols" }]);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail when skill prerequisite is not met', () => {
+  it("should fail when skill prerequisite is not met", () => {
     const character = createMockCharacter({
       skills: {},
     });
 
-    const result = validatePrerequisites(character, [
-      { type: 'skill', requirement: 'pistols' },
-    ]);
+    const result = validatePrerequisites(character, [{ type: "skill", requirement: "pistols" }]);
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.MISSING_SKILL);
   });
 
-  it('should pass when skill rating prerequisite is met', () => {
+  it("should pass when skill rating prerequisite is met", () => {
     const character = createMockCharacter({
       skills: {
         pistols: 4,
@@ -343,13 +333,13 @@ describe('validatePrerequisites', () => {
     });
 
     const result = validatePrerequisites(character, [
-      { type: 'skill_rating', requirement: 'pistols', minimumValue: 3 },
+      { type: "skill_rating", requirement: "pistols", minimumValue: 3 },
     ]);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail when skill rating is too low', () => {
+  it("should fail when skill rating is too low", () => {
     const character = createMockCharacter({
       skills: {
         pistols: 2,
@@ -357,13 +347,13 @@ describe('validatePrerequisites', () => {
     });
 
     const result = validatePrerequisites(character, [
-      { type: 'skill_rating', requirement: 'pistols', minimumValue: 3 },
+      { type: "skill_rating", requirement: "pistols", minimumValue: 3 },
     ]);
 
     expect(result.valid).toBe(false);
   });
 
-  it('should pass when attribute prerequisite is met', () => {
+  it("should pass when attribute prerequisite is met", () => {
     const character = createMockCharacter({
       attributes: {
         agility: 4,
@@ -371,42 +361,38 @@ describe('validatePrerequisites', () => {
     });
 
     const result = validatePrerequisites(character, [
-      { type: 'attribute', requirement: 'agility' },
+      { type: "attribute", requirement: "agility" },
     ]);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should pass when magic prerequisite is met for awakened', () => {
+  it("should pass when magic prerequisite is met for awakened", () => {
     const character = createMockCharacter({
       attributes: {
         magic: 5,
       },
     });
 
-    const result = validatePrerequisites(character, [
-      { type: 'magic', requirement: 'awakened' },
-    ]);
+    const result = validatePrerequisites(character, [{ type: "magic", requirement: "awakened" }]);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should fail when magic prerequisite is not met for mundane', () => {
+  it("should fail when magic prerequisite is not met for mundane", () => {
     const character = createMockCharacter({
       attributes: {
         magic: 0,
       },
     });
 
-    const result = validatePrerequisites(character, [
-      { type: 'magic', requirement: 'awakened' },
-    ]);
+    const result = validatePrerequisites(character, [{ type: "magic", requirement: "awakened" }]);
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.NOT_AWAKENED);
   });
 
-  it('should handle negated prerequisites', () => {
+  it("should handle negated prerequisites", () => {
     const character = createMockCharacter({
       attributes: {
         magic: 0, // Mundane
@@ -415,7 +401,7 @@ describe('validatePrerequisites', () => {
 
     // Negated - must NOT have magic
     const result = validatePrerequisites(character, [
-      { type: 'magic', requirement: 'awakened', negated: true },
+      { type: "magic", requirement: "awakened", negated: true },
     ]);
 
     expect(result.valid).toBe(true);
@@ -426,11 +412,11 @@ describe('validatePrerequisites', () => {
 // COMBAT CONTEXT VALIDATION
 // =============================================================================
 
-describe('validateCombatContext', () => {
-  it('should pass for active combat with valid participant', () => {
+describe("validateCombatContext", () => {
+  it("should pass for active combat with valid participant", () => {
     const participant = createMockParticipant();
     const session = createMockCombatSession({
-      status: 'active',
+      status: "active",
       participants: [participant],
     });
 
@@ -439,46 +425,46 @@ describe('validateCombatContext', () => {
     expect(result.valid).toBe(true);
   });
 
-  it('should fail for completed combat', () => {
+  it("should fail for completed combat", () => {
     const session = createMockCombatSession({
-      status: 'completed',
+      status: "completed",
     });
 
-    const result = validateCombatContext(session, 'any-id');
+    const result = validateCombatContext(session, "any-id");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.NO_COMBAT_SESSION);
   });
 
-  it('should fail for paused combat', () => {
+  it("should fail for paused combat", () => {
     const session = createMockCombatSession({
-      status: 'paused',
+      status: "paused",
     });
 
-    const result = validateCombatContext(session, 'any-id');
+    const result = validateCombatContext(session, "any-id");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.COMBAT_PAUSED);
   });
 
-  it('should fail for participant not in session', () => {
+  it("should fail for participant not in session", () => {
     const session = createMockCombatSession({
-      status: 'active',
+      status: "active",
       participants: [],
     });
 
-    const result = validateCombatContext(session, 'not-in-session');
+    const result = validateCombatContext(session, "not-in-session");
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.NOT_IN_COMBAT);
   });
 
-  it('should fail for incapacitated participant', () => {
+  it("should fail for incapacitated participant", () => {
     const participant = createMockParticipant({
-      status: 'out',
+      status: "out",
     });
     const session = createMockCombatSession({
-      status: 'active',
+      status: "active",
       participants: [participant],
     });
 
@@ -493,8 +479,8 @@ describe('validateCombatContext', () => {
 // STATE MODIFIER CALCULATION
 // =============================================================================
 
-describe('calculateStateModifiers', () => {
-  it('should include wound modifier for damaged character', () => {
+describe("calculateStateModifiers", () => {
+  it("should include wound modifier for damaged character", () => {
     const character = createMockCharacter({
       condition: {
         physicalDamage: 6, // -2 wound modifier
@@ -505,12 +491,12 @@ describe('calculateStateModifiers', () => {
 
     const modifiers = calculateStateModifiers(character, action);
 
-    const woundMod = modifiers.find((m) => m.source === 'wound');
+    const woundMod = modifiers.find((m) => m.source === "wound");
     expect(woundMod).toBeDefined();
     expect(woundMod?.value).toBeLessThan(0);
   });
 
-  it('should include no wound modifier for undamaged character', () => {
+  it("should include no wound modifier for undamaged character", () => {
     const character = createMockCharacter({
       condition: {
         physicalDamage: 0,
@@ -521,19 +507,19 @@ describe('calculateStateModifiers', () => {
 
     const modifiers = calculateStateModifiers(character, action);
 
-    const woundMod = modifiers.find((m) => m.source === 'wound');
+    const woundMod = modifiers.find((m) => m.source === "wound");
     expect(woundMod).toBeUndefined();
   });
 
-  it('should include condition modifiers from combat session', () => {
+  it("should include condition modifiers from combat session", () => {
     const character = createMockCharacter();
     const action = createMockActionDefinition();
     const participant = createMockParticipant({
       conditions: [
         {
-          id: 'prone',
-          name: 'Prone',
-          description: 'Character is lying on the ground',
+          id: "prone",
+          name: "Prone",
+          description: "Character is lying on the ground",
           poolModifier: -2,
         },
       ],
@@ -542,38 +528,26 @@ describe('calculateStateModifiers', () => {
       participants: [participant],
     });
 
-    const modifiers = calculateStateModifiers(
-      character,
-      action,
-      session,
-      participant.id
-    );
+    const modifiers = calculateStateModifiers(character, action, session, participant.id);
 
-    const conditionMod = modifiers.find((m) => m.description === 'Prone');
+    const conditionMod = modifiers.find((m) => m.description === "Prone");
     expect(conditionMod).toBeDefined();
     expect(conditionMod?.value).toBe(-2);
   });
 
-  it('should include visibility modifiers from environment', () => {
+  it("should include visibility modifiers from environment", () => {
     const character = createMockCharacter();
     const action = createMockActionDefinition();
     const session = createMockCombatSession({
       environment: {
-        visibility: 'dark',
+        visibility: "dark",
       },
       participants: [createMockParticipant()],
     });
 
-    const modifiers = calculateStateModifiers(
-      character,
-      action,
-      session,
-      'test-participant'
-    );
+    const modifiers = calculateStateModifiers(character, action, session, "test-participant");
 
-    const visibilityMod = modifiers.find((m) =>
-      m.description.includes('Visibility')
-    );
+    const visibilityMod = modifiers.find((m) => m.description.includes("Visibility"));
     expect(visibilityMod).toBeDefined();
     expect(visibilityMod?.value).toBe(-3); // Dark = -3
   });
@@ -583,10 +557,10 @@ describe('calculateStateModifiers', () => {
 // FULL ACTION VALIDATION
 // =============================================================================
 
-describe('validateAction', () => {
-  it('should pass for valid action outside combat', () => {
+describe("validateAction", () => {
+  it("should pass for valid action outside combat", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       skills: {
         perception: 4,
       },
@@ -596,8 +570,8 @@ describe('validateAction', () => {
     });
     const action = createMockActionDefinition({
       rollConfig: {
-        skill: 'perception',
-        attribute: 'intuition',
+        skill: "perception",
+        attribute: "intuition",
       },
     });
 
@@ -607,15 +581,15 @@ describe('validateAction', () => {
     expect(result.modifiedPool).toBeDefined();
   });
 
-  it('should fail for action with unmet prerequisites', () => {
+  it("should fail for action with unmet prerequisites", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       skills: {},
     });
     const action = createMockActionDefinition({
       prerequisites: [
-        { type: 'skill', requirement: 'spellcasting' },
-        { type: 'magic', requirement: 'awakened' },
+        { type: "skill", requirement: "spellcasting" },
+        { type: "magic", requirement: "awakened" },
       ],
     });
 
@@ -625,9 +599,9 @@ describe('validateAction', () => {
     expect(result.errors.length).toBeGreaterThan(0);
   });
 
-  it('should include pool in successful validation', () => {
+  it("should include pool in successful validation", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       skills: {
         pistols: 4,
       },
@@ -637,8 +611,8 @@ describe('validateAction', () => {
     });
     const action = createMockActionDefinition({
       rollConfig: {
-        skill: 'pistols',
-        attribute: 'agility',
+        skill: "pistols",
+        attribute: "agility",
       },
     });
 
@@ -649,9 +623,9 @@ describe('validateAction', () => {
     expect(result.modifiedPool?.totalDice).toBe(9); // 4 + 5
   });
 
-  it('should warn about low dice pools', () => {
+  it("should warn about low dice pools", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       skills: {
         pistols: 1,
       },
@@ -661,8 +635,8 @@ describe('validateAction', () => {
     });
     const action = createMockActionDefinition({
       rollConfig: {
-        skill: 'pistols',
-        attribute: 'agility',
+        skill: "pistols",
+        attribute: "agility",
       },
     });
 
@@ -670,7 +644,7 @@ describe('validateAction', () => {
 
     expect(result.valid).toBe(true);
     expect(result.warnings.length).toBeGreaterThan(0);
-    expect(result.warnings.some((w) => w.code === 'LOW_POOL')).toBe(true);
+    expect(result.warnings.some((w) => w.code === "LOW_POOL")).toBe(true);
   });
 });
 
@@ -678,10 +652,10 @@ describe('validateAction', () => {
 // UTILITY FUNCTIONS
 // =============================================================================
 
-describe('canPerformAction', () => {
-  it('should return true for valid action', () => {
+describe("canPerformAction", () => {
+  it("should return true for valid action", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
     });
     const action = createMockActionDefinition();
 
@@ -690,9 +664,9 @@ describe('canPerformAction', () => {
     expect(result).toBe(true);
   });
 
-  it('should return false for invalid action', () => {
+  it("should return false for invalid action", () => {
     const character = createMockCharacter({
-      status: 'deceased',
+      status: "deceased",
     });
     const action = createMockActionDefinition();
 
@@ -702,10 +676,10 @@ describe('canPerformAction', () => {
   });
 });
 
-describe('getActionBlockers', () => {
-  it('should return empty array for valid action', () => {
+describe("getActionBlockers", () => {
+  it("should return empty array for valid action", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
     });
     const action = createMockActionDefinition();
 
@@ -714,19 +688,19 @@ describe('getActionBlockers', () => {
     expect(blockers).toHaveLength(0);
   });
 
-  it('should return blocker messages for invalid action', () => {
+  it("should return blocker messages for invalid action", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
       skills: {},
     });
     const action = createMockActionDefinition({
-      prerequisites: [{ type: 'skill', requirement: 'hacking' }],
+      prerequisites: [{ type: "skill", requirement: "hacking" }],
     });
 
     const blockers = getActionBlockers(character, action);
 
     expect(blockers.length).toBeGreaterThan(0);
-    expect(blockers[0]).toContain('skill');
+    expect(blockers[0]).toContain("skill");
   });
 });
 
@@ -734,89 +708,73 @@ describe('getActionBlockers', () => {
 // COMBAT TURN VALIDATION
 // =============================================================================
 
-describe('validateActionEligibility with combat context', () => {
-  it('should fail when not participants turn for non-interrupt action', () => {
+describe("validateActionEligibility with combat context", () => {
+  it("should fail when not participants turn for non-interrupt action", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
     });
     const participant1 = createMockParticipant({
-      id: 'participant-1',
-      entityId: 'character-1',
+      id: "participant-1",
+      entityId: "character-1",
     });
     const participant2 = createMockParticipant({
-      id: 'participant-2',
-      entityId: 'character-2',
+      id: "participant-2",
+      entityId: "character-2",
     });
     const session = createMockCombatSession({
       participants: [participant1, participant2],
-      initiativeOrder: ['participant-1', 'participant-2'],
+      initiativeOrder: ["participant-1", "participant-2"],
       currentTurn: 0, // participant-1's turn
     });
     const action = createMockActionDefinition({
-      type: 'simple', // Not an interrupt
+      type: "simple", // Not an interrupt
     });
 
     const result = validateActionEligibility(
       character,
       action,
       session,
-      'participant-2' // Trying to act when it's participant-1's turn
+      "participant-2" // Trying to act when it's participant-1's turn
     );
 
     expect(result.valid).toBe(false);
     expect(result.errors[0].code).toBe(ValidationErrorCodes.NOT_YOUR_TURN);
   });
 
-  it('should pass for interrupt action when not your turn', () => {
+  it("should pass for interrupt action when not your turn", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
     });
     const participant = createMockParticipant();
     const session = createMockCombatSession({
-      participants: [
-        createMockParticipant({ id: 'other' }),
-        participant,
-      ],
-      initiativeOrder: ['other', participant.id],
+      participants: [createMockParticipant({ id: "other" }), participant],
+      initiativeOrder: ["other", participant.id],
       currentTurn: 0, // other's turn
     });
     const action = createMockActionDefinition({
-      type: 'interrupt', // Interrupt can be used out of turn
+      type: "interrupt", // Interrupt can be used out of turn
     });
 
-    const result = validateActionEligibility(
-      character,
-      action,
-      session,
-      participant.id
-    );
+    const result = validateActionEligibility(character, action, session, participant.id);
 
     expect(result.valid).toBe(true);
   });
 
-  it('should pass for free action when not your turn', () => {
+  it("should pass for free action when not your turn", () => {
     const character = createMockCharacter({
-      status: 'active',
+      status: "active",
     });
     const participant = createMockParticipant();
     const session = createMockCombatSession({
-      participants: [
-        createMockParticipant({ id: 'other' }),
-        participant,
-      ],
-      initiativeOrder: ['other', participant.id],
+      participants: [createMockParticipant({ id: "other" }), participant],
+      initiativeOrder: ["other", participant.id],
       currentTurn: 0,
     });
     const action = createMockActionDefinition({
-      type: 'free',
+      type: "free",
     });
 
-    const result = validateActionEligibility(
-      character,
-      action,
-      session,
-      participant.id
-    );
+    const result = validateActionEligibility(character, action, session, participant.id);
 
     expect(result.valid).toBe(true);
   });

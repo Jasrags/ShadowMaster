@@ -109,10 +109,7 @@ export function applyInstructorBonus(baseTime: number): number {
  * @param modifierPercent - Percentage modifier (e.g., 50 for +50%, -25 for -25%)
  * @returns Modified training time in days (rounded to nearest day)
  */
-export function applyTimeModifier(
-  baseTime: number,
-  modifierPercent: number
-): number {
+export function applyTimeModifier(baseTime: number, modifierPercent: number): number {
   if (baseTime <= 0) {
     return baseTime;
   }
@@ -137,9 +134,7 @@ export function calculateFinalTrainingTime(
   } = {}
 ): number {
   const allowInstant =
-    options.settings?.allowInstantAdvancement ??
-    options.ruleset?.allowInstantAdvancement ??
-    false;
+    options.settings?.allowInstantAdvancement ?? options.ruleset?.allowInstantAdvancement ?? false;
 
   if (allowInstant) {
     return 0;
@@ -149,9 +144,7 @@ export function calculateFinalTrainingTime(
 
   // Apply training time multiplier
   const multiplier =
-    options.settings?.trainingTimeMultiplier ??
-    options.ruleset?.trainingTimeMultiplier ??
-    1.0;
+    options.settings?.trainingTimeMultiplier ?? options.ruleset?.trainingTimeMultiplier ?? 1.0;
 
   finalTime = finalTime * multiplier;
 
@@ -257,4 +250,3 @@ export function calculateAdvancementTrainingTime(
 
   return calculateFinalTrainingTime(baseTime, options);
 }
-

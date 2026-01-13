@@ -60,7 +60,9 @@ interface QualityData {
 
 interface RulesetData {
   modules: {
-    qualities: { payload: { positive: QualityData[]; negative: QualityData[]; racial?: QualityData[] } };
+    qualities: {
+      payload: { positive: QualityData[]; negative: QualityData[]; racial?: QualityData[] };
+    };
     gear: { payload: Record<string, unknown> };
   };
 }

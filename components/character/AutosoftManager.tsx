@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 /**
  * AutosoftManager - Manage autosofts loaded on RCC and drones
@@ -6,8 +6,8 @@
  * Lists owned autosofts, shows load status, and assignment.
  */
 
-import type { CharacterAutosoft } from '@/lib/types/character';
-import type { SharedAutosoft } from '@/lib/types/rigging';
+import type { CharacterAutosoft } from "@/lib/types/character";
+import type { SharedAutosoft } from "@/lib/types/rigging";
 
 interface AutosoftManagerProps {
   ownedAutosofts: CharacterAutosoft[];
@@ -19,12 +19,12 @@ interface AutosoftManagerProps {
 }
 
 const CATEGORY_LABELS: Record<string, string> = {
-  'combat': 'Combat',
-  'perception': 'Perception',
-  'defense': 'Defense',
-  'movement': 'Movement',
-  'electronic-warfare': 'Electronic Warfare',
-  'stealth': 'Stealth',
+  combat: "Combat",
+  perception: "Perception",
+  defense: "Defense",
+  movement: "Movement",
+  "electronic-warfare": "Electronic Warfare",
+  stealth: "Stealth",
 };
 
 export function AutosoftManager({
@@ -33,9 +33,9 @@ export function AutosoftManager({
   maxLoadedSlots = 0,
   onLoadAutosoft,
   onUnloadAutosoft,
-  className = ''
+  className = "",
 }: AutosoftManagerProps) {
-  const loadedIds = new Set(loadedAutosofts.map(a => a.autosoftId));
+  const loadedIds = new Set(loadedAutosofts.map((a) => a.autosoftId));
   const canLoadMore = maxLoadedSlots === 0 || loadedAutosofts.length < maxLoadedSlots;
 
   if (ownedAutosofts.length === 0) {
@@ -53,36 +53,37 @@ export function AutosoftManager({
 
       {maxLoadedSlots > 0 && (
         <div className="autosoft-manager__capacity">
-          <span>{loadedAutosofts.length} / {maxLoadedSlots} loaded on RCC</span>
+          <span>
+            {loadedAutosofts.length} / {maxLoadedSlots} loaded on RCC
+          </span>
         </div>
       )}
 
       <ul className="autosoft-manager__list">
-        {ownedAutosofts.map(autosoft => {
+        {ownedAutosofts.map((autosoft) => {
           const isLoaded = loadedIds.has(autosoft.id ?? autosoft.catalogId);
-          
+
           return (
-            <li key={autosoft.id ?? autosoft.catalogId} className={`autosoft-manager__item ${isLoaded ? 'autosoft-manager__item--loaded' : ''}`}>
+            <li
+              key={autosoft.id ?? autosoft.catalogId}
+              className={`autosoft-manager__item ${isLoaded ? "autosoft-manager__item--loaded" : ""}`}
+            >
               <div className="autosoft-manager__item-info">
                 <span className="autosoft-manager__item-name">{autosoft.name}</span>
                 <span className="autosoft-manager__item-rating">R{autosoft.rating}</span>
               </div>
-              
+
               <div className="autosoft-manager__item-meta">
                 <span className="autosoft-manager__category">
                   {CATEGORY_LABELS[autosoft.category] ?? autosoft.category}
                 </span>
                 {autosoft.target && (
-                  <span className="autosoft-manager__target">
-                    ({autosoft.target})
-                  </span>
+                  <span className="autosoft-manager__target">({autosoft.target})</span>
                 )}
               </div>
 
               {isLoaded && (
-                <span className="autosoft-manager__shared-badge">
-                  Shared to network
-                </span>
+                <span className="autosoft-manager__shared-badge">Shared to network</span>
               )}
 
               <div className="autosoft-manager__actions">

@@ -1,19 +1,19 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Positive Qualities | Negative Qualities | Martial Arts |
-| --- | --- | --- |
+| ------------------ | ------------------ | ------------ |
 
 | Positive Metagenic Qualities | Negative Metagenic Qualities |
-| --- | --- |
+| ---------------------------- | ---------------------------- |
 
 **LEARNING MARTIAL ARTS**
 
-| DESCRIPTION | LEARNING TIME | KARMA | INSTRUCTION COST |
-| --- | --- | --- | --- |
-| New Technique | 2 Weeks | 5 | 1,500¥ |
-| New Style | 1 Month | 7 | 2,500¥ |
+| DESCRIPTION                                                                           | LEARNING TIME | KARMA | INSTRUCTION COST |
+| ------------------------------------------------------------------------------------- | ------------- | ----- | ---------------- |
+| New Technique                                                                         | 2 Weeks       | 5     | 1,500¥           |
+| New Style                                                                             | 1 Month       | 7     | 2,500¥           |
 | Note:The learning of a new style comes with one technique available under that style. |
 
 A person can be very good at dishing punishment out and taking a hit without any formal training. There’s no instructor needed to tell you to ball up your fist, or to swing your foot and connect with something vital; to duck as a sword is swinging toward your head, or run for cover when bullets are flying at you. Combat skills encompass the basics of close-combat actions and associated moves (Block, Charge, Dodge, Escape, Grapple, Parry, and Subdue), and the skill rating and specialization in a close-combat skill represents how well a character performs actions along with their general style of completing said action. Martial arts styles may also be selected as specializations for the normal cost of 7 Karma—selecting that specialization provides a +2 bonus when using that technique.
@@ -170,11 +170,11 @@ Some magicians may attempt to fight an opponent using a spell like Magic Fingers
 
 ### Physical Adept Powers With Techniques
 
-| POWER | TECHNIQUE |
-| --- | --- |
-| Light Body | Rolling Cloud |
-| Light Body | Leaping Mantis |
-| Wall Running | Monkey Climb |
+| POWER        | TECHNIQUE      |
+| ------------ | -------------- |
+| Light Body   | Rolling Cloud  |
+| Light Body   | Leaping Mantis |
+| Wall Running | Monkey Climb   |
 
 Some adept powers have a boost that is similar to a Martial Art technique, such as Rolling Cloud or Light Body. If the adept has both the power and the technique, the rules or bonuses of the power supersede the gains and rules of the technique. This means that the adept doesn’t gain benefit from both. If the adept turns off the power, however, she can still use and gain the advantage of the technique. Current list of powers/techniques with such an overlap include:
 
@@ -221,15 +221,15 @@ Some weapons seem to be perfectly suited to particular martial arts. Like shock 
 Each style can be used as a skill specialization. Some of these styles can be a specialization for a combination of skills. The gamemaster determines if it is allowable for that skill.
 
 Examples
-:   Chakram Fighting can be applied to both the Exotic Ranged and Melee Weapon skill
-:   Gun Kata can be applied to both firearms and clubs
+: Chakram Fighting can be applied to both the Exotic Ranged and Melee Weapon skill
+: Gun Kata can be applied to both firearms and clubs
 
 ## Gymnastics
 
 ### Parkour
 
 Available Techniques
-:   Bending of the Reed, Kip-up, Leaping Mantis, Monkey Climb, Rolling Cloud, Shadow Block
+: Bending of the Reed, Kip-up, Leaping Mantis, Monkey Climb, Rolling Cloud, Shadow Block
 
 While not combat related, this style has to be mentioned as a collection of gymnastic techniques to move a character quickly and effectively around in any terrain. It originated as military obstacle training and has progressed into an urban style of travel. Since the 1980s, Parkour been used in dense urban environments for those who couldn’t afford their own transportation. Various gangs like the Spiders in Seattle actively train their members in Parkour.
 
@@ -238,21 +238,21 @@ While not combat related, this style has to be mentioned as a collection of gymn
 ### 52 Blocks
 
 Available Techniques
-:   Called Shot (Disarm), Kick Attack, Multiple Opponent Defense (Defender has Defended), Pouncing Dragon, Randori (Dirty Trick), Rooted Tree
+: Called Shot (Disarm), Kick Attack, Multiple Opponent Defense (Defender has Defended), Pouncing Dragon, Randori (Dirty Trick), Rooted Tree
 
 Those that have spent any time in prison may have heard of the 52 Blocks. It’s a mixed martial art style of unarmed strikes and blocks within a confined space and possibly handcuffed. The intent of 52 Blocks is self-defense and survival. The moves are quick and dirty, designed for effect and effectiveness, not finesse. It’s not a style that is taught, especially outside prison and is usually learned the hard way.
 
 ### Aikido
 
 Available Techniques
-:   Called Shot (Disarm), Constrictor’s Crush, Counterstrike, Throw Person, Yielding Force (Counter Strike, Throw)
+: Called Shot (Disarm), Constrictor’s Crush, Counterstrike, Throw Person, Yielding Force (Counter Strike, Throw)
 
 Aikido is similar to Jujutsu in that it primarily involves using Yielding Force; that is, using the opponent’s force and momentum against him. This requires the character trained in Aikido to use little effort in defending and attacking his opponent. Aikido is taught by many masters in dojos in Kyoto and Neo-Tokyo, and they require their students to study Japanese philosophy in addition to their martial art techniques. Variations, such as the French Kinomichi, can be found outside Japan.
 
 ### Bartitsu
 
 Available Techniques
-:   Ballestra, Bending of the Reed, Called Shot (Disarm), Kick Attack, Riposte, Sweep
+: Ballestra, Bending of the Reed, Called Shot (Disarm), Kick Attack, Riposte, Sweep
 
 Bartitsu is the gentleman’s martial art style. Its most famous practitioners—including Sherlock Holmes and John Steed—may be fictional, but it is a real martial art that trains people how to use walking sticks or umbrellas, items that the everyday person might carry, as a weapon. This martial art has continued to exist through self-defense classes throughout Europe and for those of the upper crust. A similar combat variation to Bartitsu is Bataireacht from Tír na nÓg, which focuses on the use of a cudgel or shillelagh.
 
@@ -265,126 +265,126 @@ Bartitsu is the gentleman’s martial art style. Its most famous practitioners�
 #### Boxing (Brawler Style)
 
 Available Techniques
-:   Clinch, Full Offense, Haymaker, Opposing Force (Block), Stagger, Thunder Strike
+: Clinch, Full Offense, Haymaker, Opposing Force (Block), Stagger, Thunder Strike
 
 Using less finesse and footwork than Classic boxing, the Brawler style focuses on force and attempting to knock out the opponent before they can get in a damaging blow. You see the Brawler boxing style more often in street fighting than you do in the ring. Similar styles include Musti-yuddha from India, a boxing style that includes head butts, finger strikes, and no one who is faint of heart.
 
 #### Boxing (Classic Style)
 
 Available Techniques
-:   Bending of the Reed, Called Shot (Feint), Haymaker, Oaken Stance (Defense Against Being Knocked Down), Opposing Force (Block), Silken Storm
+: Bending of the Reed, Called Shot (Feint), Haymaker, Oaken Stance (Defense Against Being Knocked Down), Opposing Force (Block), Silken Storm
 
 This is the style of professional boxing with faster, longer jabs and punches, relying on reach and footwork to get out of the way of the opponent’s incoming blows. While punching another person in the face has been around since the dawn of time, this style of combat is based on 18th century rules of combat. This would include opponents fighting upright, not purposely hitting below the belt, and no biting a person’s ear off (Usually). Dornálaíocht, an Irish style of boxing, is close to the Classic style of boxing, while bare-knuckled boxing relies more on blocks than dodges.
 
 #### Boxing (Swarmer Style)
 
 Available Techniques
-:   Bending of the Reed, Called Shot (Feint), Clinch, Haymaker, Silken Storm, Two-Headed Snake
+: Bending of the Reed, Called Shot (Feint), Clinch, Haymaker, Silken Storm, Two-Headed Snake
 
 The Swarmer style consists of using a flurry of blows, moving inside the reach of the opponent, and keeping mobile to dodge the opponent’s punches. This style has some of the same finesse as the Classic style, but it is fast and furious, both with constant movement and quicker punches.
 
 ### Capoeira
 
 Available Techniques
-:   Bending of the Reed, Called Shot (Feint), Kick Attack, Kip-up, Sweep, Tricking
+: Bending of the Reed, Called Shot (Feint), Kick Attack, Kip-up, Sweep, Tricking
 
 Brazilian style martial arts that include elbow slams, leg strikes, and head butts. It originated with African slaves in Brazil, and its moves were disguised as a fast-moving dance. Because practitioner’s hands were manacled, offensive maneuvers focused on kicks and sweeps. Capoeira was taught secretly in societies called quilombos. During the 1900s there was attempted prohibition on quilombos and those who practice it. The practice went underground for a while until the 1940s, when it was legalized.
 
 ### Carromeleg
 
 Available Techniques
-:   Counterstrike, Iaijutsu, Imposing Stone, Riposte, Shadow Block, Stagger
+: Counterstrike, Iaijutsu, Imposing Stone, Riposte, Shadow Block, Stagger
 
 Some believe that this martial art dates back further than any other—as far back as what is theorized to be the Fourth World, when elves previously lived among humans. This art is a concentration of will and energy. There is no outward stance of someone ready to employ Carromeleg. It is the silence before the explosion as the practitioner of Carromeleg waits till the last moment before striking or counterstriking the opponent. When two masters meet, it is sometime anticlimactic as they size up their outward stance; what follows is a silent battle of will, which ends when one bows, ending the contest. It is only taught to elves and it is fiercely guarded by masters who want to keep it as an elven tradition. Bounties have been placed on those who attempt to teach this martial art to outsiders.
 
 ### Drunken Boxing
 
 Available Techniques
-:   Called Shot (Disarm, Feint), Defiant Dance, Full Offense, Karmic Response, Two-Headed Snake
+: Called Shot (Disarm, Feint), Defiant Dance, Full Offense, Karmic Response, Two-Headed Snake
 
 Drunken Boxing, or Zui quan, is a style that replicates the movements of someone who is drunk. Movements within this style are about making combat unpredictable for an opponent. While looking unbalanced, a master of drunken boxing is skilled in balance and acrobatics. Though the technique does not need the practitioner to consume alcohol and literally become a drunken boxer, some take it too literally. Drunken Boxing teachings were banned in several NANs due to the behavior it caused.
 
 ### Jeet Kune Do
 
 Available Techniques
-:   Bending of the Reed, Counter Strike, Kick, Opposing Force (Block), Randori (Vitals), Yielding Force (Counter Strike)
+: Bending of the Reed, Counter Strike, Kick, Opposing Force (Block), Randori (Vitals), Yielding Force (Counter Strike)
 
 Jeet Kune Do is a martial art style developed by the master martial artist Bruce Lee. While it wasn’t fully defined before his death, it continued to progress based on his original teachings. Jeet Kune Do is sometimes practiced by adepts with a belief that their mentor spirit is Master Lee himself. Jeet Kune Do emphasizes counter strikes and the intercepting fist.
 
 ### Jujitsu
 
 Available Techniques
-:   Called Shot (Disarm), Chin Na, Clinch, Sacrificial Throw, Sweep, Throw Person
+: Called Shot (Disarm), Chin Na, Clinch, Sacrificial Throw, Sweep, Throw Person
 
 Also known as the Yielding Way, this is a style in which the practitioner uses the force of the opponent against them. It originated in the sixteenth century in Japan where unarmed strikes were ineffective against armored opponents. This martial art uses little or no weapons to defeat even an armed opponent. It focuses on subduing, throws, and disarming an opponent. Descendant styles of Jutitsu include Judo and Shooto, and techniques have been adopted by Aikido, Baritsu, and Brazillian Jujitsu.
 
 ### Karate
 
 Available Techniques
-:   Counter Strike, Kick, Kip-up, Opposing Force (Block), Sweep, Yielding Force (Counter Strike)
+: Counter Strike, Kick, Kip-up, Opposing Force (Block), Sweep, Yielding Force (Counter Strike)
 
 Karate is full-contact striking combat with over seven hundred years of use, and through all those years there were various kata or models of karate created. Only a dozen or so are accepted in tournaments and sporting events. Similar styles include Hwarang-do, Wushu, and Zen Do Kai. All three emphasize kicking, grappling, and striking. More advanced practitioners learn the use of weapons along with foot and fist.
 
 ### Knight Errant Tactical
 
 Available Techniques
-:   Barbed Hooks, Broken Fang, Called Shot (Break Weapon), Close Quarter Defense Against Firearms, Hammer Fist, Imposing Stone
+: Barbed Hooks, Broken Fang, Called Shot (Break Weapon), Close Quarter Defense Against Firearms, Hammer Fist, Imposing Stone
 
 Knight Errant Tactical training is high-threat response that emphasizes the ability to neutralize the opponent as a threat. One part of their training has been to disable the opponent’s weapon, either through bricking or by force. Such techniques have been coveted by other security forces in beefing up their own training course.
 
 ### Krav Maga
 
 Available Techniques
-:   Called Shot (Disarm), Clinch, Constrictor’s Crush, Imposing Stone, Releasing Talons, Ti Khao
+: Called Shot (Disarm), Clinch, Constrictor’s Crush, Imposing Stone, Releasing Talons, Ti Khao
 
 This martial art style was developed in Israel for the defense forces. It’s a brutal mix of Muay Thai, boxing, and wrestling. Krav Maga emphasizes threat neutralization and has been adopted by Middle Eastern police and security forces. Other comparative training styles include ROSS, SAMBO, and MCMAP, which also adopted the same techniques. CAS and UCAS training have to stay competitive with other nations, so with MCMAP, they encourage soldiers to train in an additional martial art style such as Karate or Jujitsu.
 
 ### Lone Star Tactical
 
 Available Techniques
-:   Called Shot (Break Weapon), Close Quarter Defense Against Firearms, Herding, Multi ple Opponent Defense (Defender Has Defended Against Previous Attacks), Oaken Stance (Defense Against Being Charged), Rooted Tree
+: Called Shot (Break Weapon), Close Quarter Defense Against Firearms, Herding, Multi ple Opponent Defense (Defender Has Defended Against Previous Attacks), Oaken Stance (Defense Against Being Charged), Rooted Tree
 
 Lone Star Tactical training revolves around crowd control and combat in groups engaging multiple opponents. They also understand the importance of disabling an opponent’s weapon, while knowing that bricking firearms is a higher priority than making people drop a sword or stick.
 
 ### Muay Thai
 
 Available Techniques
-:   Clinch, Crushing Jaws, Finishing Move, Kick, Thunderstrike, Ti Khao
+: Clinch, Crushing Jaws, Finishing Move, Kick, Thunderstrike, Ti Khao
 
 Often referred as Thai Boxing, Muay Thai is a professional sporting style emphasizing swift and brutal strikes with legs, knees, and elbows. It’s been part of Thailand’s military training regime and has become a popular sporting event on the trid. Since the early 2030s it has perennially been one of the top five most watched national sporting events alongside longtime favorites like boxing and newer hip sports such as urban brawl.
 
 ### Ninjutsu
 
 Available Techniques
-:   Counter Strike, Dim Mak, Flying Kick, Kick Attack, Randori (Dirty Trick), Tricking
+: Counter Strike, Dim Mak, Flying Kick, Kick Attack, Randori (Dirty Trick), Tricking
 
 Ninjutsu is the art of unconventional and guerrilla warfare from Japan. It’s also known as the way of the Ninja. There are eighteen different disciplines within ninjitsu focusing on sword combat, staff fighting, unarmed combat, and even pyrotechnical techniques. The Ninjutsu style presented focuses on close-combat skills.
 
 ### Okichitaw
 
 Available Techniques
-:   Called Shot (Pin), Counter Strike, Hard Technique (Parry), Randori (Vitals), Shadow Block, Sweep
+: Called Shot (Pin), Counter Strike, Hard Technique (Parry), Randori (Vitals), Shadow Block, Sweep
 
 This combat style was based on the Cree style of combat blended with Judo and Tae Kwon Do. For the NAN, it became basic training for the military. For the Sioux, it’s mandated as part of the required year of service before advancing to Wildcat training. The main weapons used with this martial art are the Gunstock War club and long knife; the styles also cover unarmed combat techniques based on hand positions with these weapons. Other weapons learned with Okichitaw are the tomahawk and plains dagger.
 
 ### Sangre Y Acero
 
 Available Techniques
-:   Called Shot (Break Weapon), Clinch, Crushing Jaws, Finishing Move, Pouncing Dragon, Tricking
+: Called Shot (Break Weapon), Clinch, Crushing Jaws, Finishing Move, Pouncing Dragon, Tricking
 
 Also known as Eztlitzli and Ars Cybernetica, this is a brutal style of cybernetic combat that originated in the darker corners of Tenochititlan. In the gladiator pits, fighters sport new and deadly cybernetic weapons to surprise their opponents. Anyone who thinks that they can fight in those pits without augmentations quickly find themselves as barghest chow the next day. This style is only practiced in Aztlan, and it has two types of practitioners: those that have survived and live in sponsored luxury and those that are dead.
 
 ### Tae Kwon Do
 
 Available Techniques
-:   Counter Strike, Flying Kick, Kick, Opposing Force (Block), Sweep, Tricking
+: Counter Strike, Flying Kick, Kick, Opposing Force (Block), Sweep, Tricking
 
 Tae Kwon Do is a striking style of martial art developed over a century ago in Korea. It mainly consists of kicks and punches from a mobile standing position. It distinguishes itself from karate with high kicking and fast hand techniques.
 
 ### Wildcat
 
 Available Techniques
-:   Clinch, Counter Strike, Dim Mak, Finishing Move, Multiple Opponent Combat, Ti Khao
+: Clinch, Counter Strike, Dim Mak, Finishing Move, Multiple Opponent Combat, Ti Khao
 
 Wildcat is an advanced martial art style that builds on Okichaw basic training for the Sioux Nation Special Forces. It combines the more deadly parts of several martial arts like Aikido, Muay Thai, and Karate. Unlike Krav Maga, which emphasizes opponent neutralization, Wildcat employs more lethal techniques to disable opponents. A few other NAN special forces have their version of Wildcat style, but most prefer alternatives like Krav Maga. Some Amerind gangs with ex-Wildcats practice the Wildcat style of combat, with the vets passing their knowledge on to their gang members.
 
@@ -393,28 +393,28 @@ Wildcat is an advanced martial art style that builds on Okichaw basic training f
 #### Wrestling (Sport Style)
 
 Available Techniques
-:   Clinch, Constrictor’s Crush, Jiao Di (Knock Down), Karmic Response, Sweep, Throw Person
+: Clinch, Constrictor’s Crush, Jiao Di (Knock Down), Karmic Response, Sweep, Throw Person
 
 This is the revered ancient art of throwing your opponent to the ground and holding him there till he cries “uncle.” Wrestling is one of the oldest forms of combat. Reportedly existing for some four thousand years, with more formal rules from all over the world. Grappling your opponent and subduing him is the key strategy with this style while throwing him to the ground is optional. Several folk wrestling styles including Mongolian Bökh and Cambodian Bok Cham Bab have similar rules to the Sport style of wrestling.
 
 #### Wrestling (Sumo Style)
 
 Available Techniques
-:   Barbed Hooks, Clinch, Herding, Jiao Di (Knock Down), Rooted Tree, Throw Person
+: Barbed Hooks, Clinch, Herding, Jiao Di (Knock Down), Rooted Tree, Throw Person
 
 Sumo is a competitive full-contact wrestling sport where the rikishi, or wrestler, attempts to force another wrestler out of the ring or to touch the ground with something besides their feet. While the only place hosting Sumo as a professional sport is Japan, there are smaller tournaments in North America and parts of Asia where metahuman exiles have continued the sport. There have been a number of international contenders in the sport, but they have been extremely limited by the Sumo Association, which is believed in some quarters to actively work to keep the sport from being dominated by foreigners. In Africa, Senegalese, or folk wrestling, has similar rules in that the winner must throw the opponent out of the ring; the same goes for Inbuan wrestling in India.
 
 #### Wrestling (Professional Style)
 
 Available Techniques
-:   Clinch, Jiao Di (Charge), Karmic Response, Sacrifice Throw, Tricking, Yielding Force (Throw)
+: Clinch, Jiao Di (Charge), Karmic Response, Sacrifice Throw, Tricking, Yielding Force (Throw)
 
 Professional Wrestling is a mix of wrestling and theatrics loosely based on the sporting style rules of wrestling. Make no mistake, though—whether the outcomes are pre-determined or not, the style requires significant strength, coordination, and athleticism. Originating in the early twentieth century, the Professional style includes the basic classic techniques, which are then enhanced in spectacular displays. A sacrificial throw in professional wrestling is a suplex, while a sacrificial move is called a spear. Professional wrestling has various cultural and dramatic flavors. Someone may think that this is not a style of martial arts—until they get a flying elbow to the face.
 
 #### Wrestling (MMA Style)
 
 Available Techniques
-:   Clinch, Constrictor’s Crush, Crushing Jaws, Jiao Di (Knock Down), Kick, Pouncing Dragon
+: Clinch, Constrictor’s Crush, Crushing Jaws, Jiao Di (Knock Down), Kick, Pouncing Dragon
 
 MMA, or Mixed Martial Art, style is a full-contact sport of punches, kicks, and subdual holds mixing boxing and wrestling. MMA has its roots in Greco-Roman sport of Pankration with the same objective of beating the opponent into unconsciousness or submission. MMA is mostly a North American sport with similarities to Brazilian Jiu-Jitsu and Shoot Wrestling in Asia. Popular Aztechnology trideos include gladiatorial MMA and Brazilian Jiu-Jitsu fights with frequent gory injuries.
 
@@ -427,42 +427,42 @@ MMA, or Mixed Martial Art, style is a full-contact sport of punches, kicks, and 
 ### Fiore Dei Liberi (Two Weapon Sword Fighting)
 
 Available Techniques
-:   Called Shot (Break Weapon), Opposing Force (Parry), Riposte, Two-Weapon-Style Attack, Two-Weapon-Style Defense, Yielding Force (Riposte)
+: Called Shot (Break Weapon), Opposing Force (Parry), Riposte, Two-Weapon-Style Attack, Two-Weapon-Style Defense, Yielding Force (Riposte)
 
 The great Italian fighter of the fourteenth century, Fiore dei Liberi was both a mercenary and a fencing master. Toward the end of his fighting career, he published a martial arts manual of his various fighting techniques. One of the emphases with this style was that of the sword and dagger techniques. His preferred weapon was the longsword, which places this weapon style between Kunst des Fechten and Destreza.
 
 ### Kenjutsu
 
 Available Techniques
-:   Bending of the Reed, Finishing Move, Iaijutsu, Multiple Opponent Combat, Multiple Opponent Defense (Friends in Melee), Opposing Force (Parry)
+: Bending of the Reed, Finishing Move, Iaijutsu, Multiple Opponent Combat, Multiple Opponent Defense (Friends in Melee), Opposing Force (Parry)
 
 Kenjutsu is the all-encompassing term for the various Japanese schools of swordsmanship. Most commonly kenjutsu was fought with wooden swords (Bokken) and as an art rather than combat. With the reintroduction of the samurai as a way of life, Kenjutsu and Nitojutsu styles of combat using the iconic katana also returned.
 
 ### Kunst Des Fechtens (Longsword Fighting)
 
 Available Techniques
-:   Half-Sword, Multiple Opponent Combat, Opposing Force (Parry), Pouncing Dragon, Riposte, Yielding Force (Riposte)
+: Half-Sword, Multiple Opponent Combat, Opposing Force (Parry), Pouncing Dragon, Riposte, Yielding Force (Riposte)
 
 German for the Art of Fencing, this line of teaching covers the use of a longsword and two-handed blades. Kunst des Fechtens is about slashing strokes rather than thrusts. Like the Wudang Sword, Kunst des Fechtens swordplay revolves around five major movements and twelve minor movements, all focused on timing and stance. This style is more aggressive, using leverage and brute strength to take down an opponent.
 
 ### La Verdadera Destreza (Rapier Fighting)
 
 Available Techniques
-:   Ballestra, Multiple Opponent Combat, Multiple Opponent Defense, Opposing Force (Parry), Riposte, Yielding Force (Riposte)
+: Ballestra, Multiple Opponent Combat, Multiple Opponent Defense, Opposing Force (Parry), Riposte, Yielding Force (Riposte)
 
 This Spanish swordsmanship was compiled in the sixteenth century, separating itself from other European styles with the emphasis on circular movements with a sword and relying on thrusts and ripostes with a rapier. The modern fencing sport descends from the Destreza style of swordplay. Masters of the art, Camillo, Agrippa, and Thibault, have all lent their names to specific defensive and offensive strategies with the sword. Most of the trid star combat with swords is tied to this technique, as it has the most flourish and flash.
 
 ### Pentjak-silat
 
 Available Techniques
-:   Called Shot (Break Weapon, Disarm), Dim Mak, Jiao Di (Charge), Randori (Vitals), Silken Storm
+: Called Shot (Break Weapon, Disarm), Dim Mak, Jiao Di (Charge), Randori (Vitals), Silken Storm
 
 An ancient martial art from Indonesia that is over a thousand years old, Pentjak-Silat is actually an umbrella term for several techniques. It teaches the use of several weapons such as the kris and focuses on striking vital points of the opponent. It is predominantly practiced in Indonesia. Adepts have discovered that this style is effective and potent when used with weapon foci.
 
 ### Wudang Sword
 
 Available Techniques
-:   Ballestra, Finishing Move, Flying Kick, HammerFist, Iaijutsu, Riposte
+: Ballestra, Finishing Move, Flying Kick, HammerFist, Iaijutsu, Riposte
 
 Wudang Sword is part of the greater wudang martial arts tradition. This style has been passed down for hundreds of years and coveted as one of the greatest sword styles from China. Many variations of sword techniques in other Chinese martial arts derive themselves from Wudang sword, but none surpass it. It consists of one sword with six sections and 132 movements. The style is beautiful with graceful lunges and jumps. Wudang Dui Jian is the dance that occurs when two Wudang sword masters meet.
 
@@ -471,21 +471,21 @@ Wudang Sword is part of the greater wudang martial arts tradition. This style ha
 ### Arnis De Mano
 
 Available Techniques
-:   Close-Quarter Defense Against Firearms, Multiple Opponent Combat, Opposing Force (Parry), Randori (Vitals), Two-Weapon-Style Attack, TwoWeapon-Style Defense
+: Close-Quarter Defense Against Firearms, Multiple Opponent Combat, Opposing Force (Parry), Randori (Vitals), Two-Weapon-Style Attack, TwoWeapon-Style Defense
 
 Arnis De Mano is a two-weapon fighting style that typically uses two rattan sticks, but it can also involve two daggers, or a stick and a dagger. It is less formal than the Fiore dei Liberi style, and often focuses on learning how to fight prone or using what’s available to your advantage. Arnis De Mano, Escrima, and Kali styles are from the same family of Philippine martial arts.
 
 ### Jogo Du Pau
 
 Available Techniques
-:   Barbed Hooks, Herding, Oaken Stance (Defense Against Being Charged, Defense Against Being Knocked Down), Opposing Force (Parry), Pouncing Dragon
+: Barbed Hooks, Herding, Oaken Stance (Defense Against Being Charged, Defense Against Being Knocked Down), Opposing Force (Parry), Pouncing Dragon
 
 This Portuguese martial art style revolves around the use of a staff. It is said to have begun with the versatility of the staff as a tool in climbing rural terrain, crossing rivers, and defense against wild animals. While it’s been in decline since the 20th century as people moved to cities, it has made a bit of a comeback for people who want something to fall back on when a gun or knife isn’t available.
 
 ### Quarterstaff Fighting
 
 Available Techniques
-:   Jiao Di (Knock Down), Multiple Opponent Combat, Opposing Force (Parry), Sweep, Stagger, Thunderstrike
+: Jiao Di (Knock Down), Multiple Opponent Combat, Opposing Force (Parry), Sweep, Stagger, Thunderstrike
 
 Quarterstaff combat differs from Baritsu in that it uses a longer weapon and the style allows for multiple strikes by holding the weapon in the center. Quarterstaff fighting is traditionally European, but similar styles include Bojutsu and Gun. It’s all about keeping the staff in front of you and moving to shield you from blows while looking for the opportunity to get a strike in. A modern version of this style using the vibranox staff is based on a fictional trid called Denn’Bok.
 
@@ -494,14 +494,14 @@ Quarterstaff combat differs from Baritsu in that it uses a longer weapon and the
 ### Kyujutsu
 
 Available Techniques
-:   Called Shot (Pin), Close Quarter Firearms (Archery), Hammer Fist, Knucklebreaker (Blast Out of Hand), Soaring Shackles, Tricking
+: Called Shot (Pin), Close Quarter Firearms (Archery), Hammer Fist, Knucklebreaker (Blast Out of Hand), Soaring Shackles, Tricking
 
 “The Art of Archery” as it is known, is one of the weapon techniques learned by samurai. This was the art that was used in battle in early Japan. By the late 16th century it declined due to the increased use of firearms. Kyujutsu survived as a practice along with the more formal Kyudu, the way of the bow, which emphasizes aesthetics rather than fighting. By the 21st century, Kyujutsu was revived once more with the return of the samurai as a way of life. Instead of the traditional yumi bow, practitioners took up more modern compound bows.
 
 ### Turkish Archery
 
 Available Techniques
-:   Called Shot (Pin), Close Quarters Defense Against Firearms, HammerFist, Silken Storm, Soaring Shackles, Thunder Strike
+: Called Shot (Pin), Close Quarters Defense Against Firearms, HammerFist, Silken Storm, Soaring Shackles, Thunder Strike
 
 Turkish Archery has two unique combat actions: Jarmakee and Majra. Jarmakee is a balanced stance allowing the archer to shoot from behind the head to give a better angle without exposing herself to an opponent. Majara is overdrawing; using shorter arrows with an accompanying tool. The intent, as the story goes, is that the opponent then couldn’t use the arrows to fire back. There are few practitioners of Turkish Archery, with most people preferring firearms and smartlinks, but there are still tournaments held in Istanbul.
 
@@ -510,21 +510,21 @@ Turkish Archery has two unique combat actions: Jarmakee and Majra. Jarmakee is a
 ### Firefight
 
 Available Techniques
-:   Clinch, Close Quarter Defense Against Firearms, Close Quarter Firearms (Pistols), Multiple Opponent Defense (Friends in Melee), Oaken Stance (Defense Against Being Knocked Down, Defense Against Being Charged)
+: Clinch, Close Quarter Defense Against Firearms, Close Quarter Firearms (Pistols), Multiple Opponent Defense (Friends in Melee), Oaken Stance (Defense Against Being Knocked Down, Defense Against Being Charged)
 
 Firefight is a unique combat training style first developed by Ares in 2068 based on existing military combat training for urban terrain. It deals specifically with fighting in close quarters against both ranged and melee opponents. Those who practice Firefight learn how to use a firearm effectively while in melee combat. Originally only Ares FireWatch teams learned these proprietary techniques, but through espionage and shadowrunners, a few mercenary groups and security forces have learned similar training techniques.
 
 ### Gun Kata
 
 Available Techniques
-:   Close Quarter Firearms (Pistols), Kip-up, Multiple Opponent Defense (Friends in Melee), Opposing Force (Block), Tricking, Stagger
+: Close Quarter Firearms (Pistols), Kip-up, Multiple Opponent Defense (Friends in Melee), Opposing Force (Block), Tricking, Stagger
 
 Also known as Gun Fu, this martial art style is what all the fan boys want to know how to do after watching the action trids. It’s also the style that leads to the most accidental shooting incidents and elbow injuries from people thinking it’s best to hold a gun sideways. The real form of the art, as opposed to the one seen in trids, has some similarities to Ares Firefight, but with more flourish and flair. Additionally, the gun is used as both a ranged and melee weapon. There are synergies between Firefight and Gun Kata, and often after learning one, the martial artist will continue with the other. Guns used with Gun Kata have to be custom designed for impact and tricked with melee accessories. Few armorers can do such work, which means that each piece is unique enough often to identify the artist. Gun Kata practitioners also modify their smartlink so as to not receive warning feedback for the improper handling of a firearm and useless targeting data that does not account for their unorthodox uses of their weapons.
 
 ### The Cowboy Way
 
 Available Techniques
-:   Called Shot (Entanglement), Hammer Fist, Haymaker, Knucklebreaker (Blast), Stagger, Tricking
+: Called Shot (Entanglement), Hammer Fist, Haymaker, Knucklebreaker (Blast), Stagger, Tricking
 
 The Cowboy Way, named after more iconic American practitioners, has its origins further back with the Huns, Tartars, and even Persians who used the lasso in hand to hand combat to ensnare opponents and to drag them off horses or out of formation to be killed. Today the technique includes a mix of gun fighting, rope use, and unarmed combat stylized by trids. It does not require wearing a ten-gallon hat, but some practitioners do anyway. Especially those with Distinctive Style.
 
@@ -533,14 +533,14 @@ The Cowboy Way, named after more iconic American practitioners, has its origins 
 ### Chakram Fighting
 
 Available Techniques
-:   Called Shot (Pin), Close Quarter Firearms (Thrown Weapons), Knucklebreaker (Blast Out of Hands), Multiple Opponent Defense (Friends in Melee), Opposing Force (Block), Ti Khao
+: Called Shot (Pin), Close Quarter Firearms (Thrown Weapons), Knucklebreaker (Blast Out of Hands), Multiple Opponent Defense (Friends in Melee), Opposing Force (Block), Ti Khao
 
 This martial art style originated in India in the Eighth century, with the use of the chakram, a circular weapon with a sharpened outside edge. Since then it has been copied in Mongolia, Tibet, Malaysia, and Indonesia with variations in the design of chakram. The chakram can be worn on the head, arm, or wrist to be used in melee combat or damage an opponent while clinching or subduing them. The chakram can also be thrown at ranged targets. The tanjani technique is where the chakram is spun around a finger, adding range and power before it is hurled at a target. In 2061 chakram bracelets became a fad for a while as both a weapon and fashion statement.
 
 ### Whip Fighting
 
 Available Techniques
-:   Bending of the Reed, Called Shot (Entanglement), Hammer Fist, Herding, Multiple Opponent Defense (Friends in Melee), Multiple Opponent Combat
+: Bending of the Reed, Called Shot (Entanglement), Hammer Fist, Herding, Multiple Opponent Defense (Friends in Melee), Multiple Opponent Combat
 
 Whip Fighting as a martial art style comes mainly from the Philippines. Latigo y Daga (Whip and Dagger) focuses on the use of flexible weapons; other martial art styles, such as caci and wushu, use weapons such as chain whips, but do not emphasize it as a primary weapon. Whip Fighting covers entanglement of an opponent and, like a lion tamer, herding multiple opponents with the crack of the whip.
 
@@ -563,7 +563,7 @@ The character lunges forward with a long step toward his opponent, effectively a
 Close Combat Only
 
 Interception Interrupt Action
-:   +1 Die
+: +1 Die
 
 The character is quick to strike out at opponents as they move within his space. The technique provides a +1 die bonus to Interception Interrupt Action tests.
 
@@ -803,7 +803,7 @@ This technique focuses attacks on sensory and nerve areas to disorient an oppone
 ### Strike The Darkness
 
 Blind Fighting
-:   -1 Penalty
+: -1 Penalty
 
 This technique reduces the character’s reliance on his sight to fight an opponent. It’s a mix of using other senses such as hearing and smell and using memory, remembering previous blocks and strikes to predict the opponent’s next position. It reduces the penalty for Blind Fighting by 1.
 

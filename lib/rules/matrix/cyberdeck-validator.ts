@@ -50,12 +50,7 @@ export function validateCyberdeckConfig(
   const warnings: MatrixValidationWarning[] = [];
 
   // Extract the assigned values
-  const assignedValues = [
-    config.attack,
-    config.sleaze,
-    config.dataProcessing,
-    config.firewall,
-  ];
+  const assignedValues = [config.attack, config.sleaze, config.dataProcessing, config.firewall];
 
   // Sort both arrays for comparison
   const sortedAssigned = [...assignedValues].sort((a, b) => b - a);
@@ -123,9 +118,7 @@ export function validateCyberdeckConfig(
  * @param attributeArray - The deck's attribute array
  * @returns Default configuration
  */
-export function createDefaultConfig(
-  attributeArray: number[]
-): CyberdeckAttributeConfig {
+export function createDefaultConfig(attributeArray: number[]): CyberdeckAttributeConfig {
   // Sort descending
   const sorted = [...attributeArray].sort((a, b) => b - a);
 
@@ -146,9 +139,7 @@ export function createDefaultConfig(
  * @param attributeArray - The deck's attribute array
  * @returns Offensive configuration
  */
-export function createOffensiveConfig(
-  attributeArray: number[]
-): CyberdeckAttributeConfig {
+export function createOffensiveConfig(attributeArray: number[]): CyberdeckAttributeConfig {
   const sorted = [...attributeArray].sort((a, b) => b - a);
 
   return {
@@ -167,9 +158,7 @@ export function createOffensiveConfig(
  * @param attributeArray - The deck's attribute array
  * @returns Stealthy configuration
  */
-export function createStealthyConfig(
-  attributeArray: number[]
-): CyberdeckAttributeConfig {
+export function createStealthyConfig(attributeArray: number[]): CyberdeckAttributeConfig {
   const sorted = [...attributeArray].sort((a, b) => b - a);
 
   return {
@@ -220,9 +209,7 @@ export function hasMatrixAccess(character: Character): boolean {
  * @param character - The character to check
  * @returns The active cyberdeck or null
  */
-export function getActiveCyberdeck(
-  character: Character
-): CharacterCyberdeck | null {
+export function getActiveCyberdeck(character: Character): CharacterCyberdeck | null {
   const cyberdecks = getCharacterCyberdecks(character);
 
   if (cyberdecks.length === 0) {
@@ -250,9 +237,7 @@ export function getActiveCyberdeck(
  * @param character - The character
  * @returns Array of character cyberdecks
  */
-export function getCharacterCyberdecks(
-  character: Character
-): CharacterCyberdeck[] {
+export function getCharacterCyberdecks(character: Character): CharacterCyberdeck[] {
   // Cyberdecks may be stored in character.cyberdecks or in gear
   return character.cyberdecks ?? [];
 }
@@ -315,9 +300,7 @@ export function calculateMatrixConditionMonitor(deviceRating: number): number {
  * @param mode - Connection mode (ar, cold-sim-vr, hot-sim-vr)
  * @returns Number of bonus initiative dice
  */
-export function getInitiativeDiceBonus(
-  mode: "ar" | "cold-sim-vr" | "hot-sim-vr"
-): number {
+export function getInitiativeDiceBonus(mode: "ar" | "cold-sim-vr" | "hot-sim-vr"): number {
   switch (mode) {
     case "ar":
       return 0;

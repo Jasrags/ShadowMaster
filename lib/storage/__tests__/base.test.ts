@@ -1,12 +1,12 @@
 /**
  * Tests for base storage utilities
- * 
+ *
  * Tests file I/O operations with temporary directories.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { promises as fs } from 'fs';
-import path from 'path';
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { promises as fs } from "fs";
+import path from "path";
 import {
   readJsonFile,
   writeJsonFile,
@@ -16,11 +16,11 @@ import {
   readAllJsonFiles,
   directoryExists,
   listSubdirectories,
-} from '../base';
+} from "../base";
 
-const TEST_DIR = path.join(process.cwd(), '__tests__', 'temp-storage');
+const TEST_DIR = path.join(process.cwd(), "__tests__", "temp-storage");
 
-describe('Storage Base Utilities', () => {
+describe("Storage Base Utilities", () => {
   beforeEach(async () => {
     // Clean up test directory before each test
     try {
@@ -39,25 +39,25 @@ describe('Storage Base Utilities', () => {
     }
   });
 
-  describe('ensureDirectory', () => {
-    it('should create directory if it does not exist', async () => {
-      const dirPath = path.join(TEST_DIR, 'new-dir');
+  describe("ensureDirectory", () => {
+    it("should create directory if it does not exist", async () => {
+      const dirPath = path.join(TEST_DIR, "new-dir");
       await ensureDirectory(dirPath);
 
       const exists = await directoryExists(dirPath);
       expect(exists).toBe(true);
     });
 
-    it('should create nested directories recursively', async () => {
-      const dirPath = path.join(TEST_DIR, 'level1', 'level2', 'level3');
+    it("should create nested directories recursively", async () => {
+      const dirPath = path.join(TEST_DIR, "level1", "level2", "level3");
       await ensureDirectory(dirPath);
 
       const exists = await directoryExists(dirPath);
       expect(exists).toBe(true);
     });
 
-    it('should not throw if directory already exists', async () => {
-      const dirPath = path.join(TEST_DIR, 'existing-dir');
+    it("should not throw if directory already exists", async () => {
+      const dirPath = path.join(TEST_DIR, "existing-dir");
       await ensureDirectory(dirPath);
       await ensureDirectory(dirPath); // Call again
 
@@ -66,39 +66,39 @@ describe('Storage Base Utilities', () => {
     });
   });
 
-  describe('readJsonFile', () => {
-    it('should read and parse existing JSON file', async () => {
-      const filePath = path.join(TEST_DIR, 'test.json');
+  describe("readJsonFile", () => {
+    it("should read and parse existing JSON file", async () => {
+      const filePath = path.join(TEST_DIR, "test.json");
       await ensureDirectory(TEST_DIR);
-      const testData = { name: 'test', value: 42, nested: { key: 'value' } };
-      await fs.writeFile(filePath, JSON.stringify(testData), 'utf-8');
+      const testData = { name: "test", value: 42, nested: { key: "value" } };
+      await fs.writeFile(filePath, JSON.stringify(testData), "utf-8");
 
       const result = await readJsonFile(filePath);
 
       expect(result).toEqual(testData);
     });
 
-    it('should return null for non-existent file', async () => {
-      const filePath = path.join(TEST_DIR, 'nonexistent.json');
+    it("should return null for non-existent file", async () => {
+      const filePath = path.join(TEST_DIR, "nonexistent.json");
       const result = await readJsonFile(filePath);
 
       expect(result).toBeNull();
     });
 
-    it('should throw error for invalid JSON', async () => {
-      const filePath = path.join(TEST_DIR, 'invalid.json');
+    it("should throw error for invalid JSON", async () => {
+      const filePath = path.join(TEST_DIR, "invalid.json");
       await ensureDirectory(TEST_DIR);
-      await fs.writeFile(filePath, 'invalid json content', 'utf-8');
+      await fs.writeFile(filePath, "invalid json content", "utf-8");
 
       await expect(readJsonFile(filePath)).rejects.toThrow();
     });
   });
 
-  describe('writeJsonFile', () => {
-    it('should write JSON file atomically', async () => {
-      const filePath = path.join(TEST_DIR, 'write-test.json');
+  describe("writeJsonFile", () => {
+    it("should write JSON file atomically", async () => {
+      const filePath = path.join(TEST_DIR, "write-test.json");
       await ensureDirectory(TEST_DIR);
-      const testData = { name: 'test', value: 123 };
+      const testData = { name: "test", value: 123 };
 
       await writeJsonFile(filePath, testData);
 
@@ -106,15 +106,15 @@ describe('Storage Base Utilities', () => {
       expect(result).toEqual(testData);
     });
 
-    it('should handle nested objects', async () => {
-      const filePath = path.join(TEST_DIR, 'nested-test.json');
+    it("should handle nested objects", async () => {
+      const filePath = path.join(TEST_DIR, "nested-test.json");
       await ensureDirectory(TEST_DIR);
       const testData = {
         level1: {
           level2: {
-            level3: { value: 'deep' }
-          }
-        }
+            level3: { value: "deep" },
+          },
+        },
       };
 
       await writeJsonFile(filePath, testData);
@@ -123,10 +123,10 @@ describe('Storage Base Utilities', () => {
       expect(result).toEqual(testData);
     });
 
-    it('should handle arrays', async () => {
-      const filePath = path.join(TEST_DIR, 'array-test.json');
+    it("should handle arrays", async () => {
+      const filePath = path.join(TEST_DIR, "array-test.json");
       await ensureDirectory(TEST_DIR);
-      const testData = { items: [1, 2, 3, { nested: 'value' }] };
+      const testData = { items: [1, 2, 3, { nested: "value" }] };
 
       await writeJsonFile(filePath, testData);
 
@@ -134,10 +134,10 @@ describe('Storage Base Utilities', () => {
       expect(result).toEqual(testData);
     });
 
-    it('should write to temp file first, then rename (atomic write)', async () => {
-      const filePath = path.join(TEST_DIR, 'atomic-test.json');
+    it("should write to temp file first, then rename (atomic write)", async () => {
+      const filePath = path.join(TEST_DIR, "atomic-test.json");
       await ensureDirectory(TEST_DIR);
-      const testData = { value: 'atomic' };
+      const testData = { value: "atomic" };
 
       // Start write
       const writePromise = writeJsonFile(filePath, testData);
@@ -146,7 +146,7 @@ describe('Storage Base Utilities', () => {
       const tempPath = `${filePath}.tmp`;
       let tempExists = false;
       let finalExists = false;
-      
+
       // Poll a few times to catch the temp file during the write operation
       for (let i = 0; i < 10; i++) {
         try {
@@ -161,7 +161,7 @@ describe('Storage Base Utilities', () => {
             break;
           } catch {
             // Neither exists yet, wait a bit and try again
-            await new Promise(resolve => setTimeout(resolve, 10));
+            await new Promise((resolve) => setTimeout(resolve, 10));
           }
         }
       }
@@ -179,18 +179,18 @@ describe('Storage Base Utilities', () => {
       // Temp file should not exist after write completes
       try {
         await fs.access(tempPath);
-        expect.fail('Temp file should not exist after write');
+        expect.fail("Temp file should not exist after write");
       } catch {
         // Expected - temp file should be cleaned up
       }
     });
   });
 
-  describe('deleteFile', () => {
-    it('should delete existing file', async () => {
-      const filePath = path.join(TEST_DIR, 'delete-test.json');
+  describe("deleteFile", () => {
+    it("should delete existing file", async () => {
+      const filePath = path.join(TEST_DIR, "delete-test.json");
       await ensureDirectory(TEST_DIR);
-      await fs.writeFile(filePath, JSON.stringify({ test: true }), 'utf-8');
+      await fs.writeFile(filePath, JSON.stringify({ test: true }), "utf-8");
 
       const result = await deleteFile(filePath);
 
@@ -199,37 +199,37 @@ describe('Storage Base Utilities', () => {
       expect(exists).toBeNull();
     });
 
-    it('should return false for non-existent file', async () => {
-      const filePath = path.join(TEST_DIR, 'nonexistent.json');
+    it("should return false for non-existent file", async () => {
+      const filePath = path.join(TEST_DIR, "nonexistent.json");
       const result = await deleteFile(filePath);
 
       expect(result).toBe(false);
     });
   });
 
-  describe('listJsonFiles', () => {
-    it('should list all JSON files in directory', async () => {
+  describe("listJsonFiles", () => {
+    it("should list all JSON files in directory", async () => {
       await ensureDirectory(TEST_DIR);
-      await fs.writeFile(path.join(TEST_DIR, 'file1.json'), '{}', 'utf-8');
-      await fs.writeFile(path.join(TEST_DIR, 'file2.json'), '{}', 'utf-8');
-      await fs.writeFile(path.join(TEST_DIR, 'not-json.txt'), 'text', 'utf-8');
+      await fs.writeFile(path.join(TEST_DIR, "file1.json"), "{}", "utf-8");
+      await fs.writeFile(path.join(TEST_DIR, "file2.json"), "{}", "utf-8");
+      await fs.writeFile(path.join(TEST_DIR, "not-json.txt"), "text", "utf-8");
 
       const result = await listJsonFiles(TEST_DIR);
 
-      expect(result).toContain('file1');
-      expect(result).toContain('file2');
-      expect(result).not.toContain('not-json');
+      expect(result).toContain("file1");
+      expect(result).toContain("file2");
+      expect(result).not.toContain("not-json");
       expect(result.length).toBe(2);
     });
 
-    it('should return empty array for empty directory', async () => {
+    it("should return empty array for empty directory", async () => {
       await ensureDirectory(TEST_DIR);
       const result = await listJsonFiles(TEST_DIR);
       expect(result).toEqual([]);
     });
 
-    it('should create directory if it does not exist', async () => {
-      const newDir = path.join(TEST_DIR, 'new-list-dir');
+    it("should create directory if it does not exist", async () => {
+      const newDir = path.join(TEST_DIR, "new-list-dir");
       const result = await listJsonFiles(newDir);
 
       expect(result).toEqual([]);
@@ -237,20 +237,20 @@ describe('Storage Base Utilities', () => {
       expect(exists).toBe(true);
     });
 
-    it('should return empty array for non-existent directory', async () => {
-      const nonExistentDir = path.join(TEST_DIR, 'nonexistent');
+    it("should return empty array for non-existent directory", async () => {
+      const nonExistentDir = path.join(TEST_DIR, "nonexistent");
       const result = await listJsonFiles(nonExistentDir);
       expect(result).toEqual([]);
     });
   });
 
-  describe('readAllJsonFiles', () => {
-    it('should read all JSON files in directory', async () => {
+  describe("readAllJsonFiles", () => {
+    it("should read all JSON files in directory", async () => {
       await ensureDirectory(TEST_DIR);
-      const data1 = { id: '1', name: 'First' };
-      const data2 = { id: '2', name: 'Second' };
-      await writeJsonFile(path.join(TEST_DIR, 'file1.json'), data1);
-      await writeJsonFile(path.join(TEST_DIR, 'file2.json'), data2);
+      const data1 = { id: "1", name: "First" };
+      const data2 = { id: "2", name: "Second" };
+      await writeJsonFile(path.join(TEST_DIR, "file1.json"), data1);
+      await writeJsonFile(path.join(TEST_DIR, "file2.json"), data2);
 
       const result = await readAllJsonFiles(TEST_DIR);
 
@@ -259,16 +259,16 @@ describe('Storage Base Utilities', () => {
       expect(result).toContainEqual(data2);
     });
 
-    it('should return empty array for empty directory', async () => {
+    it("should return empty array for empty directory", async () => {
       await ensureDirectory(TEST_DIR);
       const result = await readAllJsonFiles(TEST_DIR);
       expect(result).toEqual([]);
     });
 
-    it('should handle invalid JSON files gracefully', async () => {
+    it("should handle invalid JSON files gracefully", async () => {
       await ensureDirectory(TEST_DIR);
-      await writeJsonFile(path.join(TEST_DIR, 'valid.json'), { id: '1' });
-      await fs.writeFile(path.join(TEST_DIR, 'invalid.json'), 'invalid json', 'utf-8');
+      await writeJsonFile(path.join(TEST_DIR, "valid.json"), { id: "1" });
+      await fs.writeFile(path.join(TEST_DIR, "invalid.json"), "invalid json", "utf-8");
 
       // readAllJsonFiles uses readJsonFile which throws on invalid JSON
       // So invalid files will cause the function to throw
@@ -277,52 +277,51 @@ describe('Storage Base Utilities', () => {
     });
   });
 
-  describe('directoryExists', () => {
-    it('should return true for existing directory', async () => {
+  describe("directoryExists", () => {
+    it("should return true for existing directory", async () => {
       await ensureDirectory(TEST_DIR);
       const result = await directoryExists(TEST_DIR);
       expect(result).toBe(true);
     });
 
-    it('should return false for non-existent directory', async () => {
-      const result = await directoryExists(path.join(TEST_DIR, 'nonexistent'));
+    it("should return false for non-existent directory", async () => {
+      const result = await directoryExists(path.join(TEST_DIR, "nonexistent"));
       expect(result).toBe(false);
     });
 
-    it('should return false for file (not directory)', async () => {
+    it("should return false for file (not directory)", async () => {
       await ensureDirectory(TEST_DIR);
-      const filePath = path.join(TEST_DIR, 'file.txt');
-      await fs.writeFile(filePath, 'content', 'utf-8');
+      const filePath = path.join(TEST_DIR, "file.txt");
+      await fs.writeFile(filePath, "content", "utf-8");
 
       const result = await directoryExists(filePath);
       expect(result).toBe(false);
     });
   });
 
-  describe('listSubdirectories', () => {
-    it('should list subdirectories', async () => {
+  describe("listSubdirectories", () => {
+    it("should list subdirectories", async () => {
       await ensureDirectory(TEST_DIR);
-      await ensureDirectory(path.join(TEST_DIR, 'dir1'));
-      await ensureDirectory(path.join(TEST_DIR, 'dir2'));
-      await fs.writeFile(path.join(TEST_DIR, 'file.txt'), 'content', 'utf-8');
+      await ensureDirectory(path.join(TEST_DIR, "dir1"));
+      await ensureDirectory(path.join(TEST_DIR, "dir2"));
+      await fs.writeFile(path.join(TEST_DIR, "file.txt"), "content", "utf-8");
 
       const result = await listSubdirectories(TEST_DIR);
 
-      expect(result).toContain('dir1');
-      expect(result).toContain('dir2');
-      expect(result).not.toContain('file.txt');
+      expect(result).toContain("dir1");
+      expect(result).toContain("dir2");
+      expect(result).not.toContain("file.txt");
     });
 
-    it('should return empty array for empty directory', async () => {
+    it("should return empty array for empty directory", async () => {
       await ensureDirectory(TEST_DIR);
       const result = await listSubdirectories(TEST_DIR);
       expect(result).toEqual([]);
     });
 
-    it('should return empty array for non-existent directory', async () => {
-      const result = await listSubdirectories(path.join(TEST_DIR, 'nonexistent'));
+    it("should return empty array for non-existent directory", async () => {
+      const result = await listSubdirectories(path.join(TEST_DIR, "nonexistent"));
       expect(result).toEqual([]);
     });
   });
 });
-

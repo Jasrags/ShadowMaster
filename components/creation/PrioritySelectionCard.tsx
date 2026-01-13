@@ -19,14 +19,7 @@ import { useMemo, useCallback, useEffect, useState } from "react";
 import { usePriorityTable } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
-import {
-  GripVertical,
-  Check,
-  Circle,
-  AlertTriangle,
-  ChevronUp,
-  ChevronDown,
-} from "lucide-react";
+import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -36,13 +29,7 @@ const PRIORITY_LEVELS = ["A", "B", "C", "D", "E"] as const;
 type PriorityLevel = (typeof PRIORITY_LEVELS)[number];
 
 // Categories in their default order (A-E)
-const DEFAULT_PRIORITY_ORDER = [
-  "metatype",
-  "attributes",
-  "magic",
-  "skills",
-  "resources",
-] as const;
+const DEFAULT_PRIORITY_ORDER = ["metatype", "attributes", "magic", "skills", "resources"] as const;
 
 const CATEGORY_CONFIG: Record<
   string,
@@ -143,10 +130,22 @@ function CategoryRow({
   return (
     <div
       draggable
+      tabIndex={0}
+      role="listitem"
+      aria-label={`${config.label} at priority ${priorityLevel}. ${description}`}
       onDragStart={(e) => onDragStart(e, category)}
       onDragOver={onDragOver}
       onDrop={(e) => onDrop(e, category)}
-      className={`group relative rounded-lg border-2 bg-white p-3 transition-all hover:shadow-md dark:bg-zinc-900 ${borderColor[status]}`}
+      onKeyDown={(e) => {
+        if (e.key === "ArrowUp" && canMoveUp) {
+          e.preventDefault();
+          onMoveUp();
+        } else if (e.key === "ArrowDown" && canMoveDown) {
+          e.preventDefault();
+          onMoveDown();
+        }
+      }}
+      className={`group relative rounded-lg border-2 bg-white p-3 transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-zinc-900 ${borderColor[status]}`}
     >
       {/* Priority Letter Badge */}
       <div className="absolute -left-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-2 py-1 text-xs font-bold text-white dark:bg-zinc-200 dark:text-zinc-900">
@@ -155,7 +154,10 @@ function CategoryRow({
 
       <div className="flex items-center gap-3 pl-4">
         {/* Drag Handle */}
-        <div className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300">
+        <div
+          className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300"
+          aria-hidden="true"
+        >
           <GripVertical className="h-5 w-5" />
         </div>
 
@@ -166,9 +168,7 @@ function CategoryRow({
               {config.label}
             </span>
           </div>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">
-            {description}
-          </p>
+          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">{description}</p>
         </div>
 
         {/* Status */}
@@ -179,8 +179,8 @@ function CategoryRow({
               status === "complete"
                 ? "text-emerald-600 dark:text-emerald-400"
                 : status === "conflict"
-                ? "text-amber-600 dark:text-amber-400"
-                : "text-zinc-500 dark:text-zinc-400"
+                  ? "text-amber-600 dark:text-amber-400"
+                  : "text-zinc-500 dark:text-zinc-400"
             }`}
           >
             {statusText[status]}
@@ -188,24 +188,28 @@ function CategoryRow({
         </div>
 
         {/* Move Buttons (visible on hover/focus) */}
-        <div className="flex flex-col opacity-0 transition-opacity group-hover:opacity-100 focus-within:opacity-100">
+        <div className="flex flex-col opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 focus-within:opacity-100">
           <button
             type="button"
             onClick={onMoveUp}
             disabled={!canMoveUp}
-            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            tabIndex={-1}
+            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            aria-label={`Move ${config.label} priority up`}
             title="Move up"
           >
-            <ChevronUp className="h-4 w-4" />
+            <ChevronUp className="h-4 w-4" aria-hidden="true" />
           </button>
           <button
             type="button"
             onClick={onMoveDown}
             disabled={!canMoveDown}
-            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            tabIndex={-1}
+            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 disabled:cursor-not-allowed focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+            aria-label={`Move ${config.label} priority down`}
             title="Move down"
           >
-            <ChevronDown className="h-4 w-4" />
+            <ChevronDown className="h-4 w-4" aria-hidden="true" />
           </button>
         </div>
       </div>
@@ -217,10 +221,7 @@ function CategoryRow({
 // MAIN COMPONENT
 // =============================================================================
 
-export function PrioritySelectionCard({
-  state,
-  updateState,
-}: PrioritySelectionCardProps) {
+export function PrioritySelectionCard({ state, updateState }: PrioritySelectionCardProps) {
   const priorityTable = usePriorityTable();
   const [draggedCategory, setDraggedCategory] = useState<string | null>(null);
 
@@ -250,8 +251,10 @@ export function PrioritySelectionCard({
     return [...DEFAULT_PRIORITY_ORDER].sort((a, b) => {
       const levelA = priorities[a] || "E";
       const levelB = priorities[b] || "E";
-      return PRIORITY_LEVELS.indexOf(levelA as PriorityLevel) -
-        PRIORITY_LEVELS.indexOf(levelB as PriorityLevel);
+      return (
+        PRIORITY_LEVELS.indexOf(levelA as PriorityLevel) -
+        PRIORITY_LEVELS.indexOf(levelB as PriorityLevel)
+      );
     });
   }, [priorities]);
 
@@ -287,13 +290,10 @@ export function PrioritySelectionCard({
   );
 
   // Check for conflicts (e.g., metatype not available at priority)
-  const hasConflict = useCallback(
-    (_category: string): boolean => {
-      // TODO: Implement conflict detection for metatype/magic priority requirements
-      return false;
-    },
-    []
-  );
+  const hasConflict = useCallback((_category: string): boolean => {
+    // TODO: Implement conflict detection for metatype/magic priority requirements
+    return false;
+  }, []);
 
   // Get description for a category at its current priority
   const getDescription = useCallback(
@@ -311,9 +311,7 @@ export function PrioritySelectionCard({
           if (!metatypeData?.available) return "";
           const count = metatypeData.available.length;
           const metatypes =
-            count <= 3
-              ? metatypeData.available.join(", ")
-              : `${count} metatypes available`;
+            count <= 3 ? metatypeData.available.join(", ") : `${count} metatypes available`;
 
           // Get special attribute points for the selected metatype or show range
           const sapValues = Object.values(metatypeData.specialAttributePoints || {});
@@ -393,13 +391,10 @@ export function PrioritySelectionCard({
   );
 
   // Drag and drop handlers
-  const handleDragStart = useCallback(
-    (e: React.DragEvent, category: string) => {
-      setDraggedCategory(category);
-      e.dataTransfer.effectAllowed = "move";
-    },
-    []
-  );
+  const handleDragStart = useCallback((e: React.DragEvent, category: string) => {
+    setDraggedCategory(category);
+    e.dataTransfer.effectAllowed = "move";
+  }, []);
 
   const handleDragOver = useCallback((e: React.DragEvent) => {
     e.preventDefault();
@@ -450,14 +445,14 @@ export function PrioritySelectionCard({
       <div className="space-y-2">
         {/* Header */}
         <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-          <span>Drag to reorder priorities</span>
-          <span className="flex items-center gap-1">
+          <span>Drag or use arrow keys to reorder</span>
+          <span className="flex items-center gap-1" aria-hidden="true">
             <GripVertical className="h-3 w-3" />
           </span>
         </div>
 
         {/* Priority Rows */}
-        <div className="space-y-2">
+        <div className="space-y-2" role="list" aria-label="Priority categories">
           {orderedCategories.map((category, index) => (
             <CategoryRow
               key={category}

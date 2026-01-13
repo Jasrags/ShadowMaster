@@ -56,36 +56,24 @@ export async function DELETE(
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     // Get the character
     const character = await getCharacter(userId, characterId);
     if (!character) {
-      return NextResponse.json(
-        { success: false, error: "Character not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
     }
 
     // Check ownership
     if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, error: "Not authorized" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Not authorized" }, { status: 403 });
     }
 
     // Find the limb
     const limbResult = findLimb(character, limbId);
     if (!limbResult) {
-      return NextResponse.json(
-        { success: false, error: "Cyberlimb not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Cyberlimb not found" }, { status: 404 });
     }
     const { limb, index: limbIndex } = limbResult;
 

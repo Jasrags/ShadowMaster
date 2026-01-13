@@ -1,11 +1,11 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | **Active Skills** | **Knowledge Skills** | **Language Skills** | **Common Skill and Attribute Uses** |
 
-| COMMON LANGUAGES | UNCOMMON LANGUAGES |
-| --- | --- |
+| COMMON LANGUAGES                                                                   | UNCOMMON LANGUAGES                                                          |
+| ---------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
 | Spanish Lakota Dakota Diné (Navajo) Russian French Italian German Aztlaner Spanish | Sperethiel (elven language) Or’zet (ork language) English Japanese Mandarin |
 
 Species Specific

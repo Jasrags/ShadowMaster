@@ -17,19 +17,19 @@ import type { ID, ISODateString, Metadata } from "./core";
  * Status of a contact relationship
  */
 export type ContactStatus =
-  | "active"    // Normal, functional relationship
-  | "burned"    // Relationship destroyed, contact won't help
-  | "inactive"  // Dormant relationship (e.g., contact moved away)
-  | "missing"   // Contact cannot be located
+  | "active" // Normal, functional relationship
+  | "burned" // Relationship destroyed, contact won't help
+  | "inactive" // Dormant relationship (e.g., contact moved away)
+  | "missing" // Contact cannot be located
   | "deceased"; // Contact is dead
 
 /**
  * Contact ownership/scope group
  */
 export type ContactGroup =
-  | "personal"     // Owned by a specific character
-  | "shared"       // Shared between specific characters
-  | "campaign"     // Available to all campaign participants
+  | "personal" // Owned by a specific character
+  | "shared" // Shared between specific characters
+  | "campaign" // Available to all campaign participants
   | "organization"; // Belongs to an organization/faction
 
 /**
@@ -256,29 +256,29 @@ export interface ContactArchetype {
  * Types of favor transactions
  */
 export type FavorTransactionType =
-  | "favor_called"       // Character called in a favor from contact
-  | "favor_failed"       // Character attempted to call favor but failed
-  | "favor_granted"      // Contact performed a service for character
-  | "favor_owed"         // Contact did something that created debt for character
-  | "favor_repaid"       // Character repaid a favor to contact
-  | "loyalty_change"     // Loyalty rating increased or decreased
-  | "connection_change"  // Connection rating increased or decreased
-  | "contact_burned"     // Contact relationship was destroyed
-  | "contact_acquired"   // New contact was added
-  | "contact_reactivated"// Burned/inactive contact was restored
-  | "status_change"      // Contact status changed (missing, deceased, etc.)
-  | "gift"               // Gift given to contact (nuyen/items)
-  | "betrayal"           // Contact betrayed character or vice versa
+  | "favor_called" // Character called in a favor from contact
+  | "favor_failed" // Character attempted to call favor but failed
+  | "favor_granted" // Contact performed a service for character
+  | "favor_owed" // Contact did something that created debt for character
+  | "favor_repaid" // Character repaid a favor to contact
+  | "loyalty_change" // Loyalty rating increased or decreased
+  | "connection_change" // Connection rating increased or decreased
+  | "contact_burned" // Contact relationship was destroyed
+  | "contact_acquired" // New contact was added
+  | "contact_reactivated" // Burned/inactive contact was restored
+  | "status_change" // Contact status changed (missing, deceased, etc.)
+  | "gift" // Gift given to contact (nuyen/items)
+  | "betrayal" // Contact betrayed character or vice versa
   | "reputation_effect"; // Street cred/notoriety affected relationship
 
 /**
  * Risk level for a favor or service
  */
 export type FavorRiskLevel =
-  | "trivial"  // No real risk to contact
-  | "low"      // Minor inconvenience
-  | "medium"   // Noticeable risk or effort
-  | "high"     // Significant danger or resources
+  | "trivial" // No real risk to contact
+  | "low" // Minor inconvenience
+  | "medium" // Noticeable risk or effort
+  | "high" // Significant danger or resources
   | "extreme"; // Life-threatening or career-ending
 
 /**
@@ -498,15 +498,15 @@ export interface SocialCapital {
  * Types of social actions that can be resolved
  */
 export type SocialActionType =
-  | "networking"       // Finding new contacts
-  | "favor_call"       // Calling in a favor
-  | "bribe"            // Direct payment for service
-  | "legwork"          // Information gathering via contacts
-  | "introduction"     // Getting introduced to someone new
+  | "networking" // Finding new contacts
+  | "favor_call" // Calling in a favor
+  | "bribe" // Direct payment for service
+  | "legwork" // Information gathering via contacts
+  | "introduction" // Getting introduced to someone new
   | "reputation_boost" // Improving standing with contact
-  | "damage_control"   // Recovering from social misstep
+  | "damage_control" // Recovering from social misstep
   | "loyalty_increase" // Spending karma to improve loyalty
-  | "connection_boost";// Improving contact's connection (rare)
+  | "connection_boost"; // Improving contact's connection (rare)
 
 /**
  * A modifier to a social dice pool

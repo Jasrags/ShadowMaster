@@ -11,7 +11,8 @@
 import { useState, useMemo } from "react";
 import type { ArmorData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
-import { X, Search, Shield, AlertTriangle } from "lucide-react";
+import { BaseModalRoot } from "@/components/ui";
+import { Search, Shield, AlertTriangle, X } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -43,10 +44,7 @@ function formatCurrency(value: number): string {
   }).format(value);
 }
 
-function getAvailabilityDisplay(
-  availability: number,
-  legality?: ItemLegality
-): string {
+function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
   let display = String(availability);
   if (legality === "restricted") display += "R";
   if (legality === "forbidden") display += "F";
@@ -228,232 +226,239 @@ export function ArmorPurchaseModal({
     }
   };
 
-  if (!isOpen) return null;
-
   const canAffordSelected = selectedArmor ? selectedArmor.cost <= remaining : false;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
-      {/* Backdrop */}
-      <div
-        className="absolute inset-0 bg-black/50"
-        onClick={handleClose}
-      />
-
-      {/* Modal */}
-      <div className="relative w-full max-w-4xl max-h-[85vh] bg-white dark:bg-zinc-900 rounded-xl shadow-2xl flex flex-col mx-4">
-        {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
-          <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-            Select Armor
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Search & Filters */}
-        <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
-          {/* Search */}
-          <div className="relative">
-            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-            <input
-              type="text"
-              placeholder="Search armor..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-            />
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
+      {({ close }) => (
+        <div className="flex max-h-[85vh] flex-col">
+          {/* Header */}
+          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Select Armor</h2>
+            <button
+              onClick={close}
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+            >
+              <X className="h-5 w-5" />
+            </button>
           </div>
 
-          {/* Category Pills */}
-          <div className="flex flex-wrap gap-1.5">
-            {ARMOR_CATEGORIES.map((cat) => (
-              <button
-                key={cat.id}
-                onClick={() => setSelectedCategory(cat.id)}
-                className={`px-2.5 py-1 text-xs font-medium rounded-full transition-colors ${
-                  selectedCategory === cat.id
-                    ? "bg-amber-500 text-white"
-                    : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                }`}
-              >
-                {cat.label}
-                {categoryCounts[cat.id] > 0 && (
-                  <span className="ml-1 opacity-70">({categoryCounts[cat.id]})</span>
+          {/* Search & Filters */}
+          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
+            {/* Search */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+              <input
+                type="text"
+                placeholder="Search armor..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              />
+            </div>
+
+            {/* Category Pills */}
+            <div className="flex flex-wrap gap-1.5">
+              {ARMOR_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`px-2.5 py-1 text-xs font-medium rounded-full transition-colors ${
+                    selectedCategory === cat.id
+                      ? "bg-amber-500 text-white"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                  }`}
+                >
+                  {cat.label}
+                  {categoryCounts[cat.id] > 0 && (
+                    <span className="ml-1 opacity-70">({categoryCounts[cat.id]})</span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Content - Split Pane */}
+          <div className="flex-1 flex overflow-hidden">
+            {/* Left: Armor List */}
+            <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
+              <div className="space-y-2">
+                {filteredArmor.length === 0 ? (
+                  <p className="text-sm text-zinc-500 text-center py-8">No armor found</p>
+                ) : (
+                  filteredArmor.map((armor) => (
+                    <ArmorListItem
+                      key={armor.id}
+                      armor={armor}
+                      isSelected={selectedArmor?.id === armor.id}
+                      canAfford={armor.cost <= remaining}
+                      onClick={() => setSelectedArmor(armor)}
+                    />
+                  ))
                 )}
-              </button>
-            ))}
-          </div>
-        </div>
+              </div>
+            </div>
 
-        {/* Content - Split Pane */}
-        <div className="flex-1 flex overflow-hidden">
-          {/* Left: Armor List */}
-          <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
-            <div className="space-y-2">
-              {filteredArmor.length === 0 ? (
-                <p className="text-sm text-zinc-500 text-center py-8">
-                  No armor found
-                </p>
+            {/* Right: Detail Preview */}
+            <div className="w-1/2 overflow-y-auto p-4">
+              {selectedArmor ? (
+                <div className="space-y-4">
+                  {/* Armor Name */}
+                  <div>
+                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                      {selectedArmor.name}
+                    </h3>
+                    {selectedArmor.armorModifier && (
+                      <p className="text-sm text-blue-600 dark:text-blue-400">
+                        Accessory - Adds to worn armor (max +STR)
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Description */}
+                  {selectedArmor.description && (
+                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                      {selectedArmor.description}
+                    </p>
+                  )}
+
+                  {/* Stats Grid */}
+                  <div className="space-y-3">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                      Statistics
+                    </h4>
+                    <div className="grid grid-cols-2 gap-2 text-sm">
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Armor Rating</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedArmor.armorModifier
+                            ? `+${selectedArmor.armorRating}`
+                            : selectedArmor.armorRating}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Capacity</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {selectedArmor.capacity ?? selectedArmor.armorRating}
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                        <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
+                        <span
+                          className={`font-medium ${
+                            selectedArmor.legality === "forbidden"
+                              ? "text-red-600 dark:text-red-400"
+                              : selectedArmor.legality === "restricted"
+                                ? "text-amber-600 dark:text-amber-400"
+                                : "text-zinc-900 dark:text-zinc-100"
+                          }`}
+                        >
+                          {getAvailabilityDisplay(
+                            selectedArmor.availability,
+                            selectedArmor.legality
+                          )}
+                        </span>
+                      </div>
+                      {selectedArmor.weight && (
+                        <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
+                          <span className="text-zinc-500 dark:text-zinc-400">Weight</span>
+                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                            {selectedArmor.weight} kg
+                          </span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Capacity Info */}
+                  <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 p-3">
+                    <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                      <Shield className="h-4 w-4" />
+                      Modification Capacity
+                    </div>
+                    <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
+                      This armor has {selectedArmor.capacity ?? selectedArmor.armorRating} capacity
+                      slots for modifications like Fire Resistance, Chemical Protection, and more.
+                    </p>
+                  </div>
+
+                  {/* Legality Warning */}
+                  {(selectedArmor.legality === "restricted" ||
+                    selectedArmor.legality === "forbidden") && (
+                    <div
+                      className={`rounded-lg p-3 ${
+                        selectedArmor.legality === "forbidden"
+                          ? "bg-red-50 dark:bg-red-900/20"
+                          : "bg-amber-50 dark:bg-amber-900/20"
+                      }`}
+                    >
+                      <div
+                        className={`flex items-center gap-2 text-sm font-medium ${
+                          selectedArmor.legality === "forbidden"
+                            ? "text-red-700 dark:text-red-300"
+                            : "text-amber-700 dark:text-amber-300"
+                        }`}
+                      >
+                        <AlertTriangle className="h-4 w-4" />
+                        {selectedArmor.legality === "forbidden" ? "Forbidden" : "Restricted"}
+                      </div>
+                      <p
+                        className={`mt-1 text-xs ${
+                          selectedArmor.legality === "forbidden"
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-amber-600 dark:text-amber-400"
+                        }`}
+                      >
+                        {selectedArmor.legality === "forbidden"
+                          ? "Illegal to own. Possession triggers serious legal consequences."
+                          : "Requires a license. May draw law enforcement attention."}
+                      </p>
+                    </div>
+                  )}
+
+                  {/* Purchase Button */}
+                  <div className="pt-2">
+                    <button
+                      onClick={handlePurchase}
+                      disabled={!canAffordSelected}
+                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
+                        canAffordSelected
+                          ? "bg-amber-500 text-white hover:bg-amber-600"
+                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
+                      }`}
+                    >
+                      {canAffordSelected
+                        ? `Purchase - ${formatCurrency(selectedArmor.cost)}¥`
+                        : `Cannot Afford (${formatCurrency(selectedArmor.cost)}¥)`}
+                    </button>
+                  </div>
+                </div>
               ) : (
-                filteredArmor.map((armor) => (
-                  <ArmorListItem
-                    key={armor.id}
-                    armor={armor}
-                    isSelected={selectedArmor?.id === armor.id}
-                    canAfford={armor.cost <= remaining}
-                    onClick={() => setSelectedArmor(armor)}
-                  />
-                ))
+                <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
+                  <p className="text-sm">Select armor to see details</p>
+                </div>
               )}
             </div>
           </div>
 
-          {/* Right: Detail Preview */}
-          <div className="w-1/2 overflow-y-auto p-4">
-            {selectedArmor ? (
-              <div className="space-y-4">
-                {/* Armor Name */}
-                <div>
-                  <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    {selectedArmor.name}
-                  </h3>
-                  {selectedArmor.armorModifier && (
-                    <p className="text-sm text-blue-600 dark:text-blue-400">
-                      Accessory - Adds to worn armor (max +STR)
-                    </p>
-                  )}
-                </div>
-
-                {/* Description */}
-                {selectedArmor.description && (
-                  <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                    {selectedArmor.description}
-                  </p>
-                )}
-
-                {/* Stats Grid */}
-                <div className="space-y-3">
-                  <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                    Statistics
-                  </h4>
-                  <div className="grid grid-cols-2 gap-2 text-sm">
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Armor Rating</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedArmor.armorModifier ? `+${selectedArmor.armorRating}` : selectedArmor.armorRating}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Capacity</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {selectedArmor.capacity ?? selectedArmor.armorRating}
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                      <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
-                      <span className={`font-medium ${
-                        selectedArmor.legality === "forbidden"
-                          ? "text-red-600 dark:text-red-400"
-                          : selectedArmor.legality === "restricted"
-                            ? "text-amber-600 dark:text-amber-400"
-                            : "text-zinc-900 dark:text-zinc-100"
-                      }`}>
-                        {getAvailabilityDisplay(selectedArmor.availability, selectedArmor.legality)}
-                      </span>
-                    </div>
-                    {selectedArmor.weight && (
-                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2">
-                        <span className="text-zinc-500 dark:text-zinc-400">Weight</span>
-                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                          {selectedArmor.weight} kg
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Capacity Info */}
-                <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 p-3">
-                  <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-300">
-                    <Shield className="h-4 w-4" />
-                    Modification Capacity
-                  </div>
-                  <p className="mt-1 text-xs text-emerald-600 dark:text-emerald-400">
-                    This armor has {selectedArmor.capacity ?? selectedArmor.armorRating} capacity slots
-                    for modifications like Fire Resistance, Chemical Protection, and more.
-                  </p>
-                </div>
-
-                {/* Legality Warning */}
-                {(selectedArmor.legality === "restricted" || selectedArmor.legality === "forbidden") && (
-                  <div className={`rounded-lg p-3 ${
-                    selectedArmor.legality === "forbidden"
-                      ? "bg-red-50 dark:bg-red-900/20"
-                      : "bg-amber-50 dark:bg-amber-900/20"
-                  }`}>
-                    <div className={`flex items-center gap-2 text-sm font-medium ${
-                      selectedArmor.legality === "forbidden"
-                        ? "text-red-700 dark:text-red-300"
-                        : "text-amber-700 dark:text-amber-300"
-                    }`}>
-                      <AlertTriangle className="h-4 w-4" />
-                      {selectedArmor.legality === "forbidden" ? "Forbidden" : "Restricted"}
-                    </div>
-                    <p className={`mt-1 text-xs ${
-                      selectedArmor.legality === "forbidden"
-                        ? "text-red-600 dark:text-red-400"
-                        : "text-amber-600 dark:text-amber-400"
-                    }`}>
-                      {selectedArmor.legality === "forbidden"
-                        ? "Illegal to own. Possession triggers serious legal consequences."
-                        : "Requires a license. May draw law enforcement attention."}
-                    </p>
-                  </div>
-                )}
-
-                {/* Purchase Button */}
-                <div className="pt-2">
-                  <button
-                    onClick={handlePurchase}
-                    disabled={!canAffordSelected}
-                    className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                      canAffordSelected
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
-                        : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                    }`}
-                  >
-                    {canAffordSelected
-                      ? `Purchase - ${formatCurrency(selectedArmor.cost)}¥`
-                      : `Cannot Afford (${formatCurrency(selectedArmor.cost)}¥)`}
-                  </button>
-                </div>
-              </div>
-            ) : (
-              <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
-                <p className="text-sm">Select armor to see details</p>
-              </div>
-            )}
+          {/* Footer */}
+          <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+            <div className="text-sm text-zinc-500 dark:text-zinc-400">
+              Budget:{" "}
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>{" "}
+              remaining
+            </div>
+            <button
+              onClick={close}
+              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+            >
+              Cancel
+            </button>
           </div>
         </div>
-
-        {/* Footer */}
-        <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
-          <div className="text-sm text-zinc-500 dark:text-zinc-400">
-            Budget: <span className="font-medium text-zinc-900 dark:text-zinc-100">{formatCurrency(remaining)}¥</span> remaining
-          </div>
-          <button
-            onClick={handleClose}
-            className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-          >
-            Cancel
-          </button>
-        </div>
-      </div>
-    </div>
+      )}
+    </BaseModalRoot>
   );
 }

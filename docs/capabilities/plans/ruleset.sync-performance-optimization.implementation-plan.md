@@ -21,9 +21,11 @@ This plan addresses the ~30 second drift check times in the System Synchronizati
 **Solution:** Add early exit check in `analyzeCharacterDrift()`.
 
 **Files to modify:**
+
 - `lib/rules/sync/drift-analyzer.ts`
 
 **Implementation:**
+
 ```typescript
 // In analyzeCharacterDrift(), after getting currentVersionRef:
 if (character.rulesetSnapshotId === currentVersionRef.snapshotId) {
@@ -52,9 +54,11 @@ if (character.rulesetSnapshotId === currentVersionRef.snapshotId) {
 **Solution:** Maintain a `_current-snapshots.json` index file.
 
 **Files to modify:**
+
 - `lib/storage/ruleset-snapshots.ts`
 
 **Implementation:**
+
 ```typescript
 // New file structure: data/ruleset-snapshots/_current-snapshots.json
 {
@@ -99,15 +103,18 @@ export async function getCurrentSnapshot(editionCode: EditionCode): Promise<Rule
 **Solution:** Create a cache class that lives for the duration of one request.
 
 **Files to create:**
+
 - `lib/storage/snapshot-cache.ts`
 
 **Files to modify:**
+
 - `lib/rules/sync/drift-analyzer.ts`
 - `lib/rules/sync/legality-validator.ts`
 - `app/api/characters/[characterId]/sync/route.ts`
 - `app/api/characters/[characterId]/sync/shield/route.ts`
 
 **Implementation:**
+
 ```typescript
 // lib/storage/snapshot-cache.ts
 export class SnapshotCache {
@@ -150,9 +157,11 @@ const report = await analyzeCharacterDrift(character, cache);
 **Solution:** Create a single function that returns both.
 
 **Files to modify:**
+
 - `lib/storage/ruleset-snapshots.ts`
 
 **Implementation:**
+
 ```typescript
 export interface SnapshotWithRef {
   ruleset: MergedRuleset;
@@ -191,9 +200,11 @@ export async function getSnapshotWithRef(snapshotId: ID): Promise<SnapshotWithRe
 **Solution:** Only run drift analysis when `syncStatus` is unknown or outdated.
 
 **Files to modify:**
+
 - `lib/rules/sync/legality-validator.ts`
 
 **Implementation:**
+
 ```typescript
 export async function getLegalityShield(
   character: Character,
@@ -238,19 +249,22 @@ export async function getLegalityShield(
 **Solution:** Use SHA256 hashes to quickly detect unchanged modules.
 
 **Files to create:**
+
 - `lib/rules/sync/structural-hash.ts`
 
 **Files to modify:**
+
 - `lib/storage/ruleset-snapshots.ts`
 
 **Implementation:**
+
 ```typescript
 // lib/rules/sync/structural-hash.ts
-import crypto from 'crypto';
+import crypto from "crypto";
 
 export function getStructuralHash(obj: unknown): string {
   const json = JSON.stringify(obj, Object.keys(obj as object).sort());
-  return crypto.createHash('sha256').update(json).digest('hex');
+  return crypto.createHash("sha256").update(json).digest("hex");
 }
 
 // In compareSnapshots():
@@ -282,9 +296,11 @@ function compareModuleWithHash(
 **Solution:** Memoize results within request scope.
 
 **Files to modify:**
+
 - `lib/storage/snapshot-cache.ts` (extend with drift cache)
 
 **Implementation:**
+
 ```typescript
 export class SnapshotCache {
   // ... existing caches ...
@@ -318,9 +334,11 @@ export class SnapshotCache {
 **Solution:** Implement a global cache with 5-minute TTL.
 
 **Files to create:**
+
 - `lib/storage/global-snapshot-cache.ts`
 
 **Implementation:**
+
 ```typescript
 interface CacheEntry<T> {
   data: T;
@@ -381,9 +399,11 @@ class GlobalSnapshotCache {
 **Solution:** Run analyses in parallel using `Promise.all()`.
 
 **Files to modify:**
+
 - `lib/rules/sync/drift-analyzer.ts`
 
 **Implementation:**
+
 ```typescript
 export async function analyzeCharacterDrift(
   character: Character,
@@ -414,6 +434,7 @@ export async function analyzeCharacterDrift(
 **Solution:** Organize snapshots by edition in the file structure.
 
 **Current structure:**
+
 ```
 data/ruleset-snapshots/
   uuid-1.json
@@ -422,6 +443,7 @@ data/ruleset-snapshots/
 ```
 
 **Proposed structure:**
+
 ```
 data/ruleset-snapshots/
   _current-snapshots.json
@@ -474,17 +496,17 @@ describe("Sync Performance", () => {
 
 ## Summary
 
-| Phase | Optimization | Expected Savings | Effort |
-|-------|-------------|------------------|--------|
-| 1.1 | Early exit for matching IDs | 15-25s | 1 hour |
-| 1.2 | Current snapshot index | 2-3s | 2-3 hours |
-| 1.3 | Request-scoped cache | 5-10s | 4-6 hours |
-| 1.4 | Combined snapshot read | 1-2s | 1-2 hours |
-| 2.1 | Lazy drift analysis | 5-10s | 2-3 hours |
-| 2.2 | Structural hash comparison | 3-5s | 4-6 hours |
-| 2.3 | Drift memoization | 2-3s | 2-3 hours |
-| 3.1 | Global cache with TTL | 10-15s (repeat) | 1 day |
-| 3.2 | Parallel analysis | 1-2s | 2-3 hours |
-| 3.3 | Edition-based file structure | O(1) lookup | 1 day |
+| Phase | Optimization                 | Expected Savings | Effort    |
+| ----- | ---------------------------- | ---------------- | --------- |
+| 1.1   | Early exit for matching IDs  | 15-25s           | 1 hour    |
+| 1.2   | Current snapshot index       | 2-3s             | 2-3 hours |
+| 1.3   | Request-scoped cache         | 5-10s            | 4-6 hours |
+| 1.4   | Combined snapshot read       | 1-2s             | 1-2 hours |
+| 2.1   | Lazy drift analysis          | 5-10s            | 2-3 hours |
+| 2.2   | Structural hash comparison   | 3-5s             | 4-6 hours |
+| 2.3   | Drift memoization            | 2-3s             | 2-3 hours |
+| 3.1   | Global cache with TTL        | 10-15s (repeat)  | 1 day     |
+| 3.2   | Parallel analysis            | 1-2s             | 2-3 hours |
+| 3.3   | Edition-based file structure | O(1) lookup      | 1 day     |
 
 **Total Expected Improvement:** ~30s → ~3-5s (Phase 1-2), with sub-second responses on cache hits (Phase 3).

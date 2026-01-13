@@ -1,5 +1,5 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
@@ -8,28 +8,28 @@ Hold-out pistols are very concealable and are perfect for sneaking into a meet o
 
 **Range Table**
 
-| DP Modifier | Short +0 | Medium -1 | Long -3 | Extreme -6 |
-| --- | --- | --- | --- | --- |
-| Pistols | Range in Meters |
-| Hold-Out Pistols | 0–5 | 6–15 | 16–30 | 31–50 |
+| DP Modifier      | Short +0        | Medium -1 | Long -3 | Extreme -6 |
+| ---------------- | --------------- | --------- | ------- | ---------- |
+| Pistols          | Range in Meters |
+| Hold-Out Pistols | 0–5             | 6–15      | 16–30   | 31–50      |
 
-| Weapon | Acc | DV | AP | Modes | RC | Ammo | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Colt New Model Revolver | 6 | 5P | – | SA | – | 5 ( cy ) | 4R | 180¥ | SR5:GH3 |
-| Fichetti Tiffani Needler | 5 | 8P( f ) | +5 | SA | – | 4 ( c ) | 6R | 1,000¥ | Core |
-| Fichetti Tiffani Self-Defender 2075 | 4 | 6P | – | SS | – | 4 ( c ) | 3R | 350¥ | SR5:R&G |
-| Streetline Special | 4 | 6P | – | SA | – | 6 ( c ) | 4R | 120¥ | Core |
-| Walther Palm Pistol | 4 | 7P | – | SS/BF | – | 2 ( b ) | 4R | 180¥ | Core |
+| Weapon                              | Acc | DV      | AP  | Modes | RC  | Ammo     | Avail | Cost   | Source  |
+| ----------------------------------- | --- | ------- | --- | ----- | --- | -------- | ----- | ------ | ------- |
+| Colt New Model Revolver             | 6   | 5P      | –   | SA    | –   | 5 ( cy ) | 4R    | 180¥   | SR5:GH3 |
+| Fichetti Tiffani Needler            | 5   | 8P( f ) | +5  | SA    | –   | 4 ( c )  | 6R    | 1,000¥ | Core    |
+| Fichetti Tiffani Self-Defender 2075 | 4   | 6P      | –   | SS    | –   | 4 ( c )  | 3R    | 350¥   | SR5:R&G |
+| Streetline Special                  | 4   | 6P      | –   | SA    | –   | 6 ( c )  | 4R    | 120¥   | Core    |
+| Walther Palm Pistol                 | 4   | 7P      | –   | SS/BF | –   | 2 ( b )  | 4R    | 180¥   | Core    |
 
 ## Colt New Model Revolver
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 6 | 5P | – | SA | – | 5(cy) | 4R | 180¥ | SR5:GH3 |
 
 Standard Upgrades/Accessories
-:   None
+: None
 
 The New Model Revolver is Colt’s return to the small-revolver market, launched with a marketing campaign aimed at young homeowners and small security firms. The New Model is manufactured in a variety of small caliber and is largely of conventional design. The cylinder uses a simple left-side drop to allow rapid reloading with the appropriate manufacturer-approved speed loader. This model is only produced at Colt’s Connecticut facility and has largely remained rare outside of northeastern UCAS. Inside the UCAS, citizens can be proud to purchase from one of their homegrown success stories. Trust the quality of a proven manufacturer. Trust the Legend™.
 
@@ -50,19 +50,19 @@ The New Model Revolver is Colt’s return to the small-revolver market, launched
 
 ## Fichetti Tiffani Needler
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 5 | 8P(f) | +5 | SA | – | 4(c) | 5R | 1,000¥ | Core |
 
 Wireless
-:   You can change the color of the Tiffani Needler with a Simple Action.
+: You can change the color of the Tiffani Needler with a Simple Action.
 
 Designed to appeal to social climbers and debutantes, the Tiffani Needler is available in a wide variety of colors and styles. It also has a special color-changing coating that can be manipulated via wireless signal. This is useful to make sure your gun matches with your shoes or your handbag. The Needler can only fire flechette rounds (already factored into its damage code).
 
 ## Fichetti-Tiffani Self-Defender 2075
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 6P | – | SS | – | 4(c) | 3R | 350¥ | SR5:R&G |
@@ -74,19 +74,19 @@ A purse pistol that has been updated to include the latest in fashion programmin
 
 ## Streetline Special
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 6P | — | SA | – | 6(c) | 4R | 120¥ | Core |
 
 MAD Scanner
-:   -2 DP to detect Streetline Special
+: -2 DP to detect Streetline Special
 
 Popular among society’s dregs, the Streetline Special is a small, lightweight weapon made of composite materials.
 
 ## Walther Palm Pistol
 
-|  |
+| |
 | Acc | DV | AP | Mode | RC | Ammo | Avail | Cost | Source |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | 4 | 7P | — | SS/BF | – | 2(b) | 4R | 180¥ | Core |
@@ -95,10 +95,10 @@ This is a classic double-barreled derringer in an over-under barrel combination.
 
 ---
 
-| Weapons |
-| --- |
-| Melee | Blades // Clubs // Exotic // Implant // Improvised // Misc. |
-| Ranged | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing |
-| Firearms | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // *Misc.* ( Exotic / Implant ) |
-| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile ) |
-| *Misc.* | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles ) |
+| Weapons                   |
+| ------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Melee                     | Blades // Clubs // Exotic // Implant // Improvised // Misc.                                                                                                                      |
+| Ranged                    | Ballistic Projectiles // Flamethrowers // Exotic // Lasers // Throwing                                                                                                           |
+| Firearms                  | Taser // Pistols ( Hold-Out / Light / Heavy / Machine ) // Submachine Guns // Rifles ( Assault / Sniper / Sporting ) // Shotguns // Machine Guns // _Misc._ ( Exotic / Implant ) |
+| Large-Caliber Projectiles | Assault Cannons // Launchers ( Grenade // Missile )                                                                                                                              |
+| _Misc._                   | Firearm Accessories // Weapon Consumables ( Ammunition / Ballistic Projectile / Grenades / Rockets & Missiles )                                                                  |

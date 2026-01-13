@@ -23,18 +23,12 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
     // Check authentication
     const userId = await getSession();
     if (!userId) {
-      return NextResponse.json(
-        { success: false, error: "Unauthorized" },
-        { status: 401 }
-      );
+      return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
     const user = await getUserById(userId);
     if (!user) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     const { sessionId, participantId } = await params;
@@ -49,19 +43,13 @@ export async function DELETE(request: NextRequest, { params }: RouteParams) {
 
     // Check ownership
     if (session.ownerId !== user.id) {
-      return NextResponse.json(
-        { success: false, error: "Access denied" },
-        { status: 403 }
-      );
+      return NextResponse.json({ success: false, error: "Access denied" }, { status: 403 });
     }
 
     // Find the participant
     const participant = session.participants.find((p) => p.id === participantId);
     if (!participant) {
-      return NextResponse.json(
-        { success: false, error: "Participant not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Participant not found" }, { status: 404 });
     }
 
     // Remove participant

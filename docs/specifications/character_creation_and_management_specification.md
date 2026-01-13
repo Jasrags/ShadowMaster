@@ -15,6 +15,7 @@
 Character creation and management is the core functionality of Shadow Master, enabling users to create, view, edit, and manage Shadowrun characters. The system uses a wizard-based, step-by-step character creation process that is dynamically driven by the selected edition's ruleset and creation method. Characters progress through multiple statuses (draft, active, retired, deceased) throughout their lifecycle.
 
 **Key Features:**
+
 - Edition-aware character creation (SR5, SR6, etc.)
 - Creation method support (Priority, Point Buy, Karma, etc.)
 - Step-by-step wizard with live validation
@@ -28,30 +29,33 @@ Character creation and management is the core functionality of Shadow Master, en
 
 ---
 
-
 ## Page Structure
 
 ### Routes
 
 #### Character List Page
+
 - **Path:** `/app/characters/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout` (inherits sidebar navigation)
 - **Authentication:** Required (protected route)
 - **Description:** Lists all user's characters with filtering, search, and sorting
 
 #### Character Creation Page
+
 - **Path:** `/app/characters/create/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Character creation wizard entry point with edition selection
 
 #### Character Detail/Sheet Page
+
 - **Path:** `/app/characters/[id]/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
 - **Description:** Detailed character sheet view
 
 #### Character Edit Page (Draft Only)
+
 - **Path:** `/app/characters/[id]/edit/page.tsx`
 - **Layout:** Uses `AuthenticatedLayout`
 - **Authentication:** Required (protected route)
@@ -123,6 +127,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 **Location:** `/app/characters/page.tsx`
 
 **Responsibilities:**
+
 - Fetch and display user's characters
 - Provide filtering by status
 - Provide search functionality
@@ -133,6 +138,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 - Navigate to character creation
 
 **State:**
+
 - `characters: Character[]` - All user's characters
 - `loading: boolean` - Loading state
 - `error: string | null` - Error state
@@ -142,6 +148,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 - `viewMode: "grid" | "list"` - Current view mode
 
 **Filters:**
+
 - **All** - Show all characters
 - **Active** - Show active characters (status: "active")
 - **Drafts** - Show draft characters (status: "draft")
@@ -149,6 +156,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 - **Deceased** - Show deceased characters (status: "deceased")
 
 **Sort Options:**
+
 - **Recently Updated** - Sort by `updatedAt` (default)
 - **Recently Created** - Sort by `createdAt`
 - **Name (A-Z)** - Alphabetical by name
@@ -163,6 +171,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 **Description:** Individual character display card in list/grid view.
 
 **Features:**
+
 - Character name and metatype
 - Status badge
 - Edition code badge
@@ -173,6 +182,7 @@ The creation steps are dynamically loaded from the ruleset's creation method def
 - Click to navigate to character sheet or edit page (if draft)
 
 **Props:**
+
 ```typescript
 interface CharacterCardProps {
   character: Character;
@@ -190,12 +200,14 @@ interface CharacterCardProps {
 **Description:** Initial step for selecting Shadowrun edition.
 
 **Features:**
+
 - Display available editions as cards
 - Show edition metadata (name, year, description)
 - Handle edition selection
 - Trigger ruleset loading on selection
 
 **Props:**
+
 ```typescript
 interface EditionSelectorProps {
   onSelect: (editionCode: EditionCode) => Promise<void>;
@@ -211,6 +223,7 @@ interface EditionSelectorProps {
 **Description:** Main orchestrator for character creation wizard.
 
 **Responsibilities:**
+
 - Manage creation state (step progression, selections, budgets)
 - Coordinate step rendering
 - Handle navigation (next, previous, jump to step)
@@ -220,6 +233,7 @@ interface EditionSelectorProps {
 - Handle cancellation
 
 **State:**
+
 - `state: CreationState` - Complete creation state
 - `characterId: ID | undefined` - Character ID (for draft recovery)
 - `isSaving: boolean` - Save operation state
@@ -227,6 +241,7 @@ interface EditionSelectorProps {
 - `isSidebarCollapsed: boolean` - UI state
 
 **Props:**
+
 ```typescript
 interface CreationWizardProps {
   characterId?: ID; // For resuming draft
@@ -245,6 +260,7 @@ interface CreationWizardProps {
 **Description:** Sidebar navigation showing all steps and progress.
 
 **Features:**
+
 - List all creation steps
 - Show step completion status
 - Highlight current step
@@ -253,6 +269,7 @@ interface CreationWizardProps {
 - Collapsible sidebar
 
 **Props:**
+
 ```typescript
 interface StepperSidebarProps {
   steps: CreationStep[];
@@ -273,6 +290,7 @@ interface StepperSidebarProps {
 **Description:** Panel displaying validation errors and warnings.
 
 **Features:**
+
 - Display validation errors (blocking)
 - Display validation warnings (non-blocking)
 - Show budget summaries
@@ -280,6 +298,7 @@ interface StepperSidebarProps {
 - Color-coded (errors: red, warnings: amber)
 
 **Props:**
+
 ```typescript
 interface ValidationPanelProps {
   errors: ValidationError[];
@@ -315,6 +334,7 @@ Each step is a self-contained component that handles its specific part of charac
 - **ReviewStep** - Final review and character name
 
 **Common Step Props:**
+
 ```typescript
 interface StepProps {
   state: CreationState;
@@ -332,6 +352,7 @@ interface StepProps {
 **Description:** Comprehensive character sheet view.
 
 **Sections:**
+
 - **Character Header** - Name, metatype, magical path, status, quick stats
 - **Attributes** - Core attributes display
 - **Derived Stats** - Physical/Mental/Social limits, initiative
@@ -344,6 +365,7 @@ interface StepProps {
 - **Lifestyles** - Lifestyle details and costs
 
 **Features:**
+
 - Dice roller integration
 - Edit button (for draft characters only)
 - Navigation back to character list
@@ -359,6 +381,7 @@ interface StepProps {
 **Description:** Resume character creation for draft characters.
 
 **Features:**
+
 - Load draft character state
 - Reinitialize CreationWizard with saved state
 - Allow continuing from where user left off
@@ -383,11 +406,11 @@ interface Character {
   rulesetSnapshotId?: ID;
   attachedBookIds: ID[];
   campaignId?: ID; // Optional campaign association
-  
+
   name: string;
   metatype: string;
   status: CharacterStatus; // "draft" | "active" | "retired" | "deceased"
-  
+
   attributes: Record<string, number>;
   specialAttributes: {
     edge: number;
@@ -395,39 +418,39 @@ interface Character {
     magic?: number;
     resonance?: number;
   };
-  
+
   skills: Record<string, number>;
   knowledgeSkills?: KnowledgeSkill[];
   languages?: LanguageSkill[];
-  
+
   positiveQualities: string[];
   negativeQualities: string[];
-  
+
   magicalPath: MagicalPath;
   tradition?: string;
   spells?: string[];
   adeptPowers?: AdeptPower[];
-  
+
   gear: GearItem[];
   vehicles?: Vehicle[];
   contacts: Contact[];
   identities?: Identity[];
   lifestyles?: Lifestyle[];
-  
+
   nuyen: number;
   startingNuyen: number;
-  
+
   karmaTotal: number;
   karmaCurrent: number;
   karmaSpentAtCreation: number;
-  
+
   derivedStats: Record<string, number>;
   condition: {
     physicalDamage: number;
     stunDamage: number;
     overflowDamage?: number;
   };
-  
+
   createdAt: ISODateString;
   updatedAt?: ISODateString;
 }
@@ -454,9 +477,9 @@ interface CreationState {
 
 ```typescript
 type CharacterStatus =
-  | "draft"    // Still being created
-  | "active"   // Playable character
-  | "retired"  // No longer in active play
+  | "draft" // Still being created
+  | "active" // Playable character
+  | "retired" // No longer in active play
   | "deceased"; // Character died in game
 ```
 
@@ -471,10 +494,12 @@ type CharacterStatus =
 **Purpose:** List all characters for the authenticated user
 
 **Query Parameters:**
+
 - `status?: CharacterStatus` - Filter by status
 - `campaignId?: ID` - Filter by campaign (future)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -492,6 +517,7 @@ type CharacterStatus =
 **Purpose:** Get detailed character information
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -509,6 +535,7 @@ type CharacterStatus =
 **Purpose:** Create a new character draft
 
 **Request:**
+
 ```typescript
 {
   editionId: ID;
@@ -519,6 +546,7 @@ type CharacterStatus =
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -536,6 +564,7 @@ type CharacterStatus =
 **Purpose:** Update a character (draft or active)
 
 **Request:**
+
 ```typescript
 {
   character: Partial<Character>;
@@ -543,6 +572,7 @@ type CharacterStatus =
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -563,6 +593,7 @@ type CharacterStatus =
 **Request:** None (character ID from route)
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -580,6 +611,7 @@ type CharacterStatus =
 **Purpose:** Finalize a draft character (change status to "active")
 
 **Request:**
+
 ```typescript
 {
   character: Character; // Complete character data
@@ -588,6 +620,7 @@ type CharacterStatus =
 ```
 
 **Response:**
+
 ```typescript
 {
   success: boolean;
@@ -605,6 +638,7 @@ type CharacterStatus =
 ### Storage Layer
 
 **File Structure:**
+
 ```
 data/characters/
 ├── {userId}/
@@ -640,12 +674,14 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 ### Auto-Save Behavior
 
 **Current Implementation:**
+
 - Creation state is auto-saved to localStorage during wizard progression
 - Character draft is created via API on first save
 - Subsequent changes update the draft via API
 - Auto-save is debounced (e.g., 2 seconds after last change)
 
 **Auto-Save Triggers:**
+
 - Any state update in CreationWizard
 - Step navigation
 - Form field changes
@@ -653,11 +689,13 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 - Selections made
 
 **Draft Recovery:**
+
 - When user returns to character creation, system checks for existing draft
 - Draft can be loaded from API or localStorage
 - User can resume from where they left off
 
 **Limitations:**
+
 - Drafts are stored per user (no cross-device sync without server-side storage)
 - Drafts expire after extended inactivity (future enhancement)
 
@@ -672,12 +710,14 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 **Purpose:** Immediate feedback, better UX
 
 **Validation Points:**
+
 - Budget constraints (points remaining)
 - Required field completion
 - Step completion requirements
 - Value ranges (e.g., attributes 1-6)
 
 **Display:**
+
 - Inline error messages
 - Budget indicators
 - Step completion status
@@ -688,6 +728,7 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 **Purpose:** Security, data integrity, rules enforcement
 
 **Validation Checks:**
+
 - Budget constraints (all budgets spent correctly)
 - Required fields present
 - Value ranges valid
@@ -696,6 +737,7 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 - Book availability rules (if campaign-linked)
 
 **Response:**
+
 - Return validation errors if invalid
 - Reject save/finalize if critical errors
 - Allow warnings but proceed if non-critical
@@ -705,6 +747,7 @@ export function retireCharacter(userId: ID, characterId: ID): Promise<Character>
 **Purpose:** Ensure character is playable and rule-compliant
 
 **Checks:**
+
 - All required steps completed
 - All budgets fully allocated
 - Character name provided
@@ -853,7 +896,6 @@ app/api/characters/
 
 ---
 
-
 ## Related Documentation
 
 - **Character Creation Framework:** `/docs/architecture/character_creation_framework.md`
@@ -903,6 +945,7 @@ app/api/characters/
 **Current Status:** ✅ Basic implementation complete, ongoing enhancements
 
 **Recent Enhancements:**
+
 - Auto-save to server (not just localStorage)
 - Draft recovery and resume
 - Comprehensive character sheet
@@ -951,4 +994,3 @@ app/api/characters/
 - The system is designed to support multiple editions and creation methods through the ruleset system
 - Character status management enables character lifecycle tracking (creation → play → retirement/death)
 - Integration with campaigns (future) will add campaign-specific constraints and validation
-

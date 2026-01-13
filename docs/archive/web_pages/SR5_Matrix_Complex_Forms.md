@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC  |
+| ------ | ----------------- | ------- | ------ | ---------- | -------- | ------ | ------------- | ------ | ------- | ------------- | --- |
 
 ## Contents
 
@@ -48,216 +48,216 @@
 ## Cleaner
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   S
+: S
 
 Fading
-:   L-2
+: L-2
 
 ## Coriolis
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   E (5, 24 hours)
+: E (5, 24 hours)
 
 ## Derezz
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   I
+: I
 
 Fading
-:   L-1
+: L-1
 
 ## Diffusion of [Matrix Attribute]
 
 Target
-:   Device
+: Device
 
 Duration
-:   S
+: S
 
 Fading
-:   L-2
+: L-2
 
 ## Editor
 
 Target
-:   File
+: File
 
 Duration
-:   P
+: P
 
 Fading
-:   L-1
+: L-1
 
 ## FAQ
 
 Target
-:   Device
+: Device
 
 Duration
-:   P
+: P
 
 Fading
-:   L-3
+: L-3
 
 ## IC Tray
 
 Target
-:   Host
+: Host
 
 Duration
-:   I
+: I
 
 Fading
-:   L-5
+: L-5
 
 ## Infusion of [Matrix Attribute]
 
 Target
-:   Device
+: Device
 
 Duration
-:   S
+: S
 
 Fading
-:   L-2
+: L-2
 
 ## Misread Marks
 
 Target
-:   IC
+: IC
 
 Duration
-:   P
+: P
 
 Fading
-:   L-1
+: L-1
 
 ## Pulse Storm
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   I
+: I
 
 Fading
-:   L-3
+: L-3
 
 ## Puppeteer
 
 Target
-:   Device
+: Device
 
 Duration
-:   I
+: I
 
 Fading
-:   L+1
+: L+1
 
 ## Redundancy
 
 Target
-:   Device
+: Device
 
 Duration
-:   S
+: S
 
 Fading
-:   L-3
+: L-3
 
 ## Resonance Channel
 
 Target
-:   Device
+: Device
 
 Duration
-:   S
+: S
 
 Fading
-:   L-4
+: L-4
 
 ## Resonance Spike
 
 Target
-:   Device
+: Device
 
 Duration
-:   I
+: I
 
 Fading
-:   L-3
+: L-3
 
 ## Resonance Veil
 
 Target
-:   Device
+: Device
 
 Duration
-:   S
+: S
 
 Fading
-:   L-4
+: L-4
 
 ## Static Bomb
 
 Target
-:   Self
+: Self
 
 Duration
-:   I
+: I
 
 Fading
-:   L-1
+: L-1
 
 ## Static Veil
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   S
+: S
 
 Fading
-:   L-4
+: L-4
 
 ## Stitches
 
 Target
-:   Sprite
+: Sprite
 
 Duration
-:   P
+: P
 
 Fading
-:   L-5
+: L-5
 
 ## Tattletale
 
 Target
-:   Persona
+: Persona
 
 Duration
-:   P
+: P
 
 Fading
-:   L-5
+: L-5
 
 ## Transcendent Grid
 
 Target
-:   Self
+: Self
 
 Duration
-:   I
+: I
 
 Fading
-:   L-6
+: L-6

@@ -57,9 +57,7 @@ export function getBiofeedbackDamageType(vrMode: RiggerVRMode): "stun" | "physic
 /**
  * Get damage type from rigging state
  */
-export function getCurrentBiofeedbackType(
-  riggingState: RiggingState
-): "stun" | "physical" {
+export function getCurrentBiofeedbackType(riggingState: RiggingState): "stun" | "physical" {
   return riggingState.biofeedbackDamageType;
 }
 
@@ -173,10 +171,7 @@ export function applyBiofeedbackDamage(
 /**
  * Track biofeedback damage in rigging state (session-level)
  */
-export function trackBiofeedbackDamage(
-  riggingState: RiggingState,
-  damage: number
-): RiggingState {
+export function trackBiofeedbackDamage(riggingState: RiggingState, damage: number): RiggingState {
   return {
     ...riggingState,
     biofeedbackDamageTaken: riggingState.biofeedbackDamageTaken + damage,
@@ -224,8 +219,7 @@ export function handleForcedEjection(
     ...riggingState,
     jumpedInState: undefined,
     droneNetwork: updatedNetwork,
-    biofeedbackDamageTaken:
-      riggingState.biofeedbackDamageTaken + dumpshock.damage,
+    biofeedbackDamageTaken: riggingState.biofeedbackDamageTaken + dumpshock.damage,
     endReason: "dumpshock",
     isActive: false,
   };
@@ -277,10 +271,7 @@ export function calculateBiofeedbackResistancePool(
 /**
  * Reduce biofeedback damage based on resistance hits
  */
-export function reduceBiofeedbackDamage(
-  baseDamage: number,
-  resistanceHits: number
-): number {
+export function reduceBiofeedbackDamage(baseDamage: number, resistanceHits: number): number {
   return Math.max(0, baseDamage - resistanceHits);
 }
 
@@ -298,10 +289,7 @@ export function getTotalBiofeedbackDamage(riggingState: RiggingState): number {
 /**
  * Check if rigger is at risk of unconsciousness from biofeedback
  */
-export function isBiofeedbackDangerous(
-  riggingState: RiggingState,
-  character: Character
-): boolean {
+export function isBiofeedbackDangerous(riggingState: RiggingState, character: Character): boolean {
   const currentBiofeedback = riggingState.biofeedbackDamageTaken;
   const damageType = riggingState.biofeedbackDamageType;
 
@@ -330,13 +318,13 @@ export function getBiofeedbackWarningLevel(
 
   const relevantAttr =
     damageType === "stun"
-      ? character.attributes?.willpower ?? 3
-      : character.attributes?.body ?? 3;
+      ? (character.attributes?.willpower ?? 3)
+      : (character.attributes?.body ?? 3);
   const monitorMax = Math.ceil(relevantAttr / 2) + 8;
   const currentDamage =
     damageType === "stun"
-      ? character.condition?.stunDamage ?? 0
-      : character.condition?.physicalDamage ?? 0;
+      ? (character.condition?.stunDamage ?? 0)
+      : (character.condition?.physicalDamage ?? 0);
 
   const totalPotentialDamage = currentDamage + currentBiofeedback;
   const percentage = totalPotentialDamage / monitorMax;

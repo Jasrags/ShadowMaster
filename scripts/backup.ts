@@ -306,7 +306,9 @@ async function listBackups(backupDir: string): Promise<void> {
   backups.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   console.log(`Found ${backups.length} backup(s):\n`);
-  console.log("NAME                              DATE                 USERS  CHARS  CAMPAIGNS  SIZE");
+  console.log(
+    "NAME                              DATE                 USERS  CHARS  CAMPAIGNS  SIZE"
+  );
   console.log("-".repeat(95));
 
   for (const backup of backups) {
@@ -323,11 +325,7 @@ async function listBackups(backupDir: string): Promise<void> {
 /**
  * Restore from a backup
  */
-async function restoreBackup(
-  backupDir: string,
-  backupName: string,
-  force: boolean
-): Promise<void> {
+async function restoreBackup(backupDir: string, backupName: string, force: boolean): Promise<void> {
   const backupPath = path.join(backupDir, backupName);
 
   // Check if backup exists

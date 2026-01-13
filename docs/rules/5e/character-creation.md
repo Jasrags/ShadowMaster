@@ -121,6 +121,7 @@ Character creation begins by selecting a metatype (human, elf, dwarf, ork, troll
 Once the player has selected the metatype they wish to play, they should review the Metatype column to determine which Priority Levels give them the best options for their character based on their preferred metatype and the special attribute points they need. The special attributes are Edge, Magic, and Resonance; if you want your character to have a high rating in one or more of these areas, make sure you select a row with plenty of special attribute points. Technomancer characters need to ensure they can have a high Resonance, while magician or adept characters will want a high Magic rating.
 
 **Metatype Priority and Special Attribute Points:**
+
 - The number in parentheses of your metatype is the number of Special Attribute Points you receive.
 - Special Attributes are Edge, Magic and Resonance.
 - Special Attribute Points can be used to increase Special Attributes at a one-for-one ratio.
@@ -141,6 +142,7 @@ Most metatypes cap Magic, Resonance, and Edge at 6; humans can have Edge 7. Qual
 Next, allocate physical and mental attribute points. Choose a priority level in the Attribute column that matches your vision for the character. The number in that column is the pool of points available to raise Body, Agility, Reaction, Strength, Charisma, Intuition, Logic, and Willpower.
 
 **Attributes Priority Rules:**
+
 - You are given between 12 and 24 "attribute points" (not to be confused with karma) depending on priority level.
 - Each attribute point raises a Physical or Mental attribute by one point.
   - Eligible attributes are:
@@ -165,7 +167,7 @@ Attribute choices affect derived stats calculated later, such as Initiative and 
 
 - UI must support assigning unique priorities to five categories and reflect SR5-specific values.
 - Build metatype selection cards that enforce availability based on chosen priority and display racial traits/maximums.
-- **Special Attribute Allocation (Implemented)**: 
+- **Special Attribute Allocation (Implemented)**:
   - Special attribute points are allocated in Step 3 (Metatype & Attributes) after regular attribute allocation.
   - The step order has been optimized: Step 2 is Magic/Resonance (select magic type), Step 3 is Metatype & Attributes (allocate attributes and special attributes).
   - This order ensures the magic type is already selected when allocating special attributes, so Magic/Resonance fields are immediately available.
@@ -186,75 +188,75 @@ The Priority System uses a table with the following columns: Metatype, Attribute
 
 **Priority Table**
 
-| PRIORITY | METATYPE | ATTRIBUTES | MAGIC OR RESONANCE | SKILLS | RESOURCES |
-| --- | --- | --- | --- | --- | --- |
-| A | Magician or Mystic Adept: Magic 6, two Rating 5 Magical skills, 10 spells<br>Technomancer: Resonance 6, two Rating 5 Resonance skills, 5 complex forms<br>Human (9)<br>Elf (8)<br>Dwarf (7)<br>Ork (7)<br>Troll (5) | 24 | Magician or Mystic Adept: Magic 6, two Rating 5 Magical skills, 10 spells<br>Technomancer: Resonance 6, two Rating 5 Resonance skills, 5 complex forms | 46/10 | 450,000¥ |
-| B | Magician or Mystic Adept: Magic 4, two Rating 4 Magical skills, 7 spells<br>Technomancer: Resonance 4, two Rating 4 Resonance skills, 2 complex forms<br>Adept: Magic 6, one Rating 4 Active skill<br>Aspected Magician: Magic 5, one Rating 4 Magical skill group<br>Human (7)<br>Elf (6)<br>Dwarf (4)<br>Ork (4)<br>Troll (0) | 20 | Magician or Mystic Adept: Magic 4, two Rating 4 Magical skills, 7 spells<br>Technomancer: Resonance 4, two Rating 4 Resonance skills, 2 complex forms<br>Adept: Magic 6, one Rating 4 Active skill<br>Aspected Magician: Magic 5, one Rating 4 Magical skill group | 36/5 | 275,000¥ |
-| C | Magician or Mystic Adept: Magic 3, 5 spells<br>Technomancer: Resonance 3, 1 complex form<br>Adept: Magic 4, one Rating 2 Active skill<br>Aspected Magician: Magic 3, one Rating 2 Magical skill group<br>Human (5)<br>Elf (3)<br>Dwarf (1)<br>Ork (0) | 16 | Magician or Mystic Adept: Magic 3, 5 spells<br>Technomancer: Resonance 3, 1 complex form<br>Adept: Magic 4, one Rating 2 Active skill<br>Aspected Magician: Magic 3, one Rating 2 Magical skill group | 28/2 | 140,000¥ |
-| D | Adept: Magic 2<br>Aspected Magician: Magic 2<br>Human (3)<br>Elf (0) | 14 | Adept: Magic 2<br>Aspected Magician: Magic 2 | 22/0 | 50,000¥ |
-| E | Human (1) | 12 | — | 18/0 | 6,000¥ |
+| PRIORITY | METATYPE                                                                                                                                                                                                                                                                                                                        | ATTRIBUTES | MAGIC OR RESONANCE                                                                                                                                                                                                                                                 | SKILLS | RESOURCES |
+| -------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------ | --------- |
+| A        | Magician or Mystic Adept: Magic 6, two Rating 5 Magical skills, 10 spells<br>Technomancer: Resonance 6, two Rating 5 Resonance skills, 5 complex forms<br>Human (9)<br>Elf (8)<br>Dwarf (7)<br>Ork (7)<br>Troll (5)                                                                                                             | 24         | Magician or Mystic Adept: Magic 6, two Rating 5 Magical skills, 10 spells<br>Technomancer: Resonance 6, two Rating 5 Resonance skills, 5 complex forms                                                                                                             | 46/10  | 450,000¥  |
+| B        | Magician or Mystic Adept: Magic 4, two Rating 4 Magical skills, 7 spells<br>Technomancer: Resonance 4, two Rating 4 Resonance skills, 2 complex forms<br>Adept: Magic 6, one Rating 4 Active skill<br>Aspected Magician: Magic 5, one Rating 4 Magical skill group<br>Human (7)<br>Elf (6)<br>Dwarf (4)<br>Ork (4)<br>Troll (0) | 20         | Magician or Mystic Adept: Magic 4, two Rating 4 Magical skills, 7 spells<br>Technomancer: Resonance 4, two Rating 4 Resonance skills, 2 complex forms<br>Adept: Magic 6, one Rating 4 Active skill<br>Aspected Magician: Magic 5, one Rating 4 Magical skill group | 36/5   | 275,000¥  |
+| C        | Magician or Mystic Adept: Magic 3, 5 spells<br>Technomancer: Resonance 3, 1 complex form<br>Adept: Magic 4, one Rating 2 Active skill<br>Aspected Magician: Magic 3, one Rating 2 Magical skill group<br>Human (5)<br>Elf (3)<br>Dwarf (1)<br>Ork (0)                                                                           | 16         | Magician or Mystic Adept: Magic 3, 5 spells<br>Technomancer: Resonance 3, 1 complex form<br>Adept: Magic 4, one Rating 2 Active skill<br>Aspected Magician: Magic 3, one Rating 2 Magical skill group                                                              | 28/2   | 140,000¥  |
+| D        | Adept: Magic 2<br>Aspected Magician: Magic 2<br>Human (3)<br>Elf (0)                                                                                                                                                                                                                                                            | 14         | Adept: Magic 2<br>Aspected Magician: Magic 2                                                                                                                                                                                                                       | 22/0   | 50,000¥   |
+| E        | Human (1)                                                                                                                                                                                                                                                                                                                       | 12         | —                                                                                                                                                                                                                                                                  | 18/0   | 6,000¥    |
 
 **Extended 'A' Priority Metavariants** (Source: SR5:Run Faster)
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (8) | 0 | Cyclopean (5) | 2 |
-| Dryad (8) | 0 | Fomorian (5) | 12 |
-| Nocturna (8) | 0 | Giant (5) | 2 |
-| Wakyambi (8) | 12 | Minotaur (5) | 2 |
-| Xapiri Thëpë (8) | 0 | Centaur (6) | 25 |
-| Gnome (7) | 7 | Naga (4) | 25 |
-| Hanuman (7) | 5 | Pixie (6) | 15 |
-| Koborokuru (7) | 0 | Sasquatch (5) | 20 |
-| Menehune (7) | 2 | Shapeshifter [Bovine; Vulpine] (8) | 5 |
-| Hobgoblin (7) | 5 | Shapeshifter [Canine;Falconine] (7) | 10 |
-| Ogre (7) | 8 | Shapeshifter[Lupine; Equine] (6) | 15 |
-| Oni (7) | 4 | Shapeshifter [Ursine;Leonine] (4) | 20 |
-| Satyr (7) | 10 | Shapeshifter [Pantherine;Tigrine] (4) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (8)      | 0                     | Cyclopean (5)                         | 2                     |
+| Dryad (8)        | 0                     | Fomorian (5)                          | 12                    |
+| Nocturna (8)     | 0                     | Giant (5)                             | 2                     |
+| Wakyambi (8)     | 12                    | Minotaur (5)                          | 2                     |
+| Xapiri Thëpë (8) | 0                     | Centaur (6)                           | 25                    |
+| Gnome (7)        | 7                     | Naga (4)                              | 25                    |
+| Hanuman (7)      | 5                     | Pixie (6)                             | 15                    |
+| Koborokuru (7)   | 0                     | Sasquatch (5)                         | 20                    |
+| Menehune (7)     | 2                     | Shapeshifter [Bovine; Vulpine] (8)    | 5                     |
+| Hobgoblin (7)    | 5                     | Shapeshifter [Canine;Falconine] (7)   | 10                    |
+| Ogre (7)         | 8                     | Shapeshifter[Lupine; Equine] (6)      | 15                    |
+| Oni (7)          | 4                     | Shapeshifter [Ursine;Leonine] (4)     | 20                    |
+| Satyr (7)        | 10                    | Shapeshifter [Pantherine;Tigrine] (4) | 25                    |
 
 **Extended 'B' Priority Metavariants** (Source: SR5:Run Faster)
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (6) | 0 | Cyclopean (0) | 2 |
-| Dryad (6) | 0 | Fomorian (0) | 12 |
-| Nocturna (6) | 0 | Giant (0) | 2 |
-| Wakyambi (6) | 12 | Minotaur (0) | 2 |
-| Xapiri Thëpë (6) | 0 | Centaur (3) | 25 |
-| Gnome (4) | 7 | Naga (2) | 25 |
-| Hanuman (4) | 5 | Pixie (3) | 15 |
-| Koborokuru (4) | 0 | Sasquatch (2) | 20 |
-| Menehune (4) | 2 | Shapeshifter [Bovine;Vulpine] (6) | 5 |
-| Hobgoblin (4) | 5 | Shapeshifter [Canine;Falconine] (5) | 10 |
-| Ogre (4) | 8 | Shapeshifter [Lupine;Equine] (4) | 15 |
-| Oni (4) | 4 | Shapeshifter [Ursine;Leonine] (2) | 20 |
-| Satyr (4) | 10 | Shapeshifter [Pantherine;Tigrine] (2) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (6)      | 0                     | Cyclopean (0)                         | 2                     |
+| Dryad (6)        | 0                     | Fomorian (0)                          | 12                    |
+| Nocturna (6)     | 0                     | Giant (0)                             | 2                     |
+| Wakyambi (6)     | 12                    | Minotaur (0)                          | 2                     |
+| Xapiri Thëpë (6) | 0                     | Centaur (3)                           | 25                    |
+| Gnome (4)        | 7                     | Naga (2)                              | 25                    |
+| Hanuman (4)      | 5                     | Pixie (3)                             | 15                    |
+| Koborokuru (4)   | 0                     | Sasquatch (2)                         | 20                    |
+| Menehune (4)     | 2                     | Shapeshifter [Bovine;Vulpine] (6)     | 5                     |
+| Hobgoblin (4)    | 5                     | Shapeshifter [Canine;Falconine] (5)   | 10                    |
+| Ogre (4)         | 8                     | Shapeshifter [Lupine;Equine] (4)      | 15                    |
+| Oni (4)          | 4                     | Shapeshifter [Ursine;Leonine] (2)     | 20                    |
+| Satyr (4)        | 10                    | Shapeshifter [Pantherine;Tigrine] (2) | 25                    |
 
 **Extended 'C' Priority Metavariants** (Source: SR5:Run Faster)
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (4) | 0 | Oni (0) | +4 |
-| Dryad (3) | 0 | Satyr (0) | 10 |
-| Nocturna (3) | 0 | Centaur (0) | 25 |
-| Wakyambi (3) | 12 | Naga (0) | 25 |
-| Xapiri Thëpë (3) | 0 | Pixie (0) | 15 |
-| Gnome (1) | 7 | Sasquatch (0) | 20 |
-| Hanuman (1) | 5 | Shapeshifter [Bovine;Vulpine] (4) | 5 |
-| Koborokuru (1) | 0 | Shapeshifter [Canine;Falconine] (3) | 10 |
-| Menehune (1) | 2 | Shapeshifter[Lupine; Equine] (2) | 15 |
-| Hobgoblin (0) | +5 | Shapeshifter [Ursine;Leonine] (0) | 20 |
-| Ogre (0) | 8 | Shapeshifter [Pantherine;Tigrine] (0) | 25 |
+| METATYPE         | ADDITIONAL KARMA COST | METATYPE                              | ADDITIONAL KARMA COST |
+| ---------------- | --------------------- | ------------------------------------- | --------------------- |
+| Nartaki (4)      | 0                     | Oni (0)                               | +4                    |
+| Dryad (3)        | 0                     | Satyr (0)                             | 10                    |
+| Nocturna (3)     | 0                     | Centaur (0)                           | 25                    |
+| Wakyambi (3)     | 12                    | Naga (0)                              | 25                    |
+| Xapiri Thëpë (3) | 0                     | Pixie (0)                             | 15                    |
+| Gnome (1)        | 7                     | Sasquatch (0)                         | 20                    |
+| Hanuman (1)      | 5                     | Shapeshifter [Bovine;Vulpine] (4)     | 5                     |
+| Koborokuru (1)   | 0                     | Shapeshifter [Canine;Falconine] (3)   | 10                    |
+| Menehune (1)     | 2                     | Shapeshifter[Lupine; Equine] (2)      | 15                    |
+| Hobgoblin (0)    | +5                    | Shapeshifter [Ursine;Leonine] (0)     | 20                    |
+| Ogre (0)         | 8                     | Shapeshifter [Pantherine;Tigrine] (0) | 25                    |
 
 **Extended 'D' & 'E' Priority Metavariants** (Source: SR5:Run Faster)
 
-| METATYPE | ADDITIONAL KARMA COST | METATYPE | ADDITIONAL KARMA COST |
-| --- | --- | --- | --- |
-| Nartaki (2) | 0 | Wakyambi (0) | 12 |
-| Dryad (0) | 0 | Xapiri Thëpë (0) | 0 |
-| Nocturna (0) | 0 | | |
-| 'E' Priority | | | |
-| Nartaki (1) | 0 | | |
+| METATYPE     | ADDITIONAL KARMA COST | METATYPE         | ADDITIONAL KARMA COST |
+| ------------ | --------------------- | ---------------- | --------------------- |
+| Nartaki (2)  | 0                     | Wakyambi (0)     | 12                    |
+| Dryad (0)    | 0                     | Xapiri Thëpë (0) | 0                     |
+| Nocturna (0) | 0                     |                  |                       |
+| 'E' Priority |                       |                  |                       |
+| Nartaki (1)  | 0                     |                  |                       |
 
 ### Open Questions & Data Gaps
 
@@ -265,6 +267,7 @@ The Priority System uses a table with the following columns: Metatype, Attribute
 The Magic/Resonance column governs magical characters (adepts, aspected magicians, full magicians, mystic adepts) and technomancers. Players uninterested in these roles assign priority E here. Review the Magic User Types section below, along with "Life as a Magic User in 2075" and "Life as a Technomancer in 2075," for expectations.
 
 **Magic or Resonance Priority Rules:**
+
 - The priority table (p. 65) shows you what your starting Resonance or Magic special attribute level is. Your Special Attribute score should be immediately changed to reflect this, and this should be done before adding Special Attribute Points (see Metatype Priority).
 - Aspected Magicians can never change back to regular Magicians.
 - You may also get Magical Skills if you select priority "A" or "B".
@@ -356,6 +359,7 @@ Because so little is known about technomancers, many in the world fear what they
 Qualities round out your character's personality and provide bonuses or penalties. Positive Qualities grant benefits at the cost of Karma; Negative Qualities impose drawbacks but reward Karma.
 
 **Purchasing Qualities:**
+
 - Qualities must be purchased with Karma (you start with 25 as mentioned in the beginning).
 - Negative Qualities give you karma.
 - You are capped to at most 25 karma worth of Positive Qualities and 25 karma worth of Negative Qualities.
@@ -379,6 +383,7 @@ Record each Quality on the character sheet, noting any modifiers to skills or at
 With attributes assigned, choose skills using the Skills priority column. At this point only two priorities remain, so select one for Skills.
 
 **Skill Priority/Purchasing Skills:**
+
 - Skills are classified as either Active, Knowledge or Language.
 - Your Skill Priority Level gives you a certain number of points (ranges from 18 to 46 "**skill points**", 0 to 10 "**skill group points**").
 - You are given free "Knowledge and Language" skill points equal to (Intuition + Logic) × 2
@@ -481,6 +486,7 @@ Determine whether each Knowledge skill uses Intuition or Logic based on its cate
 Assign the remaining priority to Resources. This governs starting nuyen for gear and lifestyle.
 
 **Spending your Nuyen (p. 94):**
+
 - Your Resources Priority level will give you between 6,000 and 450,000 starting nuyen.
 - You cannot end character generation with more than 5,000 nuyen.
 - Karma can be converted to nuyen at 1 karma point = 2,000 nuyen
@@ -504,7 +510,7 @@ Assign the remaining priority to Resources. This governs starting nuyen for gear
 
 Spend most of your starting nuyen before game play. Up to 5,000¥ may be carried over; any remaining balance is lost. Karma cannot be converted to nuyen, but you may convert up to 10 Karma into 20,000¥ (2,000¥ per Karma) to supplement purchases.
 
-Essential gear often includes a commlink, a fake SIN, and appropriate licenses. 
+Essential gear often includes a commlink, a fake SIN, and appropriate licenses.
 
 **Gear Checklist**
 
@@ -575,14 +581,14 @@ Lifestyle defines day-to-day living conditions and monthly expenses. Options inc
 
 **Lifestyle Costs Table**
 
-| LIFESTYLE | COST |
-| --- | --- |
-| Street | Free |
-| Squatter | 500¥ |
-| Low | 2,000¥ |
-| Middle | 5,000¥ |
-| High | 10,000¥ |
-| Luxury | 100,000¥ |
+| LIFESTYLE | COST     |
+| --------- | -------- |
+| Street    | Free     |
+| Squatter  | 500¥     |
+| Low       | 2,000¥   |
+| Middle    | 5,000¥   |
+| High      | 10,000¥  |
+| Luxury    | 100,000¥ |
 
 ### Implementation Notes
 
@@ -600,13 +606,13 @@ Starting nuyen depends on chosen lifestyle and a dice roll specified by the Star
 **Starting Nuyen Table**
 
 | LIFESTYLE | STARTING NUYEN |
-| --- | --- |
-| Street | 1D6 x 20¥ |
-| Squatter | 2D6 x 40¥ |
-| Low | 3D6 x 60¥ |
-| Middle | 4D6 x 100¥ |
-| High | 5D6 x 500¥ |
-| Luxury | 6D6 x 1,000¥ |
+| --------- | -------------- |
+| Street    | 1D6 x 20¥      |
+| Squatter  | 2D6 x 40¥      |
+| Low       | 3D6 x 60¥      |
+| Middle    | 4D6 x 100¥     |
+| High      | 5D6 x 500¥     |
+| Luxury    | 6D6 x 1,000¥   |
 
 ### Implementation Notes
 
@@ -622,6 +628,7 @@ Starting nuyen depends on chosen lifestyle and a dice roll specified by the Star
 This step is the last opportunity to polish the character before final calculations. By now, you should understand the character concept and mechanics. Spend remaining Karma to smooth rough edges, improve skills or attributes, buy spells, acquire bound spirits, bond foci, or purchase contacts. Consult the Additional Purchases and Restrictions table to confirm any limitations. You may carry over up to 7 Karma into play.
 
 **Spending Leftover Karma (p.98):**
+
 - Your leftover Karma amount is 25 - (Positive Quality cost) + (Negative Quality value)
 - All limits from the above steps are still in force (e.g. only one Physical or Mental attribute at maximum, skill levels cannot exceed 6)
 - Note that in this stage you are now allowed to break up Skill Groups by improving individual skills in that group with Karma, or purchasing Specializations.
@@ -670,15 +677,15 @@ Both ratings must be at least 1. Loyalty 1–2 represents a business relationshi
 
 **Additional Purchases & Restrictions (At Character Creation)**
 
-| ITEM | KARMA COST |
-| --- | --- |
-| Bound Spirits | 1 Karma per service (Force of spirit is equal to Character's Magic Attribute rating) |
-| *Can only have a number of bound spirits equal to Charisma* | |
-| Complex Forms | 4 Karma per complex form |
-| Spells | 5 Karma per spell |
-| Bond Foci | Variable; see p. 318 for bonding costs of foci |
-| Contacts | 1 Karma for each point of Connections Rating, 1 Karma for each Loyalty Rating (minimum Karma requirement = 2) |
-| Registering Sprites | 1 Karma per task (Level of Sprite equal to Character's Resonance Rating) |
+| ITEM                                                        | KARMA COST                                                                                                    |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------- |
+| Bound Spirits                                               | 1 Karma per service (Force of spirit is equal to Character's Magic Attribute rating)                          |
+| _Can only have a number of bound spirits equal to Charisma_ |                                                                                                               |
+| Complex Forms                                               | 4 Karma per complex form                                                                                      |
+| Spells                                                      | 5 Karma per spell                                                                                             |
+| Bond Foci                                                   | Variable; see p. 318 for bonding costs of foci                                                                |
+| Contacts                                                    | 1 Karma for each point of Connections Rating, 1 Karma for each Loyalty Rating (minimum Karma requirement = 2) |
+| Registering Sprites                                         | 1 Karma per task (Level of Sprite equal to Character's Resonance Rating)                                      |
 
 - Maximum number of complex forms at character creation equal to Logic Attribute
 - Maximum number of spells/rituals/preparations known at Character Creation equals Magic Rating x 2
@@ -704,33 +711,34 @@ After spending resources and Karma, compute derived mechanics. Many depend on fi
 
 **Final Calculations Table**
 
-| MECHANIC | FORMULA |
-| --- | --- |
-| Initiative | (Intuition + Reaction) + 1D6 |
-| Astral Initiative | (Intuition x 2) + 2D6 |
-| Matrix AR Initiative | (Intuition + Reaction) + 1D6 |
-| Matrix VR Initiative (Cold Sim) | (Data Processing + Intuition) + 3D6 |
-| Matrix VR Initiative (Hot Sim) | (Data Processing + Intuition) + 4D6 |
-| Inherent Limits | Add appropriate attribute(s); calculate as listed below |
-| Mental | [(Logic x 2) + Intuition + Willpower] / 3 (round up) |
-| Physical | [(Strength x 2) + Body + Reaction] / 3 (round up) |
-| Social | [(Charisma x 2) + Willpower + Essence] / 3 (round up) |
-| Condition Monitor Boxes | Calculate as listed below |
-| Physical | [Body / 2] + 8 |
-| Stun | [Willpower / 2] + 8 |
-| Overflow | Body + Augmentation bonuses |
-| Living Persona | |
-| Attack | Charisma |
-| Data Processing | Logic |
-| Device Rating | Resonance |
-| Firewall | Willpower |
-| Sleaze | Intuition |
-| Reputation | |
-| Notoriety | |
-| Public Awareness | |
-| Street Cred | |
+| MECHANIC                        | FORMULA                                                 |
+| ------------------------------- | ------------------------------------------------------- |
+| Initiative                      | (Intuition + Reaction) + 1D6                            |
+| Astral Initiative               | (Intuition x 2) + 2D6                                   |
+| Matrix AR Initiative            | (Intuition + Reaction) + 1D6                            |
+| Matrix VR Initiative (Cold Sim) | (Data Processing + Intuition) + 3D6                     |
+| Matrix VR Initiative (Hot Sim)  | (Data Processing + Intuition) + 4D6                     |
+| Inherent Limits                 | Add appropriate attribute(s); calculate as listed below |
+| Mental                          | [(Logic x 2) + Intuition + Willpower] / 3 (round up)    |
+| Physical                        | [(Strength x 2) + Body + Reaction] / 3 (round up)       |
+| Social                          | [(Charisma x 2) + Willpower + Essence] / 3 (round up)   |
+| Condition Monitor Boxes         | Calculate as listed below                               |
+| Physical                        | [Body / 2] + 8                                          |
+| Stun                            | [Willpower / 2] + 8                                     |
+| Overflow                        | Body + Augmentation bonuses                             |
+| Living Persona                  |                                                         |
+| Attack                          | Charisma                                                |
+| Data Processing                 | Logic                                                   |
+| Device Rating                   | Resonance                                               |
+| Firewall                        | Willpower                                               |
+| Sleaze                          | Intuition                                               |
+| Reputation                      |                                                         |
+| Notoriety                       |                                                         |
+| Public Awareness                |                                                         |
+| Street Cred                     |                                                         |
 
 **Inherent Limits:**
+
 - Mental Limit is [(Logic × 2) + Intuition + Willpower] / 3 (round up)
 - Physical Limit is [(Strength × 2) + Body + Reaction] / 3 (round up)
 - Social Limit is [(Charisma × 2) + Willpower + Essence] / 3 (round up)
@@ -829,5 +837,4 @@ Aspected magicians, magicians, and mystic adepts may purchase new spells, ritual
 
 There are two ways for a character to pick up new qualities. First, they can be assigned by the gamemaster as a result of events or actions in the course of a campaign. Positive qualities may be assigned as reward for good roleplaying, while Negative qualities may be assigned if something traumatic or significant happens or the character does something for which the Negative quality is a reasonable consequence ("reasonable" is defined by the gamemaster). A player may also purchase Positive qualities for his character at any time during game play. The cost for purchasing a Positive quality during game play is the listed Karma cost x 2. Similarly, if a character wishes to get rid of a Negative quality, has met any stipulated requirements, and the gamemaster has given the player permission, the player may do so at a rate of listed Karma x 2.
 
-*Last updated: 2025-01-27*
-
+_Last updated: 2025-01-27_

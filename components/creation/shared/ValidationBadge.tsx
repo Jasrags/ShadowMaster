@@ -65,9 +65,7 @@ export function ValidationBadge({
 
   // Pending state
   return (
-    <span
-      className={`text-xs font-medium text-zinc-400 dark:text-zinc-500 ${className}`}
-    >
+    <span className={`text-xs font-medium text-zinc-400 dark:text-zinc-500 ${className}`}>
       Not started
     </span>
   );

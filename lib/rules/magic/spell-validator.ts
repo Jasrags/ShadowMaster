@@ -334,9 +334,7 @@ export function extractSpellsCatalog(ruleset: LoadedRuleset): SpellsCatalogData 
 /**
  * Extract adept powers catalog from ruleset
  */
-export function extractAdeptPowersCatalog(
-  ruleset: LoadedRuleset
-): AdeptPowerCatalogItem[] {
+export function extractAdeptPowersCatalog(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
   const powers: AdeptPowerCatalogItem[] = [];
 
   for (const book of ruleset.books) {
@@ -359,17 +357,8 @@ export function extractAdeptPowersCatalog(
 /**
  * Find spell in catalog across all categories
  */
-function findSpellInCatalog(
-  spellId: string,
-  catalog: SpellsCatalogData
-): SpellData | null {
-  const categories: SpellCategory[] = [
-    "combat",
-    "detection",
-    "health",
-    "illusion",
-    "manipulation",
-  ];
+function findSpellInCatalog(spellId: string, catalog: SpellsCatalogData): SpellData | null {
+  const categories: SpellCategory[] = ["combat", "detection", "health", "illusion", "manipulation"];
 
   for (const category of categories) {
     const spell = catalog[category]?.find((s) => s.id === spellId);
@@ -384,10 +373,7 @@ function findSpellInCatalog(
 /**
  * Calculate power point cost for an adept power
  */
-function calculatePowerPointCost(
-  power: AdeptPower,
-  catalogPower: AdeptPowerCatalogItem
-): number {
+function calculatePowerPointCost(power: AdeptPower, catalogPower: AdeptPowerCatalogItem): number {
   if (catalogPower.cost === null) {
     // Variable cost powers (handled by levels table)
     if (catalogPower.levels && power.rating !== undefined) {
@@ -419,10 +405,7 @@ function calculatePowerPointCost(
 /**
  * Get all spells of a specific category
  */
-export function getSpellsByCategory(
-  category: SpellCategory,
-  ruleset: LoadedRuleset
-): SpellData[] {
+export function getSpellsByCategory(category: SpellCategory, ruleset: LoadedRuleset): SpellData[] {
   const catalog = extractSpellsCatalog(ruleset);
   return catalog[category] || [];
 }
@@ -444,8 +427,6 @@ export function getAllSpells(ruleset: LoadedRuleset): SpellData[] {
 /**
  * Get all adept powers from the ruleset
  */
-export function getAllAdeptPowers(
-  ruleset: LoadedRuleset
-): AdeptPowerCatalogItem[] {
+export function getAllAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogItem[] {
   return extractAdeptPowersCatalog(ruleset);
 }

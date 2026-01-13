@@ -26,6 +26,7 @@ The system stores data in a structured directory hierarchy:
 ```
 
 All write operations follow an atomic pattern:
+
 1. Write content to a temporary file (`{target}.tmp`)
 2. Rename temporary file to target path
 3. Filesystem guarantees atomicity of rename operations
@@ -66,4 +67,3 @@ This architecture is explicitly recognized as **not production-ready**. A databa
 - `security.account-governance` - User data persistence
 - `character.management` - Character data persistence
 - `campaign.management` - Campaign data persistence
-

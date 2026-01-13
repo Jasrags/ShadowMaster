@@ -36,10 +36,10 @@ export async function POST(req: NextRequest) {
       }
     }
 
-    return NextResponse.json({ 
-      success: true, 
+    return NextResponse.json({
+      success: true,
       count: importedCharacters.length,
-      message: `Successfully imported ${importedCharacters.length} characters.`
+      message: `Successfully imported ${importedCharacters.length} characters.`,
     });
   } catch (error) {
     console.error("Error importing data:", error);

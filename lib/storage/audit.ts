@@ -21,10 +21,7 @@ import type { ID } from "../types/core";
 /**
  * Query audit entries from a character's audit log
  */
-export function queryAuditLog(
-  character: Character,
-  options: AuditQueryOptions = {}
-): AuditEntry[] {
+export function queryAuditLog(character: Character, options: AuditQueryOptions = {}): AuditEntry[] {
   const auditLog = character.auditLog || [];
 
   let entries = [...auditLog];
@@ -80,10 +77,7 @@ export function getLatestAuditEntry(character: Character): AuditEntry | undefine
 /**
  * Get audit entries for a specific action type
  */
-export function getAuditEntriesByAction(
-  character: Character,
-  action: AuditAction
-): AuditEntry[] {
+export function getAuditEntriesByAction(character: Character, action: AuditAction): AuditEntry[] {
   return queryAuditLog(character, { actions: [action] });
 }
 
@@ -97,10 +91,7 @@ export function getAuditLogCount(character: Character): number {
 /**
  * Check if character has been modified since a given date
  */
-export function hasModificationsSince(
-  character: Character,
-  since: string
-): boolean {
+export function hasModificationsSince(character: Character, since: string): boolean {
   const sinceTime = new Date(since).getTime();
   return (character.auditLog || []).some(
     (entry) => new Date(entry.timestamp).getTime() > sinceTime
@@ -191,9 +182,6 @@ export interface AuditUpdateContext {
 /**
  * Build an AuditActor from context
  */
-export function buildAuditActor(
-  actorId: ID,
-  role: AuditActor["role"]
-): AuditActor {
+export function buildAuditActor(actorId: ID, role: AuditActor["role"]): AuditActor {
   return { userId: actorId, role };
 }

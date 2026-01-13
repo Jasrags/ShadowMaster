@@ -46,12 +46,7 @@ interface JsonItem {
 }
 
 interface Finding {
-  type:
-    | "missing"
-    | "data_mismatch"
-    | "duplicate"
-    | "invalid_source"
-    | "naming_issue";
+  type: "missing" | "data_mismatch" | "duplicate" | "invalid_source" | "naming_issue";
   priority: number;
   category: string;
   subcategory?: string;
@@ -89,10 +84,7 @@ interface VerificationReport {
 const PROJECT_ROOT = path.resolve(__dirname, "..");
 const DATA_DIR = path.join(PROJECT_ROOT, "data/editions/sr5");
 const REFERENCE_DIR = path.join(PROJECT_ROOT, "docs/archive/web_pages");
-const DEFAULT_OUTPUT_DIR = path.join(
-  PROJECT_ROOT,
-  "docs/capabilities/plans/verification-reports"
-);
+const DEFAULT_OUTPUT_DIR = path.join(PROJECT_ROOT, "docs/capabilities/plans/verification-reports");
 
 const SOURCE_CODES = [
   "Core",
@@ -115,10 +107,7 @@ const SOURCE_CODES = [
  * Parse a markdown table from reference file
  * Tables have format: | Col1 | Col2 | ... |
  */
-function parseMarkdownTable(
-  content: string,
-  sources: string[]
-): ReferenceItem[] {
+function parseMarkdownTable(content: string, sources: string[]): ReferenceItem[] {
   const items: ReferenceItem[] = [];
   const lines = content.split("\n");
 
@@ -497,11 +486,7 @@ function getCategoryConfigs(): CategoryConfig[] {
     {
       name: "bioware",
       jsonPath: ["modules", "bioware", "payload", "catalog"],
-      referenceFiles: [
-        "SR5_Bioware_Basic.md",
-        "SR5_Bioware_Cultured.md",
-        "SR5_Bioware_Other.md",
-      ],
+      referenceFiles: ["SR5_Bioware_Basic.md", "SR5_Bioware_Cultured.md", "SR5_Bioware_Other.md"],
       fieldMappings: {
         essence: "essence",
         avail: "availability",
@@ -594,10 +579,7 @@ function normalizeString(s: string): string {
     .trim();
 }
 
-function findJsonItem(
-  jsonItems: JsonItem[],
-  refName: string
-): JsonItem | undefined {
+function findJsonItem(jsonItems: JsonItem[], refName: string): JsonItem | undefined {
   const normalizedRef = normalizeString(refName);
 
   return jsonItems.find((item) => {
@@ -607,19 +589,12 @@ function findJsonItem(
   });
 }
 
-function verifyCategory(
-  config: CategoryConfig,
-  sources: string[]
-): Finding[] {
+function verifyCategory(config: CategoryConfig, sources: string[]): Finding[] {
   const findings: Finding[] = [];
 
   // Load data
   const jsonItems = loadJsonData(config.jsonPath);
-  const refItems = loadReferenceData(
-    config.referenceFiles,
-    sources,
-    config.parseTable
-  );
+  const refItems = loadReferenceData(config.referenceFiles, sources, config.parseTable);
 
   // Track which JSON items we've matched
   const matchedJsonIds = new Set<string>();
@@ -649,9 +624,7 @@ function verifyCategory(
 
           // Normalize for comparison
           const refNorm =
-            typeof refValue === "string"
-              ? refValue.toLowerCase().replace(/[–—]/g, "-")
-              : refValue;
+            typeof refValue === "string" ? refValue.toLowerCase().replace(/[–—]/g, "-") : refValue;
           const jsonNorm =
             typeof jsonValue === "string"
               ? jsonValue.toLowerCase().replace(/[–—]/g, "-")
@@ -676,9 +649,7 @@ function verifyCategory(
             // Check if it's a numeric comparison with tolerance
             const refNum = parseFloat(String(refValue).replace(/[¥,]/g, ""));
             const jsonNum =
-              typeof jsonValue === "number"
-                ? jsonValue
-                : parseFloat(String(jsonValue));
+              typeof jsonValue === "number" ? jsonValue : parseFloat(String(jsonValue));
 
             if (!isNaN(refNum) && !isNaN(jsonNum) && refNum === jsonNum) {
               continue;
@@ -767,26 +738,16 @@ function generateMarkdownReport(report: VerificationReport): string {
   lines.push("");
   lines.push("| Priority | Count | Description |");
   lines.push("|----------|-------|-------------|");
-  lines.push(
-    `| 1 | ${report.summary.byPriority[1] || 0} | Missing items |`
-  );
-  lines.push(
-    `| 2 | ${report.summary.byPriority[2] || 0} | Data mismatches |`
-  );
+  lines.push(`| 1 | ${report.summary.byPriority[1] || 0} | Missing items |`);
+  lines.push(`| 2 | ${report.summary.byPriority[2] || 0} | Data mismatches |`);
   lines.push(`| 3 | ${report.summary.byPriority[3] || 0} | Duplicates |`);
-  lines.push(
-    `| 4 | ${report.summary.byPriority[4] || 0} | Invalid source |`
-  );
-  lines.push(
-    `| 5 | ${report.summary.byPriority[5] || 0} | Naming issues |`
-  );
+  lines.push(`| 4 | ${report.summary.byPriority[4] || 0} | Invalid source |`);
+  lines.push(`| 5 | ${report.summary.byPriority[5] || 0} | Naming issues |`);
   lines.push("");
 
   // Findings by priority
   for (let priority = 1; priority <= 5; priority++) {
-    const priorityFindings = report.findings.filter(
-      (f) => f.priority === priority
-    );
+    const priorityFindings = report.findings.filter((f) => f.priority === priority);
     if (priorityFindings.length === 0) continue;
 
     const priorityNames = [
@@ -900,9 +861,7 @@ async function main() {
   // Filter by requested categories if specified
   if (config.categories.length > 0) {
     categoryConfigs = categoryConfigs.filter((c) =>
-      config.categories.some(
-        (cat) => c.name.startsWith(cat) || c.name.includes(cat)
-      )
+      config.categories.some((cat) => c.name.startsWith(cat) || c.name.includes(cat))
     );
   }
 
@@ -936,8 +895,7 @@ async function main() {
   for (const finding of allFindings) {
     report.summary.byPriority[finding.priority] =
       (report.summary.byPriority[finding.priority] || 0) + 1;
-    report.summary.byType[finding.type] =
-      (report.summary.byType[finding.type] || 0) + 1;
+    report.summary.byType[finding.type] = (report.summary.byType[finding.type] || 0) + 1;
   }
 
   // Ensure output directory exists

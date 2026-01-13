@@ -275,22 +275,18 @@ describe("CombatSessionContext", () => {
 
   describe("useCanPerformAction", () => {
     it("returns true for all actions outside combat", () => {
-      const { result: freeResult } = renderHook(
-        () => useCanPerformAction("free"),
-        { wrapper: createWrapper("char-1") }
-      );
-      const { result: simpleResult } = renderHook(
-        () => useCanPerformAction("simple"),
-        { wrapper: createWrapper("char-1") }
-      );
-      const { result: complexResult } = renderHook(
-        () => useCanPerformAction("complex"),
-        { wrapper: createWrapper("char-1") }
-      );
-      const { result: interruptResult } = renderHook(
-        () => useCanPerformAction("interrupt"),
-        { wrapper: createWrapper("char-1") }
-      );
+      const { result: freeResult } = renderHook(() => useCanPerformAction("free"), {
+        wrapper: createWrapper("char-1"),
+      });
+      const { result: simpleResult } = renderHook(() => useCanPerformAction("simple"), {
+        wrapper: createWrapper("char-1"),
+      });
+      const { result: complexResult } = renderHook(() => useCanPerformAction("complex"), {
+        wrapper: createWrapper("char-1"),
+      });
+      const { result: interruptResult } = renderHook(() => useCanPerformAction("interrupt"), {
+        wrapper: createWrapper("char-1"),
+      });
 
       // Outside combat, hooks return false (no action economy)
       expect(freeResult.current).toBe(false);

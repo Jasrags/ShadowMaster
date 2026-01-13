@@ -74,16 +74,12 @@ export function canCallFavor(
 
   // Karma check (if service has karma cost)
   if (service.karmaCost && character.karmaCurrent < service.karmaCost) {
-    reasons.push(
-      `Insufficient karma: need ${service.karmaCost}, have ${character.karmaCurrent}`
-    );
+    reasons.push(`Insufficient karma: need ${service.karmaCost}, have ${character.karmaCurrent}`);
   }
 
   // Warnings for risky situations
   if (contact.favorBalance < 0 && service.favorCost > 0) {
-    warnings.push(
-      `You already owe this contact ${Math.abs(contact.favorBalance)} favors`
-    );
+    warnings.push(`You already owe this contact ${Math.abs(contact.favorBalance)} favors`);
   }
 
   if (contact.loyalty <= 2 && service.riskLevel !== "trivial") {
@@ -311,10 +307,7 @@ export function resolveFavorCall(
  * @param contactId - Contact ID to filter by
  * @returns Current favor balance
  */
-export function getFavorBalance(
-  transactions: FavorTransaction[],
-  contactId: string
-): number {
+export function getFavorBalance(transactions: FavorTransaction[], contactId: string): number {
   return transactions
     .filter((t) => t.contactId === contactId)
     .filter((t) => !t.requiresGmApproval || t.gmApproved === true)

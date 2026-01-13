@@ -160,10 +160,7 @@ export function validateProgramAllocation(
  * @param ruleset - The loaded ruleset
  * @returns True if program exists
  */
-export function validateProgramExists(
-  programId: string,
-  ruleset: LoadedRuleset
-): boolean {
+export function validateProgramExists(programId: string, ruleset: LoadedRuleset): boolean {
   return findProgram(programId, ruleset) !== undefined;
 }
 
@@ -242,10 +239,7 @@ export function getLoadedPrograms(character: Character): string[] {
  * @param programId - The program ID to check
  * @returns True if program is loaded
  */
-export function isProgramLoaded(
-  character: Character,
-  programId: string
-): boolean {
+export function isProgramLoaded(character: Character, programId: string): boolean {
   const loadedPrograms = getLoadedPrograms(character);
   return loadedPrograms.includes(programId);
 }
@@ -260,9 +254,7 @@ export function getUnloadedPrograms(character: Character): CharacterProgram[] {
   const loadedIds = new Set(getLoadedPrograms(character));
   const ownedPrograms = character.programs ?? [];
 
-  return ownedPrograms.filter(
-    (program) => !loadedIds.has(program.catalogId)
-  );
+  return ownedPrograms.filter((program) => !loadedIds.has(program.catalogId));
 }
 
 /**
@@ -272,10 +264,7 @@ export function getUnloadedPrograms(character: Character): CharacterProgram[] {
  * @param programId - The program ID to check
  * @returns True if character owns the program
  */
-export function characterOwnsProgram(
-  character: Character,
-  programId: string
-): boolean {
+export function characterOwnsProgram(character: Character, programId: string): boolean {
   const ownedPrograms = character.programs ?? [];
   return ownedPrograms.some((p) => p.catalogId === programId);
 }
@@ -289,10 +278,7 @@ export function characterOwnsProgram(
  * @param ruleset - The loaded ruleset
  * @returns Slots used by running programs
  */
-export function calculateEffectiveSlotsUsed(
-  character: Character,
-  ruleset: LoadedRuleset
-): number {
+export function calculateEffectiveSlotsUsed(character: Character, ruleset: LoadedRuleset): number {
   const loadedPrograms = getLoadedPrograms(character);
   let slotsUsed = 0;
 

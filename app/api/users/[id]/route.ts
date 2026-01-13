@@ -11,7 +11,12 @@ import {
 } from "@/lib/storage/users";
 import { archiveUserAuditLog } from "@/lib/storage/user-audit";
 import { isValidEmail, isValidUsername } from "@/lib/auth/validation";
-import type { UpdateUserRequest, UpdateUserResponse, DeleteUserResponse, UserRole } from "@/lib/types/user";
+import type {
+  UpdateUserRequest,
+  UpdateUserResponse,
+  DeleteUserResponse,
+  UserRole,
+} from "@/lib/types/user";
 
 export async function PUT(
   request: NextRequest,
@@ -27,10 +32,7 @@ export async function PUT(
     // Validate user exists
     const existingUser = await getUserById(id);
     if (!existingUser) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Validate email if provided
@@ -75,7 +77,10 @@ export async function PUT(
       const invalidRoles = body.role.filter((role) => !validRoles.includes(role));
       if (invalidRoles.length > 0) {
         return NextResponse.json(
-          { success: false, error: `Invalid role(s): ${invalidRoles.join(", ")}. Must be one of: user, administrator, gamemaster` },
+          {
+            success: false,
+            error: `Invalid role(s): ${invalidRoles.join(", ")}. Must be one of: user, administrator, gamemaster`,
+          },
           { status: 400 }
         );
       }
@@ -90,7 +95,10 @@ export async function PUT(
 
         if (adminCount === 1) {
           return NextResponse.json(
-            { success: false, error: "Cannot remove administrator role from the last administrator" },
+            {
+              success: false,
+              error: "Cannot remove administrator role from the last administrator",
+            },
             { status: 400 }
           );
         }
@@ -129,19 +137,16 @@ export async function PUT(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     // Handle last-admin protection errors
     if (errorMessage.includes("last administrator")) {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 400 });
     }
 
     console.error("Update user error:", error);
@@ -165,10 +170,7 @@ export async function DELETE(
     // Validate user exists
     const existingUser = await getUserById(id);
     if (!existingUser) {
-      return NextResponse.json(
-        { success: false, error: "User not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
     // Prevent deletion of last administrator
@@ -195,11 +197,11 @@ export async function DELETE(
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
 
     // Check if it's an authentication/authorization error
-    if (errorMessage === "Authentication required" || errorMessage === "Administrator access required") {
-      return NextResponse.json(
-        { success: false, error: errorMessage },
-        { status: 403 }
-      );
+    if (
+      errorMessage === "Authentication required" ||
+      errorMessage === "Administrator access required"
+    ) {
+      return NextResponse.json({ success: false, error: errorMessage }, { status: 403 });
     }
 
     console.error("Delete user error:", error);
@@ -209,4 +211,3 @@ export async function DELETE(
     );
   }
 }
-

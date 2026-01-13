@@ -1,9 +1,9 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
-| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| Basics | Skills/Attributes | Actions | Jargon | Cyberdecks | Programs | How To | Complex Forms | Echoes | Sprites | Sprite Powers | IC  |
+| ------ | ----------------- | ------- | ------ | ---------- | -------- | ------ | ------------- | ------ | ------- | ------------- | --- |
 
 Everything in the Matrix is an icon, a virtual representation that allows you to interact with something in the Matrix. Every object’s owner can choose what the icon looks like, within certain limits. An icon doesn’t just represent a Matrix object in an abstract way; it shows you what it is and how to access it. The Matrix is programmed to give users a context to make it easier to work and play; if a tool is hard to use, it’s not much of a tool. There are designers and programmers who deliberately obfuscate an icon’s purpose with confusing design, but for the most part people like to know how they can use whatever they encounter. Most Matrix locations require icons to match certain visual protocols.
 

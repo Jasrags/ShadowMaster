@@ -190,10 +190,10 @@ export function getAvailableRatings(item: Partial<UnifiedRatingConfig>): number[
  * Semantic type of rating for display and rule purposes
  */
 export type RatingSemanticType =
-  | 'rating'        // Standard equipment rating
-  | 'capacity'      // Enhancement slot capacity
-  | 'deviceRating'  // Matrix device rating
-  | 'force';        // Magical force rating
+  | "rating" // Standard equipment rating
+  | "capacity" // Enhancement slot capacity
+  | "deviceRating" // Matrix device rating
+  | "force"; // Magical force rating
 
 /**
  * Base configuration for any rated item in the catalog
@@ -222,11 +222,11 @@ export interface RatingConfig {
  * Scaling type for how values change with rating
  */
 export type ScalingType =
-  | 'linear'    // value = base × rating
-  | 'squared'   // value = base × rating²
-  | 'flat'      // value = base (no scaling)
-  | 'table'     // value = lookup[rating] (for non-linear)
-  | 'formula';  // value = custom formula
+  | "linear" // value = base × rating
+  | "squared" // value = base × rating²
+  | "flat" // value = base (no scaling)
+  | "table" // value = lookup[rating] (for non-linear)
+  | "formula"; // value = custom formula
 
 /**
  * Configuration for how a value scales with rating
@@ -390,4 +390,3 @@ export interface RatingDisplayOptions {
   /** Custom label override */
   customLabel?: string;
 }
-

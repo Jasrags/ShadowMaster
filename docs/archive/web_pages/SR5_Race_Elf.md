@@ -1,5 +1,5 @@
-| 5th Edition Rules |
-| --- |
+| 5th Edition Rules                                                    |
+| -------------------------------------------------------------------- |
 | Basics // Combat // Magic // Matrix // Driving // Character Creation |
 
 | **Races** |
@@ -8,17 +8,17 @@
 
 | **Centaurs** | **Nagas** | **Pixies** | **Sasquatches** | **Changelings** | **Shapeshifters** |
 
-| CHARACTERS AND ELF CULTURE |
-| --- |
+| CHARACTERS AND ELF CULTURE                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | To be an elf is to be better than everyone else, or at least to be raised with that view. Elves, whether they grow up in a corporation or on the street, congregate together with their own and look down their noses at everyone else. But while they do this, they don’t create the enmity most would expect. Their natural charm shines through their disdaining glares, and those around them often buy into the belief that the elves really are better than them. Being an elf means playing with a chip on your shoulder and a smile on your face. Working with the other metatypes is fine, but when it comes to social time, it’s generally preferable to be with those who deserve to be in your presence. Elves tend to live among elves and even have their bolt holes among elves, often making it hard to take others with them since they’ll stand out. For those who seek to go against the grain, they find the road often easy—but the ease is really a slippery slope. They make friends with their natural charm, they’re often deferred to when charm is called for, and they still get that same feeling of being superior without acting like a stuck-up drekhead. The problem is, they still have pointy ears and almond-shaped eyes, and there are those who, no matter how well the elves sell their goodness, hate them, and most of those people will be hanging out in the same countercultural locations. Elves become a target, a rather easy-to-spot one at that, and some of their “friends” are going to stay quiet when the local ork gang wants to have a “word.” This means playing an elf in the counterculture may be a trying experience for a person expecting their friends to back them up. |
 
 | **World Population:** 15% |
 
 HOMO SAPIENS NOBILIS
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Elf | 1/6 | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 3/8 | 1/6 | 6 | REA+INT |
+| RACE                                | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ----------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Elf                                 | 1/6  | 2/7 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 3/8 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Low-Light Vision |
 
 No other metahuman culture has had the obvious world-changing effects as that of the elves. Three nations, isolated neighborhoods in almost every major sprawl, personalities acting as a primary face or voice for almost every major world power, and even with all of that they have still built a culture full of humility and founded on understanding of their fellow metahumans.
@@ -85,9 +85,9 @@ Now, what about in elven nations, you ask? Someone’s gotta be at the bottom th
 
 ## Dryad
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Dryad | 1/6 | 2/7 | 1/6 | 1/5 | 1/6 | 1/6 | 1/6 | 3/8 | 1/6 | 6 | REA+INT |
+| RACE                                                     | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| -------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Dryad                                                    | 1/6  | 2/7 | 1/6 | 1/5 | 1/6 | 1/6 | 1/6 | 3/8 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Glamour , Low-Light Vision, Symbiosis |
 
 **Physical Characteristics:** The dryad metavariant greatly resembles the standard nobilis subspecies with only a slight decrease in stature. They also tend to be more slender and fair-haired.
@@ -106,9 +106,9 @@ For now, the location is being maintained by the Amazonians, as they take care o
 
 ## Nocturna
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Nocturna | 1/5 | 3/8 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 2/7 | 1/6 | 6 | REA+INT |
+| RACE                                                                                                                | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ------------------------------------------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Nocturna                                                                                                            | 1/5  | 3/8 | 1/6 | 1/6 | 1/6 | 1/6 | 1/6 | 2/7 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Allergy (Sunlight, Mild) , Low-Light Vision, Keen-eared , Nocturnal , Unusual Hair (Colored Fur) |
 
 **Physical Characteristics:** The nocturna metavariant, commonly referred to as Night Ones, possess all physical traits common to the primary nobilis subspecies. The metavariant’s striking variations from the primary nobilis are in body hair growth, a less obvious increase to their auditory sensitivity, and a serious hypersensitivity to bright light that promotes a nocturnal biorhythm. The noticeable body hair is a layer of short, dark fur covering the entire body and face, similar to the panthera genus commonly called black panthers. This hair does not grow on the palms, bottoms of the feet, eyelids, or genitalia. The fur is most often black but may range from deep blue to violet. Two notable specimens who claimed to have never dyed their fur possessed coats of dark green and a deep burnt orange.
@@ -123,9 +123,9 @@ For now, the location is being maintained by the Amazonians, as they take care o
 
 ## Wakyambi
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Wakyambi | 1/6 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 2/7 | 1/6 | 2/7 | 6 | REA+INT |
+| RACE                                                             | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| ---------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Wakyambi                                                         | 1/6  | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 2/7 | 1/6 | 2/7  | 6   | REA+INT |
 | **Racial Traits:** Celerity , Elongated Limbs , Low-Light Vision |
 
 **Physical Characteristics:** Wakyambi are remarkably difficult to analyze due to their rarity and isolated existence. They are taller and thinner than the primary nobilis subspecies, possess the dark skin and tightly curled dark hair common to the peoples of Africa, and tend to have less pronounced extension of the aural helix.
@@ -143,9 +143,9 @@ Most accounts verify that wakyambi possess the natural low-light vision of the p
 
 ## Xapiri Thëpë
 
-| RACE | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Xapiri Thëpë | 1/6 | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6 | 6 | REA+INT |
+| RACE                                                                             | BODY | AGI | REA | STR | WIL | LOG | INT | CHA | EDGE | ESS | INIT    |
+| -------------------------------------------------------------------------------- | ---- | --- | --- | --- | --- | --- | --- | --- | ---- | --- | ------- |
+| Xapiri Thëpë                                                                     | 1/6  | 2/7 | 1/6 | 1/6 | 1/6 | 1/5 | 1/6 | 2/7 | 1/6  | 6   | REA+INT |
 | **Racial Traits:** Allergy (Pollutants, Mild), Low-Light Vision, Photometabolism |
 
 **Physical Characteristics:** The xapiri thëpë metavariant possesses the same primary physical characteristics of the nobilis metatype, with a slight decrease in their average height. The only extensive variation is in their skin. Their epidermal layer integrates patches of cells containing chloroplasts. These organelles employ chlorophyll to produce energy through plantlike photosynthesis. The patches grow with age, and some of the oldest subjects on record are completely greenskinned and claim to spend time in the sun instead of ingesting food.

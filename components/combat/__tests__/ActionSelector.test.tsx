@@ -8,7 +8,9 @@ import { ActionSelector } from "../ActionSelector";
 import type { ActionDefinition, ActionAllocation } from "@/lib/types";
 
 // Mock action factory - creates a minimal action that satisfies ActionWithStatus
-function createMockAction(overrides: Partial<ActionDefinition & { canPerform: boolean; blockers: string[] }> = {}) {
+function createMockAction(
+  overrides: Partial<ActionDefinition & { canPerform: boolean; blockers: string[] }> = {}
+) {
   return {
     id: "action-1",
     name: "Test Action",
@@ -200,8 +202,16 @@ describe("ActionSelector", () => {
 
   describe("category filtering", () => {
     it("filters by category when category button clicked", () => {
-      const combatAction = createMockAction({ id: "fire-weapon", name: "Fire Weapon", domain: "combat" });
-      const magicAction = createMockAction({ id: "cast-spell", name: "Cast Spell", domain: "magic" });
+      const combatAction = createMockAction({
+        id: "fire-weapon",
+        name: "Fire Weapon",
+        domain: "combat",
+      });
+      const magicAction = createMockAction({
+        id: "cast-spell",
+        name: "Cast Spell",
+        domain: "magic",
+      });
 
       render(
         <ActionSelector
@@ -227,8 +237,16 @@ describe("ActionSelector", () => {
     });
 
     it("shows all categories when All clicked", () => {
-      const combatAction = createMockAction({ id: "fire-weapon", name: "Fire Weapon", domain: "combat" });
-      const magicAction = createMockAction({ id: "cast-spell", name: "Cast Spell", domain: "magic" });
+      const combatAction = createMockAction({
+        id: "fire-weapon",
+        name: "Fire Weapon",
+        domain: "combat",
+      });
+      const magicAction = createMockAction({
+        id: "cast-spell",
+        name: "Cast Spell",
+        domain: "magic",
+      });
 
       render(
         <ActionSelector

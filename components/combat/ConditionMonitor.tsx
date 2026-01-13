@@ -151,9 +151,7 @@ function BoxGrid({
     const boxesPerRow = s.rows;
     const result: number[][] = [];
     for (let i = 0; i < max; i += boxesPerRow) {
-      result.push(
-        Array.from({ length: Math.min(boxesPerRow, max - i) }, (_, j) => i + j + 1)
-      );
+      result.push(Array.from({ length: Math.min(boxesPerRow, max - i) }, (_, j) => i + j + 1));
     }
     return result;
   }, [max, s.rows]);
@@ -479,7 +477,9 @@ export function ConditionMonitor({
 
       {/* Legend for wound thresholds */}
       {showWoundModifier && (
-        <div className={`mt-3 pt-3 border-t border-zinc-700/50 flex items-center gap-4 ${s.text} text-zinc-500`}>
+        <div
+          className={`mt-3 pt-3 border-t border-zinc-700/50 flex items-center gap-4 ${s.text} text-zinc-500`}
+        >
           <div className="flex items-center gap-1.5">
             <div className="w-4 h-4 rounded border-2 border-zinc-700 bg-zinc-800 ring-2 ring-amber-500/50" />
             <span>Wound threshold (-1 per 3 boxes)</span>
@@ -531,7 +531,11 @@ export function CompactConditionMonitor({
         <div className="w-16 h-2 bg-zinc-700 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all ${
-              physicalPercent >= 100 ? "bg-rose-500" : physicalPercent >= 75 ? "bg-orange-500" : "bg-rose-400"
+              physicalPercent >= 100
+                ? "bg-rose-500"
+                : physicalPercent >= 75
+                  ? "bg-orange-500"
+                  : "bg-rose-400"
             }`}
             style={{ width: `${Math.min(100, physicalPercent)}%` }}
           />
@@ -547,7 +551,11 @@ export function CompactConditionMonitor({
         <div className="w-16 h-2 bg-zinc-700 rounded-full overflow-hidden">
           <div
             className={`h-full transition-all ${
-              stunPercent >= 100 ? "bg-violet-500" : stunPercent >= 75 ? "bg-violet-400" : "bg-violet-300"
+              stunPercent >= 100
+                ? "bg-violet-500"
+                : stunPercent >= 75
+                  ? "bg-violet-400"
+                  : "bg-violet-300"
             }`}
             style={{ width: `${Math.min(100, stunPercent)}%` }}
           />

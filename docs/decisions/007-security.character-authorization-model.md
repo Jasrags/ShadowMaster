@@ -51,17 +51,17 @@ The system must balance:
 
 ## Permission Matrix
 
-| Action | Owner | GM | Player | Admin | Guest |
-|--------|-------|-----|--------|-------|-------|
-| View Basic Info | ✓ | ✓ | ✓ | ✓ | ✓* |
-| View Full Sheet | ✓ | ✓ | ✗ | ✓ | ✗ |
-| Edit Mechanics | ✓ | ✓ | ✗ | ✓ | ✗ |
-| Request Advancement | ✓ | ✗ | ✗ | ✓ | ✗ |
-| Approve Advancement | ✗ | ✓ | ✗ | ✓ | ✗ |
-| Delete Character | ✓ | ✗ | ✗ | ✓ | ✗ |
-| Transfer Ownership | ✗ | ✗ | ✗ | ✓ | ✗ |
+| Action              | Owner | GM  | Player | Admin | Guest |
+| ------------------- | ----- | --- | ------ | ----- | ----- |
+| View Basic Info     | ✓     | ✓   | ✓      | ✓     | ✓\*   |
+| View Full Sheet     | ✓     | ✓   | ✗      | ✓     | ✗     |
+| Edit Mechanics      | ✓     | ✓   | ✗      | ✓     | ✗     |
+| Request Advancement | ✓     | ✗   | ✗      | ✓     | ✗     |
+| Approve Advancement | ✗     | ✓   | ✗      | ✓     | ✗     |
+| Delete Character    | ✓     | ✗   | ✗      | ✓     | ✗     |
+| Transfer Ownership  | ✗     | ✗   | ✗      | ✓     | ✗     |
 
-*Guest access to basic info depends on campaign visibility settings.
+\*Guest access to basic info depends on campaign visibility settings.
 
 ## Alternatives Considered
 
@@ -76,4 +76,3 @@ The system must balance:
 - `character.advancement` - Advancement request and approval workflow
 - `campaign.participant-governance` - Campaign membership and roles
 - `campaign.governance-approval` - GM approval workflow
-

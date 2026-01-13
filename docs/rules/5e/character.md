@@ -19,16 +19,16 @@ Define the canonical data model and lifecycle for Shadowrun 5e characters inside
 
 ## Core Identity
 
-| Field | Type | Notes |
-|-------|------|-------|
-| `characterId` | UUID | Immutable primary key. |
-| `playerName` | string | Optional display for campaign table. |
-| `characterName` | string | Preferred street name. |
-| `metatype` | reference | Links to `shadowrun-5e-attributes-data.md` for metatype modifiers. |
-| `sex` | enum | Optional; used for flavor or specific rules (e.g., certain gear). |
-| `age` | int | Optional narrative detail. |
-| `concept` | string | Short archetype summary (e.g., "Elf Face"). |
-| `campaignId` | UUID | Optional multi-character linking. |
+| Field           | Type      | Notes                                                              |
+| --------------- | --------- | ------------------------------------------------------------------ |
+| `characterId`   | UUID      | Immutable primary key.                                             |
+| `playerName`    | string    | Optional display for campaign table.                               |
+| `characterName` | string    | Preferred street name.                                             |
+| `metatype`      | reference | Links to `shadowrun-5e-attributes-data.md` for metatype modifiers. |
+| `sex`           | enum      | Optional; used for flavor or specific rules (e.g., certain gear).  |
+| `age`           | int       | Optional narrative detail.                                         |
+| `concept`       | string    | Short archetype summary (e.g., "Elf Face").                        |
+| `campaignId`    | UUID      | Optional multi-character linking.                                  |
 
 ## Narrative Profile
 
@@ -43,13 +43,13 @@ Define the canonical data model and lifecycle for Shadowrun 5e characters inside
 
 Store structured data for each metatype to echo the descriptive guidance from the source text:
 
-| Metatype | Key Themes | Spec Hooks |
-|----------|------------|------------|
-| Human | Versatile, balanced attributes, higher Edge baseline. | Default baseline; ensure Edge allocation supports extra points. |
-| Dwarf | Short, resilient, strong; corporate integration but face accessibility bias. | Apply Body/Willpower bonuses, toxin/pathogen resistance modifiers. |
-| Elf | Agile, charismatic, long-lived, culturally distinctive. | Enforce Agility/Charisma bonuses; enable optional cultural packages. |
-| Ork | Physically imposing, shorter lifespan, social prejudice. | Strength/Body boosts, Charisma/Logic penalties, lifestyle adjustments. |
-| Troll | Massive build, natural armor (dermal deposits), social barriers. | Extreme Body/Strength bonuses, Reach modifiers, gear availability constraints. |
+| Metatype | Key Themes                                                                   | Spec Hooks                                                                     |
+| -------- | ---------------------------------------------------------------------------- | ------------------------------------------------------------------------------ |
+| Human    | Versatile, balanced attributes, higher Edge baseline.                        | Default baseline; ensure Edge allocation supports extra points.                |
+| Dwarf    | Short, resilient, strong; corporate integration but face accessibility bias. | Apply Body/Willpower bonuses, toxin/pathogen resistance modifiers.             |
+| Elf      | Agile, charismatic, long-lived, culturally distinctive.                      | Enforce Agility/Charisma bonuses; enable optional cultural packages.           |
+| Ork      | Physically imposing, shorter lifespan, social prejudice.                     | Strength/Body boosts, Charisma/Logic penalties, lifestyle adjustments.         |
+| Troll    | Massive build, natural armor (dermal deposits), social barriers.             | Extreme Body/Strength bonuses, Reach modifiers, gear availability constraints. |
 
 - Use descriptions to seed default biography snippets and tooltips during creation.
 - Link to metatype rules in `shadowrun-5e-attributes-data.md` for numerical modifiers.
@@ -57,6 +57,7 @@ Store structured data for each metatype to echo the descriptive guidance from th
 ## Priority Allocation Snapshot
 
 Store the outcome of the priority table selection for audit and recalculation:
+
 - `priorityAssignments`: mapping A–E → { Metatype, Attributes, Skills, Magic/Resonance, Resources } values.
 - `metatypeChoice`: resolved metatype and options (special attribute points, qualities).
 - `specialAttributes`: Edge, Magic, Resonance, or other special pools granted at creation.
@@ -162,4 +163,4 @@ Store the outcome of the priority table selection for audit and recalculation:
 - Initiation and metamagics rules require elaboration (grade cost, benefits, ordeals).
 - Background count tables and astral phenomena events pending documentation.
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_

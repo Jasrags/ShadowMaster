@@ -82,10 +82,7 @@ function generateMarkId(): string {
  * @param targetId - ID of the target
  * @returns The mark if found, null otherwise
  */
-export function findMark(
-  matrixState: MatrixState,
-  targetId: string
-): MatrixMark | null {
+export function findMark(matrixState: MatrixState, targetId: string): MatrixMark | null {
   return matrixState.marksHeld.find((m) => m.targetId === targetId) ?? null;
 }
 
@@ -96,10 +93,7 @@ export function findMark(
  * @param targetId - ID of the target
  * @returns Number of marks (0-3)
  */
-export function getMarksOnTarget(
-  matrixState: MatrixState,
-  targetId: string
-): number {
+export function getMarksOnTarget(matrixState: MatrixState, targetId: string): number {
   const mark = findMark(matrixState, targetId);
   return mark?.markCount ?? 0;
 }
@@ -138,10 +132,7 @@ export function getAllMarks(matrixState: MatrixState): MatrixMark[] {
  * @param targetType - Type of target to filter by
  * @returns Marks on targets of that type
  */
-export function getMarksByType(
-  matrixState: MatrixState,
-  targetType: MarkTargetType
-): MatrixMark[] {
+export function getMarksByType(matrixState: MatrixState, targetType: MarkTargetType): MatrixMark[] {
   return matrixState.marksHeld.filter((m) => m.targetType === targetType);
 }
 
@@ -293,13 +284,10 @@ export function placeMarks(
 
   // Place marks one at a time (respects MAX_MARKS)
   for (let i = 0; i < markCount; i++) {
-    const { state, result } = placeMark(
-      currentState,
-      targetId,
-      targetType,
-      targetName,
-      { ...options, silentCap: true }
-    );
+    const { state, result } = placeMark(currentState, targetId, targetType, targetName, {
+      ...options,
+      silentCap: true,
+    });
     currentState = state;
     lastResult = result;
 
@@ -344,9 +332,7 @@ export function removeMarks(
 
   // Remove all marks
   if (count === undefined || count >= existingMark.markCount) {
-    const updatedMarks = matrixState.marksHeld.filter(
-      (m) => m.id !== existingMark.id
-    );
+    const updatedMarks = matrixState.marksHeld.filter((m) => m.id !== existingMark.id);
 
     return {
       state: {
@@ -435,24 +421,16 @@ export function removeExpiredMarks(
  * @param mark - The mark being placed on us
  * @returns Updated matrix state
  */
-export function receiveMarkOnSelf(
-  matrixState: MatrixState,
-  mark: MatrixMark
-): MatrixState {
+export function receiveMarkOnSelf(matrixState: MatrixState, mark: MatrixMark): MatrixState {
   // Check if we already have a mark from this entity
-  const existingIndex = matrixState.marksReceived.findIndex(
-    (m) => m.targetId === mark.targetId
-  );
+  const existingIndex = matrixState.marksReceived.findIndex((m) => m.targetId === mark.targetId);
 
   if (existingIndex >= 0) {
     // Update existing mark
     const updated = [...matrixState.marksReceived];
     updated[existingIndex] = {
       ...updated[existingIndex],
-      markCount: Math.min(
-        (updated[existingIndex].markCount) + mark.markCount,
-        MAX_MARKS
-      ),
+      markCount: Math.min(updated[existingIndex].markCount + mark.markCount, MAX_MARKS),
     };
 
     return {
@@ -475,15 +453,10 @@ export function receiveMarkOnSelf(
  * @param markerId - ID of the entity whose marks to remove
  * @returns Updated matrix state
  */
-export function removeReceivedMarks(
-  matrixState: MatrixState,
-  markerId: string
-): MatrixState {
+export function removeReceivedMarks(matrixState: MatrixState, markerId: string): MatrixState {
   return {
     ...matrixState,
-    marksReceived: matrixState.marksReceived.filter(
-      (m) => m.targetId !== markerId
-    ),
+    marksReceived: matrixState.marksReceived.filter((m) => m.targetId !== markerId),
   };
 }
 

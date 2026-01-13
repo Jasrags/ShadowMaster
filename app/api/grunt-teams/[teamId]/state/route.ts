@@ -46,18 +46,13 @@ export async function PATCH(
     const team = await getGruntTeam(teamId);
 
     if (!team) {
-      return NextResponse.json(
-        { success: false, error: "Grunt team not found" },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: "Grunt team not found" }, { status: 404 });
     }
 
     // Authorize GM access
-    const { authorized, error, status } = await authorizeCampaign(
-      team.campaignId,
-      userId,
-      { requireGM: true }
-    );
+    const { authorized, error, status } = await authorizeCampaign(team.campaignId, userId, {
+      requireGM: true,
+    });
 
     if (!authorized) {
       return NextResponse.json({ success: false, error }, { status });
@@ -125,9 +120,6 @@ export async function PATCH(
   } catch (error) {
     console.error("Update grunt team state error:", error);
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
-    return NextResponse.json(
-      { success: false, error: errorMessage },
-      { status: 500 }
-    );
+    return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }
 }

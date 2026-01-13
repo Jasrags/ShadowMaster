@@ -159,10 +159,7 @@ export function requiresVRMode(action: MatrixAction): boolean {
  * @param targetId - ID of the target to check
  * @returns Number of marks (0-3)
  */
-export function getMarksOnTarget(
-  matrixState: MatrixState,
-  targetId: string
-): number {
+export function getMarksOnTarget(matrixState: MatrixState, targetId: string): number {
   const mark = matrixState.marksHeld.find((m) => m.targetId === targetId);
   return mark?.markCount ?? 0;
 }
@@ -209,10 +206,7 @@ export function getRelevantPrograms(action: MatrixAction): string[] {
  * @param programId - Program to check
  * @returns True if program is loaded and running
  */
-export function isProgramLoaded(
-  matrixState: MatrixState,
-  programId: string
-): boolean {
+export function isProgramLoaded(matrixState: MatrixState, programId: string): boolean {
   return matrixState.loadedPrograms.some(
     (p) => (p.catalogId === programId || p.programId === programId) && p.isRunning
   );
@@ -287,10 +281,7 @@ export function validateMatrixAction(
   // Check device type compatibility
   let deviceSupportsAction = false;
   if (matrixState.activeDeviceType) {
-    deviceSupportsAction = isActionSupportedByDevice(
-      action,
-      matrixState.activeDeviceType
-    );
+    deviceSupportsAction = isActionSupportedByDevice(action, matrixState.activeDeviceType);
 
     if (!deviceSupportsAction) {
       errors.push({
@@ -419,9 +410,7 @@ export function getAvailableActions(
  * @param actions - Array of matrix actions
  * @returns Actions grouped by category
  */
-export function categorizeActions(
-  actions: MatrixAction[]
-): Record<string, MatrixAction[]> {
+export function categorizeActions(actions: MatrixAction[]): Record<string, MatrixAction[]> {
   const categories: Record<string, MatrixAction[]> = {};
 
   for (const action of actions) {

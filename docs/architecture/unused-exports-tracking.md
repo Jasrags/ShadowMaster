@@ -613,41 +613,46 @@ associated capabilities are implemented. After completing each capability, run
 
 These are index.ts files that re-export from other modules but aren't imported:
 
-| File | Action |
-|------|--------|
-| `app/characters/[id]/components/index.ts` | Remove |
+| File                                        | Action |
+| ------------------------------------------- | ------ |
+| `app/characters/[id]/components/index.ts`   | Remove |
 | `app/characters/create/components/index.ts` | Remove |
-| `components/action-resolution/index.ts` | Remove |
-| `components/character/index.ts` | Remove |
-| `components/combat/index.ts` | Remove |
-| `lib/rules/character/index.ts` | Remove |
-| `lib/storage/index.ts` | Remove |
+| `components/action-resolution/index.ts`     | Remove |
+| `components/character/index.ts`             | Remove |
+| `components/combat/index.ts`                | Remove |
+| `lib/rules/character/index.ts`              | Remove |
+| `lib/storage/index.ts`                      | Remove |
 
 ---
 
 ## Tracking Progress
 
 ### Baseline (2025-12-29)
+
 - **Unused exports:** 169
 - **Unused types:** 64
 - **Unused files:** 20
 
 ### After mechanics.matrix-operations
+
 - [ ] Run `pnpm knip`
 - [ ] Record new counts
 - [ ] Expected reduction: ~15 exports
 
 ### After mechanics.rigging-control
+
 - [ ] Run `pnpm knip`
 - [ ] Record new counts
 - [ ] Expected reduction: ~15 exports
 
 ### After character.augmentation-systems
+
 - [ ] Run `pnpm knip`
 - [ ] Record new counts
 - [ ] Expected reduction: ~15 exports
 
 ### After Action Resolution UI
+
 - [ ] Run `pnpm knip`
 - [ ] Record new counts
 - [ ] Expected reduction: ~35 exports

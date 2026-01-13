@@ -132,10 +132,13 @@ describe("queryAuditLog", () => {
     });
 
     expect(result).toHaveLength(3);
-    expect(result.every((e) =>
-      new Date(e.timestamp) >= new Date("2024-01-02T00:00:00Z") &&
-      new Date(e.timestamp) <= new Date("2024-01-04T00:00:00Z")
-    )).toBe(true);
+    expect(
+      result.every(
+        (e) =>
+          new Date(e.timestamp) >= new Date("2024-01-02T00:00:00Z") &&
+          new Date(e.timestamp) <= new Date("2024-01-04T00:00:00Z")
+      )
+    ).toBe(true);
   });
 
   it("should sort in descending order by default", () => {

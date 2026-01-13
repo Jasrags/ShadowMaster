@@ -21,10 +21,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
 
     // Validate email format
     if (!isValidEmail(email)) {
-      return NextResponse.json(
-        { success: false, error: "Invalid email format" },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: "Invalid email format" }, { status: 400 });
     }
 
     // Validate password strength
@@ -75,4 +72,3 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     );
   }
 }
-

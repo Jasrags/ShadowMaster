@@ -29,13 +29,7 @@ import type {
   MigrationStrategy,
   RuleModuleType,
 } from "../types";
-import {
-  readJsonFile,
-  writeJsonFile,
-  ensureDirectory,
-  fileExists,
-  listJsonFiles,
-} from "./base";
+import { readJsonFile, writeJsonFile, ensureDirectory, fileExists, listJsonFiles } from "./base";
 import { loadRuleset } from "../rules/loader";
 import { produceMergedRuleset } from "../rules/merge";
 import type { RulesetLoadConfig } from "../rules/loader-types";
@@ -128,9 +122,7 @@ export async function captureRulesetSnapshot(
   // Load the current ruleset
   const loadResult = await loadRuleset(config);
   if (!loadResult.success || !loadResult.ruleset) {
-    throw new Error(
-      loadResult.error || `Failed to load ruleset for edition: ${editionCode}`
-    );
+    throw new Error(loadResult.error || `Failed to load ruleset for edition: ${editionCode}`);
   }
 
   const loadedRuleset = loadResult.ruleset;
@@ -138,9 +130,7 @@ export async function captureRulesetSnapshot(
   // Merge the ruleset to get final state
   const mergeResult = produceMergedRuleset(loadedRuleset);
   if (!mergeResult.success || !mergeResult.ruleset) {
-    throw new Error(
-      mergeResult.error || `Failed to merge ruleset for edition: ${editionCode}`
-    );
+    throw new Error(mergeResult.error || `Failed to merge ruleset for edition: ${editionCode}`);
   }
 
   const mergedRuleset = mergeResult.ruleset;
@@ -227,9 +217,7 @@ export async function getSnapshotWithVersionRef(
  * @param snapshotId - The snapshot ID to retrieve
  * @returns The merged ruleset from the snapshot, or null if not found
  */
-export async function getRulesetSnapshot(
-  snapshotId: ID
-): Promise<MergedRuleset | null> {
+export async function getRulesetSnapshot(snapshotId: ID): Promise<MergedRuleset | null> {
   const filePath = path.join(SNAPSHOTS_DIR, `${snapshotId}.json`);
 
   if (!(await fileExists(filePath))) {
@@ -246,9 +234,7 @@ export async function getRulesetSnapshot(
  * @param snapshotId - The snapshot ID
  * @returns The version reference, or null if not found
  */
-export async function getSnapshotVersionRef(
-  snapshotId: ID
-): Promise<RulesetVersionRef | null> {
+export async function getSnapshotVersionRef(snapshotId: ID): Promise<RulesetVersionRef | null> {
   const filePath = path.join(SNAPSHOTS_DIR, `${snapshotId}.json`);
 
   if (!(await fileExists(filePath))) {
@@ -282,9 +268,7 @@ export async function getCurrentSnapshot(
   }
 
   // Sort by creation date descending and return the most recent
-  snapshots.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-  );
+  snapshots.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const currentSnapshot = snapshots[0];
 
@@ -300,9 +284,7 @@ export async function getCurrentSnapshot(
  * @param editionCode - The edition code to filter by
  * @returns Array of version references for all snapshots of this edition
  */
-export async function listAllSnapshots(
-  editionCode: EditionCode
-): Promise<RulesetVersionRef[]> {
+export async function listAllSnapshots(editionCode: EditionCode): Promise<RulesetVersionRef[]> {
   if (!(await fileExists(SNAPSHOTS_DIR))) {
     return [];
   }
@@ -366,11 +348,7 @@ export async function compareSnapshots(
     const baseModule = baseRuleset.modules[moduleType];
     const targetModule = targetRuleset.modules[moduleType];
 
-    const moduleChanges = compareModule(
-      moduleType,
-      baseModule || {},
-      targetModule || {}
-    );
+    const moduleChanges = compareModule(moduleType, baseModule || {}, targetModule || {});
     changes.push(...moduleChanges);
   }
 
@@ -416,15 +394,11 @@ function compareModule(
     }
     // Check for removals
     else if (baseValue !== undefined && targetValue === undefined) {
-      changes.push(
-        createDriftChange(moduleType, "removed", key, baseValue, null)
-      );
+      changes.push(createDriftChange(moduleType, "removed", key, baseValue, null));
     }
     // Check for modifications
     else if (!deepEqual(baseValue, targetValue)) {
-      changes.push(
-        createDriftChange(moduleType, "modified", key, baseValue, targetValue)
-      );
+      changes.push(createDriftChange(moduleType, "modified", key, baseValue, targetValue));
     }
   }
 
@@ -539,9 +513,7 @@ function generateChangeDescription(
 /**
  * Generate migration recommendations for detected changes
  */
-function generateRecommendations(
-  changes: DriftChange[]
-): MigrationRecommendation[] {
+function generateRecommendations(changes: DriftChange[]): MigrationRecommendation[] {
   return changes.map((change) => {
     const strategy = determineStrategy(change);
     const autoApplicable = strategy === "auto-update";

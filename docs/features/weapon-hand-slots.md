@@ -42,12 +42,14 @@ The current weapon readiness system tracks whether a weapon is "readied" but doe
 ### Two-Handed Weapons in SR5 Core
 
 Only two melee weapons in SR5 Core Rulebook are explicitly two-handed:
+
 - **Combat Axe** (Reach 2, 5P damage, -4 AP)
 - **Katana** (Reach 1, 3P damage, -3 AP)
 
 ### Firearms Handling
 
 Most firearms can technically be fired one-handed but:
+
 - Rifles/shotguns are designed for two-handed use
 - Recoil is harder to manage one-handed
 - Some weapons may have "two-handed" designation in sourcebooks
@@ -85,13 +87,13 @@ Most firearms can technically be fired one-handed but:
 
 ### Hand Slot Rules
 
-| Scenario | Main Hand | Off Hand | Modifier |
-|----------|-----------|----------|----------|
-| Single 1H weapon | Weapon | Empty | None |
-| Off-hand only | Empty | Weapon | -2 |
-| Dual-wield | Weapon A | Weapon B | -2 on B |
-| Two-handed | Weapon | Weapon (same) | None |
-| Unarmed | Empty | Empty | None |
+| Scenario         | Main Hand | Off Hand      | Modifier |
+| ---------------- | --------- | ------------- | -------- |
+| Single 1H weapon | Weapon    | Empty         | None     |
+| Off-hand only    | Empty     | Weapon        | -2       |
+| Dual-wield       | Weapon A  | Weapon B      | -2 on B  |
+| Two-handed       | Weapon    | Weapon (same) | None     |
+| Unarmed          | Empty     | Empty         | None     |
 
 ---
 
@@ -144,8 +146,7 @@ interface CharacterHandState {
 
 // Derived helpers
 function isTwoHandedWeaponReady(state: CharacterHandState): boolean {
-  return state.mainHand !== null &&
-         state.mainHand === state.offHand;
+  return state.mainHand !== null && state.mainHand === state.offHand;
 }
 
 function hasEmptyHand(state: CharacterHandState): boolean {
@@ -186,14 +187,14 @@ function canReadyWeapon(
     if (targetSlot !== "both") {
       return {
         valid: false,
-        error: "Two-handed weapon must be wielded with both hands"
+        error: "Two-handed weapon must be wielded with both hands",
       };
     }
 
     if (handState.mainHand !== null || handState.offHand !== null) {
       return {
         valid: false,
-        error: "Both hands must be free to ready a two-handed weapon"
+        error: "Both hands must be free to ready a two-handed weapon",
       };
     }
 
@@ -204,7 +205,7 @@ function canReadyWeapon(
   if (targetSlot === "both") {
     return {
       valid: false,
-      error: "Single-handed weapon cannot occupy both hands"
+      error: "Single-handed weapon cannot occupy both hands",
     };
   }
 
@@ -212,7 +213,7 @@ function canReadyWeapon(
   if (handState.mainHand !== null && handState.mainHand === handState.offHand) {
     return {
       valid: false,
-      error: "Cannot ready weapon while wielding a two-handed weapon"
+      error: "Cannot ready weapon while wielding a two-handed weapon",
     };
   }
 
@@ -220,14 +221,14 @@ function canReadyWeapon(
   if (targetSlot === "main" && handState.mainHand !== null) {
     return {
       valid: false,
-      error: "Main hand is already occupied"
+      error: "Main hand is already occupied",
     };
   }
 
   if (targetSlot === "off" && handState.offHand !== null) {
     return {
       valid: false,
-      error: "Off hand is already occupied"
+      error: "Off hand is already occupied",
     };
   }
 
@@ -237,12 +238,8 @@ function canReadyWeapon(
 /**
  * Ready a weapon and update character hand state
  */
-function readyWeapon(
-  character: Character,
-  weaponId: string,
-  targetSlot: HandSlot
-): Character {
-  const weapon = character.gear?.find(g => g.id === weaponId) as Weapon;
+function readyWeapon(character: Character, weaponId: string, targetSlot: HandSlot): Character {
+  const weapon = character.gear?.find((g) => g.id === weaponId) as Weapon;
   if (!weapon) throw new Error("Weapon not found");
 
   const validation = canReadyWeapon(character, weapon, targetSlot);
@@ -261,15 +258,15 @@ function readyWeapon(
   }
 
   // Update weapon state
-  const updatedGear = character.gear?.map(g => {
+  const updatedGear = character.gear?.map((g) => {
     if (g.id === weaponId) {
       return {
         ...g,
         state: {
           ...g.state,
           location: "readied" as const,
-          handSlot: targetSlot
-        }
+          handSlot: targetSlot,
+        },
       };
     }
     return g;
@@ -280,8 +277,8 @@ function readyWeapon(
     gear: updatedGear,
     combatState: {
       ...character.combatState,
-      hands: newHandState
-    }
+      hands: newHandState,
+    },
   };
 }
 ```
@@ -299,10 +296,11 @@ function readyWeapon(
  * Check if character has Ambidextrous quality
  */
 function isAmbidextrous(character: Character): boolean {
-  return character.qualities?.some(
-    q => q.qualityId === "ambidextrous" ||
-         q.id === "ambidextrous"  // Legacy support
-  ) ?? false;
+  return (
+    character.qualities?.some(
+      (q) => q.qualityId === "ambidextrous" || q.id === "ambidextrous" // Legacy support
+    ) ?? false
+  );
 }
 
 /**
@@ -315,10 +313,7 @@ function getOffHandModifier(character: Character): number {
 /**
  * Calculate weapon attack pool including hand slot modifiers
  */
-function calculateWeaponAttackPool(
-  character: Character,
-  weapon: Weapon
-): AttackPoolResult {
+function calculateWeaponAttackPool(character: Character, weapon: Weapon): AttackPoolResult {
   const basePool = calculateBaseAttackPool(character, weapon);
   const handSlot = weapon.state?.handSlot;
 
@@ -338,7 +333,7 @@ function calculateWeaponAttackPool(
     handModifierLabel,
     totalPool: basePool + handModifier,
     isOffHand: handSlot === "off",
-    isAmbidextrous: isAmbidextrous(character)
+    isAmbidextrous: isAmbidextrous(character),
   };
 }
 
@@ -358,14 +353,15 @@ interface AttackPoolResult {
 
 ### SR5 Core Two-Handed Weapons
 
-| Weapon | Type | Reach | Damage | AP | Notes |
-|--------|------|-------|--------|-----|-------|
-| Combat Axe | Melee | 2 | (STR+5)P | -4 | Two-handed |
-| Katana | Melee | 1 | (STR+3)P | -3 | Two-handed |
+| Weapon     | Type  | Reach | Damage   | AP  | Notes      |
+| ---------- | ----- | ----- | -------- | --- | ---------- |
+| Combat Axe | Melee | 2     | (STR+5)P | -4  | Two-handed |
+| Katana     | Melee | 1     | (STR+3)P | -3  | Two-handed |
 
 ### Future Considerations
 
 Some weapons may have optional two-handed use:
+
 - **Rifles**: Can be fired one-handed with penalty
 - **Shotguns**: Can be fired one-handed with penalty
 - **Heavy Pistols**: Can be braced two-handed for stability
@@ -412,6 +408,7 @@ When readying a single-handed weapon:
 ```
 
 For Ambidextrous characters:
+
 ```
 │  ┌─────────────┐  ┌─────────────┐       │
 │  │  🤚 Main    │  │  ✋ Off     │       │
@@ -541,7 +538,7 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
       modifiers.push({
         label: "Off-hand",
         value: offHandMod,
-        type: "situational"
+        type: "situational",
       });
     }
 

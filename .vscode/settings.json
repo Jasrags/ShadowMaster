@@ -4,22 +4,17 @@
   "typescript.enablePromptUseWorkspaceTsdk": true,
   "typescript.preferences.includePackageJsonAutoImports": "on",
   "typescript.updateImportsOnFileMove.enabled": "always",
-  
+
   // ESLint: Auto-fix on save
   "eslint.enable": true,
-  "eslint.validate": [
-    "javascript",
-    "javascriptreact",
-    "typescript",
-    "typescriptreact"
-  ],
+  "eslint.validate": ["javascript", "javascriptreact", "typescript", "typescriptreact"],
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "explicit"
   },
-  
+
   // Show errors in Problems panel
   "problems.showCurrentInStatus": true,
-  
+
   // Fast feedback
   "files.watcherExclude": {
     "**/.git/objects/**": true,
@@ -28,4 +23,3 @@
     "**/.next/**": true
   }
 }
-

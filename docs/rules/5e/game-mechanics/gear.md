@@ -19,6 +19,7 @@ Document how ShadowMaster should represent, categorize, and manage Shadowrun 5e 
 ## Gear Data Model
 
 ### GearItem
+
 - `id`: unique identifier
 - `name`: display name
 - `category`: e.g., `weapon`, `armor`, `cyberware`, `vehicle`, `consumable`
@@ -32,10 +33,12 @@ Document how ShadowMaster should represent, categorize, and manage Shadowrun 5e 
 - `source`: rulebook reference
 
 ### Modification
+
 - `name`, `applicableCategories`, `slotsRequired`, `effects`
 - Include weapon accessories (smartgun, gas-vent), vehicle mods (armor, sensor packages), armor upgrades (chemical seal), cyberware enhancements.
 
 ### LifestyleAddon
+
 - `name`, `costModifier`, `effect` (e.g., increase security rating, add workspace).
 
 ## Character Creation: Spending Nuyen
@@ -134,4 +137,4 @@ During character creation, the Resources Priority level determines starting fund
 - Consumable rules (toxins, drugs) need data-driven effects and addiction tracking.
 - Magical gear (foci, reagents) partially covered in magic spec—ensure cross-reference.
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_

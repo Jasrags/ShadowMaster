@@ -1,40 +1,40 @@
-| 5th Edition Lists |
-| --- |
+| 5th Edition Lists                                                     |
+| --------------------------------------------------------------------- |
 | Gear // Magic // Hacking // Skills // Qualities // Packs // Creatures |
 
 | Armor/Clothing // Cyberware // Magical // Vehicles/Drones // Vehicle Mods // Weapons // Electronics // Security // Medical // Others |
 
 | Head | Eye | Ear | Body | Limb | Limb Accessories | Weapon | Other | Basic Bioware | Cultured Bioware | Other Bioware |
-| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| ---- | --- | --- | ---- | ---- | ---------------- | ------ | ----- | ------------- | ---------------- | ------------- |
 
 Cyber-implant weapons can be installed into cyberlimbs or directly into the meat. They’re popular with the denizens of urban wastelands like the Barrens, and with street samurai who never want to go anywhere unarmed.
 
 See the **[Implant Firearms page](/Shadowrun/index.php/SR5:Weapons:Implant_Firearms "SR5:Weapons:Implant Firearms")** & **[Implant Melee Weapons page](/Shadowrun/index.php/SR5:Weapons:Implant_Melee_Weapons "SR5:Weapons:Implant Melee Weapons")** for Weapon Stats.
 
-| Part | Device | Essence | Capacity | Avail | Cost | Source |
-| --- | --- | --- | --- | --- | --- | --- |
-| **Weapon** | **Hold-Out Pistol** | 0.1 | [2] | 8R | 2,000¥ | Core |
-| **Weapon** | **Light Pistol** | 0.25 | [4] | 10R | 3,900¥ | Core |
-| **Weapon** | **Machine Pistol** | 0.5 | [6] | 12R | 3,500¥ | Core |
-| **Weapon** | **Heavy Pistol** | 0.5 | [6] | 12R | 4,300¥ | Core |
-| **Weapon** | **Submachine Gun** | 1 | [8] | 12R | 4,800¥ | Core |
-| **Weapon** | **Shotgun** | 1.25 | [10] | 12R | 8,500¥ | Core |
-| **Weapon** | **Grenade Launcher** | 1.5 | [15] | 20F | 30,000¥ | Core |
-| **Weapon** | **External Clip Port** | 0.1 | [1] | - | +1,000¥ | Core |
-| **Weapon** | **Laser Sight** | - | [1] | - | +1,000¥ | Core |
-| **Weapon** | **Silencer/Suppressor** | - | [2] | - | +1,000¥ | Core |
-| **Weapon** | **Extreme Cyber-Implant** | 0.5 | [5] | 8F | 2,000¥ | SR5:CF |
-| **Weapon** | **Fangs (Pair)** | 0.1 | [1] | 6 | 200¥ | SR5:CF |
-| **Weapon** | **Retractable** | 0.15 | [2] | 8 | 500¥ | SR5:CF |
-| **Weapon** | **Flametosser** | 1.0 | [8] | 12F | 4,000¥ | SR5:CF |
-| **Weapon** | **Extra Fuel (5 Shots)** | 0.2 | [2] | 12F | 500¥ | SR5:CF |
-| **Weapon** | **Junkyard Jaw** | 0.75 | [6] | 8F | 2,000¥ | SR5:CF |
-| **Weapon** | **Oral Slasher** | 0.25 | [3] | 12R | 750¥ | SR5:CF |
-| **Weapon** | **Weapon Launcher** | 0.2 | [2] | 12F | 500¥(added to weapon cost) | SR5:CF |
-| **Weapon** | **Hand Blade (Retractable)** | 0.25 | [2] | 10F | 2,500¥ | Core |
-| **Weapon** | **Hand Razors (Retractable)** | 0.2 | [2] | 8F | 1,250¥ | Core |
-| **Weapon** | **Spurs (Retractable)** | 0.3 | [3] | 12F | 5,000¥ | Core |
-| **Weapon** | **Shock Hand** | 0.25 | [4] | 8R | 5,000¥ | Core |
+| Part       | Device                        | Essence | Capacity | Avail | Cost                       | Source |
+| ---------- | ----------------------------- | ------- | -------- | ----- | -------------------------- | ------ |
+| **Weapon** | **Hold-Out Pistol**           | 0.1     | [2]      | 8R    | 2,000¥                     | Core   |
+| **Weapon** | **Light Pistol**              | 0.25    | [4]      | 10R   | 3,900¥                     | Core   |
+| **Weapon** | **Machine Pistol**            | 0.5     | [6]      | 12R   | 3,500¥                     | Core   |
+| **Weapon** | **Heavy Pistol**              | 0.5     | [6]      | 12R   | 4,300¥                     | Core   |
+| **Weapon** | **Submachine Gun**            | 1       | [8]      | 12R   | 4,800¥                     | Core   |
+| **Weapon** | **Shotgun**                   | 1.25    | [10]     | 12R   | 8,500¥                     | Core   |
+| **Weapon** | **Grenade Launcher**          | 1.5     | [15]     | 20F   | 30,000¥                    | Core   |
+| **Weapon** | **External Clip Port**        | 0.1     | [1]      | -     | +1,000¥                    | Core   |
+| **Weapon** | **Laser Sight**               | -       | [1]      | -     | +1,000¥                    | Core   |
+| **Weapon** | **Silencer/Suppressor**       | -       | [2]      | -     | +1,000¥                    | Core   |
+| **Weapon** | **Extreme Cyber-Implant**     | 0.5     | [5]      | 8F    | 2,000¥                     | SR5:CF |
+| **Weapon** | **Fangs (Pair)**              | 0.1     | [1]      | 6     | 200¥                       | SR5:CF |
+| **Weapon** | **Retractable**               | 0.15    | [2]      | 8     | 500¥                       | SR5:CF |
+| **Weapon** | **Flametosser**               | 1.0     | [8]      | 12F   | 4,000¥                     | SR5:CF |
+| **Weapon** | **Extra Fuel (5 Shots)**      | 0.2     | [2]      | 12F   | 500¥                       | SR5:CF |
+| **Weapon** | **Junkyard Jaw**              | 0.75    | [6]      | 8F    | 2,000¥                     | SR5:CF |
+| **Weapon** | **Oral Slasher**              | 0.25    | [3]      | 12R   | 750¥                       | SR5:CF |
+| **Weapon** | **Weapon Launcher**           | 0.2     | [2]      | 12F   | 500¥(added to weapon cost) | SR5:CF |
+| **Weapon** | **Hand Blade (Retractable)**  | 0.25    | [2]      | 10F   | 2,500¥                     | Core   |
+| **Weapon** | **Hand Razors (Retractable)** | 0.2     | [2]      | 8F    | 1,250¥                     | Core   |
+| **Weapon** | **Spurs (Retractable)**       | 0.3     | [3]      | 12F   | 5,000¥                     | Core   |
+| **Weapon** | **Shock Hand**                | 0.25    | [4]      | 8R    | 5,000¥                     | Core   |
 
 ## Contents
 
@@ -96,111 +96,111 @@ For extra concealment, cyberguns are built from mostly non-metallic compounds, a
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.1 | [2] | 8R | 2,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.1     | [2]      | 8R    | 2,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Light Pistol
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | [4] | 10R | 3,900¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.25    | [4]      | 10R   | 3,900¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Machine Pistol
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.5 | [6] | 12R | 3,500¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.5     | [6]      | 12R   | 3,500¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Heavy Pistol
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.5 | [6] | 12R | 4,300¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.5     | [6]      | 12R   | 4,300¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Submachine Gun
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1 | [8] | 12R | 4,800¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 1       | [8]      | 12R   | 4,800¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Shotgun
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1.25 | [10] | 12R | 8,500¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 1.25    | [10]     | 12R   | 8,500¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Grenade Launcher
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1.5 | [15] | 20F | 30,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 1.5     | [15]     | 20F   | 30,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## External Clip Port
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.1 | [1] | - | +1,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| 0.1     | [1]      | -     | +1,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Laser Sight
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | [1] | - | +1,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| -       | [1]      | -     | +1,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Silencer/Suppressor
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| - | [2] | - | +1,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST    | SOURCE |
+| ------- | -------- | ----- | ------- | ------ |
+| -       | [2]      | -     | +1,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Cyber Melee Weapons
 
@@ -210,130 +210,130 @@ For a quarter of a century now, cyber-implant melee weapons have been the classi
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | [2] | 10F | 2,500¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.25    | [2]      | 10F   | 2,500¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Hand Razors (Retractable)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.2 | [2] | 8F | 1,250¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.2     | [2]      | 8F    | 1,250¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Spurs (Retractable)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.3 | [3] | 12F | 5,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.3     | [3]      | 12F   | 5,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Shock Hand
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | [4] | 8R | 5,000¥ | Core |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.25    | [4]      | 8R    | 5,000¥ | Core   |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Extreme Cyber-Implant
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.5 | [5] | 8F | 2,000¥ | SR5:CF |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.5     | [5]      | 8F    | 2,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Fangs (Pair)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.1 | [1] | 6 | 200¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| 0.1     | [1]      | 6     | 200¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Retractable
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.15 | [2] | 8 | 500¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| 0.15    | [2]      | 8     | 500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Flametosser
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 1.0 | [8] | 12F | 4,000¥ | SR5:CF |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 1.0     | [8]      | 12F   | 4,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Extra Fuel (5 Shots)
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.2 | [2] | 12F | 500¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| 0.2     | [2]      | 12F   | 500¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Junkyard Jaw
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.75 | [6] | 8F | 2,000¥ | SR5:CF |
+| ESSENCE | CAPACITY | AVAIL | COST   | SOURCE |
+| ------- | -------- | ----- | ------ | ------ |
+| 0.75    | [6]      | 8F    | 2,000¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Oral Slasher
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
 | ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.25 | [3] | 12R | 750¥ | SR5:CF |
+| ------- | -------- | ----- | ---- | ------ |
+| 0.25    | [3]      | 12R   | 750¥ | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |
 
 ## Weapon Launcher
 
 [![Blank.png](/Shadowrun/images/d/d2/Blank.png)](/Shadowrun/index.php/File:Blank.png)
 
-| ESSENCE | CAPACITY | AVAIL | COST | SOURCE |
-| --- | --- | --- | --- | --- |
-| 0.2 | [2] | 12F | 500¥ (added to weapon cost) | SR5:CF |
+| ESSENCE | CAPACITY | AVAIL | COST                        | SOURCE |
+| ------- | -------- | ----- | --------------------------- | ------ |
+| 0.2     | [2]      | 12F   | 500¥ (added to weapon cost) | SR5:CF |
 
-|  |  |
-|  |
+| | |
+| |

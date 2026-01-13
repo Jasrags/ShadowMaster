@@ -254,7 +254,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Razor",
       metatype: "Human",
       magicalPath: "mundane",
-      attributes: { body: 4, agility: 5, reaction: 4, strength: 3, willpower: 3, logic: 3, intuition: 4, charisma: 3 },
+      attributes: {
+        body: 4,
+        agility: 5,
+        reaction: 4,
+        strength: 3,
+        willpower: 3,
+        logic: 3,
+        intuition: 4,
+        charisma: 3,
+      },
       specialAttributes: { edge: 4, essence: 6 },
       skills: { firearms: 5, sneaking: 4, perception: 3, athletics: 3 },
       positiveQualities: ["ambidextrous"],
@@ -270,7 +279,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Mystic",
       metatype: "Elf",
       magicalPath: "magician",
-      attributes: { body: 2, agility: 4, reaction: 3, strength: 2, willpower: 5, logic: 4, intuition: 5, charisma: 4 },
+      attributes: {
+        body: 2,
+        agility: 4,
+        reaction: 3,
+        strength: 2,
+        willpower: 5,
+        logic: 4,
+        intuition: 5,
+        charisma: 4,
+      },
       specialAttributes: { edge: 2, essence: 6, magic: 6 },
       skills: { spellcasting: 6, counterspelling: 4, assensing: 5, arcana: 4 },
       positiveQualities: ["magician"],
@@ -289,7 +307,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Street Samurai WIP",
       metatype: "Ork",
       magicalPath: "mundane",
-      attributes: { body: 6, agility: 4, reaction: 4, strength: 5, willpower: 3, logic: 2, intuition: 3, charisma: 2 },
+      attributes: {
+        body: 6,
+        agility: 4,
+        reaction: 4,
+        strength: 5,
+        willpower: 3,
+        logic: 2,
+        intuition: 3,
+        charisma: 2,
+      },
       specialAttributes: { edge: 2, essence: 3.5 },
       skills: { blades: 5, firearms: 4, unarmed: 4 },
       positiveQualities: [],
@@ -305,7 +332,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Decker Prime",
       metatype: "Human",
       magicalPath: "technomancer",
-      attributes: { body: 2, agility: 3, reaction: 4, strength: 2, willpower: 4, logic: 6, intuition: 5, charisma: 2 },
+      attributes: {
+        body: 2,
+        agility: 3,
+        reaction: 4,
+        strength: 2,
+        willpower: 4,
+        logic: 6,
+        intuition: 5,
+        charisma: 2,
+      },
       specialAttributes: { edge: 3, essence: 6, resonance: 5 },
       skills: { hacking: 6, cybercombat: 5, "electronic-warfare": 5, software: 4 },
       positiveQualities: ["technomancer"],
@@ -322,7 +358,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Old Timer",
       metatype: "Dwarf",
       magicalPath: "mundane",
-      attributes: { body: 5, agility: 3, reaction: 3, strength: 4, willpower: 5, logic: 4, intuition: 4, charisma: 3 },
+      attributes: {
+        body: 5,
+        agility: 3,
+        reaction: 3,
+        strength: 4,
+        willpower: 5,
+        logic: 4,
+        intuition: 4,
+        charisma: 3,
+      },
       specialAttributes: { edge: 3, essence: 2.1 },
       skills: { negotiation: 5, etiquette: 4, leadership: 4, firearms: 3 },
       positiveQualities: ["toughness"],
@@ -338,7 +383,16 @@ function generateCharacters(users: SeedUser[], campaignIds: string[]): SeedChara
       name: "Ghost",
       metatype: "Troll",
       magicalPath: "adept",
-      attributes: { body: 7, agility: 3, reaction: 3, strength: 6, willpower: 3, logic: 2, intuition: 3, charisma: 2 },
+      attributes: {
+        body: 7,
+        agility: 3,
+        reaction: 3,
+        strength: 6,
+        willpower: 3,
+        logic: 2,
+        intuition: 3,
+        charisma: 2,
+      },
       specialAttributes: { edge: 2, essence: 6, magic: 4 },
       skills: { sneaking: 6, perception: 5, unarmed: 5, athletics: 4 },
       positiveQualities: ["adept"],
@@ -442,7 +496,16 @@ async function generateMinimalData(passwordHash: string): Promise<{
       magicalPath: "mundane",
       createdAt: now,
       updatedAt: now,
-      attributes: { body: 3, agility: 3, reaction: 3, strength: 3, willpower: 3, logic: 3, intuition: 3, charisma: 3 },
+      attributes: {
+        body: 3,
+        agility: 3,
+        reaction: 3,
+        strength: 3,
+        willpower: 3,
+        logic: 3,
+        intuition: 3,
+        charisma: 3,
+      },
       specialAttributes: { edge: 3, essence: 6 },
       skills: { firearms: 3, athletics: 3, perception: 3 },
       positiveQualities: [],
@@ -466,11 +529,7 @@ async function generateMinimalData(passwordHash: string): Promise<{
 /**
  * Seed the database
  */
-async function seedData(
-  clean: boolean,
-  dryRun: boolean,
-  minimal: boolean
-): Promise<void> {
+async function seedData(clean: boolean, dryRun: boolean, minimal: boolean): Promise<void> {
   console.log("\nShadow Master Seed Data");
   console.log("=".repeat(50));
 
@@ -539,7 +598,9 @@ async function seedData(
   console.log(`  Characters: ${characters.length}`);
   for (const char of characters) {
     const owner = users.find((u) => u.id === char.ownerId);
-    console.log(`    - ${char.name} (${char.metatype || "Unknown"}) [${char.status}] - Owner: ${owner?.username}`);
+    console.log(
+      `    - ${char.name} (${char.metatype || "Unknown"}) [${char.status}] - Owner: ${owner?.username}`
+    );
   }
 
   console.log(`  Campaigns: ${campaigns.length}`);

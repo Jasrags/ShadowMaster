@@ -13,10 +13,7 @@
     "filesystem": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
-        "."
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js", "."]
     },
     "git": {
       "type": "stdio",
@@ -26,16 +23,12 @@
     "memory": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-memory/dist/index.js"
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-memory/dist/index.js"]
     },
     "sequentialthinking": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
     },
     "time": {
       "type": "stdio",
@@ -51,6 +44,14 @@
       "type": "stdio",
       "command": "node",
       "args": ["./node_modules/@knip/mcp/src/cli.js"]
+    },
+    "github": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-github"],
+      "env": {
+        "GITHUB_PERSONAL_ACCESS_TOKEN": "${GITHUB_PERSONAL_ACCESS_TOKEN}"
+      }
     }
   }
 }

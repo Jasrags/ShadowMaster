@@ -269,9 +269,7 @@ export function CyberlimbDetailPanel({
         {/* Availability */}
         <div className="text-center">
           <div className="text-[10px] text-zinc-500 uppercase">Avail</div>
-          <div className="text-xl font-bold font-mono text-zinc-200">
-            {limb.availability}
-          </div>
+          <div className="text-xl font-bold font-mono text-zinc-200">{limb.availability}</div>
         </div>
         {/* Capacity */}
         <div className="text-center">
@@ -344,9 +342,7 @@ export function CyberlimbDetailPanel({
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
             Enhancements
-            <span className="text-zinc-600 ml-1">
-              ({limb.enhancements.length})
-            </span>
+            <span className="text-zinc-600 ml-1">({limb.enhancements.length})</span>
           </h4>
           {showActions && isActive && onAddEnhancement && (
             <button
@@ -398,9 +394,7 @@ export function CyberlimbDetailPanel({
         <div className="flex items-center justify-between mb-3">
           <h4 className="text-xs font-medium text-zinc-400 uppercase tracking-wider">
             Accessories
-            <span className="text-zinc-600 ml-1">
-              ({limb.accessories.length})
-            </span>
+            <span className="text-zinc-600 ml-1">({limb.accessories.length})</span>
           </h4>
           {showActions && isActive && onAddAccessory && (
             <button
@@ -454,9 +448,7 @@ export function CyberlimbDetailPanel({
         <div className="p-4 border-b border-zinc-800">
           <h4 className="text-xs font-medium text-zinc-400 uppercase tracking-wider mb-3">
             Weapons
-            <span className="text-zinc-600 ml-1">
-              ({limb.weapons.length})
-            </span>
+            <span className="text-zinc-600 ml-1">({limb.weapons.length})</span>
           </h4>
           <div className="space-y-2">
             {limb.weapons.map((wpn) => (
@@ -486,9 +478,7 @@ export function CyberlimbDetailPanel({
           <Clock className="w-3 h-3" />
           <span>Installed {formatDate(limb.installedAt)}</span>
           {limb.modificationHistory.length > 0 && (
-            <span className="text-zinc-600">
-              • {limb.modificationHistory.length} modifications
-            </span>
+            <span className="text-zinc-600">• {limb.modificationHistory.length} modifications</span>
           )}
         </div>
 

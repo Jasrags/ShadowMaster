@@ -430,17 +430,11 @@ async function computeStats(
 /**
  * Fix orphaned characters by deleting them
  */
-async function fixOrphanedCharacters(
-  issues: HealthIssue[]
-): Promise<number> {
+async function fixOrphanedCharacters(issues: HealthIssue[]): Promise<number> {
   let fixed = 0;
 
   for (const issue of issues) {
-    if (
-      issue.category === "orphaned-data" &&
-      issue.fixable &&
-      issue.path
-    ) {
+    if (issue.category === "orphaned-data" && issue.fixable && issue.path) {
       try {
         await fs.unlink(issue.path);
         console.log(`  Deleted: ${issue.path}`);
@@ -457,11 +451,7 @@ async function fixOrphanedCharacters(
 /**
  * Run health check
  */
-async function runHealthCheck(
-  fix: boolean,
-  verbose: boolean,
-  jsonOutput: boolean
-): Promise<void> {
+async function runHealthCheck(fix: boolean, verbose: boolean, jsonOutput: boolean): Promise<void> {
   if (!jsonOutput) {
     console.log("\nShadow Master Health Check");
     console.log("=".repeat(50));
@@ -588,7 +578,9 @@ async function runHealthCheck(
   console.log(`  Warnings: ${warningCount}`);
 
   if (!fix && allIssues.some((i) => i.fixable)) {
-    console.log(`\n  Run with --fix to automatically fix ${allIssues.filter((i) => i.fixable).length} issue(s)`);
+    console.log(
+      `\n  Run with --fix to automatically fix ${allIssues.filter((i) => i.fixable).length} issue(s)`
+    );
   }
 
   console.log();

@@ -10,10 +10,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getGruntTemplates, searchTemplates } from "@/lib/storage/grunt-templates";
 import type { EditionCode } from "@/lib/types/edition";
-import type {
-  GruntTemplatesResponse,
-  ProfessionalRating,
-} from "@/lib/types/grunts";
+import type { GruntTemplatesResponse, ProfessionalRating } from "@/lib/types/grunts";
 
 /**
  * GET /api/editions/[editionCode]/grunt-templates

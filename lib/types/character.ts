@@ -33,8 +33,6 @@ import type { CyberlimbItem, CyberImplantWeapon } from "./cyberlimb";
 // CHARACTER CORE
 // =============================================================================
 
-
-
 /**
  * Status of a character
  */
@@ -327,7 +325,7 @@ export interface Character {
 
   /** For technomancers: stream */
   stream?: string;
-  
+
   /** Initiation grade */
   initiateGrade?: number;
 
@@ -580,9 +578,9 @@ export interface LanguageSkill {
 
 export interface AdeptPower {
   id: string;
-  catalogId: string;      // Reference to catalog power ID
+  catalogId: string; // Reference to catalog power ID
   name: string;
-  rating?: number;        // For leveled powers
+  rating?: number; // For leveled powers
   powerPointCost: number; // Actual PP spent
   specification?: string; // For skill/attribute-specific powers (e.g., "Agility" or "Pistols")
 }
@@ -613,13 +611,13 @@ export enum SinnerQuality {
  */
 export type SIN =
   | {
-    type: "fake";
-    rating: number; // 1-4 for fake SINs
-  }
+      type: "fake";
+      rating: number; // 1-4 for fake SINs
+    }
   | {
-    type: "real";
-    sinnerQuality: SinnerQuality; // References SINner quality level
-  };
+      type: "real";
+      sinnerQuality: SinnerQuality; // References SINner quality level
+    };
 
 /**
  * License tied to a SIN (fake or real)
@@ -928,10 +926,7 @@ export const CYBERWARE_GRADE_MULTIPLIERS: Record<CyberwareGrade, number> = {
 /**
  * Cyberware grade availability modifiers
  */
-export const CYBERWARE_GRADE_AVAILABILITY_MODIFIERS: Record<
-  CyberwareGrade,
-  number
-> = {
+export const CYBERWARE_GRADE_AVAILABILITY_MODIFIERS: Record<CyberwareGrade, number> = {
   used: -4,
   standard: 0,
   alpha: 2,
@@ -942,8 +937,7 @@ export const CYBERWARE_GRADE_AVAILABILITY_MODIFIERS: Record<
 /**
  * Cyberware grade cost multipliers
  */
-export const CYBERWARE_GRADE_COST_MULTIPLIERS: Record<CyberwareGrade, number> =
-{
+export const CYBERWARE_GRADE_COST_MULTIPLIERS: Record<CyberwareGrade, number> = {
   used: 0.75,
   standard: 1.0,
   alpha: 2.0,
@@ -1078,6 +1072,13 @@ export interface BiowareItem {
   attributeBonuses?: Record<string, number>;
   /** Armor bonus provided by this bioware (e.g., orthoskin) */
   armorBonus?: number;
+  /** Initiative dice bonus (e.g., Synaptic Booster) */
+  initiativeDiceBonus?: number;
+  /**
+   * Target skill ID for skill-linked bioware (e.g., Reflex Recorder).
+   * The bioware provides a bonus to this specific skill.
+   */
+  targetSkill?: string;
   /** Other special effects/notes */
   notes?: string;
 }
@@ -1274,7 +1275,6 @@ export interface CharacterResponse {
   error?: string;
 }
 
-
 export interface CharactersListResponse {
   success: boolean;
   characters: Character[];
@@ -1292,4 +1292,3 @@ export interface ContactTemplateData {
   suggestedLoyalty?: number;
   commonMetatypes?: string[];
 }
-

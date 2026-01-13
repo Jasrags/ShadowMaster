@@ -136,7 +136,11 @@ describe("validateAugmentationInstall", () => {
       const result = validateAugmentationInstall(char, item, "standard", undefined, context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === "ESSENCE_INSUFFICIENT" || e.code === "ESSENCE_WOULD_KILL")).toBe(true);
+      expect(
+        result.errors.some(
+          (e) => e.code === "ESSENCE_INSUFFICIENT" || e.code === "ESSENCE_WOULD_KILL"
+        )
+      ).toBe(true);
     });
   });
 
@@ -163,7 +167,7 @@ describe("validateAugmentationInstall", () => {
       const result = validateAugmentationInstall(char, item, "standard", 3, context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === "INVALID_RATING")).toBe(true);
+      expect(result.errors.some((e) => e.code === "INVALID_RATING")).toBe(true);
     });
 
     it("fails with rating outside valid range", () => {
@@ -177,7 +181,7 @@ describe("validateAugmentationInstall", () => {
       const result = validateAugmentationInstall(char, item, "standard", 5, context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === "INVALID_RATING")).toBe(true);
+      expect(result.errors.some((e) => e.code === "INVALID_RATING")).toBe(true);
     });
   });
 
@@ -202,7 +206,7 @@ describe("validateAugmentationInstall", () => {
       const result = validateAugmentationInstall(char, item, "alpha", undefined, context);
 
       expect(result.valid).toBe(false);
-      expect(result.errors.some(e => e.code === "AVAILABILITY_EXCEEDED")).toBe(true);
+      expect(result.errors.some((e) => e.code === "AVAILABILITY_EXCEEDED")).toBe(true);
     });
   });
 });
@@ -214,55 +218,57 @@ describe("validateAugmentationInstall", () => {
 describe("validateAvailabilityConstraint", () => {
   describe("at character creation", () => {
     it("allows availability at or below max", () => {
-      const result = validateAvailabilityConstraint(
-        12, "standard", undefined, "creation", 12
-      );
+      const result = validateAvailabilityConstraint(12, "standard", undefined, "creation", 12);
       expect(result.valid).toBe(true);
     });
 
     it("blocks availability above max", () => {
-      const result = validateAvailabilityConstraint(
-        13, "standard", undefined, "creation", 12
-      );
+      const result = validateAvailabilityConstraint(13, "standard", undefined, "creation", 12);
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_EXCEEDED");
     });
 
     it("accounts for grade availability modifier", () => {
       // Alpha adds +2, so 11 + 2 = 13 > 12
-      const result = validateAvailabilityConstraint(
-        11, "alpha", undefined, "creation", 12
-      );
+      const result = validateAvailabilityConstraint(11, "alpha", undefined, "creation", 12);
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_EXCEEDED");
     });
 
     it("blocks restricted items without override", () => {
-      const result = validateAvailabilityConstraint(
-        8, "standard", "restricted", "creation", 12
-      );
+      const result = validateAvailabilityConstraint(8, "standard", "restricted", "creation", 12);
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_RESTRICTED");
     });
 
     it("allows restricted items with override", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", "restricted", "creation", 12, true, false
+        8,
+        "standard",
+        "restricted",
+        "creation",
+        12,
+        true,
+        false
       );
       expect(result.valid).toBe(true);
     });
 
     it("blocks forbidden items", () => {
-      const result = validateAvailabilityConstraint(
-        8, "standard", "forbidden", "creation", 12
-      );
+      const result = validateAvailabilityConstraint(8, "standard", "forbidden", "creation", 12);
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_FORBIDDEN");
     });
 
     it("allows forbidden items with override", () => {
       const result = validateAvailabilityConstraint(
-        8, "standard", "forbidden", "creation", 12, false, true
+        8,
+        "standard",
+        "forbidden",
+        "creation",
+        12,
+        false,
+        true
       );
       expect(result.valid).toBe(true);
     });
@@ -270,23 +276,17 @@ describe("validateAvailabilityConstraint", () => {
 
   describe("in active play", () => {
     it("allows any availability during active play", () => {
-      const result = validateAvailabilityConstraint(
-        20, "standard", undefined, "active", 12
-      );
+      const result = validateAvailabilityConstraint(20, "standard", undefined, "active", 12);
       expect(result.valid).toBe(true);
     });
 
     it("allows restricted items during active play", () => {
-      const result = validateAvailabilityConstraint(
-        8, "standard", "restricted", "active", 12
-      );
+      const result = validateAvailabilityConstraint(8, "standard", "restricted", "active", 12);
       expect(result.valid).toBe(true);
     });
 
     it("still blocks forbidden items during active play", () => {
-      const result = validateAvailabilityConstraint(
-        8, "standard", "forbidden", "active", 12
-      );
+      const result = validateAvailabilityConstraint(8, "standard", "forbidden", "active", 12);
       expect(result.valid).toBe(false);
       expect(result.error?.code).toBe("AVAILABILITY_FORBIDDEN");
     });
@@ -593,7 +593,10 @@ describe("validateMutualExclusion", () => {
         } as CyberwareItem,
       ],
     });
-    const item = createTestCyberware({ id: "bone-lacing-titanium", name: "Bone Lacing (Titanium)" });
+    const item = createTestCyberware({
+      id: "bone-lacing-titanium",
+      name: "Bone Lacing (Titanium)",
+    });
 
     const result = validateMutualExclusion(char, item);
 
@@ -685,6 +688,6 @@ describe("warnings", () => {
     const result = validateAugmentationInstall(char, item, "standard", undefined, context);
 
     expect(result.valid).toBe(true);
-    expect(result.warnings.some(w => w.code === "LOW_ESSENCE")).toBe(true);
+    expect(result.warnings.some((w) => w.code === "LOW_ESSENCE")).toBe(true);
   });
 });

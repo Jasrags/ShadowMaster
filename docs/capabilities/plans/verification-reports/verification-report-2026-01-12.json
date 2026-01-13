@@ -2,9 +2,7 @@
   "timestamp": "2026-01-12T07:12:14.156Z",
   "config": {
     "edition": "sr5",
-    "sources": [
-      "Core"
-    ],
+    "sources": ["Core"],
     "categories": [],
     "outputDir": "/Users/jason.ragsdale/Code/Jasrags/ShadowMaster/docs/capabilities/plans/verification-reports",
     "reportOnly": false

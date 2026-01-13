@@ -18,10 +18,7 @@ import type {
   ResolvedEffect,
 } from "@/lib/types/gameplay";
 import { getQualityDefinition } from "../utils";
-import {
-  getActiveEffects,
-  filterEffectsByTrigger,
-} from "../effects";
+import { getActiveEffects, filterEffectsByTrigger } from "../effects";
 import { processEffect } from "./handlers";
 
 /**
@@ -35,7 +32,14 @@ import { processEffect } from "./handlers";
 export function getAllCharacterEffects(
   character: Character,
   ruleset: MergedRuleset,
-  context: TestContext | CombatContext | MagicContext | MatrixContext | HealingContext | DamageContext | CostContext
+  context:
+    | TestContext
+    | CombatContext
+    | MagicContext
+    | MatrixContext
+    | HealingContext
+    | DamageContext
+    | CostContext
 ): ResolvedEffect[] {
   const allEffects: ResolvedEffect[] = [];
 
@@ -98,7 +102,12 @@ export function getDicePoolModifiers(
     const matchesSkillGroup = skillGroup && target.skillGroup === skillGroup;
     const matchesCategory = context.testCategory && target.testCategory === context.testCategory;
 
-    if (matchesSkill || matchesSkillGroup || matchesCategory || !target.skill && !target.skillGroup && !target.testCategory) {
+    if (
+      matchesSkill ||
+      matchesSkillGroup ||
+      matchesCategory ||
+      (!target.skill && !target.skillGroup && !target.testCategory)
+    ) {
       if (resolved.effect.type === "dice-pool-modifier") {
         const processed = processEffect(resolved);
         if (typeof processed === "number") {
@@ -194,7 +203,11 @@ export function getWoundModifierModifiers(
       if (typeof processed === "object" && processed !== null && !Array.isArray(processed)) {
         if ("type" in processed && processed.type === "boxes-ignored" && "value" in processed) {
           boxesIgnored += typeof processed.value === "number" ? processed.value : 0;
-        } else if ("type" in processed && processed.type === "penalty-interval" && "value" in processed) {
+        } else if (
+          "type" in processed &&
+          processed.type === "penalty-interval" &&
+          "value" in processed
+        ) {
           penaltyInterval = typeof processed.value === "number" ? processed.value : null;
         }
       }
@@ -348,4 +361,3 @@ export function getHealingModifiers(
 
   return totalModifier;
 }
-

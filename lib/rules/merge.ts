@@ -12,13 +12,7 @@
  */
 
 import { v4 as uuidv4 } from "uuid";
-import type {
-  ID,
-  MergeStrategy,
-  RuleModuleType,
-  MergedRuleset,
-  BookModuleEntry,
-} from "../types";
+import type { ID, MergeStrategy, RuleModuleType, MergedRuleset, BookModuleEntry } from "../types";
 import type { LoadedRuleset } from "./loader-types";
 
 // =============================================================================
@@ -59,7 +53,7 @@ function isPlainObject(value: unknown): value is Record<string, unknown> {
 /**
  * Check if array items have an 'id' field (for ID-based merging)
  */
-function isArrayWithIds(arr: unknown[]): arr is Array<{ id: string;[key: string]: unknown }> {
+function isArrayWithIds(arr: unknown[]): arr is Array<{ id: string; [key: string]: unknown }> {
   return arr.length > 0 && arr.every((item) => isPlainObject(item) && "id" in item);
 }
 
@@ -143,11 +137,10 @@ function deepMerge(base: ModulePayload, override: ModulePayload): ModulePayload 
  * - New items are appended
  */
 function mergeArraysById(
-  base: Array<{ id: string;[key: string]: unknown }>,
-  override: Array<{ id: string;[key: string]: unknown }>
-): Array<{ id: string;[key: string]: unknown }> {
+  base: Array<{ id: string; [key: string]: unknown }>,
+  override: Array<{ id: string; [key: string]: unknown }>
+): Array<{ id: string; [key: string]: unknown }> {
   const result = deepClone(base);
-
 
   for (const overrideItem of override) {
     const existingIndex = result.findIndex((item) => item.id === overrideItem.id);
@@ -157,7 +150,7 @@ function mergeArraysById(
       result[existingIndex] = deepMerge(
         result[existingIndex] as ModulePayload,
         overrideItem as ModulePayload
-      ) as { id: string;[key: string]: unknown };
+      ) as { id: string; [key: string]: unknown };
     } else {
       // Append new item
       result.push(deepClone(overrideItem));
@@ -224,10 +217,7 @@ function removeFromPayload(base: ModulePayload, toRemove: ModulePayload): Module
 
     // If both are objects, recurse
     if (isPlainObject(result[key]) && isPlainObject(removeSpec)) {
-      result[key] = removeFromPayload(
-        result[key] as ModulePayload,
-        removeSpec as ModulePayload
-      );
+      result[key] = removeFromPayload(result[key] as ModulePayload, removeSpec as ModulePayload);
     }
   }
 
@@ -461,4 +451,3 @@ export function hasModule(ruleset: MergedRuleset, moduleType: RuleModuleType): b
 export function getModuleTypes(ruleset: MergedRuleset): RuleModuleType[] {
   return Object.keys(ruleset.modules) as RuleModuleType[];
 }
-

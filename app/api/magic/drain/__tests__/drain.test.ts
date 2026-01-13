@@ -1,6 +1,6 @@
 /**
  * Magic Drain API Tests
- * 
+ *
  * Tests for POST /api/magic/drain endpoint
  */
 
@@ -115,12 +115,12 @@ describe("POST /api/magic/drain", () => {
     };
 
     mockGetCharacter.mockResolvedValue(mockCharacter);
-    mockLoadRuleset.mockResolvedValue({ 
-      success: true, 
-      ruleset: { 
-        edition: { code: "sr5" }, 
-        books: [] 
-      } 
+    mockLoadRuleset.mockResolvedValue({
+      success: true,
+      ruleset: {
+        edition: { code: "sr5" },
+        books: [],
+      },
     });
 
     const request = createRequest({

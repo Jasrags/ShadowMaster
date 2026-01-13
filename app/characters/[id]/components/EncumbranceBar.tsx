@@ -109,18 +109,20 @@ export function EncumbranceBar({
             style={{ width: `${percentage}%` }}
           />
         </div>
-        <span className={`text-xs font-mono ${colors.text}`}>
-          {formatWeight(currentWeight)}
-        </span>
+        <span className={`text-xs font-mono ${colors.text}`}>{formatWeight(currentWeight)}</span>
         {isEncumbered && (
-          <span className="text-xs text-red-600 dark:text-red-400 font-mono">-{overweightPenalty}</span>
+          <span className="text-xs text-red-600 dark:text-red-400 font-mono">
+            -{overweightPenalty}
+          </span>
         )}
       </div>
     );
   }
 
   return (
-    <div className={`p-3 rounded-lg border ${t.colors.border} border-l-2 ${colors.border} ${t.colors.card}`}>
+    <div
+      className={`p-3 rounded-lg border ${t.colors.border} border-l-2 ${colors.border} ${t.colors.card}`}
+    >
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Weight className={`w-4 h-4 ${colors.text}`} />
@@ -132,8 +134,7 @@ export function EncumbranceBar({
           </span>
           {isEncumbered && (
             <span className="flex items-center gap-1 text-xs text-red-600 dark:text-red-400 font-medium">
-              <AlertTriangle className="w-3 h-3" />
-              -{overweightPenalty} pool
+              <AlertTriangle className="w-3 h-3" />-{overweightPenalty} pool
             </span>
           )}
         </div>
@@ -168,8 +169,8 @@ export function EncumbranceBar({
       {isEncumbered && showDetails && (
         <div className="mt-2 p-2 rounded bg-red-100 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20">
           <p className="text-xs text-red-600 dark:text-red-400">
-            Carrying {formatWeight(currentWeight - maxCapacity)} over capacity.
-            All physical dice pools suffer a -{overweightPenalty} penalty.
+            Carrying {formatWeight(currentWeight - maxCapacity)} over capacity. All physical dice
+            pools suffer a -{overweightPenalty} penalty.
           </p>
         </div>
       )}

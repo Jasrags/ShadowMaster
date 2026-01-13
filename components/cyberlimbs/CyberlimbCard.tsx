@@ -167,9 +167,7 @@ function CapacityBar({
       <div className="flex items-center justify-between text-[10px]">
         <span className="text-zinc-500">Capacity</span>
         <span className="font-mono">
-          <span className={percentage >= 90 ? "text-red-400" : "text-cyan-400"}>
-            {used}
-          </span>
+          <span className={percentage >= 90 ? "text-red-400" : "text-cyan-400"}>{used}</span>
           <span className="text-zinc-500">/{total}</span>
           <span className="text-zinc-600 ml-1">({remaining} free)</span>
         </span>
@@ -227,11 +225,15 @@ export function CyberlimbCard({
   const totalUsed = enhancementCapacity + accessoryCapacity + weaponCapacity;
 
   // Calculate effective attributes
-  const effectiveStrength = limb.baseStrength + limb.customStrength +
+  const effectiveStrength =
+    limb.baseStrength +
+    limb.customStrength +
     limb.enhancements
       .filter((e) => e.enhancementType === "strength")
       .reduce((sum, e) => sum + e.rating, 0);
-  const effectiveAgility = limb.baseAgility + limb.customAgility +
+  const effectiveAgility =
+    limb.baseAgility +
+    limb.customAgility +
     limb.enhancements
       .filter((e) => e.enhancementType === "agility")
       .reduce((sum, e) => sum + e.rating, 0);
@@ -310,9 +312,7 @@ export function CyberlimbCard({
           )}
         </div>
         {/* Cost */}
-        <span className="text-[10px] text-zinc-400 ml-auto">
-          {formatCurrency(limb.cost)}¥
-        </span>
+        <span className="text-[10px] text-zinc-400 ml-auto">{formatCurrency(limb.cost)}¥</span>
       </div>
 
       {/* Capacity Bar */}
@@ -335,7 +335,8 @@ export function CyberlimbCard({
             className="flex items-center gap-1 mt-2 text-[10px] text-zinc-500 hover:text-zinc-400 transition-colors"
           >
             {expanded ? <ChevronUp className="w-3 h-3" /> : <ChevronDown className="w-3 h-3" />}
-            {expanded ? "Less" : "Show installed"} ({limb.enhancements.length + limb.accessories.length + limb.weapons.length})
+            {expanded ? "Less" : "Show installed"} (
+            {limb.enhancements.length + limb.accessories.length + limb.weapons.length})
           </button>
 
           {expanded && (
@@ -493,11 +494,15 @@ export function CyberlimbCardCompact({
   onClick?: () => void;
   className?: string;
 }) {
-  const effectiveStrength = limb.baseStrength + limb.customStrength +
+  const effectiveStrength =
+    limb.baseStrength +
+    limb.customStrength +
     limb.enhancements
       .filter((e) => e.enhancementType === "strength")
       .reduce((sum, e) => sum + e.rating, 0);
-  const effectiveAgility = limb.baseAgility + limb.customAgility +
+  const effectiveAgility =
+    limb.baseAgility +
+    limb.customAgility +
     limb.enhancements
       .filter((e) => e.enhancementType === "agility")
       .reduce((sum, e) => sum + e.rating, 0);
@@ -515,9 +520,7 @@ export function CyberlimbCardCompact({
         </div>
         <div className="min-w-0">
           <span className="text-xs text-zinc-200 truncate block">{limb.name}</span>
-          <span className="text-[10px] text-zinc-500">
-            {getLocationDisplayName(limb.location)}
-          </span>
+          <span className="text-[10px] text-zinc-500">{getLocationDisplayName(limb.location)}</span>
         </div>
         <span className={`text-[10px] ${getGradeColor(limb.grade)}`}>
           {getGradeDisplayName(limb.grade)}

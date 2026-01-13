@@ -12,12 +12,12 @@ Describes how ShadowMaster should represent and automate Shadowrun 5e magic. Sum
 
 ## Archetype Overview
 
-| Archetype | Capabilities | Key Mechanics |
-|-----------|--------------|----------------|
-| Full Magician | Sorcery + Conjuring, astral projection. | Access to all spell categories, tradition spirit lists. |
-| Mystic Adept | Combines spellcasting and adept powers. | Split Magic between spells and powers; track power point purchases. |
-| Adept | Channels mana into intrinsic powers. | Power Point economy, initiation for more points, no Sorcery/Conjuring. |
-| Aspected Magician | Limited (Sorcery, Conjuring, or Enchanting). | Reduced drain pools, tradition-specific options. |
+| Archetype         | Capabilities                                 | Key Mechanics                                                          |
+| ----------------- | -------------------------------------------- | ---------------------------------------------------------------------- |
+| Full Magician     | Sorcery + Conjuring, astral projection.      | Access to all spell categories, tradition spirit lists.                |
+| Mystic Adept      | Combines spellcasting and adept powers.      | Split Magic between spells and powers; track power point purchases.    |
+| Adept             | Channels mana into intrinsic powers.         | Power Point economy, initiation for more points, no Sorcery/Conjuring. |
+| Aspected Magician | Limited (Sorcery, Conjuring, or Enchanting). | Reduced drain pools, tradition-specific options.                       |
 
 ## Magical Traditions
 
@@ -70,6 +70,7 @@ During character creation, the Magic or Resonance Priority column determines sta
 5. **Resolve Effects**: Apply opposed tests (success vs threshold/opposition). Net hits determine damage/effect.
 6. **Resist Drain**: Roll tradition drain pool; DV cannot drop below 2.
 7. **Sustain/End**: Sustained spells impose `-2` dice penalty per spell; sustaining foci or spirits can offload penalties.
+
 - Reckless spellcasting converts Complex to Simple Action with `+3 DV`.
 
 ## Spell Categories Summary
@@ -154,16 +155,16 @@ An adept cannot follow two Ways simultaneously. The bonuses granted by Ways to p
 
 When casting spells on objects, the object may resist based on its material composition:
 
-| Material | Threshold |
-| --- | --- |
-| Natural Objects | 3 |
-| (Trees, soil, unprocessed water, hand-carved wood, metal cold-worked by hand) |  |
-| Manufactured Low-Tech Objects and Materials | 6 |
-| (Brick, leather, simple plastics) |  |
-| Manufactured High-Tech Objects and Materials | 9 |
-| (Advanced plastics, alloys, electronic equipment, sensors) |  |
-| Highly Processed Objects | 15+ |
-| (Computers, complex toxic wastes, drones, vehicles) |  |
+| Material                                                                      | Threshold |
+| ----------------------------------------------------------------------------- | --------- |
+| Natural Objects                                                               | 3         |
+| (Trees, soil, unprocessed water, hand-carved wood, metal cold-worked by hand) |           |
+| Manufactured Low-Tech Objects and Materials                                   | 6         |
+| (Brick, leather, simple plastics)                                             |           |
+| Manufactured High-Tech Objects and Materials                                  | 9         |
+| (Advanced plastics, alloys, electronic equipment, sensors)                    |           |
+| Highly Processed Objects                                                      | 15+       |
+| (Computers, complex toxic wastes, drones, vehicles)                           |           |
 
 ## Ritual Magic
 
@@ -214,8 +215,7 @@ When casting spells on objects, the object may resist based on its material comp
 - Metamagic catalog beyond core list requires future supplements.
 - Matrix analog (Fading) interactions already documented elsewhere; ensure crossover clarity.
 
-*Last updated: 2025-11-08*
-
+_Last updated: 2025-11-08_
 
 ---
 
@@ -233,33 +233,33 @@ This file hosts structured tables and lists referenced by `shadowrun-5e-magic.md
 
 ## Rituals
 
-| Name | Keywords | Description | Drain | Notes |
-|------|----------|-------------|-------|-------|
-| _TODO_ | | | | |
+| Name   | Keywords | Description | Drain | Notes |
+| ------ | -------- | ----------- | ----- | ----- |
+| _TODO_ |          |             |       |       |
 
 ## Adept Powers
 
-| Power | Cost (PP) | Activation | Effect | Notes |
-|-------|-----------|------------|--------|-------|
-| _TODO_ | | | | |
+| Power  | Cost (PP) | Activation | Effect | Notes |
+| ------ | --------- | ---------- | ------ | ----- |
+| _TODO_ |           |            |        |       |
 
 ## Mentor Spirits
 
 | Archetype | Alternate Names | Magician Bonus | Adept Bonus | Disadvantage | Notes |
-|-----------|------------------|----------------|-------------|--------------|-------|
-| _TODO_ | | | | | |
+| --------- | --------------- | -------------- | ----------- | ------------ | ----- |
+| _TODO_    |                 |                |             |              |       |
 
 ## Foci Catalog
 
 | Category | Subtype | Force Limitations | Effect Summary | Bond Karma | Notes |
-|----------|---------|--------------------|----------------|------------|-------|
-| _TODO_ | | | | | |
+| -------- | ------- | ----------------- | -------------- | ---------- | ----- |
+| _TODO_   |         |                   |                |            |       |
 
 ## Spirits
 
-| Type | Tradition Mapping | Base Powers | Optional Powers (per 3 Force) | Services Guidance |
-|------|-------------------|-------------|------------------------------|-------------------|
-| _TODO_ | | | | |
+| Type   | Tradition Mapping | Base Powers | Optional Powers (per 3 Force) | Services Guidance |
+| ------ | ----------------- | ----------- | ----------------------------- | ----------------- |
+| _TODO_ |                   |             |                               |                   |
 
 ## Astral Tables
 
@@ -271,14 +271,14 @@ This file hosts structured tables and lists referenced by `shadowrun-5e-magic.md
 
 ## Magical Goods
 
-| Item | Cost | Availability | Notes |
-|------|------|--------------|-------|
-| _TODO_ | | | |
+| Item   | Cost | Availability | Notes |
+| ------ | ---- | ------------ | ----- |
+| _TODO_ |      |              |       |
 
 ## Reagents & Harvesting
 
 | Environment | Tradition Alignment | Dice Pool Modifier | Notes |
-|-------------|---------------------|--------------------|-------|
-| _TODO_ | | | |
+| ----------- | ------------------- | ------------------ | ----- |
+| _TODO_      |                     |                    |       |
 
-*Last updated: 2025-11-08*
+_Last updated: 2025-11-08_
