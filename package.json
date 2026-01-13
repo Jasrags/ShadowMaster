@@ -29,6 +29,10 @@
     "verify-data": "pnpm dlx tsx scripts/verify-data.ts",
     "format": "prettier --write \"**/*.{ts,tsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yml,yaml}\"",
+    "backup": "pnpm dlx tsx scripts/backup.ts",
+    "health-check": "pnpm dlx tsx scripts/health-check.ts",
+    "seed-data": "pnpm dlx tsx scripts/seed-data.ts",
+    "user-admin": "pnpm dlx tsx scripts/user-admin.ts",
     "prepare": "husky"
   },
   "lint-staged": {

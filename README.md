@@ -11,7 +11,7 @@ Currently, the project is in its **MVP phase**, focusing on **Shadowrun 5th Edit
 ### Implemented Systems
 
 - **Modular Ruleset System**: Data-driven ruleset loading and merging algorithm supporting multiple books and editions.
-- **Character Creation Framework**: Step-driven wizard (SR5 Priority) with persistent draft states.
+- **Character Creation Framework**: Sheet-based single-page creation (SR5 Priority) with auto-save drafts.
 - **Dynamic Character Sheet**: Responsive UI with theme-aware sections, automated derived stats, and dice-roller integration.
 - **Character Advancement**: Full karma-based progression with GM approval workflows.
 - **Campaign Management**: Integrated campaign support including calendar management, locations, and member tracking.

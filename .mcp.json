@@ -13,10 +13,7 @@
     "filesystem": {
       "type": "stdio",
       "command": "node",
-      "args": [
-        "./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js",
-        "."
-      ]
+      "args": ["./node_modules/@modelcontextprotocol/server-filesystem/dist/index.js", "."]
     },
     "git": {
       "type": "stdio",
@@ -32,6 +29,11 @@
       "type": "stdio",
       "command": "node",
       "args": ["./node_modules/@modelcontextprotocol/server-sequential-thinking/dist/index.js"]
+    },
+    "time": {
+      "type": "stdio",
+      "command": "uvx",
+      "args": ["mcp-server-time"]
     },
     "spec-lint": {
       "type": "stdio",
