@@ -129,7 +129,9 @@ export function ModalHeader({
  */
 export function ModalBody({ children, className = "", scrollable = true }: ModalBodyProps) {
   return (
-    <div className={`${scrollable ? "min-h-0 flex-1 overflow-y-auto" : ""} ${className}`}>
+    <div
+      className={`min-h-0 flex-1 ${scrollable ? "overflow-y-auto" : "flex flex-col"} ${className}`}
+    >
       {children}
     </div>
   );

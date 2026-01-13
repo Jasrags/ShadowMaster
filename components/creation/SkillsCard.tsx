@@ -780,7 +780,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 )}
               </span>
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {skillPointsSpent + groupPointsSpent} pts
+                {skillPointsSpent} skill{skillGroupPoints > 0 && <> / {groupPointsSpent} group</>}
               </span>
             </div>
           )}
