@@ -824,9 +824,9 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
             </button>
           </div>
           {languages.length === 0 ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">
-              No languages added. Add your native language first.
-            </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No languages added</p>
+            </div>
           ) : (
             <div className="rounded-lg border border-zinc-200 bg-white px-3 py-1 dark:border-zinc-700 dark:bg-zinc-900">
               {languages.map((lang, index) => (
@@ -856,7 +856,9 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
             </button>
           </div>
           {knowledgeSkills.length === 0 ? (
-            <p className="text-sm text-zinc-500 dark:text-zinc-400">No knowledge skills added.</p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No knowledge skills added</p>
+            </div>
           ) : (
             <div className="rounded-lg border border-zinc-200 bg-white px-3 py-1 dark:border-zinc-700 dark:bg-zinc-900">
               {knowledgeSkills.map((skill, index) => (

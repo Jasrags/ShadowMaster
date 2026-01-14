@@ -963,9 +963,11 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedPositive.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              No positive qualities selected
-            </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No positive qualities selected
+              </p>
+            </div>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedPositive.map((selection) => {
@@ -1003,9 +1005,11 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedNegative.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              No negative qualities selected
-            </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No negative qualities selected
+              </p>
+            </div>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedNegative.map((selection) => {

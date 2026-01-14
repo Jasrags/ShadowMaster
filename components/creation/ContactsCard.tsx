@@ -46,9 +46,8 @@ interface ContactModalProps {
 // Contact cost = Connection + Loyalty (CRB p.98)
 const MAX_CONNECTION = 12;
 const MAX_LOYALTY = 6;
-// Maximum individual contact cost (Connection 12 + Loyalty 6 = 18)
-// In practice, limited by available karma (CHA×3 free + general karma)
-const MAX_KARMA_PER_CONTACT = 18;
+// SR5 CRB p.98: A single contact may not have more than 7 Karma spent on them at character creation
+const MAX_KARMA_PER_CONTACT = 7;
 const MIN_KARMA_PER_CONTACT = 2;
 
 // =============================================================================
@@ -137,13 +136,14 @@ function ContactModal({
     });
   }, [isValid, contact, onSave]);
 
-  // Render rating selector (1-6 buttons)
+  // Render rating selector with max karma enforcement
   const renderRatingSelector = (
     value: number,
     onChange: (value: number) => void,
     max: number,
     label: string,
-    color: "blue" | "rose"
+    color: "blue" | "rose",
+    otherRatingValue: number // The other rating's current value (to calculate if selection exceeds max)
   ) => {
     const colorClasses =
       color === "blue"
@@ -151,11 +151,15 @@ function ContactModal({
             active: "bg-blue-500 text-white",
             inactive:
               "bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 hover:bg-blue-100 dark:hover:bg-blue-900/30",
+            disabled:
+              "bg-zinc-50 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed",
           }
         : {
             active: "bg-rose-500 text-white",
             inactive:
               "bg-zinc-100 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300 hover:bg-rose-100 dark:hover:bg-rose-900/30",
+            disabled:
+              "bg-zinc-50 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600 cursor-not-allowed",
           };
 
     return (
@@ -163,19 +167,31 @@ function ContactModal({
         <label className="mb-2 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
           {label}
         </label>
-        <div className="flex gap-1">
-          {Array.from({ length: max }, (_, i) => i + 1).map((rating) => (
-            <button
-              key={rating}
-              type="button"
-              onClick={() => onChange(rating)}
-              className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${
-                value >= rating ? colorClasses.active : colorClasses.inactive
-              }`}
-            >
-              {rating}
-            </button>
-          ))}
+        <div className="flex flex-wrap gap-1">
+          {Array.from({ length: max }, (_, i) => i + 1).map((rating) => {
+            // Check if selecting this rating would exceed max karma per contact
+            const wouldExceedMax = rating + otherRatingValue > MAX_KARMA_PER_CONTACT;
+            const isDisabled = wouldExceedMax;
+
+            return (
+              <button
+                key={rating}
+                type="button"
+                onClick={() => !isDisabled && onChange(rating)}
+                disabled={isDisabled}
+                title={isDisabled ? `Would exceed ${MAX_KARMA_PER_CONTACT} karma limit` : undefined}
+                className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${
+                  isDisabled
+                    ? colorClasses.disabled
+                    : value >= rating
+                      ? colorClasses.active
+                      : colorClasses.inactive
+                }`}
+              >
+                {rating}
+              </button>
+            );
+          })}
         </div>
       </div>
     );
@@ -280,16 +296,23 @@ function ContactModal({
                 (value) => setContact({ ...contact, connection: value }),
                 MAX_CONNECTION,
                 "Connection (how useful)",
-                "blue"
+                "blue",
+                contact.loyalty || 1 // Pass loyalty so we can enforce max karma
               )}
               {renderRatingSelector(
                 contact.loyalty || 1,
                 (value) => setContact({ ...contact, loyalty: value }),
                 MAX_LOYALTY,
                 "Loyalty (how loyal)",
-                "rose"
+                "rose",
+                contact.connection || 1 // Pass connection so we can enforce max karma
               )}
             </div>
+
+            {/* Max karma hint */}
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              Max {MAX_KARMA_PER_CONTACT} karma per contact (Connection + Loyalty)
+            </p>
 
             {/* Notes */}
             <div>
@@ -311,18 +334,13 @@ function ContactModal({
                 <span className="text-sm text-zinc-600 dark:text-zinc-400">Contact Cost:</span>
                 <span
                   className={`font-medium ${
-                    contactCost > MAX_KARMA_PER_CONTACT
-                      ? "text-red-600 dark:text-red-400"
-                      : contactCost > availableKarma
-                        ? "text-amber-600 dark:text-amber-400"
-                        : "text-emerald-600 dark:text-emerald-400"
+                    contactCost > availableKarma
+                      ? "text-amber-600 dark:text-amber-400"
+                      : "text-emerald-600 dark:text-emerald-400"
                   }`}
                 >
-                  {contactCost} / {availableKarma} Karma
-                  {contactCost > MAX_KARMA_PER_CONTACT && ` (max ${MAX_KARMA_PER_CONTACT})`}
-                  {contactCost <= MAX_KARMA_PER_CONTACT &&
-                    contactCost > availableKarma &&
-                    " (not enough)"}
+                  {contactCost} / {MAX_KARMA_PER_CONTACT} Karma
+                  {contactCost > availableKarma && " (not enough available)"}
                 </span>
               </div>
               {/* Validation feedback */}
@@ -331,7 +349,7 @@ function ContactModal({
                   {!contact.name?.trim() && "• Enter a contact name"}
                   {contact.name?.trim() &&
                     contactCost > availableKarma &&
-                    "• Not enough karma available"}
+                    `• Not enough karma available (have ${availableKarma})`}
                 </div>
               )}
             </div>
@@ -579,23 +597,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     return totalKarmaAvailableForContacts;
   }, [editingIndex, contacts, totalKarmaAvailableForContacts]);
 
-  // Render rating dots
-  const renderRatingDots = (value: number, max: number, color: string) => (
-    <div className="flex gap-0.5">
-      {Array.from({ length: max }, (_, i) => (
-        <div
-          key={i}
-          className={`h-2 w-2 rounded-full ${i < value ? color : "bg-zinc-200 dark:bg-zinc-600"}`}
-        />
-      ))}
-    </div>
-  );
-
   return (
     <>
       <CreationCard
         title="Contacts"
-        status={contacts.length > 0 ? "valid" : freeContactKarma > 0 ? "warning" : "pending"}
+        status={contacts.length > 0 ? "valid" : "pending"}
         headerAction={
           <button
             onClick={handleOpenAddModal}
@@ -678,15 +684,13 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                           </span>
                         )}
                       </div>
-                      <div className="mt-1 flex items-center gap-3 text-xs">
-                        <div className="flex items-center gap-1">
-                          <span className="text-zinc-500">C:</span>
-                          {renderRatingDots(contact.connection, MAX_CONNECTION, "bg-blue-500")}
-                        </div>
-                        <div className="flex items-center gap-1">
-                          <span className="text-zinc-500">L:</span>
-                          {renderRatingDots(contact.loyalty, MAX_LOYALTY, "bg-rose-500")}
-                        </div>
+                      <div className="mt-1 flex items-center gap-2 text-xs">
+                        <span className="inline-flex items-center rounded bg-blue-100 px-1.5 py-0.5 text-xs font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+                          C: {contact.connection}
+                        </span>
+                        <span className="inline-flex items-center rounded bg-rose-100 px-1.5 py-0.5 text-xs font-medium text-rose-700 dark:bg-rose-900/40 dark:text-rose-300">
+                          L: {contact.loyalty}
+                        </span>
                       </div>
                     </div>
 
@@ -719,8 +723,8 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
 
           {/* Empty state */}
           {contacts.length === 0 && (
-            <div className="text-center text-xs text-zinc-500 dark:text-zinc-400">
-              Every runner needs contacts. Add fixers, informants, and allies.
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No contacts added</p>
             </div>
           )}
 

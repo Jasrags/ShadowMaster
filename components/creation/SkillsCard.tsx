@@ -20,17 +20,7 @@ import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
 import { SkillModal, SkillGroupModal } from "./skills";
-import {
-  Minus,
-  Plus,
-  Users,
-  BookOpen,
-  X,
-  AlertTriangle,
-  ChevronDown,
-  ChevronRight,
-  Star,
-} from "lucide-react";
+import { Minus, Plus, Users, BookOpen, X, AlertTriangle, Star } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -70,26 +60,15 @@ function SkillGroupCard({
   onRatingChange: (delta: number) => void;
   onRemove: () => void;
 }) {
-  const [isExpanded, setIsExpanded] = useState(false);
   const isAtMax = rating >= maxRating;
 
   return (
     <div className="py-1.5">
+      {/* Line 1: Group name and controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <button
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="text-purple-600 hover:text-purple-700 dark:text-purple-400"
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronRight className="h-3.5 w-3.5" />
-            )}
-          </button>
           <Users className="h-3.5 w-3.5 text-purple-500" />
           <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{groupName}</span>
-          <span className="text-xs text-zinc-500 dark:text-zinc-400">({skills.length})</span>
         </div>
 
         <div className="flex items-center gap-1">
@@ -134,21 +113,10 @@ function SkillGroupCard({
         </div>
       </div>
 
-      {isExpanded && (
-        <div className="ml-5 mt-1.5 flex flex-wrap gap-1">
-          {skills.map((skill) => (
-            <span
-              key={skill.id}
-              className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] text-purple-700 dark:bg-purple-900/50 dark:text-purple-300"
-            >
-              {skill.name}{" "}
-              <span className="text-purple-500">
-                ({skill.linkedAttribute.toUpperCase().slice(0, 3)})
-              </span>
-            </span>
-          ))}
-        </div>
-      )}
+      {/* Line 2: Skills in group (always visible) */}
+      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+        {skills.map((skill) => skill.name).join(" • ")}
+      </div>
     </div>
   );
 }
@@ -185,18 +153,13 @@ function IndividualSkillCard({
 
   return (
     <div className="py-1.5">
-      {/* Main row: skill info left, controls right */}
+      {/* Line 1: Skill name and controls */}
       <div className="flex items-center justify-between">
-        {/* Skill info - flexible width */}
         <div className="flex min-w-0 items-center gap-1.5">
           <BookOpen className="h-3.5 w-3.5 shrink-0 text-blue-500" />
           <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {skillName}
           </span>
-          <span className="shrink-0 text-xs text-zinc-500 dark:text-zinc-400">
-            {linkedAttribute.toUpperCase().slice(0, 3)}
-          </span>
-          {groupName && <span className="shrink-0 text-xs text-zinc-400">• {groupName}</span>}
           {hasSpecs && (
             <span title="Has specializations" className="shrink-0">
               <Star className="h-3 w-3 text-amber-500" />
@@ -247,7 +210,13 @@ function IndividualSkillCard({
         </div>
       </div>
 
-      {/* Specializations - separate row */}
+      {/* Line 2: Linked attribute and group (always visible) */}
+      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
+        {linkedAttribute.toUpperCase().slice(0, 3)}
+        {groupName && ` • ${groupName}`}
+      </div>
+
+      {/* Line 3: Specializations (if any) */}
       {hasSpecs && (
         <div className="ml-5 mt-1 flex flex-wrap gap-1">
           {specializations.map((spec) => (
@@ -720,7 +689,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                   })}
                 </div>
               ) : (
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No groups added</p>
+                <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+                  <p className="text-xs text-zinc-400 dark:text-zinc-500">No skill groups added</p>
+                </div>
               )}
             </div>
           )}
@@ -766,7 +737,11 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 })}
               </div>
             ) : (
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">No skills added</p>
+              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                  No individual skills added
+                </p>
+              </div>
             )}
           </div>
 

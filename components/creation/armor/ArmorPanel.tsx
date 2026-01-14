@@ -25,7 +25,7 @@ import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "..
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
-import { Lock, Plus, Shield } from "lucide-react";
+import { Lock, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -446,16 +446,8 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
-              <Shield className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No armor purchased</p>
-              <button
-                onClick={() => setIsPurchaseModalOpen(true)}
-                className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"
-              >
-                <Plus className="h-4 w-4" />
-                Add your first armor
-              </button>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No armor purchased</p>
             </div>
           )}
 
