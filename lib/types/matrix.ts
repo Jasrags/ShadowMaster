@@ -544,8 +544,11 @@ export interface CharacterCommlink {
   /** Availability rating */
   availability: number;
 
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
+
   /** Running programs (limited functionality) */
-  loadedPrograms: string[];
+  loadedPrograms?: string[];
 
   /** Player notes */
   notes?: string;

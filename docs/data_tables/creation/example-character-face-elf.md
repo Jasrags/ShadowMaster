@@ -57,7 +57,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | Pilot Ground Craft        | 1      | Reaction         | -                               |
 | Pistols                   | 4      | Agility          | -                               |
 | Stealth (Skill Group)     | 2      | Agility          | Disguise, Palming, Sneaking     |
-| Unarmed Combat            | 2      | Agility          | -                               |
+| Unarmed Combat            | 2      | Agility          | *Out of points*                 |
 
 ### Knowledge Skills
 
@@ -106,7 +106,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 ## Gear
 
-### Armor
+### Armor * need to adjust the overflow on the rows
 
 | Item                       | Armor Rating | Notes                   |
 | -------------------------- | ------------ | ----------------------- |
@@ -116,7 +116,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 | Item                  | Rating          | Notes                      |
 | --------------------- | --------------- | -------------------------- |
-| Hermes Ikon Commlink  | Device Rating 5 | High-end commlink          |
+| Hermes Ikon Commlink  | Device Rating 5 | High-end commlink          | * Commlink not showing up for purchase
 | Bug Scanner           | -               | Detect surveillance        |
 | Data Tap              | -               | Physical data extraction   |
 | Earbuds               | Rating 1        | Select Sound Filter 1      |
@@ -124,7 +124,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | Jammer (Area)         | Rating 4        | Block communications       |
 | Keycard Copier        | Rating 6        | Clone access cards         |
 | Micro Camera          | Rating 1        | Low-light vision           |
-| Micro-Transceivers    | 2               | Team communication         |
+| Micro-Transceivers    | 2               | Team communication         | * Need to allow for stacking and multiple purchases
 | Sequencer             | Rating 4        | Bypass maglocks            |
 | Tag Eraser            | -               | Remove RFID tags           |
 | White Noise Generator | Rating 6        | Counter audio surveillance |
@@ -147,12 +147,12 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 | Item                     | Notes                   |
 | ------------------------ | ----------------------- |
-| Electrochromatic T-shirt | Color-changing clothing |
-| Stealth Tags             | 20                      |
-| Suit                     | Worth 1,000¥            |
-| Shopsoft (Clothing)      | Fashion knowledge       |
+| Electrochromatic T-shirt | Color-changing clothing | * How to support this one?
+| Stealth Tags             | 20                      | * not in the gear selection
+| Suit                     | Worth 1,000¥            | * Need to allow for free form naming of clothing and pricing (i.e. Black Suit $2000)
+| Shopsoft (Clothing)      | Fashion knowledge       | * Not in the gear selection
 
-### IDs and Licenses
+### IDs and Licenses * Need to add the ability to expand/collapse the identity card rows
 
 | Item                        | Rating   | Notes |
 | --------------------------- | -------- | ----- |
@@ -174,18 +174,18 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 ## Weapons
 
-### Ranged Weapons
+### Ranged Weapons. *Need to adjust the modal the button to add is under the footer
 
 | Weapon               | Type         | Acc     | DV    | AP  | Mode  | RC  | Ammo  | Notes                                        |
 | -------------------- | ------------ | ------- | ----- | --- | ----- | --- | ----- | -------------------------------------------- |
 | Browning Ultra Power | Heavy Pistol | 5 (6)\* | 8P    | -1  | SA    | -   | 10(c) | Silencer, 2 spare clips, 100 rounds          |
 | Colt America L36     | Light Pistol | 7       | 7P    | -   | SA    | -   | 11(c) | Concealed holster, 2 spare clips, 110 rounds |
-| Walther Palm Pistol  | Hold-out     | 4       | 7P    | -   | SS/BF | -   | 2(b)  | Concealed holster, 10 rounds                 |
-| Yamaha Pulsar        | Taser        | 5       | 7S(e) | -5  | SA    | -   | 4(m)  | 40 darts                                     |
+| Walther Palm Pistol  | Hold-out     | 4       | 7P    | -   | SS/BF | -   | 2(b)  | Concealed holster, 10 rounds                 | * holster listed as incompatable with this weapon
+| Yamaha Pulsar        | Taser        | 5       | 7S(e) | -5  | SA    | -   | 4(m)  | 40 darts                                     | * weapon is allowed to load APDS, EXplosive, etc
 
 \*Silencer adds +1 Accuracy
 
-### Grenades
+### Grenades * Need to allow for stacking and multiple purchases
 
 | Weapon        | Type    | DV  | AP  | Blast      | Quantity |
 | ------------- | ------- | --- | --- | ---------- | -------- |
@@ -195,7 +195,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 | Weapon           | Type  | Reach | Acc | DV  | AP  | Notes       |
 | ---------------- | ----- | ----- | --- | --- | --- | ----------- |
-| Extendable Baton | Club  | 1     | 5   | 4S  | -   | Collapsible |
+| Extendable Baton | Club  | 1     | 5   | 4S  | -   | Collapsible | * melee weapons do not have mods (currently) and do not need ammo (currently)
 | Knife            | Blade | -     | 5   | 3P  | -1  | -           |
 
 ## Derived Stats

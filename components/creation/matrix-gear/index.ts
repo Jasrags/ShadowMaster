@@ -1,0 +1,1 @@
+export { MatrixGearCard } from "./MatrixGearCard";

@@ -10,6 +10,8 @@ import type {
   ArmorItem,
   BiowareItem,
   CharacterAutosoft,
+  CharacterCommlink,
+  CharacterCyberdeck,
   CharacterDrone,
   CharacterRCC,
   Contact,
@@ -204,6 +206,8 @@ export interface GearSelections {
   gear?: GearItem[];
   weapons?: Weapon[];
   armor?: ArmorItem[];
+  commlinks?: CharacterCommlink[];
+  cyberdecks?: CharacterCyberdeck[];
 }
 
 /**
