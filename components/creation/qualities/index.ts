@@ -1,0 +1,1 @@
+export { QualitiesCard } from "./QualitiesCard";

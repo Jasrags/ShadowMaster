@@ -508,6 +508,62 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 - `CombatSessionContext` - Combat state management (in combat pages)
 - `CreationBudgetContext` - Real-time budget tracking during character creation
 
+### Component File Organization
+
+Use a **hybrid approach** based on component complexity:
+
+**Use a subfolder when:**
+
+- Component has one or more **modals** (selection dialogs, forms, etc.)
+- Component has **reusable row/list item** components used in multiple places
+- Component exceeds ~600 lines with clear separable concerns
+- Component has distinct UI pieces that could be tested independently
+
+**Keep as a single file when:**
+
+- Component is self-contained with only **internal helper components**
+- Internal components are tightly coupled and only make sense within the parent
+- Component is under ~400 lines with straightforward structure
+- No modals or independently reusable pieces
+
+**Subfolder structure:**
+
+```
+/components/creation/qualities/
+├── QualitiesCard.tsx        # Main card component
+├── QualityModal.tsx         # Selection/edit modal
+├── QualityRow.tsx           # Optional: if row is complex/reusable
+├── index.ts                 # Re-exports public components
+```
+
+**Index file pattern:**
+
+```typescript
+// index.ts - export only public API
+export { QualitiesCard } from "./QualitiesCard";
+export { QualityModal } from "./QualityModal"; // Only if used externally
+```
+
+**Examples of correct patterns:**
+
+| Component                   | Pattern     | Why                                              |
+| --------------------------- | ----------- | ------------------------------------------------ |
+| `armor/`                    | Subfolder   | Has Panel, Row, PurchaseModal, ModificationModal |
+| `skills/`                   | Subfolder   | Has SkillModal, SkillGroupModal                  |
+| `AttributesCard.tsx`        | Single file | Inline controls, no modals                       |
+| `DerivedStatsCard.tsx`      | Single file | Display only, no interactions                    |
+| `PrioritySelectionCard.tsx` | Single file | Complex but self-contained grid                  |
+
+**Decision flowchart:**
+
+```
+Does the component have modals?
+├─ Yes → Create subfolder, extract modals
+└─ No → Does it have reusable Row/ListItem components?
+        ├─ Yes, used elsewhere → Create subfolder
+        └─ No → Keep as single file with internal helpers
+```
+
 ## Development Guidelines
 
 ### File Operations
@@ -528,10 +584,14 @@ Wrapped in `/app/providers.tsx` and applied in `/app/layout.tsx`:
 
 **New Character Creation Card:**
 
-1. Create card component in `/components/creation/`
-2. Follow the `CreationCard` wrapper pattern from `/components/creation/shared/`
-3. Add to `SheetCreationLayout.tsx` in the appropriate column
-4. Update `CreationState` type in `/lib/types/creation.ts` if needed
+1. Determine if card needs subfolder (see "Component File Organization" above)
+   - Has modals? → Create subfolder with `index.ts`
+   - Simple with internal helpers? → Single file is fine
+2. Create card component in `/components/creation/` or `/components/creation/{feature}/`
+3. Follow the `CreationCard` wrapper pattern from `/components/creation/shared/`
+4. Add to `SheetCreationLayout.tsx` in the appropriate column
+5. Update `CreationState` type in `/lib/types/creation.ts` if needed
+6. Export from `/components/creation/index.ts`
 
 **New Ruleset Module:**
 
