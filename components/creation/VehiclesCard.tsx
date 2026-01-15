@@ -509,11 +509,13 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
                         {v.name}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         <span className="text-xs text-zinc-500">{formatCurrency(v.cost)}¥</span>
+                        <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeVehicle(v.id)}
                           className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          title="Remove vehicle"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -562,11 +564,13 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
                         {d.name}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         <span className="text-xs text-zinc-500">{formatCurrency(d.cost)}¥</span>
+                        <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeDrone(d.id!)}
                           className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          title="Remove drone"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -615,11 +619,13 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
                         {r.name}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         <span className="text-xs text-zinc-500">{formatCurrency(r.cost)}¥</span>
+                        <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeRCC(r.id!)}
                           className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          title="Remove RCC"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>
@@ -668,11 +674,13 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
                         {a.name} R{a.rating}
                       </span>
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-1">
                         <span className="text-xs text-zinc-500">{formatCurrency(a.cost)}¥</span>
+                        <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeAutosoft(a.id!)}
                           className="rounded p-0.5 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                          title="Remove autosoft"
                         >
                           <X className="h-3.5 w-3.5" />
                         </button>

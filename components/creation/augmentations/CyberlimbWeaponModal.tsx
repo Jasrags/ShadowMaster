@@ -304,7 +304,7 @@ export function CyberlimbWeaponModal({
                               ? "border border-red-500 bg-red-50 dark:border-red-400 dark:bg-red-900/20"
                               : !fits
                                 ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                                : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                : "border border-zinc-200 hover:border-red-400 dark:border-zinc-700 dark:hover:border-red-500"
                           }`}
                         >
                           <div className="min-w-0 flex-1">

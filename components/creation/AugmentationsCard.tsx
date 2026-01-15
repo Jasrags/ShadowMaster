@@ -144,9 +144,9 @@ function AugmentationItem({
   return (
     <div>
       {/* Compact Single-Line Header */}
-      <div className="flex items-center gap-2 py-2">
+      <div className="flex items-center gap-1.5 py-2">
         {/* Expand/Collapse Button */}
-        {hasExpandableContent ? (
+        {hasExpandableContent && (
           <button
             onClick={() => setIsExpanded(!isExpanded)}
             aria-label={
@@ -161,13 +161,11 @@ function AugmentationItem({
               <ChevronRight className="h-4 w-4" aria-hidden="true" />
             )}
           </button>
-        ) : (
-          <div className="w-4 shrink-0" />
         )}
 
         {/* Name */}
         <span
-          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1"
+          className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate flex-1"
           title={displayName}
         >
           {displayName}
@@ -194,11 +192,14 @@ function AugmentationItem({
           </span>
         )}
 
+        {/* Separator */}
+        <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
+
         {/* Remove Button */}
         <button
           onClick={onRemove}
           aria-label={`Remove ${displayName}`}
-          className="shrink-0 p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded"
+          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
         >
           <X className="h-4 w-4" aria-hidden="true" />
         </button>
@@ -353,7 +354,7 @@ function CyberlimbAugmentationItem({
   return (
     <div>
       {/* Compact Single-Line Header */}
-      <div className="flex items-center gap-2 py-2">
+      <div className="flex items-center gap-1.5 py-2">
         {/* Expand/Collapse Button */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
@@ -364,7 +365,7 @@ function CyberlimbAugmentationItem({
 
         {/* Name */}
         <span
-          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1"
+          className="text-sm font-medium text-zinc-900 dark:text-zinc-100 truncate flex-1"
           title={item.name}
         >
           {item.name}
@@ -387,10 +388,13 @@ function CyberlimbAugmentationItem({
           </span>
         )}
 
+        {/* Separator */}
+        <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
+
         {/* Remove button */}
         <button
           onClick={onRemove}
-          className="shrink-0 p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400 rounded"
+          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
         >
           <X className="h-4 w-4" />
         </button>

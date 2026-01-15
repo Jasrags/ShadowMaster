@@ -169,13 +169,17 @@ function SelectedQualityCard({
             {isPositive ? `${cost}` : `+${cost}`}
           </span>
         </div>
-        <button
-          onClick={onRemove}
-          className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-200 hover:text-red-500 dark:hover:bg-zinc-700 dark:hover:text-red-400"
-          title="Remove quality"
-        >
-          <X className="h-3 w-3" />
-        </button>
+        <div className="flex shrink-0 items-center gap-1">
+          {/* Separator */}
+          <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
+          <button
+            onClick={onRemove}
+            className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+            title="Remove quality"
+          >
+            <X className="h-3 w-3" />
+          </button>
+        </div>
       </div>
       {/* Description */}
       <p className="ml-3 truncate text-xs text-zinc-500 dark:text-zinc-400">{quality.summary}</p>
@@ -387,10 +391,10 @@ function QualitySelectionModal({
       specification || undefined,
       hasLevels(selectedQuality) ? selectedLevel : undefined
     );
+    // Reset selection but keep modal open for adding more qualities
     setSelectedQualityId(null);
     setSpecification("");
     setSelectedLevel(1);
-    onClose();
   };
 
   const canAdd = useMemo(() => {
@@ -754,7 +758,7 @@ function QualitySelectionModal({
                 onClick={close}
                 className="rounded-lg px-4 py-2 text-sm text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
-                Cancel
+                Done
               </button>
               <button
                 onClick={handleAdd}
@@ -765,7 +769,7 @@ function QualitySelectionModal({
                     : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
                 }`}
               >
-                Add Quality
+                Add
               </button>
             </div>
           </ModalFooter>
@@ -959,9 +963,11 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedPositive.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              No positive qualities selected
-            </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No positive qualities selected
+              </p>
+            </div>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedPositive.map((selection) => {
@@ -999,9 +1005,11 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             </button>
           </div>
           {selectedNegative.length === 0 ? (
-            <p className="text-xs text-zinc-400 dark:text-zinc-500">
-              No negative qualities selected
-            </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No negative qualities selected
+              </p>
+            </div>
           ) : (
             <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedNegative.map((selection) => {

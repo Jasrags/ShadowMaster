@@ -5,6 +5,7 @@
  *
  * Modal for adding skill groups with:
  * - Search functionality
+ * - Category filter pills
  * - Split-pane design (list left, details right)
  * - Rating selection
  * - Shows skills in the group
@@ -22,6 +23,54 @@ import { Search, Plus, Minus, Check, Users, AlertTriangle } from "lucide-react";
 // =============================================================================
 
 const MAX_GROUP_RATING = 6;
+
+const GROUP_CATEGORIES = [
+  { id: "all", label: "All" },
+  { id: "combat", label: "Combat" },
+  { id: "physical", label: "Physical" },
+  { id: "social", label: "Social" },
+  { id: "technical", label: "Technical" },
+  { id: "magical", label: "Magic" },
+  { id: "resonance", label: "Resonance" },
+] as const;
+
+type GroupCategory = (typeof GROUP_CATEGORIES)[number]["id"];
+
+// Map skill group IDs to categories
+const GROUP_CATEGORY_MAP: Record<string, GroupCategory> = {
+  // Combat
+  firearms: "combat",
+  "close-combat": "combat",
+  // Physical
+  athletics: "physical",
+  stealth: "physical",
+  outdoors: "physical",
+  // Social
+  acting: "social",
+  influence: "social",
+  // Technical
+  engineering: "technical",
+  electronics: "technical",
+  biotech: "technical",
+  cracking: "technical",
+  // Magic
+  sorcery: "magical",
+  conjuring: "magical",
+  enchanting: "magical",
+  // Resonance
+  tasking: "resonance",
+};
+
+// Category display names for headers
+const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
+  combat: "COMBAT",
+  physical: "PHYSICAL",
+  social: "SOCIAL",
+  technical: "TECHNICAL",
+  magical: "MAGIC",
+  resonance: "RESONANCE",
+  other: "OTHER",
+};
 
 // =============================================================================
 // TYPES
@@ -57,12 +106,14 @@ export function SkillGroupModal({
   const { skillGroups, activeSkills } = useSkills();
 
   const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState<GroupCategory>("all");
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [rating, setRating] = useState(1);
 
   // Reset state when modal opens/closes
   const resetState = useCallback(() => {
     setSearchQuery("");
+    setSelectedCategory("all");
     setSelectedGroupId(null);
     setRating(1);
   }, []);
@@ -70,12 +121,18 @@ export function SkillGroupModal({
   // Filter available groups
   const filteredGroups = useMemo(() => {
     return skillGroups.filter((group) => {
-      // Filter magic/resonance groups
+      // Filter magic/resonance groups based on character capabilities
       if (["sorcery", "conjuring", "enchanting"].includes(group.id) && !hasMagic) {
         return false;
       }
       if (group.id === "tasking" && !hasResonance) {
         return false;
+      }
+
+      // Filter by category
+      if (selectedCategory !== "all") {
+        const groupCat = GROUP_CATEGORY_MAP[group.id] || "other";
+        if (groupCat !== selectedCategory) return false;
       }
 
       // Filter by search
@@ -85,7 +142,22 @@ export function SkillGroupModal({
 
       return true;
     });
-  }, [skillGroups, hasMagic, hasResonance, searchQuery]);
+  }, [skillGroups, hasMagic, hasResonance, selectedCategory, searchQuery]);
+
+  // Group by category for display with sticky headers
+  const groupsByCategory = useMemo(() => {
+    const grouped: Record<string, typeof filteredGroups> = {};
+    filteredGroups.forEach((group) => {
+      const cat = GROUP_CATEGORY_MAP[group.id] || "other";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(group);
+    });
+    // Sort groups within each category
+    Object.values(grouped).forEach((groups) => {
+      groups.sort((a, b) => a.name.localeCompare(b.name));
+    });
+    return grouped;
+  }, [filteredGroups]);
 
   // Get selected group data
   const selectedGroup = useMemo(() => {
@@ -130,8 +202,9 @@ export function SkillGroupModal({
         <>
           <ModalHeader title="Add Skill Group" onClose={close} />
 
-          {/* Search */}
+          {/* Search and Filters */}
           <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
+            {/* Search */}
             <div className="relative">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
               <input
@@ -142,6 +215,23 @@ export function SkillGroupModal({
                 className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
               />
             </div>
+
+            {/* Category Filter Pills */}
+            <div className="mt-3 flex flex-wrap gap-2">
+              {GROUP_CATEGORIES.map((cat) => (
+                <button
+                  key={cat.id}
+                  onClick={() => setSelectedCategory(cat.id)}
+                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
+                    selectedCategory === cat.id
+                      ? "bg-blue-500 text-white"
+                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
+                  }`}
+                >
+                  {cat.label}
+                </button>
+              ))}
+            </div>
           </div>
 
           <ModalBody scrollable={false}>
@@ -149,51 +239,58 @@ export function SkillGroupModal({
             <div className="flex flex-1 overflow-hidden">
               {/* Left Pane - Group List */}
               <div className="w-1/2 overflow-y-auto border-r border-zinc-200 dark:border-zinc-700">
-                <div className="sticky top-0 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
-                  Available Groups
-                </div>
-                {filteredGroups.map((group) => {
-                  const isSelected = selectedGroupId === group.id;
-                  const isAlreadyAdded = existingGroupIds.includes(group.id);
-                  const isIncompetent = group.id === incompetentGroupId;
-                  const isDisabled = isAlreadyAdded || isIncompetent;
+                {Object.entries(groupsByCategory).map(([category, groups]) => (
+                  <div key={category}>
+                    {/* Category Header */}
+                    <div className="sticky top-0 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                      {CATEGORY_DISPLAY_NAMES[category] || category.toUpperCase()}
+                    </div>
 
-                  return (
-                    <button
-                      key={group.id}
-                      onClick={() => !isDisabled && setSelectedGroupId(group.id)}
-                      disabled={isDisabled}
-                      className={`flex w-full items-center justify-between px-4 py-3 text-left transition-colors ${
-                        isSelected
-                          ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                          : isIncompetent
-                            ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
-                            : isAlreadyAdded
-                              ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                              : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
-                      }`}
-                    >
-                      <div>
-                        <div className={`font-medium ${isAlreadyAdded ? "line-through" : ""}`}>
-                          {group.name}
-                        </div>
-                        <div className="mt-0.5 text-xs text-zinc-400">
-                          {group.skills.length} skills
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
-                        {isIncompetent && (
-                          <span className="flex items-center gap-0.5 text-[10px] text-red-500">
-                            <AlertTriangle className="h-3 w-3" />
-                            incompetent
-                          </span>
-                        )}
-                      </div>
-                    </button>
-                  );
-                })}
-                {filteredGroups.length === 0 && (
+                    {/* Groups in category */}
+                    {groups.map((group) => {
+                      const isSelected = selectedGroupId === group.id;
+                      const isAlreadyAdded = existingGroupIds.includes(group.id);
+                      const isIncompetent = group.id === incompetentGroupId;
+                      const isDisabled = isAlreadyAdded || isIncompetent;
+
+                      return (
+                        <button
+                          key={group.id}
+                          onClick={() => !isDisabled && setSelectedGroupId(group.id)}
+                          disabled={isDisabled}
+                          className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors ${
+                            isSelected
+                              ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                              : isIncompetent
+                                ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
+                                : isAlreadyAdded
+                                  ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                                  : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
+                          }`}
+                        >
+                          <div className="flex items-center gap-2">
+                            <span className={isAlreadyAdded ? "line-through" : ""}>
+                              {group.name}
+                            </span>
+                            <span className="text-xs text-zinc-400">
+                              ({group.skills.length} skills)
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1">
+                            {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
+                            {isIncompetent && (
+                              <span className="flex items-center gap-0.5 text-[10px] text-red-500">
+                                <AlertTriangle className="h-3 w-3" />
+                                incompetent
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))}
+                {Object.keys(groupsByCategory).length === 0 && (
                   <div className="p-8 text-center text-sm text-zinc-500">No skill groups found</div>
                 )}
               </div>

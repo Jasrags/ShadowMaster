@@ -9884,41 +9884,6 @@
             "legality": "restricted"
           },
           {
-            "id": "medkit",
-            "name": "Medkit",
-            "category": "tools",
-            "hasRating": true,
-            "maxRating": 6,
-            "description": "Portable medical supplies (Rating 1-6).",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 250,
-                "availability": 1
-              },
-              "2": {
-                "cost": 500,
-                "availability": 2
-              },
-              "3": {
-                "cost": 750,
-                "availability": 3
-              },
-              "4": {
-                "cost": 1000,
-                "availability": 4
-              },
-              "5": {
-                "cost": 1250,
-                "availability": 5
-              },
-              "6": {
-                "cost": 1500,
-                "availability": 6
-              }
-            }
-          },
-          {
             "id": "chisel-crowbar",
             "name": "Chisel/Crowbar",
             "category": "tools",
@@ -10850,120 +10815,6 @@
         ],
         "security": [
           {
-            "id": "key-lock",
-            "name": "Key/Combination Lock",
-            "category": "security",
-            "hasRating": true,
-            "maxRating": 6,
-            "description": "Mechanical key or combination lock (Rating 1-6).",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 10,
-                "availability": 1
-              },
-              "2": {
-                "cost": 20,
-                "availability": 2
-              },
-              "3": {
-                "cost": 30,
-                "availability": 3
-              },
-              "4": {
-                "cost": 40,
-                "availability": 4
-              },
-              "5": {
-                "cost": 50,
-                "availability": 5
-              },
-              "6": {
-                "cost": 60,
-                "availability": 6
-              }
-            }
-          },
-          {
-            "id": "maglock",
-            "name": "Maglock",
-            "category": "security",
-            "hasRating": true,
-            "maxRating": 6,
-            "description": "Electronic lock (Rating 1-6).",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 100,
-                "availability": 1
-              },
-              "2": {
-                "cost": 200,
-                "availability": 2
-              },
-              "3": {
-                "cost": 300,
-                "availability": 3
-              },
-              "4": {
-                "cost": 400,
-                "availability": 4
-              },
-              "5": {
-                "cost": 500,
-                "availability": 5
-              },
-              "6": {
-                "cost": 600,
-                "availability": 6
-              }
-            }
-          },
-          {
-            "id": "anti-tamper-circuits",
-            "name": "Anti-Tamper Circuits",
-            "category": "security",
-            "hasRating": true,
-            "maxRating": 4,
-            "description": "Maglock add-on that triggers alarms if tampered with (Rating 1-4).",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 250,
-                "availability": 1
-              },
-              "2": {
-                "cost": 500,
-                "availability": 2
-              },
-              "3": {
-                "cost": 750,
-                "availability": 3
-              },
-              "4": {
-                "cost": 1000,
-                "availability": 4
-              }
-            }
-          },
-          {
-            "id": "restraint-plastic",
-            "name": "Plastic Restraints (10)",
-            "category": "security",
-            "cost": 20,
-            "availability": 0,
-            "description": "Disposable plastic cuffs."
-          },
-          {
-            "id": "restraint-metal",
-            "name": "Metal Restraints",
-            "category": "security",
-            "cost": 50,
-            "availability": 2,
-            "description": "Standard handcuffs.",
-            "legality": "restricted"
-          },
-          {
             "id": "motion-sensor",
             "name": "Motion Sensor",
             "category": "security",
@@ -11166,39 +11017,6 @@
                 "availability": 2
               }
             }
-          },
-          {
-            "id": "ear-buds",
-            "name": "Ear Buds",
-            "category": "audio-devices",
-            "hasRating": true,
-            "maxRating": 3,
-            "capacity": 1,
-            "capacityPerRating": true,
-            "description": "Small audio device fitting into the ear.",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              }
-            }
-          },
-          {
-            "id": "gecko-tape-gloves",
-            "name": "Gecko Tape Gloves",
-            "category": "miscellaneous",
-            "cost": 250,
-            "availability": 12,
-            "description": "Allows climbing on smooth surfaces."
           }
         ],
         "ammunition": [
@@ -12191,34 +12009,37 @@
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 25000,
+                "availability": 5,
+                "essenceCost": 1,
+                "effects": { "attributeBonuses": { "strength": 1, "agility": 1 } }
+              },
+              "2": {
+                "cost": 50000,
+                "availability": 10,
+                "essenceCost": 2,
+                "effects": { "attributeBonuses": { "strength": 2, "agility": 2 } }
+              },
+              "3": {
+                "cost": 75000,
+                "availability": 15,
+                "essenceCost": 3,
+                "effects": { "attributeBonuses": { "strength": 3, "agility": 3 } }
+              },
+              "4": {
+                "cost": 100000,
+                "availability": 20,
+                "essenceCost": 4,
+                "effects": { "attributeBonuses": { "strength": 4, "agility": 4 } }
+              }
+            },
             "category": "bodyware",
             "description": "+Rating STR and AGI. Cannot be combined with muscle augmentation or muscle toner bioware.",
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["muscle-augmentation", "muscle-toner"],
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 4
-              },
-              "costScaling": {
-                "baseValue": 25000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 5,
-                "perRating": true
-              },
-              "essenceScaling": {
-                "baseValue": 1,
-                "perRating": true
-              }
-            },
-            "attributeBonusPerRating": {
-              "strength": 1,
-              "agility": 1
-            }
+            "incompatibleWith": ["muscle-augmentation", "muscle-toner"]
           },
           {
             "id": "reaction-enhancers",
@@ -12226,34 +12047,32 @@
             "hasRating": true,
             "minRating": 1,
             "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 13000,
+                "availability": 5,
+                "essenceCost": 0.3,
+                "effects": { "attributeBonuses": { "reaction": 1 } }
+              },
+              "2": {
+                "cost": 26000,
+                "availability": 10,
+                "essenceCost": 0.6,
+                "effects": { "attributeBonuses": { "reaction": 2 } }
+              },
+              "3": {
+                "cost": 39000,
+                "availability": 15,
+                "essenceCost": 0.9,
+                "effects": { "attributeBonuses": { "reaction": 3 } }
+              }
+            },
             "category": "bodyware",
             "description": "+Rating REA (adjust Initiative and Physical limit accordingly). Incompatible with wired reflexes and other Reaction enhancements.",
             "wirelessBonus": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4 if both have wireless active.",
             "page": 457,
             "legality": "restricted",
-            "incompatibleWith": ["wired-reflexes"],
-            "ratingSpec": {
-              "rating": {
-                "hasRating": true,
-                "minRating": 1,
-                "maxRating": 3
-              },
-              "costScaling": {
-                "baseValue": 13000,
-                "perRating": true
-              },
-              "availabilityScaling": {
-                "baseValue": 5,
-                "perRating": true
-              },
-              "essenceScaling": {
-                "baseValue": 0.3,
-                "perRating": true
-              }
-            },
-            "attributeBonusPerRating": {
-              "reaction": 1
-            }
+            "incompatibleWith": ["wired-reflexes"]
           },
           {
             "id": "wired-reflexes",

@@ -211,7 +211,7 @@ function MagicPathModal({
             ? isResonance
               ? "border-cyan-500 bg-cyan-50 dark:border-cyan-500 dark:bg-cyan-900/20"
               : "border-purple-500 bg-purple-50 dark:border-purple-500 dark:bg-purple-900/20"
-            : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80"
+            : "border-zinc-200 bg-white hover:border-purple-400 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-purple-500"
         }`}
       >
         {/* Header row */}
@@ -339,7 +339,7 @@ function MagicPathModal({
                 className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
                   selectedId === "mundane"
                     ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
-                    : "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/80"
+                    : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-emerald-500"
                 }`}
               >
                 <div className="flex items-center gap-3">
@@ -795,7 +795,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                           className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
                             selectedTradition === tradition.id
                               ? "bg-purple-100 dark:bg-purple-900/30"
-                              : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                              : "hover:outline hover:outline-1 hover:outline-purple-400 dark:hover:outline-purple-500"
                           }`}
                         >
                           <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
@@ -845,7 +845,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                         className={`w-full rounded-lg px-3 py-2 text-left transition-colors ${
                           !selectedMentorSpiritId
                             ? "bg-indigo-100 dark:bg-indigo-900/30"
-                            : "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                            : "hover:outline hover:outline-1 hover:outline-indigo-400 dark:hover:outline-indigo-500"
                         }`}
                       >
                         <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
@@ -864,7 +864,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                               isSelected
                                 ? "bg-indigo-100 dark:bg-indigo-900/30"
                                 : canSelect
-                                  ? "hover:bg-zinc-50 dark:hover:bg-zinc-700"
+                                  ? "hover:outline hover:outline-1 hover:outline-indigo-400 dark:hover:outline-indigo-500"
                                   : "cursor-not-allowed opacity-50"
                             }`}
                           >

@@ -97,7 +97,7 @@ export function LifestyleSubscriptionSelector({
                           className={`w-full rounded-md border p-4 text-left transition-colors ${
                             isSelected
                               ? "border-blue-500 bg-blue-50 dark:border-blue-400 dark:bg-blue-900/20"
-                              : "border-zinc-200 bg-white hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                              : "border-zinc-200 bg-white hover:border-blue-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-blue-500"
                           }`}
                         >
                           <div className="flex items-start justify-between">

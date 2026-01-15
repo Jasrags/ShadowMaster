@@ -26,7 +26,7 @@ import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "..
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
-import { Lock, Plus, Backpack } from "lucide-react";
+import { Lock, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -445,7 +445,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         <div className="space-y-3">
           {/* Gear List */}
           {selectedGear.length > 0 ? (
-            <div className="space-y-2">
+            <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
               {selectedGear.map((gear) => (
                 <GearRow
                   key={gear.id}
@@ -457,16 +457,8 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
               ))}
             </div>
           ) : (
-            <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-200 p-8 dark:border-zinc-700">
-              <Backpack className="h-8 w-8 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-2 text-sm text-zinc-500 dark:text-zinc-400">No gear purchased</p>
-              <button
-                onClick={() => setIsPurchaseModalOpen(true)}
-                className="mt-3 flex items-center gap-1.5 text-sm font-medium text-amber-600 hover:text-amber-700 dark:text-amber-400"
-              >
-                <Plus className="h-4 w-4" />
-                Add your first gear
-              </button>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No gear purchased</p>
             </div>
           )}
 
