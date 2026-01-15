@@ -237,7 +237,7 @@ export function FocusModal({
                         className={`flex w-full items-center justify-between rounded-lg border p-3 text-left transition-colors ${
                           isSelected
                             ? "border-purple-500 bg-purple-50 dark:border-purple-400 dark:bg-purple-900/20"
-                            : "border-zinc-200 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:hover:border-zinc-600 dark:hover:bg-zinc-800/50"
+                            : "border-zinc-200 hover:border-purple-400 dark:border-zinc-700 dark:hover:border-purple-500"
                         }`}
                       >
                         <div className="flex items-center gap-3">

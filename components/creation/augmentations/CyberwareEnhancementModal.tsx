@@ -357,7 +357,7 @@ export function CyberwareEnhancementModal({
                               ? "border border-cyan-500 bg-cyan-50 dark:border-cyan-400 dark:bg-cyan-900/20"
                               : !fits
                                 ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                                : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                : "border border-zinc-200 hover:border-cyan-400 dark:border-zinc-700 dark:hover:border-cyan-500"
                           }`}
                         >
                           <div className="min-w-0 flex-1">

@@ -320,7 +320,7 @@ export function CyberlimbAccessoryModal({
                               ? "border border-sky-500 bg-sky-50 dark:border-sky-400 dark:bg-sky-900/20"
                               : !fits
                                 ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                                : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                : "border border-zinc-200 hover:border-sky-400 dark:border-zinc-700 dark:hover:border-sky-500"
                           }`}
                         >
                           <div className="min-w-0 flex-1">

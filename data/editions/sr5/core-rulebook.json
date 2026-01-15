@@ -11168,31 +11168,6 @@
             }
           },
           {
-            "id": "ear-buds",
-            "name": "Ear Buds",
-            "category": "audio-devices",
-            "hasRating": true,
-            "maxRating": 3,
-            "capacity": 1,
-            "capacityPerRating": true,
-            "description": "Small audio device fitting into the ear.",
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 50,
-                "availability": 0
-              },
-              "2": {
-                "cost": 100,
-                "availability": 0
-              },
-              "3": {
-                "cost": 150,
-                "availability": 0
-              }
-            }
-          },
-          {
             "id": "gecko-tape-gloves",
             "name": "Gecko Tape Gloves",
             "category": "miscellaneous",

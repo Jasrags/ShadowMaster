@@ -115,7 +115,7 @@ function ArmorListItem({
         isSelected
           ? "border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30"
           : canAfford
-            ? "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
+            ? "border-zinc-200 bg-white hover:border-amber-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-amber-500"
             : "border-zinc-200 bg-zinc-100 opacity-50 cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-800"
       }`}
     >

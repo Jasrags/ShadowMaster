@@ -74,7 +74,7 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
         {/* Expand/Collapse Button */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="flex flex-1 items-center gap-3 text-left transition-colors hover:bg-zinc-50 dark:hover:bg-zinc-800/50 rounded -m-2 p-2"
+          className="flex flex-1 items-center gap-3 text-left transition-colors rounded -m-2 p-2 hover:outline hover:outline-1 hover:outline-blue-400 dark:hover:outline-blue-500"
         >
           {/* Expand/Collapse Icon */}
           <div className="text-zinc-400">

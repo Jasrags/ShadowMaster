@@ -297,7 +297,7 @@ export function SkillModal({
                                 ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
                                 : isAlreadyAdded
                                   ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                                  : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                                  : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
                           }`}
                         >
                           <div className="flex items-center gap-2">
@@ -434,7 +434,7 @@ export function SkillModal({
                                     className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-sm transition-colors ${
                                       isAdded
                                         ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
-                                        : "text-zinc-700 hover:bg-zinc-50 dark:text-zinc-300 dark:hover:bg-zinc-800/50"
+                                        : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
                                     }`}
                                   >
                                     <span>{spec}</span>

@@ -122,7 +122,7 @@ export function LifestyleModificationSelector({
                       key={mod.id}
                       type="button"
                       onClick={() => handleSelect(mod)}
-                      className="w-full rounded-md border border-zinc-200 bg-white p-4 text-left hover:bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:bg-zinc-800"
+                      className="w-full rounded-md border border-zinc-200 bg-white p-4 text-left hover:border-amber-400 dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-amber-500"
                     >
                       <div className="flex items-start justify-between">
                         <div className="flex-1">

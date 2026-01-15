@@ -221,7 +221,7 @@ function GearListItem({
         isSelected
           ? "border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30"
           : !isDisabled
-            ? "border-zinc-200 bg-white hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
+            ? "border-zinc-200 bg-white hover:border-amber-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-amber-500"
             : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
       }`}
     >
@@ -240,14 +240,14 @@ function GearListItem({
           <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span className="capitalize">{gear.category}</span>
             <span>
-              Avail: {getAvailabilityDisplay(gear.availability, gear.legality)}
+              Avail: {getAvailabilityDisplay(getGearAvailability(gear), gear.legality)}
               {gear.ratingSpec?.availabilityScaling?.perRating && "/R"}
             </span>
           </div>
         </div>
         <div className="flex-shrink-0 text-right">
           <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {formatCurrency(gear.cost)}¥
+            {formatCurrency(getGearCost(gear))}¥
             {(gear.costPerRating || gear.ratingSpec?.costScaling?.perRating) && "/R"}
           </div>
         </div>

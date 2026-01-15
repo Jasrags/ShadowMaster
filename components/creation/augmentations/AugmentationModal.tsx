@@ -826,7 +826,7 @@ export function AugmentationModal({
                                 : "border border-pink-500 bg-pink-50 dark:border-pink-400 dark:bg-pink-900/20"
                               : isDisabled
                                 ? "cursor-not-allowed bg-zinc-50 opacity-50 dark:bg-zinc-800/50"
-                                : "hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
+                                : "border border-zinc-200 hover:border-cyan-400 dark:border-zinc-700 dark:hover:border-cyan-500"
                           }`}
                         >
                           <div className="min-w-0 flex-1">
@@ -927,7 +927,7 @@ export function AugmentationModal({
                                       ? "cursor-not-allowed border-zinc-200 bg-zinc-100 text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-500"
                                       : willReplace
                                         ? "border-amber-300 bg-amber-50 text-amber-700 hover:border-amber-400 dark:border-amber-600 dark:bg-amber-900/20 dark:text-amber-300"
-                                        : "border-zinc-200 text-zinc-700 hover:border-zinc-300 hover:bg-zinc-50 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-zinc-600 dark:hover:bg-zinc-800"
+                                        : "border-zinc-200 text-zinc-700 hover:border-cyan-400 dark:border-zinc-700 dark:text-zinc-300 dark:hover:border-cyan-500"
                                 }`}
                               >
                                 <span>{LOCATION_LABELS[location]}</span>
