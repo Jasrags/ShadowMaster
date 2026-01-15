@@ -510,7 +510,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                         {v.name}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs text-zinc-500">{formatCurrency(v.cost)}¥</span>
+                        <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          ¥{formatCurrency(v.cost)}
+                        </span>
                         <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeVehicle(v.id)}
@@ -565,7 +567,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                         {d.name}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs text-zinc-500">{formatCurrency(d.cost)}¥</span>
+                        <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          ¥{formatCurrency(d.cost)}
+                        </span>
                         <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeDrone(d.id!)}
@@ -620,7 +624,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                         {r.name}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs text-zinc-500">{formatCurrency(r.cost)}¥</span>
+                        <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          ¥{formatCurrency(r.cost)}
+                        </span>
                         <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeRCC(r.id!)}
@@ -675,7 +681,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                         {a.name} R{a.rating}
                       </span>
                       <div className="flex items-center gap-1">
-                        <span className="text-xs text-zinc-500">{formatCurrency(a.cost)}¥</span>
+                        <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          ¥{formatCurrency(a.cost)}
+                        </span>
                         <div className="mx-1 h-4 w-px bg-zinc-300 dark:bg-zinc-600" />
                         <button
                           onClick={() => removeAutosoft(a.id!)}
