@@ -1,0 +1,1 @@
+export { MagicPathCard } from "./MagicPathCard";

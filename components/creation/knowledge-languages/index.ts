@@ -1,0 +1,1 @@
+export { KnowledgeLanguagesCard } from "./KnowledgeLanguagesCard";

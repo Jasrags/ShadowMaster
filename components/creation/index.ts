@@ -1,13 +1,13 @@
 // Phase 2: Core Creation Components
 export { PrioritySelectionCard } from "./PrioritySelectionCard";
-export { MetatypeCard } from "./MetatypeCard";
+export { MetatypeCard } from "./metatype";
 export { AttributesCard } from "./AttributesCard";
 export { SkillsCard } from "./SkillsCard";
-export { KnowledgeLanguagesCard } from "./KnowledgeLanguagesCard";
-export { QualitiesCard } from "./QualitiesCard";
+export { KnowledgeLanguagesCard } from "./knowledge-languages";
+export { QualitiesCard } from "./qualities";
 
 // Phase 3: Magic & Resonance Components
-export { MagicPathCard } from "./MagicPathCard";
+export { MagicPathCard } from "./magic-path";
 export { SpellsCard } from "./SpellsCard";
 export { AdeptPowersCard } from "./AdeptPowersCard";
 export { ComplexFormsCard } from "./ComplexFormsCard";
@@ -25,8 +25,8 @@ export { VehiclesCard } from "./VehiclesCard";
 export { GearTabsCard } from "./GearTabsCard";
 
 // Phase 5: Social & Identity Components
-export { ContactsCard } from "./ContactsCard";
-export { IdentitiesCard } from "./IdentitiesCard";
+export { ContactsCard } from "./contacts";
+export { IdentitiesCard } from "./identities";
 export { CharacterInfoCard } from "./CharacterInfoCard";
 
 // Phase 6: Summary & Finalization Components
