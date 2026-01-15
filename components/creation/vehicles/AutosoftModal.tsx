@@ -200,8 +200,10 @@ export function AutosoftModal({ isOpen, onClose, onAdd, remainingNuyen }: Autoso
                           )}
                         </div>
                         {/* Rating selector */}
-                        <div className="mt-2 flex items-center gap-2">
-                          <span className="text-xs text-zinc-500 dark:text-zinc-400">Rating:</span>
+                        <div className="mt-2 flex items-center gap-1">
+                          <span className="mr-2 text-xs text-zinc-500 dark:text-zinc-400">
+                            1-{maxAvailable}
+                          </span>
                           <button
                             onClick={() =>
                               updateRating(
@@ -212,13 +214,13 @@ export function AutosoftModal({ isOpen, onClose, onAdd, remainingNuyen }: Autoso
                               )
                             }
                             disabled={rating <= 1}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-700"
+                            className="flex h-7 w-7 items-center justify-center rounded-lg bg-zinc-200 text-zinc-600 transition-colors hover:bg-zinc-300 disabled:opacity-30 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
                           >
                             <Minus className="h-3.5 w-3.5" />
                           </button>
-                          <span className="w-6 text-center text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                          <div className="flex h-7 w-8 items-center justify-center rounded-lg bg-zinc-200 text-sm font-medium text-zinc-900 dark:bg-zinc-700 dark:text-zinc-100">
                             {rating}
-                          </span>
+                          </div>
                           <button
                             onClick={() =>
                               updateRating(
@@ -229,11 +231,10 @@ export function AutosoftModal({ isOpen, onClose, onAdd, remainingNuyen }: Autoso
                               )
                             }
                             disabled={rating >= maxAvailable}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 disabled:opacity-30 dark:hover:bg-zinc-700"
+                            className="flex h-7 w-7 items-center justify-center rounded-lg bg-emerald-600 text-white transition-colors hover:bg-emerald-700 disabled:opacity-30"
                           >
                             <Plus className="h-3.5 w-3.5" />
                           </button>
-                          <span className="text-xs text-zinc-400">/ {maxAvailable}</span>
                         </div>
                       </div>
                       <div className="ml-3 flex flex-col items-end gap-2">

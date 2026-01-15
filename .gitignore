@@ -55,6 +55,7 @@ next-env.d.ts
 /data/activity
 /data/security
 /data/combat
+/docs/capabilities/plans/verification-reports
 
 # backups
 /backups
