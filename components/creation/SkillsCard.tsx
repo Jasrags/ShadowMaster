@@ -19,8 +19,8 @@ import { useSkills } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
-import { SkillModal, SkillGroupModal } from "./skills";
-import { Minus, Plus, Users, BookOpen, X, AlertTriangle, Star } from "lucide-react";
+import { SkillModal, SkillGroupModal, SkillListItem } from "./skills";
+import { Minus, Plus, Users, X, AlertTriangle, Star } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -37,6 +37,14 @@ const KARMA_PER_SPECIALIZATION = 7;
 interface SkillsCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
+}
+
+/** Unified entry for displaying all skills (individual and from groups) */
+interface SkillListEntry {
+  skillId: string;
+  rating: number;
+  source: { type: "individual" } | { type: "group"; groupId: string; groupName: string };
+  specializations: string[];
 }
 
 // =============================================================================
@@ -117,124 +125,6 @@ function SkillGroupCard({
       <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
         {skills.map((skill) => skill.name).join(" • ")}
       </div>
-    </div>
-  );
-}
-
-// =============================================================================
-// INDIVIDUAL SKILL CARD COMPONENT
-// =============================================================================
-
-function IndividualSkillCard({
-  skillName,
-  linkedAttribute,
-  groupName,
-  rating,
-  maxRating,
-  specializations,
-  canIncrease,
-  onRatingChange,
-  onRemoveSpecialization,
-  onRemove,
-}: {
-  skillName: string;
-  linkedAttribute: string;
-  groupName?: string;
-  rating: number;
-  maxRating: number;
-  specializations: string[];
-  canIncrease: boolean;
-  onRatingChange: (delta: number) => void;
-  onRemoveSpecialization: (spec: string) => void;
-  onRemove: () => void;
-}) {
-  const isAtMax = rating >= maxRating;
-  const hasSpecs = specializations.length > 0;
-
-  return (
-    <div className="py-1.5">
-      {/* Line 1: Skill name and controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <BookOpen className="h-3.5 w-3.5 shrink-0 text-blue-500" />
-          <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {skillName}
-          </span>
-          {hasSpecs && (
-            <span title="Has specializations" className="shrink-0">
-              <Star className="h-3 w-3 text-amber-500" />
-            </span>
-          )}
-        </div>
-
-        {/* Controls - fixed width, never wrap */}
-        <div className="flex shrink-0 items-center gap-1">
-          {isAtMax && (
-            <span className="rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
-              MAX
-            </span>
-          )}
-          <button
-            onClick={() => onRatingChange(-1)}
-            disabled={rating <= 1}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              rating > 1
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Minus className="h-3 w-3" />
-          </button>
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-            {rating}
-          </div>
-          <button
-            onClick={() => onRatingChange(1)}
-            disabled={!canIncrease || isAtMax}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              canIncrease && !isAtMax
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Plus className="h-3 w-3" />
-          </button>
-          {/* Separator */}
-          <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
-          <button
-            onClick={onRemove}
-            className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-          >
-            <X className="h-3 w-3" />
-          </button>
-        </div>
-      </div>
-
-      {/* Line 2: Linked attribute and group (always visible) */}
-      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-        {linkedAttribute.toUpperCase().slice(0, 3)}
-        {groupName && ` • ${groupName}`}
-      </div>
-
-      {/* Line 3: Specializations (if any) */}
-      {hasSpecs && (
-        <div className="ml-5 mt-1 flex flex-wrap gap-1">
-          {specializations.map((spec) => (
-            <span
-              key={spec}
-              className="inline-flex items-center gap-0.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-            >
-              {spec}
-              <button
-                onClick={() => onRemoveSpecialization(spec)}
-                className="rounded-full hover:bg-amber-200 dark:hover:bg-amber-800"
-              >
-                <X className="h-2.5 w-2.5" />
-              </button>
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -328,6 +218,47 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     });
     return skillIds;
   }, [groups, skillGroups]);
+
+  // Merged and sorted list of all skills (individual + from groups)
+  const allSkillsSorted = useMemo((): SkillListEntry[] => {
+    const entries: SkillListEntry[] = [];
+
+    // Add individual skills
+    Object.entries(skills).forEach(([skillId, rating]) => {
+      entries.push({
+        skillId,
+        rating,
+        source: { type: "individual" },
+        specializations: specializations[skillId] || [],
+      });
+    });
+
+    // Add skills from groups
+    Object.entries(groups).forEach(([groupId, groupRating]) => {
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      if (groupData) {
+        groupData.skills.forEach((skillId) => {
+          entries.push({
+            skillId,
+            rating: groupRating,
+            source: { type: "group", groupId, groupName: groupData.name },
+            specializations: [], // Group skills don't have specializations
+          });
+        });
+      }
+    });
+
+    // Sort alphabetically by skill name
+    entries.sort((a, b) => {
+      const skillA = activeSkills.find((s) => s.id === a.skillId);
+      const skillB = activeSkills.find((s) => s.id === b.skillId);
+      const nameA = skillA?.name || "";
+      const nameB = skillB?.name || "";
+      return nameA.localeCompare(nameB);
+    });
+
+    return entries;
+  }, [skills, groups, specializations, skillGroups, activeSkills]);
 
   // Handle adding a skill from modal
   const handleAddSkill = useCallback(
@@ -577,7 +508,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
   }
 
-  const hasSelectedSkills = Object.keys(skills).length > 0;
   const hasSelectedGroups = Object.keys(groups).length > 0;
 
   return (
@@ -696,11 +626,11 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             </div>
           )}
 
-          {/* Individual Skills Section */}
+          {/* Skills Section (Individual + Group Skills) */}
           <div>
             <div className="mb-1 flex items-center justify-between">
               <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Individual Skills
+                Skills
               </h4>
               <button
                 onClick={() => setIsSkillModalOpen(true)}
@@ -710,48 +640,57 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 Skill
               </button>
             </div>
-            {hasSelectedSkills ? (
+            {allSkillsSorted.length > 0 ? (
               <div className="max-h-80 divide-y divide-zinc-100 overflow-y-auto rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
-                {Object.entries(skills).map(([skillId, rating]) => {
-                  const skillData = getSkillData(skillId);
+                {allSkillsSorted.map((entry) => {
+                  const skillData = getSkillData(entry.skillId);
                   if (!skillData) return null;
 
-                  const skillSpecs = specializations[skillId] || [];
-                  const groupName = getSkillGroupName(skillId);
+                  const isGroupSkill = entry.source.type === "group";
 
                   return (
-                    <IndividualSkillCard
-                      key={skillId}
+                    <SkillListItem
+                      key={entry.skillId}
                       skillName={skillData.name}
                       linkedAttribute={skillData.linkedAttribute}
-                      groupName={groupName}
-                      rating={rating}
+                      rating={entry.rating}
                       maxRating={MAX_SKILL_RATING}
-                      specializations={skillSpecs}
-                      canIncrease={skillPointsRemaining > 0}
-                      onRatingChange={(delta) => handleSkillRatingChange(skillId, delta)}
-                      onRemoveSpecialization={(spec) => handleRemoveSpecialization(skillId, spec)}
-                      onRemove={() => handleRemoveSkill(skillId)}
+                      specializations={entry.specializations}
+                      isGroupSkill={isGroupSkill}
+                      groupName={entry.source.type === "group" ? entry.source.groupName : undefined}
+                      canIncrease={!isGroupSkill && skillPointsRemaining > 0}
+                      onRatingChange={
+                        isGroupSkill
+                          ? undefined
+                          : (delta) => handleSkillRatingChange(entry.skillId, delta)
+                      }
+                      onRemove={isGroupSkill ? undefined : () => handleRemoveSkill(entry.skillId)}
+                      onRemoveSpecialization={(spec) =>
+                        handleRemoveSpecialization(entry.skillId, spec)
+                      }
                     />
                   );
                 })}
               </div>
             ) : (
               <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  No individual skills added
-                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">No skills added</p>
               </div>
             )}
           </div>
 
           {/* Summary */}
-          {(hasSelectedSkills || hasSelectedGroups) && (
+          {allSkillsSorted.length > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {Object.keys(groups).length} group
-                {Object.keys(groups).length !== 1 ? "s" : ""}, {Object.keys(skills).length} skill
-                {Object.keys(skills).length !== 1 ? "s" : ""}
+                {allSkillsSorted.length} skill{allSkillsSorted.length !== 1 ? "s" : ""}
+                {hasSelectedGroups && (
+                  <span className="text-purple-500 dark:text-purple-400">
+                    {" "}
+                    ({Object.keys(groups).length} from group
+                    {Object.keys(groups).length !== 1 ? "s" : ""})
+                  </span>
+                )}
                 {totalSpecializations > 0 && (
                   <span className="text-amber-600 dark:text-amber-400">
                     , {totalSpecializations} spec{totalSpecializations !== 1 ? "s" : ""}
@@ -759,7 +698,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 )}
               </span>
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {skillPointsSpent} skill{skillGroupPoints > 0 && <> / {groupPointsSpent} group</>}
+                {skillPointsSpent} skill pts
+                {skillGroupPoints > 0 && <> / {groupPointsSpent} group pts</>}
               </span>
             </div>
           )}

@@ -6,3 +6,4 @@
 
 export { SkillModal } from "./SkillModal";
 export { SkillGroupModal } from "./SkillGroupModal";
+export { SkillListItem } from "./SkillListItem";
