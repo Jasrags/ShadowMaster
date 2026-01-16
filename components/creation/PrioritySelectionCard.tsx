@@ -110,15 +110,9 @@ function CategoryRow({
   const status = hasConflict ? "conflict" : isComplete ? "complete" : "pending";
 
   const statusIcon = {
-    complete: <Check className="h-4 w-4 text-emerald-500" />,
-    pending: <Circle className="h-4 w-4 text-zinc-400" />,
-    conflict: <AlertTriangle className="h-4 w-4 text-amber-500" />,
-  };
-
-  const statusText = {
-    complete: "Complete",
-    pending: "Selection needed",
-    conflict: "Conflict",
+    complete: <Check className="h-3.5 w-3.5 text-emerald-500" />,
+    pending: <Circle className="h-3.5 w-3.5 text-zinc-400" />,
+    conflict: <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />,
   };
 
   const borderColor = {
@@ -145,49 +139,43 @@ function CategoryRow({
           onMoveDown();
         }
       }}
-      className={`group relative rounded-lg border-2 bg-white p-3 transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:bg-zinc-900 ${borderColor[status]}`}
+      className={`group rounded-lg border bg-white px-2 py-1.5 transition-all hover:shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-1 dark:bg-zinc-900 ${borderColor[status]}`}
     >
-      {/* Priority Letter Badge */}
-      <div className="absolute -left-3 top-1/2 -translate-y-1/2 rounded bg-zinc-800 px-2 py-1 text-xs font-bold text-white dark:bg-zinc-200 dark:text-zinc-900">
-        {priorityLevel}
-      </div>
-
-      <div className="flex items-center gap-3 pl-4">
+      {/* Row 1: Handle, Badge, Label, Status, Move */}
+      <div className="flex items-center gap-2">
         {/* Drag Handle */}
         <div
           className="cursor-grab text-zinc-400 hover:text-zinc-600 active:cursor-grabbing dark:text-zinc-500 dark:hover:text-zinc-300"
           aria-hidden="true"
         >
-          <GripVertical className="h-5 w-5" />
+          <GripVertical className="h-4 w-4" />
         </div>
 
-        {/* Category Info */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-semibold text-zinc-900 dark:text-zinc-100">
-              {config.label}
-            </span>
-          </div>
-          <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 truncate">{description}</p>
-        </div>
+        {/* Priority Letter Badge */}
+        <span className="flex h-5 w-5 items-center justify-center rounded bg-zinc-800 text-[10px] font-bold text-white dark:bg-zinc-200 dark:text-zinc-900">
+          {priorityLevel}
+        </span>
 
-        {/* Status */}
-        <div className="flex items-center gap-1.5 text-xs">
+        {/* Category Label */}
+        <span className="flex-1 text-xs font-semibold text-zinc-900 dark:text-zinc-100">
+          {config.label}
+        </span>
+
+        {/* Status Icon */}
+        <div
+          className="flex items-center"
+          title={
+            status === "complete"
+              ? "Complete"
+              : status === "conflict"
+                ? "Conflict"
+                : "Selection needed"
+          }
+        >
           {statusIcon[status]}
-          <span
-            className={`hidden sm:inline ${
-              status === "complete"
-                ? "text-emerald-600 dark:text-emerald-400"
-                : status === "conflict"
-                  ? "text-amber-600 dark:text-amber-400"
-                  : "text-zinc-500 dark:text-zinc-400"
-            }`}
-          >
-            {statusText[status]}
-          </span>
         </div>
 
-        {/* Move Buttons (visible on hover/focus) */}
+        {/* Move Buttons */}
         <div className="flex flex-col opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100 focus-within:opacity-100">
           <button
             type="button"
@@ -198,7 +186,7 @@ function CategoryRow({
             aria-label={`Move ${config.label} priority up`}
             title="Move up"
           >
-            <ChevronUp className="h-4 w-4" aria-hidden="true" />
+            <ChevronUp className="h-3 w-3" aria-hidden="true" />
           </button>
           <button
             type="button"
@@ -209,10 +197,13 @@ function CategoryRow({
             aria-label={`Move ${config.label} priority down`}
             title="Move down"
           >
-            <ChevronDown className="h-4 w-4" aria-hidden="true" />
+            <ChevronDown className="h-3 w-3" aria-hidden="true" />
           </button>
         </div>
       </div>
+
+      {/* Row 2: Description (indented to align with label) */}
+      <p className="ml-11 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
     </div>
   );
 }
@@ -318,8 +309,8 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
           const sapRange =
             sapValues.length > 0
               ? sapValues.every((v) => v === sapValues[0])
-                ? `${sapValues[0]} special attribute points`
-                : `${Math.min(...sapValues)}-${Math.max(...sapValues)} special attribute points`
+                ? `${sapValues[0]} special attribute pts`
+                : `${Math.min(...sapValues)}-${Math.max(...sapValues)} special attribute pts`
               : "";
 
           return `${metatypes}${sapRange ? ` • ${sapRange}` : ""}`;
@@ -341,7 +332,7 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
             skillPoints: number;
             skillGroupPoints: number;
           };
-          return `${skillData?.skillPoints || 0} skill points • ${skillData?.skillGroupPoints || 0} skill group points`;
+          return `${skillData?.skillPoints || 0} skill pts • ${skillData?.skillGroupPoints || 0} group pts`;
         }
         case "resources":
           return `${((data.resources as number) || 0).toLocaleString()}¥ starting nuyen`;
@@ -442,17 +433,9 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
       }
       status={validationStatus}
     >
-      <div className="space-y-2">
-        {/* Header */}
-        <div className="flex items-center justify-between text-xs text-zinc-500 dark:text-zinc-400">
-          <span>Drag or use arrow keys to reorder</span>
-          <span className="flex items-center gap-1" aria-hidden="true">
-            <GripVertical className="h-3 w-3" />
-          </span>
-        </div>
-
+      <div className="space-y-1.5">
         {/* Priority Rows */}
-        <div className="space-y-2" role="list" aria-label="Priority categories">
+        <div className="space-y-1" role="list" aria-label="Priority categories">
           {orderedCategories.map((category, index) => (
             <CategoryRow
               key={category}
@@ -474,8 +457,8 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
 
         {/* Help text */}
         {incompleteCount > 0 && (
-          <p className="pt-2 text-xs text-zinc-500 dark:text-zinc-400">
-            Select metatype and magic path in their respective sections below.
+          <p className="text-xs text-zinc-500 dark:text-zinc-400">
+            Select metatype and magic path below.
           </p>
         )}
       </div>

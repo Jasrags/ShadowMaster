@@ -57,7 +57,7 @@ export function SelectedQualityCard({
         </div>
       </div>
       {/* Description */}
-      <p className="ml-3 truncate text-xs text-zinc-500 dark:text-zinc-400">{quality.summary}</p>
+      <p className="ml-3 text-xs text-zinc-500 dark:text-zinc-400">{quality.summary}</p>
     </div>
   );
 }

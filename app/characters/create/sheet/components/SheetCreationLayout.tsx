@@ -34,6 +34,7 @@ import {
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
+  MatrixGearCard,
   AugmentationsCard,
   VehiclesCard,
   ContactsCard,
@@ -451,7 +452,7 @@ export function SheetCreationLayout({
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
       {/* Column 1: Foundation */}
-      <div className="flex flex-col space-y-4 lg:sticky lg:top-4 lg:max-h-[calc(100vh-2rem)] lg:overflow-y-auto">
+      <div className="space-y-4">
         <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
           Foundation
         </h2>
@@ -471,14 +472,11 @@ export function SheetCreationLayout({
         {/* Derived Stats - Phase 6 */}
         <DerivedStatsCard state={creationState} updateState={updateState} />
 
-        {/* Sticky Budget Section - stays visible while scrolling */}
-        <div className="mt-auto space-y-4 lg:sticky lg:bottom-0 lg:bg-gradient-to-t lg:from-white lg:via-white lg:pt-4 lg:dark:from-zinc-950 lg:dark:via-zinc-950">
-          {/* Budget Summary */}
-          <BudgetSummaryCard creationState={creationState} />
+        {/* Budget Summary */}
+        <BudgetSummaryCard creationState={creationState} />
 
-          {/* Finalize */}
-          <ValidationSummary onFinalize={onFinalize} isSaving={isSaving} lastSaved={lastSaved} />
-        </div>
+        {/* Finalize */}
+        <ValidationSummary onFinalize={onFinalize} isSaving={isSaving} lastSaved={lastSaved} />
       </div>
 
       {/* Column 2: Stats */}
@@ -490,11 +488,11 @@ export function SheetCreationLayout({
         {/* Attributes - Phase 2 */}
         <AttributesCard state={creationState} updateState={updateState} />
 
-        {/* Skills - Phase 2 */}
-        <SkillsCard state={creationState} updateState={updateState} />
-
         {/* Qualities - Phase 2 */}
         <QualitiesCard state={creationState} updateState={updateState} />
+
+        {/* Skills - Phase 2 */}
+        <SkillsCard state={creationState} updateState={updateState} />
 
         {/* Spells - Phase 3 (conditional) */}
         {isMagical && <SpellsCard state={creationState} updateState={updateState} />}
@@ -529,6 +527,9 @@ export function SheetCreationLayout({
 
         {/* Armor - Phase 4 (New) */}
         <ArmorPanel state={creationState} updateState={updateState} />
+
+        {/* Matrix Gear - Phase 4 (Commlinks & Cyberdecks) */}
+        <MatrixGearCard state={creationState} updateState={updateState} />
 
         {/* Augmentations - Phase 4 */}
         <AugmentationsCard state={creationState} updateState={updateState} />
