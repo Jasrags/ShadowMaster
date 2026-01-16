@@ -2,6 +2,14 @@
 
 An elf face specializing in social manipulation, electronic warfare, and looking good while doing it. This character leverages natural elven charisma with an extensive network of contacts across various social strata. The Bilingual quality and acting skills make them excellent at impersonation and social engineering.
 
+┌────────────────────────────────────────────────────────────────────┐
+│ ≡ E RESOURCES · 6,000¥ starting nuyen ✓ ↕ |
+│ 6,000¥ starting nuyen |
+└────────────────────────────────────────────────────────────────────┘
+
+- Augmentations, Vehicles & Drones, the nuyen budget seems decoupled from the global budget
+  Gear is missing the global budget
+
 ## Priority Selection
 
 | Priority | Category        | Allocation                       |
@@ -37,7 +45,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 ## Skills
 
-### Active Skills
+### Active Skills \* Could not purchase all the skills, need to allow for karma conversion
 
 | Skill                     | Rating | Linked Attribute | Notes                           |
 | ------------------------- | ------ | ---------------- | ------------------------------- |
@@ -57,7 +65,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | Pilot Ground Craft        | 1      | Reaction         | -                               |
 | Pistols                   | 4      | Agility          | -                               |
 | Stealth (Skill Group)     | 2      | Agility          | Disguise, Palming, Sneaking     |
-| Unarmed Combat            | 2      | Agility          | *Out of points*                 |
+| Unarmed Combat            | 2      | Agility          | _Out of points_                 |
 
 ### Knowledge Skills
 
@@ -90,7 +98,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | ------------------------- | ----------- | --------------------- |
 | Addiction (Alcohol, Mild) | +4          | Social drinking habit |
 
-## Contacts
+## Contacts \* Can not add all the contacts, need to allow for karma conversion
 
 | Name/Type      | Connection | Loyalty | Notes                 |
 | -------------- | ---------- | ------- | --------------------- |
@@ -106,7 +114,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 ## Gear
 
-### Armor * need to adjust the overflow on the rows
+### Armor \* need to adjust the overflow on the rows
 
 | Item                       | Armor Rating | Notes                   |
 | -------------------------- | ------------ | ----------------------- |
@@ -115,8 +123,8 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 ### Electronics
 
 | Item                  | Rating          | Notes                      |
-| --------------------- | --------------- | -------------------------- |
-| Hermes Ikon Commlink  | Device Rating 5 | High-end commlink          | * Commlink not showing up for purchase
+| --------------------- | --------------- | -------------------------- | ---------------------------------------------------- |
+| Hermes Ikon Commlink  | Device Rating 5 | High-end commlink          | \* Commlink not showing up for purchase              |
 | Bug Scanner           | -               | Detect surveillance        |
 | Data Tap              | -               | Physical data extraction   |
 | Earbuds               | Rating 1        | Select Sound Filter 1      |
@@ -124,7 +132,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | Jammer (Area)         | Rating 4        | Block communications       |
 | Keycard Copier        | Rating 6        | Clone access cards         |
 | Micro Camera          | Rating 1        | Low-light vision           |
-| Micro-Transceivers    | 2               | Team communication         | * Need to allow for stacking and multiple purchases
+| Micro-Transceivers    | 2               | Team communication         | \* Need to allow for stacking and multiple purchases |
 | Sequencer             | Rating 4        | Bypass maglocks            |
 | Tag Eraser            | -               | Remove RFID tags           |
 | White Noise Generator | Rating 6        | Counter audio surveillance |
@@ -146,13 +154,13 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 ### Fashion
 
 | Item                     | Notes                   |
-| ------------------------ | ----------------------- |
-| Electrochromatic T-shirt | Color-changing clothing | * How to support this one?
-| Stealth Tags             | 20                      | * not in the gear selection
-| Suit                     | Worth 1,000¥            | * Need to allow for free form naming of clothing and pricing (i.e. Black Suit $2000)
-| Shopsoft (Clothing)      | Fashion knowledge       | * Not in the gear selection
+| ------------------------ | ----------------------- | ------------------------------------------------------------------------------------- |
+| Electrochromatic T-shirt | Color-changing clothing | \* How to support this one?                                                           |
+| Stealth Tags             | 20                      | \* not in the gear selection                                                          |
+| Suit                     | Worth 1,000¥            | \* Need to allow for free form naming of clothing and pricing (i.e. Black Suit $2000) |
+| Shopsoft (Clothing)      | Fashion knowledge       | \* Not in the gear selection                                                          |
 
-### IDs and Licenses * Need to add the ability to expand/collapse the identity card rows
+### IDs and Licenses \* Need to add the ability to expand/collapse the identity card rows
 
 | Item                        | Rating   | Notes |
 | --------------------------- | -------- | ----- |
@@ -174,18 +182,18 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 
 ## Weapons
 
-### Ranged Weapons. *Need to adjust the modal the button to add is under the footer
+### Ranged Weapons. \*Need to adjust the modal the button to add is under the footer
 
 | Weapon               | Type         | Acc     | DV    | AP  | Mode  | RC  | Ammo  | Notes                                        |
-| -------------------- | ------------ | ------- | ----- | --- | ----- | --- | ----- | -------------------------------------------- |
+| -------------------- | ------------ | ------- | ----- | --- | ----- | --- | ----- | -------------------------------------------- | -------------------------------------------------- |
 | Browning Ultra Power | Heavy Pistol | 5 (6)\* | 8P    | -1  | SA    | -   | 10(c) | Silencer, 2 spare clips, 100 rounds          |
 | Colt America L36     | Light Pistol | 7       | 7P    | -   | SA    | -   | 11(c) | Concealed holster, 2 spare clips, 110 rounds |
-| Walther Palm Pistol  | Hold-out     | 4       | 7P    | -   | SS/BF | -   | 2(b)  | Concealed holster, 10 rounds                 | * holster listed as incompatable with this weapon
-| Yamaha Pulsar        | Taser        | 5       | 7S(e) | -5  | SA    | -   | 4(m)  | 40 darts                                     | * weapon is allowed to load APDS, EXplosive, etc
+| Walther Palm Pistol  | Hold-out     | 4       | 7P    | -   | SS/BF | -   | 2(b)  | Concealed holster, 10 rounds                 | \* holster listed as incompatable with this weapon |
+| Yamaha Pulsar        | Taser        | 5       | 7S(e) | -5  | SA    | -   | 4(m)  | 40 darts                                     | \* weapon is allowed to load APDS, EXplosive, etc  |
 
 \*Silencer adds +1 Accuracy
 
-### Grenades * Need to allow for stacking and multiple purchases
+### Grenades \* Need to allow for stacking and multiple purchases
 
 | Weapon        | Type    | DV  | AP  | Blast      | Quantity |
 | ------------- | ------- | --- | --- | ---------- | -------- |
@@ -194,8 +202,8 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 ### Melee Weapons
 
 | Weapon           | Type  | Reach | Acc | DV  | AP  | Notes       |
-| ---------------- | ----- | ----- | --- | --- | --- | ----------- |
-| Extendable Baton | Club  | 1     | 5   | 4S  | -   | Collapsible | * melee weapons do not have mods (currently) and do not need ammo (currently)
+| ---------------- | ----- | ----- | --- | --- | --- | ----------- | ------------------------------------------------------------------------------ |
+| Extendable Baton | Club  | 1     | 5   | 4S  | -   | Collapsible | \* melee weapons do not have mods (currently) and do not need ammo (currently) |
 | Knife            | Blade | -     | 5   | 3P  | -1  | -           |
 
 ## Derived Stats
