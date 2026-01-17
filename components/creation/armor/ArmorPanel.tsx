@@ -434,7 +434,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         <div className="space-y-3">
           {/* Armor List */}
           {selectedArmor.length > 0 ? (
-            <div className="space-y-2">
+            <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
               {selectedArmor.map((armor) => (
                 <ArmorRow
                   key={armor.id}
@@ -451,17 +451,15 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
             </div>
           )}
 
-          {/* Summary */}
-          {selectedArmor.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(armorSpent)}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
+            </span>
+            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(armorSpent)}¥
+            </span>
+          </div>
         </div>
       </CreationCard>
 
