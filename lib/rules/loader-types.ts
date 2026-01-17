@@ -425,6 +425,7 @@ export interface GearCatalogData {
   security: GearItemData[];
   miscellaneous: GearItemData[];
   ammunition: GearItemData[];
+  rfidTags: GearItemData[];
 }
 
 // =============================================================================

@@ -84,6 +84,7 @@ function findGearCatalogItem(ruleset: MergedRuleset, identifier: string): GearIt
     ...(gearCatalog.security || []),
     ...(gearCatalog.miscellaneous || []),
     ...(gearCatalog.ammunition || []),
+    ...(gearCatalog.rfidTags || []),
     ...(gearCatalog.armor || []),
     ...(gearCatalog.commlinks || []),
     ...(gearCatalog.cyberdecks || []),
