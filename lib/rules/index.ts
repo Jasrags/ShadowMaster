@@ -88,3 +88,25 @@ export type {
   TestThresholdType,
   ArmorCalculationResult,
 } from "./gameplay";
+
+// Skill group utilities - Client-safe
+export {
+  // Types
+  type NormalizedGroupValue,
+  // Normalization
+  normalizeGroupValue,
+  getGroupRating,
+  isGroupBroken,
+  createBrokenGroup,
+  createRestoredGroup,
+  // Karma costs
+  SPECIALIZATION_KARMA_COST,
+  calculateSkillRaiseKarmaCost,
+  calculateSpecializationKarmaCost,
+  // Restoration
+  canRestoreGroup,
+  // Budget helpers
+  calculateGroupPointsSpent,
+  getActiveGroups,
+  getBrokenGroups,
+} from "./skills";

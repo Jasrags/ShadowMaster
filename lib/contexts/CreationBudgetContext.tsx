@@ -297,8 +297,15 @@ function extractSpentValues(
   spent["skill-points"] = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
 
   // Calculate skill group points spent from selections
-  const skillGroups = (selections.skillGroups || {}) as Record<string, number>;
-  spent["skill-group-points"] = Object.values(skillGroups).reduce((sum, rating) => sum + rating, 0);
+  // Handles both legacy (number) and new ({ rating, isBroken }) formats
+  const skillGroups = (selections.skillGroups || {}) as Record<
+    string,
+    number | { rating: number; isBroken: boolean }
+  >;
+  spent["skill-group-points"] = Object.values(skillGroups).reduce<number>((sum, value) => {
+    const rating = typeof value === "number" ? value : value.rating;
+    return sum + rating;
+  }, 0);
 
   // Calculate knowledge points spent from selections (languages + knowledge skills)
   const languages = (selections.languages || []) as Array<{ rating: number }>;
@@ -422,8 +429,21 @@ function extractSpentValues(
   const karmaSpentSpells = (stateBudgets["karma-spent-spells"] as number) || 0;
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
-  const karmaSpentSkills = (stateBudgets["karma-spent-skills"] as number) || 0;
   const karmaSpentContacts = (stateBudgets["karma-spent-contacts"] as number) || 0;
+
+  // Calculate skill karma spent from selections.skillKarmaSpent if present
+  // This tracks karma spent on breaking groups (raising skills, adding specializations)
+  const skillKarmaSpent = selections.skillKarmaSpent as
+    | { skillRaises: Record<string, number>; specializations: number }
+    | undefined;
+  let karmaSpentSkills = (stateBudgets["karma-spent-skills"] as number) || 0;
+  if (skillKarmaSpent) {
+    const skillRaisesTotal = Object.values(skillKarmaSpent.skillRaises || {}).reduce(
+      (sum, cost) => sum + cost,
+      0
+    );
+    karmaSpentSkills = skillRaisesTotal + (skillKarmaSpent.specializations || 0);
+  }
 
   // Net karma spent = positive qualities + other spends - negative qualities gained
   spent["karma"] =

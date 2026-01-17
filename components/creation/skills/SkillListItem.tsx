@@ -11,7 +11,7 @@
  * Group skills: Purple styling, read-only rating, shows group name
  */
 
-import { Minus, Plus, X, BookOpen, Users, Star } from "lucide-react";
+import { Minus, Plus, X, BookOpen, Users, Star, Sparkles } from "lucide-react";
 
 // =============================================================================
 // TYPES
@@ -31,6 +31,9 @@ interface SkillListItemProps {
   onRatingChange?: (delta: number) => void;
   onRemove?: () => void;
   onRemoveSpecialization?: (spec: string) => void;
+  // Customization props (only used for group skills)
+  onCustomize?: () => void;
+  canCustomize?: boolean;
 }
 
 // =============================================================================
@@ -49,6 +52,8 @@ export function SkillListItem({
   onRatingChange,
   onRemove,
   onRemoveSpecialization,
+  onCustomize,
+  canCustomize = false,
 }: SkillListItemProps) {
   const isAtMax = rating >= maxRating;
   const hasSpecs = specializations.length > 0;
@@ -91,15 +96,27 @@ export function SkillListItem({
           )}
 
           {isGroupSkill ? (
-            // Group skill: read-only rating display
+            // Group skill: read-only rating display with customize button
             <>
               <div
                 className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${ratingBgColor}`}
               >
                 {rating}
               </div>
-              {/* Placeholder for future "Customize" button */}
-              <div className="w-[76px]" /> {/* Same width as +/- buttons + separator */}
+              {/* Customize button - uses karma to customize group skill */}
+              <button
+                onClick={onCustomize}
+                disabled={!canCustomize}
+                title={canCustomize ? "Customize with karma" : "No karma available"}
+                className={`ml-1 flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+                  canCustomize
+                    ? "bg-purple-100 text-purple-700 hover:bg-purple-200 dark:bg-purple-900/30 dark:text-purple-300 dark:hover:bg-purple-900/50"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Sparkles className="h-3 w-3" />
+                Customize
+              </button>
             </>
           ) : (
             // Individual skill: full controls
