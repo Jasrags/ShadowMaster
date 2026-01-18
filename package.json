@@ -33,6 +33,10 @@
     "health-check": "pnpm dlx tsx scripts/health-check.ts",
     "seed-data": "pnpm dlx tsx scripts/seed-data.ts",
     "user-admin": "pnpm dlx tsx scripts/user-admin.ts",
+    "validate-docs": "pnpm dlx tsx scripts/validate-claude-md.ts",
+    "check-tests": "pnpm dlx tsx scripts/check-test-coverage.ts",
+    "check-tests:all": "pnpm dlx tsx scripts/check-test-coverage.ts --all",
+    "check-tests:strict": "pnpm dlx tsx scripts/check-test-coverage.ts --strict",
     "prepare": "husky"
   },
   "lint-staged": {

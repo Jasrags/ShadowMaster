@@ -10,22 +10,24 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 
 ## Implemented Features
 
-Beyond character creation, Shadow Master includes:
-
 | Feature                   | Description                                              |
 | ------------------------- | -------------------------------------------------------- |
 | **Combat Tracking**       | Initiative, actions, damage tracking, condition monitors |
 | **Grunt/NPC System**      | Pre-built templates (PR0-PR6) for encounter management   |
 | **Contact Network**       | Relationships, loyalty/connection ratings, favor economy |
-| **Wireless/Matrix**       | Matrix hacking and wireless operations                   |
-| **Augmentations**         | Cyberlimb system with essence tracking                   |
+| **Matrix Operations**     | Full matrix hacking with overwatch, marks, and programs  |
+| **Rigging System**        | VCR, RCC, drone networks, jump-in mode, biofeedback      |
+| **Augmentations**         | Cyberlimb system with essence tracking and grades        |
 | **Campaign Management**   | Sessions, locations, notes, posts, grunt teams           |
 | **Character Advancement** | Karma spending for attributes, skills, magic, edge       |
+| **Character Lifecycle**   | State machine: draft → active → retired/deceased         |
+| **Inventory Management**  | Equipment readiness states, wireless toggles             |
 | **Account Security**      | Password changes, import/export, account deletion        |
 | **Activity Feed**         | User action logging and tracking                         |
 | **Character Cloning**     | Duplicate characters for templates/backups               |
-| **Ruleset Snapshots**     | Version control for rulesets                             |
+| **Ruleset Snapshots**     | Version control with drift detection and migration       |
 | **Audit Trail**           | Full audit logging for compliance                        |
+| **Optional Rules**        | Campaign-level rule customization                        |
 
 ## Development Commands
 
@@ -42,10 +44,38 @@ Beyond character creation, Shadow Master includes:
 - `pnpm check:ci` - CI pipeline script with tests
 - `pnpm test` - Run unit tests (Vitest)
 - `pnpm test:watch` - Run tests in watch mode
+- `pnpm test:ci` - Run tests in CI mode (no watch)
 - `pnpm test:e2e` - Run E2E tests (Playwright)
+- `pnpm test:e2e:ui` - E2E with visual UI
+
+### Code Quality Commands
+
+- `pnpm format` - Format code with Prettier (ts, tsx, json, md, yml, yaml)
+- `pnpm format:check` - Check formatting without applying changes
 - `pnpm knip` - Dead code detection
 - `pnpm knip:watch` - Watch mode for dead code
+- `pnpm knip:production` - Knip in production mode
+- `pnpm knip:report` - Alias for knip (dead code report)
 - `pnpm verify-data` - Validate JSON data files
+
+### Utility Scripts
+
+- `pnpm backup` - Run data backup utility (`scripts/backup.ts`)
+- `pnpm health-check` - System health validation (`scripts/health-check.ts`)
+- `pnpm seed-data` - Populate test data (`scripts/seed-data.ts`)
+- `pnpm user-admin` - User management CLI (`scripts/user-admin.ts`)
+
+### Documentation & Test Enforcement
+
+- `pnpm validate-docs` - Validate CLAUDE.md against codebase (component counts, directories, etc.)
+- `pnpm check-tests` - Check staged files for missing tests (non-blocking)
+- `pnpm check-tests:all` - Check all source files for missing tests
+- `pnpm check-tests:strict` - Strict mode (fails if tests are missing)
+
+**Git Hooks (via Husky):**
+
+- **pre-commit**: lint-staged, type-check, test coverage check (warning)
+- **pre-push**: knip analysis, CLAUDE.md validation (warning)
 
 ### Development Workflow
 
@@ -64,7 +94,7 @@ Beyond character creation, Shadow Master includes:
 - **TypeScript 5** with strict mode enabled
 - **Tailwind CSS 4** for styling with dark mode support
 - **File-based storage** (JSON files in `/data` directory - no database)
-- **bcrypt** for password hashing
+- **bcryptjs** for password hashing
 - **Cookie-based sessions** (httpOnly, 7-day expiration)
 
 ### Path Aliases
@@ -75,27 +105,34 @@ Beyond character creation, Shadow Master includes:
 
 ```
 /app                    # Next.js App Router pages and API routes
-  /api                  # API route handlers (~160 endpoints)
+  /api                  # API route handlers (~133 route files)
     /account            # Account management (delete, import/export, preferences)
     /audit              # Audit logging endpoints
     /combat             # Combat session management
     /characters/[characterId]
       /advancement      # Karma advancement endpoints
-      /actions          # Action execution
+      /actions          # Action execution with reroll support
       /augmentations    # Cyberlimb and augmentation management
-      /contacts         # Contact management
+      /contacts         # Contact management with favor calls
+      /inventory        # Equipment state management
+      /matrix           # Matrix operations
+      /rigging          # Drone and vehicle control
       /training         # Training tracking
       /weapons          # Weapon management
-      /wireless         # Matrix/wireless operations
+      /wireless         # Wireless operations
     /campaigns/[id]
       /grunt-teams      # NPC grunt team management
-      /locations        # Location management
+      /locations        # Location management with connections
       /notes            # Campaign notes
       /posts            # Campaign posts
       /sessions         # Session management
+      /advancements     # GM approval workflows
     /editions/[editionCode]
       /grunt-templates  # Grunt template data
       /content          # Dynamic content loading
+    /magic              # Drain calculations, validation
+    /matrix             # Overwatch, validation
+    /rigging            # Drone rigging validation
   /characters           # Character management pages
     /create             # Character creation (redirects to sheet)
     /create/sheet       # Sheet-based character creation
@@ -109,25 +146,32 @@ Beyond character creation, Shadow Master includes:
   /signin, /signup      # Authentication pages
 /lib                    # Core business logic
   /types                # TypeScript type definitions
-  /storage              # File-based data persistence (~20 modules)
-  /rules                # Ruleset loading and merging system
+  /storage              # File-based data persistence (~25 modules)
+  /rules                # Ruleset and game mechanics
     /action-resolution  # Action execution framework
     /advancement        # Karma advancement (attributes, skills, edge, magic)
     /augmentations      # Cyberlimb and augmentation systems
+    /character          # Character state machine and lifecycle
     /encumbrance        # Weight/carry limits
-    /qualities          # Quality effects and validation
-    /ratings            # Unified ratings system
-    /sync               # Ruleset synchronization
+    /gear               # Gear validation and weapon customization
+    /inventory          # Equipment state management
+    /magic              # Magic system and drain
+    /matrix             # Full matrix operations (overwatch, marks, programs)
+    /qualities          # Quality effects, validation, dynamic state
+    /rigging            # Vehicle/drone control, VCR, RCC, jump-in mode
+    /skills             # Skill system utilities
+    /sync               # Drift detection, migration, legality validation
     /validation         # Character validation framework
     /wireless           # Matrix/wireless rules
   /auth                 # Authentication and session management
   /combat               # Combat session management
+  /contexts             # React contexts (CreationBudget, etc.)
   /security             # Rate limiting, audit logging
   /migrations           # Data migration framework
   /themes.ts            # Theming system (neon-rain, modern-card)
 /components             # Shared React components
   /combat               # Combat UI components
-  /creation             # Character creation cards (45+ components)
+  /creation             # Character creation cards (89 components)
   /cyberlimbs           # Cyberlimb-specific UI
   /sync                 # Character sync components
   /ThemeProvider.tsx    # Global theming
@@ -148,6 +192,7 @@ Beyond character creation, Shadow Master includes:
   /audits               # Audit documentation
 /__tests__              # Test files (Vitest)
 /e2e                    # E2E tests (Playwright)
+/scripts                # Utility scripts (backup, health-check, seed-data, user-admin)
 ```
 
 ## Core Architecture Patterns
@@ -206,7 +251,7 @@ Sheet-based, single-page character creation with all sections visible simultaneo
 
 - `/app/characters/create/sheet/page.tsx` - Entry point
 - `/app/characters/create/sheet/components/SheetCreationLayout.tsx` - Main layout
-- `/components/creation/` - Creation card components (45+ components)
+- `/components/creation/` - Creation card components (89 components in 15 subfolders)
 - `/lib/types/creation.ts` - Creation method and state types
 - `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking context
 
@@ -222,13 +267,29 @@ Sheet-based, single-page character creation with all sections visible simultaneo
   → Redirect to /characters/[id]
 ```
 
-### 3. Character Advancement System
+### 3. Character Lifecycle System
+
+State machine managing character status from creation through retirement.
+
+**Key Concepts:**
+
+- **Character States**: draft → active → retired/deceased
+- **Role-Based Transitions**: Owner, GM, and admin permissions for different transitions
+- **Completion Validation**: Ensures character is complete before finalization
+- **Audit Integration**: All transitions logged for compliance
+
+**Critical Files:**
+
+- `/lib/rules/character/state-machine.ts` - State transitions and validation
+- `/lib/types/character.ts` - Character type definitions
+
+### 4. Character Advancement System
 
 Post-creation karma spending for character progression.
 
 **Key Concepts:**
 
-- **Advancement Types**: Attributes, skills, specializations, edge
+- **Advancement Types**: Attributes, skills, specializations, edge, magic
 - **Karma Costs**: Calculated based on current rating and advancement type
 - **Training Time**: Optional downtime tracking for advancement
 - **GM Approval**: Workflow for campaign-linked characters
@@ -240,24 +301,17 @@ Post-creation karma spending for character progression.
   - `costs.ts` - Karma cost calculations
   - `attributes.ts` - Attribute advancement
   - `skills.ts` - Skill advancement
+  - `specializations.ts` - Specialization advancement
   - `edge.ts` - Edge advancement
+  - `magic-advancement.ts` - Magic path advancement
   - `training.ts` - Training time calculations
   - `validation.ts` - Rule validation
+  - `approval.ts` - GM approval workflows
+  - `ledger.ts` - Advancement history tracking
 - `/app/api/characters/[characterId]/advancement/` - API endpoints
 - `/app/characters/[id]/advancement/` - UI components
 
-**Advancement Flow:**
-
-```
-User requests advancement
-  → Validate against rules (karma available, max ratings, etc.)
-  → Calculate karma cost
-  → Apply advancement to character
-  → Record in advancement history
-  → (If campaign-linked) Submit for GM approval
-```
-
-### 4. Combat System
+### 5. Combat System
 
 Full combat tracking with initiative, actions, and damage resolution.
 
@@ -272,10 +326,98 @@ Full combat tracking with initiative, actions, and damage resolution.
 
 - `/lib/combat/CombatSessionContext.tsx` - Combat state management
 - `/lib/rules/action-resolution/` - Action execution framework
+  - `action-executor.ts` - Core execution logic
+  - `action-validator.ts` - Action validation
+  - `dice-engine.ts` - Dice rolling engine
+  - `pool-builder.ts` - Dice pool construction
+  - `edge-actions.ts` - Edge spending actions
+  - `combat/` - Combat-specific handlers (damage, weapons)
 - `/app/api/combat/` - Combat session API endpoints
 - `/components/combat/` - Combat UI (tracker, dice pools, quick reference)
 
-### 5. Grunt/NPC System
+### 6. Matrix Operations System
+
+Full matrix hacking with overwatch, marks, and program management.
+
+**Key Concepts:**
+
+- **Cyberdecks**: Hardware validation and configuration
+- **Programs**: Slot management and allocation
+- **Overwatch Score**: OS tracking and convergence handling
+- **Marks**: Mark placement and tracking system
+- **Matrix Actions**: Action validation with mark requirements
+
+**Critical Files:**
+
+- `/lib/rules/matrix/` - Matrix operations
+  - `cyberdeck-validator.ts` - Hardware validation
+  - `program-validator.ts` - Program allocation
+  - `overwatch-calculator.ts` - OS calculation
+  - `overwatch-tracker.ts` - Session tracking
+  - `mark-tracker.ts` - Mark management
+  - `action-validator.ts` - Matrix action validation
+  - `dice-pool-calculator.ts` - Matrix dice pools
+
+### 7. Rigging Control System
+
+Vehicle and drone control for riggers.
+
+**Key Concepts:**
+
+- **VCR (Vehicle Control Rig)**: Validation and bonuses
+- **RCC (Rigger Command Console)**: Drone slaving and command execution
+- **Drone Networks**: Network management and noise handling
+- **Jump-In Mode**: VR mode management for direct control
+- **Biofeedback**: Damage and dumpshock handling
+
+**Critical Files:**
+
+- `/lib/rules/rigging/` - Rigging mechanics
+  - `vcr-validator.ts` - VCR validation
+  - `rcc-validator.ts` - RCC validation and slaving
+  - `drone-network.ts` - Network management
+  - `drone-condition.ts` - Drone damage tracking
+  - `jumped-in-manager.ts` - Jump-in mode
+  - `biofeedback-handler.ts` - Biofeedback damage
+  - `noise-calculator.ts` - Signal noise calculations
+  - `action-validator.ts` - Rigging action validation
+  - `dice-pool-calculator.ts` - Vehicle/drone dice pools
+
+### 8. Inventory and Equipment System
+
+Equipment state management for gear, weapons, and devices.
+
+**Key Concepts:**
+
+- **Readiness States**: ready, holstered, stored, etc.
+- **Wireless Toggles**: Enable/disable for augmentations and devices
+- **Device Condition**: functional, bricked, repaired
+- **Gear Validation**: Availability and rating validation
+
+**Critical Files:**
+
+- `/lib/rules/inventory/state-manager.ts` - Equipment state management
+- `/lib/rules/gear/validation.ts` - Gear availability validation
+- `/lib/rules/gear/weapon-customization.ts` - Weapon modifications
+
+### 9. Gameplay Utilities
+
+Runtime calculations for combat and tests.
+
+**Key Concepts:**
+
+- **Effective Ratings**: Wireless bonuses and matrix damage effects
+- **Dice Pool Bonuses**: Equipment rating bonuses
+- **Test Thresholds**: Detect, analyze, bypass calculations
+- **Armor Stacking**: SR5 Core p.169-170 rules with accessories and encumbrance
+- **Wound Modifiers**: High/Low Pain Tolerance support
+
+**Critical Files:**
+
+- `/lib/rules/gameplay.ts` - Core gameplay calculations
+- `/lib/rules/constraint-validation.ts` - Creation constraint validation
+
+### 10. Grunt/NPC System
 
 Pre-built NPC templates for GMs with professional rating tiers.
 
@@ -293,7 +435,7 @@ Pre-built NPC templates for GMs with professional rating tiers.
 - `/app/campaigns/[id]/grunt-teams/` - Team management UI
 - `/app/api/campaigns/[id]/grunt-teams/` - Grunt team API
 
-### 6. Contact Network System
+### 11. Contact Network System
 
 Contact relationships and favor economy for social gameplay.
 
@@ -312,7 +454,42 @@ Contact relationships and favor economy for social gameplay.
 - `/lib/storage/favor-ledger.ts` - Favor tracking
 - `/app/api/characters/[characterId]/contacts/` - Contact API
 
-### 7. Data Management Layers
+### 12. System Synchronization
+
+Character-ruleset drift detection and migration.
+
+**Key Concepts:**
+
+- **Drift Analysis**: Detect metatype, skill, quality changes between rulesets
+- **Legality Validation**: Quick sync status checks
+- **Migration Engine**: Generate and execute migration plans
+- **Sync Audit**: Trail of synchronization events
+
+**Critical Files:**
+
+- `/lib/rules/sync/` - Synchronization system
+  - `drift-analyzer.ts` - Change detection
+  - `legality-validator.ts` - Rule compliance checking
+  - `migration-engine.ts` - Migration planning and execution
+  - `sync-audit.ts` - Audit trail
+  - `hooks.ts` - React hooks for client-side sync
+
+### 13. Optional Rules System
+
+Campaign-level rule customization.
+
+**Key Concepts:**
+
+- **Campaign Configuration**: Enable/disable optional rules per campaign
+- **GM Control**: Default override support
+- **Rule Extraction**: Pull optional rules from loaded rulesets
+- **Content Access**: Validate content against enabled rules
+
+**Critical Files:**
+
+- `/lib/rules/optional-rules.ts` - Optional rule management
+
+### 14. Data Management Layers
 
 **Authentication State** (`/lib/auth/AuthProvider.tsx`):
 
@@ -331,7 +508,7 @@ Contact relationships and favor economy for social gameplay.
 - User preferences and UI state
 - Draft recovery handled server-side via auto-save
 
-### 8. File-Based Storage Pattern
+### 15. File-Based Storage Pattern
 
 **Design:** JSON files on disk with atomic writes (temp file + rename pattern)
 
@@ -353,7 +530,7 @@ Extended modules:
 - `notifications.ts`, `activity.ts` - User activity tracking
 - `audit.ts`, `user-audit.ts` - Audit trail logging
 - `ruleset-snapshots.ts`, `snapshot-cache.ts` - Ruleset versioning
-- `locations.ts` - Campaign location storage
+- `locations.ts`, `locations_connections.ts` - Campaign location storage
 - `social-capital.ts` - Social capital tracking
 - `violation-record.ts` - Rule violation tracking
 
@@ -374,7 +551,7 @@ Extended modules:
 
 **Important:** This is NOT production-scalable. File I/O happens on every request. Future migration to a database is planned.
 
-### 9. Security Infrastructure
+### 16. Security Infrastructure
 
 **Rate Limiting** (`/lib/security/rate-limit.ts`):
 
@@ -398,7 +575,7 @@ Extended modules:
 - `middleware.ts` - Auth middleware
 - `campaign.ts` - Campaign-specific authorization
 
-### 10. API Route Patterns
+### 17. API Route Patterns
 
 All API routes follow this pattern:
 
@@ -428,51 +605,6 @@ export async function GET(request: NextRequest) {
 }
 ```
 
-## Critical Code Flows
-
-### User Authentication
-
-```
-/signin page
-  → POST /api/auth/signin
-  → Validate email/password (bcrypt)
-  → createSession(userId) sets cookie
-  → AuthProvider updates context
-  → Redirect to /
-```
-
-**Files:** `/app/signin/page.tsx`, `/app/api/auth/signin/route.ts`, `/lib/auth/session.ts`, `/lib/auth/password.ts`
-
-### Ruleset Loading and Merging
-
-```
-Client: loadRuleset("sr5")
-  → GET /api/rulesets/sr5
-  → Server: loadRuleset() loads edition + books
-  → mergeRuleset() combines with strategies
-  → Returns MergedRuleset
-  → RulesetContext caches in state
-  → UI hooks extract data
-```
-
-**Files:** `/lib/rules/loader.ts`, `/lib/rules/merge.ts`, `/app/api/rulesets/[editionCode]/route.ts`
-
-### Character Creation
-
-```
-/characters/create → Redirects to /characters/create/sheet
-  → EditionSelector picks edition
-  → RulesetProvider loads ruleset
-  → SheetCreationLayout renders all creation cards
-  → User selections update CreationState
-  → Auto-save to server (debounced 1s)
-  → POST /api/characters/{id}/finalize
-  → createCharacterDraft() saves to /data
-  → Redirect to /characters/[id]
-```
-
-**Files:** `/app/characters/create/sheet/page.tsx`, `/components/creation/*`, `/app/api/characters/route.ts`
-
 ## Type System
 
 All domain entities have TypeScript interfaces in `/lib/types/`:
@@ -480,6 +612,18 @@ All domain entities have TypeScript interfaces in `/lib/types/`:
 - `User`, `Character`, `Edition`, `Book`, `CreationMethod`
 - Extensive sub-types for character components (skills, qualities, gear, etc.)
 - Single export point: `/lib/types/index.ts`
+
+Key type files:
+
+- `action-definitions.ts` - Action definitions and categorization
+- `action-resolution.ts` - Action resolution types
+- `creation-selections.ts` - Character creation selection tracking
+- `gear-state.ts` - Equipment state types (readiness, condition)
+- `programs.ts` - Matrix program types
+- `rigging.ts` - Rigging system types
+- `synchronization.ts` - Character sync types
+- `vehicles.ts` - Vehicle/drone types
+- `wireless-effects.ts` - Wireless bonus effect types
 
 **Always import types from `@/lib/types`** to maintain consistency.
 
@@ -544,15 +688,25 @@ export { QualitiesCard } from "./QualitiesCard";
 export { QualityModal } from "./QualityModal"; // Only if used externally
 ```
 
-**Examples of correct patterns:**
+**Creation component subfolders (15 directories, 89 total components):**
 
-| Component                   | Pattern     | Why                                              |
-| --------------------------- | ----------- | ------------------------------------------------ |
-| `armor/`                    | Subfolder   | Has Panel, Row, PurchaseModal, ModificationModal |
-| `skills/`                   | Subfolder   | Has SkillModal, SkillGroupModal                  |
-| `AttributesCard.tsx`        | Single file | Inline controls, no modals                       |
-| `DerivedStatsCard.tsx`      | Single file | Display only, no interactions                    |
-| `PrioritySelectionCard.tsx` | Single file | Complex but self-contained grid                  |
+| Folder                 | Components | Pattern                                |
+| ---------------------- | ---------- | -------------------------------------- |
+| `/armor`               | 4          | Panel + Row + PurchaseModal + ModModal |
+| `/augmentations`       | 4          | 4 specialized modals                   |
+| `/contacts`            | 2          | Card + Modal + support files           |
+| `/foci`                | 2          | Card + Modal                           |
+| `/gear`                | 4          | Panel + Row + 2 Modals                 |
+| `/identities`          | 6          | Card + 3 modal types                   |
+| `/knowledge-languages` | 5          | Card + 2 Row types + 2 Modals          |
+| `/magic-path`          | 2          | Card + Modal + utilities               |
+| `/matrix-gear`         | 3          | Card + 2 specialized modals            |
+| `/metatype`            | 2          | Card + Modal + support files           |
+| `/qualities`           | 3          | Card + SelectionModal + DetailCard     |
+| `/shared`              | 10         | Reusable utilities and hooks           |
+| `/skills`              | 5          | 5 specialized modals                   |
+| `/vehicles`            | 4          | 4 specialized modals                   |
+| `/weapons`             | 4          | Row + 3 Modals                         |
 
 **Decision flowchart:**
 
@@ -613,23 +767,32 @@ Does the component have modals?
 
 **Test Infrastructure:**
 
-- **Vitest** - Unit and integration tests
+- **Vitest** - Unit and integration tests (~85 test files)
 - **Playwright** - E2E browser tests
 - **Testing Library** - React component testing
 
 **Test Locations:**
 
 ```
-/__tests__/                           # Root level tests
-/lib/auth/__tests__/                  # Auth unit tests
-/lib/storage/__tests__/               # Storage layer tests
-/lib/rules/__tests__/                 # Rules engine tests
-/lib/rules/advancement/__tests__/     # Advancement logic tests (7+ test files)
-/lib/rules/qualities/__tests__/       # Quality system tests
-/lib/rules/ratings/__tests__/         # Ratings system tests
-/lib/combat/__tests__/                # Combat system tests
-/app/api/**/__tests__/                # API route tests
-/e2e/                                 # Playwright E2E tests (sign-in, sign-up flows)
+/__tests__/                                    # Root level tests
+/lib/auth/__tests__/                           # Auth unit tests (3 files)
+/lib/storage/__tests__/                        # Storage layer tests (10 files)
+/lib/security/__tests__/                       # Security tests (1 file)
+/lib/rules/__tests__/                          # Core rules tests (8 files)
+/lib/rules/action-resolution/__tests__/        # Action resolution tests (2 files)
+/lib/rules/action-resolution/combat/__tests__/ # Combat handler tests (2 files)
+/lib/rules/advancement/__tests__/              # Advancement logic tests (8 files)
+/lib/rules/augmentations/__tests__/            # Augmentation tests (6 files)
+/lib/rules/character/__tests__/                # Character state machine tests (1 file)
+/lib/rules/encumbrance/__tests__/              # Encumbrance tests (1 file)
+/lib/rules/gear/__tests__/                     # Gear validation tests (2 files)
+/lib/rules/inventory/__tests__/                # Inventory tests (1 file)
+/lib/rules/magic/__tests__/                    # Magic system tests (5 files)
+/lib/rules/matrix/__tests__/                   # Matrix tests (1 file)
+/lib/rules/qualities/__tests__/                # Quality system tests (7 files)
+/lib/rules/rigging/__tests__/                  # Rigging tests (2 files)
+/app/api/**/__tests__/                         # API route tests (~25 files)
+/e2e/                                          # Playwright E2E tests
 ```
 
 **Running Tests:**
@@ -700,15 +863,45 @@ Comprehensive documentation in `/docs/`:
 2. `/lib/storage/base.ts` - Storage abstraction
 3. `/lib/storage/characters.ts` - Character persistence
 
-**Ruleset System:** 4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core 5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context 6. `/lib/rules/advancement/` - Karma advancement system 7. `/lib/rules/ratings/` - Unified ratings system
+**Ruleset System:**
 
-**Character Creation:** 8. `/app/characters/create/sheet/page.tsx` - Character creation entry point 9. `/components/creation/` - Character creation card components (45+) 10. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
+4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset system core
+5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks and context
+6. `/lib/rules/advancement/` - Karma advancement system
+7. `/lib/rules/gameplay.ts` - Runtime calculations
 
-**Combat & GM Tools:** 11. `/lib/combat/CombatSessionContext.tsx` - Combat state management 12. `/lib/rules/grunts.ts` - NPC/grunt system 13. `/lib/rules/action-resolution/` - Action execution
+**Character Creation:**
 
-**Authentication & Security:** 14. `/lib/auth/AuthProvider.tsx` - Authentication context 15. `/lib/security/rate-limit.ts` - Rate limiting 16. `/lib/security/audit-logger.ts` - Audit logging
+8. `/app/characters/create/sheet/page.tsx` - Character creation entry point
+9. `/components/creation/` - Character creation card components (89)
+10. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
-**Documentation:** 17. `/docs/architecture/` - Architecture documentation 18. `/docs/capabilities/` - Feature documentation
+**Combat & GM Tools:**
+
+11. `/lib/combat/CombatSessionContext.tsx` - Combat state management
+12. `/lib/rules/grunts.ts` - NPC/grunt system
+13. `/lib/rules/action-resolution/` - Action execution
+
+**Matrix & Rigging:**
+
+14. `/lib/rules/matrix/` - Full matrix operations
+15. `/lib/rules/rigging/` - Vehicle/drone control
+
+**Character Lifecycle:**
+
+16. `/lib/rules/character/state-machine.ts` - Character states
+17. `/lib/rules/sync/` - Drift detection and migration
+
+**Authentication & Security:**
+
+18. `/lib/auth/AuthProvider.tsx` - Authentication context
+19. `/lib/security/rate-limit.ts` - Rate limiting
+20. `/lib/security/audit-logger.ts` - Audit logging
+
+**Documentation:**
+
+21. `/docs/architecture/` - Architecture documentation
+22. `/docs/capabilities/` - Feature documentation
 
 ## MCP Servers
 
