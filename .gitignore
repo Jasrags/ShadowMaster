@@ -60,7 +60,8 @@ next-env.d.ts
 # backups
 /backups
 .cursor/
-.claude/
+# Claude Code - ignore settings but keep skills
+.claude/*
 !.claude/skills/
 seattle-locations.json
 /data/editions/sr5/core-rulebook.json.backup
