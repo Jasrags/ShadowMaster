@@ -368,7 +368,14 @@ describe("getCampaignByInviteCode", () => {
 
 describe("updateCampaign", () => {
   it("should update campaign properties", async () => {
+    vi.useFakeTimers();
+    const baseTime = new Date("2025-01-01T00:00:00Z");
+    vi.setSystemTime(baseTime);
+
     const campaign = await createTestCampaign({ title: "Original Title" });
+
+    // Advance time to ensure updatedAt will be different
+    vi.setSystemTime(new Date("2025-01-01T00:00:01Z"));
 
     const result = await campaignStorage.updateCampaign(campaign.id, {
       title: "Updated Title",
@@ -378,6 +385,8 @@ describe("updateCampaign", () => {
     expect(result.title).toBe("Updated Title");
     expect(result.description).toBe("New description");
     expect(result.updatedAt).not.toBe(campaign.updatedAt);
+
+    vi.useRealTimers();
   });
 
   it("should preserve immutable fields", async () => {
