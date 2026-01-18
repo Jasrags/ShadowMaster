@@ -51,8 +51,9 @@ export function GearRow({ gear, onRemove, onAddMod, onRemoveMod }: GearRowProps)
   const [isExpanded, setIsExpanded] = useState(false);
 
   // Calculate total cost including modifications
+  // Note: gear.cost is cost per unit, gear.quantity is total units owned
   const modCost = gear.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
-  const totalCost = gear.cost + modCost;
+  const totalCost = gear.cost * gear.quantity + modCost;
 
   // Capacity tracking
   const hasCapacity = gear.capacity !== undefined && gear.capacity > 0;

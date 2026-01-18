@@ -13,13 +13,7 @@ import { useGear, type GearItemData } from "@/lib/rules/RulesetContext";
 import type { Weapon } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
 import { ShieldAlert, AlertTriangle, Package, X } from "lucide-react";
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-/** Preset round amounts for quick selection */
-const PRESET_AMOUNTS = [10, 50, 100, 200] as const;
+import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 
 // =============================================================================
 // HELPERS
@@ -38,23 +32,6 @@ function formatCurrency(value: number): string {
  */
 function getRoundsPerBox(ammo: GearItemData): number {
   return "quantity" in ammo && typeof ammo.quantity === "number" ? ammo.quantity : 10;
-}
-
-/**
- * Calculate number of boxes needed for a given number of rounds
- * Rounds up to nearest full box
- */
-function calculateBoxes(rounds: number, roundsPerBox: number): number {
-  return Math.ceil(rounds / roundsPerBox);
-}
-
-/**
- * Calculate cost for a given number of rounds
- */
-function calculateCost(rounds: number, ammo: GearItemData): number {
-  const roundsPerBox = getRoundsPerBox(ammo);
-  const boxes = calculateBoxes(rounds, roundsPerBox);
-  return boxes * ammo.cost;
 }
 
 /**
@@ -161,8 +138,7 @@ export function AmmunitionModal({
 }: AmmunitionModalProps) {
   const gearCatalog = useGear();
   const [selectedAmmo, setSelectedAmmo] = useState<GearItemData | null>(null);
-  const [selectedRounds, setSelectedRounds] = useState<number | null>(null);
-  const [customRounds, setCustomRounds] = useState<string>("");
+  const [selectedPacks, setSelectedPacks] = useState(1);
 
   // Get ammunition from catalog
   const ammunition = useMemo(() => {
@@ -176,45 +152,23 @@ export function AmmunitionModal({
 
   // Calculate derived values
   const roundsPerBox = selectedAmmo ? getRoundsPerBox(selectedAmmo) : 10;
-  const totalCost =
-    selectedAmmo && selectedRounds ? calculateCost(selectedRounds, selectedAmmo) : 0;
-  const totalBoxes =
-    selectedAmmo && selectedRounds ? calculateBoxes(selectedRounds, roundsPerBox) : 0;
-  const actualRounds = totalBoxes * roundsPerBox;
+  const totalRounds = selectedAmmo ? selectedPacks * roundsPerBox : 0;
+  const totalCost = selectedAmmo ? selectedPacks * selectedAmmo.cost : 0;
   const canAfford = totalCost <= remaining;
-
-  // Handle preset selection
-  const handlePresetSelect = (rounds: number) => {
-    setSelectedRounds(rounds);
-    setCustomRounds("");
-  };
-
-  // Handle custom input change
-  const handleCustomChange = (value: string) => {
-    setCustomRounds(value);
-    const parsed = parseInt(value, 10);
-    if (!isNaN(parsed) && parsed > 0) {
-      setSelectedRounds(parsed);
-    } else if (value === "") {
-      setSelectedRounds(null);
-    }
-  };
 
   // Handle purchase
   const handlePurchase = () => {
-    if (!selectedAmmo || !selectedRounds || !canAfford) return;
+    if (!selectedAmmo || !canAfford) return;
     // Pass the number of boxes to the parent
-    onPurchase(selectedAmmo, totalBoxes);
+    onPurchase(selectedAmmo, selectedPacks);
     setSelectedAmmo(null);
-    setSelectedRounds(null);
-    setCustomRounds("");
+    setSelectedPacks(1);
   };
 
   // Reset selection when modal opens
   const handleClose = () => {
     setSelectedAmmo(null);
-    setSelectedRounds(null);
-    setCustomRounds("");
+    setSelectedPacks(1);
     onClose();
   };
 
@@ -283,12 +237,10 @@ export function AmmunitionModal({
                             if (isSelected) {
                               // Clicking again deselects
                               setSelectedAmmo(null);
-                              setSelectedRounds(null);
-                              setCustomRounds("");
+                              setSelectedPacks(1);
                             } else {
                               setSelectedAmmo(ammo);
-                              setSelectedRounds(null);
-                              setCustomRounds("");
+                              setSelectedPacks(1);
                             }
                           }}
                           disabled={tooExpensive}
@@ -355,91 +307,19 @@ export function AmmunitionModal({
 
                         {/* Expanded Quantity Selector */}
                         {isSelected && (
-                          <div className="border-t border-amber-200 bg-amber-50/50 p-3 dark:border-amber-800 dark:bg-amber-900/10">
-                            {/* Preset Buttons */}
-                            <div className="grid grid-cols-4 gap-2 mb-3">
-                              {PRESET_AMOUNTS.map((rounds) => {
-                                const cost = calculateCost(rounds, ammo);
-                                const boxes = calculateBoxes(rounds, ammoRoundsPerBox);
-                                const isAffordable = cost <= remaining;
-                                const isActive = selectedRounds === rounds && customRounds === "";
-
-                                return (
-                                  <button
-                                    key={rounds}
-                                    onClick={(e) => {
-                                      e.stopPropagation();
-                                      handlePresetSelect(rounds);
-                                    }}
-                                    disabled={!isAffordable}
-                                    className={`flex flex-col items-center rounded-lg border p-2 transition-all ${
-                                      isActive
-                                        ? "border-amber-500 bg-amber-200 dark:bg-amber-800/50"
-                                        : isAffordable
-                                          ? "border-amber-300 bg-white hover:border-amber-400 hover:bg-amber-100 dark:border-amber-700 dark:bg-zinc-800 dark:hover:bg-amber-900/30"
-                                          : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
-                                    }`}
-                                  >
-                                    <span
-                                      className={`text-sm font-semibold ${
-                                        isActive
-                                          ? "text-amber-800 dark:text-amber-200"
-                                          : "text-zinc-900 dark:text-zinc-100"
-                                      }`}
-                                    >
-                                      {rounds}
-                                    </span>
-                                    <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
-                                      rounds
-                                    </span>
-                                    <span
-                                      className={`mt-1 text-xs font-medium ${
-                                        isActive
-                                          ? "text-amber-700 dark:text-amber-300"
-                                          : "text-zinc-600 dark:text-zinc-400"
-                                      }`}
-                                    >
-                                      {formatCurrency(cost)}¥
-                                    </span>
-                                    <span className="text-[10px] text-zinc-400">
-                                      ({boxes} box{boxes !== 1 ? "es" : ""})
-                                    </span>
-                                  </button>
-                                );
-                              })}
-                            </div>
-
-                            {/* Custom Input */}
-                            <div className="flex items-center gap-2">
-                              <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                                Or custom:
-                              </span>
-                              <input
-                                type="number"
-                                min="1"
-                                value={customRounds}
-                                onClick={(e) => e.stopPropagation()}
-                                onChange={(e) => handleCustomChange(e.target.value)}
-                                placeholder="Enter rounds"
-                                className="w-24 rounded-lg border border-amber-300 bg-white px-2 py-1 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-amber-700 dark:bg-zinc-800 dark:text-zinc-100"
-                              />
-                              <span className="text-xs text-zinc-600 dark:text-zinc-400">
-                                rounds
-                              </span>
-                              {customRounds && selectedRounds && (
-                                <span className="ml-auto text-xs text-zinc-500">
-                                  = {formatCurrency(totalCost)}¥
-                                </span>
-                              )}
-                            </div>
-
-                            {/* Rounding notice */}
-                            {selectedRounds && actualRounds !== selectedRounds && (
-                              <p className="mt-2 text-[10px] text-amber-600 dark:text-amber-400">
-                                Rounded up from {selectedRounds} to {actualRounds} rounds (sold in
-                                boxes of {ammoRoundsPerBox})
-                              </p>
-                            )}
+                          <div
+                            className="border-t border-amber-200 bg-amber-50/50 p-3 dark:border-amber-800 dark:bg-amber-900/10"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <BulkQuantitySelector
+                              packSize={ammoRoundsPerBox}
+                              unitLabel="rounds"
+                              pricePerPack={ammo.cost}
+                              remaining={remaining}
+                              selectedPacks={selectedPacks}
+                              onPacksChange={setSelectedPacks}
+                              packLabel="box"
+                            />
                           </div>
                         )}
                       </div>
@@ -467,10 +347,12 @@ export function AmmunitionModal({
               </button>
               <button
                 onClick={handlePurchase}
-                disabled={!selectedAmmo || !selectedRounds || !canAfford}
+                disabled={!selectedAmmo || !canAfford}
                 className="rounded-lg bg-amber-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-600 disabled:cursor-not-allowed disabled:bg-zinc-300 dark:disabled:bg-zinc-700"
               >
-                Purchase {selectedRounds && actualRounds > 0 ? `${actualRounds} rounds` : ""}
+                {selectedAmmo
+                  ? `Purchase ${selectedPacks}× (${totalRounds} rounds) - ${formatCurrency(totalCost)}¥`
+                  : "Purchase"}
               </button>
             </div>
           </div>

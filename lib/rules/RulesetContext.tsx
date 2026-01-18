@@ -216,6 +216,30 @@ export interface GearItemData {
    * @see ADR-010 Inventory State Management
    */
   weight?: number;
+
+  // -------------------------------------------------------------------------
+  // STACKABLE ITEM FIELDS
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether multiple of this item can be purchased as a stack.
+   * Stackable items allow quantity selection during purchase.
+   * Examples: ammunition, RFID tags, patches, syringes
+   */
+  stackable?: boolean;
+
+  /**
+   * Whether this item is consumed on use (single-use).
+   * Consumable items are tracked for remaining uses during gameplay.
+   * Examples: patches, ammunition, chemicals, syringes
+   */
+  consumable?: boolean;
+
+  /**
+   * Number of units included per purchase (e.g., "sold per 10").
+   * When present, cost and availability apply to this quantity.
+   */
+  quantity?: number;
 }
 
 export interface WeaponData extends GearItemData {
@@ -282,6 +306,7 @@ export interface GearCatalogData {
   miscellaneous: GearItemData[];
   ammunition: GearItemData[];
   rfidTags: GearItemData[];
+  industrialChemicals: GearItemData[];
 }
 
 export interface SpellData {
