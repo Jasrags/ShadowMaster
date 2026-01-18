@@ -23,7 +23,7 @@ import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { ArmorRow } from "./ArmorRow";
-import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
+import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
 import { Lock, Plus } from "lucide-react";
 
@@ -156,6 +156,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         catalogId: armorData.id,
         name: armorData.name,
         category: "armor",
+        subcategory: armorData.subcategory,
         armorRating: armorData.armorRating,
         armorModifier: armorData.armorModifier,
         capacity: armorData.capacity ?? armorData.armorRating,
@@ -203,6 +204,36 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Can't afford even with max karma conversion - do nothing
     },
     [remaining, actuallyAddArmor, karmaConversionPrompt]
+  );
+
+  // Add custom clothing (free-form name and price)
+  const addCustomClothing = useCallback(
+    (item: CustomClothingItem) => {
+      const newArmor: ArmorItem = {
+        id: `custom-clothing-${Date.now()}`,
+        // No catalogId for custom items
+        name: item.name,
+        category: "armor",
+        subcategory: "clothing",
+        armorRating: 0, // Clothing provides no armor protection
+        capacity: 0, // No modification capacity
+        capacityUsed: 0,
+        cost: item.cost,
+        availability: 0, // Custom items are always available
+        quantity: 1,
+        modifications: [],
+        equipped: false,
+        isCustom: true, // Mark as custom item
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          armor: [...selectedArmor, newArmor],
+        },
+      });
+    },
+    [selectedArmor, state.selections, updateState]
   );
 
   // Remove armor
@@ -470,6 +501,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         armorCatalog={armorCatalog}
         remaining={remaining}
         onPurchase={addArmor}
+        onPurchaseCustom={addCustomClothing}
       />
 
       {/* Modification Modal */}

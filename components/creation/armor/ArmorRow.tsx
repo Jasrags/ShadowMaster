@@ -10,7 +10,7 @@
 
 import { useState } from "react";
 import type { ArmorItem } from "@/lib/types";
-import { ChevronDown, ChevronRight, X, Plus } from "lucide-react";
+import { ChevronDown, ChevronRight, X, Plus, Shirt } from "lucide-react";
 
 // =============================================================================
 // HELPERS
@@ -84,6 +84,9 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
           className="flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
           title={armor.name}
         >
+          {armor.isCustom && (
+            <Shirt className="inline-block h-3.5 w-3.5 mr-1 text-amber-500 dark:text-amber-400" />
+          )}
           {armor.name}
           {modCount > 0 && (
             <span className="ml-1.5 text-[10px] font-normal text-amber-600 dark:text-amber-400">
@@ -115,6 +118,14 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
       {/* Expanded Details */}
       {isExpanded && (
         <div className="ml-6 mb-2 rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+          {/* Custom Clothing Notice */}
+          {armor.isCustom && (
+            <div className="flex items-center gap-2 text-xs text-amber-600 dark:text-amber-400 mb-2">
+              <Shirt className="h-3.5 w-3.5" />
+              <span>Custom clothing item</span>
+            </div>
+          )}
+
           {/* Stats Row - compact inline */}
           <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-zinc-600 dark:text-zinc-400 mb-2">
             <span>
@@ -131,13 +142,17 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
                 {armor.legality === "restricted" ? "R" : armor.legality === "forbidden" ? "F" : ""}
               </span>
             </span>
-            <span className="text-zinc-300 dark:text-zinc-600">•</span>
-            <span>
-              <span className="text-zinc-400 dark:text-zinc-500">Capacity</span>{" "}
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                {capacityUsed}/{capacity}
-              </span>
-            </span>
+            {!armor.isCustom && (
+              <>
+                <span className="text-zinc-300 dark:text-zinc-600">•</span>
+                <span>
+                  <span className="text-zinc-400 dark:text-zinc-500">Capacity</span>{" "}
+                  <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                    {capacityUsed}/{capacity}
+                  </span>
+                </span>
+              </>
+            )}
             {armor.weight && (
               <>
                 <span className="text-zinc-300 dark:text-zinc-600">•</span>
@@ -157,66 +172,71 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
             )}
           </div>
 
-          {/* Capacity Bar - compact */}
-          <div className="mb-3">
-            <div className="h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
-              <div
-                className={`h-full rounded-full transition-all ${getCapacityColor(capacityPercentage)}`}
-                style={{ width: `${capacityPercentage}%` }}
-              />
-            </div>
-            <div className="mt-0.5 text-[10px] text-zinc-400 dark:text-zinc-500">
-              {capacityRemaining} capacity remaining
-            </div>
-          </div>
-
-          {/* Modifications Section */}
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-              Modifications
-            </span>
-            {onAddMod && capacityRemaining > 0 && (
-              <button
-                onClick={() => armor.id && onAddMod(armor.id)}
-                className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            )}
-          </div>
-          {armor.modifications && armor.modifications.length > 0 ? (
-            <div className="space-y-1">
-              {armor.modifications.map((mod, idx) => (
-                <div key={idx} className="flex items-center justify-between text-xs">
-                  <span className="text-zinc-700 dark:text-zinc-300">
-                    {mod.name}
-                    {mod.rating && <span className="ml-1 text-zinc-400">(R{mod.rating})</span>}
-                  </span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[10px] text-zinc-400">[{mod.capacityUsed}]</span>
-                    <span className="text-zinc-500">¥{formatCurrency(mod.cost)}</span>
-                    {onRemoveMod && (
-                      <button
-                        onClick={() => armor.id && onRemoveMod(armor.id, idx)}
-                        className="rounded p-0.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
-                      >
-                        <X className="h-3 w-3" />
-                      </button>
-                    )}
-                  </div>
+          {/* Capacity Bar & Modifications - only for non-custom items */}
+          {!armor.isCustom && (
+            <>
+              {/* Capacity Bar - compact */}
+              <div className="mb-3">
+                <div className="h-1.5 bg-zinc-200 dark:bg-zinc-700 rounded-full overflow-hidden">
+                  <div
+                    className={`h-full rounded-full transition-all ${getCapacityColor(capacityPercentage)}`}
+                    style={{ width: `${capacityPercentage}%` }}
+                  />
                 </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">
-              No modifications installed
-            </p>
-          )}
-          {onAddMod && capacityRemaining === 0 && (
-            <p className="mt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
-              No capacity remaining
-            </p>
+                <div className="mt-0.5 text-[10px] text-zinc-400 dark:text-zinc-500">
+                  {capacityRemaining} capacity remaining
+                </div>
+              </div>
+
+              {/* Modifications Section */}
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Modifications
+                </span>
+                {onAddMod && capacityRemaining > 0 && (
+                  <button
+                    onClick={() => armor.id && onAddMod(armor.id)}
+                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {armor.modifications && armor.modifications.length > 0 ? (
+                <div className="space-y-1">
+                  {armor.modifications.map((mod, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs">
+                      <span className="text-zinc-700 dark:text-zinc-300">
+                        {mod.name}
+                        {mod.rating && <span className="ml-1 text-zinc-400">(R{mod.rating})</span>}
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[10px] text-zinc-400">[{mod.capacityUsed}]</span>
+                        <span className="text-zinc-500">¥{formatCurrency(mod.cost)}</span>
+                        {onRemoveMod && (
+                          <button
+                            onClick={() => armor.id && onRemoveMod(armor.id, idx)}
+                            className="rounded p-0.5 text-zinc-400 hover:text-red-600 dark:hover:text-red-400"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">
+                  No modifications installed
+                </p>
+              )}
+              {onAddMod && capacityRemaining === 0 && (
+                <p className="mt-1.5 text-[10px] text-amber-600 dark:text-amber-400">
+                  No capacity remaining
+                </p>
+              )}
+            </>
           )}
         </div>
       )}
