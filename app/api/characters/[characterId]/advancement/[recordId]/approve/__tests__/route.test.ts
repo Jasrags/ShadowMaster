@@ -1,12 +1,12 @@
 /**
- * Tests for /api/characters/[characterId]/advancement/[recordId]/reject endpoint
+ * Tests for /api/characters/[characterId]/advancement/[recordId]/approve endpoint
  *
- * Tests GM rejection of character advancements including authentication,
- * authorization, and rejection workflow.
+ * Tests GM approval of character advancements including authentication,
+ * authorization, and approval workflow.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { POST } from "../reject/route";
+import { POST } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as userStorageModule from "@/lib/storage/users";
@@ -32,13 +32,15 @@ function createMockRequest(url: string, body?: unknown, method = "POST"): NextRe
     headers: body ? { "Content-Type": "application/json" } : undefined,
   });
 
-  // Always mock json() method (returns empty object if no body)
-  (request as { json: () => Promise<unknown> }).json = async () => body || {};
+  // Mock json() method if body is provided
+  if (body) {
+    (request as { json: () => Promise<unknown> }).json = async () => body;
+  }
 
   return request;
 }
 
-describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () => {
+describe("POST /api/characters/[characterId]/advancement/[recordId]/approve", () => {
   const gmUserId = "gm-user-id";
   const playerUserId = "player-user-id";
   const characterId = "test-character-id";
@@ -98,29 +100,28 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     vi.mocked(approvalModule.isCampaignGM).mockReturnValue(true);
   });
 
-  it("should successfully reject an advancement with reason", async () => {
-    const rejectedRecord: AdvancementRecord = {
+  it("should successfully approve an advancement", async () => {
+    const approvedRecord: AdvancementRecord = {
       ...mockAdvancementRecord,
-      notes: "Rejected: Rating too high for current story arc",
+      gmApproved: true,
+      gmApprovedBy: gmUserId,
+      gmApprovedAt: new Date().toISOString(),
     };
 
     const updatedCharacter: Character = {
       ...mockCharacter,
-      advancementHistory: [rejectedRecord],
+      advancementHistory: [approvedRecord],
     };
 
-    vi.mocked(approvalModule.rejectAdvancement).mockReturnValue({
+    vi.mocked(approvalModule.approveAdvancement).mockReturnValue({
       updatedCharacter,
-      updatedAdvancementRecord: rejectedRecord,
+      updatedAdvancementRecord: approvedRecord,
     });
 
     vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Rating too high for current story arc",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -130,42 +131,23 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     expect(response.status).toBe(200);
     const data = await response.json();
     expect(data.success).toBe(true);
-    expect(data.advancementRecord.notes).toContain(
-      "Rejected: Rating too high for current story arc"
-    );
+    expect(data.advancementRecord.gmApproved).toBe(true);
+    expect(data.advancementRecord.gmApprovedBy).toBe(gmUserId);
+    expect(data.advancementRecord.gmApprovedAt).toBeDefined();
 
-    expect(approvalModule.rejectAdvancement).toHaveBeenCalledWith(
+    expect(approvalModule.approveAdvancement).toHaveBeenCalledWith(
       mockCharacter,
       recordId,
-      gmUserId,
-      "Rating too high for current story arc"
+      gmUserId
     );
     expect(characterStorageModule.saveCharacter).toHaveBeenCalled();
-  });
-
-  it("should return 400 if rejection reason is missing", async () => {
-    const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`
-    );
-
-    const response = await POST(request, {
-      params: Promise.resolve({ characterId, recordId }),
-    });
-
-    expect(response.status).toBe(400);
-    const data = await response.json();
-    expect(data.success).toBe(false);
-    expect(data.error).toBe("Rejection reason is mandatory");
   });
 
   it("should return 401 if user is not authenticated", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue(null);
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Unauthorized attempt",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -182,10 +164,7 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     vi.mocked(characterStorageModule.getCharacterById).mockResolvedValue(null);
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Character gone",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -206,10 +185,7 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     vi.mocked(characterStorageModule.getCharacterById).mockResolvedValue(nonCampaignCharacter);
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Not in campaign",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -226,10 +202,7 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     vi.mocked(approvalModule.isCampaignGM).mockReturnValue(false);
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Not GM",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -239,19 +212,16 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     expect(response.status).toBe(403);
     const data = await response.json();
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Only the GM can reject advancements");
+    expect(data.error).toBe("Only the GM can approve advancements");
   });
 
   it("should return 400 if advancement record is not found", async () => {
-    vi.mocked(approvalModule.rejectAdvancement).mockImplementation(() => {
+    vi.mocked(approvalModule.approveAdvancement).mockImplementation(() => {
       throw new Error("Advancement record advancement-record-id not found");
     });
 
     const request = createMockRequest(
-      `/api/characters/${characterId}/advancement/${recordId}/reject`,
-      {
-        reason: "Record missing",
-      }
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
     );
 
     const response = await POST(request, {
@@ -262,5 +232,78 @@ describe("POST /api/characters/[characterId]/advancement/[recordId]/reject", () 
     const data = await response.json();
     expect(data.success).toBe(false);
     expect(data.error).toContain("not found");
+  });
+
+  it("should return 400 if advancement is already approved", async () => {
+    vi.mocked(approvalModule.approveAdvancement).mockImplementation(() => {
+      throw new Error("Advancement record advancement-record-id is already approved");
+    });
+
+    const request = createMockRequest(
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
+    );
+
+    const response = await POST(request, {
+      params: Promise.resolve({ characterId, recordId }),
+    });
+
+    expect(response.status).toBe(400);
+    const data = await response.json();
+    expect(data.success).toBe(false);
+    expect(data.error).toContain("already approved");
+  });
+
+  it("should work when character owner is the requester", async () => {
+    // Character found as owner
+    vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
+
+    const approvedRecord: AdvancementRecord = {
+      ...mockAdvancementRecord,
+      gmApproved: true,
+      gmApprovedBy: gmUserId,
+      gmApprovedAt: new Date().toISOString(),
+    };
+
+    const updatedCharacter: Character = {
+      ...mockCharacter,
+      advancementHistory: [approvedRecord],
+    };
+
+    vi.mocked(approvalModule.approveAdvancement).mockReturnValue({
+      updatedCharacter,
+      updatedAdvancementRecord: approvedRecord,
+    });
+
+    vi.mocked(characterStorageModule.saveCharacter).mockResolvedValue(updatedCharacter);
+
+    const request = createMockRequest(
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
+    );
+
+    const response = await POST(request, {
+      params: Promise.resolve({ characterId, recordId }),
+    });
+
+    expect(response.status).toBe(200);
+    const data = await response.json();
+    expect(data.success).toBe(true);
+  });
+
+  it("should return 400 if character does not require approval", async () => {
+    vi.mocked(characterStorageModule.getCharacter).mockResolvedValue(mockCharacter);
+    vi.mocked(approvalModule.requiresGMApproval).mockReturnValue(false);
+
+    const request = createMockRequest(
+      `/api/characters/${characterId}/advancement/${recordId}/approve`
+    );
+
+    const response = await POST(request, {
+      params: Promise.resolve({ characterId, recordId }),
+    });
+
+    expect(response.status).toBe(400);
+    const data = await response.json();
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Character does not require GM approval");
   });
 });

@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { POST } from "../edge/route";
+import { POST } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as userStorageModule from "@/lib/storage/users";
