@@ -37,7 +37,7 @@ describe("violation-record", () => {
       const indexPath = path.join(DATA_DIR, "_index.json");
       const index = JSON.parse(await fs.readFile(indexPath, "utf-8"));
       const filteredIndex = index.filter((entry: { id: string }) => !createdIds.includes(entry.id));
-      await fs.writeFile(indexPath, JSON.stringify(filteredIndex, null, 2));
+      await fs.writeFile(indexPath, JSON.stringify(filteredIndex, null, 2) + "\n");
     } catch {
       // Ignore if index doesn't exist
     }
