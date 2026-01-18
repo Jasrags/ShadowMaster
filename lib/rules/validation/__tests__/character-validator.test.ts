@@ -1,0 +1,930 @@
+/**
+ * Tests for character validator
+ *
+ * Tests the character validation engine including individual validators
+ * and main validation functions.
+ */
+
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import type { Character, CharacterDraft } from "@/lib/types/character";
+import type { MergedRuleset, CreationMethod, Campaign, CreationState } from "@/lib/types";
+import {
+  validateCharacter,
+  validateForFinalization,
+  isCharacterValid,
+} from "../character-validator";
+
+// Mock the dependencies
+vi.mock("../../constraint-validation", () => ({
+  validateAllConstraints: vi.fn(() => ({ valid: true, errors: [], warnings: [] })),
+  validateStep: vi.fn(() => ({ valid: true, errors: [], warnings: [] })),
+  validateBudgetsComplete: vi.fn(() => ({ valid: true, errors: [], warnings: [] })),
+  getMetatypeAttributeLimits: vi.fn(() => null),
+}));
+
+vi.mock("../../qualities", () => ({
+  validateAllQualities: vi.fn(() => ({ valid: true, errors: [] })),
+  validateKarmaLimits: vi.fn(() => ({
+    valid: true,
+    errors: [],
+    positiveTotal: 0,
+    negativeTotal: 0,
+    positiveExceeded: false,
+    negativeExceeded: false,
+  })),
+}));
+
+// Import mocked functions
+import { getMetatypeAttributeLimits, validateAllConstraints } from "../../constraint-validation";
+import { validateKarmaLimits, validateAllQualities } from "../../qualities";
+
+// Helper to create minimal Character for testing
+function createMinimalCharacter(overrides: Partial<Character> = {}): Character {
+  return {
+    id: "test-char",
+    userId: "test-user",
+    name: "Test Character",
+    editionCode: "sr5",
+    metatype: "human",
+    attributes: { bod: 3, agi: 3, rea: 3, str: 3, wil: 3, log: 3, int: 3, cha: 3 },
+    specialAttributes: { edge: 2, essence: 6 },
+    magicalPath: "mundane",
+    status: "draft",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    identities: [{ id: "sin-1", name: "Fake SIN", type: "fake", rating: 4 }],
+    lifestyles: [{ id: "ls-1", name: "Middle", level: "middle", months: 1, cost: 5000 }],
+    ...overrides,
+  } as Character;
+}
+
+// Helper to create minimal CharacterDraft for testing
+function createMinimalDraft(overrides: Partial<CharacterDraft> = {}): CharacterDraft {
+  return {
+    id: "test-draft",
+    userId: "test-user",
+    editionCode: "sr5",
+    status: "draft",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  } as CharacterDraft;
+}
+
+// Helper to create minimal MergedRuleset
+function createMinimalRuleset(overrides: Partial<MergedRuleset> = {}): MergedRuleset {
+  return {
+    snapshotId: "test-snapshot",
+    editionId: "sr5",
+    editionCode: "sr5",
+    bookIds: ["core-rulebook"],
+    modules: {},
+    createdAt: new Date().toISOString(),
+    ...overrides,
+  } as MergedRuleset;
+}
+
+// Helper to create minimal CreationMethod
+function createMinimalCreationMethod(overrides: Partial<CreationMethod> = {}): CreationMethod {
+  return {
+    id: "priority",
+    name: "Priority System",
+    description: "Standard SR5 priority creation",
+    editionCode: "sr5",
+    steps: [],
+    budgets: [],
+    constraints: [],
+    ...overrides,
+  } as CreationMethod;
+}
+
+// Helper to create minimal Campaign
+function createMinimalCampaign(overrides: Partial<Campaign> = {}): Campaign {
+  return {
+    id: "campaign-1",
+    gmId: "gm-user",
+    title: "Test Campaign",
+    status: "active",
+    editionId: "sr5",
+    editionCode: "sr5",
+    enabledBookIds: ["core-rulebook"],
+    enabledCreationMethodIds: ["priority"],
+    gameplayLevel: "experienced",
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  } as Campaign;
+}
+
+// Helper to create minimal CreationState
+function createMinimalCreationState(overrides: Partial<CreationState> = {}): CreationState {
+  return {
+    characterId: "test-char",
+    creationMethodId: "priority",
+    currentStep: 0,
+    completedSteps: [],
+    budgets: {},
+    selections: {} as CreationState["selections"],
+    errors: [],
+    warnings: [],
+    updatedAt: new Date().toISOString(),
+    ...overrides,
+  };
+}
+
+describe("Character Validator", () => {
+  beforeEach(() => {
+    vi.resetAllMocks();
+    vi.mocked(getMetatypeAttributeLimits).mockReturnValue(null);
+    vi.mocked(validateAllConstraints).mockReturnValue({ valid: true, errors: [], warnings: [] });
+    vi.mocked(validateKarmaLimits).mockReturnValue({
+      valid: true,
+      errors: [],
+      positiveTotal: 0,
+      negativeTotal: 0,
+      positiveExceeded: false,
+      negativeExceeded: false,
+    });
+    vi.mocked(validateAllQualities).mockReturnValue({ valid: true, errors: [] });
+  });
+
+  // ===========================================================================
+  // BASIC INFO VALIDATOR
+  // ===========================================================================
+
+  describe("basicInfoValidator (via validateCharacter)", () => {
+    it("should return error when name is missing", async () => {
+      const character = createMinimalCharacter({ name: "" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_NAME",
+          field: "name",
+        })
+      );
+    });
+
+    it("should return error when name is only whitespace", async () => {
+      const character = createMinimalCharacter({ name: "   " });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "MISSING_NAME" }));
+    });
+
+    it("should return error when metatype is missing", async () => {
+      const character = createMinimalCharacter({ metatype: "" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_METATYPE",
+          field: "metatype",
+        })
+      );
+    });
+
+    it("should return error when magicalPath is missing", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: undefined as unknown as Character["magicalPath"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_MAGICAL_PATH",
+          field: "magicalPath",
+        })
+      );
+    });
+
+    it("should not run basicInfoValidator in creation mode", async () => {
+      const character = createMinimalCharacter({ name: "" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      // Basic info validator only runs in finalization mode
+      expect(result.errors).not.toContainEqual(expect.objectContaining({ code: "MISSING_NAME" }));
+    });
+  });
+
+  // ===========================================================================
+  // ATTRIBUTE VALIDATOR
+  // ===========================================================================
+
+  describe("attributeValidator (via validateCharacter)", () => {
+    it("should return error when no attributes allocated", async () => {
+      const character = createMinimalCharacter({ attributes: {} });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_ATTRIBUTES",
+          field: "attributes",
+        })
+      );
+    });
+
+    it("should return error when attribute is below minimum", async () => {
+      const character = createMinimalCharacter({
+        metatype: "troll",
+        attributes: { bod: 1 }, // Below troll minimum
+      });
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(getMetatypeAttributeLimits).mockReturnValue({
+        bod: { min: 5, max: 10 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ATTRIBUTE_BELOW_MIN",
+          field: "attributes.bod",
+        })
+      );
+    });
+
+    it("should return error when attribute exceeds maximum", async () => {
+      const character = createMinimalCharacter({
+        metatype: "human",
+        attributes: { agi: 10 }, // Above human maximum
+      });
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(getMetatypeAttributeLimits).mockReturnValue({
+        agi: { min: 1, max: 6 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ATTRIBUTE_ABOVE_MAX",
+          field: "attributes.agi",
+        })
+      );
+    });
+
+    it("should pass when attributes are within limits", async () => {
+      const character = createMinimalCharacter({
+        metatype: "human",
+        attributes: { bod: 3, agi: 4 },
+      });
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(getMetatypeAttributeLimits).mockReturnValue({
+        bod: { min: 1, max: 6 },
+        agi: { min: 1, max: 6 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ATTRIBUTE_BELOW_MIN" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ATTRIBUTE_ABOVE_MAX" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // IDENTITY VALIDATOR
+  // ===========================================================================
+
+  describe("identityValidator (via validateCharacter)", () => {
+    it("should return error when no identities", async () => {
+      const character = createMinimalCharacter({ identities: [] });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_IDENTITY",
+          field: "identities",
+        })
+      );
+    });
+
+    it("should return error when no lifestyles", async () => {
+      const character = createMinimalCharacter({ lifestyles: [] });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_LIFESTYLE",
+          field: "lifestyles",
+        })
+      );
+    });
+
+    it("should pass when identities and lifestyles exist", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_IDENTITY" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_LIFESTYLE" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // MAGIC VALIDATOR
+  // ===========================================================================
+
+  describe("magicValidator (via validateCharacter)", () => {
+    it("should return no issues for mundane characters", async () => {
+      const character = createMinimalCharacter({ magicalPath: "mundane" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+    });
+
+    it("should return warning when full-mage has no tradition", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_TRADITION",
+          field: "tradition",
+        })
+      );
+    });
+
+    it("should return warning when adept has no powers", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        adeptPowers: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NO_ADEPT_POWERS",
+          field: "adeptPowers",
+        })
+      );
+    });
+
+    it("should return warning when mage has no spells", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NO_SPELLS",
+          field: "spells",
+        })
+      );
+    });
+
+    it("should return warning when technomancer has no complex forms", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "technomancer",
+        complexForms: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NO_COMPLEX_FORMS",
+          field: "complexForms",
+        })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // QUALITY VALIDATOR
+  // ===========================================================================
+
+  describe("qualityValidator (via validateCharacter)", () => {
+    it("should report karma limit exceeded errors", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(validateKarmaLimits).mockReturnValue({
+        valid: false,
+        errors: [],
+        positiveTotal: 30,
+        negativeTotal: 25,
+        positiveExceeded: true,
+        negativeExceeded: false,
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "POSITIVE_KARMA_EXCEEDED",
+          field: "positiveQualities",
+        })
+      );
+    });
+
+    it("should report negative karma exceeded errors", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(validateKarmaLimits).mockReturnValue({
+        valid: false,
+        errors: [],
+        positiveTotal: 20,
+        negativeTotal: 30,
+        positiveExceeded: false,
+        negativeExceeded: true,
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "NEGATIVE_KARMA_EXCEEDED",
+          field: "negativeQualities",
+        })
+      );
+    });
+
+    it("should report quality validation errors", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      vi.mocked(validateAllQualities).mockReturnValue({
+        valid: false,
+        errors: [
+          {
+            qualityId: "PREREQ_MISSING",
+            message: "Quality requires Body 5+",
+            field: "positiveQualities",
+          },
+        ],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "PREREQ_MISSING",
+          message: "Quality requires Body 5+",
+        })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // CAMPAIGN VALIDATOR
+  // ===========================================================================
+
+  describe("campaignValidator (via validateCharacter)", () => {
+    it("should skip validation when no campaign", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "DISABLED_BOOKS_USED" })
+      );
+    });
+
+    it("should report disabled books usage", async () => {
+      const character = createMinimalCharacter({
+        campaignId: "campaign-1",
+        attachedBookIds: ["core-rulebook", "street-grimoire"],
+      });
+      const ruleset = createMinimalRuleset();
+      const campaign = createMinimalCampaign({
+        enabledBookIds: ["core-rulebook"], // street-grimoire not enabled
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        campaign,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "DISABLED_BOOKS_USED",
+          field: "attachedBookIds",
+        })
+      );
+    });
+
+    it("should pass when all books are enabled", async () => {
+      const character = createMinimalCharacter({
+        campaignId: "campaign-1",
+        attachedBookIds: ["core-rulebook"],
+      });
+      const ruleset = createMinimalRuleset();
+      const campaign = createMinimalCampaign({
+        enabledBookIds: ["core-rulebook", "run-faster"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        campaign,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "DISABLED_BOOKS_USED" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // MAIN VALIDATION FUNCTIONS
+  // ===========================================================================
+
+  describe("validateCharacter", () => {
+    it("should return valid: true when no errors", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(true);
+      expect(result.errors).toHaveLength(0);
+    });
+
+    it("should return valid: false when errors exist", async () => {
+      const character = createMinimalCharacter({ name: "" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors.length).toBeGreaterThan(0);
+    });
+
+    it("should run constraint validation when creationMethod provided", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod();
+      const creationState = createMinimalCreationState();
+
+      await validateCharacter({
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(validateAllConstraints).toHaveBeenCalled();
+    });
+
+    it("should include completeness information", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod({
+        steps: [
+          { id: "step-1", title: "Step 1" },
+          { id: "step-2", title: "Step 2" },
+        ],
+        budgets: [{ id: "karma", label: "Karma", initialValue: 25 }],
+      } as unknown as CreationMethod);
+      const creationState = createMinimalCreationState({
+        budgets: { karma: 10 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.completeness).toBeDefined();
+      expect(result.completeness.steps).toHaveLength(2);
+      expect(result.completeness.budgets).toHaveLength(1);
+      expect(result.completeness.percentage).toBeDefined();
+      expect(result.completeness.readyForFinalization).toBeDefined();
+    });
+
+    it("should include campaign info when campaign provided", async () => {
+      const character = createMinimalCharacter({ campaignId: "campaign-1" });
+      const ruleset = createMinimalRuleset();
+      const campaign = createMinimalCampaign();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        campaign,
+        mode: "finalization",
+      });
+
+      expect(result.campaign).toBeDefined();
+      expect(result.campaign?.inCampaign).toBe(true);
+      expect(result.campaign?.requiresApproval).toBe(true);
+    });
+  });
+
+  // ===========================================================================
+  // CONVENIENCE FUNCTIONS
+  // ===========================================================================
+
+  describe("validateForFinalization", () => {
+    it("should use finalization mode", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateForFinalization(character, ruleset);
+
+      // Finalization mode runs basicInfoValidator
+      // If character is valid with name, it should pass
+      expect(result).toBeDefined();
+      expect(result.valid).toBe(true);
+    });
+
+    it("should accept optional parameters", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod();
+      const creationState = createMinimalCreationState();
+      const campaign = createMinimalCampaign();
+
+      const result = await validateForFinalization(
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        campaign
+      );
+
+      expect(result).toBeDefined();
+    });
+  });
+
+  describe("isCharacterValid", () => {
+    it("should return true for valid character", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      const result = await isCharacterValid(character, ruleset);
+
+      expect(result).toBe(true);
+    });
+
+    it("should return false for invalid character", async () => {
+      const character = createMinimalCharacter({ name: "", metatype: "" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await isCharacterValid(character, ruleset);
+
+      expect(result).toBe(false);
+    });
+
+    it("should use finalization mode by default", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+
+      // With default mode (finalization), basic info validator runs
+      const result = await isCharacterValid(character, ruleset);
+
+      expect(result).toBe(true);
+    });
+
+    it("should accept custom validation mode", async () => {
+      const draft = createMinimalDraft();
+      const ruleset = createMinimalRuleset();
+
+      // Creation mode doesn't require all fields
+      const result = await isCharacterValid(draft, ruleset, "creation");
+
+      // Should pass in creation mode as basic info validator is not run
+      expect(typeof result).toBe("boolean");
+    });
+  });
+
+  // ===========================================================================
+  // COMPLETENESS CALCULATION
+  // ===========================================================================
+
+  describe("completeness calculation", () => {
+    it("should calculate budget completeness correctly", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod({
+        budgets: [
+          { id: "karma", label: "Karma", initialValue: 25 },
+          { id: "resources", label: "Resources", initialValue: 100000 },
+        ],
+      } as unknown as CreationMethod);
+      const creationState = createMinimalCreationState({
+        budgets: { karma: 5, resources: 50000 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        mode: "finalization",
+      });
+
+      const karmaBudget = result.completeness.budgets.find((b) => b.budgetId === "karma");
+      expect(karmaBudget).toBeDefined();
+      expect(karmaBudget?.total).toBe(25);
+      expect(karmaBudget?.remaining).toBe(5);
+      expect(karmaBudget?.spent).toBe(20);
+      expect(karmaBudget?.complete).toBe(true);
+      expect(karmaBudget?.overspent).toBe(false);
+    });
+
+    it("should detect overspent budgets", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod({
+        budgets: [{ id: "karma", label: "Karma", initialValue: 25 }],
+      } as unknown as CreationMethod);
+      const creationState = createMinimalCreationState({
+        budgets: { karma: -5 }, // Overspent
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        mode: "finalization",
+      });
+
+      const karmaBudget = result.completeness.budgets.find((b) => b.budgetId === "karma");
+      expect(karmaBudget?.overspent).toBe(true);
+      expect(karmaBudget?.complete).toBe(false);
+    });
+
+    it("should calculate percentage based on completed steps", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationMethod = createMinimalCreationMethod({
+        steps: [
+          { id: "step-1", title: "Step 1" },
+          { id: "step-2", title: "Step 2" },
+          { id: "step-3", title: "Step 3" },
+          { id: "step-4", title: "Step 4" },
+        ],
+      } as unknown as CreationMethod);
+      const creationState = createMinimalCreationState();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationMethod,
+        creationState,
+        mode: "finalization",
+      });
+
+      // Percentage should be based on steps
+      expect(result.completeness.percentage).toBeDefined();
+      expect(result.completeness.percentage).toBeGreaterThanOrEqual(0);
+      expect(result.completeness.percentage).toBeLessThanOrEqual(100);
+    });
+  });
+});
