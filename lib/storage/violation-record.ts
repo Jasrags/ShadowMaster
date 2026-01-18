@@ -185,7 +185,7 @@ async function readIndex(): Promise<ViolationIndexEntry[]> {
  * Write the violations index.
  */
 async function writeIndex(entries: ViolationIndexEntry[]): Promise<void> {
-  await fs.writeFile(getIndexFilePath(), JSON.stringify(entries, null, 2));
+  await fs.writeFile(getIndexFilePath(), JSON.stringify(entries, null, 2) + "\n");
 }
 
 /**
