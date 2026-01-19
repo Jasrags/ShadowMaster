@@ -251,10 +251,14 @@ export interface WeaponData extends GearItemData {
   rc?: number;
   ammo?: number;
   blast?: string;
+  /** Wireless bonus description (human-readable) */
+  wirelessBonus?: string;
   /** New: Integrated modifications for specific weapons */
   builtInModifications?: Array<{
     modificationId: string;
     mount?: WeaponMountType;
+    /** Rating for rated modifications (e.g., gas-vent-system rating 2) */
+    rating?: number;
   }>;
 }
 
