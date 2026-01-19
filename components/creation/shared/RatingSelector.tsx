@@ -242,5 +242,3 @@ export function useRatingSelection(item: RatedItem, initialRating?: number) {
     maxRating: item.maxRating ?? 1,
   };
 }
-
-export default RatingSelector;

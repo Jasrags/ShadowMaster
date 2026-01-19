@@ -259,5 +259,3 @@ export function BulkQuantitySelector({
     </div>
   );
 }
-
-export default BulkQuantitySelector;

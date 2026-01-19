@@ -232,7 +232,7 @@ describe("GET /api/characters/[characterId]/magic", () => {
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.magicState).toBeDefined();
-      expect(data.magicState.magicRating).toBe(6);
+      expect(data.magicState.effectiveMagicRating).toBe(6);
       expect(data.magicState.initiateGrade).toBe(0);
       expect(data.spellsKnown).toHaveLength(2);
     });

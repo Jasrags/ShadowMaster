@@ -90,8 +90,6 @@ const config: KnipConfig = {
     "@modelcontextprotocol/server-memory",
     "@modelcontextprotocol/server-sequential-thinking",
     "next-devtools-mcp",
-    // Testing libraries are used in test files (which we ignore)
-    "@testing-library/user-event",
     // Type stubs (bcryptjs and uuid provide their own types)
     "@types/bcryptjs",
     "@types/uuid",
