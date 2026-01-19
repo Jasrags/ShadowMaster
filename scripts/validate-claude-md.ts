@@ -124,11 +124,15 @@ results.push({
 
 // Check 5: Creation subfolders
 const creationSubfolders = countDirectories("components/creation");
+const documentedSubfolders = extractNumberFromClaudeMd(/(\d+)\s*subfolders/i);
 results.push({
   check: "Creation subfolders",
-  expected: 15,
+  expected: documentedSubfolders ?? "unknown",
   actual: creationSubfolders,
-  status: creationSubfolders >= 14 && creationSubfolders <= 16 ? "pass" : "warn",
+  status:
+    documentedSubfolders && Math.abs(creationSubfolders - documentedSubfolders) <= 2
+      ? "pass"
+      : "warn",
 });
 
 // Check 6: Key directories exist

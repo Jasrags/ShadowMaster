@@ -69,7 +69,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
   /campaigns            # Campaign management pages
 /lib                    # Core business logic
   /types                # TypeScript type definitions
-  /storage              # File-based data persistence (~25 modules)
+  /storage              # File-based data persistence (~42 modules)
   /rules                # Ruleset and game mechanics
     /action-resolution  # Action execution framework
     /advancement        # Karma advancement system
@@ -82,7 +82,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
   /combat               # Combat session management
   /security             # Rate limiting, audit logging
 /components             # Shared React components
-  /creation             # Character creation cards (89 components in 15 subfolders)
+  /creation             # Character creation cards (60 components in 16 subfolders)
   /combat               # Combat UI components
 /data                   # JSON file storage (acts as database)
   /editions/{code}/     # Edition data (edition.json, core-rulebook.json, grunt-templates/)
@@ -100,6 +100,7 @@ The ruleset architecture is the heart of the application. It supports multiple S
 **Key Concepts:** Edition → Book → BookPayload → RuleModule → MergedRuleset
 
 **Critical Files:**
+
 - `/lib/rules/loader.ts` - Loads edition metadata and book payloads
 - `/lib/rules/merge.ts` - Merges books using merge strategies
 - `/lib/types/edition.ts` - Type definitions for edition system
@@ -113,8 +114,9 @@ Sheet-based, single-page character creation with all sections visible simultaneo
 **Key Concepts:** CreationMethod, CreationState, CreationBudgetContext, Draft Auto-save
 
 **Critical Files:**
+
 - `/app/characters/create/sheet/page.tsx` - Entry point
-- `/components/creation/` - Creation card components (89 components)
+- `/components/creation/` - Creation card components (60 components)
 - `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
 ### 3. Character Lifecycle System
@@ -136,6 +138,7 @@ For detailed documentation on Combat, Matrix, Rigging, Inventory, Contacts, Sync
 ## Type System
 
 All domain entities in `/lib/types/`. Key files:
+
 - `edition.ts` - Ruleset system types
 - `character.ts` - Character and creation types
 - `creation-selections.ts` - Character creation tracking
@@ -172,7 +175,7 @@ Always use TypeScript storage layer (`readJsonFile()`, `writeJsonFile()`) instea
 ## Testing
 
 ```bash
-pnpm test          # Unit tests
+pnpm test          # Unit tests (~249 test files)
 pnpm test:e2e      # E2E tests
 ```
 
@@ -181,6 +184,7 @@ For detailed test file locations, patterns, and manual testing workflow, use the
 ## Documentation
 
 Comprehensive docs in `/docs/`:
+
 - `/architecture/` - Core architecture docs
 - `/capabilities/` - Feature documentation
 - `/data_tables/` - Game rule reference tables
@@ -189,43 +193,36 @@ Comprehensive docs in `/docs/`:
 ## Key Files to Understand First
 
 **Core Types & Storage:**
+
 1. `/lib/types/index.ts` - All data structures
 2. `/lib/storage/base.ts` - Storage abstraction
 3. `/lib/storage/characters.ts` - Character persistence
 
-**Ruleset System:**
-4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset core
-5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks
+**Ruleset System:** 4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset core 5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks
 
-**Character Creation:**
-6. `/app/characters/create/sheet/page.tsx` - Entry point
-7. `/components/creation/` - Creation cards (89)
-8. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
+**Character Creation:** 6. `/app/characters/create/sheet/page.tsx` - Entry point 7. `/components/creation/` - Creation cards (60) 8. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
-**Combat & GM Tools:**
-9. `/lib/combat/CombatSessionContext.tsx` - Combat state
-10. `/lib/rules/grunts.ts` - NPC system
+**Combat & GM Tools:** 9. `/lib/combat/CombatSessionContext.tsx` - Combat state 10. `/lib/rules/grunts.ts` - NPC system
 
-**Authentication:**
-11. `/lib/auth/AuthProvider.tsx` - Auth context
-12. `/lib/security/rate-limit.ts` - Rate limiting
+**Authentication:** 11. `/lib/auth/AuthProvider.tsx` - Auth context 12. `/lib/security/rate-limit.ts` - Rate limiting
 
 ## MCP Servers
 
 This project uses MCP servers for AI-assisted development. For detailed tool selection guides (Git vs GitHub MCP, Context7, Knip, Memory, Sequential Thinking), use the `/mcp-guide` skill.
 
 **Quick Reference:**
-| Server       | Purpose                      |
+| Server | Purpose |
 | ------------ | ---------------------------- |
-| context7     | Library documentation lookup |
-| github       | GitHub API (PRs, issues)     |
-| knip         | Dead code detection          |
-| memory       | Persistent knowledge graph   |
-| git          | Local git operations         |
+| context7 | Library documentation lookup |
+| github | GitHub API (PRs, issues) |
+| knip | Dead code detection |
+| memory | Persistent knowledge graph |
+| git | Local git operations |
 
 ## Skills Reference
 
 Available skills for detailed guidance:
+
 - `/mcp-guide` - MCP server selection and usage
 - `/architecture-reference` - Detailed subsystem documentation
 - `/component-patterns` - Component organization guidelines
