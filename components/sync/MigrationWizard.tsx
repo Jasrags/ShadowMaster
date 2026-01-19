@@ -584,9 +584,3 @@ function formatValue(value: unknown): string {
   }
   return String(value);
 }
-
-// =============================================================================
-// EXPORTS
-// =============================================================================
-
-export default MigrationWizard;

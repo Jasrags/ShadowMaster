@@ -196,5 +196,3 @@ export class CreationErrorBoundary extends Component<
     return this.props.children;
   }
 }
-
-export default CreationErrorBoundary;

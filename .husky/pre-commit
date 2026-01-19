@@ -1,3 +1,5 @@
 npx lint-staged
 pnpm type-check
 
+# Check that new source files have corresponding tests (non-blocking warning)
+pnpm check-tests || echo "⚠️  Some source files are missing tests. Run 'pnpm check-tests' to see details."

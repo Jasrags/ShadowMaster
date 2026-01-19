@@ -15,6 +15,7 @@ import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { BaseModalRoot } from "@/components/ui";
 import { Search, Minus, Plus, AlertTriangle, X } from "lucide-react";
+import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 
 // =============================================================================
 // CONSTANTS
@@ -29,7 +30,8 @@ type GearCategory =
   | "survival"
   | "medical"
   | "security"
-  | "miscellaneous";
+  | "miscellaneous"
+  | "rfidTags";
 
 const GEAR_CATEGORIES: Array<{ id: GearCategory; label: string }> = [
   { id: "all", label: "All" },
@@ -38,6 +40,7 @@ const GEAR_CATEGORIES: Array<{ id: GearCategory; label: string }> = [
   { id: "medical", label: "Medical" },
   { id: "security", label: "Security" },
   { id: "survival", label: "Survival" },
+  { id: "rfidTags", label: "RFID Tags" },
   { id: "miscellaneous", label: "Misc" },
 ];
 
@@ -72,6 +75,7 @@ function getAllGear(catalog: GearCatalogData | null): GearItemData[] {
     ...catalog.medical,
     ...catalog.security,
     ...catalog.miscellaneous,
+    ...(catalog.rfidTags || []),
   ];
 }
 
@@ -191,7 +195,7 @@ interface GearPurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   remaining: number;
-  onPurchase: (gear: GearItemData, rating?: number) => void;
+  onPurchase: (gear: GearItemData, rating?: number, quantity?: number) => void;
 }
 
 // =============================================================================
@@ -272,6 +276,7 @@ export function GearPurchaseModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedGear, setSelectedGear] = useState<GearItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
+  const [selectedPacks, setSelectedPacks] = useState(1);
 
   // Get gear for current category
   const categoryGear = useMemo(
@@ -295,6 +300,9 @@ export function GearPurchaseModal({
         .length,
       security: gearCatalog.security.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
         .length,
+      rfidTags: (gearCatalog.rfidTags || []).filter(
+        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
+      ).length,
       miscellaneous: gearCatalog.miscellaneous.filter(
         (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
@@ -322,11 +330,31 @@ export function GearPurchaseModal({
     return getRatingBounds(selectedGear);
   }, [selectedGear]);
 
+  // Check if selected gear is stackable
+  const isStackable = selectedGear?.stackable === true;
+
+  // Get pack size for stackable items (default 1 if not specified)
+  const packSize = selectedGear?.quantity ?? 1;
+
+  // Get unit label based on category
+  const unitLabel = useMemo(() => {
+    if (!selectedGear) return "units";
+    if (selectedGear.category === "rfidTags") return "tags";
+    return "units";
+  }, [selectedGear]);
+
   // Calculate selected gear values with rating
-  const selectedGearCost = useMemo(() => {
+  // Note: catalog cost is per unit for stackable items
+  const selectedGearUnitCost = useMemo(() => {
     if (!selectedGear) return 0;
     return getGearCost(selectedGear, ratingBounds.hasRating ? selectedRating : undefined);
   }, [selectedGear, selectedRating, ratingBounds.hasRating]);
+
+  // For stackable items: cost per pack = unit cost × pack size
+  const pricePerPack = isStackable ? selectedGearUnitCost * packSize : selectedGearUnitCost;
+
+  // Total cost including quantity for stackable items
+  const selectedGearCost = isStackable ? pricePerPack * selectedPacks : selectedGearUnitCost;
 
   const selectedGearAvail = useMemo(() => {
     if (!selectedGear) return 0;
@@ -351,22 +379,28 @@ export function GearPurchaseModal({
     setSearchQuery("");
     setSelectedGear(null);
     setSelectedRating(1);
+    setSelectedPacks(1);
     setSelectedCategory("all");
     onClose();
   };
 
   const handlePurchase = () => {
     if (selectedGear && canPurchase) {
-      onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined);
+      // For stackable items, pass the quantity (number of packs)
+      // The parent component will multiply by pack size if needed
+      const quantity = isStackable ? selectedPacks : undefined;
+      onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined, quantity);
       setSelectedGear(null);
       setSelectedRating(1);
+      setSelectedPacks(1);
     }
   };
 
-  // Reset rating when selecting new gear
+  // Reset rating and packs when selecting new gear
   const handleSelectGear = (gear: GearItemData) => {
     setSelectedGear(gear);
     setSelectedRating(1);
+    setSelectedPacks(1);
   };
 
   return (
@@ -545,6 +579,18 @@ export function GearPurchaseModal({
                     </div>
                   )}
 
+                  {/* Bulk Quantity Selector for Stackable Items */}
+                  {isStackable && (
+                    <BulkQuantitySelector
+                      packSize={packSize}
+                      unitLabel={unitLabel}
+                      pricePerPack={pricePerPack}
+                      remaining={remaining}
+                      selectedPacks={selectedPacks}
+                      onPacksChange={setSelectedPacks}
+                    />
+                  )}
+
                   {/* Stats */}
                   <div className="space-y-2">
                     <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
@@ -634,7 +680,9 @@ export function GearPurchaseModal({
                         ? `Cannot Afford (${formatCurrency(selectedGearCost)}¥)`
                         : !availabilityOk
                           ? `Availability Too High (${selectedGearAvail})`
-                          : `Purchase - ${formatCurrency(selectedGearCost)}¥`}
+                          : isStackable
+                            ? `Purchase ${selectedPacks}× (${selectedPacks * packSize} ${unitLabel}) - ${formatCurrency(selectedGearCost)}¥`
+                            : `Purchase - ${formatCurrency(selectedGearCost)}¥`}
                     </button>
                   </div>
                 </div>

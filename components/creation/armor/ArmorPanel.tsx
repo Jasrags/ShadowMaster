@@ -23,7 +23,7 @@ import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { ArmorRow } from "./ArmorRow";
-import { ArmorPurchaseModal } from "./ArmorPurchaseModal";
+import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
 import { Lock, Plus } from "lucide-react";
 
@@ -156,6 +156,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         catalogId: armorData.id,
         name: armorData.name,
         category: "armor",
+        subcategory: armorData.subcategory,
         armorRating: armorData.armorRating,
         armorModifier: armorData.armorModifier,
         capacity: armorData.capacity ?? armorData.armorRating,
@@ -203,6 +204,36 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
       // Can't afford even with max karma conversion - do nothing
     },
     [remaining, actuallyAddArmor, karmaConversionPrompt]
+  );
+
+  // Add custom clothing (free-form name and price)
+  const addCustomClothing = useCallback(
+    (item: CustomClothingItem) => {
+      const newArmor: ArmorItem = {
+        id: `custom-clothing-${Date.now()}`,
+        // No catalogId for custom items
+        name: item.name,
+        category: "armor",
+        subcategory: "clothing",
+        armorRating: 0, // Clothing provides no armor protection
+        capacity: 0, // No modification capacity
+        capacityUsed: 0,
+        cost: item.cost,
+        availability: 0, // Custom items are always available
+        quantity: 1,
+        modifications: [],
+        equipped: false,
+        isCustom: true, // Mark as custom item
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          armor: [...selectedArmor, newArmor],
+        },
+      });
+    },
+    [selectedArmor, state.selections, updateState]
   );
 
   // Remove armor
@@ -434,7 +465,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         <div className="space-y-3">
           {/* Armor List */}
           {selectedArmor.length > 0 ? (
-            <div className="space-y-2">
+            <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
               {selectedArmor.map((armor) => (
                 <ArmorRow
                   key={armor.id}
@@ -451,17 +482,15 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
             </div>
           )}
 
-          {/* Summary */}
-          {selectedArmor.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(armorSpent)}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
+            </span>
+            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
+              {formatCurrency(armorSpent)}¥
+            </span>
+          </div>
         </div>
       </CreationCard>
 
@@ -472,6 +501,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         armorCatalog={armorCatalog}
         remaining={remaining}
         onPurchase={addArmor}
+        onPurchaseCustom={addCustomClothing}
       />
 
       {/* Modification Modal */}

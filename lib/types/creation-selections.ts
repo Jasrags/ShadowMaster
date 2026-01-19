@@ -102,15 +102,29 @@ export interface AttributeSelections {
 }
 
 /**
+ * Skill group value - supports both legacy (number) and new (object) formats
+ * Legacy format: number (rating)
+ * New format: { rating: number; isBroken: boolean }
+ */
+export type SkillGroupValue = number | { rating: number; isBroken: boolean };
+
+/**
  * Skill allocations
  */
 export interface SkillSelections {
   /** Individual skill ratings */
   skills?: Record<string, number>;
-  /** Skill group ratings */
-  skillGroups?: Record<string, number>;
+  /** Skill group ratings - supports both number and { rating, isBroken } formats */
+  skillGroups?: Record<string, SkillGroupValue>;
   /** Skill specializations (skill ID -> array of specialization names) */
   skillSpecializations?: Record<string, string[]>;
+  /** Track karma spent on skills during creation (for group breaking, etc.) */
+  skillKarmaSpent?: {
+    /** Karma spent raising individual skills beyond group rating */
+    skillRaises: Record<string, number>;
+    /** Total karma spent on specializations (7 karma each) */
+    specializations: number;
+  };
 }
 
 /**
@@ -415,9 +429,10 @@ export function getSkills(selections: CreationSelections): Record<string, number
 
 /**
  * Safely get skill groups with defaults
+ * Returns the raw skill group values (may be numbers or objects with isBroken)
  */
-export function getSkillGroups(selections: CreationSelections): Record<string, number> {
-  return (selections.skillGroups || {}) as Record<string, number>;
+export function getSkillGroups(selections: CreationSelections): Record<string, SkillGroupValue> {
+  return (selections.skillGroups || {}) as Record<string, SkillGroupValue>;
 }
 
 /**

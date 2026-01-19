@@ -4,15 +4,17 @@ Administrative and development scripts for managing the Shadow Master applicatio
 
 ## Quick Reference
 
-| Script              | Purpose                      | Common Usage                             |
-| ------------------- | ---------------------------- | ---------------------------------------- |
-| `backup.ts`         | Backup/restore data          | `pnpm backup create`                     |
-| `health-check.ts`   | Data integrity check         | `pnpm health-check`                      |
-| `seed-data.ts`      | Create test data             | `pnpm seed-data`                         |
-| `user-admin.ts`     | User management              | `pnpm user-admin list`                   |
-| `sync-character.ts` | Sync character with rulebook | `npx tsx scripts/sync-character.ts <id>` |
-| `verify-data.ts`    | Validate ruleset data        | `pnpm verify-data`                       |
-| `migrate-*.ts`      | Data migration utilities     | See individual scripts                   |
+| Script                   | Purpose                      | Common Usage                             |
+| ------------------------ | ---------------------------- | ---------------------------------------- |
+| `backup.ts`              | Backup/restore data          | `pnpm backup create`                     |
+| `health-check.ts`        | Data integrity check         | `pnpm health-check`                      |
+| `seed-data.ts`           | Create test data             | `pnpm seed-data`                         |
+| `user-admin.ts`          | User management              | `pnpm user-admin list`                   |
+| `validate-claude-md.ts`  | Validate CLAUDE.md accuracy  | `pnpm validate-docs`                     |
+| `check-test-coverage.ts` | Check for missing tests      | `pnpm check-tests`                       |
+| `sync-character.ts`      | Sync character with rulebook | `npx tsx scripts/sync-character.ts <id>` |
+| `verify-data.ts`         | Validate ruleset data        | `pnpm verify-data`                       |
+| `migrate-*.ts`           | Data migration utilities     | See individual scripts                   |
 
 ---
 
@@ -176,6 +178,89 @@ npx tsx scripts/user-admin.ts reactivate user@example.com
 
 ---
 
+### validate-claude-md.ts
+
+Validates CLAUDE.md documentation against the actual codebase structure.
+
+```bash
+# Run validation
+pnpm validate-docs
+
+# Or directly
+npx tsx scripts/validate-claude-md.ts
+```
+
+**What gets validated:**
+
+- Creation component count (~89 components)
+- API route file count (~133 routes)
+- Test file count (~85 tests)
+- Storage module count (~25 modules)
+- Creation subfolder count (15 directories)
+- Key directory existence (matrix, rigging, inventory, character, sync, etc.)
+
+**Exit codes:**
+
+- `0` - All checks passed (or warnings only)
+- `1` - Validation failed (missing directories, major discrepancies)
+
+**When to run:**
+
+- Before pushing changes (`pre-push` hook runs this automatically)
+- After adding new modules or components
+- When updating CLAUDE.md manually
+
+---
+
+### check-test-coverage.ts
+
+Checks that source files have corresponding test files.
+
+```bash
+# Check staged files only (default, for pre-commit)
+pnpm check-tests
+
+# Check all source files
+pnpm check-tests:all
+
+# Strict mode (fails if tests missing)
+pnpm check-tests:strict
+
+# Or directly
+npx tsx scripts/check-test-coverage.ts
+npx tsx scripts/check-test-coverage.ts --all
+npx tsx scripts/check-test-coverage.ts --strict
+```
+
+**Options:**
+
+- `--all` - Check all source files (not just staged)
+- `--strict` - Exit with error code if tests are missing
+
+**Files that require tests:**
+
+- `lib/rules/**/*.ts` → expects `__tests__/*.test.ts`
+- `lib/storage/*.ts` → expects `__tests__/*.test.ts`
+- `lib/auth/*.ts` → expects `__tests__/*.test.ts`
+- `lib/security/*.ts` → expects `__tests__/*.test.ts`
+- `app/api/**/route.ts` → expects `__tests__/route.test.ts`
+
+**Exempt files (no test required):**
+
+- `index.ts` - Re-export files
+- `types.ts` - Type definition files
+- `constants.ts` - Constant definition files
+- `*.d.ts` - TypeScript declaration files
+- Files already in `__tests__/` directories
+
+**When to run:**
+
+- On commit (`pre-commit` hook runs this as a warning)
+- Before creating PRs
+- In CI pipeline with `--strict` flag
+
+---
+
 ### sync-character.ts
 
 Synchronizes character items with the core rulebook.
@@ -301,6 +386,12 @@ pnpm verify-data             # Verify ruleset data
 # User management
 pnpm user-admin list         # List users
 pnpm user-admin info <email> # Show user info
+
+# Documentation & test enforcement
+pnpm validate-docs           # Validate CLAUDE.md against codebase
+pnpm check-tests             # Check staged files for missing tests
+pnpm check-tests:all         # Check all source files
+pnpm check-tests:strict      # Fail if tests are missing
 ```
 
 ---

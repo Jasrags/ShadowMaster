@@ -179,17 +179,18 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
   // Add gear (actual implementation)
   const actuallyAddGear = useCallback(
-    (gearData: GearItemData, rating?: number) => {
+    (gearData: GearItemData, rating?: number, quantity?: number) => {
       const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
       const effectiveRating = rating || 1;
-      let cost = gearData.cost ?? 0;
+      const effectiveQuantity = quantity || 1;
+      let unitCost = gearData.cost ?? 0;
       let availability = gearData.availability ?? 0;
       let capacity = gearData.capacity;
 
       // Handle unified ratings - look up from table
       if (hasUnifiedRatings(gearData)) {
         const ratingValue = getRatingTableValue(gearData, effectiveRating);
-        cost = ratingValue?.cost ?? 0;
+        unitCost = ratingValue?.cost ?? 0;
         availability = ratingValue?.availability ?? 0;
         if (ratingValue?.capacity !== undefined) {
           capacity = ratingValue.capacity;
@@ -200,10 +201,10 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
       } else if (hasRatingFlag) {
         // Legacy cost scaling
         if (gearData.ratingSpec?.costScaling?.perRating) {
-          cost =
+          unitCost =
             (gearData.ratingSpec.costScaling.baseValue || gearData.cost || 0) * effectiveRating;
         } else if (gearData.costPerRating) {
-          cost = (gearData.cost || 0) * effectiveRating;
+          unitCost = (gearData.cost || 0) * effectiveRating;
         }
 
         // Legacy availability scaling
@@ -214,16 +215,24 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         }
       }
 
+      // For stackable items, calculate total units from packs
+      // cost is per unit, quantity in catalog is pack size
+      const packSize = gearData.quantity ?? 1;
+      const totalUnits = gearData.stackable ? effectiveQuantity * packSize : effectiveQuantity;
+
+      // Build the display name
+      let displayName = gearData.name;
+      if (hasRatingFlag || hasUnifiedRatings(gearData)) {
+        displayName = `${gearData.name} (Rating ${effectiveRating})`;
+      }
+
       const newGear: GearItem = {
         id: `${gearData.id}-${Date.now()}`,
-        name:
-          hasRatingFlag || hasUnifiedRatings(gearData)
-            ? `${gearData.name} (Rating ${effectiveRating})`
-            : gearData.name,
+        name: displayName,
         category: gearData.category,
-        cost,
+        cost: unitCost,
         availability,
-        quantity: 1,
+        quantity: totalUnits,
         rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
         capacity,
         capacityUsed: 0,
@@ -244,25 +253,35 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
   // Add gear (with karma conversion prompt if needed)
   const addGear = useCallback(
-    (gearData: GearItemData, rating?: number) => {
-      const cost = calculateGearCost(gearData, rating);
+    (gearData: GearItemData, rating?: number, quantity?: number) => {
+      const unitCost = calculateGearCost(gearData, rating);
+      const effectiveQuantity = quantity || 1;
+      // For stackable items: quantity is number of packs, unitCost is per unit
+      // Total cost = unitCost × packSize × numberOfPacks
+      const packSize = gearData.quantity ?? 1;
+      const totalCost = gearData.stackable ? unitCost * packSize * effectiveQuantity : unitCost;
 
       // Check if already affordable
-      if (cost <= remaining) {
-        actuallyAddGear(gearData, rating);
+      if (totalCost <= remaining) {
+        actuallyAddGear(gearData, rating, quantity);
         return;
       }
 
       // Check if karma conversion could help
-      const conversionInfo = karmaConversionPrompt.checkPurchase(cost);
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
       if (conversionInfo?.canConvert) {
         const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
         const effectiveRating = rating || 1;
-        const itemName = hasRatingFlag
-          ? `${gearData.name} (Rating ${effectiveRating})`
-          : gearData.name;
-        karmaConversionPrompt.promptConversion(itemName, cost, () => {
-          actuallyAddGear(gearData, rating);
+        let itemName = gearData.name;
+        if (hasRatingFlag) {
+          itemName = `${gearData.name} (Rating ${effectiveRating})`;
+        }
+        if (gearData.stackable && effectiveQuantity > 1) {
+          const packSize = gearData.quantity ?? 1;
+          itemName = `${itemName} (${effectiveQuantity * packSize} units)`;
+        }
+        karmaConversionPrompt.promptConversion(itemName, totalCost, () => {
+          actuallyAddGear(gearData, rating, quantity);
         });
         return;
       }

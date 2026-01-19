@@ -12,7 +12,7 @@ import { useState, useMemo } from "react";
 import type { ArmorData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
-import { Search, Shield, AlertTriangle, X } from "lucide-react";
+import { Search, Shield, AlertTriangle, X, Plus, Shirt } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -52,10 +52,13 @@ function getAvailabilityDisplay(availability: number, legality?: ItemLegality): 
 }
 
 /**
- * Categorize armor based on name and properties
+ * Categorize armor based on subcategory field or name heuristics
  */
 function categorizeArmor(armor: ArmorData): ArmorCategory {
   const name = armor.name.toLowerCase();
+
+  // Use explicit subcategory if available
+  if (armor.subcategory === "clothing") return "clothing";
 
   // Shields
   if (name.includes("shield")) return "shields";
@@ -71,7 +74,7 @@ function categorizeArmor(armor: ArmorData): ArmorCategory {
   // Accessories (armorModifier items that aren't shields/helmets)
   if (armor.armorModifier) return "accessories";
 
-  // Clothing (low/zero armor rating or clothing in name)
+  // Clothing fallback (low/zero armor rating or clothing in name)
   if (armor.armorRating <= 2 || name.includes("clothing") || name.includes("clothes")) {
     return "clothing";
   }
@@ -84,12 +87,96 @@ function categorizeArmor(armor: ArmorData): ArmorCategory {
 // TYPES
 // =============================================================================
 
+/** Custom clothing item for free-form naming and pricing */
+export interface CustomClothingItem {
+  name: string;
+  cost: number;
+}
+
 interface ArmorPurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   armorCatalog: ArmorData[];
   remaining: number;
   onPurchase: (armor: ArmorData) => void;
+  onPurchaseCustom?: (item: CustomClothingItem) => void;
+}
+
+// =============================================================================
+// CUSTOM CLOTHING FORM
+// =============================================================================
+
+function CustomClothingForm({
+  remaining,
+  onAdd,
+}: {
+  remaining: number;
+  onAdd: (item: CustomClothingItem) => void;
+}) {
+  const [name, setName] = useState("");
+  const [costInput, setCostInput] = useState("");
+
+  const cost = parseInt(costInput, 10) || 0;
+  const canAfford = cost > 0 && cost <= remaining;
+  const isValid = name.trim().length > 0 && cost > 0;
+
+  const handleSubmit = () => {
+    if (isValid && canAfford) {
+      onAdd({ name: name.trim(), cost });
+      setName("");
+      setCostInput("");
+    }
+  };
+
+  return (
+    <div className="rounded-lg border-2 border-dashed border-amber-300 dark:border-amber-600 bg-amber-50 dark:bg-amber-900/20 p-3 mb-3">
+      <div className="flex items-center gap-2 mb-2">
+        <Shirt className="h-4 w-4 text-amber-600 dark:text-amber-400" />
+        <span className="text-xs font-semibold text-amber-700 dark:text-amber-300 uppercase tracking-wider">
+          Custom Clothing
+        </span>
+      </div>
+      <div className="space-y-2">
+        <input
+          type="text"
+          placeholder="Name (e.g., Black Suit)"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          className="w-full rounded border border-zinc-200 bg-white px-2.5 py-1.5 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+        />
+        <div className="flex gap-2">
+          <div className="relative flex-1">
+            <input
+              type="number"
+              placeholder="Cost"
+              value={costInput}
+              onChange={(e) => setCostInput(e.target.value)}
+              min="1"
+              className="w-full rounded border border-zinc-200 bg-white px-2.5 py-1.5 pr-6 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+            />
+            <span className="absolute right-2 top-1/2 -translate-y-1/2 text-xs text-zinc-400">
+              ¥
+            </span>
+          </div>
+          <button
+            onClick={handleSubmit}
+            disabled={!isValid || !canAfford}
+            className={`flex items-center gap-1 rounded px-3 py-1.5 text-xs font-medium transition-colors ${
+              isValid && canAfford
+                ? "bg-amber-500 text-white hover:bg-amber-600"
+                : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
+            }`}
+          >
+            <Plus className="h-3 w-3" />
+            Add
+          </button>
+        </div>
+        {cost > 0 && !canAfford && (
+          <p className="text-[10px] text-red-500">Cannot afford ({formatCurrency(cost)}¥)</p>
+        )}
+      </div>
+    </div>
+  );
 }
 
 // =============================================================================
@@ -162,10 +249,21 @@ export function ArmorPurchaseModal({
   armorCatalog,
   remaining,
   onPurchase,
+  onPurchaseCustom,
 }: ArmorPurchaseModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<ArmorCategory>("all");
   const [selectedArmor, setSelectedArmor] = useState<ArmorData | null>(null);
+
+  // Show custom clothing form when in clothing category
+  const showCustomClothingForm = selectedCategory === "clothing" && onPurchaseCustom;
+
+  // Handle custom clothing purchase
+  const handleCustomClothingAdd = (item: CustomClothingItem) => {
+    if (onPurchaseCustom) {
+      onPurchaseCustom(item);
+    }
+  };
 
   // Filter armor by category and search
   const filteredArmor = useMemo(() => {
@@ -282,6 +380,11 @@ export function ArmorPurchaseModal({
           <div className="flex-1 flex overflow-hidden">
             {/* Left: Armor List */}
             <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
+              {/* Custom Clothing Form */}
+              {showCustomClothingForm && (
+                <CustomClothingForm remaining={remaining} onAdd={handleCustomClothingAdd} />
+              )}
+
               <div className="space-y-2">
                 {filteredArmor.length === 0 ? (
                   <p className="text-sm text-zinc-500 text-center py-8">No armor found</p>

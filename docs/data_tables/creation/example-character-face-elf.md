@@ -156,7 +156,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 | Item                     | Notes                   |
 | ------------------------ | ----------------------- | ------------------------------------------------------------------------------------- |
 | Electrochromatic T-shirt | Color-changing clothing | \* How to support this one?                                                           |
-| Stealth Tags             | 20                      | \* not in the gear selection                                                          |
+| Stealth Tags             | 20                      |                                                                                       |
 | Suit                     | Worth 1,000¥            | \* Need to allow for free form naming of clothing and pricing (i.e. Black Suit $2000) |
 | Shopsoft (Clothing)      | Fashion knowledge       | \* Not in the gear selection                                                          |
 

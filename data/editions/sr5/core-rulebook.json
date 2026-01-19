@@ -8356,24 +8356,29 @@
             "id": "synth-leather",
             "name": "(Synth)Leather",
             "category": "armor",
+            "subcategory": "clothing",
             "armorRating": 4,
             "capacity": 4,
             "cost": 200,
-            "availability": 0
+            "availability": 0,
+            "description": "Synthleather jacket or duster. Never goes out of style and offers a modicum of protection."
           },
           {
             "id": "actioneer-business-clothes",
             "name": "Actioneer Business Clothes",
             "category": "armor",
+            "subcategory": "clothing",
             "armorRating": 8,
             "capacity": 8,
             "cost": 1500,
-            "availability": 8
+            "availability": 8,
+            "description": "High-end business attire with integrated armor weave for the corporate shadowrunner."
           },
           {
             "id": "armor-clothing",
             "name": "Armor Clothing",
             "category": "armor",
+            "subcategory": "clothing",
             "armorRating": 6,
             "capacity": 6,
             "cost": 450,
@@ -8428,30 +8433,12 @@
             "id": "clothing",
             "name": "Clothing",
             "category": "armor",
+            "subcategory": "clothing",
             "armorRating": 0,
             "capacity": 0,
             "cost": 50,
-            "availability": 0
-          },
-          {
-            "id": "electrochromic-modification",
-            "name": "Electrochromic Modification",
-            "category": "armor",
-            "armorRating": 0,
-            "cost": 500,
-            "availability": 2,
-            "parentArmor": "clothing",
-            "description": "Color-changing fabric that can display patterns, images, or blend with surroundings."
-          },
-          {
-            "id": "feedback-clothing",
-            "name": "Feedback Clothing",
-            "category": "armor",
-            "armorRating": 0,
-            "cost": 500,
-            "availability": 8,
-            "parentArmor": "clothing",
-            "description": "Clothing with haptic feedback for simsense and VR experiences."
+            "availability": 0,
+            "description": "Standard clothing. Cost varies from 20¥ for vending machine flats to 100,000¥+ for high fashion. Use custom clothing for specific items."
           },
           {
             "id": "full-body-armor",
@@ -8551,6 +8538,26 @@
           }
         ],
         "armorModifications": [
+          {
+            "id": "electrochromic-modification",
+            "name": "Electrochromic Modification",
+            "category": "armorModification",
+            "clothingOnly": true,
+            "noCapacityCost": true,
+            "cost": 500,
+            "availability": 2,
+            "description": "Color-changing fabric that can display patterns, images, or blend with surroundings. Takes a Simple Action to change settings. Wireless: Changing settings is a Free Action and can display images, text, or video from your commlink."
+          },
+          {
+            "id": "feedback-clothing",
+            "name": "Feedback Clothing",
+            "category": "armorModification",
+            "clothingOnly": true,
+            "noCapacityCost": true,
+            "cost": 500,
+            "availability": 8,
+            "description": "Haptic clothing that provides tactile feedback for augmented reality and simsense experiences."
+          },
           {
             "id": "chemical-protection",
             "name": "Chemical Protection",
@@ -9490,6 +9497,8 @@
             "deviceRating": 1,
             "cost": 1,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "Basic RFID tags, sold per 10.",
             "page": 440,
             "source": "Core"
@@ -9501,6 +9510,8 @@
             "deviceRating": 1,
             "cost": 5,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "Small data storage chips, sold per 10.",
             "page": 440,
             "source": "Core"
@@ -9513,6 +9524,8 @@
             "cost": 5,
             "availability": 3,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "Encrypted security tags, sold per 10.",
             "page": 440,
             "source": "Core"
@@ -9525,6 +9538,8 @@
             "cost": 40,
             "availability": 5,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "RFID tags with built-in sensors, sold per 10.",
             "page": 440,
             "source": "Core"
@@ -9538,6 +9553,8 @@
             "availability": 7,
             "legality": "restricted",
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "Hard to detect RFID tags, sold per 10.",
             "page": 440,
             "source": "Core"
@@ -10531,6 +10548,8 @@
             "category": "industrial-chemicals",
             "cost": 90,
             "availability": 2,
+            "stackable": true,
+            "consumable": true,
             "description": "Spray can with enough solvent to dissolve about a square meter of fast-drying aerosol superglue.",
             "page": 448,
             "source": "Core"
@@ -10541,6 +10560,8 @@
             "category": "industrial-chemicals",
             "cost": 150,
             "availability": 2,
+            "stackable": true,
+            "consumable": true,
             "description": "Fast-drying aerosol superglue for gluing two rigid surfaces together. Holds enough for about a square meter (an exterior door or picture window). Takes 1 Combat Turn to harden. Glue has Body and Strength 5 for forcing (Opposed Body + Strength Test).",
             "page": 448,
             "source": "Core"
@@ -10552,6 +10573,8 @@
             "cost": 500,
             "availability": 16,
             "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
             "description": "Thermite gel incendiary material on a rod with handle and frame used to melt holes in iron, steel, and plasteel. Inflicts Fire Damage DV 30P. Must be set carefully; cannot be used as a weapon unless target is tied up or unconscious.",
             "page": 448,
             "source": "Core",
@@ -10565,6 +10588,8 @@
             "category": "medical",
             "hasRating": true,
             "maxRating": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Combats fatigue and injury effects (Rating 1-6).",
             "legality": "restricted",
             "minRating": 1,
@@ -10601,6 +10626,8 @@
             "category": "medical",
             "hasRating": true,
             "maxRating": 10,
+            "stackable": true,
+            "consumable": true,
             "description": "Sedative patch (Rating 1-10).",
             "legality": "restricted",
             "minRating": 1,
@@ -10653,6 +10680,8 @@
             "category": "medical",
             "hasRating": true,
             "maxRating": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Emergency stabilization patch (Rating 1-6).",
             "minRating": 1,
             "ratings": {
@@ -10688,6 +10717,8 @@
             "category": "medical",
             "hasRating": true,
             "maxRating": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Counteracts toxins (Rating 1-6).",
             "minRating": 1,
             "ratings": {
@@ -10723,6 +10754,8 @@
             "category": "medical",
             "cost": 30,
             "availability": 0,
+            "stackable": true,
+            "consumable": true,
             "description": "Adhesive bandage with antiseptic."
           },
           {
@@ -10731,6 +10764,8 @@
             "category": "medical",
             "hasRating": true,
             "maxRating": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Drug delivery patch (Rating 1-6).",
             "legality": "restricted",
             "minRating": 1,
@@ -10778,6 +10813,8 @@
             "category": "biotech",
             "cost": 10,
             "availability": 3,
+            "stackable": true,
+            "consumable": true,
             "description": "Plastic syringe with metal needle for single use. Can apply injection-vector toxins. Uncooperative victims may need to be immobilized or grappled first.",
             "page": 450,
             "source": "Core"
@@ -10808,6 +10845,8 @@
             "category": "biotech",
             "cost": 100,
             "availability": 0,
+            "stackable": true,
+            "consumable": true,
             "description": "Replacement supplies for medkit after use.",
             "page": 450,
             "source": "Core"
@@ -11027,6 +11066,8 @@
             "subcategory": "ammunition",
             "cost": 120,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "apModifier": -4,
             "availability": 12,
             "legality": "forbidden"
@@ -11037,6 +11078,8 @@
             "category": "ammunition",
             "cost": 120,
             "availability": 12,
+            "stackable": true,
+            "consumable": true,
             "description": "Armor-Piercing Discarding Sabot (-4 AP).",
             "legality": "forbidden"
           },
@@ -11047,6 +11090,8 @@
             "subcategory": "ammunition",
             "cost": 400,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "availability": 12,
             "legality": "forbidden"
           },
@@ -11056,6 +11101,8 @@
             "category": "ammunition",
             "cost": 80,
             "availability": 9,
+            "stackable": true,
+            "consumable": true,
             "description": "Explosive rounds (+1 DV, -1 AP).",
             "legality": "forbidden"
           },
@@ -11066,6 +11113,8 @@
             "subcategory": "ammunition",
             "cost": 80,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "damageModifier": "+1",
             "apModifier": -1,
             "availability": 9,
@@ -11077,6 +11126,8 @@
             "category": "ammunition",
             "cost": 65,
             "availability": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Flechette rounds (+2 DV vs unarmored, +5 AP).",
             "legality": "restricted"
           },
@@ -11087,6 +11138,8 @@
             "subcategory": "ammunition",
             "cost": 65,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "damageModifier": "+2",
             "apModifier": 5,
             "availability": 6,
@@ -11098,6 +11151,8 @@
             "category": "ammunition",
             "cost": 25,
             "availability": 2,
+            "stackable": true,
+            "consumable": true,
             "description": "Non-lethal rounds (Stun damage, +2 AP)."
           },
           {
@@ -11107,6 +11162,8 @@
             "subcategory": "ammunition",
             "cost": 25,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "damageModifier": "+0S",
             "apModifier": 1,
             "availability": 2,
@@ -11119,6 +11176,8 @@
             "subcategory": "ammunition",
             "cost": 70,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "damageModifier": "+1",
             "apModifier": 2,
             "availability": 4,
@@ -11131,6 +11190,8 @@
             "subcategory": "ammunition",
             "cost": 75,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "availability": 4,
             "legality": "restricted"
           },
@@ -11140,6 +11201,8 @@
             "category": "ammunition",
             "cost": 20,
             "availability": 2,
+            "stackable": true,
+            "consumable": true,
             "description": "Standard ammunition.",
             "legality": "restricted"
           },
@@ -11150,6 +11213,8 @@
             "subcategory": "ammunition",
             "cost": 20,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "availability": 2,
             "legality": "restricted"
           },
@@ -11160,6 +11225,8 @@
             "subcategory": "ammunition",
             "cost": 80,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "damageModifier": "-2S (e)",
             "apModifier": -5,
             "availability": 6,
@@ -11171,6 +11238,8 @@
             "category": "ammunition",
             "cost": 80,
             "availability": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Electrical rounds (-5 DV(e), -5 AP).",
             "legality": "restricted"
           },
@@ -11181,6 +11250,8 @@
             "subcategory": "ammunition",
             "cost": 50,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "availability": 3
           },
           {
@@ -11190,6 +11261,8 @@
             "subcategory": "ammunition",
             "cost": 60,
             "quantity": 10,
+            "stackable": true,
+            "consumable": true,
             "availability": 6,
             "legality": "restricted"
           },
@@ -11199,6 +11272,8 @@
             "category": "ammunition",
             "cost": 25,
             "availability": 6,
+            "stackable": true,
+            "consumable": true,
             "description": "Visible tracers for aimed fire.",
             "legality": "restricted"
           }

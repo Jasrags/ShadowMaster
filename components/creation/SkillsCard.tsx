@@ -16,11 +16,27 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { useSkills } from "@/lib/rules";
+import {
+  getGroupRating,
+  isGroupBroken,
+  createBrokenGroup,
+  createRestoredGroup,
+  normalizeGroupValue,
+  canRestoreGroup,
+} from "@/lib/rules/skills/group-utils";
 import type { CreationState } from "@/lib/types";
+import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
-import { SkillModal, SkillGroupModal } from "./skills";
-import { Minus, Plus, Users, BookOpen, X, AlertTriangle, Star } from "lucide-react";
+import {
+  SkillModal,
+  SkillGroupModal,
+  SkillListItem,
+  SkillCustomizeModal,
+  SkillGroupBreakModal,
+  type SkillCustomizeChanges,
+} from "./skills";
+import { Minus, Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -39,6 +55,14 @@ interface SkillsCardProps {
   updateState: (updates: Partial<CreationState>) => void;
 }
 
+/** Unified entry for displaying all skills (individual and from groups) */
+interface SkillListEntry {
+  skillId: string;
+  rating: number;
+  source: { type: "individual" } | { type: "group"; groupId: string; groupName: string };
+  specializations: string[];
+}
+
 // =============================================================================
 // SKILL GROUP CARD COMPONENT
 // =============================================================================
@@ -49,59 +73,100 @@ function SkillGroupCard({
   rating,
   maxRating,
   canIncrease,
+  isBroken,
+  canRestore,
   onRatingChange,
   onRemove,
+  onRestore,
 }: {
   groupName: string;
   skills: { id: string; name: string; linkedAttribute: string }[];
   rating: number;
   maxRating: number;
   canIncrease: boolean;
+  isBroken: boolean;
+  canRestore: boolean;
   onRatingChange: (delta: number) => void;
   onRemove: () => void;
+  onRestore?: () => void;
 }) {
   const isAtMax = rating >= maxRating;
 
   return (
-    <div className="py-1.5">
+    <div className={`py-1.5 ${isBroken ? "opacity-60" : ""}`}>
       {/* Line 1: Group name and controls */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <Users className="h-3.5 w-3.5 text-purple-500" />
-          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{groupName}</span>
+          <Users className={`h-3.5 w-3.5 ${isBroken ? "text-zinc-400" : "text-purple-500"}`} />
+          <span
+            className={`text-sm font-medium ${isBroken ? "text-zinc-500 dark:text-zinc-400" : "text-zinc-900 dark:text-zinc-100"}`}
+          >
+            {groupName}
+          </span>
+          {isBroken && (
+            <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-medium text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+              Broken
+            </span>
+          )}
         </div>
 
         <div className="flex items-center gap-1">
-          {isAtMax && (
+          {/* Show MAX badge only for non-broken groups */}
+          {!isBroken && isAtMax && (
             <span className="rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
               MAX
             </span>
           )}
-          <button
-            onClick={() => onRatingChange(-1)}
-            disabled={rating <= 1}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              rating > 1
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Minus className="h-3 w-3" />
-          </button>
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-900 dark:bg-purple-900/50 dark:text-purple-100">
-            {rating}
-          </div>
-          <button
-            onClick={() => onRatingChange(1)}
-            disabled={!canIncrease || isAtMax}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              canIncrease && !isAtMax
-                ? "bg-purple-500 text-white hover:bg-purple-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Plus className="h-3 w-3" />
-          </button>
+
+          {/* Rating controls - hidden for broken groups */}
+          {!isBroken && (
+            <>
+              <button
+                onClick={() => onRatingChange(-1)}
+                disabled={rating <= 1}
+                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+                  rating > 1
+                    ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Minus className="h-3 w-3" />
+              </button>
+              <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-900 dark:bg-purple-900/50 dark:text-purple-100">
+                {rating}
+              </div>
+              <button
+                onClick={() => onRatingChange(1)}
+                disabled={!canIncrease || isAtMax}
+                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
+                  canIncrease && !isAtMax
+                    ? "bg-purple-500 text-white hover:bg-purple-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                }`}
+              >
+                <Plus className="h-3 w-3" />
+              </button>
+            </>
+          )}
+
+          {/* Show rating badge for broken groups (read-only) */}
+          {isBroken && (
+            <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-200 text-sm font-bold text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+              {rating}
+            </div>
+          )}
+
+          {/* Restore button for broken groups that can be restored */}
+          {isBroken && canRestore && onRestore && (
+            <button
+              onClick={onRestore}
+              className="flex items-center gap-1 rounded bg-emerald-500 px-2 py-1 text-[10px] font-medium text-white transition-colors hover:bg-emerald-600"
+            >
+              <RefreshCw className="h-3 w-3" />
+              Restore
+            </button>
+          )}
+
           {/* Separator */}
           <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
           <button
@@ -114,127 +179,15 @@ function SkillGroupCard({
       </div>
 
       {/* Line 2: Skills in group (always visible) */}
-      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-        {skills.map((skill) => skill.name).join(" • ")}
+      <div
+        className={`ml-5 mt-0.5 text-xs ${isBroken ? "text-zinc-400 dark:text-zinc-500" : "text-zinc-500 dark:text-zinc-400"}`}
+      >
+        {isBroken ? (
+          <span className="italic">Skills managed individually</span>
+        ) : (
+          skills.map((skill) => skill.name).join(" • ")
+        )}
       </div>
-    </div>
-  );
-}
-
-// =============================================================================
-// INDIVIDUAL SKILL CARD COMPONENT
-// =============================================================================
-
-function IndividualSkillCard({
-  skillName,
-  linkedAttribute,
-  groupName,
-  rating,
-  maxRating,
-  specializations,
-  canIncrease,
-  onRatingChange,
-  onRemoveSpecialization,
-  onRemove,
-}: {
-  skillName: string;
-  linkedAttribute: string;
-  groupName?: string;
-  rating: number;
-  maxRating: number;
-  specializations: string[];
-  canIncrease: boolean;
-  onRatingChange: (delta: number) => void;
-  onRemoveSpecialization: (spec: string) => void;
-  onRemove: () => void;
-}) {
-  const isAtMax = rating >= maxRating;
-  const hasSpecs = specializations.length > 0;
-
-  return (
-    <div className="py-1.5">
-      {/* Line 1: Skill name and controls */}
-      <div className="flex items-center justify-between">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <BookOpen className="h-3.5 w-3.5 shrink-0 text-blue-500" />
-          <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {skillName}
-          </span>
-          {hasSpecs && (
-            <span title="Has specializations" className="shrink-0">
-              <Star className="h-3 w-3 text-amber-500" />
-            </span>
-          )}
-        </div>
-
-        {/* Controls - fixed width, never wrap */}
-        <div className="flex shrink-0 items-center gap-1">
-          {isAtMax && (
-            <span className="rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
-              MAX
-            </span>
-          )}
-          <button
-            onClick={() => onRatingChange(-1)}
-            disabled={rating <= 1}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              rating > 1
-                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Minus className="h-3 w-3" />
-          </button>
-          <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-            {rating}
-          </div>
-          <button
-            onClick={() => onRatingChange(1)}
-            disabled={!canIncrease || isAtMax}
-            className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-              canIncrease && !isAtMax
-                ? "bg-blue-500 text-white hover:bg-blue-600"
-                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-            }`}
-          >
-            <Plus className="h-3 w-3" />
-          </button>
-          {/* Separator */}
-          <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
-          <button
-            onClick={onRemove}
-            className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-          >
-            <X className="h-3 w-3" />
-          </button>
-        </div>
-      </div>
-
-      {/* Line 2: Linked attribute and group (always visible) */}
-      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-        {linkedAttribute.toUpperCase().slice(0, 3)}
-        {groupName && ` • ${groupName}`}
-      </div>
-
-      {/* Line 3: Specializations (if any) */}
-      {hasSpecs && (
-        <div className="ml-5 mt-1 flex flex-wrap gap-1">
-          {specializations.map((spec) => (
-            <span
-              key={spec}
-              className="inline-flex items-center gap-0.5 rounded-full bg-amber-100 px-1.5 py-0.5 text-[10px] text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-            >
-              {spec}
-              <button
-                onClick={() => onRemoveSpecialization(spec)}
-                className="rounded-full hover:bg-amber-200 dark:hover:bg-amber-800"
-              >
-                <X className="h-2.5 w-2.5" />
-              </button>
-            </span>
-          ))}
-        </div>
-      )}
     </div>
   );
 }
@@ -248,12 +201,23 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const { getBudget } = useCreationBudgets();
   const skillBudget = getBudget("skill-points");
   const groupBudget = getBudget("skill-group-points");
+  const karmaBudget = getBudget("karma");
 
   const skillPoints = skillBudget?.total || 0;
   const skillGroupPoints = groupBudget?.total || 0;
+  const karmaRemaining = karmaBudget?.remaining || 0;
 
+  // Basic modal states
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
+
+  // Customization flow state
+  const [customizeTarget, setCustomizeTarget] = useState<{
+    skillId: string;
+    groupId: string;
+  } | null>(null);
+  const [pendingChanges, setPendingChanges] = useState<SkillCustomizeChanges | null>(null);
+  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
 
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
@@ -286,9 +250,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     return (state.selections.skills || {}) as Record<string, number>;
   }, [state.selections.skills]);
 
-  // Get current skill group values from state
+  // Get current skill group values from state (supports new { rating, isBroken } format)
   const groups = useMemo(() => {
-    return (state.selections.skillGroups || {}) as Record<string, number>;
+    return (state.selections.skillGroups || {}) as Record<string, SkillGroupValue>;
   }, [state.selections.skillGroups]);
 
   // Get specializations (now supports multiple per skill)
@@ -302,7 +266,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   }, [skills]);
 
   const groupPointsSpent = useMemo(() => {
-    return Object.values(groups).reduce((sum, rating) => sum + rating, 0);
+    return Object.values(groups).reduce<number>((sum, value) => sum + getGroupRating(value), 0);
   }, [groups]);
 
   // Calculate specialization karma cost
@@ -317,10 +281,14 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const isSkillsOverBudget = skillPointsRemaining < 0;
   const isGroupsOverBudget = groupPointsRemaining < 0;
 
-  // Get existing skill IDs (skills that are in selected groups)
+  // Get existing skill IDs (skills that are in selected NON-BROKEN groups)
+  // Broken groups have their skills managed individually, so they don't block adding
   const skillsInGroups = useMemo(() => {
     const skillIds: string[] = [];
-    Object.keys(groups).forEach((groupId) => {
+    Object.entries(groups).forEach(([groupId, value]) => {
+      // Skip broken groups - their skills are now individual
+      if (isGroupBroken(value)) return;
+
       const group = skillGroups.find((g) => g.id === groupId);
       if (group) {
         skillIds.push(...group.skills);
@@ -328,6 +296,52 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     });
     return skillIds;
   }, [groups, skillGroups]);
+
+  // Merged and sorted list of all skills (individual + from non-broken groups)
+  const allSkillsSorted = useMemo((): SkillListEntry[] => {
+    const entries: SkillListEntry[] = [];
+
+    // Add individual skills
+    Object.entries(skills).forEach(([skillId, rating]) => {
+      entries.push({
+        skillId,
+        rating,
+        source: { type: "individual" },
+        specializations: specializations[skillId] || [],
+      });
+    });
+
+    // Add skills from non-broken groups only
+    // (broken group skills are already in individual skills)
+    Object.entries(groups).forEach(([groupId, groupValue]) => {
+      // Skip broken groups - their skills are now individual
+      if (isGroupBroken(groupValue)) return;
+
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      if (groupData) {
+        const rating = getGroupRating(groupValue);
+        groupData.skills.forEach((skillId) => {
+          entries.push({
+            skillId,
+            rating,
+            source: { type: "group", groupId, groupName: groupData.name },
+            specializations: [], // Group skills don't have specializations (yet)
+          });
+        });
+      }
+    });
+
+    // Sort alphabetically by skill name
+    entries.sort((a, b) => {
+      const skillA = activeSkills.find((s) => s.id === a.skillId);
+      const skillB = activeSkills.find((s) => s.id === b.skillId);
+      const nameA = skillA?.name || "";
+      const nameB = skillB?.name || "";
+      return nameA.localeCompare(nameB);
+    });
+
+    return entries;
+  }, [skills, groups, specializations, skillGroups, activeSkills]);
 
   // Handle adding a skill from modal
   const handleAddSkill = useCallback(
@@ -402,12 +416,20 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   // Handle skill group rating change
   const handleGroupRatingChange = useCallback(
     (groupId: string, delta: number) => {
-      const currentRating = groups[groupId] || 0;
+      const groupValue = groups[groupId];
+      if (!groupValue) return;
+
+      const currentRating = getGroupRating(groupValue);
       const newRating = currentRating + delta;
 
       if (newRating < 1 || newRating > MAX_GROUP_RATING) return;
 
-      const newGroups = { ...groups, [groupId]: newRating };
+      // Preserve the isBroken state if it exists
+      const isBroken = isGroupBroken(groupValue);
+      const newGroups = {
+        ...groups,
+        [groupId]: isBroken ? { rating: newRating, isBroken: true } : newRating,
+      };
       updateState({
         selections: {
           ...state.selections,
@@ -477,6 +499,157 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [specializations, state.selections, updateState]
   );
 
+  // =============================================================================
+  // SKILL GROUP BREAKING HANDLERS
+  // =============================================================================
+
+  // Open customization modal for a group skill
+  const handleOpenCustomize = useCallback((skillId: string, groupId: string) => {
+    setCustomizeTarget({ skillId, groupId });
+  }, []);
+
+  // Close customization modal
+  const handleCloseCustomize = useCallback(() => {
+    setCustomizeTarget(null);
+    setPendingChanges(null);
+  }, []);
+
+  // User applied changes in customize modal - show break confirmation
+  const handleCustomizeApply = useCallback((changes: SkillCustomizeChanges) => {
+    setPendingChanges(changes);
+    setIsBreakModalOpen(true);
+  }, []);
+
+  // User confirmed breaking the group - execute the break
+  const handleConfirmBreak = useCallback(() => {
+    if (!customizeTarget || !pendingChanges) return;
+
+    const { skillId, groupId } = customizeTarget;
+    const groupData = skillGroups.find((g) => g.id === groupId);
+    if (!groupData) return;
+
+    const currentGroupValue = groups[groupId];
+    const groupRating = getGroupRating(currentGroupValue);
+
+    // 1. Mark group as broken (keep it, don't delete - for budget tracking)
+    const newGroups = {
+      ...groups,
+      [groupId]: createBrokenGroup(currentGroupValue),
+    };
+
+    // 2. Add all member skills as individual skills at group rating
+    const newSkills = { ...skills };
+    groupData.skills.forEach((memberSkillId) => {
+      newSkills[memberSkillId] = groupRating;
+    });
+
+    // 3. Apply the triggering change (raised rating)
+    if (pendingChanges.newRating) {
+      newSkills[skillId] = pendingChanges.newRating;
+    }
+
+    // 4. Add specializations if any
+    const newSpecs = { ...specializations };
+    if (pendingChanges.specializations && pendingChanges.specializations.length > 0) {
+      newSpecs[skillId] = [...(newSpecs[skillId] || []), ...pendingChanges.specializations];
+    }
+
+    // 5. Track karma spent
+    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+      skillRaises: Record<string, number>;
+      specializations: number;
+    }) || { skillRaises: {}, specializations: 0 };
+
+    const newKarmaSpent = {
+      skillRaises: { ...currentKarmaSpent.skillRaises },
+      specializations: currentKarmaSpent.specializations,
+    };
+
+    // Calculate karma for skill raise
+    if (pendingChanges.newRating && pendingChanges.newRating > groupRating) {
+      // Karma cost for the raise portion only
+      let raiseCost = 0;
+      for (let r = groupRating + 1; r <= pendingChanges.newRating; r++) {
+        raiseCost += r * 2;
+      }
+      newKarmaSpent.skillRaises[skillId] = (newKarmaSpent.skillRaises[skillId] || 0) + raiseCost;
+    }
+
+    // Karma for specializations
+    if (pendingChanges.specializations) {
+      newKarmaSpent.specializations += pendingChanges.specializations.length * 7;
+    }
+
+    updateState({
+      selections: {
+        ...state.selections,
+        skillGroups: newGroups,
+        skills: newSkills,
+        skillSpecializations: newSpecs,
+        skillKarmaSpent: newKarmaSpent,
+      },
+    });
+
+    // Close modals
+    setIsBreakModalOpen(false);
+    setCustomizeTarget(null);
+    setPendingChanges(null);
+  }, [
+    customizeTarget,
+    pendingChanges,
+    groups,
+    skills,
+    specializations,
+    skillGroups,
+    state.selections,
+    updateState,
+  ]);
+
+  // Cancel break confirmation
+  const handleCancelBreak = useCallback(() => {
+    setIsBreakModalOpen(false);
+    // Keep customize modal open so user can adjust
+  }, []);
+
+  // Restore a broken group when all member skills have equal ratings
+  const handleRestoreGroup = useCallback(
+    (groupId: string) => {
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      if (!groupData) return;
+
+      // Verify restoration is still valid
+      const { canRestore, commonRating } = canRestoreGroup(groupData.skills, skills);
+      if (!canRestore || commonRating === undefined) return;
+
+      // Remove member skills from individual skills
+      const newSkills = { ...skills };
+      const newSpecs = { ...specializations };
+      groupData.skills.forEach((skillId) => {
+        delete newSkills[skillId];
+        // Note: Per SR5 rules discussion, specializations prevent group restoration
+        // However, we allow it here and just remove the specs
+        // This could be made stricter if needed
+        delete newSpecs[skillId];
+      });
+
+      // Restore the group with the common rating
+      const newGroups = {
+        ...groups,
+        [groupId]: createRestoredGroup(commonRating),
+      };
+
+      updateState({
+        selections: {
+          ...state.selections,
+          skillGroups: newGroups,
+          skills: newSkills,
+          skillSpecializations: newSpecs,
+        },
+      });
+    },
+    [groups, skills, specializations, skillGroups, state.selections, updateState]
+  );
+
   // Get skill data by ID
   const getSkillData = useCallback(
     (skillId: string) => {
@@ -511,8 +684,10 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
     if (!incompetentGroupId) return conflicts;
 
-    // Check if the incompetent group is selected as a skill group
-    if (groups[incompetentGroupId]) {
+    // Check if the incompetent group is selected as a skill group (and not broken)
+    // Broken groups have their skills managed individually, so we only flag the skills
+    const incompetentGroupValue = groups[incompetentGroupId];
+    if (incompetentGroupValue && !isGroupBroken(incompetentGroupValue)) {
       conflicts.groupId = incompetentGroupId;
     }
 
@@ -528,6 +703,39 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
   const hasIncompetentConflicts =
     incompetentConflicts.skillIds.length > 0 || incompetentConflicts.groupId !== null;
+
+  // Detect broken groups that can be restored
+  // A group can be restored when all member skills exist with equal ratings
+  const restorableGroups = useMemo(() => {
+    const restorable: Array<{
+      groupId: string;
+      groupName: string;
+      currentRating: number;
+    }> = [];
+
+    Object.entries(groups).forEach(([groupId, value]) => {
+      const normalized = normalizeGroupValue(value);
+      if (!normalized.isBroken) return;
+
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      if (!groupData) return;
+
+      // Use canRestoreGroup helper to check if restoration is possible
+      const { canRestore, commonRating } = canRestoreGroup(groupData.skills, skills);
+
+      if (canRestore && commonRating !== undefined) {
+        restorable.push({
+          groupId,
+          groupName: groupData.name,
+          currentRating: commonRating,
+        });
+      }
+    });
+
+    return restorable;
+  }, [groups, skills, skillGroups]);
+
+  const hasRestorableGroups = restorableGroups.length > 0;
 
   // Get validation status
   const validationStatus = useMemo(() => {
@@ -577,7 +785,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
   }
 
-  const hasSelectedSkills = Object.keys(skills).length > 0;
   const hasSelectedGroups = Object.keys(groups).length > 0;
 
   return (
@@ -636,6 +843,35 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             </div>
           )}
 
+          {/* Restoration notification for broken groups */}
+          {hasRestorableGroups && (
+            <div className="space-y-2">
+              {restorableGroups.map((group) => (
+                <div
+                  key={group.groupId}
+                  className="rounded-lg border border-emerald-200 bg-emerald-50 p-3 dark:border-emerald-800 dark:bg-emerald-900/20"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div className="flex items-start gap-2">
+                      <RefreshCw className="mt-0.5 h-4 w-4 flex-shrink-0 text-emerald-600 dark:text-emerald-400" />
+                      <div className="text-sm text-emerald-700 dark:text-emerald-300">
+                        <strong>{group.groupName}</strong> can be restored! All skills are at rating{" "}
+                        <strong>{group.currentRating}</strong>.
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleRestoreGroup(group.groupId)}
+                      className="flex items-center gap-1 rounded-lg bg-emerald-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-emerald-600"
+                    >
+                      <RefreshCw className="h-3.5 w-3.5" />
+                      Restore
+                    </button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
           {/* Specialization karma cost */}
           {totalSpecializations > 0 && (
             <div className="rounded-lg bg-amber-50 p-2 text-xs text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
@@ -662,10 +898,12 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               </div>
               {hasSelectedGroups ? (
                 <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
-                  {Object.entries(groups).map(([groupId, rating]) => {
+                  {Object.entries(groups).map(([groupId, groupValue]) => {
                     const groupData = getGroupData(groupId);
                     if (!groupData) return null;
 
+                    const broken = isGroupBroken(groupValue);
+                    const rating = getGroupRating(groupValue);
                     const skillsInGroup = groupData.skills
                       .map((skillId) => getSkillData(skillId))
                       .filter(Boolean) as {
@@ -673,6 +911,10 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       name: string;
                       linkedAttribute: string;
                     }[];
+
+                    // Check if this broken group can be restored
+                    const canRestore =
+                      broken && restorableGroups.some((g) => g.groupId === groupId);
 
                     return (
                       <SkillGroupCard
@@ -682,8 +924,11 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                         rating={rating}
                         maxRating={MAX_GROUP_RATING}
                         canIncrease={groupPointsRemaining > 0}
+                        isBroken={broken}
+                        canRestore={canRestore}
                         onRatingChange={(delta) => handleGroupRatingChange(groupId, delta)}
                         onRemove={() => handleRemoveGroup(groupId)}
+                        onRestore={canRestore ? () => handleRestoreGroup(groupId) : undefined}
                       />
                     );
                   })}
@@ -696,11 +941,11 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             </div>
           )}
 
-          {/* Individual Skills Section */}
+          {/* Skills Section (Individual + Group Skills) */}
           <div>
             <div className="mb-1 flex items-center justify-between">
               <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Individual Skills
+                Skills
               </h4>
               <button
                 onClick={() => setIsSkillModalOpen(true)}
@@ -710,48 +955,71 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 Skill
               </button>
             </div>
-            {hasSelectedSkills ? (
+            {allSkillsSorted.length > 0 ? (
               <div className="max-h-80 divide-y divide-zinc-100 overflow-y-auto rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
-                {Object.entries(skills).map(([skillId, rating]) => {
-                  const skillData = getSkillData(skillId);
+                {allSkillsSorted.map((entry) => {
+                  const skillData = getSkillData(entry.skillId);
                   if (!skillData) return null;
 
-                  const skillSpecs = specializations[skillId] || [];
-                  const groupName = getSkillGroupName(skillId);
+                  const isGroupSkill = entry.source.type === "group";
 
                   return (
-                    <IndividualSkillCard
-                      key={skillId}
+                    <SkillListItem
+                      key={entry.skillId}
                       skillName={skillData.name}
                       linkedAttribute={skillData.linkedAttribute}
-                      groupName={groupName}
-                      rating={rating}
+                      rating={entry.rating}
                       maxRating={MAX_SKILL_RATING}
-                      specializations={skillSpecs}
-                      canIncrease={skillPointsRemaining > 0}
-                      onRatingChange={(delta) => handleSkillRatingChange(skillId, delta)}
-                      onRemoveSpecialization={(spec) => handleRemoveSpecialization(skillId, spec)}
-                      onRemove={() => handleRemoveSkill(skillId)}
+                      specializations={entry.specializations}
+                      isGroupSkill={isGroupSkill}
+                      groupName={entry.source.type === "group" ? entry.source.groupName : undefined}
+                      canIncrease={!isGroupSkill && skillPointsRemaining > 0}
+                      onRatingChange={
+                        isGroupSkill
+                          ? undefined
+                          : (delta) => handleSkillRatingChange(entry.skillId, delta)
+                      }
+                      onRemove={isGroupSkill ? undefined : () => handleRemoveSkill(entry.skillId)}
+                      onRemoveSpecialization={(spec) =>
+                        handleRemoveSpecialization(entry.skillId, spec)
+                      }
+                      // Customization props for group skills
+                      onCustomize={
+                        isGroupSkill && entry.source.type === "group"
+                          ? () => {
+                              const source = entry.source as {
+                                type: "group";
+                                groupId: string;
+                                groupName: string;
+                              };
+                              handleOpenCustomize(entry.skillId, source.groupId);
+                            }
+                          : undefined
+                      }
+                      canCustomize={isGroupSkill && karmaRemaining > 0}
                     />
                   );
                 })}
               </div>
             ) : (
               <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                  No individual skills added
-                </p>
+                <p className="text-xs text-zinc-400 dark:text-zinc-500">No skills added</p>
               </div>
             )}
           </div>
 
           {/* Summary */}
-          {(hasSelectedSkills || hasSelectedGroups) && (
+          {allSkillsSorted.length > 0 && (
             <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
               <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {Object.keys(groups).length} group
-                {Object.keys(groups).length !== 1 ? "s" : ""}, {Object.keys(skills).length} skill
-                {Object.keys(skills).length !== 1 ? "s" : ""}
+                {allSkillsSorted.length} skill{allSkillsSorted.length !== 1 ? "s" : ""}
+                {hasSelectedGroups && (
+                  <span className="text-purple-500 dark:text-purple-400">
+                    {" "}
+                    ({Object.keys(groups).length} from group
+                    {Object.keys(groups).length !== 1 ? "s" : ""})
+                  </span>
+                )}
                 {totalSpecializations > 0 && (
                   <span className="text-amber-600 dark:text-amber-400">
                     , {totalSpecializations} spec{totalSpecializations !== 1 ? "s" : ""}
@@ -759,7 +1027,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 )}
               </span>
               <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {skillPointsSpent} skill{skillGroupPoints > 0 && <> / {groupPointsSpent} group</>}
+                {skillPointsSpent} skill pts
+                {skillGroupPoints > 0 && <> / {groupPointsSpent} group pts</>}
               </span>
             </div>
           )}
@@ -791,6 +1060,69 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         remainingGroupPoints={groupPointsRemaining}
         incompetentGroupId={incompetentGroupId}
       />
+
+      {/* Skill Customization Modal (for group skills) */}
+      {customizeTarget &&
+        (() => {
+          const skillData = getSkillData(customizeTarget.skillId);
+          const groupData = getGroupData(customizeTarget.groupId);
+          const groupValue = groups[customizeTarget.groupId];
+
+          if (!skillData || !groupData || !groupValue) return null;
+
+          const groupRating = getGroupRating(groupValue);
+
+          return (
+            <SkillCustomizeModal
+              isOpen={true}
+              onClose={handleCloseCustomize}
+              onApply={handleCustomizeApply}
+              skillId={customizeTarget.skillId}
+              skillName={skillData.name}
+              currentRating={groupRating}
+              maxRating={MAX_SKILL_RATING}
+              suggestedSpecializations={skillData.suggestedSpecializations || []}
+              availableKarma={karmaRemaining}
+              groupId={customizeTarget.groupId}
+              groupName={groupData.name}
+            />
+          );
+        })()}
+
+      {/* Break Confirmation Modal */}
+      {customizeTarget &&
+        pendingChanges &&
+        (() => {
+          const skillData = getSkillData(customizeTarget.skillId);
+          const groupData = getGroupData(customizeTarget.groupId);
+          const groupValue = groups[customizeTarget.groupId];
+
+          if (!skillData || !groupData || !groupValue) return null;
+
+          const groupRating = getGroupRating(groupValue);
+          const memberSkills = groupData.skills
+            .map((id) => {
+              const data = getSkillData(id);
+              return data ? { id, name: data.name } : null;
+            })
+            .filter(Boolean) as Array<{ id: string; name: string }>;
+
+          return (
+            <SkillGroupBreakModal
+              isOpen={isBreakModalOpen}
+              onClose={handleCancelBreak}
+              onConfirm={handleConfirmBreak}
+              skillName={skillData.name}
+              skillId={customizeTarget.skillId}
+              groupName={groupData.name}
+              groupId={customizeTarget.groupId}
+              currentRating={groupRating}
+              memberSkills={memberSkills}
+              changes={pendingChanges}
+              availableKarma={karmaRemaining}
+            />
+          );
+        })()}
     </>
   );
 }

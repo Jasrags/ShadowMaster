@@ -197,14 +197,24 @@ export function ArmorModificationModal({
   const remainingCapacity = totalCapacity - usedCapacity;
   const capacityPercentage = totalCapacity > 0 ? (usedCapacity / totalCapacity) * 100 : 0;
 
+  // Check if armor is clothing
+  const isClothing = armor.subcategory === "clothing";
+
   // Filter mods by search and check if they fit
+  // Also filter out clothing-only mods for non-clothing armor
   const modsWithFitInfo = useMemo(() => {
-    return allMods.map((mod) => {
-      const capacityCost = getModCapacityCost(mod, 1);
-      const canFit = capacityCost <= remainingCapacity || !!mod.noCapacityCost;
-      return { mod, capacityCost, canFit };
-    });
-  }, [allMods, remainingCapacity]);
+    return allMods
+      .filter((mod) => {
+        // Clothing-only mods can only be applied to clothing
+        if (mod.clothingOnly && !isClothing) return false;
+        return true;
+      })
+      .map((mod) => {
+        const capacityCost = getModCapacityCost(mod, 1);
+        const canFit = capacityCost <= remainingCapacity || !!mod.noCapacityCost;
+        return { mod, capacityCost, canFit };
+      });
+  }, [allMods, remainingCapacity, isClothing]);
 
   // Filter by search
   const filteredMods = useMemo(() => {

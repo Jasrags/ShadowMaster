@@ -709,6 +709,8 @@ export interface GearItem {
   id?: ID;
   name: string;
   category: string;
+  /** Subcategory for more specific classification (e.g., "clothing" for armor) */
+  subcategory?: string;
   quantity: number;
   /** Total cost including mods */
   cost: number;
@@ -884,6 +886,11 @@ export interface ArmorItem extends GearItem {
   modifications?: InstalledArmorMod[];
   /** Legality status: "restricted" (R) or "forbidden" (F) */
   legality?: ItemLegality;
+  /**
+   * True if this is a custom item with free-form name and pricing.
+   * Custom items have no catalog reference and no armor protection (clothing only).
+   */
+  isCustom?: boolean;
 
   // -------------------------------------------------------------------------
   // Inventory State (ADR-010)

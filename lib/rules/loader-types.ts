@@ -302,6 +302,26 @@ export interface GearItemData {
   description?: string;
   capacity?: number;
 
+  /**
+   * Whether multiple of this item can be purchased as a stack.
+   * Stackable items allow quantity selection during purchase.
+   * Examples: ammunition, RFID tags, patches, syringes
+   */
+  stackable?: boolean;
+
+  /**
+   * Whether this item is consumed on use (single-use).
+   * Consumable items are tracked for remaining uses during gameplay.
+   * Examples: patches, ammunition, chemicals, syringes
+   */
+  consumable?: boolean;
+
+  /**
+   * Number of units included per purchase (e.g., "sold per 10").
+   * When present, cost and availability apply to this quantity.
+   */
+  quantity?: number;
+
   // -------------------------------------------------------------------------
   // UNIFIED RATINGS TABLE (Preferred Approach)
   // -------------------------------------------------------------------------
@@ -401,6 +421,15 @@ export interface CyberdeckData extends GearItemData {
 }
 
 /**
+ * Sensor catalog data structure (nested by type)
+ */
+export interface SensorsCatalogData {
+  housings: GearItemData[];
+  functions: GearItemData[];
+  maxRatingByHousing: Record<string, number>;
+}
+
+/**
  * Gear catalog data structure
  */
 export interface GearCatalogData {
@@ -416,11 +445,20 @@ export interface GearCatalogData {
     grenades: WeaponData[];
   };
   armor: ArmorData[];
+  armorModifications: GearItemData[];
   commlinks: CommlinkData[];
   cyberdecks: CyberdeckData[];
   electronics: GearItemData[];
+  accessories: GearItemData[];
+  rfidTags: GearItemData[];
+  visionEnhancements: GearItemData[];
+  audioEnhancements: GearItemData[];
   tools: GearItemData[];
+  sensors: SensorsCatalogData;
+  securityDevices: GearItemData[];
+  restraints: GearItemData[];
   survival: GearItemData[];
+  industrialChemicals: GearItemData[];
   medical: GearItemData[];
   security: GearItemData[];
   miscellaneous: GearItemData[];
@@ -1268,6 +1306,11 @@ export interface ArmorModificationCatalogItemData {
   page?: number;
   /** Source book */
   source?: string;
+  /**
+   * If true, this modification can only be applied to clothing items
+   * (items with subcategory: "clothing")
+   */
+  clothingOnly?: boolean;
 }
 
 /**

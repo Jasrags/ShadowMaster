@@ -337,6 +337,149 @@ function CompactRatedCatalogRow({
 }
 
 // =============================================================================
+// COMPACT STACKABLE CATALOG ROW (inline quantity picker for stackable items)
+// =============================================================================
+
+function CompactStackableCatalogRow({
+  item,
+  remaining,
+  onAdd,
+}: {
+  item: GearItemData;
+  remaining: number;
+  onAdd: (quantity: number) => void;
+}) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [selectedQuantity, setSelectedQuantity] = useState(1);
+
+  // Calculate total cost based on quantity
+  const unitCost = item.cost;
+  const totalCost = unitCost * selectedQuantity;
+  const canAfford = totalCost <= remaining && item.availability <= MAX_AVAILABILITY;
+
+  // Units per purchase (e.g., "sold per 10")
+  const unitsPerPurchase = item.quantity || 1;
+
+  return (
+    <div>
+      {/* Compact Header Row */}
+      <div className="flex items-center gap-2 py-1.5">
+        {/* Expand/Collapse */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+        >
+          {isExpanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />}
+        </button>
+
+        {/* Name */}
+        <span
+          className="flex-1 truncate text-sm text-zinc-900 dark:text-zinc-100"
+          title={item.name}
+        >
+          {item.name}
+        </span>
+
+        {/* Stackable badge */}
+        <span className="shrink-0 flex items-center gap-0.5 rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+          ×{unitsPerPurchase}
+        </span>
+
+        {/* Category */}
+        <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500 w-20 truncate text-right">
+          {item.category}
+        </span>
+
+        {/* Cost per unit */}
+        <span className="shrink-0 text-xs text-zinc-400 dark:text-zinc-500 w-16 text-right">
+          ¥{formatCurrency(unitCost)}/ea
+        </span>
+
+        {/* Quick add button */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="shrink-0 rounded p-1 text-blue-600 hover:bg-blue-100 hover:text-blue-700 dark:text-blue-400 dark:hover:bg-blue-900/30"
+          title="Select quantity"
+        >
+          <Plus className="h-4 w-4" />
+        </button>
+      </div>
+
+      {/* Expanded Quantity Picker */}
+      {isExpanded && (
+        <div className="ml-6 mb-2 flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+          {/* Quantity selector */}
+          <div className="flex items-center gap-1.5">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">Qty:</span>
+            <button
+              onClick={() => setSelectedQuantity(Math.max(1, selectedQuantity - 1))}
+              disabled={selectedQuantity <= 1}
+              aria-label={`Decrease ${item.name} quantity`}
+              className={`flex h-5 w-5 items-center justify-center rounded transition-colors ${
+                selectedQuantity > 1
+                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <Minus className="h-3 w-3" aria-hidden="true" />
+            </button>
+            <div className="flex h-5 w-8 items-center justify-center rounded bg-white text-xs font-bold text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+              {selectedQuantity}
+            </div>
+            <button
+              onClick={() => setSelectedQuantity(selectedQuantity + 1)}
+              disabled={unitCost * (selectedQuantity + 1) > remaining}
+              aria-label={`Increase ${item.name} quantity`}
+              className={`flex h-5 w-5 items-center justify-center rounded transition-colors ${
+                unitCost * (selectedQuantity + 1) <= remaining
+                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+              }`}
+            >
+              <Plus className="h-3 w-3" aria-hidden="true" />
+            </button>
+          </div>
+
+          {/* Units info */}
+          {unitsPerPurchase > 1 && (
+            <span className="text-xs text-zinc-400 dark:text-zinc-500">
+              ({selectedQuantity * unitsPerPurchase} units)
+            </span>
+          )}
+
+          {/* Total cost */}
+          <span className="text-xs text-zinc-500 dark:text-zinc-400">
+            Total:{" "}
+            <span className="font-medium text-zinc-700 dark:text-zinc-300">
+              ¥{formatCurrency(totalCost)}
+            </span>
+          </span>
+
+          {/* Add button */}
+          <button
+            onClick={() => {
+              onAdd(selectedQuantity);
+              setIsExpanded(false);
+              setSelectedQuantity(1);
+            }}
+            disabled={!canAfford}
+            aria-label={`Add ${item.name} to cart`}
+            className={`ml-auto flex items-center gap-1 rounded px-2 py-1 text-xs font-medium transition-colors ${
+              canAfford
+                ? "bg-emerald-500 text-white hover:bg-emerald-600"
+                : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
+            }`}
+          >
+            <Plus className="h-3 w-3" aria-hidden="true" />
+            Add
+          </button>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
 // COMPACT PURCHASED ITEM ROW (with expand/collapse like WeaponRow)
 // =============================================================================
 
@@ -344,17 +487,25 @@ function CompactPurchasedRow({
   name,
   category,
   cost,
+  quantity,
+  unitCost,
+  isStackable,
   details,
   onRemove,
+  onQuantityChange,
 }: {
   name: string;
   category: string;
   cost: number;
+  quantity?: number;
+  unitCost?: number;
+  isStackable?: boolean;
   details?: React.ReactNode;
   onRemove: () => void;
+  onQuantityChange?: (newQuantity: number) => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const hasDetails = !!details;
+  const hasDetails = !!details || (isStackable && quantity && quantity > 1);
 
   return (
     <div>
@@ -376,12 +527,17 @@ function CompactPurchasedRow({
           <div className="w-4 shrink-0" />
         )}
 
-        {/* Name */}
+        {/* Name with quantity badge for stackable items */}
         <span
           className="flex-1 truncate text-sm font-medium text-zinc-900 dark:text-zinc-100"
           title={name}
         >
           {name}
+          {isStackable && quantity && quantity > 1 && (
+            <span className="ml-1.5 inline-flex items-center rounded bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">
+              ×{quantity}
+            </span>
+          )}
         </span>
 
         {/* Category */}
@@ -389,7 +545,7 @@ function CompactPurchasedRow({
           {category}
         </span>
 
-        {/* Cost */}
+        {/* Cost (total for stackable items) */}
         <span className="shrink-0 text-xs font-medium text-zinc-700 dark:text-zinc-300 w-16 text-right">
           ¥{formatCurrency(cost)}
         </span>
@@ -409,7 +565,43 @@ function CompactPurchasedRow({
 
       {/* Expanded Details */}
       {isExpanded && hasDetails && (
-        <div className="ml-6 mb-2 text-xs text-zinc-500 dark:text-zinc-400">{details}</div>
+        <div className="ml-6 mb-2 space-y-2">
+          {/* Quantity adjuster for stackable items */}
+          {isStackable && quantity && unitCost && onQuantityChange && (
+            <div className="flex items-center gap-3 rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
+              <div className="flex items-center gap-1.5">
+                <span className="text-xs text-zinc-500 dark:text-zinc-400">Qty:</span>
+                <button
+                  onClick={() => onQuantityChange(Math.max(1, quantity - 1))}
+                  disabled={quantity <= 1}
+                  aria-label="Decrease quantity"
+                  className={`flex h-5 w-5 items-center justify-center rounded transition-colors ${
+                    quantity > 1
+                      ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                      : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                  }`}
+                >
+                  <Minus className="h-3 w-3" aria-hidden="true" />
+                </button>
+                <div className="flex h-5 w-8 items-center justify-center rounded bg-white text-xs font-bold text-zinc-900 dark:bg-zinc-900 dark:text-zinc-100">
+                  {quantity}
+                </div>
+                <button
+                  onClick={() => onQuantityChange(quantity + 1)}
+                  aria-label="Increase quantity"
+                  className="flex h-5 w-5 items-center justify-center rounded bg-zinc-200 text-zinc-700 transition-colors hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                >
+                  <Plus className="h-3 w-3" aria-hidden="true" />
+                </button>
+              </div>
+              <span className="text-xs text-zinc-400 dark:text-zinc-500">
+                @ ¥{formatCurrency(unitCost)}/ea
+              </span>
+            </div>
+          )}
+          {/* Other details */}
+          {details && <div className="text-xs text-zinc-500 dark:text-zinc-400">{details}</div>}
+        </div>
       )}
     </div>
   );
@@ -441,6 +633,9 @@ export function GearCard({ state, updateState }: GearCardProps) {
       ...gearCatalog.medical,
       ...gearCatalog.security,
       ...gearCatalog.miscellaneous,
+      ...(gearCatalog.rfidTags || []),
+      ...(gearCatalog.industrialChemicals || []),
+      ...(gearCatalog.ammunition || []),
     ];
   }, [gearCatalog]);
 
@@ -620,45 +815,72 @@ export function GearCard({ state, updateState }: GearCardProps) {
     [remaining, selectedArmor, state.selections, updateState]
   );
 
-  // Add gear (with optional rating for rated items)
+  // Add gear (with optional rating for rated items, and quantity for stackable items)
   const addGear = useCallback(
-    (gear: GearItemData, selectedRating?: number) => {
+    (gear: GearItemData, selectedRating?: number, purchaseQuantity?: number) => {
       // Determine if item has rating support
       const isRated = gear.hasRating === true;
+      const isStackable = gear.stackable === true;
       const rating = isRated ? (selectedRating ?? gear.minRating ?? 1) : (gear.rating ?? 1);
+      const quantity = isStackable ? (purchaseQuantity ?? 1) : 1;
 
-      // Calculate cost and availability based on rating
+      // Calculate unit cost and availability based on rating
       // Use unified ratings table if available, otherwise fall back to legacy formula
-      let cost: number;
+      let unitCost: number;
       let availability: number;
 
       if (hasUnifiedRatings(gear)) {
         const values = getRatedItemValuesUnified(gear as RatedItem, rating);
-        cost = values.cost;
+        unitCost = values.cost;
         availability = values.availability;
       } else if (isRated && gear.ratingSpec) {
         // Legacy formula-based calculation
         const baseCost = gear.ratingSpec.costScaling?.baseValue ?? gear.cost;
         const baseAvail = gear.ratingSpec.availabilityScaling?.baseValue ?? gear.availability;
-        cost = baseCost * rating;
+        unitCost = baseCost * rating;
         availability = baseAvail * rating;
       } else {
         // Non-rated item
-        cost = gear.cost;
+        unitCost = gear.cost;
         availability = gear.availability;
       }
 
-      if (cost > remaining) return;
+      const totalCost = unitCost * quantity;
+      if (totalCost > remaining) return;
+
+      // For stackable items, check if we already have this item and merge quantities
+      // Items are matched by catalog ID (gear.id)
+      if (isStackable) {
+        const existingIndex = selectedGear.findIndex((g) => g.metadata?.catalogId === gear.id);
+
+        if (existingIndex !== -1) {
+          // Merge: increase quantity of existing item
+          const existingItem = selectedGear[existingIndex];
+          const updatedGear = [...selectedGear];
+          updatedGear[existingIndex] = {
+            ...existingItem,
+            quantity: existingItem.quantity + quantity,
+          };
+          updateState({
+            selections: {
+              ...state.selections,
+              gear: updatedGear,
+            },
+          });
+          return;
+        }
+      }
 
       const newGear: GearItem = {
         id: `${gear.id}-${Date.now()}`,
         name: isRated ? `${gear.name} (Rating ${rating})` : gear.name,
         category: gear.category,
-        cost,
+        cost: unitCost, // Store unit cost; total is calculated as cost * quantity
         availability,
-        quantity: 1,
+        quantity,
         rating: isRated ? rating : gear.rating,
         modifications: [],
+        metadata: isStackable ? { catalogId: gear.id, stackable: true } : undefined,
       };
 
       updateState({
@@ -733,6 +955,28 @@ export function GearCard({ state, updateState }: GearCardProps) {
         selections: {
           ...state.selections,
           gear: selectedGear.filter((g) => g.id !== id),
+        },
+      });
+    },
+    [selectedGear, state.selections, updateState]
+  );
+
+  // Update quantity for stackable gear items
+  const updateGearQuantity = useCallback(
+    (id: string, newQuantity: number) => {
+      if (newQuantity < 1) return;
+
+      const updatedGear = selectedGear.map((g) => {
+        if (g.id === id) {
+          return { ...g, quantity: newQuantity };
+        }
+        return g;
+      });
+
+      updateState({
+        selections: {
+          ...state.selections,
+          gear: updatedGear,
         },
       });
     },
@@ -1007,22 +1251,33 @@ export function GearCard({ state, updateState }: GearCardProps) {
                     Purchased
                   </div>
                   <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-2 divide-y divide-zinc-100 dark:divide-zinc-800">
-                    {selectedGear.map((g) => (
-                      <CompactPurchasedRow
-                        key={g.id}
-                        name={g.name}
-                        category={g.category}
-                        cost={g.cost}
-                        details={
-                          g.rating ? (
-                            <span>
-                              Rating {g.rating} • Avail {g.availability}
-                            </span>
-                          ) : undefined
-                        }
-                        onRemove={() => g.id && removeGear(g.id)}
-                      />
-                    ))}
+                    {selectedGear.map((g) => {
+                      const isStackable = g.metadata?.stackable === true;
+                      return (
+                        <CompactPurchasedRow
+                          key={g.id}
+                          name={g.name}
+                          category={g.category}
+                          cost={g.cost * g.quantity}
+                          quantity={g.quantity}
+                          unitCost={g.cost}
+                          isStackable={isStackable}
+                          details={
+                            g.rating ? (
+                              <span>
+                                Rating {g.rating} • Avail {g.availability}
+                              </span>
+                            ) : undefined
+                          }
+                          onRemove={() => g.id && removeGear(g.id)}
+                          onQuantityChange={
+                            isStackable && g.id
+                              ? (newQty) => updateGearQuantity(g.id!, newQty)
+                              : undefined
+                          }
+                        />
+                      );
+                    })}
                   </div>
                 </div>
               )}
@@ -1043,6 +1298,18 @@ export function GearCard({ state, updateState }: GearCardProps) {
                           legality={gear.legality}
                           remaining={remaining}
                           onAdd={(rating) => addGear(gear, rating)}
+                        />
+                      );
+                    }
+
+                    // Use stackable row for stackable items
+                    if (gear.stackable === true) {
+                      return (
+                        <CompactStackableCatalogRow
+                          key={gear.id}
+                          item={gear}
+                          remaining={remaining}
+                          onAdd={(quantity) => addGear(gear, undefined, quantity)}
                         />
                       );
                     }

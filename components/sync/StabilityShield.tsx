@@ -334,9 +334,3 @@ export function CompactShield({ status, label, className = "" }: CompactShieldPr
     </span>
   );
 }
-
-// =============================================================================
-// EXPORTS
-// =============================================================================
-
-export default StabilityShield;
