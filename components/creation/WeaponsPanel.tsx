@@ -406,7 +406,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
   // Add weapon (actual implementation - called after affordability check)
   const actuallyAddWeapon = useCallback(
-    (weapon: WeaponData) => {
+    (weapon: WeaponData, quantity: number = 1) => {
       const newWeapon: Weapon = {
         id: `${weapon.id}-${Date.now()}`,
         catalogId: weapon.id,
@@ -421,7 +421,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         accuracy: weapon.accuracy,
         cost: weapon.cost,
         availability: weapon.availability,
-        quantity: 1,
+        quantity,
         modifications: [],
         occupiedMounts: [],
       };
@@ -442,18 +442,21 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
   // Add weapon (with karma conversion prompt if needed)
   const addWeapon = useCallback(
-    (weapon: WeaponData) => {
+    (weapon: WeaponData, quantity: number = 1) => {
+      const totalCost = weapon.cost * quantity;
+
       // Check if already affordable
-      if (weapon.cost <= remaining) {
-        actuallyAddWeapon(weapon);
+      if (totalCost <= remaining) {
+        actuallyAddWeapon(weapon, quantity);
         return;
       }
 
       // Check if karma conversion could help
-      const conversionInfo = karmaConversionPrompt.checkPurchase(weapon.cost);
+      const conversionInfo = karmaConversionPrompt.checkPurchase(totalCost);
       if (conversionInfo?.canConvert) {
-        karmaConversionPrompt.promptConversion(weapon.name, weapon.cost, () => {
-          actuallyAddWeapon(weapon);
+        const itemName = quantity > 1 ? `${weapon.name} (x${quantity})` : weapon.name;
+        karmaConversionPrompt.promptConversion(itemName, totalCost, () => {
+          actuallyAddWeapon(weapon, quantity);
         });
         return;
       }

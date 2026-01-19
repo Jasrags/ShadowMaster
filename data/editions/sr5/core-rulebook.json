@@ -8085,7 +8085,9 @@
               "damage": "(STR+1)P",
               "ap": -1,
               "accuracy": "physical",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "throwing-knife",
@@ -8097,7 +8099,9 @@
               "damage": "(STR+1)P",
               "ap": -1,
               "accuracy": "physical",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             }
           ],
           "bows": [
@@ -8231,7 +8235,9 @@
               "ap": -4,
               "blast": "-4/m",
               "availability": 18,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "flash-bang-grenade",
@@ -8243,7 +8249,9 @@
               "damage": "10S",
               "ap": -4,
               "blast": "10m radius",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "flash-pak",
@@ -8253,7 +8261,9 @@
               "damage": "Special",
               "cost": 125,
               "blast": "Special",
-              "availability": 4
+              "availability": 4,
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "fragmentation-grenade",
@@ -8265,7 +8275,9 @@
               "damage": "18P(f)",
               "ap": 2,
               "blast": "-1/m",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "fragmentation-rocket",
@@ -8277,7 +8289,9 @@
               "ap": 5,
               "blast": "-1/m",
               "availability": 12,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "gas",
@@ -8287,7 +8301,9 @@
               "damage": "as Chemical",
               "cost": 0,
               "blast": "10m Radius",
-              "availability": 2
+              "availability": 2,
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "gas-grenade-cs-tear",
@@ -8299,7 +8315,9 @@
               "damage": "Nausea",
               "ap": 0,
               "blast": "10m radius",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "high-explosive-grenade",
@@ -8311,7 +8329,9 @@
               "damage": "16P",
               "ap": -2,
               "blast": "-2/m",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "high-explosive-rocket",
@@ -8323,7 +8343,9 @@
               "ap": -2,
               "blast": "-2/m",
               "availability": 18,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "smoke-grenade",
@@ -8335,7 +8357,9 @@
               "damage": "-",
               "ap": 0,
               "blast": "10m radius",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             },
             {
               "id": "thermal-smoke-grenade",
@@ -8347,7 +8371,9 @@
               "damage": "-",
               "ap": 0,
               "blast": "10m radius",
-              "legality": "restricted"
+              "legality": "restricted",
+              "stackable": true,
+              "consumable": true
             }
           ]
         },

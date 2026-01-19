@@ -138,11 +138,16 @@ export function WeaponRow({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const conceal = getConcealability(weapon);
-  const hasWireless = true; // Most SR5 weapons are wireless-capable
+  const subcategoryLower = weapon.subcategory?.toLowerCase() || "";
+  const isThrowingOrGrenade =
+    subcategoryLower === "grenades" || subcategoryLower === "throwingweapons";
+  const hasWireless = !isThrowingOrGrenade; // Throwing weapons and grenades don't have wireless
+  const supportsMods = !isThrowingOrGrenade;
+  const supportsAmmo = !isThrowingOrGrenade;
   const modCost = weapon.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
   const ammoCost =
     weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.cost * a.quantity, 0) || 0;
-  const totalCost = weapon.cost + modCost + ammoCost;
+  const totalCost = weapon.cost * weapon.quantity + modCost + ammoCost;
 
   // Counts
   const modCount = weapon.modifications?.length || 0;
@@ -151,8 +156,8 @@ export function WeaponRow({
     weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.quantity * (a.roundsPerBox || 10), 0) ||
     0;
 
-  // Check if expandable
-  const hasExpandableContent = modCount > 0 || ammoCount > 0 || hasWireless;
+  // Check if expandable - all weapons have stats to show
+  const hasExpandableContent = true;
 
   // Legality
   const legality = (weapon as Weapon & { legality?: ItemLegality }).legality;
@@ -179,11 +184,18 @@ export function WeaponRow({
 
         {/* Weapon Name */}
         <span
-          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1"
+          className="font-medium text-sm text-zinc-900 dark:text-zinc-100 truncate flex-1 min-w-0"
           title={weapon.name}
         >
           {weapon.name}
         </span>
+
+        {/* Quantity Badge */}
+        {weapon.quantity > 1 && (
+          <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400 shrink-0">
+            x{weapon.quantity}
+          </span>
+        )}
 
         {/* Wireless indicator */}
         {hasWireless && <Wifi className="h-3.5 w-3.5 shrink-0 text-blue-500" />}
@@ -283,100 +295,104 @@ export function WeaponRow({
           )}
 
           {/* Modifications */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                Mods
-              </span>
-              {onAddMod && (
-                <button
-                  onClick={() => weapon.id && onAddMod(weapon.id)}
-                  className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
-                >
-                  <Plus className="h-3 w-3" />
-                  Add
-                </button>
+          {supportsMods && (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Mods
+                </span>
+                {onAddMod && (
+                  <button
+                    onClick={() => weapon.id && onAddMod(weapon.id)}
+                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {modCount > 0 ? (
+                <div className="space-y-1">
+                  {weapon.modifications?.map((mod, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs">
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        • {mod.name}
+                        {mod.mount && (
+                          <span className="text-zinc-400 dark:text-zinc-500"> ({mod.mount})</span>
+                        )}
+                        {mod.isBuiltIn && (
+                          <span className="text-zinc-400 dark:text-zinc-500 italic"> built-in</span>
+                        )}
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-zinc-400">¥{formatCurrency(mod.cost)}</span>
+                        {!mod.isBuiltIn && onRemoveMod && (
+                          <button
+                            onClick={() => weapon.id && onRemoveMod(weapon.id, idx)}
+                            className="p-0.5 text-zinc-400 hover:text-red-500"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
               )}
             </div>
-            {modCount > 0 ? (
-              <div className="space-y-1">
-                {weapon.modifications?.map((mod, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      • {mod.name}
-                      {mod.mount && (
-                        <span className="text-zinc-400 dark:text-zinc-500"> ({mod.mount})</span>
-                      )}
-                      {mod.isBuiltIn && (
-                        <span className="text-zinc-400 dark:text-zinc-500 italic"> built-in</span>
-                      )}
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <span className="text-zinc-400">¥{formatCurrency(mod.cost)}</span>
-                      {!mod.isBuiltIn && onRemoveMod && (
-                        <button
-                          onClick={() => weapon.id && onRemoveMod(weapon.id, idx)}
-                          className="p-0.5 text-zinc-400 hover:text-red-500"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
-            )}
-          </div>
+          )}
 
           {/* Ammunition */}
-          <div>
-            <div className="flex items-center justify-between mb-1.5">
-              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
-                Ammo
-              </span>
-              {onAddAmmo && (
-                <button
-                  onClick={() => weapon.id && onAddAmmo(weapon.id)}
-                  className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
-                >
-                  <Plus className="h-3 w-3" />
-                  Add
-                </button>
+          {supportsAmmo && (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  Ammo
+                </span>
+                {onAddAmmo && (
+                  <button
+                    onClick={() => weapon.id && onAddAmmo(weapon.id)}
+                    className="flex items-center gap-0.5 text-[10px] text-amber-600 hover:text-amber-700 dark:text-amber-400"
+                  >
+                    <Plus className="h-3 w-3" />
+                    Add
+                  </button>
+                )}
+              </div>
+              {ammoCount > 0 ? (
+                <div className="space-y-1">
+                  {weapon.purchasedAmmunition?.map((ammo, idx) => (
+                    <div key={idx} className="flex items-center justify-between text-xs">
+                      <span className="text-zinc-600 dark:text-zinc-400">
+                        • {ammo.name}
+                        <span className="text-zinc-400 dark:text-zinc-500">
+                          {" "}
+                          ({ammo.quantity * (ammo.roundsPerBox || 10)} rds)
+                        </span>
+                      </span>
+                      <div className="flex items-center gap-1">
+                        <span className="text-zinc-400">
+                          ¥{formatCurrency(ammo.cost * ammo.quantity)}
+                        </span>
+                        {onRemoveAmmo && (
+                          <button
+                            onClick={() => weapon.id && onRemoveAmmo(weapon.id, idx)}
+                            className="p-0.5 text-zinc-400 hover:text-red-500"
+                          >
+                            <X className="h-3 w-3" />
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
               )}
             </div>
-            {ammoCount > 0 ? (
-              <div className="space-y-1">
-                {weapon.purchasedAmmunition?.map((ammo, idx) => (
-                  <div key={idx} className="flex items-center justify-between text-xs">
-                    <span className="text-zinc-600 dark:text-zinc-400">
-                      • {ammo.name}
-                      <span className="text-zinc-400 dark:text-zinc-500">
-                        {" "}
-                        ({ammo.quantity * (ammo.roundsPerBox || 10)} rds)
-                      </span>
-                    </span>
-                    <div className="flex items-center gap-1">
-                      <span className="text-zinc-400">
-                        ¥{formatCurrency(ammo.cost * ammo.quantity)}
-                      </span>
-                      {onRemoveAmmo && (
-                        <button
-                          onClick={() => weapon.id && onRemoveAmmo(weapon.id, idx)}
-                          className="p-0.5 text-zinc-400 hover:text-red-500"
-                        >
-                          <X className="h-3 w-3" />
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-[10px] text-zinc-400 dark:text-zinc-500 italic">None</p>
-            )}
-          </div>
+          )}
         </div>
       )}
     </div>

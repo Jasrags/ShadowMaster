@@ -16,6 +16,7 @@ import { useVirtualizer } from "@tanstack/react-virtual";
 import type { WeaponData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
+import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 import { Search, Wifi, AlertTriangle, X } from "lucide-react";
 
 // =============================================================================
@@ -122,7 +123,7 @@ interface WeaponPurchaseModalProps {
     grenades: WeaponData[];
   };
   remaining: number;
-  onPurchase: (weapon: WeaponData) => void;
+  onPurchase: (weapon: WeaponData, quantity?: number) => void;
   /** Optional initial category from WeaponsPanel (ranged, melee, throwing) */
   initialCategory?: WeaponPanelCategoryKey | null;
 }
@@ -198,6 +199,7 @@ export function WeaponPurchaseModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<WeaponCategory>("all");
   const [selectedWeapon, setSelectedWeapon] = useState<WeaponData | null>(null);
+  const [selectedPacks, setSelectedPacks] = useState(1);
 
   // Set initial category when modal opens with a category specified
   useEffect(() => {
@@ -208,6 +210,16 @@ export function WeaponPurchaseModal({
       setSelectedCategory("all");
     }
   }, [isOpen, initialCategory]);
+
+  // Reset selectedPacks when weapon changes
+  useEffect(() => {
+    setSelectedPacks(1);
+  }, [selectedWeapon?.id]);
+
+  // Stackable/consumable item calculations
+  const isStackable = selectedWeapon?.stackable === true;
+  const unitLabel = selectedWeapon?.subcategory === "grenades" ? "grenades" : "items";
+  const totalCost = isStackable ? selectedWeapon.cost * selectedPacks : (selectedWeapon?.cost ?? 0);
 
   // Flatten all weapons into a single array with category info
   const allWeapons = useMemo(() => {
@@ -258,18 +270,21 @@ export function WeaponPurchaseModal({
     setSearchQuery("");
     setSelectedCategory("all");
     setSelectedWeapon(null);
+    setSelectedPacks(1);
     onClose();
   };
 
   const handlePurchase = () => {
-    if (selectedWeapon && selectedWeapon.cost <= remaining) {
-      onPurchase(selectedWeapon);
+    if (selectedWeapon && totalCost <= remaining) {
+      const quantity = isStackable ? selectedPacks : 1;
+      onPurchase(selectedWeapon, quantity);
       setSelectedWeapon(null);
+      setSelectedPacks(1);
     }
   };
 
   const conceal = selectedWeapon ? getBaseConcealability(selectedWeapon.subcategory || "") : 0;
-  const canAffordSelected = selectedWeapon ? selectedWeapon.cost <= remaining : false;
+  const canAffordSelected = selectedWeapon ? totalCost <= remaining : false;
 
   return (
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
@@ -509,6 +524,19 @@ export function WeaponPurchaseModal({
                     </div>
                   )}
 
+                  {/* Quantity Selector for stackable items */}
+                  {isStackable && (
+                    <BulkQuantitySelector
+                      packSize={1}
+                      unitLabel={unitLabel}
+                      pricePerPack={selectedWeapon.cost}
+                      remaining={remaining}
+                      selectedPacks={selectedPacks}
+                      onPacksChange={setSelectedPacks}
+                      packLabel="unit"
+                    />
+                  )}
+
                   {/* Purchase Button */}
                   <div className="pt-2">
                     <button
@@ -521,8 +549,10 @@ export function WeaponPurchaseModal({
                       }`}
                     >
                       {canAffordSelected
-                        ? `Purchase - ${formatCurrency(selectedWeapon.cost)}¥`
-                        : `Cannot Afford (${formatCurrency(selectedWeapon.cost)}¥)`}
+                        ? isStackable
+                          ? `Purchase ${selectedPacks}x - ${formatCurrency(totalCost)}¥`
+                          : `Purchase - ${formatCurrency(selectedWeapon.cost)}¥`
+                        : `Cannot Afford (${formatCurrency(totalCost)}¥)`}
                     </button>
                   </div>
                 </div>
