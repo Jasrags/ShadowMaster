@@ -157,7 +157,8 @@ export type RuleModuleType =
   | "limits" // Limit calculations (SR5-specific)
   | "diceRules" // Dice mechanics (hit thresholds, glitch rules, Edge actions)
   | "socialModifiers" // Social test modifiers
-  | "actions"; // Action definitions for combat and other activities
+  | "actions" // Action definitions for combat and other activities
+  | "categoryModificationDefaults"; // Default modification capabilities per gear category
 
 /**
  * Rules governing character advancement post-creation.
@@ -958,6 +959,115 @@ export interface ModificationsCatalog {
   /** Armor modifications */
   armorMods: ArmorModificationCatalogItem[];
 }
+
+// =============================================================================
+// MODIFICATION CAPABILITY SYSTEM
+// =============================================================================
+
+/**
+ * Capability modes for equipment modification support.
+ *
+ * - "none": Item does not support modifications
+ * - "mount-based": Uses mount points (top, under, barrel, etc.) - typical for ranged weapons
+ * - "capacity-based": Uses capacity slots (armor capacity) - typical for armor
+ * - "slot-based": Uses named slots with type constraints - for melee weapons and special items
+ */
+export type ModificationCapabilityMode = "none" | "mount-based" | "capacity-based" | "slot-based";
+
+/**
+ * A named modification slot for slot-based modification systems.
+ * Used primarily for melee weapons where specific parts can be modified.
+ */
+export interface ModificationSlot {
+  /** Unique identifier for this slot */
+  slotId: string;
+  /** Type of slot (e.g., "grip", "blade-coating", "guard", "pommel") */
+  slotType: string;
+  /** Display label for the slot */
+  label: string;
+  /** Whether this slot must be filled (default: false) */
+  required?: boolean;
+  /** Maximum number of mods in this slot (default: 1) */
+  maxCount?: number;
+  /** Modification categories that can be installed in this slot */
+  acceptsCategories?: string[];
+  /** Specific modification IDs that can be installed in this slot */
+  acceptsModifications?: string[];
+}
+
+/**
+ * Declares what modification systems an item or category supports.
+ * This is the core type for the equipment modification capability system.
+ *
+ * Resolution order:
+ * 1. Item-level capability (explicit override)
+ * 2. Category defaults (from categoryModificationDefaults module)
+ * 3. None (no modification support)
+ *
+ * @example Mount-based (ranged weapons)
+ * ```typescript
+ * {
+ *   capabilityMode: "mount-based",
+ *   availableMounts: ["top", "under", "barrel"]
+ * }
+ * ```
+ *
+ * @example Capacity-based (armor)
+ * ```typescript
+ * {
+ *   capabilityMode: "capacity-based",
+ *   capacity: 12
+ * }
+ * ```
+ *
+ * @example Slot-based (melee weapons)
+ * ```typescript
+ * {
+ *   capabilityMode: "slot-based",
+ *   slots: [
+ *     { slotId: "grip", slotType: "grip", label: "Grip" },
+ *     { slotId: "blade", slotType: "blade-coating", label: "Blade Coating" }
+ *   ]
+ * }
+ * ```
+ */
+export interface ModificationCapability {
+  /** How modification support is defined */
+  capabilityMode: ModificationCapabilityMode;
+
+  /** For mount-based: available mount points */
+  availableMounts?: WeaponMountType[];
+
+  /** For capacity-based: total modification capacity */
+  capacity?: number;
+
+  /** For slot-based: named slots with type constraints */
+  slots?: ModificationSlot[];
+
+  /** Whitelist: only these mod IDs are compatible */
+  allowedModifications?: string[];
+
+  /** Blacklist: these mod IDs are explicitly incompatible */
+  disallowedModifications?: string[];
+
+  /** Category restrictions (e.g., "weapon-accessory", "melee-enhancement") */
+  allowedModCategories?: string[];
+}
+
+/**
+ * Maps gear subcategories to their default modification capabilities.
+ * This is a ruleset-level configuration that sourcebooks can extend.
+ *
+ * @example
+ * ```typescript
+ * {
+ *   "melee": { capabilityMode: "none" },
+ *   "heavy-pistol": { capabilityMode: "mount-based", availableMounts: ["top", "under", "barrel"] },
+ *   "armor": { capabilityMode: "capacity-based" }
+ * }
+ * ```
+ */
+export type CategoryModificationDefaults = Record<string, ModificationCapability>;
 
 // =============================================================================
 // MERGED RULESET

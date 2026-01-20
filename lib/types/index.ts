@@ -70,6 +70,11 @@ export type {
   WeaponModificationCatalogItem,
   ArmorModificationCatalogItem,
   ModificationsCatalog,
+  // Modification capability system types
+  ModificationCapabilityMode,
+  ModificationSlot,
+  ModificationCapability,
+  CategoryModificationDefaults,
   // Spirit types
   SpiritPower,
   Spirit,

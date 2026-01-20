@@ -18475,6 +18475,81 @@
         "social": [],
         "vehicle": []
       }
+    },
+    "categoryModificationDefaults": {
+      "mergeStrategy": "merge",
+      "payload": {
+        "melee": { "capabilityMode": "none" },
+        "throwingWeapons": { "capabilityMode": "none" },
+        "grenades": { "capabilityMode": "none" },
+        "hold-out-pistol": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "barrel"]
+        },
+        "light-pistol": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "barrel"]
+        },
+        "heavy-pistol": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "barrel"]
+        },
+        "machine-pistol": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "barrel", "stock"]
+        },
+        "smg": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "barrel", "stock"]
+        },
+        "assault-rifle": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "side", "barrel", "stock"]
+        },
+        "sniper-rifle": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "side", "barrel", "stock"]
+        },
+        "shotgun": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "barrel", "stock"]
+        },
+        "sport-rifle": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "side", "barrel", "stock"]
+        },
+        "light-machine-gun": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "side", "barrel", "stock"]
+        },
+        "medium-machine-gun": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under", "side", "barrel", "stock"]
+        },
+        "heavy-machine-gun": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "side"]
+        },
+        "cannon": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "side"]
+        },
+        "launcher": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top"]
+        },
+        "bow": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top"]
+        },
+        "crossbow": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top", "under"]
+        },
+        "clothing": {
+          "capabilityMode": "capacity-based"
+        }
+      }
     }
   }
 }
