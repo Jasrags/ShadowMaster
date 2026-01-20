@@ -27,6 +27,7 @@
     "knip:watch": "knip --watch",
     "knip:ci": "knip --max-issues 0",
     "verify-data": "pnpm dlx tsx scripts/verify-data.ts",
+    "verify-naming": "pnpm dlx tsx scripts/verify-naming-conventions.ts",
     "format": "prettier --write \"**/*.{ts,tsx,json,md,yml,yaml}\"",
     "format:check": "prettier --check \"**/*.{ts,tsx,json,md,yml,yaml}\"",
     "backup": "pnpm dlx tsx scripts/backup.ts",

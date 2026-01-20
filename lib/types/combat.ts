@@ -253,7 +253,7 @@ export interface InitiativeRoll {
   /** Total initiative score */
   total: number;
   /** Whether Edge was used (Blitz or Seize the Initiative) */
-  edgeUsed?: "blitz" | "seize_the_initiative";
+  edgeUsed?: "blitz" | "seize-the-initiative";
 }
 
 /**
@@ -364,7 +364,7 @@ export interface CombatInitiativeRequest {
   /** Manual initiative score (for NPCs/GM override) */
   manualScore?: number;
   /** Edge action to use */
-  edgeAction?: "blitz" | "seize_the_initiative";
+  edgeAction?: "blitz" | "seize-the-initiative";
 }
 
 /**

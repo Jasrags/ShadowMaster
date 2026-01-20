@@ -22,7 +22,7 @@ export const DEFAULT_DICE_RULES: EditionDiceRules = {
   maxDicePool: 50,
   minDicePool: 1,
   edgeActions: {
-    push_the_limit: {
+    "push-the-limit": {
       name: "Push the Limit",
       description: "Add Edge to your dice pool, roll, and any 6s explode.",
       cost: 1,
@@ -31,7 +31,7 @@ export const DEFAULT_DICE_RULES: EditionDiceRules = {
       addsDice: true,
       explodingSixes: true,
     },
-    second_chance: {
+    "second-chance": {
       name: "Second Chance",
       description: "Reroll all dice that did not score a hit. Keep your original hits.",
       cost: 1,
@@ -39,7 +39,7 @@ export const DEFAULT_DICE_RULES: EditionDiceRules = {
       postRoll: true,
       allowsReroll: true,
     },
-    seize_the_initiative: {
+    "seize-the-initiative": {
       name: "Seize the Initiative",
       description: "Go first in an Initiative Pass.",
       cost: 1,
@@ -54,14 +54,14 @@ export const DEFAULT_DICE_RULES: EditionDiceRules = {
       postRoll: false,
       addsDice: true,
     },
-    close_call: {
+    "close-call": {
       name: "Close Call",
       description: "Negate a glitch or critical glitch.",
       cost: 1,
       preRoll: false,
       postRoll: true,
     },
-    dead_mans_trigger: {
+    "dead-mans-trigger": {
       name: "Dead Man's Trigger",
       description: "Act when incapacitated.",
       cost: 1,

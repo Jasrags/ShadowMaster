@@ -90,12 +90,12 @@ describe("DEFAULT_DICE_RULES", () => {
   });
 
   it("should have all standard Edge actions defined", () => {
-    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("push_the_limit");
-    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("second_chance");
-    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("seize_the_initiative");
+    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("push-the-limit");
+    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("second-chance");
+    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("seize-the-initiative");
     expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("blitz");
-    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("close_call");
-    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("dead_mans_trigger");
+    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("close-call");
+    expect(DEFAULT_DICE_RULES.edgeActions).toHaveProperty("dead-mans-trigger");
   });
 
   it("should have wound modifier rules", () => {

@@ -303,7 +303,7 @@ describe("useActionResolver", () => {
 
       let rerollResult: ActionResult | null = null;
       await act(async () => {
-        rerollResult = await result.current.reroll("second_chance");
+        rerollResult = await result.current.reroll("second-chance");
       });
 
       expect(rerollResult).toBeNull();
@@ -315,7 +315,7 @@ describe("useActionResolver", () => {
       const rerolledResult = createMockActionResult({
         hits: 3,
         rerollCount: 1,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
       });
 
       mockFetch
@@ -335,7 +335,7 @@ describe("useActionResolver", () => {
       });
 
       await act(async () => {
-        await result.current.reroll("second_chance");
+        await result.current.reroll("second-chance");
       });
 
       expect(mockFetch).toHaveBeenCalledTimes(2);
@@ -350,7 +350,7 @@ describe("useActionResolver", () => {
       });
 
       await act(async () => {
-        await result.current.reroll("second_chance");
+        await result.current.reroll("second-chance");
       });
 
       expect(executeReroll).toHaveBeenCalled();
@@ -367,7 +367,7 @@ describe("useActionResolver", () => {
       const originalId = result.current.currentResult?.id;
 
       await act(async () => {
-        await result.current.reroll("second_chance");
+        await result.current.reroll("second-chance");
       });
 
       // History should have same ID but updated result

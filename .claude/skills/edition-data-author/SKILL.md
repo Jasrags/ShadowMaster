@@ -15,23 +15,53 @@ This skill guides the creation of catalog items for Shadowrun edition data files
 - **Rating spec types**: `/lib/types/ratings.ts`
 - **Quality types**: `/lib/types/qualities.ts`
 
-## ID Naming Convention
+## Naming Conventions
 
-All IDs use **kebab-case** with lowercase letters:
+All `id`, `category`, and `subcategory` values must use **kebab-case** (lowercase letters, numbers, and hyphens).
+
+**Validation regex:** `/^[a-z0-9]+(-[a-z0-9]+)*$/`
+
+**Run `pnpm verify-naming` to validate all data files.**
+
+### ID Examples
+
 ```
 combat-sense
 ares-predator-v
 wired-reflexes
 muscle-replacement
 control-thoughts
+push-the-limit
 ```
 
+### Category Examples
+
+```
+armor-modification    (NOT armorModification)
+rfid-tags             (NOT rfidTags)
+nervous-system
+eyeware
+```
+
+### Subcategory Examples
+
+```
+throwing-weapons      (NOT throwingWeapons)
+heavy-pistols
+light-pistol
+assault-rifles
+```
+
+### Special Rules
+
 For items with ratings, include the base name only (not the rating):
+
 ```
 wired-reflexes     (NOT wired-reflexes-1, wired-reflexes-2)
 ```
 
 For items requiring a selection (attribute, skill, limit):
+
 ```
 improved-physical-attribute  (with requiresAttribute: true)
 improved-ability             (with requiresSkill: true)
@@ -40,12 +70,14 @@ improved-ability             (with requiresSkill: true)
 ## Common Patterns
 
 ### Availability Format
+
 ```typescript
 availability: number;           // Base availability value (0-20+)
 legality?: "restricted" | "forbidden";  // R or F suffix in books
 ```
 
 ### Cost Patterns
+
 ```typescript
 // Fixed cost
 cost: 5000;
@@ -59,6 +91,7 @@ ratingSpec: {
 ```
 
 ### Page References
+
 ```typescript
 page?: number;      // Page number in source book
 source?: string;    // "SR5" or book abbreviation
@@ -76,14 +109,14 @@ Categories: `combat`, `detection`, `health`, `illusion`, `manipulation`
 
 ```typescript
 interface SpellCatalogItem {
-  id: string;           // kebab-case
-  name: string;         // Display name
+  id: string; // kebab-case
+  name: string; // Display name
   category: "combat" | "detection" | "health" | "illusion" | "manipulation";
   type: "mana" | "physical";
   range: "touch" | "LOS" | "LOS(A)" | "self";
   duration: "instant" | "sustained" | "permanent";
-  drain: string;        // "F-2", "F", "F+1", etc.
-  damage?: string;      // For combat spells: "(F-3)P", "(F)S", etc.
+  drain: string; // "F-2", "F", "F+1", etc.
+  damage?: string; // For combat spells: "(F-3)P", "(F)S", etc.
   description: string;
   page?: number;
   source?: string;
@@ -91,6 +124,7 @@ interface SpellCatalogItem {
 ```
 
 Example:
+
 ```json
 {
   "id": "fireball",
@@ -115,12 +149,12 @@ interface Quality {
   name: string;
   type: "positive" | "negative";
   category: "physical" | "mental" | "social" | "magical" | "mundane" | "metatype";
-  cost: number;         // Karma cost (positive for positive qualities)
-  maxRating?: number;   // If quality has levels (1-4 typically)
+  cost: number; // Karma cost (positive for positive qualities)
+  maxRating?: number; // If quality has levels (1-4 typically)
   costPerRating?: boolean;
-  metatypeRestrictions?: string[];  // ["human", "elf"]
+  metatypeRestrictions?: string[]; // ["human", "elf"]
   prerequisites?: QualityPrerequisites;
-  incompatible?: string[];  // IDs of incompatible qualities
+  incompatible?: string[]; // IDs of incompatible qualities
   description: string;
   effects?: QualityEffect[];
   source?: SourceReference;
@@ -128,6 +162,7 @@ interface Quality {
 ```
 
 Example:
+
 ```json
 {
   "id": "toughness",
@@ -157,8 +192,8 @@ interface CyberwareCatalogItem {
   id: string;
   name: string;
   category: CyberwareCategory;
-  essenceCost: number;          // Base essence cost
-  cost: number;                 // Base nuyen cost
+  essenceCost: number; // Base essence cost
+  cost: number; // Base nuyen cost
   availability: number;
   legality?: "restricted" | "forbidden";
 
@@ -172,8 +207,8 @@ interface CyberwareCatalogItem {
   costPerRating?: boolean;
 
   // Capacity (for cyberlimbs that hold enhancements)
-  capacity?: number;            // Capacity this provides
-  capacityCost?: number;        // Capacity this consumes (for enhancements)
+  capacity?: number; // Capacity this provides
+  capacityCost?: number; // Capacity this consumes (for enhancements)
 
   // Bonuses
   attributeBonuses?: Record<string, number>;
@@ -189,6 +224,7 @@ interface CyberwareCatalogItem {
 ```
 
 Example:
+
 ```json
 {
   "id": "wired-reflexes",
@@ -249,17 +285,17 @@ interface WeaponCatalogItem {
   id: string;
   name: string;
   subcategory: string;
-  damage: string;           // "5P", "8P(f)", "(STR+2)P"
+  damage: string; // "5P", "8P(f)", "(STR+2)P"
   accuracy: number;
-  ap: number;               // Armor Penetration (usually negative)
-  mode?: string;            // "SA", "SA/BF", "SA/BF/FA"
-  rc?: number;              // Recoil compensation
-  ammo?: string;            // "12(c)", "30(c)", "belt"
+  ap: number; // Armor Penetration (usually negative)
+  mode?: string; // "SA", "SA/BF", "SA/BF/FA"
+  rc?: number; // Recoil compensation
+  ammo?: string; // "12(c)", "30(c)", "belt"
   cost: number;
   availability: number;
   legality?: "restricted" | "forbidden";
-  reach?: number;           // For melee weapons
-  concealability?: number;  // Modifier for concealment
+  reach?: number; // For melee weapons
+  concealability?: number; // Modifier for concealment
   description?: string;
   page?: number;
   source?: string;
@@ -267,6 +303,7 @@ interface WeaponCatalogItem {
 ```
 
 Example:
+
 ```json
 {
   "id": "ares-predator-v",
@@ -294,11 +331,11 @@ interface ArmorCatalogItem {
   id: string;
   name: string;
   armorRating: number;
-  capacity: number;         // For armor modifications
+  capacity: number; // For armor modifications
   cost: number;
   availability: number;
   legality?: "restricted" | "forbidden";
-  encumbrance?: number;     // Modifier to physical tests
+  encumbrance?: number; // Modifier to physical tests
   concealability?: number;
   description?: string;
   page?: number;
@@ -315,7 +352,7 @@ interface WeaponModificationCatalogItem {
   id: string;
   name: string;
   mount?: "top" | "under" | "side" | "barrel" | "stock" | "internal";
-  occupiedMounts?: WeaponMountType[];  // Additional mounts used
+  occupiedMounts?: WeaponMountType[]; // Additional mounts used
   isBuiltIn?: boolean;
   compatibleWeapons?: string[];
   incompatibleWeapons?: string[];
@@ -350,7 +387,7 @@ interface ArmorModificationCatalogItem {
   id: string;
   name: string;
   capacityCost: number;
-  noCapacityCost?: boolean;     // If true, doesn't use capacity (bracketed in book)
+  noCapacityCost?: boolean; // If true, doesn't use capacity (bracketed in book)
 
   ratingSpec?: CatalogItemRatingSpec;
   hasRating?: boolean;
@@ -365,7 +402,7 @@ interface ArmorModificationCatalogItem {
   legality?: "restricted" | "forbidden";
 
   armorBonus?: number;
-  requirements?: string[];      // ["full body armor", "helmet"]
+  requirements?: string[]; // ["full body armor", "helmet"]
 
   description?: string;
   wirelessBonus?: string;
@@ -382,7 +419,7 @@ Location: `modules.adeptPowers.payload.powers[]`
 interface AdeptPowerCatalogItem {
   id: string;
   name: string;
-  cost: number | null;          // Power point cost (null if table-based)
+  cost: number | null; // Power point cost (null if table-based)
   costType: "fixed" | "perLevel" | "table";
   maxLevel?: number;
   activation?: "free" | "simple" | "complex" | "interrupt";
@@ -424,8 +461,8 @@ interface FocusCatalogItem {
   id: string;
   name: string;
   type: "enchanting" | "metamagic" | "power" | "qi" | "spell" | "spirit" | "weapon";
-  costMultiplier: number;           // Cost = Force × multiplier
-  bondingKarmaMultiplier: number;   // Karma = Force × multiplier
+  costMultiplier: number; // Cost = Force × multiplier
+  bondingKarmaMultiplier: number; // Karma = Force × multiplier
   availability: number;
   legality?: "restricted" | "forbidden";
   description?: string;
@@ -444,7 +481,7 @@ interface ComplexFormCatalogItem {
   name: string;
   target: "persona" | "device" | "file" | "sprite" | "host" | "self";
   duration: "instant" | "sustained" | "permanent";
-  fading: string;           // "L+1", "L-1", "L", etc.
+  fading: string; // "L+1", "L-1", "L", etc.
   description: string;
   page?: number;
   source?: string;
@@ -459,30 +496,36 @@ For items with ratings, use **unified ratings tables** - explicit per-rating val
 
 ```typescript
 interface UnifiedRatingConfig {
-  hasRating: true;            // Must be true to enable ratings
-  minRating?: number;         // Default: 1
-  maxRating: number;          // Maximum rating allowed
-  ratings: Record<number, {   // Explicit values for each rating
-    cost?: number;            // Nuyen cost at this rating
-    availability?: number;    // Availability at this rating
-    availabilitySuffix?: "R" | "F";
-    essenceCost?: number;     // Essence cost (cyberware/bioware)
-    capacity?: number;        // Capacity provided (cyberlimbs, cybereyes)
-    capacityCost?: number;    // Capacity consumed (enhancements)
-    karmaCost?: number;       // Karma cost (qualities)
-    powerPointCost?: number;  // Power point cost (adept powers)
-    effects?: {               // Mechanical effects at this rating
-      attributeBonuses?: Record<string, number>;
-      initiativeDice?: number;
-      initiativeScore?: number;
-      limitBonus?: number;
-      armorBonus?: number;
-    };
-  }>;
+  hasRating: true; // Must be true to enable ratings
+  minRating?: number; // Default: 1
+  maxRating: number; // Maximum rating allowed
+  ratings: Record<
+    number,
+    {
+      // Explicit values for each rating
+      cost?: number; // Nuyen cost at this rating
+      availability?: number; // Availability at this rating
+      availabilitySuffix?: "R" | "F";
+      essenceCost?: number; // Essence cost (cyberware/bioware)
+      capacity?: number; // Capacity provided (cyberlimbs, cybereyes)
+      capacityCost?: number; // Capacity consumed (enhancements)
+      karmaCost?: number; // Karma cost (qualities)
+      powerPointCost?: number; // Power point cost (adept powers)
+      effects?: {
+        // Mechanical effects at this rating
+        attributeBonuses?: Record<string, number>;
+        initiativeDice?: number;
+        initiativeScore?: number;
+        limitBonus?: number;
+        armorBonus?: number;
+      };
+    }
+  >;
 }
 ```
 
 ### Example - Cybereyes (different capacity per rating):
+
 ```json
 {
   "id": "cybereyes",
@@ -502,6 +545,7 @@ interface UnifiedRatingConfig {
 ```
 
 ### Example - Wired Reflexes (non-linear essence/cost):
+
 ```json
 {
   "id": "wired-reflexes",
@@ -512,15 +556,21 @@ interface UnifiedRatingConfig {
   "maxRating": 3,
   "ratings": {
     "1": {
-      "cost": 39000, "availability": 8, "essenceCost": 2,
+      "cost": 39000,
+      "availability": 8,
+      "essenceCost": 2,
       "effects": { "initiativeDice": 1, "initiativeScore": 1 }
     },
     "2": {
-      "cost": 149000, "availability": 12, "essenceCost": 3,
+      "cost": 149000,
+      "availability": 12,
+      "essenceCost": 3,
       "effects": { "initiativeDice": 2, "initiativeScore": 2 }
     },
     "3": {
-      "cost": 217000, "availability": 20, "essenceCost": 5,
+      "cost": 217000,
+      "availability": 20,
+      "essenceCost": 5,
       "effects": { "initiativeDice": 3, "initiativeScore": 3 }
     }
   },
@@ -531,6 +581,7 @@ interface UnifiedRatingConfig {
 ```
 
 ### Example - Quality with Levels (Toughness):
+
 ```json
 {
   "id": "toughness",
@@ -568,26 +619,27 @@ The `ratingSpec` format is still supported for backward compatibility, but **uni
 interface CatalogItemRatingSpec {
   rating: {
     hasRating: boolean;
-    minRating?: number;   // Default: 1
+    minRating?: number; // Default: 1
     maxRating: number;
   };
   essenceScaling?: {
     perRating?: boolean;
-    values?: number[];    // Specific essence costs per rating
+    values?: number[]; // Specific essence costs per rating
   };
   costScaling?: {
     perRating?: boolean;
-    values?: number[];    // Specific costs per rating
+    values?: number[]; // Specific costs per rating
   };
   capacityCostScaling?: {
     perRating?: boolean;
     values?: number[];
   };
-  attributeBonusScaling?: Record<string, number>;  // Bonus per rating
+  attributeBonusScaling?: Record<string, number>; // Bonus per rating
 }
 ```
 
 Legacy Example - Muscle Replacement (linear scaling):
+
 ```json
 {
   "ratingSpec": {
@@ -633,8 +685,12 @@ Items are added to arrays within the module payloads:
       "payload": {
         "spells": {
           "combat": [
-            { /* spell 1 */ },
-            { /* spell 2 */ }
+            {
+              /* spell 1 */
+            },
+            {
+              /* spell 2 */
+            }
           ]
         }
       }
@@ -644,6 +700,7 @@ Items are added to arrays within the module payloads:
 ```
 
 For sourcebooks, use appropriate merge strategy:
+
 - `merge` - Combine with existing data (default)
 - `append` - Add to arrays without replacing
 - `replace` - Completely override module

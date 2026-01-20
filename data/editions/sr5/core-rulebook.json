@@ -35,7 +35,7 @@
         "maxDicePool": 50,
         "minDicePool": 1,
         "edgeActions": {
-          "push_the_limit": {
+          "push-the-limit": {
             "name": "Push the Limit",
             "description": "Add Edge to your dice pool, roll, and any 6s explode (reroll and add). Ignore limits for this test.",
             "cost": 1,
@@ -44,7 +44,7 @@
             "addsDice": true,
             "explodingSixes": true
           },
-          "second_chance": {
+          "second-chance": {
             "name": "Second Chance",
             "description": "Reroll all dice that did not score a hit. Keep your original hits.",
             "cost": 1,
@@ -52,7 +52,7 @@
             "postRoll": true,
             "allowsReroll": true
           },
-          "seize_the_initiative": {
+          "seize-the-initiative": {
             "name": "Seize the Initiative",
             "description": "Go first in an Initiative Pass, regardless of your Initiative Score.",
             "cost": 1,
@@ -67,14 +67,14 @@
             "postRoll": false,
             "addsDice": true
           },
-          "close_call": {
+          "close-call": {
             "name": "Close Call",
             "description": "Negate the effects of a glitch or critical glitch.",
             "cost": 1,
             "preRoll": false,
             "postRoll": true
           },
-          "dead_mans_trigger": {
+          "dead-mans-trigger": {
             "name": "Dead Man's Trigger",
             "description": "When incapacitated, immediately take a Free Action.",
             "cost": 1,
@@ -1281,49 +1281,49 @@
             "description": "Determines action order in combat."
           },
           {
-            "id": "astralInitiative",
+            "id": "astral-initiative",
             "name": "Astral Initiative",
             "formula": "(INT × 2) + 2d6",
             "description": "Initiative while astrally projecting."
           },
           {
-            "id": "matrixInitiativeCold",
+            "id": "matrix-initiative-cold",
             "name": "Matrix Initiative (Cold Sim)",
             "formula": "Data Processing + INT + 3d6",
             "description": "Initiative in VR cold sim."
           },
           {
-            "id": "matrixInitiativeHot",
+            "id": "matrix-initiative-hot",
             "name": "Matrix Initiative (Hot Sim)",
             "formula": "Data Processing + INT + 4d6",
             "description": "Initiative in VR hot sim."
           },
           {
-            "id": "physicalLimit",
+            "id": "physical-limit",
             "name": "Physical Limit",
             "formula": "ceil(((STR × 2) + BOD + REA) / 3)",
             "description": "Maximum hits on physical tests."
           },
           {
-            "id": "mentalLimit",
+            "id": "mental-limit",
             "name": "Mental Limit",
             "formula": "ceil(((LOG × 2) + INT + WIL) / 3)",
             "description": "Maximum hits on mental tests."
           },
           {
-            "id": "socialLimit",
+            "id": "social-limit",
             "name": "Social Limit",
             "formula": "ceil(((CHA × 2) + WIL + ceil(ESS)) / 3)",
             "description": "Maximum hits on social tests."
           },
           {
-            "id": "physicalConditionMonitor",
+            "id": "physical-condition-monitor",
             "name": "Physical Condition Monitor",
             "formula": "ceil(BOD / 2) + 8",
             "description": "Boxes of physical damage before overflow."
           },
           {
-            "id": "stunConditionMonitor",
+            "id": "stun-condition-monitor",
             "name": "Stun Condition Monitor",
             "formula": "ceil(WIL / 2) + 8",
             "description": "Boxes of stun damage before unconsciousness."
@@ -1335,7 +1335,7 @@
             "description": "Resist fear and emotional stress."
           },
           {
-            "id": "judgeIntentions",
+            "id": "judge-intentions",
             "name": "Judge Intentions",
             "formula": "CHA + INT",
             "description": "Read others' motives and truthfulness."
@@ -1347,7 +1347,7 @@
             "description": "Recall and memorize information."
           },
           {
-            "id": "liftCarry",
+            "id": "lift-carry",
             "name": "Lift/Carry",
             "formula": "STR + BOD",
             "description": "Lift heavy objects."
@@ -8287,7 +8287,7 @@
               "id": "shuriken",
               "name": "Shuriken",
               "category": "weapons",
-              "subcategory": "throwingWeapons",
+              "subcategory": "throwing-weapons",
               "cost": 25,
               "availability": 4,
               "damage": "(STR+1)P",
@@ -8301,7 +8301,7 @@
               "id": "throwing-knife",
               "name": "Throwing Knife",
               "category": "weapons",
-              "subcategory": "throwingWeapons",
+              "subcategory": "throwing-weapons",
               "cost": 25,
               "availability": 4,
               "damage": "(STR+1)P",
@@ -8775,7 +8775,7 @@
           {
             "id": "electrochromic-modification",
             "name": "Electrochromic Modification",
-            "category": "armorModification",
+            "category": "armor-modification",
             "clothingOnly": true,
             "noCapacityCost": true,
             "cost": 500,
@@ -8785,7 +8785,7 @@
           {
             "id": "feedback-clothing",
             "name": "Feedback Clothing",
-            "category": "armorModification",
+            "category": "armor-modification",
             "clothingOnly": true,
             "noCapacityCost": true,
             "cost": 500,
@@ -8795,7 +8795,7 @@
           {
             "id": "chemical-protection",
             "name": "Chemical Protection",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": "[Rating]",
             "availability": 6,
             "description": "Provides protection against contact-vector chemical attacks."
@@ -8803,7 +8803,7 @@
           {
             "id": "chemical-seal",
             "name": "Chemical Seal",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": 6,
             "availability": 12,
             "legality": "restricted",
@@ -8813,7 +8813,7 @@
           {
             "id": "fire-resistance",
             "name": "Fire Resistance",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": "[Rating]",
             "availability": 6,
             "description": "Provides protection against fire and heat damage."
@@ -8821,7 +8821,7 @@
           {
             "id": "insulation",
             "name": "Insulation",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": "[Rating]",
             "availability": 6,
             "description": "Provides protection against cold damage."
@@ -8829,7 +8829,7 @@
           {
             "id": "nonconductivity",
             "name": "Nonconductivity",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": "[Rating]",
             "availability": 6,
             "description": "Provides protection against electrical damage."
@@ -8837,7 +8837,7 @@
           {
             "id": "shock-frills",
             "name": "Shock Frills",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": 2,
             "availability": 6,
             "legality": "restricted",
@@ -8847,7 +8847,7 @@
           {
             "id": "thermal-damping",
             "name": "Thermal Damping",
-            "category": "armorModification",
+            "category": "armor-modification",
             "capacityCost": "[Rating]",
             "availability": 10,
             "legality": "restricted",
@@ -9727,7 +9727,7 @@
           {
             "id": "standard-tags",
             "name": "Standard Tags",
-            "category": "rfidTags",
+            "category": "rfid-tags",
             "deviceRating": 1,
             "cost": 1,
             "quantity": 10,
@@ -9740,7 +9740,7 @@
           {
             "id": "datachip",
             "name": "Datachip",
-            "category": "rfidTags",
+            "category": "rfid-tags",
             "deviceRating": 1,
             "cost": 5,
             "quantity": 10,
@@ -9753,7 +9753,7 @@
           {
             "id": "security-tags",
             "name": "Security Tags",
-            "category": "rfidTags",
+            "category": "rfid-tags",
             "deviceRating": 3,
             "cost": 5,
             "availability": 3,
@@ -9767,7 +9767,7 @@
           {
             "id": "sensor-tags",
             "name": "Sensor Tags",
-            "category": "rfidTags",
+            "category": "rfid-tags",
             "deviceRating": 2,
             "cost": 40,
             "availability": 5,
@@ -9781,7 +9781,7 @@
           {
             "id": "stealth-tags",
             "name": "Stealth Tags",
-            "category": "rfidTags",
+            "category": "rfid-tags",
             "deviceRating": 3,
             "cost": 10,
             "availability": 7,

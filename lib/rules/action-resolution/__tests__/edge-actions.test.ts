@@ -18,7 +18,7 @@ vi.mock("../dice-engine", () => ({
     maxDicePool: 50,
     minDicePool: 1,
     edgeActions: {
-      push_the_limit: {
+      "push-the-limit": {
         name: "Push the Limit",
         description: "Add Edge to your dice pool, roll, and any 6s explode.",
         cost: 1,
@@ -27,7 +27,7 @@ vi.mock("../dice-engine", () => ({
         addsDice: true,
         explodingSixes: true,
       },
-      second_chance: {
+      "second-chance": {
         name: "Second Chance",
         description: "Reroll all dice that did not score a hit.",
         cost: 1,
@@ -35,7 +35,7 @@ vi.mock("../dice-engine", () => ({
         postRoll: true,
         allowsReroll: true,
       },
-      seize_the_initiative: {
+      "seize-the-initiative": {
         name: "Seize the Initiative",
         description: "Go first in an Initiative Pass.",
         cost: 1,
@@ -50,14 +50,14 @@ vi.mock("../dice-engine", () => ({
         postRoll: false,
         addsDice: true,
       },
-      close_call: {
+      "close-call": {
         name: "Close Call",
         description: "Negate a glitch or critical glitch.",
         cost: 1,
         preRoll: false,
         postRoll: true,
       },
-      dead_mans_trigger: {
+      "dead-mans-trigger": {
         name: "Dead Man's Trigger",
         description: "Act when incapacitated.",
         cost: 1,
@@ -310,18 +310,18 @@ describe("canSpendEdge", () => {
 // =============================================================================
 
 describe("canUseEdgeAction", () => {
-  it("should allow push_the_limit when pre-roll with sufficient edge", () => {
+  it("should allow push-the-limit when pre-roll with sufficient edge", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "push_the_limit", {
+    const result = canUseEdgeAction(character, "push-the-limit", {
       isPreRoll: true,
     });
 
     expect(result.canUse).toBe(true);
   });
 
-  it("should reject push_the_limit when post-roll", () => {
+  it("should reject push-the-limit when post-roll", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "push_the_limit", {
+    const result = canUseEdgeAction(character, "push-the-limit", {
       isPostRoll: true,
     });
 
@@ -333,7 +333,7 @@ describe("canUseEdgeAction", () => {
     const character = createMockCharacter({
       condition: { edgeCurrent: 0, physicalDamage: 0, stunDamage: 0 },
     });
-    const result = canUseEdgeAction(character, "push_the_limit", {
+    const result = canUseEdgeAction(character, "push-the-limit", {
       isPreRoll: true,
     });
 
@@ -341,9 +341,9 @@ describe("canUseEdgeAction", () => {
     expect(result.reason).toContain("Insufficient Edge");
   });
 
-  it("should allow second_chance when post-roll with result", () => {
+  it("should allow second-chance when post-roll with result", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "second_chance", {
+    const result = canUseEdgeAction(character, "second-chance", {
       isPostRoll: true,
       currentResult: createMockActionResult(),
     });
@@ -351,9 +351,9 @@ describe("canUseEdgeAction", () => {
     expect(result.canUse).toBe(true);
   });
 
-  it("should reject second_chance without result", () => {
+  it("should reject second-chance without result", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "second_chance", {
+    const result = canUseEdgeAction(character, "second-chance", {
       isPostRoll: true,
     });
 
@@ -361,9 +361,9 @@ describe("canUseEdgeAction", () => {
     expect(result.reason).toContain("No result to reroll");
   });
 
-  it("should reject second_chance if already rerolled", () => {
+  it("should reject second-chance if already rerolled", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "second_chance", {
+    const result = canUseEdgeAction(character, "second-chance", {
       isPostRoll: true,
       currentResult: createMockActionResult({ rerollCount: 1 }),
     });
@@ -372,9 +372,9 @@ describe("canUseEdgeAction", () => {
     expect(result.reason).toContain("Already used Second Chance");
   });
 
-  it("should allow close_call when there is a glitch", () => {
+  it("should allow close-call when there is a glitch", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "close_call", {
+    const result = canUseEdgeAction(character, "close-call", {
       isPostRoll: true,
       hasGlitch: true,
     });
@@ -382,9 +382,9 @@ describe("canUseEdgeAction", () => {
     expect(result.canUse).toBe(true);
   });
 
-  it("should reject close_call when no glitch", () => {
+  it("should reject close-call when no glitch", () => {
     const character = createMockCharacter();
-    const result = canUseEdgeAction(character, "close_call", {
+    const result = canUseEdgeAction(character, "close-call", {
       isPostRoll: true,
       hasGlitch: false,
     });
@@ -700,30 +700,30 @@ describe("executeEdgeAction", () => {
     vi.clearAllMocks();
   });
 
-  it("should dispatch push_the_limit correctly", () => {
+  it("should dispatch push-the-limit correctly", () => {
     const character = createMockCharacter();
     const pool = createMockPool();
 
-    const result = executeEdgeAction("push_the_limit", character, { pool });
+    const result = executeEdgeAction("push-the-limit", character, { pool });
 
     expect(result.success).toBe(true);
     expect(executeRoll).toHaveBeenCalled();
   });
 
-  it("should fail push_the_limit without pool", () => {
+  it("should fail push-the-limit without pool", () => {
     const character = createMockCharacter();
 
-    const result = executeEdgeAction("push_the_limit", character, {});
+    const result = executeEdgeAction("push-the-limit", character, {});
 
     expect(result.success).toBe(false);
     expect(result.error).toContain("requires a pool");
   });
 
-  it("should dispatch second_chance correctly", () => {
+  it("should dispatch second-chance correctly", () => {
     const character = createMockCharacter();
     const actionResult = createMockActionResult();
 
-    const result = executeEdgeAction("second_chance", character, {
+    const result = executeEdgeAction("second-chance", character, {
       result: actionResult,
     });
 
@@ -731,20 +731,20 @@ describe("executeEdgeAction", () => {
     expect(executeReroll).toHaveBeenCalled();
   });
 
-  it("should fail second_chance without result", () => {
+  it("should fail second-chance without result", () => {
     const character = createMockCharacter();
 
-    const result = executeEdgeAction("second_chance", character, {});
+    const result = executeEdgeAction("second-chance", character, {});
 
     expect(result.success).toBe(false);
     expect(result.error).toContain("requires a result");
   });
 
-  it("should dispatch close_call correctly", () => {
+  it("should dispatch close-call correctly", () => {
     const character = createMockCharacter();
     const glitchResult = createMockActionResult({ isGlitch: true });
 
-    const result = executeEdgeAction("close_call", character, {
+    const result = executeEdgeAction("close-call", character, {
       result: glitchResult,
     });
 
@@ -752,10 +752,10 @@ describe("executeEdgeAction", () => {
     expect(result.glitchNegated).toBe(true);
   });
 
-  it("should fail close_call without result", () => {
+  it("should fail close-call without result", () => {
     const character = createMockCharacter();
 
-    const result = executeEdgeAction("close_call", character, {});
+    const result = executeEdgeAction("close-call", character, {});
 
     expect(result.success).toBe(false);
     expect(result.error).toContain("requires a result");
@@ -770,20 +770,20 @@ describe("executeEdgeAction", () => {
     expect(executeRoll).toHaveBeenCalled();
   });
 
-  it("should handle seize_the_initiative (no dice)", () => {
+  it("should handle seize-the-initiative (no dice)", () => {
     const character = createMockCharacter();
 
-    const result = executeEdgeAction("seize_the_initiative", character, {});
+    const result = executeEdgeAction("seize-the-initiative", character, {});
 
     expect(result.success).toBe(true);
     expect(result.edgeSpent).toBe(1);
     expect(result.rollResult).toBeUndefined();
   });
 
-  it("should handle dead_mans_trigger (no dice)", () => {
+  it("should handle dead-mans-trigger (no dice)", () => {
     const character = createMockCharacter();
 
-    const result = executeEdgeAction("dead_mans_trigger", character, {});
+    const result = executeEdgeAction("dead-mans-trigger", character, {});
 
     expect(result.success).toBe(true);
     expect(result.edgeSpent).toBe(1);
@@ -799,12 +799,12 @@ describe("executeEdgeAction", () => {
     expect(result.error).toContain("Unknown Edge action");
   });
 
-  it("should fail seize_the_initiative with no edge", () => {
+  it("should fail seize-the-initiative with no edge", () => {
     const character = createMockCharacter({
       condition: { edgeCurrent: 0, physicalDamage: 0, stunDamage: 0 },
     });
 
-    const result = executeEdgeAction("seize_the_initiative", character, {});
+    const result = executeEdgeAction("seize-the-initiative", character, {});
 
     expect(result.success).toBe(false);
     expect(result.error).toBe("Insufficient Edge");

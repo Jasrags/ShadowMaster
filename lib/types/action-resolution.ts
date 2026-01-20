@@ -182,12 +182,12 @@ export interface ActionResult {
  * Types of Edge actions available
  */
 export type EdgeActionType =
-  | "push_the_limit" // Add Edge dice, exploding 6s
-  | "second_chance" // Reroll failures
-  | "seize_the_initiative" // Go first in combat
+  | "push-the-limit" // Add Edge dice, exploding 6s
+  | "second-chance" // Reroll failures
+  | "seize-the-initiative" // Go first in combat
   | "blitz" // Extra initiative dice
-  | "close_call" // Negate a glitch
-  | "dead_mans_trigger"; // Act when incapacitated
+  | "close-call" // Negate a glitch
+  | "dead-mans-trigger"; // Act when incapacitated
 
 /**
  * Configuration for an Edge action

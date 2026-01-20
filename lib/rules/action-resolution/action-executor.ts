@@ -91,7 +91,7 @@ export interface RerollRequest {
   userId: ID;
   /** ID of the action to reroll */
   actionId: ID;
-  /** Edge action type for reroll (second_chance or close_call) */
+  /** Edge action type for reroll (second-chance or close-call) */
   edgeAction: EdgeActionType;
   /** Combat session context (if in combat) */
   combatSessionId?: ID;
@@ -237,7 +237,7 @@ export async function executeAction(request: ExecutionRequest): Promise<Executio
 
   // 4. Handle Edge action (pre-roll)
   let edgeSpent = 0;
-  if (request.edgeAction === "push_the_limit") {
+  if (request.edgeAction === "push-the-limit") {
     const edgeValue = request.character.attributes?.edge ?? 0;
     if (edgeValue <= 0) {
       return {
@@ -265,7 +265,7 @@ export async function executeAction(request: ExecutionRequest): Promise<Executio
   // 5. Execute the roll
   const rollResult = executeRoll(actionPool.totalDice, DEFAULT_DICE_RULES, {
     limit: actionPool.limit,
-    explodingSixes: request.edgeAction === "push_the_limit",
+    explodingSixes: request.edgeAction === "push-the-limit",
   });
 
   // 6. Create action result
@@ -378,16 +378,16 @@ export async function executeActionReroll(request: RerollRequest): Promise<Execu
   }
 
   // 2. Validate the Edge action
-  if (request.edgeAction !== "second_chance" && request.edgeAction !== "close_call") {
+  if (request.edgeAction !== "second-chance" && request.edgeAction !== "close-call") {
     return {
       success: false,
-      error: "Invalid Edge action for reroll. Use second_chance or close_call.",
+      error: "Invalid Edge action for reroll. Use second-chance or close-call.",
       stateChanges: [],
     };
   }
 
   // Close Call just negates glitch, doesn't reroll
-  if (request.edgeAction === "close_call") {
+  if (request.edgeAction === "close-call") {
     if (!originalAction.isGlitch && !originalAction.isCriticalGlitch) {
       return {
         success: false,
