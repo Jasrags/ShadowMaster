@@ -14870,6 +14870,25 @@
             "cost": 52000,
             "availability": 8,
             "page": 463
+          },
+          {
+            "id": "rover-model-2072",
+            "name": "Rover Model 2072",
+            "category": "trucks",
+            "handling": {
+              "onRoad": 5,
+              "offRoad": 5
+            },
+            "speed": 4,
+            "acceleration": 2,
+            "body": 15,
+            "armor": 12,
+            "pilot": 2,
+            "sensor": 4,
+            "seats": 6,
+            "cost": 68000,
+            "availability": 0,
+            "page": 463
           }
         ],
         "watercraft": [
@@ -15117,6 +15136,23 @@
             "availability": 0,
             "description": "Ground-based utility drone",
             "page": 465
+          },
+          {
+            "id": "aztechnology-crawler",
+            "name": "Aztechnology Crawler",
+            "size": "small",
+            "droneType": "ground",
+            "handling": 4,
+            "speed": 3,
+            "acceleration": 1,
+            "body": 3,
+            "armor": 3,
+            "pilot": 4,
+            "sensor": 3,
+            "cost": 4000,
+            "availability": 4,
+            "description": "All-terrain crawler for surveillance operations",
+            "page": 466
           },
           {
             "id": "ares-duelist",
