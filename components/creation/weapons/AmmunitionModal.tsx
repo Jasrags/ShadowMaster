@@ -9,10 +9,11 @@
  */
 
 import { useMemo, useState } from "react";
-import { useGear, type GearItemData } from "@/lib/rules/RulesetContext";
+import { useGear, useRuleset, type GearItemData } from "@/lib/rules/RulesetContext";
+import { isMountBased, type ModifiableItem } from "@/lib/rules/modifications";
 import type { Weapon } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
-import { ShieldAlert, AlertTriangle, Package, X } from "lucide-react";
+import { ShieldAlert, AlertTriangle, Package, X, Ban } from "lucide-react";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 
 // =============================================================================
@@ -137,18 +138,33 @@ export function AmmunitionModal({
   onPurchase,
 }: AmmunitionModalProps) {
   const gearCatalog = useGear();
+  const { ruleset } = useRuleset();
   const [selectedAmmo, setSelectedAmmo] = useState<GearItemData | null>(null);
   const [selectedPacks, setSelectedPacks] = useState(1);
+
+  // Create modifiable item for capability system
+  const modifiableItem: ModifiableItem = useMemo(
+    () => ({ subcategory: weapon.subcategory || "" }),
+    [weapon.subcategory]
+  );
+
+  // Check if weapon supports ammunition using capability system
+  // Mount-based weapons (firearms) use ammunition
+  const supportsAmmunition = useMemo(() => {
+    if (!ruleset) return false;
+    return isMountBased(modifiableItem, ruleset);
+  }, [modifiableItem, ruleset]);
 
   // Get ammunition from catalog
   const ammunition = useMemo(() => {
     if (!gearCatalog?.ammunition) return [];
+    if (!supportsAmmunition) return [];
 
     // Filter to ammunition with subcategory "ammunition"
     return gearCatalog.ammunition.filter(
       (ammo) => ammo.subcategory === "ammunition" && isAmmoCompatible(ammo, weapon.subcategory)
     );
-  }, [gearCatalog, weapon.subcategory]);
+  }, [gearCatalog, weapon.subcategory, supportsAmmunition]);
 
   // Calculate derived values
   const roundsPerBox = selectedAmmo ? getRoundsPerBox(selectedAmmo) : 10;
@@ -172,8 +188,8 @@ export function AmmunitionModal({
     onClose();
   };
 
-  // Check if weapon uses ammo
-  const usesAmmo = getCompatibleAmmoTypes(weapon.subcategory).length > 0;
+  // Check if weapon uses ammo - now using capability system
+  const usesAmmo = supportsAmmunition;
 
   return (
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="lg">

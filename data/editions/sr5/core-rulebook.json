@@ -18480,7 +18480,7 @@
       "mergeStrategy": "merge",
       "payload": {
         "melee": { "capabilityMode": "none" },
-        "throwingWeapons": { "capabilityMode": "none" },
+        "throwing-weapons": { "capabilityMode": "none" },
         "grenades": { "capabilityMode": "none" },
         "hold-out-pistol": {
           "capabilityMode": "mount-based",
