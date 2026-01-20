@@ -5715,6 +5715,14 @@
             "summary": "Will not kill or allow killing of a protected group.",
             "requiresSpecification": true,
             "specificationLabel": "Protected Group",
+            "specificationOptions": [
+              "Assassin's Creed (won't kill anyone not the target)",
+              "Bushido (won't harm unarmed or surrendered foes)",
+              "Warrior's Code (won't harm non-combatants)",
+              "Soldier's Code (won't leave teammates behind)",
+              "Akichita Code (protect the weak and innocent)",
+              "Custom"
+            ],
             "limit": 1,
             "gmApprovalRequired": true,
             "effects": [
@@ -6444,6 +6452,8 @@
             "name": "SINner",
             "karmaBonus": 5,
             "summary": "Legal SIN with tax obligations and tracking vulnerability.",
+            "requiresSpecification": true,
+            "specificationLabel": "Issuing Nation/Corporation",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 4,
