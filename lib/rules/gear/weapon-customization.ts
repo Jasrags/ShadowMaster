@@ -167,27 +167,21 @@ export function validateModInstallation(
     return { valid: false, errors, warnings };
   }
 
-  // Collect all mount points this mod will occupy
-  const requiredMounts: WeaponMountType[] = [];
+  const occupiedMounts = weapon.occupiedMounts ?? [];
+
+  // Check primary mount point (must be available AND unoccupied)
   if (mod.mount) {
-    requiredMounts.push(mod.mount);
+    if (!mountConfig.availableMounts.includes(mod.mount)) {
+      errors.push(`Mount point "${mod.mount}" is not available on ${weapon.subcategory} weapons.`);
+    } else if (occupiedMounts.includes(mod.mount)) {
+      errors.push(`Mount point "${mod.mount}" is already occupied.`);
+    }
   }
+
+  // Check additional occupied mounts (only need to be unoccupied, not necessarily available)
+  // These represent conceptual slots the mod blocks, which may not be physical mounts
   if (mod.occupiedMounts) {
-    requiredMounts.push(...mod.occupiedMounts);
-  }
-
-  // Check mount point availability
-  if (requiredMounts.length > 0) {
-    const occupiedMounts = weapon.occupiedMounts ?? [];
-
-    for (const mount of requiredMounts) {
-      // Check if mount is available on this weapon type
-      if (!mountConfig.availableMounts.includes(mount)) {
-        errors.push(`Mount point "${mount}" is not available on ${weapon.subcategory} weapons.`);
-        continue;
-      }
-
-      // Check if mount is already occupied
+    for (const mount of mod.occupiedMounts) {
       if (occupiedMounts.includes(mount)) {
         errors.push(`Mount point "${mount}" is already occupied.`);
       }
