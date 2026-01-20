@@ -163,7 +163,7 @@ function WeaponListItem({
             <span className="font-medium text-zinc-900 dark:text-zinc-100 text-sm truncate">
               {weapon.name}
             </span>
-            <Wifi className="h-3 w-3 text-blue-500 flex-shrink-0" />
+            {weapon.wirelessBonus && <Wifi className="h-3 w-3 text-blue-500 flex-shrink-0" />}
           </div>
           <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span>{weapon.damage}</span>
@@ -479,16 +479,18 @@ export function WeaponPurchaseModal({
                     </div>
                   </div>
 
-                  {/* Wireless Bonus */}
-                  <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
-                    <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
-                      <Wifi className="h-4 w-4" />
-                      Wireless Bonus
+                  {/* Wireless Bonus - only show if weapon has one */}
+                  {selectedWeapon.wirelessBonus && (
+                    <div className="rounded-lg bg-blue-50 dark:bg-blue-900/20 p-3">
+                      <div className="flex items-center gap-2 text-sm font-medium text-blue-700 dark:text-blue-300">
+                        <Wifi className="h-4 w-4" />
+                        Wireless Bonus
+                      </div>
+                      <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
+                        {selectedWeapon.wirelessBonus}
+                      </p>
                     </div>
-                    <p className="mt-1 text-xs text-blue-600 dark:text-blue-400">
-                      Eject clip as a Free Action. +1 Accuracy when connected to a smartgun system.
-                    </p>
-                  </div>
+                  )}
 
                   {/* Legality Warning */}
                   {(selectedWeapon.legality === "restricted" ||

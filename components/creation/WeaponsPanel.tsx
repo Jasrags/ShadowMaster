@@ -18,10 +18,12 @@
 import { useMemo, useCallback, useState } from "react";
 import {
   useGear,
+  useWeaponModifications,
   type WeaponData,
   type GearCatalogData,
   type WeaponModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
+import { applyBuiltInModifications } from "@/lib/rules/gear/weapon-customization";
 import type {
   CreationState,
   Weapon,
@@ -253,6 +255,7 @@ function WeaponCategorySection({
 
 export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const gearCatalog = useGear();
+  const weaponModsCatalog = useWeaponModifications();
   const { getBudget } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -407,7 +410,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   // Add weapon (actual implementation - called after affordability check)
   const actuallyAddWeapon = useCallback(
     (weapon: WeaponData, quantity: number = 1) => {
-      const newWeapon: Weapon = {
+      let newWeapon: Weapon = {
         id: `${weapon.id}-${Date.now()}`,
         catalogId: weapon.id,
         name: weapon.name,
@@ -422,9 +425,32 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         cost: weapon.cost,
         availability: weapon.availability,
         quantity,
+        wirelessBonus: weapon.wirelessBonus,
         modifications: [],
         occupiedMounts: [],
       };
+
+      // Apply built-in modifications if the weapon has any
+      if (weapon.builtInModifications && weapon.builtInModifications.length > 0) {
+        const builtInMods: WeaponModificationCatalogItemData[] = [];
+        for (const builtIn of weapon.builtInModifications) {
+          const catalogMod = weaponModsCatalog.find((m) => m.id === builtIn.modificationId);
+          if (catalogMod) {
+            // Override mount with the weapon-specific mount if provided
+            builtInMods.push({
+              ...catalogMod,
+              mount: builtIn.mount || catalogMod.mount,
+            });
+          }
+        }
+
+        if (builtInMods.length > 0) {
+          newWeapon = applyBuiltInModifications(
+            newWeapon,
+            builtInMods as unknown as Parameters<typeof applyBuiltInModifications>[1]
+          );
+        }
+      }
 
       updateState({
         selections: {
@@ -437,7 +463,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       setIsPurchaseModalOpen(false);
       setPurchaseCategory(null);
     },
-    [selectedWeapons, state.selections, updateState]
+    [selectedWeapons, state.selections, updateState, weaponModsCatalog]
   );
 
   // Add weapon (with karma conversion prompt if needed)

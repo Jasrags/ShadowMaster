@@ -815,6 +815,8 @@ export interface Weapon extends GearItem {
   accuracy?: number; // Base accuracy
   /** Required for compatibility check */
   subcategory: string;
+  /** Wireless bonus description (copied from catalog) */
+  wirelessBonus?: string;
   /** Installed modifications on this weapon */
   modifications?: InstalledWeaponMod[];
   /** Track which mounts are occupied */

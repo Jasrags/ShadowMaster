@@ -380,6 +380,8 @@ export interface WeaponData extends GearItemData {
   rc?: number;
   ammo?: number;
   blast?: string;
+  /** Wireless bonus description (human-readable) */
+  wirelessBonus?: string;
   /** Built-in modification IDs applied automatically when weapon is selected */
   builtInMods?: string[];
   /** Available mount points for this specific weapon (overrides subcategory defaults) */

@@ -141,7 +141,14 @@ export function WeaponRow({
   const subcategoryLower = weapon.subcategory?.toLowerCase() || "";
   const isThrowingOrGrenade =
     subcategoryLower === "grenades" || subcategoryLower === "throwingweapons";
-  const hasWireless = !isThrowingOrGrenade; // Throwing weapons and grenades don't have wireless
+
+  // Check if weapon has smartgun modification installed
+  const smartgunMod = weapon.modifications?.find(
+    (mod) => mod.catalogId === "smartgun-internal" || mod.catalogId === "smartgun-external"
+  );
+
+  // Weapon has wireless if it has its own wireless bonus OR has a smartgun mod
+  const hasWireless = Boolean(weapon.wirelessBonus) || Boolean(smartgunMod);
   const supportsMods = !isThrowingOrGrenade;
   const supportsAmmo = !isThrowingOrGrenade;
   const modCost = weapon.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
@@ -289,7 +296,10 @@ export function WeaponRow({
             <div className="flex items-start gap-2 text-xs">
               <Wifi className="h-3.5 w-3.5 text-blue-500 shrink-0 mt-0.5" />
               <span className="text-zinc-500 dark:text-zinc-400">
-                Eject clip as Free Action, +1 Acc w/ smartgun
+                {weapon.wirelessBonus ||
+                  (smartgunMod
+                    ? "+1/+2 dice pool (gear/cyberware smartlink). Eject clip and change fire modes as Free Actions."
+                    : "")}
               </span>
             </div>
           )}
