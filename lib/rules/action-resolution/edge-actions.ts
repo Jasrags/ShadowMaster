@@ -92,7 +92,7 @@ export function canUseEdgeAction(
 
   // Specific action checks
   switch (action) {
-    case "second_chance":
+    case "second-chance":
       if (!context.currentResult) {
         return { canUse: false, reason: "No result to reroll" };
       }
@@ -101,7 +101,7 @@ export function canUseEdgeAction(
       }
       break;
 
-    case "close_call":
+    case "close-call":
       if (!context.hasGlitch) {
         return { canUse: false, reason: "No glitch to negate" };
       }
@@ -140,7 +140,7 @@ export function executePushTheLimit(
   pool: ActionPool,
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): EdgeActionResult {
-  const edgeConfig = rules.edgeActions?.push_the_limit;
+  const edgeConfig = rules.edgeActions?.["push-the-limit"];
   const edgeCost = edgeConfig?.cost ?? 1;
 
   // Check availability
@@ -193,7 +193,7 @@ export function executeSecondChance(
   originalResult: ActionResult,
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): EdgeActionResult {
-  const edgeConfig = rules.edgeActions?.second_chance;
+  const edgeConfig = rules.edgeActions?.["second-chance"];
   const edgeCost = edgeConfig?.cost ?? 1;
 
   // Check availability
@@ -237,7 +237,7 @@ export function executeCloseCall(
   result: ActionResult,
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): EdgeActionResult {
-  const edgeConfig = rules.edgeActions?.close_call;
+  const edgeConfig = rules.edgeActions?.["close-call"];
   const edgeCost = edgeConfig?.cost ?? 1;
 
   // Check availability
@@ -277,7 +277,7 @@ export function executeBlitz(
   character: Character,
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): EdgeActionResult {
-  const edgeConfig = rules.edgeActions?.blitz;
+  const edgeConfig = rules.edgeActions?.["blitz"];
   const edgeCost = edgeConfig?.cost ?? 1;
 
   // Check availability
@@ -318,7 +318,7 @@ export function executeEdgeAction(
   rules: EditionDiceRules = DEFAULT_DICE_RULES
 ): EdgeActionResult {
   switch (action) {
-    case "push_the_limit":
+    case "push-the-limit":
       if (!context.pool) {
         return {
           success: false,
@@ -329,7 +329,7 @@ export function executeEdgeAction(
       }
       return executePushTheLimit(character, context.pool, rules);
 
-    case "second_chance":
+    case "second-chance":
       if (!context.result) {
         return {
           success: false,
@@ -340,7 +340,7 @@ export function executeEdgeAction(
       }
       return executeSecondChance(character, context.result, rules);
 
-    case "close_call":
+    case "close-call":
       if (!context.result) {
         return {
           success: false,
@@ -354,8 +354,8 @@ export function executeEdgeAction(
     case "blitz":
       return executeBlitz(character, rules);
 
-    case "seize_the_initiative":
-    case "dead_mans_trigger":
+    case "seize-the-initiative":
+    case "dead-mans-trigger":
       // These don't involve dice rolls, just Edge spending
       const edgeConfig = rules.edgeActions?.[action];
       const edgeCost = edgeConfig?.cost ?? 1;

@@ -515,14 +515,14 @@ describe("executeAction", () => {
       userId: character.ownerId,
       action,
       character,
-      edgeAction: "push_the_limit",
+      edgeAction: "push-the-limit",
     };
 
     const result = await executeAction(request);
 
     expect(result.success).toBe(true);
     expect(result.actionResult?.edgeSpent).toBe(1);
-    expect(result.actionResult?.edgeAction).toBe("push_the_limit");
+    expect(result.actionResult?.edgeAction).toBe("push-the-limit");
     expect(executeRoll).toHaveBeenCalledWith(
       expect.any(Number),
       expect.anything(),
@@ -554,7 +554,7 @@ describe("executeAction", () => {
       userId: character.ownerId,
       action,
       character,
-      edgeAction: "push_the_limit",
+      edgeAction: "push-the-limit",
     };
 
     const result = await executeAction(request);
@@ -639,7 +639,7 @@ describe("executeActionReroll", () => {
       characterId: "char-1",
       userId: "user-1",
       actionId: "nonexistent-action",
-      edgeAction: "second_chance",
+      edgeAction: "second-chance",
     };
 
     const result = await executeActionReroll(request);
@@ -656,7 +656,7 @@ describe("executeActionReroll", () => {
       characterId: "char-1",
       userId: "user-1",
       actionId: originalAction.id,
-      edgeAction: "push_the_limit" as "second_chance",
+      edgeAction: "push-the-limit" as "second-chance",
     };
 
     const result = await executeActionReroll(request);
@@ -675,7 +675,7 @@ describe("executeActionReroll", () => {
         rawHits: 4,
         dice: makeDice([3, 4, 5, 6, 5, 6]),
         edgeSpent: 1,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
         rerollCount: 1,
       });
 
@@ -683,7 +683,7 @@ describe("executeActionReroll", () => {
         characterId: "char-1",
         userId: "user-1",
         actionId: originalAction.id,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
       };
 
       const result = await executeActionReroll(request);
@@ -705,7 +705,7 @@ describe("executeActionReroll", () => {
         ...originalAction,
         hits: 4,
         edgeSpent: 1,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
         rerollCount: 1,
       });
 
@@ -713,7 +713,7 @@ describe("executeActionReroll", () => {
         characterId: "char-1",
         userId: "user-1",
         actionId: originalAction.id,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
       };
 
       const result = await executeActionReroll(request);
@@ -746,7 +746,7 @@ describe("executeActionReroll", () => {
         characterId: "char-1",
         userId: "user-1",
         actionId: originalAction.id,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       };
 
       const result = await executeActionReroll(request);
@@ -767,14 +767,14 @@ describe("executeActionReroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         edgeSpent: 1,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       });
 
       const request: RerollRequest = {
         characterId: "char-1",
         userId: "user-1",
         actionId: originalAction.id,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       };
 
       const result = await executeActionReroll(request);
@@ -796,14 +796,14 @@ describe("executeActionReroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         edgeSpent: 1,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       });
 
       const request: RerollRequest = {
         characterId: "char-1",
         userId: "user-1",
         actionId: originalAction.id,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       };
 
       const result = await executeActionReroll(request);

@@ -172,7 +172,7 @@ export async function POST(
     let edgeAction: EdgeActionType | undefined;
     let rollResult;
 
-    if (body.edgeAction === "push_the_limit") {
+    if (body.edgeAction === "push-the-limit") {
       // Check Edge availability
       const currentEdge = getCurrentEdge(character);
       if (currentEdge < 1) {
@@ -191,7 +191,7 @@ export async function POST(
       rollResult = ptlResult.rollResult;
       pool = ptlResult.modifiedPool || pool;
       edgeSpent = ptlResult.edgeSpent;
-      edgeAction = "push_the_limit";
+      edgeAction = "push-the-limit";
 
       // Spend Edge
       character = await spendEdge(userId, characterId, edgeSpent);

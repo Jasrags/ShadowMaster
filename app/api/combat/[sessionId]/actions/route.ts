@@ -216,7 +216,7 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
  * - participantId: ID of the participant executing (optional, defaults to current)
  * - targetId: ID of target participant (for opposed tests)
  * - modifiers: Additional pool modifiers
- * - useEdge: Edge action to use (push_the_limit, second_chance, etc.)
+ * - useEdge: Edge action to use (push-the-limit, second-chance, etc.)
  * - rollOverride: Manual dice (for non-automated rolls)
  * - weaponId: Weapon ID for weapon attacks
  * - firingMode: Firing mode for ranged weapons (SS, SA, BF, FA)

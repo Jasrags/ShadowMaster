@@ -269,9 +269,11 @@ describe("GET /api/characters/[characterId]/magic", () => {
       expect(response.status).toBe(200);
       expect(data.spellsKnown[0]).toEqual({
         id: "fireball",
+        catalogId: "fireball",
         name: "Fireball",
         category: "combat",
         drain: "F+2",
+        selectedAttribute: undefined,
       });
     });
 
@@ -299,6 +301,7 @@ describe("GET /api/characters/[characterId]/magic", () => {
       expect(response.status).toBe(200);
       expect(data.spellsKnown[0]).toEqual({
         id: "unknown-spell",
+        catalogId: "unknown-spell",
         unknown: true,
       });
     });

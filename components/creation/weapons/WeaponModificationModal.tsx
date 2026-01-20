@@ -11,12 +11,17 @@
 import { useState, useMemo } from "react";
 import {
   useWeaponModifications,
-  getAvailableMountsForWeaponType,
+  useRuleset,
   type WeaponModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type { Weapon, WeaponMount, ItemLegality } from "@/lib/types";
+import {
+  canAcceptModifications,
+  getAvailableMounts,
+  type ModifiableItem,
+} from "@/lib/rules/modifications";
+import type { Weapon, WeaponMount, ItemLegality, MergedRuleset } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
-import { X, Search, AlertTriangle, Check, Minus, Plus } from "lucide-react";
+import { X, Search, AlertTriangle, Check, Minus, Plus, Ban } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -87,7 +92,8 @@ function getModAvailability(mod: WeaponModificationCatalogItemData, rating?: num
 function isModCompatible(
   mod: WeaponModificationCatalogItemData,
   weapon: Weapon,
-  occupiedMounts: WeaponMount[]
+  occupiedMounts: WeaponMount[],
+  availableMounts: WeaponMount[]
 ): { compatible: boolean; reason?: string } {
   // Check compatible weapons list
   if (mod.compatibleWeapons && mod.compatibleWeapons.length > 0) {
@@ -109,13 +115,12 @@ function isModCompatible(
     }
   }
 
-  // Check mount availability
+  // Check mount availability (using pre-computed availableMounts from capability system)
   if (mod.mount) {
-    const availableMounts = getAvailableMountsForWeaponType(weapon.subcategory);
-    if (!availableMounts.includes(mod.mount)) {
+    if (!availableMounts.includes(mod.mount as WeaponMount)) {
       return { compatible: false, reason: `No ${MOUNT_LABELS[mod.mount]} mount` };
     }
-    if (occupiedMounts.includes(mod.mount)) {
+    if (occupiedMounts.includes(mod.mount as WeaponMount)) {
       return { compatible: false, reason: `${MOUNT_LABELS[mod.mount]} mount occupied` };
     }
   }
@@ -208,6 +213,7 @@ export function WeaponModificationModal({
   remaining,
   onInstall,
 }: WeaponModificationModalProps) {
+  const { ruleset } = useRuleset();
   const allMods = useWeaponModifications({ maxAvailability: MAX_AVAILABILITY });
 
   const [searchQuery, setSearchQuery] = useState("");
@@ -220,19 +226,31 @@ export function WeaponModificationModal({
     [weapon.occupiedMounts]
   );
 
-  // Get available mounts for this weapon type
-  const availableMounts = useMemo(
-    () => getAvailableMountsForWeaponType(weapon.subcategory),
+  // Create modifiable item for capability system
+  const modifiableItem: ModifiableItem = useMemo(
+    () => ({ subcategory: weapon.subcategory || "" }),
     [weapon.subcategory]
   );
+
+  // Check if weapon can accept modifications using capability system
+  const weaponCanAcceptMods = useMemo(() => {
+    if (!ruleset) return false;
+    return canAcceptModifications(modifiableItem, ruleset);
+  }, [modifiableItem, ruleset]);
+
+  // Get available mounts using capability system
+  const availableMounts = useMemo(() => {
+    if (!ruleset) return [];
+    return getAvailableMounts(modifiableItem, ruleset) as WeaponMount[];
+  }, [modifiableItem, ruleset]);
 
   // Filter and check compatibility for each mod
   const modsWithCompatibility = useMemo(() => {
     return allMods.map((mod) => ({
       mod,
-      compatibility: isModCompatible(mod, weapon, occupiedMounts),
+      compatibility: isModCompatible(mod, weapon, occupiedMounts, availableMounts),
     }));
-  }, [allMods, weapon, occupiedMounts]);
+  }, [allMods, weapon, occupiedMounts, availableMounts]);
 
   // Filter by search
   const filteredMods = useMemo(() => {
@@ -297,6 +315,54 @@ export function WeaponModificationModal({
       handleClose();
     }
   };
+
+  // If weapon can't accept modifications, show a simplified modal
+  if (!weaponCanAcceptMods) {
+    return (
+      <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="md">
+        {({ close }) => (
+          <div className="flex flex-col">
+            {/* Header */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
+              <div>
+                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                  Add Modification
+                </h2>
+                <p className="text-sm text-zinc-500 dark:text-zinc-400">{weapon.name}</p>
+              </div>
+              <button
+                onClick={close}
+                className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* No Modifications Message */}
+            <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+              <Ban className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+              <p className="mt-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Modifications Not Supported
+              </p>
+              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                This weapon type does not accept modifications.
+              </p>
+            </div>
+
+            {/* Footer */}
+            <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex justify-end">
+              <button
+                onClick={close}
+                className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        )}
+      </BaseModalRoot>
+    );
+  }
 
   return (
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="xl">

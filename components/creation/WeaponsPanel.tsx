@@ -19,6 +19,7 @@ import { useMemo, useCallback, useState } from "react";
 import {
   useGear,
   useWeaponModifications,
+  useRuleset,
   type WeaponData,
   type GearCatalogData,
   type WeaponModificationCatalogItemData,
@@ -30,6 +31,7 @@ import type {
   InstalledWeaponMod,
   WeaponMount,
   PurchasedAmmunitionItem,
+  MergedRuleset,
 } from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
@@ -148,6 +150,7 @@ interface WeaponsPanelProps {
 interface WeaponCategorySectionProps {
   categoryKey: WeaponCategoryKey;
   weapons: Weapon[];
+  ruleset: MergedRuleset | null;
   onAddClick: () => void;
   onRemove: (id: string) => void;
   onAddMod: (weaponId: string) => void;
@@ -159,6 +162,7 @@ interface WeaponCategorySectionProps {
 function WeaponCategorySection({
   categoryKey,
   weapons,
+  ruleset,
   onAddClick,
   onRemove,
   onAddMod,
@@ -228,6 +232,7 @@ function WeaponCategorySection({
                 <WeaponRow
                   key={weapon.id}
                   weapon={weapon}
+                  ruleset={ruleset}
                   onRemove={onRemove}
                   onAddMod={onAddMod}
                   onRemoveMod={onRemoveMod}
@@ -254,6 +259,7 @@ function WeaponCategorySection({
 // =============================================================================
 
 export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
+  const { ruleset } = useRuleset();
   const gearCatalog = useGear();
   const weaponModsCatalog = useWeaponModifications();
   const { getBudget } = useCreationBudgets();
@@ -870,6 +876,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           <WeaponCategorySection
             categoryKey="ranged"
             weapons={weaponsByCategory.ranged}
+            ruleset={ruleset}
             onAddClick={() => openPurchaseModal("ranged")}
             onRemove={removeWeapon}
             onAddMod={handleAddMod}
@@ -881,6 +888,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           <WeaponCategorySection
             categoryKey="melee"
             weapons={weaponsByCategory.melee}
+            ruleset={ruleset}
             onAddClick={() => openPurchaseModal("melee")}
             onRemove={removeWeapon}
             onAddMod={handleAddMod}
@@ -892,6 +900,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           <WeaponCategorySection
             categoryKey="throwing"
             weapons={weaponsByCategory.throwing}
+            ruleset={ruleset}
             onAddClick={() => openPurchaseModal("throwing")}
             onRemove={removeWeapon}
             onAddMod={handleAddMod}

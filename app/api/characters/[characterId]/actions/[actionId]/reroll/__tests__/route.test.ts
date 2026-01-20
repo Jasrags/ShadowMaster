@@ -190,7 +190,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -208,7 +208,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -227,7 +227,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -247,7 +247,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -281,7 +281,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
       expect(data.error).toBe("Edge action is required");
     });
 
-    it("should return 400 when edgeAction is not a post-roll type (push_the_limit)", async () => {
+    it("should return 400 when edgeAction is not a post-roll type (push-the-limit)", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
       vi.mocked(getUserById).mockResolvedValue(createMockUser());
       vi.mocked(getCharacter).mockResolvedValue(createMockCharacter());
@@ -289,7 +289,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "push_the_limit" },
+        body: { edgeAction: "push-the-limit" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -322,7 +322,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
     });
   });
 
-  describe("second_chance", () => {
+  describe("second-chance", () => {
     it("should return 400 when insufficient Edge", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
       vi.mocked(getUserById).mockResolvedValue(createMockUser());
@@ -332,7 +332,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -355,7 +355,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -392,7 +392,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
         rawHits: 5,
         rerollCount: 1,
         edgeSpent: 1,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
         previousResultId: TEST_ACTION_ID,
       });
       const updatedCharacter = createMockCharacter({
@@ -413,7 +413,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -426,7 +426,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
       expect(data.result.hits).toBe(5);
       expect(data.result.rerollCount).toBe(1);
       expect(data.result.edgeSpent).toBe(1);
-      expect(data.result.edgeAction).toBe("second_chance");
+      expect(data.result.edgeAction).toBe("second-chance");
       expect(data.edgeCurrent).toBe(2);
       expect(data.edgeMaximum).toBe(3);
       expect(executeReroll).toHaveBeenCalledWith(
@@ -447,7 +447,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
           isGlitch: rerollResult.isGlitch,
           isCriticalGlitch: rerollResult.isCriticalGlitch,
           edgeSpent: 1,
-          edgeAction: "second_chance",
+          edgeAction: "second-chance",
           rerollCount: 1,
           previousResultId: TEST_ACTION_ID,
         }
@@ -455,7 +455,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
     });
   });
 
-  describe("close_call", () => {
+  describe("close-call", () => {
     it("should return 400 when no glitch to negate", async () => {
       const actionWithoutGlitch = createMockActionResult({
         isGlitch: false,
@@ -470,7 +470,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "close_call" },
+        body: { edgeAction: "close-call" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -500,7 +500,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         edgeSpent: 1,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       });
       const updatedCharacter = createMockCharacter({
         specialAttributes: { edge: 3, essence: 6 },
@@ -519,7 +519,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "close_call" },
+        body: { edgeAction: "close-call" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -532,7 +532,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
       expect(data.result.isGlitch).toBe(false);
       expect(data.result.isCriticalGlitch).toBe(false);
       expect(data.result.edgeSpent).toBe(1);
-      expect(data.result.edgeAction).toBe("close_call");
+      expect(data.result.edgeAction).toBe("close-call");
       expect(data.glitchNegated).toBe(true);
       expect(data.edgeCurrent).toBe(2);
       expect(data.edgeMaximum).toBe(3);
@@ -545,7 +545,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
           isGlitch: false,
           isCriticalGlitch: false,
           edgeSpent: 1,
-          edgeAction: "close_call",
+          edgeAction: "close-call",
         }
       );
     });
@@ -568,7 +568,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
         isGlitch: false,
         isCriticalGlitch: false,
         edgeSpent: 1,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       });
       const updatedCharacter = createMockCharacter({
         specialAttributes: { edge: 3, essence: 6 },
@@ -587,7 +587,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "close_call" },
+        body: { edgeAction: "close-call" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -602,7 +602,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
       expect(data.glitchNegated).toBe(true);
     });
 
-    it("should return 400 when insufficient Edge for close_call", async () => {
+    it("should return 400 when insufficient Edge for close-call", async () => {
       const actionWithGlitch = createMockActionResult({
         isGlitch: true,
         isCriticalGlitch: false,
@@ -616,7 +616,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "close_call" },
+        body: { edgeAction: "close-call" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 
@@ -652,7 +652,7 @@ describe("POST /api/characters/[characterId]/actions/[actionId]/reroll", () => {
 
       const request = createMockRequest({
         method: "POST",
-        body: { edgeAction: "second_chance" },
+        body: { edgeAction: "second-chance" },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID, actionId: TEST_ACTION_ID });
 

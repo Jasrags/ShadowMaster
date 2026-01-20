@@ -67,7 +67,7 @@ export async function POST(
     }
 
     // Validate Edge action type
-    const validPostRollActions: EdgeActionType[] = ["second_chance", "close_call"];
+    const validPostRollActions: EdgeActionType[] = ["second-chance", "close-call"];
     if (!validPostRollActions.includes(body.edgeAction)) {
       return NextResponse.json(
         { success: false, error: "Invalid Edge action for reroll" },
@@ -81,7 +81,7 @@ export async function POST(
     }
 
     // Handle different Edge actions
-    if (body.edgeAction === "second_chance") {
+    if (body.edgeAction === "second-chance") {
       // Check if already rerolled
       if (originalAction.rerollCount > 0) {
         return NextResponse.json(
@@ -109,7 +109,7 @@ export async function POST(
         isGlitch: rerollResult.isGlitch,
         isCriticalGlitch: rerollResult.isCriticalGlitch,
         edgeSpent: originalAction.edgeSpent + 1,
-        edgeAction: "second_chance",
+        edgeAction: "second-chance",
         rerollCount: originalAction.rerollCount + 1,
         previousResultId: originalAction.id,
       });
@@ -120,7 +120,7 @@ export async function POST(
         edgeCurrent: getCurrentEdge(character),
         edgeMaximum: getMaxEdge(character),
       });
-    } else if (body.edgeAction === "close_call") {
+    } else if (body.edgeAction === "close-call") {
       // Check if there's a glitch to negate
       if (!originalAction.isGlitch && !originalAction.isCriticalGlitch) {
         return NextResponse.json({ success: false, error: "No glitch to negate" }, { status: 400 });
@@ -134,7 +134,7 @@ export async function POST(
         isGlitch: false,
         isCriticalGlitch: false,
         edgeSpent: originalAction.edgeSpent + 1,
-        edgeAction: "close_call",
+        edgeAction: "close-call",
       });
 
       return NextResponse.json({

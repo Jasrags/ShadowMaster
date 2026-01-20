@@ -831,7 +831,7 @@ describe("POST /api/characters/[characterId]/actions", () => {
   });
 
   describe("edge actions", () => {
-    it("should return 400 when insufficient Edge for push_the_limit", async () => {
+    it("should return 400 when insufficient Edge for push-the-limit", async () => {
       const mockCharacter = createMockCharacter();
       const mockPool = createMockActionPool();
 
@@ -845,7 +845,7 @@ describe("POST /api/characters/[characterId]/actions", () => {
         method: "POST",
         body: {
           pool: { attribute: "agility", skill: "firearms" },
-          edgeAction: "push_the_limit",
+          edgeAction: "push-the-limit",
         },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -858,7 +858,7 @@ describe("POST /api/characters/[characterId]/actions", () => {
       expect(data.error).toBe("Insufficient Edge");
     });
 
-    it("should succeed with push_the_limit (spends Edge, uses executePushTheLimit)", async () => {
+    it("should succeed with push-the-limit (spends Edge, uses executePushTheLimit)", async () => {
       const mockCharacter = createMockCharacter();
       const mockPool = createMockActionPool();
       const modifiedPool = createMockActionPool({ totalDice: 11 });
@@ -897,7 +897,7 @@ describe("POST /api/characters/[characterId]/actions", () => {
         method: "POST",
         body: {
           pool: { attribute: "agility", skill: "firearms" },
-          edgeAction: "push_the_limit",
+          edgeAction: "push-the-limit",
         },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -908,14 +908,14 @@ describe("POST /api/characters/[characterId]/actions", () => {
       expect(response.status).toBe(200);
       expect(data.success).toBe(true);
       expect(data.result.edgeSpent).toBe(1);
-      expect(data.result.edgeAction).toBe("push_the_limit");
+      expect(data.result.edgeAction).toBe("push-the-limit");
       expect(data.result.hits).toBe(6);
       expect(executePushTheLimit).toHaveBeenCalledWith(mockCharacter, mockPool, expect.any(Object));
       expect(spendEdge).toHaveBeenCalledWith(TEST_USER_ID, TEST_CHARACTER_ID, 1);
       expect(executeRoll).not.toHaveBeenCalled();
     });
 
-    it("should return 400 when push_the_limit fails", async () => {
+    it("should return 400 when push-the-limit fails", async () => {
       const mockCharacter = createMockCharacter();
       const mockPool = createMockActionPool();
 
@@ -935,7 +935,7 @@ describe("POST /api/characters/[characterId]/actions", () => {
         method: "POST",
         body: {
           pool: { attribute: "agility", skill: "firearms" },
-          edgeAction: "push_the_limit",
+          edgeAction: "push-the-limit",
         },
       });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });

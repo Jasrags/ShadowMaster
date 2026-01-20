@@ -13,11 +13,12 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { useVirtualizer } from "@tanstack/react-virtual";
-import type { WeaponData } from "@/lib/rules/RulesetContext";
+import type { WeaponData, WeaponModificationCatalogItemData } from "@/lib/rules/RulesetContext";
+import { useWeaponModifications } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot } from "@/components/ui";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
-import { Search, Wifi, AlertTriangle, X } from "lucide-react";
+import { Search, Wifi, AlertTriangle, X, Wrench } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -144,6 +145,7 @@ function WeaponListItem({
   onClick: () => void;
 }) {
   const conceal = getBaseConcealability(weapon.subcategory || "");
+  const hasBuiltInMods = weapon.builtInModifications && weapon.builtInModifications.length > 0;
 
   return (
     <button
@@ -164,6 +166,14 @@ function WeaponListItem({
               {weapon.name}
             </span>
             {weapon.wirelessBonus && <Wifi className="h-3 w-3 text-blue-500 flex-shrink-0" />}
+            {hasBuiltInMods && (
+              <span
+                className="flex items-center gap-0.5 text-[10px] font-medium text-emerald-600 dark:text-emerald-400 flex-shrink-0"
+                title="Has built-in modifications"
+              >
+                <Wrench className="h-3 w-3" />
+              </span>
+            )}
           </div>
           <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span>{weapon.damage}</span>
@@ -196,10 +206,30 @@ export function WeaponPurchaseModal({
   onPurchase,
   initialCategory,
 }: WeaponPurchaseModalProps) {
+  const weaponModsCatalog = useWeaponModifications();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState<WeaponCategory>("all");
   const [selectedWeapon, setSelectedWeapon] = useState<WeaponData | null>(null);
   const [selectedPacks, setSelectedPacks] = useState(1);
+
+  // Helper to look up modification names from built-in mod IDs
+  const getBuiltInModDetails = useMemo(() => {
+    const modMap = new Map<string, WeaponModificationCatalogItemData>();
+    for (const mod of weaponModsCatalog) {
+      modMap.set(mod.id, mod);
+    }
+    return (builtInMods: NonNullable<WeaponData["builtInModifications"]>) => {
+      return builtInMods.map((builtIn) => {
+        const catalogMod = modMap.get(builtIn.modificationId);
+        return {
+          id: builtIn.modificationId,
+          name: catalogMod?.name || builtIn.modificationId,
+          mount: builtIn.mount,
+          rating: builtIn.rating,
+        };
+      });
+    };
+  }, [weaponModsCatalog]);
 
   // Set initial category when modal opens with a category specified
   useEffect(() => {
@@ -478,6 +508,37 @@ export function WeaponPurchaseModal({
                       </div>
                     </div>
                   </div>
+
+                  {/* Built-in Modifications - only show if weapon has any */}
+                  {selectedWeapon.builtInModifications &&
+                    selectedWeapon.builtInModifications.length > 0 && (
+                      <div className="rounded-lg bg-emerald-50 dark:bg-emerald-900/20 p-3">
+                        <div className="flex items-center gap-2 text-sm font-medium text-emerald-700 dark:text-emerald-300">
+                          <Wrench className="h-4 w-4" />
+                          Built-in Modifications
+                        </div>
+                        <p className="mt-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                          Included at no extra cost
+                        </p>
+                        <ul className="mt-2 space-y-1">
+                          {getBuiltInModDetails(selectedWeapon.builtInModifications).map((mod) => (
+                            <li
+                              key={mod.id}
+                              className="text-xs text-emerald-700 dark:text-emerald-300 flex items-center gap-1"
+                            >
+                              <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                              {mod.name}
+                              {mod.rating && ` (Rating ${mod.rating})`}
+                              {mod.mount && (
+                                <span className="text-emerald-500 dark:text-emerald-500 text-[10px]">
+                                  [{mod.mount}]
+                                </span>
+                              )}
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
                   {/* Wireless Bonus - only show if weapon has one */}
                   {selectedWeapon.wirelessBonus && (

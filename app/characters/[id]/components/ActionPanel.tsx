@@ -1107,7 +1107,7 @@ export function ActionPanel({
                 showReroll={edgeCurrent > 0}
                 onReroll={(action) => {
                   // Re-roll using Second Chance edge action
-                  executeRoll(action.pool, action.context, "second_chance");
+                  executeRoll(action.pool, action.context, "second-chance");
                 }}
                 maxVisible={5}
                 size="sm"

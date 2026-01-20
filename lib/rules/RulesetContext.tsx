@@ -323,6 +323,10 @@ export interface SpellData {
   drain: string;
   damage?: string;
   description?: string;
+  // Spell parameterization fields
+  requiresAttributeSelection?: boolean;
+  validAttributes?: string[];
+  attributeSelectionLabel?: string;
 }
 
 export interface SpellsCatalogData {

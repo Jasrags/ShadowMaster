@@ -586,12 +586,12 @@ export function ActionPoolBuilder({
           </div>
           <div className="grid grid-cols-2 gap-2">
             <Button
-              onPress={() => handleEdgeAction("push_the_limit")}
+              onPress={() => handleEdgeAction("push-the-limit")}
               className={`
                 flex items-center justify-center gap-1
                 px-2 py-1.5 rounded ${s.text}
                 ${
-                  edgeAction === "push_the_limit"
+                  edgeAction === "push-the-limit"
                     ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
                     : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
                 }
@@ -620,7 +620,7 @@ export function ActionPoolBuilder({
           </div>
           {edgeAction && (
             <p className={`mt-2 text-muted-foreground ${s.text}`}>
-              {edgeAction === "push_the_limit" && <>Add Edge to pool, no limit, exploding 6s</>}
+              {edgeAction === "push-the-limit" && <>Add Edge to pool, no limit, exploding 6s</>}
               {edgeAction === "blitz" && <>Go first in combat (5 initiative dice)</>}
             </p>
           )}

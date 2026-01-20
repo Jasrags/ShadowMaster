@@ -50,11 +50,28 @@ export async function GET(
     const magicState = getEssenceMagicState(character, augmentationRules);
 
     // Enrich spells with metadata
-    const spellsDetailed = (character.spells || []).map((spellId) => {
+    // Supports both legacy string[] and new CharacterSpell[] formats
+    const spellsDetailed = (character.spells || []).map((spell) => {
+      const spellId = typeof spell === "string" ? spell : spell.catalogId || spell.id;
+      const selectedAttribute = typeof spell === "object" ? spell.selectedAttribute : undefined;
       const def = getSpellDefinition(spellId, undefined, ruleset);
-      return def
-        ? { id: spellId, name: def.name, category: def.category, drain: def.drain }
-        : { id: spellId, unknown: true };
+      if (def) {
+        // For parameterized spells, modify the display name
+        let displayName = def.name;
+        if (def.requiresAttributeSelection && selectedAttribute) {
+          const attrName = selectedAttribute.charAt(0).toUpperCase() + selectedAttribute.slice(1);
+          displayName = def.name.replace("[Attribute]", `[${attrName}]`);
+        }
+        return {
+          id: typeof spell === "string" ? spellId : spell.id,
+          catalogId: spellId,
+          name: displayName,
+          category: def.category,
+          drain: def.drain,
+          selectedAttribute,
+        };
+      }
+      return { id: spellId, catalogId: spellId, unknown: true };
     });
 
     // Enrich adept powers with metadata

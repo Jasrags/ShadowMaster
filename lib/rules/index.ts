@@ -110,3 +110,27 @@ export {
   getActiveGroups,
   getBrokenGroups,
 } from "./skills";
+
+// Modification capability system - Client-safe
+export {
+  // Types
+  type ModifiableItem,
+  type CapabilityResolutionResult,
+  // Category defaults accessor
+  getCategoryModificationDefaults,
+  // Core resolution
+  resolveModificationCapability,
+  getModificationCapability,
+  canAcceptModifications,
+  // Mode-specific helpers
+  getAvailableMounts,
+  getModificationCapacity,
+  getModificationSlots,
+  // Compatibility checking
+  isModificationAllowed,
+  canInstallInSlot,
+  // Mode checks
+  isMountBased,
+  isCapacityBased,
+  isSlotBased,
+} from "./modifications";

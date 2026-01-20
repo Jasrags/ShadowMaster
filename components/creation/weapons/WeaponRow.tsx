@@ -8,8 +8,13 @@
  * Expanded: Full stats, wireless bonus, mods, ammo sections
  */
 
-import { useState } from "react";
-import type { Weapon, ItemLegality } from "@/lib/types";
+import { useState, useMemo } from "react";
+import type { Weapon, ItemLegality, MergedRuleset } from "@/lib/types";
+import {
+  canAcceptModifications,
+  isMountBased,
+  type ModifiableItem,
+} from "@/lib/rules/modifications";
 import { ChevronDown, ChevronRight, X, Wifi, Plus } from "lucide-react";
 
 // =============================================================================
@@ -116,6 +121,7 @@ function getAvailabilityDisplay(availability: number, legality?: ItemLegality): 
 
 interface WeaponRowProps {
   weapon: Weapon;
+  ruleset: MergedRuleset | null;
   onRemove: (id: string) => void;
   onAddMod?: (weaponId: string) => void;
   onRemoveMod?: (weaponId: string, modIndex: number) => void;
@@ -129,6 +135,7 @@ interface WeaponRowProps {
 
 export function WeaponRow({
   weapon,
+  ruleset,
   onRemove,
   onAddMod,
   onRemoveMod,
@@ -138,9 +145,24 @@ export function WeaponRow({
   const [isExpanded, setIsExpanded] = useState(false);
 
   const conceal = getConcealability(weapon);
-  const subcategoryLower = weapon.subcategory?.toLowerCase() || "";
-  const isThrowingOrGrenade =
-    subcategoryLower === "grenades" || subcategoryLower === "throwingweapons";
+
+  // Create modifiable item for capability system
+  const modifiableItem: ModifiableItem = useMemo(
+    () => ({ subcategory: weapon.subcategory || "" }),
+    [weapon.subcategory]
+  );
+
+  // Use capability system to determine if weapon supports mods and ammo
+  const supportsMods = useMemo(() => {
+    if (!ruleset) return false;
+    return canAcceptModifications(modifiableItem, ruleset);
+  }, [modifiableItem, ruleset]);
+
+  const supportsAmmo = useMemo(() => {
+    if (!ruleset) return false;
+    // Mount-based weapons (firearms) use ammunition
+    return isMountBased(modifiableItem, ruleset);
+  }, [modifiableItem, ruleset]);
 
   // Check if weapon has smartgun modification installed
   const smartgunMod = weapon.modifications?.find(
@@ -149,8 +171,6 @@ export function WeaponRow({
 
   // Weapon has wireless if it has its own wireless bonus OR has a smartgun mod
   const hasWireless = Boolean(weapon.wirelessBonus) || Boolean(smartgunMod);
-  const supportsMods = !isThrowingOrGrenade;
-  const supportsAmmo = !isThrowingOrGrenade;
   const modCost = weapon.modifications?.reduce((sum, m) => sum + m.cost, 0) || 0;
   const ammoCost =
     weapon.purchasedAmmunition?.reduce((sum, a) => sum + a.cost * a.quantity, 0) || 0;

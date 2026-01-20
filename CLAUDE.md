@@ -172,6 +172,14 @@ For component organization guidelines (subfolder vs single file decisions), use 
 
 Always use TypeScript storage layer (`readJsonFile()`, `writeJsonFile()`) instead of bash commands.
 
+### Naming Conventions
+
+- **Data identifiers** (`id`, `category`, `subcategory` values in JSON): `kebab-case`
+  - Examples: `push-the-limit`, `throwing-weapons`, `armor-modification`
+  - Validation regex: `/^[a-z0-9]+(-[a-z0-9]+)*$/`
+- **TypeScript object keys**: `camelCase`
+- Run `pnpm verify-naming` to validate naming conventions in data files
+
 ## Testing
 
 ```bash

@@ -166,9 +166,22 @@ export interface KnowledgeLanguageSelections {
 }
 
 /**
- * Spell selection (can be just ID or full object depending on component)
+ * Spell selection object with optional attribute selection for parameterized spells.
  */
-export type SpellSelection = string | { id: string; [key: string]: unknown };
+export interface SpellSelectionObject {
+  /** Catalog spell ID */
+  id: string;
+  /**
+   * Selected attribute for parameterized spells (e.g., Increase/Decrease [Attribute]).
+   * Uses attribute codes: body, agility, reaction, strength, willpower, logic, intuition, charisma
+   */
+  selectedAttribute?: string;
+}
+
+/**
+ * Spell selection (can be just ID string or full object with attribute selection)
+ */
+export type SpellSelection = string | SpellSelectionObject;
 
 /**
  * Focus selection during creation
@@ -475,6 +488,59 @@ export function getNegativeQualityIds(selections: CreationSelections): string[] 
  */
 export function getSpells(selections: CreationSelections): SpellSelection[] {
   return (selections.spells || []) as SpellSelection[];
+}
+
+/**
+ * Type guard to check if a spell selection is an object (not just ID string)
+ */
+export function isSpellSelectionObject(
+  selection: SpellSelection
+): selection is SpellSelectionObject {
+  return typeof selection === "object" && selection !== null && "id" in selection;
+}
+
+/**
+ * Extract spell ID from a selection value
+ */
+export function getSpellId(selection: SpellSelection): string {
+  return typeof selection === "string" ? selection : selection.id;
+}
+
+/**
+ * Get all spell IDs from selections
+ */
+export function getSpellIds(selections: CreationSelections): string[] {
+  return getSpells(selections).map(getSpellId);
+}
+
+/**
+ * Get selected attribute for a spell (if parameterized)
+ */
+export function getSpellSelectedAttribute(selection: SpellSelection): string | undefined {
+  if (isSpellSelectionObject(selection)) {
+    return selection.selectedAttribute;
+  }
+  return undefined;
+}
+
+/**
+ * Normalize a spell selection to object form.
+ * Converts legacy string format to SpellSelectionObject.
+ * Useful for migration or when object form is required.
+ */
+export function normalizeSpellSelection(selection: SpellSelection): SpellSelectionObject {
+  if (typeof selection === "string") {
+    return { id: selection };
+  }
+  return selection;
+}
+
+/**
+ * Normalize all spell selections to object form.
+ * Converts any legacy string selections to SpellSelectionObject.
+ */
+export function normalizeSpellSelections(selections: SpellSelection[]): SpellSelectionObject[] {
+  return selections.map(normalizeSpellSelection);
 }
 
 /**
