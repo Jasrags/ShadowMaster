@@ -332,8 +332,13 @@ export interface Character {
   /** Metamagics known (IDs) */
   metamagics?: string[];
 
-  /** Spells known (spell IDs) */
-  spells?: string[];
+  /**
+   * Spells known by this character.
+   * Supports both legacy format (string[]) and new format (CharacterSpell[]).
+   * Legacy format: array of spell IDs (e.g., ["heal", "stunbolt"])
+   * New format: array of CharacterSpell objects with optional attribute selection
+   */
+  spells?: Array<string | CharacterSpell>;
 
   /** Adept powers with ratings */
   adeptPowers?: AdeptPower[];
@@ -583,6 +588,25 @@ export interface AdeptPower {
   rating?: number; // For leveled powers
   powerPointCost: number; // Actual PP spent
   specification?: string; // For skill/attribute-specific powers (e.g., "Agility" or "Pistols")
+}
+
+/**
+ * A spell known by a character with optional attribute selection.
+ * Supports parameterized spells like Increase/Decrease [Attribute].
+ */
+export interface CharacterSpell {
+  /** Unique instance ID for this spell on the character */
+  id: string;
+  /** Reference to catalog spell ID */
+  catalogId: string;
+  /** Display name (may be modified for parameterized spells, e.g., "Increase [Agility]") */
+  name: string;
+  /**
+   * Selected attribute for parameterized spells.
+   * Only present for spells with requiresAttributeSelection: true.
+   * Uses attribute codes: body, agility, reaction, strength, etc.
+   */
+  selectedAttribute?: string;
 }
 
 export interface BoundSpirit {

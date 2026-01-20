@@ -2109,7 +2109,19 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-2",
-              "description": "Weakens the target by decreasing a designated Attribute."
+              "description": "Weakens the target by decreasing a designated Attribute.",
+              "requiresAttributeSelection": true,
+              "validAttributes": [
+                "body",
+                "agility",
+                "reaction",
+                "strength",
+                "willpower",
+                "logic",
+                "intuition",
+                "charisma"
+              ],
+              "attributeSelectionLabel": "Select attribute to decrease"
             },
             {
               "id": "detox",
@@ -2139,7 +2151,19 @@
               "range": "touch",
               "duration": "sustained",
               "drain": "F-3",
-              "description": "Increases an Attribute (natural or augmented) on a voluntary subject."
+              "description": "Increases an Attribute (natural or augmented) on a voluntary subject.",
+              "requiresAttributeSelection": true,
+              "validAttributes": [
+                "body",
+                "agility",
+                "reaction",
+                "strength",
+                "willpower",
+                "logic",
+                "intuition",
+                "charisma"
+              ],
+              "attributeSelectionLabel": "Select attribute to increase"
             },
             {
               "id": "increase-reflexes",

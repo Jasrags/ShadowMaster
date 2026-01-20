@@ -484,6 +484,29 @@ export interface SpellData {
   drain: string;
   damage?: string;
   description?: string;
+
+  // -------------------------------------------------------------------------
+  // SPELL PARAMETERIZATION
+  // -------------------------------------------------------------------------
+
+  /**
+   * Whether this spell requires selecting an attribute (e.g., Increase [Attribute]).
+   * When true, user must choose from validAttributes during spell selection.
+   */
+  requiresAttributeSelection?: boolean;
+
+  /**
+   * Valid attributes that can be selected for this spell.
+   * Only applies when requiresAttributeSelection is true.
+   * Uses attribute codes: body, agility, reaction, strength, willpower, logic, intuition, charisma
+   */
+  validAttributes?: string[];
+
+  /**
+   * Label to display for attribute selection UI.
+   * E.g., "Select attribute to increase" or "Select attribute to decrease"
+   */
+  attributeSelectionLabel?: string;
 }
 
 /**
