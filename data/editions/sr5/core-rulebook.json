@@ -7256,6 +7256,7 @@
               "subcategory": "light-pistol",
               "accuracy": 7,
               "damage": "6P",
+              "ap": 0,
               "mode": ["SA"],
               "rc": 0,
               "ammo": 16,
@@ -7269,14 +7270,18 @@
               "category": "weapons",
               "subcategory": "light-pistol",
               "accuracy": 6,
-              "accuracySmartgun": 8,
               "damage": "6P",
+              "ap": 0,
               "mode": ["SA"],
               "rc": 0,
               "ammo": 16,
               "availability": 6,
               "cost": 1250,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "builtInModifications": [
+                { "modificationId": "smartgun-internal", "mount": "internal" },
+                { "modificationId": "silencer-light-fire-75", "mount": "barrel" }
+              ]
             },
             {
               "id": "ares-predator-v",
@@ -7291,7 +7296,6 @@
               "rc": 0,
               "ammo": 15,
               "accuracy": 5,
-              "accuracySmartgun": 7,
               "weight": 1.3,
               "builtInModifications": [
                 {
@@ -7313,22 +7317,28 @@
               "ammo": 20,
               "availability": 7,
               "cost": 950,
+              "skill": "exotic-ranged-weapon",
+              "description": "Fires DMSO gel packs that deliver chemicals as Contact vector toxins. Uses Light Pistol ranges. Can accept top and underbarrel-mounted accessories.",
               "legality": "restricted"
             },
             {
               "id": "ares-viper-slivergun",
               "name": "Ares Viper Slivergun",
               "category": "weapons",
-              "subcategory": "machine-pistol",
+              "subcategory": "heavy-pistol",
               "accuracy": 4,
-              "damage": "9P (f)",
+              "damage": "9P(f)",
               "ap": 4,
               "mode": ["SA", "BF"],
               "rc": 0,
               "ammo": 30,
               "availability": 8,
               "cost": 380,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "allowedAmmoTypes": ["flechette-rounds"],
+              "builtInModifications": [
+                { "modificationId": "silencer-suppressor", "mount": "barrel" }
+              ]
             },
             {
               "id": "beretta-201t",
@@ -7337,13 +7347,14 @@
               "subcategory": "light-pistol",
               "accuracy": 6,
               "damage": "6P",
+              "ap": 0,
               "mode": ["SA", "BF"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 21,
               "availability": 7,
               "cost": 210,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [{ "modificationId": "stock-folding", "mount": "stock" }]
             },
             {
               "id": "browning-ultra-power",
@@ -7351,7 +7362,6 @@
               "category": "weapons",
               "subcategory": "heavy-pistol",
               "accuracy": 5,
-              "accuracySmartgun": 6,
               "damage": "8P",
               "ap": -1,
               "mode": ["SA"],
@@ -7359,12 +7369,7 @@
               "ammo": 10,
               "availability": 4,
               "cost": 640,
-              "builtInModifications": [
-                {
-                  "modificationId": "laser-sight",
-                  "mount": "top"
-                }
-              ],
+              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }],
               "legality": "restricted"
             },
             {
@@ -7420,8 +7425,12 @@
               "damage": "Special",
               "mode": ["SS"],
               "rc": 0,
+              "ammo": 10,
               "availability": 11,
               "cost": 5000,
+              "skill": "exotic-ranged-weapon",
+              "description": "Microwave weapon. Toxin attack: Power 8, Immediate, resist with Body + Willpower. If modified Power exceeds Mental limit, target must flee. Uses SMG ranges. Can take top and underbarrel accessories.",
+              "wirelessBonus": "Recharges by induction at 1 charge per hour.",
               "legality": "restricted"
             },
             {
@@ -7435,17 +7444,19 @@
               "ap": 0,
               "mode": ["SA"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 30,
               "accuracy": 6,
-              "accuracySmartgun": 7,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "stock-folding", "mount": "stock" },
+                { "modificationId": "laser-sight", "mount": "top" }
+              ]
             },
             {
               "id": "fichetti-tiffani-needler",
               "name": "Fichetti Tiffani Needler",
               "category": "weapons",
-              "subcategory": "hold-out",
+              "subcategory": "hold-out-pistol",
               "accuracy": 5,
               "damage": "8P(f)",
               "ap": 5,
@@ -7454,13 +7465,15 @@
               "ammo": 4,
               "availability": 5,
               "cost": 1000,
-              "legality": "restricted"
+              "legality": "restricted",
+              "wirelessBonus": "You can change the color of the Tiffani Needler with a Simple Action.",
+              "allowedAmmoTypes": ["flechette-rounds"]
             },
             {
               "id": "parashield-dart-pistol",
               "name": "Parashield Dart Pistol",
               "category": "weapons",
-              "subcategory": "light-pistol",
+              "subcategory": "heavy-pistol",
               "accuracy": 5,
               "damage": "as Drug/Toxin",
               "mode": ["SA"],
@@ -7468,13 +7481,17 @@
               "ammo": 5,
               "availability": 4,
               "cost": 600,
+              "skill": "exotic-ranged-weapon",
+              "description": "Industry standard dart pistol. Fires injection darts with narcoject or other payload. Uses Heavy Pistol ranges. Can take top-mounted accessories only.",
+              "wirelessBonus": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1).",
+              "excludedMounts": ["barrel", "under"],
               "legality": "restricted"
             },
             {
               "id": "parashield-dart-rifle",
               "name": "Parashield Dart Rifle",
               "category": "weapons",
-              "subcategory": "rifle",
+              "subcategory": "sport-rifle",
               "accuracy": 6,
               "damage": "as Drug/Toxin",
               "mode": ["SA"],
@@ -7482,6 +7499,15 @@
               "ammo": 6,
               "availability": 6,
               "cost": 1200,
+              "skill": "exotic-ranged-weapon",
+              "description": "Compressed air dart rifle for long-range takedowns. Uses Sport Rifle ranges. Can mount top and underbarrel accessories.",
+              "wirelessBonus": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1).",
+              "builtInModifications": [
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                }
+              ],
               "legality": "restricted"
             },
             {
@@ -7518,7 +7544,7 @@
               "id": "streetline-special",
               "name": "Streetline Special",
               "category": "weapons",
-              "subcategory": "hold-out",
+              "subcategory": "hold-out-pistol",
               "cost": 120,
               "availability": 4,
               "damage": "6P",
@@ -7527,15 +7553,15 @@
               "rc": 0,
               "ammo": 6,
               "accuracy": 4,
-              "legality": "restricted"
+              "legality": "restricted",
+              "madDetectionModifier": -2
             },
             {
               "id": "taurus-omni-6",
               "name": "Taurus Omni-6",
               "category": "weapons",
-              "subcategory": "heavy-pistol",
+              "subcategory": "light-pistol",
               "accuracy": 5,
-              "accuracySmartgun": 6,
               "damage": "6P/7P",
               "ap": 0,
               "mode": ["SA", "SS"],
@@ -7543,15 +7569,17 @@
               "ammo": 6,
               "availability": 3,
               "cost": 300,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }]
             },
             {
               "id": "walther-palm-pistol",
               "name": "Walther Palm Pistol",
               "category": "weapons",
-              "subcategory": "hold-out",
+              "subcategory": "hold-out-pistol",
               "accuracy": 4,
               "damage": "7P",
+              "ap": 0,
               "mode": ["SS", "BF"],
               "rc": 0,
               "ammo": 2,
@@ -7588,17 +7616,9 @@
               "rc": 2,
               "ammo": 40,
               "accuracy": 5,
-              "accuracySmartgun": 7,
               "builtInModifications": [
-                {
-                  "modificationId": "smartgun-internal",
-                  "mount": "internal"
-                },
-                {
-                  "modificationId": "gas-vent-system",
-                  "mount": "barrel",
-                  "rating": 2
-                }
+                { "modificationId": "smartgun-internal", "mount": "internal" },
+                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 }
               ],
               "legality": "restricted"
             },
@@ -7609,13 +7629,14 @@
               "subcategory": "machine-pistol",
               "accuracy": 5,
               "damage": "6P",
+              "ap": 0,
               "mode": ["SA", "BF"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 35,
               "availability": 6,
               "cost": 270,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [{ "modificationId": "stock-folding", "mount": "stock" }]
             },
             {
               "id": "colt-cobra-tz-120",
@@ -7623,15 +7644,19 @@
               "category": "weapons",
               "subcategory": "smg",
               "accuracy": 4,
-              "accuracySmartgun": 5,
               "damage": "7P",
+              "ap": 0,
               "mode": ["SA", "BF", "FA"],
               "rc": 2,
-              "rcMax": 3,
               "ammo": 32,
               "availability": 5,
               "cost": 660,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "stock-folding", "mount": "stock" },
+                { "modificationId": "laser-sight", "mount": "top" },
+                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 }
+              ]
             },
             {
               "id": "fn-p93-praetor",
@@ -7640,13 +7665,17 @@
               "subcategory": "smg",
               "accuracy": 6,
               "damage": "8P",
+              "ap": 0,
               "mode": ["SA", "BF", "FA"],
               "rc": 1,
-              "rcMax": 2,
               "ammo": 50,
               "availability": 11,
               "cost": 900,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "builtInModifications": [
+                { "modificationId": "stock-rigid", "mount": "stock" },
+                { "modificationId": "flashlight", "mount": "under" }
+              ]
             },
             {
               "id": "hk-227",
@@ -7659,11 +7688,14 @@
               "ap": 0,
               "mode": ["SA", "BF", "FA"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 28,
               "accuracy": 5,
-              "accuracySmartgun": 7,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "stock-retractable", "mount": "stock" },
+                { "modificationId": "smartgun-internal", "mount": "internal" },
+                { "modificationId": "silencer-suppressor", "mount": "barrel" }
+              ]
             },
             {
               "id": "ingram-smartgun-x",
@@ -7678,8 +7710,12 @@
               "rc": 2,
               "ammo": 32,
               "accuracy": 4,
-              "accuracySmartgun": 6,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 },
+                { "modificationId": "smartgun-internal", "mount": "internal" },
+                { "modificationId": "silencer-suppressor", "mount": "barrel" }
+              ]
             },
             {
               "id": "sck-model-100",
@@ -7692,11 +7728,13 @@
               "ap": 0,
               "mode": ["SA", "BF"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 30,
               "accuracy": 5,
-              "accuracySmartgun": 7,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "smartgun-internal", "mount": "internal" },
+                { "modificationId": "stock-folding", "mount": "stock" }
+              ]
             },
             {
               "id": "steyr-tmp",
@@ -7705,12 +7743,14 @@
               "subcategory": "machine-pistol",
               "accuracy": 4,
               "damage": "7P",
+              "ap": 0,
               "mode": ["SA", "BF", "FA"],
               "rc": 0,
               "ammo": 30,
               "availability": 8,
               "cost": 350,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }]
             },
             {
               "id": "uzi-iv",
@@ -7723,11 +7763,13 @@
               "ap": 0,
               "mode": ["BF"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 24,
               "accuracy": 4,
-              "accuracySmartgun": 5,
-              "legality": "restricted"
+              "legality": "restricted",
+              "builtInModifications": [
+                { "modificationId": "stock-folding", "mount": "stock" },
+                { "modificationId": "laser-sight", "mount": "top" }
+              ]
             }
           ],
           "rifles": [
@@ -7759,7 +7801,6 @@
               "rc": 2,
               "ammo": 42,
               "accuracy": 5,
-              "accuracySmartgun": 7,
               "weight": 3.8,
               "builtInModifications": [
                 {
@@ -7767,8 +7808,8 @@
                   "mount": "internal"
                 },
                 {
-                  "modificationId": "gas-vent-system",
-                  "mount": "barrel"
+                  "modificationId": "underbarrel-grenade-launcher",
+                  "mount": "under"
                 }
               ],
               "legality": "forbidden"
@@ -7779,13 +7820,29 @@
               "category": "weapons",
               "subcategory": "launcher",
               "accuracy": 4,
-              "accuracySmartgun": 6,
               "damage": "Grenade",
               "mode": ["SS"],
               "rc": 0,
               "ammo": 8,
               "availability": 8,
               "cost": 3200,
+              "allowedAmmoTypes": [
+                "flash-bang-grenade",
+                "flash-pak",
+                "fragmentation-grenade",
+                "gas",
+                "gas-grenade-cs-tear",
+                "high-explosive-grenade",
+                "smoke-grenade",
+                "thermal-smoke-grenade"
+              ],
+              "builtInModifications": [
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                }
+              ],
+              "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
               "legality": "forbidden"
             },
             {
@@ -7800,6 +7857,17 @@
               "ammo": 12,
               "availability": 10,
               "cost": 5000,
+              "allowedAmmoTypes": [
+                "flash-bang-grenade",
+                "flash-pak",
+                "fragmentation-grenade",
+                "gas",
+                "gas-grenade-cs-tear",
+                "high-explosive-grenade",
+                "smoke-grenade",
+                "thermal-smoke-grenade"
+              ],
+              "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
               "legality": "forbidden"
             },
             {
@@ -7814,6 +7882,13 @@
               "ammo": 1,
               "availability": 10,
               "cost": 1200,
+              "allowedAmmoTypes": [
+                "anti-vehicle-rocket",
+                "fragmentation-rocket",
+                "high-explosive-rocket"
+              ],
+              "description": "Extremely light disposable launcher. Perfect for delivering a punch and making a quick getaway.",
+              "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
               "legality": "forbidden"
             },
             {
@@ -7844,24 +7919,47 @@
               "rc": 2,
               "ammo": 35,
               "accuracy": 5,
-              "accuracySmartgun": 6,
+              "builtInModifications": [
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                },
+                {
+                  "modificationId": "gas-vent-system",
+                  "mount": "barrel",
+                  "rating": 2
+                }
+              ],
               "legality": "restricted"
             },
             {
               "id": "ingram-valiant",
               "name": "Ingram Valiant",
               "category": "weapons",
-              "subcategory": "machine-gun",
+              "subcategory": "light-machine-gun",
               "accuracy": 5,
-              "accuracySmartgun": 6,
               "damage": "9P",
               "ap": -2,
               "mode": ["BF", "FA"],
-              "rc": 2,
-              "rcMax": 3,
+              "rc": 4,
               "ammo": 50,
               "availability": 12,
               "cost": 5800,
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                },
+                {
+                  "modificationId": "gas-vent-system",
+                  "mount": "barrel",
+                  "rating": 2
+                }
+              ],
               "legality": "forbidden"
             },
             {
@@ -7874,10 +7972,11 @@
               "ap": -6,
               "mode": ["SA"],
               "rc": 0,
-              "rcMax": 1,
               "ammo": 6,
               "availability": 20,
               "cost": 21000,
+              "allowedAmmoTypes": ["assault-cannon-rounds"],
+              "description": "Cheap heavy weapon big on attitude and firepower. Comes standard with troll modification.",
               "legality": "forbidden"
             },
             {
@@ -7886,13 +7985,25 @@
               "category": "weapons",
               "subcategory": "launcher",
               "accuracy": 4,
-              "accuracySmartgun": 6,
               "damage": "Missile",
               "mode": ["SS"],
               "rc": 0,
               "ammo": 2,
               "availability": 18,
               "cost": 14000,
+              "allowedAmmoTypes": [
+                "anti-vehicle-rocket",
+                "fragmentation-rocket",
+                "high-explosive-rocket"
+              ],
+              "description": "Military missile launcher with two separate barrels. Can load two missiles of different types. Cannot fire both at once due to backblast.",
+              "builtInModifications": [
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                }
+              ],
+              "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
               "legality": "forbidden"
             },
             {
@@ -7901,7 +8012,6 @@
               "category": "weapons",
               "subcategory": "cannon",
               "accuracy": 5,
-              "accuracySmartgun": 7,
               "damage": "17P",
               "ap": -6,
               "mode": ["SS"],
@@ -7909,29 +8019,42 @@
               "ammo": 15,
               "availability": 20,
               "cost": 43000,
+              "allowedAmmoTypes": ["assault-cannon-rounds"],
+              "builtInModifications": [
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                }
+              ],
               "legality": "forbidden"
             },
             {
               "id": "rpk-hmg",
               "name": "RPK HMG",
               "category": "weapons",
-              "subcategory": "machine-gun",
+              "subcategory": "heavy-machine-gun",
               "accuracy": 5,
               "damage": "12P",
               "ap": -4,
               "mode": ["FA"],
               "rc": 0,
-              "rcMax": 6,
               "ammo": 50,
               "availability": 16,
               "cost": 16300,
+              "description": "Heavy Russian machine gun. Equipped with detachable tripod (6 RC when deployed). Usually fired prone, sitting, kneeling, or vehicle-mounted.",
+              "builtInModifications": [
+                {
+                  "modificationId": "tripod",
+                  "mount": "under"
+                }
+              ],
               "legality": "forbidden"
             },
             {
               "id": "stoner-ares-m202",
               "name": "Stoner-Ares M202",
               "category": "weapons",
-              "subcategory": "machine-gun",
+              "subcategory": "medium-machine-gun",
               "accuracy": 5,
               "damage": "10P",
               "ap": -3,
@@ -7955,7 +8078,16 @@
               "rc": 1,
               "ammo": 60,
               "accuracy": 6,
-              "accuracySmartgun": 8,
+              "builtInModifications": [
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "silencer-suppressor",
+                  "mount": "barrel"
+                }
+              ],
               "legality": "forbidden"
             }
           ],
@@ -7990,7 +8122,12 @@
               "ammoAlt": 24,
               "ammoAltType": "drum",
               "accuracy": 4,
-              "accuracySmartgun": 5,
+              "builtInModifications": [
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
               "legality": "forbidden"
             },
             {
@@ -8002,11 +8139,17 @@
               "damage": "11P",
               "ap": -1,
               "mode": ["SS"],
-              "rc": 0,
-              "rcMax": 1,
+              "rc": 2,
               "ammo": 2,
               "availability": 9,
               "cost": 1000,
+              "description": "Classic double-barrel sporting shotgun. Both barrels can be fired at once as a short burst (see Not Enough Bullets, p. 180).",
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                }
+              ],
               "legality": "restricted"
             }
           ],
@@ -8021,10 +8164,19 @@
               "damage": "13P",
               "ap": -4,
               "mode": ["SA"],
-              "rc": 0,
-              "rcMax": 1,
+              "rc": 2,
               "ammo": 14,
               "accuracy": 7,
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                }
+              ],
               "legality": "forbidden"
             },
             {
@@ -8036,11 +8188,20 @@
               "damage": "12P",
               "ap": -3,
               "mode": ["SA", "BF"],
-              "rc": 0,
-              "rcMax": 1,
+              "rc": 2,
               "ammo": 20,
               "availability": 12,
               "cost": 10300,
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                }
+              ],
               "legality": "forbidden"
             },
             {
@@ -8053,10 +8214,24 @@
               "damage": "14P",
               "ap": -5,
               "mode": ["SA"],
-              "rc": 0,
-              "rcMax": 1,
+              "rc": 2,
               "ammo": 15,
               "accuracy": 8,
+              "description": "Legendary assassin's weapon. Disassembles into briefcase (Extended Firearms + Logic [Mental] (6, Complex Action)). Fragile: reduce Accuracy by 1 (min 3) at end of each Combat Turn in firefight, or by 2 if used in melee. Recalibration (1 hour) restores Accuracy.",
+              "builtInModifications": [
+                {
+                  "modificationId": "silencer-suppressor",
+                  "mount": "barrel"
+                },
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                },
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                }
+              ],
               "legality": "forbidden"
             },
             {
@@ -8072,22 +8247,38 @@
               "rc": 0,
               "ammo": 5,
               "accuracy": 7,
+              "excludedMounts": ["under"],
+              "builtInModifications": [
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                }
+              ],
               "legality": "restricted"
             },
             {
-              "id": "ruger-100",
-              "name": "Ruger 100",
+              "id": "ruger-101",
+              "name": "Ruger 101",
               "category": "weapons",
               "subcategory": "sniper-rifle",
               "accuracy": 6,
               "damage": "11P",
               "ap": -3,
               "mode": ["SA"],
-              "rc": 0,
-              "rcMax": 1,
+              "rc": 2,
               "ammo": 8,
               "availability": 4,
               "cost": 1300,
+              "builtInModifications": [
+                {
+                  "modificationId": "imaging-scope",
+                  "mount": "top"
+                },
+                {
+                  "modificationId": "stock-rigid-shock-pad",
+                  "mount": "stock"
+                }
+              ],
               "legality": "restricted"
             }
           ],
@@ -11103,8 +11294,8 @@
         ],
         "ammunition": [
           {
-            "id": "apds",
-            "name": "APDS",
+            "id": "apds-rounds",
+            "name": "APDS Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 120,
@@ -11113,22 +11304,12 @@
             "consumable": true,
             "apModifier": -4,
             "availability": 12,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "description": "Armor-Piercing Discarding Sabot."
           },
           {
-            "id": "ammo-apds",
-            "name": "APDS Ammo (10)",
-            "category": "ammunition",
-            "cost": 120,
-            "availability": 12,
-            "stackable": true,
-            "consumable": true,
-            "description": "Armor-Piercing Discarding Sabot (-4 AP).",
-            "legality": "forbidden"
-          },
-          {
-            "id": "assault-cannon",
-            "name": "Assault cannon",
+            "id": "assault-cannon-rounds",
+            "name": "Assault Cannon Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 400,
@@ -11139,19 +11320,8 @@
             "legality": "forbidden"
           },
           {
-            "id": "ammo-explosive",
-            "name": "Explosive Ammo (10)",
-            "category": "ammunition",
-            "cost": 80,
-            "availability": 9,
-            "stackable": true,
-            "consumable": true,
-            "description": "Explosive rounds (+1 DV, -1 AP).",
-            "legality": "forbidden"
-          },
-          {
             "id": "explosive-rounds",
-            "name": "Explosive rounds",
+            "name": "Explosive Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 80,
@@ -11161,22 +11331,12 @@
             "damageModifier": "+1",
             "apModifier": -1,
             "availability": 9,
-            "legality": "forbidden"
-          },
-          {
-            "id": "ammo-flechette",
-            "name": "Flechette Ammo (100)",
-            "category": "ammunition",
-            "cost": 65,
-            "availability": 6,
-            "stackable": true,
-            "consumable": true,
-            "description": "Flechette rounds (+2 DV vs unarmored, +5 AP).",
-            "legality": "restricted"
+            "legality": "forbidden",
+            "description": "Explosive rounds."
           },
           {
             "id": "flechette-rounds",
-            "name": "Flechette rounds",
+            "name": "Flechette Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 65,
@@ -11186,21 +11346,12 @@
             "damageModifier": "+2",
             "apModifier": 5,
             "availability": 6,
-            "legality": "restricted"
-          },
-          {
-            "id": "ammo-gel",
-            "name": "Gel Rounds (100)",
-            "category": "ammunition",
-            "cost": 25,
-            "availability": 2,
-            "stackable": true,
-            "consumable": true,
-            "description": "Non-lethal rounds (Stun damage, +2 AP)."
+            "legality": "restricted",
+            "description": "Flechette rounds."
           },
           {
             "id": "gel-rounds",
-            "name": "Gel rounds",
+            "name": "Gel Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 25,
@@ -11208,13 +11359,14 @@
             "stackable": true,
             "consumable": true,
             "damageModifier": "+0S",
-            "apModifier": 1,
+            "apModifier": 2,
             "availability": 2,
-            "legality": "restricted"
+            "legality": "restricted",
+            "description": "Non-lethal rounds (Stun damage)."
           },
           {
-            "id": "hollow-points",
-            "name": "Hollow points",
+            "id": "hollow-point-rounds",
+            "name": "Hollow Point Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 70,
@@ -11227,8 +11379,8 @@
             "legality": "forbidden"
           },
           {
-            "id": "injection-darts",
-            "name": "Injection darts",
+            "id": "injection-rounds",
+            "name": "Injection Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 75,
@@ -11239,19 +11391,8 @@
             "legality": "restricted"
           },
           {
-            "id": "ammo-regular",
-            "name": "Regular Ammo (100)",
-            "category": "ammunition",
-            "cost": 20,
-            "availability": 2,
-            "stackable": true,
-            "consumable": true,
-            "description": "Standard ammunition.",
-            "legality": "restricted"
-          },
-          {
-            "id": "regular-ammo",
-            "name": "Regular ammo",
+            "id": "regular-rounds",
+            "name": "Regular Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 20,
@@ -11259,7 +11400,8 @@
             "stackable": true,
             "consumable": true,
             "availability": 2,
-            "legality": "restricted"
+            "legality": "restricted",
+            "description": "Standard ammunition."
           },
           {
             "id": "stick-n-shock",
@@ -11270,25 +11412,15 @@
             "quantity": 10,
             "stackable": true,
             "consumable": true,
-            "damageModifier": "-2S (e)",
+            "damageModifier": "-2S(e)",
             "apModifier": -5,
             "availability": 6,
-            "legality": "restricted"
+            "legality": "restricted",
+            "description": "Electrical rounds."
           },
           {
-            "id": "ammo-stick-n-shock",
-            "name": "Stick-n-Shock (10)",
-            "category": "ammunition",
-            "cost": 80,
-            "availability": 6,
-            "stackable": true,
-            "consumable": true,
-            "description": "Electrical rounds (-5 DV(e), -5 AP).",
-            "legality": "restricted"
-          },
-          {
-            "id": "taser-dart",
-            "name": "Taser dart",
+            "id": "taser-rounds",
+            "name": "Taser Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 50,
@@ -11298,8 +11430,8 @@
             "availability": 3
           },
           {
-            "id": "tracer",
-            "name": "Tracer",
+            "id": "tracer-rounds",
+            "name": "Tracer Rounds",
             "category": "gear",
             "subcategory": "ammunition",
             "cost": 60,
@@ -11307,18 +11439,8 @@
             "stackable": true,
             "consumable": true,
             "availability": 6,
-            "legality": "restricted"
-          },
-          {
-            "id": "ammo-tracer",
-            "name": "Tracer Ammo (100)",
-            "category": "ammunition",
-            "cost": 25,
-            "availability": 6,
-            "stackable": true,
-            "consumable": true,
-            "description": "Visible tracers for aimed fire.",
-            "legality": "restricted"
+            "legality": "restricted",
+            "description": "Visible tracers for aimed fire."
           }
         ]
       }
@@ -11332,8 +11454,8 @@
             "name": "Airburst Link",
             "availability": 6,
             "cost": 600,
-            "description": "Reduces scatter distance for launched grenades by 2m per net hit instead of 1m.",
-            "wirelessBonus": "Detonate grenade/rocket remotely. Reduces scatter by 2m per net hit instead of 1m.",
+            "description": "Smartgun accessory for grenade/rocket launchers. Requires wireless to function. Both grenades and launcher must have wireless enabled.",
+            "wirelessBonus": "Reduces scatter distance by 2m per net hit instead of 1m. Can detonate grenade/rocket remotely.",
             "compatibleWeapons": ["grenade-launcher", "rocket-launcher"],
             "page": 432,
             "source": "Core",
@@ -11352,15 +11474,26 @@
             "source": "Core"
           },
           {
+            "id": "underbarrel-grenade-launcher",
+            "name": "Underbarrel Grenade Launcher",
+            "mount": "under",
+            "availability": 8,
+            "cost": 3500,
+            "description": "Integrated grenade launcher. Uses Heavy Weapons skill. Fires grenades with Grenade damage.",
+            "page": 431,
+            "source": "Core",
+            "legality": "forbidden"
+          },
+          {
             "id": "concealable-holster",
             "name": "Concealable Holster",
             "availability": 2,
             "cost": 150,
             "concealabilityModifier": -1,
-            "description": "Adds -1 to the item's Concealability. Only fits pistols and tasers.",
+            "description": "Small holster worn on ankle, forearm, small of back, etc. Adds -1 to the item's Concealability. Only fits pistols and tasers.",
             "wirelessBonus": "Additional –1 to Concealability.",
             "compatibleWeapons": [
-              "holdout",
+              "hold-out-pistol",
               "light-pistol",
               "heavy-pistol",
               "machine-pistol",
@@ -11402,12 +11535,12 @@
           {
             "id": "gyro-mount",
             "name": "Gyro Mount",
-            "mount": "under",
+            "mount": "harness",
             "availability": 7,
             "cost": 1400,
             "recoilCompensation": 6,
-            "description": "Heavy upper-body harness with motorized gyro-stabilized arm. Neutralizes up to 6 points of recoil and movement modifiers.",
-            "wirelessBonus": "Quick-release with wireless signal is a Free Action.",
+            "description": "Heavy upper-body harness with motorized gyro-stabilized arm. Weapon mounts to harness. Neutralizes up to 6 points of recoil and movement modifiers. Attaching/removing weapon is a Simple Action. Putting on harness takes 5 minutes.",
+            "wirelessBonus": "Quick-release to exit harness is a Free Action.",
             "minimumWeaponSize": "rifle",
             "page": 432,
             "source": "Core"
@@ -11418,9 +11551,9 @@
             "availability": 4,
             "cost": 350,
             "concealabilityModifier": -1,
-            "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2.",
+            "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2. Gives weapon –1 Concealability modifier.",
             "wirelessBonus": "Ready weapon as a Free Action.",
-            "compatibleWeapons": ["holdout", "light-pistol", "taser"],
+            "compatibleWeapons": ["hold-out-pistol", "light-pistol", "taser"],
             "page": 432,
             "source": "Core",
             "legality": "restricted"
@@ -11440,11 +11573,22 @@
             "id": "laser-sight",
             "name": "Laser Sight",
             "mount": "top",
+            "alternateMounts": ["under"],
             "availability": 2,
             "cost": 125,
             "accuracyModifier": 1,
-            "description": "Projects a visible dot on target. Increases Accuracy by 1 (not cumulative with smartlink).",
+            "description": "Projects a visible dot on target. Can mount on top or underbarrel. Increases Accuracy by 1 (not cumulative with smartlink). Activating/deactivating is a Simple Action.",
             "wirelessBonus": "+1 dice pool bonus (not cumulative with smartlink). Activating/deactivating is a Free Action.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "flashlight",
+            "name": "Flashlight",
+            "mount": "under",
+            "availability": 2,
+            "cost": 25,
+            "description": "Weapon-mounted flashlight. Reduces darkness penalties by one step.",
             "page": 432,
             "source": "Core"
           },
@@ -11464,9 +11608,9 @@
             "name": "Quick-Draw Holster",
             "availability": 4,
             "cost": 175,
-            "description": "Reduces the threshold for quick-drawing by 1. Fits machine pistol or smaller.",
+            "description": "Easy access holster. Reduces the threshold for quick-drawing by 1. Fits machine pistol or smaller.",
             "compatibleWeapons": [
-              "holdout",
+              "hold-out-pistol",
               "light-pistol",
               "heavy-pistol",
               "machine-pistol",
@@ -11488,6 +11632,50 @@
             "source": "Core"
           },
           {
+            "id": "stock-folding",
+            "name": "Folding Stock",
+            "mount": "stock",
+            "availability": 2,
+            "cost": 50,
+            "recoilCompensation": 1,
+            "description": "Detachable or folding shoulder stock. Provides +1 Recoil Compensation when deployed.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "stock-retractable",
+            "name": "Retractable Stock",
+            "mount": "stock",
+            "availability": 2,
+            "cost": 50,
+            "recoilCompensation": 1,
+            "description": "Retractable shoulder stock. Provides +1 Recoil Compensation when deployed.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "stock-rigid",
+            "name": "Rigid Stock",
+            "mount": "stock",
+            "availability": 2,
+            "cost": 50,
+            "recoilCompensation": 1,
+            "description": "Integrated rigid shoulder stock. Provides +1 Recoil Compensation.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
+            "id": "stock-rigid-shock-pad",
+            "name": "Rigid Stock with Shock Pad",
+            "mount": "stock",
+            "availability": 4,
+            "cost": 100,
+            "recoilCompensation": 2,
+            "description": "Integrated rigid shoulder stock with shock-absorbing pad. Provides +2 Recoil Compensation.",
+            "page": 432,
+            "source": "Core"
+          },
+          {
             "id": "silencer-suppressor",
             "name": "Silencer/Suppressor",
             "mount": "barrel",
@@ -11501,14 +11689,40 @@
             "legality": "forbidden"
           },
           {
+            "id": "silencer-light-fire-70",
+            "name": "Light Fire 70 Silencer",
+            "mount": "barrel",
+            "availability": 9,
+            "cost": 750,
+            "description": "Special barrel-mounted silencer developed exclusively for the Light Fire 70. Provides -5 dice pool modifier on Perception Tests to notice or locate firer (additional -1 beyond standard silencers).",
+            "wirelessBonus": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound.",
+            "compatibleWeapons": ["ares-light-fire-70"],
+            "page": 426,
+            "source": "Core",
+            "legality": "forbidden"
+          },
+          {
+            "id": "silencer-light-fire-75",
+            "name": "Light Fire 75 Integral Silencer",
+            "mount": "barrel",
+            "availability": 0,
+            "cost": 0,
+            "description": "Integral barrel-mounted silencer exclusive to the Light Fire 75. Provides -5 dice pool modifier on Perception Tests to notice or locate firer (additional -1 beyond standard silencers).",
+            "wirelessBonus": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound.",
+            "compatibleWeapons": ["ares-light-fire-75"],
+            "page": 426,
+            "source": "Core",
+            "legality": "forbidden"
+          },
+          {
             "id": "smart-firing-platform",
             "name": "Smart Firing Platform",
-            "mount": "under",
+            "mount": "platform",
             "availability": 12,
             "cost": 2500,
             "recoilCompensation": 5,
-            "description": "Non-mobile robotic tripod with Pilot 3 and Targeting autosoft 3. Provides 5 points of Recoil Compensation.",
-            "wirelessBonus": "Fire weapon remotely. Use implanted smartlink in VR.",
+            "description": "Non-mobile robotic tripod. Smartgun-equipped weapon mounts to platform. 180-degree arc, 60-degree inclination. Pilot 3, Targeting autosoft 3. Initiative: Pilot x 2 + 4D6. Provides 5 points of Recoil Compensation.",
+            "wirelessBonus": "Fire mounted weapon remotely like a drone. Use implanted smartlink in VR.",
             "page": 433,
             "source": "Core",
             "legality": "forbidden"
@@ -11530,10 +11744,11 @@
             "id": "smartgun-external",
             "name": "Smartgun System, External",
             "mount": "top",
+            "alternateMounts": ["under"],
             "availability": 4,
             "cost": 200,
             "accuracyModifier": 2,
-            "description": "External smartgun system. Increases Accuracy by 2 when used with smartlink.",
+            "description": "External smartgun system. Can mount on top or underbarrel. Requires Armorer + Logic (4, 1 hour) Extended Test to install. Increases Accuracy by 2 when used with smartlink. Camera has capacity 1 for vision enhancements.",
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
             "page": 433,
             "source": "Core",

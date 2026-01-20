@@ -68,7 +68,7 @@ const SIZE_HIERARCHY: WeaponSizeCategory[] = [
 export const DEFAULT_MOUNT_REGISTRY: WeaponSubcategoryMountRegistry = {
   "hold-out-pistol": {
     size: "holdout",
-    availableMounts: ["barrel"],
+    availableMounts: [],
   },
   "light-pistol": {
     size: "light-pistol",
@@ -76,19 +76,19 @@ export const DEFAULT_MOUNT_REGISTRY: WeaponSubcategoryMountRegistry = {
   },
   "heavy-pistol": {
     size: "heavy-pistol",
-    availableMounts: ["barrel", "top", "under"],
+    availableMounts: ["barrel", "top"],
   },
   "machine-pistol": {
     size: "heavy-pistol",
-    availableMounts: ["barrel", "top", "under"],
+    availableMounts: ["barrel", "top"],
   },
   smg: {
     size: "smg",
-    availableMounts: ["barrel", "top", "under", "stock"],
+    availableMounts: ["barrel", "top"],
   },
   "assault-rifle": {
     size: "rifle",
-    availableMounts: ["barrel", "top", "under", "side", "stock"],
+    availableMounts: ["barrel", "top", "under"],
   },
   "sport-rifle": {
     size: "rifle",
@@ -96,27 +96,35 @@ export const DEFAULT_MOUNT_REGISTRY: WeaponSubcategoryMountRegistry = {
   },
   "sniper-rifle": {
     size: "rifle",
-    availableMounts: ["barrel", "top", "under", "stock"],
+    availableMounts: ["barrel", "top", "under"],
   },
   shotgun: {
     size: "rifle",
-    availableMounts: ["barrel", "top", "under", "stock"],
+    availableMounts: ["barrel", "top", "under"],
   },
   "light-machine-gun": {
     size: "heavy",
-    availableMounts: ["barrel", "top", "under", "side", "stock"],
+    availableMounts: ["barrel", "top", "under"],
   },
   "medium-machine-gun": {
     size: "heavy",
-    availableMounts: ["barrel", "top", "under", "side"],
+    availableMounts: ["barrel", "top", "under"],
   },
   "heavy-machine-gun": {
     size: "heavy",
-    availableMounts: ["barrel", "top"],
+    availableMounts: ["barrel", "top", "under"],
   },
   "assault-cannon": {
     size: "heavy",
-    availableMounts: ["top"],
+    availableMounts: ["top", "under"],
+  },
+  cannon: {
+    size: "heavy",
+    availableMounts: ["top", "under"],
+  },
+  launcher: {
+    size: "heavy",
+    availableMounts: ["top", "under"],
   },
 };
 
