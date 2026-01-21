@@ -2601,6 +2601,14 @@
             "description": "Remove your marks from a target persona. Each net hit removes one mark."
           },
           {
+            "id": "data-mask",
+            "name": "Data Mask",
+            "target": "persona",
+            "duration": "sustained",
+            "fading": "L-1",
+            "description": "Mask your Matrix attributes, making them appear as values of your choice. Viewers must succeed on a Matrix Perception test opposed by your Threading test to see your true attributes."
+          },
+          {
             "id": "diffusion",
             "name": "Diffusion of [Matrix Attribute]",
             "target": "device",
