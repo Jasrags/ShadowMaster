@@ -257,14 +257,27 @@ export function FociCard({ state, updateState }: FociCardProps) {
             </div>
           )}
 
-          {/* Add Button */}
-          <button
-            onClick={() => setIsModalOpen(true)}
-            className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-purple-300 bg-purple-50 px-3 py-2 text-sm font-medium text-purple-700 transition-colors hover:border-purple-400 hover:bg-purple-100 dark:border-purple-700 dark:bg-purple-900/20 dark:text-purple-300 dark:hover:border-purple-600 dark:hover:bg-purple-900/30"
-          >
-            <Plus className="h-4 w-4" />
-            Add Focus
-          </button>
+          {/* Category Header with Add Button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Sparkles className="h-3.5 w-3.5 text-purple-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Foci
+              </span>
+              {foci.length > 0 && (
+                <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/40 dark:text-purple-400">
+                  {foci.length}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
 
           {/* Foci List */}
           {foci.length > 0 && (
@@ -282,10 +295,8 @@ export function FociCard({ state, updateState }: FociCardProps) {
 
           {/* Empty state */}
           {foci.length === 0 && (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                Foci enhance your magical abilities but require karma to bond
-              </p>
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No foci purchased</p>
             </div>
           )}
 

@@ -102,14 +102,25 @@ function checkAddButtons(
   violations: PurchaseCardViolation[],
   stats: PurchaseCardResult["stats"]
 ): void {
-  // Find all buttons with "Add" text or Plus icon
-  const addButtonRegex =
-    /<button[^>]*className=["']([^"']+)["'][^>]*>[\s\S]*?(?:<Plus|Add\s|Add<|>\s*Add\s*<)[\s\S]*?<\/button>/gi;
+  // Two-step approach to avoid cross-boundary matching:
+  // 1. Find all button elements with className
+  // 2. Check if they contain "Add" text or Plus icon
+  const buttonRegex = /<button[\s\S]*?className=["']([^"']+)["'][\s\S]*?<\/button>/gi;
 
   let match;
-  while ((match = addButtonRegex.exec(content)) !== null) {
-    stats.checksPerformed++;
+  while ((match = buttonRegex.exec(content)) !== null) {
     const fullMatch = match[0];
+
+    // Check if this button contains "Add" text or Plus icon
+    const hasPlus = fullMatch.includes("<Plus");
+    const hasAdd = /\bAdd\b/.test(fullMatch);
+
+    // Skip buttons that don't have Add/Plus (e.g., remove buttons, toggle buttons)
+    if (!hasPlus && !hasAdd) {
+      continue;
+    }
+
+    stats.checksPerformed++;
     const className = match[1];
     const line = getLineNumber(content, match.index);
 
