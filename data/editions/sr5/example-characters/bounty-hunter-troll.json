@@ -1,0 +1,357 @@
+{
+  "id": "example-bounty-hunter-troll",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Bounty Hunter (Example)",
+  "metatype": "troll",
+  "description": "A Salish-Sidhe national troll working as a bounty hunter. This character combines traditional hunting skills with modern firearms and extensive gear for pursuing targets.",
+  "status": "draft",
+  "attributes": {
+    "body": 7,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 8,
+    "willpower": 3,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6.0
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "animal-handling": 2,
+    "archery": 4,
+    "armorer": 1,
+    "gymnastics": 4,
+    "running": 4,
+    "swimming": 4,
+    "automotive-mechanic": 1,
+    "blades": 3,
+    "clubs": 3,
+    "computer": 1,
+    "con": 2,
+    "electronic-warfare": 1,
+    "first-aid": 3,
+    "etiquette": 2,
+    "leadership": 2,
+    "negotiation": 2,
+    "intimidation": 5,
+    "locksmith": 3,
+    "longarms": 4,
+    "navigation": 4,
+    "survival": 4,
+    "tracking": 4,
+    "palming": 1,
+    "perception": 3,
+    "pilot-ground-craft": 2,
+    "pistols": 4,
+    "sneaking": 3,
+    "throwing-weapons": 1,
+    "unarmed-combat": 5
+  },
+  "knowledgeSkills": [
+    { "name": "Parazoology", "category": "academic", "rating": 2 },
+    { "name": "Police Procedures", "category": "professional", "rating": 4 },
+    { "name": "Salish-Sidhe Tribal Law", "category": "academic", "rating": 3 }
+  ],
+  "languages": [
+    { "name": "Siouan (Crow)", "rating": 0, "isNative": true },
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Spanish", "rating": 3, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "bilingual", "rating": 1, "specification": "English" },
+    { "qualityId": "guts", "rating": 1 },
+    { "qualityId": "natural-athlete", "rating": 1 }
+  ],
+  "negativeQualities": [{ "qualityId": "allergy", "rating": 2, "specification": "Soy (Mild)" }],
+  "racialQualities": ["Thermographic Vision", "+1 Reach", "+1 Dermal Armor"],
+  "sinnerQuality": "national",
+  "contacts": [
+    {
+      "name": "Parole Officer",
+      "type": "Law Enforcement",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Legal supervision"
+    },
+    {
+      "name": "Tribal Official",
+      "type": "Government",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Salish-Sidhe government"
+    }
+  ],
+  "gear": [
+    { "name": "Armorer Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Auto Mechanics Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
+    { "name": "Lockpick Set", "category": "tools", "quantity": 1, "cost": 250 },
+    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 4 },
+    { "name": "Binoculars (Optical)", "category": "electronics", "quantity": 1, "cost": 50 },
+    {
+      "name": "Sensor Array (Handheld)",
+      "category": "sensors",
+      "quantity": 1,
+      "cost": 3000,
+      "rating": 3
+    },
+    { "name": "Manacles", "category": "restraints", "quantity": 1, "cost": 20 },
+    { "name": "Metal Restraints", "category": "restraints", "quantity": 2, "cost": 40 },
+    { "name": "Plastic Restraints", "category": "restraints", "quantity": 20, "cost": 100 },
+    { "name": "RFID Tags (Security)", "category": "rfid", "quantity": 10, "cost": 100 },
+    { "name": "RFID Tags (Stealth)", "category": "rfid", "quantity": 10, "cost": 100 },
+    { "name": "Rope (100m)", "category": "survival", "quantity": 1, "cost": 50 }
+  ],
+  "armor": [
+    {
+      "catalogId": "lined-coat",
+      "name": "Lined Coat",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "capacityUsed": 3,
+      "cost": 900,
+      "quantity": 1,
+      "equipped": true,
+      "modifications": [
+        {
+          "catalogId": "shock-frills",
+          "name": "Shock Frills",
+          "capacityUsed": 3,
+          "cost": 250,
+          "availability": 6,
+          "legality": "restricted"
+        }
+      ]
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "bow",
+      "name": "Bow (Rating 8)",
+      "category": "weapons",
+      "subcategory": "bow",
+      "damage": "10P",
+      "ap": -2,
+      "mode": ["SS"],
+      "accuracy": 6,
+      "cost": 600,
+      "quantity": 1,
+      "rating": 8,
+      "notes": "20 arrows"
+    },
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "2 spare clips, 110 rounds"
+    },
+    {
+      "catalogId": "defiance-t-250",
+      "name": "Defiance T-250",
+      "category": "weapons",
+      "subcategory": "shotgun",
+      "damage": "10P",
+      "ap": -1,
+      "mode": ["SS", "SA"],
+      "accuracy": 4,
+      "ammoCapacity": 5,
+      "cost": 450,
+      "quantity": 1,
+      "notes": "50 standard + 20 Stick-n-Shock"
+    },
+    {
+      "catalogId": "remington-950",
+      "name": "Remington 950",
+      "category": "weapons",
+      "subcategory": "sniper-rifle",
+      "damage": "12P",
+      "ap": -4,
+      "mode": ["SS"],
+      "accuracy": 7,
+      "ammoCapacity": 5,
+      "cost": 2100,
+      "quantity": 1,
+      "notes": "50 rounds"
+    },
+    {
+      "catalogId": "ruger-super-warhawk",
+      "name": "Ruger Super Warhawk",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "9P",
+      "ap": -2,
+      "mode": ["SS"],
+      "accuracy": 5,
+      "ammoCapacity": 6,
+      "cost": 400,
+      "quantity": 1,
+      "notes": "2 speed loaders, 60 rounds"
+    },
+    {
+      "catalogId": "yamaha-pulsar",
+      "name": "Yamaha Pulsar",
+      "category": "weapons",
+      "subcategory": "taser",
+      "damage": "9S(e)",
+      "ap": -5,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 4,
+      "cost": 180,
+      "quantity": 1,
+      "notes": "10 darts"
+    },
+    {
+      "catalogId": "flash-bang-grenade",
+      "name": "Flash-Bang Grenade",
+      "category": "weapons",
+      "subcategory": "grenade",
+      "damage": "10S",
+      "ap": -4,
+      "mode": [],
+      "cost": 100,
+      "quantity": 2
+    },
+    {
+      "catalogId": "smoke-grenade",
+      "name": "Smoke Grenade",
+      "category": "weapons",
+      "subcategory": "grenade",
+      "damage": "-",
+      "ap": 0,
+      "mode": [],
+      "cost": 40,
+      "quantity": 2
+    },
+    {
+      "catalogId": "extendable-baton",
+      "name": "Extendable Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "10S",
+      "ap": 0,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1
+    },
+    {
+      "catalogId": "stun-baton",
+      "name": "Stun Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "9S(e)",
+      "ap": -5,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 4,
+      "cost": 750,
+      "quantity": 1
+    },
+    {
+      "catalogId": "survival-knife",
+      "name": "Survival Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "10P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "bounty-hunter-vehicle-1",
+      "name": "Toyota Gopher",
+      "type": "ground",
+      "handling": 4,
+      "speed": 3,
+      "acceleration": 1,
+      "body": 14,
+      "armor": 6,
+      "pilot": 1,
+      "sensor": 1,
+      "seats": 3,
+      "notes": "Pickup truck"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "renraku-sensei",
+      "name": "Renraku Sensei",
+      "deviceRating": 3,
+      "cost": 1000
+    }
+  ],
+  "identities": [
+    {
+      "name": "Legal Identity",
+      "sin": {
+        "type": "real",
+        "sinnerQuality": "national"
+      },
+      "licenses": [],
+      "notes": "Salish-Sidhe National SIN"
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 4116,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 9,
+    "mentalLimit": 4,
+    "socialLimit": 5,
+    "initiativeBase": 6,
+    "initiativeDice": 1,
+    "physicalConditionMonitor": 12,
+    "stunConditionMonitor": 10,
+    "composure": 5,
+    "judgeIntentions": 5,
+    "memory": 6,
+    "liftCarry": 15
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Bounty Hunter / Tracker",
+    "notes": "Priority: A-Skills, B-Attributes, C-Metatype(Troll), D-Resources, E-Magic. Legal SINner (Salish-Sidhe National)."
+  }
+}

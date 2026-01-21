@@ -1,0 +1,366 @@
+{
+  "id": "example-drone-rigger-ork",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Drone Rigger (Example)",
+  "metatype": "ork",
+  "description": "An ork rigger specializing in drone operations with an impressive fleet of aerial, ground, and walker drones. This character operates as a one-person army, controlling multiple armed drones while maintaining a vehicle for transport. The Juryrigger quality allows improvised repairs in the field.",
+  "status": "draft",
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 5,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 2,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 3.2
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "armorer": 5,
+    "computer": 2,
+    "hardware": 2,
+    "software": 2,
+    "aeronautics-mechanic": 3,
+    "automotive-mechanic": 3,
+    "industrial-mechanic": 3,
+    "nautical-mechanic": 3,
+    "etiquette": 3,
+    "gunnery": 5,
+    "perception": 3,
+    "pilot-aircraft": 6,
+    "pilot-ground-craft": 6,
+    "pilot-walker": 5,
+    "pistols": 3
+  },
+  "knowledgeSkills": [
+    { "name": "Automotive Mechanics", "category": "professional", "rating": 5 },
+    { "name": "Drone Designs", "category": "professional", "rating": 2 },
+    { "name": "Vehicle Chop Shops", "category": "street", "rating": 4 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Or'zet", "rating": 3, "isNative": false }
+  ],
+  "positiveQualities": [{ "qualityId": "juryrigger", "rating": 1 }],
+  "negativeQualities": [],
+  "racialQualities": ["Low-Light Vision", "+3 Body", "+2 Strength"],
+  "cyberware": [
+    {
+      "catalogId": "implanted-commlink",
+      "name": "Implanted Commlink (Transys Avalon)",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.2,
+      "essenceCost": 0.2,
+      "cost": 8000,
+      "availability": 8,
+      "notes": "Device Rating 6, hot-sim module"
+    },
+    {
+      "catalogId": "control-rig",
+      "name": "Control Rig",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 1.0,
+      "essenceCost": 1.0,
+      "rating": 2,
+      "cost": 97000,
+      "availability": 12,
+      "legality": "restricted",
+      "notes": "+2 dice vehicle/drone tests, +2 limits"
+    },
+    {
+      "catalogId": "reaction-enhancers",
+      "name": "Reaction Enhancers",
+      "category": "bodyware",
+      "grade": "standard",
+      "baseEssenceCost": 0.6,
+      "essenceCost": 0.6,
+      "rating": 2,
+      "cost": 26000,
+      "availability": 8,
+      "attributeBonuses": { "reaction": 2 }
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Barrens Mechanic",
+      "type": "Service",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Cheap repairs"
+    },
+    {
+      "name": "Drone Dealer",
+      "type": "Arms",
+      "connection": 3,
+      "loyalty": 3,
+      "notes": "Drone acquisition"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Goggles",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 100,
+      "rating": 4,
+      "notes": "Image Link, Smartlink, Thermographic Vision, Vision Magnification"
+    },
+    { "name": "Aeronautics Mechanic Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Armorer Shop", "category": "tools", "quantity": 1, "cost": 5000 },
+    { "name": "Automotive Mechanic Facility", "category": "tools", "quantity": 1, "cost": 50000 },
+    { "name": "Miniwelder", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "DocWagon Contract",
+      "category": "services",
+      "quantity": 1,
+      "cost": 25000,
+      "notes": "Gold (1 year)"
+    }
+  ],
+  "drones": [
+    {
+      "catalogId": "cyberspace-designs-dalmatian",
+      "name": "Cyberspace Designs Dalmatian",
+      "type": "aerial",
+      "handling": 5,
+      "speed": 4,
+      "acceleration": 3,
+      "body": 5,
+      "armor": 5,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 10000,
+      "quantity": 1,
+      "notes": "VTOL, Surveillance"
+    },
+    {
+      "catalogId": "lockheed-optic-x2",
+      "name": "Lockheed Optic-X2",
+      "type": "aerial",
+      "handling": 4,
+      "speed": 4,
+      "acceleration": 3,
+      "body": 2,
+      "armor": 2,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 15000,
+      "quantity": 1,
+      "notes": "VSTOL, Recon"
+    },
+    {
+      "catalogId": "mct-fly-spy",
+      "name": "MCT Fly-Spy",
+      "type": "aerial",
+      "handling": 4,
+      "speed": 3,
+      "acceleration": 2,
+      "body": 1,
+      "armor": 0,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 2000,
+      "quantity": 2,
+      "notes": "Micro surveillance"
+    },
+    {
+      "catalogId": "mct-nissan-roto-drone",
+      "name": "MCT-Nissan Roto-Drone",
+      "type": "rotorcraft",
+      "handling": 4,
+      "speed": 4,
+      "acceleration": 2,
+      "body": 4,
+      "armor": 4,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 5000,
+      "quantity": 1,
+      "notes": "Ares Alpha mounted, 250 rounds regular"
+    },
+    {
+      "catalogId": "mct-nissan-roto-drone",
+      "name": "MCT-Nissan Roto-Drone #2",
+      "type": "rotorcraft",
+      "handling": 4,
+      "speed": 4,
+      "acceleration": 2,
+      "body": 4,
+      "armor": 4,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 5000,
+      "quantity": 1,
+      "notes": "Yamaha Pulsar (taser) mounted"
+    },
+    {
+      "catalogId": "gm-nissan-doberman",
+      "name": "GM-Nissan Doberman",
+      "type": "ground",
+      "handling": 5,
+      "speed": 3,
+      "acceleration": 1,
+      "body": 4,
+      "armor": 4,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 5000,
+      "quantity": 1,
+      "notes": "Tracked, AK-97 mounted, 100 rounds APDS"
+    },
+    {
+      "catalogId": "steel-lynx",
+      "name": "Steel Lynx Combat Drone",
+      "type": "ground",
+      "handling": 5,
+      "speed": 4,
+      "acceleration": 2,
+      "body": 6,
+      "armor": 12,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 25000,
+      "quantity": 1,
+      "notes": "Wheeled, Stoner-Ares M202 (Heavy) mounted, 150 rounds explosive"
+    },
+    {
+      "catalogId": "aztechnology-crawler",
+      "name": "Aztechnology Crawler",
+      "type": "walker",
+      "handling": 4,
+      "speed": 3,
+      "acceleration": 1,
+      "body": 3,
+      "armor": 3,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 5000,
+      "quantity": 1
+    },
+    {
+      "catalogId": "shiawase-kanmushi",
+      "name": "Shiawase Kanmushi",
+      "type": "walker",
+      "handling": 4,
+      "speed": 2,
+      "acceleration": 1,
+      "body": 0,
+      "armor": 0,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 1000,
+      "quantity": 2,
+      "notes": "Micro bugs"
+    }
+  ],
+  "vehicles": [
+    {
+      "catalogId": "rover-model-2072",
+      "name": "Rover Model 2072",
+      "type": "ground",
+      "handling": "5/5",
+      "speed": 4,
+      "acceleration": 2,
+      "body": 15,
+      "armor": 12,
+      "pilot": 2,
+      "sensor": 4,
+      "seats": 6,
+      "cost": 44000,
+      "notes": "SUV, Rigger interface, weapon mount with Ares Alpha (250 rounds regular) and Grenade Launcher (12 thermal smoke minigrenades)"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-vest",
+      "name": "Armor Vest",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 500,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "ares-predator-v",
+      "name": "Ares Predator V",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "8P",
+      "ap": -1,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 15,
+      "cost": 725,
+      "quantity": 1,
+      "notes": "Smartlink, 75 rounds"
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 4 },
+      "licenses": [
+        { "type": "fake", "rating": 4, "name": "Gun License" },
+        { "type": "fake", "rating": 4, "name": "Drone License" }
+      ]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "medium",
+      "monthlyCost": 5000,
+      "prepaidMonths": 3,
+      "notes": "Special Work Area (Vehicle Facility), Obscure location"
+    }
+  ],
+  "nuyen": 1150,
+  "startingNuyen": 450000,
+  "derivedStats": {
+    "physicalLimit": 6,
+    "mentalLimit": 6,
+    "socialLimit": 4,
+    "initiativeBase": 9,
+    "initiativeDice": 1,
+    "matrixInitiativeAR": 9,
+    "matrixInitiativeDiceAR": 1,
+    "matrixInitiativeColdVR": 10,
+    "matrixInitiativeDiceColdVR": 3,
+    "matrixInitiativeHotVR": 10,
+    "matrixInitiativeDiceHotVR": 4,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 10,
+    "composure": 6,
+    "judgeIntentions": 4,
+    "memory": 7,
+    "liftCarry": 7
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 15,
+  "karmaSpentAtCreation": 10,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Drone Rigger",
+    "notes": "Priority: A-Resources, B-Attributes, C-Metatype(Ork), D-Skills, E-Magic. Control Rig 2 provides +2 dice and +2 limits when jumped in. Reaction Enhancers +2 already factored into derived stats."
+  }
+}

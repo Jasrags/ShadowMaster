@@ -1,0 +1,254 @@
+{
+  "id": "example-shaman-elf",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Shaman (Example)",
+  "metatype": "elf",
+  "description": "A Salish-Sidhe elf shaman following the path of Bear, specializing in healing and support magic. This character combines traditional tribal shamanism with alchemical knowledge.",
+  "status": "draft",
+  "attributes": {
+    "body": 4,
+    "agility": 4,
+    "reaction": 4,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 6
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 6.0,
+    "magic": 3
+  },
+  "magicalPath": "magician",
+  "tradition": "shamanic",
+  "mentorSpirit": "bear",
+  "skills": {
+    "alchemy": 4,
+    "animal-handling": 2,
+    "assensing": 3,
+    "gymnastics": 1,
+    "running": 1,
+    "swimming": 1,
+    "banishing": 2,
+    "blades": 3,
+    "conjuring": 6,
+    "disguise": 1,
+    "etiquette": 2,
+    "first-aid": 4,
+    "intimidation": 2,
+    "medicine": 4,
+    "navigation": 1,
+    "negotiation": 2,
+    "perception": 1,
+    "performance": 2,
+    "sneaking": 1,
+    "counterspelling": 4,
+    "ritual-spellcasting": 4,
+    "spellcasting": 4,
+    "survival": 1,
+    "throwing-weapons": 1,
+    "unarmed-combat": 1
+  },
+  "knowledgeSkills": [
+    { "name": "Politics", "category": "academic", "rating": 2 },
+    { "name": "Salish-Sidhe Nation", "category": "street", "rating": 3 },
+    { "name": "Sprawl Life", "category": "street", "rating": 4 },
+    { "name": "Tarislar", "category": "street", "rating": 4 },
+    { "name": "Tir Tairngire", "category": "street", "rating": 2 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Salish", "rating": 2, "isNative": false },
+    { "name": "Sperethiel", "rating": 0, "isNative": true }
+  ],
+  "positiveQualities": [
+    { "qualityId": "bilingual", "rating": 1, "specification": "Sperethiel" },
+    { "qualityId": "mentor-spirit", "rating": 1, "specification": "Bear" },
+    { "qualityId": "spirit-affinity", "rating": 1, "specification": "Beast Spirits" }
+  ],
+  "negativeQualities": [
+    { "qualityId": "gremlins", "rating": 2 },
+    { "qualityId": "prejudiced", "rating": 1, "specification": "Hermetic Magicians (Biased)" },
+    { "qualityId": "simsense-vertigo", "rating": 1 }
+  ],
+  "racialQualities": ["Low-Light Vision"],
+  "spells": [
+    { "id": "spell-antidote", "catalogId": "antidote", "name": "Antidote" },
+    { "id": "spell-cure-disease", "catalogId": "cure-disease", "name": "Cure Disease" },
+    { "id": "spell-entertainment", "catalogId": "entertainment", "name": "Entertainment" },
+    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
+    { "id": "spell-mana-bolt", "catalogId": "manabolt", "name": "Mana Bolt" }
+  ],
+  "contacts": [
+    { "name": "Street Ganger", "type": "Gang", "connection": 2, "loyalty": 3 },
+    {
+      "name": "Talismonger",
+      "type": "Magic",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Magical supplies"
+    },
+    {
+      "name": "Tamanous Member",
+      "type": "Underworld",
+      "connection": 1,
+      "loyalty": 1,
+      "notes": "Organlegger contact"
+    },
+    {
+      "name": "Tarislar Politician",
+      "type": "Government",
+      "connection": 3,
+      "loyalty": 3,
+      "notes": "Elven district influence"
+    },
+    {
+      "name": "Tribal Bureaucrat",
+      "type": "Government",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Salish-Sidhe official"
+    }
+  ],
+  "gear": [
+    { "name": "Alchemy Kit", "category": "magical", "quantity": 1, "cost": 500 },
+    {
+      "name": "Magical Lodge Materials",
+      "category": "magical",
+      "quantity": 1,
+      "cost": 1500,
+      "rating": 3
+    },
+    { "name": "Biomonitor", "category": "medical", "quantity": 1, "cost": 300 },
+    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 4 },
+    { "name": "Medkit Supplies", "category": "medical", "quantity": 1, "cost": 200 },
+    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 }
+  ],
+  "foci": [
+    {
+      "catalogId": "spell-focus-health",
+      "name": "Spell Focus (Health)",
+      "type": "spell",
+      "force": 2,
+      "bonded": true,
+      "karmaToBond": 4,
+      "cost": 8000,
+      "availability": 8,
+      "legality": "restricted"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "lined-coat",
+      "name": "Lined Coat",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 900,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "combat-knife",
+      "name": "Combat Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "7P",
+      "ap": -3,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 6,
+      "cost": 300,
+      "quantity": 1
+    },
+    {
+      "catalogId": "survival-knife",
+      "name": "Survival Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "7P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1
+    },
+    {
+      "catalogId": "throwing-knife",
+      "name": "Throwing Knife",
+      "category": "weapons",
+      "subcategory": "throwing-weapon",
+      "damage": "6P",
+      "ap": -1,
+      "mode": [],
+      "accuracy": 0,
+      "cost": 25,
+      "quantity": 3
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "renraku-sensei",
+      "name": "Renraku Sensei",
+      "deviceRating": 3,
+      "cost": 1000
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 3 },
+      "licenses": [
+        { "type": "fake", "rating": 3, "name": "Magic License" },
+        { "type": "fake", "rating": 3, "name": "Medicine License" }
+      ]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "squatter",
+      "monthlyCost": 500,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 0,
+  "startingNuyen": 6000,
+  "derivedStats": {
+    "physicalLimit": 6,
+    "mentalLimit": 6,
+    "socialLimit": 8,
+    "initiativeBase": 8,
+    "initiativeDice": 1,
+    "astralInitiativeBase": 8,
+    "astralInitiativeDice": 3,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 10,
+    "composure": 10,
+    "judgeIntentions": 10,
+    "memory": 8,
+    "liftCarry": 9
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Shaman / Healer",
+    "notes": "Priority: A-Attributes, B-Skills, C-Magic, D-Metatype(Elf), E-Resources. Shamanic Tradition (Drain: Willpower + Charisma), Mentor Spirit: Bear."
+  }
+}

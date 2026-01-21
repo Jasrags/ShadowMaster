@@ -38,6 +38,7 @@
     "check-tests": "pnpm dlx tsx scripts/check-test-coverage.ts",
     "check-tests:all": "pnpm dlx tsx scripts/check-test-coverage.ts --all",
     "check-tests:strict": "pnpm dlx tsx scripts/check-test-coverage.ts --strict",
+    "validate-characters": "pnpm dlx tsx scripts/validate-example-characters.ts",
     "prepare": "husky"
   },
   "lint-staged": {
