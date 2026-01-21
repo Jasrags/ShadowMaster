@@ -35,7 +35,7 @@ A troll rigger specializing in vehicle operation across multiple platforms - gro
 
 | Attribute | Value | Notes                 |
 | --------- | ----- | --------------------- |
-| Essence   | 4.9   | Moderate augmentation |
+| Essence   | 4.1   | Moderate augmentation |
 | Edge      | 1     | -                     |
 | Magic     | -     | Mundane               |
 
@@ -47,16 +47,16 @@ A troll rigger specializing in vehicle operation across multiple platforms - gro
 | ------------ | -------- | ------------ | ------------------------------------------------------- |
 | Control Rig  | Rating 2 | 1.0          | +2 dice vehicle tests, +2 vehicle limits when jumped in |
 | Datajack     | Standard | 0.1          | Direct neural interface                                 |
+| Smartlink    | Standard | 0.2          | +2 Accuracy with smartguns                              |
 
 ### Bioware
 
-| Augmentation          | Grade    | Essence Cost | Effects                    |
-| --------------------- | -------- | ------------ | -------------------------- |
-| Muscle Toner          | Rating 2 | 0.4          | +2 Agility                 |
-| Smuggling Compartment | Standard | 0.2          | Hidden storage             |
-| Smartlink             | Bioware  | 0.2          | +2 Accuracy with smartguns |
+| Augmentation          | Grade    | Essence Cost | Effects        |
+| --------------------- | -------- | ------------ | -------------- |
+| Muscle Toner          | Rating 2 | 0.4          | +2 Agility     |
+| Smuggling Compartment | Standard | 0.2          | Hidden storage |
 
-**Total Essence Cost:** 1.1 (Remaining: 4.9)
+**Total Essence Cost:** 1.9 (Remaining: 4.1)
 
 ## Skills
 
