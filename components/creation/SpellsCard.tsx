@@ -601,6 +601,28 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
           </div>
         )}
 
+        {/* Category Header with Add Button */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              Spells
+            </span>
+            {selectedSpells.length > 0 && (
+              <span className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
+                {selectedSpells.length}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3 w-3" />
+            Add
+          </button>
+        </div>
+
         {/* Category tabs */}
         <div className="flex flex-wrap gap-1">
           <button
@@ -632,15 +654,6 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
             );
           })}
         </div>
-
-        {/* Add button */}
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 py-3 text-sm font-medium text-zinc-600 transition-colors hover:border-emerald-400 hover:bg-emerald-50 hover:text-emerald-700 dark:border-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:border-emerald-600 dark:hover:bg-emerald-900/20 dark:hover:text-emerald-400"
-        >
-          <Plus className="h-4 w-4" />
-          Add Spell
-        </button>
 
         {/* Selected spells grouped by category */}
         {selectedSpells.length > 0 && (
@@ -679,6 +692,13 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
                 </div>
               </div>
             ))}
+          </div>
+        )}
+
+        {/* Empty state */}
+        {selectedSpells.length === 0 && (
+          <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">No spells selected</p>
           </div>
         )}
 

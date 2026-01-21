@@ -102,27 +102,85 @@ function checkAddButtons(
   violations: PurchaseCardViolation[],
   stats: PurchaseCardResult["stats"]
 ): void {
-  // Two-step approach to avoid cross-boundary matching:
-  // 1. Find all button elements with className
-  // 2. Check if they contain "Add" text or Plus icon
-  const buttonRegex = /<button[\s\S]*?className=["']([^"']+)["'][\s\S]*?<\/button>/gi;
+  // Strategy: Find <button tags, then locate the matching </button> and extract content
+  // We need to handle JSX attributes that may contain > (like arrow functions)
+  const buttonStartRegex = /<button\b/gi;
 
-  let match;
-  while ((match = buttonRegex.exec(content)) !== null) {
-    const fullMatch = match[0];
+  let startMatch;
+  while ((startMatch = buttonStartRegex.exec(content)) !== null) {
+    const buttonStart = startMatch.index;
+
+    // Find the end of the opening tag by looking for > that's not inside quotes or braces
+    let tagEnd = buttonStart + 7; // After "<button"
+    let inString: string | null = null;
+    let braceDepth = 0;
+
+    while (tagEnd < content.length) {
+      const char = content[tagEnd];
+
+      if (inString) {
+        if (char === inString && content[tagEnd - 1] !== "\\") {
+          inString = null;
+        }
+      } else if (char === '"' || char === "'" || char === "`") {
+        inString = char;
+      } else if (char === "{") {
+        braceDepth++;
+      } else if (char === "}") {
+        braceDepth--;
+      } else if (char === ">" && braceDepth === 0) {
+        break;
+      }
+      tagEnd++;
+    }
+
+    if (tagEnd >= content.length) continue;
+
+    const openingTag = content.substring(buttonStart, tagEnd + 1);
+
+    // Find the matching </button> by tracking nesting depth
+    let depth = 1;
+    let pos = tagEnd + 1;
+    while (depth > 0 && pos < content.length) {
+      const nextOpen = content.indexOf("<button", pos);
+      const nextClose = content.indexOf("</button>", pos);
+
+      if (nextClose === -1) break;
+
+      if (nextOpen !== -1 && nextOpen < nextClose) {
+        depth++;
+        pos = nextOpen + 7;
+      } else {
+        depth--;
+        if (depth === 0) {
+          pos = nextClose + 9;
+        } else {
+          pos = nextClose + 9;
+        }
+      }
+    }
+
+    if (depth !== 0) continue;
+
+    const fullMatch = content.substring(buttonStart, pos);
+    const buttonContent = content.substring(tagEnd + 1, pos - 9);
 
     // Check if this button contains "Add" text or Plus icon
-    const hasPlus = fullMatch.includes("<Plus");
-    const hasAdd = /\bAdd\b/.test(fullMatch);
+    const hasPlus = buttonContent.includes("<Plus");
+    const hasAdd = /\bAdd\b/.test(buttonContent);
 
-    // Skip buttons that don't have Add/Plus (e.g., remove buttons, toggle buttons)
     if (!hasPlus && !hasAdd) {
       continue;
     }
 
     stats.checksPerformed++;
-    const className = match[1];
-    const line = getLineNumber(content, match.index);
+
+    // Extract className from the opening tag
+    const classNameMatch = /className=["']([^"']+)["']/.exec(openingTag);
+    if (!classNameMatch) continue;
+
+    const className = classNameMatch[1];
+    const line = getLineNumber(content, buttonStart);
 
     // Check for full-width dashed button (anti-pattern)
     if (/w-full/.test(className) && /border-dashed/.test(className)) {
@@ -130,8 +188,8 @@ function checkAddButtons(
         type: "full-width-add-button",
         severity: "high",
         line,
-        column: getColumnNumber(content, match.index),
-        code: getCodeSnippet(content, match.index, fullMatch.length),
+        column: getColumnNumber(content, buttonStart),
+        code: getCodeSnippet(content, buttonStart, fullMatch.length),
         message: "Add button uses full-width dashed style (anti-pattern)",
         expected: "Compact amber button in category header: bg-amber-500 px-2 py-1 text-xs",
         found: "Full-width dashed button",
@@ -152,8 +210,8 @@ function checkAddButtons(
         type: "wrong-add-button-style",
         severity: "high",
         line,
-        column: getColumnNumber(content, match.index),
-        code: getCodeSnippet(content, match.index, fullMatch.length),
+        column: getColumnNumber(content, buttonStart),
+        code: getCodeSnippet(content, buttonStart, fullMatch.length),
         message: "Add button uses non-standard colors",
         expected: "bg-amber-500 hover:bg-amber-600 text-white",
         found: wrongColors.join(", "),
@@ -178,8 +236,8 @@ function checkAddButtons(
         type: "wrong-add-button-style",
         severity: "medium",
         line,
-        column: getColumnNumber(content, match.index),
-        code: getCodeSnippet(content, match.index, fullMatch.length),
+        column: getColumnNumber(content, buttonStart),
+        code: getCodeSnippet(content, buttonStart, fullMatch.length),
         message: `Add button missing required classes: ${missing.join(", ")}`,
         expected: "bg-amber-500 hover:bg-amber-600 text-white",
         found: className,
