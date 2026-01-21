@@ -16660,6 +16660,1395 @@
         ]
       }
     },
+    "critterPowers": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "categories": {
+          "standard": {
+            "name": "Standard Critter Powers",
+            "description": "Powers available to various magical creatures and critters. Found in SR5 Core Rulebook pp. 394-401."
+          }
+        },
+        "powers": [
+          {
+            "id": "accident",
+            "name": "Accident",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "instant",
+            "category": "standard",
+            "description": "Critters with this power can cause seemingly normal accidents to occur. When a critter targets someone with this power, make an Opposed Test using the critter's Magic + Willpower against the target's Reaction + Intuition. If the critter wins, treat it as if the target rolled a glitch. If the critter scores 4+ net hits, the accident is treated as a critical glitch. A critter can use this power on a number of targets at once equal to its Magic rating.",
+            "summary": "Causes glitches or critical glitches on targets",
+            "scalesWithForce": true,
+            "page": 394,
+            "source": "Core"
+          },
+          {
+            "id": "animal-control",
+            "name": "Animal Control",
+            "type": "mana",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "This power lets the critter control the behavior of an animal or group of animals. It must be a normal behavior for the target animal. If the target critter leaves the controlling critter's line of sight, it can't be commanded any longer but will continue following orders for the critter's Charisma in minutes. The critter may control a number of small animals equal to Charisma x 5, or larger animals equal to Charisma. Cannot be used on any critter with the Sapience power.",
+            "summary": "Controls animal behavior within LOS",
+            "scalesWithForce": false,
+            "page": 394,
+            "source": "Core"
+          },
+          {
+            "id": "armor",
+            "name": "Armor",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "Whether it comes in the form of dermal bone deposits, scales, or just a thick hide, a critter with this power has some inherent protection from physical attacks. The critter's natural Armor rating is cumulative with any armor worn.",
+            "summary": "Natural armor protection cumulative with worn armor",
+            "scalesWithForce": false,
+            "page": 395,
+            "source": "Core"
+          },
+          {
+            "id": "astral-form",
+            "name": "Astral Form",
+            "type": "mana",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "A critter with this power only exists in the astral plane. Only astral attacks or mana spells/powers may hurt an astral critter; physical attacks or spells/powers have no effect. The reverse is also true; an astral critter can only affect dual-natured beings or those on the astral plane. Critters with this power may manifest on the physical plane in the same way as astrally projecting magicians.",
+            "summary": "Exists only on the astral plane",
+            "scalesWithForce": false,
+            "page": 395,
+            "source": "Core"
+          },
+          {
+            "id": "binding",
+            "name": "Binding",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "instant",
+            "category": "standard",
+            "description": "The critter with this power can make its target stick to any surface the target happens to be touching. The target may attempt to break free with a Complex Action, rolling Strength + Body against the critter's Magic + Willpower. If the target wins, they escape. If they fail, they remain immobilized until the next escape attempt. Range depends on binding method: webbing (LOS), sticky body (Touch), or self-adhesion (Self).",
+            "summary": "Immobilizes targets by sticking them to surfaces",
+            "scalesWithForce": true,
+            "page": 395,
+            "source": "Core"
+          },
+          {
+            "id": "compulsion",
+            "name": "Compulsion",
+            "type": "mana",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "This power enables the critter to compel a target to perform a specific action, even if not in the target's best interests. The critter makes an Opposed Test using Magic + Charisma against the target's Willpower + Logic; if the target loses, they must immediately carry out the compelled action. The victim immediately recognizes they were compelled after the power is used. Cannot plant suggestions for future actions.",
+            "summary": "Forces target to perform a specific action",
+            "scalesWithForce": true,
+            "page": 395,
+            "source": "Core"
+          },
+          {
+            "id": "concealment",
+            "name": "Concealment",
+            "type": "physical",
+            "action": "simple",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Critters with this power can mystically hide themselves, other people, or things from detection. Concealment subtracts a number of dice equal to the critter's Magic from any Perception Tests to locate the concealed subject. Can be used on a number of metahuman-sized targets equal to Magic, or smaller targets equal to Magic x 5. Concealed subjects can see each other if the critter allows.",
+            "summary": "Subtracts Magic from Perception Tests to find concealed targets",
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "confusion",
+            "name": "Confusion",
+            "type": "mana",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "This power renders the target unable to think clearly. They become indecisive, forgetful, and befuddled. The critter makes an Opposed Test using Magic + Willpower against the target's Willpower + Logic. Any net hits become a negative dice pool modifier for any action the target takes.",
+            "summary": "Causes confusion, net hits become negative modifier",
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "corrosive-spit",
+            "name": "Corrosive Spit",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "instant",
+            "category": "standard",
+            "description": "The critter's saliva (or other chemical) is extremely caustic and can be used as a weapon. Treated as a standard ranged combat attack using Exotic Ranged Weapon + Agility [Physical], with range increments of (Body) meters. Causes Acid damage with DV of (Magic x 2)P and AP of -(critter's Magic).",
+            "summary": "Ranged acid attack with DV Magic x 2",
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "dragonspeech",
+            "name": "Dragonspeech",
+            "type": "mana",
+            "action": "auto",
+            "range": "los",
+            "duration": "instant",
+            "category": "standard",
+            "description": "Dragons and some related critters can communicate telepathically with other beings through this power—as many as they like within line of sight—regardless of the beings' Language skills. This telepathic communication cannot be picked up by technological means. The critter projects speech but targets cannot respond without their own telepathic ability.",
+            "summary": "Telepathic communication regardless of language",
+            "scalesWithForce": false,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "dual-natured",
+            "name": "Dual Natured",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "Dual-natured critters are active in both the astral and physical planes simultaneously. They can affect both astral and physical beings. They can perceive and interact with the astral plane like characters using astral perception. Unlike astral perception, dual-natured critters always sense both worlds and cannot shift back and forth. They don't suffer the -2 dice pool modifier for interacting with the physical world while astrally perceiving.",
+            "summary": "Exists on both astral and physical planes simultaneously",
+            "scalesWithForce": false,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "elemental-attack",
+            "name": "Elemental Attack",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "instant",
+            "category": "standard",
+            "description": "The critter can project a damaging stream of elemental energy. The power has a specific element type. Ranged attack with range increments of (Magic) meters, using Exotic Ranged Weapon + Agility [Physical]. DV is (Magic x 2)P with AP of -(critter's Magic), plus appropriate elemental damage effects.",
+            "summary": "Ranged elemental attack with DV Magic x 2",
+            "requiresSelection": true,
+            "selectionLabel": "Element Type",
+            "selectionOptions": ["fire", "electricity", "cold", "acid"],
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "energy-aura",
+            "name": "Energy Aura",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "The critter is surrounded by a field of damaging energy (fire, electricity, cold, etc.). The power has a specific element type. The critter adds its Magic to the DV of any melee attack it makes. Damage has AP of -(critter's Magic). Successful melee attacks against the critter also damage the attacker—the attacker makes a Damage Resistance Test against DV equal to Magic x 2 with AP -(critter's Magic). Usually always on and cannot be turned off.",
+            "summary": "Damaging energy field adds Magic to melee DV",
+            "requiresSelection": true,
+            "selectionLabel": "Element Type",
+            "selectionOptions": ["fire", "electricity", "cold"],
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "engulf",
+            "name": "Engulf",
+            "type": "physical",
+            "action": "complex",
+            "range": "touch",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "The critter can draw a target into itself, smothering or enveloping them and causing damage. Melee attack that inflicts Magic x 2 damage with AP -(critter's Magic). Once engulfed, target is trapped and cannot move. Each Action Phase, critter automatically inflicts damage. Target may use Complex Action to attempt escape: Strength + Body vs critter's Magic + Body. Secondary effects vary by element: Air (Stun, inhalation), Earth (Physical), Fire (Fire damage), Water (Stun, drowning).",
+            "summary": "Envelops and traps targets, causing ongoing damage",
+            "requiresSelection": true,
+            "selectionLabel": "Element Type",
+            "selectionOptions": ["air", "earth", "fire", "water"],
+            "scalesWithForce": true,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "enhanced-senses",
+            "name": "Enhanced Senses",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "This power includes any improved or augmented senses beyond normal human awareness: low-light vision, thermographic vision, improved hearing/smell, heat-sensing organs, natural sonar, etc. If the enhanced sense doesn't already have a specific effect, this power gives +2 dice pool modifier to tests using that sense, as well as +1 to the appropriate limit.",
+            "summary": "+2 dice and +1 limit for enhanced sense tests",
+            "requiresSelection": true,
+            "selectionLabel": "Sense Type",
+            "selectionOptions": [
+              "low-light-vision",
+              "thermographic-vision",
+              "improved-hearing",
+              "improved-smell",
+              "ultrasound",
+              "heat-sensing"
+            ],
+            "scalesWithForce": false,
+            "page": 396,
+            "source": "Core"
+          },
+          {
+            "id": "essence-drain",
+            "name": "Essence Drain",
+            "type": "physical",
+            "action": "complex",
+            "range": "touch",
+            "duration": "permanent",
+            "category": "standard",
+            "description": "Allows the critter to permanently take away another being's Essence and add it to its own. Can only target physical, sapient beings. Essence cannot be drained while the victim is actively resisting—they must be willing or subdued. Requires strong emotional connection focused on the critter. Draining takes Extended Charisma + Magic (10 - target's Essence, 1 minute) Test. Critter can increase Essence to twice natural maximum. Drained Essence can boost attributes by +1 per point (max +4) for 12 hours.",
+            "summary": "Permanently drains Essence from sapient targets",
+            "scalesWithForce": true,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "fear",
+            "name": "Fear",
+            "type": "mana",
+            "action": "complex",
+            "range": "los",
+            "duration": "special",
+            "category": "standard",
+            "description": "This power fills victims with overwhelming terror. The victim flees in panic and doesn't stop until safely away and out of sight. The critter makes an Opposed Test using Willpower + Magic against target's Willpower + Logic. Terror lasts 1 Combat Turn per net hit. Even after fear fades, target must succeed in Willpower + Logic (critter's net hits) Test to face the critter again.",
+            "summary": "Causes terror, target flees for 1 turn per net hit",
+            "scalesWithForce": true,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "guard",
+            "name": "Guard",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "This power protects against normal environmental accidents and hazards (both natural and those induced by the Accident power), such as preventing heatstroke or saving someone from drowning. Can also prevent a glitch from occurring. May be used on a number of characters equal to the critter's Magic attribute. Each accident averted or glitch prevented counts as a service if used by a spirit.",
+            "summary": "Protects against accidents and prevents glitches",
+            "scalesWithForce": true,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "hardened-armor",
+            "name": "Hardened Armor",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "Provides its rating in Armor like the Armor power, but with special properties. If the modified DV of an attack is less than the Hardened Armor rating (modified by AP), the attack does no damage automatically. If the modified DV exceeds the rating, perform a Damage Resistance test normally, and half the Hardened Armor rating (modified by AP, rounded up) counts as automatic extra hits on this test.",
+            "summary": "Armor that ignores low-damage attacks, auto-hits on resistance",
+            "scalesWithForce": false,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "hardened-mystic-armor",
+            "name": "Hardened Mystic Armor",
+            "type": "mana",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "This power provides protection from attacks on the astral plane. Otherwise, it functions in the same way as Hardened Armor.",
+            "summary": "Hardened Armor that protects on the astral plane",
+            "scalesWithForce": false,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "immunity",
+            "name": "Immunity",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "A critter with Immunity has enhanced resistance to a certain type of attack or affliction. Effectively has Hardened Armor rating equal to twice its Essence against that damage type. If modified DV doesn't exceed Immunity rating, attack does no damage. If it does, add Immunity rating to Damage Resistance dice pool, and half (rounded up) counts as automatic hits. Special immunities: Age (no aging), Normal Weapons (only magical attacks work, except allergen weapons).",
+            "summary": "Hardened resistance (2x Essence) to specific damage type",
+            "requiresSelection": true,
+            "selectionLabel": "Immunity Type",
+            "selectionOptions": [
+              "normal-weapons",
+              "fire",
+              "cold",
+              "electricity",
+              "age",
+              "pathogens",
+              "toxins"
+            ],
+            "scalesWithForce": false,
+            "page": 397,
+            "source": "Core"
+          },
+          {
+            "id": "infection",
+            "name": "Infection",
+            "type": "physical",
+            "action": "auto",
+            "range": "touch",
+            "duration": "permanent",
+            "category": "standard",
+            "description": "This power transmits HMHVV. When a critter with this power uses Essence Drain to reduce victim's Essence to 0, make Opposed Test of critter's Magic + Charisma vs victim's Body + Willpower. If critter wins, victim is infected and enters coma-like state. 24 hours later, victim rises as new Infected critter with 1 Essence and insatiable hunger for more. Player characters transformed become NPCs controlled by the gamemaster.",
+            "summary": "Transmits HMHVV infection when draining Essence to 0",
+            "scalesWithForce": true,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "influence",
+            "name": "Influence",
+            "type": "mana",
+            "action": "complex",
+            "range": "los",
+            "duration": "instant",
+            "category": "standard",
+            "description": "This power lets the critter exert its will on a target, implanting a suggestion in their mind. Make Opposed Test using critter's Magic + Charisma vs target's Willpower + Logic. If critter succeeds, target acts on the suggestion as if it was their own idea. If confronted with the wrongness of the suggestion, subject can make Willpower Test to overcome it, like mental manipulation spells.",
+            "summary": "Implants suggestion that target believes is their own idea",
+            "scalesWithForce": true,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "innate-spell",
+            "name": "Innate Spell",
+            "type": "special",
+            "action": "complex",
+            "range": "special",
+            "duration": "special",
+            "category": "standard",
+            "description": "Allows the critter to instinctively cast a single, specific spell. Critter needs Spellcasting skill to use effectively. Innate Spells are chosen from the spell list, and magicians can oppose them with Counterspelling. Innate Spells produce Drain normally and suffer -2 penalty for sustaining. Critters and spirits resist Drain with either Intuition or Charisma.",
+            "summary": "Natural ability to cast a specific spell",
+            "requiresSelection": true,
+            "selectionLabel": "Spell",
+            "scalesWithForce": true,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "materialization",
+            "name": "Materialization",
+            "type": "mana",
+            "action": "complex",
+            "range": "self",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Astral critters can project themselves into the physical world and form a temporary body to inhabit, letting them interact with and affect physical beings. Additionally, they gain Immunity to Normal Weapons while materialized. Materializing and dematerializing both require a Complex Action.",
+            "summary": "Allows astral beings to form physical bodies",
+            "scalesWithForce": false,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "mimicry",
+            "name": "Mimicry",
+            "type": "physical",
+            "action": "simple",
+            "range": "self",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Allows a critter to exactly imitate sounds, including speech and hunting calls of other creatures it has been exposed to. If mimicking from memory, critter needs Memory Test. Noticing that the sound is false requires Perception Test; threshold is determined by critter's Charisma + Magic hits.",
+            "summary": "Perfectly imitates sounds and voices",
+            "scalesWithForce": true,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "mist-form",
+            "name": "Mist Form",
+            "type": "physical",
+            "action": "complex",
+            "range": "self",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Allows the critter to transform into a cloud of mist. Shifting into or out of mist form is a Complex Action. Transforms itself and any bonded foci. Movement rate of 5 meters per Combat Turn; susceptible to strong winds. Can pass through any cracks that aren't airtight. While in mist form, critter has Immunity to Normal Weapons but cannot use any other powers. Allergen exposure forces return to normal form.",
+            "summary": "Transform into mist, immune to normal weapons but can't use powers",
+            "scalesWithForce": false,
+            "page": 398,
+            "source": "Core"
+          },
+          {
+            "id": "movement",
+            "name": "Movement",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Allows the critter to speed up or slow down target's movement rate. Only works on things predisposed to locomotion. If used on targets other than itself, only functions in terrain the critter controls. Can multiply or divide movement rate by up to Magic attribute. Only one instance may be applied at a time. For vehicles: Magic + Willpower test with threshold of half vehicle's Body (min 2); hits x Acceleration added to/subtracted from Speed.",
+            "summary": "Multiply or divide movement by up to Magic",
+            "scalesWithForce": true,
+            "page": 399,
+            "source": "Core"
+          },
+          {
+            "id": "mystic-armor",
+            "name": "Mystic Armor",
+            "type": "mana",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "This power functions in the same way as Armor, except that it only provides protection from attacks on the astral plane.",
+            "summary": "Natural armor protection on the astral plane only",
+            "scalesWithForce": false,
+            "page": 399,
+            "source": "Core"
+          },
+          {
+            "id": "natural-weapon",
+            "name": "Natural Weapon",
+            "type": "physical",
+            "action": "auto",
+            "range": "touch",
+            "duration": "instant",
+            "category": "standard",
+            "description": "Claws, teeth, spiked tail, or other means of inflicting Physical damage. May be melee or ranged attacks following standard combat rules. Critters use Unarmed Combat for natural melee weapons and Exotic Ranged Weapon for natural ranged weapons. Most natural weapons are considered normal weapons for Immunity to Normal Weapons. Dual-natured critters can use melee Natural Weapons against astral targets within reach.",
+            "summary": "Natural physical attack (claws, teeth, etc.)",
+            "scalesWithForce": false,
+            "page": 399,
+            "source": "Core"
+          },
+          {
+            "id": "noxious-breath",
+            "name": "Noxious Breath",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "instant",
+            "category": "standard",
+            "description": "The critter can incapacitate targets with nauseating stench. Ranged attack using Exotic Ranged Weapon + Agility [Physical]. Toxin attack with inhalation vector (Speed: Immediate, Power: Magic, Effect: Stun damage, nausea). Armor is useless but respiratory protection helps. Blast extends in cone out to (Body) meters and can hit up to two targets within one meter of each other.",
+            "summary": "Toxic breath attack causing Stun and nausea",
+            "scalesWithForce": true,
+            "page": 399,
+            "source": "Core"
+          },
+          {
+            "id": "paralyzing-howl",
+            "name": "Paralyzing Howl",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "special",
+            "category": "standard",
+            "description": "Affects everyone who hears it within (Magic x 15) meters. Critter makes Opposed Test using Magic + Charisma vs target's Intuition + Willpower. Sound-dampening devices/spells add to target's pool. If critter wins, target's Reaction and Agility are reduced by 1 per net hit for (Magic + net hits) Combat Turns. If either drops to 0, target is paralyzed for (Magic + net hits) minutes. Attributes return at 1 point per minute after effect ends.",
+            "summary": "Area howl that reduces Reaction/Agility, may paralyze",
+            "scalesWithForce": true,
+            "page": 399,
+            "source": "Core"
+          },
+          {
+            "id": "paralyzing-touch",
+            "name": "Paralyzing Touch",
+            "type": "physical",
+            "action": "complex",
+            "range": "touch",
+            "duration": "special",
+            "category": "standard",
+            "description": "Touch-range version of Paralyzing Howl. Must touch target; automatic if target is surprised/unaware, otherwise treat as Melee Attack that causes no damage. Opposed Test is critter's Magic + Agility vs target's Intuition + Willpower. Otherwise functions same as Paralyzing Howl.",
+            "summary": "Touch attack that may reduce attributes and paralyze",
+            "scalesWithForce": true,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "petrification",
+            "name": "Petrification",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Can literally petrify targets. Opposed Test using critter's Magic + Willpower vs target's Intuition + Willpower. If critter wins, target's Agility and Reaction are reduced by 1 per net hit (affects Initiative). Effect lasts while sustained. If either drops to 0, target is transformed into stone statue with Barrier Rating equal to Magic x 2. Victim is unaware of surroundings while transformed. Attributes return at 1 per minute when released.",
+            "summary": "Gradually turns target to stone",
+            "scalesWithForce": true,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "psychokinesis",
+            "name": "Psychokinesis",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Enables a critter to move an object with its mind. Similar to the Magic Fingers spell, acting as a magical 'hand' with Strength and Agility equal to the hits scored on a Magic + Willpower Test.",
+            "summary": "Telekinetically move objects with Magic + Willpower hits as Str/Agi",
+            "scalesWithForce": true,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "regeneration",
+            "name": "Regeneration",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "Allows rapid healing of any damage. At end of each Combat Turn with damage, critter makes Magic + Body Test, adds Body to hits, and heals that many boxes (Physical overflow first, then Physical, then Stun). If Physical overflow exceeds Body, still gets test—if overflow still exceeds Body after, truly dead. Cannot heal: brain/spinal damage, magical damage from weapon foci, combat spells, critter/adept powers, or Drain. Cannot heal allergen damage while in contact with allergen. Incompatible with augmentations.",
+            "summary": "Heals (Magic + Body + Body) boxes per Combat Turn",
+            "scalesWithForce": true,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "sapience",
+            "name": "Sapience",
+            "type": "physical",
+            "action": "auto",
+            "range": "self",
+            "duration": "always",
+            "category": "standard",
+            "description": "Sapient critters are self-aware and capable of making their own choices, at or above Homo sapiens level. While most critters are Unaware of skills they don't possess, sapient critters are merely Untrained and can default normally. They can learn new skills. Most sapient critters are mundane but capable of Awakening. Awakened sapient critters can learn any magical task. No sapient critters are known to have Emerged as technomancers.",
+            "summary": "Self-aware, can default on skills and learn new ones",
+            "scalesWithForce": false,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "search",
+            "name": "Search",
+            "type": "physical",
+            "action": "complex",
+            "range": "special",
+            "duration": "special",
+            "category": "standard",
+            "description": "To find a target, critter makes Extended Magic + Intuition (5, 10 minutes) Test. Modifiers: +kilometers threshold if target >1km away, +5 threshold if nonliving object/place, -concealer's Magic dice if hidden by Concealment, -barrier Force dice if behind mana barrier. Must have seen the target before. Spirits may search for anything their summoner can provide mental image of. Critters that can enter astral space may use this power there without materializing.",
+            "summary": "Locate targets with Extended Magic + Intuition test",
+            "scalesWithForce": true,
+            "page": 400,
+            "source": "Core"
+          },
+          {
+            "id": "venom",
+            "name": "Venom",
+            "type": "physical",
+            "action": "auto",
+            "range": "touch",
+            "duration": "instant",
+            "category": "standard",
+            "description": "The critter secretes a toxin that is dangerous and harmful to others. Typically: Vector: Injection, Speed: 1 Combat Turn, Penetration: 0, Power: Magic, Effect: Physical damage. Some critters may have venoms with different attributes as noted in their descriptions.",
+            "summary": "Secretes harmful toxin with Physical damage",
+            "scalesWithForce": true,
+            "page": 401,
+            "source": "Core"
+          },
+          {
+            "id": "weather-control",
+            "name": "Weather Control",
+            "type": "physical",
+            "action": "complex",
+            "range": "los",
+            "duration": "sustained",
+            "category": "standard",
+            "description": "Allows the critter to manipulate local weather conditions within reason (must be realistically possible in the environment—no snowstorms in equatorial Africa). Weather builds up over time, reaching peak when critter completes Extended Magic + Willpower (10, 30 minutes) Test. The critter summons and pushes weather in a direction but doesn't actually control it—can summon a thunderstorm but cannot aim lightning bolts.",
+            "summary": "Summon and direct local weather patterns",
+            "scalesWithForce": true,
+            "page": 401,
+            "source": "Core"
+          }
+        ]
+      }
+    },
+    "critterWeaknesses": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "weaknesses": [
+          {
+            "id": "allergy",
+            "name": "Allergy",
+            "type": "allergy",
+            "description": "Critters with this weakness are allergic to a specific substance or condition. The severity determines the effects: Mild allergies cause 1 box of Stun damage per minute of exposure; Moderate allergies cause 1 box of Physical damage per minute; Severe allergies cause 1 box of Physical damage per Combat Turn. The allergen and severity are specified in the critter's description.",
+            "summary": "Takes damage from exposure to specific substance/condition",
+            "page": 401,
+            "source": "Core"
+          },
+          {
+            "id": "dietary-requirement",
+            "name": "Dietary Requirement",
+            "type": "dietary-requirement",
+            "description": "The critter requires a specific substance for sustenance. Without it, the critter cannot heal damage naturally and loses 1 box of Stun damage per day that cannot be healed until the dietary requirement is met. The specific requirement is noted in the critter's description.",
+            "summary": "Must consume specific substance to heal and avoid Stun damage",
+            "page": 401,
+            "source": "Core"
+          },
+          {
+            "id": "essence-loss",
+            "name": "Essence Loss",
+            "type": "essence-loss",
+            "description": "The critter's Essence slowly drains away. For HMHVV-infected critters, Essence lost through Essence Drain is only temporary—if they do not replenish their Essence through feeding, their Essence permanently decreases. The rate and conditions of Essence loss vary by critter type.",
+            "summary": "Essence permanently decreases without feeding",
+            "page": 401,
+            "source": "Core"
+          },
+          {
+            "id": "induced-dormancy",
+            "name": "Induced Dormancy",
+            "type": "induced-dormancy",
+            "description": "Under certain conditions, the critter enters a dormant, death-like state. During dormancy, the critter cannot take any actions and is helpless. The trigger condition and duration are specified in the critter's description (e.g., lack of air causes dormancy for Essence minutes for vampires).",
+            "summary": "Enters helpless dormant state under specific conditions",
+            "page": 401,
+            "source": "Core"
+          },
+          {
+            "id": "reduced-senses",
+            "name": "Reduced Senses",
+            "type": "reduced-senses",
+            "description": "The critter has impaired or missing sensory capabilities. The most common form is blindness, where the critter cannot see and relies on other senses. The specific impairment is noted in the critter's description.",
+            "summary": "Has impaired or missing sensory abilities",
+            "page": 402,
+            "source": "Core"
+          },
+          {
+            "id": "uneducated",
+            "name": "Uneducated",
+            "type": "uneducated",
+            "description": "The critter has no formal education and is functionally illiterate. While sapient critters can still default on skills, Uneducated critters treat all Technical and Academic Knowledge skills as Unaware rather than Untrained and cannot default on them.",
+            "summary": "Cannot default on Technical/Academic Knowledge skills",
+            "page": 402,
+            "source": "Core"
+          },
+          {
+            "id": "vulnerability",
+            "name": "Vulnerability",
+            "type": "vulnerability",
+            "description": "The critter is especially susceptible to damage from a specific source. Damage from that source cannot be healed by Regeneration. For some critters, damage from the vulnerable source bypasses Immunity to Normal Weapons. The specific vulnerability is noted in the critter's description.",
+            "summary": "Takes extra/unhealed damage from specific source",
+            "page": 402,
+            "source": "Core"
+          }
+        ]
+      }
+    },
+    "critters": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "critters": [
+          {
+            "id": "dog",
+            "name": "Dog",
+            "type": "mundane",
+            "attributes": {
+              "body": 4,
+              "agility": 3,
+              "reaction": 4,
+              "strength": 4,
+              "willpower": 3,
+              "logic": 2,
+              "intuition": 4,
+              "charisma": 3,
+              "edge": 3,
+              "essence": 6
+            },
+            "initiative": "8 + 1D6",
+            "movement": { "walk": 2, "run": 8, "sprint": 4 },
+            "conditionMonitor": { "physical": 10, "stun": 10 },
+            "limits": { "physical": 6, "mental": 4, "social": 5 },
+            "armor": 0,
+            "skills": [
+              { "name": "Intimidation", "rating": 4 },
+              { "name": "Perception", "rating": 5, "specialization": "Smell", "bonus": 2 },
+              { "name": "Running", "rating": 5 },
+              { "name": "Tracking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 5 }
+            ],
+            "powers": [
+              { "id": "enhanced-senses", "details": "Hearing, Smell" },
+              { "id": "natural-weapon", "details": "Claws/Bite: (STR+1)P, AP —" }
+            ],
+            "naturalWeapons": [
+              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+1)P", "ap": "—" }
+            ],
+            "page": 402,
+            "source": "Core"
+          },
+          {
+            "id": "great-cat",
+            "name": "Great Cat",
+            "type": "mundane",
+            "attributes": {
+              "body": 6,
+              "agility": 5,
+              "reaction": 4,
+              "strength": 5,
+              "willpower": 3,
+              "logic": 2,
+              "intuition": 4,
+              "charisma": 3,
+              "edge": 3,
+              "essence": 6
+            },
+            "initiative": "8 + 2D6",
+            "movement": { "walk": 2, "run": 6, "sprint": 4 },
+            "conditionMonitor": { "physical": 11, "stun": 10 },
+            "limits": { "physical": 7, "mental": 4, "social": 5 },
+            "armor": 0,
+            "skills": [
+              { "name": "Perception", "rating": 5 },
+              { "name": "Running", "rating": 5 },
+              { "name": "Sneaking", "rating": 6 },
+              { "name": "Tracking", "rating": 4 },
+              { "name": "Unarmed Combat", "rating": 7 }
+            ],
+            "powers": [{ "id": "natural-weapon", "details": "Claws/Bite: (STR+3)P, AP –1" }],
+            "naturalWeapons": [
+              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+3)P", "ap": -1 }
+            ],
+            "page": 402,
+            "source": "Core"
+          },
+          {
+            "id": "horse",
+            "name": "Horse",
+            "type": "mundane",
+            "attributes": {
+              "body": 8,
+              "agility": 5,
+              "reaction": 5,
+              "strength": 8,
+              "willpower": 3,
+              "logic": 2,
+              "intuition": 3,
+              "charisma": 4,
+              "edge": 2,
+              "essence": 6
+            },
+            "initiative": "8 + 1D6",
+            "movement": { "walk": 3, "run": 10, "sprint": 6 },
+            "conditionMonitor": { "physical": 12, "stun": 10 },
+            "limits": { "physical": 10, "mental": 4, "social": 6 },
+            "armor": 0,
+            "skills": [
+              { "name": "Running", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 1 }
+            ],
+            "powers": [{ "id": "natural-weapon", "details": "Kick: (STR+1)P, AP —, Reach 1" }],
+            "naturalWeapons": [
+              { "name": "Kick", "type": "melee", "damage": "(STR+1)P", "ap": "—", "reach": 1 }
+            ],
+            "page": 402,
+            "source": "Core"
+          },
+          {
+            "id": "shark",
+            "name": "Shark",
+            "type": "mundane",
+            "attributes": {
+              "body": 5,
+              "agility": 4,
+              "reaction": 5,
+              "strength": 5,
+              "willpower": 3,
+              "logic": 1,
+              "intuition": 4,
+              "charisma": 1,
+              "edge": 2,
+              "essence": 6
+            },
+            "initiative": "9 + 1D6",
+            "movement": {
+              "walk": 3,
+              "run": 8,
+              "sprint": 4,
+              "swim": { "walk": 3, "run": 8, "sprint": 4 }
+            },
+            "conditionMonitor": { "physical": 11, "stun": 10 },
+            "limits": { "physical": 7, "mental": 3, "social": 4 },
+            "armor": 2,
+            "skills": [
+              { "name": "Perception", "rating": 6, "specialization": "Smell", "bonus": 2 },
+              { "name": "Swimming", "rating": 10 },
+              { "name": "Unarmed Combat", "rating": 8 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 2 },
+              { "id": "natural-weapon", "details": "Bite: (STR+2)P, AP –2" }
+            ],
+            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+2)P", "ap": -2 }],
+            "page": 403,
+            "source": "Core"
+          },
+          {
+            "id": "wolf",
+            "name": "Wolf",
+            "type": "mundane",
+            "attributes": {
+              "body": 6,
+              "agility": 3,
+              "reaction": 5,
+              "strength": 5,
+              "willpower": 3,
+              "logic": 2,
+              "intuition": 4,
+              "charisma": 3,
+              "edge": 3,
+              "essence": 6
+            },
+            "initiative": "9 + 2D6",
+            "movement": { "walk": 2, "run": 8, "sprint": 4 },
+            "conditionMonitor": { "physical": 10, "stun": 10 },
+            "limits": { "physical": 6, "mental": 4, "social": 5 },
+            "armor": 0,
+            "skills": [
+              { "name": "Perception", "rating": 5, "specialization": "Smell", "bonus": 2 },
+              { "name": "Running", "rating": 5 },
+              { "name": "Sneaking", "rating": 5 },
+              { "name": "Tracking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 7 }
+            ],
+            "powers": [
+              { "id": "enhanced-senses", "details": "Hearing, Smell" },
+              { "id": "natural-weapon", "details": "Claws/Bite: (STR+2)P, AP –1" }
+            ],
+            "naturalWeapons": [
+              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+2)P", "ap": -1 }
+            ],
+            "page": 403,
+            "source": "Core"
+          },
+          {
+            "id": "barghest",
+            "name": "Barghest",
+            "type": "paracritter",
+            "attributes": {
+              "body": 8,
+              "agility": 5,
+              "reaction": 6,
+              "strength": 6,
+              "willpower": 4,
+              "logic": 2,
+              "intuition": 5,
+              "charisma": 5,
+              "edge": 4,
+              "essence": 6,
+              "magic": 5
+            },
+            "initiative": "11 + 2D6",
+            "movement": { "walk": 2, "run": 6, "sprint": 4 },
+            "conditionMonitor": { "physical": 12, "stun": 10 },
+            "limits": { "physical": 9, "mental": 5, "social": 7 },
+            "armor": 3,
+            "skills": [
+              { "name": "Intimidation", "rating": 7 },
+              { "name": "Perception", "rating": 6 },
+              { "name": "Running", "rating": 5 },
+              { "name": "Tracking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 8 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 3 },
+              { "id": "dual-natured" },
+              { "id": "enhanced-senses", "details": "Hearing, Smell, Sonar" },
+              { "id": "fear" },
+              { "id": "immunity", "details": "Barghest Howls" },
+              { "id": "natural-weapon", "details": "Bite: (STR+2)P, AP –1" },
+              { "id": "paralyzing-howl" }
+            ],
+            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+2)P", "ap": -1 }],
+            "page": 403,
+            "source": "Core"
+          },
+          {
+            "id": "basilisk",
+            "name": "Basilisk",
+            "type": "paracritter",
+            "attributes": {
+              "body": 6,
+              "agility": 3,
+              "reaction": 3,
+              "strength": 7,
+              "willpower": 5,
+              "logic": 1,
+              "intuition": 3,
+              "charisma": 1,
+              "edge": 1,
+              "essence": 6,
+              "magic": 4
+            },
+            "initiative": "6 + 1D6",
+            "movement": {
+              "walk": 1,
+              "run": 5,
+              "sprint": 1,
+              "swim": { "walk": 2, "run": 8, "sprint": 2 }
+            },
+            "conditionMonitor": { "physical": 11, "stun": 11 },
+            "limits": { "physical": 8, "mental": 4, "social": 5 },
+            "armor": 7,
+            "skills": [
+              { "name": "Infiltrating", "rating": 3 },
+              { "name": "Perception", "rating": 4 },
+              { "name": "Running", "rating": 2 },
+              { "name": "Sneaking", "rating": 3 },
+              { "name": "Swimming", "rating": 8 },
+              { "name": "Unarmed Combat", "rating": 6 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 7 },
+              { "id": "natural-weapon", "details": "Bite: 8P, AP –2" },
+              { "id": "petrification" }
+            ],
+            "weaknesses": [{ "id": "vulnerability", "details": "Own Gaze" }],
+            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "8P", "ap": -2 }],
+            "page": 403,
+            "source": "Core"
+          },
+          {
+            "id": "cockatrice",
+            "name": "Cockatrice",
+            "type": "paracritter",
+            "attributes": {
+              "body": 4,
+              "agility": 5,
+              "reaction": 4,
+              "strength": 4,
+              "willpower": 4,
+              "logic": 2,
+              "intuition": 3,
+              "charisma": 1,
+              "edge": 1,
+              "essence": 6,
+              "magic": 5
+            },
+            "initiative": "7 + 1D6",
+            "movement": { "walk": 2, "run": 8, "sprint": 3 },
+            "conditionMonitor": { "physical": 10, "stun": 10 },
+            "limits": { "physical": 6, "mental": 4, "social": 4 },
+            "armor": 1,
+            "skills": [
+              { "name": "Perception", "rating": 3 },
+              { "name": "Running", "rating": 7 },
+              { "name": "Sneaking", "rating": 5 },
+              { "name": "Unarmed Combat", "rating": 7 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 1 },
+              { "id": "immunity", "details": "Own Touch" },
+              { "id": "natural-weapon", "details": "Claws: (STR)P, AP –1" },
+              { "id": "paralyzing-touch", "details": "Tail" }
+            ],
+            "naturalWeapons": [{ "name": "Claws", "type": "melee", "damage": "(STR)P", "ap": -1 }],
+            "page": 404,
+            "source": "Core"
+          },
+          {
+            "id": "devil-rat",
+            "name": "Devil Rat",
+            "type": "paracritter",
+            "attributes": {
+              "body": 2,
+              "agility": 5,
+              "reaction": 5,
+              "strength": 1,
+              "willpower": 3,
+              "logic": 2,
+              "intuition": 5,
+              "charisma": 5,
+              "edge": 2,
+              "essence": 6,
+              "magic": 4
+            },
+            "initiative": "10 + 1D6",
+            "movement": { "walk": 1, "run": 2, "sprint": 1 },
+            "conditionMonitor": { "physical": 9, "stun": 10 },
+            "limits": { "physical": 3, "mental": 4, "social": 7 },
+            "armor": 0,
+            "skills": [
+              { "name": "Climbing", "rating": 5 },
+              { "name": "Perception", "rating": 4 },
+              { "name": "Running", "rating": 2 },
+              { "name": "Sneaking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 5 }
+            ],
+            "powers": [
+              { "id": "animal-control", "details": "Ordinary Rats" },
+              { "id": "concealment", "details": "Self Only" },
+              { "id": "immunity", "details": "Toxins" },
+              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP —, Reach –1" }
+            ],
+            "weaknesses": [{ "id": "allergy", "details": "Sunlight, Mild" }],
+            "naturalWeapons": [
+              { "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": "—", "reach": -1 }
+            ],
+            "page": 404,
+            "source": "Core"
+          },
+          {
+            "id": "ghoul",
+            "name": "Ghoul",
+            "type": "infected",
+            "attributes": {
+              "body": 7,
+              "agility": 3,
+              "reaction": 5,
+              "strength": 6,
+              "willpower": 5,
+              "logic": 2,
+              "intuition": 4,
+              "charisma": 1,
+              "edge": 3,
+              "essence": 5,
+              "magic": 1
+            },
+            "initiative": "9 + 1D6",
+            "movement": { "walk": 2, "run": 4, "sprint": 2, "special": "As base metatype" },
+            "conditionMonitor": { "physical": 12, "stun": 11 },
+            "limits": { "physical": 8, "mental": 5, "social": 5 },
+            "armor": 1,
+            "skills": [
+              { "name": "Assensing", "rating": 4 },
+              { "name": "Perception", "rating": 5 },
+              { "name": "Running", "rating": 3 },
+              { "name": "Sneaking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 6 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 1 },
+              { "id": "dual-natured" },
+              { "id": "enhanced-senses", "details": "Hearing, Smell" },
+              { "id": "natural-weapon", "details": "Claws: (STR+1)P, AP –1" },
+              { "id": "sapience" }
+            ],
+            "weaknesses": [
+              { "id": "allergy", "details": "Sunlight, Moderate" },
+              { "id": "dietary-requirement", "details": "Metahuman Flesh" },
+              { "id": "reduced-senses", "details": "Blind" }
+            ],
+            "naturalWeapons": [
+              { "name": "Claws", "type": "melee", "damage": "(STR+1)P", "ap": -1 }
+            ],
+            "notes": "Stats for standard human ghoul. Use Metatype Attribute Modifiers for other metaspecies. Some may have Adept/Magician/Mystic Adept.",
+            "page": 404,
+            "source": "Core"
+          },
+          {
+            "id": "hell-hound",
+            "name": "Hell Hound",
+            "type": "paracritter",
+            "attributes": {
+              "body": 6,
+              "agility": 4,
+              "reaction": 5,
+              "strength": 6,
+              "willpower": 4,
+              "logic": 2,
+              "intuition": 4,
+              "charisma": 3,
+              "edge": 3,
+              "essence": 6,
+              "magic": 5
+            },
+            "initiative": "10 + 3D6",
+            "movement": { "walk": 2, "run": 6, "sprint": 4 },
+            "conditionMonitor": { "physical": 11, "stun": 10 },
+            "limits": { "physical": 8, "mental": 4, "social": 6 },
+            "armor": 2,
+            "skills": [
+              { "name": "Exotic Ranged Weapon", "rating": 4 },
+              { "name": "Intimidation", "rating": 3 },
+              { "name": "Perception", "rating": 3 },
+              { "name": "Running", "rating": 4 },
+              { "name": "Sneaking", "rating": 5 },
+              { "name": "Tracking", "rating": 5 },
+              { "name": "Unarmed Combat", "rating": 3 }
+            ],
+            "powers": [
+              { "id": "armor", "rating": 2 },
+              { "id": "dual-natured" },
+              { "id": "elemental-attack", "details": "Fire" },
+              { "id": "enhanced-senses", "details": "Hearing, Low-Light Vision, Smell" },
+              { "id": "fear" },
+              { "id": "immunity", "details": "Fire" },
+              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP –1" }
+            ],
+            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": -1 }],
+            "page": 405,
+            "source": "Core"
+          },
+          {
+            "id": "sasquatch",
+            "name": "Sasquatch",
+            "type": "paracritter",
+            "attributes": {
+              "body": 8,
+              "agility": 3,
+              "reaction": 4,
+              "strength": 7,
+              "willpower": 3,
+              "logic": 3,
+              "intuition": 5,
+              "charisma": 3,
+              "edge": 4,
+              "essence": 6,
+              "magic": 4
+            },
+            "initiative": "9 + 1D6",
+            "movement": { "walk": 2, "run": 4, "sprint": 2 },
+            "conditionMonitor": { "physical": 12, "stun": 10 },
+            "limits": { "physical": 9, "mental": 5, "social": 5 },
+            "armor": 0,
+            "reach": 1,
+            "skills": [
+              { "name": "Assensing", "rating": 6 },
+              { "name": "Animal Calls (Professional Knowledge)", "rating": 8 },
+              { "name": "Artisan", "rating": 6 },
+              { "name": "Athletics skill group", "rating": 3 },
+              { "name": "Perception", "rating": 6 },
+              { "name": "Sneaking", "rating": 8 }
+            ],
+            "powers": [{ "id": "dual-natured" }, { "id": "mimicry" }, { "id": "sapience" }],
+            "notes": "Some may have Adept/Magician/Mystic Adept.",
+            "page": 406,
+            "source": "Core"
+          },
+          {
+            "id": "vampire",
+            "name": "Vampire",
+            "type": "infected",
+            "attributes": {
+              "body": 4,
+              "agility": 3,
+              "reaction": 5,
+              "strength": 4,
+              "willpower": 4,
+              "logic": 3,
+              "intuition": 4,
+              "charisma": 5,
+              "edge": 3,
+              "essence": "2D6",
+              "magic": 6
+            },
+            "initiative": "9 + 2D6",
+            "movement": { "walk": 3, "run": 5, "sprint": 3 },
+            "conditionMonitor": { "physical": 10, "stun": 10 },
+            "limits": { "physical": 6, "mental": 5, "social": "5-9 (depending on Essence)" },
+            "armor": 0,
+            "skills": [
+              { "name": "Perception", "rating": 5 },
+              { "name": "Running", "rating": 4 },
+              { "name": "Sneaking", "rating": 6 },
+              { "name": "Unarmed Combat", "rating": 5 }
+            ],
+            "powers": [
+              { "id": "dual-natured" },
+              { "id": "enhanced-senses", "details": "Hearing, Smell, Thermographic Vision" },
+              { "id": "essence-drain" },
+              { "id": "immunity", "details": "Age, Pathogens, Toxins" },
+              { "id": "infection" },
+              { "id": "mist-form" },
+              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP –1, Reach –1" },
+              { "id": "regeneration" },
+              { "id": "sapience" }
+            ],
+            "weaknesses": [
+              { "id": "allergy", "details": "Sunlight, Severe" },
+              { "id": "allergy", "details": "Wood, Severe" },
+              { "id": "dietary-requirement", "details": "Metahuman Blood" },
+              { "id": "essence-loss" },
+              { "id": "induced-dormancy", "details": "Lack of Air, (Essence) Minutes" }
+            ],
+            "naturalWeapons": [
+              { "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": -1, "reach": -1 }
+            ],
+            "notes": "Magic = 6 or Essence (lower). Can only consume blood. –4 to swimming tests. Sunlight damage cannot be healed by Regeneration. May have Adept/Magician/Mystic Adept.",
+            "page": 406,
+            "source": "Core"
+          },
+          {
+            "id": "eastern-dragon",
+            "name": "Eastern Dragon",
+            "type": "dracoform",
+            "attributes": {
+              "body": 17,
+              "agility": 8,
+              "reaction": 8,
+              "strength": 35,
+              "willpower": 9,
+              "logic": 10,
+              "intuition": 8,
+              "charisma": 9,
+              "edge": 6,
+              "essence": 10,
+              "magic": 10
+            },
+            "initiative": "16 + 2D6",
+            "movement": {
+              "walk": 2,
+              "run": 4,
+              "sprint": 4,
+              "flight": { "walk": 3, "run": 7, "sprint": 6 }
+            },
+            "conditionMonitor": { "physical": 17, "stun": 13 },
+            "limits": { "physical": 32, "mental": 13, "social": 13 },
+            "armor": { "physical": "17H", "mystic": "9H" },
+            "reach": 2,
+            "skills": [
+              { "name": "Assensing", "rating": 14 },
+              { "name": "Conjuring skill group", "rating": 12 },
+              { "name": "Exotic Ranged Weapon", "rating": 12 },
+              { "name": "Flight", "rating": 12 },
+              { "name": "Perception", "rating": 12 },
+              { "name": "Running", "rating": 10 },
+              { "name": "Sorcery skill group", "rating": 14 },
+              { "name": "Unarmed Combat", "rating": 12 }
+            ],
+            "powers": [
+              { "id": "dragonspeech" },
+              { "id": "dual-natured" },
+              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "enhanced-senses",
+                "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
+              },
+              { "id": "hardened-armor", "details": "Body" },
+              { "id": "hardened-mystic-armor", "details": "Willpower" },
+              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
+              { "id": "sapience" }
+            ],
+            "naturalWeapons": [
+              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+            ],
+            "description": "Approximately 30 meters long, 2 meters at the shoulder. Colorful, serpentine body with broad head, whiskers, and multiple horns. Common coloration is iridescent green with golden whiskers and belly.",
+            "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
+            "page": 407,
+            "source": "Core"
+          },
+          {
+            "id": "feathered-serpent",
+            "name": "Feathered Serpent",
+            "type": "dracoform",
+            "attributes": {
+              "body": 15,
+              "agility": 9,
+              "reaction": 10,
+              "strength": 30,
+              "willpower": 10,
+              "logic": 9,
+              "intuition": 9,
+              "charisma": 8,
+              "edge": 6,
+              "essence": 10,
+              "magic": 10
+            },
+            "initiative": "19 + 3D6",
+            "movement": {
+              "walk": 3,
+              "run": 5,
+              "sprint": 5,
+              "flight": { "walk": 4, "run": 8, "sprint": 7 }
+            },
+            "conditionMonitor": { "physical": 16, "stun": 13 },
+            "limits": { "physical": 29, "mental": 13, "social": 12 },
+            "armor": { "physical": "15H", "mystic": "10H" },
+            "reach": 2,
+            "skills": [
+              { "name": "Assensing", "rating": 14 },
+              { "name": "Conjuring skill group", "rating": 12 },
+              { "name": "Exotic Ranged Weapon", "rating": 12 },
+              { "name": "Flight", "rating": 12 },
+              { "name": "Perception", "rating": 12 },
+              { "name": "Running", "rating": 10 },
+              { "name": "Sorcery skill group", "rating": 14 },
+              { "name": "Unarmed Combat", "rating": 12 }
+            ],
+            "powers": [
+              { "id": "dragonspeech" },
+              { "id": "dual-natured" },
+              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "enhanced-senses",
+                "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
+              },
+              { "id": "hardened-armor", "details": "Body" },
+              { "id": "hardened-mystic-armor", "details": "Willpower" },
+              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
+              { "id": "sapience" }
+            ],
+            "naturalWeapons": [
+              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+            ],
+            "description": "Approximately 20 meters long with a feathered body in rainbow colors. Has a wingspan of 15-18 meters. Frequently have a tail stinger or venomous fangs.",
+            "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
+            "page": 407,
+            "source": "Core"
+          },
+          {
+            "id": "western-dragon",
+            "name": "Western Dragon",
+            "type": "dracoform",
+            "attributes": {
+              "body": 18,
+              "agility": 7,
+              "reaction": 8,
+              "strength": 40,
+              "willpower": 8,
+              "logic": 8,
+              "intuition": 8,
+              "charisma": 8,
+              "edge": 6,
+              "essence": 10,
+              "magic": 10
+            },
+            "initiative": "16 + 2D6",
+            "movement": {
+              "walk": 2,
+              "run": 4,
+              "sprint": 4,
+              "flight": { "walk": 3, "run": 7, "sprint": 5 }
+            },
+            "conditionMonitor": { "physical": 17, "stun": 12 },
+            "limits": { "physical": 36, "mental": 11, "social": 12 },
+            "armor": { "physical": "18H", "mystic": "8H" },
+            "reach": 2,
+            "skills": [
+              { "name": "Assensing", "rating": 14 },
+              { "name": "Conjuring skill group", "rating": 12 },
+              { "name": "Exotic Ranged Weapon", "rating": 12 },
+              { "name": "Flight", "rating": 12 },
+              { "name": "Perception", "rating": 12 },
+              { "name": "Running", "rating": 10 },
+              { "name": "Sorcery skill group", "rating": 14 },
+              { "name": "Unarmed Combat", "rating": 12 }
+            ],
+            "powers": [
+              { "id": "dragonspeech" },
+              { "id": "dual-natured" },
+              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "enhanced-senses",
+                "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
+              },
+              { "id": "hardened-armor", "details": "Body" },
+              { "id": "hardened-mystic-armor", "details": "Willpower" },
+              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
+              { "id": "sapience" }
+            ],
+            "naturalWeapons": [
+              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+            ],
+            "description": "Largest dragon type, 37+ meters in length, 3 meters at the shoulder, with approximately 30 meter wingspan. Usually single-colored with heavy scales; some have bony plates.",
+            "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
+            "page": 407,
+            "source": "Core"
+          }
+        ]
+      }
+    },
     "contactArchetypes": {
       "mergeStrategy": "replace",
       "payload": {

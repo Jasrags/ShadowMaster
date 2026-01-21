@@ -78,6 +78,31 @@ export type {
   // Spirit types
   SpiritPower,
   Spirit,
+  // Critter power types
+  CritterPowerType,
+  CritterPowerAction,
+  CritterPowerRange,
+  CritterPowerDuration,
+  CritterPowerCategory,
+  CritterPowerCatalogItem,
+  CritterPowersPayload,
+  // Critter weakness types
+  CritterWeaknessType,
+  CritterWeaknessCatalogItem,
+  CritterWeaknessesPayload,
+  // Critter types
+  CritterType,
+  CritterAttributes,
+  CritterMovement,
+  CritterLimits,
+  CritterConditionMonitor,
+  CritterSkill,
+  CritterNaturalWeapon,
+  CritterWeaknessRef,
+  CritterPowerRef,
+  DragonArmor,
+  CritterCatalogItem,
+  CrittersPayload,
   // Quality catalog types (re-exported from qualities.ts for convenience)
   Quality,
   QualityCatalog,

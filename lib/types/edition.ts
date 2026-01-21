@@ -771,6 +771,339 @@ export interface Spirit {
 }
 
 // =============================================================================
+// CRITTER POWER TYPES
+// =============================================================================
+
+/**
+ * Critter power type - mana or physical
+ * Mana powers do not affect nonliving targets
+ * Physical powers cannot be used in astral space
+ */
+export type CritterPowerType = "mana" | "physical";
+
+/**
+ * Action required to activate a critter power
+ */
+export type CritterPowerAction =
+  | "auto" // Always on, no action required
+  | "free" // Free Action
+  | "simple" // Simple Action
+  | "complex" // Complex Action
+  | "special"; // Special conditions (see description)
+
+/**
+ * Range of a critter power
+ */
+export type CritterPowerRange =
+  | "self" // Affects only the critter itself
+  | "touch" // Requires physical contact
+  | "los" // Line of Sight
+  | "los-a" // Line of Sight (Area)
+  | "special"; // Special range (see description)
+
+/**
+ * Duration of a critter power effect
+ */
+export type CritterPowerDuration =
+  | "always" // Constantly active (Auto action powers)
+  | "instant" // Takes effect and ends immediately
+  | "sustained" // Maintained at no cost, up to Magic in sustained powers
+  | "permanent" // Must be maintained until effects become permanent
+  | "special"; // Special duration (see description)
+
+/**
+ * Category of critter power
+ */
+export type CritterPowerCategory =
+  | "standard" // Standard critter powers (Core)
+  | "spirit" // Spirit-specific powers (Street Grimoire)
+  | "free-spirit" // Free spirit powers
+  | "greater-spirit"; // Greater spirit powers
+
+/**
+ * Critter power catalog item in ruleset data
+ * Based on SR5 Core Rulebook pp. 394-401 and Street Grimoire
+ */
+export interface CritterPowerCatalogItem {
+  /** Unique kebab-case identifier */
+  id: string;
+  /** Display name */
+  name: string;
+  /** Power type: mana or physical */
+  type: CritterPowerType;
+  /** Action required to activate */
+  action: CritterPowerAction;
+  /** Power range */
+  range: CritterPowerRange;
+  /** Effect duration */
+  duration: CritterPowerDuration;
+  /** Power category */
+  category: CritterPowerCategory;
+  /** Full mechanical description */
+  description: string;
+  /** Short summary for display */
+  summary?: string;
+  /** Element type for elemental powers */
+  element?: string;
+  /** Whether power requires a subtype selection */
+  requiresSelection?: boolean;
+  /** Label for the selection input */
+  selectionLabel?: string;
+  /** Valid selection options */
+  selectionOptions?: string[];
+  /** Whether power scales with Magic/Force */
+  scalesWithForce?: boolean;
+  /** Source page number */
+  page?: number;
+  /** Source book reference */
+  source?: string;
+}
+
+/**
+ * Critter powers payload structure for ruleset module
+ */
+export interface CritterPowersPayload {
+  powers: CritterPowerCatalogItem[];
+  categories: Record<
+    CritterPowerCategory,
+    {
+      name: string;
+      description: string;
+    }
+  >;
+}
+
+// =============================================================================
+// CRITTER WEAKNESS TYPES
+// =============================================================================
+
+/**
+ * Critter weakness type classification
+ * Based on SR5 Core Rulebook pp. 401-402
+ */
+export type CritterWeaknessType =
+  | "allergy" // Allergic to substance (sunlight, silver, etc.)
+  | "dietary-requirement" // Must consume specific substance to survive
+  | "essence-loss" // Loses Essence under certain conditions
+  | "induced-dormancy" // Enters dormant state under conditions
+  | "reduced-senses" // Has impaired sensory abilities
+  | "uneducated" // Lacks formal education (for sapient critters)
+  | "vulnerability"; // Takes extra damage from specific source
+
+/**
+ * Critter weakness catalog item in ruleset data
+ * Based on SR5 Core Rulebook pp. 401-402
+ */
+export interface CritterWeaknessCatalogItem {
+  /** Unique kebab-case identifier */
+  id: string;
+  /** Display name */
+  name: string;
+  /** Weakness type classification */
+  type: CritterWeaknessType;
+  /** Full description of the weakness mechanics */
+  description: string;
+  /** Short summary for display */
+  summary?: string;
+  /** Source page number */
+  page: number;
+  /** Source book reference */
+  source: string;
+}
+
+/**
+ * Critter weaknesses payload structure for ruleset module
+ */
+export interface CritterWeaknessesPayload {
+  weaknesses: CritterWeaknessCatalogItem[];
+}
+
+// =============================================================================
+// CRITTER TYPES
+// =============================================================================
+
+/**
+ * Critter type classification
+ * Based on SR5 Core Rulebook
+ */
+export type CritterType =
+  | "mundane" // Non-magical animals (dog, horse, shark)
+  | "paracritter" // Awakened creatures with magical powers
+  | "dracoform" // Dragons (eastern, western, feathered serpent)
+  | "spirit" // Spirits (handled separately in spirits module)
+  | "infected"; // HMHVV-infected creatures (ghouls, vampires)
+
+/**
+ * Critter attributes block
+ */
+export interface CritterAttributes {
+  body: number;
+  agility: number;
+  reaction: number;
+  strength: number;
+  willpower: number;
+  logic: number;
+  intuition: number;
+  charisma: number;
+  edge: number;
+  /** Essence - can be number or string for dice notation (e.g., "2D6") */
+  essence: number | string;
+  /** Magic rating (if magical) */
+  magic?: number;
+}
+
+/**
+ * Critter movement rates
+ * Values are multipliers for walking/running and +meters for sprinting
+ */
+export interface CritterMovement {
+  /** Walking multiplier */
+  walk: number;
+  /** Running multiplier */
+  run: number;
+  /** Sprint bonus (+meters per hit) */
+  sprint: number;
+  /** Swimming movement (if different from base) */
+  swim?: { walk: number; run: number; sprint: number };
+  /** Flight movement (if capable of flying) */
+  flight?: { walk: number; run: number; sprint: number };
+  /** Special movement notes (e.g., "As base metatype") */
+  special?: string;
+}
+
+/**
+ * Critter limits
+ */
+export interface CritterLimits {
+  physical: number;
+  mental: number;
+  /** Social limit - can be string for variable limits (e.g., "5-9 (depending on Essence)") */
+  social: number | string;
+}
+
+/**
+ * Critter condition monitor boxes
+ */
+export interface CritterConditionMonitor {
+  physical: number;
+  stun: number;
+}
+
+/**
+ * Critter skill entry
+ */
+export interface CritterSkill {
+  /** Skill name */
+  name: string;
+  /** Skill rating */
+  rating: number;
+  /** Specialization (if any) */
+  specialization?: string;
+  /** Bonus from specialization (typically +2) */
+  bonus?: number;
+}
+
+/**
+ * Critter natural weapon (claws, bite, etc.)
+ */
+export interface CritterNaturalWeapon {
+  /** Weapon name (e.g., "Claws/Bite", "Kick") */
+  name: string;
+  /** Weapon type */
+  type: "melee" | "ranged";
+  /** Damage string (e.g., "(STR+2)P", "8P") */
+  damage: string;
+  /** Armor penetration (number or "—" for none) */
+  ap: number | string;
+  /** Reach modifier (can be negative for small creatures) */
+  reach?: number;
+}
+
+/**
+ * Reference to a critter weakness with optional details
+ */
+export interface CritterWeaknessRef {
+  /** ID of the weakness from critterWeaknesses module */
+  id: string;
+  /** Specific details (e.g., "Sunlight, Severe" or "Own Gaze") */
+  details?: string;
+}
+
+/**
+ * Reference to a critter power with optional rating/details
+ */
+export interface CritterPowerRef {
+  /** ID of the power from critterPowers module */
+  id: string;
+  /** Power rating (for powers like "Armor 3") */
+  rating?: number;
+  /** Additional details (e.g., "Fire" for Elemental Attack) */
+  details?: string;
+}
+
+/**
+ * Dragon-specific hardened armor notation
+ */
+export interface DragonArmor {
+  /** Physical hardened armor value (e.g., "17H") */
+  physical: string;
+  /** Mystic hardened armor value (e.g., "9H") */
+  mystic: string;
+}
+
+/**
+ * Critter catalog item in ruleset data
+ * Based on SR5 Core Rulebook pp. 402-407
+ */
+export interface CritterCatalogItem {
+  /** Unique kebab-case identifier */
+  id: string;
+  /** Display name */
+  name: string;
+  /** Critter type classification */
+  type: CritterType;
+  /** Attribute block */
+  attributes: CritterAttributes;
+  /** Initiative string (e.g., "8 + 1D6") */
+  initiative: string;
+  /** Movement rates */
+  movement: CritterMovement;
+  /** Condition monitor boxes */
+  conditionMonitor: CritterConditionMonitor;
+  /** Limit values */
+  limits: CritterLimits;
+  /** Armor rating (number or DragonArmor for dragons) */
+  armor: number | DragonArmor;
+  /** Skills the critter possesses */
+  skills: CritterSkill[];
+  /** Critter powers (references to critterPowers module) */
+  powers: CritterPowerRef[];
+  /** Critter weaknesses (references to critterWeaknesses module) */
+  weaknesses?: CritterWeaknessRef[];
+  /** Natural weapons */
+  naturalWeapons?: CritterNaturalWeapon[];
+  /** Inherent reach modifier (e.g., +1 for sasquatch, +2 for dragons) */
+  reach?: number;
+  /** Physical description */
+  description?: string;
+  /** Natural habitat */
+  habitat?: string;
+  /** Additional notes (e.g., magic rules, variants) */
+  notes?: string;
+  /** Source page number */
+  page: number;
+  /** Source book reference */
+  source: string;
+}
+
+/**
+ * Critters payload structure for ruleset module
+ */
+export interface CrittersPayload {
+  critters: CritterCatalogItem[];
+}
+
+// =============================================================================
 // MODIFICATION TYPES (for ruleset data)
 // =============================================================================
 
