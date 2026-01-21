@@ -1,0 +1,258 @@
+{
+  "id": "example-alchemist-human",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Alchemist (Example)",
+  "metatype": "human",
+  "description": "A human mage following the mentor spirit Snake, specializing in alchemy and summoning. This character operates as a private investigator in the magical community, using their arcane talents and preparation-based magic for subtle problem-solving. Strong mental attributes and a vehicle make them mobile and perceptive.",
+  "status": "draft",
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 5,
+    "logic": 3,
+    "intuition": 6,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6.0,
+    "magic": 4
+  },
+  "magicalPath": "magician",
+  "tradition": "hermetic",
+  "mentorSpirit": "snake",
+  "skills": {
+    "alchemy": 5,
+    "arcana": 4,
+    "banishing": 4,
+    "binding": 3,
+    "clubs": 2,
+    "counterspelling": 4,
+    "impersonation": 3,
+    "etiquette": 2,
+    "leadership": 2,
+    "negotiation": 2,
+    "perception": 5,
+    "summoning": 5
+  },
+  "skillSpecializations": {
+    "arcana": ["Magical Theory"],
+    "impersonation": ["Human"]
+  },
+  "knowledgeSkills": [
+    { "name": "Magical Community", "category": "street", "rating": 4, "specialization": "Seattle" },
+    { "name": "Magical Forensics", "category": "professional", "rating": 3 },
+    { "name": "Police Procedures", "category": "professional", "rating": 3 },
+    { "name": "Sprawl Dive Bars", "category": "interests", "rating": 3 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Spanish", "rating": 0, "isNative": true },
+    { "name": "Sperethiel", "rating": 4, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "bilingual", "rating": 1, "specification": "Spanish" },
+    { "qualityId": "first-impression", "rating": 1 },
+    { "qualityId": "mentor-spirit", "rating": 1, "specification": "Snake" },
+    { "qualityId": "national-sin", "rating": 1, "specification": "Aztlan" }
+  ],
+  "negativeQualities": [
+    { "qualityId": "addiction", "rating": 1, "specification": "Alcohol (Mild)" },
+    { "qualityId": "bad-luck", "rating": 1 }
+  ],
+  "spells": [
+    { "id": "spell-analyze-truth", "catalogId": "analyze-truth", "name": "Analyze Truth" },
+    { "id": "spell-armor", "catalogId": "armor", "name": "Armor" },
+    { "id": "spell-clairvoyance", "catalogId": "clairvoyance", "name": "Clairvoyance" },
+    {
+      "id": "spell-detect-individual",
+      "catalogId": "detect-individual",
+      "name": "Detect Individual"
+    },
+    { "id": "spell-flamethrower", "catalogId": "flamethrower", "name": "Flamethrower" },
+    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
+    { "id": "spell-physical-barrier", "catalogId": "physical-barrier", "name": "Physical Barrier" },
+    { "id": "spell-stealth", "catalogId": "stealth", "name": "Stealth" }
+  ],
+  "contacts": [
+    {
+      "name": "Talismonger",
+      "type": "Magic",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Magical supplies"
+    },
+    {
+      "name": "Police Detective",
+      "type": "Government",
+      "connection": 3,
+      "loyalty": 4,
+      "notes": "Law enforcement connection"
+    },
+    {
+      "name": "Bartender",
+      "type": "Service",
+      "connection": 1,
+      "loyalty": 2,
+      "notes": "Information source"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Magical Lodge Materials",
+      "category": "magical",
+      "quantity": 1,
+      "cost": 2500,
+      "rating": 5
+    }
+  ],
+  "foci": [
+    {
+      "catalogId": "alchemy-focus",
+      "name": "Alchemy Focus",
+      "type": "alchemy",
+      "force": 4,
+      "bonded": true,
+      "karmaToBond": 8,
+      "cost": 16000,
+      "availability": 12,
+      "legality": "restricted"
+    },
+    {
+      "catalogId": "counterspelling-focus",
+      "name": "Counterspelling Focus (Combat Spells)",
+      "type": "counterspelling",
+      "force": 4,
+      "bonded": true,
+      "karmaToBond": 8,
+      "cost": 16000,
+      "availability": 12,
+      "legality": "restricted",
+      "notes": "Combat Spells"
+    }
+  ],
+  "vehicles": [
+    {
+      "catalogId": "chrysler-nissan-jackrabbit",
+      "name": "Chrysler-Nissan Jackrabbit",
+      "type": "ground",
+      "handling": "4/3",
+      "speed": 3,
+      "acceleration": 2,
+      "body": 8,
+      "armor": 4,
+      "pilot": 1,
+      "sensor": 2,
+      "seats": 2,
+      "cost": 10000,
+      "notes": "Compact economy car"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "lined-coat",
+      "name": "Lined Coat",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 900,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "staff",
+      "name": "Staff",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "6P",
+      "ap": 0,
+      "mode": [],
+      "reach": 2,
+      "accuracy": 6,
+      "cost": 100,
+      "quantity": 1,
+      "notes": "Can be used as magical focus housing"
+    },
+    {
+      "catalogId": "stun-baton",
+      "name": "Stun Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "9S(e)",
+      "ap": -5,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 4,
+      "cost": 750,
+      "quantity": 1,
+      "notes": "10 charges, electrical damage"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "sony-emperor",
+      "name": "Sony Emperor",
+      "deviceRating": 2,
+      "cost": 700
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 4 },
+      "licenses": [{ "type": "fake", "rating": 4, "name": "Private Detective License" }]
+    },
+    {
+      "name": "National Identity",
+      "sin": { "type": "national", "rating": 0, "nation": "Aztlan" },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "middle",
+      "monthlyCost": 5000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 1250,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 5,
+    "mentalLimit": 6,
+    "socialLimit": 7,
+    "initiativeBase": 10,
+    "initiativeDice": 1,
+    "astralInitiativeBase": 12,
+    "astralInitiativeDice": 2,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 11,
+    "composure": 10,
+    "judgeIntentions": 11,
+    "memory": 9,
+    "liftCarry": 6
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 9,
+  "karmaSpentAtCreation": 16,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Alchemist / Magical Investigator",
+    "notes": "Priority: A-Attributes, B-Magic, C-Skills, D-Resources, E-Metatype(Human). Hermetic Tradition (Drain: Willpower + Logic). Snake Mentor Spirit: +2 dice Detection/Illusion spells. National SIN from Aztlan provides legal identity. Bad Luck quality: glitches become critical glitches."
+  }
+}

@@ -1,0 +1,312 @@
+{
+  "id": "example-decker-dwarf",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Decker (Example)",
+  "metatype": "dwarf",
+  "description": "A dwarf decker with an ethical Code of Honor protecting metahumans. Excels at Matrix operations with enhanced Logic from a cerebral booster and natural Aptitude for hacking.",
+  "status": "draft",
+  "attributes": {
+    "body": 3,
+    "agility": 2,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 5,
+    "logic": 5,
+    "intuition": 4,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 5.0
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "automatics": 4,
+    "cybercombat": 6,
+    "electronic-warfare": 6,
+    "computer": 6,
+    "hardware": 6,
+    "software": 6,
+    "aeronautics-mechanic": 4,
+    "automotive-mechanic": 4,
+    "industrial-mechanic": 4,
+    "nautical-mechanic": 4,
+    "etiquette": 4,
+    "first-aid": 3,
+    "hacking": 7,
+    "locksmith": 4,
+    "pilot-aircraft": 3,
+    "pilot-ground-craft": 3,
+    "pistols": 4,
+    "unarmed-combat": 3
+  },
+  "skillSpecializations": {
+    "hacking": ["Hack on the Fly"]
+  },
+  "knowledgeSkills": [
+    { "name": "Cannibalizing Hardware", "category": "professional", "rating": 5 },
+    { "name": "Detective Novels", "category": "interests", "rating": 3 },
+    { "name": "Matrix Security", "category": "professional", "rating": 4 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Japanese", "rating": 3, "isNative": false },
+    { "name": "Salish", "rating": 3, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "analytical-mind", "rating": 1 },
+    { "qualityId": "aptitude", "rating": 1, "specification": "Hacking" },
+    { "qualityId": "code-slinger", "rating": 1, "specification": "Brute Force" }
+  ],
+  "negativeQualities": [
+    { "qualityId": "allergy", "rating": 2, "specification": "Sunlight (Mild)" },
+    { "qualityId": "code-of-honor", "rating": 1, "specification": "Metahumans" }
+  ],
+  "racialQualities": [
+    "Thermographic Vision",
+    "+2 Body",
+    "+1 Willpower",
+    "Toxin/Pathogen Resistance (+2 dice)"
+  ],
+  "cyberware": [
+    {
+      "catalogId": "cerebral-booster",
+      "name": "Cerebral Booster",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.4,
+      "essenceCost": 0.4,
+      "rating": 1,
+      "cost": 31500,
+      "availability": 12,
+      "legality": "restricted",
+      "attributeBonuses": { "logic": 1 }
+    },
+    {
+      "catalogId": "cybereyes",
+      "name": "Cybereyes",
+      "category": "eyeware",
+      "grade": "standard",
+      "baseEssenceCost": 0.2,
+      "essenceCost": 0.2,
+      "rating": 1,
+      "cost": 4000,
+      "availability": 3,
+      "notes": "Low-light, Thermographic"
+    },
+    {
+      "catalogId": "datajack",
+      "name": "Datajack",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.1,
+      "essenceCost": 0.1,
+      "cost": 1000,
+      "availability": 2
+    },
+    {
+      "catalogId": "skilljack",
+      "name": "Skilljack",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.2,
+      "essenceCost": 0.2,
+      "rating": 2,
+      "cost": 20000,
+      "availability": 8,
+      "notes": "Use skillsofts up to rating 2"
+    },
+    {
+      "catalogId": "sleep-regulator",
+      "name": "Sleep Regulator",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.1,
+      "essenceCost": 0.1,
+      "cost": 12000,
+      "availability": 6
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Corporate Janitor",
+      "type": "Corporate",
+      "connection": 1,
+      "loyalty": 2,
+      "notes": "Inside information"
+    },
+    {
+      "name": "Wizgang Leader",
+      "type": "Gang",
+      "connection": 2,
+      "loyalty": 1,
+      "notes": "Street-level Matrix contact"
+    }
+  ],
+  "gear": [
+    { "name": "Lockpick Set", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "DocWagon Contract",
+      "category": "services",
+      "quantity": 1,
+      "cost": 5000,
+      "notes": "Basic"
+    },
+    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 1500, "rating": 6 },
+    {
+      "name": "Linguasoft (Sperethiel)",
+      "category": "skillsoft",
+      "quantity": 1,
+      "cost": 250,
+      "rating": 2
+    },
+    {
+      "name": "Knowsoft (Vehicle Schematics)",
+      "category": "skillsoft",
+      "quantity": 1,
+      "cost": 250,
+      "rating": 2
+    },
+    {
+      "name": "Knowsoft (Corporate Security Procedures)",
+      "category": "skillsoft",
+      "quantity": 1,
+      "cost": 250,
+      "rating": 2
+    }
+  ],
+  "cyberdecks": [
+    {
+      "catalogId": "hermes-chariot",
+      "name": "Hermes Chariot",
+      "deviceRating": 2,
+      "dataProcessing": 5,
+      "firewall": 2,
+      "attack": 4,
+      "sleaze": 4,
+      "cost": 123000,
+      "availability": 8,
+      "legality": "restricted"
+    }
+  ],
+  "programs": [
+    { "catalogId": "armor", "name": "Armor", "category": "hacking", "cost": 250 },
+    {
+      "catalogId": "biofeedback-filter",
+      "name": "Biofeedback Filter",
+      "category": "hacking",
+      "cost": 250
+    },
+    { "catalogId": "edit", "name": "Edit", "category": "hacking", "cost": 250 },
+    { "catalogId": "encryption", "name": "Encryption", "category": "hacking", "cost": 250 },
+    { "catalogId": "hammer", "name": "Hammer", "category": "hacking", "cost": 250 },
+    { "catalogId": "signal-scrub", "name": "Signal Scrub", "category": "hacking", "cost": 250 },
+    { "catalogId": "toolbox", "name": "Toolbox", "category": "hacking", "cost": 250 }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-jacket",
+      "name": "Armor Jacket",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 12,
+      "capacity": 12,
+      "cost": 1000,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "ceska-black-scorpion",
+      "name": "Ceska Black Scorpion",
+      "category": "weapons",
+      "subcategory": "machine-pistol",
+      "damage": "6P",
+      "ap": 0,
+      "mode": ["SA", "BF"],
+      "recoil": 1,
+      "accuracy": 5,
+      "ammoCapacity": 35,
+      "cost": 270,
+      "quantity": 1,
+      "notes": "90 rounds regular"
+    },
+    {
+      "catalogId": "remington-roomsweeper",
+      "name": "Remington Roomsweeper",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "7P",
+      "ap": -1,
+      "mode": ["SA"],
+      "accuracy": 4,
+      "ammoCapacity": 8,
+      "cost": 300,
+      "quantity": 1,
+      "notes": "30 rounds regular"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "meta-link",
+      "name": "Meta Link",
+      "deviceRating": 1,
+      "cost": 100,
+      "notes": "Burner commlink"
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 4 },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "middle",
+      "monthlyCost": 5000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 11,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 4,
+    "mentalLimit": 7,
+    "socialLimit": 5,
+    "initiativeBase": 7,
+    "initiativeDice": 1,
+    "matrixInitiativeAR": 7,
+    "matrixInitiativeDiceAR": 1,
+    "matrixInitiativeColdVR": 9,
+    "matrixInitiativeDiceColdVR": 3,
+    "matrixInitiativeHotVR": 9,
+    "matrixInitiativeDiceHotVR": 4,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 11,
+    "composure": 7,
+    "judgeIntentions": 6,
+    "memory": 10,
+    "liftCarry": 6
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Decker / Matrix Specialist",
+    "notes": "Priority: A-Skills, B-Attributes, C-Metatype(Dwarf), D-Resources, E-Magic. Aptitude (Hacking) allows rating 7. Cerebral Booster provides +1 Logic."
+  }
+}

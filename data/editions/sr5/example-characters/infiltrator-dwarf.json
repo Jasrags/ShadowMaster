@@ -1,0 +1,250 @@
+{
+  "id": "example-infiltrator-dwarf",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Infiltrator (Example)",
+  "metatype": "dwarf",
+  "description": "A dwarf breaking-and-entering specialist with exceptional agility and physical prowess. This character combines natural athletic ability with specialized infiltration gear to bypass security systems.",
+  "status": "draft",
+  "attributes": {
+    "body": 5,
+    "agility": 6,
+    "reaction": 4,
+    "strength": 5,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 5,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 5,
+    "essence": 5.6
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "computer": 2,
+    "escape-artist": 3,
+    "etiquette": 3,
+    "automatics": 2,
+    "longarms": 2,
+    "pistols": 2,
+    "gymnastics": 5,
+    "hardware": 2,
+    "perception": 3,
+    "running": 3,
+    "sneaking": 5,
+    "swimming": 2
+  },
+  "knowledgeSkills": [
+    { "name": "Building Layouts", "category": "professional", "rating": 4 },
+    { "name": "Corporate Security Systems", "category": "professional", "rating": 5 },
+    { "name": "Extreme Sports", "category": "interests", "rating": 2 },
+    { "name": "Infiltration Techniques", "category": "professional", "rating": 3 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Japanese", "rating": 4, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "catlike", "rating": 1 },
+    { "qualityId": "double-jointed", "rating": 1 },
+    { "qualityId": "natural-athlete", "rating": 1 }
+  ],
+  "negativeQualities": [],
+  "racialQualities": [
+    "Thermographic Vision",
+    "+2 Body",
+    "+1 Willpower",
+    "Toxin/Pathogen Resistance (+2 dice)"
+  ],
+  "cyberware": [
+    {
+      "catalogId": "cybereyes",
+      "name": "Cybereyes",
+      "category": "eyeware",
+      "grade": "standard",
+      "baseEssenceCost": 0.3,
+      "essenceCost": 0.3,
+      "rating": 2,
+      "capacity": 8,
+      "capacityUsed": 7,
+      "cost": 6000,
+      "availability": 6,
+      "enhancements": [
+        { "name": "Low-Light Vision", "capacity": 2 },
+        { "name": "Smartlink", "capacity": 3 },
+        { "name": "Thermographic Vision", "capacity": 2 },
+        { "name": "Vision Enhancement 1", "capacity": 0 }
+      ]
+    },
+    {
+      "catalogId": "datajack",
+      "name": "Datajack",
+      "category": "headware",
+      "grade": "standard",
+      "baseEssenceCost": 0.1,
+      "essenceCost": 0.1,
+      "cost": 1000,
+      "availability": 2
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 4,
+      "loyalty": 3,
+      "notes": "Jobs and equipment"
+    },
+    {
+      "name": "Corporate Security Contractor",
+      "type": "Security",
+      "connection": 3,
+      "loyalty": 5,
+      "notes": "Inside information on security"
+    }
+  ],
+  "gear": [
+    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Crowbar", "category": "tools", "quantity": 1, "cost": 20 },
+    {
+      "name": "Grapple Gun",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 500,
+      "notes": "Stealth rope 500m, catalyst stick, micro wire 200m"
+    },
+    {
+      "name": "Maglock Passkey",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 4500,
+      "rating": 3
+    },
+    { "name": "Rappelling Gloves", "category": "survival", "quantity": 1, "cost": 70 },
+    { "name": "Tag Eraser", "category": "electronics", "quantity": 1, "cost": 450 },
+    { "name": "Micro-Transceiver", "category": "electronics", "quantity": 1, "cost": 100 }
+  ],
+  "armor": [
+    {
+      "catalogId": "chameleon-suit",
+      "name": "Chameleon Suit",
+      "category": "armor",
+      "subcategory": "full-body-armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "capacityUsed": 2,
+      "cost": 1700,
+      "quantity": 1,
+      "equipped": true,
+      "modifications": [
+        {
+          "catalogId": "thermal-damping",
+          "name": "Thermal Damping",
+          "rating": 2,
+          "capacityUsed": 2,
+          "cost": 1000,
+          "availability": 10,
+          "legality": "restricted"
+        }
+      ]
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "streetline-special",
+      "name": "Streetline Special",
+      "category": "weapons",
+      "subcategory": "hold-out-pistol",
+      "damage": "6P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 4,
+      "ammoCapacity": 6,
+      "cost": 120,
+      "quantity": 1,
+      "notes": "Spare clip, 60 rounds"
+    },
+    {
+      "catalogId": "ares-predator-v",
+      "name": "Ares Predator V",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "7P",
+      "ap": -4,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 15,
+      "cost": 725,
+      "quantity": 1,
+      "modifications": [
+        {
+          "catalogId": "silencer",
+          "name": "Silencer",
+          "cost": 500,
+          "availability": 9,
+          "legality": "forbidden",
+          "capacityUsed": 0
+        }
+      ],
+      "notes": "Smartlink, spare clip, 50 rounds"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "erika-elite",
+      "name": "Erika Elite",
+      "deviceRating": 4,
+      "cost": 2500
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
+      "licenses": [{ "type": "fake", "rating": 4, "name": "Gun License" }]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 3
+    }
+  ],
+  "nuyen": 270,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 7,
+    "mentalLimit": 6,
+    "socialLimit": 6,
+    "initiativeBase": 9,
+    "initiativeDice": 1,
+    "physicalConditionMonitor": 11,
+    "stunConditionMonitor": 10,
+    "composure": 8,
+    "judgeIntentions": 9,
+    "memory": 9,
+    "liftCarry": 10
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Infiltrator / B&E Specialist",
+    "notes": "Priority: A-Attributes, B-Skills, C-Metatype(Dwarf), D-Resources, E-Magic. High Edge (5) for critical moments."
+  }
+}

@@ -1,0 +1,354 @@
+{
+  "id": "example-face-elf",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Face (Example)",
+  "metatype": "elf",
+  "description": "An elf face specializing in social manipulation, electronic warfare, and looking good while doing it. This character leverages natural elven charisma with an extensive network of contacts across various social strata.",
+  "status": "draft",
+  "attributes": {
+    "body": 3,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 2,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 7
+  },
+  "specialAttributes": {
+    "edge": 4,
+    "essence": 6.0
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "con": 4,
+    "impersonation": 4,
+    "performance": 4,
+    "blades": 2,
+    "clubs": 4,
+    "electronic-warfare": 4,
+    "computer": 4,
+    "hardware": 4,
+    "software": 4,
+    "etiquette": 5,
+    "first-aid": 1,
+    "forgery": 4,
+    "intimidation": 4,
+    "leadership": 4,
+    "locksmith": 4,
+    "negotiation": 5,
+    "perception": 4,
+    "pilot-ground-craft": 1,
+    "pistols": 4,
+    "disguise": 2,
+    "palming": 2,
+    "sneaking": 2,
+    "unarmed-combat": 2
+  },
+  "knowledgeSkills": [
+    { "name": "Business", "category": "academic", "rating": 4 },
+    { "name": "High Fashion", "category": "interests", "rating": 4 },
+    { "name": "Sports", "category": "interests", "rating": 4 }
+  ],
+  "languages": [
+    { "name": "Cantonese", "rating": 0, "isNative": true },
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Japanese", "rating": 4, "isNative": false }
+  ],
+  "positiveQualities": [
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "English"
+    },
+    {
+      "qualityId": "first-impression",
+      "rating": 1
+    }
+  ],
+  "negativeQualities": [
+    {
+      "qualityId": "addiction",
+      "rating": 1,
+      "specification": "Alcohol (Mild)"
+    }
+  ],
+  "racialQualities": ["Low-Light Vision"],
+  "contacts": [
+    {
+      "name": "City Official",
+      "type": "Government",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Government access"
+    },
+    {
+      "name": "Club Owner",
+      "type": "Nightlife",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Nightlife connections"
+    },
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Jobs and equipment"
+    },
+    {
+      "name": "Media Producer",
+      "type": "Media",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Media manipulation"
+    },
+    {
+      "name": "Mr. Johnson",
+      "type": "Corporate",
+      "connection": 4,
+      "loyalty": 1,
+      "notes": "Corporate work"
+    },
+    {
+      "name": "Street Ganger",
+      "type": "Gang",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Street-level intel"
+    },
+    {
+      "name": "Ticket Scalper",
+      "type": "Entertainment",
+      "connection": 1,
+      "loyalty": 1,
+      "notes": "Event access"
+    }
+  ],
+  "gear": [
+    { "name": "Bug Scanner", "category": "electronics", "quantity": 1, "cost": 400 },
+    { "name": "Data Tap", "category": "electronics", "quantity": 1, "cost": 300 },
+    { "name": "Area Jammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 4 },
+    { "name": "Tag Eraser", "category": "electronics", "quantity": 1, "cost": 450 },
+    {
+      "name": "White Noise Generator",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 150,
+      "rating": 6
+    },
+    { "name": "Hardware Toolkit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Lockpick Set", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "Glasses",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 100,
+      "rating": 1,
+      "notes": "Image Link"
+    },
+    { "name": "Micro-Transceivers", "category": "electronics", "quantity": 2, "cost": 100 },
+    { "name": "Stealth Tags", "category": "rfid", "quantity": 20, "cost": 200 }
+  ],
+  "armor": [
+    {
+      "catalogId": "actioneer-business-clothes",
+      "name": "Actioneer Business Clothes",
+      "category": "armor",
+      "subcategory": "clothing",
+      "armorRating": 8,
+      "capacity": 8,
+      "capacityUsed": 0,
+      "cost": 1500,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "browning-ultra-power",
+      "name": "Browning Ultra-Power",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "8P",
+      "ap": -1,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 10,
+      "cost": 640,
+      "quantity": 1,
+      "modifications": [
+        {
+          "catalogId": "silencer",
+          "name": "Silencer",
+          "cost": 500,
+          "availability": 9,
+          "legality": "forbidden",
+          "capacityUsed": 0
+        }
+      ],
+      "notes": "2 spare clips, 100 rounds regular ammo"
+    },
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "Concealed holster, 2 spare clips, 110 rounds"
+    },
+    {
+      "catalogId": "walther-palm-pistol",
+      "name": "Walther Palm Pistol",
+      "category": "weapons",
+      "subcategory": "hold-out-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SS", "BF"],
+      "accuracy": 4,
+      "ammoCapacity": 2,
+      "cost": 180,
+      "quantity": 1,
+      "notes": "Concealed holster, 10 rounds"
+    },
+    {
+      "catalogId": "yamaha-pulsar",
+      "name": "Yamaha Pulsar",
+      "category": "weapons",
+      "subcategory": "taser",
+      "damage": "7S(e)",
+      "ap": -5,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 4,
+      "cost": 180,
+      "quantity": 1,
+      "notes": "40 darts"
+    },
+    {
+      "catalogId": "smoke-grenade",
+      "name": "Smoke Grenade",
+      "category": "weapons",
+      "subcategory": "grenade",
+      "damage": "-",
+      "ap": 0,
+      "mode": [],
+      "accuracy": 0,
+      "cost": 40,
+      "quantity": 2,
+      "notes": "10m Radius smoke"
+    },
+    {
+      "catalogId": "extendable-baton",
+      "name": "Extendable Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "4S",
+      "ap": 0,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1,
+      "notes": "Collapsible"
+    },
+    {
+      "catalogId": "knife",
+      "name": "Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "3P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 10,
+      "quantity": 1
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "face-vehicle-1",
+      "name": "Ford Americar",
+      "type": "ground",
+      "handling": 4,
+      "speed": 3,
+      "acceleration": 2,
+      "body": 11,
+      "armor": 4,
+      "pilot": 1,
+      "sensor": 2,
+      "seats": 4,
+      "notes": "Standard sedan"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "hermes-ikon",
+      "name": "Hermes Ikon",
+      "deviceRating": 5,
+      "cost": 3000
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
+      "licenses": [
+        { "type": "fake", "rating": 4, "name": "Concealed Carry Permit" },
+        { "type": "fake", "rating": 4, "name": "Gun License" }
+      ]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "medium",
+      "monthlyCost": 5000,
+      "prepaidMonths": 1,
+      "notes": "Standard medium lifestyle"
+    }
+  ],
+  "nuyen": 6000,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 4,
+    "mentalLimit": 6,
+    "socialLimit": 8,
+    "initiativeBase": 7,
+    "initiativeDice": 1,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 10,
+    "composure": 11,
+    "judgeIntentions": 11,
+    "memory": 8,
+    "liftCarry": 5
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "page": "SR5 p.112-113",
+    "archetype": "Face / Social Infiltrator",
+    "notes": "Priority: A-Skills, B-Attributes, C-Metatype(Elf), D-Resources, E-Magic"
+  }
+}

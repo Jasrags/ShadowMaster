@@ -1,0 +1,332 @@
+{
+  "id": "example-gang-leader-ork",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Gang Leader (Example)",
+  "metatype": "ork",
+  "description": "An ork gang leader and street-level fixer from the Seattle sprawl. This character combines physical presence with social skills to lead a gang and handle negotiations.",
+  "status": "draft",
+  "attributes": {
+    "body": 7,
+    "agility": 4,
+    "reaction": 4,
+    "strength": 7,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 1,
+    "essence": 4.8
+  },
+  "magicalPath": "mundane",
+  "skills": {
+    "armorer": 1,
+    "gymnastics": 2,
+    "running": 2,
+    "swimming": 2,
+    "automatics": 1,
+    "blades": 3,
+    "clubs": 3,
+    "computer": 1,
+    "con": 1,
+    "cybertechnology": 1,
+    "etiquette": 2,
+    "first-aid": 1,
+    "intimidation": 5,
+    "leadership": 3,
+    "locksmith": 1,
+    "aeronautics-mechanic": 1,
+    "automotive-mechanic": 1,
+    "industrial-mechanic": 1,
+    "nautical-mechanic": 1,
+    "navigation": 1,
+    "negotiation": 3,
+    "perception": 3,
+    "performance": 3,
+    "pilot-ground-craft": 2,
+    "pistols": 3,
+    "disguise": 2,
+    "palming": 2,
+    "sneaking": 2,
+    "throwing-weapons": 1,
+    "unarmed-combat": 5
+  },
+  "skillSpecializations": {
+    "etiquette": ["Street"]
+  },
+  "knowledgeSkills": [
+    { "name": "Business", "category": "academic", "rating": 2 },
+    { "name": "Seattle Street Gangs", "category": "street", "rating": 4 },
+    { "name": "Sprawl Life", "category": "street", "rating": 3 },
+    { "name": "Street Drugs", "category": "street", "rating": 2 }
+  ],
+  "languages": [
+    { "name": "English (City Speak)", "rating": 0, "isNative": true },
+    { "name": "Or'zet", "rating": 2, "isNative": false }
+  ],
+  "positiveQualities": [
+    {
+      "qualityId": "guts",
+      "rating": 1
+    },
+    {
+      "qualityId": "home-ground",
+      "rating": 1,
+      "specification": "You Know a Guy"
+    }
+  ],
+  "negativeQualities": [
+    {
+      "qualityId": "dependent",
+      "rating": 3,
+      "specification": "Several brothers and sisters"
+    },
+    {
+      "qualityId": "distinctive-style",
+      "rating": 1
+    },
+    {
+      "qualityId": "prejudiced",
+      "rating": 2,
+      "specification": "Elves (Outspoken)"
+    }
+  ],
+  "racialQualities": ["Low-Light Vision"],
+  "cyberware": [
+    {
+      "catalogId": "cyberarm",
+      "name": "Cyberarm (Obvious)",
+      "category": "cyberlimb",
+      "grade": "used",
+      "baseEssenceCost": 1.0,
+      "essenceCost": 1.2,
+      "cost": 11250,
+      "availability": 4,
+      "notes": "Standard stats, visible wear"
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 3,
+      "loyalty": 1,
+      "notes": "General jobs and gear"
+    },
+    {
+      "name": "Sprawl Ganger",
+      "type": "Gang",
+      "connection": 2,
+      "loyalty": 5,
+      "notes": "Highly loyal gang member"
+    },
+    {
+      "name": "Street Kid",
+      "type": "Street",
+      "connection": 1,
+      "loyalty": 3,
+      "notes": "Information source"
+    }
+  ],
+  "gear": [
+    { "name": "Armorer Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Automotive Mechanics Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Cybertechnology Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Industrial Mechanic Kit", "category": "tools", "quantity": 1, "cost": 500 },
+    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 3 },
+    {
+      "name": "Glasses",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 100,
+      "rating": 1,
+      "notes": "Image Link"
+    },
+    { "name": "Jazz", "category": "drugs", "quantity": 4, "cost": 300, "notes": "Combat drug" },
+    { "name": "Plastic Restraints", "category": "restraints", "quantity": 10, "cost": 50 }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-jacket",
+      "name": "Armored Jacket",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 12,
+      "capacity": 12,
+      "capacityUsed": 6,
+      "cost": 1000,
+      "quantity": 1,
+      "equipped": true,
+      "modifications": [
+        {
+          "catalogId": "nonconductivity",
+          "name": "Nonconductivity",
+          "rating": 6,
+          "capacityUsed": 6,
+          "cost": 1500,
+          "availability": 6
+        }
+      ]
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "Concealed holster, 2 spare clips, 110 rounds"
+    },
+    {
+      "catalogId": "ruger-super-warhawk",
+      "name": "Ruger Super Warhawk",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "9P",
+      "ap": -2,
+      "mode": ["SS"],
+      "accuracy": 5,
+      "ammoCapacity": 6,
+      "cost": 400,
+      "quantity": 1,
+      "notes": "2 speed loaders, 60 rounds"
+    },
+    {
+      "catalogId": "streetline-special",
+      "name": "Streetline Special",
+      "category": "weapons",
+      "subcategory": "hold-out-pistol",
+      "damage": "6P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 4,
+      "ammoCapacity": 6,
+      "cost": 120,
+      "quantity": 1,
+      "notes": "Concealed history, 30 rounds"
+    },
+    {
+      "catalogId": "combat-axe",
+      "name": "Combat Axe",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "12P",
+      "ap": -4,
+      "mode": [],
+      "reach": 2,
+      "accuracy": 4,
+      "cost": 500,
+      "quantity": 1
+    },
+    {
+      "catalogId": "extendable-baton",
+      "name": "Extendable Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "7S",
+      "ap": 0,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1,
+      "notes": "Collapsible"
+    },
+    {
+      "catalogId": "knife",
+      "name": "Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "7P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 10,
+      "quantity": 1
+    }
+  ],
+  "vehicles": [
+    {
+      "id": "gang-leader-vehicle-1",
+      "name": "Harley-Davidson Scorpion",
+      "type": "ground",
+      "handling": 4,
+      "speed": 4,
+      "acceleration": 2,
+      "body": 8,
+      "armor": 6,
+      "pilot": 1,
+      "sensor": 2,
+      "seats": 1,
+      "notes": "Motorcycle"
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "renraku-sensei",
+      "name": "Renraku Sensei",
+      "deviceRating": 3,
+      "cost": 1000
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": {
+        "type": "fake",
+        "rating": 3
+      },
+      "licenses": [{ "type": "fake", "rating": 3, "name": "Gun License" }]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 1500,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 9,
+    "mentalLimit": 5,
+    "socialLimit": 6,
+    "initiativeBase": 7,
+    "initiativeDice": 1,
+    "physicalConditionMonitor": 12,
+    "stunConditionMonitor": 10,
+    "composure": 8,
+    "judgeIntentions": 7,
+    "memory": 7,
+    "liftCarry": 14
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Gang Leader / Street Boss",
+    "notes": "Priority: A-Attributes, B-Skills, C-Metatype(Ork), D-Resources, E-Magic"
+  }
+}

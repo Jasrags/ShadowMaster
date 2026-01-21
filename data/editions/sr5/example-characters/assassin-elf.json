@@ -1,0 +1,365 @@
+{
+  "id": "example-assassin-elf",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Assassin (Example)",
+  "metatype": "elf",
+  "description": "A Lakota elf physical adept following the Assassin's Creed, specializing in firearms and infiltration. This character combines supernatural reflexes with extensive weapons training, making them a deadly combatant. High Edge provides luck when it matters most, while adept powers enhance accuracy and reaction time.",
+  "status": "draft",
+  "attributes": {
+    "body": 3,
+    "agility": 6,
+    "reaction": 3,
+    "strength": 2,
+    "willpower": 2,
+    "logic": 2,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 5,
+    "essence": 6.0,
+    "magic": 6
+  },
+  "magicalPath": "adept",
+  "adeptPowers": [
+    {
+      "catalogId": "attribute-boost",
+      "name": "Attribute Boost (Agility)",
+      "powerPointCost": 1.0,
+      "rating": 4,
+      "notes": "Boost AGI by up to 4 (causes drain)"
+    },
+    {
+      "catalogId": "combat-sense",
+      "name": "Combat Sense",
+      "powerPointCost": 0.5,
+      "rating": 1,
+      "notes": "+1 dice to defense tests"
+    },
+    {
+      "catalogId": "enhanced-accuracy",
+      "name": "Enhanced Accuracy (Pistols)",
+      "powerPointCost": 0.25,
+      "notes": "+1 Accuracy with pistols"
+    },
+    {
+      "catalogId": "enhanced-accuracy",
+      "name": "Enhanced Accuracy (Automatics)",
+      "powerPointCost": 0.25,
+      "notes": "+1 Accuracy with automatics"
+    },
+    {
+      "catalogId": "improved-reflexes",
+      "name": "Improved Reflexes",
+      "powerPointCost": 2.5,
+      "rating": 2,
+      "notes": "+2 Reaction, +2 Initiative dice"
+    },
+    {
+      "catalogId": "mystic-armor",
+      "name": "Mystic Armor",
+      "powerPointCost": 1.0,
+      "rating": 2,
+      "notes": "+2 armor"
+    },
+    {
+      "catalogId": "spell-resistance",
+      "name": "Spell Resistance",
+      "powerPointCost": 0.5,
+      "rating": 1,
+      "notes": "+1 dice to resist spells"
+    }
+  ],
+  "skills": {
+    "blades": 4,
+    "con": 3,
+    "automatics": 5,
+    "longarms": 5,
+    "pistols": 5,
+    "first-aid": 3,
+    "gymnastics": 5,
+    "perception": 4,
+    "pilot-ground-craft": 3,
+    "running": 4,
+    "sneaking": 4,
+    "swimming": 2,
+    "tracking": 3
+  },
+  "skillSpecializations": {
+    "sneaking": ["Urban"]
+  },
+  "knowledgeSkills": [
+    { "name": "Egyptian Ceramics", "category": "interests", "rating": 2 },
+    { "name": "Weapon Manufacturers", "category": "professional", "rating": 4 }
+  ],
+  "languages": [
+    { "name": "Lakota", "rating": 0, "isNative": true },
+    { "name": "English", "rating": 5, "isNative": false },
+    { "name": "Sperethiel", "rating": 4, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "guts", "rating": 1 },
+    { "qualityId": "natural-athlete", "rating": 1 }
+  ],
+  "negativeQualities": [
+    { "qualityId": "addiction", "rating": 1, "specification": "BTLs (Mild)" },
+    { "qualityId": "code-of-honor", "rating": 1, "specification": "Assassin's Creed" }
+  ],
+  "racialQualities": ["Low-Light Vision", "+1 Agility", "+2 Charisma"],
+  "contacts": [
+    {
+      "name": "Black Market Gun Dealer",
+      "type": "Arms",
+      "connection": 3,
+      "loyalty": 3,
+      "notes": "Weapons and ammo"
+    },
+    {
+      "name": "Target Range Operator",
+      "type": "Service",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Practice and intel"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Contacts",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 75,
+      "rating": 3,
+      "notes": "Smartlink, Vision Enhancement 2"
+    },
+    {
+      "name": "Earbuds",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 75,
+      "rating": 3,
+      "notes": "Audio Enhancement 1, Spatial Recognizer"
+    },
+    {
+      "name": "DocWagon Contract",
+      "category": "services",
+      "quantity": 1,
+      "cost": 50000,
+      "notes": "Platinum (1 year)"
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 500,
+      "rating": 4,
+      "notes": "2 resupplies"
+    },
+    { "name": "Trauma Patch", "category": "medical", "quantity": 2, "cost": 1000 },
+    {
+      "name": "Gecko Tape Gloves",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 250,
+      "notes": "Wall climbing"
+    },
+    { "name": "Maglock Passkey", "category": "tools", "quantity": 1, "cost": 6000, "rating": 3 }
+  ],
+  "vehicles": [
+    {
+      "catalogId": "hyundai-shin-hyung",
+      "name": "Hyundai Shin-Hyung",
+      "type": "ground",
+      "handling": "4/3",
+      "speed": 3,
+      "acceleration": 2,
+      "body": 10,
+      "armor": 6,
+      "pilot": 1,
+      "sensor": 2,
+      "cost": 28000,
+      "notes": "Sedan"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-jacket",
+      "name": "Armor Jacket",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 12,
+      "capacity": 12,
+      "cost": 1000,
+      "quantity": 1,
+      "equipped": true,
+      "notes": "Chemical Protection 3, Fire Resistance 3, Non-conductivity 4"
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "ares-predator-v",
+      "name": "Ares Predator V",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "8P",
+      "ap": -1,
+      "mode": ["SA"],
+      "accuracy": 5,
+      "ammoCapacity": 15,
+      "cost": 725,
+      "quantity": 2,
+      "notes": "Smartlink, 100 regular + 100 Stick-n-Shock"
+    },
+    {
+      "catalogId": "ingram-smartgun-x",
+      "name": "Ingram Smartgun X",
+      "category": "weapons",
+      "subcategory": "smg",
+      "damage": "8P",
+      "ap": 0,
+      "mode": ["BF", "FA"],
+      "recoil": 2,
+      "accuracy": 4,
+      "ammoCapacity": 32,
+      "cost": 800,
+      "quantity": 1,
+      "notes": "Gas-vent 2, suppressor, smartlink, 100 regular + 100 explosive"
+    },
+    {
+      "catalogId": "pjss-model-55",
+      "name": "PJSS Model 55",
+      "category": "weapons",
+      "subcategory": "shotgun",
+      "damage": "11P",
+      "ap": -1,
+      "mode": ["SS"],
+      "recoil": 1,
+      "accuracy": 6,
+      "ammoCapacity": 2,
+      "cost": 1000,
+      "quantity": 1,
+      "notes": "Integrated shock pad, 100 regular + 100 explosive"
+    },
+    {
+      "catalogId": "ruger-super-warhawk",
+      "name": "Ruger Super Warhawk",
+      "category": "weapons",
+      "subcategory": "heavy-pistol",
+      "damage": "9P",
+      "ap": -2,
+      "mode": ["SS"],
+      "accuracy": 5,
+      "ammoCapacity": 6,
+      "cost": 400,
+      "quantity": 1,
+      "notes": "100 rounds regular"
+    },
+    {
+      "catalogId": "steyr-tmp",
+      "name": "Steyr TMP",
+      "category": "weapons",
+      "subcategory": "machine-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA", "BF", "FA"],
+      "accuracy": 5,
+      "ammoCapacity": 30,
+      "cost": 350,
+      "quantity": 1,
+      "notes": "Laser sight, 100 each: regular, explosive, Stick-n-Shock"
+    },
+    {
+      "catalogId": "yamaha-raiden",
+      "name": "Yamaha Raiden",
+      "category": "weapons",
+      "subcategory": "assault-rifle",
+      "damage": "11P",
+      "ap": -2,
+      "mode": ["BF", "FA"],
+      "recoil": 1,
+      "accuracy": 6,
+      "ammoCapacity": 60,
+      "cost": 2600,
+      "quantity": 1,
+      "notes": "Suppressor, smartlink, 100 regular + 100 explosive"
+    },
+    {
+      "catalogId": "knife",
+      "name": "Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "3P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 10,
+      "quantity": 1
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "renraku-sensei",
+      "name": "Renraku Sensei",
+      "deviceRating": 3,
+      "cost": 1000
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 5 },
+      "licenses": [
+        { "type": "fake", "rating": 5, "name": "Gun License" },
+        { "type": "fake", "rating": 5, "name": "Gun License" },
+        { "type": "fake", "rating": 5, "name": "Gun License" },
+        { "type": "fake", "rating": 5, "name": "Gun License" },
+        { "type": "fake", "rating": 5, "name": "Gun License" }
+      ]
+    },
+    {
+      "name": "Secondary Identity",
+      "sin": { "type": "fake", "rating": 5 },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 1
+    }
+  ],
+  "nuyen": 1690,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 4,
+    "mentalLimit": 3,
+    "socialLimit": 5,
+    "initiativeBase": 8,
+    "initiativeDice": 3,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 9,
+    "composure": 5,
+    "judgeIntentions": 6,
+    "memory": 4,
+    "liftCarry": 5
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 8,
+  "karmaSpentAtCreation": 17,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Assassin / Physical Adept",
+    "notes": "Priority: A-Attributes, B-Magic(Adept), C-Skills, D-Resources, E-Metatype(Elf). Improved Reflexes 2: +2 Reaction, +2 Initiative dice (base 8+3D6). Total Armor: 14 (12 jacket + 2 Mystic Armor). Enhanced Accuracy improves pistol and automatic weapon accuracy by +1."
+  }
+}

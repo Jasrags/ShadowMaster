@@ -1,0 +1,305 @@
+{
+  "id": "example-technomancer-human",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Technomancer (Example)",
+  "metatype": "human",
+  "description": "A human technomancer with an innate connection to the Matrix. This character manipulates the digital world through sheer will and Resonance rather than hardware. Strong electronic warfare skills combined with complex forms make them a formidable Matrix operative. A former NeoNET employee with lingering prejudice against NeoNET citizens.",
+  "status": "draft",
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 5,
+    "logic": 5,
+    "intuition": 6,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6.0,
+    "resonance": 5
+  },
+  "magicalPath": "technomancer",
+  "skills": {
+    "compiling": 3,
+    "computer": 4,
+    "cybercombat": 4,
+    "decompiling": 2,
+    "electronic-warfare": 6,
+    "first-aid": 1,
+    "hacking": 4,
+    "hardware": 2,
+    "software": 4,
+    "gymnastics": 1,
+    "running": 1,
+    "swimming": 1,
+    "etiquette": 4,
+    "leadership": 4,
+    "negotiation": 4,
+    "navigation": 1,
+    "pilot-aircraft": 1,
+    "pilot-ground-craft": 1,
+    "pilot-watercraft": 1,
+    "pistols": 2,
+    "sneaking": 2
+  },
+  "knowledgeSkills": [
+    { "name": "Business", "category": "academic", "rating": 4, "specialization": "Finance" },
+    {
+      "name": "Club Music",
+      "category": "interests",
+      "rating": 2,
+      "specialization": "Classic Dubstep"
+    },
+    { "name": "Economics", "category": "academic", "rating": 4 },
+    { "name": "NeoNET", "category": "professional", "rating": 4 },
+    { "name": "Sports", "category": "interests", "rating": 2, "specialization": "Baseball" },
+    { "name": "Street Life", "category": "street", "rating": 1 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "German", "rating": 2, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "analytical-mind", "rating": 1 },
+    { "qualityId": "codeslinger", "rating": 1, "specification": "Snoop" },
+    { "qualityId": "home-ground", "rating": 1, "specification": "Digital Turf: NeoNET" }
+  ],
+  "negativeQualities": [
+    { "qualityId": "combat-paralysis", "rating": 1 },
+    { "qualityId": "insomnia", "rating": 2 },
+    { "qualityId": "prejudiced", "rating": 1, "specification": "NeoNET Citizens (Vocal)" }
+  ],
+  "complexForms": [
+    {
+      "catalogId": "cleaner",
+      "name": "Cleaner",
+      "target": "Persona",
+      "duration": "P",
+      "fadingValue": "L-2"
+    },
+    {
+      "catalogId": "data-mask",
+      "name": "Data Mask",
+      "target": "Persona",
+      "duration": "S",
+      "fadingValue": "L-1"
+    },
+    {
+      "catalogId": "editor",
+      "name": "Editor",
+      "target": "File",
+      "duration": "P",
+      "fadingValue": "L-2"
+    },
+    {
+      "catalogId": "pulse-storm",
+      "name": "Pulse Storm",
+      "target": "Device",
+      "duration": "I",
+      "fadingValue": "L+1"
+    },
+    {
+      "catalogId": "resonance-spike",
+      "name": "Resonance Spike",
+      "target": "Device",
+      "duration": "I",
+      "fadingValue": "L"
+    }
+  ],
+  "livingPersona": {
+    "deviceRating": 5,
+    "attack": 4,
+    "sleaze": 6,
+    "dataProcessing": 5,
+    "firewall": 5
+  },
+  "contacts": [
+    {
+      "name": "Blogger",
+      "type": "Media",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Information and publicity"
+    },
+    {
+      "name": "BTL Dealer",
+      "type": "Underworld",
+      "connection": 1,
+      "loyalty": 1,
+      "notes": "Matrix underworld"
+    },
+    {
+      "name": "Technomancer",
+      "type": "Shadow",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Fellow Resonance user"
+    }
+  ],
+  "gear": [
+    { "name": "Data Tap", "category": "electronics", "quantity": 1, "cost": 300 },
+    {
+      "name": "Earbuds",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 50,
+      "rating": 1,
+      "notes": "Select Sound Filter 1"
+    },
+    {
+      "name": "Glasses",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 100,
+      "rating": 1,
+      "notes": "Image Link"
+    },
+    { "name": "Headjammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 6 },
+    { "name": "Datachips (Blank)", "category": "electronics", "quantity": 50, "cost": 25 },
+    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
+    { "name": "Mapsoft (Seattle)", "category": "software", "quantity": 1, "cost": 100 },
+    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 250, "rating": 3 },
+    { "name": "Respirator", "category": "survival", "quantity": 1, "cost": 50, "rating": 1 },
+    { "name": "RFID Tags", "category": "electronics", "quantity": 50, "cost": 5 },
+    { "name": "Stealth Tags", "category": "electronics", "quantity": 30, "cost": 300 },
+    { "name": "Plastic Restraints", "category": "security", "quantity": 10, "cost": 20 }
+  ],
+  "drones": [
+    {
+      "catalogId": "mct-fly-spy",
+      "name": "MCT Fly-Spy",
+      "type": "aerial",
+      "handling": 4,
+      "speed": 3,
+      "acceleration": 2,
+      "body": 1,
+      "armor": 0,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 2000,
+      "quantity": 1,
+      "notes": "Micro surveillance"
+    },
+    {
+      "catalogId": "shiawase-kanmushi",
+      "name": "Shiawase Kanmushi",
+      "type": "walker",
+      "handling": 4,
+      "speed": 2,
+      "acceleration": 1,
+      "body": 0,
+      "armor": 0,
+      "pilot": 3,
+      "sensor": 3,
+      "cost": 1000,
+      "quantity": 2,
+      "notes": "Micro bugs"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-vest",
+      "name": "Armor Vest",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 500,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "Spare clip, 110 rounds"
+    },
+    {
+      "catalogId": "knife",
+      "name": "Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "4P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 10,
+      "quantity": 1
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "renraku-sensei",
+      "name": "Renraku Sensei",
+      "deviceRating": 3,
+      "cost": 1000,
+      "notes": "Backup/decoy commlink"
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 3 },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 0,
+  "startingNuyen": 6000,
+  "derivedStats": {
+    "physicalLimit": 4,
+    "mentalLimit": 7,
+    "socialLimit": 6,
+    "initiativeBase": 9,
+    "initiativeDice": 1,
+    "matrixInitiativeAR": 9,
+    "matrixInitiativeDiceAR": 1,
+    "matrixInitiativeColdVR": 11,
+    "matrixInitiativeDiceColdVR": 3,
+    "matrixInitiativeHotVR": 11,
+    "matrixInitiativeDiceHotVR": 4,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 11,
+    "composure": 9,
+    "judgeIntentions": 10,
+    "memory": 11,
+    "liftCarry": 6
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Technomancer / Matrix Specialist",
+    "notes": "Priority: A-Resonance, B-Skills, C-Metatype(Human), D-Attributes, E-Resources. Living Persona: DR 5, Attack 4, Sleaze 6, DP 5, FW 5. Combat Paralysis: -3 Initiative, act last in first round."
+  }
+}

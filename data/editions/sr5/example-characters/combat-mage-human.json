@@ -1,0 +1,186 @@
+{
+  "id": "example-combat-mage-human",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Combat Mage (Example)",
+  "metatype": "human",
+  "description": "A human combat mage with a 'Troll Poser' distinctive style, specializing in offensive spellcasting and astral combat. Follows the Hermetic Tradition.",
+  "status": "draft",
+  "attributes": {
+    "body": 5,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 5,
+    "intuition": 3,
+    "charisma": 2
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6.0,
+    "magic": 6
+  },
+  "magicalPath": "magician",
+  "tradition": "hermetic",
+  "skills": {
+    "assensing": 3,
+    "astral-combat": 3,
+    "banishing": 3,
+    "blades": 2,
+    "counterspelling": 5,
+    "first-aid": 3,
+    "perception": 3,
+    "pistols": 3,
+    "spellcasting": 5,
+    "summoning": 4
+  },
+  "knowledgeSkills": [
+    { "name": "Action Trids", "category": "interests", "rating": 3 },
+    { "name": "Critters", "category": "academic", "rating": 3 },
+    { "name": "Magic Theory", "category": "academic", "rating": 4 },
+    { "name": "Urban Brawl", "category": "interests", "rating": 3 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Spanish", "rating": 3, "isNative": false }
+  ],
+  "positiveQualities": [
+    { "qualityId": "focused-concentration", "rating": 3 },
+    { "qualityId": "high-pain-tolerance", "rating": 1 }
+  ],
+  "negativeQualities": [
+    { "qualityId": "distinctive-style", "rating": 1, "specification": "Troll Poser" },
+    { "qualityId": "prejudiced", "rating": 1, "specification": "Elves (Biased)" }
+  ],
+  "spells": [
+    { "id": "spell-ball-lightning", "catalogId": "ball-lightning", "name": "Ball Lightning" },
+    { "id": "spell-clout", "catalogId": "clout", "name": "Clout" },
+    { "id": "spell-combat-sense", "catalogId": "combat-sense", "name": "Combat Sense" },
+    { "id": "spell-flamethrower", "catalogId": "flamethrower", "name": "Flamethrower" },
+    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
+    {
+      "id": "spell-increase-agility",
+      "catalogId": "increase-attribute",
+      "name": "Increase Agility",
+      "selectedAttribute": "agility"
+    },
+    {
+      "id": "spell-increase-reflexes",
+      "catalogId": "increase-reflexes",
+      "name": "Increase Reflexes"
+    },
+    { "id": "spell-manaball", "catalogId": "manaball", "name": "Manaball" },
+    { "id": "spell-physical-mask", "catalogId": "physical-mask", "name": "Physical Mask" },
+    { "id": "spell-stunbolt", "catalogId": "stunbolt", "name": "Stunbolt" }
+  ],
+  "contacts": [
+    {
+      "name": "Talismonger",
+      "type": "Magic",
+      "connection": 3,
+      "loyalty": 3,
+      "notes": "Magical supplies and reagents"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Contacts",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 200,
+      "rating": 2,
+      "notes": "Vision Enhancement 2"
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "armor-jacket",
+      "name": "Armor Jacket",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 12,
+      "capacity": 12,
+      "cost": 1000,
+      "quantity": 1,
+      "equipped": true
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": ["SA"],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "75 rounds regular ammo"
+    },
+    {
+      "catalogId": "combat-knife",
+      "name": "Combat Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "7P",
+      "ap": -3,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 6,
+      "cost": 300,
+      "quantity": 1
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 2 },
+      "licenses": [{ "type": "fake", "rating": 2, "name": "Magic License" }]
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 80,
+  "startingNuyen": 6000,
+  "derivedStats": {
+    "physicalLimit": 5,
+    "mentalLimit": 6,
+    "socialLimit": 5,
+    "initiativeBase": 6,
+    "initiativeDice": 1,
+    "astralInitiativeBase": 6,
+    "astralInitiativeDice": 2,
+    "physicalConditionMonitor": 11,
+    "stunConditionMonitor": 10,
+    "composure": 6,
+    "judgeIntentions": 5,
+    "memory": 8,
+    "liftCarry": 8
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Combat Mage",
+    "notes": "Priority: A-Magic, B-Attributes, C-Metatype(Human), D-Skills, E-Resources. Hermetic Tradition (Drain: Willpower + Logic)."
+  }
+}

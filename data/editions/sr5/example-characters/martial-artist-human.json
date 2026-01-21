@@ -1,0 +1,301 @@
+{
+  "id": "example-martial-artist-human",
+  "ownerId": "system",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": ["sr5-core-rulebook"],
+  "name": "Martial Artist (Example)",
+  "metatype": "human",
+  "description": "A human martial artist adept following a strict Code of Honor, specializing in unarmed combat and acrobatics. This character embodies the street-level vigilante archetype, using supernatural martial arts abilities to protect the weak. Bilingual in English and Mandarin with deep knowledge of Kung Fu and Seattle's urban landscape.",
+  "status": "draft",
+  "attributes": {
+    "body": 5,
+    "agility": 5,
+    "reaction": 5,
+    "strength": 5,
+    "willpower": 3,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 4,
+    "essence": 6.0,
+    "magic": 5
+  },
+  "magicalPath": "adept",
+  "adeptPowers": [
+    {
+      "catalogId": "critical-strike",
+      "name": "Critical Strike (Unarmed Combat)",
+      "powerPointCost": 1.0,
+      "rating": 2,
+      "notes": "+2 DV with unarmed attacks"
+    },
+    {
+      "catalogId": "improved-ability",
+      "name": "Improved Ability (Unarmed Combat)",
+      "powerPointCost": 1.5,
+      "rating": 3,
+      "notes": "+3 dice for Unarmed Combat"
+    },
+    {
+      "catalogId": "improved-reflexes",
+      "name": "Improved Reflexes",
+      "powerPointCost": 1.5,
+      "rating": 1,
+      "notes": "+1 Reaction, +1 Initiative die"
+    },
+    {
+      "catalogId": "improved-senses",
+      "name": "Improved Senses (Low-Light Vision)",
+      "powerPointCost": 0.25,
+      "notes": "See in low light"
+    },
+    {
+      "catalogId": "killing-hands",
+      "name": "Killing Hands",
+      "powerPointCost": 0.5,
+      "notes": "Unarmed attacks deal Physical damage"
+    },
+    {
+      "catalogId": "light-body",
+      "name": "Light Body",
+      "powerPointCost": 0.25,
+      "rating": 1,
+      "notes": "Reduce effective falling distance"
+    }
+  ],
+  "skills": {
+    "archery": 4,
+    "gymnastics": 4,
+    "running": 4,
+    "swimming": 4,
+    "blades": 4,
+    "clubs": 4,
+    "computer": 1,
+    "con": 1,
+    "disguise": 1,
+    "escape-artist": 3,
+    "etiquette": 2,
+    "first-aid": 1,
+    "intimidation": 3,
+    "locksmith": 2,
+    "negotiation": 1,
+    "navigation": 1,
+    "survival": 1,
+    "tracking": 1,
+    "perception": 3,
+    "sneaking": 4,
+    "throwing-weapons": 3,
+    "unarmed-combat": 6
+  },
+  "knowledgeSkills": [
+    { "name": "Kung Fu", "category": "interests", "rating": 4 },
+    { "name": "Seattle Parkour", "category": "street", "rating": 4 },
+    { "name": "Seattle Squats", "category": "street", "rating": 2 },
+    { "name": "Triads", "category": "street", "rating": 2 }
+  ],
+  "languages": [
+    { "name": "English", "rating": 0, "isNative": true },
+    { "name": "Mandarin", "rating": 0, "isNative": true }
+  ],
+  "positiveQualities": [
+    { "qualityId": "bilingual", "rating": 1, "specification": "Mandarin" },
+    { "qualityId": "double-jointed", "rating": 1 },
+    { "qualityId": "natural-athlete", "rating": 1 },
+    { "qualityId": "pain-resistance", "rating": 1 }
+  ],
+  "negativeQualities": [
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "Only lethal force against those who use it first, protect the weak, overthrow the corrupt"
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Crusading Reporter",
+      "type": "Media",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Media exposure"
+    },
+    {
+      "name": "Street Kid",
+      "type": "Shadow",
+      "connection": 1,
+      "loyalty": 3,
+      "notes": "Street-level intel"
+    },
+    {
+      "name": "Triad Member",
+      "type": "Underworld",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Underworld connections"
+    }
+  ],
+  "gear": [
+    {
+      "name": "Glasses",
+      "category": "sensor-housing",
+      "quantity": 1,
+      "cost": 100,
+      "rating": 1,
+      "notes": "Image Link"
+    },
+    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
+    { "name": "Lockpicks", "category": "tools", "quantity": 1, "cost": 250 },
+    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
+    { "name": "Respirator", "category": "survival", "quantity": 1, "cost": 50, "rating": 1 }
+  ],
+  "armor": [
+    {
+      "catalogId": "urban-explorer-jumpsuit",
+      "name": "Urban Explorer Jumpsuit",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 650,
+      "quantity": 1,
+      "equipped": true,
+      "notes": "Flexible, good for acrobatics"
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "bow",
+      "name": "Bow (Rating 5)",
+      "category": "weapons",
+      "subcategory": "bow",
+      "damage": "7P",
+      "ap": -2,
+      "mode": ["SS"],
+      "accuracy": 6,
+      "cost": 500,
+      "quantity": 1,
+      "rating": 5,
+      "notes": "10 arrows"
+    },
+    {
+      "catalogId": "throwing-knife",
+      "name": "Throwing Knife",
+      "category": "weapons",
+      "subcategory": "throwing-weapon",
+      "damage": "6P",
+      "ap": -1,
+      "mode": [],
+      "accuracy": 0,
+      "cost": 25,
+      "quantity": 2
+    },
+    {
+      "catalogId": "club",
+      "name": "Club",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "8P",
+      "ap": 0,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 4,
+      "cost": 30,
+      "quantity": 1
+    },
+    {
+      "catalogId": "extendable-baton",
+      "name": "Extendable Baton",
+      "category": "weapons",
+      "subcategory": "club",
+      "damage": "7P",
+      "ap": 0,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1,
+      "notes": "Collapsible"
+    },
+    {
+      "catalogId": "knife",
+      "name": "Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "6P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 10,
+      "quantity": 2
+    },
+    {
+      "catalogId": "survival-knife",
+      "name": "Survival Knife",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "7P",
+      "ap": -1,
+      "mode": [],
+      "reach": 0,
+      "accuracy": 5,
+      "cost": 100,
+      "quantity": 1
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "meta-link",
+      "name": "Meta Link",
+      "deviceRating": 1,
+      "cost": 100
+    }
+  ],
+  "identities": [
+    {
+      "name": "Primary Identity",
+      "sin": { "type": "fake", "rating": 1 },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "squatter",
+      "monthlyCost": 500,
+      "prepaidMonths": 2
+    }
+  ],
+  "nuyen": 0,
+  "startingNuyen": 6000,
+  "derivedStats": {
+    "physicalLimit": 7,
+    "mentalLimit": 4,
+    "socialLimit": 5,
+    "initiativeBase": 9,
+    "initiativeDice": 2,
+    "physicalConditionMonitor": 11,
+    "stunConditionMonitor": 10,
+    "composure": 6,
+    "judgeIntentions": 6,
+    "memory": 6,
+    "liftCarry": 10
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-01-20T00:00:00.000Z",
+  "metadata": {
+    "source": "SR5 Core Rulebook Example Character",
+    "archetype": "Martial Artist / Physical Adept",
+    "notes": "Priority: A-Attributes, B-Skills, C-Magic(Adept), D-Metatype(Human), E-Resources. Unarmed Combat effective 9 dice (6 base + 3 Improved Ability). Unarmed damage: 7P (STR 5 + Critical Strike 2) with Killing Hands for Physical damage. Improved Reflexes 1: +1 Reaction, +1 Initiative die (base 9+2D6)."
+  }
+}
