@@ -27,6 +27,8 @@ import { checkDarkMode } from "./checkers/dark-mode";
 import { checkVisualConsistency } from "./checkers/visual-consistency";
 import { checkResponsive } from "./checkers/responsive";
 import { checkInteractiveStates } from "./checkers/interactive-states";
+import { checkPurchaseCard } from "./checkers/purchase-card";
+import { checkSelectionModal } from "./checkers/selection-modal";
 
 // Import reporters
 import { reportToConsole, calculateSummary, type AuditResults } from "./reporters/console";
@@ -100,7 +102,7 @@ Options:
   --output=FORMAT   Output format: console (default), markdown, both
   --output-path=P   Path for markdown output (default: ./audit-report.md)
   --category=CAT    Only run specific category (accessibility, dark-mode,
-                    visual, responsive, interactive)
+                    visual, responsive, interactive, purchase-card, selection-modal)
   --file=PATH       Only audit a specific file
   --help, -h        Show this help message
 
@@ -165,6 +167,8 @@ function runAudit(files: string[], options: CliOptions): AuditResults {
     visualConsistency: [],
     responsive: [],
     interactiveStates: [],
+    purchaseCard: [],
+    selectionModal: [],
   };
 
   // Progress indicator
@@ -201,6 +205,14 @@ function runAudit(files: string[], options: CliOptions): AuditResults {
 
     if (!options.category || options.category === "interactive") {
       results.interactiveStates.push(checkInteractiveStates(file, content));
+    }
+
+    if (!options.category || options.category === "purchase-card") {
+      results.purchaseCard.push(checkPurchaseCard(file, content));
+    }
+
+    if (!options.category || options.category === "selection-modal") {
+      results.selectionModal.push(checkSelectionModal(file, content));
     }
   }
 

@@ -9,6 +9,8 @@ import type { DarkModeResult } from "../checkers/dark-mode";
 import type { VisualConsistencyResult } from "../checkers/visual-consistency";
 import type { ResponsiveResult } from "../checkers/responsive";
 import type { InteractiveStatesResult } from "../checkers/interactive-states";
+import type { PurchaseCardResult } from "../checkers/purchase-card";
+import type { SelectionModalResult } from "../checkers/selection-modal";
 
 // =============================================================================
 // TYPES
@@ -21,6 +23,8 @@ export interface AuditResults {
   visualConsistency: VisualConsistencyResult[];
   responsive: ResponsiveResult[];
   interactiveStates: InteractiveStatesResult[];
+  purchaseCard: PurchaseCardResult[];
+  selectionModal: SelectionModalResult[];
 }
 
 export interface AuditSummary {
@@ -36,6 +40,8 @@ export interface AuditSummary {
     visualConsistency: number;
     responsive: number;
     interactiveStates: number;
+    purchaseCard: number;
+    selectionModal: number;
   };
 }
 
@@ -116,6 +122,8 @@ export function calculateSummary(results: AuditResults): AuditSummary {
     visualConsistency: 0,
     responsive: 0,
     interactiveStates: 0,
+    purchaseCard: 0,
+    selectionModal: 0,
   };
 
   // Count accessibility violations
@@ -166,6 +174,28 @@ export function calculateSummary(results: AuditResults): AuditSummary {
     for (const v of result.violations) {
       totalViolations++;
       byCategory.interactiveStates++;
+      if (v.severity === "high") highViolations++;
+      else if (v.severity === "medium") mediumViolations++;
+      else if (v.severity === "low") lowViolations++;
+    }
+  }
+
+  // Count purchase card violations
+  for (const result of results.purchaseCard) {
+    for (const v of result.violations) {
+      totalViolations++;
+      byCategory.purchaseCard++;
+      if (v.severity === "high") highViolations++;
+      else if (v.severity === "medium") mediumViolations++;
+      else if (v.severity === "low") lowViolations++;
+    }
+  }
+
+  // Count selection modal violations
+  for (const result of results.selectionModal) {
+    for (const v of result.violations) {
+      totalViolations++;
+      byCategory.selectionModal++;
       if (v.severity === "high") highViolations++;
       else if (v.severity === "medium") mediumViolations++;
       else if (v.severity === "low") lowViolations++;
@@ -256,6 +286,16 @@ export function reportToConsole(
         `   Interactive States: ${colors.yellow}${summary.byCategory.interactiveStates}${colors.reset}`
       );
     }
+    if (summary.byCategory.purchaseCard > 0) {
+      console.log(
+        `   Purchase Card:      ${colors.yellow}${summary.byCategory.purchaseCard}${colors.reset}`
+      );
+    }
+    if (summary.byCategory.selectionModal > 0) {
+      console.log(
+        `   Selection Modal:    ${colors.yellow}${summary.byCategory.selectionModal}${colors.reset}`
+      );
+    }
     console.log();
   }
 
@@ -332,6 +372,32 @@ export function reportToConsole(
           severity: v.severity,
           line: v.line,
           message: v.message,
+        });
+      }
+    }
+
+    for (const result of results.purchaseCard) {
+      for (const v of result.violations) {
+        if (!byFile.has(result.filePath)) byFile.set(result.filePath, []);
+        byFile.get(result.filePath)!.push({
+          category: "Purchase",
+          severity: v.severity,
+          line: v.line,
+          message: v.message,
+          suggestion: v.suggestion,
+        });
+      }
+    }
+
+    for (const result of results.selectionModal) {
+      for (const v of result.violations) {
+        if (!byFile.has(result.filePath)) byFile.set(result.filePath, []);
+        byFile.get(result.filePath)!.push({
+          category: "Modal",
+          severity: v.severity,
+          line: v.line,
+          message: v.message,
+          suggestion: v.suggestion,
         });
       }
     }
