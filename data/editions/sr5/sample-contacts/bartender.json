@@ -1,0 +1,53 @@
+{
+  "id": "sample-contact-bartender",
+  "editionCode": "sr5",
+  "name": "Bartender",
+  "description": "Bartenders serve drinks. They also serve as counselor and crying shoulder to nearly everyone who comes into their joint. They see and hear just about everything, which is why it's so very important to make his acquaintance and make his tip jar a little heavier. Bartenders know everyone, so they'll be able to let you know who hasn't been in for a while, whose kid has run away from home this time, whose wife is screwing some other guy—just about anything you might need to know. He can also connect you to the local rumor mill, and he might have something juicy that one of his clients let slip in a haze of gin and tonic. He can guide newbies to suppliers of a variety of goods and services. It'll all cost you, of course—sometimes straight-up cred, sometimes a round for the house to keep the good will flowing. He's known for his discretion, however. He won't just spill to anyone without a really good reason. Like we said, it'll cost you … but it's usually worth it to keep him (and sometimes his other customers) happy.",
+  "uses": ["Information", "Additional contacts", "Back rooms for private meets"],
+  "meetingPlaces": ["Any bar/nightclub"],
+  "similarContacts": ["Bar/nightclub owner", "Bouncer", "Waitress", "Stripper"],
+  "attributes": {
+    "body": 3,
+    "agility": 4,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 3,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 6,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 6
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Etiquette", "rating": 6, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 5 },
+    { "name": "Longarms", "rating": 4, "specialization": "Shotguns" },
+    { "name": "Negotiation", "rating": 5 },
+    { "name": "Pistols", "rating": 4 },
+    { "name": "Unarmed Combat", "rating": 4 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Alcohol", "rating": 6 },
+    { "name": "Media Stars", "rating": 5 },
+    { "name": "Sports", "rating": 6 },
+    { "name": "Street Rumors", "rating": 6 },
+    { "name": "Trivia", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "388",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "sample-contact-talismonger",
+  "editionCode": "sr5",
+  "name": "Talismonger",
+  "description": "The Awakened are exceedingly rare, but they're still like other consumers. They have their special needs: magical foci, fetishes, ritual supplies and components. Fortunately, there are people out there equipped to meet those needs. Talismongers see just about everyone in the area with any sort of magical talent pass through their shops sooner or later. This makes them a great source of not just magical equipment, but vital information about what's going on in the local Awakened community. It also means they're the ones to go to if you need the services of a good street mage. Many talismongers are also enchanters, enabling them to provide shadowrunners with custom magical gear. They can also be good to have around when you need to know if that talisman you lifted on your last job is real or a mass-produced geegaw from a sweatshop in Hong Kong. One word of advice, though: Don't piss them off. They're great people to have on your side, but you make them mad and you might just find your last purchase has run out of mojo right when you really need it.",
+  "uses": ["Magical items", "Magic-related information", "Additional contacts"],
+  "meetingPlaces": ["Talismonger's shop", "Occult library", "Coffee shop"],
+  "similarContacts": ["Fixer", "Street mage/shaman", "Corporate wagemage"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 5,
+    "logic": 4,
+    "intuition": 5,
+    "charisma": 4
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6,
+    "magic": 4
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 7
+  },
+  "conditionMonitor": 11,
+  "qualities": [{ "name": "Aspected Magician", "specification": "Enchanter" }],
+  "skills": [
+    { "name": "Arcana", "rating": 5 },
+    { "name": "Artisan", "rating": 5 },
+    { "name": "Assensing", "rating": 6 },
+    { "name": "Enchanting", "rating": 6, "isSkillGroup": true },
+    { "name": "Etiquette", "rating": 5, "specialization": "Magical" },
+    { "name": "Negotiation", "rating": 6 },
+    { "name": "Perception", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Magical Background", "rating": 5 },
+    { "name": "Magical Goods", "rating": 5 },
+    { "name": "Metalworking", "rating": 6 },
+    { "name": "Woodworking", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "390",
+    "category": "Sample Contact"
+  }
+}

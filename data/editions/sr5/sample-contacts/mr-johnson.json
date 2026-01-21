@@ -1,0 +1,53 @@
+{
+  "id": "sample-contact-mr-johnson",
+  "editionCode": "sr5",
+  "name": "Mr. Johnson",
+  "description": "For someone who doesn't officially exist, Mr. Johnson sure gets around. And that's just as well, since without him, all shadowrunners would be out of a job. He's the man between the shadows and the corps, and he's the one who gets the whole thing started. He's the one who gets his hands dirty so the corps and the governments don't have to. He helps put the \"deniable\" into deniable assets. Mr. Johnson runs the meeting, hires the talent, and pays for results. He gives you the information you need to do the job he's hiring you for, or at least the information he believes you're going to need. He can also get you some of the specialty items you might need to complete the job. He has deep connections and a long memory. While he has a reputation for double-crossing his assets, a lot of that is urban legend. Treat him well, and he'll generally return the favor. Screw him, though, and you might find yourself the target of one of his shadowruns somewhere down the line.",
+  "uses": ["Shadowruns", "Job-related information", "Additional contacts"],
+  "meetingPlaces": ["Just about anywhere he wants"],
+  "similarContacts": ["Company man", "Fixer", "Government agent"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 5,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computer", "rating": 6 },
+    { "name": "Con", "rating": 4 },
+    { "name": "Etiquette", "rating": 7, "specialization": "Corporate" },
+    { "name": "Intimidation", "rating": 4 },
+    { "name": "Negotiation", "rating": 8 },
+    { "name": "Perception", "rating": 5 },
+    { "name": "Pistols", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Finances", "rating": 5 },
+    { "name": "Corporate Rumors", "rating": 8 },
+    { "name": "Psychology", "rating": 5 },
+    { "name": "SOTA Technology", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "389-390",
+    "category": "Sample Contact"
+  }
+}

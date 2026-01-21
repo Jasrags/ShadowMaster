@@ -39,6 +39,10 @@
     "check-tests:all": "pnpm dlx tsx scripts/check-test-coverage.ts --all",
     "check-tests:strict": "pnpm dlx tsx scripts/check-test-coverage.ts --strict",
     "validate-characters": "pnpm dlx tsx scripts/validate-example-characters.ts",
+    "audit:creation": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts",
+    "audit:creation:strict": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --strict",
+    "audit:creation:verbose": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --verbose",
+    "audit:creation:report": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --output=markdown",
     "prepare": "husky"
   },
   "lint-staged": {
