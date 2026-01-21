@@ -1,0 +1,52 @@
+{
+  "id": "sample-contact-street-doc",
+  "editionCode": "sr5",
+  "name": "Street Doc",
+  "description": "Traditional medical treatment, for a shadowrunner, is not always a convenient choice. There's a great deal of paperwork, after all. It's times like this when knowing a street doc can be the difference between breathing for another day and becoming ghoul chow. Street docs operate out of local clinics and body-mod shops, and they don't ask a lot of questions. They have comparatively reasonable rates. They might not have an actual medical degree. Street docs are, often as not, med-school dropouts, nurses, or former combat medics. Beggars can't be choosers in the shadows, though, and if you're bleeding profusely and legitimate medical care is out of the question, your choice is pretty clear. Not only will they put you back together, but many street docs will also rebuild you. Many of them have cyberware installation as one of their income streams. It's often used ware, salvaged from runners who didn't make it, but it's usually a pretty good deal in terms of price. Keep your street doc happy. He'll cut you a better deal, you'll get treated better, and he'll be a lot less likely to kill you on the table and sell your parts to organleggers and other shadowrunners.",
+  "uses": ["Medical care", "Information", "Additional contacts", "Gear (drugs)"],
+  "meetingPlaces": ["Local clinic", "Body shop"],
+  "similarContacts": ["EMT", "Ambulance driver", "Street mage/shaman"],
+  "attributes": {
+    "body": 3,
+    "agility": 5,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 3,
+    "logic": 5,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Cybertechnology", "rating": 7 },
+    { "name": "First Aid", "rating": 6 },
+    { "name": "Medicine", "rating": 8 },
+    { "name": "Negotiation", "rating": 4 },
+    { "name": "Perception", "rating": 6 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Biology", "rating": 7 },
+    { "name": "Medical Advances", "rating": 5 },
+    { "name": "Organleggers", "rating": 4 },
+    { "name": "Psychology", "rating": 4 },
+    { "name": "Smugglers", "rating": 3 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "390",
+    "category": "Sample Contact"
+  }
+}

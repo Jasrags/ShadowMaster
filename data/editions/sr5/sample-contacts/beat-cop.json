@@ -1,0 +1,57 @@
+{
+  "id": "sample-contact-beat-cop",
+  "editionCode": "sr5",
+  "name": "Beat Cop",
+  "description": "They've walked the cold streets of their beat for more years than they care to remember, and they've seen everything that happens there. Newcomers and old-timers, BTL dens and gang turf—he's got the skinny on all of it, and what he doesn't know now, he will soon enough. His network of snitches will make sure of that. If you're good to him, he might even share. Some beat cops patrol on foot, some in cars or on motorcycles. Some of them, especially in some towns in the NAN, even patrol on horseback. Some are straight shooters, and some of them would sell their own mothers if the price was right. The key to working with the beat cop is to know what makes him tick. Find out what he wants and help him get it. He'll repay you with a wealth of information, or arrange meetings with people when you need it.",
+  "uses": ["Information", "Additional contacts", "Gear"],
+  "meetingPlaces": ["The streets of his beat", "Coffee shops"],
+  "similarContacts": ["Detective", "Snitch", "Undercover cop", "Rent-a-cop"],
+  "attributes": {
+    "body": 4,
+    "agility": 4,
+    "reaction": 4,
+    "strength": 3,
+    "willpower": 3,
+    "logic": 3,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Automatics", "rating": 4 },
+    { "name": "Clubs", "rating": 5 },
+    { "name": "Etiquette", "rating": 6, "specialization": "Street" },
+    { "name": "Intimidation", "rating": 5 },
+    { "name": "Leadership", "rating": 4 },
+    { "name": "Perception", "rating": 6 },
+    { "name": "Pistols", "rating": 6 },
+    { "name": "Running", "rating": 4 },
+    { "name": "Unarmed Combat", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Crime Syndicates", "rating": 7 },
+    { "name": "Illegal Goods", "rating": 6 },
+    { "name": "Law Enforcement", "rating": 4 },
+    { "name": "Local Gangs", "rating": 6 },
+    { "name": "Police Procedures", "rating": 8 },
+    { "name": "Street Rumors", "rating": 6 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "388",
+    "category": "Sample Contact"
+  }
+}

@@ -1,0 +1,55 @@
+{
+  "id": "sample-contact-mafia-consiglieri",
+  "editionCode": "sr5",
+  "name": "Mafia Consiglieri",
+  "description": "There are occasions in the shadows when one must ask a favor of the local Mafia don. Of course, one does not simply walk into the don's office, at least not intact. To see the man on the throne, you speak to the power behind the throne, the don's consiglieri, or counselor. He is not actually a member of the family, but he has access to their secrets by dint of being the don's most trusted advisor. This confidence gives him information and insight on the family's business, their plans, and their mindset. He's also not a fool. These confidences aren't given up lightly, since his life would be worthless if the family got wind of their secrets being told out of school. You'll have to offer him something of value to the family to get that information. Help him deal with a problem that the family shouldn't touch on its own, or paydata on its enemies, and he'll be happy to reward you appropriately. Betray his trust, and he'll likewise be happy to reward you appropriately. The consiglieri typically holds a traditional job outside the family business. Many of them are, perhaps not surprisingly, lawyers.",
+  "uses": ["Information", "Additional contacts"],
+  "meetingPlaces": ["Restaurants", "Casinos", "Bars"],
+  "similarContacts": ["Yakuza wakagashira", "Triad Incense Master"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 6,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computer", "rating": 5 },
+    { "name": "Etiquette", "rating": 7, "specialization": "Mob" },
+    { "name": "Instruction", "rating": 6 },
+    { "name": "Leadership", "rating": 7 },
+    { "name": "Negotiation", "rating": 6 },
+    { "name": "Perception", "rating": 6 },
+    { "name": "Pistols", "rating": 3 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Business", "rating": 6 },
+    { "name": "Law", "rating": 7 },
+    { "name": "Local Politics", "rating": 6 },
+    { "name": "Mob Politics", "rating": 9 },
+    { "name": "Police Procedures", "rating": 5 },
+    { "name": "Psychology", "rating": 7 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "389",
+    "category": "Sample Contact"
+  }
+}

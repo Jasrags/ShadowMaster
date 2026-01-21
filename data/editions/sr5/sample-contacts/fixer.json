@@ -1,0 +1,56 @@
+{
+  "id": "sample-contact-fixer",
+  "editionCode": "sr5",
+  "name": "Fixer",
+  "description": "If you know nobody else, make the acquaintance of a fixer. They are the center of the shadowrunning universe, and they know everyone you might need to know. Find one, get on his good side, and you'll have a shot at prospering in the shadows. He can get you anything you need … for a price. After all, nothing's free in the shadows. Fixers are only as good as their connections, which they go to great lengths to cultivate. They're a one-man combination of employment agency, procurement firm, and fence. They make their living on whom and what they know, and by how well they can make deals between interested parties looking to buy or sell goods and services. A shadowrunner has something hot that he needs to unload pronto? The fixer's the man he needs to see. Mr. Johnson needs a team to extract someone from a competitor's compound? The fixer's the man who sets up the meeting. A team needs a specialist to pull off a tricky run? You guessed it; the fixer knows who to call. These kinds of services don't come cheap, however. A fixer takes a percentage from every transaction, and the better he is, the bigger that cut is going to be. Once you've found a quality fixer, stay on his good side. You might get a discount if he likes you, and even better, you might get another job without having to relocate to another city and start all over again.",
+  "uses": ["Jobs and cred", "Information", "Gear", "Additional contacts"],
+  "meetingPlaces": [
+    "Local bars or clubs",
+    "Coffee shops",
+    "Street corners where surveillance is next to impossible"
+  ],
+  "similarContacts": ["Fence", "Loan shark", "Mr. Johnson"],
+  "attributes": {
+    "body": 3,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 3,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 5,
+    "charisma": 5
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 8,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 4,
+    "mental": 5,
+    "social": 7
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Computer", "rating": 7 },
+    { "name": "Data Search", "rating": 8 },
+    { "name": "Etiquette", "rating": 8, "specialization": "Street" },
+    { "name": "Negotiation", "rating": 9 },
+    { "name": "Perception", "rating": 6 },
+    { "name": "Pistols", "rating": 5 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Corporate Rumors", "rating": 8 },
+    { "name": "Fences", "rating": 7 },
+    { "name": "Gear Values", "rating": 9 },
+    { "name": "Shadowrunner Teams", "rating": 8 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "388-389",
+    "category": "Sample Contact"
+  }
+}

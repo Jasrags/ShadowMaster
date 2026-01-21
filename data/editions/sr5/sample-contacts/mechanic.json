@@ -1,0 +1,58 @@
+{
+  "id": "sample-contact-mechanic",
+  "editionCode": "sr5",
+  "name": "Mechanic",
+  "description": "Sometimes, the only thing between a shadowrunner and disaster is a vehicle that moves like a scalded cat. To keep your vehicles in that category, it's good to know a mechanic. A good mechanic can fix what's broken and improve what's not. Given sufficient time and cash, he can make the worst junkyard refugee into a serviceable vehicle. The more miraculous the work, of course, the more it's going to cost you. As often as not, \"hopeless case\" can simply be read as \"very expensive.\" He also doubles as a car salesman, or at least an agent for one. If you need a quick, cheap set of wheels, a new drone, or that sweet new motorcycle you've been lusting over, he knows someone who can get it for you.",
+  "uses": ["Repair services", "Used wheels and other vehicles"],
+  "meetingPlaces": [
+    "Local garage",
+    "Gas station",
+    "Automobile chop shop",
+    "Used car lot",
+    "Aircraft hangar"
+  ],
+  "similarContacts": ["Tech wizard"],
+  "attributes": {
+    "body": 4,
+    "agility": 3,
+    "reaction": 3,
+    "strength": 4,
+    "willpower": 3,
+    "logic": 4,
+    "intuition": 4,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 3,
+    "essence": 6
+  },
+  "initiative": {
+    "base": 7,
+    "dice": 1
+  },
+  "limits": {
+    "physical": 5,
+    "mental": 5,
+    "social": 5
+  },
+  "conditionMonitor": 10,
+  "skills": [
+    { "name": "Aeronautics Mechanic", "rating": 6 },
+    { "name": "Automotive Mechanic", "rating": 8 },
+    { "name": "Computer", "rating": 4 },
+    { "name": "Gunnery", "rating": 3 },
+    { "name": "Hardware", "rating": 6 },
+    { "name": "Industrial Mechanic", "rating": 4 },
+    { "name": "Pilot Ground Craft", "rating": 6 }
+  ],
+  "knowledgeSkills": [
+    { "name": "Chop Shops", "rating": 8 },
+    { "name": "Combat Biking", "rating": 7 },
+    { "name": "Vehicles", "rating": 8 }
+  ],
+  "metadata": {
+    "source": "SR5 Core Rulebook",
+    "page": "389",
+    "category": "Sample Contact"
+  }
+}
