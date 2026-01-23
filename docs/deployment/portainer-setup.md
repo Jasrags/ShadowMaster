@@ -249,15 +249,29 @@ For production deployments, Shadow Master uses Caddy as a reverse proxy with aut
 
 ### Deploy HTTPS Stack
 
-Use `docker-compose.portainer.yml` from the repository, or copy the stack content below.
+#### Option 1: Deploy from Git Repository (Recommended)
+
+This method pulls the compose file directly from GitHub, making updates easier.
 
 1. Navigate to **Stacks** → **Add stack**
 
 2. **Name**: `shadow-master`
 
-3. **Build method**: Repository or Web editor
+3. **Build method**: Select **Repository**
 
-4. **Environment variables** (required):
+4. **Repository configuration**:
+
+   | Setting              | Value                                     |
+   | -------------------- | ----------------------------------------- |
+   | Repository URL       | `https://github.com/Jasrags/ShadowMaster` |
+   | Repository reference | `main`                                    |
+   | Compose path         | `docker-compose.portainer.yml`            |
+
+5. **Authentication** (if repo is private):
+   - Username: Your GitHub username
+   - Personal Access Token: GitHub PAT with `repo` scope
+
+6. **Environment variables**:
 
    | Variable       | Value                                  |
    | -------------- | -------------------------------------- |
@@ -265,7 +279,46 @@ Use `docker-compose.portainer.yml` from the repository, or copy the stack conten
    | `DOMAIN`       | `home.jasrags.net`                     |
    | `HTTPS_PORT`   | `2075` (optional, this is the default) |
 
-5. Click **Deploy the stack**
+7. **GitOps updates** (optional):
+   - Enable to auto-redeploy when the repo changes
+   - Or manually click "Pull and redeploy" to update
+
+8. Click **Deploy the stack**
+
+#### Option 2: Deploy with Web Editor
+
+If you prefer to copy the compose file manually:
+
+1. Navigate to **Stacks** → **Add stack**
+2. **Name**: `shadow-master`
+3. **Build method**: Select **Web editor**
+4. Copy contents of `docker-compose.portainer.yml` from the repository
+5. Add environment variables (same as above)
+6. Click **Deploy the stack**
+
+#### Migrating an Existing Stack to Repository Method
+
+If you have an existing stack using the Web editor and want to switch to the Repository method:
+
+1. **Note your current environment variables**
+   - Go to your stack → Editor → scroll to Environment variables
+   - Copy: `CF_API_TOKEN`, `DOMAIN`, `HTTPS_PORT`
+
+2. **Stop the existing stack**
+   - Stacks → your stack → **Stop**
+
+3. **Delete the stack (keep volumes)**
+   - Click **Delete**
+   - **Uncheck** "Delete associated volumes"
+   - This preserves your `shadow-master-data` volume with all your data
+
+4. **Create new stack with Repository method**
+   - Follow "Option 1: Deploy from Git Repository" above
+   - Use the same stack name: `shadow-master`
+   - Add your saved environment variables
+
+5. **Deploy**
+   - Your data persists because the volume name matches
 
 ### Verify HTTPS Deployment
 
