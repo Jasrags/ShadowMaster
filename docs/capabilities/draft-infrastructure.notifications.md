@@ -1,6 +1,15 @@
 # Notification Infrastructure Capability
 
-> [!NOTE] > **Draft Status:** This capability is in draft. This is a cross-cutting infrastructure capability that many other features depend upon.
+> [!NOTE]
+> **Draft Status:** This capability is in draft. This is a cross-cutting infrastructure capability that many other features depend upon.
+
+> [!TIP]
+> **Related Decisions:**
+>
+> - [ADR-013: Email Transport Strategy](../decisions/013-infrastructure.email-transport-strategy.md) - Environment-specific transports decided
+> - [ADR-014: Hybrid Authentication Model](../decisions/014-security.hybrid-authentication-model.md) - Password + magic link approach
+>
+> **Implementation Plan:** [Email Infrastructure Roadmap](../plans/email-infrastructure-roadmap.md)
 
 ## Purpose
 

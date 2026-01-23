@@ -1,11 +1,20 @@
 > [!NOTE]
-> This implementation guide is governed by the [Capability (security.account-security.md)](file:///Users/jrags/Code/Jasrags/shadow-master/docs/capabilities/security.account-security.md).
+> This implementation guide is governed by the [Capability (security.account-security.md)](../capabilities/security.account-security.md).
+
+> [!TIP]
+> **Related Decisions:**
+>
+> - [ADR-008: Cookie-Based Sessions](../decisions/008-security.cookie-based-sessions.md)
+> - [ADR-013: Email Transport Strategy](../decisions/013-infrastructure.email-transport-strategy.md)
+> - [ADR-014: Hybrid Authentication Model](../decisions/014-security.hybrid-authentication-model.md)
+>
+> **Future Enhancements:** See [Email Infrastructure Roadmap](../plans/email-infrastructure-roadmap.md) for email verification, password reset, and magic link plans.
 
 # Authentication Specification (Login & Registration)
 
-**Last Updated:** 2025-01-27  
-**Status:** Specification  
-**Category:** Security, Authentication, User Management  
+**Last Updated:** 2026-01-23
+**Status:** Specification
+**Category:** Security, Authentication, User Management
 **Affected Areas:** All protected routes and user-facing features
 
 ---

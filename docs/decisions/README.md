@@ -121,19 +121,22 @@ When encountering a design constraint, ask:
 
 ## ADR Index
 
-| #   | ADR                                                                              | Domain    | Summary                                                                                       |
-| --- | -------------------------------------------------------------------------------- | --------- | --------------------------------------------------------------------------------------------- |
-| 001 | [Account Security Defense](./001-security.account-security-defense.md)           | Security  | Multi-layered defense: lockouts, rate limiting, session revocation, audit logging             |
-| 002 | [Multi-Edition Sandbox](./002-ruleset.multi-edition-sandbox.md)                  | Ruleset   | Strict data/logic isolation between Shadowrun editions                                        |
-| 003 | [Rule Merging Strategies](./003-ruleset.rule-merging-strategies.md)              | Ruleset   | Deterministic merge/replace/append/remove strategies for books                                |
-| 004 | [Hybrid Snapshot Model](./004-ruleset.hybrid-snapshot-model.md)                  | Ruleset   | Live/Snapshot/Delta layers for character-ruleset synchronization                              |
-| 005 | [Modular Step Wizard](./005-character.modular-step-wizard.md)                    | Character | Data-driven, ruleset-defined character creation wizard                                        |
-| 006 | [File-Based Persistence](./006-storage.file-based-persistence.md)                | Storage   | JSON files with atomic writes; recognized as MVP-only                                         |
-| 007 | [Character Authorization Model](./007-security.character-authorization-model.md) | Security  | Context-aware multi-role authorization (owner, GM, player, admin)                             |
-| 008 | [Cookie-Based Sessions](./008-security.cookie-based-sessions.md)                 | Security  | httpOnly cookies with session versioning for instant revocation                               |
-| 009 | [Append-Only Ledger Pattern](./009-storage.append-only-ledger-pattern.md)        | Storage   | Immutable transaction logs for karma, favors, actions, audits                                 |
-| 010 | [Inventory State Management](./010-gear.inventory-state-management.md)           | Gear      | Unified gear state model: equipment readiness, per-item wireless, device condition, magazines |
-| 011 | [Sheet-Driven Creation](./011-character.sheet-driven-creation.md)                | Character | Character creation on the sheet interface; extends ADR-005 wizard approach                    |
+| #   | ADR                                                                              | Domain         | Summary                                                                                       |
+| --- | -------------------------------------------------------------------------------- | -------------- | --------------------------------------------------------------------------------------------- |
+| 001 | [Account Security Defense](./001-security.account-security-defense.md)           | Security       | Multi-layered defense: lockouts, rate limiting, session revocation, audit logging             |
+| 002 | [Multi-Edition Sandbox](./002-ruleset.multi-edition-sandbox.md)                  | Ruleset        | Strict data/logic isolation between Shadowrun editions                                        |
+| 003 | [Rule Merging Strategies](./003-ruleset.rule-merging-strategies.md)              | Ruleset        | Deterministic merge/replace/append/remove strategies for books                                |
+| 004 | [Hybrid Snapshot Model](./004-ruleset.hybrid-snapshot-model.md)                  | Ruleset        | Live/Snapshot/Delta layers for character-ruleset synchronization                              |
+| 005 | [Modular Step Wizard](./005-character.modular-step-wizard.md)                    | Character      | Data-driven, ruleset-defined character creation wizard                                        |
+| 006 | [File-Based Persistence](./006-storage.file-based-persistence.md)                | Storage        | JSON files with atomic writes; recognized as MVP-only                                         |
+| 007 | [Character Authorization Model](./007-security.character-authorization-model.md) | Security       | Context-aware multi-role authorization (owner, GM, player, admin)                             |
+| 008 | [Cookie-Based Sessions](./008-security.cookie-based-sessions.md)                 | Security       | httpOnly cookies with session versioning for instant revocation                               |
+| 009 | [Append-Only Ledger Pattern](./009-storage.append-only-ledger-pattern.md)        | Storage        | Immutable transaction logs for karma, favors, actions, audits                                 |
+| 010 | [Inventory State Management](./010-gear.inventory-state-management.md)           | Gear           | Unified gear state model: equipment readiness, per-item wireless, device condition, magazines |
+| 011 | [Sheet-Driven Creation](./011-character.sheet-driven-creation.md)                | Character      | Character creation on the sheet interface; extends ADR-005 wizard approach                    |
+| 012 | [HTTPS Reverse Proxy](./012-deployment.https-reverse-proxy.md)                   | Deployment     | Caddy reverse proxy for HTTPS termination                                                     |
+| 013 | [Email Transport Strategy](./013-infrastructure.email-transport-strategy.md)     | Infrastructure | Environment-specific email transports: Mailpit (dev), Mailtrap (test), Resend (prod)          |
+| 014 | [Hybrid Authentication Model](./014-security.hybrid-authentication-model.md)     | Security       | Support both password and magic link auth; passwordless primary when email stable             |
 
 ---
 

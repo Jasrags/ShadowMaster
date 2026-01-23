@@ -29,25 +29,28 @@ This project has MCP servers configured in the workspace `.mcp.json` file. These
 
 Three tools available for version control and GitHub operations. Choose based on the task:
 
-| Task                   | Use This            | Why                       |
-| ---------------------- | ------------------- | ------------------------- |
-| View status, diff, log | **Git MCP**         | Clean structured output   |
-| Create commits         | **Git MCP**         | Proper message formatting |
-| List/switch branches   | **Git MCP**         | Simple operations         |
-| Push to remote         | **Bash `git push`** | MCP doesn't support push  |
-| Create PRs             | **GitHub MCP**      | Rich API integration      |
-| Create/update issues   | **GitHub MCP**      | Full issue management     |
-| Add issue comments     | **GitHub MCP**      | Direct API access         |
-| Search code on GitHub  | **GitHub MCP**      | Cross-repo search         |
-| List/manage milestones | **Bash `gh api`**   | No MCP milestone support  |
-| Complex git operations | **Bash `git`**      | Rebase, cherry-pick, etc. |
+| Task                   | Use This             | Why                       |
+| ---------------------- | -------------------- | ------------------------- |
+| View status, diff, log | **Git MCP**          | Clean structured output   |
+| Create commits         | **Git MCP**          | Proper message formatting |
+| List/switch branches   | **Git MCP**          | Simple operations         |
+| Push to remote         | **Bash `git push`**  | MCP doesn't support push  |
+| Create PRs             | **Bash `gh pr`**     | Reliable, no auth issues  |
+| Create/update issues   | **Bash `gh issue`**  | Reliable, no auth issues  |
+| Add issue comments     | **Bash `gh issue`**  | Reliable, no auth issues  |
+| Search issues          | **Bash `gh issue`**  | Reliable, no auth issues  |
+| Search code on GitHub  | **Bash `gh search`** | Reliable, no auth issues  |
+| List/manage milestones | **Bash `gh api`**    | No MCP milestone support  |
+| Complex git operations | **Bash `git`**       | Rebase, cherry-pick, etc. |
+
+> **⚠️ IMPORTANT:** The GitHub MCP server frequently has authentication failures ("Bad credentials" errors) even when tokens are configured. **Always prefer the `gh` CLI via Bash** for GitHub operations (issues, PRs, searches). The `gh` CLI is pre-authenticated and reliable.
 
 ### Decision Flowchart
 
 ```
 Is it a GitHub.com operation (issues, PRs, remote files)?
-├─ Yes → Use GitHub MCP
-│        └─ Unless it's milestones → Use `gh api`
+├─ Yes → Use Bash `gh` CLI (gh issue, gh pr, gh api)
+│        └─ GitHub MCP is unreliable due to auth issues
 └─ No → Is it a local git operation?
         ├─ Yes → Use Git MCP
         │        └─ Unless it's push/pull/fetch → Use `git` in Bash
@@ -72,34 +75,54 @@ mcp__git__git_add         # Stage files
 
 ### GitHub MCP Server
 
-Use for GitHub API operations (requires `GITHUB_PERSONAL_ACCESS_TOKEN`):
+> **⚠️ NOT RECOMMENDED:** The GitHub MCP server frequently fails with "Bad credentials" authentication errors. **Use the `gh` CLI via Bash instead** for all GitHub operations.
+
+Available tools (but prefer `gh` CLI):
 
 ```
-mcp__github__create_issue           # Create new issues
-mcp__github__update_issue           # Update issue state/labels/milestone
-mcp__github__add_issue_comment      # Add comments to issues
-mcp__github__list_issues            # List/filter issues
-mcp__github__create_pull_request    # Create PRs
-mcp__github__get_pull_request       # Get PR details
-mcp__github__search_code            # Search code across repos
-mcp__github__get_file_contents      # Read files from remote
+mcp__github__create_issue           # Use: gh issue create
+mcp__github__update_issue           # Use: gh issue edit
+mcp__github__add_issue_comment      # Use: gh issue comment
+mcp__github__list_issues            # Use: gh issue list
+mcp__github__create_pull_request    # Use: gh pr create
+mcp__github__get_pull_request       # Use: gh pr view
+mcp__github__search_code            # Use: gh search code
+mcp__github__get_file_contents      # Use: gh api repos/OWNER/REPO/contents/PATH
 ```
 
-**Limitations:** No milestone CRUD (use `gh api` for milestones).
+**Limitations:** Unreliable authentication, no milestone CRUD.
 
-### Bash git/gh CLI
+### Bash git/gh CLI (Preferred for GitHub)
 
-Use when MCP tools don't support the operation:
+**The `gh` CLI is the most reliable way to interact with GitHub.** Use it for all GitHub operations:
 
 ```bash
-# Remote operations (not in Git MCP)
+# Issues (preferred over GitHub MCP)
+gh issue list --search "keyword"           # Search issues
+gh issue list --state all --limit 30       # List all issues
+gh issue view 123                          # View issue details
+gh issue create --title "Title" --body "Body"
+gh issue edit 123 --add-label "bug"
+gh issue comment 123 --body "Comment text"
+
+# Pull Requests (preferred over GitHub MCP)
+gh pr list                                 # List open PRs
+gh pr view 123                             # View PR details
+gh pr create --title "Title" --body "Body"
+gh pr merge 123 --squash
+
+# Search (preferred over GitHub MCP)
+gh search issues "keyword repo:owner/repo"
+gh search code "function_name repo:owner/repo"
+
+# API access for anything else
+gh api repos/OWNER/REPO/milestones
+gh api repos/OWNER/REPO/contents/path/to/file
+
+# Remote git operations (not in Git MCP)
 git push origin branch-name
 git pull origin main
 git fetch --all
-
-# Milestone management (not in GitHub MCP)
-gh api repos/OWNER/REPO/milestones -X POST -f title="v1.0"
-gh api repos/OWNER/REPO/milestones --jq '.[] | ...'
 
 # Complex git operations
 git rebase -i HEAD~3
