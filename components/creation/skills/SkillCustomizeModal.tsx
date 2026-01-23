@@ -291,7 +291,7 @@ export function SkillCustomizeModal({
                     onChange={(e) => setCustomSpecInput(e.target.value)}
                     onKeyDown={(e) => e.key === "Enter" && handleAddCustomSpec()}
                     placeholder="Add custom specialization..."
-                    className="flex-1 rounded-lg border border-zinc-300 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
                   />
                   <button
                     onClick={handleAddCustomSpec}

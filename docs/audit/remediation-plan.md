@@ -179,29 +179,23 @@ Generated From:
 
 ## P2 (Medium) - Nice to Have
 
-### 13. ArmorPanel - Missing Budget Bar
+### 13. ArmorPanel - Missing Budget Bar ✅ FIXED
 
 **File:** `/components/creation/armor/ArmorPanel.tsx`
 
-**Issue:** No BudgetIndicator at top; relies on shared nuyen context displayed elsewhere.
+**Status:** ✅ Fixed 2026-01-22 - Added nuyen budget bar matching other panels
 
-**Fix:** Add BudgetIndicator showing nuyen budget, OR document as intentional (panels share budget display).
-
-**Effort:** Low (1 hour)
-**Dependencies:** Design decision on shared budget display
+**Rationale:** Consistency with WeaponsPanel, MatrixGearCard, AugmentationsCard, VehiclesCard which all display individual nuyen budget bars.
 
 ---
 
-### 14. GearPanel - Missing Budget Bar
+### 14. GearPanel - Missing Budget Bar ✅ FIXED
 
 **File:** `/components/creation/gear/GearPanel.tsx`
 
-**Issue:** No BudgetIndicator at top; relies on shared nuyen context displayed elsewhere.
+**Status:** ✅ Fixed 2026-01-22 - Added nuyen budget bar matching other panels
 
-**Fix:** Add BudgetIndicator showing nuyen budget, OR document as intentional.
-
-**Effort:** Low (1 hour)
-**Dependencies:** Design decision on shared budget display
+**Rationale:** Consistency with WeaponsPanel, MatrixGearCard, AugmentationsCard, VehiclesCard which all display individual nuyen budget bars.
 
 ---
 
@@ -345,8 +339,8 @@ Fixed modal sizes (changed `size="lg"` to `size="2xl"`):
 
 ## Design Decisions Needed
 
-1. **ArmorPanel/GearPanel Budget Bars:** Should panels that share a nuyen budget display individual budget bars, or is a shared display acceptable?
-   - _Pending decision_
+1. ~~**ArmorPanel/GearPanel Budget Bars:** Should panels that share a nuyen budget display individual budget bars, or is a shared display acceptable?~~
+   - ✅ **RESOLVED:** Individual budget bars added to maintain consistency with WeaponsPanel, MatrixGearCard, AugmentationsCard, and VehiclesCard. All 6 nuyen-spending panels now display individual budget bars following the purchase card pattern.
 
 2. ~~**FocusModal Pattern:** Should FocusModal follow selection modal pattern with split-pane, or is form-based configuration acceptable?~~
    - ✅ **RESOLVED:** Documented as "Form-Based Configuration Modal" variant - form-based is acceptable for items requiring substantial configuration.

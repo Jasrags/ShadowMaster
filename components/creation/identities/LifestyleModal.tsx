@@ -136,7 +136,7 @@ export function LifestyleModal({
           <select
             value={formState.type}
             onChange={(e) => setFormState({ ...formState, type: e.target.value })}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
           >
             <option value="">Select a lifestyle...</option>
             {LIFESTYLE_TYPES.map((l) => (
@@ -158,7 +158,7 @@ export function LifestyleModal({
             value={formState.location}
             onChange={(e) => setFormState({ ...formState, location: e.target.value })}
             placeholder="e.g., Downtown Seattle, Redmond Barrens"
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </div>
 
@@ -273,7 +273,7 @@ export function LifestyleModal({
               onChange={(e) =>
                 setFormState({ ...formState, customExpenses: parseInt(e.target.value) || 0 })
               }
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+              className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>
           <div>
@@ -287,7 +287,7 @@ export function LifestyleModal({
               onChange={(e) =>
                 setFormState({ ...formState, customIncome: parseInt(e.target.value) || 0 })
               }
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+              className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             />
           </div>
         </div>
@@ -302,7 +302,7 @@ export function LifestyleModal({
             onChange={(e) => setFormState({ ...formState, notes: e.target.value })}
             placeholder="Additional notes about this lifestyle..."
             rows={2}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </div>
 

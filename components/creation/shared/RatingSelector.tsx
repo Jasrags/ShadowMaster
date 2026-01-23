@@ -188,10 +188,10 @@ export function RatingSelector({
         value={selectedRating}
         onChange={handleChange}
         disabled={disabled}
-        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm transition-colors
+        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm transition-colors
           focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500
           disabled:cursor-not-allowed disabled:bg-zinc-100
-          dark:border-zinc-600 dark:bg-zinc-800 dark:text-white
+          dark:border-zinc-700 dark:bg-zinc-800 dark:text-white
           dark:disabled:bg-zinc-900"
       >
         {options.map((opt) => (

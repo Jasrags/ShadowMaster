@@ -187,7 +187,7 @@ export function QualitySelectionModal({
                   placeholder="Search qualities..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-300 py-2 pl-10 pr-4 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                  className="w-full rounded-lg border border-zinc-200 py-2 pl-10 pr-4 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                 />
               </div>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
@@ -332,7 +332,7 @@ export function QualitySelectionModal({
                           <select
                             value={specification}
                             onChange={(e) => setSpecification(e.target.value)}
-                            className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                            className="w-full appearance-none rounded-lg border border-zinc-200 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                           >
                             <option value="">Select {selectedQuality.specificationLabel}...</option>
                             {selectedQuality.specificationOptions.map((opt) => (
@@ -350,7 +350,7 @@ export function QualitySelectionModal({
                             <select
                               value={specification}
                               onChange={(e) => setSpecification(e.target.value)}
-                              className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                              className="w-full appearance-none rounded-lg border border-zinc-200 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                             >
                               <option value="">
                                 Select {selectedQuality.specificationLabel}...
@@ -398,7 +398,7 @@ export function QualitySelectionModal({
                           value={specification}
                           onChange={(e) => setSpecification(e.target.value)}
                           placeholder={`Enter ${selectedQuality.specificationLabel || "specification"}...`}
-                          className="w-full rounded-lg border border-zinc-300 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                          className="w-full rounded-lg border border-zinc-200 px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                         />
                       )}
                     </div>
@@ -421,7 +421,7 @@ export function QualitySelectionModal({
                               <select
                                 value={selectedLevel}
                                 onChange={(e) => setSelectedLevel(parseInt(e.target.value))}
-                                className="w-full appearance-none rounded-lg border border-zinc-300 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                                className="w-full appearance-none rounded-lg border border-zinc-200 py-2 pl-3 pr-10 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                               >
                                 {levels.map((level) => {
                                   const levelCost = Math.abs(level.karma);

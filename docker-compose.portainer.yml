@@ -2,16 +2,14 @@ version: "3.8"
 
 services:
   shadow-master:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: shadow-master:local
+    image: ghcr.io/jasrags/shadow-master:latest
     container_name: shadow-master-app
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
+      - HOSTNAME=0.0.0.0
     restart: unless-stopped
     volumes:
       - shadow-master-data:/app/data
@@ -27,12 +25,6 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
-    networks:
-      - shadow-master-network
-
-networks:
-  shadow-master-network:
-    driver: bridge
 
 volumes:
   shadow-master-data:

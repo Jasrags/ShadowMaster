@@ -74,7 +74,7 @@ export function LicenseModal({
             value={formState.name}
             onChange={(e) => setFormState({ ...formState, name: e.target.value })}
             placeholder="e.g., Firearms License, Driver's License"
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
             autoFocus
           />
         </div>
@@ -126,7 +126,7 @@ export function LicenseModal({
             <select
               value={formState.rating}
               onChange={(e) => setFormState({ ...formState, rating: parseInt(e.target.value) })}
-              className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
+              className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             >
               {[1, 2, 3, 4].map((r) => (
                 <option key={r} value={r}>
@@ -151,7 +151,7 @@ export function LicenseModal({
             onChange={(e) => setFormState({ ...formState, notes: e.target.value })}
             placeholder="Additional notes about this license..."
             rows={2}
-            className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           />
         </div>
 

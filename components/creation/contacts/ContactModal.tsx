@@ -227,7 +227,7 @@ export function ContactModal({
                   type="text"
                   value={contact.name || ""}
                   onChange={(e) => setContact({ ...contact, name: e.target.value })}
-                  className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                  className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="Contact's name or alias"
                   autoFocus
                 />
@@ -240,7 +240,7 @@ export function ContactModal({
                   type="text"
                   value={contact.type || ""}
                   onChange={(e) => setContact({ ...contact, type: e.target.value })}
-                  className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                  className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                   placeholder="e.g., Fixer, Street Doc"
                 />
               </div>
@@ -280,7 +280,7 @@ export function ContactModal({
                 value={contact.notes || ""}
                 onChange={(e) => setContact({ ...contact, notes: e.target.value })}
                 rows={2}
-                className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+                className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-emerald-500 focus:outline-none focus:ring-1 focus:ring-emerald-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
                 placeholder="Any additional details about this contact..."
               />
             </div>
