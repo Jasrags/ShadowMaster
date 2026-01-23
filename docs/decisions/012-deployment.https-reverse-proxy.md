@@ -2,39 +2,38 @@
 
 ## Decision
 
-The system MUST use **Caddy** as a reverse proxy to provide HTTPS support for the Shadow Master application. SSL certificates are obtained via **Let's Encrypt** using the **Cloudflare DNS-01 challenge** to support non-standard ports.
+The system MUST use **Caddy** as a reverse proxy to provide HTTPS support for the Shadow Master application in production deployments. SSL certificates are obtained via **Let's Encrypt** using the **Cloudflare DNS-01 challenge** to support non-standard ports.
 
 Configuration:
 
-- **HTTPS Port**: 9443 (external)
-- **HTTP Port**: 3000 (optional, configurable)
+- **HTTPS Port**: 2075 (the year the Sixth World begins in Shadowrun)
 - **Domain**: `home.jasrags.net`
 - **Certificate Provider**: Let's Encrypt via DNS-01 challenge
 - **DNS Provider**: Cloudflare (free tier)
+- **HTTP**: Disabled in production (HTTPS-only)
 
 ## Context
 
-Shadow Master is deployed on a home server where ISP blocks ports 80 and 443 (common residential restrictions). This prevents traditional HTTP-01 challenges used by most ACME clients to obtain SSL certificates.
+Shadow Master is deployed on a home server where ports 80 and 443 are blocked at the firewall. This prevents traditional HTTP-01 challenges used by most ACME clients to obtain SSL certificates.
 
 The requirements are:
 
 - **Automated SSL**: Certificates must renew automatically without manual intervention.
-- **Non-Standard Ports**: HTTPS must work on port 9443 since 443 is blocked.
+- **Non-Standard Ports**: HTTPS must work on port 2075 since standard ports are blocked.
 - **Security Headers**: Modern security headers (HSTS, X-Frame-Options) must be applied.
 - **Minimal Infrastructure**: No additional databases or complex certificate management.
-- **Migration Path**: Support for eventual HTTPS-only deployment.
+- **HTTPS-Only**: No HTTP endpoint in production; local development uses HTTP.
 
 ## Architecture
 
 ```
-Internet (port 9443)
+Internet (port 2075)
         |
         v
 +--------------------------------------------------+
-|  Caddy (caddy-dns/cloudflare build)              |
+|  Caddy (caddy-cloudflaredns image)               |
 |  - DNS-01 challenge via Cloudflare API           |
-|  - HTTPS on :9443                                |
-|  - Optional HTTP proxy on :3000                  |
+|  - HTTPS on :2075                                |
 |  - Security headers (HSTS, X-Frame-Options)      |
 +----------------------------+---------------------+
                              | (internal: port 3000)
@@ -45,22 +44,30 @@ Internet (port 9443)
 +--------------------------------------------------+
 ```
 
+## Deployment Models
+
+| Environment  | Compose File                   | Protocol | Port |
+| ------------ | ------------------------------ | -------- | ---- |
+| Local dev    | `pnpm dev`                     | HTTP     | 3000 |
+| Local Docker | `docker-compose.yml`           | HTTP     | 3000 |
+| Production   | `docker-compose.portainer.yml` | HTTPS    | 2075 |
+
 ## Consequences
 
 ### Positive
 
 - **Automated Certificates**: Caddy handles certificate acquisition and renewal automatically.
-- **DNS-01 Bypass**: Works regardless of ISP port restrictions on 80/443.
+- **DNS-01 Bypass**: Works regardless of firewall port restrictions on 80/443.
 - **Security Headers**: Standardized security headers applied at the proxy layer.
-- **Simple Configuration**: Single Caddyfile for all proxy rules.
-- **Future Migration**: Easy to switch to HTTPS-only by removing HTTP block.
+- **Self-Contained Config**: Caddyfile embedded in docker-compose, no external files needed.
+- **HTTPS-Only**: Simplified security model with no HTTP fallback.
+- **Thematic Port**: Port 2075 references the Shadowrun setting year.
 
 ### Negative
 
 - **Cloudflare Dependency**: Requires Cloudflare as DNS provider (free tier sufficient).
-- **Custom Caddy Build**: Requires Caddy built with the cloudflare DNS plugin.
 - **API Token Management**: Cloudflare API token must be securely stored and managed.
-- **Nameserver Migration**: One-time migration from Namecheap nameservers to Cloudflare.
+- **Nameserver Migration**: One-time migration from registrar nameservers to Cloudflare.
 
 ## Security Headers
 
@@ -77,13 +84,37 @@ Internet (port 9443)
 
 1. Create free Cloudflare account at cloudflare.com
 2. Add `jasrags.net` domain to Cloudflare
-3. At Namecheap: change nameservers to Cloudflare's (provided during setup)
+3. At registrar: change nameservers to Cloudflare's (provided during setup)
 4. In Cloudflare: create A record for `home.jasrags.net` pointing to public IP
 5. Create API token with Zone:DNS:Edit permission for `jasrags.net`
 
-### Router Configuration
+### Router/Firewall Configuration
 
-Forward port 9443 from router to server:9443
+Forward port 2075 from router to server:2075
+
+## Environment Variables
+
+| Variable       | Required | Default            | Purpose                         |
+| -------------- | -------- | ------------------ | ------------------------------- |
+| `CF_API_TOKEN` | Yes      | -                  | Cloudflare API token for DNS-01 |
+| `DOMAIN`       | No       | `home.jasrags.net` | Domain name for the application |
+| `HTTPS_PORT`   | No       | `2075`             | External HTTPS port             |
+
+## Verification
+
+```bash
+# Check certificate acquisition
+docker logs caddy-proxy 2>&1 | grep -i "certificate\|tls"
+
+# Test HTTPS endpoint
+curl -I https://home.jasrags.net:2075
+
+# Verify security headers
+curl -I https://home.jasrags.net:2075 | grep -E "Strict-Transport|X-Frame|X-Content"
+
+# Health check
+curl https://home.jasrags.net:2075/api/health
+```
 
 ## Alternatives Considered
 
@@ -97,48 +128,7 @@ Forward port 9443 from router to server:9443
 
 - **nginx + certbot**: Rejected. Requires separate certificate management process. Caddy provides integrated certificate management with simpler configuration.
 
-## Files Created
-
-| File                       | Purpose                                       |
-| -------------------------- | --------------------------------------------- |
-| `Caddyfile`                | Caddy reverse proxy configuration             |
-| `docker-compose.https.yml` | Production compose with Caddy + HTTPS         |
-| `Dockerfile.caddy`         | Custom Caddy build with Cloudflare DNS plugin |
-
-## Environment Variables
-
-| Variable       | Purpose                             | Example            |
-| -------------- | ----------------------------------- | ------------------ |
-| `CF_API_TOKEN` | Cloudflare API token for DNS-01     | `xxxxxxxxxxxx`     |
-| `DOMAIN`       | Domain name for the application     | `home.jasrags.net` |
-| `HTTPS_PORT`   | External HTTPS port                 | `9443`             |
-| `HTTP_PORT`    | Optional HTTP port (empty=disabled) | `3000`             |
-| `HTTPS_ONLY`   | Disable HTTP endpoint               | `false`            |
-
-## Verification
-
-```bash
-# Check certificate acquisition
-docker logs caddy-proxy 2>&1 | grep -i "certificate\|tls"
-
-# Test HTTPS endpoint
-curl -I https://home.jasrags.net:9443
-
-# Verify security headers
-curl -I https://home.jasrags.net:9443 | grep -E "Strict-Transport|X-Frame|X-Content"
-
-# Health check
-curl https://home.jasrags.net:9443/api/health
-```
-
-## Migration to HTTPS-Only
-
-When ready to disable HTTP:
-
-1. Set `HTTPS_ONLY=true` in environment
-2. Remove HTTP block from Caddyfile (or rely on conditional)
-3. Restart Caddy container
-4. Update bookmarks and documentation
+- **HTTP fallback**: Rejected. HTTPS-only simplifies security model and avoids mixed-content issues.
 
 ## Related ADRs
 

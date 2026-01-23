@@ -1,16 +1,55 @@
 version: "3.8"
 
+# Shadow Master with HTTPS via Caddy reverse proxy
+#
+# Port 2075 - The year the Sixth World begins in Shadowrun
+#
+# Required environment variables (set in Portainer):
+#   CF_API_TOKEN - Cloudflare API token with Zone:DNS:Edit permission
+#
+# Optional environment variables:
+#   DOMAIN       - Your domain (default: home.jasrags.net)
+#   HTTPS_PORT   - HTTPS port (default: 2075)
+#
+# See: docs/deployment/portainer-setup.md#https-deployment
+
 services:
+  # Caddy reverse proxy with automatic HTTPS
+  caddy:
+    image: ghcr.io/slothcroissant/caddy-cloudflaredns:latest
+    container_name: caddy-proxy
+    restart: unless-stopped
+    ports:
+      - "${HTTPS_PORT:-2075}:${HTTPS_PORT:-2075}"
+    environment:
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - DOMAIN=${DOMAIN:-home.jasrags.net}
+      - HTTPS_PORT=${HTTPS_PORT:-2075}
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    depends_on:
+      shadow-master:
+        condition: service_healthy
+    networks:
+      - shadow-master-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
+
+  # Shadow Master application
   shadow-master:
     image: ghcr.io/jasrags/shadowmaster:latest
     container_name: shadow-master-app
-    ports:
-      - "3000:3000"
+    restart: unless-stopped
+    expose:
+      - "3000"
     environment:
       - NODE_ENV=production
       - PORT=3000
       - HOSTNAME=0.0.0.0
-    restart: unless-stopped
     volumes:
       - shadow-master-data:/app/data
     healthcheck:
@@ -25,9 +64,12 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    networks:
+      - shadow-master-network
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
+  # Watchtower for automatic updates
   watchtower:
     image: containrrr/watchtower:latest
     container_name: watchtower
@@ -43,6 +85,32 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=false"
 
+# Embedded Caddyfile configuration
+configs:
+  caddyfile:
+    content: |
+      {
+        acme_dns cloudflare {env.CF_API_TOKEN}
+      }
+      https://{$$DOMAIN}:{$$HTTPS_PORT} {
+        reverse_proxy shadow-master:3000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubDomains"
+          X-Frame-Options "SAMEORIGIN"
+          X-Content-Type-Options "nosniff"
+          Referrer-Policy "strict-origin-when-cross-origin"
+          -Server
+        }
+      }
+
+networks:
+  shadow-master-network:
+    driver: bridge
+
 volumes:
   shadow-master-data:
+    driver: local
+  caddy-data:
+    driver: local
+  caddy-config:
     driver: local
