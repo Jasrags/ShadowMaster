@@ -4,6 +4,15 @@ version: "3.8"
 #
 # Port 2075 - The year the Sixth World begins in Shadowrun
 #
+# Port Architecture:
+#   HTTPS_PORT (default 2075) - External port exposed to internet, configurable
+#   Internal port 3000        - Container-to-container only, never exposed externally
+#
+#   Flow: Internet → :2075 (HTTPS) → Caddy → :3000 (internal HTTP) → Next.js app
+#
+#   The internal port is hardcoded because it's an implementation detail.
+#   Caddy terminates TLS, so internal traffic doesn't need HTTPS.
+#
 # Required environment variables (set in Portainer):
 #   CF_API_TOKEN - Cloudflare API token with Zone:DNS:Edit permission
 #
@@ -40,15 +49,17 @@ services:
       - "com.centurylinklabs.watchtower.enable=false"
 
   # Shadow Master application
+  # Internal port 3000 is hardcoded - only accessible within Docker network
+  # Caddy handles external HTTPS on HTTPS_PORT and proxies to this container
   shadow-master:
     image: ghcr.io/jasrags/shadowmaster:latest
     container_name: shadow-master-app
     restart: unless-stopped
     expose:
-      - "3000"
+      - "3000" # Internal only, not exposed to host
     environment:
       - NODE_ENV=production
-      - PORT=3000
+      - PORT=3000 # Next.js internal port
       - HOSTNAME=0.0.0.0
     volumes:
       - shadow-master-data:/app/data
@@ -92,7 +103,9 @@ configs:
       {
         acme_dns cloudflare {env.CF_API_TOKEN}
       }
+      # External HTTPS endpoint (configurable port)
       https://{$$DOMAIN}:{$$HTTPS_PORT} {
+        # Proxy to internal container port (hardcoded, not exposed externally)
         reverse_proxy shadow-master:3000
         header {
           Strict-Transport-Security "max-age=31536000; includeSubDomains"
