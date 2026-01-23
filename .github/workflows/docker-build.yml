@@ -90,19 +90,3 @@ jobs:
           echo "\`\`\`bash" >> $GITHUB_STEP_SUMMARY
           echo "docker pull ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-
-      - name: Trigger Portainer Deployment
-        if: github.ref == 'refs/heads/main' && success()
-        run: |
-          if [ -n "${{ secrets.PORTAINER_WEBHOOK_URL }}" ]; then
-            echo "Triggering Portainer webhook..."
-            response=$(curl -s -w "\n%{http_code}" -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}")
-            http_code=$(echo "$response" | tail -n1)
-            if [ "$http_code" -ge 200 ] && [ "$http_code" -lt 300 ]; then
-              echo "Deployment triggered successfully"
-            else
-              echo "Warning: Webhook returned HTTP $http_code (deployment may need manual intervention)"
-            fi
-          else
-            echo "PORTAINER_WEBHOOK_URL not configured - skipping auto-deployment"
-          fi

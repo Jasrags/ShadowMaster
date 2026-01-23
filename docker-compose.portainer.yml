@@ -2,7 +2,7 @@ version: "3.8"
 
 services:
   shadow-master:
-    image: ghcr.io/jasrags/shadow-master:latest
+    image: ghcr.io/jasrags/shadowmaster:latest
     container_name: shadow-master-app
     ports:
       - "3000:3000"
@@ -25,6 +25,23 @@ services:
       timeout: 10s
       retries: 3
       start_period: 40s
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300
+      - WATCHTOWER_LABEL_ENABLE=true
+      - WATCHTOWER_INCLUDE_RESTARTING=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/config.json:ro
+    labels:
+      - "com.centurylinklabs.watchtower.enable=false"
 
 volumes:
   shadow-master-data:
