@@ -16,7 +16,8 @@ This guide explains how to deploy the Shadow Master application using Portainer 
 3. [Deploying as a Stack](#deploying-as-a-stack)
 4. [Environment Variables](#environment-variables)
 5. [Updating the Deployment](#updating-the-deployment)
-6. [Troubleshooting](#troubleshooting)
+6. [HTTPS Deployment](#https-deployment)
+7. [Troubleshooting](#troubleshooting)
 
 ## Connecting to GHCR
 
@@ -225,6 +226,202 @@ services:
 
 > [!WARNING]
 > Automatic updates in production should be carefully considered. Test updates in staging first.
+
+## HTTPS Deployment
+
+For production deployments requiring HTTPS, Shadow Master includes a Caddy-based reverse proxy with automatic Let's Encrypt certificates via Cloudflare DNS-01 challenge.
+
+### Prerequisites
+
+1. **Cloudflare Account** (free tier):
+   - Create account at [cloudflare.com](https://cloudflare.com)
+   - Add your domain to Cloudflare
+   - Update nameservers at your registrar to Cloudflare's nameservers
+   - Create A record pointing to your server's public IP
+
+2. **Cloudflare API Token**:
+   - Cloudflare Dashboard → My Profile → API Tokens
+   - Create Token with permission: Zone:DNS:Edit for your domain
+   - Save token securely
+
+3. **Router Port Forwarding**:
+   - Forward port 9443 from your router to server:9443
+
+### Deploy HTTPS Stack
+
+1. Navigate to **Stacks** → **Add stack**
+
+2. **Name**: `shadow-master-https`
+
+3. **Build method**: Web editor
+
+4. **Stack file content**:
+
+```yaml
+version: "3.8"
+
+services:
+  caddy:
+    image: ghcr.io/slothcroissant/caddy-cloudflaredns:latest
+    container_name: caddy-proxy
+    restart: unless-stopped
+    ports:
+      - "9443:9443"
+      - "3000:3000"
+    environment:
+      - CF_API_TOKEN=${CF_API_TOKEN}
+      - DOMAIN=${DOMAIN:-home.jasrags.net}
+      - HTTPS_PORT=9443
+      - HTTP_PORT=3000
+    volumes:
+      - caddy-data:/data
+      - caddy-config:/config
+    configs:
+      - source: caddyfile
+        target: /etc/caddy/Caddyfile
+    depends_on:
+      shadow-master:
+        condition: service_healthy
+    networks:
+      - shadow-master-network
+
+  shadow-master:
+    image: ghcr.io/jasrags/shadowmaster:latest
+    container_name: shadow-master-app
+    restart: unless-stopped
+    expose:
+      - "3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+    volumes:
+      - shadow-master-data:/app/data
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "node",
+          "-e",
+          "require('http').get('http://localhost:3000/api/health', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - shadow-master-network
+    labels:
+      - "com.centurylinklabs.watchtower.enable=true"
+
+  watchtower:
+    image: containrrr/watchtower:latest
+    container_name: watchtower
+    restart: unless-stopped
+    environment:
+      - WATCHTOWER_CLEANUP=true
+      - WATCHTOWER_POLL_INTERVAL=300
+      - WATCHTOWER_LABEL_ENABLE=true
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ~/.docker/config.json:/config.json:ro
+
+configs:
+  caddyfile:
+    content: |
+      {
+        acme_dns cloudflare {env.CF_API_TOKEN}
+      }
+      https://{$$DOMAIN}:{$$HTTPS_PORT} {
+        reverse_proxy shadow-master:3000
+        header {
+          Strict-Transport-Security "max-age=31536000; includeSubDomains"
+          X-Frame-Options "SAMEORIGIN"
+          X-Content-Type-Options "nosniff"
+        }
+      }
+      http://{$$DOMAIN}:{$$HTTP_PORT} {
+        reverse_proxy shadow-master:3000
+      }
+
+networks:
+  shadow-master-network:
+    driver: bridge
+
+volumes:
+  shadow-master-data:
+  caddy-data:
+  caddy-config:
+```
+
+5. **Environment variables** (add in Portainer):
+   - `CF_API_TOKEN`: Your Cloudflare API token
+   - `DOMAIN`: Your domain (e.g., `home.jasrags.net`)
+
+6. Click **Deploy the stack**
+
+### Verify HTTPS Deployment
+
+1. **Check Caddy logs for certificate acquisition**:
+
+   ```bash
+   docker logs caddy-proxy 2>&1 | grep -i "certificate\|tls"
+   ```
+
+2. **Test HTTPS endpoint**:
+
+   ```bash
+   curl -I https://home.jasrags.net:9443
+   ```
+
+3. **Verify security headers**:
+
+   ```bash
+   curl -I https://home.jasrags.net:9443 | grep -E "Strict-Transport|X-Frame|X-Content"
+   ```
+
+4. **Health check**:
+   ```bash
+   curl https://home.jasrags.net:9443/api/health
+   ```
+
+### Migrate to HTTPS-Only
+
+When ready to disable HTTP access:
+
+1. Remove the HTTP block from the Caddyfile config
+2. Remove port 3000 from Caddy's port mappings
+3. Update the stack
+
+### Security Headers
+
+The HTTPS deployment includes these security headers:
+
+| Header                      | Value                                 | Purpose                |
+| --------------------------- | ------------------------------------- | ---------------------- |
+| `Strict-Transport-Security` | `max-age=31536000; includeSubDomains` | Force HTTPS for 1 year |
+| `X-Frame-Options`           | `SAMEORIGIN`                          | Prevent clickjacking   |
+| `X-Content-Type-Options`    | `nosniff`                             | Prevent MIME sniffing  |
+
+### HTTPS Troubleshooting
+
+**Certificate not obtained**:
+
+- Check Cloudflare API token has correct permissions
+- Verify DNS records are correct in Cloudflare
+- Check Caddy logs: `docker logs caddy-proxy`
+
+**Connection refused on port 9443**:
+
+- Verify router port forwarding is configured
+- Check firewall rules on the server
+- Ensure Caddy container is running: `docker ps`
+
+**Certificate renewal failing**:
+
+- Caddy handles renewal automatically
+- Check Cloudflare API token hasn't expired
+- Verify DNS records haven't changed
 
 ## Troubleshooting
 
