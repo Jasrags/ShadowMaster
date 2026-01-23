@@ -27,7 +27,7 @@ import {
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
+import { CreationCard, BudgetIndicator, SummaryFooter, Stepper } from "./shared";
 import {
   SkillModal,
   SkillGroupModal,
@@ -36,7 +36,7 @@ import {
   SkillGroupBreakModal,
   type SkillCustomizeChanges,
 } from "./skills";
-import { Minus, Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
+import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -120,33 +120,17 @@ function SkillGroupCard({
 
           {/* Rating controls - hidden for broken groups */}
           {!isBroken && (
-            <>
-              <button
-                onClick={() => onRatingChange(-1)}
-                disabled={rating <= 1}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  rating > 1
-                    ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Minus className="h-3 w-3" />
-              </button>
-              <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-900 dark:bg-purple-900/50 dark:text-purple-100">
-                {rating}
-              </div>
-              <button
-                onClick={() => onRatingChange(1)}
-                disabled={!canIncrease || isAtMax}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  canIncrease && !isAtMax
-                    ? "bg-purple-500 text-white hover:bg-purple-600"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Plus className="h-3 w-3" />
-              </button>
-            </>
+            <Stepper
+              value={rating}
+              min={1}
+              max={maxRating}
+              onChange={(newValue) => onRatingChange(newValue - rating)}
+              canIncrement={canIncrease && !isAtMax}
+              accentColor="purple"
+              valueColor="purple"
+              showMaxBadge={false}
+              name={`${groupName} skill group`}
+            />
           )}
 
           {/* Show rating badge for broken groups (read-only) */}

@@ -11,7 +11,8 @@
  * Group skills: Purple styling, read-only rating, shows group name
  */
 
-import { Minus, Plus, X, BookOpen, Users, Star, Sparkles } from "lucide-react";
+import { X, BookOpen, Users, Star, Sparkles } from "lucide-react";
+import { Stepper } from "../shared";
 
 // =============================================================================
 // TYPES
@@ -63,9 +64,6 @@ export function SkillListItem({
   const ratingBgColor = isGroupSkill
     ? "bg-purple-100 text-purple-900 dark:bg-purple-900/50 dark:text-purple-100"
     : "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100";
-  const increaseButtonColor = isGroupSkill
-    ? "bg-purple-500 text-white hover:bg-purple-600"
-    : "bg-blue-500 text-white hover:bg-blue-600";
 
   return (
     <div className="py-1.5">
@@ -121,33 +119,16 @@ export function SkillListItem({
           ) : (
             // Individual skill: full controls
             <>
-              <button
-                onClick={() => onRatingChange?.(-1)}
-                disabled={rating <= 1}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  rating > 1
-                    ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Minus className="h-3 w-3" />
-              </button>
-              <div
-                className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${ratingBgColor}`}
-              >
-                {rating}
-              </div>
-              <button
-                onClick={() => onRatingChange?.(1)}
-                disabled={!canIncrease || isAtMax}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  canIncrease && !isAtMax
-                    ? increaseButtonColor
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Plus className="h-3 w-3" />
-              </button>
+              <Stepper
+                value={rating}
+                min={1}
+                max={maxRating}
+                onChange={(newValue) => onRatingChange?.(newValue - rating)}
+                canIncrement={canIncrease && !isAtMax}
+                accentColor="blue"
+                showMaxBadge={false}
+                name={`${skillName} skill`}
+              />
               {/* Separator */}
               <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
               <button
