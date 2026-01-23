@@ -1,5 +1,3 @@
-version: "3.8"
-
 # Shadow Master with HTTPS via Caddy reverse proxy
 #
 # Port 2075 - The year the Sixth World begins in Shadowrun
