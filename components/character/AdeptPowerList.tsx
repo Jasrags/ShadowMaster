@@ -139,29 +139,13 @@ function AdeptPowerCard({ power, catalogPower, onToggle }: AdeptPowerCardProps) 
 }
 
 function calculatePowerCost(power: AdeptPower, catalogPower: AdeptPowerCatalogItem): number {
-  if (catalogPower.cost === null) {
-    // Variable cost - check levels table
-    if (catalogPower.levels && power.rating !== undefined) {
-      const level = catalogPower.levels.find((l) => l.level === power.rating);
-      return level?.cost ?? 0;
-    }
-    return 0;
+  // New unified ratings approach - check ratings table first
+  if (catalogPower.hasRating && catalogPower.ratings && power.rating !== undefined) {
+    const ratingData = catalogPower.ratings[power.rating];
+    return ratingData?.powerPointCost ?? 0;
   }
-
-  switch (catalogPower.costType) {
-    case "fixed":
-      return catalogPower.cost;
-    case "perLevel":
-      return catalogPower.cost * (power.rating ?? 1);
-    case "table":
-      if (catalogPower.levels && power.rating !== undefined) {
-        const level = catalogPower.levels.find((l) => l.level === power.rating);
-        return level?.cost ?? catalogPower.cost;
-      }
-      return catalogPower.cost;
-    default:
-      return catalogPower.cost;
-  }
+  // Non-rated power - use top-level powerPointCost
+  return catalogPower.powerPointCost ?? 0;
 }
 
 function formatActivation(activation: string): string {

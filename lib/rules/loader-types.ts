@@ -819,10 +819,15 @@ export interface BiowareCatalogData {
 export interface AdeptPowerCatalogItem {
   id: string;
   name: string;
-  /** Base power point cost (used when costType is "fixed") */
-  cost: number | null;
-  /** How the power point cost is determined */
-  costType: "fixed" | "perLevel" | "table";
+  /**
+   * Power point cost for non-rated powers (e.g., Astral Perception = 1 PP)
+   * For rated powers, use ratings[level].powerPointCost instead
+   */
+  powerPointCost?: number;
+  /** @deprecated Use powerPointCost instead */
+  cost?: number | null;
+  /** @deprecated Check hasRating instead */
+  costType?: "fixed" | "perLevel" | "table";
   activation?: "free" | "simple" | "complex" | "interrupt";
   description: string;
   requiresSkill?: boolean;
