@@ -22,7 +22,13 @@ import {
 import type { CreationState, GearItem } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
+import {
+  CreationCard,
+  EmptyState,
+  SummaryFooter,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
@@ -454,10 +460,10 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         headerAction={
           <button
             onClick={() => setIsPurchaseModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
           >
-            <Plus className="h-3.5 w-3.5" />
-            Gear
+            <Plus className="h-3 w-3" />
+            Add
           </button>
         }
       >
@@ -476,22 +482,11 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">No gear purchased</p>
-            </div>
+            <EmptyState message="No gear purchased" />
           )}
 
-          {/* Summary */}
-          {selectedGear.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {selectedGear.length} item{selectedGear.length !== 1 ? "s" : ""}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(gearSpent)}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter count={selectedGear.length} total={gearSpent} format="currency" />
         </div>
       </CreationCard>
 

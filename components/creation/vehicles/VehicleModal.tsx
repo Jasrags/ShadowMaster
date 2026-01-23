@@ -116,7 +116,7 @@ export function VehicleModal({ isOpen, onClose, onAdd, remainingNuyen }: Vehicle
   };
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="lg">
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="2xl">
       {({ close }) => (
         <>
           <ModalHeader title="Add Vehicle" onClose={close}>

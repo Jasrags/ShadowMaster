@@ -22,7 +22,7 @@ import type { CreationState, SpellSelection } from "@/lib/types";
 import { getSpellId, isSpellSelectionObject } from "@/lib/types";
 import type { SpellData } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
+import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import { Lock, Check, Search, X, Plus, Sparkles, ChevronDown } from "lucide-react";
 
 // =============================================================================
@@ -702,21 +702,18 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
           </div>
         )}
 
-        {/* Summary footer */}
-        {selectedSpells.length > 0 && (
-          <div className="flex items-center justify-between rounded-lg bg-zinc-100 px-3 py-2 dark:bg-zinc-800">
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">
-              {selectedSpells.length} spell{selectedSpells.length !== 1 ? "s" : ""} selected
-            </span>
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {freeRemaining > 0
-                ? `${freeRemaining} free remaining`
-                : isOverFree
-                  ? `${karmaSpentOnSpells} karma spent`
-                  : "All free spells used"}
-            </span>
-          </div>
-        )}
+        {/* Footer Summary */}
+        <SummaryFooter
+          count={selectedSpells.length}
+          total={
+            freeRemaining > 0
+              ? `${freeRemaining} free remaining`
+              : isOverFree
+                ? `${karmaSpentOnSpells} karma`
+                : "0 karma"
+          }
+          label="spell"
+        />
 
         {/* Add Spell Modal */}
         {showAddModal && (

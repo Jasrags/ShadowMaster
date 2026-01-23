@@ -209,7 +209,7 @@ export function FocusModal({
   }, [resetState, onClose]);
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="lg">
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
       {({ close }) => (
         <>
           <ModalHeader title="Add Focus" onClose={close} />

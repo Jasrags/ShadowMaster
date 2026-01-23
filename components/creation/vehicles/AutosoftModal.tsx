@@ -126,7 +126,7 @@ export function AutosoftModal({ isOpen, onClose, onAdd, remainingNuyen }: Autoso
   };
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="lg">
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="2xl">
       {({ close }) => (
         <>
           <ModalHeader title="Add Autosoft" onClose={close}>

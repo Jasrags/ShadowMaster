@@ -21,7 +21,12 @@ import type {
   ItemLegality,
 } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
+import {
+  CreationCard,
+  SummaryFooter,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "./shared";
 import {
   VehicleModal,
   DroneModal,
@@ -704,20 +709,8 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
             )}
           </div>
 
-          {/* Summary - ContactsCard pattern */}
-          {totalItems > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {selectedVehicles.length} vehicle{selectedVehicles.length !== 1 ? "s" : ""},{" "}
-                {selectedDrones.length} drone{selectedDrones.length !== 1 ? "s" : ""},{" "}
-                {selectedRCCs.length} RCC{selectedRCCs.length !== 1 ? "s" : ""},{" "}
-                {selectedAutosofts.length} autosoft{selectedAutosofts.length !== 1 ? "s" : ""}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(vehiclesSpent)}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter count={totalItems} total={vehiclesSpent} format="currency" label="item" />
 
           {/* Help text */}
           <p className="text-[10px] text-zinc-500 dark:text-zinc-400">

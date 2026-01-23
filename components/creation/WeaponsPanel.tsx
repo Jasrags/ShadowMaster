@@ -35,7 +35,13 @@ import type {
 } from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
+import {
+  CreationCard,
+  EmptyState,
+  SummaryFooter,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "./shared";
 import {
   WeaponRow,
   WeaponPurchaseModal,
@@ -242,11 +248,7 @@ function WeaponCategorySection({
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">
-                No {category.label.toLowerCase()} purchased
-              </p>
-            </div>
+            <EmptyState message={`No ${category.label.toLowerCase()} purchased`} />
           )}
         </>
       )}
@@ -910,15 +912,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           />
 
           {/* Footer Summary */}
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total: {selectedWeapons.length} item
-              {selectedWeapons.length !== 1 ? "s" : ""}
-            </span>
-            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              {formatCurrency(weaponsSpent)}¥
-            </span>
-          </div>
+          <SummaryFooter count={selectedWeapons.length} total={weaponsSpent} format="currency" />
         </div>
       </CreationCard>
 

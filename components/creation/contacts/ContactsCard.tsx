@@ -16,7 +16,7 @@ import { Plus, X, Edit2, Info, User } from "lucide-react";
 import type { Contact } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { useContactTemplates, useMetatypes } from "@/lib/rules";
-import { CreationCard } from "../shared";
+import { CreationCard, SummaryFooter } from "../shared";
 import { MIN_KARMA_PER_CONTACT, MAX_KARMA_PER_CONTACT } from "./constants";
 import { ContactModal } from "./ContactModal";
 import type { ContactsCardProps } from "./types";
@@ -362,17 +362,12 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
             </div>
           )}
 
-          {/* Summary */}
-          {contacts.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {contacts.length} contact{contacts.length !== 1 ? "s" : ""}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {totalContactKarmaSpent} pts
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter
+            count={contacts.length}
+            total={`${totalContactKarmaSpent} pts`}
+            label="contact"
+          />
         </div>
       </CreationCard>
 

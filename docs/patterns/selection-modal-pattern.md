@@ -299,6 +299,63 @@ const rowVirtualizer = useVirtualizer({
 - `components/creation/weapons/WeaponPurchaseModal.tsx` - With category filters
 - `components/creation/matrix-gear/CyberdeckPurchaseModal.tsx` - Matrix gear variant
 
+## Accepted Pattern Variants
+
+### Large Catalog Modal Variant
+
+**Applies to:** `QualitySelectionModal`
+
+For catalogs with a very large number of items (100+) where users typically browse sequentially rather than compare items side-by-side, a single-column virtualized list is acceptable.
+
+**Characteristics:**
+
+- Single scrollable column instead of split-pane layout
+- Full-width item rows with inline details
+- Virtualization required for performance
+- Expanded/collapsed row states for viewing details
+- Selection happens via row click or checkbox
+
+**When to use:**
+
+- Catalog has 100+ items (qualities list is typically 150+ items)
+- Users rarely need to compare two items side-by-side
+- Item details are compact enough to show inline
+- Performance concerns with large lists
+
+**Key differences from standard pattern:**
+
+- No separate detail preview column
+- Item row expands to show details on click/hover
+- Selection confirmed via toggle rather than "Purchase" button
+- May use categories as collapsible sections
+
+**Reference:** `components/creation/qualities/QualitySelectionModal.tsx`
+
+---
+
+### Form-Based Configuration Modal
+
+**Applies to:** `FocusModal`
+
+For items that require substantial configuration (force/rating selection, binding options), a form-based modal may replace the catalog browsing pattern.
+
+**Characteristics:**
+
+- Focus on configuration rather than browsing
+- Fewer items to choose from (user has already selected category)
+- Form inputs for rating, force, options
+- Cost calculation shown dynamically as options change
+
+**When to use:**
+
+- Item requires multiple configuration choices
+- User has already selected the general item type elsewhere
+- Final cost depends heavily on configuration
+
+**Reference:** `components/creation/foci/FocusModal.tsx`
+
+---
+
 ## Related Patterns
 
 - [Purchase Card Pattern](./purchase-card-pattern.md) - Card that opens these modals

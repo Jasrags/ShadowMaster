@@ -14,7 +14,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
-import { CreationCard, BudgetIndicator } from "../shared";
+import { CreationCard, BudgetIndicator, SummaryFooter } from "../shared";
 import { Plus } from "lucide-react";
 import { MAX_SKILL_RATING } from "./constants";
 import type { KnowledgeCategory } from "./types";
@@ -216,7 +216,7 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
               : undefined
           }
           noteStyle="warning"
-          compact
+          mode="compact"
         />
 
         {!hasAttributes && (
@@ -289,22 +289,12 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
           )}
         </div>
 
-        {/* Summary */}
-        {(languages.length > 0 || knowledgeSkills.length > 0) && (
-          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total:{" "}
-              {languages.length > 0 &&
-                `${languages.length} language${languages.length !== 1 ? "s" : ""}`}
-              {languages.length > 0 && knowledgeSkills.length > 0 && ", "}
-              {knowledgeSkills.length > 0 &&
-                `${knowledgeSkills.length} skill${knowledgeSkills.length !== 1 ? "s" : ""}`}
-            </span>
-            <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-              {knowledgePointsSpent} pts
-            </span>
-          </div>
-        )}
+        {/* Footer Summary */}
+        <SummaryFooter
+          count={languages.length + knowledgeSkills.length}
+          total={`${knowledgePointsSpent} pts`}
+          label="item"
+        />
       </div>
 
       {/* Modals */}

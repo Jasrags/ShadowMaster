@@ -243,6 +243,54 @@ Use this checklist when reviewing purchase card components:
 
 See `components/creation/matrix-gear/MatrixGearCard.tsx` for the canonical implementation of this pattern.
 
+## Accepted Pattern Variants
+
+### Inline Selection Variant
+
+**Applies to:** `ComplexFormsCard`
+
+For components with typically small catalogs (<20 items), an inline selection pattern is acceptable as an alternative to the modal-based purchase pattern.
+
+**Characteristics:**
+
+- Selection happens directly in the card via checkboxes or toggleable items
+- No separate modal required
+- Items are displayed as a compact list or grid
+- Budget tracking still required at top of card
+
+**When to use:**
+
+- Catalog has fewer than ~20 items
+- Items don't require configuration (no rating, no options)
+- Quick toggling is more ergonomic than modal flow
+
+**Reference:** `components/creation/ComplexFormsCard.tsx`
+
+---
+
+### Header Action Variant
+
+**Applies to:** `ArmorPanel`, `GearPanel`
+
+For components displayed in tab panels or other constrained layouts, the add button may be placed in the `headerAction` slot of `CreationCard` instead of an in-card category section header.
+
+**Characteristics:**
+
+- Add button is passed via `headerAction` prop to `CreationCard`
+- Button appears in the card header row, right-aligned
+- Still uses amber styling (`bg-amber-500 px-2 py-1 text-xs`)
+- No separate category section header inside the card
+
+**When to use:**
+
+- Component is rendered in a tabbed interface
+- Card title already serves as the category identifier
+- Single category of items (no need for collapse/expand)
+
+**Reference:** `components/creation/armor/ArmorPanel.tsx`, `components/creation/gear/GearPanel.tsx`
+
+---
+
 ## Related Patterns
 
 - [Card Pattern](./card-pattern.md) - Base card structure

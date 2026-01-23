@@ -20,7 +20,7 @@ import type { CreationState } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "../shared";
+import { CreationCard, BudgetIndicator, SummaryFooter } from "../shared";
 import { Plus } from "lucide-react";
 import { MAX_POSITIVE_KARMA, MAX_NEGATIVE_KARMA } from "./constants";
 import { SelectedQualityCard } from "./SelectedQualityCard";
@@ -185,7 +185,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             spent={positiveKarmaSpent}
             total={MAX_POSITIVE_KARMA}
             variant="positive"
-            compact
+            mode="compact"
           />
           <BudgetIndicator
             label="Negative Qualities"
@@ -193,7 +193,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
             spent={negativeKarmaGained}
             total={MAX_NEGATIVE_KARMA}
             variant="negative"
-            compact
+            mode="compact"
           />
         </div>
 
@@ -281,23 +281,12 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
           )}
         </div>
 
-        {/* Summary */}
-        {(selectedPositive.length > 0 || selectedNegative.length > 0) && (
-          <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total: {selectedPositive.length} positive, {selectedNegative.length} negative
-            </span>
-            <span
-              className={`text-xs font-bold ${
-                karmaBalance >= 0
-                  ? "text-zinc-900 dark:text-zinc-100"
-                  : "text-red-600 dark:text-red-400"
-              }`}
-            >
-              {karmaBalance} karma
-            </span>
-          </div>
-        )}
+        {/* Footer Summary */}
+        <SummaryFooter
+          count={selectedPositive.length + selectedNegative.length}
+          total={`${karmaBalance} karma`}
+          label="quality"
+        />
       </div>
 
       {/* Modals */}

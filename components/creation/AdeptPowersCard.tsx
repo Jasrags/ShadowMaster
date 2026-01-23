@@ -20,7 +20,7 @@ import { useAdeptPowers, usePriorityTable } from "@/lib/rules";
 import type { CreationState, AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
+import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import { Lock, Search, Plus, Minus, X, Zap, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -226,14 +226,13 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
 
   // Calculate cost for power at level
   const calculateCost = useCallback((power: AdeptPowerCatalogItem, level: number): number => {
-    if (power.costType === "table" && power.levels) {
-      const levelData = power.levels.find((l) => l.level === level);
-      return levelData?.cost || 0;
+    // New unified ratings approach - check ratings table first
+    if (power.hasRating && power.ratings) {
+      const ratingData = power.ratings[level];
+      return ratingData?.powerPointCost || 0;
     }
-    if (power.costType === "perLevel") {
-      return (power.cost || 0) * level;
-    }
-    return power.cost || 0;
+    // Non-rated power - use top-level powerPointCost
+    return power.powerPointCost || 0;
   }, []);
 
   // Check if power is already selected
@@ -261,8 +260,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       id: `${selectedPowerId}-${Date.now()}`,
       catalogId: selectedPowerId,
       name: power.name,
-      rating:
-        power.costType === "perLevel" || power.costType === "table" ? selectedLevel : undefined,
+      rating: power.hasRating ? selectedLevel : undefined,
       powerPointCost: cost,
       specification: selectedSpec || undefined,
     };
@@ -331,7 +329,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       if (!catalogPower) return;
 
       const newLevel = power.rating + delta;
-      if (newLevel < 1 || (catalogPower.maxLevel && newLevel > catalogPower.maxLevel)) return;
+      if (newLevel < 1 || (catalogPower.maxRating && newLevel > catalogPower.maxRating)) return;
 
       const oldCost = power.powerPointCost;
       const newCost = calculateCost(catalogPower, newLevel);
@@ -390,17 +388,27 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     updateState,
   ]);
 
+  // Minimum PP allocation required to cover spent power points (for mystic adepts)
+  const minPPAllocation = useMemo(() => {
+    // Need at least enough whole PP to cover what's been spent
+    // Subtract karma-purchased PP since those don't come from allocation
+    const ppFromAllocationSpent = Math.max(0, ppSpent - karmaPurchasedPP);
+    return Math.ceil(ppFromAllocationSpent);
+  }, [ppSpent, karmaPurchasedPP]);
+
   // Handle mystic adept PP allocation
   const handleAllocationChange = useCallback(
     (value: number) => {
+      // Don't allow reducing below what's needed for spent powers
+      const clampedValue = Math.max(value, minPPAllocation);
       updateState({
         selections: {
           ...state.selections,
-          "power-points-allocation": value,
+          "power-points-allocation": clampedValue,
         },
       });
     },
-    [state.selections, updateState]
+    [state.selections, updateState, minPPAllocation]
   );
 
   // Get selected power data
@@ -481,7 +489,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
             <div className="mt-3">
               <input
                 type="range"
-                min={0}
+                min={minPPAllocation}
                 max={magicRating}
                 step={1}
                 value={basePowerPointBudget}
@@ -492,6 +500,11 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                 <span>Spells ({magicRating - basePowerPointBudget})</span>
                 <span>Powers ({basePowerPointBudget})</span>
               </div>
+              {minPPAllocation > 0 && (
+                <div className="mt-1 text-[10px] text-amber-500 dark:text-amber-500">
+                  Minimum {minPPAllocation} PP required for purchased powers
+                </div>
+              )}
             </div>
 
             {/* Karma purchase */}
@@ -516,60 +529,68 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
           </div>
         )}
 
-        {/* Add button */}
-        <button
-          onClick={() => setShowAddModal(true)}
-          className="flex w-full items-center justify-center gap-2 rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 py-3 text-sm font-medium text-zinc-600 transition-colors hover:border-violet-400 hover:bg-violet-50 hover:text-violet-700 dark:border-zinc-600 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:border-violet-600 dark:hover:bg-violet-900/20 dark:hover:text-violet-400"
-        >
-          <Plus className="h-4 w-4" />
-          Add Adept Power
-        </button>
+        {/* Category Section Header */}
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Zap className="h-3.5 w-3.5 text-violet-500" />
+            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              Adept Powers
+            </span>
+            {selectedPowers.length > 0 && (
+              <span className="rounded-full bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
+                {selectedPowers.length}
+              </span>
+            )}
+          </div>
+          <button
+            onClick={() => setShowAddModal(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3 w-3" />
+            Add
+          </button>
+        </div>
+
+        {/* Empty state */}
+        {selectedPowers.length === 0 && (
+          <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+            <p className="text-xs text-zinc-400 dark:text-zinc-500">No adept powers selected</p>
+          </div>
+        )}
 
         {/* Selected powers */}
         {selectedPowers.length > 0 && (
-          <div className="space-y-4">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Selected Powers ({selectedPowers.length})
-            </h4>
+          <div className="space-y-2">
+            {selectedPowers.map((power) => {
+              const catalogPower = getPowerById(power.catalogId);
+              if (!catalogPower) return null;
 
-            <div className="space-y-2">
-              {selectedPowers.map((power) => {
-                const catalogPower = getPowerById(power.catalogId);
-                if (!catalogPower) return null;
+              const isLeveled = catalogPower.hasRating === true;
 
-                const isLeveled =
-                  catalogPower.costType === "perLevel" || catalogPower.costType === "table";
-
-                return (
-                  <PowerRow
-                    key={power.id}
-                    power={catalogPower}
-                    rating={power.rating}
-                    specification={power.specification}
-                    powerPointCost={power.powerPointCost}
-                    maxLevel={catalogPower.maxLevel}
-                    isLeveled={isLeveled}
-                    onIncrease={() => handleUpdateLevel(power.id, 1)}
-                    onDecrease={() => handleUpdateLevel(power.id, -1)}
-                    onRemove={() => handleRemovePower(power.id)}
-                  />
-                );
-              })}
-            </div>
+              return (
+                <PowerRow
+                  key={power.id}
+                  power={catalogPower}
+                  rating={power.rating}
+                  specification={power.specification}
+                  powerPointCost={power.powerPointCost}
+                  maxLevel={catalogPower.maxRating}
+                  isLeveled={isLeveled}
+                  onIncrease={() => handleUpdateLevel(power.id, 1)}
+                  onDecrease={() => handleUpdateLevel(power.id, -1)}
+                  onRemove={() => handleRemovePower(power.id)}
+                />
+              );
+            })}
           </div>
         )}
 
-        {/* Summary footer */}
-        {selectedPowers.length > 0 && (
-          <div className="flex items-center justify-between rounded-lg bg-zinc-100 px-3 py-2 dark:bg-zinc-800">
-            <span className="text-sm text-zinc-600 dark:text-zinc-400">
-              {ppSpent.toFixed(2)} PP spent
-            </span>
-            <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {ppRemaining.toFixed(2)} PP remaining
-            </span>
-          </div>
-        )}
+        {/* Footer Summary */}
+        <SummaryFooter
+          count={selectedPowers.length}
+          total={`${ppSpent.toFixed(2)} PP`}
+          label="power"
+        />
 
         {/* Add Power Modal */}
         {showAddModal && (
@@ -637,12 +658,14 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                   {filteredPowers.slice(0, 30).map((power) => {
                     const isSelected = selectedPowerId === power.id;
                     const alreadyHas = isPowerSelected(power.id);
+                    // Get base cost from unified ratings table or top-level powerPointCost
                     const baseCost =
-                      power.costType === "table" ? power.levels?.[0]?.cost || 0 : power.cost || 0;
-                    const costDisplay =
-                      power.costType === "perLevel"
-                        ? `${baseCost.toFixed(2)}/level`
-                        : `${baseCost.toFixed(2)} PP`;
+                      power.hasRating && power.ratings
+                        ? power.ratings[1]?.powerPointCost || 0
+                        : power.powerPointCost || 0;
+                    const costDisplay = power.hasRating
+                      ? `${baseCost.toFixed(2)}/level`
+                      : `${baseCost.toFixed(2)} PP`;
 
                     return (
                       <button
@@ -697,15 +720,14 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                   </div>
 
                   {/* Level selector */}
-                  {(selectedPowerData.costType === "perLevel" ||
-                    selectedPowerData.costType === "table") && (
+                  {selectedPowerData.hasRating && (
                     <div className="mb-3">
                       <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
                         Level
                       </div>
                       <div className="flex gap-1">
                         {Array.from(
-                          { length: selectedPowerData.maxLevel || 4 },
+                          { length: selectedPowerData.maxRating || 4 },
                           (_, i) => i + 1
                         ).map((lvl) => {
                           const lvlCost = calculateCost(selectedPowerData, lvl);

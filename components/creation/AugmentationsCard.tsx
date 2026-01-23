@@ -18,7 +18,12 @@ import { useMemo, useCallback, useState } from "react";
 import { useAugmentationRules, calculateMagicLoss } from "@/lib/rules/RulesetContext";
 import type { CreationState, CyberwareItem, BiowareItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "./shared";
+import {
+  CreationCard,
+  SummaryFooter,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "./shared";
 import {
   AugmentationModal,
   CyberwareEnhancementModal,
@@ -1469,17 +1474,13 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
             )}
           </div>
 
-          {/* Summary - ContactsCard pattern */}
-          {totalAugmentations > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {selectedCyberware.length} cyberware, {selectedBioware.length} bioware
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(cyberwareSpent + biowareSpent)}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter
+            count={totalAugmentations}
+            total={cyberwareSpent + biowareSpent}
+            format="currency"
+            label="augmentation"
+          />
         </div>
       </CreationCard>
 

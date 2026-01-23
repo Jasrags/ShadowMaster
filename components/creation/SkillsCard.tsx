@@ -27,7 +27,7 @@ import {
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator } from "./shared";
+import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import {
   SkillModal,
   SkillGroupModal,
@@ -798,7 +798,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               tooltip="Points for individual skills"
               spent={skillPointsSpent}
               total={skillPoints}
-              compact
+              mode="compact"
             />
             {skillGroupPoints > 0 && (
               <BudgetIndicator
@@ -806,7 +806,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 tooltip="Points for skill groups"
                 spent={groupPointsSpent}
                 total={skillGroupPoints}
-                compact
+                mode="compact"
               />
             )}
           </div>
@@ -1008,30 +1008,12 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             )}
           </div>
 
-          {/* Summary */}
-          {allSkillsSorted.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                {allSkillsSorted.length} skill{allSkillsSorted.length !== 1 ? "s" : ""}
-                {hasSelectedGroups && (
-                  <span className="text-purple-500 dark:text-purple-400">
-                    {" "}
-                    ({Object.keys(groups).length} from group
-                    {Object.keys(groups).length !== 1 ? "s" : ""})
-                  </span>
-                )}
-                {totalSpecializations > 0 && (
-                  <span className="text-amber-600 dark:text-amber-400">
-                    , {totalSpecializations} spec{totalSpecializations !== 1 ? "s" : ""}
-                  </span>
-                )}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {skillPointsSpent} skill pts
-                {skillGroupPoints > 0 && <> / {groupPointsSpent} group pts</>}
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter
+            count={allSkillsSorted.length}
+            total={`${skillPointsSpent} skill pts${skillGroupPoints > 0 ? ` / ${groupPointsSpent} group pts` : ""}`}
+            label="skill"
+          />
         </div>
       </CreationCard>
 

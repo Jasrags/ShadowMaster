@@ -113,7 +113,7 @@ export function DroneModal({ isOpen, onClose, onAdd, remainingNuyen }: DroneModa
   };
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="lg">
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="2xl">
       {({ close }) => (
         <>
           <ModalHeader title="Add Drone" onClose={close}>

@@ -21,7 +21,13 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { CreationState, ArmorItem } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
+import {
+  CreationCard,
+  EmptyState,
+  SummaryFooter,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+} from "../shared";
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
@@ -455,10 +461,10 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         headerAction={
           <button
             onClick={() => setIsPurchaseModalOpen(true)}
-            className="flex items-center gap-1.5 rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
           >
-            <Plus className="h-3.5 w-3.5" />
-            Armor
+            <Plus className="h-3 w-3" />
+            Add
           </button>
         }
       >
@@ -477,20 +483,11 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
               ))}
             </div>
           ) : (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">No armor purchased</p>
-            </div>
+            <EmptyState message="No armor purchased" />
           )}
 
           {/* Footer Summary */}
-          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
-            <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total: {selectedArmor.length} item{selectedArmor.length !== 1 ? "s" : ""}
-            </span>
-            <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
-              {formatCurrency(armorSpent)}¥
-            </span>
-          </div>
+          <SummaryFooter count={selectedArmor.length} total={armorSpent} format="currency" />
         </div>
       </CreationCard>
 

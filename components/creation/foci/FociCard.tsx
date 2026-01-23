@@ -14,7 +14,7 @@
 import { useMemo, useCallback, useState } from "react";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "../shared";
+import { CreationCard, SummaryFooter } from "../shared";
 import { FocusModal, type FocusSelection } from "./FocusModal";
 import { Plus, X, Sparkles, Sword, BookOpen, Ghost, Wand2, Zap, Check, Square } from "lucide-react";
 
@@ -300,15 +300,8 @@ export function FociCard({ state, updateState }: FociCardProps) {
             </div>
           )}
 
-          {/* Total */}
-          {foci.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-sm text-zinc-600 dark:text-zinc-400">Total Cost</span>
-              <span className="text-sm font-bold text-zinc-900 dark:text-zinc-100">
-                {totalCost.toLocaleString()}¥
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter count={foci.length} total={totalCost} format="currency" label="focus" />
         </div>
       </CreationCard>
 

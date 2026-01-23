@@ -18,7 +18,7 @@ import { Plus, AlertTriangle } from "lucide-react";
 import type { CreationState, Identity, License, SIN, SinnerQuality, Lifestyle } from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard } from "../shared";
+import { CreationCard, SummaryFooter } from "../shared";
 import { IdentityCard } from "./IdentityCard";
 import { IdentityModal } from "./IdentityModal";
 import { LicenseModal } from "./LicenseModal";
@@ -457,19 +457,13 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
             </>
           )}
 
-          {/* Summary */}
-          {identities.length > 0 && (
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-800/50">
-              <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                Total: {identities.length} identit{identities.length !== 1 ? "ies" : "y"}
-                {identities.reduce((sum, i) => sum + (i.licenses?.length || 0), 0) > 0 &&
-                  `, ${identities.reduce((sum, i) => sum + (i.licenses?.length || 0), 0)} license${identities.reduce((sum, i) => sum + (i.licenses?.length || 0), 0) !== 1 ? "s" : ""}`}
-              </span>
-              <span className="text-xs font-bold text-zinc-900 dark:text-zinc-100">
-                {totalCosts.total.toLocaleString()}
-              </span>
-            </div>
-          )}
+          {/* Footer Summary */}
+          <SummaryFooter
+            count={identities.length}
+            total={totalCosts.total}
+            format="currency"
+            label="identity"
+          />
         </div>
       </CreationCard>
 

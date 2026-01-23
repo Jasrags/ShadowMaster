@@ -680,7 +680,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
             spent={0}
             total={attributePoints}
             tooltip={attributePrioritySource}
-            compact
+            mode="compact"
           />
           <div className="flex items-center gap-2 rounded-lg border border-blue-200 bg-blue-50 p-3 dark:border-blue-800 dark:bg-blue-900/20">
             <Lock className="h-4 w-4 text-blue-500" />
@@ -703,7 +703,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
           total={attributePoints}
           tooltip={attributePrioritySource}
           karmaRequired={isCoreOverBudget ? karmaRequired : undefined}
-          compact
+          mode="compact"
         />
 
         {/* Physical Attributes */}
@@ -736,7 +736,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
                 spent={specialPointsSpent}
                 total={specialAttributePoints}
                 tooltip={specialPrioritySource}
-                compact
+                mode="compact"
               />
             )}
 

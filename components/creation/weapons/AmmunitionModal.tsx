@@ -192,7 +192,7 @@ export function AmmunitionModal({
   const usesAmmo = supportsAmmunition;
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="lg">
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
       {({ close }) => (
         <div className="flex max-h-[85vh] flex-col overflow-hidden">
           {/* Header */}

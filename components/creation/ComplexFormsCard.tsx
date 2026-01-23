@@ -192,7 +192,7 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
             label="Free Forms"
             spent={Math.min(selectedForms.length, freeForms)}
             total={freeForms}
-            compact
+            mode="compact"
           />
           {formsBeyondFree > 0 && (
             <div className="flex items-center gap-1 text-xs">

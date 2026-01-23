@@ -370,7 +370,7 @@ export function LegacyBudgetIndicator({
       remaining={remaining}
       displayFormat={displayFormat}
       showProgressBar={showProgressBar}
-      compact={compact}
+      mode={compact ? "compact" : "default"}
       className={className}
     />
   );
