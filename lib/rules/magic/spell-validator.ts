@@ -168,11 +168,13 @@ export function validateAdeptPowerAllocation(
     }
 
     // Validate rating if leveled power
-    if (catalogPower.maxLevel !== undefined && power.rating !== undefined) {
-      if (power.rating > catalogPower.maxLevel) {
+    // Prefer maxRating (new), fall back to maxLevel (deprecated)
+    const maxRating = catalogPower.maxRating ?? catalogPower.maxLevel;
+    if (maxRating !== undefined && power.rating !== undefined) {
+      if (power.rating > maxRating) {
         errors.push({
           code: "POWER_LEVEL_EXCEEDED",
-          message: `${power.name} cannot exceed level ${catalogPower.maxLevel} (selected: ${power.rating})`,
+          message: `${power.name} cannot exceed level ${maxRating} (selected: ${power.rating})`,
           field: "adeptPowers",
           itemId: power.catalogId,
         });
