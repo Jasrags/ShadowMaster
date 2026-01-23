@@ -22,6 +22,7 @@ import {
   TooltipTrigger,
   TooltipProps as AriaTooltipProps,
   OverlayArrow,
+  Button as AriaButton,
 } from "react-aria-components";
 
 // =============================================================================
@@ -81,10 +82,8 @@ function TooltipContent({
     <AriaTooltip
       {...props}
       className={`
-        z-50 rounded-md bg-zinc-900 px-2 py-1.5 text-xs text-white shadow-lg
+        z-[9999] rounded-md bg-zinc-900 px-2 py-1.5 text-xs text-white shadow-lg
         dark:bg-zinc-100 dark:text-zinc-900
-        animate-in fade-in-0 zoom-in-95
-        data-[exiting]:animate-out data-[exiting]:fade-out-0 data-[exiting]:zoom-out-95
         ${className}
       `}
     >
@@ -148,3 +147,65 @@ export function Tooltip({
 }
 
 export { TooltipTrigger, TooltipContent };
+
+// =============================================================================
+// INFO TOOLTIP - SIMPLIFIED COMPONENT FOR INFO ICONS
+// =============================================================================
+
+interface InfoTooltipProps {
+  /** The tooltip content */
+  content: ReactNode;
+  /** Tooltip placement */
+  placement?: TooltipPlacement;
+  /** Delay before showing (ms) */
+  delay?: number;
+  /** Aria label for the button */
+  label?: string;
+  /** Additional className for the icon */
+  iconClassName?: string;
+}
+
+/**
+ * Simple info tooltip with built-in button and icon.
+ * Use this for info icons that show explanatory text on hover.
+ *
+ * @example
+ * ```tsx
+ * <InfoTooltip content="Explains what this field does" label="Field info" />
+ * ```
+ */
+export function InfoTooltip({
+  content,
+  placement = "bottom",
+  delay = 300,
+  label = "More info",
+  iconClassName = "h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300",
+}: InfoTooltipProps) {
+  return (
+    <TooltipTrigger delay={delay}>
+      <AriaButton
+        aria-label={label}
+        className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          className={iconClassName}
+          aria-hidden="true"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="M12 16v-4" />
+          <path d="M12 8h.01" />
+        </svg>
+      </AriaButton>
+      <TooltipContent placement={placement}>{content}</TooltipContent>
+    </TooltipTrigger>
+  );
+}

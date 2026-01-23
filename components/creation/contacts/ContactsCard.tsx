@@ -12,7 +12,8 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { Plus, X, Edit2, Info, User } from "lucide-react";
+import { Plus, X, Edit2, User } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
 import type { Contact } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { useContactTemplates, useMetatypes } from "@/lib/rules";
@@ -255,12 +256,12 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
           {/* Contact Points - compact like Essence bar */}
           <div className="space-y-1">
             <div className="flex items-center justify-between text-xs">
-              <span
-                className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
-                title="Cost = Connection + Loyalty (max 7 per contact). Min 2 karma each."
-              >
+              <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
                 Contact Points
-                <Info className="h-3 w-3 text-zinc-400" />
+                <InfoTooltip
+                  content="Cost = Connection + Loyalty (max 7 per contact). Min 2 karma each."
+                  label="Contact points info"
+                />
               </span>
               <span
                 className={`font-medium ${

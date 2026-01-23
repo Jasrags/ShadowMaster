@@ -41,11 +41,11 @@ import {
   Shield,
   Backpack,
   Gem,
-  Info,
   ChevronDown,
   ChevronRight,
   Settings,
 } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
 // CONSTANTS
@@ -1029,12 +1029,10 @@ export function GearCard({ state, updateState }: GearCardProps) {
           <div className="flex items-center justify-between text-xs">
             <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
               <span>Nuyen</span>
-              <span className="group relative">
-                <Info className="h-3 w-3 cursor-help text-zinc-400" />
-                <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                  Total nuyen spent across all gear categories
-                </span>
-              </span>
+              <InfoTooltip
+                content="Total nuyen spent across all gear categories"
+                label="Nuyen budget info"
+              />
               {karmaConversion > 0 && (
                 <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
                   (+{formatCurrency(convertedNuyen)}¥ karma)

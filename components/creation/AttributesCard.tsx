@@ -19,8 +19,8 @@ import { useMetatypes, usePriorityTable, useMagicPaths } from "@/lib/rules";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator } from "./shared";
-import { Tooltip } from "@/components/ui";
-import { Lock, Minus, Plus, Info, Star, Sparkles, Cpu } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
+import { Lock, Minus, Plus, Star, Sparkles, Cpu } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -165,18 +165,7 @@ function InlineAttributeRow({
       <div className="flex items-center gap-1.5">
         {Icon && <Icon className={`h-3.5 w-3.5 ${iconColor}`} />}
         <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{name}</span>
-        <Tooltip content={`${name} (${abbr}): ${description}`}>
-          <button
-            type="button"
-            aria-label={`Info about ${name}`}
-            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-          >
-            <Info
-              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-              aria-hidden="true"
-            />
-          </button>
-        </Tooltip>
+        <InfoTooltip content={`${name} (${abbr}): ${description}`} label={`Info about ${name}`} />
       </div>
 
       {/* Range + Controls */}
@@ -276,18 +265,10 @@ function SpecialAttributeRow({
       <div className="flex items-center gap-1.5">
         <Icon className={`h-3.5 w-3.5 ${config.color}`} />
         <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{config.name}</span>
-        <Tooltip content={`${config.name} (${config.abbr}): ${config.description}`}>
-          <button
-            type="button"
-            aria-label={`Info about ${config.name}`}
-            className="rounded-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-1"
-          >
-            <Info
-              className="h-3 w-3 cursor-help text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-              aria-hidden="true"
-            />
-          </button>
-        </Tooltip>
+        <InfoTooltip
+          content={`${config.name} (${config.abbr}): ${config.description}`}
+          label={`Info about ${config.name}`}
+        />
       </div>
 
       <div className="flex items-center gap-2">

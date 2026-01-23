@@ -32,6 +32,7 @@ import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
 import { Lock, Plus } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
 // CONSTANTS
@@ -469,6 +470,32 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         }
       >
         <div className="space-y-3">
+          {/* Nuyen Budget Bar */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-xs">
+              <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                <span>Nuyen</span>
+                <InfoTooltip content="Total nuyen spent on all gear" label="Nuyen budget info" />
+                {karmaConversion > 0 && (
+                  <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
+                    (+{(karmaConversion * KARMA_TO_NUYEN_RATE).toLocaleString()}¥ karma)
+                  </span>
+                )}
+              </span>
+              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
+              </span>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+              <div
+                className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
+                style={{
+                  width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%`,
+                }}
+              />
+            </div>
+          </div>
+
           {/* Armor List */}
           {selectedArmor.length > 0 ? (
             <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">

@@ -22,6 +22,7 @@ export {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  InfoTooltip,
   type TooltipProps,
   type TooltipPlacement,
 } from "./Tooltip";

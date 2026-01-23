@@ -15,7 +15,12 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useCommlinks, useCyberdecks, type CommlinkData, type CyberdeckData } from "@/lib/rules/RulesetContext";
+import {
+  useCommlinks,
+  useCyberdecks,
+  type CommlinkData,
+  type CyberdeckData,
+} from "@/lib/rules/RulesetContext";
 import type { CreationState, CharacterCommlink, CharacterCyberdeck } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
@@ -27,11 +32,11 @@ import {
   Smartphone,
   Cpu,
   AlertTriangle,
-  Info,
   ChevronDown,
   ChevronRight,
   X,
 } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
 // CONSTANTS
@@ -256,7 +261,10 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     modifications?: Array<{ cost: number }>;
     purchasedAmmunition?: Array<{ cost: number; quantity: number }>;
   }>;
-  const selectedArmor = (state.selections?.armor || []) as Array<{ cost: number; quantity: number }>;
+  const selectedArmor = (state.selections?.armor || []) as Array<{
+    cost: number;
+    quantity: number;
+  }>;
   const selectedFoci = (state.selections?.foci || []) as Array<{ cost: number }>;
   const selectedCyberware = (state.selections?.cyberware || []) as Array<{ cost: number }>;
   const selectedBioware = (state.selections?.bioware || []) as Array<{ cost: number }>;
@@ -268,7 +276,8 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
-    const ammoCost = w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
+    const ammoCost =
+      w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => sum + a.cost * a.quantity, 0);
@@ -279,10 +288,16 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     selectedBioware.reduce((s, i) => s + i.cost, 0);
   const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
   const vehiclesSpent =
-    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
+    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    ) +
     ((state.selections?.drones as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
     ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
-    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
+    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce(
+      (s, i) => s + i.cost,
+      0
+    );
 
   const totalSpent =
     weaponsSpent +
@@ -483,7 +498,11 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
   if (!hasPriorities) {
     return (
-      <CreationCard title="Matrix Gear" description="Purchase commlinks and cyberdecks" status="pending">
+      <CreationCard
+        title="Matrix Gear"
+        description="Purchase commlinks and cyberdecks"
+        status="pending"
+      >
         <div className="space-y-3">
           <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 dark:border-zinc-700">
             <Lock className="h-5 w-5 text-zinc-400" />
@@ -503,12 +522,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
             <div className="flex items-center justify-between text-xs">
               <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
                 <span>Nuyen</span>
-                <span className="group relative">
-                  <Info className="h-3 w-3 cursor-help text-zinc-400" />
-                  <span className="pointer-events-none absolute bottom-full left-1/2 z-50 mb-1 -translate-x-1/2 whitespace-nowrap rounded bg-zinc-900 px-2 py-1 text-[10px] text-white opacity-0 shadow-lg transition-opacity group-hover:opacity-100 dark:bg-zinc-100 dark:text-zinc-900">
-                    Total nuyen spent on all gear
-                  </span>
-                </span>
+                <InfoTooltip content="Total nuyen spent on all gear" label="Nuyen budget info" />
                 {karmaConversion > 0 && (
                   <span className="ml-1 text-[10px] text-emerald-600 dark:text-emerald-400">
                     (+{(karmaConversion * KARMA_TO_NUYEN_RATE).toLocaleString()}¥ karma)

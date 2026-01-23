@@ -1,6 +1,7 @@
 "use client";
 
-import { AlertTriangle, Info } from "lucide-react";
+import { AlertTriangle } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
 
 /**
  * BudgetIndicator
@@ -234,12 +235,9 @@ export function BudgetIndicator({
         </div>
         <div className="flex items-center justify-between gap-2">
           {tooltip ? (
-            <span
-              className="flex cursor-help items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400"
-              title={tooltip}
-            >
+            <span className="flex items-center gap-1 text-xs text-zinc-600 dark:text-zinc-400">
               {label}
-              <Info className="h-3 w-3 text-zinc-400" aria-hidden="true" />
+              <InfoTooltip content={tooltip} label={`${label} info`} />
             </span>
           ) : (
             <span className="text-xs text-zinc-500 dark:text-zinc-400">{label}</span>
@@ -281,12 +279,9 @@ export function BudgetIndicator({
       </div>
       <div className="flex items-center justify-between text-sm">
         {tooltip ? (
-          <span
-            className="flex cursor-help items-center gap-1 text-zinc-600 dark:text-zinc-400"
-            title={tooltip}
-          >
+          <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
             {label}
-            <Info className="h-3 w-3 text-zinc-400" aria-hidden="true" />
+            <InfoTooltip content={tooltip} label={`${label} info`} />
           </span>
         ) : (
           <span className="text-zinc-600 dark:text-zinc-400">{label}</span>
