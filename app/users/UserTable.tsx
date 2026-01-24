@@ -6,6 +6,16 @@ import type { PublicUser, UpdateUserRequest, UserRole, AccountStatus } from "@/l
 import UserEditModal from "./UserEditModal";
 import UserAuditModal from "./UserAuditModal";
 
+// Helper to check if user is currently locked out (lockoutUntil is in the future)
+const isLockedOut = (user: PublicUser): boolean =>
+  user.lockoutUntil ? new Date(user.lockoutUntil) > new Date() : false;
+
+// Format time for lockout badge
+const formatLockoutTime = (lockoutUntil: string): string => {
+  const date = new Date(lockoutUntil);
+  return date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+};
+
 interface UserTableProps {
   initialUsers: PublicUser[];
 }
@@ -27,6 +37,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [auditUser, setAuditUser] = useState<PublicUser | null>(null);
   const [isAuditModalOpen, setIsAuditModalOpen] = useState(false);
+  const [isResending, setIsResending] = useState(false);
 
   // Debounce search input
   useEffect(() => {
@@ -264,6 +275,88 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setIsAuditModalOpen(true);
   };
 
+  // Handle unlock user (clear login lockout)
+  const handleUnlock = async (user: PublicUser) => {
+    if (!confirm(`Are you sure you want to unlock ${user.username}?`)) return;
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/lockout`, {
+        method: "DELETE",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchUsers();
+      } else {
+        setError(data.error || "Failed to unlock user");
+      }
+    } catch {
+      setError("An error occurred while unlocking user");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle resend verification email
+  const handleResendVerification = async (user: PublicUser) => {
+    setIsResending(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/resend-verification`, {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        alert(`Verification email sent to ${user.email}`);
+      } else {
+        setError(data.error || "Failed to resend verification email");
+      }
+    } catch {
+      setError("An error occurred while resending verification email");
+    } finally {
+      setIsResending(false);
+    }
+  };
+
+  // Handle manual email verification
+  const handleManualVerify = async (user: PublicUser) => {
+    if (
+      !confirm(
+        `Are you sure you want to manually verify ${user.email}?\n\nThis bypasses the normal email verification process.`
+      )
+    ) {
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`/api/users/${user.id}/verify-email`, {
+        method: "POST",
+      });
+
+      const data = await response.json();
+
+      if (data.success) {
+        await fetchUsers();
+      } else {
+        setError(data.error || "Failed to verify email");
+      }
+    } catch {
+      setError("An error occurred while verifying email");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* Search and Controls */}
@@ -394,7 +487,21 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                       {formatRole(user.role)}
                     </span>
                   </td>
-                  <td className="px-4 py-3">{getStatusBadge(user.accountStatus)}</td>
+                  <td className="px-4 py-3">
+                    <div className="flex flex-wrap items-center gap-1">
+                      {getStatusBadge(user.accountStatus)}
+                      {isLockedOut(user) && (
+                        <span className="inline-flex items-center rounded-full bg-orange-100 px-2.5 py-0.5 text-xs font-medium text-orange-800 dark:bg-orange-900/30 dark:text-orange-400">
+                          Locked out (until {formatLockoutTime(user.lockoutUntil!)})
+                        </span>
+                      )}
+                      {!user.emailVerified && (
+                        <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                          Unverified
+                        </span>
+                      )}
+                    </div>
+                  </td>
                   <td className="px-4 py-3">
                     <span className="text-sm text-zinc-600 dark:text-zinc-400">
                       {formatDate(user.createdAt)}
@@ -437,6 +544,12 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                                 handleSuspend(user);
                               } else if (key === "reactivate") {
                                 handleReactivate(user);
+                              } else if (key === "unlock") {
+                                handleUnlock(user);
+                              } else if (key === "resend-verification") {
+                                handleResendVerification(user);
+                              } else if (key === "verify-email") {
+                                handleManualVerify(user);
                               } else if (key === "audit") {
                                 handleViewAudit(user);
                               } else if (key === "delete") {
@@ -465,6 +578,30 @@ export default function UserTable({ initialUsers }: UserTableProps) {
                               >
                                 Reactivate
                               </MenuItem>
+                            )}
+                            {isLockedOut(user) && (
+                              <MenuItem
+                                id="unlock"
+                                className="rounded-md px-3 py-2 text-sm text-orange-600 outline-none focus:bg-zinc-100 dark:text-orange-400 dark:focus:bg-zinc-800"
+                              >
+                                Unlock
+                              </MenuItem>
+                            )}
+                            {!user.emailVerified && (
+                              <>
+                                <MenuItem
+                                  id="resend-verification"
+                                  className="rounded-md px-3 py-2 text-sm text-amber-600 outline-none focus:bg-zinc-100 dark:text-amber-400 dark:focus:bg-zinc-800"
+                                >
+                                  Resend Verification
+                                </MenuItem>
+                                <MenuItem
+                                  id="verify-email"
+                                  className="rounded-md px-3 py-2 text-sm text-green-600 outline-none focus:bg-zinc-100 dark:text-green-400 dark:focus:bg-zinc-800"
+                                >
+                                  Mark as Verified
+                                </MenuItem>
+                              </>
                             )}
                             <MenuItem
                               id="audit"
@@ -523,6 +660,28 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           onClose={handleModalClose}
           onSave={handleSave}
           isLoading={loading}
+          onUnlock={async () => {
+            await handleUnlock(editingUser);
+            // Refresh the editing user data
+            const response = await fetch(`/api/users/${editingUser.id}`);
+            const data = await response.json();
+            if (data.success && data.user) {
+              setEditingUser(data.user);
+            }
+          }}
+          onResendVerification={async () => {
+            await handleResendVerification(editingUser);
+          }}
+          onManualVerify={async () => {
+            await handleManualVerify(editingUser);
+            // Refresh the editing user data
+            const response = await fetch(`/api/users/${editingUser.id}`);
+            const data = await response.json();
+            if (data.success && data.user) {
+              setEditingUser(data.user);
+            }
+          }}
+          isResending={isResending}
         />
       )}
 

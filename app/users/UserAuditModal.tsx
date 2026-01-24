@@ -58,6 +58,9 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
       user_deleted: "Account Deleted",
       user_lockout_triggered: "Account Locked",
       user_lockout_cleared: "Lockout Cleared",
+      user_lockout_admin_cleared: "Lockout Cleared (Admin)",
+      user_email_admin_verified: "Email Verified (Admin)",
+      user_verification_admin_resent: "Verification Email Resent",
       admin_character_status_changed: "Character Status Changed",
     };
     return actionLabels[action] || action;
@@ -69,6 +72,8 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
       case "user_created":
       case "user_reactivated":
       case "user_lockout_cleared":
+      case "user_lockout_admin_cleared":
+      case "user_email_admin_verified":
         return "text-green-600 dark:text-green-400";
       case "user_suspended":
       case "user_lockout_triggered":
@@ -76,6 +81,8 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
       case "user_deleted":
       case "user_role_revoked":
         return "text-red-600 dark:text-red-400";
+      case "user_verification_admin_resent":
+        return "text-blue-600 dark:text-blue-400";
       default:
         return "text-zinc-600 dark:text-zinc-400";
     }
