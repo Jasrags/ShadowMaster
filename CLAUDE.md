@@ -37,6 +37,13 @@ pnpm lint             # ESLint
 pnpm type-check       # TypeScript checking
 pnpm check            # Combined lint + type-check + knip
 
+# Docker (local development)
+pnpm docker:dev       # Build and start containers
+pnpm docker:build     # Build image with git SHA
+pnpm docker:up        # Start containers
+pnpm docker:down      # Stop containers
+pnpm docker:logs      # Follow container logs
+
 # Code Quality
 pnpm format           # Prettier formatting
 pnpm knip             # Dead code detection
@@ -46,6 +53,8 @@ pnpm verify-data      # Validate JSON data files
 pnpm validate-docs    # Validate CLAUDE.md against codebase
 pnpm check-tests      # Check for missing tests (non-blocking)
 ```
+
+**Environments:** `local` (pnpm dev), `docker` (pnpm docker:dev), `staging` (Portainer), `production` (hidden badge)
 
 **Git Hooks:** pre-commit (lint-staged, type-check), pre-push (knip, CLAUDE.md validation)
 

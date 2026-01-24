@@ -43,6 +43,12 @@
     "audit:creation:strict": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --strict",
     "audit:creation:verbose": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --verbose",
     "audit:creation:report": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --output=markdown",
+    "docker:build": "GIT_SHA=$(git rev-parse --short HEAD) docker compose build",
+    "docker:build:fresh": "GIT_SHA=$(git rev-parse --short HEAD) docker compose build --no-cache",
+    "docker:up": "docker compose up -d",
+    "docker:down": "docker compose down",
+    "docker:dev": "GIT_SHA=$(git rev-parse --short HEAD) docker compose up --build -d",
+    "docker:logs": "docker compose logs -f",
     "prepare": "husky"
   },
   "lint-staged": {

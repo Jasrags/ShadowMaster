@@ -3,6 +3,10 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+      args:
+        - NEXT_PUBLIC_APP_ENV=docker
+        # Pass git SHA for environment badge (run: GIT_SHA=$(git rev-parse --short HEAD) docker compose build)
+        - NEXT_PUBLIC_GIT_SHA=${GIT_SHA:-unknown}
     image: shadow-master:local
     container_name: shadow-master-app
     ports:

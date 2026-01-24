@@ -17,6 +17,11 @@ FROM node:20-alpine AS builder
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
+# Build arguments for environment configuration
+# These are embedded into the Next.js build at compile time
+ARG NEXT_PUBLIC_APP_ENV=docker
+ARG NEXT_PUBLIC_GIT_SHA=unknown
+
 # Copy dependencies from deps stage
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
@@ -24,6 +29,8 @@ COPY . .
 # Set environment for build
 ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_APP_ENV=${NEXT_PUBLIC_APP_ENV}
+ENV NEXT_PUBLIC_GIT_SHA=${NEXT_PUBLIC_GIT_SHA}
 
 # Build the application
 RUN pnpm build
