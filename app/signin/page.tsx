@@ -1,10 +1,32 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { Link } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { isValidEmail } from "@/lib/auth/validation";
+
+/**
+ * Component that reads search params and sets success message
+ * Must be wrapped in Suspense boundary
+ */
+function SearchParamsHandler({
+  onResetSuccess,
+}: {
+  onResetSuccess: (message: string) => void;
+}) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      onResetSuccess(
+        "Your password has been reset successfully. Please sign in with your new password."
+      );
+    }
+  }, [searchParams, onResetSuccess]);
+
+  return null;
+}
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
@@ -19,16 +41,6 @@ export default function SigninPage() {
   }>({});
 
   const { signIn } = useAuth();
-  const searchParams = useSearchParams();
-
-  // Check for reset success message on mount
-  useEffect(() => {
-    if (searchParams.get("reset") === "success") {
-      setSuccessMessage(
-        "Your password has been reset successfully. Please sign in with your new password."
-      );
-    }
-  }, [searchParams]);
 
   const validateForm = (): boolean => {
     const errors: typeof validationErrors = {};
@@ -72,6 +84,11 @@ export default function SigninPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
+      {/* Suspense boundary for useSearchParams */}
+      <Suspense fallback={null}>
+        <SearchParamsHandler onResetSuccess={setSuccessMessage} />
+      </Suspense>
+
       <main className="w-full max-w-md px-6 py-12">
         <div className="rounded-lg bg-zinc-50 p-8 shadow-lg dark:bg-zinc-900">
           <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Sign In</h1>
