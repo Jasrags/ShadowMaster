@@ -40,6 +40,9 @@ export interface User {
   emailVerifiedAt: string | null; // ISO 8601 date string
   emailVerificationTokenHash: string | null;
   emailVerificationTokenExpiresAt: string | null; // ISO 8601 date string
+  // Password reset fields
+  passwordResetTokenHash: string | null;
+  passwordResetTokenExpiresAt: string | null; // ISO 8601 date string
 }
 
 export interface SignupRequest {

@@ -98,6 +98,8 @@ function createMockUser(overrides?: Partial<User>): User {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
     ...overrides,
   };
 }

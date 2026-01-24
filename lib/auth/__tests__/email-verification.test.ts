@@ -233,6 +233,8 @@ describe("email-verification", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: "hash",
       emailVerificationTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+      passwordResetTokenHash: null,
+      passwordResetTokenExpiresAt: null,
     };
 
     it("returns success for valid token", async () => {

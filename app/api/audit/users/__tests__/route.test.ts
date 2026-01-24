@@ -41,6 +41,8 @@ describe("GET /api/audit/users", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockAuditEntries: UserAuditEntry[] = [

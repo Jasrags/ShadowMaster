@@ -116,6 +116,9 @@ export function createMockUser(overrides?: Partial<User>): User {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    // Password reset fields
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
     ...overrides,
   };
 }

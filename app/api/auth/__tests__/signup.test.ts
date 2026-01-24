@@ -63,6 +63,8 @@ describe("POST /api/auth/signup", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   beforeEach(() => {
@@ -234,6 +236,8 @@ describe("POST /api/auth/signup", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      passwordResetTokenHash: null,
+      passwordResetTokenExpiresAt: null,
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);

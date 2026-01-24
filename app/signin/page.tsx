@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { Link } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { isValidEmail } from "@/lib/auth/validation";
@@ -10,6 +11,7 @@ export default function SigninPage() {
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
@@ -17,6 +19,16 @@ export default function SigninPage() {
   }>({});
 
   const { signIn } = useAuth();
+  const searchParams = useSearchParams();
+
+  // Check for reset success message on mount
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      setSuccessMessage(
+        "Your password has been reset successfully. Please sign in with your new password."
+      );
+    }
+  }, [searchParams]);
 
   const validateForm = (): boolean => {
     const errors: typeof validationErrors = {};
@@ -38,6 +50,7 @@ export default function SigninPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
 
     if (!validateForm()) {
       return;
@@ -64,6 +77,12 @@ export default function SigninPage() {
           <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Sign In</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {successMessage && (
+              <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-200">
+                {successMessage}
+              </div>
+            )}
+
             {error && (
               <div className="rounded-md bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-200">
                 {error}
@@ -132,6 +151,15 @@ export default function SigninPage() {
                   {validationErrors.password}
                 </p>
               )}
+            </div>
+
+            <div className="flex justify-end">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             <div className="flex items-center gap-2">

@@ -23,6 +23,8 @@ export type NewUserData = Omit<
   | "emailVerifiedAt"
   | "emailVerificationTokenHash"
   | "emailVerificationTokenExpiresAt"
+  | "passwordResetTokenHash"
+  | "passwordResetTokenExpiresAt"
 >;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
@@ -134,6 +136,9 @@ function normalizeUserDefaults(user: User): User {
     emailVerifiedAt: user.emailVerifiedAt ?? null,
     emailVerificationTokenHash: user.emailVerificationTokenHash ?? null,
     emailVerificationTokenExpiresAt: user.emailVerificationTokenExpiresAt ?? null,
+    // Password reset fields
+    passwordResetTokenHash: user.passwordResetTokenHash ?? null,
+    passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt ?? null,
   };
 }
 
@@ -214,6 +219,9 @@ export async function createUser(userData: NewUserData): Promise<User> {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    // Initialize password reset fields
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   // Atomic write: write to temp file, then rename
@@ -659,4 +667,85 @@ export async function getUserByVerificationToken(token: string): Promise<User | 
   }
 
   return null;
+}
+
+// =============================================================================
+// PASSWORD RESET FUNCTIONS
+// =============================================================================
+
+/**
+ * Set password reset token for a user
+ *
+ * @param userId - The user to set the token for
+ * @param tokenHash - The bcrypt hash of the reset token
+ * @param expiresAt - When the token expires (ISO 8601 string)
+ */
+export async function setPasswordResetToken(
+  userId: string,
+  tokenHash: string,
+  expiresAt: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    passwordResetTokenHash: tokenHash,
+    passwordResetTokenExpiresAt: expiresAt,
+  });
+}
+
+/**
+ * Clear password reset token for a user
+ *
+ * @param userId - The user to clear the token for
+ */
+export async function clearPasswordResetToken(userId: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
+  });
+}
+
+/**
+ * Find a user by their password reset token
+ * Iterates through all users and compares the token hash using bcrypt
+ *
+ * @param token - The plain text reset token
+ * @returns The user if found and token matches, null otherwise
+ */
+export async function getUserByPasswordResetToken(token: string): Promise<User | null> {
+  const bcrypt = await import("bcryptjs");
+  const users = await getAllUsers();
+
+  for (const user of users) {
+    if (user.passwordResetTokenHash) {
+      const matches = await bcrypt.compare(token, user.passwordResetTokenHash);
+      if (matches) {
+        return user;
+      }
+    }
+  }
+
+  return null;
+}
+
+/**
+ * Update user password and increment session version to invalidate all sessions
+ *
+ * @param userId - The user to update
+ * @param newPasswordHash - The bcrypt hash of the new password
+ */
+export async function updateUserPassword(userId: string, newPasswordHash: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    passwordHash: newPasswordHash,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
+    sessionVersion: (user.sessionVersion || 0) + 1,
+  });
 }

@@ -13,7 +13,12 @@ export type SecurityEvent =
   | "verification.sent"
   | "verification.success"
   | "verification.failed"
-  | "verification.rate_limited";
+  | "verification.rate_limited"
+  | "password_reset.requested"
+  | "password_reset.sent"
+  | "password_reset.success"
+  | "password_reset.failed"
+  | "password_reset.rate_limited";
 
 export interface SecurityRecord {
   timestamp: string;
