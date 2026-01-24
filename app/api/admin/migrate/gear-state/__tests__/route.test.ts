@@ -72,6 +72,11 @@ function createMockUser(overrides: Partial<User> = {}): User {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    // Email verification fields
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
     ...overrides,
   };
 }

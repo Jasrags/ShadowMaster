@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState, useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { EnvironmentBadge } from "@/components/EnvironmentBadge";
+import { EmailVerificationBanner } from "@/components/auth/EmailVerificationBanner";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -338,6 +339,8 @@ export default function AuthenticatedLayout({
           className={`flex-1 transition-all duration-300 lg:ml-${isCollapsed ? "16" : "60"}`}
           style={{ marginLeft: isCollapsed ? "4rem" : undefined }} // Inline style as fallback/override for dynamic class
         >
+          {/* Email Verification Banner - in document flow, spans full width */}
+          <EmailVerificationBanner />
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>

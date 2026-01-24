@@ -4,6 +4,7 @@ import { hashPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
 import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
+import { sendVerificationEmail } from "@/lib/auth/email-verification";
 import type { SignupRequest, AuthResponse } from "@/lib/types/user";
 
 export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
@@ -62,6 +63,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     });
 
     createSession(user.id, response);
+
+    // Send verification email (non-blocking)
+    const protocol = request.headers.get("x-forwarded-proto") || "http";
+    const host = request.headers.get("host") || "localhost:3000";
+    const baseUrl = `${protocol}://${host}`;
+
+    sendVerificationEmail(user.id, user.email, user.username, baseUrl).catch((err) => {
+      console.error("Failed to send verification email:", err);
+    });
 
     return response;
   } catch (error) {

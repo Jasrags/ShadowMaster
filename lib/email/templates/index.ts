@@ -11,6 +11,10 @@ import type { ReactElement } from "react";
 export { BaseEmailLayout, EmailText, EmailButton, EmailInfoBox } from "./base";
 export type { BaseEmailLayoutProps } from "./base";
 
+// Export verification email template
+export { VerificationEmailTemplate } from "./verification-email";
+export type { VerificationEmailTemplateProps } from "./verification-email";
+
 /**
  * Rendered template output
  */

@@ -9,7 +9,11 @@ export type SecurityEvent =
   | "signup.success"
   | "lockout.triggered"
   | "lockout.expired"
-  | "password.change";
+  | "password.change"
+  | "verification.sent"
+  | "verification.success"
+  | "verification.failed"
+  | "verification.rate_limited";
 
 export interface SecurityRecord {
   timestamp: string;

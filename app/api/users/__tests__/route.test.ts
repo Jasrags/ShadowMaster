@@ -49,6 +49,10 @@ describe("GET /api/users", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockUsers: User[] = [
@@ -71,6 +75,10 @@ describe("GET /api/users", () => {
       statusReason: null,
       lastRoleChangeAt: null,
       lastRoleChangeBy: null,
+      emailVerified: true,
+      emailVerifiedAt: null,
+      emailVerificationTokenHash: null,
+      emailVerificationTokenExpiresAt: null,
     },
     {
       id: "user-2",
@@ -91,6 +99,10 @@ describe("GET /api/users", () => {
       statusReason: null,
       lastRoleChangeAt: null,
       lastRoleChangeBy: null,
+      emailVerified: true,
+      emailVerifiedAt: null,
+      emailVerificationTokenHash: null,
+      emailVerificationTokenExpiresAt: null,
     },
     {
       id: "user-3",
@@ -111,6 +123,10 @@ describe("GET /api/users", () => {
       statusReason: null,
       lastRoleChangeAt: null,
       lastRoleChangeBy: null,
+      emailVerified: true,
+      emailVerifiedAt: null,
+      emailVerificationTokenHash: null,
+      emailVerificationTokenExpiresAt: null,
     },
   ];
 
