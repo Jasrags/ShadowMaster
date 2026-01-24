@@ -5,10 +5,27 @@ import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
 import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 import { sendVerificationEmail } from "@/lib/auth/email-verification";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { AuditLogger } from "@/lib/security/audit-logger";
 import type { SignupRequest, AuthResponse } from "@/lib/types/user";
 
+// Rate limit: 5 signups per hour per IP
+const SIGNUP_LIMIT = { windowMs: 60 * 60 * 1000, max: 5 };
+
 export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
+  const ip = request.headers.get("x-forwarded-for") || "unknown";
+
   try {
+    // Rate limiting check (before parsing body)
+    const rateLimiter = RateLimiter.get("signup", SIGNUP_LIMIT);
+    if (rateLimiter.isRateLimited(ip)) {
+      await AuditLogger.log({ event: "signup.rate_limited", ip });
+      return NextResponse.json(
+        { success: false, error: "Too many signup attempts. Please try again later." },
+        { status: 429 }
+      );
+    }
+
     const body: SignupRequest = await request.json();
     const { email, username, password } = body;
 
@@ -62,7 +79,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       user: toPublicUser(user),
     });
 
-    createSession(user.id, response);
+    await createSession(user.id, response);
 
     // Send verification email (non-blocking)
     const protocol = request.headers.get("x-forwarded-proto") || "http";

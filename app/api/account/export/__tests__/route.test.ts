@@ -58,6 +58,7 @@ describe("GET /api/account/export", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 3,
+    sessionSecretHash: null,
     preferences: {
       theme: "dark",
       navigationCollapsed: true,

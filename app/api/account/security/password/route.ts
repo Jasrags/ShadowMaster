@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
 import { verifyPassword, hashPassword } from "@/lib/auth/password";
+import { isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 
 /**
  * POST: Secure password transition requiring current password verification
@@ -34,6 +35,15 @@ export async function POST(req: NextRequest) {
       return NextResponse.json(
         { success: false, error: "Incorrect current password" },
         { status: 401 }
+      );
+    }
+
+    // Validate new password strength (defense-in-depth)
+    if (!isStrongPassword(newPassword)) {
+      const errorMessage = getPasswordStrengthError(newPassword);
+      return NextResponse.json(
+        { success: false, error: errorMessage || "Password does not meet strength requirements" },
+        { status: 400 }
       );
     }
 

@@ -12,6 +12,7 @@ import * as storageModule from "@/lib/storage/users";
 import * as passwordModule from "@/lib/auth/password";
 import * as sessionModule from "@/lib/auth/session";
 import * as validationModule from "@/lib/auth/validation";
+import { RateLimiter } from "@/lib/security/rate-limit";
 import type { User } from "@/lib/types/user";
 
 // Mock dependencies
@@ -19,6 +20,8 @@ vi.mock("@/lib/storage/users");
 vi.mock("@/lib/auth/password");
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/auth/validation");
+vi.mock("@/lib/security/rate-limit");
+vi.mock("@/lib/security/audit-logger");
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
@@ -49,6 +52,7 @@ describe("POST /api/auth/signup", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
@@ -71,6 +75,11 @@ describe("POST /api/auth/signup", () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
+
+    // Default rate limiter mock (not rate limited)
+    vi.mocked(RateLimiter.get).mockReturnValue({
+      isRateLimited: vi.fn().mockReturnValue(false),
+    } as unknown as RateLimiter);
   });
 
   it("should create user successfully with valid data", async () => {
@@ -224,6 +233,7 @@ describe("POST /api/auth/signup", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       preferences: {
         theme: "system",
         navigationCollapsed: false,

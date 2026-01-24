@@ -223,6 +223,7 @@ describe("email-verification", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       accountStatus: "active",
       statusChangedAt: null,
       statusChangedBy: null,

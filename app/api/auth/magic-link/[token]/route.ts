@@ -37,7 +37,7 @@ export async function GET(request: NextRequest, { params }: RouteParams): Promis
     const response = NextResponse.redirect(new URL("/", baseUrl));
 
     // Create session cookie
-    createSession(result.userId, response, result.sessionVersion);
+    await createSession(result.userId, response, result.sessionVersion);
 
     return response;
   }

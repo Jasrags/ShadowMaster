@@ -137,6 +137,7 @@ function createMockUser(overrides?: Partial<User>): User {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,

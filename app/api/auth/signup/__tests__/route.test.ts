@@ -2,7 +2,7 @@
  * Tests for /api/auth/signup endpoint
  *
  * Tests user registration functionality including validation,
- * password hashing, session creation, and error handling.
+ * password hashing, session creation, rate limiting, and error handling.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
@@ -12,6 +12,8 @@ import * as storageModule from "@/lib/storage/users";
 import * as passwordModule from "@/lib/auth/password";
 import * as sessionModule from "@/lib/auth/session";
 import * as validationModule from "@/lib/auth/validation";
+import { RateLimiter } from "@/lib/security/rate-limit";
+import { AuditLogger } from "@/lib/security/audit-logger";
 import type { User } from "@/lib/types/user";
 
 // Mock dependencies
@@ -19,6 +21,8 @@ vi.mock("@/lib/storage/users");
 vi.mock("@/lib/auth/password");
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/auth/validation");
+vi.mock("@/lib/security/rate-limit");
+vi.mock("@/lib/security/audit-logger");
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
@@ -54,6 +58,7 @@ describe("POST /api/auth/signup", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
@@ -81,6 +86,11 @@ describe("POST /api/auth/signup", () => {
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(validationModule.getPasswordStrengthError).mockReturnValue(null);
+
+    // Default rate limiter mock (not rate limited)
+    vi.mocked(RateLimiter.get).mockReturnValue({
+      isRateLimited: vi.fn().mockReturnValue(false),
+    } as unknown as RateLimiter);
   });
 
   it("should create user successfully with valid data", async () => {
@@ -416,5 +426,102 @@ describe("POST /api/auth/signup", () => {
     await POST(request);
 
     expect(sessionModule.createSession).toHaveBeenCalledWith(mockUser.id, expect.any(Object));
+  });
+
+  describe("rate limiting", () => {
+    it("should return 429 when rate limited", async () => {
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: vi.fn().mockReturnValue(true),
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      const request = createMockRequest(
+        "http://localhost:3000/api/auth/signup",
+        requestBody,
+        "POST"
+      );
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(429);
+      expect(data.success).toBe(false);
+      expect(data.error).toBe("Too many signup attempts. Please try again later.");
+      expect(AuditLogger.log).toHaveBeenCalledWith({
+        event: "signup.rate_limited",
+        ip: expect.any(String),
+      });
+      expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+      expect(storageModule.createUser).not.toHaveBeenCalled();
+    });
+
+    it("should allow signup when not rate limited", async () => {
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: vi.fn().mockReturnValue(false),
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
+      vi.mocked(passwordModule.hashPassword).mockResolvedValue("hashed-password");
+      vi.mocked(storageModule.createUser).mockResolvedValue(mockUser);
+
+      const request = createMockRequest(
+        "http://localhost:3000/api/auth/signup",
+        requestBody,
+        "POST"
+      );
+
+      const response = await POST(request);
+      const data = await response.json();
+
+      expect(response.status).toBe(200);
+      expect(data.success).toBe(true);
+      expect(RateLimiter.get).toHaveBeenCalledWith("signup", {
+        windowMs: 60 * 60 * 1000,
+        max: 5,
+      });
+    });
+
+    it("should use x-forwarded-for header for IP", async () => {
+      const mockIsRateLimited = vi.fn().mockReturnValue(false);
+      vi.mocked(RateLimiter.get).mockReturnValue({
+        isRateLimited: mockIsRateLimited,
+      } as unknown as RateLimiter);
+
+      const requestBody = {
+        email: "newuser@example.com",
+        username: "newuser",
+        password: "ValidPass123!",
+      };
+
+      vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
+      vi.mocked(passwordModule.hashPassword).mockResolvedValue("hashed-password");
+      vi.mocked(storageModule.createUser).mockResolvedValue(mockUser);
+
+      const headers = new Headers();
+      headers.set("Content-Type", "application/json");
+      headers.set("x-forwarded-for", "192.168.1.100");
+
+      const request = new NextRequest("http://localhost:3000/api/auth/signup", {
+        method: "POST",
+        body: JSON.stringify(requestBody),
+        headers,
+      });
+      (request as { json: () => Promise<unknown> }).json = async () => requestBody;
+
+      await POST(request);
+
+      expect(mockIsRateLimited).toHaveBeenCalledWith("192.168.1.100");
+    });
   });
 });

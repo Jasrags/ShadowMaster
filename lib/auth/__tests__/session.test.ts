@@ -1,15 +1,16 @@
 /**
- * Tests for session management
+ * Tests for session management with cryptographic session secrets
  *
- * Tests session cookie creation, retrieval, and clearing.
+ * Tests session cookie creation, retrieval, clearing, and cryptographic verification.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createSession, getSession, clearSession } from "../session";
+import { createSession, getSession, clearSession, generateSessionSecret } from "../session";
 import { cookies } from "next/headers";
-import { getUserById } from "../../storage/users";
+import { getUserById, setSessionSecretHash } from "../../storage/users";
 import { NextResponse } from "next/server";
 import type { User } from "../../types/user";
+import { createHash } from "crypto";
 
 // Mock next/headers
 vi.mock("next/headers", () => ({
@@ -19,6 +20,7 @@ vi.mock("next/headers", () => ({
 // Mock user storage
 vi.mock("../../storage/users", () => ({
   getUserById: vi.fn(),
+  setSessionSecretHash: vi.fn(),
 }));
 
 // Mock NextResponse
@@ -52,6 +54,7 @@ describe("Session Management", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
@@ -86,19 +89,55 @@ describe("Session Management", () => {
     vi.mocked(cookies).mockResolvedValue(
       mockCookieStore as unknown as Awaited<ReturnType<typeof cookies>>
     );
+    vi.mocked(setSessionSecretHash).mockResolvedValue(mockUser);
+  });
+
+  describe("generateSessionSecret", () => {
+    it("should generate a 256-bit secret (43 base64url characters)", () => {
+      const { secret, secretHash } = generateSessionSecret();
+
+      // base64url encoding of 32 bytes = 43 characters
+      expect(secret).toHaveLength(43);
+      // SHA-256 hash as hex = 64 characters
+      expect(secretHash).toHaveLength(64);
+    });
+
+    it("should generate different secrets each time", () => {
+      const { secret: secret1 } = generateSessionSecret();
+      const { secret: secret2 } = generateSessionSecret();
+
+      expect(secret1).not.toBe(secret2);
+    });
+
+    it("should generate valid base64url format", () => {
+      const { secret } = generateSessionSecret();
+
+      // base64url uses only these characters
+      expect(secret).toMatch(/^[A-Za-z0-9_-]+$/);
+    });
+
+    it("should produce hash that matches re-hashing the secret", () => {
+      const { secret, secretHash } = generateSessionSecret();
+
+      // Decode secret and hash it
+      const secretBuffer = Buffer.from(secret, "base64url");
+      const recomputedHash = createHash("sha256").update(secretBuffer).digest("hex");
+
+      expect(recomputedHash).toBe(secretHash);
+    });
   });
 
   describe("createSession", () => {
-    it("should set session cookie with user ID and version", () => {
+    it("should set session cookie with user ID, version, and secret", async () => {
       const response = mockNextResponse as unknown as NextResponse;
       const userId = "test-user-id";
       const sessionVersion = 1;
 
-      createSession(userId, response, sessionVersion);
+      await createSession(userId, response, sessionVersion);
 
       expect(response.cookies.set).toHaveBeenCalledWith(
         "session",
-        `${userId}:${sessionVersion}`,
+        expect.stringMatching(/^test-user-id:1:[A-Za-z0-9_-]{43}$/),
         expect.objectContaining({
           httpOnly: true,
           sameSite: "lax",
@@ -107,12 +146,25 @@ describe("Session Management", () => {
       );
     });
 
-    it("should set secure flag in production", () => {
+    it("should store secret hash server-side", async () => {
+      const response = mockNextResponse as unknown as NextResponse;
+      const userId = "test-user-id";
+
+      await createSession(userId, response);
+
+      expect(setSessionSecretHash).toHaveBeenCalledWith(
+        userId,
+        expect.stringMatching(/^[a-f0-9]{64}$/) // SHA-256 hex hash
+      );
+    });
+
+    it("should set secure flag in production", async () => {
       vi.stubEnv("NODE_ENV", "production");
 
       const response = mockNextResponse as unknown as NextResponse;
       vi.clearAllMocks();
-      createSession("user-id", response);
+      vi.mocked(setSessionSecretHash).mockResolvedValue(mockUser);
+      await createSession("user-id", response);
 
       expect(response.cookies.set).toHaveBeenCalledWith(
         expect.any(String),
@@ -121,12 +173,13 @@ describe("Session Management", () => {
       );
     });
 
-    it("should not set secure flag in development", () => {
+    it("should not set secure flag in development", async () => {
       vi.stubEnv("NODE_ENV", "development");
 
       const response = mockNextResponse as unknown as NextResponse;
       vi.clearAllMocks();
-      createSession("user-id", response);
+      vi.mocked(setSessionSecretHash).mockResolvedValue(mockUser);
+      await createSession("user-id", response);
 
       expect(response.cookies.set).toHaveBeenCalledWith(
         expect.any(String),
@@ -135,10 +188,11 @@ describe("Session Management", () => {
       );
     });
 
-    it("should set expiration date", () => {
+    it("should set expiration date", async () => {
       const response = mockNextResponse as unknown as NextResponse;
       vi.clearAllMocks();
-      createSession("user-id", response);
+      vi.mocked(setSessionSecretHash).mockResolvedValue(mockUser);
+      await createSession("user-id", response);
 
       const setCall = vi.mocked(response.cookies.set).mock.calls[0];
       expect(setCall).toBeDefined();
@@ -155,12 +209,19 @@ describe("Session Management", () => {
   });
 
   describe("getSession", () => {
-    it("should retrieve user ID from session cookie when version matches", async () => {
-      mockCookieStore.get.mockReturnValue({ name: "session", value: "test-user-id:1" });
+    it("should retrieve user ID when secret hash matches", async () => {
+      // Generate a real secret/hash pair
+      const { secret, secretHash } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
       vi.mocked(getUserById).mockResolvedValue({
         ...mockUser,
         id: "test-user-id",
         sessionVersion: 1,
+        sessionSecretHash: secretHash,
       });
 
       const userId = await getSession();
@@ -170,12 +231,57 @@ describe("Session Management", () => {
       expect(getUserById).toHaveBeenCalledWith("test-user-id");
     });
 
-    it("should return null when version does not match", async () => {
-      mockCookieStore.get.mockReturnValue({ name: "session", value: "test-user-id:1" });
+    it("should return null when secret does not match", async () => {
+      const { secret } = generateSessionSecret();
+      const { secretHash: differentHash } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
       vi.mocked(getUserById).mockResolvedValue({
         ...mockUser,
         id: "test-user-id",
-        sessionVersion: 2,
+        sessionVersion: 1,
+        sessionSecretHash: differentHash, // Different hash
+      });
+
+      const userId = await getSession();
+
+      expect(userId).toBeNull();
+    });
+
+    it("should return null when user has no secret hash stored", async () => {
+      const { secret } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
+      vi.mocked(getUserById).mockResolvedValue({
+        ...mockUser,
+        id: "test-user-id",
+        sessionVersion: 1,
+        sessionSecretHash: null, // No hash stored
+      });
+
+      const userId = await getSession();
+
+      expect(userId).toBeNull();
+    });
+
+    it("should return null when version does not match", async () => {
+      const { secret, secretHash } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
+      vi.mocked(getUserById).mockResolvedValue({
+        ...mockUser,
+        id: "test-user-id",
+        sessionVersion: 2, // Different version
+        sessionSecretHash: secretHash,
       });
 
       const userId = await getSession();
@@ -184,7 +290,12 @@ describe("Session Management", () => {
     });
 
     it("should return null when user does not exist", async () => {
-      mockCookieStore.get.mockReturnValue({ name: "session", value: "test-user-id:1" });
+      const { secret } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
       vi.mocked(getUserById).mockResolvedValue(null);
 
       const userId = await getSession();
@@ -200,8 +311,36 @@ describe("Session Management", () => {
       expect(userId).toBeNull();
     });
 
-    it("should return null when session cookie has invalid format", async () => {
-      mockCookieStore.get.mockReturnValue({ name: "session", value: "test-user-id" });
+    it("should reject legacy session format (userId:version only)", async () => {
+      // Old format without secret - should be rejected for security
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: "test-user-id:1", // No secret
+      });
+      vi.mocked(getUserById).mockResolvedValue({
+        ...mockUser,
+        id: "test-user-id",
+        sessionVersion: 1,
+      });
+
+      const userId = await getSession();
+
+      expect(userId).toBeNull();
+    });
+
+    it("should reject tampered session secret", async () => {
+      const { secretHash } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: "test-user-id:1:AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA0", // Tampered
+      });
+      vi.mocked(getUserById).mockResolvedValue({
+        ...mockUser,
+        id: "test-user-id",
+        sessionVersion: 1,
+        sessionSecretHash: secretHash,
+      });
 
       const userId = await getSession();
 
@@ -227,6 +366,36 @@ describe("Session Management", () => {
       const SESSION_DURATION_MS = SESSION_DURATION_DAYS * 24 * 60 * 60 * 1000;
 
       expect(SESSION_DURATION_MS).toBe(7 * 24 * 60 * 60 * 1000);
+    });
+  });
+
+  describe("timing-safe comparison", () => {
+    it("should use timing-safe comparison to prevent timing attacks", async () => {
+      // This test documents that we use timing-safe comparison.
+      // The implementation uses crypto.timingSafeEqual which provides
+      // constant-time comparison to prevent timing side-channel attacks.
+      //
+      // A timing attack would measure how long the comparison takes to
+      // determine how many characters match. By using constant-time
+      // comparison, an attacker cannot learn any information about
+      // the correct secret value from response timing.
+      const { secret, secretHash } = generateSessionSecret();
+
+      mockCookieStore.get.mockReturnValue({
+        name: "session",
+        value: `test-user-id:1:${secret}`,
+      });
+      vi.mocked(getUserById).mockResolvedValue({
+        ...mockUser,
+        id: "test-user-id",
+        sessionVersion: 1,
+        sessionSecretHash: secretHash,
+      });
+
+      // Both valid and invalid should complete in similar time
+      // (we can't easily test timing, but we verify the correct result)
+      const result = await getSession();
+      expect(result).toBe("test-user-id");
     });
   });
 });

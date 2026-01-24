@@ -211,6 +211,7 @@ describe("password-reset", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       accountStatus: "active",
       statusChangedAt: null,
       statusChangedBy: null,
@@ -273,6 +274,7 @@ describe("password-reset", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       accountStatus: "active",
       statusChangedAt: null,
       statusChangedBy: null,
@@ -364,6 +366,31 @@ describe("password-reset", () => {
         })
       );
     });
+
+    it("should reject weak password (defense-in-depth)", async () => {
+      vi.mocked(usersStorage.getUserByPasswordResetToken).mockResolvedValue(mockUser);
+
+      const result = await resetPassword("valid-token", "weak");
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBe("weak_password");
+      expect(usersStorage.updateUserPassword).not.toHaveBeenCalled();
+    });
+
+    it("should log weak password rejection", async () => {
+      vi.mocked(usersStorage.getUserByPasswordResetToken).mockResolvedValue(mockUser);
+
+      await resetPassword("valid-token", "weak");
+
+      expect(AuditLogger.log).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: "password_reset.failed",
+          userId: mockUser.id,
+          email: mockUser.email,
+          metadata: expect.objectContaining({ reason: "weak_password" }),
+        })
+      );
+    });
   });
 
   describe("requestPasswordReset", () => {
@@ -380,6 +407,7 @@ describe("password-reset", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       accountStatus: "active",
       statusChangedAt: null,
       statusChangedBy: null,

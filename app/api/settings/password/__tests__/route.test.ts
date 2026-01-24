@@ -55,6 +55,7 @@ describe("POST /api/settings/password", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
@@ -86,7 +87,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "oldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -101,7 +102,7 @@ describe("POST /api/settings/password", () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
 
     const request = createMockRequest({
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -125,7 +126,7 @@ describe("POST /api/settings/password", () => {
     expect(data.error).toBe("Missing required fields");
   });
 
-  it("should return 400 when newPassword is less than 8 characters", async () => {
+  it("should return 400 when newPassword is too weak (defense-in-depth)", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
 
     const request = createMockRequest({
@@ -137,7 +138,22 @@ describe("POST /api/settings/password", () => {
     const data = await response.json();
 
     expect(response.status).toBe(400);
-    expect(data.error).toBe("New password must be at least 8 characters long");
+    expect(data.error).toContain("Password must");
+  });
+
+  it("should return 400 when newPassword is missing required characters", async () => {
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+
+    const request = createMockRequest({
+      currentPassword: "oldpassword",
+      newPassword: "verylongbutnospecialchars1",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.error).toContain("uppercase");
   });
 
   it("should return 404 when user not found", async () => {
@@ -146,7 +162,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "oldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -163,7 +179,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "wrongpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -185,7 +201,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "wrongpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     await POST(request);
@@ -214,7 +230,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -222,7 +238,7 @@ describe("POST /api/settings/password", () => {
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(passwordModule.hashPassword).toHaveBeenCalledWith("newpassword123");
+    expect(passwordModule.hashPassword).toHaveBeenCalledWith("NewPassword123!");
     expect(storageModule.updateUser).toHaveBeenCalledWith("test-user-id", {
       passwordHash: "new-hashed-password",
     });
@@ -240,7 +256,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     await POST(request);
@@ -260,7 +276,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     await POST(request);
@@ -285,7 +301,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     await POST(request);
@@ -303,7 +319,7 @@ describe("POST /api/settings/password", () => {
 
     const request = createMockRequest({
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
