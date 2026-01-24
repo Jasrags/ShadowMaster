@@ -4,6 +4,7 @@ import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/
 import { verifyPassword, hashPassword } from "@/lib/auth/password";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
+import { isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -20,9 +21,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
-    if (newPassword.length < 8) {
+    // Validate new password strength (defense-in-depth)
+    if (!isStrongPassword(newPassword)) {
+      const errorMessage = getPasswordStrengthError(newPassword);
       return NextResponse.json(
-        { error: "New password must be at least 8 characters long" },
+        { error: errorMessage || "Password does not meet strength requirements" },
         { status: 400 }
       );
     }

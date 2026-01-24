@@ -82,7 +82,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "oldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -98,7 +98,7 @@ describe("POST /api/account/security/password", () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -130,7 +130,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "oldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -148,7 +148,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "wrongpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -164,6 +164,25 @@ describe("POST /api/account/security/password", () => {
     expect(storageModule.updateUser).not.toHaveBeenCalled();
   });
 
+  it("should return 400 when new password is too weak (defense-in-depth)", async () => {
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+
+    const request = createMockRequest("http://localhost:3000/api/account/security/password", {
+      currentPassword: "correctoldpassword",
+      newPassword: "weak",
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toContain("Password must");
+    expect(storageModule.updateUser).not.toHaveBeenCalled();
+  });
+
   it("should update password hash on success", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
@@ -176,7 +195,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);
@@ -184,7 +203,7 @@ describe("POST /api/account/security/password", () => {
 
     expect(response.status).toBe(200);
     expect(data.success).toBe(true);
-    expect(passwordModule.hashPassword).toHaveBeenCalledWith("newpassword123");
+    expect(passwordModule.hashPassword).toHaveBeenCalledWith("NewPassword123!");
     expect(storageModule.updateUser).toHaveBeenCalledWith("test-user-id", {
       passwordHash: "new-hashed-password",
     });
@@ -202,7 +221,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     await POST(request);
@@ -220,7 +239,7 @@ describe("POST /api/account/security/password", () => {
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
-      newPassword: "newpassword123",
+      newPassword: "NewPassword123!",
     });
 
     const response = await POST(request);

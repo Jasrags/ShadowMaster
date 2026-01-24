@@ -25,6 +25,7 @@ import { sendEmail, renderTemplate } from "@/lib/email";
 import { PasswordResetEmailTemplate } from "@/lib/email/templates/password-reset-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
+import { isStrongPassword } from "./validation";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
 const TOKEN_BYTES = 32;
@@ -265,6 +266,17 @@ export async function resetPassword(
         });
         return { success: false, error: "expired_token", userId: user.id };
       }
+    }
+
+    // Validate new password strength (defense-in-depth)
+    if (!isStrongPassword(newPassword)) {
+      await AuditLogger.log({
+        event: "password_reset.failed",
+        userId: user.id,
+        email: user.email,
+        metadata: { reason: "weak_password" },
+      });
+      return { success: false, error: "weak_password" };
     }
 
     // Hash the new password
