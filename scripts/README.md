@@ -9,6 +9,7 @@ Administrative and development scripts for managing the Shadow Master applicatio
 | `backup.ts`              | Backup/restore data          | `pnpm backup create`                     |
 | `health-check.ts`        | Data integrity check         | `pnpm health-check`                      |
 | `seed-data.ts`           | Create test data             | `pnpm seed-data`                         |
+| `test-email.ts`          | Send test email              | `npx tsx scripts/test-email.ts`          |
 | `user-admin.ts`          | User management              | `pnpm user-admin list`                   |
 | `validate-claude-md.ts`  | Validate CLAUDE.md accuracy  | `pnpm validate-docs`                     |
 | `check-test-coverage.ts` | Check for missing tests      | `pnpm check-tests`                       |
@@ -122,6 +123,51 @@ npx tsx scripts/seed-data.ts --minimal
 - 2 campaigns
 
 **Default password:** `password123`
+
+---
+
+### test-email.ts
+
+Sends a test email using the configured email transport.
+
+```bash
+# Send test email (uses configured transport)
+npx tsx scripts/test-email.ts
+
+# Send to specific recipient
+npx tsx scripts/test-email.ts recipient@example.com
+```
+
+**Environment variables:**
+
+- `EMAIL_TRANSPORT` - Transport type: `smtp`, `resend`, or `file` (default: `file`)
+- `EMAIL_FROM` - Sender email address
+- `EMAIL_FROM_NAME` - Sender display name
+- `SMTP_HOST` - SMTP server hostname (required for smtp transport)
+- `SMTP_PORT` - SMTP server port (default: 587)
+- `RESEND_API_KEY` - Resend API key (required for resend transport)
+
+**Example with SMTP (Mailpit):**
+
+```bash
+# Start Mailpit first
+docker compose up -d mailpit
+
+# Send test email via SMTP
+EMAIL_TRANSPORT=smtp SMTP_HOST=localhost SMTP_PORT=1025 npx tsx scripts/test-email.ts
+
+# View email at http://localhost:8025
+```
+
+**Example with file transport:**
+
+```bash
+# Emails saved to data/emails/
+npx tsx scripts/test-email.ts
+
+# Check the output
+ls data/emails/
+```
 
 ---
 
