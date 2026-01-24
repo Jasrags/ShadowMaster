@@ -25,6 +25,8 @@ export type NewUserData = Omit<
   | "emailVerificationTokenExpiresAt"
   | "passwordResetTokenHash"
   | "passwordResetTokenExpiresAt"
+  | "magicLinkTokenHash"
+  | "magicLinkTokenExpiresAt"
 >;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
@@ -139,6 +141,9 @@ function normalizeUserDefaults(user: User): User {
     // Password reset fields
     passwordResetTokenHash: user.passwordResetTokenHash ?? null,
     passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt ?? null,
+    // Magic link fields
+    magicLinkTokenHash: user.magicLinkTokenHash ?? null,
+    magicLinkTokenExpiresAt: user.magicLinkTokenExpiresAt ?? null,
   };
 }
 
@@ -222,6 +227,9 @@ export async function createUser(userData: NewUserData): Promise<User> {
     // Initialize password reset fields
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    // Initialize magic link fields
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
   };
 
   // Atomic write: write to temp file, then rename
@@ -766,4 +774,67 @@ export async function updateUserPassword(userId: string, newPasswordHash: string
     passwordResetTokenExpiresAt: null,
     sessionVersion: (user.sessionVersion || 0) + 1,
   });
+}
+
+// =============================================================================
+// MAGIC LINK FUNCTIONS
+// =============================================================================
+
+/**
+ * Set magic link token for a user
+ *
+ * @param userId - The user to set the token for
+ * @param tokenHash - The bcrypt hash of the magic link token
+ * @param expiresAt - When the token expires (ISO 8601 string)
+ */
+export async function setMagicLinkToken(
+  userId: string,
+  tokenHash: string,
+  expiresAt: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    magicLinkTokenHash: tokenHash,
+    magicLinkTokenExpiresAt: expiresAt,
+  });
+}
+
+/**
+ * Clear magic link token for a user
+ *
+ * @param userId - The user to clear the token for
+ */
+export async function clearMagicLinkToken(userId: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
+  });
+}
+
+/**
+ * Find a user by their magic link token
+ * Iterates through all users and compares the token hash using bcrypt
+ *
+ * @param token - The plain text magic link token
+ * @returns The user if found and token matches, null otherwise
+ */
+export async function getUserByMagicLinkToken(token: string): Promise<User | null> {
+  const bcrypt = await import("bcryptjs");
+  const users = await getAllUsers();
+
+  for (const user of users) {
+    if (user.magicLinkTokenHash) {
+      const matches = await bcrypt.compare(token, user.magicLinkTokenHash);
+      if (matches) {
+        return user;
+      }
+    }
+  }
+
+  return null;
 }

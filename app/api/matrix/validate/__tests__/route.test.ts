@@ -153,6 +153,8 @@ function createMockUser(overrides?: Partial<User>): User {
     emailVerificationTokenExpiresAt: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
     ...overrides,
   };
 }

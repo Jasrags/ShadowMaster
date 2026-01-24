@@ -44,6 +44,8 @@ describe("GET /api/notifications", () => {
     emailVerificationTokenExpiresAt: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
   };
 
   const mockNotifications: CampaignNotification[] = [

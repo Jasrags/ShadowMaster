@@ -19,6 +19,10 @@ export type { VerificationEmailTemplateProps } from "./verification-email";
 export { PasswordResetEmailTemplate } from "./password-reset-email";
 export type { PasswordResetEmailTemplateProps } from "./password-reset-email";
 
+// Export magic link email template
+export { MagicLinkEmailTemplate } from "./magic-link-email";
+export type { MagicLinkEmailTemplateProps } from "./magic-link-email";
+
 // Export security alert email templates
 export { LockoutAlertEmailTemplate } from "./lockout-alert";
 export type { LockoutAlertEmailTemplateProps } from "./lockout-alert";
