@@ -46,6 +46,8 @@ export interface GeneratedResetToken {
   tokenHash: string;
   /** Expiration timestamp (ISO 8601) */
   expiresAt: string;
+  /** First 6 chars of token for O(1) prefix filtering */
+  tokenPrefix: string;
 }
 
 /**
@@ -91,10 +93,14 @@ export async function generatePasswordResetToken(): Promise<GeneratedResetToken>
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + TOKEN_EXPIRY_HOURS);
 
+  // Extract prefix for O(1) filtering (non-secret, just for fast lookup)
+  const tokenPrefix = token.substring(0, 6);
+
   return {
     token,
     tokenHash,
     expiresAt: expiresAt.toISOString(),
+    tokenPrefix,
   };
 }
 
@@ -120,10 +126,10 @@ export async function sendPasswordResetEmail(
     await clearPasswordResetToken(userId);
 
     // Generate a new token
-    const { token, tokenHash, expiresAt } = await generatePasswordResetToken();
+    const { token, tokenHash, expiresAt, tokenPrefix } = await generatePasswordResetToken();
 
-    // Store the token hash in the user record
-    await setPasswordResetToken(userId, tokenHash, expiresAt);
+    // Store the token hash and prefix in the user record
+    await setPasswordResetToken(userId, tokenHash, expiresAt, tokenPrefix);
 
     // Build the reset URL
     const resetUrl = `${baseUrl}/reset-password/${token}`;

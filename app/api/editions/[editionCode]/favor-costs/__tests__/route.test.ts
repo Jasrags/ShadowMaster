@@ -57,10 +57,13 @@ describe("GET /api/editions/[editionCode]/favor-costs", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const mockFavorServices: FavorServiceDefinition[] = [

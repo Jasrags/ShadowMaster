@@ -554,46 +554,52 @@ Authentication is the foundation of user security and access control in Shadow M
 
 ### 4. Rate Limiting
 
-**Current Status:** Not implemented (CRITICAL SECURITY GAP)
+**Current Status:** ✅ Implemented (in-memory)
 
-**Recommendations (High Priority):**
+**Implementation:**
 
 #### Sign-In Rate Limiting
 
-Implement rate limiting to prevent brute force attacks:
+- ✅ **IP Rate Limit:** 20 attempts per 15 minutes per IP
+- ✅ **Account Rate Limit:** 5 attempts per 15 minutes per email
+- ✅ **Response:** Returns 429 (Too Many Requests) after limit exceeded
+- ✅ **Recovery:** Automatic unlock after time window expires
+- ✅ **Account Lockout:** 5 failed password attempts triggers 15-minute lockout
 
-- **Limit:** 5 failed attempts per email per 15 minutes
-- **Action:** Temporarily block sign-in attempts for that email
-- **Response:** Return 429 (Too Many Requests) after limit exceeded
-- **Recovery:** Automatic unlock after time window expires
+**Implementation Details:**
 
-**Implementation Options:**
+- Uses in-memory Map with automatic cleanup
+- Dual-layer protection: IP limits + account limits + account lockout
+- Suitable for single-server file-based deployment
 
-1. **In-memory store** (simple, single-server only)
-   - Use Map with email → attempt count + timestamp
-   - Clear expired entries periodically
-   - Works for single-server deployments
+#### Accepted Risk: Persistent Rate Limiting (#175)
 
-2. **Redis** (recommended for production)
-   - Store attempt counts with TTL
-   - Works across multiple servers
-   - Better performance and scalability
+**Risk:** In-memory rate limiting resets on server restart, doesn't work across multiple server instances.
 
-3. **Database** (acceptable for file-based storage)
-   - Store attempt records in rate limit table
-   - Clean up old records periodically
-   - Works with current file-based storage
+**Mitigations in Place:**
+
+1. **Defense-in-depth:** Three layers of protection (IP rate limit, account rate limit, account lockout)
+2. **Account lockout persists:** Lockout data is stored in user JSON files, survives restarts
+3. **Single-server deployment:** File-based storage architecture already limits us to single-server
+
+**Accepted Because:**
+
+- The current file-based storage architecture already constrains us to single-server deployments
+- Account lockout (persistent) provides strong protection against password brute force
+- IP rate limiting provides adequate protection against distributed attacks for our scale
+- Moving to persistent rate limiting would require Redis/database infrastructure beyond current needs
+
+**Future Enhancement:** If scaling to multi-server deployment, implement Redis-based rate limiting alongside database migration.
 
 #### Sign-Up Rate Limiting
 
-- **Limit:** 3 registrations per IP per hour
+- ✅ **IP Rate Limit:** 3 registrations per IP per hour
 - **Purpose:** Prevent spam account creation
 - **Response:** Return 429 after limit exceeded
 
 #### API Rate Limiting (General)
 
-- Implement general rate limiting on all auth endpoints
-- **Limit:** 100 requests per IP per minute
+- ✅ All auth endpoints have rate limiting
 - **Purpose:** Prevent DDoS and abuse
 
 ---
@@ -659,17 +665,38 @@ Implement rate limiting to prevent brute force attacks:
 
 - ✅ SameSite cookie attribute set to "lax"
 - ✅ Uses POST for state-changing operations
+- ✅ All state-changing operations use POST/DELETE (protected by SameSite)
 
 **Best Practices Applied:**
 
 - SameSite="lax" prevents CSRF for same-site requests
 - POST requests for state changes (not GET)
 
+#### Accepted Risk: CSRF Tokens (#178)
+
+**Risk:** No explicit CSRF tokens beyond SameSite cookie protection.
+
+**Mitigations in Place:**
+
+1. **SameSite=Lax cookies:** Browser won't send cookies on cross-site POST requests
+2. **State-changing operations use POST/DELETE:** Protected by SameSite policy
+3. **httpOnly cookies:** Prevents JavaScript access to session cookies
+4. **No cross-origin AJAX to sensitive endpoints:** All auth requests are same-origin
+
+**Accepted Because:**
+
+- SameSite=Lax provides robust CSRF protection for modern browsers (95%+ support)
+- All state-changing operations already use POST/DELETE (SameSite protected)
+- Additional CSRF tokens would add complexity with minimal security benefit
+- No known attack vectors that bypass SameSite for our use cases
+- Standard practice for modern web applications
+
+**Browser Support:** SameSite=Lax is supported by all modern browsers. Legacy browsers without support are increasingly rare and represent a diminishing threat model.
+
 **Recommendations:**
 
+- Monitor for any emerging CSRF attack vectors that bypass SameSite
 - Consider SameSite="strict" for enhanced security (may break some flows)
-- Consider CSRF tokens for additional protection (Next.js built-in, future)
-- Verify Origin/Referer headers for sensitive operations (future)
 
 ---
 
@@ -981,8 +1008,9 @@ Use this checklist when reviewing authentication security:
 
 - [x] Generic error messages (no user enumeration)
 - [x] Constant-time password comparison
-- [ ] Rate limiting implemented
-- [ ] Account lockout implemented
+- [x] Timing-safe login (bcrypt always runs to prevent email enumeration)
+- [x] Rate limiting implemented (IP + account)
+- [x] Account lockout implemented
 - [ ] Login history tracked
 
 ### Session Security

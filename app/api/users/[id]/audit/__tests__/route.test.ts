@@ -44,10 +44,13 @@ describe("GET /api/users/[id]/audit", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const mockTargetUser: User = {
@@ -74,10 +77,13 @@ describe("GET /api/users/[id]/audit", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const mockAuditEntries: UserAuditEntry[] = [

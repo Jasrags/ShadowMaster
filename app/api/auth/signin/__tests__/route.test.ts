@@ -71,10 +71,13 @@ describe("POST /api/auth/signin", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   let mockIpLimiter: { isRateLimited: ReturnType<typeof vi.fn>; reset: ReturnType<typeof vi.fn> };
@@ -184,6 +187,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
+    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
@@ -193,13 +197,35 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Invalid email or password");
-    expect(passwordModule.verifyPassword).not.toHaveBeenCalled();
+    // verifyPassword should ALWAYS be called for timing-safe comparison
+    expect(passwordModule.verifyPassword).toHaveBeenCalled();
     expect(sessionModule.createSession).not.toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
         event: "signin.failure",
         metadata: { reason: "user_not_found" },
       })
+    );
+  });
+
+  it("should always call verifyPassword for timing-safe comparison (prevents email enumeration)", async () => {
+    const requestBody = {
+      email: "nonexistent@example.com",
+      password: "ValidPass123!",
+    };
+
+    vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
+    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+
+    const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
+
+    await POST(request);
+
+    // Verify that verifyPassword is called with a dummy hash when user doesn't exist
+    // This ensures consistent timing regardless of whether the user exists
+    expect(passwordModule.verifyPassword).toHaveBeenCalledWith(
+      "ValidPass123!",
+      expect.stringMatching(/^\$2a\$/) // bcrypt hash format
     );
   });
 
@@ -256,7 +282,8 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Account is temporarily locked. Please try again in 15 minutes.");
-    expect(passwordModule.verifyPassword).not.toHaveBeenCalled();
+    // With timing-safe login, verifyPassword is always called to prevent email enumeration via timing attacks
+    expect(passwordModule.verifyPassword).toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
         event: "lockout.triggered",

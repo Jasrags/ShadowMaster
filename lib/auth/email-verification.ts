@@ -42,6 +42,8 @@ export interface GeneratedToken {
   tokenHash: string;
   /** Expiration timestamp (ISO 8601) */
   expiresAt: string;
+  /** First 6 chars of token for O(1) prefix filtering */
+  tokenPrefix: string;
 }
 
 /**
@@ -78,10 +80,14 @@ export async function generateVerificationToken(): Promise<GeneratedToken> {
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + TOKEN_EXPIRY_HOURS);
 
+  // Extract prefix for O(1) filtering (non-secret, just for fast lookup)
+  const tokenPrefix = token.substring(0, 6);
+
   return {
     token,
     tokenHash,
     expiresAt: expiresAt.toISOString(),
+    tokenPrefix,
   };
 }
 
@@ -104,10 +110,10 @@ export async function sendVerificationEmail(
 ): Promise<{ success: boolean; error?: string }> {
   try {
     // Generate a new token
-    const { token, tokenHash, expiresAt } = await generateVerificationToken();
+    const { token, tokenHash, expiresAt, tokenPrefix } = await generateVerificationToken();
 
-    // Store the token hash in the user record
-    await setVerificationToken(userId, tokenHash, expiresAt);
+    // Store the token hash and prefix in the user record
+    await setVerificationToken(userId, tokenHash, expiresAt, tokenPrefix);
 
     // Build the verification URL
     const verifyUrl = `${baseUrl}/api/auth/verify-email/${token}`;

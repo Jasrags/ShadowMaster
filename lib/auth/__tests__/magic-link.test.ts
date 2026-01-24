@@ -115,10 +115,13 @@ describe("Magic Link Service", () => {
       emailVerifiedAt: new Date().toISOString(),
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
 
     beforeEach(() => {
@@ -149,7 +152,8 @@ describe("Magic Link Service", () => {
       expect(usersStorage.setMagicLinkToken).toHaveBeenCalledWith(
         mockUser.id,
         expect.any(String),
-        expect.any(String)
+        expect.any(String),
+        expect.any(String) // prefix
       );
       expect(email.sendEmail).toHaveBeenCalledWith({
         to: { email: mockUser.email, name: mockUser.username },
@@ -277,10 +281,13 @@ describe("Magic Link Service", () => {
       emailVerifiedAt: new Date().toISOString(),
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
 
     beforeEach(() => {
@@ -360,10 +367,13 @@ describe("Magic Link Service", () => {
       emailVerifiedAt: new Date().toISOString(),
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: "hash",
       magicLinkTokenExpiresAt: new Date(Date.now() + 900000).toISOString(), // 15 minutes from now
+      magicLinkTokenPrefix: null,
     };
 
     beforeEach(() => {
@@ -523,6 +533,9 @@ describe("Magic Link Service", () => {
         passwordResetTokenExpiresAt: null,
         magicLinkTokenHash: "hash",
         magicLinkTokenExpiresAt: new Date(Date.now() + 900000).toISOString(), // 15 minutes from now
+        emailVerificationTokenPrefix: null,
+        passwordResetTokenPrefix: null,
+        magicLinkTokenPrefix: "abc123",
       };
       vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithToken);
 
@@ -560,6 +573,9 @@ describe("Magic Link Service", () => {
         passwordResetTokenExpiresAt: null,
         magicLinkTokenHash: null,
         magicLinkTokenExpiresAt: null,
+        emailVerificationTokenPrefix: null,
+        passwordResetTokenPrefix: null,
+        magicLinkTokenPrefix: null,
       };
       vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithoutToken);
 
@@ -605,6 +621,9 @@ describe("Magic Link Service", () => {
         passwordResetTokenExpiresAt: null,
         magicLinkTokenHash: "hash",
         magicLinkTokenExpiresAt: new Date(Date.now() - 900000).toISOString(), // 15 minutes ago
+        emailVerificationTokenPrefix: null,
+        passwordResetTokenPrefix: null,
+        magicLinkTokenPrefix: "abc123",
       };
       vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithExpiredToken);
 

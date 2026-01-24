@@ -6,8 +6,21 @@ import type { User, PublicUser } from "../types/user";
  * Convert a User to PublicUser by stripping sensitive fields
  */
 export function toPublicUser(user: User): PublicUser {
-  // Destructure to remove passwordHash, spread the rest
-  const { passwordHash: _, ...publicUser } = user;
+  // Destructure to remove all sensitive fields, spread the rest
+  const {
+    passwordHash: _passwordHash,
+    sessionSecretHash: _sessionSecretHash,
+    emailVerificationTokenHash: _emailVerificationTokenHash,
+    emailVerificationTokenExpiresAt: _emailVerificationTokenExpiresAt,
+    emailVerificationTokenPrefix: _emailVerificationTokenPrefix,
+    passwordResetTokenHash: _passwordResetTokenHash,
+    passwordResetTokenExpiresAt: _passwordResetTokenExpiresAt,
+    passwordResetTokenPrefix: _passwordResetTokenPrefix,
+    magicLinkTokenHash: _magicLinkTokenHash,
+    magicLinkTokenExpiresAt: _magicLinkTokenExpiresAt,
+    magicLinkTokenPrefix: _magicLinkTokenPrefix,
+    ...publicUser
+  } = user;
   return publicUser;
 }
 

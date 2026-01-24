@@ -43,10 +43,13 @@ describe("middleware", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const mockAdminUser: User = {
@@ -66,6 +69,37 @@ describe("middleware", () => {
       const publicUser = toPublicUser(mockUser);
 
       expect(publicUser).not.toHaveProperty("passwordHash");
+    });
+
+    it("strips all sensitive token fields from user object", () => {
+      const userWithTokens: User = {
+        ...mockUser,
+        sessionSecretHash: "secret-hash",
+        emailVerificationTokenHash: "verification-hash",
+        emailVerificationTokenExpiresAt: "2024-01-01T00:00:00.000Z",
+        emailVerificationTokenPrefix: "abc123",
+        passwordResetTokenHash: "reset-hash",
+        passwordResetTokenExpiresAt: "2024-01-01T00:00:00.000Z",
+        passwordResetTokenPrefix: "def456",
+        magicLinkTokenHash: "magic-hash",
+        magicLinkTokenExpiresAt: "2024-01-01T00:00:00.000Z",
+        magicLinkTokenPrefix: "ghi789",
+      };
+
+      const publicUser = toPublicUser(userWithTokens);
+
+      // Verify all sensitive fields are stripped
+      expect(publicUser).not.toHaveProperty("passwordHash");
+      expect(publicUser).not.toHaveProperty("sessionSecretHash");
+      expect(publicUser).not.toHaveProperty("emailVerificationTokenHash");
+      expect(publicUser).not.toHaveProperty("emailVerificationTokenExpiresAt");
+      expect(publicUser).not.toHaveProperty("emailVerificationTokenPrefix");
+      expect(publicUser).not.toHaveProperty("passwordResetTokenHash");
+      expect(publicUser).not.toHaveProperty("passwordResetTokenExpiresAt");
+      expect(publicUser).not.toHaveProperty("passwordResetTokenPrefix");
+      expect(publicUser).not.toHaveProperty("magicLinkTokenHash");
+      expect(publicUser).not.toHaveProperty("magicLinkTokenExpiresAt");
+      expect(publicUser).not.toHaveProperty("magicLinkTokenPrefix");
     });
 
     it("preserves all other fields", () => {

@@ -24,10 +24,13 @@ export type NewUserData = Omit<
   | "emailVerifiedAt"
   | "emailVerificationTokenHash"
   | "emailVerificationTokenExpiresAt"
+  | "emailVerificationTokenPrefix"
   | "passwordResetTokenHash"
   | "passwordResetTokenExpiresAt"
+  | "passwordResetTokenPrefix"
   | "magicLinkTokenHash"
   | "magicLinkTokenExpiresAt"
+  | "magicLinkTokenPrefix"
 >;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
@@ -140,12 +143,15 @@ function normalizeUserDefaults(user: User): User {
     emailVerifiedAt: user.emailVerifiedAt ?? null,
     emailVerificationTokenHash: user.emailVerificationTokenHash ?? null,
     emailVerificationTokenExpiresAt: user.emailVerificationTokenExpiresAt ?? null,
+    emailVerificationTokenPrefix: user.emailVerificationTokenPrefix ?? null,
     // Password reset fields
     passwordResetTokenHash: user.passwordResetTokenHash ?? null,
     passwordResetTokenExpiresAt: user.passwordResetTokenExpiresAt ?? null,
+    passwordResetTokenPrefix: user.passwordResetTokenPrefix ?? null,
     // Magic link fields
     magicLinkTokenHash: user.magicLinkTokenHash ?? null,
     magicLinkTokenExpiresAt: user.magicLinkTokenExpiresAt ?? null,
+    magicLinkTokenPrefix: user.magicLinkTokenPrefix ?? null,
   };
 }
 
@@ -227,12 +233,15 @@ export async function createUser(userData: NewUserData): Promise<User> {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     // Initialize password reset fields
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     // Initialize magic link fields
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   // Atomic write: write to temp file, then rename
@@ -674,11 +683,13 @@ export async function updateUsername(
  * @param userId - The user to set the token for
  * @param tokenHash - The bcrypt hash of the verification token
  * @param expiresAt - When the token expires (ISO 8601 string)
+ * @param tokenPrefix - First 6 characters of plain token for O(1) filtering (optional for backward compatibility)
  */
 export async function setVerificationToken(
   userId: string,
   tokenHash: string,
-  expiresAt: string
+  expiresAt: string,
+  tokenPrefix?: string
 ): Promise<User> {
   const user = await getUserById(userId);
   if (!user) throw new Error("User not found");
@@ -686,6 +697,7 @@ export async function setVerificationToken(
   return updateUser(userId, {
     emailVerificationTokenHash: tokenHash,
     emailVerificationTokenExpiresAt: expiresAt,
+    emailVerificationTokenPrefix: tokenPrefix ?? null,
   });
 }
 
@@ -703,12 +715,13 @@ export async function markEmailVerified(userId: string): Promise<User> {
     emailVerifiedAt: new Date().toISOString(),
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
   });
 }
 
 /**
  * Find a user by their email verification token
- * Iterates through all users and compares the token hash using bcrypt
+ * Uses prefix-based filtering for O(1) average case, then bcrypt comparison
  *
  * @param token - The plain text verification token
  * @returns The user if found and token matches, null otherwise
@@ -716,8 +729,16 @@ export async function markEmailVerified(userId: string): Promise<User> {
 export async function getUserByVerificationToken(token: string): Promise<User | null> {
   const bcrypt = await import("bcryptjs");
   const users = await getAllUsers();
+  const tokenPrefix = token.substring(0, 6);
 
-  for (const user of users) {
+  // Filter by prefix first for O(1) average case (prevents DoS via bcrypt)
+  const candidates = users.filter(
+    (u) =>
+      u.emailVerificationTokenHash &&
+      (u.emailVerificationTokenPrefix === tokenPrefix || u.emailVerificationTokenPrefix === null)
+  );
+
+  for (const user of candidates) {
     if (user.emailVerificationTokenHash) {
       const matches = await bcrypt.compare(token, user.emailVerificationTokenHash);
       if (matches) {
@@ -739,11 +760,13 @@ export async function getUserByVerificationToken(token: string): Promise<User | 
  * @param userId - The user to set the token for
  * @param tokenHash - The bcrypt hash of the reset token
  * @param expiresAt - When the token expires (ISO 8601 string)
+ * @param tokenPrefix - First 6 characters of plain token for O(1) filtering (optional for backward compatibility)
  */
 export async function setPasswordResetToken(
   userId: string,
   tokenHash: string,
-  expiresAt: string
+  expiresAt: string,
+  tokenPrefix?: string
 ): Promise<User> {
   const user = await getUserById(userId);
   if (!user) throw new Error("User not found");
@@ -751,6 +774,7 @@ export async function setPasswordResetToken(
   return updateUser(userId, {
     passwordResetTokenHash: tokenHash,
     passwordResetTokenExpiresAt: expiresAt,
+    passwordResetTokenPrefix: tokenPrefix ?? null,
   });
 }
 
@@ -766,12 +790,13 @@ export async function clearPasswordResetToken(userId: string): Promise<User> {
   return updateUser(userId, {
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
   });
 }
 
 /**
  * Find a user by their password reset token
- * Iterates through all users and compares the token hash using bcrypt
+ * Uses prefix-based filtering for O(1) average case, then bcrypt comparison
  *
  * @param token - The plain text reset token
  * @returns The user if found and token matches, null otherwise
@@ -779,8 +804,16 @@ export async function clearPasswordResetToken(userId: string): Promise<User> {
 export async function getUserByPasswordResetToken(token: string): Promise<User | null> {
   const bcrypt = await import("bcryptjs");
   const users = await getAllUsers();
+  const tokenPrefix = token.substring(0, 6);
 
-  for (const user of users) {
+  // Filter by prefix first for O(1) average case (prevents DoS via bcrypt)
+  const candidates = users.filter(
+    (u) =>
+      u.passwordResetTokenHash &&
+      (u.passwordResetTokenPrefix === tokenPrefix || u.passwordResetTokenPrefix === null)
+  );
+
+  for (const user of candidates) {
     if (user.passwordResetTokenHash) {
       const matches = await bcrypt.compare(token, user.passwordResetTokenHash);
       if (matches) {
@@ -806,6 +839,7 @@ export async function updateUserPassword(userId: string, newPasswordHash: string
     passwordHash: newPasswordHash,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     sessionVersion: (user.sessionVersion || 0) + 1,
   });
 }
@@ -820,11 +854,13 @@ export async function updateUserPassword(userId: string, newPasswordHash: string
  * @param userId - The user to set the token for
  * @param tokenHash - The bcrypt hash of the magic link token
  * @param expiresAt - When the token expires (ISO 8601 string)
+ * @param tokenPrefix - First 6 characters of plain token for O(1) filtering (optional for backward compatibility)
  */
 export async function setMagicLinkToken(
   userId: string,
   tokenHash: string,
-  expiresAt: string
+  expiresAt: string,
+  tokenPrefix?: string
 ): Promise<User> {
   const user = await getUserById(userId);
   if (!user) throw new Error("User not found");
@@ -832,6 +868,7 @@ export async function setMagicLinkToken(
   return updateUser(userId, {
     magicLinkTokenHash: tokenHash,
     magicLinkTokenExpiresAt: expiresAt,
+    magicLinkTokenPrefix: tokenPrefix ?? null,
   });
 }
 
@@ -847,12 +884,13 @@ export async function clearMagicLinkToken(userId: string): Promise<User> {
   return updateUser(userId, {
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   });
 }
 
 /**
  * Find a user by their magic link token
- * Iterates through all users and compares the token hash using bcrypt
+ * Uses prefix-based filtering for O(1) average case, then bcrypt comparison
  *
  * @param token - The plain text magic link token
  * @returns The user if found and token matches, null otherwise
@@ -860,8 +898,16 @@ export async function clearMagicLinkToken(userId: string): Promise<User> {
 export async function getUserByMagicLinkToken(token: string): Promise<User | null> {
   const bcrypt = await import("bcryptjs");
   const users = await getAllUsers();
+  const tokenPrefix = token.substring(0, 6);
 
-  for (const user of users) {
+  // Filter by prefix first for O(1) average case (prevents DoS via bcrypt)
+  const candidates = users.filter(
+    (u) =>
+      u.magicLinkTokenHash &&
+      (u.magicLinkTokenPrefix === tokenPrefix || u.magicLinkTokenPrefix === null)
+  );
+
+  for (const user of candidates) {
     if (user.magicLinkTokenHash) {
       const matches = await bcrypt.compare(token, user.magicLinkTokenHash);
       if (matches) {

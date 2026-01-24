@@ -1,9 +1,27 @@
 /**
  * Validate email format
+ *
+ * Stricter validation than basic regex:
+ * - Max length 254 characters (RFC 5321)
+ * - Local part must start and end with alphanumeric characters
+ * - Domain must be valid with 2-10 character TLD
+ * - No consecutive dots
  */
 export function isValidEmail(email: string): boolean {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
+  if (!email || email.length > 254) return false;
+
+  // Stricter regex:
+  // - Local part: starts with alphanumeric, allows ._+%- in middle, ends with alphanumeric
+  // - Domain: alphanumeric with hyphens, multiple subdomains allowed
+  // - TLD: 2-10 alphabetic characters
+  const emailRegex =
+    /^[a-zA-Z0-9](?:[a-zA-Z0-9._%+-]*[a-zA-Z0-9])?@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,10}$/;
+
+  // Also allow single-char local part (e.g., a@b.co)
+  const singleCharLocalRegex =
+    /^[a-zA-Z0-9]@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,10}$/;
+
+  return emailRegex.test(email) || singleCharLocalRegex.test(email);
 }
 
 /**

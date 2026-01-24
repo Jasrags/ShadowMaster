@@ -62,7 +62,6 @@ function createMockAdmin(): PublicUser {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
-    sessionSecretHash: null,
     accountStatus: "active",
     statusChangedAt: null,
     statusChangedBy: null,
@@ -71,12 +70,6 @@ function createMockAdmin(): PublicUser {
     lastRoleChangeBy: null,
     emailVerified: true,
     emailVerifiedAt: null,
-    emailVerificationTokenHash: null,
-    emailVerificationTokenExpiresAt: null,
-    passwordResetTokenHash: null,
-    passwordResetTokenExpiresAt: null,
-    magicLinkTokenHash: null,
-    magicLinkTokenExpiresAt: null,
   };
 }
 

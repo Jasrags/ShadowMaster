@@ -15,6 +15,9 @@ describe("validation", () => {
       expect(isValidEmail("user+tag@example.com")).toBe(true);
       expect(isValidEmail("user@subdomain.example.com")).toBe(true);
       expect(isValidEmail("a@b.co")).toBe(true);
+      expect(isValidEmail("user_name@example.com")).toBe(true);
+      expect(isValidEmail("user%tag@example.com")).toBe(true);
+      expect(isValidEmail("test123@example.co.uk")).toBe(true);
     });
 
     it("returns false for emails without @", () => {
@@ -40,6 +43,38 @@ describe("validation", () => {
       expect(isValidEmail("test @example.com")).toBe(false);
       expect(isValidEmail("test@ example.com")).toBe(false);
       expect(isValidEmail(" test@example.com")).toBe(false);
+    });
+
+    it("returns false for emails exceeding max length", () => {
+      const longLocalPart = "a".repeat(250);
+      expect(isValidEmail(`${longLocalPart}@example.com`)).toBe(false);
+    });
+
+    it("returns false for emails with invalid TLD length", () => {
+      // TLD too short (1 char)
+      expect(isValidEmail("test@example.c")).toBe(false);
+      // TLD too long (11+ chars)
+      expect(isValidEmail("test@example.verylongtld")).toBe(false);
+    });
+
+    it("returns false for emails starting with special characters", () => {
+      expect(isValidEmail(".test@example.com")).toBe(false);
+      expect(isValidEmail("+test@example.com")).toBe(false);
+      expect(isValidEmail("_test@example.com")).toBe(false);
+    });
+
+    it("returns false for emails ending with special characters in local part", () => {
+      expect(isValidEmail("test.@example.com")).toBe(false);
+      expect(isValidEmail("test+@example.com")).toBe(false);
+    });
+
+    it("returns false for domains starting/ending with hyphens", () => {
+      expect(isValidEmail("test@-example.com")).toBe(false);
+      expect(isValidEmail("test@example-.com")).toBe(false);
+    });
+
+    it("returns false for numeric TLDs", () => {
+      expect(isValidEmail("test@example.123")).toBe(false);
     });
   });
 

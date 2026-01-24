@@ -11,12 +11,14 @@ import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as storageModule from "@/lib/storage/users";
 import * as passwordModule from "@/lib/auth/password";
+import * as securityAlertsModule from "@/lib/email/security-alerts";
 import type { User } from "@/lib/types/user";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/users");
 vi.mock("@/lib/auth/password");
+vi.mock("@/lib/email/security-alerts");
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = "POST"): NextRequest {
@@ -67,10 +69,13 @@ describe("POST /api/account/security/password", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   beforeEach(() => {
@@ -192,6 +197,7 @@ describe("POST /api/account/security/password", () => {
     vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
       undefined as unknown as never
     );
+    vi.mocked(securityAlertsModule.sendPasswordChangedEmail).mockResolvedValue(undefined);
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
@@ -218,6 +224,7 @@ describe("POST /api/account/security/password", () => {
     vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
       undefined as unknown as never
     );
+    vi.mocked(securityAlertsModule.sendPasswordChangedEmail).mockResolvedValue(undefined);
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
@@ -227,6 +234,33 @@ describe("POST /api/account/security/password", () => {
     await POST(request);
 
     expect(storageModule.incrementSessionVersion).toHaveBeenCalledWith("test-user-id");
+  });
+
+  it("should send password changed notification email on success", async () => {
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.hashPassword).mockResolvedValue("new-hashed-password");
+    vi.mocked(storageModule.updateUser).mockResolvedValue(undefined as unknown as never);
+    vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
+      undefined as unknown as never
+    );
+    vi.mocked(securityAlertsModule.sendPasswordChangedEmail).mockResolvedValue(undefined);
+
+    const request = createMockRequest("http://localhost:3000/api/account/security/password", {
+      currentPassword: "correctoldpassword",
+      newPassword: "NewPassword123!",
+    });
+
+    await POST(request);
+
+    expect(securityAlertsModule.sendPasswordChangedEmail).toHaveBeenCalledWith(
+      mockUser.id,
+      mockUser.email,
+      mockUser.username,
+      expect.any(Date),
+      expect.any(String) // baseUrl
+    );
   });
 
   it("should return 500 on server error", async () => {

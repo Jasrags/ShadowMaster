@@ -3,6 +3,7 @@ import { getSession } from "@/lib/auth/session";
 import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
 import { verifyPassword, hashPassword } from "@/lib/auth/password";
 import { isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
+import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 
 /**
  * POST: Secure password transition requiring current password verification
@@ -53,6 +54,12 @@ export async function POST(req: NextRequest) {
     // Update password and increment session version to invalidate other sessions (ADR-001)
     await updateUser(userId, { passwordHash: newPasswordHash });
     await incrementSessionVersion(userId);
+
+    // Send password changed notification email (fire-and-forget)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    sendPasswordChangedEmail(user.id, user.email, user.username, new Date(), baseUrl).catch((err) =>
+      console.error("Failed to send password changed email:", err)
+    );
 
     return NextResponse.json({ success: true });
   } catch (error) {

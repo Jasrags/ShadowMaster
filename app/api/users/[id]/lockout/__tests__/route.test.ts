@@ -56,10 +56,13 @@ describe("User Lockout API", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const createLockedUser = (): User => {
@@ -89,10 +92,13 @@ describe("User Lockout API", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
   };
 
@@ -120,10 +126,13 @@ describe("User Lockout API", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   });
 
   const createMockParams = (id: string) => ({
