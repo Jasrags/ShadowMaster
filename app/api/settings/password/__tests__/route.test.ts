@@ -71,6 +71,8 @@ describe("POST /api/settings/password", () => {
     emailVerificationTokenExpiresAt: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
   };
 
   beforeEach(() => {

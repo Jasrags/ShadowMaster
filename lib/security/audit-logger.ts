@@ -20,6 +20,11 @@ export type SecurityEvent =
   | "password_reset.success"
   | "password_reset.failed"
   | "password_reset.rate_limited"
+  | "magic_link.requested"
+  | "magic_link.sent"
+  | "magic_link.success"
+  | "magic_link.failed"
+  | "magic_link.rate_limited"
   | "security_email.lockout_sent"
   | "security_email.password_changed_sent"
   | "security_email.email_changed_sent";

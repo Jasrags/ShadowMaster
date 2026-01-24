@@ -43,6 +43,9 @@ export interface User {
   // Password reset fields
   passwordResetTokenHash: string | null;
   passwordResetTokenExpiresAt: string | null; // ISO 8601 date string
+  // Magic link fields
+  magicLinkTokenHash: string | null;
+  magicLinkTokenExpiresAt: string | null; // ISO 8601 date string
 }
 
 export interface SignupRequest {

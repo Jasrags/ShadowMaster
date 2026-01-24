@@ -42,7 +42,15 @@ interface UserEditModalProps {
   onClose: () => void;
   onSave: (data: UpdateUserRequest) => Promise<void>;
   isLoading?: boolean;
+  onUnlock?: () => Promise<void>;
+  onResendVerification?: () => Promise<void>;
+  onManualVerify?: () => Promise<void>;
+  isResending?: boolean;
 }
+
+// Helper to check if user is currently locked out
+const isLockedOut = (user: PublicUser): boolean =>
+  user.lockoutUntil ? new Date(user.lockoutUntil) > new Date() : false;
 
 export default function UserEditModal({
   user,
@@ -50,6 +58,10 @@ export default function UserEditModal({
   onClose,
   onSave,
   isLoading = false,
+  onUnlock,
+  onResendVerification,
+  onManualVerify,
+  isResending = false,
 }: UserEditModalProps) {
   // Initialize state from user prop - component will remount when user.id changes (via key prop)
   const [email, setEmail] = useState(user.email);
@@ -244,6 +256,113 @@ export default function UserEditModal({
                     <p className="text-xs text-zinc-500 dark:text-zinc-500 mt-2">
                       Use the table actions menu to suspend or reactivate this account.
                     </p>
+                  </div>
+                </div>
+
+                {/* Login Lockout Section */}
+                {(user.failedLoginAttempts > 0 || user.lockoutUntil) && (
+                  <div className="border-t border-zinc-200 pt-4 dark:border-zinc-800">
+                    <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 mb-3">
+                      Login Lockout
+                    </h3>
+                    <div className="space-y-2">
+                      <div className="text-sm">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                          Failed Attempts:{" "}
+                        </span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {user.failedLoginAttempts}
+                        </span>
+                      </div>
+                      {isLockedOut(user) && (
+                        <>
+                          <div className="text-sm">
+                            <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                              Locked Until:{" "}
+                            </span>
+                            <span className="text-orange-600 dark:text-orange-400">
+                              {new Date(user.lockoutUntil!).toLocaleString()}
+                            </span>
+                          </div>
+                          {onUnlock && (
+                            <Button
+                              onPress={onUnlock}
+                              isDisabled={isLoading}
+                              className="mt-2 rounded-md border border-orange-300 bg-white px-3 py-1.5 text-sm font-medium text-orange-600 transition-colors hover:bg-orange-50 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 disabled:opacity-50 dark:border-orange-700 dark:bg-zinc-800 dark:text-orange-400 dark:hover:bg-zinc-700 dark:focus:ring-orange-400"
+                            >
+                              Unlock Account
+                            </Button>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {/* Email Verification Section */}
+                <div className="border-t border-zinc-200 pt-4 dark:border-zinc-800">
+                  <h3 className="text-sm font-semibold text-zinc-900 dark:text-zinc-50 mb-3">
+                    Email Verification
+                  </h3>
+                  <div className="space-y-2">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                        Status:
+                      </span>
+                      {user.emailVerified ? (
+                        <span className="inline-flex items-center gap-1 rounded-full bg-green-100 px-2.5 py-0.5 text-xs font-medium text-green-800 dark:bg-green-900/30 dark:text-green-400">
+                          <svg
+                            className="h-3.5 w-3.5"
+                            fill="currentColor"
+                            viewBox="0 0 20 20"
+                            aria-hidden="true"
+                          >
+                            <path
+                              fillRule="evenodd"
+                              d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z"
+                              clipRule="evenodd"
+                            />
+                          </svg>
+                          Verified
+                        </span>
+                      ) : (
+                        <span className="inline-flex items-center rounded-full bg-amber-100 px-2.5 py-0.5 text-xs font-medium text-amber-800 dark:bg-amber-900/30 dark:text-amber-400">
+                          Unverified
+                        </span>
+                      )}
+                    </div>
+                    {user.emailVerified && user.emailVerifiedAt && (
+                      <div className="text-sm">
+                        <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                          Verified At:{" "}
+                        </span>
+                        <span className="text-zinc-600 dark:text-zinc-400">
+                          {new Date(user.emailVerifiedAt).toLocaleString()}
+                        </span>
+                      </div>
+                    )}
+                    {!user.emailVerified && (
+                      <div className="flex flex-wrap gap-2 mt-2">
+                        {onResendVerification && (
+                          <Button
+                            onPress={onResendVerification}
+                            isDisabled={isLoading || isResending}
+                            className="rounded-md border border-amber-300 bg-white px-3 py-1.5 text-sm font-medium text-amber-600 transition-colors hover:bg-amber-50 focus:outline-none focus:ring-2 focus:ring-amber-500 focus:ring-offset-2 disabled:opacity-50 dark:border-amber-700 dark:bg-zinc-800 dark:text-amber-400 dark:hover:bg-zinc-700 dark:focus:ring-amber-400"
+                          >
+                            {isResending ? "Sending..." : "Resend Verification"}
+                          </Button>
+                        )}
+                        {onManualVerify && (
+                          <Button
+                            onPress={onManualVerify}
+                            isDisabled={isLoading}
+                            className="rounded-md border border-green-300 bg-white px-3 py-1.5 text-sm font-medium text-green-600 transition-colors hover:bg-green-50 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-offset-2 disabled:opacity-50 dark:border-green-700 dark:bg-zinc-800 dark:text-green-400 dark:hover:bg-zinc-700 dark:focus:ring-green-400"
+                          >
+                            Mark as Verified
+                          </Button>
+                        )}
+                      </div>
+                    )}
                   </div>
                 </div>
 

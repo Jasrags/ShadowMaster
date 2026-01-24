@@ -223,6 +223,8 @@ describe("password-reset", () => {
       emailVerificationTokenExpiresAt: null,
       passwordResetTokenHash: "hash",
       passwordResetTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+      magicLinkTokenHash: null,
+      magicLinkTokenExpiresAt: null,
     };
 
     it("should return valid for a valid token", async () => {
@@ -283,6 +285,8 @@ describe("password-reset", () => {
       emailVerificationTokenExpiresAt: null,
       passwordResetTokenHash: "hash",
       passwordResetTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(),
+      magicLinkTokenHash: null,
+      magicLinkTokenExpiresAt: null,
     };
 
     beforeEach(() => {
@@ -388,6 +392,8 @@ describe("password-reset", () => {
       emailVerificationTokenExpiresAt: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      magicLinkTokenHash: null,
+      magicLinkTokenExpiresAt: null,
     };
 
     beforeEach(() => {

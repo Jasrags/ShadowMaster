@@ -65,6 +65,8 @@ describe("PUT /api/settings/account", () => {
     emailVerificationTokenExpiresAt: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
   };
 
   const existingUserByEmail: User = {

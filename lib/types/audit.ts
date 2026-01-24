@@ -186,6 +186,10 @@ export type UserAuditAction =
   | "user_deleted"
   | "user_lockout_triggered"
   | "user_lockout_cleared"
+  // Admin lockout and verification actions
+  | "user_lockout_admin_cleared"
+  | "user_email_admin_verified"
+  | "user_verification_admin_resent"
   // Admin character actions
   | "admin_character_status_changed";
 

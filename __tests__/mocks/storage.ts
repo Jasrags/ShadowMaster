@@ -119,6 +119,9 @@ export function createMockUser(overrides?: Partial<User>): User {
     // Password reset fields
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    // Magic link fields
+    magicLinkTokenHash: null,
+    magicLinkTokenExpiresAt: null,
     ...overrides,
   };
 }
