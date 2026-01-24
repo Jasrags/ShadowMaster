@@ -55,6 +55,8 @@ next-env.d.ts
 /data/activity
 /data/security
 /data/combat
+/data/emails/*
+!/data/emails/.gitkeep
 /docs/capabilities/plans/verification-reports
 
 # backups
