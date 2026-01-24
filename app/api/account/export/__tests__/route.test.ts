@@ -72,6 +72,8 @@ describe("GET /api/account/export", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockCharacters: Character[] = [

@@ -57,6 +57,8 @@ describe("PUT /api/users/[id]", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockTargetUser: User = {
@@ -82,6 +84,8 @@ describe("PUT /api/users/[id]", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const createMockRequest = (body: object): NextRequest => {
@@ -401,6 +405,8 @@ describe("DELETE /api/users/[id]", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockTargetUser: User = {
@@ -426,6 +432,8 @@ describe("DELETE /api/users/[id]", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const createMockParams = (id: string) => ({

@@ -15,6 +15,10 @@ export type { BaseEmailLayoutProps } from "./base";
 export { VerificationEmailTemplate } from "./verification-email";
 export type { VerificationEmailTemplateProps } from "./verification-email";
 
+// Export password reset email template
+export { PasswordResetEmailTemplate } from "./password-reset-email";
+export type { PasswordResetEmailTemplateProps } from "./password-reset-email";
+
 /**
  * Rendered template output
  */

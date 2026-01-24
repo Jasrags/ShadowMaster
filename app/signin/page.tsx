@@ -1,15 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, Suspense } from "react";
+import { useSearchParams } from "next/navigation";
 import { Link } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { isValidEmail } from "@/lib/auth/validation";
+
+/**
+ * Component that reads search params and sets success message
+ * Must be wrapped in Suspense boundary
+ */
+function SearchParamsHandler({
+  onResetSuccess,
+}: {
+  onResetSuccess: (message: string) => void;
+}) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    if (searchParams.get("reset") === "success") {
+      onResetSuccess(
+        "Your password has been reset successfully. Please sign in with your new password."
+      );
+    }
+  }, [searchParams, onResetSuccess]);
+
+  return null;
+}
 
 export default function SigninPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [validationErrors, setValidationErrors] = useState<{
     email?: string;
@@ -38,6 +62,7 @@ export default function SigninPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSuccessMessage(null);
 
     if (!validateForm()) {
       return;
@@ -59,11 +84,22 @@ export default function SigninPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-zinc-950">
+      {/* Suspense boundary for useSearchParams */}
+      <Suspense fallback={null}>
+        <SearchParamsHandler onResetSuccess={setSuccessMessage} />
+      </Suspense>
+
       <main className="w-full max-w-md px-6 py-12">
         <div className="rounded-lg bg-zinc-50 p-8 shadow-lg dark:bg-zinc-900">
           <h1 className="mb-6 text-3xl font-semibold text-zinc-900 dark:text-zinc-50">Sign In</h1>
 
           <form onSubmit={handleSubmit} className="space-y-4">
+            {successMessage && (
+              <div className="rounded-md bg-green-50 p-3 text-sm text-green-800 dark:bg-green-900/20 dark:text-green-200">
+                {successMessage}
+              </div>
+            )}
+
             {error && (
               <div className="rounded-md bg-red-50 p-3 text-sm text-red-800 dark:bg-red-900/20 dark:text-red-200">
                 {error}
@@ -132,6 +168,15 @@ export default function SigninPage() {
                   {validationErrors.password}
                 </p>
               )}
+            </div>
+
+            <div className="flex justify-end">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+              >
+                Forgot password?
+              </Link>
             </div>
 
             <div className="flex items-center gap-2">

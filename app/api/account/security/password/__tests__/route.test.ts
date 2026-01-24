@@ -66,6 +66,8 @@ describe("POST /api/account/security/password", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   beforeEach(() => {

@@ -70,6 +70,8 @@ describe("POST /api/auth/signin", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   let mockIpLimiter: { isRateLimited: ReturnType<typeof vi.fn>; reset: ReturnType<typeof vi.fn> };

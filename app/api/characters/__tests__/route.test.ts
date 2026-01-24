@@ -63,6 +63,8 @@ describe("GET /api/characters", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockCharacters: Character[] = [
@@ -421,6 +423,8 @@ describe("POST /api/characters", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    passwordResetTokenHash: null,
+    passwordResetTokenExpiresAt: null,
   };
 
   const mockDraft: CharacterDraft = {
