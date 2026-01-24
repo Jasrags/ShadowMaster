@@ -7,6 +7,7 @@ export type SecurityEvent =
   | "signin.success"
   | "signin.failure"
   | "signup.success"
+  | "signup.rate_limited"
   | "lockout.triggered"
   | "lockout.expired"
   | "password.change"
