@@ -66,6 +66,10 @@ describe("POST /api/auth/signin", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   let mockIpLimiter: { isRateLimited: ReturnType<typeof vi.fn>; reset: ReturnType<typeof vi.fn> };

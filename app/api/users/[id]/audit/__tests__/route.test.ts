@@ -39,6 +39,10 @@ describe("GET /api/users/[id]/audit", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockTargetUser: User = {
@@ -60,6 +64,10 @@ describe("GET /api/users/[id]/audit", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockAuditEntries: UserAuditEntry[] = [

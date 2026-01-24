@@ -19,6 +19,10 @@ export type NewUserData = Omit<
   | "statusReason"
   | "lastRoleChangeAt"
   | "lastRoleChangeBy"
+  | "emailVerified"
+  | "emailVerifiedAt"
+  | "emailVerificationTokenHash"
+  | "emailVerificationTokenExpiresAt"
 >;
 
 const DATA_DIR = path.join(process.cwd(), "data", "users");
@@ -125,6 +129,11 @@ function normalizeUserDefaults(user: User): User {
     statusReason: user.statusReason ?? null,
     lastRoleChangeAt: user.lastRoleChangeAt ?? null,
     lastRoleChangeBy: user.lastRoleChangeBy ?? null,
+    // Email verification fields (existing users are grandfathered as verified)
+    emailVerified: user.emailVerified ?? true,
+    emailVerifiedAt: user.emailVerifiedAt ?? null,
+    emailVerificationTokenHash: user.emailVerificationTokenHash ?? null,
+    emailVerificationTokenExpiresAt: user.emailVerificationTokenExpiresAt ?? null,
   };
 }
 
@@ -200,6 +209,11 @@ export async function createUser(userData: NewUserData): Promise<User> {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    // Initialize email verification fields (new users start unverified)
+    emailVerified: false,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   // Atomic write: write to temp file, then rename
@@ -580,4 +594,69 @@ export async function updateUsername(
   });
 
   return updatedUser;
+}
+
+// =============================================================================
+// EMAIL VERIFICATION FUNCTIONS
+// =============================================================================
+
+/**
+ * Set email verification token for a user
+ *
+ * @param userId - The user to set the token for
+ * @param tokenHash - The bcrypt hash of the verification token
+ * @param expiresAt - When the token expires (ISO 8601 string)
+ */
+export async function setVerificationToken(
+  userId: string,
+  tokenHash: string,
+  expiresAt: string
+): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    emailVerificationTokenHash: tokenHash,
+    emailVerificationTokenExpiresAt: expiresAt,
+  });
+}
+
+/**
+ * Mark a user's email as verified and clear the verification token
+ *
+ * @param userId - The user to mark as verified
+ */
+export async function markEmailVerified(userId: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    emailVerified: true,
+    emailVerifiedAt: new Date().toISOString(),
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
+  });
+}
+
+/**
+ * Find a user by their email verification token
+ * Iterates through all users and compares the token hash using bcrypt
+ *
+ * @param token - The plain text verification token
+ * @returns The user if found and token matches, null otherwise
+ */
+export async function getUserByVerificationToken(token: string): Promise<User | null> {
+  const bcrypt = await import("bcryptjs");
+  const users = await getAllUsers();
+
+  for (const user of users) {
+    if (user.emailVerificationTokenHash) {
+      const matches = await bcrypt.compare(token, user.emailVerificationTokenHash);
+      if (matches) {
+        return user;
+      }
+    }
+  }
+
+  return null;
 }

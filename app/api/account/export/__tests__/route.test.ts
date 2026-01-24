@@ -68,6 +68,10 @@ describe("GET /api/account/export", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockCharacters: Character[] = [

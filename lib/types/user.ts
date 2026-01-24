@@ -35,6 +35,11 @@ export interface User {
   statusReason: string | null; // Reason for status change (e.g., suspension reason)
   lastRoleChangeAt: string | null; // ISO 8601 date string
   lastRoleChangeBy: string | null; // User ID of admin who changed roles
+  // Email verification fields
+  emailVerified: boolean;
+  emailVerifiedAt: string | null; // ISO 8601 date string
+  emailVerificationTokenHash: string | null;
+  emailVerificationTokenExpiresAt: string | null; // ISO 8601 date string
 }
 
 export interface SignupRequest {

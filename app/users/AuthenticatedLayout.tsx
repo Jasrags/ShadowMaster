@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState, useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
 import { EnvironmentBadge } from "@/components/EnvironmentBadge";
+import { EmailVerificationBanner } from "@/components/auth/EmailVerificationBanner";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -228,6 +229,11 @@ export default function AuthenticatedLayout({
           </div>
         </div>
       </header>
+
+      {/* Email Verification Banner - positioned below header */}
+      <div className="fixed top-16 left-0 right-0 z-40">
+        <EmailVerificationBanner />
+      </div>
 
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}

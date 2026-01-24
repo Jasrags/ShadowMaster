@@ -59,6 +59,10 @@ describe("PUT /api/settings/account", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const existingUserByEmail: User = {

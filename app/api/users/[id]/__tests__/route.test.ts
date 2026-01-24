@@ -53,6 +53,10 @@ describe("PUT /api/users/[id]", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockTargetUser: User = {
@@ -74,6 +78,10 @@ describe("PUT /api/users/[id]", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const createMockRequest = (body: object): NextRequest => {
@@ -389,6 +397,10 @@ describe("DELETE /api/users/[id]", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const mockTargetUser: User = {
@@ -410,6 +422,10 @@ describe("DELETE /api/users/[id]", () => {
     statusReason: null,
     lastRoleChangeAt: null,
     lastRoleChangeBy: null,
+    emailVerified: true,
+    emailVerifiedAt: null,
+    emailVerificationTokenHash: null,
+    emailVerificationTokenExpiresAt: null,
   };
 
   const createMockParams = (id: string) => ({
