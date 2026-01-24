@@ -12,7 +12,7 @@
 
 # Authentication Specification (Login & Registration)
 
-**Last Updated:** 2026-01-23
+**Last Updated:** 2026-01-24
 **Status:** Specification
 **Category:** Security, Authentication, User Management
 **Affected Areas:** All protected routes and user-facing features
@@ -491,16 +491,19 @@ Authentication is the foundation of user security and access control in Shadow M
 
 **Current Implementation:**
 
-- ✅ Format validation using regex
+- ✅ Format validation using strict regex
 - ✅ Normalization (lowercase, trimmed)
 - ✅ Server-side validation required
+- ✅ Maximum length check (254 characters per RFC 5321)
+- ✅ Alphanumeric local part boundaries (must start/end with alphanumeric)
+- ✅ Valid TLD format (2-10 characters)
 
 **Best Practices:**
 
 - Validate email format (regex is acceptable for basic validation)
 - Normalize email addresses (lowercase, trim)
 - Validate on both client and server
-- Consider using library like `validator.js` for more robust validation (future)
+- Enforce maximum length limits (254 chars for full address)
 
 **Recommendations:**
 
@@ -590,6 +593,22 @@ Authentication is the foundation of user security and access control in Shadow M
 - Moving to persistent rate limiting would require Redis/database infrastructure beyond current needs
 
 **Future Enhancement:** If scaling to multi-server deployment, implement Redis-based rate limiting alongside database migration.
+
+#### Token Lookup Optimization (#174)
+
+**Implementation:**
+
+- ✅ 6-character token prefix stored alongside hashed tokens
+- ✅ Email verification, password reset, and magic link tokens all use prefix optimization
+- ✅ Token lookups filter by prefix before bcrypt comparison
+
+**Purpose:** Prevents DoS attacks via token brute-forcing. Without prefixes, token verification requires O(N) bcrypt comparisons across all users. With prefixes, only matching candidates (typically 0-1) undergo expensive bcrypt comparison.
+
+**Security Notes:**
+
+- Prefix is the first 6 characters of the plaintext token (non-secret)
+- Does not weaken token security (full token still required for verification)
+- Provides O(1) average-case lookup performance
 
 #### Sign-Up Rate Limiting
 
@@ -747,10 +766,17 @@ Authentication is the foundation of user security and access control in Shadow M
 
 #### Account Lockout
 
-- Lock account after 5 failed sign-in attempts
-- Lock duration: 15 minutes (or increasing)
-- Admin unlock capability
-- Email notification on lockout
+- ✅ Lock account after 5 failed sign-in attempts
+- ✅ Lock duration: 15 minutes
+- ✅ Admin unlock capability
+- ✅ Email notification on lockout
+
+#### Password Change Notifications
+
+- ✅ Email notification when password changed via account settings
+- ✅ Email notification when password reset via forgot password flow
+- ✅ Fire-and-forget delivery (doesn't block the operation)
+- ✅ Includes timestamp and account security link
 
 #### Login History
 
@@ -809,6 +835,12 @@ Authentication is the foundation of user security and access control in Shadow M
 - ✅ Passwords not logged or exposed
 - ✅ Minimal data in session cookies (user ID only)
 - ✅ User data only accessible to authenticated users
+- ✅ PublicUser type excludes all sensitive fields from API responses:
+  - Password hash
+  - Session secret hash
+  - Email verification token (hash, expiration, prefix)
+  - Password reset token (hash, expiration, prefix)
+  - Magic link token (hash, expiration, prefix)
 
 **Recommendations:**
 
@@ -1011,6 +1043,8 @@ Use this checklist when reviewing authentication security:
 - [x] Timing-safe login (bcrypt always runs to prevent email enumeration)
 - [x] Rate limiting implemented (IP + account)
 - [x] Account lockout implemented
+- [x] Token prefix optimization (prevents DoS via token brute-forcing)
+- [x] Password change email notifications
 - [ ] Login history tracked
 
 ### Session Security
