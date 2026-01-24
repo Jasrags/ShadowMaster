@@ -56,10 +56,13 @@ describe("Manual Verify Email API", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const createUnverifiedUser = (): User => ({
@@ -86,10 +89,13 @@ describe("Manual Verify Email API", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   });
 
   const createVerifiedUser = (): User => ({
@@ -116,10 +122,13 @@ describe("Manual Verify Email API", () => {
     emailVerifiedAt: new Date().toISOString(),
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   });
 
   const createMockParams = (id: string) => ({

@@ -136,7 +136,8 @@ describe("email-verification", () => {
       expect(setVerificationToken).toHaveBeenCalledWith(
         mockUserId,
         expect.stringMatching(/^\$2[ab]\$/), // bcrypt hash
-        expect.any(String) // ISO date string
+        expect.any(String), // ISO date string
+        expect.any(String) // prefix
       );
     });
 
@@ -234,10 +235,13 @@ describe("email-verification", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: "hash",
       emailVerificationTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
 
     it("returns success for valid token", async () => {

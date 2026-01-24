@@ -54,10 +54,13 @@ describe("GET /api/users", () => {
     emailVerifiedAt: null,
     emailVerificationTokenHash: null,
     emailVerificationTokenExpiresAt: null,
+    emailVerificationTokenPrefix: null,
     passwordResetTokenHash: null,
     passwordResetTokenExpiresAt: null,
+    passwordResetTokenPrefix: null,
     magicLinkTokenHash: null,
     magicLinkTokenExpiresAt: null,
+    magicLinkTokenPrefix: null,
   };
 
   const mockUsers: User[] = [
@@ -85,10 +88,13 @@ describe("GET /api/users", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     },
     {
       id: "user-2",
@@ -114,10 +120,13 @@ describe("GET /api/users", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     },
     {
       id: "user-3",
@@ -143,10 +152,13 @@ describe("GET /api/users", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     },
   ];
 

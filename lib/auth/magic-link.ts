@@ -45,6 +45,8 @@ export interface GeneratedMagicLinkToken {
   tokenHash: string;
   /** Expiration timestamp (ISO 8601) */
   expiresAt: string;
+  /** First 6 chars of token for O(1) prefix filtering */
+  tokenPrefix: string;
 }
 
 /**
@@ -87,10 +89,14 @@ export async function generateMagicLinkToken(): Promise<GeneratedMagicLinkToken>
   const expiresAt = new Date();
   expiresAt.setMinutes(expiresAt.getMinutes() + TOKEN_EXPIRY_MINUTES);
 
+  // Extract prefix for O(1) filtering (non-secret, just for fast lookup)
+  const tokenPrefix = token.substring(0, 6);
+
   return {
     token,
     tokenHash,
     expiresAt: expiresAt.toISOString(),
+    tokenPrefix,
   };
 }
 
@@ -156,10 +162,10 @@ export async function sendMagicLinkEmail(
     await clearMagicLinkToken(userId);
 
     // Generate a new token
-    const { token, tokenHash, expiresAt } = await generateMagicLinkToken();
+    const { token, tokenHash, expiresAt, tokenPrefix } = await generateMagicLinkToken();
 
-    // Store the token hash in the user record
-    await setMagicLinkToken(userId, tokenHash, expiresAt);
+    // Store the token hash and prefix in the user record
+    await setMagicLinkToken(userId, tokenHash, expiresAt, tokenPrefix);
 
     // Build the magic link URL
     const magicLinkUrl = `${baseUrl}/api/auth/magic-link/${token}`;

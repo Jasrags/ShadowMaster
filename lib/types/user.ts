@@ -41,12 +41,15 @@ export interface User {
   emailVerifiedAt: string | null; // ISO 8601 date string
   emailVerificationTokenHash: string | null;
   emailVerificationTokenExpiresAt: string | null; // ISO 8601 date string
+  emailVerificationTokenPrefix: string | null; // First 6 chars of token for O(1) filtering
   // Password reset fields
   passwordResetTokenHash: string | null;
   passwordResetTokenExpiresAt: string | null; // ISO 8601 date string
+  passwordResetTokenPrefix: string | null; // First 6 chars of token for O(1) filtering
   // Magic link fields
   magicLinkTokenHash: string | null;
   magicLinkTokenExpiresAt: string | null; // ISO 8601 date string
+  magicLinkTokenPrefix: string | null; // First 6 chars of token for O(1) filtering
 }
 
 export interface SignupRequest {
@@ -63,11 +66,24 @@ export interface SigninRequest {
 
 export interface AuthResponse {
   success: boolean;
-  user?: Omit<User, "passwordHash">;
+  user?: PublicUser;
   error?: string;
 }
 
-export type PublicUser = Omit<User, "passwordHash">;
+export type PublicUser = Omit<
+  User,
+  | "passwordHash"
+  | "sessionSecretHash"
+  | "emailVerificationTokenHash"
+  | "emailVerificationTokenExpiresAt"
+  | "emailVerificationTokenPrefix"
+  | "passwordResetTokenHash"
+  | "passwordResetTokenExpiresAt"
+  | "passwordResetTokenPrefix"
+  | "magicLinkTokenHash"
+  | "magicLinkTokenExpiresAt"
+  | "magicLinkTokenPrefix"
+>;
 
 export interface UpdateUserRequest {
   email?: string;

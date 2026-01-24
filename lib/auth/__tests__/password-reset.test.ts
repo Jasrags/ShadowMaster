@@ -115,7 +115,8 @@ describe("password-reset", () => {
       expect(usersStorage.setPasswordResetToken).toHaveBeenCalledWith(
         mockUserId,
         expect.stringMatching(/^\$2[ab]\$/), // bcrypt hash
-        expect.any(String) // expiration timestamp
+        expect.any(String), // expiration timestamp
+        expect.any(String) // prefix
       );
     });
 
@@ -222,10 +223,13 @@ describe("password-reset", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: "hash",
       passwordResetTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
 
     it("should return valid for a valid token", async () => {
@@ -289,6 +293,9 @@ describe("password-reset", () => {
       passwordResetTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(),
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
+      passwordResetTokenPrefix: "abc123",
+      magicLinkTokenPrefix: null,
     };
 
     beforeEach(() => {
@@ -418,10 +425,13 @@ describe("password-reset", () => {
       emailVerifiedAt: null,
       emailVerificationTokenHash: null,
       emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
       passwordResetTokenHash: null,
       passwordResetTokenExpiresAt: null,
+      passwordResetTokenPrefix: null,
       magicLinkTokenHash: null,
       magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
     };
 
     beforeEach(() => {
