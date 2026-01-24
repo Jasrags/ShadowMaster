@@ -4,6 +4,7 @@ import { Link, Button, Menu, MenuTrigger, MenuItem, Popover } from "react-aria-c
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState, useEffect } from "react";
 import { NotificationBell } from "@/components/NotificationBell";
+import { EnvironmentBadge } from "@/components/EnvironmentBadge";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -159,12 +160,15 @@ export default function AuthenticatedLayout({
                 />
               </svg>
             </Button>
-            <Link
-              href="/"
-              className="text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
-            >
-              Shadow Master
-            </Link>
+            <div className="flex flex-col">
+              <Link
+                href="/"
+                className="text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
+              >
+                Shadow Master
+              </Link>
+              <EnvironmentBadge />
+            </div>
           </div>
           <div className="flex items-center gap-3">
             {/* Notifications */}

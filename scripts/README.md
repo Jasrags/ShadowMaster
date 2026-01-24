@@ -438,7 +438,45 @@ pnpm validate-docs           # Validate CLAUDE.md against codebase
 pnpm check-tests             # Check staged files for missing tests
 pnpm check-tests:all         # Check all source files
 pnpm check-tests:strict      # Fail if tests are missing
+
+# Docker (local development)
+pnpm docker:build            # Build image with git SHA
+pnpm docker:build:fresh      # Build from scratch (no cache)
+pnpm docker:up               # Start containers
+pnpm docker:down             # Stop containers
+pnpm docker:dev              # Build and start in one command
+pnpm docker:logs             # Follow container logs
 ```
+
+### Docker Commands
+
+The Docker commands automatically pass the git SHA for the environment badge.
+
+```bash
+# Quick start - build and run
+pnpm docker:dev
+
+# Or step by step
+pnpm docker:build        # Build image
+pnpm docker:up           # Start containers
+
+# View logs
+pnpm docker:logs
+
+# Stop everything
+pnpm docker:down
+
+# Rebuild without cache (after Dockerfile changes)
+pnpm docker:build:fresh
+pnpm docker:up
+```
+
+**Services started:**
+
+- `shadow-master-app` - Next.js application at http://localhost:3000
+- `mailpit` - Email testing UI at http://localhost:8025
+
+**Environment badge:** The Docker environment shows "docker" with version, git SHA, and build time.
 
 ---
 

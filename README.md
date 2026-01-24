@@ -62,20 +62,36 @@ pnpm dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Docker Deployment
+### Docker Development
 
 ```bash
-# Build the Docker image
-docker build -t shadow-master .
+# Build and start with one command
+pnpm docker:dev
 
-# Run the container
-docker run -p 3000:3000 shadow-master
-
-# Or use Docker Compose
-docker-compose up
+# Or step by step
+pnpm docker:build      # Build image
+pnpm docker:up         # Start containers
+pnpm docker:logs       # View logs
+pnpm docker:down       # Stop containers
 ```
 
-For more details, see our **[Portainer Setup Guide](docs/deployment/portainer-setup.md)** or the **[CI/CD Pipeline documentation](docs/deployment/cicd-guide.md)**.
+This starts:
+
+- **Shadow Master** at http://localhost:3000
+- **Mailpit** (email testing) at http://localhost:8025
+
+### Environments
+
+| Environment    | How to Run        | Badge Color |
+| -------------- | ----------------- | ----------- |
+| **local**      | `pnpm dev`        | Purple      |
+| **docker**     | `pnpm docker:dev` | Blue        |
+| **staging**    | Portainer/GHCR    | Amber       |
+| **production** | Web hosting       | Hidden      |
+
+The environment badge shows version, git SHA, and build time (hidden in production).
+
+For production deployment, see our **[Portainer Setup Guide](docs/deployment/portainer-setup.md)** or the **[CI/CD Pipeline documentation](docs/deployment/cicd-guide.md)**.
 
 ---
 
