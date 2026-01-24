@@ -49,6 +49,7 @@ describe("POST /api/auth/signup", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
@@ -224,6 +225,7 @@ describe("POST /api/auth/signup", () => {
       failedLoginAttempts: 0,
       lockoutUntil: null,
       sessionVersion: 1,
+      sessionSecretHash: null,
       preferences: {
         theme: "system",
         navigationCollapsed: false,

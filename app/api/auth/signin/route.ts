@@ -108,7 +108,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       user: toPublicUser(updatedUser),
     });
 
-    createSession(user.id, response, updatedUser.sessionVersion);
+    await createSession(user.id, response, updatedUser.sessionVersion);
 
     return response;
   } catch (error) {

@@ -28,6 +28,7 @@ export interface User {
   failedLoginAttempts: number;
   lockoutUntil: string | null; // ISO 8601 date string or null
   sessionVersion: number;
+  sessionSecretHash: string | null; // SHA-256 hash of session secret
   // Account status and governance fields
   accountStatus: AccountStatus;
   statusChangedAt: string | null; // ISO 8601 date string

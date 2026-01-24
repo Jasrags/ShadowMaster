@@ -12,6 +12,7 @@ export type NewUserData = Omit<
   | "failedLoginAttempts"
   | "lockoutUntil"
   | "sessionVersion"
+  | "sessionSecretHash"
   | "preferences"
   | "accountStatus"
   | "statusChangedAt"
@@ -126,6 +127,7 @@ function normalizeUserDefaults(user: User): User {
     failedLoginAttempts: user.failedLoginAttempts ?? 0,
     lockoutUntil: user.lockoutUntil ?? null,
     sessionVersion: user.sessionVersion ?? 1,
+    sessionSecretHash: user.sessionSecretHash ?? null,
     // Governance fields (participant governance capability)
     accountStatus: user.accountStatus ?? "active",
     statusChangedAt: user.statusChangedAt ?? null,
@@ -212,6 +214,7 @@ export async function createUser(userData: NewUserData): Promise<User> {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     // Initialize governance fields
     accountStatus: "active",
     statusChangedAt: null,
@@ -370,6 +373,7 @@ export async function resetFailedAttempts(userId: string): Promise<User> {
 
 /**
  * Increment session version to invalidate all active sessions
+ * Also clears session secret hash to force re-authentication
  */
 export async function incrementSessionVersion(userId: string): Promise<User> {
   const user = await getUserById(userId);
@@ -377,6 +381,36 @@ export async function incrementSessionVersion(userId: string): Promise<User> {
 
   return updateUser(userId, {
     sessionVersion: (user.sessionVersion || 0) + 1,
+    sessionSecretHash: null, // Clear secret hash to invalidate current session
+  });
+}
+
+/**
+ * Set session secret hash for a user
+ *
+ * @param userId - The user to set the hash for
+ * @param secretHash - The SHA-256 hash of the session secret (hex string)
+ */
+export async function setSessionSecretHash(userId: string, secretHash: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    sessionSecretHash: secretHash,
+  });
+}
+
+/**
+ * Clear session secret hash for a user (used during logout)
+ *
+ * @param userId - The user to clear the hash for
+ */
+export async function clearSessionSecretHash(userId: string): Promise<User> {
+  const user = await getUserById(userId);
+  if (!user) throw new Error("User not found");
+
+  return updateUser(userId, {
+    sessionSecretHash: null,
   });
 }
 

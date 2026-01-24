@@ -42,6 +42,7 @@ describe("GET /api/editions/[editionCode]/favor-costs", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,

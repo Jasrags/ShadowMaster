@@ -50,6 +50,7 @@ describe("GET /api/account/preferences", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "dark",
       navigationCollapsed: true,
@@ -141,6 +142,7 @@ describe("PATCH /api/account/preferences", () => {
     failedLoginAttempts: 0,
     lockoutUntil: null,
     sessionVersion: 1,
+    sessionSecretHash: null,
     preferences: {
       theme: "system",
       navigationCollapsed: false,
