@@ -230,11 +230,6 @@ export default function AuthenticatedLayout({
         </div>
       </header>
 
-      {/* Email Verification Banner - positioned below header */}
-      <div className="fixed top-16 left-0 right-0 z-40">
-        <EmailVerificationBanner />
-      </div>
-
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}
         <aside
@@ -344,6 +339,8 @@ export default function AuthenticatedLayout({
           className={`flex-1 transition-all duration-300 lg:ml-${isCollapsed ? "16" : "60"}`}
           style={{ marginLeft: isCollapsed ? "4rem" : undefined }} // Inline style as fallback/override for dynamic class
         >
+          {/* Email Verification Banner - in document flow, spans full width */}
+          <EmailVerificationBanner />
           <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
