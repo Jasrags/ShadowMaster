@@ -319,11 +319,29 @@ export async function incrementFailedAttempts(userId: string): Promise<User> {
 
   const newAttempts = (user.failedLoginAttempts || 0) + 1;
   let lockoutUntil = user.lockoutUntil;
+  const wasNotLocked = !user.lockoutUntil || new Date(user.lockoutUntil) < new Date();
 
   if (newAttempts >= LOCKOUT_THRESHOLD) {
     const unlockTime = new Date();
     unlockTime.setMinutes(unlockTime.getMinutes() + LOCKOUT_DURATION_MINS);
     lockoutUntil = unlockTime.toISOString();
+
+    // Send lockout alert email when lockout is first triggered (fire-and-forget)
+    if (wasNotLocked) {
+      const lockoutTime = new Date();
+      import("@/lib/email/security-alerts")
+        .then(({ sendLockoutAlertEmail }) =>
+          sendLockoutAlertEmail(
+            userId,
+            user.email,
+            user.username,
+            lockoutTime,
+            unlockTime,
+            process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+          )
+        )
+        .catch((err) => console.error("Failed to send lockout alert email:", err));
+    }
   }
 
   return updateUser(userId, {

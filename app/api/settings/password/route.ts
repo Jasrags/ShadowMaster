@@ -3,6 +3,7 @@ import { getSession, clearSession } from "@/lib/auth/session";
 import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
 import { verifyPassword, hashPassword } from "@/lib/auth/password";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 
 export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -49,6 +50,13 @@ export async function POST(request: NextRequest) {
     await incrementSessionVersion(userId);
 
     await AuditLogger.log({ event: "password.change", userId, ip });
+
+    // Send password changed notification email (fire-and-forget)
+    const baseUrl =
+      request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    sendPasswordChangedEmail(userId, user.email, user.username, new Date(), baseUrl).catch((err) =>
+      console.error("Failed to send password changed email:", err)
+    );
 
     const response = NextResponse.json({ success: true });
 

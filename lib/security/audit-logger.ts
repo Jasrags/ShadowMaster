@@ -10,6 +10,7 @@ export type SecurityEvent =
   | "lockout.triggered"
   | "lockout.expired"
   | "password.change"
+  | "email.change"
   | "verification.sent"
   | "verification.success"
   | "verification.failed"
@@ -18,7 +19,10 @@ export type SecurityEvent =
   | "password_reset.sent"
   | "password_reset.success"
   | "password_reset.failed"
-  | "password_reset.rate_limited";
+  | "password_reset.rate_limited"
+  | "security_email.lockout_sent"
+  | "security_email.password_changed_sent"
+  | "security_email.email_changed_sent";
 
 export interface SecurityRecord {
   timestamp: string;

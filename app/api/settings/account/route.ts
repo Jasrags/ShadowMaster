@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { updateUser, getUserById, getUserByEmail, getUserByUsername } from "@/lib/storage/users";
+import { AuditLogger } from "@/lib/security/audit-logger";
+import { sendEmailChangedEmail } from "@/lib/email/security-alerts";
 
 // PUT: Update user account (email/username)
 // DELETE: Delete user account
@@ -34,10 +36,33 @@ export async function PUT(request: NextRequest) {
       }
     }
 
+    // Capture old email before update
+    const oldEmail = user.email;
+    const emailChanged = email && email !== oldEmail;
+
     const updatedUser = await updateUser(userId, {
       ...(email && { email }),
       ...(username && { username }),
     });
+
+    // If email changed, log and send notification to OLD email address
+    if (emailChanged) {
+      const ip = request.headers.get("x-forwarded-for") || "unknown";
+      await AuditLogger.log({
+        event: "email.change",
+        userId,
+        email: oldEmail,
+        ip,
+        metadata: { newEmail: email },
+      });
+
+      // Send notification to old email (fire-and-forget)
+      const baseUrl =
+        request.headers.get("origin") || process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+      sendEmailChangedEmail(userId, oldEmail, user.username, email, new Date(), baseUrl).catch(
+        (err) => console.error("Failed to send email changed notification:", err)
+      );
+    }
 
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { passwordHash: _unused, ...safeUser } = updatedUser;

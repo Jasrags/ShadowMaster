@@ -24,6 +24,7 @@ import {
 import { sendEmail, renderTemplate } from "@/lib/email";
 import { PasswordResetEmailTemplate } from "@/lib/email/templates/password-reset-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
+import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
 const TOKEN_BYTES = 32;
@@ -278,6 +279,12 @@ export async function resetPassword(
       userId: user.id,
       email: user.email,
     });
+
+    // Send password changed notification email (fire-and-forget)
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+    sendPasswordChangedEmail(user.id, user.email, user.username, new Date(), baseUrl).catch((err) =>
+      console.error("Failed to send password changed email:", err)
+    );
 
     return { success: true, userId: user.id };
   } catch (error) {

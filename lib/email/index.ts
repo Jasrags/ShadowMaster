@@ -55,3 +55,10 @@ export type { SentEmail } from "./transports";
 // Templates
 export { renderTemplate, BaseEmailLayout, EmailText, EmailButton, EmailInfoBox } from "./templates";
 export type { RenderedTemplate, BaseEmailLayoutProps } from "./templates";
+
+// Security Alerts
+export {
+  sendLockoutAlertEmail,
+  sendPasswordChangedEmail,
+  sendEmailChangedEmail,
+} from "./security-alerts";

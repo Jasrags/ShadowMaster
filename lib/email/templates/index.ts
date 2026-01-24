@@ -19,6 +19,16 @@ export type { VerificationEmailTemplateProps } from "./verification-email";
 export { PasswordResetEmailTemplate } from "./password-reset-email";
 export type { PasswordResetEmailTemplateProps } from "./password-reset-email";
 
+// Export security alert email templates
+export { LockoutAlertEmailTemplate } from "./lockout-alert";
+export type { LockoutAlertEmailTemplateProps } from "./lockout-alert";
+
+export { PasswordChangedEmailTemplate } from "./password-changed";
+export type { PasswordChangedEmailTemplateProps } from "./password-changed";
+
+export { EmailChangedEmailTemplate, maskEmail } from "./email-changed";
+export type { EmailChangedEmailTemplateProps } from "./email-changed";
+
 /**
  * Rendered template output
  */
