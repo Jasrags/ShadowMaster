@@ -94,7 +94,9 @@ mcp__github__get_file_contents      # Use: gh api repos/OWNER/REPO/contents/PATH
 
 ### Bash git/gh CLI (Preferred for GitHub)
 
-**The `gh` CLI is the most reliable way to interact with GitHub.** Use it for all GitHub operations:
+**The `gh` CLI is the most reliable way to interact with GitHub.** Use it for all GitHub operations.
+
+> For detailed issue management (epics, sub-issues, milestones, GraphQL API), see the `/github-issues` skill.
 
 ```bash
 # Issues (preferred over GitHub MCP)

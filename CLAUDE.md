@@ -241,6 +241,7 @@ This project uses MCP servers for AI-assisted development. For detailed tool sel
 Available skills for detailed guidance:
 
 - `/mcp-guide` - MCP server selection and usage
+- `/github-issues` - GitHub issue management including epics, sub-issues, milestones, and relationships
 - `/architecture-reference` - Detailed subsystem documentation
 - `/component-patterns` - Component organization guidelines
 - `/testing` - Test infrastructure and patterns
