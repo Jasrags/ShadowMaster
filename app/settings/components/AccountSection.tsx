@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { User, Mail, Save } from "lucide-react";
+import { User, Mail, Save, CheckCircle, AlertCircle, Send } from "lucide-react";
 
 interface AccountSectionProps {
   user: {
@@ -8,15 +8,43 @@ interface AccountSectionProps {
     role: string[];
     createdAt: string;
     lastLogin?: string | null;
+    emailVerified: boolean;
+    emailVerifiedAt?: string | null;
   };
   onUpdate: (updates: { email?: string; username?: string }) => Promise<void>;
 }
+
+type VerificationStatus = "idle" | "sending" | "sent" | "error" | "rate_limited";
 
 export function AccountSection({ user, onUpdate }: AccountSectionProps) {
   const [username, setUsername] = useState(user.username);
   const [email, setEmail] = useState(user.email);
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "success" | "error"; text: string } | null>(null);
+  const [verificationStatus, setVerificationStatus] = useState<VerificationStatus>("idle");
+
+  const handleSendVerification = async () => {
+    setVerificationStatus("sending");
+
+    try {
+      const response = await fetch("/api/auth/verify-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+      });
+
+      if (response.ok) {
+        setVerificationStatus("sent");
+        // Reset to idle after showing success
+        setTimeout(() => setVerificationStatus("idle"), 5000);
+      } else if (response.status === 429) {
+        setVerificationStatus("rate_limited");
+      } else {
+        setVerificationStatus("error");
+      }
+    } catch {
+      setVerificationStatus("error");
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -91,6 +119,56 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                 onChange={(e) => setEmail(e.target.value)}
                 className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
               />
+            </div>
+
+            {/* Email Verification Status */}
+            <div className="mt-3">
+              {user.emailVerified ? (
+                <div className="flex items-center gap-2 text-sm text-emerald-600 dark:text-emerald-400">
+                  <CheckCircle className="h-4 w-4" />
+                  <span>
+                    Verified
+                    {user.emailVerifiedAt && (
+                      <span className="text-muted-foreground ml-1">
+                        on {new Date(user.emailVerifiedAt).toLocaleDateString()}
+                      </span>
+                    )}
+                  </span>
+                </div>
+              ) : (
+                <div className="flex flex-col gap-2">
+                  <div className="flex items-center gap-2 text-sm text-amber-600 dark:text-amber-400">
+                    <AlertCircle className="h-4 w-4" />
+                    <span>Not verified</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={handleSendVerification}
+                      disabled={verificationStatus === "sending"}
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      <Send className="h-3.5 w-3.5" />
+                      {verificationStatus === "sending" ? "Sending..." : "Send verification email"}
+                    </button>
+                    {verificationStatus === "sent" && (
+                      <span className="text-sm text-emerald-600 dark:text-emerald-400">
+                        Email sent! Check your inbox.
+                      </span>
+                    )}
+                    {verificationStatus === "rate_limited" && (
+                      <span className="text-sm text-red-600 dark:text-red-400">
+                        Too many requests. Try again later.
+                      </span>
+                    )}
+                    {verificationStatus === "error" && (
+                      <span className="text-sm text-red-600 dark:text-red-400">
+                        Failed to send. Please try again.
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
 
