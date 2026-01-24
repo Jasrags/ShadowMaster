@@ -295,6 +295,20 @@ Extended modules:
 - `validation.ts` - Auth validation logic
 - `middleware.ts` - Auth middleware
 - `campaign.ts` - Campaign-specific authorization
+- `email-verification.ts` - Email verification token handling
+
+**Admin User Management** (`/app/api/users/[id]/`):
+
+- `lockout/route.ts` - DELETE to clear login lockouts
+- `resend-verification/route.ts` - POST to resend verification emails (rate limited)
+- `verify-email/route.ts` - POST to manually verify user email
+- `suspend/route.ts` - POST/DELETE to suspend/reactivate accounts
+
+**Admin UI** (`/app/users/`):
+
+- `UserTable.tsx` - User list with lockout/verification badges and menu actions
+- `UserEditModal.tsx` - User details with lockout info and verification controls
+- `UserAuditModal.tsx` - User audit trail viewer
 
 ---
 

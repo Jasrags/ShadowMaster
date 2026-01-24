@@ -18,6 +18,7 @@ The Account Security capability ensures the persistent integrity of user account
 - Authentication attempts MUST NOT reveal specific credential failures to prevent user enumeration.
 - Account access MUST be restricted after a defined threshold of failed authentication attempts is reached.
 - Account restrictions MUST automatically expire after a predefined duration unless administrative action is required for security restoration.
+- Administrators MUST have the authority to manually clear account lockouts to restore access when circumstances warrant early intervention.
 
 ### Rate Control
 

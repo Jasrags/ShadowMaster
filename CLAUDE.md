@@ -22,7 +22,7 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 | **Character Advancement** | Karma spending for attributes, skills, magic, edge       |
 | **Character Lifecycle**   | State machine: draft → active → retired/deceased         |
 | **Inventory Management**  | Equipment readiness states, wireless toggles             |
-| **Account Security**      | Password changes, import/export, account deletion        |
+| **Account Security**      | Password changes, lockout management, email verification |
 | **Ruleset Snapshots**     | Version control with drift detection and migration       |
 
 ## Development Commands

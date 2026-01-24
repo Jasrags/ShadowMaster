@@ -32,6 +32,15 @@ The Participant Governance capability provides administrative control over all p
 - The system MUST enforce safety locks that block the removal of the final administrator to prevent system abandonment.
 - Participant records MUST validate that no identity is left in a "role-less" state, ensuring continuous governance.
 
+### Lockout and Verification Management
+
+- Administrators MUST have visibility into login lockout states, including the lockout expiration time and failed attempt counts.
+- The system MUST allow administrators to manually clear login lockouts to restore participant access without waiting for automatic expiration.
+- Administrators MUST have visibility into email verification status for all participant accounts.
+- The system MUST allow administrators to resend verification emails for unverified accounts, subject to rate limiting.
+- The system MUST allow administrators to manually mark a participant's email as verified when circumstances require bypassing the normal verification flow.
+- All administrative lockout and verification actions MUST be recorded in the participant's audit trail.
+
 ### Systematic Oversight
 
 - The system MUST facilitate the monitoring of participant activity through last-login timestamps and associated entity counts (e.g., characters owned).
