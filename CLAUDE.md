@@ -161,9 +161,9 @@ All domain entities in `/lib/types/`. Key files:
 **Server Components** (default): Pages without interactivity
 **Client Components** (`"use client"`): Interactive components, forms
 
-**Custom Hooks:** `useAuth()`, `useRuleset()`, `useMetatypes()`, `useSkills()`, `useRulesetStatus()`
+**Custom Hooks:** `useAuth()`, `useRuleset()`, `useMetatypes()`, `useSkills()`, `useRulesetStatus()`, `useSidebar()`
 
-**Context Providers:** AuthProvider, ThemeProvider, RulesetProvider, CombatSessionContext, CreationBudgetContext
+**Context Providers:** AuthProvider, ThemeProvider, RulesetProvider, CombatSessionContext, CreationBudgetContext, SidebarProvider
 
 For component organization guidelines (subfolder vs single file decisions), use the `/component-patterns` skill.
 

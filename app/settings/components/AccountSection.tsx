@@ -62,10 +62,12 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
-      <div className="border-b border-border px-6 py-4">
-        <h2 className="text-lg font-medium text-foreground">Account Information</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+    <div className="settings-card">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-6 py-4">
+        <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">
+          Account Information
+        </h2>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           Update your account details and profile information.
         </p>
       </div>
@@ -76,8 +78,8 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
             <div
               className={`rounded-md p-4 transition-colors ${
                 message.type === "success"
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                  : "bg-red-500/10 text-red-600 dark:text-red-400 border border-red-500/20"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  : "bg-red-500/10 text-red-400 border border-red-500/20"
               }`}
             >
               {message.text}
@@ -85,11 +87,14 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
           )}
 
           <div>
-            <label htmlFor="username" className="block text-sm font-medium text-foreground/80">
+            <label
+              htmlFor="username"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            >
               Username
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
+              <span className="settings-input-addon rounded-l-md">
                 <User className="h-4 w-4" />
               </span>
               <input
@@ -98,17 +103,20 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                 id="username"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
+                className="settings-input rounded-l-none rounded-r-md"
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-foreground/80">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            >
               Email Address
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
+              <span className="settings-input-addon rounded-l-md">
                 <Mail className="h-4 w-4" />
               </span>
               <input
@@ -117,7 +125,7 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                 id="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
+                className="settings-input rounded-l-none rounded-r-md"
               />
             </div>
 
@@ -129,7 +137,7 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                   <span>
                     Verified
                     {user.emailVerifiedAt && (
-                      <span className="text-muted-foreground ml-1">
+                      <span className="text-zinc-500 ml-1">
                         on {new Date(user.emailVerifiedAt).toLocaleDateString()}
                       </span>
                     )}
@@ -146,7 +154,7 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
                       type="button"
                       onClick={handleSendVerification}
                       disabled={verificationStatus === "sending"}
-                      className="inline-flex items-center gap-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300 disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="inline-flex items-center gap-1.5 text-sm font-medium text-emerald-600 dark:text-emerald-400 hover:text-emerald-500 dark:hover:text-emerald-300 disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       <Send className="h-3.5 w-3.5" />
                       {verificationStatus === "sending" ? "Sending..." : "Send verification email"}
@@ -174,14 +182,18 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
 
           <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
             <div>
-              <label className="block text-sm font-medium text-foreground/80">Role</label>
-              <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Role
+              </label>
+              <div className="mt-1 block w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-zinc-600 dark:text-zinc-400">
                 {user.role.join(", ")}
               </div>
             </div>
             <div>
-              <label className="block text-sm font-medium text-foreground/80">Member Since</label>
-              <div className="mt-1 block w-full rounded-md border border-border bg-muted px-3 py-2 text-muted-foreground">
+              <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                Member Since
+              </label>
+              <div className="mt-1 block w-full rounded-md border border-zinc-300 dark:border-zinc-700 bg-zinc-100 dark:bg-zinc-800 px-3 py-2 text-zinc-600 dark:text-zinc-400">
                 {new Date(user.createdAt).toLocaleDateString()}
               </div>
             </div>
@@ -189,11 +201,7 @@ export function AccountSection({ user, onUpdate }: AccountSectionProps) {
         </div>
 
         <div className="mt-6 flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-black"
-          >
+          <button type="submit" disabled={loading} className="settings-btn-primary">
             {loading ? (
               "Saving..."
             ) : (

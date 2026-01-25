@@ -96,7 +96,7 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
         </span>
 
         {/* Cost */}
-        <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
+        <span className="shrink-0 font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
           ¥{formatCurrency(totalCost)}
         </span>
 

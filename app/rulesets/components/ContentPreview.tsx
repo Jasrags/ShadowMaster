@@ -77,10 +77,10 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
       <div className="flex flex-wrap gap-2">
         <button
           onClick={() => handleCategoryChange(undefined)}
-          className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+          className={`px-3 py-1.5 text-sm rounded-full transition-all font-medium ${
             !selectedCategory
-              ? "bg-primary text-primary-foreground"
-              : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+              ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
+              : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
           }`}
         >
           All
@@ -89,10 +89,10 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
           <button
             key={key}
             onClick={() => handleCategoryChange(key)}
-            className={`px-3 py-1.5 text-sm rounded-full transition-colors ${
+            className={`px-3 py-1.5 text-sm rounded-full transition-all font-medium ${
               selectedCategory === key
-                ? "bg-primary text-primary-foreground"
-                : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                ? "bg-emerald-600 text-white shadow-lg shadow-emerald-500/25"
+                : "bg-muted text-muted-foreground hover:bg-muted/80 hover:text-foreground"
             }`}
           >
             {label}
@@ -103,7 +103,7 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
       {/* Content List */}
       {loading ? (
         <div className="flex items-center justify-center py-8">
-          <Loader2 className="w-6 h-6 animate-spin text-primary" />
+          <Loader2 className="w-6 h-6 animate-spin text-emerald-500" aria-hidden="true" />
         </div>
       ) : error ? (
         <div className="text-center py-8 text-destructive">{error}</div>
@@ -116,7 +116,7 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
           {items.map((item) => (
             <div
               key={`${item.category}-${item.id}`}
-              className="p-3 rounded-lg bg-secondary/30 border border-border hover:bg-secondary/50 transition-colors"
+              className="p-3 rounded-lg bg-muted/30 border border-border hover:border-emerald-500/30 transition-colors"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -128,13 +128,15 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
                   )}
                 </div>
                 {item.category && (
-                  <span className="text-xs bg-primary/10 text-primary px-2 py-0.5 rounded">
+                  <span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded font-mono">
                     {CATEGORY_LABELS[item.category] || item.category}
                   </span>
                 )}
               </div>
               {item.source && (
-                <p className="text-xs text-muted-foreground mt-2">Source: {item.source}</p>
+                <p className="text-xs text-muted-foreground mt-2 font-mono">
+                  Source: {item.source}
+                </p>
               )}
             </div>
           ))}
@@ -145,22 +147,28 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
       {total > limit && (
         <div className="flex items-center justify-between pt-2 border-t border-border">
           <span className="text-sm text-muted-foreground">
-            Showing {offset + 1}-{Math.min(offset + limit, total)} of {total}
+            Showing <span className="font-mono font-semibold text-foreground">{offset + 1}</span>-
+            <span className="font-mono font-semibold text-foreground">
+              {Math.min(offset + limit, total)}
+            </span>{" "}
+            of <span className="font-mono font-semibold text-foreground">{total}</span>
           </span>
           <div className="flex gap-2">
             <button
               onClick={() => setOffset(Math.max(0, offset - limit))}
               disabled={!hasPrev}
-              className="p-2 rounded-lg bg-secondary hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              aria-label="Previous page"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-4 h-4" aria-hidden="true" />
             </button>
             <button
               onClick={() => setOffset(offset + limit)}
               disabled={!hasNext}
-              className="p-2 rounded-lg bg-secondary hover:bg-secondary/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              className="p-2 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              aria-label="Next page"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-4 h-4" aria-hidden="true" />
             </button>
           </div>
         </div>

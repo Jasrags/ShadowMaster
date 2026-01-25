@@ -223,9 +223,9 @@ function GearListItem({
       disabled={isDisabled}
       className={`w-full rounded-lg border p-2.5 text-left transition-all ${
         isSelected
-          ? "border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30"
+          ? "border-emerald-400 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
           : !isDisabled
-            ? "border-zinc-200 bg-white hover:border-amber-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-amber-500"
+            ? "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
             : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
       }`}
     >
@@ -250,7 +250,7 @@ function GearListItem({
           </div>
         </div>
         <div className="flex-shrink-0 text-right">
-          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {formatCurrency(getGearCost(gear))}¥
             {(gear.costPerRating || gear.ratingSpec?.costScaling?.perRating) && "/R"}
           </div>
@@ -414,7 +414,10 @@ export function GearPurchaseModal({
                 Purchase Gear
               </h2>
               <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                {formatCurrency(remaining)}¥ available
+                <span className="font-mono text-emerald-600 dark:text-emerald-400">
+                  {formatCurrency(remaining)}¥
+                </span>{" "}
+                available
               </p>
             </div>
             <button
@@ -438,7 +441,7 @@ export function GearPurchaseModal({
                   }}
                   className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
                     selectedCategory === category.id
-                      ? "bg-amber-500 text-white"
+                      ? "bg-emerald-600 text-white"
                       : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
                   }`}
                 >
@@ -446,7 +449,7 @@ export function GearPurchaseModal({
                   <span
                     className={`ml-1 ${
                       selectedCategory === category.id
-                        ? "text-amber-100"
+                        ? "text-emerald-100"
                         : "text-zinc-400 dark:text-zinc-500"
                     }`}
                   >
@@ -599,10 +602,10 @@ export function GearPurchaseModal({
                     <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">
                       <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
                       <span
-                        className={`font-medium ${
+                        className={`font-mono font-medium ${
                           !canAfford
                             ? "text-red-600 dark:text-red-400"
-                            : "text-zinc-900 dark:text-zinc-100"
+                            : "text-emerald-600 dark:text-emerald-400"
                         }`}
                       >
                         {formatCurrency(selectedGearCost)}¥{!canAfford && " (over budget)"}

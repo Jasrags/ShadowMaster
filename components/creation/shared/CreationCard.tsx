@@ -111,11 +111,11 @@ export function CreationCard({
   const getBorderColor = () => {
     switch (status) {
       case "valid":
-        return "border-emerald-200 dark:border-emerald-800";
+        return "border-emerald-300 dark:border-emerald-500/30";
       case "warning":
-        return "border-amber-200 dark:border-amber-800";
+        return "border-amber-300 dark:border-amber-500/30";
       case "error":
-        return "border-red-200 dark:border-red-800";
+        return "border-red-300 dark:border-red-500/30";
       default:
         return "border-zinc-200 dark:border-zinc-700";
     }
