@@ -48,6 +48,9 @@ export class SmtpTransport implements EmailTransport {
       // Disable certificate validation for local dev (Mailpit)
       tls: config.secure ? undefined : { rejectUnauthorized: false },
     });
+    console.log(
+      `[Email] SMTP transport initialized: ${config.host}:${config.port} (secure: ${config.secure}, auth: ${config.auth ? "yes" : "no"})`
+    );
   }
 
   async send(message: EmailMessage): Promise<EmailResult> {
@@ -74,6 +77,10 @@ export class SmtpTransport implements EmailTransport {
         })),
       });
 
+      const toAddrs = formatAddresses(message.to);
+      console.log(
+        `[Email] SMTP sent successfully: to=${toAddrs}, subject="${message.subject}", messageId=${info.messageId}`
+      );
       return {
         success: true,
         messageId: info.messageId,
@@ -82,6 +89,10 @@ export class SmtpTransport implements EmailTransport {
       };
     } catch (err) {
       const error = err instanceof Error ? err.message : "Unknown SMTP error";
+      const toAddrs = formatAddresses(message.to);
+      console.error(
+        `[Email] SMTP send failed: to=${toAddrs}, subject="${message.subject}", error=${error}`
+      );
       return {
         success: false,
         error,
@@ -94,8 +105,11 @@ export class SmtpTransport implements EmailTransport {
   async verify(): Promise<boolean> {
     try {
       await this.transporter.verify();
+      console.log("[Email] SMTP connection verified successfully");
       return true;
-    } catch {
+    } catch (err) {
+      const error = err instanceof Error ? err.message : "Unknown error";
+      console.error(`[Email] SMTP connection verification failed: ${error}`);
       return false;
     }
   }
