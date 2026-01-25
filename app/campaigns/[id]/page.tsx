@@ -214,7 +214,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
       </button>
 
       {/* Campaign Header */}
-      <div className="mb-6 rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
+      <div className="mb-6 rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <div className="flex items-center gap-3">
@@ -240,7 +240,7 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
               </span>
               <span className="inline-flex items-center gap-1">
                 <Users className="h-4 w-4" />
-                {campaign.playerIds.length} players
+                <span className="font-mono">{campaign.playerIds.length}</span> players
               </span>
               <span className="rounded bg-zinc-100 px-2 py-0.5 text-xs dark:bg-zinc-800">
                 {gameplayLevelLabels[campaign.gameplayLevel]}

@@ -79,7 +79,7 @@ export default function CampaignList() {
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
+            className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
             <option value="all">All Status</option>
             <option value="active">Active</option>
@@ -90,7 +90,7 @@ export default function CampaignList() {
           <select
             value={roleFilter}
             onChange={(e) => setRoleFilter(e.target.value)}
-            className="rounded-md border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-50"
+            className="rounded-md border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
           >
             <option value="all">All Campaigns</option>
             <option value="gm">As GM</option>
@@ -115,7 +115,7 @@ export default function CampaignList() {
           </button>
           <button
             onClick={handleCreateCampaign}
-            className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+            className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all hover:bg-indigo-700 hover:shadow-indigo-500/40"
           >
             <Plus className="h-4 w-4" />
             Create Campaign
@@ -132,7 +132,7 @@ export default function CampaignList() {
 
       {/* Campaign Grid */}
       {campaigns.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-zinc-200 bg-zinc-50 p-12 text-center dark:border-zinc-700 dark:bg-zinc-950">
+        <div className="rounded-lg border-2 border-dashed border-zinc-200 bg-zinc-50 p-12 text-center dark:border-zinc-700 dark:bg-zinc-800/30">
           <h3 className="text-lg font-medium text-zinc-900 dark:text-zinc-50">No campaigns yet</h3>
           <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
             Create a new campaign or join one with an invite code.
@@ -147,7 +147,7 @@ export default function CampaignList() {
             </button>
             <button
               onClick={handleCreateCampaign}
-              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-indigo-700"
+              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all hover:bg-indigo-700 hover:shadow-indigo-500/40"
             >
               <Plus className="h-4 w-4" />
               Create Campaign
