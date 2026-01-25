@@ -228,7 +228,7 @@ export function WeaponRow({
         {hasWireless && <Wifi className="h-3.5 w-3.5 shrink-0 text-blue-500" />}
 
         {/* Cost */}
-        <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100 shrink-0">
+        <span className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100 shrink-0">
           ¥{formatCurrency(totalCost)}
         </span>
 

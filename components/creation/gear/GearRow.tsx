@@ -110,7 +110,7 @@ export function GearRow({ gear, onRemove, onAddMod, onRemoveMod }: GearRowProps)
 
         {/* Controls */}
         <div className="flex shrink-0 items-center gap-1">
-          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <span className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {formatCurrency(totalCost)}¥
           </span>
           {/* Separator */}

@@ -14,8 +14,10 @@
  */
 
 import { useState } from "react";
+import { Button as AriaButton } from "react-aria-components";
 import { useStabilityShield } from "@/lib/rules/sync/hooks";
 import { MigrationWizard } from "./MigrationWizard";
+import { Tooltip } from "@/components/ui/Tooltip";
 import type { ID, SyncStatus, LegalityStatus } from "@/lib/types";
 
 // =============================================================================
@@ -164,76 +166,54 @@ export function StabilityShield({
 
   const hasAction = shield.status !== "green" && interactive;
 
-  const handleClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const handleClick = () => {
     if (hasAction) {
       setShowWizard(true);
     }
   };
 
+  // Build tooltip content
+  const tooltipContent = (
+    <div className="text-center">
+      <div className="font-semibold">{shield.label}</div>
+      <div className="text-zinc-300 dark:text-zinc-600">{shield.tooltip}</div>
+      {shield.actionRequired && (
+        <div className="mt-1 text-yellow-300 dark:text-yellow-600">{shield.actionRequired}</div>
+      )}
+    </div>
+  );
+
+  const shieldButton = (
+    <AriaButton
+      onPress={hasAction ? handleClick : undefined}
+      isDisabled={!hasAction}
+      className={`
+        ${sizeClasses[size]}
+        ${colorClasses[shield.status]}
+        ${bgClasses[shield.status]}
+        ${hasAction ? hoverClasses[shield.status] : ""}
+        ${hasAction ? "cursor-pointer" : "cursor-default"}
+        rounded-full
+        flex items-center justify-center
+        transition-colors duration-200
+        focus:outline-none focus:ring-2 focus:ring-offset-1
+        ${hasAction ? "focus:ring-current" : ""}
+      `}
+      aria-label={shield.label}
+    >
+      <ShieldIcon className="w-3/4 h-3/4" status={shield.status} />
+    </AriaButton>
+  );
+
   return (
     <>
-      <div className={`relative inline-flex group ${className}`}>
-        {/* Shield Icon */}
-        <button
-          type="button"
-          onClick={handleClick}
-          disabled={!hasAction}
-          className={`
-            ${sizeClasses[size]}
-            ${colorClasses[shield.status]}
-            ${bgClasses[shield.status]}
-            ${hasAction ? hoverClasses[shield.status] : ""}
-            ${hasAction ? "cursor-pointer" : "cursor-default"}
-            rounded-full
-            flex items-center justify-center
-            transition-colors duration-200
-            focus:outline-none focus:ring-2 focus:ring-offset-1
-            ${hasAction ? "focus:ring-current" : ""}
-          `}
-          aria-label={shield.label}
-          title={hasAction ? "Click to review" : shield.label}
-        >
-          <ShieldIcon className="w-3/4 h-3/4" status={shield.status} />
-        </button>
-
-        {/* Tooltip */}
-        {showTooltip && (
-          <div
-            className={`
-              absolute z-50
-              left-1/2 -translate-x-1/2
-              bottom-full mb-2
-              px-3 py-2
-              bg-gray-900 dark:bg-gray-100
-              text-white dark:text-gray-900
-              text-xs font-medium
-              rounded-lg shadow-lg
-              whitespace-nowrap
-              opacity-0 invisible
-              group-hover:opacity-100 group-hover:visible
-              transition-all duration-200
-              pointer-events-none
-            `}
-          >
-            <div className="font-semibold">{shield.label}</div>
-            <div className="text-gray-300 dark:text-gray-600">{shield.tooltip}</div>
-            {shield.actionRequired && (
-              <div className="mt-1 text-yellow-300 dark:text-yellow-600">
-                {shield.actionRequired}
-              </div>
-            )}
-            {/* Tooltip arrow */}
-            <div
-              className={`
-                absolute left-1/2 -translate-x-1/2
-                top-full
-                border-4 border-transparent
-                border-t-gray-900 dark:border-t-gray-100
-              `}
-            />
-          </div>
+      <div className={`inline-flex ${className}`}>
+        {showTooltip ? (
+          <Tooltip content={tooltipContent} placement="top" delay={300}>
+            {shieldButton}
+          </Tooltip>
+        ) : (
+          shieldButton
         )}
       </div>
 

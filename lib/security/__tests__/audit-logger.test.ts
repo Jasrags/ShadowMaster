@@ -5,6 +5,10 @@ import { AuditLogger, SecurityEvent } from "../audit-logger";
 const mocks = vi.hoisted(() => ({
   mkdir: vi.fn().mockResolvedValue(undefined),
   appendFile: vi.fn().mockResolvedValue(undefined),
+  securityLogger: {
+    info: vi.fn(),
+    error: vi.fn(),
+  },
 }));
 
 // Mock fs.promises using dynamic import pattern
@@ -28,23 +32,22 @@ vi.mock("fs", async (importOriginal) => {
   };
 });
 
+// Mock the logging module
+vi.mock("@/lib/logging", () => ({
+  securityLogger: mocks.securityLogger,
+}));
+
 describe("AuditLogger", () => {
-  let consoleLogSpy: ReturnType<typeof vi.spyOn>;
-  let consoleErrorSpy: ReturnType<typeof vi.spyOn>;
   const fixedDate = new Date("2024-06-15T10:30:00.000Z");
 
   beforeEach(() => {
     vi.clearAllMocks();
     vi.useFakeTimers();
     vi.setSystemTime(fixedDate);
-    consoleLogSpy = vi.spyOn(console, "log").mockImplementation(() => {});
-    consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
   });
 
   afterEach(() => {
     vi.useRealTimers();
-    consoleLogSpy.mockRestore();
-    consoleErrorSpy.mockRestore();
   });
 
   it("creates logs directory with recursive option", async () => {
@@ -200,14 +203,20 @@ describe("AuditLogger", () => {
     });
   });
 
-  describe("console logging", () => {
+  describe("structured logging", () => {
     it("logs event with userId", async () => {
       await AuditLogger.log({
         event: "signin.success",
         userId: "user-123",
       });
 
-      expect(consoleLogSpy).toHaveBeenCalledWith("[AuditLog] signin.success: user-123");
+      expect(mocks.securityLogger.info).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: "signin.success",
+          userId: "user-123",
+        }),
+        "Security event logged"
+      );
     });
 
     it("logs event with email when no userId", async () => {
@@ -216,7 +225,13 @@ describe("AuditLogger", () => {
         email: "test@example.com",
       });
 
-      expect(consoleLogSpy).toHaveBeenCalledWith("[AuditLog] signin.failure: test@example.com");
+      expect(mocks.securityLogger.info).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: "signin.failure",
+          email: "test@example.com",
+        }),
+        "Security event logged"
+      );
     });
 
     it("logs event with ip when no userId or email", async () => {
@@ -225,7 +240,13 @@ describe("AuditLogger", () => {
         ip: "192.168.1.1",
       });
 
-      expect(consoleLogSpy).toHaveBeenCalledWith("[AuditLog] signin.failure: 192.168.1.1");
+      expect(mocks.securityLogger.info).toHaveBeenCalledWith(
+        expect.objectContaining({
+          event: "signin.failure",
+          ip: "192.168.1.1",
+        }),
+        "Security event logged"
+      );
     });
   });
 
@@ -242,7 +263,13 @@ describe("AuditLogger", () => {
         })
       ).resolves.not.toThrow();
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to write to audit log:", error);
+      expect(mocks.securityLogger.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          error,
+          event: "signin.success",
+        }),
+        "Failed to write to audit log"
+      );
     });
 
     it("catches and logs fs appendFile error without throwing", async () => {
@@ -257,7 +284,13 @@ describe("AuditLogger", () => {
         })
       ).resolves.not.toThrow();
 
-      expect(consoleErrorSpy).toHaveBeenCalledWith("Failed to write to audit log:", error);
+      expect(mocks.securityLogger.error).toHaveBeenCalledWith(
+        expect.objectContaining({
+          error,
+          event: "signin.success",
+        }),
+        "Failed to write to audit log"
+      );
     });
   });
 });

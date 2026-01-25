@@ -181,7 +181,7 @@ export default function CreateCampaignPage() {
         Back to Campaigns
       </button>
 
-      <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-black">
+      <div className="rounded-lg border border-zinc-200 bg-white p-6 dark:border-zinc-800 dark:bg-zinc-900">
         <h1 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">Create Campaign</h1>
         <p className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
           Set up a new campaign with your preferred rules and settings.
@@ -210,7 +210,7 @@ export default function CreateCampaignPage() {
                 id="template"
                 value={selectedTemplateId}
                 onChange={(e) => handleTemplateChange(e.target.value)}
-                className="mt-1 block w-full rounded-md border border-indigo-200 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-indigo-800 dark:bg-black dark:text-white"
+                className="mt-1 block w-full rounded-md border border-indigo-200 px-3 py-2 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-indigo-800 dark:bg-zinc-800 dark:text-white"
                 disabled={loadingTemplates}
               >
                 <option value="">No Template (Clean Start)</option>
@@ -239,7 +239,7 @@ export default function CreateCampaignPage() {
               required
               minLength={3}
               maxLength={100}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               placeholder="Enter campaign title"
             />
           </div>
@@ -257,7 +257,7 @@ export default function CreateCampaignPage() {
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               rows={3}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               placeholder="Describe your campaign (optional)"
             />
           </div>
@@ -275,7 +275,7 @@ export default function CreateCampaignPage() {
               value={editionCode}
               onChange={(e) => setEditionCode(e.target.value)}
               required
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               disabled={loadingEditions}
             >
               <option value="">Select an edition</option>
@@ -351,7 +351,7 @@ export default function CreateCampaignPage() {
               value={gameplayLevel}
               onChange={(e) => setGameplayLevel(e.target.value as GameplayLevel)}
               required
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
             >
               <option value="street">Street Level</option>
               <option value="experienced">Experienced</option>
@@ -372,7 +372,7 @@ export default function CreateCampaignPage() {
               value={visibility}
               onChange={(e) => setVisibility(e.target.value as CampaignVisibility)}
               required
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
             >
               <option value="private">Private (GM only)</option>
               <option value="invite-only">Invite Only (with code)</option>
@@ -394,7 +394,7 @@ export default function CreateCampaignPage() {
               value={maxPlayers || ""}
               onChange={(e) => setMaxPlayers(e.target.value ? parseInt(e.target.value) : undefined)}
               min={1}
-              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
+              className="mt-1 block w-full rounded-md border border-zinc-300 px-3 py-2 focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-white"
               placeholder="Leave blank for unlimited"
             />
           </div>
@@ -417,7 +417,7 @@ export default function CreateCampaignPage() {
                 enabledBookIds.length === 0 ||
                 enabledCreationMethodIds.length === 0
               }
-              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 disabled:opacity-50"
+              className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-lg shadow-indigo-500/25 transition-all hover:bg-indigo-700 hover:shadow-indigo-500/40 disabled:opacity-50"
             >
               {loading ? (
                 <>

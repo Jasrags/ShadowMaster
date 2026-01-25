@@ -28,6 +28,33 @@
   /* Cyber accents - subtle in light mode */
   --cyber-accent: rgba(16, 185, 129, 0.1);
   --cyber-glow: transparent;
+
+  /* Archetype accent colors */
+  --accent-mage: #8b5cf6;
+  --accent-mage-light: #a78bfa;
+  --accent-sam: #10b981;
+  --accent-sam-light: #34d399;
+  --accent-rigger: #06b6d4;
+  --accent-rigger-light: #22d3ee;
+  --accent-decker: #3b82f6;
+  --accent-decker-light: #60a5fa;
+  --accent-face: #f59e0b;
+  --accent-face-light: #fbbf24;
+  --accent-campaign: #6366f1;
+  --accent-campaign-light: #818cf8;
+  --accent-alert: #f59e0b;
+
+  /* Glow effects - subtle in light mode */
+  --glow-mage: 0 4px 20px rgba(139, 92, 246, 0.1);
+  --glow-sam: 0 4px 20px rgba(16, 185, 129, 0.1);
+  --glow-rigger: 0 4px 20px rgba(6, 182, 212, 0.1);
+  --glow-decker: 0 4px 20px rgba(59, 130, 246, 0.1);
+  --glow-face: 0 4px 20px rgba(245, 158, 11, 0.1);
+  --glow-campaign: 0 4px 20px rgba(99, 102, 241, 0.1);
+
+  /* Grid pattern - subtle in light */
+  --grid-color: rgba(16, 185, 129, 0.04);
+  --grid-size: 40px;
 }
 
 .dark {
@@ -54,6 +81,17 @@
   /* Cyber accents - stronger in dark mode */
   --cyber-accent: rgba(16, 185, 129, 0.2);
   --cyber-glow: 0 0 20px rgba(16, 185, 129, 0.15);
+
+  /* Stronger glows in dark mode - neon effect */
+  --glow-mage: 0 0 20px rgba(139, 92, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-sam: 0 0 20px rgba(16, 185, 129, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-rigger: 0 0 20px rgba(6, 182, 212, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-decker: 0 0 20px rgba(59, 130, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-face: 0 0 20px rgba(245, 158, 11, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-campaign: 0 0 20px rgba(99, 102, 241, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Grid pattern - visible in dark mode */
+  --grid-color: rgba(16, 185, 129, 0.03);
 }
 
 @theme inline {
@@ -71,6 +109,28 @@
   --font-mono: var(--font-geist-mono);
 
   --shadow-cyber: var(--cyber-glow);
+
+  /* Archetype colors for Tailwind utilities */
+  --color-accent-mage: var(--accent-mage);
+  --color-accent-mage-light: var(--accent-mage-light);
+  --color-accent-sam: var(--accent-sam);
+  --color-accent-sam-light: var(--accent-sam-light);
+  --color-accent-rigger: var(--accent-rigger);
+  --color-accent-rigger-light: var(--accent-rigger-light);
+  --color-accent-decker: var(--accent-decker);
+  --color-accent-decker-light: var(--accent-decker-light);
+  --color-accent-face: var(--accent-face);
+  --color-accent-face-light: var(--accent-face-light);
+  --color-accent-campaign: var(--accent-campaign);
+  --color-accent-campaign-light: var(--accent-campaign-light);
+
+  /* Glow shadows for Tailwind utilities */
+  --shadow-glow-mage: var(--glow-mage);
+  --shadow-glow-sam: var(--glow-sam);
+  --shadow-glow-rigger: var(--glow-rigger);
+  --shadow-glow-decker: var(--glow-decker);
+  --shadow-glow-face: var(--glow-face);
+  --shadow-glow-campaign: var(--glow-campaign);
 }
 
 body {
@@ -78,6 +138,328 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =============================================================================
+   CYBERPUNK DASHBOARD STYLES
+   ============================================================================= */
+
+/* Grid background pattern for dashboard */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Neon card base - add accent bar via ::before */
+.neon-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.neon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Archetype-specific accent bars and glows */
+.neon-card-mage::before {
+  background: linear-gradient(90deg, var(--accent-mage), var(--accent-mage-light));
+}
+.neon-card-mage {
+  box-shadow: var(--glow-mage);
+}
+.neon-card-mage:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.neon-card-sam::before {
+  background: linear-gradient(90deg, var(--accent-sam), var(--accent-sam-light));
+}
+.neon-card-sam {
+  box-shadow: var(--glow-sam);
+}
+.neon-card-sam:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.neon-card-rigger::before {
+  background: linear-gradient(90deg, var(--accent-rigger), var(--accent-rigger-light));
+}
+.neon-card-rigger {
+  box-shadow: var(--glow-rigger);
+}
+.neon-card-rigger:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.neon-card-decker::before {
+  background: linear-gradient(90deg, var(--accent-decker), var(--accent-decker-light));
+}
+.neon-card-decker {
+  box-shadow: var(--glow-decker);
+}
+.neon-card-decker:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.neon-card-face::before {
+  background: linear-gradient(90deg, var(--accent-face), var(--accent-face-light));
+}
+.neon-card-face {
+  box-shadow: var(--glow-face);
+}
+.neon-card-face:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.neon-card-campaign::before {
+  background: linear-gradient(90deg, var(--accent-campaign), var(--accent-campaign-light));
+}
+.neon-card-campaign {
+  box-shadow: var(--glow-campaign);
+}
+.neon-card-campaign:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Default green accent for generic cards */
+.neon-card-default::before {
+  background: linear-gradient(90deg, var(--accent-sam), var(--accent-sam-light));
+}
+.neon-card-default {
+  box-shadow: var(--glow-sam);
+}
+
+/* Neon divider with diamond */
+.neon-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  position: relative;
+}
+
+.neon-divider::after {
+  content: '\25C6';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background);
+  padding: 0 12px;
+  color: var(--primary);
+  font-size: 10px;
+}
+
+/* Section title with accent line */
+.section-title-accent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title-accent::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+/* Alert banner with top accent */
+.alert-banner-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.alert-banner-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-alert), transparent);
+}
+
+/* =============================================================================
+   HEADER & SIDEBAR NEON STYLES
+   ============================================================================= */
+
+/* Header with top accent bar */
+.neon-header {
+  position: relative;
+}
+
+.neon-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--accent-sam) 20%,
+    var(--accent-sam-light) 50%,
+    var(--accent-sam) 80%,
+    transparent 100%
+  );
+  opacity: 0.8;
+}
+
+.dark .neon-header::before {
+  opacity: 1;
+  box-shadow: 0 0 10px var(--accent-sam), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+/* Sidebar container */
+.neon-sidebar {
+  position: relative;
+}
+
+/* Sidebar with right accent line in dark mode */
+.dark .neon-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg,
+    var(--accent-sam) 0%,
+    transparent 30%,
+    transparent 70%,
+    var(--accent-sam) 100%
+  );
+  opacity: 0.3;
+}
+
+/* Sidebar nav item base */
+.nav-item {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Active nav item with left accent bar */
+.nav-item-active {
+  position: relative;
+}
+
+.nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-sam), var(--accent-sam-light));
+  border-radius: 0 2px 2px 0;
+}
+
+.dark .nav-item-active {
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.dark .nav-item-active::before {
+  box-shadow: 0 0 8px var(--accent-sam);
+}
+
+/* Nav item hover glow in dark mode */
+.dark .nav-item:hover:not(.nav-item-active) {
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.05);
+}
+
+/* Sidebar section divider */
+.sidebar-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 8px 0;
+}
+
+.dark .sidebar-divider {
+  background: linear-gradient(90deg, transparent, var(--accent-sam), transparent);
+  opacity: 0.2;
+}
+
+/* User avatar with glow */
+.avatar-glow {
+  transition: box-shadow 0.2s ease;
+}
+
+.dark .avatar-glow:hover {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Header icon button hover */
+.header-icon-btn {
+  transition: all 0.2s ease;
+}
+
+.dark .header-icon-btn:hover {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+/* Logo text glow effect in dark mode */
+.logo-text {
+  transition: text-shadow 0.2s ease;
+}
+
+.dark .logo-text:hover {
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Collapse button with subtle glow */
+.collapse-btn {
+  transition: all 0.2s ease;
+}
+
+.dark .collapse-btn:hover {
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  color: var(--accent-sam) !important;
+}
+
+/* =============================================================================
+   STAT VALUE STYLING
+   ============================================================================= */
+
+/* Stat value styling */
+.stat-karma {
+  color: var(--accent-face);
+}
+
+.stat-nuyen {
+  color: var(--accent-sam);
+}
+
+.stat-essence {
+  color: var(--accent-rigger);
+}
+
+/* Archetype text colors */
+.text-archetype-mage {
+  color: var(--accent-mage);
+}
+
+.text-archetype-sam {
+  color: var(--accent-sam);
+}
+
+.text-archetype-rigger {
+  color: var(--accent-rigger);
+}
+
+.text-archetype-decker {
+  color: var(--accent-decker);
+}
+
+.text-archetype-face {
+  color: var(--accent-face);
 }
 
 /* Cyberpunk scanline effect */
@@ -104,6 +486,151 @@ body {
 
 .dark .scanlines::before {
   opacity: 0.3;
+}
+
+/* =============================================================================
+   SETTINGS PAGE STYLES
+   ============================================================================= */
+
+/* Settings card with top accent bar */
+.settings-card {
+  @apply rounded-lg border border-zinc-800 bg-zinc-900 shadow-sm;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-sam), transparent);
+  opacity: 0.5;
+}
+
+.dark .settings-card::before {
+  opacity: 0.8;
+}
+
+/* Light mode settings card override */
+:root .settings-card {
+  @apply border-zinc-200 bg-white;
+}
+
+/* Settings navigation items */
+.settings-nav-item {
+  @apply relative flex w-full items-center rounded-md px-3 py-2 text-sm font-medium;
+  @apply text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-200;
+  transition: all 0.2s ease;
+}
+
+:root .settings-nav-item {
+  @apply text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900;
+}
+
+/* Active settings nav item with left accent bar */
+.settings-nav-item-active {
+  @apply bg-zinc-800/80 text-zinc-100;
+  position: relative;
+}
+
+.settings-nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-sam), var(--accent-sam-light));
+  border-radius: 0 2px 2px 0;
+}
+
+.dark .settings-nav-item-active {
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.dark .settings-nav-item-active::before {
+  box-shadow: 0 0 8px var(--accent-sam);
+}
+
+:root .settings-nav-item-active {
+  @apply bg-zinc-100 text-zinc-900;
+}
+
+/* Settings form inputs */
+.settings-input {
+  @apply block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100;
+  @apply placeholder:text-zinc-500;
+  @apply focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none;
+  @apply sm:text-sm;
+  transition: all 0.2s ease;
+}
+
+:root .settings-input {
+  @apply border-zinc-300 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400;
+  @apply focus:border-emerald-500 focus:ring-emerald-500;
+}
+
+/* Input group addon (icon prefix) */
+.settings-input-addon {
+  @apply inline-flex items-center rounded-l-md border border-r-0 border-zinc-700 bg-zinc-800 px-3 text-zinc-500;
+}
+
+:root .settings-input-addon {
+  @apply border-zinc-300 bg-zinc-100 text-zinc-500;
+}
+
+/* Settings buttons */
+.settings-btn-primary {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply bg-emerald-600 text-white shadow-sm;
+  @apply hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+.dark .settings-btn-primary:not(:disabled):hover {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.settings-btn-secondary {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply border border-zinc-700 bg-zinc-800 text-zinc-200 shadow-sm;
+  @apply hover:bg-zinc-700 hover:text-zinc-100;
+  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+:root .settings-btn-secondary {
+  @apply border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900;
+}
+
+.settings-btn-danger {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply bg-red-600 text-white shadow-sm;
+  @apply hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+/* Theme card for preferences */
+.settings-theme-card {
+  @apply relative flex flex-col items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer;
+  @apply border-zinc-700 bg-zinc-800/50 hover:border-emerald-500/50 hover:bg-zinc-800;
+}
+
+:root .settings-theme-card {
+  @apply border-zinc-200 bg-zinc-50 hover:border-emerald-500/50 hover:bg-zinc-100;
+}
+
+.settings-theme-card-active {
+  @apply border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500;
 }
 
 /* =============================================================================

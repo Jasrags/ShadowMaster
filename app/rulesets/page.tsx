@@ -10,15 +10,18 @@ export default async function RulesetsPage() {
   const editions = await getAllEditions();
 
   return (
-    <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
-      <div className="mb-8">
-        <h1 className="text-3xl font-bold tracking-tight">Rulesets</h1>
-        <p className="mt-2 text-lg text-muted-foreground">
-          Browse available Shadowrun editions, books, and rules.
-        </p>
-      </div>
+    <div className="bg-grid min-h-full">
+      <div className="container mx-auto py-8 px-4 sm:px-6 lg:px-8">
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold tracking-tight">Rulesets</h1>
+          <p className="mt-2 text-lg text-muted-foreground">
+            Browse available Shadowrun editions, books, and rules.
+          </p>
+          <div className="neon-divider mt-4" />
+        </div>
 
-      <EditionBrowser editions={editions} />
+        <EditionBrowser editions={editions} />
+      </div>
     </div>
   );
 }

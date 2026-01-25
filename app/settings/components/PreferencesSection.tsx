@@ -80,26 +80,26 @@ export function PreferencesSection() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <Loader2 className="h-8 w-8 animate-spin text-emerald-500" />
       </div>
     );
   }
 
   return (
-    <div className="rounded-xl border border-border bg-card shadow-sm overflow-hidden transition-colors">
-      <div className="border-b border-border px-6 py-5 flex justify-between items-center">
+    <div className="settings-card">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-6 py-5 flex justify-between items-center">
         <div>
-          <h2 className="text-xl font-semibold text-foreground">Preferences</h2>
-          <p className="mt-1 text-sm text-muted-foreground">
+          <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Preferences</h2>
+          <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
             Customize your experience across the sprawl.
           </p>
         </div>
-        {saving && <Loader2 className="h-4 w-4 animate-spin text-muted-foreground" />}
+        {saving && <Loader2 className="h-4 w-4 animate-spin text-zinc-500" />}
       </div>
 
       <div className="p-6 space-y-8">
         <section>
-          <h3 className="text-sm font-medium uppercase tracking-wider text-muted-foreground mb-4">
+          <h3 className="text-sm font-medium uppercase tracking-wider text-zinc-500 mb-4">
             Appearance
           </h3>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -110,30 +110,24 @@ export function PreferencesSection() {
                 <button
                   key={t.id}
                   onClick={() => handleThemeChange(t.id)}
-                  className={`relative flex flex-col items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 text-left cursor-pointer
-                                        ${
-                                          isSelected
-                                            ? "border-primary bg-primary/5 ring-1 ring-primary"
-                                            : "border-border bg-muted/50 hover:border-primary/50 hover:bg-muted dark:hover:border-primary/50"
-                                        }
-                                    `}
+                  className={`settings-theme-card ${isSelected ? "settings-theme-card-active" : ""}`}
                 >
                   <div
-                    className={`p-2 rounded-lg ${isSelected ? "text-primary" : "text-muted-foreground"}`}
+                    className={`p-2 rounded-lg ${isSelected ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-500"}`}
                   >
                     <Icon size={24} />
                   </div>
                   <div className="text-center">
                     <p
-                      className={`font-medium ${isSelected ? "text-foreground" : "text-foreground/80"}`}
+                      className={`font-medium ${isSelected ? "text-zinc-900 dark:text-zinc-100" : "text-zinc-700 dark:text-zinc-300"}`}
                     >
                       {t.name}
                     </p>
-                    <p className="text-xs text-muted-foreground">{t.description}</p>
+                    <p className="text-xs text-zinc-500">{t.description}</p>
                   </div>
                   {isSelected && (
                     <div className="absolute top-2 right-2">
-                      <div className="w-2 h-2 rounded-full bg-primary shadow-sm shadow-primary/50" />
+                      <div className="w-2 h-2 rounded-full bg-emerald-500 shadow-sm shadow-emerald-500/50" />
                     </div>
                   )}
                 </button>
@@ -142,22 +136,22 @@ export function PreferencesSection() {
           </div>
         </section>
 
-        <div className="pt-6 border-t border-border">
+        <div className="pt-6 border-t border-zinc-200 dark:border-zinc-800">
           <div
             className="flex items-center justify-between cursor-pointer"
             onClick={handleCompactModeToggle}
           >
             <div>
-              <h3 className="text-sm font-medium text-foreground">Compact Mode</h3>
-              <p className="text-xs text-muted-foreground">
+              <h3 className="text-sm font-medium text-zinc-800 dark:text-zinc-200">Compact Mode</h3>
+              <p className="text-xs text-zinc-500">
                 Reduce padding and font sizes for high-density information
               </p>
             </div>
             <div
-              className={`w-10 h-6 rounded-full relative transition-colors ${compactMode ? "bg-primary" : "bg-muted"}`}
+              className={`w-10 h-6 rounded-full relative transition-colors ${compactMode ? "bg-emerald-500" : "bg-zinc-300 dark:bg-zinc-700"}`}
             >
               <div
-                className={`absolute top-1 w-4 h-4 bg-background rounded-full transition-all ${compactMode ? "left-5" : "left-1"}`}
+                className={`absolute top-1 w-4 h-4 bg-white dark:bg-zinc-900 rounded-full transition-all ${compactMode ? "left-5" : "left-1"}`}
               />
             </div>
           </div>

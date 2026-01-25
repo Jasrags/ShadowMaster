@@ -6,21 +6,23 @@ interface PrivacySectionProps {
 
 export function PrivacySection({ onDeleteAccount }: PrivacySectionProps) {
   return (
-    <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
-      <div className="border-b border-border px-6 py-4">
-        <h2 className="text-lg font-medium text-destructive">Danger Zone</h2>
-        <p className="mt-1 text-sm text-muted-foreground">Irreversible actions for your account.</p>
+    <div className="settings-card !border-red-900/50">
+      <div className="border-b border-red-200 dark:border-red-900/30 px-6 py-4">
+        <h2 className="text-lg font-medium text-red-600 dark:text-red-500">Danger Zone</h2>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
+          Irreversible actions for your account.
+        </p>
       </div>
 
       <div className="p-6">
-        <div className="rounded-md bg-destructive/10 border border-destructive/20 p-4">
+        <div className="rounded-md bg-red-500/10 border border-red-500/20 p-4">
           <div className="flex">
             <div className="shrink-0">
-              <AlertTriangle className="h-5 w-5 text-destructive" aria-hidden="true" />
+              <AlertTriangle className="h-5 w-5 text-red-500" aria-hidden="true" />
             </div>
             <div className="ml-3">
-              <h3 className="text-sm font-medium text-destructive">Delete Account</h3>
-              <div className="mt-2 text-sm text-destructive opacity-90">
+              <h3 className="text-sm font-medium text-red-600 dark:text-red-400">Delete Account</h3>
+              <div className="mt-2 text-sm text-red-600/80 dark:text-red-400/80">
                 <p>
                   Once you delete your account, there is no going back. Please be certain. All your
                   characters and personal data will be permanently deleted.
@@ -34,7 +36,7 @@ export function PrivacySection({ onDeleteAccount }: PrivacySectionProps) {
           <div className="w-full max-w-sm">
             <label
               htmlFor="delete-password"
-              className="block text-sm font-medium text-foreground/80 mb-1"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-1"
             >
               Confirm Password to Delete Account
             </label>
@@ -42,7 +44,7 @@ export function PrivacySection({ onDeleteAccount }: PrivacySectionProps) {
               type="password"
               id="delete-password"
               placeholder="Enter your password"
-              className="block w-full rounded-md border-input bg-background text-foreground px-3 py-2 text-sm focus:border-destructive focus:ring-destructive"
+              className="settings-input focus:border-red-500 focus:ring-red-500"
             />
           </div>
           <button
@@ -65,7 +67,7 @@ export function PrivacySection({ onDeleteAccount }: PrivacySectionProps) {
                 }
               }
             }}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-destructive px-4 py-2 text-sm font-medium text-destructive-foreground shadow-sm hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-destructive focus:ring-offset-2 dark:focus:ring-offset-background"
+            className="settings-btn-danger"
           >
             <Trash2 className="mr-2 h-4 w-4" />
             Delete Account Permanently

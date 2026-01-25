@@ -24,7 +24,7 @@ export default function CampaignCard({ campaign, userRole, onView }: CampaignCar
   return (
     <div
       onClick={() => onView(campaign.id)}
-      className="group cursor-pointer overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-950 dark:hover:border-zinc-700"
+      className="neon-card neon-card-campaign group cursor-pointer overflow-hidden rounded-lg border border-zinc-200 bg-white transition-all duration-300 hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-zinc-900 dark:hover:border-zinc-700"
     >
       {campaign.imageUrl && (
         <div className="h-32 w-full overflow-hidden bg-zinc-100 dark:bg-zinc-900">
@@ -92,8 +92,8 @@ export default function CampaignCard({ campaign, userRole, onView }: CampaignCar
           </div>
           <div className="flex items-center gap-1">
             <Users className="h-4 w-4" />
-            <span>
-              <span className="font-mono">{campaign.playerIds.length}</span> players
+            <span className="font-mono">
+              {campaign.playerIds.length} <span className="font-sans">players</span>
             </span>
           </div>
           <div className="flex items-center gap-1">

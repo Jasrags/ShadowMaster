@@ -2,6 +2,7 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { randomBytes, createHash, timingSafeEqual } from "crypto";
 import { getUserById, setSessionSecretHash } from "../storage/users";
+import { authLogger } from "@/lib/logging";
 
 const SESSION_COOKIE_NAME = "session";
 const SESSION_DURATION_DAYS = 7;
@@ -96,6 +97,8 @@ export async function createSession(
     expires,
     path: "/",
   });
+
+  authLogger.debug({ userId, sessionVersion }, "Session created");
 }
 
 /**

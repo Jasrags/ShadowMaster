@@ -7,6 +7,7 @@
 
 import nodemailer from "nodemailer";
 import type { Transporter } from "nodemailer";
+import { emailLogger } from "@/lib/logging";
 import type { EmailAddress, EmailMessage, EmailResult, EmailTransport, SmtpConfig } from "../types";
 
 /**
@@ -48,8 +49,9 @@ export class SmtpTransport implements EmailTransport {
       // Disable certificate validation for local dev (Mailpit)
       tls: config.secure ? undefined : { rejectUnauthorized: false },
     });
-    console.log(
-      `[Email] SMTP transport initialized: ${config.host}:${config.port} (secure: ${config.secure}, auth: ${config.auth ? "yes" : "no"})`
+    emailLogger.info(
+      { host: config.host, port: config.port, secure: config.secure, hasAuth: !!config.auth },
+      "SMTP transport initialized"
     );
   }
 
@@ -78,8 +80,9 @@ export class SmtpTransport implements EmailTransport {
       });
 
       const toAddrs = formatAddresses(message.to);
-      console.log(
-        `[Email] SMTP sent successfully: to=${toAddrs}, subject="${message.subject}", messageId=${info.messageId}`
+      emailLogger.info(
+        { to: toAddrs, subject: message.subject, messageId: info.messageId },
+        "SMTP email sent successfully"
       );
       return {
         success: true,
@@ -90,9 +93,7 @@ export class SmtpTransport implements EmailTransport {
     } catch (err) {
       const error = err instanceof Error ? err.message : "Unknown SMTP error";
       const toAddrs = formatAddresses(message.to);
-      console.error(
-        `[Email] SMTP send failed: to=${toAddrs}, subject="${message.subject}", error=${error}`
-      );
+      emailLogger.error({ to: toAddrs, subject: message.subject, error }, "SMTP email send failed");
       return {
         success: false,
         error,
@@ -105,11 +106,11 @@ export class SmtpTransport implements EmailTransport {
   async verify(): Promise<boolean> {
     try {
       await this.transporter.verify();
-      console.log("[Email] SMTP connection verified successfully");
+      emailLogger.info("SMTP connection verified successfully");
       return true;
     } catch (err) {
       const error = err instanceof Error ? err.message : "Unknown error";
-      console.error(`[Email] SMTP connection verification failed: ${error}`);
+      emailLogger.error({ error }, "SMTP connection verification failed");
       return false;
     }
   }
