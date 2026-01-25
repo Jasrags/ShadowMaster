@@ -49,17 +49,20 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
 
   if (loading) {
     return (
-      <div className="h-full flex items-center justify-center p-8">
-        <Loader2 className="w-8 h-8 animate-spin text-primary" />
+      <div className="h-full flex items-center justify-center p-8 bg-card">
+        <Loader2 className="w-8 h-8 animate-spin text-emerald-500" aria-hidden="true" />
       </div>
     );
   }
 
   if (error || !data) {
     return (
-      <div className="p-6 text-center">
+      <div className="h-full bg-card p-6 text-center">
         <p className="text-destructive mb-4">{error || "Data not available"}</p>
-        <button onClick={onClose} className="px-4 py-2 bg-secondary rounded-md">
+        <button
+          onClick={onClose}
+          className="px-4 py-2 bg-muted rounded-md hover:bg-muted/80 transition-colors"
+        >
           Close
         </button>
       </div>
@@ -70,14 +73,24 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
 
   return (
     <div className="h-full overflow-y-auto bg-card border-l border-border animate-in slide-in-from-right duration-300">
-      <div className="sticky top-0 z-10 bg-card/95 backdrop-blur border-b border-border p-4 flex items-start justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">{edition.name}</h2>
-          <p className="text-muted-foreground">Released {edition.releaseYear}</p>
+      {/* Header with neon accent */}
+      <div className="sticky top-0 z-10 bg-card/95 backdrop-blur border-b border-border">
+        <div className="p-4 flex items-start justify-between">
+          <div>
+            <h2 className="text-2xl font-bold">{edition.name}</h2>
+            <p className="text-sm font-mono text-muted-foreground">
+              Released {edition.releaseYear}
+            </p>
+          </div>
+          <button
+            onClick={onClose}
+            className="p-2 rounded-full hover:bg-muted transition-colors"
+            aria-label="Close panel"
+          >
+            <X className="w-5 h-5" aria-hidden="true" />
+          </button>
         </div>
-        <button onClick={onClose} className="p-2 rounded-full hover:bg-secondary transition-colors">
-          <X className="w-5 h-5" />
-        </button>
+        <div className="neon-divider mx-4" />
       </div>
 
       <div className="p-6 space-y-8">
@@ -85,19 +98,20 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
         <div className="flex flex-col gap-3">
           <a
             href={`/characters/create/sheet?edition=${edition.shortCode}`}
-            className="w-full py-3 px-4 bg-primary text-primary-foreground font-semibold rounded-lg text-center hover:bg-primary/90 transition-colors flex items-center justify-center gap-2"
+            className="w-full py-3 px-4 bg-emerald-600 text-white font-semibold rounded-lg text-center transition-all hover:bg-emerald-700 shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 flex items-center justify-center gap-2"
           >
             Create Character
-            <ArrowRight className="w-4 h-4" />
+            <ArrowRight className="w-4 h-4" aria-hidden="true" />
           </a>
         </div>
 
+        {/* Tabs with emerald accent */}
         <div className="flex border-b border-border overflow-x-auto">
           <button
             onClick={() => setActiveTab("overview")}
             className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
               activeTab === "overview"
-                ? "border-primary text-primary"
+                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -107,12 +121,12 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
             onClick={() => setActiveTab("content")}
             className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
               activeTab === "content"
-                ? "border-primary text-primary"
+                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
             <span className="flex items-center gap-1.5">
-              <Layers className="w-4 h-4" />
+              <Layers className="w-4 h-4" aria-hidden="true" />
               Content
             </span>
           </button>
@@ -120,7 +134,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
             onClick={() => setActiveTab("books")}
             className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
               activeTab === "books"
-                ? "border-primary text-primary"
+                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -130,7 +144,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
             onClick={() => setActiveTab("methods")}
             className={`px-4 py-2 border-b-2 font-medium text-sm transition-colors whitespace-nowrap ${
               activeTab === "methods"
-                ? "border-primary text-primary"
+                ? "border-emerald-500 text-emerald-600 dark:text-emerald-400"
                 : "border-transparent text-muted-foreground hover:text-foreground"
             }`}
           >
@@ -148,19 +162,19 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div className="p-4 rounded-lg bg-secondary/20 border border-border">
-                  <div className="flex items-center gap-2 mb-2 text-primary">
-                    <BookOpen className="w-4 h-4" />
-                    <span className="font-semibold">Books Available</span>
+                <div className="p-4 rounded-lg bg-muted/30 border border-border hover:border-emerald-500/30 transition-colors">
+                  <div className="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400">
+                    <BookOpen className="w-4 h-4" aria-hidden="true" />
+                    <span className="font-semibold text-sm">Books Available</span>
                   </div>
-                  <p className="text-2xl font-bold">{books.length}</p>
+                  <p className="text-2xl font-bold font-mono">{books.length}</p>
                 </div>
-                <div className="p-4 rounded-lg bg-secondary/20 border border-border">
-                  <div className="flex items-center gap-2 mb-2 text-primary">
-                    <UserPlus className="w-4 h-4" />
-                    <span className="font-semibold">Creation Methods</span>
+                <div className="p-4 rounded-lg bg-muted/30 border border-border hover:border-emerald-500/30 transition-colors">
+                  <div className="flex items-center gap-2 mb-2 text-emerald-600 dark:text-emerald-400">
+                    <UserPlus className="w-4 h-4" aria-hidden="true" />
+                    <span className="font-semibold text-sm">Creation Methods</span>
                   </div>
-                  <p className="text-2xl font-bold">{creationMethods?.length || 0}</p>
+                  <p className="text-2xl font-bold font-mono">{creationMethods?.length || 0}</p>
                 </div>
               </div>
             </div>
@@ -178,7 +192,9 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                 <BookCard key={book.id} book={book} isCore={book.isCore} />
               ))}
               {books.length === 0 && (
-                <p className="text-muted-foreground italic">No books available for this edition.</p>
+                <p className="text-muted-foreground italic text-center py-8">
+                  No books available for this edition.
+                </p>
               )}
             </div>
           )}
@@ -196,7 +212,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
                 />
               ))}
               {(!creationMethods || creationMethods.length === 0) && (
-                <p className="text-muted-foreground italic">
+                <p className="text-muted-foreground italic text-center py-8">
                   No creation methods available for this edition.
                 </p>
               )}

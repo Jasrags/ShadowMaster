@@ -9,13 +9,21 @@ interface BookCardProps {
 export default function BookCard({ book, isCore }: BookCardProps) {
   return (
     <div
-      className={`p-4 rounded-lg border ${isCore ? "border-primary/50 bg-primary/5" : "border-border bg-card"}`}
+      className={`p-4 rounded-lg border transition-colors ${
+        isCore
+          ? "border-emerald-500/30 bg-emerald-500/5 hover:border-emerald-500/50"
+          : "border-border bg-card hover:border-muted-foreground/30"
+      }`}
     >
       <div className="flex items-start gap-3">
         <div
-          className={`p-2 rounded-md ${isCore ? "bg-primary/20 text-primary" : "bg-muted text-muted-foreground"}`}
+          className={`p-2 rounded-md ${
+            isCore
+              ? "bg-emerald-500/15 text-emerald-600 dark:text-emerald-400"
+              : "bg-muted text-muted-foreground"
+          }`}
         >
-          <BookOpen className="w-5 h-5" />
+          <BookOpen className="w-5 h-5" aria-hidden="true" />
         </div>
         <div>
           <h4 className="font-medium text-foreground">{book.title}</h4>
@@ -23,13 +31,13 @@ export default function BookCard({ book, isCore }: BookCardProps) {
             {book.categories.map((cat) => (
               <span
                 key={cat}
-                className="text-xs px-2 py-1 rounded-full bg-secondary text-secondary-foreground capitalize"
+                className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground capitalize font-mono"
               >
                 {cat}
               </span>
             ))}
             {isCore && (
-              <span className="text-xs px-2 py-1 rounded-full bg-primary/20 text-primary font-medium">
+              <span className="text-xs px-2 py-1 rounded-full bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 font-medium border border-emerald-500/20">
                 Core Rulebook
               </span>
             )}
