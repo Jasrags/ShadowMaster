@@ -220,9 +220,17 @@ Campaign-level rule customization.
 - Provides hooks: `useRuleset()`, `useMetatypes()`, `useSkills()`, etc.
 - Fetches from `/api/rulesets/[editionCode]`
 
+**Sidebar State** (`/lib/contexts/SidebarContext.tsx`):
+
+- React Context managing sidebar open/collapsed state globally
+- Provides `useSidebar()` hook with: `isOpen`, `isCollapsed`, `toggle`, `close`, `toggleCollapse`
+- Desktop collapsed state persisted to localStorage (`shadow-master-sidebar-collapsed-global`)
+- Built-in Escape key handler and resize listener for mobile drawer
+- Focus trap and accessibility features managed in `AuthenticatedLayout`
+
 **Local Storage**:
 
-- User preferences and UI state
+- User preferences and UI state (theme, sidebar collapsed state)
 - Draft recovery handled server-side via auto-save
 
 ---
