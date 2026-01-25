@@ -1,13 +1,17 @@
 import { promises as fs } from "fs";
 import path from "path";
+import { securityLogger } from "@/lib/logging";
 
 const LOGS_DIR = path.join(process.cwd(), "data", "security", "logs");
 
 export type SecurityEvent =
   | "signin.success"
   | "signin.failure"
+  | "signout.success"
   | "signup.success"
   | "signup.rate_limited"
+  | "session.created"
+  | "session.invalidated"
   | "lockout.triggered"
   | "lockout.expired"
   | "password.change"
@@ -26,6 +30,8 @@ export type SecurityEvent =
   | "magic_link.success"
   | "magic_link.failed"
   | "magic_link.rate_limited"
+  | "authorization.denied"
+  | "email.delivery_failed"
   | "security_email.lockout_sent"
   | "security_email.password_changed_sent"
   | "security_email.email_changed_sent";
@@ -65,9 +71,12 @@ export class AuditLogger {
       const line = JSON.stringify(fullRecord) + "\n";
       await fs.appendFile(logFilePath, line, "utf-8");
 
-      console.log(`[AuditLog] ${record.event}: ${record.userId || record.email || record.ip}`);
+      securityLogger.info(
+        { event: record.event, userId: record.userId, email: record.email, ip: record.ip },
+        "Security event logged"
+      );
     } catch (error) {
-      console.error("Failed to write to audit log:", error);
+      securityLogger.error({ error, event: record.event }, "Failed to write to audit log");
     }
   }
 }
