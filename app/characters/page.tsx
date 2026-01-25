@@ -18,7 +18,13 @@ interface CharacterWithOwner extends Character {
 
 function PlusIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
     </svg>
   );
@@ -26,7 +32,13 @@ function PlusIcon({ className }: { className?: string }) {
 
 function UserIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -39,7 +51,13 @@ function UserIcon({ className }: { className?: string }) {
 
 function TrashIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -52,7 +70,13 @@ function TrashIcon({ className }: { className?: string }) {
 
 function SearchIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -65,7 +89,13 @@ function SearchIcon({ className }: { className?: string }) {
 
 function GridIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -78,7 +108,13 @@ function GridIcon({ className }: { className?: string }) {
 
 function ListIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -91,7 +127,13 @@ function ListIcon({ className }: { className?: string }) {
 
 function UploadIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -104,7 +146,13 @@ function UploadIcon({ className }: { className?: string }) {
 
 function ShieldIcon({ className }: { className?: string }) {
   return (
-    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+    <svg
+      className={className}
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      aria-hidden="true"
+    >
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -113,6 +161,56 @@ function ShieldIcon({ className }: { className?: string }) {
       />
     </svg>
   );
+}
+
+// =============================================================================
+// ARCHETYPE HELPERS
+// =============================================================================
+
+// Get neon card class based on character archetype/magical path
+function getArchetypeCardClass(character: CharacterWithOwner): string {
+  const path = character.magicalPath;
+  if (path === "full-mage" || path === "aspected-mage" || path === "explorer") {
+    return "neon-card-mage";
+  }
+  if (path === "adept") {
+    return "neon-card-face"; // Adepts get amber/face color
+  }
+  if (path === "technomancer") {
+    return "neon-card-decker";
+  }
+  // Default to sam (green) for mundane characters
+  return "neon-card-sam";
+}
+
+// Get hover text color based on archetype
+function getArchetypeHoverColor(character: CharacterWithOwner): string {
+  const path = character.magicalPath;
+  if (path === "full-mage" || path === "aspected-mage" || path === "explorer") {
+    return "group-hover:text-violet-500 dark:group-hover:text-violet-400";
+  }
+  if (path === "adept") {
+    return "group-hover:text-amber-500 dark:group-hover:text-amber-400";
+  }
+  if (path === "technomancer") {
+    return "group-hover:text-blue-500 dark:group-hover:text-blue-400";
+  }
+  return "group-hover:text-emerald-500 dark:group-hover:text-emerald-400";
+}
+
+// Get archetype label and color for display
+function getArchetypeLabel(character: CharacterWithOwner): { label: string; colorClass: string } {
+  const path = character.magicalPath;
+  if (path === "full-mage" || path === "aspected-mage" || path === "explorer") {
+    return { label: path.replace(/-/g, " "), colorClass: "text-violet-500 dark:text-violet-400" };
+  }
+  if (path === "adept") {
+    return { label: "Adept", colorClass: "text-amber-500 dark:text-amber-400" };
+  }
+  if (path === "technomancer") {
+    return { label: "Technomancer", colorClass: "text-blue-500 dark:text-blue-400" };
+  }
+  return { label: "Mundane", colorClass: "text-emerald-600 dark:text-emerald-400" };
 }
 
 // =============================================================================
@@ -128,7 +226,7 @@ function StatusBadge({ status }: { status: string }) {
     retired:
       "bg-zinc-500/10 text-zinc-700 border-zinc-500/20 dark:bg-zinc-500/20 dark:text-zinc-400 dark:border-zinc-500/30",
     deceased:
-      "bg-destructive/10 text-destructive border-destructive/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30",
+      "bg-red-500/10 text-red-700 border-red-500/20 dark:bg-red-500/20 dark:text-red-400 dark:border-red-500/30",
   };
 
   return (
@@ -185,6 +283,10 @@ function CharacterCard({
     setIsDeleting(false);
   };
 
+  const cardClass = getArchetypeCardClass(character);
+  const hoverColor = getArchetypeHoverColor(character);
+  const archetype = getArchetypeLabel(character);
+
   // List view variant
   if (viewMode === "list") {
     return (
@@ -196,12 +298,16 @@ function CharacterCard({
         }
         className="group relative block"
       >
-        <div className="relative rounded-lg border border-border bg-card transition-all duration-200 hover:border-emerald-500/50 hover:bg-muted/50">
-          <div className="flex items-center gap-4 p-4">
+        <div
+          className={`relative rounded-lg border border-border bg-card neon-card ${cardClass} transition-all duration-300`}
+        >
+          <div className="flex items-center gap-4 p-4 pt-5">
             {/* Name & Metatype */}
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-3">
-                <h3 className="font-bold text-foreground truncate group-hover:text-emerald-500 transition-colors">
+                <h3
+                  className={`font-bold text-foreground truncate transition-colors ${hoverColor}`}
+                >
                   {character.name || "Unnamed Runner"}
                 </h3>
                 <StabilityShield
@@ -221,9 +327,7 @@ function CharacterCard({
                 {character.magicalPath && character.magicalPath !== "mundane" && (
                   <>
                     <span className="text-muted-foreground">•</span>
-                    <span className="text-violet-500 dark:text-violet-400 capitalize">
-                      {character.magicalPath.replace(/-/g, " ")}
-                    </span>
+                    <span className={`capitalize ${archetype.colorClass}`}>{archetype.label}</span>
                   </>
                 )}
                 <span className="text-muted-foreground">•</span>
@@ -244,20 +348,26 @@ function CharacterCard({
             {/* Stats */}
             <div className="hidden sm:flex items-center gap-6 text-sm">
               <div className="text-center">
-                <span className="block text-xs text-muted-foreground uppercase">Karma</span>
-                <span className="font-mono font-bold text-amber-500 dark:text-amber-400">
+                <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                  Karma
+                </span>
+                <span className="font-mono font-bold stat-karma">
                   {character.karmaCurrent ?? 0}
                 </span>
               </div>
               <div className="text-center">
-                <span className="block text-xs text-muted-foreground uppercase">Nuyen</span>
-                <span className="font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                  Nuyen
+                </span>
+                <span className="font-mono font-bold stat-nuyen">
                   ¥{((character.nuyen ?? 0) / 1000).toFixed(0)}k
                 </span>
               </div>
               <div className="text-center">
-                <span className="block text-xs text-muted-foreground uppercase">ESS</span>
-                <span className="font-mono font-bold text-cyan-600 dark:text-cyan-400">
+                <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                  ESS
+                </span>
+                <span className="font-mono font-bold stat-essence">
                   {(character.specialAttributes?.essence ?? 6).toFixed(1)}
                 </span>
               </div>
@@ -265,13 +375,14 @@ function CharacterCard({
 
             {/* Date & Delete */}
             <div className="flex items-center gap-3">
-              <span className="text-xs text-muted-foreground hidden md:block">
+              <span className="text-xs text-muted-foreground hidden md:block font-mono">
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
               <button
                 onClick={handleDelete}
                 disabled={isDeleting}
-                className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                aria-label={`Delete ${character.name || "character"}`}
               >
                 <TrashIcon className="w-4 h-4" />
               </button>
@@ -292,26 +403,18 @@ function CharacterCard({
       }
       className="group relative block"
     >
-      <div className="relative rounded-lg border border-border bg-card transition-all duration-300 hover:border-emerald-500/50 hover:shadow-lg hover:shadow-emerald-500/5">
-        {/* Background pattern */}
-        <div className="absolute inset-0 opacity-5 group-hover:opacity-10 transition-opacity overflow-hidden rounded-lg">
-          <div
-            className="absolute inset-0"
-            style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23888888' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
-            }}
-          />
-        </div>
-
-        {/* Top accent line */}
-        <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-emerald-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-
-        <div className="relative p-5">
+      <div
+        className={`relative rounded-lg border border-border bg-card neon-card ${cardClass} transition-all duration-300`}
+      >
+        {/* Card content with padding to account for accent bar */}
+        <div className="relative p-5 pt-6">
           {/* Header */}
           <div className="flex items-start justify-between mb-4">
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <h3 className="font-bold text-lg text-foreground truncate group-hover:text-emerald-500 transition-colors">
+                <h3
+                  className={`font-bold text-lg text-foreground truncate transition-colors ${hoverColor}`}
+                >
                   {character.name || "Unnamed Runner"}
                 </h3>
                 <StabilityShield
@@ -338,35 +441,31 @@ function CharacterCard({
 
           {/* Quick Stats */}
           <div className="grid grid-cols-3 gap-3 mb-4">
-            <div className="text-center p-2 bg-muted/50 rounded">
-              <span className="block text-xs text-muted-foreground uppercase">Karma</span>
-              <span className="text-sm font-mono font-bold text-amber-500 dark:text-amber-400">
+            <div className="text-center p-2 bg-muted/30 dark:bg-zinc-800/50 rounded border border-border/50">
+              <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                Karma
+              </span>
+              <span className="text-sm font-mono font-bold stat-karma">
                 {character.karmaCurrent ?? 0}
               </span>
             </div>
-            <div className="text-center p-2 bg-muted/50 rounded">
-              <span className="block text-xs text-muted-foreground uppercase">Nuyen</span>
-              <span className="text-sm font-mono font-bold text-emerald-600 dark:text-emerald-400">
+            <div className="text-center p-2 bg-muted/30 dark:bg-zinc-800/50 rounded border border-border/50">
+              <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                Nuyen
+              </span>
+              <span className="text-sm font-mono font-bold stat-nuyen">
                 ¥{((character.nuyen ?? 0) / 1000).toFixed(0)}k
               </span>
             </div>
-            <div className="text-center p-2 bg-muted/50 rounded">
-              <span className="block text-xs text-muted-foreground uppercase">ESS</span>
-              <span className="text-sm font-mono font-bold text-cyan-600 dark:text-cyan-400">
+            <div className="text-center p-2 bg-muted/30 dark:bg-zinc-800/50 rounded border border-border/50">
+              <span className="block text-xs text-muted-foreground uppercase tracking-wide">
+                ESS
+              </span>
+              <span className="text-sm font-mono font-bold stat-essence">
                 {(character.specialAttributes?.essence ?? 6).toFixed(1)}
               </span>
             </div>
           </div>
-
-          {/* Magical Path if applicable */}
-          {character.magicalPath && character.magicalPath !== "mundane" && (
-            <div className="flex items-center gap-2 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-violet-500" />
-              <span className="text-xs text-violet-500 dark:text-violet-400 capitalize">
-                {character.magicalPath.replace(/-/g, " ")}
-              </span>
-            </div>
-          )}
 
           {/* Owner info in admin mode */}
           {isAdminMode && character.ownerUsername && (
@@ -379,16 +478,23 @@ function CharacterCard({
 
           {/* Footer */}
           <div className="flex items-center justify-between pt-3 border-t border-border">
-            <span className="text-xs text-muted-foreground">
-              {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
+            {/* Archetype label */}
+            <span className={`text-xs font-medium capitalize ${archetype.colorClass}`}>
+              {archetype.label}
             </span>
-            <button
-              onClick={handleDelete}
-              disabled={isDeleting}
-              className="p-1.5 rounded text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
-            >
-              <TrashIcon className="w-4 h-4" />
-            </button>
+            <div className="flex items-center gap-2">
+              <span className="text-xs text-muted-foreground font-mono">
+                {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
+              </span>
+              <button
+                onClick={handleDelete}
+                disabled={isDeleting}
+                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                aria-label={`Delete ${character.name || "character"}`}
+              >
+                <TrashIcon className="w-4 h-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -402,9 +508,9 @@ function CharacterCard({
 
 function EmptyState() {
   return (
-    <div className="rounded-lg border-2 border-dashed border-border bg-muted/10 p-12 text-center">
-      <div className="mx-auto h-16 w-16 rounded-full bg-muted p-4 flex items-center justify-center">
-        <UserIcon className="h-8 w-8 text-muted-foreground" />
+    <div className="rounded-lg border-2 border-dashed border-emerald-500/30 bg-emerald-500/5 p-12 text-center">
+      <div className="mx-auto h-16 w-16 rounded-full bg-emerald-500/10 p-4 flex items-center justify-center">
+        <UserIcon className="h-8 w-8 text-emerald-600 dark:text-emerald-400" />
       </div>
       <h3 className="mt-4 text-lg font-medium text-foreground">No characters yet</h3>
       <p className="mt-2 text-sm text-muted-foreground">
@@ -413,7 +519,7 @@ function EmptyState() {
       <div className="mt-6">
         <Link
           href="/characters/create/sheet"
-          className="inline-flex items-center gap-2 rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 dark:focus:ring-offset-background"
+          className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-5 py-2.5 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:bg-emerald-700 hover:shadow-emerald-500/40 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:focus:ring-offset-background"
         >
           <PlusIcon className="h-4 w-4" />
           Create Character
@@ -431,20 +537,25 @@ function LoadingState() {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="rounded-lg border border-border bg-card p-5 animate-pulse">
-          <div className="flex items-start justify-between mb-4">
-            <div className="space-y-2">
-              <div className="h-5 w-32 bg-muted rounded" />
-              <div className="h-4 w-24 bg-muted rounded" />
+        <div
+          key={i}
+          className="rounded-lg border border-border bg-card p-5 animate-pulse neon-card neon-card-default"
+        >
+          <div className="pt-1">
+            <div className="flex items-start justify-between mb-4">
+              <div className="space-y-2">
+                <div className="h-5 w-32 bg-muted rounded" />
+                <div className="h-4 w-24 bg-muted rounded" />
+              </div>
+              <div className="h-5 w-16 bg-muted rounded" />
             </div>
-            <div className="h-5 w-16 bg-muted rounded" />
+            <div className="grid grid-cols-3 gap-3 mb-4">
+              {[1, 2, 3].map((j) => (
+                <div key={j} className="h-12 bg-muted/50 rounded" />
+              ))}
+            </div>
+            <div className="h-px bg-border" />
           </div>
-          <div className="grid grid-cols-3 gap-3 mb-4">
-            {[1, 2, 3].map((j) => (
-              <div key={j} className="h-12 bg-muted rounded" />
-            ))}
-          </div>
-          <div className="h-px bg-muted" />
         </div>
       ))}
     </div>
@@ -470,22 +581,24 @@ function FilterTabs({ activeFilter, onFilterChange, counts }: FilterTabsProps) {
   ];
 
   return (
-    <div className="flex gap-1 p-1 bg-muted rounded-lg">
+    <div className="flex gap-1 p-1 bg-muted/50 dark:bg-zinc-800/50 rounded-lg border border-border">
       {filters.map((filter) => (
         <button
           key={filter.id}
           onClick={() => onFilterChange(filter.id)}
-          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-colors ${
+          className={`px-3 py-1.5 text-sm font-medium rounded-md transition-all ${
             activeFilter === filter.id
-              ? "bg-background text-foreground shadow-sm"
-              : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+              ? "bg-background text-foreground shadow-sm border border-emerald-500/30 dark:border-emerald-500/50"
+              : "text-muted-foreground hover:text-foreground hover:bg-background/50 border border-transparent"
           }`}
         >
           {filter.label}
           {counts[filter.id] !== undefined && (
             <span
               className={`ml-1.5 text-xs font-mono ${
-                activeFilter === filter.id ? "text-primary" : "text-muted-foreground"
+                activeFilter === filter.id
+                  ? "text-emerald-600 dark:text-emerald-400"
+                  : "text-muted-foreground"
               }`}
             >
               ({counts[filter.id]})
@@ -642,14 +755,14 @@ export default function CharactersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="bg-grid min-h-full space-y-6">
       {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-3">
             <h1 className="text-2xl font-bold text-foreground">Characters</h1>
             {isAdminMode && (
-              <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded">
+              <span className="px-2 py-0.5 text-xs font-medium bg-amber-500/20 text-amber-600 dark:text-amber-400 border border-amber-500/30 rounded font-mono uppercase">
                 Admin Mode
               </span>
             )}
@@ -665,9 +778,9 @@ export default function CharactersPage() {
           {isAdmin && (
             <button
               onClick={() => setIsAdminMode(!isAdminMode)}
-              className={`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+              className={`inline-flex items-center justify-center gap-2 rounded-lg border px-4 py-2 text-sm font-medium transition-all ${
                 isAdminMode
-                  ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20"
+                  ? "border-amber-500/30 bg-amber-500/10 text-amber-600 dark:text-amber-400 hover:bg-amber-500/20 shadow-lg shadow-amber-500/10"
                   : "border-border bg-card text-muted-foreground hover:bg-muted hover:text-foreground"
               }`}
               title={isAdminMode ? "Exit admin mode" : "Enter admin mode to view all characters"}
@@ -678,7 +791,7 @@ export default function CharactersPage() {
           )}
           <button
             onClick={() => setShowImportDialog(true)}
-            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-muted focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+            className="inline-flex items-center justify-center gap-2 rounded-lg border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-all hover:bg-muted hover:border-zinc-500/50 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
           >
             <UploadIcon className="h-4 w-4" />
             Import JSON
@@ -686,13 +799,16 @@ export default function CharactersPage() {
 
           <Link
             href="/characters/create/sheet"
-            className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-background"
+            className="inline-flex items-center justify-center gap-2 rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-lg shadow-emerald-500/25 transition-all hover:bg-emerald-700 hover:shadow-emerald-500/40 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 focus:ring-offset-background"
           >
             <PlusIcon className="h-4 w-4" />
             Create Character
           </Link>
         </div>
       </div>
+
+      {/* Neon divider */}
+      <div className="neon-divider" />
 
       <CharacterImportDialog
         isOpen={showImportDialog}
@@ -703,8 +819,8 @@ export default function CharactersPage() {
 
       {/* Error State */}
       {error && (
-        <div className="rounded-lg border border-destructive/20 bg-destructive/10 p-4">
-          <p className="text-sm text-destructive">{error}</p>
+        <div className="alert-banner-accent rounded-lg border border-red-500/20 bg-red-500/10 p-4">
+          <p className="text-sm text-red-600 dark:text-red-400">{error}</p>
         </div>
       )}
 
@@ -729,13 +845,13 @@ export default function CharactersPage() {
                   />
 
                   {/* View Toggle */}
-                  <div className="flex items-center gap-1 p-1 bg-muted rounded-lg">
+                  <div className="flex items-center gap-1 p-1 bg-muted/50 dark:bg-zinc-800/50 rounded-lg border border-border">
                     <button
                       onClick={() => setViewMode("grid")}
-                      className={`p-1.5 rounded transition-colors ${
+                      className={`p-1.5 rounded transition-all ${
                         viewMode === "grid"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                          ? "bg-background text-foreground shadow-sm border border-emerald-500/30 dark:border-emerald-500/50"
+                          : "text-muted-foreground hover:text-foreground border border-transparent"
                       }`}
                       aria-label="Grid view"
                     >
@@ -743,10 +859,10 @@ export default function CharactersPage() {
                     </button>
                     <button
                       onClick={() => setViewMode("list")}
-                      className={`p-1.5 rounded transition-colors ${
+                      className={`p-1.5 rounded transition-all ${
                         viewMode === "list"
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground"
+                          ? "bg-background text-foreground shadow-sm border border-emerald-500/30 dark:border-emerald-500/50"
+                          : "text-muted-foreground hover:text-foreground border border-transparent"
                       }`}
                       aria-label="List view"
                     >
@@ -765,12 +881,13 @@ export default function CharactersPage() {
                       placeholder="Search by name, metatype, or path..."
                       value={searchQuery}
                       onChange={(e) => setSearchQuery(e.target.value)}
-                      className="w-full pl-9 pr-4 py-2 text-sm bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none transition-colors"
+                      className="w-full pl-9 pr-4 py-2 text-sm bg-background border border-border rounded-lg text-foreground placeholder-muted-foreground focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none transition-colors"
                     />
                     {searchQuery && (
                       <button
                         onClick={() => setSearchQuery("")}
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                        aria-label="Clear search"
                       >
                         ×
                       </button>
@@ -797,7 +914,7 @@ export default function CharactersPage() {
                   <select
                     value={sortBy}
                     onChange={(e) => setSortBy(e.target.value as SortOption)}
-                    className="px-3 py-2 text-sm bg-background border border-border rounded-lg text-foreground focus:border-primary focus:ring-1 focus:ring-primary focus:outline-none cursor-pointer"
+                    className="px-3 py-2 text-sm bg-background border border-border rounded-lg text-foreground focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none cursor-pointer"
                   >
                     <option value="updated">Recently Updated</option>
                     <option value="created">Recently Created</option>
@@ -810,15 +927,26 @@ export default function CharactersPage() {
               {/* Results count */}
               {searchQuery && (
                 <div className="text-sm text-muted-foreground">
-                  Found {filteredCharacters.length} character
+                  Found{" "}
+                  <span className="font-mono font-semibold text-foreground">
+                    {filteredCharacters.length}
+                  </span>{" "}
+                  character
                   {filteredCharacters.length !== 1 ? "s" : ""}
-                  {searchQuery && ` matching "${searchQuery}"`}
+                  {searchQuery && (
+                    <>
+                      {" "}
+                      matching &quot;
+                      <span className="text-emerald-600 dark:text-emerald-400">{searchQuery}</span>
+                      &quot;
+                    </>
+                  )}
                 </div>
               )}
 
               {/* Character Grid/List */}
               {filteredCharacters.length === 0 ? (
-                <div className="text-center py-12">
+                <div className="text-center py-12 rounded-lg border border-dashed border-border bg-muted/10">
                   <p className="text-muted-foreground">
                     {searchQuery
                       ? `No characters matching "${searchQuery}"`
@@ -827,7 +955,7 @@ export default function CharactersPage() {
                   {searchQuery && (
                     <button
                       onClick={() => setSearchQuery("")}
-                      className="mt-2 text-sm text-primary hover:underline"
+                      className="mt-2 text-sm text-emerald-600 dark:text-emerald-400 hover:underline"
                     >
                       Clear search
                     </button>
