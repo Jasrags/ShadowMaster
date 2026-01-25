@@ -46,7 +46,7 @@ export function EmptyState({ message, icon: Icon, size = "md", className = "" }:
 
   return (
     <div
-      className={`rounded-lg border-2 border-dashed border-zinc-200 ${sizeClasses[size]} text-center dark:border-zinc-700 ${className}`}
+      className={`rounded-lg border-2 border-dashed border-zinc-200 bg-zinc-50 ${sizeClasses[size]} text-center dark:border-zinc-700 dark:bg-zinc-800/30 ${className}`}
     >
       {Icon ? (
         <div className="flex items-center justify-center gap-2">

@@ -481,13 +481,13 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
                   </span>
                 )}
               </span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              <span className="font-mono font-medium text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(totalSpent)} / {formatCurrency(totalNuyen)}
               </span>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <div className="h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
               <div
-                className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-blue-500"}`}
+                className={`h-full transition-all ${isOverBudget ? "bg-red-500" : "bg-emerald-500"}`}
                 style={{
                   width: `${Math.min(100, (totalSpent / totalNuyen) * 100)}%`,
                 }}

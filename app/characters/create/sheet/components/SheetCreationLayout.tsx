@@ -145,8 +145,7 @@ function PlaceholderCard({
  */
 function getBudgetBarColor(budget: { spent: number; total: number; remaining: number }): string {
   if (budget.remaining < 0) return "bg-red-500";
-  if (budget.remaining === 0 && budget.total > 0) return "bg-emerald-500";
-  return "bg-blue-500";
+  return "bg-emerald-500";
 }
 
 function getBudgetTextColor(budget: { spent: number; total: number; remaining: number }): string {
@@ -240,7 +239,7 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   };
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <div className="flex items-center justify-between">
         <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Budget Summary</h3>
         {isValid ? (
@@ -291,7 +290,7 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
                 </div>
 
                 {/* Progress bar */}
-                <div className="relative mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+                <div className="relative mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
                   <div
                     className={`h-full transition-all ${barColor}`}
                     style={{ width: `${percentSpent}%` }}
@@ -376,7 +375,7 @@ function ValidationSummary({
   const { canFinalize, isValid, errors } = useCreationBudgets();
 
   return (
-    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-800 dark:bg-zinc-900">
+    <div className="rounded-lg border border-zinc-200 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-900">
       <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Finalize Character</h3>
 
       {/* Save status */}

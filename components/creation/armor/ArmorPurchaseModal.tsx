@@ -200,9 +200,9 @@ function ArmorListItem({
       disabled={!canAfford}
       className={`w-full text-left p-2.5 rounded-lg border transition-all ${
         isSelected
-          ? "border-amber-400 bg-amber-50 dark:border-amber-600 dark:bg-amber-900/30"
+          ? "border-emerald-400 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
           : canAfford
-            ? "border-zinc-200 bg-white hover:border-amber-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-amber-500"
+            ? "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
             : "border-zinc-200 bg-zinc-100 opacity-50 cursor-not-allowed dark:border-zinc-700 dark:bg-zinc-800"
       }`}
     >
@@ -227,7 +227,7 @@ function ArmorListItem({
           </div>
         </div>
         <div className="text-right flex-shrink-0">
-          <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {formatCurrency(armor.cost)}¥
           </div>
           <div className="text-xs text-zinc-500">
@@ -363,7 +363,7 @@ export function ArmorPurchaseModal({
                   onClick={() => setSelectedCategory(cat.id)}
                   className={`px-2.5 py-1 text-xs font-medium rounded-full transition-colors ${
                     selectedCategory === cat.id
-                      ? "bg-amber-500 text-white"
+                      ? "bg-emerald-600 text-white"
                       : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
                   }`}
                 >
@@ -548,7 +548,7 @@ export function ArmorPurchaseModal({
           <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
               Budget:{" "}
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+              <span className="font-mono font-medium text-emerald-600 dark:text-emerald-400">
                 {formatCurrency(remaining)}¥
               </span>{" "}
               remaining

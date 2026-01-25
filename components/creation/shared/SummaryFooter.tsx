@@ -66,7 +66,9 @@ export function SummaryFooter({
       <span className="text-xs text-zinc-500 dark:text-zinc-400">
         Total: {count} {pluralLabel}
       </span>
-      <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">{formattedTotal}</span>
+      <span className="font-mono text-xs font-medium text-emerald-600 dark:text-emerald-400">
+        {formattedTotal}
+      </span>
     </div>
   );
 }
