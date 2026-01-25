@@ -28,6 +28,33 @@
   /* Cyber accents - subtle in light mode */
   --cyber-accent: rgba(16, 185, 129, 0.1);
   --cyber-glow: transparent;
+
+  /* Archetype accent colors */
+  --accent-mage: #8b5cf6;
+  --accent-mage-light: #a78bfa;
+  --accent-sam: #10b981;
+  --accent-sam-light: #34d399;
+  --accent-rigger: #06b6d4;
+  --accent-rigger-light: #22d3ee;
+  --accent-decker: #3b82f6;
+  --accent-decker-light: #60a5fa;
+  --accent-face: #f59e0b;
+  --accent-face-light: #fbbf24;
+  --accent-campaign: #6366f1;
+  --accent-campaign-light: #818cf8;
+  --accent-alert: #f59e0b;
+
+  /* Glow effects - subtle in light mode */
+  --glow-mage: 0 4px 20px rgba(139, 92, 246, 0.1);
+  --glow-sam: 0 4px 20px rgba(16, 185, 129, 0.1);
+  --glow-rigger: 0 4px 20px rgba(6, 182, 212, 0.1);
+  --glow-decker: 0 4px 20px rgba(59, 130, 246, 0.1);
+  --glow-face: 0 4px 20px rgba(245, 158, 11, 0.1);
+  --glow-campaign: 0 4px 20px rgba(99, 102, 241, 0.1);
+
+  /* Grid pattern - subtle in light */
+  --grid-color: rgba(16, 185, 129, 0.04);
+  --grid-size: 40px;
 }
 
 .dark {
@@ -54,6 +81,17 @@
   /* Cyber accents - stronger in dark mode */
   --cyber-accent: rgba(16, 185, 129, 0.2);
   --cyber-glow: 0 0 20px rgba(16, 185, 129, 0.15);
+
+  /* Stronger glows in dark mode - neon effect */
+  --glow-mage: 0 0 20px rgba(139, 92, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-sam: 0 0 20px rgba(16, 185, 129, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-rigger: 0 0 20px rgba(6, 182, 212, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-decker: 0 0 20px rgba(59, 130, 246, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-face: 0 0 20px rgba(245, 158, 11, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+  --glow-campaign: 0 0 20px rgba(99, 102, 241, 0.4), 0 8px 32px rgba(0, 0, 0, 0.5);
+
+  /* Grid pattern - visible in dark mode */
+  --grid-color: rgba(16, 185, 129, 0.03);
 }
 
 @theme inline {
@@ -71,6 +109,28 @@
   --font-mono: var(--font-geist-mono);
 
   --shadow-cyber: var(--cyber-glow);
+
+  /* Archetype colors for Tailwind utilities */
+  --color-accent-mage: var(--accent-mage);
+  --color-accent-mage-light: var(--accent-mage-light);
+  --color-accent-sam: var(--accent-sam);
+  --color-accent-sam-light: var(--accent-sam-light);
+  --color-accent-rigger: var(--accent-rigger);
+  --color-accent-rigger-light: var(--accent-rigger-light);
+  --color-accent-decker: var(--accent-decker);
+  --color-accent-decker-light: var(--accent-decker-light);
+  --color-accent-face: var(--accent-face);
+  --color-accent-face-light: var(--accent-face-light);
+  --color-accent-campaign: var(--accent-campaign);
+  --color-accent-campaign-light: var(--accent-campaign-light);
+
+  /* Glow shadows for Tailwind utilities */
+  --shadow-glow-mage: var(--glow-mage);
+  --shadow-glow-sam: var(--glow-sam);
+  --shadow-glow-rigger: var(--glow-rigger);
+  --shadow-glow-decker: var(--glow-decker);
+  --shadow-glow-face: var(--glow-face);
+  --shadow-glow-campaign: var(--glow-campaign);
 }
 
 body {
@@ -78,6 +138,187 @@ body {
   color: var(--foreground);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* =============================================================================
+   CYBERPUNK DASHBOARD STYLES
+   ============================================================================= */
+
+/* Grid background pattern for dashboard */
+.bg-grid {
+  background-image:
+    linear-gradient(var(--grid-color) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
+  background-size: var(--grid-size) var(--grid-size);
+}
+
+/* Neon card base - add accent bar via ::before */
+.neon-card {
+  position: relative;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+.neon-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  transition: box-shadow 0.3s ease;
+}
+
+/* Archetype-specific accent bars and glows */
+.neon-card-mage::before {
+  background: linear-gradient(90deg, var(--accent-mage), var(--accent-mage-light));
+}
+.neon-card-mage {
+  box-shadow: var(--glow-mage);
+}
+.neon-card-mage:hover {
+  border-color: rgba(139, 92, 246, 0.3);
+}
+
+.neon-card-sam::before {
+  background: linear-gradient(90deg, var(--accent-sam), var(--accent-sam-light));
+}
+.neon-card-sam {
+  box-shadow: var(--glow-sam);
+}
+.neon-card-sam:hover {
+  border-color: rgba(16, 185, 129, 0.3);
+}
+
+.neon-card-rigger::before {
+  background: linear-gradient(90deg, var(--accent-rigger), var(--accent-rigger-light));
+}
+.neon-card-rigger {
+  box-shadow: var(--glow-rigger);
+}
+.neon-card-rigger:hover {
+  border-color: rgba(6, 182, 212, 0.3);
+}
+
+.neon-card-decker::before {
+  background: linear-gradient(90deg, var(--accent-decker), var(--accent-decker-light));
+}
+.neon-card-decker {
+  box-shadow: var(--glow-decker);
+}
+.neon-card-decker:hover {
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.neon-card-face::before {
+  background: linear-gradient(90deg, var(--accent-face), var(--accent-face-light));
+}
+.neon-card-face {
+  box-shadow: var(--glow-face);
+}
+.neon-card-face:hover {
+  border-color: rgba(245, 158, 11, 0.3);
+}
+
+.neon-card-campaign::before {
+  background: linear-gradient(90deg, var(--accent-campaign), var(--accent-campaign-light));
+}
+.neon-card-campaign {
+  box-shadow: var(--glow-campaign);
+}
+.neon-card-campaign:hover {
+  border-color: rgba(99, 102, 241, 0.3);
+}
+
+/* Default green accent for generic cards */
+.neon-card-default::before {
+  background: linear-gradient(90deg, var(--accent-sam), var(--accent-sam-light));
+}
+.neon-card-default {
+  box-shadow: var(--glow-sam);
+}
+
+/* Neon divider with diamond */
+.neon-divider {
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--primary), transparent);
+  position: relative;
+}
+
+.neon-divider::after {
+  content: '\25C6';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--background);
+  padding: 0 12px;
+  color: var(--primary);
+  font-size: 10px;
+}
+
+/* Section title with accent line */
+.section-title-accent {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.section-title-accent::after {
+  content: '';
+  width: 60px;
+  height: 1px;
+  background: linear-gradient(90deg, var(--primary), transparent);
+}
+
+/* Alert banner with top accent */
+.alert-banner-accent {
+  position: relative;
+  overflow: hidden;
+}
+
+.alert-banner-accent::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent-alert), transparent);
+}
+
+/* Stat value styling */
+.stat-karma {
+  color: var(--accent-face);
+}
+
+.stat-nuyen {
+  color: var(--accent-sam);
+}
+
+.stat-essence {
+  color: var(--accent-rigger);
+}
+
+/* Archetype text colors */
+.text-archetype-mage {
+  color: var(--accent-mage);
+}
+
+.text-archetype-sam {
+  color: var(--accent-sam);
+}
+
+.text-archetype-rigger {
+  color: var(--accent-rigger);
+}
+
+.text-archetype-decker {
+  color: var(--accent-decker);
+}
+
+.text-archetype-face {
+  color: var(--accent-face);
 }
 
 /* Cyberpunk scanline effect */
