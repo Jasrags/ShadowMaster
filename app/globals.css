@@ -287,6 +287,147 @@ body {
   background: linear-gradient(90deg, transparent, var(--accent-alert), transparent);
 }
 
+/* =============================================================================
+   HEADER & SIDEBAR NEON STYLES
+   ============================================================================= */
+
+/* Header with top accent bar */
+.neon-header {
+  position: relative;
+}
+
+.neon-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    var(--accent-sam) 20%,
+    var(--accent-sam-light) 50%,
+    var(--accent-sam) 80%,
+    transparent 100%
+  );
+  opacity: 0.8;
+}
+
+.dark .neon-header::before {
+  opacity: 1;
+  box-shadow: 0 0 10px var(--accent-sam), 0 0 20px rgba(16, 185, 129, 0.3);
+}
+
+/* Sidebar container */
+.neon-sidebar {
+  position: relative;
+}
+
+/* Sidebar with right accent line in dark mode */
+.dark .neon-sidebar::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 1px;
+  background: linear-gradient(180deg,
+    var(--accent-sam) 0%,
+    transparent 30%,
+    transparent 70%,
+    var(--accent-sam) 100%
+  );
+  opacity: 0.3;
+}
+
+/* Sidebar nav item base */
+.nav-item {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+/* Active nav item with left accent bar */
+.nav-item-active {
+  position: relative;
+}
+
+.nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-sam), var(--accent-sam-light));
+  border-radius: 0 2px 2px 0;
+}
+
+.dark .nav-item-active {
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.dark .nav-item-active::before {
+  box-shadow: 0 0 8px var(--accent-sam);
+}
+
+/* Nav item hover glow in dark mode */
+.dark .nav-item:hover:not(.nav-item-active) {
+  box-shadow: inset 0 0 15px rgba(16, 185, 129, 0.05);
+}
+
+/* Sidebar section divider */
+.sidebar-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
+  margin: 8px 0;
+}
+
+.dark .sidebar-divider {
+  background: linear-gradient(90deg, transparent, var(--accent-sam), transparent);
+  opacity: 0.2;
+}
+
+/* User avatar with glow */
+.avatar-glow {
+  transition: box-shadow 0.2s ease;
+}
+
+.dark .avatar-glow:hover {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+/* Header icon button hover */
+.header-icon-btn {
+  transition: all 0.2s ease;
+}
+
+.dark .header-icon-btn:hover {
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.3);
+}
+
+/* Logo text glow effect in dark mode */
+.logo-text {
+  transition: text-shadow 0.2s ease;
+}
+
+.dark .logo-text:hover {
+  text-shadow: 0 0 20px rgba(16, 185, 129, 0.5);
+}
+
+/* Collapse button with subtle glow */
+.collapse-btn {
+  transition: all 0.2s ease;
+}
+
+.dark .collapse-btn:hover {
+  box-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  color: var(--accent-sam) !important;
+}
+
+/* =============================================================================
+   STAT VALUE STYLING
+   ============================================================================= */
+
 /* Stat value styling */
 .stat-karma {
   color: var(--accent-face);

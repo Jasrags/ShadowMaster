@@ -3,9 +3,11 @@
 import { Link, Button, Menu, MenuTrigger, MenuItem, Popover } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import { NotificationBell } from "@/components/NotificationBell";
 import { EnvironmentBadge } from "@/components/EnvironmentBadge";
 import { EmailVerificationBanner } from "@/components/auth/EmailVerificationBanner";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 interface AuthenticatedLayoutProps {
   children: React.ReactNode;
@@ -70,14 +72,27 @@ function SettingsIcon({ className }: { className?: string }) {
   );
 }
 
-function UsersIcon({ className }: { className?: string }) {
+function ScrollIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
       <path
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth={2}
-        d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"
+        d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"
+      />
+    </svg>
+  );
+}
+
+function ShieldCheckIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
       />
     </svg>
   );
@@ -88,6 +103,7 @@ export default function AuthenticatedLayout({
   currentPath = "/",
 }: AuthenticatedLayoutProps) {
   const { user, signOut } = useAuth();
+  const router = useRouter();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isCollapsed, setIsCollapsed] = useState(false);
 
@@ -125,13 +141,13 @@ export default function AuthenticatedLayout({
       badge: null,
     },
     { id: "rulesets", label: "Rulesets", icon: BookIcon, href: "/rulesets" },
-    { id: "campaigns", label: "Campaigns", icon: UsersIcon, href: "/campaigns" },
+    { id: "campaigns", label: "Campaigns", icon: ScrollIcon, href: "/campaigns" },
     ...(user.role.includes("administrator")
       ? [
           {
             id: "users",
             label: "User Management",
-            icon: UsersIcon,
+            icon: ShieldCheckIcon,
             href: "/users",
             disabled: false,
           },
@@ -143,7 +159,7 @@ export default function AuthenticatedLayout({
   return (
     <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
       {/* Header */}
-      <header className="fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/80 backdrop-blur-sm dark:border-zinc-800 dark:bg-black/80">
+      <header className="neon-header fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800/50 dark:bg-zinc-950/95">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-4">
             {/* Mobile hamburger menu */}
@@ -164,7 +180,7 @@ export default function AuthenticatedLayout({
             <div className="flex flex-col">
               <Link
                 href="/"
-                className="text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-zinc-300"
+                className="logo-text text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-emerald-400"
               >
                 Shadow Master
               </Link>
@@ -174,21 +190,14 @@ export default function AuthenticatedLayout({
           <div className="flex items-center gap-3">
             {/* Notifications */}
             <NotificationBell />
-            {/* Settings */}
-            <Button
-              className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
-              aria-label="Settings"
-            >
-              <SettingsIcon className="h-5 w-5" />
-            </Button>
             {/* User Menu */}
             <MenuTrigger>
               <Button
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:text-zinc-50 dark:hover:bg-zinc-900 dark:focus:ring-zinc-400"
+                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-zinc-50 dark:hover:bg-zinc-900"
                 aria-label="User menu"
               >
-                <div className="flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800">
-                  <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                <div className="avatar-glow flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 dark:bg-zinc-800 dark:border dark:border-emerald-500/20">
+                  <span className="text-xs font-medium text-zinc-700 dark:text-emerald-400">
                     {user.username.charAt(0).toUpperCase()}
                   </span>
                 </div>
@@ -211,15 +220,21 @@ export default function AuthenticatedLayout({
                       {Array.isArray(user.role) ? user.role.join(", ") : user.role}
                     </div>
                   </MenuItem>
-                  <MenuItem className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800">
+                  <MenuItem
+                    onAction={() => router.push("/settings/profile")}
+                    className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800 cursor-pointer"
+                  >
                     Profile
                   </MenuItem>
-                  <MenuItem className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800">
+                  <MenuItem
+                    onAction={() => router.push("/settings")}
+                    className="rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800 cursor-pointer"
+                  >
                     Settings
                   </MenuItem>
                   <MenuItem
                     onAction={handleSignOut}
-                    className="rounded-md px-3 py-2 text-sm text-red-600 outline-none focus:bg-zinc-100 dark:text-red-400 dark:focus:bg-zinc-800"
+                    className="rounded-md px-3 py-2 text-sm text-red-600 outline-none focus:bg-zinc-100 dark:text-red-400 dark:focus:bg-zinc-800 cursor-pointer"
                   >
                     Sign Out
                   </MenuItem>
@@ -233,37 +248,43 @@ export default function AuthenticatedLayout({
       <div className="flex flex-1 pt-16">
         {/* Sidebar */}
         <aside
-          className={`fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] border-r border-zinc-200 bg-white transition-all duration-300 dark:border-zinc-800 dark:bg-black lg:translate-x-0 ${
+          className={`neon-sidebar fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] border-r border-zinc-200 bg-white/95 transition-all duration-300 dark:border-zinc-800/50 dark:bg-zinc-950/95 lg:translate-x-0 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } ${isCollapsed ? "w-16" : "w-64"}`}
         >
           <div className="flex h-full flex-col">
-            <div className="flex items-center justify-end p-2 border-b border-zinc-100 dark:border-zinc-800/50">
-              <button
-                onClick={toggleCollapse}
-                className="hidden lg:flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-                aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            <div className="flex items-center justify-end p-2 border-b border-zinc-100 dark:border-zinc-800/30">
+              <Tooltip
+                content={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                placement="right"
+                delay={300}
               >
-                {isCollapsed ? (
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M13 5l7 7-7 7M5 5l7 7-7 7"
-                    />
-                  </svg>
-                ) : (
-                  <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
-                    />
-                  </svg>
-                )}
-              </button>
+                <button
+                  onClick={toggleCollapse}
+                  className="collapse-btn hidden lg:flex h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:text-zinc-500 dark:hover:bg-zinc-900"
+                  aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                >
+                  {isCollapsed ? (
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M13 5l7 7-7 7M5 5l7 7-7 7"
+                      />
+                    </svg>
+                  ) : (
+                    <svg className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M11 19l-7-7 7-7m8 14l-7-7 7-7"
+                      />
+                    </svg>
+                  )}
+                </button>
+              </Tooltip>
             </div>
 
             <nav className={`flex-1 overflow-y-auto p-2 ${isCollapsed ? "items-center" : ""}`}>
@@ -274,13 +295,11 @@ export default function AuthenticatedLayout({
 
                 // Render disabled items as non-interactive elements
                 if (isDisabled) {
-                  return (
+                  const disabledContent = (
                     <div
-                      key={item.id}
                       className={`flex cursor-not-allowed items-center rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600 ${
                         isCollapsed ? "justify-center" : "gap-3"
                       }`}
-                      title={isCollapsed ? item.label : "Coming soon"}
                     >
                       <Icon className="h-5 w-5 shrink-0" />
                       {!isCollapsed && (
@@ -293,21 +312,39 @@ export default function AuthenticatedLayout({
                       )}
                     </div>
                   );
+
+                  return isCollapsed ? (
+                    <Tooltip
+                      key={item.id}
+                      content={`${item.label} (Coming soon)`}
+                      placement="right"
+                      delay={300}
+                    >
+                      <div role="button" tabIndex={0}>
+                        {disabledContent}
+                      </div>
+                    </Tooltip>
+                  ) : (
+                    <div key={item.id} title="Coming soon">
+                      {disabledContent}
+                    </div>
+                  );
                 }
 
-                return (
+                const linkContent = (
                   <Link
-                    key={item.id}
                     href={item.href}
-                    className={`flex items-center rounded-md py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2 dark:focus:ring-zinc-400 ${
+                    className={`nav-item flex items-center rounded-md py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
                       isCollapsed ? "justify-center px-2" : "gap-3 px-3"
                     } ${
                       isActive
-                        ? "bg-zinc-100 text-black dark:bg-zinc-900 dark:text-zinc-50"
-                        : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-900 dark:hover:text-zinc-50"
+                        ? "nav-item-active bg-zinc-100 text-black dark:bg-emerald-500/10 dark:text-emerald-400"
+                        : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-emerald-400"
                     }`}
                   >
-                    <Icon className="h-5 w-5 shrink-0" />
+                    <Icon
+                      className={`h-5 w-5 shrink-0 ${isActive ? "dark:text-emerald-400" : ""}`}
+                    />
                     {!isCollapsed && (
                       <>
                         <span className="truncate">{item.label}</span>
@@ -320,6 +357,14 @@ export default function AuthenticatedLayout({
                       </>
                     )}
                   </Link>
+                );
+
+                return isCollapsed ? (
+                  <Tooltip key={item.id} content={item.label} placement="right" delay={300}>
+                    {linkContent}
+                  </Tooltip>
+                ) : (
+                  <div key={item.id}>{linkContent}</div>
                 );
               })}
             </nav>
@@ -334,14 +379,13 @@ export default function AuthenticatedLayout({
           />
         )}
 
-        {/* Main Content */}
+        {/* Main Content - margin only on lg+ screens where sidebar is visible */}
         <main
-          className={`flex-1 transition-all duration-300 lg:ml-${isCollapsed ? "16" : "60"}`}
-          style={{ marginLeft: isCollapsed ? "4rem" : undefined }} // Inline style as fallback/override for dynamic class
+          className={`flex-1 min-h-screen transition-all duration-300 bg-white dark:bg-zinc-950 ${isCollapsed ? "lg:ml-16" : "lg:ml-64"}`}
         >
           {/* Email Verification Banner - in document flow, spans full width */}
           <EmailVerificationBanner />
-          <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">{children}</div>
+          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
     </div>
