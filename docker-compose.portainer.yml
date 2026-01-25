@@ -12,11 +12,15 @@
 #   Caddy terminates TLS, so internal traffic doesn't need HTTPS.
 #
 # Required environment variables (set in Portainer):
-#   CF_API_TOKEN - Cloudflare API token with Zone:DNS:Edit permission
+#   CF_API_TOKEN  - Cloudflare API token with Zone:DNS:Edit permission
+#   MAILTRAP_USER - Mailtrap SMTP username (from mailtrap.io inbox settings)
+#   MAILTRAP_PASS - Mailtrap SMTP password
 #
 # Optional environment variables:
-#   DOMAIN       - Your domain (default: home.jasrags.net)
-#   HTTPS_PORT   - HTTPS port (default: 2075)
+#   DOMAIN          - Your domain (default: home.jasrags.net)
+#   HTTPS_PORT      - HTTPS port (default: 2075)
+#   EMAIL_FROM      - Sender email (default: noreply@shadowmaster.app)
+#   EMAIL_FROM_NAME - Sender name (default: Shadow Master)
 #
 # See: docs/deployment/portainer-setup.md#https-deployment
 
@@ -59,6 +63,15 @@ services:
       - NODE_ENV=production
       - PORT=3000 # Next.js internal port
       - HOSTNAME=0.0.0.0
+      # Email configuration (Mailtrap for staging)
+      - EMAIL_TRANSPORT=smtp
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@shadowmaster.app}
+      - EMAIL_FROM_NAME=${EMAIL_FROM_NAME:-Shadow Master}
+      - SMTP_HOST=sandbox.smtp.mailtrap.io
+      - SMTP_PORT=2525
+      - SMTP_SECURE=false
+      - SMTP_USER=${MAILTRAP_USER}
+      - SMTP_PASS=${MAILTRAP_PASS}
     volumes:
       - shadow-master-data:/app/data
     healthcheck:
