@@ -24,20 +24,10 @@ export function SettingsNavigation({ activeSection, onSectionChange }: SettingsN
           <button
             key={item.name}
             onClick={() => onSectionChange(item.href as SettingsSection)}
-            className={`
-              group flex w-full items-center rounded-md px-3 py-2 text-sm font-medium
-              ${
-                isActive
-                  ? "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-white"
-                  : "text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900 dark:text-zinc-400 dark:hover:bg-zinc-800 dark:hover:text-white"
-              }
-            `}
+            className={`settings-nav-item ${isActive ? "settings-nav-item-active" : ""}`}
           >
             <item.icon
-              className={`
-                mr-3 h-5 w-5 flex-shrink-0
-                ${isActive ? "text-zinc-500 dark:text-zinc-300" : "text-zinc-400 group-hover:text-zinc-500 dark:text-zinc-500 dark:group-hover:text-zinc-300"}
-              `}
+              className={`mr-3 h-5 w-5 flex-shrink-0 ${isActive ? "text-emerald-400" : "text-zinc-500 group-hover:text-zinc-400"}`}
               aria-hidden="true"
             />
             <span className="truncate">{item.name}</span>

@@ -40,10 +40,10 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
-      <div className="border-b border-border px-6 py-4">
-        <h2 className="text-lg font-medium text-foreground">Security Settings</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+    <div className="settings-card">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-6 py-4">
+        <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Security Settings</h2>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           Manage your password and security preferences.
         </p>
       </div>
@@ -54,8 +54,8 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
             <div
               className={`rounded-md p-4 transition-colors ${
                 message.type === "success"
-                  ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20"
-                  : "bg-destructive/10 text-destructive dark:text-destructive border border-destructive/20"
+                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  : "bg-red-500/10 text-red-400 border border-red-500/20"
               }`}
             >
               {message.text}
@@ -65,12 +65,12 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
           <div>
             <label
               htmlFor="current-password"
-              className="block text-sm font-medium text-foreground/80"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
             >
               Current Password
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
+              <span className="settings-input-addon rounded-l-md">
                 <Lock className="h-4 w-4" />
               </span>
               <input
@@ -78,18 +78,21 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                 id="current-password"
                 value={currentPassword}
                 onChange={(e) => setCurrentPassword(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
+                className="settings-input rounded-l-none rounded-r-md"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label htmlFor="new-password" className="block text-sm font-medium text-foreground/80">
+            <label
+              htmlFor="new-password"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
+            >
               New Password
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
+              <span className="settings-input-addon rounded-l-md">
                 <Lock className="h-4 w-4" />
               </span>
               <input
@@ -97,23 +100,23 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                 id="new-password"
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
+                className="settings-input rounded-l-none rounded-r-md"
                 required
                 minLength={8}
               />
             </div>
-            <p className="mt-1 text-xs text-muted-foreground">Minimum 8 characters</p>
+            <p className="mt-1 text-xs text-zinc-500">Minimum 8 characters</p>
           </div>
 
           <div>
             <label
               htmlFor="confirm-password"
-              className="block text-sm font-medium text-foreground/80"
+              className="block text-sm font-medium text-zinc-700 dark:text-zinc-300"
             >
               Confirm New Password
             </label>
             <div className="mt-1 flex rounded-md shadow-sm">
-              <span className="inline-flex items-center rounded-l-md border border-r-0 border-input bg-muted px-3 text-muted-foreground">
+              <span className="settings-input-addon rounded-l-md">
                 <Lock className="h-4 w-4" />
               </span>
               <input
@@ -121,7 +124,7 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
                 id="confirm-password"
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
-                className="block w-full min-w-0 flex-1 rounded-none rounded-r-md border-input bg-background text-foreground px-3 py-2 focus:border-primary focus:ring-primary sm:text-sm"
+                className="settings-input rounded-l-none rounded-r-md"
                 required
               />
             </div>
@@ -129,11 +132,7 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
         </div>
 
         <div className="mt-6 flex justify-end">
-          <button
-            type="submit"
-            disabled={loading}
-            className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:opacity-50 dark:focus:ring-offset-black"
-          >
+          <button type="submit" disabled={loading} className="settings-btn-primary">
             {loading ? (
               "Updating..."
             ) : (

@@ -489,6 +489,151 @@ body {
 }
 
 /* =============================================================================
+   SETTINGS PAGE STYLES
+   ============================================================================= */
+
+/* Settings card with top accent bar */
+.settings-card {
+  @apply rounded-lg border border-zinc-800 bg-zinc-900 shadow-sm;
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 16px;
+  right: 16px;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-sam), transparent);
+  opacity: 0.5;
+}
+
+.dark .settings-card::before {
+  opacity: 0.8;
+}
+
+/* Light mode settings card override */
+:root .settings-card {
+  @apply border-zinc-200 bg-white;
+}
+
+/* Settings navigation items */
+.settings-nav-item {
+  @apply relative flex w-full items-center rounded-md px-3 py-2 text-sm font-medium;
+  @apply text-zinc-500 hover:bg-zinc-800/50 hover:text-zinc-200;
+  transition: all 0.2s ease;
+}
+
+:root .settings-nav-item {
+  @apply text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900;
+}
+
+/* Active settings nav item with left accent bar */
+.settings-nav-item-active {
+  @apply bg-zinc-800/80 text-zinc-100;
+  position: relative;
+}
+
+.settings-nav-item-active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: linear-gradient(180deg, var(--accent-sam), var(--accent-sam-light));
+  border-radius: 0 2px 2px 0;
+}
+
+.dark .settings-nav-item-active {
+  box-shadow: inset 0 0 20px rgba(16, 185, 129, 0.1);
+}
+
+.dark .settings-nav-item-active::before {
+  box-shadow: 0 0 8px var(--accent-sam);
+}
+
+:root .settings-nav-item-active {
+  @apply bg-zinc-100 text-zinc-900;
+}
+
+/* Settings form inputs */
+.settings-input {
+  @apply block w-full rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-zinc-100;
+  @apply placeholder:text-zinc-500;
+  @apply focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 focus:outline-none;
+  @apply sm:text-sm;
+  transition: all 0.2s ease;
+}
+
+:root .settings-input {
+  @apply border-zinc-300 bg-zinc-50 text-zinc-900 placeholder:text-zinc-400;
+  @apply focus:border-emerald-500 focus:ring-emerald-500;
+}
+
+/* Input group addon (icon prefix) */
+.settings-input-addon {
+  @apply inline-flex items-center rounded-l-md border border-r-0 border-zinc-700 bg-zinc-800 px-3 text-zinc-500;
+}
+
+:root .settings-input-addon {
+  @apply border-zinc-300 bg-zinc-100 text-zinc-500;
+}
+
+/* Settings buttons */
+.settings-btn-primary {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply bg-emerald-600 text-white shadow-sm;
+  @apply hover:bg-emerald-500 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+.dark .settings-btn-primary:not(:disabled):hover {
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.4);
+}
+
+.settings-btn-secondary {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply border border-zinc-700 bg-zinc-800 text-zinc-200 shadow-sm;
+  @apply hover:bg-zinc-700 hover:text-zinc-100;
+  @apply focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+:root .settings-btn-secondary {
+  @apply border-zinc-300 bg-white text-zinc-700 hover:bg-zinc-50 hover:text-zinc-900;
+}
+
+.settings-btn-danger {
+  @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-medium;
+  @apply bg-red-600 text-white shadow-sm;
+  @apply hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-offset-2;
+  @apply disabled:opacity-50 disabled:cursor-not-allowed;
+  @apply dark:focus:ring-offset-zinc-900;
+  transition: all 0.2s ease;
+}
+
+/* Theme card for preferences */
+.settings-theme-card {
+  @apply relative flex flex-col items-center gap-3 p-4 rounded-xl border-2 transition-all duration-200 cursor-pointer;
+  @apply border-zinc-700 bg-zinc-800/50 hover:border-emerald-500/50 hover:bg-zinc-800;
+}
+
+:root .settings-theme-card {
+  @apply border-zinc-200 bg-zinc-50 hover:border-emerald-500/50 hover:bg-zinc-100;
+}
+
+.settings-theme-card-active {
+  @apply border-emerald-500 bg-emerald-500/10 ring-1 ring-emerald-500;
+}
+
+/* =============================================================================
    PRINT STYLES FOR CHARACTER SHEETS
    ============================================================================= */
 

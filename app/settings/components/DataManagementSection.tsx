@@ -20,10 +20,10 @@ export function DataManagementSection({ onExport }: DataManagementSectionProps) 
   };
 
   return (
-    <div className="rounded-lg border border-border bg-card shadow-sm transition-colors">
-      <div className="border-b border-border px-6 py-4">
-        <h2 className="text-lg font-medium text-foreground">Data Management</h2>
-        <p className="mt-1 text-sm text-muted-foreground">
+    <div className="settings-card">
+      <div className="border-b border-zinc-200 dark:border-zinc-800 px-6 py-4">
+        <h2 className="text-lg font-medium text-zinc-900 dark:text-zinc-100">Data Management</h2>
+        <p className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
           Export your personal data and characters.
         </p>
       </div>
@@ -49,15 +49,15 @@ export function DataManagementSection({ onExport }: DataManagementSectionProps) 
         </div>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
-          <div className="flex flex-col items-start gap-4 p-4 rounded-lg border border-border bg-muted/30">
-            <h4 className="font-medium text-foreground">Export Data</h4>
-            <p className="text-xs text-muted-foreground">
+          <div className="flex flex-col items-start gap-4 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
+            <h4 className="font-medium text-zinc-900 dark:text-zinc-100">Export Data</h4>
+            <p className="text-xs text-zinc-500">
               Download a complete copy of your data as a JSON file.
             </p>
             <button
               onClick={handleExport}
               disabled={exporting}
-              className="w-full inline-flex items-center justify-center rounded-md border border-transparent bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow-sm hover:opacity-90 transition-opacity focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2 disabled:opacity-50"
+              className="w-full settings-btn-primary"
             >
               {exporting ? (
                 "Exporting..."
@@ -70,9 +70,9 @@ export function DataManagementSection({ onExport }: DataManagementSectionProps) 
             </button>
           </div>
 
-          <div className="flex flex-col items-start gap-4 p-4 rounded-lg border border-border bg-muted/30">
-            <h4 className="font-medium text-foreground">Import Data</h4>
-            <p className="text-xs text-muted-foreground">
+          <div className="flex flex-col items-start gap-4 p-4 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800/50">
+            <h4 className="font-medium text-zinc-900 dark:text-zinc-100">Import Data</h4>
+            <p className="text-xs text-zinc-500">
               Restore your profile and characters from a JSON export.
             </p>
             <input
@@ -110,7 +110,7 @@ export function DataManagementSection({ onExport }: DataManagementSectionProps) 
             />
             <button
               onClick={() => document.getElementById("import-file")?.click()}
-              className="w-full inline-flex items-center justify-center rounded-md border border-border bg-background px-4 py-2 text-sm font-medium text-foreground shadow-sm hover:bg-muted transition-colors focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2"
+              className="w-full settings-btn-secondary"
             >
               <Download className="mr-2 h-4 w-4 rotate-180" />
               Import JSON

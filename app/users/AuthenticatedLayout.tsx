@@ -157,7 +157,7 @@ export default function AuthenticatedLayout({
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-zinc-50 font-sans dark:bg-black">
+    <div className="flex min-h-screen flex-col bg-white font-sans dark:bg-zinc-950">
       {/* Header */}
       <header className="neon-header fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800/50 dark:bg-zinc-950/95">
         <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
@@ -245,10 +245,10 @@ export default function AuthenticatedLayout({
         </div>
       </header>
 
-      <div className="flex flex-1 pt-16">
+      <div className="flex flex-1">
         {/* Sidebar */}
         <aside
-          className={`neon-sidebar fixed left-0 top-16 z-40 h-[calc(100vh-4rem)] border-r border-zinc-200 bg-white/95 transition-all duration-300 dark:border-zinc-800/50 dark:bg-zinc-950/95 lg:translate-x-0 ${
+          className={`neon-sidebar fixed left-0 top-0 z-40 h-screen pt-16 border-r border-zinc-200 bg-white/95 transition-all duration-300 dark:border-zinc-800/50 dark:bg-zinc-950/95 lg:translate-x-0 ${
             sidebarOpen ? "translate-x-0" : "-translate-x-full"
           } ${isCollapsed ? "w-16" : "w-64"}`}
         >
@@ -381,11 +381,11 @@ export default function AuthenticatedLayout({
 
         {/* Main Content - margin only on lg+ screens where sidebar is visible */}
         <main
-          className={`flex-1 min-h-screen transition-all duration-300 bg-white dark:bg-zinc-950 ${isCollapsed ? "lg:ml-16" : "lg:ml-64"}`}
+          className={`flex-1 min-h-screen pt-16 transition-all duration-300 bg-white dark:bg-zinc-950 ${isCollapsed ? "lg:ml-16" : "lg:ml-64"}`}
         >
           {/* Email Verification Banner - in document flow, spans full width */}
           <EmailVerificationBanner />
-          <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">{children}</div>
+          <div className="px-4 py-6 sm:px-6 lg:px-8">{children}</div>
         </main>
       </div>
     </div>
