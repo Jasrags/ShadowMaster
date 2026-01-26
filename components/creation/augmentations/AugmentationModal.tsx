@@ -12,7 +12,7 @@
  * - Magic/Resonance loss warning for awakened characters
  */
 
-import { useMemo, useState, useCallback, useEffect } from "react";
+import { useMemo, useState, useCallback, useEffect, useRef } from "react";
 import {
   useCyberware,
   useBioware,
@@ -262,6 +262,9 @@ export function AugmentationModal({
   const [selectedLocation, setSelectedLocation] = useState<CyberlimbLocation | null>(null);
   const [selectedSkill, setSelectedSkill] = useState<string | null>(null);
 
+  // Track previous values to avoid cascading renders from setState in effects
+  const prevItemIdRef = useRef<string | null>(null);
+
   const isCyberware = augmentationType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
   const TypeIcon = isCyberware ? Cpu : Heart;
@@ -334,14 +337,25 @@ export function AugmentationModal({
     return catalog?.find((i) => i.id === selectedItemId) ?? null;
   }, [selectedItemId, isCyberware, cyberwareCatalog, biowareCatalog]);
 
-  // Reset rating when item changes
+  // Reset item-specific state when selected item changes (batched to avoid cascading renders)
   useEffect(() => {
+    // Only reset when the item ID actually changes
+    if (selectedItemId === prevItemIdRef.current) return;
+    prevItemIdRef.current = selectedItemId;
+
+    // Reset rating based on new item
     if (rawSelectedItem && hasUnifiedRatings(rawSelectedItem)) {
       setSelectedRating(rawSelectedItem.minRating ?? 1);
     } else {
       setSelectedRating(1);
     }
-  }, [rawSelectedItem]);
+
+    // Reset location (will be handled by validation below if needed)
+    setSelectedLocation(null);
+
+    // Reset skill selection
+    setSelectedSkill(null);
+  }, [selectedItemId, rawSelectedItem]);
 
   // Check if selected item is a cyberlimb
   const isCyberlimb = useMemo(() => {
@@ -363,15 +377,13 @@ export function AugmentationModal({
     return LIMB_TYPE_LOCATIONS[selectedLimbType] || [];
   }, [selectedLimbType]);
 
-  // Reset location when item changes or when switching to non-cyberlimb
+  // Validate location when limb type changes (location is reset on item change above)
   useEffect(() => {
-    if (!isCyberlimb) {
-      setSelectedLocation(null);
-    } else if (selectedLocation && !validLocations.includes(selectedLocation)) {
+    if (selectedLocation && !validLocations.includes(selectedLocation)) {
       // Reset if current location is not valid for new limb type
       setSelectedLocation(null);
     }
-  }, [isCyberlimb, validLocations, selectedLocation]);
+  }, [validLocations, selectedLocation]);
 
   // Get conflict status for the selected location
   const locationConflict = useMemo(() => {
@@ -418,13 +430,6 @@ export function AugmentationModal({
 
     return skills;
   }, [requiresSkillSelection, rawSelectedItem, activeSkills, takenSkillsForBioware]);
-
-  // Reset skill when item changes or when switching to non-skill-linked bioware
-  useEffect(() => {
-    if (!requiresSkillSelection) {
-      setSelectedSkill(null);
-    }
-  }, [requiresSkillSelection]);
 
   // Selected item with calculated values (including rating-based values)
   const selectedItem = useMemo(() => {

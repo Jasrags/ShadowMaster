@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Button } from "react-aria-components";
 import { useAuth } from "@/lib/auth/AuthProvider";
 
@@ -22,50 +22,56 @@ export function EmailVerificationBanner() {
   const [status, setStatus] = useState<BannerStatus>("idle");
   const [showVerified, setShowVerified] = useState(false);
   const [verificationError, setVerificationError] = useState<string | null>(null);
+  const hasProcessedUrlRef = useRef(false);
 
-  // Check URL params for verification status
+  // Check URL params for verification status (one-time on mount)
   useEffect(() => {
     if (typeof window === "undefined") return;
+    if (hasProcessedUrlRef.current) return;
+    hasProcessedUrlRef.current = true;
 
     const params = new URLSearchParams(window.location.search);
     const verified = params.get("verified");
     const verification = params.get("verification");
     const reason = params.get("reason");
 
-    if (verified === "true") {
-      setShowVerified(true);
-      // Clear the URL params after showing the message
-      const url = new URL(window.location.href);
-      url.searchParams.delete("verified");
-      window.history.replaceState({}, "", url.toString());
-      // Auto-dismiss success message after 5 seconds
-      setTimeout(() => setShowVerified(false), 5000);
-    }
-
-    if (verification === "error") {
-      switch (reason) {
-        case "expired":
-          setVerificationError("Your verification link has expired. Please request a new one.");
-          break;
-        case "invalid":
-          setVerificationError("Invalid verification link. Please request a new one.");
-          break;
-        default:
-          setVerificationError("Verification failed. Please try again.");
+    // Defer state updates to avoid synchronous cascading renders
+    queueMicrotask(() => {
+      if (verified === "true") {
+        setShowVerified(true);
+        // Clear the URL params after showing the message
+        const url = new URL(window.location.href);
+        url.searchParams.delete("verified");
+        window.history.replaceState({}, "", url.toString());
+        // Auto-dismiss success message after 5 seconds
+        setTimeout(() => setShowVerified(false), 5000);
       }
-      // Clear the URL params
-      const url = new URL(window.location.href);
-      url.searchParams.delete("verification");
-      url.searchParams.delete("reason");
-      window.history.replaceState({}, "", url.toString());
-    }
 
-    if (verification === "already_verified") {
-      // Clear the URL params - user is already verified
-      const url = new URL(window.location.href);
-      url.searchParams.delete("verification");
-      window.history.replaceState({}, "", url.toString());
-    }
+      if (verification === "error") {
+        switch (reason) {
+          case "expired":
+            setVerificationError("Your verification link has expired. Please request a new one.");
+            break;
+          case "invalid":
+            setVerificationError("Invalid verification link. Please request a new one.");
+            break;
+          default:
+            setVerificationError("Verification failed. Please try again.");
+        }
+        // Clear the URL params
+        const url = new URL(window.location.href);
+        url.searchParams.delete("verification");
+        url.searchParams.delete("reason");
+        window.history.replaceState({}, "", url.toString());
+      }
+
+      if (verification === "already_verified") {
+        // Clear the URL params - user is already verified
+        const url = new URL(window.location.href);
+        url.searchParams.delete("verification");
+        window.history.replaceState({}, "", url.toString());
+      }
+    });
   }, []);
 
   // Don't render if user is not logged in or email is verified
