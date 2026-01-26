@@ -73,6 +73,7 @@ function SheetCreationContent({
   const [characterId, setCharacterId] = useState<ID | null>(existingCharacter?.id || null);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   // Refs for managing auto-save race conditions
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -194,6 +195,7 @@ function SheetCreationContent({
         // Only update lastSaved if this is still the current version
         if (currentVersion === saveVersionRef.current) {
           setLastSaved(new Date());
+          setSaveError(null);
         }
       } catch (e) {
         // Ignore aborted requests
@@ -201,6 +203,10 @@ function SheetCreationContent({
           return;
         }
         console.error("Failed to save draft:", e);
+        // Set error state if this is still the current version
+        if (currentVersion === saveVersionRef.current) {
+          setSaveError("Failed to save changes");
+        }
       } finally {
         // Only update isSaving if this is still the current version
         if (currentVersion === saveVersionRef.current) {
@@ -211,6 +217,16 @@ function SheetCreationContent({
 
     return () => clearTimeout(saveTimeout);
   }, [creationState, characterId, editionCode, selectedEdition, campaignId, updateState, ruleset]);
+
+  // Handle retry after save failure
+  const handleRetry = useCallback(() => {
+    // Clear the error and trigger a save by updating the state with same values
+    setSaveError(null);
+    setCreationState((prev) => ({
+      ...prev,
+      updatedAt: new Date().toISOString(),
+    }));
+  }, []);
 
   // Handle character finalization
   const handleFinalize = useCallback(async () => {
@@ -299,6 +315,8 @@ function SheetCreationContent({
           onFinalize={handleFinalize}
           isSaving={isSaving}
           lastSaved={lastSaved}
+          saveError={saveError}
+          onRetry={handleRetry}
           campaignId={campaignId}
           campaign={campaign}
         />

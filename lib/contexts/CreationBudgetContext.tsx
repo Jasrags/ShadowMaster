@@ -276,13 +276,28 @@ function extractSpentValues(
   );
 
   // ============================================================================
+  // CONTACT POINTS - derived from selections
+  // ============================================================================
+
+  const contacts = (selections.contacts || []) as Array<{
+    connection: number;
+    loyalty: number;
+  }>;
+  spent["contact-points"] = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+
+  // ============================================================================
+  // SPELL SLOTS - derived from selections
+  // ============================================================================
+
+  const spells = (selections.spells || []) as Array<string | { id: string }>;
+  spent["spell-slots"] = spells.length;
+
+  // ============================================================================
   // REMAINING BUDGET MAPPINGS - still read from stateBudgets for now
   // ============================================================================
 
-  // These could be derived from selections in a future refactor
+  // Power points still read from stateBudgets (adept power selection is complex)
   const remainingMappings: Record<string, string> = {
-    "contact-points-spent": "contact-points",
-    "spell-slots-spent": "spell-slots",
     "power-points-spent": "power-points",
   };
 
@@ -384,8 +399,15 @@ function extractSpentValues(
     return sum + baseCost + modCost;
   }, 0);
 
-  // Calculate lifestyle spending (stored in budgets)
-  const lifestyleSpent = (stateBudgets["nuyen-spent-lifestyle"] as number) || 0;
+  // Calculate lifestyle spending (derived from selections)
+  const lifestyles = (selections.lifestyles || []) as Array<{
+    monthlyCost: number;
+    prepaidMonths?: number;
+  }>;
+  const lifestyleSpent = lifestyles.reduce(
+    (sum, ls) => sum + ls.monthlyCost * (ls.prepaidMonths || 1),
+    0
+  );
 
   // Total nuyen spent
   spent["nuyen"] =
@@ -536,6 +558,17 @@ function validateBudgets(
     errors.push({
       constraintId: "negative-quality-limit",
       message: `Negative qualities cannot exceed 25 karma (currently ${negativeKarmaGained})`,
+      severity: "error",
+    });
+  }
+
+  // Check karma-to-nuyen conversion limit (max 10 karma)
+  const MAX_KARMA_CONVERSION = 10;
+  const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+  if (karmaSpentGear > MAX_KARMA_CONVERSION) {
+    errors.push({
+      constraintId: "karma-conversion-limit",
+      message: `Karma-to-nuyen conversion cannot exceed ${MAX_KARMA_CONVERSION} karma (currently ${karmaSpentGear})`,
       severity: "error",
     });
   }
@@ -748,3 +781,14 @@ export function useCanFinalize(): boolean {
   const { canFinalize } = useCreationBudgets();
   return canFinalize;
 }
+
+// =============================================================================
+// TESTABLE EXPORTS (for unit testing helper functions)
+// =============================================================================
+
+/** @internal Exported for testing only */
+export const _testExports = {
+  extractSpentValues,
+  validateBudgets,
+  calculateBudgetTotals,
+};

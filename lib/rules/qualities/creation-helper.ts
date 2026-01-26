@@ -7,12 +7,56 @@
 import type { CreationState, Character, EditionCode } from "@/lib/types";
 
 /**
+ * Quality selection can be either a string ID or an object with embedded data.
+ * Object format supports embedded specification and karma values (new format).
+ * String format reads specification from qualitySpecifications record (legacy format).
+ */
+type QualitySelection = string | { id: string; specification?: string; karma?: number };
+
+/**
  * Build a partial character object from creation state for validation
  */
 export function buildCharacterFromCreationState(
   state: CreationState,
   editionCode: string
 ): Partial<Character> {
+  // Get legacy qualitySpecifications for backwards compatibility
+  const qualitySpecifications = (state.selections.qualitySpecifications || {}) as Record<
+    string,
+    string
+  >;
+  const qualityLevels = (state.selections.qualityLevels || {}) as Record<string, number>;
+
+  // Helper to normalize quality selection (supports both string and object formats)
+  const normalizeQuality = (quality: QualitySelection) => {
+    if (typeof quality === "string") {
+      // Legacy string format - look up specification from qualitySpecifications
+      return {
+        qualityId: quality,
+        id: quality,
+        rating: qualityLevels[quality],
+        specification: qualitySpecifications[quality],
+        source: "creation" as const,
+        active: true,
+      };
+    } else {
+      // New object format - use embedded specification (with legacy fallback)
+      return {
+        qualityId: quality.id,
+        id: quality.id,
+        rating: qualityLevels[quality.id],
+        specification: quality.specification || qualitySpecifications[quality.id],
+        source: "creation" as const,
+        active: true,
+      };
+    }
+  };
+
+  const positiveQualitySelections = (state.selections.positiveQualities ||
+    []) as QualitySelection[];
+  const negativeQualitySelections = (state.selections.negativeQualities ||
+    []) as QualitySelection[];
+
   return {
     id: state.characterId || "",
     editionCode: editionCode as EditionCode,
@@ -31,22 +75,8 @@ export function buildCharacterFromCreationState(
     },
     magicalPath: (state.selections["magical-path"] as Character["magicalPath"]) || "mundane",
     skills: state.selections.skills as Record<string, number> | undefined,
-    positiveQualities: ((state.selections.positiveQualities as string[]) || []).map((id) => ({
-      qualityId: id,
-      id: id, // For backward compatibility
-      rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
-      specification: (state.selections.qualitySpecifications as Record<string, string>)?.[id],
-      source: "creation" as const,
-      active: true,
-    })),
-    negativeQualities: ((state.selections.negativeQualities as string[]) || []).map((id) => ({
-      qualityId: id,
-      id: id, // For backward compatibility
-      rating: (state.selections.qualityLevels as Record<string, number>)?.[id],
-      specification: (state.selections.qualitySpecifications as Record<string, string>)?.[id],
-      source: "creation" as const,
-      active: true,
-    })),
+    positiveQualities: positiveQualitySelections.map(normalizeQuality),
+    negativeQualities: negativeQualitySelections.map(normalizeQuality),
     status: "draft" as const,
   };
 }

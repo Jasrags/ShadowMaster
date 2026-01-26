@@ -88,6 +88,8 @@ interface SheetCreationLayoutProps {
   onFinalize: () => void;
   isSaving: boolean;
   lastSaved: Date | null;
+  saveError?: string | null;
+  onRetry?: () => void;
   campaignId?: string;
   campaign?: Campaign | null;
 }
@@ -367,10 +369,14 @@ function ValidationSummary({
   onFinalize,
   isSaving,
   lastSaved,
+  saveError,
+  onRetry,
 }: {
   onFinalize: () => void;
   isSaving: boolean;
   lastSaved: Date | null;
+  saveError?: string | null;
+  onRetry?: () => void;
 }) {
   const { canFinalize, isValid, errors } = useCreationBudgets();
 
@@ -379,22 +385,32 @@ function ValidationSummary({
       <h3 className="font-medium text-zinc-900 dark:text-zinc-100">Finalize Character</h3>
 
       {/* Save status */}
-      <div className="mt-2 flex items-center gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-        {isSaving ? (
-          <>
+      <div className="mt-2 flex items-center gap-2 text-xs">
+        {saveError ? (
+          <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+            <AlertCircle className="h-3 w-3" />
+            <span>Save failed</span>
+            {onRetry && (
+              <button onClick={onRetry} className="font-medium underline hover:no-underline">
+                Retry
+              </button>
+            )}
+          </div>
+        ) : isSaving ? (
+          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
             <Loader2 className="h-3 w-3 animate-spin" />
             Saving...
-          </>
+          </div>
         ) : lastSaved ? (
-          <>
+          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
             <Save className="h-3 w-3" />
             Saved {lastSaved.toLocaleTimeString()}
-          </>
+          </div>
         ) : (
-          <>
+          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
             <Clock className="h-3 w-3" />
             Not yet saved
-          </>
+          </div>
         )}
       </div>
 
@@ -439,6 +455,8 @@ export function SheetCreationLayout({
   onFinalize,
   isSaving,
   lastSaved,
+  saveError,
+  onRetry,
   campaignId: _campaignId, // Used in Phase 5+
   campaign: _campaign, // Used in Phase 5+
 }: SheetCreationLayoutProps) {
@@ -475,7 +493,13 @@ export function SheetCreationLayout({
         <BudgetSummaryCard creationState={creationState} />
 
         {/* Finalize */}
-        <ValidationSummary onFinalize={onFinalize} isSaving={isSaving} lastSaved={lastSaved} />
+        <ValidationSummary
+          onFinalize={onFinalize}
+          isSaving={isSaving}
+          lastSaved={lastSaved}
+          saveError={saveError}
+          onRetry={onRetry}
+        />
       </div>
 
       {/* Column 2: Stats */}
