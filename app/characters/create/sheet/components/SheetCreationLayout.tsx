@@ -467,101 +467,140 @@ export function SheetCreationLayout({
   const isTechnomancer = magicPath === "technomancer";
 
   return (
-    <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-      {/* Column 1: Foundation */}
-      <div className="space-y-4">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-          Foundation
-        </h2>
-
-        {/* Character Info - Phase 5 */}
-        <CharacterInfoCard state={creationState} updateState={updateState} />
-
-        {/* Priority Selection - Phase 2 */}
-        <PrioritySelectionCard state={creationState} updateState={updateState} />
-
-        {/* Metatype Selection - Phase 2 */}
-        <MetatypeCard state={creationState} updateState={updateState} />
-
-        {/* Magic Path - Phase 3 */}
-        <MagicPathCard state={creationState} updateState={updateState} />
-
-        {/* Derived Stats - Phase 6 */}
-        <DerivedStatsCard state={creationState} updateState={updateState} />
-
-        {/* Budget Summary */}
-        <BudgetSummaryCard creationState={creationState} />
-
-        {/* Finalize */}
-        <ValidationSummary
-          onFinalize={onFinalize}
-          isSaving={isSaving}
-          lastSaved={lastSaved}
-          saveError={saveError}
-          onRetry={onRetry}
-        />
+    <div className="space-y-4">
+      {/* Save Status Bar */}
+      <div className="flex items-center justify-between rounded-lg border border-zinc-200 bg-white px-4 py-2 dark:border-zinc-700 dark:bg-zinc-900">
+        <div className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Character Draft</div>
+        <div className="flex items-center gap-2 text-sm">
+          {saveError ? (
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+              <AlertCircle className="h-4 w-4" />
+              <span>Save failed</span>
+              {onRetry && (
+                <button
+                  onClick={onRetry}
+                  className="rounded bg-red-100 px-2 py-0.5 text-xs font-medium hover:bg-red-200 dark:bg-red-900/30 dark:hover:bg-red-900/50"
+                >
+                  Retry
+                </button>
+              )}
+            </div>
+          ) : isSaving ? (
+            <div className="flex items-center gap-2 text-amber-600 dark:text-amber-400">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              <span>Saving...</span>
+            </div>
+          ) : lastSaved ? (
+            <div className="flex items-center gap-2 text-emerald-600 dark:text-emerald-400">
+              <CheckCircle2 className="h-4 w-4" />
+              <span>Saved {lastSaved.toLocaleTimeString()}</span>
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <Clock className="h-4 w-4" />
+              <span>Not saved yet</span>
+            </div>
+          )}
+        </div>
       </div>
 
-      {/* Column 2: Stats */}
-      <div className="space-y-4">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-          Attributes & Powers
-        </h2>
+      {/* Three Column Grid */}
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        {/* Column 1: Foundation */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+            Foundation
+          </h2>
 
-        {/* Attributes - Phase 2 */}
-        <AttributesCard state={creationState} updateState={updateState} />
+          {/* Character Info - Phase 5 */}
+          <CharacterInfoCard state={creationState} updateState={updateState} />
 
-        {/* Qualities - Phase 2 */}
-        <QualitiesCard state={creationState} updateState={updateState} />
+          {/* Priority Selection - Phase 2 */}
+          <PrioritySelectionCard state={creationState} updateState={updateState} />
 
-        {/* Skills - Phase 2 */}
-        <SkillsCard state={creationState} updateState={updateState} />
+          {/* Metatype Selection - Phase 2 */}
+          <MetatypeCard state={creationState} updateState={updateState} />
 
-        {/* Spells - Phase 3 (conditional) */}
-        {isMagical && <SpellsCard state={creationState} updateState={updateState} />}
+          {/* Magic Path - Phase 3 */}
+          <MagicPathCard state={creationState} updateState={updateState} />
 
-        {/* Adept Powers - Phase 3 (conditional) */}
-        {isAdept && <AdeptPowersCard state={creationState} updateState={updateState} />}
+          {/* Derived Stats - Phase 6 */}
+          <DerivedStatsCard state={creationState} updateState={updateState} />
 
-        {/* Foci - Phase 3 (conditional) */}
-        {isMagical && <FociCard state={creationState} updateState={updateState} />}
+          {/* Budget Summary */}
+          <BudgetSummaryCard creationState={creationState} />
 
-        {/* Complex Forms - Phase 3 (conditional) */}
-        {isTechnomancer && <ComplexFormsCard state={creationState} updateState={updateState} />}
-      </div>
+          {/* Finalize */}
+          <ValidationSummary
+            onFinalize={onFinalize}
+            isSaving={isSaving}
+            lastSaved={lastSaved}
+            saveError={saveError}
+            onRetry={onRetry}
+          />
+        </div>
 
-      {/* Column 3: Abilities & Gear */}
-      <div className="space-y-4">
-        <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
-          Skills & Gear
-        </h2>
+        {/* Column 2: Stats */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+            Attributes & Powers
+          </h2>
 
-        {/* Knowledge & Languages - Phase 2 */}
-        <KnowledgeLanguagesCard state={creationState} updateState={updateState} />
+          {/* Attributes - Phase 2 */}
+          <AttributesCard state={creationState} updateState={updateState} />
 
-        {/* Contacts - Phase 5 */}
-        <ContactsCard state={creationState} updateState={updateState} />
+          {/* Qualities - Phase 2 */}
+          <QualitiesCard state={creationState} updateState={updateState} />
 
-        {/* Gear - Phase 4 */}
-        <GearPanel state={creationState} updateState={updateState} />
+          {/* Skills - Phase 2 */}
+          <SkillsCard state={creationState} updateState={updateState} />
 
-        {/* Weapons - Phase 4 (New) */}
-        <WeaponsPanel state={creationState} updateState={updateState} />
+          {/* Spells - Phase 3 (conditional) */}
+          {isMagical && <SpellsCard state={creationState} updateState={updateState} />}
 
-        {/* Armor - Phase 4 (New) */}
-        <ArmorPanel state={creationState} updateState={updateState} />
+          {/* Adept Powers - Phase 3 (conditional) */}
+          {isAdept && <AdeptPowersCard state={creationState} updateState={updateState} />}
 
-        {/* Matrix Gear - Phase 4 (Commlinks & Cyberdecks) */}
-        <MatrixGearCard state={creationState} updateState={updateState} />
+          {/* Foci - Phase 3 (conditional) */}
+          {isMagical && <FociCard state={creationState} updateState={updateState} />}
 
-        {/* Augmentations - Phase 4 */}
-        <AugmentationsCard state={creationState} updateState={updateState} />
+          {/* Complex Forms - Phase 3 (conditional) */}
+          {isTechnomancer && <ComplexFormsCard state={creationState} updateState={updateState} />}
+        </div>
 
-        {/* Vehicles & Drones - Phase 4 */}
-        <VehiclesCard state={creationState} updateState={updateState} />
+        {/* Column 3: Abilities & Gear */}
+        <div className="space-y-4">
+          <h2 className="text-sm font-medium uppercase tracking-wide text-zinc-400 dark:text-zinc-500">
+            Skills & Gear
+          </h2>
 
-        {/* Identities - Phase 5 */}
-        <IdentitiesCard state={creationState} updateState={updateState} />
+          {/* Knowledge & Languages - Phase 2 */}
+          <KnowledgeLanguagesCard state={creationState} updateState={updateState} />
+
+          {/* Contacts - Phase 5 */}
+          <ContactsCard state={creationState} updateState={updateState} />
+
+          {/* Gear - Phase 4 */}
+          <GearPanel state={creationState} updateState={updateState} />
+
+          {/* Weapons - Phase 4 (New) */}
+          <WeaponsPanel state={creationState} updateState={updateState} />
+
+          {/* Armor - Phase 4 (New) */}
+          <ArmorPanel state={creationState} updateState={updateState} />
+
+          {/* Matrix Gear - Phase 4 (Commlinks & Cyberdecks) */}
+          <MatrixGearCard state={creationState} updateState={updateState} />
+
+          {/* Augmentations - Phase 4 */}
+          <AugmentationsCard state={creationState} updateState={updateState} />
+
+          {/* Vehicles & Drones - Phase 4 */}
+          <VehiclesCard state={creationState} updateState={updateState} />
+
+          {/* Identities - Phase 5 */}
+          <IdentitiesCard state={creationState} updateState={updateState} />
+        </div>
       </div>
     </div>
   );

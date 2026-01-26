@@ -33,7 +33,7 @@ import {
   MENTOR_SPIRIT_KARMA_COST,
   PATH_INFO,
 } from "./constants";
-import { calculatePositiveKarmaSpent } from "./utils";
+import { calculatePositiveKarmaSpent, type QualitySelection } from "./utils";
 import { MagicPathModal } from "./MagicPathModal";
 import type { MagicPathCardProps } from "./types";
 
@@ -53,9 +53,6 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const selectedTradition = state.selections["tradition"] as string | undefined;
   const selectedMentorSpiritId = state.selections["mentor-spirit"] as string | undefined;
   const magicPriority = state.priorities?.magic;
-
-  // Quality selection type supporting both string IDs and object format
-  type QualitySelection = string | { id: string; specification?: string; karma?: number };
 
   // Get current positive qualities and specifications
   const positiveQualities = useMemo(

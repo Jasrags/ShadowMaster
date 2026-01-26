@@ -4,7 +4,7 @@ import type { QualityData } from "@/lib/rules/loader-types";
  * Quality selection can be either a string ID or an object with embedded data.
  * Object format supports embedded specification and karma values.
  */
-type QualitySelection = string | { id: string; specification?: string; karma?: number };
+export type QualitySelection = string | { id: string; specification?: string; karma?: number };
 
 export function calculatePositiveKarmaSpent(
   selectedQualities: QualitySelection[],

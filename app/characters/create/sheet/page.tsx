@@ -63,10 +63,35 @@ function SheetCreationContent({
   const { loadRuleset, editionCode, ruleset } = useRuleset();
   const priorityTable = usePriorityTable();
 
-  // Creation state management - initialize from existing character if provided
+  // localStorage key for backup (development safety net)
+  const localStorageKey = existingCharacter?.id
+    ? `draft-backup-${existingCharacter.id}`
+    : "draft-backup-new";
+
+  // Creation state management - initialize from existing character or localStorage backup
   const [creationState, setCreationState] = useState<CreationState>(() => {
     if (existingCharacter?.creationState) {
       return existingCharacter.creationState;
+    }
+    // Check for localStorage backup (development safety net)
+    if (typeof window !== "undefined") {
+      try {
+        const backup = localStorage.getItem(localStorageKey);
+        if (backup) {
+          const parsed = JSON.parse(backup);
+          // Only restore if backup is recent (within 24 hours)
+          if (parsed.updatedAt) {
+            const backupTime = new Date(parsed.updatedAt).getTime();
+            const now = Date.now();
+            if (now - backupTime < 24 * 60 * 60 * 1000) {
+              console.log("[Draft] Restored from localStorage backup");
+              return parsed;
+            }
+          }
+        }
+      } catch {
+        // Ignore localStorage errors
+      }
     }
     return createInitialCreationState();
   });
@@ -78,6 +103,45 @@ function SheetCreationContent({
   // Refs for managing auto-save race conditions
   const abortControllerRef = useRef<AbortController | null>(null);
   const saveVersionRef = useRef(0);
+
+  // Backup to localStorage on every state change (immediate, no debounce)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!creationState.priorities || Object.keys(creationState.priorities).length === 0) return;
+
+    try {
+      localStorage.setItem(localStorageKey, JSON.stringify(creationState));
+    } catch {
+      // Ignore localStorage errors (quota exceeded, etc.)
+    }
+  }, [creationState, localStorageKey]);
+
+  // Clear localStorage backup after successful server save
+  const clearLocalBackup = useCallback(() => {
+    if (typeof window === "undefined") return;
+    try {
+      localStorage.removeItem(localStorageKey);
+    } catch {
+      // Ignore
+    }
+  }, [localStorageKey]);
+
+  // Save immediately on page unload (beforeunload)
+  useEffect(() => {
+    const handleBeforeUnload = () => {
+      // Backup to localStorage immediately
+      if (creationState.priorities && Object.keys(creationState.priorities).length > 0) {
+        try {
+          localStorage.setItem(localStorageKey, JSON.stringify(creationState));
+        } catch {
+          // Ignore
+        }
+      }
+    };
+
+    window.addEventListener("beforeunload", handleBeforeUnload);
+    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
+  }, [creationState, localStorageKey]);
 
   // Auto-load ruleset if campaign or existing character is provided
   useEffect(() => {
@@ -196,6 +260,7 @@ function SheetCreationContent({
         if (currentVersion === saveVersionRef.current) {
           setLastSaved(new Date());
           setSaveError(null);
+          clearLocalBackup(); // Clear localStorage backup after successful server save
         }
       } catch (e) {
         // Ignore aborted requests
@@ -216,7 +281,16 @@ function SheetCreationContent({
     }, 1000); // 1 second debounce
 
     return () => clearTimeout(saveTimeout);
-  }, [creationState, characterId, editionCode, selectedEdition, campaignId, updateState, ruleset]);
+  }, [
+    creationState,
+    characterId,
+    editionCode,
+    selectedEdition,
+    campaignId,
+    updateState,
+    ruleset,
+    clearLocalBackup,
+  ]);
 
   // Handle retry after save failure
   const handleRetry = useCallback(() => {

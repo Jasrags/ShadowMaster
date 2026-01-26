@@ -29,6 +29,20 @@ interface SummaryFooterProps {
   className?: string;
 }
 
+/**
+ * Simple pluralization that handles common cases:
+ * - Words ending in consonant + y → ies (quality → qualities, identity → identities)
+ * - Regular words → add s (item → items, spell → spells)
+ */
+function pluralize(word: string): string {
+  // Words ending in consonant + y: replace y with ies
+  if (/[^aeiou]y$/i.test(word)) {
+    return word.slice(0, -1) + "ies";
+  }
+  // Default: just add s
+  return word + "s";
+}
+
 function formatValue(total: number | string, format: "currency" | "number" | "decimal"): string {
   if (typeof total === "string") return total;
 
@@ -51,7 +65,7 @@ export function SummaryFooter({
   showBorder = true,
   className = "",
 }: SummaryFooterProps) {
-  const pluralLabel = count === 1 ? label : `${label}s`;
+  const pluralLabel = count === 1 ? label : pluralize(label);
   const formattedTotal = formatValue(total, format);
 
   const variantClasses =
