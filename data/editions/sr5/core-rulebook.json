@@ -11309,56 +11309,6 @@
             }
           },
           {
-            "id": "contacts-imagelink",
-            "name": "Contacts w/ Image Link",
-            "category": "miscellaneous",
-            "description": "AR-enabled contact lenses.",
-            "hasRating": true,
-            "maxRating": 3,
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 200,
-                "availability": 3
-              },
-              "2": {
-                "cost": 400,
-                "availability": 3
-              },
-              "3": {
-                "cost": 600,
-                "availability": 3
-              }
-            }
-          },
-          {
-            "id": "glasses-imagelink",
-            "name": "Glasses w/ Image Link",
-            "category": "miscellaneous",
-            "description": "AR-enabled glasses.",
-            "hasRating": true,
-            "maxRating": 4,
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 100,
-                "availability": 2
-              },
-              "2": {
-                "cost": 200,
-                "availability": 2
-              },
-              "3": {
-                "cost": 300,
-                "availability": 2
-              },
-              "4": {
-                "cost": 400,
-                "availability": 2
-              }
-            }
-          },
-          {
             "id": "magical-lodge-materials",
             "name": "Magical Lodge Materials",
             "category": "magical-supplies",

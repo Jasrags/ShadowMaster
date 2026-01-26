@@ -33,7 +33,7 @@ import {
   MENTOR_SPIRIT_KARMA_COST,
   PATH_INFO,
 } from "./constants";
-import { calculatePositiveKarmaSpent } from "./utils";
+import { calculatePositiveKarmaSpent, type QualitySelection } from "./utils";
 import { MagicPathModal } from "./MagicPathModal";
 import type { MagicPathCardProps } from "./types";
 
@@ -56,7 +56,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
 
   // Get current positive qualities and specifications
   const positiveQualities = useMemo(
-    () => (state.selections.positiveQualities || []) as string[],
+    () => (state.selections.positiveQualities || []) as QualitySelection[],
     [state.selections.positiveQualities]
   );
   const qualitySpecifications = useMemo(
@@ -68,8 +68,12 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     [state.selections.qualityLevels]
   );
 
-  // Check if mentor spirit quality is already selected
-  const hasMentorSpiritQuality = positiveQualities.includes(MENTOR_SPIRIT_QUALITY_ID);
+  // Check if mentor spirit quality is already selected (handles both string and object formats)
+  const hasMentorSpiritQuality = positiveQualities.some(
+    (q) =>
+      (typeof q === "string" && q === MENTOR_SPIRIT_QUALITY_ID) ||
+      (typeof q === "object" && q.id === MENTOR_SPIRIT_QUALITY_ID)
+  );
 
   // Get available magic options based on priority
   const availableOptions = useMemo(() => {
@@ -120,11 +124,16 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       // Clear mentor spirit if path doesn't support it
       if (!MENTOR_SPIRIT_PATHS.includes(pathId)) {
         delete updates["mentor-spirit"];
-        // Remove mentor spirit quality
-        const newPositiveQualities = (
-          (updates.positiveQualities as string[]) || positiveQualities
-        ).filter((q: string) => q !== MENTOR_SPIRIT_QUALITY_ID);
+        // Remove mentor spirit quality (handles both string and object formats)
+        const currentQualities =
+          (updates.positiveQualities as QualitySelection[]) || positiveQualities;
+        const newPositiveQualities = currentQualities.filter(
+          (q) =>
+            (typeof q === "string" && q !== MENTOR_SPIRIT_QUALITY_ID) ||
+            (typeof q === "object" && q.id !== MENTOR_SPIRIT_QUALITY_ID)
+        );
         updates.positiveQualities = newPositiveQualities;
+        // Also clean up legacy qualitySpecifications for backwards compatibility
         const newQualitySpecs = {
           ...((updates.qualitySpecifications as Record<string, string>) || qualitySpecifications),
         };
@@ -173,17 +182,30 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
         ...state.selections,
       };
 
-      let newPositiveQualities = [...positiveQualities];
+      // Filter out existing mentor spirit quality (handles both string and object formats)
+      let newPositiveQualities: QualitySelection[] = positiveQualities.filter(
+        (q) =>
+          (typeof q === "string" && q !== MENTOR_SPIRIT_QUALITY_ID) ||
+          (typeof q === "object" && q.id !== MENTOR_SPIRIT_QUALITY_ID)
+      );
+
+      // Also maintain legacy qualitySpecifications for backwards compatibility
       const newQualitySpecs = { ...qualitySpecifications };
 
       if (mentorId && mentor) {
-        if (!newPositiveQualities.includes(MENTOR_SPIRIT_QUALITY_ID)) {
-          newPositiveQualities = [...newPositiveQualities, MENTOR_SPIRIT_QUALITY_ID];
-        }
+        // Add mentor spirit quality using new object format with embedded specification
+        newPositiveQualities = [
+          ...newPositiveQualities,
+          {
+            id: MENTOR_SPIRIT_QUALITY_ID,
+            specification: mentor.name,
+            karma: MENTOR_SPIRIT_KARMA_COST,
+          },
+        ];
+        // Also write to legacy qualitySpecifications for backwards compatibility
         newQualitySpecs[MENTOR_SPIRIT_QUALITY_ID] = mentor.name;
         newSelections["mentor-spirit"] = mentorId;
       } else {
-        newPositiveQualities = newPositiveQualities.filter((q) => q !== MENTOR_SPIRIT_QUALITY_ID);
         delete newQualitySpecs[MENTOR_SPIRIT_QUALITY_ID];
         delete newSelections["mentor-spirit"];
       }

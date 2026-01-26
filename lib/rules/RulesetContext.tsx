@@ -311,6 +311,8 @@ export interface GearCatalogData {
   ammunition: GearItemData[];
   rfidTags: GearItemData[];
   industrialChemicals: GearItemData[];
+  visionEnhancements?: GearItemData[];
+  audioEnhancements?: GearItemData[];
 }
 
 export interface SpellData {
@@ -1088,6 +1090,9 @@ export function useArmorModifications(options?: {
 
 /**
  * Hook to get gear modifications with optional filtering
+ *
+ * Includes vision enhancements (for optical-devices) and audio enhancements
+ * (for audio-devices) in addition to standard gear mods.
  */
 export function useGearModifications(options?: {
   maxAvailability?: number;
@@ -1099,9 +1104,67 @@ export function useGearModifications(options?: {
   const { data } = useRuleset();
 
   return useMemo(() => {
-    if (!data.modifications?.gearMods) return [];
+    const allMods: GearModificationCatalogItemData[] = [];
 
-    let filtered = [...data.modifications.gearMods];
+    // Add standard gear mods
+    if (data.modifications?.gearMods) {
+      allMods.push(...data.modifications.gearMods);
+    }
+
+    // Add vision enhancements as mods for optical devices
+    // Vision enhancements can be installed in glasses, goggles, contacts, etc.
+    if (data.gear?.visionEnhancements) {
+      const visionMods = data.gear.visionEnhancements.map((item) => ({
+        id: item.id,
+        name: item.name,
+        capacityCost: (item as GearItemData & { capacityCost?: number }).capacityCost || 1,
+        capacityPerRating: (item as GearItemData & { capacityPerRating?: boolean })
+          .capacityPerRating,
+        hasRating: item.hasRating,
+        maxRating: item.maxRating,
+        cost: item.cost,
+        costPerRating: (item as GearItemData & { costPerRating?: boolean }).costPerRating,
+        availability: item.availability,
+        legality: item.legality,
+        applicableCategories: ["optical-devices", "imaging-devices", "helmets"],
+        description: item.description,
+        page: (item as GearItemData & { page?: number }).page,
+        source: (item as GearItemData & { source?: string }).source,
+        // Support unified ratings table for vision enhancement with rating
+        ...(item.ratings && {
+          ratings: item.ratings,
+        }),
+      })) as GearModificationCatalogItemData[];
+      allMods.push(...visionMods);
+    }
+
+    // Add audio enhancements as mods for audio devices
+    if (data.gear?.audioEnhancements) {
+      const audioMods = data.gear.audioEnhancements.map((item) => ({
+        id: item.id,
+        name: item.name,
+        capacityCost: (item as GearItemData & { capacityCost?: number }).capacityCost || 1,
+        capacityPerRating: (item as GearItemData & { capacityPerRating?: boolean })
+          .capacityPerRating,
+        hasRating: item.hasRating,
+        maxRating: item.maxRating,
+        cost: item.cost,
+        costPerRating: (item as GearItemData & { costPerRating?: boolean }).costPerRating,
+        availability: item.availability,
+        legality: item.legality,
+        applicableCategories: ["audio-devices", "helmets"],
+        description: item.description,
+        page: (item as GearItemData & { page?: number }).page,
+        source: (item as GearItemData & { source?: string }).source,
+        // Support unified ratings table
+        ...(item.ratings && {
+          ratings: item.ratings,
+        }),
+      })) as GearModificationCatalogItemData[];
+      allMods.push(...audioMods);
+    }
+
+    let filtered = allMods;
 
     if (options?.maxAvailability !== undefined) {
       filtered = filtered.filter((item) => item.availability <= options.maxAvailability!);
@@ -1123,7 +1186,7 @@ export function useGearModifications(options?: {
     }
 
     return filtered;
-  }, [data.modifications, options]);
+  }, [data.modifications, data.gear, options]);
 }
 
 /**

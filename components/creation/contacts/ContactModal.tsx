@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback, useState, useEffect } from "react";
+import { useMemo, useCallback, useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 import type { Contact, ContactTemplateData } from "@/lib/types";
 import {
@@ -31,9 +31,16 @@ export function ContactModal({
     }
   );
 
-  // Reset form when modal opens/closes
+  // Track previous isOpen to detect modal opening (avoids cascading renders)
+  const prevIsOpenRef = useRef(isOpen);
+
+  // Reset form when modal opens (only on transition from closed to open)
   useEffect(() => {
-    if (isOpen) {
+    const wasOpen = prevIsOpenRef.current;
+    prevIsOpenRef.current = isOpen;
+
+    // Only reset when transitioning from closed to open
+    if (!wasOpen && isOpen) {
       if (initialContact) {
         setContact(initialContact);
         setSelectedTemplateId(null);

@@ -9,7 +9,7 @@
  * Phase 6.1: Added collapsible functionality with localStorage persistence.
  */
 
-import { ReactNode, useState, useEffect, useCallback } from "react";
+import { ReactNode, useState, useEffect, useCallback, useRef } from "react";
 import { ChevronDown, ChevronRight } from "lucide-react";
 import { ValidationBadge } from "./ValidationBadge";
 
@@ -88,17 +88,22 @@ export function CreationCard({
     return defaultCollapsed;
   });
 
-  // Track previous status for auto-collapse
-  const [prevStatus, setPrevStatus] = useState(status);
+  // Track previous status for auto-collapse (using ref to avoid cascading renders)
+  const prevStatusRef = useRef(status);
 
   // Auto-collapse when status becomes valid
   useEffect(() => {
-    if (autoCollapseOnValid && collapsible && status === "valid" && prevStatus !== "valid") {
+    if (
+      autoCollapseOnValid &&
+      collapsible &&
+      status === "valid" &&
+      prevStatusRef.current !== "valid"
+    ) {
       setIsCollapsed(true);
       if (id) setStoredCollapsedState(id, true);
     }
-    setPrevStatus(status);
-  }, [status, prevStatus, autoCollapseOnValid, collapsible, id]);
+    prevStatusRef.current = status;
+  }, [status, autoCollapseOnValid, collapsible, id]);
 
   // Toggle collapsed state
   const toggleCollapsed = useCallback(() => {
