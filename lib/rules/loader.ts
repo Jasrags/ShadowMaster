@@ -711,6 +711,40 @@ export function extractProgramsCatalog(ruleset: LoadedRuleset): ProgramsCatalogD
   return extractModule<ProgramsCatalogData>(ruleset, "programs");
 }
 
+import type { DataSoftwareCatalogData, DataSoftwareCatalogItemData } from "./loader-types";
+
+/**
+ * Load data software (datasofts, mapsofts, shopsofts, tutorsofts) from a ruleset.
+ * Data software is stored in the programs module alongside regular programs.
+ */
+export function extractDataSoftwareCatalog(ruleset: LoadedRuleset): DataSoftwareCatalogData | null {
+  const programsModule = extractModule<{
+    datasofts?: DataSoftwareCatalogItemData[];
+    mapsofts?: DataSoftwareCatalogItemData[];
+    shopsofts?: DataSoftwareCatalogItemData[];
+    tutorsofts?: DataSoftwareCatalogItemData[];
+  }>(ruleset, "programs");
+
+  if (!programsModule) return null;
+
+  // Return null if no data software is present
+  if (
+    !programsModule.datasofts?.length &&
+    !programsModule.mapsofts?.length &&
+    !programsModule.shopsofts?.length &&
+    !programsModule.tutorsofts?.length
+  ) {
+    return null;
+  }
+
+  return {
+    datasofts: programsModule.datasofts || [],
+    mapsofts: programsModule.mapsofts || [],
+    shopsofts: programsModule.shopsofts || [],
+    tutorsofts: programsModule.tutorsofts || [],
+  };
+}
+
 // =============================================================================
 // FOCI DATA TYPES AND LOADERS
 // =============================================================================

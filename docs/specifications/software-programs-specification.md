@@ -2,63 +2,153 @@
 
 ## Overview
 
-This document captures requirements and design considerations for adding software/program purchasing to character creation. Software encompasses a variety of digital tools, utilities, and skillsofts that characters can acquire.
+This document captures requirements and design considerations for adding software purchasing to the Matrix Gear card in character creation. Software encompasses a variety of digital tools, utilities, cyberprograms, and skillsofts that characters can acquire.
 
-## Program Categories
+Software can be purchased as an online download or less commonly on chip from physical stores. Datasofts, mapsofts, shopsofts, and tutorsofts can be easily stored and accessed on a commlink, dataterminal, or cyberdeck.
 
-### 1. CyberPrograms (Cyberdeck Only)
+---
 
-Programs that run exclusively on cyberdecks. Cyberdecks have limited program slots (1-6 depending on model).
+## Software Categories
+
+### 1. Data Software (Commlink/Cyberdeck)
+
+Consumer utility software. No special requirements beyond having a device.
+
+| Software               | Cost          | Availability | Effect                                              |
+| ---------------------- | ------------- | ------------ | --------------------------------------------------- |
+| Datasoft               | 120¥          | 4            | +1 Mental limit on related Knowledge Skill Tests    |
+| Mapsoft                | 100¥          | 4            | +1 limit bonus to Navigation Tests for covered area |
+| Shopsoft               | 150¥          | 4            | +1 Social limit for Availability/Negotiation tests  |
+| Tutorsoft (Rating 1–6) | Rating × 400¥ | Rating       | Makes Instruction Tests with dice pool = Rating × 2 |
+
+**Implementation Notes:**
+
+- **Datasoft, Mapsoft, Shopsoft**: Require "Specific Details" free-form text input (e.g., "Datasoft - 18th Century Poetry", "Mapsoft - Downtown Seattle", "Shopsoft - Firearms")
+- **Tutorsoft**: Requires skill selection (cannot be Magic or Resonance-based skills)
+
+#### Detailed Descriptions
+
+**Datasofts:** Encompass a wide variety of information files, databases containing information on everything from hydraulic fracturing to 18th century romantic poetry. An appropriate datasoft gives you a +1 bonus to your Mental limit on related Knowledge Skill Tests.
+
+**Mapsofts:** Feature detailed information about a particular area, from streets to business/residential listings to topographical, census, GPS and environmental data. An interactive interface allows you to quickly determine the best routes and directions, locate the nearest spot of your choice, or create your own customized maps. If a wireless link is maintained, the map automatically self-updates with the latest data from GridGuide. Provides a +1 limit bonus to Navigation Tests made to navigate the area they cover.
+
+**Shopsofts:** Shopping apps like Clothes Horse, Caveat Emptour, and Guns Near Me provide pricing breakdowns and user reviews for comparison shopping purposes, both for standard goods and black market purchases. Shopsofts self-update regularly to stay current. An appropriate shopsoft provides a +1 bonus to your Social limit for all Availability and Negotiation tests you make to buy and sell those items.
+
+**Tutorsofts:** Virtual private tutors that aid you in learning a specific skill. The tutorsoft makes Instruction Tests with a dice pool equal to its Rating × 2. Tutorsofts cannot teach skills based on Magic or Resonance.
+
+**Tutorsoft Upgrading:** While not explicitly detailed as a "hardware upgrade" in the same way as a cyberdeck, you improve your skills by using the tutorsoft in conjunction with downtime, or by purchasing a higher-rated (1-6) tutorsoft program to replace a lower-rated one.
+
+---
+
+### 2. CyberPrograms (Cyberdeck Only)
+
+Programs that run exclusively on cyberdecks. Cyberdecks have limited program slots (1-6 depending on model). You can't run more than one program of the same type on your deck at once.
 
 #### Common Programs
 
 General-purpose Matrix utilities. Legal and widely available.
 
-| Program         | Cost | Availability | Effect                                                                 |
-| --------------- | ---- | ------------ | ---------------------------------------------------------------------- |
-| Browse          | 80¥  | 2            | +2 Matrix Search                                                       |
-| Configurator    | 80¥  | 2            | Swap cyberdeck array once/turn for free                                |
-| Edit            | 80¥  | 2            | +2 Edit File                                                           |
-| Encryption      | 80¥  | 2            | +1 Firewall                                                            |
-| Search          | 80¥  | 2            | Negate -2 penalty for Matrix search without index                      |
-| Signal Scrub    | 80¥  | 2            | +2 to defense vs Trace User                                            |
-| Toolbox         | 80¥  | 2            | +1 Data Processing                                                     |
-| Virtual Machine | 80¥  | 2            | Run 2 extra programs; take 1 unresisted Matrix damage when one crashes |
+| Program         | Cost | Avail | Effect                                                                      |
+| --------------- | ---- | ----- | --------------------------------------------------------------------------- |
+| Browse          | 80¥  | —     | Cuts Matrix Search time in half                                             |
+| Configurator    | 80¥  | —     | Store an alternate deck config; switch to it when reconfiguring             |
+| Edit            | 80¥  | —     | +2 to Data Processing limit for Edit tests                                  |
+| Encryption      | 80¥  | —     | +1 Firewall                                                                 |
+| Signal Scrub    | 80¥  | —     | Rating 2 noise reduction                                                    |
+| Toolbox         | 80¥  | —     | +1 Data Processing                                                          |
+| Virtual Machine | 80¥  | —     | Run 2 additional programs; take 1 extra unresistable Matrix damage when hit |
 
 #### Hacking Programs
 
-Offensive and defensive programs for Matrix operations. All restricted.
+Offensive and defensive programs for Matrix operations. All Restricted (R) legality.
 
-| Program                                | Cost | Availability | Legality   |
-| -------------------------------------- | ---- | ------------ | ---------- |
-| Armor, Baby Monitor, Biofeedback, etc. | 250¥ | 4            | Restricted |
+| Program            | Cost | Avail | Effect                                                                           |
+| ------------------ | ---- | ----- | -------------------------------------------------------------------------------- |
+| Armor              | 250¥ | 6R    | +2 dice pool modifier to resist Matrix damage                                    |
+| Baby Monitor       | 250¥ | 6R    | Always know your current Overwatch Score                                         |
+| Biofeedback        | 250¥ | 6R    | Matrix damage also deals equal Stun/Physical biofeedback damage                  |
+| Biofeedback Filter | 250¥ | 6R    | +2 dice pool modifier to resist biofeedback damage                               |
+| Blackout           | 250¥ | 6R    | Matrix damage also deals equal Stun biofeedback (regardless of sim mode)         |
+| Decryption         | 250¥ | 6R    | +1 Attack attribute                                                              |
+| Defuse             | 250¥ | 6R    | +4 dice pool modifier to resist Data Bomb damage                                 |
+| Demolition         | 250¥ | 6R    | +1 to rating of Data Bombs you set                                               |
+| Exploit            | 250¥ | 6R    | +2 Sleaze attribute when attempting Hack on the Fly                              |
+| Fork               | 250¥ | 6R    | Perform a single Matrix action on two targets                                    |
+| Guard              | 250¥ | 6R    | Reduce extra damage from marks by 1 DV per mark                                  |
+| Hammer             | 250¥ | 6R    | +2 DV Matrix damage when you cause damage with an action                         |
+| Lockdown           | 250¥ | 6R    | Damaged personas are link-locked until program stops or they Jack Out            |
+| Mugger             | 250¥ | 6R    | +1 DV per mark bonus damage                                                      |
+| Shell              | 250¥ | 6R    | +1 dice pool to resist Matrix and biofeedback damage (stacks)                    |
+| Sneak              | 250¥ | 6R    | +2 dice pool vs Trace User; demiGOD convergence doesn't reveal physical location |
+| Stealth            | 250¥ | 6R    | +1 Sleaze attribute                                                              |
+| Track              | 250¥ | 6R    | +2 Data Processing for Trace User, OR negates Sneak's +2 (one benefit only)      |
+| Wrapper            | 250¥ | 6R    | Icons can appear as anything via Change Icon; requires Matrix Perception to see  |
 
-**19 hacking programs in catalog** - see `data/editions/sr5/core-rulebook.json` for full list.
+---
 
-### 2. Autosofts (RCC or Vehicle/Drone Only)
+### 3. Agents (Cyberdeck Only)
+
+Autonomous programs rated 1-6 that can perform Matrix actions on your behalf.
+
+| Rating | Availability | Cost    |
+| ------ | ------------ | ------- |
+| 1      | 3            | 1,000¥  |
+| 2      | 6            | 2,000¥  |
+| 3      | 9            | 3,000¥  |
+| 4      | 12           | 8,000¥  |
+| 5      | 15           | 10,000¥ |
+| 6      | 18           | 12,000¥ |
+
+**Agent Characteristics:**
+
+- Each agent occupies one program slot on your deck
+- Uses device's Matrix attributes and agent's rating for skill tests
+- Has Computer, Hacking, and Cybercombat skills equal to its rating
+- Has its own persona and icon when running
+- Attacks on an agent damage the device running it (shares Matrix Condition Monitor)
+- About as smart as a pilot program of the same rating
+
+---
+
+### 4. Skillsofts (Requires Cyberware)
+
+Software that provides skill capabilities. Requires specific cyberware to function. Tests made with a skillsoft may not be boosted with Edge in any way.
+
+| Skillsoft               | Cost            | Availability | Requirement               |
+| ----------------------- | --------------- | ------------ | ------------------------- |
+| Activesoft (Rating 1–6) | Rating × 5,000¥ | 8            | Skillwires                |
+| Knowsoft (Rating 1–6)   | Rating × 2,000¥ | 4            | Skilljack                 |
+| Linguasoft (Rating 1–6) | Rating × 1,000¥ | 2            | Skilljack OR Translat-Ear |
+
+**Implementation Notes:**
+
+- **Activesoft**: Requires skill selection (active skills only, not Magic or Resonance-based)
+- **Knowsoft**: Requires knowledge skill selection
+- **Linguasoft**: Requires language selection
+
+#### Detailed Descriptions
+
+**Activesofts:** Replace physical active skills (every Active skill not based on Magic or Resonance). A skillwire system is needed to translate the 'softs into usable muscle memory. The number of skills usable at once is limited by the skillwires rating.
+
+**Knowsofts:** Replicate Knowledge skills, actively overwriting the user's knowledge with their own data. Must be accessed with a skilljack, and the number usable at once is limited by the skilljack.
+
+**Linguasofts:** Replicate language skills, allowing a user to speak a foreign language by automatically translating signals from the speech cortex. Chipped speech can be awkward and stilted. Must be accessed with a skilljack.
+
+---
+
+### 5. Autosofts (RCC or Vehicle/Drone Only)
 
 Already implemented in rigging system. Run on RCCs or directly on vehicles/drones.
 
 | Autosoft | Cost          | Availability |
 | -------- | ------------- | ------------ |
-| Various  | 500¥ × Rating | 2 × Rating   |
+| Various  | Rating × 500¥ | Rating × 2   |
 
 **Status:** ✅ Already surfaced in VehiclesCard
 
-### 3. Data Software (Commlink/Cyberdeck)
+---
 
-Consumer utility software. No special requirements beyond having a device.
-
-| Software  | Cost       | Availability | Notes                                        |
-| --------- | ---------- | ------------ | -------------------------------------------- |
-| Datasoft  | 120¥       | 4            | Reference info on a single subject           |
-| Mapsoft   | 100¥       | 4            | Detailed maps of a specific area             |
-| Shopsoft  | 150¥       | 4            | Shopping catalogs and price comparisons      |
-| Tutorsoft | Rating × ? | Rating × ?   | Interactive instruction program (Rating 1-6) |
-
-**Question:** What are Tutorsoft cost/availability formulas?
-
-### 4. BTL Programs (Commlink with Hot-Sim OR Chip + Reader)
+### 6. BTL Programs (Commlink with Hot-Sim OR Chip + Reader)
 
 Better-Than-Life illegal simsense programs. Consumable, single-use.
 
@@ -69,55 +159,19 @@ Better-Than-Life illegal simsense programs. Consumable, single-use.
 | Personafix | 200¥ | 4            | Forbidden |
 | Tripchip   | 100¥ | 4            | Forbidden |
 
+**Implementation Notes:**
+
+- Require "Specific Details" free-form text input (e.g., "Moodchip - Euphoria", "Personafix - Corporate Executive")
+- Consumable (single-use, self-erasing)
+- Psychological addiction type
+- All Forbidden legality
+
 **Format Options:**
 
 - **Chip format:** Requires modified simsense deck with hot-sim, OR skilljack/datajack for direct-input
 - **Download format:** Requires commlink with modified hot-sim module
 
-**Characteristics:**
-
-- Consumable (single-use, self-erasing)
-- Psychological addiction type
-- All Forbidden legality
-
 **Status:** ❌ Not in catalog - needs to be added
-
-### 5. Skillsofts (Requires Cyberware)
-
-Software that provides skill capabilities. Requires specific cyberware to function.
-
-#### Activesoft
-
-| Attribute       | Value                                         |
-| --------------- | --------------------------------------------- |
-| Rating          | 1-6                                           |
-| Cost            | ? (per rating)                                |
-| Availability    | ?                                             |
-| **Requirement** | Skillwires OR Skilljack with Active Hardwires |
-
-Provides active skill at software rating (capped by skillwires rating).
-
-#### Knowsoft
-
-| Attribute       | Value                            |
-| --------------- | -------------------------------- |
-| Rating          | 1-6                              |
-| Cost            | ? (per rating)                   |
-| Availability    | ?                                |
-| **Requirement** | Skilljack OR Knowledge Hardwires |
-
-Provides knowledge skill at software rating.
-
-#### Linguasoft
-
-| Attribute       | Value                                                   |
-| --------------- | ------------------------------------------------------- |
-| Rating          | 1-6                                                     |
-| Cost            | ? (per rating)                                          |
-| Availability    | ?                                                       |
-| **Requirement** | Skilljack OR Knowledge Hardwires OR Translat-Ear (gear) |
-
-Provides language at software rating.
 
 ---
 
@@ -125,14 +179,18 @@ Provides language at software rating.
 
 ### Catalog Data (core-rulebook.json)
 
-| Category         | Location                                           | Status                         |
-| ---------------- | -------------------------------------------------- | ------------------------------ |
-| Common Programs  | `programs.common`                                  | ✅ Data exists                 |
-| Hacking Programs | `programs.hacking`                                 | ✅ Data exists                 |
-| Autosofts        | `gear.autosofts`                                   | ✅ Data exists, UI implemented |
-| Data Software    | `programs.datasofts/mapsofts/shopsofts/tutorsofts` | ✅ Data exists                 |
-| BTL Programs     | -                                                  | ❌ Missing                     |
-| Skillsofts       | `programs.skillsofts`                              | ✅ Data exists                 |
+| Category         | Location              | Status                         |
+| ---------------- | --------------------- | ------------------------------ |
+| Common Programs  | `programs.common`     | ✅ Data exists (7 programs)    |
+| Hacking Programs | `programs.hacking`    | ✅ Data exists (19 programs)   |
+| Agents           | `programs.agents`     | ✅ Data exists                 |
+| Datasofts        | `programs.datasofts`  | ✅ Data exists                 |
+| Mapsofts         | `programs.mapsofts`   | ✅ Data exists                 |
+| Shopsofts        | `programs.shopsofts`  | ✅ Data exists                 |
+| Tutorsofts       | `programs.tutorsofts` | ✅ Data exists                 |
+| Skillsofts       | `programs.skillsofts` | ✅ Data exists                 |
+| Autosofts        | `gear.autosofts`      | ✅ Data exists, UI implemented |
+| BTL Programs     | -                     | ❌ Missing                     |
 
 ### UI Components
 
@@ -149,199 +207,146 @@ Provides language at software rating.
 
 ---
 
-## Open Questions
+## Implementation Plan: Phase 1 - Software on Matrix Gear Card
 
-### Data Questions
+### Scope
 
-1. **Tutorsoft pricing:** What is the cost/availability formula per rating?
-2. **Skillsoft pricing:** What are the cost/availability formulas for Activesoft, Knowsoft, Linguasoft?
-3. **BTL addiction mechanics:** Do we need to track addiction during character creation, or is this a gameplay concern?
+Add a new **"Software"** category/section to the Matrix Gear card that allows purchasing:
 
-### Design Questions
+1. **Data Software** (Datasoft, Mapsoft, Shopsoft, Tutorsoft)
+2. **CyberPrograms** (Common and Hacking programs)
+3. **Agents**
+4. **Skillsofts** (Activesoft, Knowsoft, Linguasoft)
 
-1. **Program slot tracking:** Should we enforce cyberdeck program slot limits during creation, or is that a runtime concern?
-2. **Cyberware validation:** Should purchasing an Activesoft validate that the character has Skillwires? Options:
-   - Hard block (can't purchase without cyberware)
-   - Soft warning (can purchase, show warning)
-   - No validation (purchase freely, runtime concern)
-3. **Device assignment:** Do programs need to be assigned to a specific device during creation, or just purchased as inventory?
-4. **BTL classification:** Are BTLs gear (consumables) or software? Affects where they appear in UI.
+BTLs deferred to a later phase.
 
----
+### UI Design
 
-## Proposed Approaches
+The Matrix Gear card will have a new collapsible section for "Software" with subcategories:
 
-### Approach A: Programs as Device Modifications
-
-Treat programs like armor mods - installed onto a specific device.
-
-**Pros:**
-
-- Clear association between program and device
-- Natural fit for program slot limits on cyberdecks
-- Consistent with existing mod pattern (ArmorModificationModal)
-
-**Cons:**
-
-- More complex UX (select device, then add programs)
-- Awkward for skillsofts (they're used via cyberware, not "installed" on a device per se)
-- Data software doesn't really need device tracking
-
-**Implementation:**
-
-1. Add "Manage Programs" button to commlink/cyberdeck rows
-2. Open modal showing compatible programs
-3. Track `loadedPrograms` array on device (already exists on `CharacterCyberdeck`)
-
-### Approach B: Programs in Gear Panel
-
-Add software categories to the general Gear purchase flow.
-
-**Pros:**
-
-- Simple, consistent with other purchasable items
-- Low implementation effort
-- Programs are just inventory items
-
-**Cons:**
-
-- No device association
-- No program slot validation
-- Mixes physical gear with software
-
-**Implementation:**
-
-1. Add `usePrograms()` hook to RulesetContext
-2. Add "Software" category to GearPurchaseModal
-3. Store in `state.selections.programs`
-
-### Approach C: Hybrid Approach
-
-Different treatment based on program type:
-
-| Category                       | Treatment            | Location                                           |
-| ------------------------------ | -------------------- | -------------------------------------------------- |
-| CyberPrograms (Common/Hacking) | Device mods          | MatrixGearCard → Cyberdeck row → "Programs" button |
-| Data Software                  | Gear items           | GearPanel (new "Software" category)                |
-| Skillsofts                     | Gear with validation | GearPanel with cyberware prerequisite warnings     |
-| BTLs                           | Consumable gear      | GearPanel (new "BTL/Consumables" category)         |
-| Autosofts                      | Device mods          | VehiclesCard (already implemented)                 |
-
-**Pros:**
-
-- Each category handled appropriately for its nature
-- CyberPrograms get slot tracking where it matters
-- Simpler treatment for utility software
-
-**Cons:**
-
-- More complex to implement (multiple integration points)
-- Users need to look in different places for different software
-
-### Approach D: Dedicated Software Card
-
-New creation card specifically for all software types.
-
-**Pros:**
-
-- Single location for all software purchasing
-- Can show cyberware/device prerequisites clearly
-- Room for future expansion
-
-**Cons:**
-
-- Another card in an already busy creation flow
-- May duplicate some device-selection UI
-- Separates programs from their host devices
-
----
-
-## Recommended Approach
-
-**Hybrid (Approach C)** with phased implementation:
-
-### Phase 1: CyberPrograms on Cyberdecks
-
-- Add "Programs" button to cyberdeck rows in MatrixGearCard
-- Modal to select Common and Hacking programs
-- Enforce program slot limits
-- Store in `cyberdeck.loadedPrograms`
-
-### Phase 2: Data Software in Gear
-
-- Add "Software" category to GearPurchaseModal
-- Include Datasoft, Mapsoft, Shopsoft, Tutorsoft
-- Simple purchase, no device assignment
-- Store in `state.selections.software`
-
-### Phase 3: Skillsofts with Validation
-
-- Add to Gear or dedicated section
-- Show warnings if cyberware prerequisites not met
-- Store in `state.selections.skillsofts`
-
-### Phase 4: BTLs (if desired)
-
-- Add BTL data to catalog
-- Add to Gear as consumables or dedicated "vice" category
-- Track as inventory items
-
----
-
-## Data Schema Additions Needed
-
-### BTL Catalog Entry (to add)
-
-```json
-{
-  "btl": [
-    {
-      "id": "dreamchip",
-      "name": "Dreamchip",
-      "category": "btl",
-      "cost": 20,
-      "availability": 4,
-      "legality": "forbidden",
-      "format": ["chip", "download"],
-      "description": "Standard simsense recordings modified for BTL output.",
-      "addictionType": "psychological",
-      "page": 411,
-      "source": "Core"
-    }
-  ]
-}
+```
+Matrix Gear Card
+├── Commlinks (existing)
+├── Cyberdecks (existing)
+└── Software (NEW)
+    ├── Data Software
+    │   ├── Datasofts (with specific details input)
+    │   ├── Mapsofts (with specific details input)
+    │   ├── Shopsofts (with specific details input)
+    │   └── Tutorsofts (with skill selection + rating)
+    ├── CyberPrograms
+    │   ├── Common Programs
+    │   └── Hacking Programs
+    ├── Agents (with rating selection)
+    └── Skillsofts
+        ├── Activesofts (with skill selection + rating)
+        ├── Knowsofts (with skill selection + rating)
+        └── Linguasofts (with language selection + rating)
 ```
 
-### CharacterProgram Type (new)
+### Data Schema Additions
+
+#### CharacterSoftware Type (new)
 
 ```typescript
-interface CharacterProgram {
+interface CharacterSoftware {
   id: string;
   catalogId: string;
   name: string;
-  category: "common" | "hacking" | "data" | "skillsoft" | "btl";
+  category:
+    | "datasoft"
+    | "mapsoft"
+    | "shopsoft"
+    | "tutorsoft"
+    | "common"
+    | "hacking"
+    | "agent"
+    | "skillsoft";
+  subcategory?: "activesoft" | "knowsoft" | "linguasoft";
   cost: number;
   rating?: number;
-  // For skillsofts
+  // For datasofts, mapsofts, shopsofts
+  specificDetails?: string;
+  // For tutorsofts and skillsofts
   skillId?: string;
   skillName?: string;
+  // For linguasofts
+  languageId?: string;
+  languageName?: string;
 }
 ```
 
-### Updated CharacterCyberdeck
+#### CreationSelections Update
 
 ```typescript
-interface CharacterCyberdeck {
+interface CreationSelections {
   // ... existing fields
-  loadedPrograms: CharacterProgram[]; // Already exists, ensure it's used
+  software: CharacterSoftware[];
 }
 ```
+
+### Required Changes
+
+1. **RulesetContext.tsx**: Add `usePrograms()` hook to expose program catalog data
+2. **MatrixGearCard**: Add Software section with purchase modal
+3. **SoftwarePurchaseModal**: New modal for browsing/purchasing software
+4. **CreationBudgetContext**: Track software purchases in budget
+5. **Character types**: Add software to character data structure
+
+### Validation Rules
+
+| Software Type | Validation                                     |
+| ------------- | ---------------------------------------------- |
+| Data Software | Soft warning if no commlink or cyberdeck owned |
+| CyberPrograms | Soft warning if no cyberdeck owned             |
+| Agents        | Soft warning if no cyberdeck owned             |
+| Skillsofts    | Soft warning if required cyberware not present |
+
+**Note:** "Soft warning" means the purchase is allowed but displays a warning that the item requires specific hardware/cyberware to use.
+
+**Device Requirements:**
+
+- **Data Software** (Datasoft, Mapsoft, Shopsoft, Tutorsoft): Requires commlink, dataterminal, or cyberdeck for storage and access
+- **CyberPrograms** (Common, Hacking): Requires cyberdeck to run
+- **Agents**: Requires cyberdeck to run (occupies program slot)
+- **Skillsofts**: Requires specific cyberware (Skillwires for Activesoft, Skilljack for Knowsoft/Linguasoft)
+
+**Catalog Data Implementation:**
+
+- Data software entries have `requiresDevice: ["commlink", "cyberdeck"]` field
+- CyberPrograms requirement is implicit by category (`programs.common`, `programs.hacking`) - UI checks category
+- Agents have `requiresCyberdeck: true` field
+- Skillsofts have `requiresCyberware: ["skillwires"]` or `["skilljack"]` field
 
 ---
 
-## Next Steps
+## Open Questions
 
-1. Confirm approach with stakeholder
-2. Gather missing pricing data (Tutorsoft, Skillsofts)
-3. Add BTL data to catalog
-4. Create implementation plan with task breakdown
+### Resolved
+
+1. ✅ **Tutorsoft pricing:** Rating × 400¥, Availability = Rating
+2. ✅ **Skillsoft pricing:**
+   - Activesoft: Rating × 5,000¥, Availability 8
+   - Knowsoft: Rating × 2,000¥, Availability 4
+   - Linguasoft: Rating × 1,000¥, Availability 2
+
+### Remaining Questions
+
+1. **Program slot tracking:** Should we enforce cyberdeck program slot limits during creation, or is that a runtime concern?
+   - **Recommendation:** Runtime concern for now; creation just purchases programs
+
+2. **Device assignment:** Do programs need to be assigned to a specific device during creation, or just purchased as inventory?
+   - **Recommendation:** Purchased as inventory; assignment is a runtime concern
+
+3. **BTL classification:** Are BTLs gear (consumables) or software? Affects where they appear in UI.
+   - **Recommendation:** Defer BTLs to Phase 2; they're edge-case for character creation
+
+---
+
+## Reference Tables
+
+See also:
+
+- `/docs/data_tables/matrix/software.md` - Software pricing summary
+- `/docs/data_tables/matrix/programs_table.md` - Detailed program listings
+- `/docs/data_tables/matrix/skillsofts.md` - Skillsoft details

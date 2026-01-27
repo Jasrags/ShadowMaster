@@ -48,6 +48,8 @@ import type {
   GearModificationCatalogItemData,
   LifestyleSubscriptionCatalogItem,
   ActionsCatalogData,
+  DataSoftwareCatalogData,
+  DataSoftwareCatalogItemData,
 } from "./loader-types";
 export type {
   QualityData,
@@ -77,6 +79,8 @@ export type {
   GearModificationCatalogItemData,
   LifestyleSubscriptionCatalogItem,
   ActionsCatalogData,
+  DataSoftwareCatalogData,
+  DataSoftwareCatalogItemData,
 };
 
 // =============================================================================
@@ -629,6 +633,7 @@ export interface RulesetData {
   ritualKeywords: RitualKeywordData[];
   vehicles: VehiclesCatalogData | null;
   programs: ProgramsCatalogData | null;
+  dataSoftware: DataSoftwareCatalogData | null;
   foci: FocusCatalogItemData[];
   spirits: SpiritsCatalogData | null;
   actions: ActionsCatalogData | null;
@@ -692,6 +697,7 @@ const defaultData: RulesetData = {
   ritualKeywords: [],
   vehicles: null,
   programs: null,
+  dataSoftware: null,
   foci: [],
   spirits: null,
   actions: null,
@@ -782,6 +788,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             ritualKeywords: extractedData.ritualKeywords || [],
             vehicles: extractedData.vehicles || null,
             programs: extractedData.programs || null,
+            dataSoftware: extractedData.dataSoftware || null,
             foci: extractedData.foci || [],
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
@@ -2228,6 +2235,50 @@ export function calculateAgentCost(costPerRating: number, rating: number): numbe
  */
 export function calculateAgentAvailability(rating: number): number {
   return rating * 2;
+}
+
+// =============================================================================
+// DATA SOFTWARE HOOKS
+// =============================================================================
+
+/**
+ * Hook to get the full data software catalog
+ */
+export function useDataSoftwareCatalog(): DataSoftwareCatalogData | null {
+  const { data } = useRuleset();
+  return data.dataSoftware;
+}
+
+/**
+ * Hook to get datasofts only
+ */
+export function useDatasofts(): DataSoftwareCatalogItemData[] {
+  const { data } = useRuleset();
+  return useMemo(() => data.dataSoftware?.datasofts || [], [data.dataSoftware]);
+}
+
+/**
+ * Hook to get mapsofts only
+ */
+export function useMapsofts(): DataSoftwareCatalogItemData[] {
+  const { data } = useRuleset();
+  return useMemo(() => data.dataSoftware?.mapsofts || [], [data.dataSoftware]);
+}
+
+/**
+ * Hook to get shopsofts only
+ */
+export function useShopsofts(): DataSoftwareCatalogItemData[] {
+  const { data } = useRuleset();
+  return useMemo(() => data.dataSoftware?.shopsofts || [], [data.dataSoftware]);
+}
+
+/**
+ * Hook to get tutorsofts only
+ */
+export function useTutorsofts(): DataSoftwareCatalogItemData[] {
+  const { data } = useRuleset();
+  return useMemo(() => data.dataSoftware?.tutorsofts || [], [data.dataSoftware]);
 }
 
 /**

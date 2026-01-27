@@ -43,16 +43,16 @@ The quality system already has a mature `effects` structure. We should extend an
 
 ## Design Decisions
 
-| Decision | Choice | Rationale |
-|----------|--------|-----------|
-| Trigger matching | Multi-trigger array | Explicit, no ambiguity about which triggers apply |
-| Specific actions | Typed enum | Prevents stringly-typed mess, enables validation |
-| Wireless overrides | Constrained fields only | Most SR5 wireless bonuses follow predictable patterns |
-| Stacking rules | Per effect type | Matches SR5 rules where dice pool stacks but limits don't |
-| Character state | Extend existing types | Avoid parallel structures, integrate with current patterns |
-| Active modifiers | Part of character model | Persisted, not session-only |
-| Resolution context | Builder helpers | Reduce coupling, improve DX |
-| Existing quality effects | Migrate | Single system, not parallel |
+| Decision                 | Choice                  | Rationale                                                  |
+| ------------------------ | ----------------------- | ---------------------------------------------------------- |
+| Trigger matching         | Multi-trigger array     | Explicit, no ambiguity about which triggers apply          |
+| Specific actions         | Typed enum              | Prevents stringly-typed mess, enables validation           |
+| Wireless overrides       | Constrained fields only | Most SR5 wireless bonuses follow predictable patterns      |
+| Stacking rules           | Per effect type         | Matches SR5 rules where dice pool stacks but limits don't  |
+| Character state          | Extend existing types   | Avoid parallel structures, integrate with current patterns |
+| Active modifiers         | Part of character model | Persisted, not session-only                                |
+| Resolution context       | Builder helpers         | Reduce coupling, improve DX                                |
+| Existing quality effects | Migrate                 | Single system, not parallel                                |
 
 ---
 
@@ -66,7 +66,7 @@ Stored on catalog items in edition JSON files.
 interface Effect {
   id: string;
   type: EffectType;
-  triggers: EffectTrigger[];           // Multi-trigger array (explicit matching)
+  triggers: EffectTrigger[]; // Multi-trigger array (explicit matching)
   target: EffectTarget;
   value: number | { perRating: number };
   condition?: EffectCondition;
@@ -79,8 +79,8 @@ interface Effect {
   // Wireless variant (constrained fields only)
   requiresWireless?: boolean;
   wirelessOverride?: {
-    type?: EffectType;                 // Can change (e.g., limit → dice)
-    bonusValue?: number;               // Additional value on top of base
+    type?: EffectType; // Can change (e.g., limit → dice)
+    bonusValue?: number; // Additional value on top of base
     description?: string;
   };
 }
@@ -188,7 +188,7 @@ interface EffectTarget {
   perceptionType?: "audio" | "visual" | "tactile" | "astral";
   weaponCategory?: string[];
   damageType?: "physical" | "stun";
-  specificAction?: SpecificAction;    // Typed enum, not string
+  specificAction?: SpecificAction; // Typed enum, not string
 }
 ```
 
@@ -316,7 +316,7 @@ interface ActiveModifier {
   expiresAt?: ISODateString;
   expiresAfterUses?: number;
   remainingUses?: number;
-  appliedBy?: string;              // User ID of GM who applied
+  appliedBy?: string; // User ID of GM who applied
   appliedAt: ISODateString;
   notes?: string;
 }
@@ -353,7 +353,7 @@ class EffectContextBuilder {
   static forSkillTest(skill: string): EffectContextBuilder {
     return new EffectContextBuilder().setAction({
       type: "skill-test",
-      skill
+      skill,
     });
   }
 
@@ -366,7 +366,7 @@ class EffectContextBuilder {
       type: "skill-test",
       skill: "perception",
       perceptionType: type,
-      specificAction
+      specificAction,
     });
   }
 
@@ -374,7 +374,7 @@ class EffectContextBuilder {
     return new EffectContextBuilder().setAction({
       type: "attack",
       attackType: "ranged",
-      weaponId
+      weaponId,
     });
   }
 
@@ -382,7 +382,7 @@ class EffectContextBuilder {
     return new EffectContextBuilder().setAction({
       type: "attack",
       attackType: "melee",
-      weaponId
+      weaponId,
     });
   }
 
@@ -405,8 +405,7 @@ class EffectContextBuilder {
 }
 
 // Usage examples:
-const ctx = EffectContextBuilder
-  .forPerception("audio", "locate-sound-source")
+const ctx = EffectContextBuilder.forPerception("audio", "locate-sound-source")
   .withEnvironment({ noise: "loud" })
   .build();
 ```
@@ -645,8 +644,7 @@ const effects = resolveEffects(character, ctx, ruleset);
 ### Gameplay (Locate Sniper)
 
 ```typescript
-const ctx = EffectContextBuilder
-  .forPerception("audio", "locate-sound-source")
+const ctx = EffectContextBuilder.forPerception("audio", "locate-sound-source")
   .withEnvironment({ noise: "loud" })
   .build();
 
@@ -660,6 +658,7 @@ const effects = resolveEffects(character, ctx, ruleset);
 ## 7. Migration Plan
 
 ### Phase 1: Foundation (Types & Resolver)
+
 - Define types in `/lib/types/effects.ts`
 - Create resolver in `/lib/rules/effects/resolver.ts`
 - Create context builder in `/lib/rules/effects/context.ts`
@@ -667,26 +666,31 @@ const effects = resolveEffects(character, ctx, ruleset);
 - Audit existing character types for integration points
 
 ### Phase 2: Quality Migration
+
 - Update quality effects to use `triggers: []` array format
 - Ensure backward compatibility during transition
 - Update quality resolution to use unified resolver
 
 ### Phase 3: Gear Effects
+
 - Add `effects` arrays to gear items (10-20 items initially)
 - Validate resolver with gear + quality combinations
 - Add wireless toggle to character gear state
 
 ### Phase 4: Cyberware/Bioware Effects
+
 - Add `effects` arrays to cyberware items
 - Add `effects` arrays to bioware items
 - Add wireless toggle to character cyberware state
 
 ### Phase 5: Character Sheet Integration
+
 - Display resolved effects on character sheet
 - Show wireless toggle controls
 - Show stacking exclusions for transparency
 
 ### Phase 6: Active Modifiers UI
+
 - GM interface to add/remove active modifiers
 - Display active modifiers on character sheet
 - Automatic expiration handling
@@ -695,16 +699,16 @@ const effects = resolveEffects(character, ctx, ruleset);
 
 ## 8. Open Questions (Resolved)
 
-| Question | Resolution |
-|----------|------------|
-| Trigger hierarchy? | Multi-trigger arrays - explicit matching |
-| Specific action typing? | Enum - `SpecificAction` type |
+| Question                  | Resolution                                   |
+| ------------------------- | -------------------------------------------- |
+| Trigger hierarchy?        | Multi-trigger arrays - explicit matching     |
+| Specific action typing?   | Enum - `SpecificAction` type                 |
 | Wireless override fields? | Constrained to type, bonusValue, description |
-| Stacking rules? | Per effect type via `STACKING_RULES` |
-| Character state? | Extend existing types, audit first |
-| Active modifiers? | Persisted on character, part of data model |
-| Resolution context? | Builder pattern for DX |
-| Existing quality effects? | Migrate to unified system |
+| Stacking rules?           | Per effect type via `STACKING_RULES`         |
+| Character state?          | Extend existing types, audit first           |
+| Active modifiers?         | Persisted on character, part of data model   |
+| Resolution context?       | Builder pattern for DX                       |
+| Existing quality effects? | Migrate to unified system                    |
 
 ---
 

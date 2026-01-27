@@ -290,8 +290,7 @@ export function CommlinkPurchaseModal({
                             : "text-zinc-900 dark:text-zinc-100"
                         }`}
                       >
-                        {formatCurrency(selectedCommlink.cost)}¥
-                        {!canAfford && " (over budget)"}
+                        {formatCurrency(selectedCommlink.cost)}¥{!canAfford && " (over budget)"}
                       </span>
                     </div>
                     <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 text-sm dark:bg-zinc-800">

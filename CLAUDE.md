@@ -246,4 +246,5 @@ Available skills for detailed guidance:
 - `/component-patterns` - Component organization guidelines
 - `/testing` - Test infrastructure and patterns
 - `/edition-data-author` - Creating catalog items for edition JSON files
+- `/archetype-import` - Importing SR5 archetypes from sourcebook stat blocks
 - `/shadowrun-aesthetic` - UI styling guidelines

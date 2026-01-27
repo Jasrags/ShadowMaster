@@ -12,6 +12,7 @@ import type {
   CharacterAutosoft,
   CharacterCommlink,
   CharacterCyberdeck,
+  CharacterDataSoftware,
   CharacterDrone,
   CharacterRCC,
   Contact,
@@ -235,6 +236,7 @@ export interface GearSelections {
   armor?: ArmorItem[];
   commlinks?: CharacterCommlink[];
   cyberdecks?: CharacterCyberdeck[];
+  software?: CharacterDataSoftware[];
 }
 
 /**
