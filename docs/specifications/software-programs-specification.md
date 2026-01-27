@@ -295,12 +295,26 @@ interface CreationSelections {
 
 | Software Type | Validation                                     |
 | ------------- | ---------------------------------------------- |
-| Data Software | None (can store on any commlink/cyberdeck)     |
+| Data Software | Soft warning if no commlink or cyberdeck owned |
 | CyberPrograms | Soft warning if no cyberdeck owned             |
 | Agents        | Soft warning if no cyberdeck owned             |
 | Skillsofts    | Soft warning if required cyberware not present |
 
 **Note:** "Soft warning" means the purchase is allowed but displays a warning that the item requires specific hardware/cyberware to use.
+
+**Device Requirements:**
+
+- **Data Software** (Datasoft, Mapsoft, Shopsoft, Tutorsoft): Requires commlink, dataterminal, or cyberdeck for storage and access
+- **CyberPrograms** (Common, Hacking): Requires cyberdeck to run
+- **Agents**: Requires cyberdeck to run (occupies program slot)
+- **Skillsofts**: Requires specific cyberware (Skillwires for Activesoft, Skilljack for Knowsoft/Linguasoft)
+
+**Catalog Data Implementation:**
+
+- Data software entries have `requiresDevice: ["commlink", "cyberdeck"]` field
+- CyberPrograms requirement is implicit by category (`programs.common`, `programs.hacking`) - UI checks category
+- Agents have `requiresCyberdeck: true` field
+- Skillsofts have `requiresCyberware: ["skillwires"]` or `["skilljack"]` field
 
 ---
 
