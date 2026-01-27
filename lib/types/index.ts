@@ -161,6 +161,7 @@ export type {
   CharacterRCC,
   CharacterAutosoft,
   FocusItem,
+  CharacterDataSoftware,
   CharacterDraft,
   CreateCharacterRequest,
   UpdateCharacterRequest,

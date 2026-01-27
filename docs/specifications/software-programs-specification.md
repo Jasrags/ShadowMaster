@@ -36,6 +36,8 @@ Consumer utility software. No special requirements beyond having a device.
 
 **Tutorsofts:** Virtual private tutors that aid you in learning a specific skill. The tutorsoft makes Instruction Tests with a dice pool equal to its Rating × 2. Tutorsofts cannot teach skills based on Magic or Resonance.
 
+**Tutorsoft Upgrading:** While not explicitly detailed as a "hardware upgrade" in the same way as a cyberdeck, you improve your skills by using the tutorsoft in conjunction with downtime, or by purchasing a higher-rated (1-6) tutorsoft program to replace a lower-rated one.
+
 ---
 
 ### 2. CyberPrograms (Cyberdeck Only)

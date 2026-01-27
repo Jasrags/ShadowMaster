@@ -1267,6 +1267,34 @@ export interface FocusItem {
   notes?: string;
 }
 
+/**
+ * Data software owned by a character (Datasoft, Mapsoft, Shopsoft, Tutorsoft)
+ */
+export interface CharacterDataSoftware {
+  /** Unique instance ID */
+  id: string;
+  /** Reference to catalog item ID */
+  catalogId: string;
+  /** Type of data software */
+  type: "datasoft" | "mapsoft" | "shopsoft" | "tutorsoft";
+  /** Base name from catalog */
+  name: string;
+  /** Display name with details (e.g., "Datasoft (18th Century Poetry)") */
+  displayName: string;
+  /** Rating (for Tutorsofts) */
+  rating?: number;
+  /** Specific details (e.g., subject for Datasoft, area for Mapsoft) */
+  specificDetails?: string;
+  /** Selected skill ID (for Tutorsofts) */
+  selectedSkillId?: string;
+  /** Selected skill display name (for Tutorsofts) */
+  selectedSkillName?: string;
+  /** Cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+}
+
 // =============================================================================
 // CHARACTER DRAFT (During Creation)
 // =============================================================================

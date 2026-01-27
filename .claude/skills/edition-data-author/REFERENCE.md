@@ -2,28 +2,29 @@
 
 ## Common Availability Values (SR5)
 
-| Availability | Meaning |
-|-------------|---------|
-| 0-4 | Common, easily obtained |
-| 5-8 | Uncommon, requires some effort |
-| 9-12 | Rare, maximum at character creation |
-| 13-18 | Very rare, require contacts/legwork |
-| 19+ | Extremely rare, military/experimental |
+| Availability | Meaning                               |
+| ------------ | ------------------------------------- |
+| 0-4          | Common, easily obtained               |
+| 5-8          | Uncommon, requires some effort        |
+| 9-12         | Rare, maximum at character creation   |
+| 13-18        | Very rare, require contacts/legwork   |
+| 19+          | Extremely rare, military/experimental |
 
 Legality suffixes:
+
 - (none) = Legal
 - `"restricted"` = R suffix in book, requires license
 - `"forbidden"` = F suffix in book, illegal
 
 ## Cyberware Grades
 
-| Grade | Essence Mult | Cost Mult | Avail Mod |
-|-------|--------------|-----------|-----------|
-| Used | 1.25 | 0.75 | - |
-| Standard | 1.0 | 1.0 | - |
-| Alphaware | 0.8 | 1.2 | +2 |
-| Betaware | 0.7 | 1.5 | +4 |
-| Deltaware | 0.5 | 2.5 | +8 |
+| Grade     | Essence Mult | Cost Mult | Avail Mod |
+| --------- | ------------ | --------- | --------- |
+| Used      | 1.25         | 0.75      | -         |
+| Standard  | 1.0          | 1.0       | -         |
+| Alphaware | 0.8          | 1.2       | +2        |
+| Betaware  | 0.7          | 1.5       | +4        |
+| Deltaware | 0.5          | 2.5       | +8        |
 
 ## Cyberware Categories
 
@@ -75,10 +76,12 @@ Combined: `SA/BF`, `SA/BF/FA`, `BF/FA`
 ## Damage Codes
 
 Format: `{damage}P` or `{damage}S`
+
 - `P` = Physical damage
 - `S` = Stun damage
 
 Modifiers:
+
 - `(f)` = Fire damage (e.g., `5P(f)`)
 - `(e)` = Electrical damage
 - `STR` = Use character Strength (e.g., `(STR+2)P`)
@@ -88,6 +91,7 @@ Modifiers:
 Format: `F+X` or `F-X` where F = Force
 
 Common values:
+
 - `F-4` = Very easy drain
 - `F-3` = Easy drain
 - `F-2` = Standard drain
@@ -101,6 +105,7 @@ Common values:
 Format: `L+X` or `L-X` where L = Level
 
 Common values:
+
 - `L-2` = Easy fading
 - `L-1` = Standard fading
 - `L` = Moderate
@@ -115,12 +120,12 @@ Common values:
 
 ## Spell Categories
 
-| Category | Purpose |
-|----------|---------|
-| combat | Direct/indirect damage |
-| detection | Perception, analysis, finding |
-| health | Healing, enhancement, resist |
-| illusion | Deception, concealment |
+| Category     | Purpose                        |
+| ------------ | ------------------------------ |
+| combat       | Direct/indirect damage         |
+| detection    | Perception, analysis, finding  |
+| health       | Healing, enhancement, resist   |
+| illusion     | Deception, concealment         |
 | manipulation | Control, barriers, telekinesis |
 
 ## Spell Types
@@ -143,15 +148,15 @@ Common values:
 
 ## Focus Types
 
-| Type | Bonding Karma | Common Force |
-|------|---------------|--------------|
-| enchanting | F × 3 | 1-4 |
-| metamagic | F × 3 | 1-6 |
-| power | F × 1 | 1-4 |
-| qi | F × 2 | 1-4 |
-| spell | F × 2 | 1-6 |
-| spirit | F × 2 | 1-6 |
-| weapon | F × 3 | 1-6 |
+| Type       | Bonding Karma | Common Force |
+| ---------- | ------------- | ------------ |
+| enchanting | F × 3         | 1-4          |
+| metamagic  | F × 3         | 1-6          |
+| power      | F × 1         | 1-4          |
+| qi         | F × 2         | 1-4          |
+| spell      | F × 2         | 1-6          |
+| spirit     | F × 2         | 1-6          |
+| weapon     | F × 3         | 1-6          |
 
 ## Quality Categories
 
@@ -167,18 +172,21 @@ metatype  - Metatype-specific (Metagenetic, Changeling)
 ## Attribute Abbreviations
 
 Physical:
+
 - `body` / `BOD`
 - `agility` / `AGI`
 - `reaction` / `REA`
 - `strength` / `STR`
 
 Mental:
+
 - `willpower` / `WIL`
 - `logic` / `LOG`
 - `intuition` / `INT`
 - `charisma` / `CHA`
 
 Special:
+
 - `edge` / `EDG`
 - `essence` / `ESS`
 - `magic` / `MAG`

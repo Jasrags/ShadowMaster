@@ -1167,6 +1167,55 @@ export interface ProgramsCatalogData {
 }
 
 // =============================================================================
+// DATA SOFTWARE CATALOG TYPES
+// =============================================================================
+
+/**
+ * Data software catalog item data structure
+ * Used for Datasofts, Mapsofts, Shopsofts, and Tutorsofts
+ */
+export interface DataSoftwareCatalogItemData {
+  id: string;
+  name: string;
+  category: "software";
+  cost?: number;
+  availability?: number;
+  legality?: ItemLegality;
+  description?: string;
+  effects?: string;
+  requiresDevice: ("commlink" | "cyberdeck")[];
+  /** If true, user must enter specific details (e.g., subject for Datasoft) */
+  requiresSpecificDetails?: boolean;
+  /** Label for specific details input */
+  specificDetailsLabel?: string;
+  /** Placeholder for specific details input */
+  specificDetailsPlaceholder?: string;
+  /** If true, this software has a rating */
+  hasRating?: boolean;
+  minRating?: number;
+  maxRating?: number;
+  /** If true, requires skill selection (e.g., Tutorsoft) */
+  requiresSkillSelection?: boolean;
+  /** Skill categories to exclude from selection */
+  excludeSkillCategories?: string[];
+  /** Rating-based costs and availability */
+  ratings?: Record<string, { cost: number; availability: number }>;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Data software catalog data structure
+ * Contains all data software categories from the programs module
+ */
+export interface DataSoftwareCatalogData {
+  datasofts: DataSoftwareCatalogItemData[];
+  mapsofts: DataSoftwareCatalogItemData[];
+  shopsofts: DataSoftwareCatalogItemData[];
+  tutorsofts: DataSoftwareCatalogItemData[];
+}
+
+// =============================================================================
 // FOCI DATA TYPES
 // =============================================================================
 

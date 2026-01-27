@@ -21,16 +21,26 @@ import {
   type CommlinkData,
   type CyberdeckData,
 } from "@/lib/rules/RulesetContext";
-import type { CreationState, CharacterCommlink, CharacterCyberdeck } from "@/lib/types";
+import type {
+  CreationState,
+  CharacterCommlink,
+  CharacterCyberdeck,
+  CharacterDataSoftware,
+} from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
 import { CommlinkPurchaseModal } from "./CommlinkPurchaseModal";
 import { CyberdeckPurchaseModal } from "./CyberdeckPurchaseModal";
+import { DataSoftwarePurchaseModal } from "./DataSoftwarePurchaseModal";
 import {
   Lock,
   Plus,
   Smartphone,
   Cpu,
+  Database,
+  Map,
+  ShoppingCart,
+  GraduationCap,
   AlertTriangle,
   ChevronDown,
   ChevronRight,
@@ -146,6 +156,55 @@ function CyberdeckRow({
 }
 
 // =============================================================================
+// DATA SOFTWARE ROW
+// =============================================================================
+
+const SOFTWARE_ICONS = {
+  datasoft: Database,
+  mapsoft: Map,
+  shopsoft: ShoppingCart,
+  tutorsoft: GraduationCap,
+} as const;
+
+const SOFTWARE_COLORS = {
+  datasoft: "text-blue-500",
+  mapsoft: "text-green-500",
+  shopsoft: "text-amber-500",
+  tutorsoft: "text-purple-500",
+} as const;
+
+function DataSoftwareRow({
+  software,
+  onRemove,
+}: {
+  software: CharacterDataSoftware;
+  onRemove: (id: string) => void;
+}) {
+  const Icon = SOFTWARE_ICONS[software.type];
+  const color = SOFTWARE_COLORS[software.type];
+
+  return (
+    <div className="flex items-center gap-2 py-2">
+      <Icon className={`h-4 w-4 shrink-0 ${color}`} />
+      <div className="min-w-0 flex-1">
+        <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          {software.displayName}
+        </span>
+      </div>
+      <span className="shrink-0 text-xs font-medium text-zinc-600 dark:text-zinc-400">
+        {formatCurrency(software.cost)}¥
+      </span>
+      <button
+        onClick={() => onRemove(software.id)}
+        className="shrink-0 rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-red-500 dark:hover:bg-zinc-800"
+      >
+        <X className="h-3.5 w-3.5" />
+      </button>
+    </div>
+  );
+}
+
+// =============================================================================
 // CATEGORY SECTION
 // =============================================================================
 
@@ -235,6 +294,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
 
   const [isCommlinkModalOpen, setIsCommlinkModalOpen] = useState(false);
   const [isCyberdeckModalOpen, setIsCyberdeckModalOpen] = useState(false);
+  const [isDataSoftwareModalOpen, setIsDataSoftwareModalOpen] = useState(false);
 
   // Get selected items from state
   const selectedCommlinks = useMemo(
@@ -246,6 +306,14 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     () => (state.selections?.cyberdecks || []) as CharacterCyberdeck[],
     [state.selections?.cyberdecks]
   );
+
+  const selectedSoftware = useMemo(
+    () => (state.selections?.software || []) as CharacterDataSoftware[],
+    [state.selections?.software]
+  );
+
+  // Check if character has a device to run software
+  const hasCompatibleDevice = selectedCommlinks.length > 0 || selectedCyberdecks.length > 0;
 
   // Calculate budget (shared with other gear panels)
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -271,7 +339,8 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
 
   const commlinksSpent = selectedCommlinks.reduce((sum, c) => sum + c.cost, 0);
   const cyberdecksSpent = selectedCyberdecks.reduce((sum, d) => sum + d.cost, 0);
-  const matrixSpent = commlinksSpent + cyberdecksSpent;
+  const softwareSpent = selectedSoftware.reduce((sum, s) => sum + s.cost, 0);
+  const matrixSpent = commlinksSpent + cyberdecksSpent + softwareSpent;
 
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
@@ -487,12 +556,63 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     [selectedCyberdecks, state.selections, updateState]
   );
 
+  // Add data software (actual implementation)
+  const actuallyAddSoftware = useCallback(
+    (software: CharacterDataSoftware) => {
+      updateState({
+        selections: {
+          ...state.selections,
+          software: [...selectedSoftware, software],
+        },
+      });
+      setIsDataSoftwareModalOpen(false);
+    },
+    [selectedSoftware, state.selections, updateState]
+  );
+
+  // Add data software (with karma conversion prompt if needed)
+  const addSoftware = useCallback(
+    (software: CharacterDataSoftware) => {
+      if (software.cost <= remaining) {
+        actuallyAddSoftware(software);
+        return;
+      }
+
+      const conversionInfo = karmaConversionPrompt.checkPurchase(software.cost);
+      if (conversionInfo?.canConvert) {
+        karmaConversionPrompt.promptConversion(software.displayName, software.cost, () => {
+          actuallyAddSoftware(software);
+        });
+        return;
+      }
+    },
+    [remaining, actuallyAddSoftware, karmaConversionPrompt]
+  );
+
+  // Remove data software
+  const removeSoftware = useCallback(
+    (id: string) => {
+      updateState({
+        selections: {
+          ...state.selections,
+          software: selectedSoftware.filter((s) => s.id !== id),
+        },
+      });
+    },
+    [selectedSoftware, state.selections, updateState]
+  );
+
   // Validation status
   const validationStatus = useMemo(() => {
     if (isOverBudget) return "error";
-    if (selectedCommlinks.length > 0 || selectedCyberdecks.length > 0) return "valid";
+    if (
+      selectedCommlinks.length > 0 ||
+      selectedCyberdecks.length > 0 ||
+      selectedSoftware.length > 0
+    )
+      return "valid";
     return "pending";
-  }, [isOverBudget, selectedCommlinks.length, selectedCyberdecks.length]);
+  }, [isOverBudget, selectedCommlinks.length, selectedCyberdecks.length, selectedSoftware.length]);
 
   // Check prerequisites
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
@@ -611,11 +731,29 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
             ))}
           </CategorySection>
 
+          {/* Data Software Section */}
+          <CategorySection
+            title="Data Software"
+            icon={Database}
+            iconColor="text-blue-500"
+            badgeColor="bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
+            count={selectedSoftware.length}
+            onAddClick={() => setIsDataSoftwareModalOpen(true)}
+            emptyMessage="No data software purchased"
+          >
+            {selectedSoftware.map((software) => (
+              <DataSoftwareRow key={software.id} software={software} onRemove={removeSoftware} />
+            ))}
+          </CategorySection>
+
           {/* Footer Summary */}
           <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
             <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total: {selectedCommlinks.length + selectedCyberdecks.length} item
-              {selectedCommlinks.length + selectedCyberdecks.length !== 1 ? "s" : ""}
+              Total:{" "}
+              {selectedCommlinks.length + selectedCyberdecks.length + selectedSoftware.length} item
+              {selectedCommlinks.length + selectedCyberdecks.length + selectedSoftware.length !== 1
+                ? "s"
+                : ""}
             </span>
             <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
               {formatCurrency(matrixSpent)}¥
@@ -638,6 +776,15 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
         onClose={() => setIsCyberdeckModalOpen(false)}
         remaining={remaining}
         onPurchase={addCyberdeck}
+      />
+
+      {/* Data Software Purchase Modal */}
+      <DataSoftwarePurchaseModal
+        isOpen={isDataSoftwareModalOpen}
+        onClose={() => setIsDataSoftwareModalOpen(false)}
+        remaining={remaining}
+        onPurchase={addSoftware}
+        hasCompatibleDevice={hasCompatibleDevice}
       />
 
       {/* Karma Conversion Modal */}
