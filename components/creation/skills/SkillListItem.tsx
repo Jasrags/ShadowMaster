@@ -13,6 +13,7 @@
 
 import { X, BookOpen, Users, Star, Sparkles } from "lucide-react";
 import { Stepper } from "../shared";
+import { Tooltip } from "@/components/ui";
 
 // =============================================================================
 // TYPES
@@ -29,12 +30,16 @@ interface SkillListItemProps {
   groupName?: string;
   // Control props (only used for individual skills)
   canIncrease?: boolean;
+  canIncreaseWithKarma?: boolean;
   onRatingChange?: (delta: number) => void;
+  onKarmaIncrease?: () => void;
   onRemove?: () => void;
   onRemoveSpecialization?: (spec: string) => void;
   // Customization props (only used for group skills)
   onCustomize?: () => void;
   canCustomize?: boolean;
+  // Disabled state with reason (for tooltip)
+  disabledReason?: string;
 }
 
 // =============================================================================
@@ -50,11 +55,14 @@ export function SkillListItem({
   isGroupSkill,
   groupName,
   canIncrease = false,
+  canIncreaseWithKarma = false,
   onRatingChange,
+  onKarmaIncrease,
   onRemove,
   onRemoveSpecialization,
   onCustomize,
   canCustomize = false,
+  disabledReason,
 }: SkillListItemProps) {
   const isAtMax = rating >= maxRating;
   const hasSpecs = specializations.length > 0;
@@ -119,16 +127,48 @@ export function SkillListItem({
           ) : (
             // Individual skill: full controls
             <>
-              <Stepper
-                value={rating}
-                min={1}
-                max={maxRating}
-                onChange={(newValue) => onRatingChange?.(newValue - rating)}
-                canIncrement={canIncrease && !isAtMax}
-                accentColor="blue"
-                showMaxBadge={false}
-                name={`${skillName} skill`}
-              />
+              {(() => {
+                // Determine stepper accent color and behavior based on purchase mode
+                const canIncrement = canIncrease || canIncreaseWithKarma;
+                const accentColor = canIncreaseWithKarma && !canIncrease ? "amber" : "blue";
+                const isDisabled = !canIncrement && isAtMax;
+
+                // Custom increment handler for karma mode
+                const handleChange = (newValue: number) => {
+                  const delta = newValue - rating;
+                  if (delta > 0 && canIncreaseWithKarma && !canIncrease) {
+                    // Karma purchase mode - open confirmation modal
+                    onKarmaIncrease?.();
+                  } else {
+                    // Normal skill point mode
+                    onRatingChange?.(delta);
+                  }
+                };
+
+                const stepper = (
+                  <Stepper
+                    value={rating}
+                    min={1}
+                    max={maxRating}
+                    onChange={handleChange}
+                    canIncrement={canIncrement && !isAtMax}
+                    accentColor={accentColor}
+                    showMaxBadge={false}
+                    name={`${skillName} skill`}
+                  />
+                );
+
+                // Wrap in tooltip if disabled with a reason
+                if (isDisabled && disabledReason) {
+                  return (
+                    <Tooltip content={disabledReason} placement="top" delay={300}>
+                      <div>{stepper}</div>
+                    </Tooltip>
+                  );
+                }
+
+                return stepper;
+              })()}
               {/* Separator */}
               <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
               <button

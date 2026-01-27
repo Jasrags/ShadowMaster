@@ -34,8 +34,10 @@ import {
   SkillListItem,
   SkillCustomizeModal,
   SkillGroupBreakModal,
+  SkillKarmaConfirmModal,
   type SkillCustomizeChanges,
 } from "./skills";
+import { calculateSkillRaiseKarmaCost } from "@/lib/rules/skills/group-utils";
 import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
 // =============================================================================
@@ -203,6 +205,13 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const [pendingChanges, setPendingChanges] = useState<SkillCustomizeChanges | null>(null);
   const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
 
+  // Karma purchase confirmation state (for individual skills when skill points exhausted)
+  const [karmaSkillPurchase, setKarmaSkillPurchase] = useState<{
+    skillId: string;
+    skillName: string;
+    currentRating: number;
+  } | null>(null);
+
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
   const hasMagic =
@@ -245,9 +254,19 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   }, [state.selections.skillSpecializations]);
 
   // Calculate points spent
+  // Note: karmaRatingPoints are rating points purchased with karma, not counted as skill points
+  const karmaRatingPoints = useMemo(() => {
+    return (
+      (state.selections.skillKarmaSpent as { skillRatingPoints?: number } | undefined)
+        ?.skillRatingPoints || 0
+    );
+  }, [state.selections.skillKarmaSpent]);
+
   const skillPointsSpent = useMemo(() => {
-    return Object.values(skills).reduce((sum, rating) => sum + rating, 0);
-  }, [skills]);
+    const totalRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
+    // Subtract karma-purchased rating points - they don't count against skill point budget
+    return totalRatings - karmaRatingPoints;
+  }, [skills, karmaRatingPoints]);
 
   const groupPointsSpent = useMemo(() => {
     return Object.values(groups).reduce<number>((sum, value) => sum + getGroupRating(value), 0);
@@ -329,20 +348,48 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
   // Handle adding a skill from modal
   const handleAddSkill = useCallback(
-    (skillId: string, rating: number, specs: string[]) => {
+    (skillId: string, rating: number, specs: string[], karmaSpent?: number) => {
       const newSkills = { ...skills, [skillId]: rating };
       const newSpecs = { ...specializations };
       if (specs.length > 0) {
         newSpecs[skillId] = specs;
       }
 
-      updateState({
-        selections: {
-          ...state.selections,
-          skills: newSkills,
-          skillSpecializations: newSpecs,
-        },
-      });
+      // Track karma spent if skill was added using karma
+      if (karmaSpent && karmaSpent > 0) {
+        const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+          skillRaises: Record<string, number>;
+          skillRatingPoints: number;
+          specializations: number;
+        }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+        const newKarmaSpent = {
+          skillRaises: {
+            ...currentKarmaSpent.skillRaises,
+            [skillId]: karmaSpent,
+          },
+          // Track rating points purchased with karma (entire skill rating when adding new skill)
+          skillRatingPoints: currentKarmaSpent.skillRatingPoints + rating,
+          specializations: currentKarmaSpent.specializations,
+        };
+
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+            skillSpecializations: newSpecs,
+            skillKarmaSpent: newKarmaSpent,
+          },
+        });
+      } else {
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+            skillSpecializations: newSpecs,
+          },
+        });
+      }
       setIsSkillModalOpen(false);
     },
     [skills, specializations, state.selections, updateState]
@@ -378,7 +425,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [groups, skills, specializations, skillGroups, state.selections, updateState]
   );
 
-  // Handle skill rating change
+  // Handle skill rating change (with karma refund support)
   const handleSkillRatingChange = useCallback(
     (skillId: string, delta: number) => {
       const currentRating = skills[skillId] || 0;
@@ -387,12 +434,51 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       if (newRating < 1 || newRating > MAX_SKILL_RATING) return;
 
       const newSkills = { ...skills, [skillId]: newRating };
-      updateState({
-        selections: {
-          ...state.selections,
-          skills: newSkills,
-        },
-      });
+
+      // Check if we need to refund karma when reducing rating
+      const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+        skillRaises: Record<string, number>;
+        skillRatingPoints: number;
+        specializations: number;
+      }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+      const karmaSpentOnSkill = currentKarmaSpent.skillRaises[skillId] || 0;
+
+      // If reducing rating and karma was spent on this skill, refund it
+      if (delta < 0 && karmaSpentOnSkill > 0) {
+        // Calculate karma to refund: cost of the rating being removed
+        // E.g., reducing from 4 to 3 refunds 4 × 2 = 8 karma
+        const karmaToRefund = Math.min(currentRating * 2, karmaSpentOnSkill);
+
+        const newKarmaSpent = {
+          ...currentKarmaSpent,
+          skillRaises: { ...currentKarmaSpent.skillRaises },
+          // Decrement rating points purchased with karma (1 rating point refunded)
+          skillRatingPoints: Math.max(0, currentKarmaSpent.skillRatingPoints - 1),
+        };
+
+        const remainingKarma = karmaSpentOnSkill - karmaToRefund;
+        if (remainingKarma <= 0) {
+          delete newKarmaSpent.skillRaises[skillId];
+        } else {
+          newKarmaSpent.skillRaises[skillId] = remainingKarma;
+        }
+
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+            skillKarmaSpent: newKarmaSpent,
+          },
+        });
+      } else {
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+          },
+        });
+      }
     },
     [skills, state.selections, updateState]
   );
@@ -484,6 +570,95 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   );
 
   // =============================================================================
+  // KARMA SKILL PURCHASE HELPERS
+  // =============================================================================
+
+  /**
+   * Determine the purchase mode for increasing a skill's rating.
+   * - 'skill-points': Use skill points (green + button)
+   * - 'karma': Use karma (amber + button, opens confirmation modal)
+   * - 'disabled': Cannot increase (gray + button with tooltip)
+   */
+  const getPurchaseMode = useCallback(
+    (
+      currentRating: number,
+      isAtMax: boolean
+    ): { mode: "skill-points" | "karma" | "disabled"; disabledReason?: string } => {
+      if (isAtMax) {
+        return { mode: "disabled", disabledReason: "Maximum rating reached" };
+      }
+      if (skillPointsRemaining > 0) {
+        return { mode: "skill-points" };
+      }
+      // Skill points exhausted - check if karma purchase is possible
+      const karmaCost = calculateSkillRaiseKarmaCost(currentRating, currentRating + 1);
+      if (karmaRemaining >= karmaCost) {
+        return { mode: "karma" };
+      }
+      return {
+        mode: "disabled",
+        disabledReason: `No skill points. Need ${karmaCost} karma (have ${karmaRemaining})`,
+      };
+    },
+    [skillPointsRemaining, karmaRemaining]
+  );
+
+  // Handle opening karma confirmation modal
+  const handleOpenKarmaConfirm = useCallback(
+    (skillId: string) => {
+      const skillData = activeSkills.find((s) => s.id === skillId);
+      const currentRating = skills[skillId] || 0;
+      if (skillData) {
+        setKarmaSkillPurchase({
+          skillId,
+          skillName: skillData.name,
+          currentRating,
+        });
+      }
+    },
+    [activeSkills, skills]
+  );
+
+  // Handle confirming karma purchase
+  const handleConfirmKarmaPurchase = useCallback(() => {
+    if (!karmaSkillPurchase) return;
+
+    const { skillId, currentRating } = karmaSkillPurchase;
+    const newRating = currentRating + 1;
+    const karmaCost = calculateSkillRaiseKarmaCost(currentRating, newRating);
+
+    // Update skill rating
+    const newSkills = { ...skills, [skillId]: newRating };
+
+    // Track karma spent on skill raises
+    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+      skillRaises: Record<string, number>;
+      skillRatingPoints: number;
+      specializations: number;
+    }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+    const newKarmaSpent = {
+      skillRaises: {
+        ...currentKarmaSpent.skillRaises,
+        [skillId]: (currentKarmaSpent.skillRaises[skillId] || 0) + karmaCost,
+      },
+      // Track that 1 more rating point was purchased with karma
+      skillRatingPoints: currentKarmaSpent.skillRatingPoints + 1,
+      specializations: currentKarmaSpent.specializations,
+    };
+
+    updateState({
+      selections: {
+        ...state.selections,
+        skills: newSkills,
+        skillKarmaSpent: newKarmaSpent,
+      },
+    });
+
+    setKarmaSkillPurchase(null);
+  }, [karmaSkillPurchase, skills, state.selections, updateState]);
+
+  // =============================================================================
   // SKILL GROUP BREAKING HANDLERS
   // =============================================================================
 
@@ -541,11 +716,13 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     // 5. Track karma spent
     const currentKarmaSpent = (state.selections.skillKarmaSpent as {
       skillRaises: Record<string, number>;
+      skillRatingPoints: number;
       specializations: number;
-    }) || { skillRaises: {}, specializations: 0 };
+    }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
 
     const newKarmaSpent = {
       skillRaises: { ...currentKarmaSpent.skillRaises },
+      skillRatingPoints: currentKarmaSpent.skillRatingPoints,
       specializations: currentKarmaSpent.specializations,
     };
 
@@ -553,10 +730,13 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     if (pendingChanges.newRating && pendingChanges.newRating > groupRating) {
       // Karma cost for the raise portion only
       let raiseCost = 0;
+      const ratingPointsRaised = pendingChanges.newRating - groupRating;
       for (let r = groupRating + 1; r <= pendingChanges.newRating; r++) {
         raiseCost += r * 2;
       }
       newKarmaSpent.skillRaises[skillId] = (newKarmaSpent.skillRaises[skillId] || 0) + raiseCost;
+      // Track the number of rating points purchased with karma
+      newKarmaSpent.skillRatingPoints += ratingPointsRaised;
     }
 
     // Karma for specializations
@@ -783,6 +963,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               spent={skillPointsSpent}
               total={skillPoints}
               mode="compact"
+              note={karmaRatingPoints > 0 ? `+${karmaRatingPoints} via karma` : undefined}
+              noteStyle="warning"
             />
             {skillGroupPoints > 0 && (
               <BudgetIndicator
@@ -946,6 +1128,12 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                   if (!skillData) return null;
 
                   const isGroupSkill = entry.source.type === "group";
+                  const isAtMax = entry.rating >= MAX_SKILL_RATING;
+
+                  // Determine purchase mode for individual skills
+                  const purchaseInfo = isGroupSkill
+                    ? { mode: "disabled" as const, disabledReason: undefined }
+                    : getPurchaseMode(entry.rating, isAtMax);
 
                   return (
                     <SkillListItem
@@ -957,11 +1145,16 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       specializations={entry.specializations}
                       isGroupSkill={isGroupSkill}
                       groupName={entry.source.type === "group" ? entry.source.groupName : undefined}
-                      canIncrease={!isGroupSkill && skillPointsRemaining > 0}
+                      canIncrease={!isGroupSkill && purchaseInfo.mode === "skill-points"}
+                      canIncreaseWithKarma={!isGroupSkill && purchaseInfo.mode === "karma"}
+                      disabledReason={purchaseInfo.disabledReason}
                       onRatingChange={
                         isGroupSkill
                           ? undefined
                           : (delta) => handleSkillRatingChange(entry.skillId, delta)
+                      }
+                      onKarmaIncrease={
+                        isGroupSkill ? undefined : () => handleOpenKarmaConfirm(entry.skillId)
                       }
                       onRemove={isGroupSkill ? undefined : () => handleRemoveSkill(entry.skillId)}
                       onRemoveSpecialization={(spec) =>
@@ -1012,6 +1205,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         hasMagic={!!hasMagic}
         hasResonance={!!hasResonance}
         remainingPoints={skillPointsRemaining}
+        karmaRemaining={karmaRemaining}
         incompetentGroupId={incompetentGroupId}
       />
 
@@ -1089,6 +1283,23 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             />
           );
         })()}
+
+      {/* Karma Purchase Confirmation Modal (for individual skills) */}
+      {karmaSkillPurchase && (
+        <SkillKarmaConfirmModal
+          isOpen={true}
+          onClose={() => setKarmaSkillPurchase(null)}
+          onConfirm={handleConfirmKarmaPurchase}
+          skillName={karmaSkillPurchase.skillName}
+          currentRating={karmaSkillPurchase.currentRating}
+          newRating={karmaSkillPurchase.currentRating + 1}
+          karmaCost={calculateSkillRaiseKarmaCost(
+            karmaSkillPurchase.currentRating,
+            karmaSkillPurchase.currentRating + 1
+          )}
+          karmaRemaining={karmaRemaining}
+        />
+      )}
     </>
   );
 }

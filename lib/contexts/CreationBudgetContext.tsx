@@ -308,8 +308,13 @@ function extractSpentValues(
   }
 
   // Calculate skill points spent from selections
+  // Subtract rating points purchased with karma (those don't count against skill point budget)
   const skills = (selections.skills || {}) as Record<string, number>;
-  spent["skill-points"] = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
+  const totalSkillRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
+  const karmaRatingPoints =
+    (selections.skillKarmaSpent as { skillRatingPoints?: number } | undefined)?.skillRatingPoints ||
+    0;
+  spent["skill-points"] = totalSkillRatings - karmaRatingPoints;
 
   // Calculate skill group points spent from selections
   // Handles both legacy (number) and new ({ rating, isBroken }) formats

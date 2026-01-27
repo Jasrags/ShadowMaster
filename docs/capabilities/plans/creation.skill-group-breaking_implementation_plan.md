@@ -1,8 +1,11 @@
-# Skill Group Breaking Implementation Plan
+# Skill Karma Purchases & Group Breaking Implementation Plan
 
 ## Overview
 
-Enable skill group breaking and restoration during character creation, following SR5 rules where groups can only be broken using karma (not skill points) and can be restored when all member skills reach equal ratings.
+Enable karma-based skill modifications during character creation:
+
+1. **Individual Skill Rating Purchases**: When skill points are exhausted, allow purchasing additional rating increases with karma
+2. **Skill Group Breaking**: Groups can only be broken using karma (not skill points) and can be restored when all member skills reach equal ratings
 
 ## Background
 
@@ -27,6 +30,21 @@ Since we use a single-page sheet-based creation (not a multi-step wizard), the "
 | Skill Points       | No                | Equivalent to Step 5                           |
 | Skill Group Points | No                | For groups only                                |
 | Karma              | Yes               | Equivalent to Step 7 "Spending Leftover Karma" |
+
+### SR5 Skill Point Rules
+
+From SR5 Core Rulebook:
+
+> All skill and skill group points must be spent at the time of character creation. These points cannot be saved or used after the game starts.
+>
+> At character creation, a specialization costs 1 skill point. No individual skill may have more than one specialization. As a character develops, though, they may gain other areas of expertise and so add more specializations to the same skills. Along with being purchased in this step, specializations may be purchased using Karma at the end of character creation.
+
+**Key implications:**
+
+- Skill points must be fully spent during creation
+- Specializations cost 1 skill point (not 7 karma) during creation
+- Karma can supplement skill purchases in the "Spending Leftover Karma" step
+- In sheet-based creation, karma is available when skill points are exhausted
 
 ## Current State (Completed)
 
@@ -419,18 +437,122 @@ const handleRestoreGroup = useCallback(
 4. Show "Restore" button when restoration is available
 5. Keep remove button (removes broken group entirely)
 
+### Phase 11: Individual Skill Karma Purchases
+
+**Status:** Completed
+
+**Objective:** Allow purchasing individual skill rating increases with karma when skill points are exhausted.
+
+#### Scope
+
+This applies to two scenarios:
+
+1. **Adding new skills** via the "Add Skill" modal when skill points are exhausted
+2. **Increasing existing skill ratings** via the inline Stepper when skill points are exhausted
+
+#### Visual States
+
+| Condition                               | + Button Color       | Behavior                                                      |
+| --------------------------------------- | -------------------- | ------------------------------------------------------------- |
+| Skill points available                  | Blue/Green (default) | Direct increment using skill points                           |
+| Skill points exhausted, karma available | Amber                | Opens confirmation modal (inline) or shows karma cost (modal) |
+| Both exhausted OR at max rating         | Gray (disabled)      | Shows tooltip with reason on hover                            |
+
+#### Karma Cost for New Skills
+
+When adding a new skill with karma, the cost is cumulative:
+
+- Rating 1 = 2 karma (1 × 2)
+- Rating 2 = 6 karma (2 + 4)
+- Rating 3 = 12 karma (2 + 4 + 6)
+- Rating 4 = 20 karma (2 + 4 + 6 + 8)
+- Rating 5 = 30 karma (2 + 4 + 6 + 8 + 10)
+- Rating 6 = 42 karma (2 + 4 + 6 + 8 + 10 + 12)
+
+#### Implementation
+
+**File:** `components/creation/skills/SkillModal.tsx` (modified)
+
+Add Skill modal now supports karma purchases:
+
+- New `karmaRemaining` prop
+- Updated `onAdd` callback: `(skillId, rating, specs, karmaSpent?) => void`
+- Calculates karma cost using `calculateSkillRaiseKarmaCost(0, rating)`
+- Shows amber-themed UI when in karma mode (skill points exhausted)
+- Displays karma cost breakdown (e.g., "2+4+6 = 12 karma")
+- "Add Skill" button turns amber when using karma
+
+**File:** `components/creation/skills/SkillKarmaConfirmModal.tsx` (new)
+
+Confirmation modal for karma skill rating increases (inline Stepper):
+
+- Amber-themed header indicating karma spending
+- Shows skill name, current → new rating transition
+- Displays karma cost (New Rating × 2)
+- Shows remaining karma after purchase
+- Confirm/Cancel actions
+
+**File:** `components/creation/skills/SkillListItem.tsx` (modified)
+
+New props for karma purchase support:
+
+```typescript
+interface SkillListItemProps {
+  // ... existing props
+  canIncreaseWithKarma?: boolean; // Amber button mode
+  onKarmaIncrease?: () => void; // Opens confirmation modal
+  disabledReason?: string; // Tooltip when disabled
+}
+```
+
+- Stepper accent color changes based on purchase mode
+- Wraps in Tooltip when disabled to show reason
+
+**File:** `components/creation/SkillsCard.tsx` (modified)
+
+Added purchase mode determination and handlers:
+
+```typescript
+// Determine purchase mode for each skill
+const getPurchaseMode = (currentRating: number, isAtMax: boolean) => {
+  if (isAtMax) return { mode: "disabled", disabledReason: "Maximum rating reached" };
+  if (skillPointsRemaining > 0) return { mode: "skill-points" };
+  const karmaCost = calculateSkillRaiseKarmaCost(currentRating, currentRating + 1);
+  if (karmaRemaining >= karmaCost) return { mode: "karma" };
+  return { mode: "disabled", disabledReason: `No skill points. Need ${karmaCost} karma` };
+};
+```
+
+#### Karma Refund on Rating Reduction
+
+When reducing a skill rating that was purchased with karma, the karma is refunded:
+
+- Refund amount: `currentRating × 2` (cost of the rating being removed)
+- Capped at the tracked karma for that skill (can't refund more than spent)
+- Tracked in `skillKarmaSpent.skillRaises[skillId]`
+
+Example flow:
+
+1. Skill at 3, no skill points, 20 karma available
+2. Purchase rating 4 → costs 8 karma (4 × 2), tracked = 8
+3. Purchase rating 5 → costs 10 karma (5 × 2), tracked = 18
+4. Reduce to 4 → refunds 10 karma, tracked = 8
+5. Reduce to 3 → refunds 8 karma, tracked = 0 (deleted)
+
 ## File Changes Summary
 
-| File                                                  | Change Type | Description                                 |
-| ----------------------------------------------------- | ----------- | ------------------------------------------- |
-| `lib/types/creation.ts`                               | Modify      | Update skillGroups type, add karma tracking |
-| `lib/rules/skills/group-utils.ts`                     | New         | Helper functions for group normalization    |
-| `components/creation/skills/SkillListItem.tsx`        | Modify      | Add onCustomize prop and button             |
-| `components/creation/skills/SkillCustomizeModal.tsx`  | New         | Karma-based skill customization             |
-| `components/creation/skills/SkillGroupBreakModal.tsx` | New         | Break confirmation dialog                   |
-| `components/creation/skills/index.ts`                 | Modify      | Export new modals                           |
-| `components/creation/SkillsCard.tsx`                  | Modify      | Add break/restore handlers, karma tracking  |
-| `lib/contexts/CreationBudgetContext.tsx`              | Modify      | Add karma budget support                    |
+| File                                                    | Change Type | Description                                  |
+| ------------------------------------------------------- | ----------- | -------------------------------------------- |
+| `lib/types/creation.ts`                                 | Modify      | Update skillGroups type, add karma tracking  |
+| `lib/rules/skills/group-utils.ts`                       | New         | Helper functions for group normalization     |
+| `components/creation/skills/SkillModal.tsx`             | Modify      | Add karma purchase support for new skills    |
+| `components/creation/skills/SkillListItem.tsx`          | Modify      | Add onCustomize, karma purchase props        |
+| `components/creation/skills/SkillCustomizeModal.tsx`    | New         | Karma-based skill customization (groups)     |
+| `components/creation/skills/SkillGroupBreakModal.tsx`   | New         | Break confirmation dialog                    |
+| `components/creation/skills/SkillKarmaConfirmModal.tsx` | New         | Individual skill karma purchase confirmation |
+| `components/creation/skills/index.ts`                   | Modify      | Export new modals                            |
+| `components/creation/SkillsCard.tsx`                    | Modify      | Add break/restore/karma purchase handlers    |
+| `lib/contexts/CreationBudgetContext.tsx`                | Modify      | Add karma budget support                     |
 
 ## Testing Strategy
 
@@ -476,21 +598,50 @@ const handleRestoreGroup = useCallback(
 
 ## Timeline
 
-| Phase                           | Estimated Effort | Dependencies   |
-| ------------------------------- | ---------------- | -------------- |
-| Phase 1: Data Model             | Small            | None           |
-| Phase 2: Karma Budget           | Medium           | Phase 1        |
-| Phase 3: Customize Modal        | Medium           | Phase 2        |
-| Phase 4: Break Modal            | Small            | None           |
-| Phase 5: Break Handler          | Medium           | Phases 1, 3, 4 |
-| Phase 6: SkillListItem Update   | Small            | Phase 5        |
-| Phase 7: Restoration Detection  | Small            | Phase 1        |
-| Phase 8: Restoration UI         | Medium           | Phase 7        |
-| Phase 9: Validation             | Small            | Phase 1        |
-| Phase 10: Group Section Display | Small            | Phase 7        |
+| Phase                            | Estimated Effort | Dependencies   | Status    |
+| -------------------------------- | ---------------- | -------------- | --------- |
+| Phase 1: Data Model              | Small            | None           | Completed |
+| Phase 2: Karma Budget            | Medium           | Phase 1        | Completed |
+| Phase 3: Customize Modal         | Medium           | Phase 2        | Completed |
+| Phase 4: Break Modal             | Small            | None           | Completed |
+| Phase 5: Break Handler           | Medium           | Phases 1, 3, 4 | Completed |
+| Phase 6: SkillListItem Update    | Small            | Phase 5        | Completed |
+| Phase 7: Restoration Detection   | Small            | Phase 1        | Completed |
+| Phase 8: Restoration UI          | Medium           | Phase 7        | Completed |
+| Phase 9: Validation              | Small            | Phase 1        | Completed |
+| Phase 10: Group Section Display  | Small            | Phase 7        | Completed |
+| Phase 11: Individual Skill Karma | Small            | Phase 2        | Completed |
 
-**Recommended Order:** 1 → 2 → 4 → 3 → 5 → 6 → 7 → 8 → 9 → 10
+**Recommended Order:** 1 → 2 → 4 → 3 → 5 → 6 → 7 → 8 → 9 → 10 → 11
+
+## Decisions Log
+
+### Specialization Cost During Creation
+
+**Decision:** Specializations cost 1 skill point during creation (per SR5 rules), not 7 karma.
+
+**Note:** Karma-to-skill-point conversion for purchasing specializations is out of scope for this plan.
+
+### Karma Availability for Skills
+
+**Decision:** Karma is only available for skill rating purchases when skill points are exhausted.
+
+**Rationale:**
+
+- Encourages using free skill points first
+- Clear to user what currency they're spending
+- Matches spirit of SR5 rules (use points first, karma to supplement)
+
+### Karma Refund Policy
+
+**Decision:** When reducing a skill rating that was purchased with karma, the karma is refunded.
+
+**Rationale:**
+
+- Character creation is exploratory - users should experiment freely
+- Prevents accidental "lost" karma from UI mistakes
+- Refund is capped at tracked amount to prevent gaming
 
 ---
 
-_Last updated: 2026-01-16_
+_Last updated: 2026-01-27_

@@ -123,6 +123,8 @@ export interface SkillSelections {
   skillKarmaSpent?: {
     /** Karma spent raising individual skills beyond group rating */
     skillRaises: Record<string, number>;
+    /** Total number of skill rating points purchased with karma (not to be counted as skill points) */
+    skillRatingPoints: number;
     /** Total karma spent on specializations (7 karma each) */
     specializations: number;
   };
