@@ -277,13 +277,19 @@ function extractSpentValues(
 
   // ============================================================================
   // CONTACT POINTS - derived from selections
+  // Cap at free pool (CHA × 3) - overflow goes to karma, not contact points
   // ============================================================================
 
   const contacts = (selections.contacts || []) as Array<{
     connection: number;
     loyalty: number;
   }>;
-  spent["contact-points"] = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  const totalContactCostForPoints = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  const contactAttributes = selections.attributes as Record<string, number> | undefined;
+  const contactCharisma = contactAttributes?.charisma || 1;
+  const freeContactPool = contactCharisma * 3;
+  // Only count up to the free pool - karma handles the rest
+  spent["contact-points"] = Math.min(totalContactCostForPoints, freeContactPool);
 
   // ============================================================================
   // SPELL SLOTS - derived from selections
@@ -467,7 +473,14 @@ function extractSpentValues(
   const karmaSpentSpells = (stateBudgets["karma-spent-spells"] as number) || 0;
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
-  const karmaSpentContacts = (stateBudgets["karma-spent-contacts"] as number) || 0;
+
+  // Contact karma - derive from selections to avoid stale closure bugs
+  // Calculate: total contact cost - free pool (CHA × 3)
+  const attributes = selections.attributes as Record<string, number> | undefined;
+  const charisma = attributes?.charisma || 1;
+  const freeContactKarma = charisma * 3;
+  const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 
   // Calculate skill karma spent from selections.skillKarmaSpent if present
   // This tracks karma spent on breaking groups (raising skills, adding specializations),
@@ -489,8 +502,7 @@ function extractSpentValues(
       (sum, cost) => sum + cost,
       0
     );
-    karmaSpentSkills =
-      skillRaisesTotal + (skillKarmaSpent.specializations || 0) + groupRaisesTotal;
+    karmaSpentSkills = skillRaisesTotal + (skillKarmaSpent.specializations || 0) + groupRaisesTotal;
   }
 
   // Net karma spent = positive qualities + other spends - negative qualities gained

@@ -183,7 +183,18 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
 
   // Extract conversion/overflow values from creation state for contextual notes
   const karmaSpentGear = (creationState.budgets?.["karma-spent-gear"] as number) || 0;
-  const karmaSpentContacts = (creationState.budgets?.["karma-spent-contacts"] as number) || 0;
+
+  // Derive contact karma from selections to avoid stale closure bugs
+  const selections = creationState.selections || {};
+  const contactsForKarma = (selections.contacts || []) as Array<{
+    connection: number;
+    loyalty: number;
+  }>;
+  const attributesForKarma = selections.attributes as Record<string, number> | undefined;
+  const charismaForKarma = attributesForKarma?.charisma || 1;
+  const freeContactKarma = charismaForKarma * 3;
+  const totalContactCost = contactsForKarma.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 
   // Build karma breakdown for tooltip
   interface KarmaBreakdownItem {

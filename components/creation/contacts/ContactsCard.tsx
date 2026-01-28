@@ -8,7 +8,8 @@
  * - Contact karma budget (CHA × 3 free, then general karma)
  * - Modal-based contact add/edit with template selection
  * - Connection and Loyalty rating selectors
- * - Karma tracking for contacts
+ * - Karma tracking derived from selections (not budgets)
+ * - Confirmation modal when spending general karma
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -20,6 +21,7 @@ import { useContactTemplates, useMetatypes } from "@/lib/rules";
 import { CreationCard, SummaryFooter } from "../shared";
 import { MIN_KARMA_PER_CONTACT, MAX_KARMA_PER_CONTACT } from "./constants";
 import { ContactModal } from "./ContactModal";
+import { ContactKarmaConfirmModal } from "./ContactKarmaConfirmModal";
 import type { ContactsCardProps } from "./types";
 
 export function ContactsCard({ state, updateState }: ContactsCardProps) {
@@ -30,6 +32,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
+
+  // Karma confirmation modal state
+  const [isKarmaConfirmOpen, setIsKarmaConfirmOpen] = useState(false);
+  const [pendingContact, setPendingContact] = useState<Contact | null>(null);
+  const [pendingEditIndex, setPendingEditIndex] = useState<number | null>(null);
 
   // Get charisma from state
   const charisma = useMemo(() => {
@@ -74,121 +81,115 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   const karmaRemaining = Math.max(0, budgets["karma"]?.remaining ?? 0);
   const totalKarmaAvailableForContacts = freeContactKarmaRemaining + karmaRemaining;
 
-  // Handle adding a new contact
-  const handleAddContact = useCallback(
-    (contact: Contact) => {
+  // Calculate how much general karma a contact would cost
+  const calculateGeneralKarmaCost = useCallback(
+    (contact: Contact, isEdit: boolean, editIdx: number | null) => {
       const contactCost = contact.connection + contact.loyalty;
+      let newTotalContactKarma = totalContactKarmaSpent + contactCost;
+
+      // If editing, subtract the old contact's cost
+      if (isEdit && editIdx !== null) {
+        const oldContact = contacts[editIdx];
+        const oldCost = oldContact.connection + oldContact.loyalty;
+        newTotalContactKarma -= oldCost;
+      }
+
+      const newGeneralKarmaSpent = Math.max(0, newTotalContactKarma - freeContactKarma);
+      return newGeneralKarmaSpent - generalKarmaSpentOnContacts;
+    },
+    [totalContactKarmaSpent, freeContactKarma, generalKarmaSpentOnContacts, contacts]
+  );
+
+  // Commit a contact addition (called after confirmation or if no karma needed)
+  const commitAddContact = useCallback(
+    (contact: Contact) => {
       const updatedContacts = [...contacts, contact];
-      const newTotalContactKarmaSpent = totalContactKarmaSpent + contactCost;
-      const newGeneralKarmaSpentOnContacts = Math.max(
-        0,
-        newTotalContactKarmaSpent - freeContactKarma
-      );
 
       updateState({
         selections: {
           ...state.selections,
           contacts: updatedContacts,
-        },
-        budgets: {
-          ...state.budgets,
-          // Sync with CreationBudgetContext which reads "contact-points-spent"
-          "contact-points-spent": newTotalContactKarmaSpent,
-          "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
         },
       });
 
       setIsModalOpen(false);
+      setPendingContact(null);
     },
-    [
-      contacts,
-      state.selections,
-      state.budgets,
-      totalContactKarmaSpent,
-      freeContactKarma,
-      updateState,
-    ]
+    [contacts, state.selections, updateState]
   );
 
-  // Handle updating an existing contact
-  const handleUpdateContact = useCallback(
+  // Handle adding a new contact - may show confirmation modal
+  const handleAddContact = useCallback(
     (contact: Contact) => {
-      if (editingIndex === null) return;
+      const additionalKarmaNeeded = calculateGeneralKarmaCost(contact, false, null);
 
-      const oldContact = contacts[editingIndex];
-      const oldCost = oldContact.connection + oldContact.loyalty;
-      const newCost = contact.connection + contact.loyalty;
-      const costDiff = newCost - oldCost;
+      if (additionalKarmaNeeded > 0) {
+        // Need to spend general karma - show confirmation modal
+        setPendingContact(contact);
+        setPendingEditIndex(null);
+        setIsKarmaConfirmOpen(true);
+      } else {
+        // Free pool covers it - add directly
+        commitAddContact(contact);
+      }
+    },
+    [calculateGeneralKarmaCost, commitAddContact]
+  );
 
+  // Commit a contact update (called after confirmation or if no additional karma needed)
+  const commitUpdateContact = useCallback(
+    (contact: Contact, editIdx: number) => {
       const updatedContacts = [...contacts];
-      updatedContacts[editingIndex] = contact;
-
-      const newTotalContactKarmaSpent = totalContactKarmaSpent + costDiff;
-      const newGeneralKarmaSpentOnContacts = Math.max(
-        0,
-        newTotalContactKarmaSpent - freeContactKarma
-      );
+      updatedContacts[editIdx] = contact;
 
       updateState({
         selections: {
           ...state.selections,
           contacts: updatedContacts,
-        },
-        budgets: {
-          ...state.budgets,
-          // Sync with CreationBudgetContext which reads "contact-points-spent"
-          "contact-points-spent": newTotalContactKarmaSpent,
-          "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
         },
       });
 
       setIsModalOpen(false);
       setEditingIndex(null);
+      setPendingContact(null);
+      setPendingEditIndex(null);
     },
-    [
-      editingIndex,
-      contacts,
-      state.selections,
-      state.budgets,
-      totalContactKarmaSpent,
-      freeContactKarma,
-      updateState,
-    ]
+    [contacts, state.selections, updateState]
+  );
+
+  // Handle updating an existing contact - may show confirmation modal
+  const handleUpdateContact = useCallback(
+    (contact: Contact) => {
+      if (editingIndex === null) return;
+
+      const additionalKarmaNeeded = calculateGeneralKarmaCost(contact, true, editingIndex);
+
+      if (additionalKarmaNeeded > 0) {
+        // Need more general karma - show confirmation modal
+        setPendingContact(contact);
+        setPendingEditIndex(editingIndex);
+        setIsKarmaConfirmOpen(true);
+      } else {
+        // No additional karma needed (might even refund some) - update directly
+        commitUpdateContact(contact, editingIndex);
+      }
+    },
+    [editingIndex, calculateGeneralKarmaCost, commitUpdateContact]
   );
 
   // Handle removing a contact
   const handleRemoveContact = useCallback(
     (index: number) => {
-      const removedContact = contacts[index];
       const updatedContacts = contacts.filter((_, i) => i !== index);
-      const newTotalContactKarmaSpent =
-        totalContactKarmaSpent - (removedContact.connection + removedContact.loyalty);
-      const newGeneralKarmaSpentOnContacts = Math.max(
-        0,
-        newTotalContactKarmaSpent - freeContactKarma
-      );
 
       updateState({
         selections: {
           ...state.selections,
           contacts: updatedContacts,
         },
-        budgets: {
-          ...state.budgets,
-          // Sync with CreationBudgetContext which reads "contact-points-spent"
-          "contact-points-spent": newTotalContactKarmaSpent,
-          "karma-spent-contacts": newGeneralKarmaSpentOnContacts,
-        },
       });
     },
-    [
-      contacts,
-      state.selections,
-      state.budgets,
-      totalContactKarmaSpent,
-      freeContactKarma,
-      updateState,
-    ]
+    [contacts, state.selections, updateState]
   );
 
   // Handle opening modal for new contact
@@ -208,6 +209,30 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     setIsModalOpen(false);
     setEditingIndex(null);
   }, []);
+
+  // Handle closing karma confirmation modal
+  const handleCloseKarmaConfirm = useCallback(() => {
+    setIsKarmaConfirmOpen(false);
+    setPendingContact(null);
+    setPendingEditIndex(null);
+  }, []);
+
+  // Handle confirming karma spend
+  const handleConfirmKarmaSpend = useCallback(() => {
+    if (!pendingContact) return;
+
+    if (pendingEditIndex !== null) {
+      // This was an edit
+      commitUpdateContact(pendingContact, pendingEditIndex);
+    } else {
+      // This was an add
+      commitAddContact(pendingContact);
+    }
+
+    setIsKarmaConfirmOpen(false);
+    setPendingContact(null);
+    setPendingEditIndex(null);
+  }, [pendingContact, pendingEditIndex, commitAddContact, commitUpdateContact]);
 
   // Handle save from modal
   const handleModalSave = useCallback(
@@ -383,6 +408,25 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
         maxCost={MAX_KARMA_PER_CONTACT}
         availableKarma={availableKarmaForModal}
       />
+
+      {/* Karma Confirmation Modal */}
+      {pendingContact && (
+        <ContactKarmaConfirmModal
+          isOpen={isKarmaConfirmOpen}
+          onClose={handleCloseKarmaConfirm}
+          onConfirm={handleConfirmKarmaSpend}
+          contactName={pendingContact.name}
+          connection={pendingContact.connection}
+          loyalty={pendingContact.loyalty}
+          contactKarmaCost={pendingContact.connection + pendingContact.loyalty}
+          karmaFromGeneral={calculateGeneralKarmaCost(
+            pendingContact,
+            pendingEditIndex !== null,
+            pendingEditIndex
+          )}
+          karmaRemaining={karmaRemaining}
+        />
+      )}
     </>
   );
 }

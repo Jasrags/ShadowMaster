@@ -46,9 +46,10 @@ function createBudgetState(total: number, spent: number, label: string): BudgetS
 
 describe("extractSpentValues", () => {
   describe("contact points derivation", () => {
-    it("derives contact points from selections.contacts array", () => {
+    it("derives contact points from selections.contacts array (within free pool)", () => {
       const stateBudgets = {};
       const selections = {
+        attributes: { charisma: 4 }, // Free pool = 4 × 3 = 12
         contacts: [
           { connection: 3, loyalty: 2 }, // 5 points
           { connection: 4, loyalty: 3 }, // 7 points
@@ -57,7 +58,25 @@ describe("extractSpentValues", () => {
 
       const spent = extractSpentValues(stateBudgets, selections);
 
+      // Total is 12, free pool is 12, so spent = 12
       expect(spent["contact-points"]).toBe(12);
+    });
+
+    it("caps contact points at free pool (CHA × 3)", () => {
+      const stateBudgets = {};
+      const selections = {
+        attributes: { charisma: 3 }, // Free pool = 3 × 3 = 9
+        contacts: [
+          { connection: 3, loyalty: 2 }, // 5 points
+          { connection: 4, loyalty: 3 }, // 7 points - total 12
+        ],
+      };
+
+      const spent = extractSpentValues(stateBudgets, selections);
+
+      // Total is 12, but free pool is 9, so spent is capped at 9
+      // The extra 3 points go to karma, not contact points
+      expect(spent["contact-points"]).toBe(9);
     });
 
     it("returns 0 when no contacts are selected", () => {
