@@ -54,6 +54,258 @@
 
 ---
 
+## Gameplay Level Variants
+
+### Resource Allocation by Level
+
+| Priority | Street  | Standard | Prime Runner |
+| -------- | ------- | -------- | ------------ |
+| A        | 75,000¥ | 450,000¥ | 500,000¥     |
+| B        | 50,000¥ | 275,000¥ | 325,000¥     |
+| C        | 25,000¥ | 140,000¥ | 210,000¥     |
+| D        | 15,000¥ | 50,000¥  | 150,000¥     |
+| E        | 6,000¥  | 6,000¥   | 100,000¥     |
+
+### Karma Budgets by Level
+
+| Level        | Starting | Max Carryover | Max to Nuyen |
+| ------------ | -------- | ------------- | ------------ |
+| Street       | 13       | 7             | 5 (10,000¥)  |
+| Standard     | 25       | 7             | 10 (20,000¥) |
+| Prime Runner | 35       | 7             | 25 (50,000¥) |
+
+### Restrictions by Level
+
+| Restriction   | Street | Standard | Prime |
+| ------------- | ------ | -------- | ----- |
+| Availability  | ≤10    | ≤12      | ≤15   |
+| Device Rating | ≤4     | ≤6       | —     |
+| Augment Bonus | +4     | +4       | +4    |
+
+---
+
+## Karma Spending at Creation
+
+### Starting Karma by Level
+
+- **Street:** 13 Karma
+- **Standard:** 25 Karma
+- **Prime Runner:** 35 Karma
+
+### All Karma Costs
+
+| Purchase                   | Cost               |
+| -------------------------- | ------------------ |
+| Positive Quality           | Listed cost        |
+| Negative Quality           | Receive listed     |
+| Karma-to-Nuyen             | 1 : 2,000¥         |
+| Active Skill               | New Rating × 2     |
+| Skill Group                | New Rating × 5     |
+| Knowledge/Language Skill   | New Rating × 1     |
+| Specialization             | 7                  |
+| Attribute                  | New Rating × 5     |
+| Spell/Ritual/Preparation   | 5                  |
+| Complex Form               | 4                  |
+| Focus Bonding              | Force × multiplier |
+| Power Point (Mystic Adept) | 5                  |
+| Contact                    | Connection+Loyalty |
+| Bound Spirit Service       | 1 per service      |
+| Registered Sprite Task     | 1 per task         |
+
+### Karma-to-Nuyen Conversion Limits
+
+| Level    | Max Karma | Max Nuyen |
+| -------- | --------- | --------- |
+| Street   | 5         | 10,000¥   |
+| Standard | 10        | 20,000¥   |
+| Prime    | 25        | 50,000¥   |
+
+### Carryover Rules
+
+- **Karma:** Maximum 7 Karma carryover (all levels)
+- **Nuyen:** Maximum 5,000¥ carryover (all levels)
+
+---
+
+## Knowledge & Language Skills
+
+### Formula
+
+```
+Free Points = (Intuition + Logic) × 2
+```
+
+### Example Calculations
+
+| INT | LOG | Free Points |
+| --- | --- | ----------- |
+| 2   | 2   | 8           |
+| 3   | 3   | 12          |
+| 4   | 3   | 14          |
+| 4   | 4   | 16          |
+| 5   | 4   | 18          |
+| 5   | 5   | 20          |
+
+### Knowledge Skill Categories
+
+| Category     | Linked Attr | Examples                       |
+| ------------ | ----------- | ------------------------------ |
+| Academic     | Logic       | History, Biology, Literature   |
+| Professional | Logic       | Law, Business, Engineering     |
+| Interests    | Intuition   | Sports, Music, Urban Brawl     |
+| Street       | Intuition   | Gangs, Drugs, Smuggling Routes |
+
+---
+
+## Contact Pool
+
+### Formula
+
+```
+Free Contact Karma = Charisma × 3
+```
+
+### Example Calculations
+
+| CHA | Free Contact Karma |
+| --- | ------------------ |
+| 2   | 6                  |
+| 3   | 9                  |
+| 4   | 12                 |
+| 5   | 15                 |
+| 6   | 18                 |
+
+### Contact Limits
+
+- **Per Contact:** 2-7 Karma
+- **Minimum:** 1 Connection + 1 Loyalty
+- **Maximum:** 6 Connection + 1 Loyalty OR 1 Connection + 6 Loyalty
+- **No limit** on number of contacts
+
+### Contact Cost Matrix (Connection + Loyalty = Total)
+
+| Con\\Loy | 1   | 2   | 3   | 4   | 5   | 6   |
+| -------- | --- | --- | --- | --- | --- | --- |
+| 1        | 2   | 3   | 4   | 5   | 6   | 7   |
+| 2        | 3   | 4   | 5   | 6   | 7   | —   |
+| 3        | 4   | 5   | 6   | 7   | —   | —   |
+| 4        | 5   | 6   | 7   | —   | —   | —   |
+| 5        | 6   | 7   | —   | —   | —   | —   |
+| 6        | 7   | —   | —   | —   | —   | —   |
+
+(— = exceeds 7 Karma limit per contact)
+
+---
+
+## Focus Bonding Costs
+
+### Bonding Multipliers
+
+| Focus Type       | Multiplier |
+| ---------------- | ---------- |
+| Qi Focus         | Force × 2  |
+| Spell Focus      | Force × 2  |
+| Spirit Focus     | Force × 2  |
+| Enchanting Focus | Force × 3  |
+| Metamagic Focus  | Force × 3  |
+| Weapon Focus     | Force × 3  |
+| Power Focus      | Force × 6  |
+
+### Precalculated Costs by Force
+
+| Focus Type       | F1  | F2  | F3  | F4  | F5  | F6  |
+| ---------------- | --- | --- | --- | --- | --- | --- |
+| Qi Focus         | 2   | 4   | 6   | 8   | 10  | 12  |
+| Spell Focus      | 2   | 4   | 6   | 8   | 10  | 12  |
+| Spirit Focus     | 2   | 4   | 6   | 8   | 10  | 12  |
+| Enchanting Focus | 3   | 6   | 9   | 12  | 15  | 18  |
+| Metamagic Focus  | 3   | 6   | 9   | 12  | 15  | 18  |
+| Weapon Focus     | 3   | 6   | 9   | 12  | 15  | 18  |
+| Power Focus      | 6   | 12  | 18  | 24  | 30  | 36  |
+
+### Creation vs Post-Creation Limits
+
+| Limit          | At Creation | Post-Creation |
+| -------------- | ----------- | ------------- |
+| Bonded foci    | ≤ Magic     | ≤ Magic       |
+| Total Force    | ≤ Magic × 2 | ≤ Magic × 5   |
+| Force per test | 1 focus     | 1 focus       |
+
+---
+
+## Magic Purchase Limits
+
+### Spell/Ritual/Preparation Limits by Magic
+
+| Magic | Max per Category |
+| ----- | ---------------- |
+| 2     | 4                |
+| 3     | 6                |
+| 4     | 8                |
+| 5     | 10               |
+| 6     | 12               |
+
+### Spirit Limits
+
+- **Bound spirits:** Count ≤ Charisma
+- **Services per spirit:** Varies (1 Karma each at creation)
+
+### Sprite Limits
+
+- **Registered sprites:** Count ≤ Charisma
+- **Tasks per sprite:** Varies (1 Karma each at creation)
+
+### Mystic Adept Power Points
+
+| Magic | Max Power Points | Total Cost |
+| ----- | ---------------- | ---------- |
+| 2     | 2                | 10 Karma   |
+| 3     | 3                | 15 Karma   |
+| 4     | 4                | 20 Karma   |
+| 5     | 5                | 25 Karma   |
+| 6     | 6                | 30 Karma   |
+
+(Adepts get Power Points free = Magic rating)
+
+---
+
+## Creation Limits Summary
+
+### Hard Limits (All Levels)
+
+| Category               | Limit                |
+| ---------------------- | -------------------- |
+| Karma carryover        | ≤7                   |
+| Nuyen carryover        | ≤5,000¥              |
+| Positive qualities     | ≤25 Karma            |
+| Negative qualities     | ≤25 Karma bonus      |
+| Physical at max        | Only 1               |
+| Mental at max          | Only 1               |
+| Attribute augmentation | +4 per attribute     |
+| Skill rating           | ≤6 (7 with Aptitude) |
+
+### Level-Dependent Limits
+
+| Limit           | Street | Standard | Prime |
+| --------------- | ------ | -------- | ----- |
+| Starting Karma  | 13     | 25       | 35    |
+| Availability    | ≤10    | ≤12      | ≤15   |
+| Device Rating   | ≤4     | ≤6       | —     |
+| Max Karma→Nuyen | 5      | 10       | 25    |
+
+### Magic/Resonance Limits
+
+| Limit                 | Formula    |
+| --------------------- | ---------- |
+| Bonded foci count     | ≤ Magic    |
+| Bonded foci Force     | ≤ Magic×2  |
+| Spells (per category) | ≤ Magic×2  |
+| Complex forms         | ≤ Logic    |
+| Bound spirits         | ≤ Charisma |
+| Registered sprites    | ≤ Charisma |
+
+---
+
 ## Metatype Base Attributes
 
 | Metatype | BOD | AGI | REA | STR | WIL | LOG | INT | CHA | Max Attribute           |
@@ -248,18 +500,50 @@ Fake SIN (Rating 1-6)
 
 ### Pre-Generation
 
-- [ ] All equipment names match database exactly
+- [ ] All equipment names match database (use fuzzy matching if no exact match)
+- [ ] Close matches auto-corrected to database names
 - [ ] All cyberware grades specified
 - [ ] All item costs include grade multipliers
-- [ ] Availability ≤12 (or note if quality allows higher)
+- [ ] Availability within level limit (≤10/≤12/≤15)
+- [ ] Device ratings within level limit (≤4/≤6/—)
 
-### Calculations
+### Priority Calculations
 
 - [ ] Attribute points total matches priority
 - [ ] Skill points total matches priority
 - [ ] Essence total is correct (6 - sum of augmentation essence)
 - [ ] Resource total within priority budget (±5% tolerance)
 - [ ] Each priority used exactly once (A-E)
+- [ ] Gameplay level identified (Street/Standard/Prime)
+
+### Karma Validation
+
+- [ ] Starting karma matches level (13/25/35)
+- [ ] Positive qualities ≤25 Karma total
+- [ ] Negative qualities ≤25 Karma bonus
+- [ ] Karma-to-Nuyen within level limit
+- [ ] Karma carryover ≤7
+- [ ] All karma expenditures itemized
+
+### Knowledge & Contacts
+
+- [ ] Knowledge points ≤ (INT + LOG) × 2
+- [ ] Contact pool ≤ CHA × 3
+- [ ] Each contact costs 2-7 Karma
+- [ ] Each contact has min 1 Connection + 1 Loyalty
+
+### Magic Validation (if Awakened)
+
+- [ ] Spells per category ≤ Magic × 2
+- [ ] Bonded foci count ≤ Magic
+- [ ] Bonded foci total Force ≤ Magic × 2
+- [ ] Focus bonding costs calculated correctly
+- [ ] Bound spirits ≤ Charisma
+
+### Resonance Validation (if Emerged)
+
+- [ ] Complex forms ≤ Logic
+- [ ] Registered sprites ≤ Charisma
 
 ### Hierarchy
 
@@ -272,8 +556,15 @@ Fake SIN (Rating 1-6)
 ### Database
 
 - [ ] All items exist in core-rulebook.json
+- [ ] Fuzzy matching applied before marking items as missing
+- [ ] Close matches auto-corrected to database names
 - [ ] Missing items documented in validation report
 - [ ] Item IDs use kebab-case
+
+### Carryover Limits
+
+- [ ] Nuyen carryover ≤5,000¥
+- [ ] Karma carryover ≤7
 
 ---
 
@@ -281,13 +572,14 @@ Fake SIN (Rating 1-6)
 
 ### Weapon Names
 
-| Common Error       | Correct Name      |
-| ------------------ | ----------------- |
-| Ares Predator 5    | Ares Predator V   |
-| HK-277             | HK-227            |
-| Ingram Smart Gun X | Ingram Smartgun X |
-| FN-HAR             | FN HAR            |
-| AK97               | AK-97             |
+| Common Error         | Correct Name         |
+| -------------------- | -------------------- |
+| Ares Predator 5      | Ares Predator V      |
+| HK-277               | HK-227               |
+| Ingram Smart Gun X   | Ingram Smartgun X    |
+| FN-HAR               | FN HAR               |
+| AK97                 | AK-97                |
+| Browning Ultra Power | Browning Ultra-Power |
 
 ### Cyberware Names
 
@@ -297,6 +589,82 @@ Fake SIN (Rating 1-6)
 | Wired Reflexes R2    | Wired Reflexes 2           |
 | Cyber Eyes           | Cybereyes                  |
 | Dermal Armor         | Dermal Plating             |
+
+---
+
+## Fuzzy Matching Name Variations
+
+When validating items against the database, use fuzzy matching before marking items as "missing."
+
+### Variation Types
+
+| Type           | Example Stat Block   | Example Database      | Resolution            |
+| -------------- | -------------------- | --------------------- | --------------------- |
+| Hyphen         | Browning Ultra Power | Browning Ultra-Power  | Normalize hyphens     |
+| Word Split     | Earbuds              | Ear Buds              | Check both forms      |
+| Roman Numeral  | Predator 5           | Predator V            | Convert to numeral    |
+| Word Order     | Jammer (area)        | Area Jammer           | Check rearrangements  |
+| Abbreviation   | Fichetti Sec 600     | Fichetti Security 600 | Expand abbreviations  |
+| Adjective Form | Concealed holster    | Concealable Holster   | Check similar forms   |
+| Partial Name   | Silencer             | Silencer/Suppressor   | Substring search      |
+| Synonym        | Regular ammunition   | Regular Rounds        | Check common synonyms |
+| Full Name      | Hardware kit         | Hardware Toolkit      | Search partial match  |
+
+### Normalization Algorithm
+
+```
+1. Convert to lowercase
+2. Remove hyphens and extra spaces
+3. Convert Roman numerals (I, II, III, IV, V, VI) to digits
+4. Strip common suffixes (rating, level, mk, mark)
+5. Compare normalized strings
+```
+
+### Search Strategy (in order)
+
+1. **Exact match** → Use as-is
+2. **Case-insensitive match** → Use database name
+3. **Normalized match** (remove hyphens/spaces) → Use database name
+4. **Substring match** (stat block name in database) → Flag as close match
+5. **Reverse substring** (database name in stat block) → Flag as close match
+6. **Token overlap ≥80%** → Flag as close match
+7. **No match** → Mark as missing
+
+### Comprehensive Name Variation Table
+
+| Stat Block Name      | Database Name         | Variation      |
+| -------------------- | --------------------- | -------------- |
+| Browning Ultra Power | Browning Ultra-Power  | Hyphen added   |
+| Ares Predator 5      | Ares Predator V       | Roman numeral  |
+| Earbuds              | Ear Buds              | Word split     |
+| Hardware kit         | Hardware Toolkit      | Full name      |
+| Jammer (area)        | Area Jammer           | Word order     |
+| Silencer             | Silencer/Suppressor   | Partial name   |
+| Concealed holster    | Concealable Holster   | Adjective form |
+| Regular ammunition   | Regular Rounds        | Synonym        |
+| Fichetti Sec 600     | Fichetti Security 600 | Abbreviation   |
+| Ingram Smart Gun X   | Ingram Smartgun X     | Word merge     |
+| Cyber Eyes           | Cybereyes             | Word merge     |
+| FN-HAR               | FN HAR                | Hyphen removed |
+| AK97                 | AK-97                 | Hyphen added   |
+| Smartlink            | Smartgun System       | Different name |
+| Dermal Armor         | Dermal Plating        | Different name |
+
+### grep Patterns for Fuzzy Search
+
+```bash
+# Exact search
+grep -i '"name": "Browning Ultra Power"' core-rulebook.json
+
+# Normalized (ignore hyphens)
+grep -i '"name":.*browning.*ultra.*power' core-rulebook.json
+
+# Partial match (find all "browning" items)
+grep -i '"name":.*browning' core-rulebook.json
+
+# Find all items in a category
+grep -A5 '"category": "weapons"' core-rulebook.json | grep '"name"'
+```
 
 ### Essence Values
 
