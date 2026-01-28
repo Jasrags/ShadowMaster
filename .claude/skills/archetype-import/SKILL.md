@@ -829,6 +829,28 @@ Before generating the markdown:
 2. **Check naming consistency** - Match exact names from catalog (see Fuzzy Matching below)
 3. **Check availability limits** - Items must be ≤12 availability at creation (without qualities)
 
+### Default Rating Rule
+
+**CRITICAL:** When a stat block lists an item that has ratings in the database but does NOT specify a rating, **default to Rating 1**.
+
+**Example:**
+
+- Stat block shows: "Bug Scanner — 100¥"
+- Database has: Bug Scanner (Rating 1-6, costs 100¥-600¥)
+- Correct interpretation: Bug Scanner Rating 1 at 100¥
+
+**Common rated items that often omit ratings:**
+| Item | Rating Range | R1 Cost | R6 Cost |
+|------|--------------|---------|---------|
+| Bug Scanner | 1-6 | 100¥ | 600¥ |
+| White Noise Generator | 1-6 | 50¥ | 300¥ |
+| Jammer (Area) | 1-6 | 200¥ | — |
+| Medkit | 1-6 | 250¥ | 1,500¥ |
+| Fake SIN | 1-6 | 2,500¥ | 15,000¥ |
+| Autopicker | 1-6 | 50¥ | 300¥ |
+
+**Validation:** If the stat block price doesn't match Rating 1, check if it matches another rating and document accordingly.
+
 ### Fuzzy Matching for Item Names
 
 **CRITICAL:** Sourcebook stat blocks often use slightly different names than the database. Before marking an item as "missing," perform fuzzy matching to find close matches.

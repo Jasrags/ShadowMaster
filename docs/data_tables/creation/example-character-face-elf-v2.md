@@ -14,7 +14,7 @@ An elf face specializing in social manipulation, electronic warfare, and looking
 **Detected Level:** Standard
 **Evidence:**
 
-- Total resources: ~43,000¥ (within 50K Budget D)
+- Total resources: ~42,000¥ (within 50K Budget D)
 - Max availability: 12R (Keycard Copier R6)
 - Max device rating: 5 (Hermes Ikon)
 - Estimated karma budget: 25 (standard)
@@ -289,7 +289,7 @@ Priority A provides 46 skill points. **Excess: 2 points** (purchased with karma)
 | Item                  | Rating | Cost   | Avail | Notes                      |
 | --------------------- | ------ | ------ | ----- | -------------------------- |
 | Hermes Ikon Commlink  | 5      | 3,000¥ | 5     | Device Rating 5            |
-| Bug Scanner           | —      | 400¥   | 6R    | Detect surveillance        |
+| Bug Scanner           | 1      | 100¥   | 1R    | Detect surveillance        |
 | Data Tap              | —      | 300¥   | 6R    | Physical data extraction   |
 | Area Jammer           | 4      | 800¥   | 8F    | Block communications       |
 | Keycard Copier        | 6      | 1,200¥ | 12R   | Clone access cards         |
@@ -430,7 +430,7 @@ Priority A provides 46 skill points. **Excess: 2 points** (purchased with karma)
 | Category            | Subtotal    |
 | ------------------- | ----------- |
 | Armor               | 1,500¥      |
-| Electronics         | 7,150¥      |
+| Electronics         | 6,850¥      |
 | Sensor Devices      | 1,050¥      |
 | Tools               | 775¥        |
 | Medical             | 800¥        |
@@ -441,13 +441,13 @@ Priority A provides 46 skill points. **Excess: 2 points** (purchased with karma)
 | Melee Weapons       | 110¥        |
 | Grenades            | 80¥         |
 | Vehicle             | 16,000¥     |
-| **Grand Total**     | **42,265¥** |
+| **Grand Total**     | **41,965¥** |
 
-→ Priority D (50,000¥) with ~7,735¥ remaining
+→ Priority D (50,000¥) with ~8,035¥ remaining
 
 **Estimated Lifestyle:** Medium (5,000¥/month) × 1 month = 5,000¥
 
-**Final Resource Total:** ~47,265¥ (within Priority D budget) ✓
+**Final Resource Total:** ~46,965¥ (within Priority D budget) ✓
 
 ---
 
@@ -491,7 +491,7 @@ Priority A provides 46 skill points. **Excess: 2 points** (purchased with karma)
 | Limit                | Value  | Max   | Status |
 | -------------------- | ------ | ----- | ------ |
 | Karma carryover      | 0      | 7     | ✓      |
-| Nuyen carryover      | ~2,700 | 5,000 | ✓      |
+| Nuyen carryover      | ~3,000 | 5,000 | ✓      |
 | Positive qualities   | 16     | 25    | ✓      |
 | Negative qualities   | 4      | 25    | ✓      |
 | Physical attr at max | 0      | 1     | ✓      |

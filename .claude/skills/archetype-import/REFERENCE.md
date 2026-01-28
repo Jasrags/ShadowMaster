@@ -502,6 +502,7 @@ Fake SIN (Rating 1-6)
 
 - [ ] All equipment names match database (use fuzzy matching if no exact match)
 - [ ] Close matches auto-corrected to database names
+- [ ] Rated items without specified rating default to Rating 1
 - [ ] All cyberware grades specified
 - [ ] All item costs include grade multipliers
 - [ ] Availability within level limit (≤10/≤12/≤15)
@@ -565,6 +566,28 @@ Fake SIN (Rating 1-6)
 
 - [ ] Nuyen carryover ≤5,000¥
 - [ ] Karma carryover ≤7
+
+---
+
+## Default Rating Rule
+
+When a stat block lists a rated item WITHOUT specifying a rating, **default to Rating 1**.
+
+### Common Rated Items (Default to R1)
+
+| Item                  | R1 Cost | R1 Avail | Max Rating |
+| --------------------- | ------- | -------- | ---------- |
+| Bug Scanner           | 100¥    | 1R       | 6          |
+| White Noise Generator | 50¥     | 1        | 6          |
+| Area Jammer           | 200¥    | 2F       | 6          |
+| Medkit                | 250¥    | 1        | 6          |
+| Fake SIN              | 2,500¥  | 3F       | 6          |
+| Autopicker            | 50¥     | 4F       | 6          |
+| Maglock Passkey       | 2,000¥  | 8R       | 4          |
+| Sequencer             | 125¥    | 2R       | 4          |
+| Keycard Copier        | 200¥    | 2R       | 6          |
+
+**Validation:** If stat block price ≠ R1 price, infer the rating from the price.
 
 ---
 
