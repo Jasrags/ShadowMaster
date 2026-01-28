@@ -14,6 +14,7 @@ import {
   createBrokenGroup,
   createRestoredGroup,
   calculateSkillRaiseKarmaCost,
+  calculateSkillGroupRaiseKarmaCost,
   SPECIALIZATION_KARMA_COST,
   calculateSpecializationKarmaCost,
   canRestoreGroup,
@@ -134,6 +135,32 @@ describe("Skill Group Utilities", () => {
       expect(calculateSkillRaiseKarmaCost(2, 5)).toBe(24);
       // 0 → 6: (1×2) + (2×2) + (3×2) + (4×2) + (5×2) + (6×2) = 2+4+6+8+10+12 = 42
       expect(calculateSkillRaiseKarmaCost(0, 6)).toBe(42);
+    });
+  });
+
+  describe("calculateSkillGroupRaiseKarmaCost", () => {
+    it("should return 0 when target is less than or equal to current", () => {
+      expect(calculateSkillGroupRaiseKarmaCost(4, 4)).toBe(0);
+      expect(calculateSkillGroupRaiseKarmaCost(4, 3)).toBe(0);
+      expect(calculateSkillGroupRaiseKarmaCost(4, 0)).toBe(0);
+    });
+
+    it("should calculate cost for single rating increase (new rating × 5)", () => {
+      // 0 → 1: 1 × 5 = 5
+      expect(calculateSkillGroupRaiseKarmaCost(0, 1)).toBe(5);
+      // 3 → 4: 4 × 5 = 20
+      expect(calculateSkillGroupRaiseKarmaCost(3, 4)).toBe(20);
+      // 5 → 6: 6 × 5 = 30
+      expect(calculateSkillGroupRaiseKarmaCost(5, 6)).toBe(30);
+    });
+
+    it("should calculate cumulative cost for multiple rating increases", () => {
+      // 0 → 3: (1×5) + (2×5) + (3×5) = 5 + 10 + 15 = 30
+      expect(calculateSkillGroupRaiseKarmaCost(0, 3)).toBe(30);
+      // 2 → 5: (3×5) + (4×5) + (5×5) = 15 + 20 + 25 = 60
+      expect(calculateSkillGroupRaiseKarmaCost(2, 5)).toBe(60);
+      // 0 → 6: (1×5) + (2×5) + (3×5) + (4×5) + (5×5) + (6×5) = 5+10+15+20+25+30 = 105
+      expect(calculateSkillGroupRaiseKarmaCost(0, 6)).toBe(105);
     });
   });
 

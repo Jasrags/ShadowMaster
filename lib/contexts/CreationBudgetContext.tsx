@@ -309,23 +309,34 @@ function extractSpentValues(
 
   // Calculate skill points spent from selections
   // Subtract rating points purchased with karma (those don't count against skill point budget)
+  // Include specializations (1 skill point each during creation)
   const skills = (selections.skills || {}) as Record<string, number>;
   const totalSkillRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
   const karmaRatingPoints =
     (selections.skillKarmaSpent as { skillRatingPoints?: number } | undefined)?.skillRatingPoints ||
     0;
-  spent["skill-points"] = totalSkillRatings - karmaRatingPoints;
+  const skillSpecializations = (selections.skillSpecializations || {}) as Record<string, string[]>;
+  const totalSpecPoints = Object.values(skillSpecializations).reduce(
+    (sum, specs) => sum + specs.length,
+    0
+  );
+  spent["skill-points"] = totalSkillRatings + totalSpecPoints - karmaRatingPoints;
 
   // Calculate skill group points spent from selections
   // Handles both legacy (number) and new ({ rating, isBroken }) formats
+  // Subtract karma-purchased group rating points - they don't count against group point budget
   const skillGroups = (selections.skillGroups || {}) as Record<
     string,
     number | { rating: number; isBroken: boolean }
   >;
-  spent["skill-group-points"] = Object.values(skillGroups).reduce<number>((sum, value) => {
+  const totalGroupRatings = Object.values(skillGroups).reduce<number>((sum, value) => {
     const rating = typeof value === "number" ? value : value.rating;
     return sum + rating;
   }, 0);
+  const karmaGroupRatingPoints =
+    (selections.skillKarmaSpent as { groupRatingPoints?: number } | undefined)?.groupRatingPoints ||
+    0;
+  spent["skill-group-points"] = totalGroupRatings - karmaGroupRatingPoints;
 
   // Calculate knowledge points spent from selections (languages + knowledge skills)
   const languages = (selections.languages || []) as Array<{ rating: number }>;
@@ -459,9 +470,14 @@ function extractSpentValues(
   const karmaSpentContacts = (stateBudgets["karma-spent-contacts"] as number) || 0;
 
   // Calculate skill karma spent from selections.skillKarmaSpent if present
-  // This tracks karma spent on breaking groups (raising skills, adding specializations)
+  // This tracks karma spent on breaking groups (raising skills, adding specializations),
+  // and karma spent on skill groups when group points are exhausted
   const skillKarmaSpent = selections.skillKarmaSpent as
-    | { skillRaises: Record<string, number>; specializations: number }
+    | {
+        skillRaises: Record<string, number>;
+        specializations: number;
+        groupRaises?: Record<string, number>;
+      }
     | undefined;
   let karmaSpentSkills = (stateBudgets["karma-spent-skills"] as number) || 0;
   if (skillKarmaSpent) {
@@ -469,7 +485,12 @@ function extractSpentValues(
       (sum, cost) => sum + cost,
       0
     );
-    karmaSpentSkills = skillRaisesTotal + (skillKarmaSpent.specializations || 0);
+    const groupRaisesTotal = Object.values(skillKarmaSpent.groupRaises || {}).reduce(
+      (sum, cost) => sum + cost,
+      0
+    );
+    karmaSpentSkills =
+      skillRaisesTotal + (skillKarmaSpent.specializations || 0) + groupRaisesTotal;
   }
 
   // Net karma spent = positive qualities + other spends - negative qualities gained

@@ -111,6 +111,26 @@ export function calculateSkillRaiseKarmaCost(fromRating: number, toRating: numbe
 }
 
 /**
+ * Calculate karma cost to raise a skill group rating.
+ *
+ * SR5 Rule: New Rating × 5
+ * Cost to go from 3 to 4 = 4 × 5 = 20 karma
+ *
+ * @param fromRating - Current group rating
+ * @param toRating - Target group rating
+ * @returns Total karma cost for the increase
+ */
+export function calculateSkillGroupRaiseKarmaCost(fromRating: number, toRating: number): number {
+  if (toRating <= fromRating) return 0;
+
+  let totalCost = 0;
+  for (let r = fromRating + 1; r <= toRating; r++) {
+    totalCost += r * 5;
+  }
+  return totalCost;
+}
+
+/**
  * Karma cost for a specialization during character creation.
  * SR5 Rule: 7 karma per specialization
  */

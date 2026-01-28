@@ -35,6 +35,11 @@ interface SkillListItemProps {
   onKarmaIncrease?: () => void;
   onRemove?: () => void;
   onRemoveSpecialization?: (spec: string) => void;
+  // Specialization props (only used for individual skills without spec)
+  onAddSpecialization?: () => void;
+  canAddSpecialization?: boolean;
+  /** True when spec would be purchased with karma (skill points exhausted) */
+  specRequiresKarma?: boolean;
   // Customization props (only used for group skills)
   onCustomize?: () => void;
   canCustomize?: boolean;
@@ -60,6 +65,9 @@ export function SkillListItem({
   onKarmaIncrease,
   onRemove,
   onRemoveSpecialization,
+  onAddSpecialization,
+  canAddSpecialization = false,
+  specRequiresKarma = false,
   onCustomize,
   canCustomize = false,
   disabledReason,
@@ -169,6 +177,44 @@ export function SkillListItem({
 
                 return stepper;
               })()}
+              {/* Add specialization button - only for individual skills without specs */}
+              {!hasSpecs && onAddSpecialization && (
+                <button
+                  onClick={canAddSpecialization ? onAddSpecialization : undefined}
+                  title={
+                    canAddSpecialization
+                      ? specRequiresKarma
+                        ? "Add specialization (7 karma)"
+                        : "Add specialization (1 skill pt)"
+                      : "No skill points or karma available"
+                  }
+                  aria-label={
+                    canAddSpecialization
+                      ? "Add specialization"
+                      : "Cannot add specialization - no skill points or karma"
+                  }
+                  className={`relative flex h-5 w-5 items-center justify-center rounded transition-colors ${
+                    canAddSpecialization
+                      ? specRequiresKarma
+                        ? "bg-amber-200 text-amber-700 hover:bg-amber-300 dark:bg-amber-800/50 dark:text-amber-300 dark:hover:bg-amber-800/70"
+                        : "bg-amber-100 text-amber-600 hover:bg-amber-200 dark:bg-amber-900/30 dark:text-amber-400 dark:hover:bg-amber-900/50"
+                      : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
+                  }`}
+                >
+                  {specRequiresKarma && canAddSpecialization ? (
+                    <Sparkles className="h-3 w-3" />
+                  ) : (
+                    <Star className="h-3 w-3" />
+                  )}
+                  <span
+                    className={`absolute -right-0.5 -top-0.5 flex h-2 w-2 items-center justify-center rounded-full text-[6px] font-bold text-white ${
+                      canAddSpecialization ? "bg-amber-500" : "bg-zinc-400 dark:bg-zinc-600"
+                    }`}
+                  >
+                    +
+                  </span>
+                </button>
+              )}
               {/* Separator */}
               <div className="mx-2 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
               <button

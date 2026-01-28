@@ -37,7 +37,9 @@ const SKILL_CATEGORIES = [
 type SkillCategory = (typeof SKILL_CATEGORIES)[number]["id"];
 
 const MAX_SKILL_RATING = 6;
-const SPEC_KARMA_COST = 7;
+const MAX_SKILL_RATING_WITH_APTITUDE = 7;
+const SPEC_SKILL_POINT_COST = 1;
+const MAX_SPECS_PER_SKILL = 1;
 
 // =============================================================================
 // TYPES
@@ -55,6 +57,7 @@ interface SkillModalProps {
   remainingPoints: number;
   karmaRemaining: number;
   incompetentGroupId?: string; // Skill group the character is incompetent in
+  aptitudeSkillId?: string; // Skill that can reach rating 7 (from Aptitude quality)
 }
 
 // =============================================================================
@@ -73,6 +76,7 @@ export function SkillModal({
   remainingPoints,
   karmaRemaining,
   incompetentGroupId,
+  aptitudeSkillId,
 }: SkillModalProps) {
   const { activeSkills } = useSkills();
 
@@ -170,6 +174,14 @@ export function SkillModal({
     return group?.name || null;
   }, [selectedSkill, skillGroups]);
 
+  // Get max rating for the selected skill (considering Aptitude quality)
+  const selectedSkillMaxRating = useMemo(() => {
+    if (selectedSkillId && aptitudeSkillId === selectedSkillId) {
+      return MAX_SKILL_RATING_WITH_APTITUDE;
+    }
+    return MAX_SKILL_RATING;
+  }, [selectedSkillId, aptitudeSkillId]);
+
   // Check if a specialization already exists (case-insensitive)
   const isSpecDuplicate = useCallback(
     (spec: string) => {
@@ -179,14 +191,15 @@ export function SkillModal({
     [selectedSpecs]
   );
 
-  // Add a specialization
+  // Add a specialization (max 1 per skill)
   const addSpec = useCallback(
     (spec: string) => {
       const trimmed = spec.trim();
-      if (!trimmed || isSpecDuplicate(trimmed)) return;
+      if (!trimmed || isSpecDuplicate(trimmed) || selectedSpecs.length >= MAX_SPECS_PER_SKILL)
+        return;
       setSelectedSpecs((prev) => [...prev, trimmed]);
     },
-    [isSpecDuplicate]
+    [isSpecDuplicate, selectedSpecs.length]
   );
 
   // Remove a specialization
@@ -204,19 +217,27 @@ export function SkillModal({
   }, [customSpecInput, isSpecDuplicate, addSpec]);
 
   // Calculate cost
-  const skillPointCost = rating;
-  const skillKarmaCost = calculateSkillRaiseKarmaCost(0, rating); // Karma cost for new skill
-  const specKarmaCost = selectedSpecs.length * SPEC_KARMA_COST;
+  // Specializations cost skill points during creation (1 each, max 1 per skill)
+  const specSkillPointCost = selectedSpecs.length * SPEC_SKILL_POINT_COST;
+  const skillPointCost = rating + specSkillPointCost;
+  const skillKarmaCost = calculateSkillRaiseKarmaCost(0, rating); // Karma cost for skill rating only
 
   // Calculate karma cost for the next rating level (for disabling plus button)
   const nextLevelKarmaCost = calculateSkillRaiseKarmaCost(0, rating + 1);
-  const canAffordNextWithKarma = nextLevelKarmaCost + specKarmaCost <= karmaRemaining;
 
   // Determine purchase mode
+  // Skill points mode: have enough skill points for rating + specs
   const canAffordWithPoints = skillPointCost <= remainingPoints;
-  const canAffordWithKarma = skillKarmaCost + specKarmaCost <= karmaRemaining;
+  // Karma mode: specs must still use skill points, only rating can use karma
+  // So we need at least specSkillPointCost skill points, plus karma for rating
+  const canAffordWithKarma =
+    !canAffordWithPoints && specSkillPointCost <= remainingPoints && skillKarmaCost <= karmaRemaining;
   const usingKarma = !canAffordWithPoints && canAffordWithKarma;
   const canAfford = canAffordWithPoints || canAffordWithKarma;
+
+  // Can we afford the next level?
+  const canAffordNextWithKarma =
+    !canAffordWithPoints && specSkillPointCost <= remainingPoints && nextLevelKarmaCost <= karmaRemaining;
 
   // Handle add skill
   const handleAddSkill = useCallback(() => {
@@ -403,13 +424,13 @@ export function SkillModal({
                           {rating}
                         </div>
                         <button
-                          onClick={() => setRating(Math.min(MAX_SKILL_RATING, rating + 1))}
+                          onClick={() => setRating(Math.min(selectedSkillMaxRating, rating + 1))}
                           disabled={
-                            rating >= MAX_SKILL_RATING ||
+                            rating >= selectedSkillMaxRating ||
                             (!canAffordWithPoints && !canAffordNextWithKarma)
                           }
                           className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                            rating < MAX_SKILL_RATING &&
+                            rating < selectedSkillMaxRating &&
                             (canAffordWithPoints || canAffordNextWithKarma)
                               ? usingKarma
                                 ? "bg-amber-500 text-white hover:bg-amber-600"
@@ -419,30 +440,45 @@ export function SkillModal({
                         >
                           <Plus className="h-4 w-4" />
                         </button>
-                        <span className="text-xs text-zinc-400">Max: {MAX_SKILL_RATING}</span>
+                        <span className="text-xs text-zinc-400">
+                          Max: {selectedSkillMaxRating}
+                          {selectedSkillMaxRating > MAX_SKILL_RATING && (
+                            <span className="ml-1 text-emerald-500">(Aptitude)</span>
+                          )}
+                        </span>
                       </div>
                       {/* Show karma cost breakdown when in karma mode */}
                       {usingKarma && (
                         <div className="mt-3 rounded-lg border border-zinc-200 bg-zinc-50 p-3 dark:border-zinc-700 dark:bg-zinc-800/50">
                           <div className="flex items-center justify-between text-sm">
-                            <span className="text-zinc-600 dark:text-zinc-400">Karma Cost</span>
+                            <span className="text-zinc-600 dark:text-zinc-400">
+                              Karma Cost (rating)
+                            </span>
                             <span className="flex items-center gap-1 font-semibold text-amber-600 dark:text-amber-400">
                               <Sparkles className="h-3.5 w-3.5" />
                               {skillKarmaCost} karma
                             </span>
                           </div>
+                          {specSkillPointCost > 0 && (
+                            <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-2 text-sm dark:border-zinc-700">
+                              <span className="text-zinc-600 dark:text-zinc-400">
+                                Skill Points (spec)
+                              </span>
+                              <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                                {specSkillPointCost} skill pt
+                              </span>
+                            </div>
+                          )}
                           <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-2 text-sm dark:border-zinc-700">
-                            <span className="text-zinc-600 dark:text-zinc-400">
-                              Remaining after purchase
-                            </span>
+                            <span className="text-zinc-600 dark:text-zinc-400">Karma remaining</span>
                             <span
                               className={`font-medium ${
-                                karmaRemaining - skillKarmaCost - specKarmaCost < 0
+                                karmaRemaining - skillKarmaCost < 0
                                   ? "text-red-600 dark:text-red-400"
                                   : "text-zinc-900 dark:text-zinc-100"
                               }`}
                             >
-                              {karmaRemaining - skillKarmaCost - specKarmaCost} karma
+                              {karmaRemaining - skillKarmaCost}
                             </span>
                           </div>
                           <p className="mt-2 border-t border-zinc-200 pt-2 text-center text-xs text-zinc-500 dark:border-zinc-700 dark:text-zinc-400">
@@ -458,9 +494,9 @@ export function SkillModal({
                     {/* Specializations */}
                     <div>
                       <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                        Specializations
+                        Specialization
                         <span className="ml-2 font-normal text-zinc-400">
-                          ({SPEC_KARMA_COST} karma each)
+                          ({SPEC_SKILL_POINT_COST} skill point, max {MAX_SPECS_PER_SKILL})
                         </span>
                       </label>
 
@@ -496,14 +532,19 @@ export function SkillModal({
                                 const isAdded = selectedSpecs.some(
                                   (s) => s.toLowerCase() === spec.toLowerCase()
                                 );
+                                const isAtMaxSpecs =
+                                  selectedSpecs.length >= MAX_SPECS_PER_SKILL && !isAdded;
                                 return (
                                   <button
                                     key={spec}
                                     onClick={() => (isAdded ? removeSpec(spec) : addSpec(spec))}
+                                    disabled={isAtMaxSpecs}
                                     className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-sm transition-colors ${
                                       isAdded
                                         ? "bg-blue-50 text-blue-700 dark:bg-blue-900/20 dark:text-blue-300"
-                                        : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
+                                        : isAtMaxSpecs
+                                          ? "cursor-not-allowed text-zinc-400 dark:text-zinc-500"
+                                          : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
                                     }`}
                                   >
                                     <span>{spec}</span>
@@ -525,15 +566,30 @@ export function SkillModal({
                             type="text"
                             value={customSpecInput}
                             onChange={(e) => setCustomSpecInput(e.target.value)}
-                            onKeyDown={(e) => e.key === "Enter" && handleAddCustomSpec()}
-                            placeholder="Type custom specialization..."
-                            className="flex-1 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                            onKeyDown={(e) =>
+                              e.key === "Enter" &&
+                              selectedSpecs.length < MAX_SPECS_PER_SKILL &&
+                              handleAddCustomSpec()
+                            }
+                            placeholder={
+                              selectedSpecs.length >= MAX_SPECS_PER_SKILL
+                                ? "Maximum reached"
+                                : "Type custom specialization..."
+                            }
+                            disabled={selectedSpecs.length >= MAX_SPECS_PER_SKILL}
+                            className="flex-1 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:disabled:bg-zinc-900 dark:disabled:text-zinc-500"
                           />
                           <button
                             onClick={handleAddCustomSpec}
-                            disabled={!customSpecInput.trim() || isSpecDuplicate(customSpecInput)}
+                            disabled={
+                              !customSpecInput.trim() ||
+                              isSpecDuplicate(customSpecInput) ||
+                              selectedSpecs.length >= MAX_SPECS_PER_SKILL
+                            }
                             className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                              customSpecInput.trim() && !isSpecDuplicate(customSpecInput)
+                              customSpecInput.trim() &&
+                              !isSpecDuplicate(customSpecInput) &&
+                              selectedSpecs.length < MAX_SPECS_PER_SKILL
                                 ? "bg-emerald-500 text-white hover:bg-emerald-600"
                                 : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
                             }`}
@@ -554,7 +610,8 @@ export function SkillModal({
                         <Info className="mt-0.5 h-3.5 w-3.5 flex-shrink-0" />
                         <span>
                           Specializations provide +2 dice when applicable. Each costs{" "}
-                          {SPEC_KARMA_COST} karma during character creation.
+                          {SPEC_SKILL_POINT_COST} skill point during character creation. Maximum{" "}
+                          {MAX_SPECS_PER_SKILL} per skill.
                         </span>
                       </div>
                     </div>
@@ -575,30 +632,33 @@ export function SkillModal({
                 <>
                   Cost:{" "}
                   {usingKarma ? (
-                    // Karma mode - show total karma cost
-                    <span className="font-medium text-amber-600 dark:text-amber-400">
-                      <Sparkles className="mr-1 inline h-3.5 w-3.5" />
-                      {skillKarmaCost + specKarmaCost} karma
-                    </span>
-                  ) : (
-                    // Skill points mode
+                    // Karma mode - skill rating uses karma, specs still use skill points
                     <>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {skillPointCost} skill points
+                      <span className="font-medium text-amber-600 dark:text-amber-400">
+                        <Sparkles className="mr-1 inline h-3.5 w-3.5" />
+                        {skillKarmaCost} karma
                       </span>
-                      {specKarmaCost > 0 && (
+                      {specSkillPointCost > 0 && (
                         <>
                           {" + "}
-                          <span className="font-medium text-amber-600 dark:text-amber-400">
-                            {specKarmaCost} karma
+                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                            {specSkillPointCost} skill pt
                           </span>
-                          <span className="text-zinc-400">
-                            {" "}
-                            ({selectedSpecs.length} spec{selectedSpecs.length !== 1 ? "s" : ""})
-                          </span>
+                          <span className="text-zinc-400"> (spec)</span>
                         </>
                       )}
                     </>
+                  ) : (
+                    // Skill points mode - everything uses skill points
+                    <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                      {skillPointCost} skill point{skillPointCost !== 1 ? "s" : ""}
+                      {specSkillPointCost > 0 && (
+                        <span className="font-normal text-zinc-400">
+                          {" "}
+                          ({rating} rating + {specSkillPointCost} spec)
+                        </span>
+                      )}
+                    </span>
                   )}
                   {/* Show karma mode indicator */}
                   {usingKarma && (

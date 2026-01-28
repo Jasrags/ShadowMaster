@@ -35,9 +35,14 @@ import {
   SkillCustomizeModal,
   SkillGroupBreakModal,
   SkillKarmaConfirmModal,
+  SkillGroupKarmaConfirmModal,
+  SkillSpecModal,
   type SkillCustomizeChanges,
 } from "./skills";
-import { calculateSkillRaiseKarmaCost } from "@/lib/rules/skills/group-utils";
+import {
+  calculateSkillRaiseKarmaCost,
+  calculateSkillGroupRaiseKarmaCost,
+} from "@/lib/rules/skills/group-utils";
 import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
 // =============================================================================
@@ -45,8 +50,10 @@ import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 // =============================================================================
 
 const MAX_SKILL_RATING = 6;
+const MAX_SKILL_RATING_WITH_APTITUDE = 7;
 const MAX_GROUP_RATING = 6;
-const KARMA_PER_SPECIALIZATION = 7;
+const SKILL_POINTS_PER_SPECIALIZATION = 1;
+const MAX_SPECS_PER_SKILL = 1;
 
 // =============================================================================
 // TYPES
@@ -75,9 +82,11 @@ function SkillGroupCard({
   rating,
   maxRating,
   canIncrease,
+  canIncreaseWithKarma,
   isBroken,
   canRestore,
   onRatingChange,
+  onKarmaIncrease,
   onRemove,
   onRestore,
 }: {
@@ -86,13 +95,17 @@ function SkillGroupCard({
   rating: number;
   maxRating: number;
   canIncrease: boolean;
+  canIncreaseWithKarma?: boolean;
   isBroken: boolean;
   canRestore: boolean;
   onRatingChange: (delta: number) => void;
+  onKarmaIncrease?: () => void;
   onRemove: () => void;
   onRestore?: () => void;
 }) {
   const isAtMax = rating >= maxRating;
+  const canIncrement = canIncrease || canIncreaseWithKarma;
+  const isKarmaMode = canIncreaseWithKarma && !canIncrease;
 
   return (
     <div className={`py-1.5 ${isBroken ? "opacity-60" : ""}`}>
@@ -126,9 +139,18 @@ function SkillGroupCard({
               value={rating}
               min={1}
               max={maxRating}
-              onChange={(newValue) => onRatingChange(newValue - rating)}
-              canIncrement={canIncrease && !isAtMax}
-              accentColor="purple"
+              onChange={(newValue) => {
+                const delta = newValue - rating;
+                if (delta > 0 && isKarmaMode) {
+                  // Karma purchase mode - open confirmation modal
+                  onKarmaIncrease?.();
+                } else {
+                  // Normal group point mode
+                  onRatingChange(delta);
+                }
+              }}
+              canIncrement={canIncrement && !isAtMax}
+              accentColor={isKarmaMode ? "amber" : "purple"}
               valueColor="purple"
               showMaxBadge={false}
               name={`${groupName} skill group`}
@@ -212,6 +234,17 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     currentRating: number;
   } | null>(null);
 
+  // Karma purchase confirmation state (for skill groups when group points exhausted)
+  const [karmaGroupPurchase, setKarmaGroupPurchase] = useState<{
+    groupId: string;
+    groupName: string;
+    skillCount: number;
+    currentRating: number;
+  } | null>(null);
+
+  // Specialization modal state (for individual skills)
+  const [specModalTarget, setSpecModalTarget] = useState<string | null>(null);
+
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
   const hasMagic =
@@ -230,6 +263,20 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
     return incompetentQuality?.specification || undefined;
   }, [state.selections.negativeQualities]);
+
+  // Get Aptitude skill ID from positive qualities
+  // Aptitude allows one skill to reach rating 7 instead of 6
+  const aptitudeSkillId = useMemo(() => {
+    const positiveQualities = (state.selections.positiveQualities || []) as Array<{
+      id?: string;
+      qualityId?: string;
+      specification?: string;
+    }>;
+    const aptitudeQuality = positiveQualities.find(
+      (q) => q.qualityId === "aptitude" || q.id === "aptitude"
+    );
+    return aptitudeQuality?.specification || undefined;
+  }, [state.selections.positiveQualities]);
 
   // Get skills in the incompetent group (for conflict detection)
   const incompetentSkills = useMemo(() => {
@@ -262,22 +309,40 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
   }, [state.selections.skillKarmaSpent]);
 
+  // Group rating points purchased with karma (not counted as group points)
+  const karmaGroupRatingPoints = useMemo(() => {
+    return (
+      (state.selections.skillKarmaSpent as { groupRatingPoints?: number } | undefined)
+        ?.groupRatingPoints || 0
+    );
+  }, [state.selections.skillKarmaSpent]);
+
   const skillPointsSpent = useMemo(() => {
     const totalRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
+    // Add specializations (1 skill point each)
+    const totalSpecPoints = Object.values(specializations).reduce(
+      (sum, specs) => sum + specs.length,
+      0
+    );
     // Subtract karma-purchased rating points - they don't count against skill point budget
-    return totalRatings - karmaRatingPoints;
-  }, [skills, karmaRatingPoints]);
+    return totalRatings + totalSpecPoints - karmaRatingPoints;
+  }, [skills, specializations, karmaRatingPoints]);
 
   const groupPointsSpent = useMemo(() => {
-    return Object.values(groups).reduce<number>((sum, value) => sum + getGroupRating(value), 0);
-  }, [groups]);
+    const totalRatings = Object.values(groups).reduce<number>(
+      (sum, value) => sum + getGroupRating(value),
+      0
+    );
+    // Subtract karma-purchased group rating points - they don't count against group point budget
+    return totalRatings - karmaGroupRatingPoints;
+  }, [groups, karmaGroupRatingPoints]);
 
-  // Calculate specialization karma cost
+  // Calculate total specializations (for display purposes)
   const totalSpecializations = useMemo(() => {
     return Object.values(specializations).reduce((sum, specs) => sum + specs.length, 0);
   }, [specializations]);
 
-  const specializationKarmaCost = totalSpecializations * KARMA_PER_SPECIALIZATION;
+  const specializationSkillPointCost = totalSpecializations * SKILL_POINTS_PER_SPECIALIZATION;
 
   const skillPointsRemaining = skillPoints - skillPointsSpent;
   const groupPointsRemaining = skillGroupPoints - groupPointsSpent;
@@ -646,6 +711,49 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [specializations, state.selections, updateState]
   );
 
+  // Handle opening spec modal for individual skills
+  const handleOpenSpecModal = useCallback((skillId: string) => {
+    setSpecModalTarget(skillId);
+  }, []);
+
+  // Handle adding a specialization from the spec modal
+  const handleAddSpecFromModal = useCallback(
+    (skillId: string, spec: string, karmaSpent?: number) => {
+      const newSpecs = { ...specializations, [skillId]: [spec] };
+
+      // Track karma spent if purchased with karma
+      if (karmaSpent && karmaSpent > 0) {
+        const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+          skillRaises: Record<string, number>;
+          skillRatingPoints: number;
+          specializations: number;
+        }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+        const newKarmaSpent = {
+          ...currentKarmaSpent,
+          specializations: (currentKarmaSpent.specializations || 0) + karmaSpent,
+        };
+
+        updateState({
+          selections: {
+            ...state.selections,
+            skillSpecializations: newSpecs,
+            skillKarmaSpent: newKarmaSpent,
+          },
+        });
+      } else {
+        updateState({
+          selections: {
+            ...state.selections,
+            skillSpecializations: newSpecs,
+          },
+        });
+      }
+      setSpecModalTarget(null);
+    },
+    [specializations, state.selections, updateState]
+  );
+
   // =============================================================================
   // KARMA SKILL PURCHASE HELPERS
   // =============================================================================
@@ -680,7 +788,37 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [skillPointsRemaining, karmaRemaining]
   );
 
-  // Handle opening karma confirmation modal
+  /**
+   * Determine the purchase mode for increasing a skill group's rating.
+   * - 'group-points': Use group points (purple + button)
+   * - 'karma': Use karma (amber + button, opens confirmation modal)
+   * - 'disabled': Cannot increase (gray + button with tooltip)
+   */
+  const getGroupPurchaseMode = useCallback(
+    (
+      currentRating: number,
+      isAtMax: boolean
+    ): { mode: "group-points" | "karma" | "disabled"; disabledReason?: string } => {
+      if (isAtMax) {
+        return { mode: "disabled", disabledReason: "Maximum rating reached" };
+      }
+      if (groupPointsRemaining > 0) {
+        return { mode: "group-points" };
+      }
+      // Group points exhausted - check if karma purchase is possible
+      const karmaCost = calculateSkillGroupRaiseKarmaCost(currentRating, currentRating + 1);
+      if (karmaRemaining >= karmaCost) {
+        return { mode: "karma" };
+      }
+      return {
+        mode: "disabled",
+        disabledReason: `No group points. Need ${karmaCost} karma (have ${karmaRemaining})`,
+      };
+    },
+    [groupPointsRemaining, karmaRemaining]
+  );
+
+  // Handle opening karma confirmation modal for skill
   const handleOpenKarmaConfirm = useCallback(
     (skillId: string) => {
       const skillData = activeSkills.find((s) => s.id === skillId);
@@ -734,6 +872,75 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
 
     setKarmaSkillPurchase(null);
   }, [karmaSkillPurchase, skills, state.selections, updateState]);
+
+  // Handle opening karma confirmation modal for skill group
+  const handleOpenGroupKarmaConfirm = useCallback(
+    (groupId: string) => {
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      const groupValue = groups[groupId];
+      if (groupData && groupValue) {
+        setKarmaGroupPurchase({
+          groupId,
+          groupName: groupData.name,
+          skillCount: groupData.skills.length,
+          currentRating: getGroupRating(groupValue),
+        });
+      }
+    },
+    [skillGroups, groups]
+  );
+
+  // Handle confirming karma purchase for skill group
+  const handleConfirmGroupKarmaPurchase = useCallback(() => {
+    if (!karmaGroupPurchase) return;
+
+    const { groupId, currentRating } = karmaGroupPurchase;
+    const newRating = currentRating + 1;
+    const karmaCost = calculateSkillGroupRaiseKarmaCost(currentRating, newRating);
+
+    // Update group rating (preserve isBroken state if applicable)
+    const groupValue = groups[groupId];
+    const isBroken = isGroupBroken(groupValue);
+    const newGroups = {
+      ...groups,
+      [groupId]: isBroken ? { rating: newRating, isBroken: true } : newRating,
+    };
+
+    // Track karma spent on group raises
+    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+      skillRaises: Record<string, number>;
+      skillRatingPoints: number;
+      specializations: number;
+      groupRaises?: Record<string, number>;
+      groupRatingPoints?: number;
+    }) || {
+      skillRaises: {},
+      skillRatingPoints: 0,
+      specializations: 0,
+      groupRaises: {},
+      groupRatingPoints: 0,
+    };
+
+    const newKarmaSpent = {
+      ...currentKarmaSpent,
+      groupRaises: {
+        ...(currentKarmaSpent.groupRaises || {}),
+        [groupId]: ((currentKarmaSpent.groupRaises || {})[groupId] || 0) + karmaCost,
+      },
+      // Track that 1 more group rating point was purchased with karma
+      groupRatingPoints: (currentKarmaSpent.groupRatingPoints || 0) + 1,
+    };
+
+    updateState({
+      selections: {
+        ...state.selections,
+        skillGroups: newGroups,
+        skillKarmaSpent: newKarmaSpent,
+      },
+    });
+
+    setKarmaGroupPurchase(null);
+  }, [karmaGroupPurchase, groups, state.selections, updateState]);
 
   // =============================================================================
   // SKILL GROUP BREAKING HANDLERS
@@ -816,10 +1023,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       newKarmaSpent.skillRatingPoints += ratingPointsRaised;
     }
 
-    // Karma for specializations
-    if (pendingChanges.specializations) {
-      newKarmaSpent.specializations += pendingChanges.specializations.length * 7;
-    }
+    // Specializations now cost skill points, not karma - no karma tracking needed
 
     updateState({
       selections: {
@@ -930,6 +1134,17 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       return activeSkills.find((s) => s.id === skillId);
     },
     [activeSkills]
+  );
+
+  // Get max rating for a skill (considering Aptitude quality)
+  const getMaxRating = useCallback(
+    (skillId: string): number => {
+      if (aptitudeSkillId === skillId) {
+        return MAX_SKILL_RATING_WITH_APTITUDE;
+      }
+      return MAX_SKILL_RATING;
+    },
+    [aptitudeSkillId]
   );
 
   // Get group data by ID
@@ -1083,6 +1298,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 spent={groupPointsSpent}
                 total={skillGroupPoints}
                 mode="compact"
+                note={karmaGroupRatingPoints > 0 ? `+${karmaGroupRatingPoints} via karma` : undefined}
+                noteStyle="warning"
               />
             )}
           </div>
@@ -1148,12 +1365,13 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             </div>
           )}
 
-          {/* Specialization karma cost */}
+          {/* Specialization skill point cost */}
           {totalSpecializations > 0 && (
-            <div className="rounded-lg bg-amber-50 p-2 text-xs text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
+            <div className="rounded-lg bg-blue-50 p-2 text-xs text-blue-700 dark:bg-blue-900/20 dark:text-blue-300">
               <Star className="mr-1 inline h-3.5 w-3.5" />
               {totalSpecializations} specialization
-              {totalSpecializations !== 1 ? "s" : ""} = {specializationKarmaCost} karma
+              {totalSpecializations !== 1 ? "s" : ""} = {specializationSkillPointCost} skill point
+              {specializationSkillPointCost !== 1 ? "s" : ""} (included above)
             </div>
           )}
 
@@ -1192,6 +1410,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                     const canRestore =
                       broken && restorableGroups.some((g) => g.groupId === groupId);
 
+                    // Determine purchase mode for this group
+                    const groupPurchaseInfo = getGroupPurchaseMode(rating, rating >= MAX_GROUP_RATING);
+
                     return (
                       <SkillGroupCard
                         key={groupId}
@@ -1199,10 +1420,12 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                         skills={skillsInGroup}
                         rating={rating}
                         maxRating={MAX_GROUP_RATING}
-                        canIncrease={groupPointsRemaining > 0}
+                        canIncrease={groupPurchaseInfo.mode === "group-points"}
+                        canIncreaseWithKarma={groupPurchaseInfo.mode === "karma"}
                         isBroken={broken}
                         canRestore={canRestore}
                         onRatingChange={(delta) => handleGroupRatingChange(groupId, delta)}
+                        onKarmaIncrease={() => handleOpenGroupKarmaConfirm(groupId)}
                         onRemove={() => handleRemoveGroup(groupId)}
                         onRestore={canRestore ? () => handleRestoreGroup(groupId) : undefined}
                       />
@@ -1238,7 +1461,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                   if (!skillData) return null;
 
                   const isGroupSkill = entry.source.type === "group";
-                  const isAtMax = entry.rating >= MAX_SKILL_RATING;
+                  const skillMaxRating = getMaxRating(entry.skillId);
+                  const isAtMax = entry.rating >= skillMaxRating;
 
                   // Determine purchase mode for individual skills
                   const purchaseInfo = isGroupSkill
@@ -1251,7 +1475,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       skillName={skillData.name}
                       linkedAttribute={skillData.linkedAttribute}
                       rating={entry.rating}
-                      maxRating={MAX_SKILL_RATING}
+                      maxRating={skillMaxRating}
                       specializations={entry.specializations}
                       isGroupSkill={isGroupSkill}
                       groupName={entry.source.type === "group" ? entry.source.groupName : undefined}
@@ -1269,6 +1493,23 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       onRemove={isGroupSkill ? undefined : () => handleRemoveSkill(entry.skillId)}
                       onRemoveSpecialization={(spec) =>
                         handleRemoveSpecialization(entry.skillId, spec)
+                      }
+                      // Specialization props for individual skills without specs
+                      onAddSpecialization={
+                        !isGroupSkill && entry.specializations.length === 0
+                          ? () => handleOpenSpecModal(entry.skillId)
+                          : undefined
+                      }
+                      canAddSpecialization={
+                        !isGroupSkill &&
+                        entry.specializations.length === 0 &&
+                        (skillPointsRemaining > 0 || karmaRemaining >= 7)
+                      }
+                      specRequiresKarma={
+                        !isGroupSkill &&
+                        entry.specializations.length === 0 &&
+                        skillPointsRemaining <= 0 &&
+                        karmaRemaining >= 7
                       }
                       // Customization props for group skills
                       onCustomize={
@@ -1317,6 +1558,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         remainingPoints={skillPointsRemaining}
         karmaRemaining={karmaRemaining}
         incompetentGroupId={incompetentGroupId}
+        aptitudeSkillId={aptitudeSkillId}
       />
 
       <SkillGroupModal
@@ -1353,6 +1595,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               maxRating={MAX_SKILL_RATING}
               suggestedSpecializations={skillData.suggestedSpecializations || []}
               availableKarma={karmaRemaining}
+              availableSkillPoints={skillPointsRemaining}
               groupId={customizeTarget.groupId}
               groupName={groupData.name}
             />
@@ -1410,6 +1653,42 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           karmaRemaining={karmaRemaining}
         />
       )}
+
+      {/* Karma Purchase Confirmation Modal (for skill groups) */}
+      {karmaGroupPurchase && (
+        <SkillGroupKarmaConfirmModal
+          isOpen={true}
+          onClose={() => setKarmaGroupPurchase(null)}
+          onConfirm={handleConfirmGroupKarmaPurchase}
+          groupName={karmaGroupPurchase.groupName}
+          skillCount={karmaGroupPurchase.skillCount}
+          currentRating={karmaGroupPurchase.currentRating}
+          newRating={karmaGroupPurchase.currentRating + 1}
+          karmaCost={calculateSkillGroupRaiseKarmaCost(
+            karmaGroupPurchase.currentRating,
+            karmaGroupPurchase.currentRating + 1
+          )}
+          karmaRemaining={karmaRemaining}
+        />
+      )}
+
+      {/* Specialization Modal (for individual skills) */}
+      {specModalTarget && (() => {
+        const skillData = getSkillData(specModalTarget);
+        if (!skillData) return null;
+
+        return (
+          <SkillSpecModal
+            isOpen={true}
+            onClose={() => setSpecModalTarget(null)}
+            onAdd={(spec, karmaSpent) => handleAddSpecFromModal(specModalTarget, spec, karmaSpent)}
+            skillName={skillData.name}
+            suggestedSpecializations={skillData.suggestedSpecializations || []}
+            availableSkillPoints={skillPointsRemaining}
+            availableKarma={karmaRemaining}
+          />
+        );
+      })()}
     </>
   );
 }

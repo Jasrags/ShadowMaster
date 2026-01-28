@@ -8,18 +8,22 @@
  *
  * Features:
  * - Rating increase section with karma cost
- * - Specialization section with suggested and custom options
- * - Real-time karma cost calculation
+ * - Specialization section (costs skill points, max 1 per skill)
+ * - Real-time cost calculation
  * - Budget validation
  */
 
 import { useState, useCallback, useMemo } from "react";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
-import {
-  calculateSkillRaiseKarmaCost,
-  SPECIALIZATION_KARMA_COST,
-} from "@/lib/rules/skills/group-utils";
+import { calculateSkillRaiseKarmaCost } from "@/lib/rules/skills/group-utils";
 import { Plus, Minus, Star, X, AlertTriangle, Sparkles } from "lucide-react";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+const SPEC_SKILL_POINT_COST = 1;
+const MAX_SPECS_PER_SKILL = 1;
 
 // =============================================================================
 // TYPES
@@ -30,8 +34,10 @@ export interface SkillCustomizeChanges {
   newRating?: number;
   /** Specializations being added */
   specializations?: string[];
-  /** Total karma cost for all changes */
+  /** Karma cost for rating changes */
   karmaCost: number;
+  /** Skill point cost for specializations */
+  skillPointCost: number;
 }
 
 interface SkillCustomizeModalProps {
@@ -50,6 +56,8 @@ interface SkillCustomizeModalProps {
   suggestedSpecializations: string[];
   /** Available karma budget */
   availableKarma: number;
+  /** Available skill points for specializations */
+  availableSkillPoints: number;
   /** Group context */
   groupId: string;
   groupName: string;
@@ -68,6 +76,7 @@ export function SkillCustomizeModal({
   maxRating,
   suggestedSpecializations,
   availableKarma,
+  availableSkillPoints,
   groupName,
 }: SkillCustomizeModalProps) {
   // State
@@ -83,15 +92,19 @@ export function SkillCustomizeModal({
     onClose();
   }, [currentRating, onClose]);
 
-  // Calculate karma costs
+  // Calculate costs
+  // Rating increases cost karma
   const ratingKarmaCost = useMemo(() => {
     if (targetRating <= currentRating) return 0;
     return calculateSkillRaiseKarmaCost(currentRating, targetRating);
   }, [currentRating, targetRating]);
 
-  const specKarmaCost = selectedSpecs.length * SPECIALIZATION_KARMA_COST;
-  const totalKarmaCost = ratingKarmaCost + specKarmaCost;
-  const isOverBudget = totalKarmaCost > availableKarma;
+  // Specializations cost skill points (1 each, max 1 per skill)
+  const specSkillPointCost = selectedSpecs.length * SPEC_SKILL_POINT_COST;
+
+  const isKarmaOverBudget = ratingKarmaCost > availableKarma;
+  const isSkillPointsOverBudget = specSkillPointCost > availableSkillPoints;
+  const isOverBudget = isKarmaOverBudget || isSkillPointsOverBudget;
 
   // Check if any changes were made
   const hasChanges = targetRating > currentRating || selectedSpecs.length > 0;
@@ -109,16 +122,20 @@ export function SkillCustomizeModal({
     }
   }, [targetRating, currentRating]);
 
-  // Handle specialization selection
+  // Handle specialization selection (max 1 per skill)
   const handleSpecToggle = useCallback((spec: string) => {
     setSelectedSpecs((current) =>
-      current.includes(spec) ? current.filter((s) => s !== spec) : [...current, spec]
+      current.includes(spec)
+        ? current.filter((s) => s !== spec)
+        : current.length < MAX_SPECS_PER_SKILL
+          ? [...current, spec]
+          : current
     );
   }, []);
 
   const handleAddCustomSpec = useCallback(() => {
     const trimmed = customSpecInput.trim();
-    if (trimmed && !selectedSpecs.includes(trimmed)) {
+    if (trimmed && !selectedSpecs.includes(trimmed) && selectedSpecs.length < MAX_SPECS_PER_SKILL) {
       setSelectedSpecs((current) => [...current, trimmed]);
       setCustomSpecInput("");
     }
@@ -133,7 +150,8 @@ export function SkillCustomizeModal({
     if (!hasChanges || isOverBudget) return;
 
     const changes: SkillCustomizeChanges = {
-      karmaCost: totalKarmaCost,
+      karmaCost: ratingKarmaCost,
+      skillPointCost: specSkillPointCost,
     };
 
     if (targetRating > currentRating) {
@@ -151,7 +169,8 @@ export function SkillCustomizeModal({
     targetRating,
     currentRating,
     selectedSpecs,
-    totalKarmaCost,
+    ratingKarmaCost,
+    specSkillPointCost,
     onApply,
   ]);
 
@@ -233,10 +252,10 @@ export function SkillCustomizeModal({
               {/* Specializations Section */}
               <div>
                 <h3 className="mb-2 flex items-center gap-2 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                  <Star className="h-4 w-4 text-amber-500" />
-                  Add Specializations
+                  <Star className="h-4 w-4 text-blue-500" />
+                  Add Specialization
                   <span className="text-xs font-normal text-zinc-500">
-                    ({SPECIALIZATION_KARMA_COST} karma each)
+                    ({SPEC_SKILL_POINT_COST} skill point, max {MAX_SPECS_PER_SKILL})
                   </span>
                 </h3>
 
@@ -246,12 +265,12 @@ export function SkillCustomizeModal({
                     {selectedSpecs.map((spec) => (
                       <span
                         key={spec}
-                        className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
+                        className="inline-flex items-center gap-1 rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
                       >
                         {spec}
                         <button
                           onClick={() => handleRemoveSpec(spec)}
-                          className="rounded-full hover:bg-amber-200 dark:hover:bg-amber-800"
+                          className="rounded-full hover:bg-blue-200 dark:hover:bg-blue-800"
                         >
                           <X className="h-3 w-3" />
                         </button>
@@ -265,20 +284,26 @@ export function SkillCustomizeModal({
                   <div className="mb-2">
                     <p className="mb-1 text-xs text-zinc-500 dark:text-zinc-400">Suggested:</p>
                     <div className="flex flex-wrap gap-1.5">
-                      {suggestedSpecializations.map((spec) => (
-                        <button
-                          key={spec}
-                          onClick={() => handleSpecToggle(spec)}
-                          disabled={selectedSpecs.includes(spec)}
-                          className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
-                            selectedSpecs.includes(spec)
-                              ? "cursor-not-allowed bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-300"
-                              : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-                          }`}
-                        >
-                          {spec}
-                        </button>
-                      ))}
+                      {suggestedSpecializations.map((spec) => {
+                        const isSelected = selectedSpecs.includes(spec);
+                        const isAtMax = selectedSpecs.length >= MAX_SPECS_PER_SKILL && !isSelected;
+                        return (
+                          <button
+                            key={spec}
+                            onClick={() => handleSpecToggle(spec)}
+                            disabled={isSelected || isAtMax}
+                            className={`rounded-full px-2 py-0.5 text-xs transition-colors ${
+                              isSelected
+                                ? "cursor-not-allowed bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
+                                : isAtMax
+                                  ? "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                                  : "bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+                            }`}
+                          >
+                            {spec}
+                          </button>
+                        );
+                      })}
                     </div>
                   </div>
                 )}
@@ -289,16 +314,27 @@ export function SkillCustomizeModal({
                     type="text"
                     value={customSpecInput}
                     onChange={(e) => setCustomSpecInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleAddCustomSpec()}
-                    placeholder="Add custom specialization..."
-                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500"
+                    onKeyDown={(e) =>
+                      e.key === "Enter" &&
+                      selectedSpecs.length < MAX_SPECS_PER_SKILL &&
+                      handleAddCustomSpec()
+                    }
+                    placeholder={
+                      selectedSpecs.length >= MAX_SPECS_PER_SKILL
+                        ? "Maximum reached"
+                        : "Add custom specialization..."
+                    }
+                    disabled={selectedSpecs.length >= MAX_SPECS_PER_SKILL}
+                    className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-1.5 text-sm text-zinc-900 placeholder:text-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:placeholder:text-zinc-500 dark:disabled:bg-zinc-900 dark:disabled:text-zinc-500"
                   />
                   <button
                     onClick={handleAddCustomSpec}
-                    disabled={!customSpecInput.trim()}
+                    disabled={
+                      !customSpecInput.trim() || selectedSpecs.length >= MAX_SPECS_PER_SKILL
+                    }
                     className={`flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors ${
-                      customSpecInput.trim()
-                        ? "bg-amber-500 text-white hover:bg-amber-600"
+                      customSpecInput.trim() && selectedSpecs.length < MAX_SPECS_PER_SKILL
+                        ? "bg-blue-500 text-white hover:bg-blue-600"
                         : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700 dark:text-zinc-500"
                     }`}
                   >
@@ -319,49 +355,74 @@ export function SkillCustomizeModal({
                       <span className="text-zinc-600 dark:text-zinc-400">
                         Rating {currentRating} → {targetRating}
                       </span>
-                      <span className="text-zinc-900 dark:text-zinc-100">
+                      <span
+                        className={
+                          isKarmaOverBudget
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-zinc-900 dark:text-zinc-100"
+                        }
+                      >
                         {ratingKarmaCost} karma
                       </span>
                     </div>
                   )}
-                  {specKarmaCost > 0 && (
+                  {specSkillPointCost > 0 && (
                     <div className="flex justify-between">
                       <span className="text-zinc-600 dark:text-zinc-400">
-                        {selectedSpecs.length} specialization{selectedSpecs.length !== 1 ? "s" : ""}
+                        {selectedSpecs.length} specialization
                       </span>
-                      <span className="text-zinc-900 dark:text-zinc-100">
-                        {specKarmaCost} karma
+                      <span
+                        className={
+                          isSkillPointsOverBudget
+                            ? "text-red-600 dark:text-red-400"
+                            : "text-zinc-900 dark:text-zinc-100"
+                        }
+                      >
+                        {specSkillPointCost} skill pt
                       </span>
                     </div>
                   )}
-                  <div className="mt-2 flex justify-between border-t border-zinc-300 pt-2 dark:border-zinc-600">
-                    <span className="font-medium text-zinc-700 dark:text-zinc-300">Total</span>
-                    <span
-                      className={`font-bold ${
-                        isOverBudget
-                          ? "text-red-600 dark:text-red-400"
-                          : "text-zinc-900 dark:text-zinc-100"
-                      }`}
-                    >
-                      {totalKarmaCost} karma
-                    </span>
-                  </div>
-                  <div className="flex justify-between text-xs">
-                    <span className="text-zinc-500 dark:text-zinc-400">Available</span>
-                    <span
-                      className={
-                        isOverBudget
-                          ? "text-red-600 dark:text-red-400"
-                          : "text-zinc-600 dark:text-zinc-400"
-                      }
-                    >
-                      {availableKarma} karma
-                    </span>
+                  <div className="mt-2 space-y-1 border-t border-zinc-300 pt-2 dark:border-zinc-600">
+                    {ratingKarmaCost > 0 && (
+                      <div className="flex justify-between text-xs">
+                        <span className="text-zinc-500 dark:text-zinc-400">Karma available</span>
+                        <span
+                          className={
+                            isKarmaOverBudget
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-zinc-600 dark:text-zinc-400"
+                          }
+                        >
+                          {availableKarma}
+                        </span>
+                      </div>
+                    )}
+                    {specSkillPointCost > 0 && (
+                      <div className="flex justify-between text-xs">
+                        <span className="text-zinc-500 dark:text-zinc-400">
+                          Skill points available
+                        </span>
+                        <span
+                          className={
+                            isSkillPointsOverBudget
+                              ? "text-red-600 dark:text-red-400"
+                              : "text-zinc-600 dark:text-zinc-400"
+                          }
+                        >
+                          {availableSkillPoints}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
-                {isOverBudget && (
+                {isKarmaOverBudget && (
                   <p className="mt-2 text-xs text-red-600 dark:text-red-400">
-                    Not enough karma available for these changes.
+                    Not enough karma for the rating increase.
+                  </p>
+                )}
+                {isSkillPointsOverBudget && (
+                  <p className="mt-2 text-xs text-red-600 dark:text-red-400">
+                    Not enough skill points for specialization.
                   </p>
                 )}
               </div>

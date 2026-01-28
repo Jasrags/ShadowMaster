@@ -127,6 +127,10 @@ export interface SkillSelections {
     skillRatingPoints: number;
     /** Total karma spent on specializations (7 karma each) */
     specializations: number;
+    /** Karma spent raising skill groups (when group points exhausted) */
+    groupRaises?: Record<string, number>;
+    /** Total number of group rating points purchased with karma (not to be counted as group points) */
+    groupRatingPoints?: number;
   };
 }
 
