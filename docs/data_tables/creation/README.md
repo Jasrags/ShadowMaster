@@ -19,6 +19,7 @@ This folder contains reference tables and examples for SR5 character creation us
 - **character_improvement_table.md** - Karma costs for advancement
 - **karma_advancement_attributes.md** - Karma costs for attribute increases
 - **karma_advancement_skills.md** - Karma costs for skill increases
+- **initiation_submersion_costs.md** - Initiation and submersion grade costs with discounts
 - **training_rate_table.md** - Training time requirements
 - **final_calculations_table.md** - Derived stat formulas
 - **additional_purchases_restrictions.md** - Availability and purchase limits at creation
