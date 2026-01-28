@@ -405,12 +405,44 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       const newSkills = { ...skills };
       const newSpecs = { ...specializations };
 
+      // Track karma refunds for skills being replaced by the group
+      const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+        skillRaises: Record<string, number>;
+        skillRatingPoints: number;
+        specializations: number;
+      }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+      let karmaRatingPointsToRefund = 0;
+      const newKarmaRaises = { ...currentKarmaSpent.skillRaises };
+
       if (group) {
         group.skills.forEach((skillId) => {
+          // If karma was spent on this skill, refund it
+          if (newKarmaRaises[skillId]) {
+            const skillRating = skills[skillId] || 0;
+            karmaRatingPointsToRefund += Math.min(
+              skillRating,
+              currentKarmaSpent.skillRatingPoints || 0
+            );
+            delete newKarmaRaises[skillId];
+          }
           delete newSkills[skillId];
           delete newSpecs[skillId];
         });
       }
+
+      const newKarmaSpent =
+        karmaRatingPointsToRefund > 0 ||
+        Object.keys(newKarmaRaises).length !== Object.keys(currentKarmaSpent.skillRaises).length
+          ? {
+              ...currentKarmaSpent,
+              skillRaises: newKarmaRaises,
+              skillRatingPoints: Math.max(
+                0,
+                (currentKarmaSpent.skillRatingPoints || 0) - karmaRatingPointsToRefund
+              ),
+            }
+          : undefined;
 
       updateState({
         selections: {
@@ -418,6 +450,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           skillGroups: newGroups,
           skills: newSkills,
           skillSpecializations: newSpecs,
+          ...(newKarmaSpent && { skillKarmaSpent: newKarmaSpent }),
         },
       });
       setIsGroupModalOpen(false);
@@ -513,19 +546,63 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   // Handle removing a skill
   const handleRemoveSkill = useCallback(
     (skillId: string) => {
+      const skillRating = skills[skillId] || 0;
       const newSkills = { ...skills };
       delete newSkills[skillId];
 
       const newSpecs = { ...specializations };
       delete newSpecs[skillId];
 
-      updateState({
-        selections: {
-          ...state.selections,
-          skills: newSkills,
-          skillSpecializations: newSpecs,
-        },
-      });
+      // Check if karma was spent on this skill and clean it up
+      const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+        skillRaises: Record<string, number>;
+        skillRatingPoints: number;
+        specializations: number;
+      }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+      const karmaSpentOnSkill = currentKarmaSpent.skillRaises[skillId] || 0;
+
+      if (karmaSpentOnSkill > 0) {
+        // Calculate how many rating points were purchased with karma
+        // Using the formula: karma = sum of (level * 2) for each level
+        // We need to find how many levels K karma buys starting from 0
+        // K = 2 + 4 + 6 + ... + 2n = 2(1 + 2 + ... + n) = n(n+1)
+        // So n = (-1 + sqrt(1 + 4K)) / 2
+        // But this assumes all levels were karma-purchased. In practice,
+        // we track skillRatingPoints separately, so we use the skill's rating
+        // as a reasonable estimate when the skill is being fully removed.
+        const karmaRatingPointsToRefund = Math.min(
+          skillRating,
+          currentKarmaSpent.skillRatingPoints || 0
+        );
+
+        const newKarmaSpent = {
+          ...currentKarmaSpent,
+          skillRaises: { ...currentKarmaSpent.skillRaises },
+          skillRatingPoints: Math.max(
+            0,
+            (currentKarmaSpent.skillRatingPoints || 0) - karmaRatingPointsToRefund
+          ),
+        };
+        delete newKarmaSpent.skillRaises[skillId];
+
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+            skillSpecializations: newSpecs,
+            skillKarmaSpent: newKarmaSpent,
+          },
+        });
+      } else {
+        updateState({
+          selections: {
+            ...state.selections,
+            skills: newSkills,
+            skillSpecializations: newSpecs,
+          },
+        });
+      }
     },
     [skills, specializations, state.selections, updateState]
   );
@@ -785,10 +862,29 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       const { canRestore, commonRating } = canRestoreGroup(groupData.skills, skills);
       if (!canRestore || commonRating === undefined) return;
 
+      // Track karma refunds for skills being merged back into group
+      const currentKarmaSpent = (state.selections.skillKarmaSpent as {
+        skillRaises: Record<string, number>;
+        skillRatingPoints: number;
+        specializations: number;
+      }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
+
+      let karmaRatingPointsToRefund = 0;
+      const newKarmaRaises = { ...currentKarmaSpent.skillRaises };
+
       // Remove member skills from individual skills
       const newSkills = { ...skills };
       const newSpecs = { ...specializations };
       groupData.skills.forEach((skillId) => {
+        // If karma was spent on this skill, refund it
+        if (newKarmaRaises[skillId]) {
+          const skillRating = skills[skillId] || 0;
+          karmaRatingPointsToRefund += Math.min(
+            skillRating,
+            currentKarmaSpent.skillRatingPoints || 0
+          );
+          delete newKarmaRaises[skillId];
+        }
         delete newSkills[skillId];
         // Note: Per SR5 rules discussion, specializations prevent group restoration
         // However, we allow it here and just remove the specs
@@ -802,12 +898,26 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         [groupId]: createRestoredGroup(commonRating),
       };
 
+      const newKarmaSpent =
+        karmaRatingPointsToRefund > 0 ||
+        Object.keys(newKarmaRaises).length !== Object.keys(currentKarmaSpent.skillRaises).length
+          ? {
+              ...currentKarmaSpent,
+              skillRaises: newKarmaRaises,
+              skillRatingPoints: Math.max(
+                0,
+                (currentKarmaSpent.skillRatingPoints || 0) - karmaRatingPointsToRefund
+              ),
+            }
+          : undefined;
+
       updateState({
         selections: {
           ...state.selections,
           skillGroups: newGroups,
           skills: newSkills,
           skillSpecializations: newSpecs,
+          ...(newKarmaSpent && { skillKarmaSpent: newKarmaSpent }),
         },
       });
     },
