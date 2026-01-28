@@ -208,6 +208,10 @@ export function SkillModal({
   const skillKarmaCost = calculateSkillRaiseKarmaCost(0, rating); // Karma cost for new skill
   const specKarmaCost = selectedSpecs.length * SPEC_KARMA_COST;
 
+  // Calculate karma cost for the next rating level (for disabling plus button)
+  const nextLevelKarmaCost = calculateSkillRaiseKarmaCost(0, rating + 1);
+  const canAffordNextWithKarma = nextLevelKarmaCost + specKarmaCost <= karmaRemaining;
+
   // Determine purchase mode
   const canAffordWithPoints = skillPointCost <= remainingPoints;
   const canAffordWithKarma = skillKarmaCost + specKarmaCost <= karmaRemaining;
@@ -400,9 +404,13 @@ export function SkillModal({
                         </div>
                         <button
                           onClick={() => setRating(Math.min(MAX_SKILL_RATING, rating + 1))}
-                          disabled={rating >= MAX_SKILL_RATING}
+                          disabled={
+                            rating >= MAX_SKILL_RATING ||
+                            (!canAffordWithPoints && !canAffordNextWithKarma)
+                          }
                           className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                            rating < MAX_SKILL_RATING
+                            rating < MAX_SKILL_RATING &&
+                            (canAffordWithPoints || canAffordNextWithKarma)
                               ? usingKarma
                                 ? "bg-amber-500 text-white hover:bg-amber-600"
                                 : "bg-emerald-500 text-white hover:bg-emerald-600"
