@@ -19,8 +19,10 @@
 import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useCreationBudgets } from "@/lib/contexts";
-import type { CreationState, Campaign } from "@/lib/types";
+import type { CreationState, Campaign, SelectedQuality } from "@/lib/types";
 import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, Clock, Save } from "lucide-react";
+import { InfoTooltip } from "@/components/ui";
+import { useQualities, useSkills } from "@/lib/rules/RulesetContext";
 
 // Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
@@ -162,10 +164,203 @@ interface BudgetSummaryCardProps {
 
 function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   const { budgets, isValid, errors, warnings } = useCreationBudgets();
+  const { positive: positiveQualityCatalog, negative: negativeQualityCatalog } = useQualities();
+  const { activeSkills } = useSkills();
+
+  // Build lookup maps for quality and skill names
+  const positiveQualityMap = useMemo(
+    () => new Map(positiveQualityCatalog.map((q) => [q.id, q.name])),
+    [positiveQualityCatalog]
+  );
+  const negativeQualityMap = useMemo(
+    () => new Map(negativeQualityCatalog.map((q) => [q.id, q.name])),
+    [negativeQualityCatalog]
+  );
+  const skillNameMap = useMemo(
+    () => new Map(activeSkills.map((s) => [s.id, s.name])),
+    [activeSkills]
+  );
 
   // Extract conversion/overflow values from creation state for contextual notes
   const karmaSpentGear = (creationState.budgets?.["karma-spent-gear"] as number) || 0;
   const karmaSpentContacts = (creationState.budgets?.["karma-spent-contacts"] as number) || 0;
+
+  // Build karma breakdown for tooltip
+  interface KarmaBreakdownItem {
+    name: string;
+    amount: number; // negative = cost, positive = gain
+  }
+  interface KarmaBreakdownCategory {
+    label: string;
+    total: number;
+    items?: KarmaBreakdownItem[];
+  }
+
+  const karmaBreakdown = useMemo(() => {
+    const categories: KarmaBreakdownCategory[] = [];
+    const selections = creationState.selections || {};
+
+    // Positive Qualities (cost karma)
+    const positiveQualities = (selections.positiveQualities || []) as (string | SelectedQuality)[];
+    if (positiveQualities.length > 0) {
+      const items: KarmaBreakdownItem[] = [];
+      let total = 0;
+      for (const q of positiveQualities) {
+        const id = typeof q === "string" ? q : q.id;
+        const karma = typeof q === "object" && q.karma ? q.karma : 0;
+        const name = positiveQualityMap.get(id) || id;
+        if (karma > 0) {
+          items.push({ name, amount: -karma });
+          total += karma;
+        }
+      }
+      if (total > 0) {
+        categories.push({ label: "Positive Qualities", total: -total, items });
+      }
+    }
+
+    // Negative Qualities (gain karma)
+    const negativeQualities = (selections.negativeQualities || []) as (string | SelectedQuality)[];
+    if (negativeQualities.length > 0) {
+      const items: KarmaBreakdownItem[] = [];
+      let total = 0;
+      for (const q of negativeQualities) {
+        const id = typeof q === "string" ? q : q.id;
+        const karma = typeof q === "object" && q.karma ? q.karma : 0;
+        const name = negativeQualityMap.get(id) || id;
+        if (karma > 0) {
+          items.push({ name, amount: karma });
+          total += karma;
+        }
+      }
+      if (total > 0) {
+        categories.push({ label: "Negative Qualities", total, items });
+      }
+    }
+
+    // Skills (from skillKarmaSpent)
+    const skillKarmaSpent = selections.skillKarmaSpent as
+      | {
+          skillRaises?: Record<string, number>;
+          skillRatingPoints?: number;
+          specializations?: number;
+        }
+      | undefined;
+    if (skillKarmaSpent) {
+      const items: KarmaBreakdownItem[] = [];
+      let total = 0;
+
+      // Individual skill raises
+      if (skillKarmaSpent.skillRaises) {
+        for (const [skillId, karma] of Object.entries(skillKarmaSpent.skillRaises)) {
+          if (karma > 0) {
+            const name = skillNameMap.get(skillId) || skillId;
+            items.push({ name, amount: -karma });
+            total += karma;
+          }
+        }
+      }
+
+      // Specializations
+      if (skillKarmaSpent.specializations && skillKarmaSpent.specializations > 0) {
+        items.push({ name: "Specializations", amount: -skillKarmaSpent.specializations });
+        total += skillKarmaSpent.specializations;
+      }
+
+      if (total > 0) {
+        categories.push({ label: "Skills", total: -total, items });
+      }
+    }
+
+    // Nuyen Conversion
+    if (karmaSpentGear > 0) {
+      categories.push({ label: "Nuyen Conversion", total: -karmaSpentGear });
+    }
+
+    // Extra Contacts
+    if (karmaSpentContacts > 0) {
+      categories.push({ label: "Extra Contacts", total: -karmaSpentContacts });
+    }
+
+    // Spells (karma-spent-spells)
+    const karmaSpentSpells = (creationState.budgets?.["karma-spent-spells"] as number) || 0;
+    if (karmaSpentSpells > 0) {
+      categories.push({ label: "Extra Spells", total: -karmaSpentSpells });
+    }
+
+    // Adept Powers (karma-spent-power-points)
+    const karmaSpentPowerPoints =
+      (creationState.budgets?.["karma-spent-power-points"] as number) || 0;
+    if (karmaSpentPowerPoints > 0) {
+      categories.push({ label: "Extra Power Points", total: -karmaSpentPowerPoints });
+    }
+
+    // Attributes (karma-spent-attributes)
+    const karmaSpentAttributes = (creationState.budgets?.["karma-spent-attributes"] as number) || 0;
+    if (karmaSpentAttributes > 0) {
+      categories.push({ label: "Attribute Raises", total: -karmaSpentAttributes });
+    }
+
+    return categories;
+  }, [
+    creationState.selections,
+    creationState.budgets,
+    positiveQualityMap,
+    negativeQualityMap,
+    skillNameMap,
+    karmaSpentGear,
+    karmaSpentContacts,
+  ]);
+
+  // Calculate starting karma (default 25 for SR5 priority)
+  const startingKarma = budgets.karma?.total || 25;
+  const remainingKarma = budgets.karma?.remaining ?? startingKarma;
+  const hasKarmaBreakdown = karmaBreakdown.length > 0;
+
+  // Karma breakdown tooltip content
+  const karmaTooltipContent = useMemo(() => {
+    if (!hasKarmaBreakdown) return null;
+
+    return (
+      <div className="w-52 text-left">
+        <div className="mb-2 font-medium">Karma Breakdown</div>
+        <div className="mb-2 border-t border-zinc-700" />
+
+        <div className="flex justify-between">
+          <span>Starting:</span>
+          <span>{startingKarma}</span>
+        </div>
+
+        {karmaBreakdown.map((category, idx) => (
+          <div key={idx} className="mt-2">
+            <div className="flex justify-between font-medium">
+              <span>{category.label}:</span>
+              <span className={category.total > 0 ? "text-emerald-400" : ""}>
+                {category.total > 0 ? "+" : ""}
+                {category.total}
+              </span>
+            </div>
+            {category.items?.map((item, itemIdx) => (
+              <div key={itemIdx} className="flex justify-between pl-2 text-zinc-400">
+                <span className="truncate pr-2">{item.name}</span>
+                <span className={item.amount > 0 ? "text-emerald-400" : ""}>
+                  {item.amount > 0 ? "+" : ""}
+                  {item.amount}
+                </span>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        <div className="mt-2 border-t border-zinc-700 pt-2">
+          <div className="flex justify-between font-semibold">
+            <span>Remaining:</span>
+            <span className={remainingKarma < 0 ? "text-red-400" : ""}>{remainingKarma}</span>
+          </div>
+        </div>
+      </div>
+    );
+  }, [hasKarmaBreakdown, startingKarma, karmaBreakdown, remainingKarma]);
 
   const budgetList = useMemo(
     () =>
@@ -272,12 +467,23 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
                 : 0;
             const note = getNote(budget.id);
             const hasOverflow = budget.spent > budget.total;
+            const isKarma = budget.id === "karma";
+            const showKarmaTooltip = isKarma && hasKarmaBreakdown && karmaTooltipContent;
 
             return (
               <div key={budget.id}>
                 {/* Label and values: "X spent • Y left" */}
                 <div className="flex items-center justify-between text-sm">
-                  <span className="text-zinc-600 dark:text-zinc-400">{budget.label}</span>
+                  <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                    <span>{budget.label}</span>
+                    {showKarmaTooltip && (
+                      <InfoTooltip
+                        content={karmaTooltipContent}
+                        label="Karma breakdown"
+                        placement="bottom"
+                      />
+                    )}
+                  </span>
                   <span className={`font-mono font-medium ${textColor}`}>
                     {formatValue(budget.spent, budget.displayFormat)} spent
                     <span className="font-sans text-zinc-400"> • </span>
