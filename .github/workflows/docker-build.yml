@@ -1,8 +1,14 @@
 name: Docker Build and Push
 
 on:
-  push:
+  # Only run after CI workflow completes successfully
+  workflow_run:
+    workflows: ["CI - Build and Test"]
+    types:
+      - completed
     branches: [main]
+  # Allow manual trigger and version tags
+  push:
     tags:
       - "v*"
   workflow_dispatch:
@@ -20,6 +26,8 @@ jobs:
   build-and-push:
     name: Build and Push Docker Image
     runs-on: ubuntu-latest
+    # Skip if triggered by workflow_run and CI failed
+    if: ${{ github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success' }}
     permissions:
       contents: read
       packages: write
