@@ -510,6 +510,7 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
   // Handle core attribute change
   // Phase 4.2: Store coreAttributePointsSpent in selections (not budgets)
   // The CreationBudgetContext derives attribute-points from selections.coreAttributePointsSpent
+  // Also update karma-spent-attributes budget when overspending attribute points
   const handleCoreAttributeChange = useCallback(
     (attrId: CoreAttributeId, delta: number) => {
       const limits = getAttributeLimits(attrId);
@@ -528,17 +529,34 @@ export function AttributesCard({ state, updateState }: AttributesCardProps) {
         newSpent += val - lim.min;
       });
 
+      // Calculate karma required for overspend
+      const pointsOverBudget = Math.max(0, newSpent - attributePoints);
+      const karmaForAttributes = pointsOverBudget * KARMA_PER_ATTRIBUTE_POINT;
+
       // Store both attribute values and spent points in selections
       // Context derives budget from coreAttributePointsSpent
+      // Also update karma-spent-attributes so it reflects in the overall karma budget
       updateState({
         selections: {
           ...state.selections,
           attributes: newAttributes,
           coreAttributePointsSpent: newSpent,
         },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-attributes": karmaForAttributes,
+        },
       });
     },
-    [attributes, getAttributeValue, getAttributeLimits, state.selections, updateState]
+    [
+      attributes,
+      attributePoints,
+      getAttributeValue,
+      getAttributeLimits,
+      state.selections,
+      state.budgets,
+      updateState,
+    ]
   );
 
   // Handle special attribute change
