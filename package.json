@@ -16,6 +16,9 @@
     "test": "vitest",
     "test:watch": "vitest --watch",
     "test:ci": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:coverage:watch": "vitest --coverage",
+    "test:coverage:ui": "vitest --coverage --ui",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
     "check": "pnpm lint && pnpm type-check && pnpm knip",
@@ -94,7 +97,8 @@
     "@types/react-dom": "^19",
     "@types/uuid": "^11.0.0",
     "@vitejs/plugin-react": "^5.1.2",
-    "@vitest/ui": "^4.0.15",
+    "@vitest/coverage-v8": "^4.0.18",
+    "@vitest/ui": "^4.0.18",
     "concurrently": "^9.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.0.7",
@@ -109,7 +113,7 @@
     "prettier": "^3.7.4",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vitest": "^4.0.15"
+    "vitest": "^4.0.18"
   },
   "pnpm": {
     "overrides": {
