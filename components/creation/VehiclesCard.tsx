@@ -117,34 +117,15 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
   const convertedNuyen = karmaConversion * 2000;
   const totalNuyen = baseNuyen + convertedNuyen;
 
-  // Calculate spent across all categories
-  const gearSpent =
-    ((state.selections?.weapons as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
-    ((state.selections?.armor as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
-    ((state.selections?.gear as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
-    ((state.selections?.foci as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
-  const augmentationSpent =
-    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce(
-      (s, i) => s + i.cost,
-      0
-    ) +
-    ((state.selections?.bioware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
+  // Local category cost (for card-specific displays)
   const vehiclesSpent =
     selectedVehicles.reduce((sum, v) => sum + v.cost, 0) +
     selectedDrones.reduce((sum, d) => sum + d.cost, 0) +
     selectedRCCs.reduce((sum, r) => sum + r.cost, 0) +
     selectedAutosofts.reduce((sum, a) => sum + a.cost, 0);
-  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const totalSpent = gearSpent + augmentationSpent + vehiclesSpent + lifestyleSpent;
+
+  // Use centralized nuyen spent from budget context for global budget tracker
+  const totalSpent = nuyenBudget?.spent || 0;
   const remaining = totalNuyen - totalSpent;
 
   const totalItems =

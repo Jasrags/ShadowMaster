@@ -44,7 +44,7 @@ function getCompatibleAmmoTypes(subcategory: string): string[] {
 
   // Taser only uses taser darts
   if (subcat === "taser") {
-    return ["taser-dart"];
+    return ["taser-rounds"];
   }
 
   // Assault cannons use their own ammo
@@ -78,9 +78,9 @@ function getCompatibleAmmoTypes(subcategory: string): string[] {
     "explosive-rounds",
     "flechette-rounds",
     "gel-rounds",
-    "hollow-points",
-    "injection-darts",
-    "regular-ammo",
+    "hollow-point",
+    "injection-rounds",
+    "regular-rounds",
     "stick-n-shock",
     "tracer",
   ];

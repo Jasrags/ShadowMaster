@@ -657,27 +657,12 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const convertedNuyen = karmaConversion * 2000;
   const totalNuyen = baseNuyen + convertedNuyen;
 
-  // Calculate total spent across all gear categories
-  const gearSpent =
-    (
-      (state.selections?.weapons as Array<{
-        cost: number;
-        quantity: number;
-      }>) || []
-    ).reduce((s, i) => s + i.cost * i.quantity, 0) +
-    ((state.selections?.armor as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
-    ((state.selections?.gear as Array<{ cost: number; quantity: number }>) || []).reduce(
-      (s, i) => s + i.cost * i.quantity,
-      0
-    ) +
-    ((state.selections?.foci as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
+  // Local category costs (for card-specific footer display)
   const cyberwareSpent = selectedCyberware.reduce((sum, item) => sum + item.cost, 0);
   const biowareSpent = selectedBioware.reduce((sum, item) => sum + item.cost, 0);
-  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const totalSpent = gearSpent + cyberwareSpent + biowareSpent + lifestyleSpent;
+
+  // Use centralized nuyen spent from budget context for global budget tracker
+  const totalSpent = nuyenBudget?.spent || 0;
   const remainingNuyen = totalNuyen - totalSpent;
 
   // Karma conversion hook for purchase prompts

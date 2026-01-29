@@ -428,7 +428,7 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
         // Show if contacts overflowed to general karma
         if (karmaSpentContacts > 0) {
           return {
-            text: `+${karmaSpentContacts} from general karma`,
+            text: `+${karmaSpentContacts} via karma`,
             style: "info",
           };
         }

@@ -379,6 +379,13 @@ function extractSpentValues(
     quantity: number;
     modifications?: Array<{ cost: number }>;
   }>;
+  const commlinks = (selections.commlinks || []) as Array<{ cost: number }>;
+  const cyberdecks = (selections.cyberdecks || []) as Array<{ cost: number }>;
+  const software = (selections.software || []) as Array<{ cost: number }>;
+  const identities = (selections.identities || []) as Array<{
+    sin: { type: string; rating: number };
+    licenses?: Array<{ type: string; rating: number }>;
+  }>;
 
   // Calculate gear spending
   const gearSpent = gear.reduce((sum, g) => {
@@ -431,6 +438,25 @@ function extractSpentValues(
     0
   );
 
+  // Calculate matrix gear spending (commlinks, cyberdecks, software)
+  const commlinksSpent = commlinks.reduce((sum, c) => sum + (c.cost || 0), 0);
+  const cyberdecksSpent = cyberdecks.reduce((sum, d) => sum + (d.cost || 0), 0);
+  const softwareSpent = software.reduce((sum, s) => sum + (s.cost || 0), 0);
+
+  // Calculate identity spending (fake SINs and licenses)
+  // Fake SIN: Rating × 2,500¥, Fake License: Rating × 200¥
+  const SIN_COST_PER_RATING = 2500;
+  const LICENSE_COST_PER_RATING = 200;
+  const identitiesSpent = identities.reduce((sum, identity) => {
+    const sinCost =
+      identity.sin?.type === "fake" ? (identity.sin.rating || 0) * SIN_COST_PER_RATING : 0;
+    const licensesCost =
+      identity.licenses?.reduce((lSum, lic) => {
+        return lSum + (lic.type === "fake" ? (lic.rating || 0) * LICENSE_COST_PER_RATING : 0);
+      }, 0) || 0;
+    return sum + sinCost + licensesCost;
+  }, 0);
+
   // Total nuyen spent
   spent["nuyen"] =
     gearSpent +
@@ -440,7 +466,11 @@ function extractSpentValues(
     biowareSpent +
     fociSpent +
     vehiclesSpent +
-    lifestyleSpent;
+    lifestyleSpent +
+    commlinksSpent +
+    cyberdecksSpent +
+    softwareSpent +
+    identitiesSpent;
 
   // ============================================================================
   // KARMA - calculate from multiple sources

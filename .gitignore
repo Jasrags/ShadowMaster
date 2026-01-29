@@ -58,6 +58,7 @@ next-env.d.ts
 /data/emails/*
 !/data/emails/.gitkeep
 /docs/capabilities/plans/verification-reports
+/docs/excluded
 
 # backups
 /backups

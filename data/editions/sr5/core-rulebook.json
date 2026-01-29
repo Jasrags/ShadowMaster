@@ -7637,7 +7637,7 @@
               "id": "yamaha-pulsar",
               "name": "Yamaha Pulsar",
               "category": "weapons",
-              "subcategory": "light-pistol",
+              "subcategory": "taser",
               "accuracy": 5,
               "damage": "7S(e)",
               "ap": -5,
@@ -9610,16 +9610,11 @@
           {
             "id": "micro-camera",
             "name": "Micro-Camera",
-            "category": "electronics",
-            "hasRating": true,
-            "maxRating": 1,
-            "minRating": 1,
-            "ratings": {
-              "1": {
-                "cost": 100,
-                "availability": 0
-              }
-            }
+            "category": "imaging-devices",
+            "cost": 100,
+            "availability": 0,
+            "capacity": 1,
+            "description": "Miniature camera for covert surveillance."
           },
           {
             "id": "monocle",
@@ -11483,6 +11478,491 @@
             "availability": 6,
             "legality": "restricted",
             "description": "Visible tracers for aimed fire."
+          }
+        ],
+        "toxins": [
+          {
+            "id": "cs-tear-gas",
+            "name": "CS/Tear Gas",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": 0,
+            "power": 8,
+            "effects": ["disorientation", "nausea", "stun-damage"],
+            "duration": "2 minutes",
+            "cost": 20,
+            "availability": 4,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "An irritant that affects the eyes, skin, and mucus membranes, causing them to burn and water. Stimulates physiological panic response. Washing with soap and water removes it. Becomes inert after 2 minutes in air.",
+            "page": 408,
+            "source": "Core"
+          },
+          {
+            "id": "gamma-scopolamine",
+            "name": "Gamma-Scopolamine",
+            "category": "toxin",
+            "vector": ["injection"],
+            "speed": "Immediate",
+            "penetration": 0,
+            "power": 12,
+            "effects": ["paralysis", "truth-serum"],
+            "duration": "1 hour (paralysis), +1 hour (truth serum)",
+            "cost": 200,
+            "availability": 14,
+            "legality": "forbidden",
+            "stackable": true,
+            "consumable": true,
+            "description": "Derived from nightshade, this neuromuscular blocking agent paralyzes its target immediately, causing dizziness, pupil dilation, speech loss, delirium, and paralysis. After primary effects wear off, acts as truth serum for another hour (reduce Willpower by 3, minimum 1).",
+            "page": 408,
+            "source": "Core"
+          },
+          {
+            "id": "narcoject",
+            "name": "Narcoject",
+            "category": "toxin",
+            "vector": ["injection"],
+            "speed": "Immediate",
+            "penetration": 0,
+            "power": 15,
+            "effects": ["stun-damage"],
+            "cost": 50,
+            "availability": 8,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "A common tranquilizer typically used with dart guns. Has no side effects.",
+            "page": 408,
+            "source": "Core"
+          },
+          {
+            "id": "nausea-gas",
+            "name": "Nausea Gas",
+            "category": "toxin",
+            "vector": ["inhalation"],
+            "speed": "3 Combat Turns",
+            "penetration": 0,
+            "power": 9,
+            "effects": ["disorientation", "nausea"],
+            "duration": "2 minutes",
+            "cost": 25,
+            "availability": 6,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Riot control agent that causes nausea and a crippling need to vomit. Becomes inert after 2 minutes in air.",
+            "page": 409,
+            "source": "Core"
+          },
+          {
+            "id": "neuro-stun-viii",
+            "name": "Neuro-Stun VIII",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": 0,
+            "power": 15,
+            "effects": ["disorientation", "stun-damage"],
+            "duration": "10 minutes",
+            "cost": 60,
+            "availability": 12,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Colorless and odorless industry standard knockout gas for emergency containment. Becomes inert after 10 minutes in air.",
+            "page": 409,
+            "source": "Core"
+          },
+          {
+            "id": "neuro-stun-ix",
+            "name": "Neuro-Stun IX",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": 0,
+            "power": 15,
+            "effects": ["disorientation", "stun-damage"],
+            "duration": "1 minute",
+            "cost": 60,
+            "availability": 13,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Colorless and odorless knockout gas. More concentrated than VIII. Becomes inert after 1 minute in air.",
+            "page": 409,
+            "source": "Core"
+          },
+          {
+            "id": "neuro-stun-x",
+            "name": "Neuro-Stun X",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": -2,
+            "power": 15,
+            "effects": ["disorientation", "stun-damage"],
+            "duration": "1 minute",
+            "cost": 100,
+            "availability": 14,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Most potent Neuro-Stun variant with -2 Penetration to bypass protection. Becomes inert after 1 minute in air.",
+            "page": 409,
+            "source": "Core"
+          },
+          {
+            "id": "pepper-punch",
+            "name": "Pepper Punch",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": 0,
+            "power": 11,
+            "effects": ["nausea", "stun-damage"],
+            "cost": 5,
+            "availability": 0,
+            "legality": "legal",
+            "stackable": true,
+            "consumable": true,
+            "description": "Irritant combining CS and oleoresin capsicum (hot pepper extract). Typically deployed as liquid spray for personal defense. Often tagged with RFID or dyes to identify victims. Causes intense burning on skin, especially eyes, nose, and mouth.",
+            "page": 409,
+            "source": "Core"
+          },
+          {
+            "id": "seven-7",
+            "name": "Seven-7",
+            "category": "toxin",
+            "vector": ["contact", "inhalation"],
+            "speed": "1 Combat Turn",
+            "penetration": -2,
+            "power": 12,
+            "effects": ["physical-damage", "disorientation", "nausea"],
+            "duration": "10 minutes",
+            "cost": 1000,
+            "availability": 20,
+            "legality": "forbidden",
+            "stackable": true,
+            "consumable": true,
+            "description": "Colorless and odorless gas developed to bypass chemical protection measures. Causes Physical damage, cramping, nausea, and double vision. Becomes inert after 10 minutes in air.",
+            "page": 409,
+            "source": "Core"
+          }
+        ],
+        "drugs": [
+          {
+            "id": "bliss",
+            "name": "Bliss",
+            "category": "drug",
+            "vector": ["inhalation", "injection"],
+            "speed": "1 Combat Turn",
+            "duration": "(6 - Body) hours, minimum 1 hour",
+            "addictionType": "both",
+            "addictionRating": 3,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "reaction": -1,
+                "thresholdModifier": 1,
+                "limitModifier": -1,
+                "highPainTolerance": 3
+              },
+              "crash": null
+            },
+            "cost": 15,
+            "availability": 3,
+            "legality": "forbidden",
+            "stackable": true,
+            "consumable": true,
+            "description": "A tranquilizing narcotic opiate synthesized from poppy plants. Takes its name from the sensations users feel. Good for escapism and blocking out the world.",
+            "page": 411,
+            "source": "Core"
+          },
+          {
+            "id": "cram",
+            "name": "Cram",
+            "category": "drug",
+            "vector": ["ingestion", "inhalation"],
+            "speed": "10 minutes",
+            "duration": "(12 - Body) hours, minimum 1 hour",
+            "addictionType": "psychological",
+            "addictionRating": 4,
+            "addictionThreshold": 3,
+            "effects": {
+              "active": {
+                "reaction": 1,
+                "initiativeDice": 1
+              },
+              "crash": {
+                "stunDamage": 6,
+                "description": "Unresisted Stun damage"
+              }
+            },
+            "cost": 10,
+            "availability": 2,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Extremely popular stimulant. Users appear hyper-alert, almost paranoid, reacting quickly without thought. Prone to irrational outbursts, jitteriness, and fidgeting.",
+            "page": 411,
+            "source": "Core"
+          },
+          {
+            "id": "deepweed",
+            "name": "Deepweed",
+            "category": "drug",
+            "vector": ["ingestion", "inhalation"],
+            "speed": "Immediate",
+            "duration": "(6 - Body) hours, minimum 1 hour",
+            "addictionType": "physiological",
+            "addictionRating": 6,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "willpower": 1,
+                "mentalLimit": 1,
+                "physicalLimit": -1,
+                "forcesAstralPerception": true
+              },
+              "crash": {
+                "dicePoolModifier": -1,
+                "limitModifier": -1,
+                "duration": "Same as initial effect"
+              }
+            },
+            "cost": 400,
+            "availability": 8,
+            "legality": "forbidden",
+            "stackable": true,
+            "consumable": true,
+            "description": "Narcotic derived from Awakened kelp by Caribbean houngans. Extremely enticing to the Awakened. Forces any magically active user to astrally perceive, even adepts without the ability.",
+            "page": 411,
+            "source": "Core"
+          },
+          {
+            "id": "jazz",
+            "name": "Jazz",
+            "category": "drug",
+            "vector": ["inhalation"],
+            "speed": "Immediate",
+            "duration": "10 x 1D6 minutes",
+            "addictionType": "both",
+            "addictionRating": 8,
+            "addictionThreshold": 3,
+            "effects": {
+              "active": {
+                "reaction": 1,
+                "physicalLimit": 1,
+                "initiativeDice": 2
+              },
+              "crash": {
+                "disorientation": true,
+                "duration": "Same as initial effect",
+                "description": "Flooded with despondent and miserable emotions"
+              }
+            },
+            "cost": 75,
+            "availability": 2,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Stimulant designed for law enforcement against augmented street samurai. Usually taken from single-dose inhaler (popper). Makes users jumpy and hyper as caffeinated two-year-olds.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "kamikaze",
+            "name": "Kamikaze",
+            "category": "drug",
+            "vector": ["inhalation"],
+            "speed": "Immediate",
+            "duration": "10 x 1D6 minutes",
+            "addictionType": "physiological",
+            "addictionRating": 9,
+            "addictionThreshold": 3,
+            "effects": {
+              "active": {
+                "body": 1,
+                "agility": 1,
+                "strength": 2,
+                "willpower": 1,
+                "physicalLimit": 2,
+                "initiativeDice": 2,
+                "highPainTolerance": 3
+              },
+              "crash": {
+                "reaction": -1,
+                "willpower": -1,
+                "limitModifier": -2,
+                "stunDamage": 6,
+                "duration": "Same as initial effect",
+                "description": "Unresisted Stun damage"
+              }
+            },
+            "cost": 100,
+            "availability": 4,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Tailored combat stimulant with destructive effect on metabolism. Users are near-crazed with feelings of imperviousness and invincibility, exhibiting almost no regard for their own well-being. Excess doses cause anxiety, hallucinations, uncontrolled movements, and death.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "long-haul",
+            "name": "Long Haul",
+            "category": "drug",
+            "vector": ["injection"],
+            "speed": "10 minutes",
+            "duration": "4 days",
+            "addictionType": "psychological",
+            "addictionRating": 2,
+            "addictionThreshold": 1,
+            "effects": {
+              "active": {
+                "alleviatesSleep": true,
+                "description": "Remain awake for 4 days without fatigue modifiers"
+              },
+              "crash": {
+                "unconscious": true,
+                "duration": "8D6 hours",
+                "description": "Immediately passes out and sleeps soundly"
+              }
+            },
+            "cost": 50,
+            "availability": 0,
+            "legality": "legal",
+            "stackable": true,
+            "consumable": true,
+            "description": "Synthesized hormones and brain-regulating chemicals that keep user awake without fatigue. Second dose after crash adds 1D6÷2 days but inflicts 10 unresisted Stun and forces crash.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "nitro",
+            "name": "Nitro",
+            "category": "drug",
+            "vector": ["inhalation"],
+            "speed": "1 Combat Turn",
+            "duration": "10 x 1D6 minutes",
+            "addictionType": "both",
+            "addictionRating": 9,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "strength": 2,
+                "willpower": 2,
+                "perception": 2,
+                "physicalLimit": 2,
+                "highPainTolerance": 6
+              },
+              "crash": {
+                "limitModifier": -2,
+                "stunDamage": 9,
+                "duration": "Same as initial effect",
+                "description": "Unresisted Stun damage"
+              }
+            },
+            "cost": 50,
+            "availability": 2,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Dangerous combination of potent drugs favored by troll gangers. Powerful stimulant that can easily kill a user. Users feel infused with energy, suffer diminished attention span, and talk incessantly.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "novacoke",
+            "name": "Novacoke",
+            "category": "drug",
+            "vector": ["inhalation", "injection"],
+            "speed": "1 Combat Turn",
+            "duration": "(10 - Body) hours, minimum 1 hour",
+            "addictionType": "both",
+            "addictionRating": 6,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "reaction": 1,
+                "charisma": 1,
+                "perception": 1,
+                "socialLimit": 1,
+                "highPainTolerance": 1
+              },
+              "crash": {
+                "charisma": "reduced to 1",
+                "willpower": "reduced to 1",
+                "limitModifier": -1,
+                "duration": "Same as initial effect"
+              }
+            },
+            "cost": 10,
+            "availability": 2,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Highly addictive social stimulant derived from coca plants.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "psyche",
+            "name": "Psyche",
+            "category": "drug",
+            "vector": ["ingestion"],
+            "speed": "10 minutes",
+            "duration": "(12 - Body) hours, minimum 1 hour",
+            "addictionType": "psychological",
+            "addictionRating": 5,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "intuition": 1,
+                "logic": 1,
+                "mentalLimit": 1,
+                "sustainedSpellModifier": -1,
+                "description": "Awakened users suffer only -1 per sustained spell instead of -2"
+              },
+              "crash": null
+            },
+            "cost": 200,
+            "availability": 0,
+            "legality": "legal",
+            "stackable": true,
+            "consumable": true,
+            "description": "Designer stimulant prized by magicians and technomancers. Users are simultaneously hyper-aware and detached, easily absorbed by detail and obsessive about certain facts or problems.",
+            "page": 412,
+            "source": "Core"
+          },
+          {
+            "id": "zen",
+            "name": "Zen",
+            "category": "drug",
+            "vector": ["inhalation"],
+            "speed": "5 minutes",
+            "duration": "10 x 1D6 minutes",
+            "addictionType": "psychological",
+            "addictionRating": 3,
+            "addictionThreshold": 2,
+            "effects": {
+              "active": {
+                "reaction": -2,
+                "willpower": 1,
+                "physicalDicePoolModifier": -1
+              },
+              "crash": null
+            },
+            "cost": 5,
+            "availability": 4,
+            "legality": "restricted",
+            "stackable": true,
+            "consumable": true,
+            "description": "Psychedelic hallucinogen popular among those looking to escape reality or seeking trance-like states.",
+            "page": 413,
+            "source": "Core"
           }
         ]
       }
@@ -19987,6 +20467,10 @@
         "melee": { "capabilityMode": "none" },
         "throwing-weapons": { "capabilityMode": "none" },
         "grenades": { "capabilityMode": "none" },
+        "taser": {
+          "capabilityMode": "mount-based",
+          "availableMounts": ["top"]
+        },
         "hold-out-pistol": {
           "capabilityMode": "mount-based",
           "availableMounts": ["top", "barrel"]

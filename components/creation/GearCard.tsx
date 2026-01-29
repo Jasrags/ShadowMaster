@@ -670,20 +670,14 @@ export function GearCard({ state, updateState }: GearCardProps) {
   const convertedNuyen = karmaConversion * KARMA_TO_NUYEN_RATE;
   const totalNuyen = baseNuyen + convertedNuyen;
 
-  // Calculate spent
+  // Local category costs (for card-specific displays)
   const weaponsSpent = selectedWeapons.reduce((sum, w) => sum + w.cost * w.quantity, 0);
   const armorSpent = selectedArmor.reduce((sum, a) => sum + a.cost * a.quantity, 0);
   const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
   const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
-  const augmentationSpent =
-    ((state.selections?.cyberware as Array<{ cost: number }>) || []).reduce(
-      (s, i) => s + i.cost,
-      0
-    ) +
-    ((state.selections?.bioware as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0);
-  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const totalSpent =
-    weaponsSpent + armorSpent + gearSpent + fociSpent + augmentationSpent + lifestyleSpent;
+
+  // Use centralized nuyen spent from budget context for global budget tracker
+  const totalSpent = nuyenBudget?.spent || 0;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 

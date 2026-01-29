@@ -316,7 +316,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
             </div>
             {generalKarmaSpentOnContacts > 0 && (
               <div className="text-xs text-amber-600 dark:text-amber-400">
-                +{generalKarmaSpentOnContacts} from general karma
+                +{generalKarmaSpentOnContacts} via karma
               </div>
             )}
           </div>

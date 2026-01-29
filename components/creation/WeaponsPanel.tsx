@@ -323,6 +323,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     cost: number;
   }>;
 
+  // Local category cost (for card-specific footer display)
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
     const baseCost = w.cost * w.quantity;
     const modCost = w.modifications?.reduce((m, mod) => m + mod.cost, 0) || 0;
@@ -330,33 +331,9 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       w.purchasedAmmunition?.reduce((a, ammo) => a + ammo.cost * ammo.quantity, 0) || 0;
     return sum + baseCost + modCost + ammoCost;
   }, 0);
-  const armorSpent = selectedArmor.reduce((sum, a) => sum + a.cost * a.quantity, 0);
-  const gearSpent = selectedGear.reduce((sum, g) => sum + g.cost * g.quantity, 0);
-  const fociSpent = selectedFoci.reduce((sum, f) => sum + f.cost, 0);
-  const augmentationSpent =
-    selectedCyberware.reduce((s, i) => s + i.cost, 0) +
-    selectedBioware.reduce((s, i) => s + i.cost, 0);
-  const lifestyleSpent = (state.budgets?.["nuyen-spent-lifestyle"] as number) || 0;
-  const vehiclesSpent =
-    ((state.selections?.vehicles as Array<{ cost: number }>) || []).reduce(
-      (s, i) => s + i.cost,
-      0
-    ) +
-    ((state.selections?.drones as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
-    ((state.selections?.rccs as Array<{ cost: number }>) || []).reduce((s, i) => s + i.cost, 0) +
-    ((state.selections?.autosofts as Array<{ cost: number }>) || []).reduce(
-      (s, i) => s + i.cost,
-      0
-    );
 
-  const totalSpent =
-    weaponsSpent +
-    armorSpent +
-    gearSpent +
-    fociSpent +
-    augmentationSpent +
-    lifestyleSpent +
-    vehiclesSpent;
+  // Use centralized nuyen spent from budget context for global budget tracker
+  const totalSpent = nuyenBudget?.spent || 0;
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
