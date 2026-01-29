@@ -503,6 +503,7 @@ function extractSpentValues(
   const karmaSpentSpells = (stateBudgets["karma-spent-spells"] as number) || 0;
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
+  const karmaSpentFoci = (stateBudgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections to avoid stale closure bugs
   // Calculate: total contact cost - free pool (CHA × 3)
@@ -542,6 +543,7 @@ function extractSpentValues(
     karmaSpentSpells +
     karmaSpentPowers +
     karmaSpentAttributes +
+    karmaSpentFoci +
     karmaSpentSkills +
     karmaSpentContacts -
     karmaGainedNegative;
