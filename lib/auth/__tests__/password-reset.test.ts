@@ -12,6 +12,7 @@ import {
   validateResetToken,
   resetPassword,
   requestPasswordReset,
+  hasPendingReset,
 } from "../password-reset";
 import * as usersStorage from "@/lib/storage/users";
 import * as emailModule from "@/lib/email";
@@ -484,6 +485,108 @@ describe("password-reset", () => {
           ip: "192.168.1.1",
         })
       );
+    });
+  });
+
+  describe("hasPendingReset", () => {
+    const mockUserWithPendingReset: User = {
+      id: "user-123",
+      email: "test@example.com",
+      username: "testuser",
+      passwordHash: "hash",
+      role: ["user"],
+      preferences: { theme: "system", navigationCollapsed: false },
+      createdAt: new Date().toISOString(),
+      lastLogin: null,
+      characters: [],
+      failedLoginAttempts: 0,
+      lockoutUntil: null,
+      sessionVersion: 1,
+      sessionSecretHash: null,
+      accountStatus: "active",
+      statusChangedAt: null,
+      statusChangedBy: null,
+      statusReason: null,
+      lastRoleChangeAt: null,
+      lastRoleChangeBy: null,
+      emailVerified: true,
+      emailVerifiedAt: null,
+      emailVerificationTokenHash: null,
+      emailVerificationTokenExpiresAt: null,
+      emailVerificationTokenPrefix: null,
+      passwordResetTokenHash: "hash-value",
+      passwordResetTokenExpiresAt: new Date(Date.now() + 3600000).toISOString(), // 1 hour from now
+      passwordResetTokenPrefix: "abc123",
+      magicLinkTokenHash: null,
+      magicLinkTokenExpiresAt: null,
+      magicLinkTokenPrefix: null,
+    };
+
+    it("returns true when user has valid unexpired reset token", async () => {
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(mockUserWithPendingReset);
+
+      const result = await hasPendingReset("user-123");
+
+      expect(result).toBe(true);
+      expect(usersStorage.getUserById).toHaveBeenCalledWith("user-123");
+    });
+
+    it("returns false when user does not exist", async () => {
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(null);
+
+      const result = await hasPendingReset("nonexistent-user");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false when user has no passwordResetTokenHash", async () => {
+      const userWithoutTokenHash = {
+        ...mockUserWithPendingReset,
+        passwordResetTokenHash: null,
+      };
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithoutTokenHash);
+
+      const result = await hasPendingReset("user-123");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false when user has no passwordResetTokenExpiresAt", async () => {
+      const userWithoutExpiry = {
+        ...mockUserWithPendingReset,
+        passwordResetTokenExpiresAt: null,
+      };
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithoutExpiry);
+
+      const result = await hasPendingReset("user-123");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns false when reset token is expired", async () => {
+      const userWithExpiredToken = {
+        ...mockUserWithPendingReset,
+        passwordResetTokenExpiresAt: new Date(Date.now() - 3600000).toISOString(), // 1 hour ago
+      };
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithExpiredToken);
+
+      const result = await hasPendingReset("user-123");
+
+      expect(result).toBe(false);
+    });
+
+    it("returns true at exact expiration boundary (edge case)", async () => {
+      // Token that expires 1 second in the future
+      const userWithTokenAboutToExpire = {
+        ...mockUserWithPendingReset,
+        passwordResetTokenExpiresAt: new Date(Date.now() + 1000).toISOString(),
+      };
+      vi.mocked(usersStorage.getUserById).mockResolvedValue(userWithTokenAboutToExpire);
+
+      const result = await hasPendingReset("user-123");
+
+      // Token is still valid since it expires in the future
+      expect(result).toBe(true);
     });
   });
 });
