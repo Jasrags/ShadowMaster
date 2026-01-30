@@ -58,11 +58,15 @@ interface SkillModalProps {
   karmaRemaining: number;
   incompetentGroupId?: string; // Skill group the character is incompetent in
   aptitudeSkillId?: string; // Skill that can reach rating 7 (from Aptitude quality)
+  magicalPath?: string; // Character's magical path (for mystic-adept restrictions)
 }
 
 // =============================================================================
 // COMPONENT
 // =============================================================================
+
+// Skills that mystic adepts cannot learn (SR5 Core p.69)
+const MYSTIC_ADEPT_RESTRICTED_SKILLS = ["counterspelling"];
 
 export function SkillModal({
   isOpen,
@@ -77,6 +81,7 @@ export function SkillModal({
   karmaRemaining,
   incompetentGroupId,
   aptitudeSkillId,
+  magicalPath,
 }: SkillModalProps) {
   const { activeSkills } = useSkills();
 
@@ -130,6 +135,12 @@ export function SkillModal({
     const group = skillGroups.find((g) => g.id === incompetentGroupId);
     return group?.name || null;
   }, [incompetentGroupId, skillGroups]);
+
+  // Get restricted skills for mystic adepts (SR5 Core p.69)
+  const restrictedSkills = useMemo(() => {
+    if (magicalPath !== "mystic-adept") return new Set<string>();
+    return new Set(MYSTIC_ADEPT_RESTRICTED_SKILLS);
+  }, [magicalPath]);
 
   // Filter available skills
   const filteredSkills = useMemo(() => {
@@ -339,7 +350,8 @@ export function SkillModal({
                       const isAlreadyAdded = existingSkillIds.includes(skill.id);
                       const isInGroup = skillsInGroups.has(skill.id);
                       const isIncompetent = incompetentSkills.has(skill.id);
-                      const isDisabled = isAlreadyAdded || isIncompetent;
+                      const isRestricted = restrictedSkills.has(skill.id);
+                      const isDisabled = isAlreadyAdded || isIncompetent || isRestricted;
 
                       return (
                         <button
@@ -349,11 +361,13 @@ export function SkillModal({
                           className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors ${
                             isSelected
                               ? "bg-blue-50 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300"
-                              : isIncompetent
-                                ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
-                                : isAlreadyAdded
-                                  ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-                                  : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
+                              : isRestricted
+                                ? "cursor-not-allowed bg-purple-50 text-purple-400 dark:bg-purple-900/20 dark:text-purple-500"
+                                : isIncompetent
+                                  ? "cursor-not-allowed bg-red-50 text-red-400 dark:bg-red-900/20 dark:text-red-500"
+                                  : isAlreadyAdded
+                                    ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
+                                    : "text-zinc-700 rounded-md hover:outline hover:outline-1 hover:outline-blue-400 dark:text-zinc-300 dark:hover:outline-blue-500"
                           }`}
                         >
                           <div className="flex items-center gap-2">
@@ -366,13 +380,19 @@ export function SkillModal({
                           </div>
                           <div className="flex items-center gap-1">
                             {isAlreadyAdded && <Check className="h-4 w-4 text-emerald-500" />}
-                            {isIncompetent && (
+                            {isRestricted && (
+                              <span className="flex items-center gap-0.5 text-[10px] text-purple-500">
+                                <AlertTriangle className="h-3 w-3" />
+                                mystic adept
+                              </span>
+                            )}
+                            {isIncompetent && !isRestricted && (
                               <span className="flex items-center gap-0.5 text-[10px] text-red-500">
                                 <AlertTriangle className="h-3 w-3" />
                                 incompetent
                               </span>
                             )}
-                            {isInGroup && !isAlreadyAdded && !isIncompetent && (
+                            {isInGroup && !isAlreadyAdded && !isIncompetent && !isRestricted && (
                               <span className="text-[10px] text-amber-500">in group</span>
                             )}
                           </div>

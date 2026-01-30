@@ -32,6 +32,7 @@ import {
   MENTOR_SPIRIT_QUALITY_ID,
   MENTOR_SPIRIT_KARMA_COST,
   PATH_INFO,
+  FREE_SKILL_TYPE_LABELS,
 } from "./constants";
 import { calculatePositiveKarmaSpent, type QualitySelection } from "./utils";
 import { MagicPathModal } from "./MagicPathModal";
@@ -86,12 +87,35 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     return magicData?.options || [];
   }, [magicPriority, priorityTable]);
 
-  // Get selected path's rating
-  const pathRating = useMemo(() => {
-    if (!selectedPath || selectedPath === "mundane") return 0;
-    const option = availableOptions.find((o) => o.path === selectedPath);
-    return option?.magicRating || option?.resonanceRating || 0;
+  // Get selected path's rating and free skills
+  const selectedOption = useMemo(() => {
+    if (!selectedPath || selectedPath === "mundane") return null;
+    return availableOptions.find((o) => o.path === selectedPath) as
+      | {
+          path: string;
+          magicRating?: number;
+          resonanceRating?: number;
+          freeSkills?: Array<{ type: string; rating: number; count: number }>;
+          spells?: number;
+          complexForms?: number;
+        }
+      | undefined;
   }, [selectedPath, availableOptions]);
+
+  const pathRating = useMemo(() => {
+    if (!selectedOption) return 0;
+    return selectedOption.magicRating || selectedOption.resonanceRating || 0;
+  }, [selectedOption]);
+
+  // Format free skills for display
+  const freeSkillsDisplay = useMemo(() => {
+    if (!selectedOption?.freeSkills) return [];
+    return selectedOption.freeSkills.map((fs) => {
+      const typeInfo = FREE_SKILL_TYPE_LABELS[fs.type];
+      const label = typeInfo?.label || fs.type;
+      return `${fs.count} ${label} at rating ${fs.rating}`;
+    });
+  }, [selectedOption]);
 
   // Get selected path data
   const selectedPathData = useMemo(() => {
@@ -377,23 +401,58 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
               )}
 
               {/* Abilities with tree formatting */}
-              {pathInfo && (
+              {(pathInfo || freeSkillsDisplay.length > 0 || selectedOption) && (
                 <div className="text-sm">
                   <span className="font-medium text-zinc-900 dark:text-zinc-100">
                     {selectedPath === "mundane" ? "Build Focus" : "Abilities"}
                   </span>
                   <ul className="mt-1 space-y-0.5">
-                    {pathInfo.features.map((feature, index) => (
+                    {/* Priority benefits: rating, free spells/forms */}
+                    {selectedPath !== "mundane" && pathRating > 0 && (
+                      <li className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400">
+                        <span className="text-zinc-400">├─</span>
+                        {isResonancePath ? "Resonance" : "Magic"} {pathRating}
+                      </li>
+                    )}
+                    {selectedOption?.spells && selectedOption.spells > 0 && (
+                      <li className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400">
+                        <span className="text-zinc-400">├─</span>
+                        {selectedOption.spells} free spells
+                      </li>
+                    )}
+                    {selectedOption?.complexForms && selectedOption.complexForms > 0 && (
+                      <li className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400">
+                        <span className="text-zinc-400">├─</span>
+                        {selectedOption.complexForms} free complex forms
+                      </li>
+                    )}
+                    {/* Free skills from priority */}
+                    {freeSkillsDisplay.map((skillDisplay, index) => (
                       <li
-                        key={index}
-                        className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400"
+                        key={`skill-${index}`}
+                        className="flex items-start gap-2 font-medium text-indigo-600 dark:text-indigo-400"
                       >
-                        <span className="text-zinc-400">
-                          {index === pathInfo.features.length - 1 ? "└─" : "├─"}
-                        </span>
-                        {feature}
+                        <span className="text-indigo-400 dark:text-indigo-500">├─</span>
+                        {skillDisplay}
                       </li>
                     ))}
+                    {/* Static path features */}
+                    {pathInfo?.features.map((feature, index) => {
+                      const isLast =
+                        index === pathInfo.features.length - 1 &&
+                        freeSkillsDisplay.length === 0 &&
+                        !selectedOption?.spells &&
+                        !selectedOption?.complexForms;
+                      return (
+                        <li
+                          key={`feature-${index}`}
+                          className="flex items-start gap-2 text-zinc-600 dark:text-zinc-400"
+                        >
+                          <span className="text-zinc-400">{isLast ? "└─" : "├─"}</span>
+                          {feature}
+                        </li>
+                      );
+                    })}
                   </ul>
                 </div>
               )}
@@ -420,6 +479,9 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
                         </div>
                         <div className="text-[10px] text-zinc-500 dark:text-zinc-400">
                           {group.description}
+                        </div>
+                        <div className="mt-0.5 text-[9px] text-zinc-400 dark:text-zinc-500">
+                          {group.skills.join(" • ")}
                         </div>
                       </button>
                     ))}

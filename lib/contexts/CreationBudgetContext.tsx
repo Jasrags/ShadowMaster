@@ -212,17 +212,25 @@ function calculateBudgetTotals(
     displayFormat: "number",
   };
 
-  // Spell slots from magic priority (if magician/mystic adept)
+  // Spell slots and power points from magic priority
   const magicPriority = priorities.magic;
   const magicPath = selections["magical-path"] as string;
   if (magicPriority && priorityTable.table[magicPriority] && magicPath) {
     const magicData = priorityTable.table[magicPriority].magic as {
-      spells?: number;
-      powers?: number;
+      options?: Array<{
+        path: string;
+        spells?: number;
+        complexForms?: number;
+        magicRating?: number;
+        resonanceRating?: number;
+      }>;
     };
+    // Find the selected path's option to get spells/forms count
+    const selectedOption = magicData?.options?.find((opt) => opt.path === magicPath);
+
     if (["magician", "mystic-adept", "aspected-mage"].includes(magicPath)) {
       totals["spell-slots"] = {
-        total: magicData?.spells || 0,
+        total: selectedOption?.spells || 0,
         label: "Spell Points",
         displayFormat: "number",
       };
@@ -233,7 +241,7 @@ function calculateBudgetTotals(
       totals["power-points"] = {
         total: magicRating,
         label: "Power Points",
-        displayFormat: "number",
+        displayFormat: "decimal" as "number" | "currency", // Cast for now, used for PP display
       };
     }
   }

@@ -1566,6 +1566,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         karmaRemaining={karmaRemaining}
         incompetentGroupId={incompetentGroupId}
         aptitudeSkillId={aptitudeSkillId}
+        magicalPath={magicPath}
       />
 
       <SkillGroupModal

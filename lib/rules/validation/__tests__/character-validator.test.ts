@@ -509,6 +509,48 @@ describe("Character Validator", () => {
         })
       );
     });
+
+    it("should return error when mystic-adept has Counterspelling skill", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        skills: { counterspelling: 3 },
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MYSTIC_ADEPT_RESTRICTED_SKILL",
+          field: "skills.counterspelling",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should not return error when magician has Counterspelling skill", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        skills: { counterspelling: 3 },
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({
+          code: "MYSTIC_ADEPT_RESTRICTED_SKILL",
+        })
+      );
+    });
   });
 
   // ===========================================================================
