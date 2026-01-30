@@ -544,31 +544,17 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
   }
 
   return (
-    <CreationCard
-      title="Spells"
-      description={
-        selectedSpells.length === 0
-          ? `${freeSpells} free spells available`
-          : freeRemaining > 0
-            ? `${selectedSpells.length}/${freeSpells} free spells`
-            : isOverFree
-              ? `${selectedSpells.length} spells (+${karmaSpentOnSpells} karma)`
-              : "All free spells used"
-      }
-      status={validationStatus}
-    >
+    <CreationCard title="Spells" status={validationStatus}>
       <div className="space-y-4">
-        {/* Free Spells Budget */}
+        {/* Spells Budget */}
         <BudgetIndicator
-          label="Free Spells"
-          description="Spells from your Magic priority"
+          label="Spells"
           spent={Math.min(selectedSpells.length, freeSpells)}
           total={freeSpells}
-          source={prioritySource}
-          mode="card"
-          karmaRequired={isOverFree ? karmaSpentOnSpells : undefined}
-          karmaCostPerUnit={SPELL_KARMA_COST}
-          unitName="spell"
+          tooltip={`Spells from your Magic priority. ${prioritySource}`}
+          mode="compact"
+          note={isOverFree ? `+${karmaSpentOnSpells} via karma` : undefined}
+          noteStyle="warning"
         />
 
         {/* Incomplete spells warning */}
@@ -580,24 +566,6 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
             <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
               Some spells require you to select which attribute they affect.
             </p>
-          </div>
-        )}
-
-        {/* Karma spend indicator */}
-        {karmaSpentOnSpells > 0 && (
-          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
-            <div className="flex items-center justify-between">
-              <div className="text-sm font-medium text-amber-800 dark:text-amber-200">
-                Spells via Karma
-              </div>
-              <div className="text-sm font-bold text-amber-600 dark:text-amber-400">
-                {karmaSpentOnSpells} karma
-              </div>
-            </div>
-            <div className="mt-1 text-xs text-amber-600 dark:text-amber-400">
-              {spellsBeyondFree} additional spell{spellsBeyondFree !== 1 ? "s" : ""} at{" "}
-              {SPELL_KARMA_COST} karma each
-            </div>
           </div>
         )}
 

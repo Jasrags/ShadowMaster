@@ -27,7 +27,7 @@ import {
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator, SummaryFooter, Stepper } from "./shared";
+import { CreationCard, BudgetIndicator, Stepper, pluralize } from "./shared";
 import {
   SkillModal,
   SkillGroupModal,
@@ -455,7 +455,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           },
         });
       }
-      setIsSkillModalOpen(false);
     },
     [skills, specializations, state.selections, updateState]
   );
@@ -1298,7 +1297,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 spent={groupPointsSpent}
                 total={skillGroupPoints}
                 mode="compact"
-                note={karmaGroupRatingPoints > 0 ? `+${karmaGroupRatingPoints} via karma` : undefined}
+                note={
+                  karmaGroupRatingPoints > 0 ? `+${karmaGroupRatingPoints} via karma` : undefined
+                }
                 noteStyle="warning"
               />
             )}
@@ -1411,7 +1412,10 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       broken && restorableGroups.some((g) => g.groupId === groupId);
 
                     // Determine purchase mode for this group
-                    const groupPurchaseInfo = getGroupPurchaseMode(rating, rating >= MAX_GROUP_RATING);
+                    const groupPurchaseInfo = getGroupPurchaseMode(
+                      rating,
+                      rating >= MAX_GROUP_RATING
+                    );
 
                     return (
                       <SkillGroupCard
@@ -1537,11 +1541,14 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           </div>
 
           {/* Footer Summary */}
-          <SummaryFooter
-            count={allSkillsSorted.length}
-            total={`${skillPointsSpent} skill pts${skillGroupPoints > 0 ? ` / ${groupPointsSpent} group pts` : ""}`}
-            label="skill"
-          />
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {Object.keys(groups).length === 1 ? "skill group" : pluralize("skill group")}{" "}
+              {Object.keys(groups).length} /{" "}
+              {Object.keys(skills).length === 1 ? "skill" : pluralize("skill")}{" "}
+              {Object.keys(skills).length}
+            </span>
+          </div>
         </div>
       </CreationCard>
 
@@ -1673,22 +1680,25 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       )}
 
       {/* Specialization Modal (for individual skills) */}
-      {specModalTarget && (() => {
-        const skillData = getSkillData(specModalTarget);
-        if (!skillData) return null;
+      {specModalTarget &&
+        (() => {
+          const skillData = getSkillData(specModalTarget);
+          if (!skillData) return null;
 
-        return (
-          <SkillSpecModal
-            isOpen={true}
-            onClose={() => setSpecModalTarget(null)}
-            onAdd={(spec, karmaSpent) => handleAddSpecFromModal(specModalTarget, spec, karmaSpent)}
-            skillName={skillData.name}
-            suggestedSpecializations={skillData.suggestedSpecializations || []}
-            availableSkillPoints={skillPointsRemaining}
-            availableKarma={karmaRemaining}
-          />
-        );
-      })()}
+          return (
+            <SkillSpecModal
+              isOpen={true}
+              onClose={() => setSpecModalTarget(null)}
+              onAdd={(spec, karmaSpent) =>
+                handleAddSpecFromModal(specModalTarget, spec, karmaSpent)
+              }
+              skillName={skillData.name}
+              suggestedSpecializations={skillData.suggestedSpecializations || []}
+              availableSkillPoints={skillPointsRemaining}
+              availableKarma={karmaRemaining}
+            />
+          );
+        })()}
     </>
   );
 }

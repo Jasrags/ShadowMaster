@@ -223,7 +223,7 @@ function calculateBudgetTotals(
     if (["magician", "mystic-adept", "aspected-mage"].includes(magicPath)) {
       totals["spell-slots"] = {
         total: magicData?.spells || 0,
-        label: "Free Spells",
+        label: "Spell Points",
         displayFormat: "number",
       };
     }
@@ -249,7 +249,8 @@ function calculateBudgetTotals(
  */
 function extractSpentValues(
   stateBudgets: Record<string, number>,
-  selections: Record<string, unknown>
+  selections: Record<string, unknown>,
+  totals: Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }>
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -296,7 +297,8 @@ function extractSpentValues(
   // ============================================================================
 
   const spells = (selections.spells || []) as Array<string | { id: string }>;
-  spent["spell-slots"] = spells.length;
+  const freeSpellsTotal = totals["spell-slots"]?.total || 0;
+  spent["spell-slots"] = Math.min(spells.length, freeSpellsTotal);
 
   // ============================================================================
   // REMAINING BUDGET MAPPINGS - still read from stateBudgets for now
@@ -674,8 +676,8 @@ export function CreationBudgetProvider({
 
   // Extract spent values from state and selections
   const spentValues = useMemo(
-    () => extractSpentValues(creationState.budgets, creationState.selections),
-    [creationState.budgets, creationState.selections]
+    () => extractSpentValues(creationState.budgets, creationState.selections, budgetTotals),
+    [creationState.budgets, creationState.selections, budgetTotals]
   );
 
   // Get karma-to-nuyen conversion (2000¥ per karma)

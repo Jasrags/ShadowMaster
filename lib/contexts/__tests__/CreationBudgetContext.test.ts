@@ -44,6 +44,21 @@ function createBudgetState(total: number, spent: number, label: string): BudgetS
 // extractSpentValues Tests
 // =============================================================================
 
+// Helper to create empty totals for tests that don't need specific totals
+const emptyTotals: Record<
+  string,
+  { total: number; label: string; displayFormat?: "number" | "currency" }
+> = {};
+
+// Helper to create totals with spell slots
+function createTotalsWithSpellSlots(
+  spellSlots: number
+): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
+  return {
+    "spell-slots": { total: spellSlots, label: "Free Spells", displayFormat: "number" },
+  };
+}
+
 describe("extractSpentValues", () => {
   describe("contact points derivation", () => {
     it("derives contact points from selections.contacts array (within free pool)", () => {
@@ -56,7 +71,7 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       // Total is 12, free pool is 12, so spent = 12
       expect(spent["contact-points"]).toBe(12);
@@ -72,7 +87,7 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       // Total is 12, but free pool is 9, so spent is capped at 9
       // The extra 3 points go to karma, not contact points
@@ -83,7 +98,7 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = {};
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       expect(spent["contact-points"]).toBe(0);
     });
@@ -92,21 +107,35 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = { contacts: [] };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       expect(spent["contact-points"]).toBe(0);
     });
   });
 
   describe("spell slots derivation", () => {
-    it("derives spell slots from selections.spells array length", () => {
+    it("derives spell slots from selections.spells array length (within free allocation)", () => {
       const stateBudgets = {};
       const selections = {
         spells: ["fireball", "lightning-bolt", "ice-shield"],
       };
+      const totals = createTotalsWithSpellSlots(10);
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, totals);
 
+      expect(spent["spell-slots"]).toBe(3);
+    });
+
+    it("caps spell slots at free allocation", () => {
+      const stateBudgets = {};
+      const selections = {
+        spells: ["spell-1", "spell-2", "spell-3", "spell-4", "spell-5"],
+      };
+      const totals = createTotalsWithSpellSlots(3); // Only 3 free slots
+
+      const spent = extractSpentValues(stateBudgets, selections, totals);
+
+      // 5 spells selected, but only 3 free slots - caps at 3
       expect(spent["spell-slots"]).toBe(3);
     });
 
@@ -115,8 +144,9 @@ describe("extractSpentValues", () => {
       const selections = {
         spells: [{ id: "fireball" }, { id: "lightning-bolt" }],
       };
+      const totals = createTotalsWithSpellSlots(10);
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, totals);
 
       expect(spent["spell-slots"]).toBe(2);
     });
@@ -125,8 +155,20 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = {};
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
+      expect(spent["spell-slots"]).toBe(0);
+    });
+
+    it("returns 0 when no free spells are available", () => {
+      const stateBudgets = {};
+      const selections = {
+        spells: ["fireball", "lightning-bolt"],
+      };
+
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
+
+      // No spell-slots in totals means 0 free spells
       expect(spent["spell-slots"]).toBe(0);
     });
   });
@@ -141,7 +183,7 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       // Lifestyle is part of total nuyen spent
       // Check that it's included in the nuyen calculation
@@ -154,7 +196,7 @@ describe("extractSpentValues", () => {
         lifestyles: [{ monthlyCost: 2000 }],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(stateBudgets, selections, emptyTotals);
 
       expect(spent["nuyen"]).toBeGreaterThanOrEqual(2000);
     });

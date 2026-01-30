@@ -97,6 +97,14 @@ export function SkillModal({
     setCustomSpecInput("");
   }, []);
 
+  // Reset for adding another skill - preserves search/filter
+  const resetForNextSkill = useCallback(() => {
+    setSelectedSkillId(null);
+    setRating(1);
+    setSelectedSpecs([]);
+    setCustomSpecInput("");
+  }, []);
+
   // Get skills that are part of already-added groups
   const skillsInGroups = useMemo(() => {
     const inGroup = new Set<string>();
@@ -231,13 +239,17 @@ export function SkillModal({
   // Karma mode: specs must still use skill points, only rating can use karma
   // So we need at least specSkillPointCost skill points, plus karma for rating
   const canAffordWithKarma =
-    !canAffordWithPoints && specSkillPointCost <= remainingPoints && skillKarmaCost <= karmaRemaining;
+    !canAffordWithPoints &&
+    specSkillPointCost <= remainingPoints &&
+    skillKarmaCost <= karmaRemaining;
   const usingKarma = !canAffordWithPoints && canAffordWithKarma;
   const canAfford = canAffordWithPoints || canAffordWithKarma;
 
   // Can we afford the next level?
   const canAffordNextWithKarma =
-    !canAffordWithPoints && specSkillPointCost <= remainingPoints && nextLevelKarmaCost <= karmaRemaining;
+    !canAffordWithPoints &&
+    specSkillPointCost <= remainingPoints &&
+    nextLevelKarmaCost <= karmaRemaining;
 
   // Handle add skill
   const handleAddSkill = useCallback(() => {
@@ -245,8 +257,7 @@ export function SkillModal({
     // Pass karma cost if using karma for the skill rating
     const karmaSpent = usingKarma ? skillKarmaCost : undefined;
     onAdd(selectedSkillId, rating, selectedSpecs, karmaSpent);
-    resetState();
-    onClose();
+    resetForNextSkill();
   }, [
     selectedSkillId,
     rating,
@@ -255,8 +266,7 @@ export function SkillModal({
     usingKarma,
     skillKarmaCost,
     onAdd,
-    resetState,
-    onClose,
+    resetForNextSkill,
   ]);
 
   // Handle close
@@ -470,7 +480,9 @@ export function SkillModal({
                             </div>
                           )}
                           <div className="mt-2 flex items-center justify-between border-t border-zinc-200 pt-2 text-sm dark:border-zinc-700">
-                            <span className="text-zinc-600 dark:text-zinc-400">Karma remaining</span>
+                            <span className="text-zinc-600 dark:text-zinc-400">
+                              Karma remaining
+                            </span>
                             <span
                               className={`font-medium ${
                                 karmaRemaining - skillKarmaCost < 0
@@ -672,7 +684,7 @@ export function SkillModal({
                 onClick={close}
                 className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
-                Cancel
+                Done
               </button>
               <button
                 onClick={handleAddSkill}

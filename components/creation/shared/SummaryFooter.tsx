@@ -34,7 +34,7 @@ interface SummaryFooterProps {
  * - Words ending in consonant + y → ies (quality → qualities, identity → identities)
  * - Regular words → add s (item → items, spell → spells)
  */
-function pluralize(word: string): string {
+export function pluralize(word: string): string {
   // Words ending in consonant + y: replace y with ies
   if (/[^aeiou]y$/i.test(word)) {
     return word.slice(0, -1) + "ies";

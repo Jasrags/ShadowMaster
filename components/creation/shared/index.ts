@@ -3,7 +3,7 @@ export { CardSkeleton } from "./CardSkeleton";
 export { CreationCard } from "./CreationCard";
 export { EmptyState } from "./EmptyState";
 export { Stepper } from "./Stepper";
-export { SummaryFooter } from "./SummaryFooter";
+export { SummaryFooter, pluralize } from "./SummaryFooter";
 export { ValidationBadge } from "./ValidationBadge";
 export { KarmaConversionModal } from "./KarmaConversionModal";
 export {
