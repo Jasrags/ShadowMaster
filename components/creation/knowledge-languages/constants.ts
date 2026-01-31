@@ -24,6 +24,8 @@ export const CATEGORY_ABBREVS: Record<KnowledgeCategory, string> = {
   street: "Str",
 };
 
+export const SPEC_KNOWLEDGE_POINT_COST = 1;
+
 export const COMMON_LANGUAGES = [
   "English",
   "Japanese",

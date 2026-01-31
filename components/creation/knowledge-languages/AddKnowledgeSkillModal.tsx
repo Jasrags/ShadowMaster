@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { X } from "lucide-react";
+import { X, Star } from "lucide-react";
 import { useSkills } from "@/lib/rules";
 import type { AddKnowledgeSkillModalProps, KnowledgeCategory } from "./types";
+import { SPEC_KNOWLEDGE_POINT_COST } from "./constants";
 
 export function AddKnowledgeSkillModal({
   isOpen,
@@ -13,7 +14,13 @@ export function AddKnowledgeSkillModal({
 }: AddKnowledgeSkillModalProps) {
   const [name, setName] = useState("");
   const [category, setCategory] = useState<KnowledgeCategory>("academic");
+  const [specialization, setSpecialization] = useState("");
   const { exampleKnowledgeSkills, knowledgeCategories } = useSkills();
+
+  // Calculate cost: 1 for skill + 1 for specialization if provided
+  const specCost = specialization.trim() ? SPEC_KNOWLEDGE_POINT_COST : 0;
+  const totalCost = 1 + specCost;
+  const canAfford = pointsRemaining >= totalCost;
 
   const handleSelectFromDropdown = (skillName: string) => {
     const selected = exampleKnowledgeSkills?.find((s) => s.name === skillName);
@@ -24,10 +31,12 @@ export function AddKnowledgeSkillModal({
   };
 
   const handleAdd = () => {
-    if (name.trim() && pointsRemaining > 0) {
-      onAdd(name.trim(), category, 1);
+    if (name.trim() && canAfford) {
+      const spec = specialization.trim() || undefined;
+      onAdd(name.trim(), category, 1, spec);
       setName("");
       setCategory("academic");
+      setSpecialization("");
       onClose();
     }
   };
@@ -35,6 +44,7 @@ export function AddKnowledgeSkillModal({
   const handleClose = () => {
     setName("");
     setCategory("academic");
+    setSpecialization("");
     onClose();
   };
 
@@ -127,7 +137,7 @@ export function AddKnowledgeSkillModal({
               </div>
             )}
 
-            {/* Custom input with category and add button */}
+            {/* Custom input with category */}
             <div className="space-y-3">
               <input
                 type="text"
@@ -136,39 +146,97 @@ export function AddKnowledgeSkillModal({
                 onChange={(e) => setName(e.target.value)}
                 className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
               />
-              <div className="flex gap-2">
-                <select
-                  value={category}
-                  onChange={(e) => setCategory(e.target.value as KnowledgeCategory)}
-                  className="flex-1 rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              <select
+                value={category}
+                onChange={(e) => setCategory(e.target.value as KnowledgeCategory)}
+                className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2.5 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+              >
+                {categoryOptions.map((cat) => (
+                  <option key={cat.id} value={cat.id}>
+                    {cat.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            {/* Optional specialization */}
+            <div className="space-y-2">
+              <div className="flex items-center gap-1.5">
+                <Star className="h-3.5 w-3.5 text-amber-500" />
+                <span className="text-xs font-medium text-zinc-600 dark:text-zinc-400">
+                  Specialization (optional)
+                </span>
+                <span className="text-[10px] text-zinc-400 dark:text-zinc-500">+1 pt</span>
+              </div>
+              <input
+                type="text"
+                placeholder="Enter specialization..."
+                value={specialization}
+                onChange={(e) => setSpecialization(e.target.value)}
+                disabled={!name.trim() || pointsRemaining < 2}
+                className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 disabled:cursor-not-allowed disabled:bg-zinc-100 disabled:text-zinc-400 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 dark:disabled:bg-zinc-900 dark:disabled:text-zinc-500"
+              />
+              {specialization.trim() && (
+                <div className="flex items-center gap-1">
+                  <span className="inline-flex items-center gap-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs text-amber-700 dark:bg-amber-900/30 dark:text-amber-300">
+                    <Star className="h-3 w-3" />
+                    {specialization.trim()}
+                    <button
+                      onClick={() => setSpecialization("")}
+                      className="ml-0.5 rounded-full hover:bg-amber-200 dark:hover:bg-amber-800"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </span>
+                </div>
+              )}
+            </div>
+
+            {/* Cost summary */}
+            <div className="rounded-lg bg-zinc-100 p-2 text-xs dark:bg-zinc-800">
+              <div className="flex items-center justify-between">
+                <span className="text-zinc-600 dark:text-zinc-400">Total Cost</span>
+                <span
+                  className={
+                    canAfford
+                      ? "font-medium text-zinc-900 dark:text-zinc-100"
+                      : "font-medium text-red-600 dark:text-red-400"
+                  }
                 >
-                  {categoryOptions.map((cat) => (
-                    <option key={cat.id} value={cat.id}>
-                      {cat.name}
-                    </option>
-                  ))}
-                </select>
-                <button
-                  onClick={handleAdd}
-                  disabled={!name.trim() || pointsRemaining <= 0}
-                  className={`flex-1 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    name.trim() && pointsRemaining > 0
-                      ? "bg-amber-600 text-white hover:bg-amber-700"
-                      : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
-                  }`}
+                  {totalCost} point{totalCost > 1 ? "s" : ""}
+                  {specCost > 0 && (
+                    <span className="ml-1 text-zinc-500 dark:text-zinc-400">
+                      (1 skill + 1 spec)
+                    </span>
+                  )}
+                </span>
+              </div>
+              <div className="mt-1 flex items-center justify-between text-[10px]">
+                <span className="text-zinc-500 dark:text-zinc-400">Available</span>
+                <span
+                  className={
+                    canAfford
+                      ? "text-zinc-500 dark:text-zinc-400"
+                      : "text-red-500 dark:text-red-400"
+                  }
                 >
-                  Add
-                </button>
+                  {pointsRemaining} pts
+                </span>
               </div>
             </div>
 
-            {/* Info text */}
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">
-              <p>
-                Knowledge skills cost 1 point per rating level.{" "}
-                <span className="font-medium">{pointsRemaining} points remaining.</span>
-              </p>
-            </div>
+            {/* Add button */}
+            <button
+              onClick={handleAdd}
+              disabled={!name.trim() || !canAfford}
+              className={`w-full rounded-lg px-4 py-2.5 text-sm font-medium transition-colors ${
+                name.trim() && canAfford
+                  ? "bg-amber-600 text-white hover:bg-amber-700"
+                  : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-700"
+              }`}
+            >
+              Add Skill{specCost > 0 ? " with Specialization" : ""}
+            </button>
           </div>
         </div>
 

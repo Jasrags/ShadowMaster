@@ -573,6 +573,7 @@ export interface KnowledgeSkill {
   name: string;
   category: "academic" | "interests" | "professional" | "street";
   rating: number;
+  specialization?: string;
 }
 
 export interface LanguageSkill {
