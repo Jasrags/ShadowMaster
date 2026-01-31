@@ -8,7 +8,7 @@
  * Displays which mounts are already occupied.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   useWeaponModifications,
   useRuleset,
@@ -19,9 +19,9 @@ import {
   getAvailableMounts,
   type ModifiableItem,
 } from "@/lib/rules/modifications";
-import type { Weapon, WeaponMount, ItemLegality, MergedRuleset } from "@/lib/types";
-import { BaseModalRoot } from "@/components/ui";
-import { X, Search, AlertTriangle, Check, Minus, Plus, Ban } from "lucide-react";
+import type { Weapon, WeaponMount, ItemLegality } from "@/lib/types";
+import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { Search, AlertTriangle, Check, Minus, Plus, Ban, Wrench } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -219,6 +219,7 @@ export function WeaponModificationModal({
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMod, setSelectedMod] = useState<WeaponModificationCatalogItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
+  const [addedThisSession, setAddedThisSession] = useState(0);
 
   // Get occupied mounts from weapon
   const occupiedMounts = useMemo(
@@ -301,91 +302,89 @@ export function WeaponModificationModal({
     return { min: 1, max: 1, hasRating: false };
   }, [selectedMod]);
 
-  // Reset selection when modal opens
-  const handleClose = () => {
+  // Full reset on close
+  const resetState = useCallback(() => {
     setSearchQuery("");
     setSelectedMod(null);
     setSelectedRating(1);
-    onClose();
-  };
+    setAddedThisSession(0);
+  }, []);
 
-  const handleInstall = () => {
+  // Partial reset after adding (preserves search)
+  const resetForNextMod = useCallback(() => {
+    setSelectedMod(null);
+    setSelectedRating(1);
+  }, []);
+
+  // Handle close
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [resetState, onClose]);
+
+  const handleInstall = useCallback(() => {
     if (selectedMod && canAffordSelected) {
       onInstall(selectedMod, ratingBounds.hasRating ? selectedRating : undefined);
-      handleClose();
+      setAddedThisSession((prev) => prev + 1);
+      resetForNextMod();
     }
-  };
+  }, [
+    selectedMod,
+    canAffordSelected,
+    ratingBounds.hasRating,
+    selectedRating,
+    onInstall,
+    resetForNextMod,
+  ]);
 
   // If weapon can't accept modifications, show a simplified modal
   if (!weaponCanAcceptMods) {
     return (
       <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="md">
         {({ close }) => (
-          <div className="flex flex-col">
-            {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
-              <div>
-                <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                  Add Modification
-                </h2>
-                <p className="text-sm text-zinc-500 dark:text-zinc-400">{weapon.name}</p>
+          <>
+            <ModalHeader title="Add Modification" onClose={close}>
+              <span className="text-sm text-zinc-500 dark:text-zinc-400">{weapon.name}</span>
+            </ModalHeader>
+
+            <ModalBody>
+              <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
+                <Ban className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+                <p className="mt-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Modifications Not Supported
+                </p>
+                <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                  This weapon type does not accept modifications.
+                </p>
               </div>
+            </ModalBody>
+
+            <ModalFooter>
+              <div />
               <button
                 onClick={close}
-                className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-              >
-                <X className="h-5 w-5" />
-              </button>
-            </div>
-
-            {/* No Modifications Message */}
-            <div className="flex flex-col items-center justify-center py-12 px-6 text-center">
-              <Ban className="h-12 w-12 text-zinc-300 dark:text-zinc-600" />
-              <p className="mt-3 text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Modifications Not Supported
-              </p>
-              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-                This weapon type does not accept modifications.
-              </p>
-            </div>
-
-            {/* Footer */}
-            <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex justify-end">
-              <button
-                onClick={close}
-                className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
               >
                 Close
               </button>
-            </div>
-          </div>
+            </ModalFooter>
+          </>
         )}
       </BaseModalRoot>
     );
   }
 
   return (
-    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="xl">
+    <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="full" className="max-w-4xl">
       {({ close }) => (
-        <div className="flex max-h-[85vh] flex-col">
-          {/* Header */}
-          <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
-            <div>
-              <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                Add Modification
-              </h2>
-              <p className="text-sm text-zinc-500 dark:text-zinc-400">{weapon.name}</p>
-            </div>
-            <button
-              onClick={close}
-              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
+        <>
+          <ModalHeader title="Add Modification" onClose={close}>
+            <span className="text-sm text-zinc-500 dark:text-zinc-400">{weapon.name}</span>
+          </ModalHeader>
 
-          {/* Mount Status */}
-          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
+          {/* Mount Status & Search */}
+          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
+            {/* Mount Status */}
             <div className="flex items-center gap-2 flex-wrap">
               <span className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Mounts:</span>
               {availableMounts.length === 0 ? (
@@ -396,7 +395,7 @@ export function WeaponModificationModal({
                   return (
                     <span
                       key={mount}
-                      className={`text-xs px-2 py-1 rounded-full flex items-center gap-1 ${
+                      className={`flex items-center gap-1 rounded-full px-2 py-1 text-xs ${
                         isOccupied
                           ? "bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300"
                           : "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300"
@@ -409,230 +408,250 @@ export function WeaponModificationModal({
                 })
               )}
             </div>
-          </div>
 
-          {/* Search */}
-          <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800">
-            <div className="relative">
+            {/* Search */}
+            <div className="relative mt-3">
               <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
               <input
                 type="text"
                 placeholder="Search modifications..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
               />
             </div>
           </div>
 
-          {/* Content - Split Pane */}
-          <div className="flex-1 flex overflow-hidden">
-            {/* Left: Mod List */}
-            <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
-              <div className="space-y-2">
-                {sortedMods.length === 0 ? (
-                  <p className="text-sm text-zinc-500 text-center py-8">No modifications found</p>
+          <ModalBody scrollable={false}>
+            {/* Content - Split Pane */}
+            <div className="flex flex-1 overflow-hidden">
+              {/* Left Pane: Mod List */}
+              <div className="w-1/2 overflow-y-auto border-r border-zinc-200 p-4 dark:border-zinc-700">
+                <div className="space-y-2">
+                  {sortedMods.length === 0 ? (
+                    <p className="text-sm text-zinc-500 text-center py-8">No modifications found</p>
+                  ) : (
+                    sortedMods.map(({ mod, compatibility }) => {
+                      const cost = getModCost(mod, weapon.cost);
+                      return (
+                        <ModListItem
+                          key={mod.id}
+                          mod={mod}
+                          isSelected={selectedMod?.id === mod.id}
+                          compatibility={compatibility}
+                          canAfford={cost <= remaining}
+                          onClick={() => {
+                            setSelectedMod(mod);
+                            setSelectedRating(ratingBounds.min);
+                          }}
+                        />
+                      );
+                    })
+                  )}
+                </div>
+              </div>
+
+              {/* Right Pane: Detail Preview */}
+              <div className="w-1/2 overflow-y-auto p-6">
+                {selectedMod ? (
+                  <div className="space-y-4">
+                    {/* Mod Name */}
+                    <div>
+                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                        {selectedMod.name}
+                      </h3>
+                      {selectedMod.mount && (
+                        <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                          Requires {MOUNT_LABELS[selectedMod.mount]} mount
+                        </p>
+                      )}
+                    </div>
+
+                    {/* Description */}
+                    {selectedMod.description && (
+                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                        {selectedMod.description}
+                      </p>
+                    )}
+
+                    {/* Stats */}
+                    <div className="space-y-2">
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
+                        <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
+                        <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                          {formatCurrency(selectedModCost)}¥
+                        </span>
+                      </div>
+                      <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
+                        <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
+                        <span
+                          className={`font-medium ${
+                            selectedMod.legality === "forbidden"
+                              ? "text-red-600 dark:text-red-400"
+                              : selectedMod.legality === "restricted"
+                                ? "text-amber-600 dark:text-amber-400"
+                                : "text-zinc-900 dark:text-zinc-100"
+                          }`}
+                        >
+                          {getAvailabilityDisplay(selectedModAvail, selectedMod.legality)}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Rating Selector */}
+                    {ratingBounds.hasRating && (
+                      <div className="space-y-2">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                          Rating
+                        </span>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() =>
+                              setSelectedRating(Math.max(ratingBounds.min, selectedRating - 1))
+                            }
+                            disabled={selectedRating <= ratingBounds.min}
+                            className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                              selectedRating > ratingBounds.min
+                                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                            }`}
+                          >
+                            <Minus className="h-4 w-4" />
+                          </button>
+                          <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                            {selectedRating}
+                          </div>
+                          <button
+                            onClick={() =>
+                              setSelectedRating(Math.min(ratingBounds.max, selectedRating + 1))
+                            }
+                            disabled={selectedRating >= ratingBounds.max}
+                            className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
+                              selectedRating < ratingBounds.max
+                                ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
+                                : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
+                            }`}
+                          >
+                            <Plus className="h-4 w-4" />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Effects */}
+                    {(selectedMod.accuracyModifier ||
+                      selectedMod.recoilCompensation ||
+                      selectedMod.concealabilityModifier) && (
+                      <div className="space-y-2">
+                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                          Effects
+                        </span>
+                        <div className="space-y-1">
+                          {selectedMod.accuracyModifier && (
+                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                              +{selectedMod.accuracyModifier} Accuracy
+                            </div>
+                          )}
+                          {selectedMod.recoilCompensation && (
+                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                              +{selectedMod.recoilCompensation} Recoil Compensation
+                            </div>
+                          )}
+                          {selectedMod.concealabilityModifier && (
+                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                              {selectedMod.concealabilityModifier} Concealability
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Legality Warning */}
+                    {(selectedMod.legality === "restricted" ||
+                      selectedMod.legality === "forbidden") && (
+                      <div
+                        className={`rounded-lg p-3 ${
+                          selectedMod.legality === "forbidden"
+                            ? "bg-red-50 dark:bg-red-900/20"
+                            : "bg-amber-50 dark:bg-amber-900/20"
+                        }`}
+                      >
+                        <div
+                          className={`flex items-center gap-2 text-sm font-medium ${
+                            selectedMod.legality === "forbidden"
+                              ? "text-red-700 dark:text-red-300"
+                              : "text-amber-700 dark:text-amber-300"
+                          }`}
+                        >
+                          <AlertTriangle className="h-4 w-4" />
+                          {selectedMod.legality === "forbidden" ? "Forbidden" : "Restricted"}
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Cost Indicator */}
+                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                          Cost
+                        </span>
+                        <span
+                          className={`font-semibold ${
+                            canAffordSelected
+                              ? "text-amber-600 dark:text-amber-400"
+                              : "text-red-600 dark:text-red-400"
+                          }`}
+                        >
+                          {formatCurrency(selectedModCost)}¥
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 ) : (
-                  sortedMods.map(({ mod, compatibility }) => {
-                    const cost = getModCost(mod, weapon.cost);
-                    return (
-                      <ModListItem
-                        key={mod.id}
-                        mod={mod}
-                        isSelected={selectedMod?.id === mod.id}
-                        compatibility={compatibility}
-                        canAfford={cost <= remaining}
-                        onClick={() => {
-                          setSelectedMod(mod);
-                          setSelectedRating(ratingBounds.min);
-                        }}
-                      />
-                    );
-                  })
+                  <div className="flex h-full flex-col items-center justify-center text-zinc-400">
+                    <Wrench className="h-12 w-12" />
+                    <p className="mt-4 text-sm">Select a modification from the list</p>
+                  </div>
                 )}
               </div>
             </div>
+          </ModalBody>
 
-            {/* Right: Detail Preview */}
-            <div className="w-1/2 overflow-y-auto p-4">
-              {selectedMod ? (
-                <div className="space-y-4">
-                  {/* Mod Name */}
-                  <div>
-                    <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                      {selectedMod.name}
-                    </h3>
-                    {selectedMod.mount && (
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                        Requires {MOUNT_LABELS[selectedMod.mount]} mount
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Description */}
-                  {selectedMod.description && (
-                    <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                      {selectedMod.description}
-                    </p>
-                  )}
-
-                  {/* Stats */}
-                  <div className="space-y-2">
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
-                      <span className="text-zinc-500 dark:text-zinc-400">Cost</span>
-                      <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                        {formatCurrency(selectedModCost)}¥
-                      </span>
-                    </div>
-                    <div className="flex justify-between bg-zinc-50 dark:bg-zinc-800 rounded px-3 py-2 text-sm">
-                      <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
-                      <span
-                        className={`font-medium ${
-                          selectedMod.legality === "forbidden"
-                            ? "text-red-600 dark:text-red-400"
-                            : selectedMod.legality === "restricted"
-                              ? "text-amber-600 dark:text-amber-400"
-                              : "text-zinc-900 dark:text-zinc-100"
-                        }`}
-                      >
-                        {getAvailabilityDisplay(selectedModAvail, selectedMod.legality)}
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Rating Selector */}
-                  {ratingBounds.hasRating && (
-                    <div className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Rating
-                      </span>
-                      <div className="flex items-center gap-3">
-                        <button
-                          onClick={() =>
-                            setSelectedRating(Math.max(ratingBounds.min, selectedRating - 1))
-                          }
-                          disabled={selectedRating <= ratingBounds.min}
-                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                            selectedRating > ratingBounds.min
-                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                          }`}
-                        >
-                          <Minus className="h-4 w-4" />
-                        </button>
-                        <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                          {selectedRating}
-                        </div>
-                        <button
-                          onClick={() =>
-                            setSelectedRating(Math.min(ratingBounds.max, selectedRating + 1))
-                          }
-                          disabled={selectedRating >= ratingBounds.max}
-                          className={`flex h-8 w-8 items-center justify-center rounded transition-colors ${
-                            selectedRating < ratingBounds.max
-                              ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                              : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                          }`}
-                        >
-                          <Plus className="h-4 w-4" />
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Effects */}
-                  {(selectedMod.accuracyModifier ||
-                    selectedMod.recoilCompensation ||
-                    selectedMod.concealabilityModifier) && (
-                    <div className="space-y-2">
-                      <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Effects
-                      </span>
-                      <div className="space-y-1">
-                        {selectedMod.accuracyModifier && (
-                          <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                            +{selectedMod.accuracyModifier} Accuracy
-                          </div>
-                        )}
-                        {selectedMod.recoilCompensation && (
-                          <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                            +{selectedMod.recoilCompensation} Recoil Compensation
-                          </div>
-                        )}
-                        {selectedMod.concealabilityModifier && (
-                          <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                            {selectedMod.concealabilityModifier} Concealability
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Legality Warning */}
-                  {(selectedMod.legality === "restricted" ||
-                    selectedMod.legality === "forbidden") && (
-                    <div
-                      className={`rounded-lg p-3 ${
-                        selectedMod.legality === "forbidden"
-                          ? "bg-red-50 dark:bg-red-900/20"
-                          : "bg-amber-50 dark:bg-amber-900/20"
-                      }`}
-                    >
-                      <div
-                        className={`flex items-center gap-2 text-sm font-medium ${
-                          selectedMod.legality === "forbidden"
-                            ? "text-red-700 dark:text-red-300"
-                            : "text-amber-700 dark:text-amber-300"
-                        }`}
-                      >
-                        <AlertTriangle className="h-4 w-4" />
-                        {selectedMod.legality === "forbidden" ? "Forbidden" : "Restricted"}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Install Button */}
-                  <div className="pt-2">
-                    <button
-                      onClick={handleInstall}
-                      disabled={!canAffordSelected}
-                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                        canAffordSelected
-                          ? "bg-amber-500 text-white hover:bg-amber-600"
-                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                      }`}
-                    >
-                      {canAffordSelected
-                        ? `Install - ${formatCurrency(selectedModCost)}¥`
-                        : `Cannot Afford (${formatCurrency(selectedModCost)}¥)`}
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
-                  <p className="text-sm">Select a modification to see details</p>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+          <ModalFooter>
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              Budget:{" "}
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                {formatCurrency(remaining)}¥
-              </span>{" "}
-              remaining
+              {addedThisSession > 0 && (
+                <span className="mr-2 text-emerald-600 dark:text-emerald-400">
+                  {addedThisSession} installed
+                </span>
+              )}
+              <span>
+                Budget:{" "}
+                <span className="font-mono font-medium text-zinc-900 dark:text-zinc-100">
+                  {formatCurrency(remaining)}¥
+                </span>
+              </span>
             </div>
-            <button
-              onClick={close}
-              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            >
-              Cancel
-            </button>
-          </div>
-        </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Done
+              </button>
+              <button
+                onClick={handleInstall}
+                disabled={!selectedMod || !canAffordSelected}
+                className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  selectedMod && canAffordSelected
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                Install Mod
+              </button>
+            </div>
+          </ModalFooter>
+        </>
       )}
     </BaseModalRoot>
   );
