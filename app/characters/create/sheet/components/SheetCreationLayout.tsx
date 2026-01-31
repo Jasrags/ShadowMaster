@@ -381,6 +381,9 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
           // Always hide special-attribute-points and skill-group-points if total is 0
           if (id === "special-attribute-points" && budget.total === 0) return false;
           if (id === "skill-group-points" && budget.total === 0) return false;
+          // Hide power-points and spell-slots for non-magical characters
+          if (id === "power-points" && budget.total === 0) return false;
+          if (id === "spell-slots" && budget.total === 0) return false;
           return true;
         })
         .map(([id, budget]) => ({
@@ -439,9 +442,13 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
     }
   };
 
-  const formatValue = (value: number, format?: string) => {
+  const formatValue = (value: number, format?: string, budgetId?: string) => {
     if (format === "currency") {
       return `${value.toLocaleString()}¥`;
+    }
+    // Display power points with decimal (PP can be fractional: 0.25, 0.5, etc.)
+    if (budgetId === "power-points" || format === "decimal") {
+      return value % 1 === 0 ? `${value}.0 PP` : `${value.toFixed(2)} PP`;
     }
     return value.toString();
   };
@@ -496,13 +503,19 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
                     )}
                   </span>
                   <span className={`font-mono font-medium ${textColor}`}>
-                    {formatValue(budget.spent, budget.displayFormat)} spent
+                    {formatValue(budget.spent, budget.displayFormat, budget.id)} spent
                     <span className="font-sans text-zinc-400"> • </span>
-                    {formatValue(Math.max(0, budget.remaining), budget.displayFormat)} left
+                    {formatValue(
+                      Math.max(0, budget.remaining),
+                      budget.displayFormat,
+                      budget.id
+                    )}{" "}
+                    left
                     {hasOverflow && (
                       <span className="text-red-500">
                         {" "}
-                        (+{formatValue(budget.spent - budget.total, budget.displayFormat)})
+                        (+
+                        {formatValue(budget.spent - budget.total, budget.displayFormat, budget.id)})
                       </span>
                     )}
                   </span>

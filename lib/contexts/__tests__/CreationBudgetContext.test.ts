@@ -44,6 +44,24 @@ function createBudgetState(total: number, spent: number, label: string): BudgetS
 // extractSpentValues Tests
 // =============================================================================
 
+// Helper to create empty totals for tests that don't need specific totals
+const emptyTotals: Record<
+  string,
+  { total: number; label: string; displayFormat?: "number" | "currency" }
+> = {};
+
+// Helper to create totals with spell slots
+function createTotalsWithSpellSlots(
+  spellSlots: number
+): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
+  return {
+    "spell-slots": { total: spellSlots, label: "Free Spells", displayFormat: "number" },
+  };
+}
+
+// Empty skill categories for tests that don't need them
+const emptySkillCategories: Record<string, string | undefined> = {};
+
 describe("extractSpentValues", () => {
   describe("contact points derivation", () => {
     it("derives contact points from selections.contacts array (within free pool)", () => {
@@ -56,7 +74,14 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       // Total is 12, free pool is 12, so spent = 12
       expect(spent["contact-points"]).toBe(12);
@@ -72,7 +97,14 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       // Total is 12, but free pool is 9, so spent is capped at 9
       // The extra 3 points go to karma, not contact points
@@ -83,7 +115,14 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = {};
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       expect(spent["contact-points"]).toBe(0);
     });
@@ -92,21 +131,56 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = { contacts: [] };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       expect(spent["contact-points"]).toBe(0);
     });
   });
 
   describe("spell slots derivation", () => {
-    it("derives spell slots from selections.spells array length", () => {
+    it("derives spell slots from selections.spells array length (within free allocation)", () => {
       const stateBudgets = {};
       const selections = {
         spells: ["fireball", "lightning-bolt", "ice-shield"],
       };
+      const totals = createTotalsWithSpellSlots(10);
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        totals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
+      expect(spent["spell-slots"]).toBe(3);
+    });
+
+    it("caps spell slots at free allocation", () => {
+      const stateBudgets = {};
+      const selections = {
+        spells: ["spell-1", "spell-2", "spell-3", "spell-4", "spell-5"],
+      };
+      const totals = createTotalsWithSpellSlots(3); // Only 3 free slots
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        totals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      // 5 spells selected, but only 3 free slots - caps at 3
       expect(spent["spell-slots"]).toBe(3);
     });
 
@@ -115,8 +189,16 @@ describe("extractSpentValues", () => {
       const selections = {
         spells: [{ id: "fireball" }, { id: "lightning-bolt" }],
       };
+      const totals = createTotalsWithSpellSlots(10);
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        totals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       expect(spent["spell-slots"]).toBe(2);
     });
@@ -125,8 +207,34 @@ describe("extractSpentValues", () => {
       const stateBudgets = {};
       const selections = {};
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
+      expect(spent["spell-slots"]).toBe(0);
+    });
+
+    it("returns 0 when no free spells are available", () => {
+      const stateBudgets = {};
+      const selections = {
+        spells: ["fireball", "lightning-bolt"],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      // No spell-slots in totals means 0 free spells
       expect(spent["spell-slots"]).toBe(0);
     });
   });
@@ -141,7 +249,14 @@ describe("extractSpentValues", () => {
         ],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       // Lifestyle is part of total nuyen spent
       // Check that it's included in the nuyen calculation
@@ -154,7 +269,14 @@ describe("extractSpentValues", () => {
         lifestyles: [{ monthlyCost: 2000 }],
       };
 
-      const spent = extractSpentValues(stateBudgets, selections);
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
 
       expect(spent["nuyen"]).toBeGreaterThanOrEqual(2000);
     });
@@ -164,6 +286,175 @@ describe("extractSpentValues", () => {
 // =============================================================================
 // validateBudgets Tests
 // =============================================================================
+
+describe("skill points with free skills derivation", () => {
+  // Mock priority table with Magic B granting 2 magical skills at Rating 4
+  const mockPriorityTable = {
+    levels: ["A", "B", "C", "D", "E"],
+    categories: [],
+    table: {
+      B: {
+        magic: {
+          options: [
+            {
+              path: "magician",
+              magicRating: 4,
+              freeSkills: [{ type: "magical", rating: 4, count: 2 }],
+              spells: 7,
+            },
+          ],
+        },
+      },
+    },
+  };
+
+  const mockSkillCategories: Record<string, string | undefined> = {
+    alchemy: "magical",
+    arcana: "magical",
+    spellcasting: "magical",
+    summoning: "magical",
+    counterspelling: "magical",
+    banishing: "magical",
+    binding: "magical",
+    pistols: "combat",
+    perception: "physical",
+    impersonation: "social",
+    clubs: "combat",
+  };
+
+  it("subtracts free skill points from total when magical skills qualify", () => {
+    const stateBudgets = {};
+    const selections = {
+      "magical-path": "magician",
+      skills: {
+        alchemy: 4, // magical, rating 4 - qualifies for free
+        arcana: 4, // magical, rating 4 - qualifies for free
+        banishing: 3, // magical, rating 3 - below free rating, doesn't qualify
+        binding: 3, // magical, rating 3 - below free rating
+        counterspelling: 1, // magical, rating 1 - below free rating
+        summoning: 1, // magical, rating 1 - below free rating
+        clubs: 2, // combat, not magical
+        impersonation: 3, // social, not magical
+        perception: 1, // physical, not magical
+      },
+    };
+    const priorities = { magic: "B" };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      mockPriorityTable,
+      priorities,
+      mockSkillCategories
+    );
+
+    // Total skill points: 4+4+3+3+1+1+2+3+1 = 22
+    // Free skill points: 2 skills × 4 rating = 8 (alchemy and arcana qualify)
+    // Expected spent: 22 - 8 = 14
+    expect(spent["skill-points"]).toBe(14);
+  });
+
+  it("does not subtract free points when skills are below required rating", () => {
+    const stateBudgets = {};
+    const selections = {
+      "magical-path": "magician",
+      skills: {
+        alchemy: 3, // magical, but rating 3 < required 4
+        arcana: 3, // magical, but rating 3 < required 4
+        pistols: 4, // combat, not magical
+      },
+    };
+    const priorities = { magic: "B" };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      mockPriorityTable,
+      priorities,
+      mockSkillCategories
+    );
+
+    // Total: 3+3+4 = 10
+    // No free points - magical skills are below required rating 4
+    expect(spent["skill-points"]).toBe(10);
+  });
+
+  it("only subtracts free points for qualifying magical skills, not combat skills", () => {
+    const stateBudgets = {};
+    const selections = {
+      "magical-path": "magician",
+      skills: {
+        alchemy: 5, // magical, rating 5 - qualifies
+        pistols: 5, // combat, not magical - doesn't qualify
+        perception: 4, // physical, not magical - doesn't qualify
+      },
+    };
+    const priorities = { magic: "B" };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      mockPriorityTable,
+      priorities,
+      mockSkillCategories
+    );
+
+    // Total: 5+5+4 = 14
+    // Free: 1 skill × 4 rating = 4 (only alchemy qualifies, count is 2 but only 1 available)
+    // Expected: 14 - 4 = 10
+    expect(spent["skill-points"]).toBe(10);
+  });
+
+  it("does not subtract free points when no magical path selected", () => {
+    const stateBudgets = {};
+    const selections = {
+      skills: {
+        alchemy: 4,
+        arcana: 4,
+      },
+    };
+    const priorities = { magic: "B" };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      mockPriorityTable,
+      priorities,
+      mockSkillCategories
+    );
+
+    // No magical-path selected, so no free skills
+    expect(spent["skill-points"]).toBe(8);
+  });
+
+  it("does not subtract free points when priority table is null", () => {
+    const stateBudgets = {};
+    const selections = {
+      "magical-path": "magician",
+      skills: {
+        alchemy: 4,
+        arcana: 4,
+      },
+    };
+    const priorities = { magic: "B" };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      null, // No priority table
+      priorities,
+      mockSkillCategories
+    );
+
+    // No priority table, so no free skills
+    expect(spent["skill-points"]).toBe(8);
+  });
+});
 
 describe("validateBudgets", () => {
   describe("karma conversion limit validation", () => {
@@ -175,7 +466,7 @@ describe("validateBudgets", () => {
         budgets: { "karma-spent-gear": 10 },
       });
 
-      const { errors } = validateBudgets(budgets, state);
+      const { errors } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const conversionError = errors.find((e) => e.constraintId === "karma-conversion-limit");
       expect(conversionError).toBeUndefined();
@@ -189,7 +480,7 @@ describe("validateBudgets", () => {
         budgets: { "karma-spent-gear": 11 },
       });
 
-      const { errors } = validateBudgets(budgets, state);
+      const { errors } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const conversionError = errors.find((e) => e.constraintId === "karma-conversion-limit");
       expect(conversionError).toBeDefined();
@@ -205,7 +496,7 @@ describe("validateBudgets", () => {
         budgets: {},
       });
 
-      const { errors } = validateBudgets(budgets, state);
+      const { errors } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const conversionError = errors.find((e) => e.constraintId === "karma-conversion-limit");
       expect(conversionError).toBeUndefined();
@@ -219,7 +510,7 @@ describe("validateBudgets", () => {
       };
       const state = createMinimalCreationState();
 
-      const { errors } = validateBudgets(budgets, state);
+      const { errors } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const overspentError = errors.find((e) => e.constraintId === "attribute-points-overspent");
       expect(overspentError).toBeDefined();
@@ -234,7 +525,7 @@ describe("validateBudgets", () => {
       };
       const state = createMinimalCreationState();
 
-      const { warnings } = validateBudgets(budgets, state);
+      const { warnings } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const carryoverWarning = warnings.find((w) => w.constraintId === "nuyen-carryover");
       expect(carryoverWarning).toBeDefined();
@@ -254,7 +545,7 @@ describe("validateBudgets", () => {
         },
       });
 
-      const { errors } = validateBudgets(budgets, state);
+      const { errors } = validateBudgets(budgets, state, null, emptySkillCategories);
 
       const qualityError = errors.find((e) => e.constraintId === "positive-quality-limit");
       expect(qualityError).toBeDefined();

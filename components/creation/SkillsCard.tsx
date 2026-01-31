@@ -15,7 +15,7 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useSkills } from "@/lib/rules";
+import { useSkills, usePriorityTable } from "@/lib/rules";
 import {
   getGroupRating,
   isGroupBroken,
@@ -24,10 +24,22 @@ import {
   normalizeGroupValue,
   canRestoreGroup,
 } from "@/lib/rules/skills/group-utils";
+import {
+  getFreeSkillsFromMagicPriority,
+  getSkillsWithFreeAllocation,
+  getFreeSkillAllocationStatus,
+  getDesignatedFreeSkills,
+  getDesignatedSkillFreeRating,
+  canDesignateForFreeSkill,
+  type FreeSkillDesignations,
+} from "@/lib/rules/skills/free-skills";
+import { FREE_SKILL_TYPE_LABELS } from "./magic-path/constants";
+import { FreeSkillsPanel } from "./skills/FreeSkillsPanel";
+import { FreeSkillDesignationModal } from "./skills/FreeSkillDesignationModal";
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, BudgetIndicator, SummaryFooter, Stepper } from "./shared";
+import { CreationCard, BudgetIndicator, Stepper, pluralize } from "./shared";
 import {
   SkillModal,
   SkillGroupModal,
@@ -245,6 +257,15 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   // Specialization modal state (for individual skills)
   const [specModalTarget, setSpecModalTarget] = useState<string | null>(null);
 
+  // Free skill designation modal state
+  const [freeSkillDesignationModal, setFreeSkillDesignationModal] = useState<{
+    type: string;
+    label: string;
+    freeRating: number;
+    totalSlots: number;
+    currentDesignations: string[];
+  } | null>(null);
+
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
   const hasMagic =
@@ -277,6 +298,83 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
     return aptitudeQuality?.specification || undefined;
   }, [state.selections.positiveQualities]);
+
+  // Get free skills from magic priority (using skill categories from ruleset)
+  const priorityTable = usePriorityTable();
+  const skillCategories = useMemo(() => {
+    const categories: Record<string, string | undefined> = {};
+    for (const skill of activeSkills) {
+      categories[skill.id] = skill.category;
+    }
+    return categories;
+  }, [activeSkills]);
+
+  // Get free skill configurations from magic priority
+  const freeSkillConfigs = useMemo(() => {
+    return getFreeSkillsFromMagicPriority(priorityTable, state.priorities?.magic, magicPath);
+  }, [priorityTable, state.priorities?.magic, magicPath]);
+
+  // Get explicit free skill designations from state
+  const freeSkillDesignations = useMemo(() => {
+    return state.selections.freeSkillDesignations as FreeSkillDesignations | undefined;
+  }, [state.selections.freeSkillDesignations]);
+
+  // Check if explicit designations exist (new system)
+  const hasExplicitDesignations = useMemo(() => {
+    return !!(
+      freeSkillDesignations &&
+      ((freeSkillDesignations.magical && freeSkillDesignations.magical.length > 0) ||
+        (freeSkillDesignations.resonance && freeSkillDesignations.resonance.length > 0) ||
+        (freeSkillDesignations.active && freeSkillDesignations.active.length > 0))
+    );
+  }, [freeSkillDesignations]);
+
+  // Get set of designated skill IDs for quick lookup
+  const designatedSkillIds = useMemo(() => {
+    return getDesignatedFreeSkills(freeSkillDesignations);
+  }, [freeSkillDesignations]);
+
+  // Get free skill allocation status for UI display
+  const freeSkillAllocationStatuses = useMemo(() => {
+    const skills = (state.selections.skills || {}) as Record<string, number>;
+    return getFreeSkillAllocationStatus(
+      skills,
+      freeSkillConfigs,
+      freeSkillDesignations,
+      FREE_SKILL_TYPE_LABELS
+    );
+  }, [state.selections.skills, freeSkillConfigs, freeSkillDesignations]);
+
+  // Check if there are any free skill configs (show panel if so)
+  const hasFreeSkillConfigs = useMemo(() => {
+    return freeSkillConfigs.some((config) => config.type !== "magicalGroup");
+  }, [freeSkillConfigs]);
+
+  // Map of skill ID to name for display
+  const skillNameMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const skill of activeSkills) {
+      map[skill.id] = skill.name;
+    }
+    return map;
+  }, [activeSkills]);
+
+  // Legacy: Get free skill IDs for automatic allocation (used when no explicit designations)
+  const freeSkillIds = useMemo(() => {
+    // If explicit designations exist, use those instead
+    if (hasExplicitDesignations) {
+      return designatedSkillIds;
+    }
+    // Fall back to automatic allocation
+    const skills = (state.selections.skills || {}) as Record<string, number>;
+    return getSkillsWithFreeAllocation(skills, freeSkillConfigs, skillCategories);
+  }, [
+    hasExplicitDesignations,
+    designatedSkillIds,
+    state.selections.skills,
+    freeSkillConfigs,
+    skillCategories,
+  ]);
 
   // Get skills in the incompetent group (for conflict detection)
   const incompetentSkills = useMemo(() => {
@@ -317,25 +415,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     );
   }, [state.selections.skillKarmaSpent]);
 
-  const skillPointsSpent = useMemo(() => {
-    const totalRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
-    // Add specializations (1 skill point each)
-    const totalSpecPoints = Object.values(specializations).reduce(
-      (sum, specs) => sum + specs.length,
-      0
-    );
-    // Subtract karma-purchased rating points - they don't count against skill point budget
-    return totalRatings + totalSpecPoints - karmaRatingPoints;
-  }, [skills, specializations, karmaRatingPoints]);
-
-  const groupPointsSpent = useMemo(() => {
-    const totalRatings = Object.values(groups).reduce<number>(
-      (sum, value) => sum + getGroupRating(value),
-      0
-    );
-    // Subtract karma-purchased group rating points - they don't count against group point budget
-    return totalRatings - karmaGroupRatingPoints;
-  }, [groups, karmaGroupRatingPoints]);
+  // Use budget context for spent values - it handles free skill points, karma purchases, etc.
+  const skillPointsSpent = skillBudget?.spent ?? 0;
+  const groupPointsSpent = groupBudget?.spent ?? 0;
 
   // Calculate total specializations (for display purposes)
   const totalSpecializations = useMemo(() => {
@@ -455,7 +537,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           },
         });
       }
-      setIsSkillModalOpen(false);
     },
     [skills, specializations, state.selections, updateState]
   );
@@ -752,6 +833,196 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       setSpecModalTarget(null);
     },
     [specializations, state.selections, updateState]
+  );
+
+  // =============================================================================
+  // FREE SKILL DESIGNATION HANDLERS
+  // =============================================================================
+
+  // Handle opening the free skill designation modal for a specific type
+  const handleOpenDesignationModal = useCallback(
+    (type: string) => {
+      const status = freeSkillAllocationStatuses.find((s) => s.type === type);
+      if (!status) return;
+
+      setFreeSkillDesignationModal({
+        type,
+        label: status.label,
+        freeRating: status.freeRating,
+        totalSlots: status.totalSlots,
+        currentDesignations: status.designatedSkillIds,
+      });
+    },
+    [freeSkillAllocationStatuses]
+  );
+
+  // Handle confirming free skill designations from modal
+  const handleConfirmDesignations = useCallback(
+    (type: string, selectedSkillIds: string[]) => {
+      // Update designations for this type
+      const newDesignations: FreeSkillDesignations = {
+        ...freeSkillDesignations,
+      };
+
+      // Set the designations for this type
+      switch (type) {
+        case "magical":
+          newDesignations.magical = selectedSkillIds;
+          break;
+        case "resonance":
+          newDesignations.resonance = selectedSkillIds;
+          break;
+        case "active":
+          newDesignations.active = selectedSkillIds;
+          break;
+      }
+
+      // Find the config for this type to get the free rating
+      const config = freeSkillConfigs.find((c) => c.type === type);
+      const freeRating = config?.rating || 0;
+
+      // Auto-set designated skills to free rating if they're lower
+      const newSkills = { ...skills };
+      for (const skillId of selectedSkillIds) {
+        const currentRating = skills[skillId] || 0;
+        if (currentRating < freeRating) {
+          newSkills[skillId] = freeRating;
+        }
+      }
+
+      updateState({
+        selections: {
+          ...state.selections,
+          skills: newSkills,
+          freeSkillDesignations: newDesignations,
+        },
+      });
+
+      setFreeSkillDesignationModal(null);
+    },
+    [freeSkillDesignations, freeSkillConfigs, skills, state.selections, updateState]
+  );
+
+  // Handle undesignating a skill from the FreeSkillsPanel
+  const handleUndesignateSkill = useCallback(
+    (skillId: string, type: string) => {
+      const newDesignations: FreeSkillDesignations = {
+        ...freeSkillDesignations,
+      };
+
+      // Remove the skill from designations for this type
+      switch (type) {
+        case "magical":
+          newDesignations.magical = (newDesignations.magical || []).filter((id) => id !== skillId);
+          break;
+        case "resonance":
+          newDesignations.resonance = (newDesignations.resonance || []).filter(
+            (id) => id !== skillId
+          );
+          break;
+        case "active":
+          newDesignations.active = (newDesignations.active || []).filter((id) => id !== skillId);
+          break;
+      }
+
+      updateState({
+        selections: {
+          ...state.selections,
+          freeSkillDesignations: newDesignations,
+        },
+      });
+    },
+    [freeSkillDesignations, state.selections, updateState]
+  );
+
+  // Handle designating a skill directly from SkillListItem
+  const handleDesignateSkillFromList = useCallback(
+    (skillId: string) => {
+      // Find the first free skill type that this skill qualifies for and has available slots
+      const skillCategory = skillCategories[skillId];
+
+      for (const status of freeSkillAllocationStatuses) {
+        if (status.remainingSlots <= 0) continue;
+
+        const { canDesignate } = canDesignateForFreeSkill(
+          skillId,
+          skillCategory,
+          status.type,
+          status.designatedSkillIds,
+          status.totalSlots
+        );
+
+        if (canDesignate) {
+          // Add to designations and auto-set rating
+          const newDesignations: FreeSkillDesignations = {
+            ...freeSkillDesignations,
+          };
+
+          switch (status.type) {
+            case "magical":
+              newDesignations.magical = [...(newDesignations.magical || []), skillId];
+              break;
+            case "resonance":
+              newDesignations.resonance = [...(newDesignations.resonance || []), skillId];
+              break;
+            case "active":
+              newDesignations.active = [...(newDesignations.active || []), skillId];
+              break;
+          }
+
+          // Auto-set skill to free rating if lower
+          const newSkills = { ...skills };
+          const currentRating = skills[skillId] || 0;
+          if (currentRating < status.freeRating) {
+            newSkills[skillId] = status.freeRating;
+          }
+
+          updateState({
+            selections: {
+              ...state.selections,
+              skills: newSkills,
+              freeSkillDesignations: newDesignations,
+            },
+          });
+          return;
+        }
+      }
+    },
+    [
+      skillCategories,
+      freeSkillAllocationStatuses,
+      freeSkillDesignations,
+      skills,
+      state.selections,
+      updateState,
+    ]
+  );
+
+  // Check if a skill can be designated (for SkillListItem button)
+  const canSkillBeDesignated = useCallback(
+    (skillId: string): boolean => {
+      // Already designated?
+      if (designatedSkillIds.has(skillId)) return false;
+
+      const skillCategory = skillCategories[skillId];
+
+      for (const status of freeSkillAllocationStatuses) {
+        if (status.remainingSlots <= 0) continue;
+
+        const { canDesignate } = canDesignateForFreeSkill(
+          skillId,
+          skillCategory,
+          status.type,
+          status.designatedSkillIds,
+          status.totalSlots
+        );
+
+        if (canDesignate) return true;
+      }
+
+      return false;
+    },
+    [designatedSkillIds, skillCategories, freeSkillAllocationStatuses]
   );
 
   // =============================================================================
@@ -1298,7 +1569,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                 spent={groupPointsSpent}
                 total={skillGroupPoints}
                 mode="compact"
-                note={karmaGroupRatingPoints > 0 ? `+${karmaGroupRatingPoints} via karma` : undefined}
+                note={
+                  karmaGroupRatingPoints > 0 ? `+${karmaGroupRatingPoints} via karma` : undefined
+                }
                 noteStyle="warning"
               />
             )}
@@ -1335,6 +1608,15 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
               </div>
             </div>
           )}
+
+          {/* Free Skills Panel (for magic priority free skills) */}
+          <FreeSkillsPanel
+            allocationStatuses={freeSkillAllocationStatuses}
+            skillNames={skillNameMap}
+            onDesignate={handleOpenDesignationModal}
+            onUndesignate={handleUndesignateSkill}
+            hasFreeSkills={hasFreeSkillConfigs}
+          />
 
           {/* Restoration notification for broken groups */}
           {hasRestorableGroups && (
@@ -1411,7 +1693,10 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       broken && restorableGroups.some((g) => g.groupId === groupId);
 
                     // Determine purchase mode for this group
-                    const groupPurchaseInfo = getGroupPurchaseMode(rating, rating >= MAX_GROUP_RATING);
+                    const groupPurchaseInfo = getGroupPurchaseMode(
+                      rating,
+                      rating >= MAX_GROUP_RATING
+                    );
 
                     return (
                       <SkillGroupCard
@@ -1469,6 +1754,18 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                     ? { mode: "disabled" as const, disabledReason: undefined }
                     : getPurchaseMode(entry.rating, isAtMax);
 
+                  // Check if this skill is designated for free allocation
+                  const isDesignated = designatedSkillIds.has(entry.skillId);
+                  const freeRating = isDesignated
+                    ? getDesignatedSkillFreeRating(
+                        entry.skillId,
+                        freeSkillConfigs,
+                        freeSkillDesignations
+                      )
+                    : undefined;
+                  const canDesignate =
+                    !isGroupSkill && hasFreeSkillConfigs && canSkillBeDesignated(entry.skillId);
+
                   return (
                     <SkillListItem
                       key={entry.skillId}
@@ -1482,6 +1779,28 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                       canIncrease={!isGroupSkill && purchaseInfo.mode === "skill-points"}
                       canIncreaseWithKarma={!isGroupSkill && purchaseInfo.mode === "karma"}
                       disabledReason={purchaseInfo.disabledReason}
+                      isFreeAllocation={
+                        !isGroupSkill && !isDesignated && freeSkillIds.has(entry.skillId)
+                      }
+                      isDesignated={isDesignated}
+                      freeRating={freeRating}
+                      canDesignate={canDesignate}
+                      onDesignate={
+                        canDesignate ? () => handleDesignateSkillFromList(entry.skillId) : undefined
+                      }
+                      onUndesignate={
+                        isDesignated
+                          ? () => {
+                              // Find which type this skill is designated under
+                              for (const status of freeSkillAllocationStatuses) {
+                                if (status.designatedSkillIds.includes(entry.skillId)) {
+                                  handleUndesignateSkill(entry.skillId, status.type);
+                                  break;
+                                }
+                              }
+                            }
+                          : undefined
+                      }
                       onRatingChange={
                         isGroupSkill
                           ? undefined
@@ -1537,11 +1856,14 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
           </div>
 
           {/* Footer Summary */}
-          <SummaryFooter
-            count={allSkillsSorted.length}
-            total={`${skillPointsSpent} skill pts${skillGroupPoints > 0 ? ` / ${groupPointsSpent} group pts` : ""}`}
-            label="skill"
-          />
+          <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
+            <span className="text-xs text-zinc-500 dark:text-zinc-400">
+              Total: {Object.keys(groups).length === 1 ? "skill group" : pluralize("skill group")}{" "}
+              {Object.keys(groups).length} /{" "}
+              {Object.keys(skills).length === 1 ? "skill" : pluralize("skill")}{" "}
+              {Object.keys(skills).length}
+            </span>
+          </div>
         </div>
       </CreationCard>
 
@@ -1559,6 +1881,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
         karmaRemaining={karmaRemaining}
         incompetentGroupId={incompetentGroupId}
         aptitudeSkillId={aptitudeSkillId}
+        magicalPath={magicPath}
       />
 
       <SkillGroupModal
@@ -1673,22 +1996,46 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       )}
 
       {/* Specialization Modal (for individual skills) */}
-      {specModalTarget && (() => {
-        const skillData = getSkillData(specModalTarget);
-        if (!skillData) return null;
+      {specModalTarget &&
+        (() => {
+          const skillData = getSkillData(specModalTarget);
+          if (!skillData) return null;
 
-        return (
-          <SkillSpecModal
-            isOpen={true}
-            onClose={() => setSpecModalTarget(null)}
-            onAdd={(spec, karmaSpent) => handleAddSpecFromModal(specModalTarget, spec, karmaSpent)}
-            skillName={skillData.name}
-            suggestedSpecializations={skillData.suggestedSpecializations || []}
-            availableSkillPoints={skillPointsRemaining}
-            availableKarma={karmaRemaining}
-          />
-        );
-      })()}
+          return (
+            <SkillSpecModal
+              isOpen={true}
+              onClose={() => setSpecModalTarget(null)}
+              onAdd={(spec, karmaSpent) =>
+                handleAddSpecFromModal(specModalTarget, spec, karmaSpent)
+              }
+              skillName={skillData.name}
+              suggestedSpecializations={skillData.suggestedSpecializations || []}
+              availableSkillPoints={skillPointsRemaining}
+              availableKarma={karmaRemaining}
+            />
+          );
+        })()}
+
+      {/* Free Skill Designation Modal */}
+      {freeSkillDesignationModal && (
+        <FreeSkillDesignationModal
+          isOpen={true}
+          onClose={() => setFreeSkillDesignationModal(null)}
+          onConfirm={(selectedIds) =>
+            handleConfirmDesignations(freeSkillDesignationModal.type, selectedIds)
+          }
+          freeSkillType={freeSkillDesignationModal.type}
+          typeLabel={freeSkillDesignationModal.label}
+          freeRating={freeSkillDesignationModal.freeRating}
+          totalSlots={freeSkillDesignationModal.totalSlots}
+          currentDesignations={freeSkillDesignationModal.currentDesignations}
+          availableSkills={activeSkills}
+          skillCategories={skillCategories}
+          currentSkillRatings={skills}
+          hasMagic={!!hasMagic}
+          hasResonance={!!hasResonance}
+        />
+      )}
     </>
   );
 }

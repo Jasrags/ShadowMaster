@@ -11,7 +11,7 @@
  * Group skills: Purple styling, read-only rating, shows group name
  */
 
-import { X, BookOpen, Users, Star, Sparkles } from "lucide-react";
+import { X, BookOpen, Users, Star, Sparkles, Gift, Plus } from "lucide-react";
 import { Stepper } from "../shared";
 import { Tooltip } from "@/components/ui";
 
@@ -45,6 +45,19 @@ interface SkillListItemProps {
   canCustomize?: boolean;
   // Disabled state with reason (for tooltip)
   disabledReason?: string;
+  /** @deprecated Use isDesignated instead for explicit designation system */
+  isFreeAllocation?: boolean;
+  // Free skill designation props (new explicit system)
+  /** True when this skill is explicitly designated for free allocation */
+  isDesignated?: boolean;
+  /** The free rating granted (e.g., 5 for magician at Priority A) */
+  freeRating?: number;
+  /** Whether this skill can be designated (has available slots and matches type) */
+  canDesignate?: boolean;
+  /** Callback when user wants to designate this skill */
+  onDesignate?: () => void;
+  /** Callback when user wants to undesignate this skill */
+  onUndesignate?: () => void;
 }
 
 // =============================================================================
@@ -71,6 +84,12 @@ export function SkillListItem({
   onCustomize,
   canCustomize = false,
   disabledReason,
+  isFreeAllocation = false,
+  isDesignated = false,
+  freeRating,
+  canDesignate = false,
+  onDesignate,
+  onUndesignate,
 }: SkillListItemProps) {
   const isAtMax = rating >= maxRating;
   const hasSpecs = specializations.length > 0;
@@ -103,6 +122,49 @@ export function SkillListItem({
 
         {/* Controls - different for group vs individual */}
         <div className="flex shrink-0 items-center gap-1">
+          {/* Designated free skill badge (new explicit system) */}
+          {isDesignated && freeRating && (
+            <Tooltip
+              content={
+                rating >= freeRating
+                  ? `Designated: First ${freeRating} points free`
+                  : `Designated: ${rating}/${freeRating} free points (raise to ${freeRating} for full benefit)`
+              }
+              placement="top"
+              delay={300}
+            >
+              <span className="flex items-center gap-0.5 rounded bg-indigo-100 px-1 py-0.5 text-[10px] font-medium text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+                <Gift className="h-2.5 w-2.5" />
+                {rating >= freeRating ? (
+                  <>FREE ({freeRating} pts)</>
+                ) : (
+                  <>
+                    FREE ({rating}/{freeRating})
+                  </>
+                )}
+              </span>
+            </Tooltip>
+          )}
+          {/* Legacy free allocation badge (automatic system) */}
+          {isFreeAllocation && !isDesignated && (
+            <span className="rounded bg-indigo-100 px-1 py-0.5 text-[10px] font-medium text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+              FREE
+            </span>
+          )}
+          {/* Designate button for eligible skills */}
+          {canDesignate && onDesignate && !isDesignated && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onDesignate();
+              }}
+              className="flex items-center gap-0.5 rounded bg-indigo-50 px-1.5 py-0.5 text-[10px] font-medium text-indigo-600 transition-colors hover:bg-indigo-100 dark:bg-indigo-900/30 dark:text-indigo-400 dark:hover:bg-indigo-900/50"
+              title="Designate as free skill"
+            >
+              <Plus className="h-2.5 w-2.5" />
+              Designate
+            </button>
+          )}
           {isAtMax && (
             <span className="rounded bg-emerald-100 px-1 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300">
               MAX

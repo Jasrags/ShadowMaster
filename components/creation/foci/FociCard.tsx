@@ -166,6 +166,11 @@ export function FociCard({ state, updateState }: FociCardProps) {
     return foci.filter((f) => f.bonded).reduce((sum, f) => sum + f.karmaToBond, 0);
   }, [foci]);
 
+  // Helper to calculate total bonded karma from foci array
+  const calculateBondedKarma = useCallback((fociArray: OwnedFocus[]) => {
+    return fociArray.filter((f) => f.bonded).reduce((sum, f) => sum + (f.karmaToBond || 0), 0);
+  }, []);
+
   // Handle adding a focus
   const handleAddFocus = useCallback(
     (focus: FocusSelection) => {
@@ -174,14 +179,22 @@ export function FociCard({ state, updateState }: FociCardProps) {
         bonded: false,
       };
 
+      const updatedFoci = [...foci, newFocus];
+      // Recalculate bonded karma (new focus starts unbonded, but we maintain consistency)
+      const totalBondedKarma = calculateBondedKarma(updatedFoci);
+
       updateState({
         selections: {
           ...state.selections,
-          foci: [...foci, newFocus],
+          foci: updatedFoci,
+        },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-foci": totalBondedKarma,
         },
       });
     },
-    [foci, state.selections, updateState]
+    [foci, state.selections, state.budgets, updateState, calculateBondedKarma]
   );
 
   // Handle toggling bonded status
@@ -190,14 +203,21 @@ export function FociCard({ state, updateState }: FociCardProps) {
       const newFoci = [...foci];
       newFoci[index] = { ...newFoci[index], bonded: !newFoci[index].bonded };
 
+      // Calculate total bonded karma after toggle
+      const totalBondedKarma = calculateBondedKarma(newFoci);
+
       updateState({
         selections: {
           ...state.selections,
           foci: newFoci,
         },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-foci": totalBondedKarma,
+        },
       });
     },
-    [foci, state.selections, updateState]
+    [foci, state.selections, state.budgets, updateState, calculateBondedKarma]
   );
 
   // Handle removing a focus
@@ -205,14 +225,21 @@ export function FociCard({ state, updateState }: FociCardProps) {
     (index: number) => {
       const newFoci = foci.filter((_, i) => i !== index);
 
+      // Recalculate bonded karma after removal
+      const totalBondedKarma = calculateBondedKarma(newFoci);
+
       updateState({
         selections: {
           ...state.selections,
           foci: newFoci,
         },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-foci": totalBondedKarma,
+        },
       });
     },
-    [foci, state.selections, updateState]
+    [foci, state.selections, state.budgets, updateState, calculateBondedKarma]
   );
 
   // Get validation status

@@ -20,7 +20,34 @@ import React, {
   useRef,
 } from "react";
 import type { CreationState, ValidationError } from "../types/creation";
-import type { PriorityTableData } from "../rules/RulesetContext";
+import type { PriorityTableData, SkillData } from "../rules/RulesetContext";
+import { useSkills } from "../rules/RulesetContext";
+import {
+  getFreeSkillsFromMagicPriority,
+  calculateFreeSkillPointsUsed,
+  calculateFreeSkillGroupPointsUsed,
+  countQualifyingSkillsForFreeAllocation,
+  calculateFreePointsFromDesignations,
+  getFreeSkillAllocationStatus,
+  type FreeSkillDesignations,
+} from "../rules/skills/free-skills";
+import { FREE_SKILL_TYPE_LABELS } from "@/components/creation/magic-path/constants";
+
+// =============================================================================
+// SKILL CATEGORY HELPERS
+// =============================================================================
+
+/**
+ * Build a map of skill ID to category from skill data.
+ * Used for determining which skills qualify for free skill allocations.
+ */
+function buildSkillCategoriesMap(activeSkills: SkillData[]): Record<string, string | undefined> {
+  const categories: Record<string, string | undefined> = {};
+  for (const skill of activeSkills) {
+    categories[skill.id] = skill.category;
+  }
+  return categories;
+}
 
 // =============================================================================
 // TYPES
@@ -212,18 +239,26 @@ function calculateBudgetTotals(
     displayFormat: "number",
   };
 
-  // Spell slots from magic priority (if magician/mystic adept)
+  // Spell slots and power points from magic priority
   const magicPriority = priorities.magic;
   const magicPath = selections["magical-path"] as string;
   if (magicPriority && priorityTable.table[magicPriority] && magicPath) {
     const magicData = priorityTable.table[magicPriority].magic as {
-      spells?: number;
-      powers?: number;
+      options?: Array<{
+        path: string;
+        spells?: number;
+        complexForms?: number;
+        magicRating?: number;
+        resonanceRating?: number;
+      }>;
     };
+    // Find the selected path's option to get spells/forms count
+    const selectedOption = magicData?.options?.find((opt) => opt.path === magicPath);
+
     if (["magician", "mystic-adept", "aspected-mage"].includes(magicPath)) {
       totals["spell-slots"] = {
-        total: magicData?.spells || 0,
-        label: "Free Spells",
+        total: selectedOption?.spells || 0,
+        label: "Spell Points",
         displayFormat: "number",
       };
     }
@@ -233,7 +268,7 @@ function calculateBudgetTotals(
       totals["power-points"] = {
         total: magicRating,
         label: "Power Points",
-        displayFormat: "number",
+        displayFormat: "decimal" as "number" | "currency", // Cast for now, used for PP display
       };
     }
   }
@@ -249,7 +284,11 @@ function calculateBudgetTotals(
  */
 function extractSpentValues(
   stateBudgets: Record<string, number>,
-  selections: Record<string, unknown>
+  selections: Record<string, unknown>,
+  totals: Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }>,
+  priorityTable: PriorityTableData | null,
+  priorities: Record<string, string> | undefined,
+  skillCategories: Record<string, string | undefined>
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -296,7 +335,8 @@ function extractSpentValues(
   // ============================================================================
 
   const spells = (selections.spells || []) as Array<string | { id: string }>;
-  spent["spell-slots"] = spells.length;
+  const freeSpellsTotal = totals["spell-slots"]?.total || 0;
+  spent["spell-slots"] = Math.min(spells.length, freeSpellsTotal);
 
   // ============================================================================
   // REMAINING BUDGET MAPPINGS - still read from stateBudgets for now
@@ -315,6 +355,7 @@ function extractSpentValues(
 
   // Calculate skill points spent from selections
   // Subtract rating points purchased with karma (those don't count against skill point budget)
+  // Subtract free skill points from magic priority (those don't count against skill point budget)
   // Include specializations (1 skill point each during creation)
   const skills = (selections.skills || {}) as Record<string, number>;
   const totalSkillRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
@@ -326,11 +367,37 @@ function extractSpentValues(
     (sum, specs) => sum + specs.length,
     0
   );
-  spent["skill-points"] = totalSkillRatings + totalSpecPoints - karmaRatingPoints;
+
+  // Calculate free skill points from magic priority
+  // Use explicit designations if present, otherwise fall back to automatic allocation
+  const magicPath = selections["magical-path"] as string | undefined;
+  const freeSkillConfigs = getFreeSkillsFromMagicPriority(
+    priorityTable,
+    priorities?.magic,
+    magicPath
+  );
+  const freeSkillDesignations = selections.freeSkillDesignations as
+    | FreeSkillDesignations
+    | undefined;
+
+  // Check for explicit designations first (new system)
+  // Fall back to automatic allocation (legacy system) only if no designations exist
+  const hasExplicitDesignations =
+    freeSkillDesignations &&
+    ((freeSkillDesignations.magical && freeSkillDesignations.magical.length > 0) ||
+      (freeSkillDesignations.resonance && freeSkillDesignations.resonance.length > 0) ||
+      (freeSkillDesignations.active && freeSkillDesignations.active.length > 0));
+
+  const freeSkillPoints = hasExplicitDesignations
+    ? calculateFreePointsFromDesignations(skills, freeSkillConfigs, freeSkillDesignations)
+    : calculateFreeSkillPointsUsed(skills, freeSkillConfigs, skillCategories);
+
+  spent["skill-points"] = totalSkillRatings + totalSpecPoints - karmaRatingPoints - freeSkillPoints;
 
   // Calculate skill group points spent from selections
   // Handles both legacy (number) and new ({ rating, isBroken }) formats
   // Subtract karma-purchased group rating points - they don't count against group point budget
+  // Subtract free skill group points from magic priority (aspected mages)
   const skillGroups = (selections.skillGroups || {}) as Record<
     string,
     number | { rating: number; isBroken: boolean }
@@ -342,7 +409,11 @@ function extractSpentValues(
   const karmaGroupRatingPoints =
     (selections.skillKarmaSpent as { groupRatingPoints?: number } | undefined)?.groupRatingPoints ||
     0;
-  spent["skill-group-points"] = totalGroupRatings - karmaGroupRatingPoints;
+
+  // Calculate free skill group points from magic priority (aspected mages)
+  const freeSkillGroupPoints = calculateFreeSkillGroupPointsUsed(skillGroups, freeSkillConfigs);
+
+  spent["skill-group-points"] = totalGroupRatings - karmaGroupRatingPoints - freeSkillGroupPoints;
 
   // Calculate knowledge points spent from selections (languages + knowledge skills)
   const languages = (selections.languages || []) as Array<{ rating: number }>;
@@ -503,6 +574,7 @@ function extractSpentValues(
   const karmaSpentSpells = (stateBudgets["karma-spent-spells"] as number) || 0;
   const karmaSpentPowers = (stateBudgets["karma-spent-power-points"] as number) || 0;
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
+  const karmaSpentFoci = (stateBudgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections to avoid stale closure bugs
   // Calculate: total contact cost - free pool (CHA × 3)
@@ -542,6 +614,7 @@ function extractSpentValues(
     karmaSpentSpells +
     karmaSpentPowers +
     karmaSpentAttributes +
+    karmaSpentFoci +
     karmaSpentSkills +
     karmaSpentContacts -
     karmaGainedNegative;
@@ -554,7 +627,9 @@ function extractSpentValues(
  */
 function validateBudgets(
   budgets: Record<string, BudgetState>,
-  state: CreationState
+  state: CreationState,
+  priorityTable: PriorityTableData | null,
+  skillCategories: Record<string, string | undefined>
 ): { errors: ValidationError[]; warnings: ValidationError[] } {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
@@ -641,6 +716,88 @@ function validateBudgets(
     });
   }
 
+  // Check for unused free skills from magic priority
+  const magicPath = state.selections["magical-path"] as string | undefined;
+  const freeSkillConfigs = getFreeSkillsFromMagicPriority(
+    priorityTable,
+    state.priorities?.magic,
+    magicPath
+  );
+
+  const skills = (state.selections.skills || {}) as Record<string, number>;
+  const skillGroups = (state.selections.skillGroups || {}) as Record<
+    string,
+    number | { rating: number; isBroken: boolean }
+  >;
+
+  // Check for explicit designations (new system)
+  const freeSkillDesignations = state.selections.freeSkillDesignations as
+    | FreeSkillDesignations
+    | undefined;
+  const hasExplicitDesignations =
+    freeSkillDesignations &&
+    ((freeSkillDesignations.magical && freeSkillDesignations.magical.length > 0) ||
+      (freeSkillDesignations.resonance && freeSkillDesignations.resonance.length > 0) ||
+      (freeSkillDesignations.active && freeSkillDesignations.active.length > 0));
+
+  // If using explicit designations, use the new validation logic
+  if (hasExplicitDesignations || freeSkillConfigs.length > 0) {
+    const allocationStatuses = getFreeSkillAllocationStatus(
+      skills,
+      freeSkillConfigs,
+      freeSkillDesignations,
+      FREE_SKILL_TYPE_LABELS
+    );
+
+    for (const status of allocationStatuses) {
+      // Warning for unfilled slots (user hasn't designated all free skills yet)
+      if (status.remainingSlots > 0) {
+        warnings.push({
+          constraintId: `free-skills-unfilled-${status.type}`,
+          message: `${status.remainingSlots} of ${status.totalSlots} free ${status.label} not designated (rating ${status.freeRating})`,
+          severity: "warning",
+        });
+      }
+
+      // Warning for designated skills below free rating
+      for (const below of status.belowFreeRating) {
+        warnings.push({
+          constraintId: `free-skill-below-rating-${below.skillId}`,
+          message: `Designated skill at rating ${below.currentRating} (free provides ${below.freeRating})`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
+  // Check skill groups for aspected mages (magicalGroup config)
+  for (const config of freeSkillConfigs) {
+    if (config.type === "magicalGroup") {
+      const qualifyingGroupIds = ["sorcery", "conjuring", "enchanting"];
+      let allocatedCount = 0;
+
+      for (const groupId of qualifyingGroupIds) {
+        if (allocatedCount >= config.count) break;
+        const groupValue = skillGroups[groupId];
+        if (!groupValue) continue;
+        const groupRating = typeof groupValue === "number" ? groupValue : groupValue.rating;
+        if (groupRating >= config.rating) {
+          allocatedCount++;
+        }
+      }
+
+      const unusedCount = config.count - allocatedCount;
+      if (unusedCount > 0) {
+        const label = FREE_SKILL_TYPE_LABELS[config.type]?.label || config.type;
+        warnings.push({
+          constraintId: `free-skills-unused-${config.type}`,
+          message: `${unusedCount} unused free ${label} at rating ${config.rating} from Magic priority`,
+          severity: "warning",
+        });
+      }
+    }
+  }
+
   return { errors, warnings };
 }
 
@@ -664,6 +821,10 @@ export function CreationBudgetProvider({
 
   const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Get skill data from ruleset for category lookups
+  const { activeSkills } = useSkills();
+  const skillCategories = useMemo(() => buildSkillCategoriesMap(activeSkills), [activeSkills]);
+
   // Calculate budget totals from priorities
   const budgetTotals = useMemo(
     () => calculateBudgetTotals(creationState.priorities, creationState.selections, priorityTable),
@@ -672,8 +833,23 @@ export function CreationBudgetProvider({
 
   // Extract spent values from state and selections
   const spentValues = useMemo(
-    () => extractSpentValues(creationState.budgets, creationState.selections),
-    [creationState.budgets, creationState.selections]
+    () =>
+      extractSpentValues(
+        creationState.budgets,
+        creationState.selections,
+        budgetTotals,
+        priorityTable,
+        creationState.priorities,
+        skillCategories
+      ),
+    [
+      creationState.budgets,
+      creationState.selections,
+      budgetTotals,
+      priorityTable,
+      creationState.priorities,
+      skillCategories,
+    ]
   );
 
   // Get karma-to-nuyen conversion (2000¥ per karma)
@@ -712,7 +888,12 @@ export function CreationBudgetProvider({
     }
 
     validationTimeoutRef.current = setTimeout(() => {
-      let { errors, warnings } = validateBudgets(budgets, creationState);
+      let { errors, warnings } = validateBudgets(
+        budgets,
+        creationState,
+        priorityTable,
+        skillCategories
+      );
 
       // Add custom validation if provided
       if (customValidation) {
@@ -729,7 +910,14 @@ export function CreationBudgetProvider({
         clearTimeout(validationTimeoutRef.current);
       }
     };
-  }, [budgets, creationState, customValidation, validationDebounceMs]);
+  }, [
+    budgets,
+    creationState,
+    customValidation,
+    validationDebounceMs,
+    priorityTable,
+    skillCategories,
+  ]);
 
   // Update spent callback - this notifies parent to update CreationState
   const updateSpent = useCallback(

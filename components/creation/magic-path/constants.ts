@@ -1,5 +1,32 @@
 import type { AspectedMageGroup, PathInfo } from "./types";
 
+// Skills mystic adepts cannot learn (SR5 Core p.69)
+export const MYSTIC_ADEPT_RESTRICTED_SKILLS = ["counterspelling"];
+
+// Magical skill IDs for "magical skills" free skill type
+export const MAGICAL_SKILL_IDS = [
+  "spellcasting",
+  "counterspelling",
+  "ritual-spellcasting",
+  "summoning",
+  "banishing",
+  "binding",
+  "alchemy",
+  "artificing",
+  "disenchanting",
+];
+
+// Resonance skill IDs for "resonance skills" free skill type
+export const RESONANCE_SKILL_IDS = ["compiling", "registering", "decompiling"];
+
+// Skill types to readable labels for free skills display
+export const FREE_SKILL_TYPE_LABELS: Record<string, { label: string; skillIds?: string[] }> = {
+  magical: { label: "magical skills", skillIds: MAGICAL_SKILL_IDS },
+  resonance: { label: "resonance skills", skillIds: RESONANCE_SKILL_IDS },
+  active: { label: "active skills" },
+  magicalGroup: { label: "skill group" },
+};
+
 // Aspected mage can choose ONE of these skill groups
 export const ASPECTED_MAGE_GROUPS: AspectedMageGroup[] = [
   {
@@ -32,10 +59,11 @@ export const MENTOR_SPIRIT_QUALITY_ID = "mentor-spirit";
 export const MENTOR_SPIRIT_KARMA_COST = 5;
 
 // Path descriptions and features for the modal
+// Note: Free spells/forms and skill bonuses are shown dynamically from priority table
 export const PATH_INFO: Record<string, PathInfo> = {
   magician: {
     description: "Full spellcaster with summoning and enchanting",
-    features: ["5 free spells", "Requires tradition selection", "All magical skills available"],
+    features: ["Requires tradition selection", "All magical skills available"],
   },
   "mystic-adept": {
     description: "Blend of adept powers and spellcasting",
@@ -51,7 +79,7 @@ export const PATH_INFO: Record<string, PathInfo> = {
   },
   technomancer: {
     description: "Living interface with the Matrix",
-    features: ["Complex forms", "Compile sprites", "Living Persona"],
+    features: ["Compile sprites", "Living Persona"],
   },
   mundane: {
     description: "Focus your build on physical, technical, or social strengths",

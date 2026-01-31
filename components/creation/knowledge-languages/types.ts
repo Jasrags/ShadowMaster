@@ -12,6 +12,17 @@ export interface KnowledgeSkillRowProps {
   skill: KnowledgeSkill;
   onRatingChange: (delta: number) => void;
   onRemove: () => void;
+  onAddSpecialization?: () => void;
+  onRemoveSpecialization?: () => void;
+  canAddSpecialization?: boolean;
+}
+
+export interface KnowledgeSkillSpecModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onAdd: (spec: string) => void;
+  skillName: string;
+  pointsRemaining: number;
 }
 
 export interface AddLanguageModalProps {
@@ -26,6 +37,11 @@ export interface AddLanguageModalProps {
 export interface AddKnowledgeSkillModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (name: string, category: KnowledgeCategory, rating: number) => void;
+  onAdd: (
+    name: string,
+    category: KnowledgeCategory,
+    rating: number,
+    specialization?: string
+  ) => void;
   pointsRemaining: number;
 }

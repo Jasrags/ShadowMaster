@@ -91,7 +91,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
   /combat               # Combat session management
   /security             # Rate limiting, audit logging
 /components             # Shared React components
-  /creation             # Character creation cards (60 components in 16 subfolders)
+  /creation             # Character creation cards (~83 components in 15 subfolders)
   /combat               # Combat UI components
 /data                   # JSON file storage (acts as database)
   /editions/{code}/     # Edition data (edition.json, core-rulebook.json, grunt-templates/)
@@ -188,6 +188,14 @@ Always use TypeScript storage layer (`readJsonFile()`, `writeJsonFile()`) instea
   - Validation regex: `/^[a-z0-9]+(-[a-z0-9]+)*$/`
 - **TypeScript object keys**: `camelCase`
 - Run `pnpm verify-naming` to validate naming conventions in data files
+
+### Keeping Documentation in Sync
+
+When modifying files in `/components/creation/`:
+
+- Update the hierarchy diagrams in `/docs/architecture/creation-components/` if adding, removing, or reorganizing components
+- Run `pnpm validate-creation-docs` to check for drift between code and documentation
+- Key files to update: `README.md` (component counts), feature-specific docs (hierarchy diagrams)
 
 ## Testing
 

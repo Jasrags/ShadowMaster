@@ -171,6 +171,9 @@ const identityValidator: ValidatorDefinition = {
   },
 };
 
+// Skills that mystic adepts cannot learn (SR5 Core p.69)
+const MYSTIC_ADEPT_RESTRICTED_SKILLS = ["counterspelling"];
+
 /**
  * Validate magic-specific requirements
  */
@@ -200,6 +203,22 @@ const magicValidator: ValidatorDefinition = {
         severity: "warning",
         suggestion: "Select a magical tradition (e.g., Hermetic, Shaman)",
       });
+    }
+
+    // Mystic adepts cannot have Counterspelling skill (SR5 Core p.69)
+    if (character.magicalPath === "mystic-adept" && character.skills) {
+      const skillsObj = character.skills as Record<string, number>;
+      for (const restrictedSkill of MYSTIC_ADEPT_RESTRICTED_SKILLS) {
+        if (skillsObj[restrictedSkill] && skillsObj[restrictedSkill] > 0) {
+          issues.push({
+            code: "MYSTIC_ADEPT_RESTRICTED_SKILL",
+            message: `Mystic adepts cannot learn the Counterspelling skill (SR5 Core p.69)`,
+            field: `skills.${restrictedSkill}`,
+            severity: "error",
+            suggestion: "Remove Counterspelling from your skills",
+          });
+        }
+      }
     }
 
     // Adepts and mystic adepts should have adept powers

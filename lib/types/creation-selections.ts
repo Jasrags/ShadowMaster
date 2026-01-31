@@ -24,6 +24,7 @@ import type {
   Lifestyle,
   Weapon,
 } from "./index";
+import type { FreeSkillDesignations } from "@/lib/rules/skills/free-skills";
 
 // =============================================================================
 // ATTRIBUTE IDS
@@ -132,6 +133,12 @@ export interface SkillSelections {
     /** Total number of group rating points purchased with karma (not to be counted as group points) */
     groupRatingPoints?: number;
   };
+  /**
+   * User's explicit designations for free skill allocations from magic priority.
+   * Maps free skill type (magical, resonance, active) to array of designated skill IDs.
+   * When set, these take precedence over automatic allocation.
+   */
+  freeSkillDesignations?: FreeSkillDesignations;
 }
 
 /**
