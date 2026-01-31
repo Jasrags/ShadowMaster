@@ -4,15 +4,14 @@
  * WeaponsPanel
  *
  * Card for weapon purchasing in sheet-driven creation.
- * Follows the Augmentations pattern with:
- * - Nuyen budget bar at top
- * - Category sections (Ranged, Melee, Throwing/Grenades)
- * - Type badges and icon tags for stats
- * - Per-category add buttons
+ * Features:
+ * - Nuyen budget bar at top (shared with GearCard)
+ * - Single "+ Add Weapon" button opening modal with category filtering
+ * - Grouped display by category (Ranged, Melee, Throwing)
  * - Legality warnings
- * - Modal-driven weapon selection
+ * - Modal-driven weapon selection, modifications, and ammunition
  *
- * Shares budget with GearCard via state.budgets["nuyen"]
+ * Follows SpellsCard-style grouped display pattern.
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -31,13 +30,11 @@ import type {
   InstalledWeaponMod,
   WeaponMount,
   PurchasedAmmunitionItem,
-  MergedRuleset,
 } from "@/lib/types";
 import type { GearItemData } from "@/lib/rules/RulesetContext";
 import { useCreationBudgets } from "@/lib/contexts";
 import {
   CreationCard,
-  EmptyState,
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
@@ -48,17 +45,7 @@ import {
   WeaponModificationModal,
   AmmunitionModal,
 } from "./weapons";
-import {
-  Lock,
-  Plus,
-  Sword,
-  Crosshair,
-  Target,
-  Bomb,
-  AlertTriangle,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { Lock, Plus, Crosshair, AlertTriangle } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
@@ -67,29 +54,14 @@ import { InfoTooltip } from "@/components/ui";
 
 const KARMA_TO_NUYEN_RATE = 2000;
 
-// Weapon category configuration
-const WEAPON_CATEGORIES = {
-  ranged: {
-    label: "Ranged Weapons",
-    icon: Crosshair,
-    color: "blue",
-    subcategories: ["pistols", "smgs", "rifles", "shotguns", "sniperRifles"],
-  },
-  melee: {
-    label: "Melee Weapons",
-    icon: Sword,
-    color: "amber",
-    subcategories: ["melee"],
-  },
-  throwing: {
-    label: "Throwing & Grenades",
-    icon: Bomb,
-    color: "red",
-    subcategories: ["throwingWeapons", "grenades"],
-  },
-} as const;
+// Category labels for grouped display
+const CATEGORY_LABELS: Record<WeaponCategoryKey, string> = {
+  ranged: "Ranged",
+  melee: "Melee",
+  throwing: "Throwing",
+};
 
-type WeaponCategoryKey = keyof typeof WEAPON_CATEGORIES;
+type WeaponCategoryKey = "ranged" | "melee" | "throwing";
 
 // =============================================================================
 // HELPERS
@@ -150,113 +122,6 @@ interface WeaponsPanelProps {
 }
 
 // =============================================================================
-// WEAPON CATEGORY SECTION COMPONENT
-// =============================================================================
-
-interface WeaponCategorySectionProps {
-  categoryKey: WeaponCategoryKey;
-  weapons: Weapon[];
-  ruleset: MergedRuleset | null;
-  onAddClick: () => void;
-  onRemove: (id: string) => void;
-  onAddMod: (weaponId: string) => void;
-  onRemoveMod: (weaponId: string, modIndex: number) => void;
-  onAddAmmo: (weaponId: string) => void;
-  onRemoveAmmo: (weaponId: string, ammoIndex: number) => void;
-}
-
-function WeaponCategorySection({
-  categoryKey,
-  weapons,
-  ruleset,
-  onAddClick,
-  onRemove,
-  onAddMod,
-  onRemoveMod,
-  onAddAmmo,
-  onRemoveAmmo,
-}: WeaponCategorySectionProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-  const category = WEAPON_CATEGORIES[categoryKey];
-  const Icon = category.icon;
-
-  const colorClasses = {
-    blue: {
-      icon: "text-blue-500",
-      badge: "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300",
-    },
-    amber: {
-      icon: "text-amber-500",
-      badge: "bg-amber-100 text-amber-700 dark:bg-amber-900/50 dark:text-amber-300",
-    },
-    red: {
-      icon: "text-red-500",
-      badge: "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300",
-    },
-  }[category.color];
-
-  return (
-    <div>
-      <div className="mb-2 flex items-center justify-between">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="flex items-center gap-2 hover:opacity-80"
-        >
-          <div className="text-zinc-400">
-            {isCollapsed ? (
-              <ChevronRight className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronDown className="h-3.5 w-3.5" />
-            )}
-          </div>
-          <Icon className={`h-3.5 w-3.5 ${colorClasses.icon}`} />
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            {category.label}
-          </span>
-          {weapons.length > 0 && (
-            <span
-              className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${colorClasses.badge}`}
-            >
-              {weapons.length}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={onAddClick}
-          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-        >
-          <Plus className="h-3 w-3" />
-          Add
-        </button>
-      </div>
-
-      {!isCollapsed && (
-        <>
-          {weapons.length > 0 ? (
-            <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
-              {weapons.map((weapon) => (
-                <WeaponRow
-                  key={weapon.id}
-                  weapon={weapon}
-                  ruleset={ruleset}
-                  onRemove={onRemove}
-                  onAddMod={onAddMod}
-                  onRemoveMod={onRemoveMod}
-                  onAddAmmo={onAddAmmo}
-                  onRemoveAmmo={onRemoveAmmo}
-                />
-              ))}
-            </div>
-          ) : (
-            <EmptyState message={`No ${category.label.toLowerCase()} purchased`} />
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
 // MAIN COMPONENT
 // =============================================================================
 
@@ -269,7 +134,6 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const karmaBudget = getBudget("karma");
 
   const [isPurchaseModalOpen, setIsPurchaseModalOpen] = useState(false);
-  const [purchaseCategory, setPurchaseCategory] = useState<WeaponCategoryKey | null>(null);
   const [modifyingWeaponId, setModifyingWeaponId] = useState<string | null>(null);
   const [ammoWeaponId, setAmmoWeaponId] = useState<string | null>(null);
 
@@ -303,25 +167,6 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const baseNuyen = nuyenBudget?.total || 0;
   const convertedNuyen = karmaConversion * KARMA_TO_NUYEN_RATE;
   const totalNuyen = baseNuyen + convertedNuyen;
-
-  // Calculate total spent across all gear categories
-  const selectedGear = (state.selections?.gear || []) as Array<{
-    cost: number;
-    quantity: number;
-  }>;
-  const selectedArmor = (state.selections?.armor || []) as Array<{
-    cost: number;
-    quantity: number;
-  }>;
-  const selectedFoci = (state.selections?.foci || []) as Array<{
-    cost: number;
-  }>;
-  const selectedCyberware = (state.selections?.cyberware || []) as Array<{
-    cost: number;
-  }>;
-  const selectedBioware = (state.selections?.bioware || []) as Array<{
-    cost: number;
-  }>;
 
   // Local category cost (for card-specific footer display)
   const weaponsSpent = selectedWeapons.reduce((sum, w) => {
@@ -386,12 +231,6 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     onConvert: handleKarmaConvert,
   });
 
-  // Open purchase modal for a specific category
-  const openPurchaseModal = useCallback((category: WeaponCategoryKey) => {
-    setPurchaseCategory(category);
-    setIsPurchaseModalOpen(true);
-  }, []);
-
   // Add weapon (actual implementation - called after affordability check)
   const actuallyAddWeapon = useCallback(
     (weapon: WeaponData, quantity: number = 1) => {
@@ -443,10 +282,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           weapons: [...selectedWeapons, newWeapon],
         },
       });
-
-      // Close modal after purchase
-      setIsPurchaseModalOpen(false);
-      setPurchaseCategory(null);
+      // Modal stays open for bulk-add pattern - user clicks "Done" to close
     },
     [selectedWeapons, state.selections, updateState, weaponModsCatalog]
   );
@@ -565,8 +401,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           weapons: newWeapons,
         },
       });
-
-      setModifyingWeaponId(null);
+      // Modal stays open for bulk-add pattern - user clicks "Done" to close
     },
     [modifyingWeaponId, selectedWeapons, state.selections, updateState]
   );
@@ -703,8 +538,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           weapons: newWeapons,
         },
       });
-
-      setAmmoWeaponId(null);
+      // Modal stays open for bulk-add pattern - user clicks "Done" to close
     },
     [ammoWeaponId, selectedWeapons, state.selections, updateState]
   );
@@ -846,42 +680,68 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
             </div>
           )}
 
-          {/* Weapon Category Sections */}
-          <WeaponCategorySection
-            categoryKey="ranged"
-            weapons={weaponsByCategory.ranged}
-            ruleset={ruleset}
-            onAddClick={() => openPurchaseModal("ranged")}
-            onRemove={removeWeapon}
-            onAddMod={handleAddMod}
-            onRemoveMod={handleRemoveMod}
-            onAddAmmo={handleAddAmmo}
-            onRemoveAmmo={handleRemoveAmmo}
-          />
+          {/* Category Header with Add Button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Crosshair className="h-3.5 w-3.5 text-blue-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Weapons
+              </span>
+              {selectedWeapons.length > 0 && (
+                <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
+                  {selectedWeapons.length}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => setIsPurchaseModalOpen(true)}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
 
-          <WeaponCategorySection
-            categoryKey="melee"
-            weapons={weaponsByCategory.melee}
-            ruleset={ruleset}
-            onAddClick={() => openPurchaseModal("melee")}
-            onRemove={removeWeapon}
-            onAddMod={handleAddMod}
-            onRemoveMod={handleRemoveMod}
-            onAddAmmo={handleAddAmmo}
-            onRemoveAmmo={handleRemoveAmmo}
-          />
+          {/* Selected weapons grouped by category */}
+          {selectedWeapons.length > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Selected Weapons ({selectedWeapons.length})
+              </h4>
 
-          <WeaponCategorySection
-            categoryKey="throwing"
-            weapons={weaponsByCategory.throwing}
-            ruleset={ruleset}
-            onAddClick={() => openPurchaseModal("throwing")}
-            onRemove={removeWeapon}
-            onAddMod={handleAddMod}
-            onRemoveMod={handleRemoveMod}
-            onAddAmmo={handleAddAmmo}
-            onRemoveAmmo={handleRemoveAmmo}
-          />
+              {(Object.entries(weaponsByCategory) as [WeaponCategoryKey, Weapon[]][]).map(
+                ([category, weapons]) =>
+                  weapons.length > 0 && (
+                    <div key={category}>
+                      <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                        {CATEGORY_LABELS[category]}
+                      </h5>
+                      <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                        {weapons.map((weapon) => (
+                          <WeaponRow
+                            key={weapon.id}
+                            weapon={weapon}
+                            ruleset={ruleset}
+                            onRemove={removeWeapon}
+                            onAddMod={handleAddMod}
+                            onRemoveMod={handleRemoveMod}
+                            onAddAmmo={handleAddAmmo}
+                            onRemoveAmmo={handleRemoveAmmo}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )
+              )}
+            </div>
+          )}
+
+          {/* Empty state */}
+          {selectedWeapons.length === 0 && (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No weapons selected</p>
+            </div>
+          )}
 
           {/* Footer Summary */}
           <SummaryFooter count={selectedWeapons.length} total={weaponsSpent} format="currency" />
@@ -891,14 +751,10 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
       {/* Purchase Modal */}
       <WeaponPurchaseModal
         isOpen={isPurchaseModalOpen}
-        onClose={() => {
-          setIsPurchaseModalOpen(false);
-          setPurchaseCategory(null);
-        }}
+        onClose={() => setIsPurchaseModalOpen(false)}
         weapons={weaponsCatalog}
         remaining={remaining}
         onPurchase={addWeapon}
-        initialCategory={purchaseCategory}
       />
 
       {/* Modification Modal */}
