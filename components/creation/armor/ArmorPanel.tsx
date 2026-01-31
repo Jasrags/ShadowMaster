@@ -172,8 +172,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         },
       });
 
-      // Close modal after purchase
-      setIsPurchaseModalOpen(false);
+      // Note: Modal stays open for bulk-add workflow - user clicks "Done" to close
     },
     [selectedArmor, state.selections, updateState]
   );
@@ -359,8 +358,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
         },
       });
 
-      // Close modal
-      setModifyingArmorId(null);
+      // Note: Modal stays open for bulk-add workflow - user clicks "Done" to close
     },
     [modifyingArmorId, selectedArmor, state.selections, updateState]
   );

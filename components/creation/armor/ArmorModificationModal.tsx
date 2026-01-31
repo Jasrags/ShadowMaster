@@ -8,13 +8,13 @@
  * Displays capacity usage with visual progress bar.
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import {
   useArmorModifications,
   type ArmorModificationCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import type { ArmorItem, ItemLegality } from "@/lib/types";
-import { BaseModalRoot } from "@/components/ui";
+import { BaseModalRoot, ModalFooter } from "@/components/ui";
 import { Search, AlertTriangle, Shield, Minus, Plus, X } from "lucide-react";
 
 // =============================================================================
@@ -191,6 +191,9 @@ export function ArmorModificationModal({
   const [selectedMod, setSelectedMod] = useState<ArmorModificationCatalogItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
 
+  // Track how many mods were installed in this session
+  const [addedThisSession, setAddedThisSession] = useState(0);
+
   // Calculate capacity
   const totalCapacity = armor.capacity ?? armor.armorRating;
   const usedCapacity = armor.capacityUsed ?? 0;
@@ -272,20 +275,41 @@ export function ArmorModificationModal({
   const canAffordSelected = selectedModCost <= remaining && selectedModAvail <= MAX_AVAILABILITY;
   const canInstall = canFitSelected && canAffordSelected;
 
-  // Reset selection when modal opens
-  const handleClose = () => {
+  // Reset for adding another mod - preserves search
+  const resetForNextItem = useCallback(() => {
+    setSelectedMod(null);
+    setSelectedRating(1);
+  }, []);
+
+  // Full reset on close
+  const resetState = useCallback(() => {
     setSearchQuery("");
     setSelectedMod(null);
     setSelectedRating(1);
-    onClose();
-  };
+    setAddedThisSession(0);
+  }, []);
 
-  const handleInstall = () => {
+  // Handle close
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [resetState, onClose]);
+
+  // Handle install - stays open for bulk-add
+  const handleInstall = useCallback(() => {
     if (selectedMod && canInstall) {
       onInstall(selectedMod, ratingBounds.hasRating ? selectedRating : undefined);
-      handleClose();
+      setAddedThisSession((prev) => prev + 1);
+      resetForNextItem();
     }
-  };
+  }, [
+    selectedMod,
+    canInstall,
+    onInstall,
+    ratingBounds.hasRating,
+    selectedRating,
+    resetForNextItem,
+  ]);
 
   // Reset rating when selecting a new mod
   const handleSelectMod = (mod: ArmorModificationCatalogItemData) => {
@@ -513,25 +537,6 @@ export function ArmorModificationModal({
                       </div>
                     </div>
                   )}
-
-                  {/* Install Button */}
-                  <div className="pt-2">
-                    <button
-                      onClick={handleInstall}
-                      disabled={!canInstall}
-                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                        canInstall
-                          ? "bg-amber-500 text-white hover:bg-amber-600"
-                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                      }`}
-                    >
-                      {!canFitSelected
-                        ? `Exceeds Capacity (needs ${selectedModCapacity})`
-                        : canAffordSelected
-                          ? `Install - ${formatCurrency(selectedModCost)}¥`
-                          : `Cannot Afford (${formatCurrency(selectedModCost)}¥)`}
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
@@ -541,28 +546,47 @@ export function ArmorModificationModal({
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+          <ModalFooter>
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              Budget:{" "}
+              {addedThisSession > 0 && (
+                <span className="mr-2 text-emerald-600 dark:text-emerald-400">
+                  {addedThisSession} installed
+                </span>
+              )}
               <span className="font-medium text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(remaining)}¥
               </span>{" "}
               remaining
               <span className="mx-2">•</span>
-              Capacity:{" "}
               <span className="font-medium text-zinc-900 dark:text-zinc-100">
                 {remainingCapacity}
               </span>{" "}
-              available
+              capacity
             </div>
-            <button
-              onClick={close}
-              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Done
+              </button>
+              <button
+                onClick={handleInstall}
+                disabled={!canInstall}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  canInstall
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                {!canFitSelected && selectedMod
+                  ? `Exceeds Capacity`
+                  : canInstall && selectedMod
+                    ? `Install Mod (${formatCurrency(selectedModCost)}¥)`
+                    : "Install Mod"}
+              </button>
+            </div>
+          </ModalFooter>
         </div>
       )}
     </BaseModalRoot>
