@@ -8,10 +8,10 @@
  * Right side: Detail preview of selected armor
  */
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useCallback } from "react";
 import type { ArmorData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
-import { BaseModalRoot } from "@/components/ui";
+import { BaseModalRoot, ModalFooter } from "@/components/ui";
 import { Search, Shield, AlertTriangle, X, Plus, Shirt } from "lucide-react";
 
 // =============================================================================
@@ -255,13 +255,30 @@ export function ArmorPurchaseModal({
   const [selectedCategory, setSelectedCategory] = useState<ArmorCategory>("all");
   const [selectedArmor, setSelectedArmor] = useState<ArmorData | null>(null);
 
+  // Track how many items were added in this session
+  const [addedThisSession, setAddedThisSession] = useState(0);
+
   // Show custom clothing form when in clothing category
   const showCustomClothingForm = selectedCategory === "clothing" && onPurchaseCustom;
+
+  // Reset for adding another item - preserves search/category
+  const resetForNextItem = useCallback(() => {
+    setSelectedArmor(null);
+  }, []);
+
+  // Full reset on close
+  const resetState = useCallback(() => {
+    setSearchQuery("");
+    setSelectedCategory("all");
+    setSelectedArmor(null);
+    setAddedThisSession(0);
+  }, []);
 
   // Handle custom clothing purchase
   const handleCustomClothingAdd = (item: CustomClothingItem) => {
     if (onPurchaseCustom) {
       onPurchaseCustom(item);
+      setAddedThisSession((prev) => prev + 1);
     }
   };
 
@@ -309,20 +326,54 @@ export function ArmorPurchaseModal({
     return counts;
   }, [armorCatalog]);
 
-  // Reset selection when modal opens
-  const handleClose = () => {
-    setSearchQuery("");
-    setSelectedCategory("all");
-    setSelectedArmor(null);
-    onClose();
+  // Group filtered armor by category for sticky headers (only when showing "all")
+  const armorByCategory = useMemo(() => {
+    if (selectedCategory !== "all") {
+      // When filtering by specific category, no grouping needed
+      return null;
+    }
+    const grouped: Partial<Record<ArmorCategory, ArmorData[]>> = {};
+    filteredArmor.forEach((armor) => {
+      const cat = categorizeArmor(armor);
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat]!.push(armor);
+    });
+    return grouped;
+  }, [filteredArmor, selectedCategory]);
+
+  // Category display order and labels
+  const categoryOrder: ArmorCategory[] = [
+    "body",
+    "clothing",
+    "helmets",
+    "shields",
+    "fba",
+    "accessories",
+  ];
+  const categoryLabels: Record<ArmorCategory, string> = {
+    all: "All Armor",
+    body: "Body Armor",
+    clothing: "Clothing",
+    helmets: "Helmets",
+    shields: "Shields",
+    fba: "Full Body Armor",
+    accessories: "Accessories",
   };
 
-  const handlePurchase = () => {
+  // Handle close
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [resetState, onClose]);
+
+  // Handle purchase - stays open for bulk-add
+  const handlePurchase = useCallback(() => {
     if (selectedArmor && selectedArmor.cost <= remaining) {
       onPurchase(selectedArmor);
-      setSelectedArmor(null);
+      setAddedThisSession((prev) => prev + 1);
+      resetForNextItem();
     }
-  };
+  }, [selectedArmor, remaining, onPurchase, resetForNextItem]);
 
   const canAffordSelected = selectedArmor ? selectedArmor.cost <= remaining : false;
 
@@ -379,17 +430,42 @@ export function ArmorPurchaseModal({
           {/* Content - Split Pane */}
           <div className="flex-1 flex overflow-hidden">
             {/* Left: Armor List */}
-            <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto p-4">
+            <div className="w-1/2 border-r border-zinc-100 dark:border-zinc-800 overflow-y-auto">
               {/* Custom Clothing Form */}
               {showCustomClothingForm && (
-                <CustomClothingForm remaining={remaining} onAdd={handleCustomClothingAdd} />
+                <div className="p-4 pb-0">
+                  <CustomClothingForm remaining={remaining} onAdd={handleCustomClothingAdd} />
+                </div>
               )}
 
-              <div className="space-y-2">
-                {filteredArmor.length === 0 ? (
-                  <p className="text-sm text-zinc-500 text-center py-8">No armor found</p>
-                ) : (
-                  filteredArmor.map((armor) => (
+              {filteredArmor.length === 0 ? (
+                <p className="text-sm text-zinc-500 text-center py-8">No armor found</p>
+              ) : armorByCategory ? (
+                // Grouped by category with sticky headers (when "all" is selected)
+                categoryOrder
+                  .filter((cat) => armorByCategory[cat]?.length)
+                  .map((category) => (
+                    <div key={category}>
+                      <div className="sticky top-0 z-10 bg-zinc-100 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                        {categoryLabels[category]}
+                      </div>
+                      <div className="space-y-2 px-4 py-2">
+                        {armorByCategory[category]!.map((armor) => (
+                          <ArmorListItem
+                            key={armor.id}
+                            armor={armor}
+                            isSelected={selectedArmor?.id === armor.id}
+                            canAfford={armor.cost <= remaining}
+                            onClick={() => setSelectedArmor(armor)}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  ))
+              ) : (
+                // Flat list when filtering by specific category
+                <div className="space-y-2 p-4">
+                  {filteredArmor.map((armor) => (
                     <ArmorListItem
                       key={armor.id}
                       armor={armor}
@@ -397,9 +473,9 @@ export function ArmorPurchaseModal({
                       canAfford={armor.cost <= remaining}
                       onClick={() => setSelectedArmor(armor)}
                     />
-                  ))
-                )}
-              </div>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Right: Detail Preview */}
@@ -518,23 +594,6 @@ export function ArmorPurchaseModal({
                       </p>
                     </div>
                   )}
-
-                  {/* Purchase Button */}
-                  <div className="pt-2">
-                    <button
-                      onClick={handlePurchase}
-                      disabled={!canAffordSelected}
-                      className={`w-full py-3 rounded-lg text-sm font-medium transition-colors ${
-                        canAffordSelected
-                          ? "bg-amber-500 text-white hover:bg-amber-600"
-                          : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
-                      }`}
-                    >
-                      {canAffordSelected
-                        ? `Purchase - ${formatCurrency(selectedArmor.cost)}¥`
-                        : `Cannot Afford (${formatCurrency(selectedArmor.cost)}¥)`}
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <div className="flex items-center justify-center h-full text-zinc-400 dark:text-zinc-500">
@@ -544,22 +603,40 @@ export function ArmorPurchaseModal({
             </div>
           </div>
 
-          {/* Footer */}
-          <div className="px-6 py-3 border-t border-zinc-200 dark:border-zinc-700 flex items-center justify-between">
+          <ModalFooter>
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              Budget:{" "}
-              <span className="font-mono font-medium text-emerald-600 dark:text-emerald-400">
+              {addedThisSession > 0 && (
+                <span className="mr-2 text-emerald-600 dark:text-emerald-400">
+                  {addedThisSession} added
+                </span>
+              )}
+              <span className="font-mono font-medium text-zinc-900 dark:text-zinc-100">
                 {formatCurrency(remaining)}¥
               </span>{" "}
               remaining
             </div>
-            <button
-              onClick={close}
-              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Done
+              </button>
+              <button
+                onClick={handlePurchase}
+                disabled={!canAffordSelected}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  canAffordSelected
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                {canAffordSelected && selectedArmor
+                  ? `Add Armor (${formatCurrency(selectedArmor.cost)}¥)`
+                  : "Add Armor"}
+              </button>
+            </div>
+          </ModalFooter>
         </div>
       )}
     </BaseModalRoot>
