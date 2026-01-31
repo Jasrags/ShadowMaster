@@ -15,3 +15,5 @@ export {
   type SkillGroupKarmaConfirmModalProps,
 } from "./SkillGroupKarmaConfirmModal";
 export { SkillSpecModal } from "./SkillSpecModal";
+export { FreeSkillsPanel } from "./FreeSkillsPanel";
+export { FreeSkillDesignationModal } from "./FreeSkillDesignationModal";

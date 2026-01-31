@@ -24,3 +24,15 @@ export {
   getActiveGroups,
   getBrokenGroups,
 } from "./group-utils";
+
+export {
+  // Types
+  type FreeSkillConfig,
+  type FreeSkillAllocationResult,
+  // Core functions
+  getFreeSkillsFromMagicPriority,
+  calculateFreeSkillPointsUsed,
+  countQualifyingSkillsForFreeAllocation,
+  calculateFreeSkillGroupPointsUsed,
+  getSkillsWithFreeAllocation,
+} from "./free-skills";
