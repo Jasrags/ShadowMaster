@@ -4,14 +4,14 @@
  * AugmentationsCard
  *
  * Compact card for augmentation selection in sheet-driven creation.
- * Option A: Unified List with Type Badges
+ * Uses unified category-grouped pattern with single Add button.
  *
  * Features:
- * - Unified list showing both cyberware and bioware with type badges
- * - Two add buttons: [+ Add Cyberware] [+ Add Bioware]
+ * - Single Add button opens unified modal with Cyberware/Bioware toggle
+ * - Installed items grouped by subcategory (Cyberlimbs, Headware, etc.)
  * - Essence bar with magic/resonance loss warnings
  * - Items with capacity show capacity usage and enhancement button
- * - Modal-driven item selection
+ * - Category tabs in modal show item counts
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -70,6 +70,19 @@ const GRADE_DISPLAY: Record<string, string> = {
   beta: "Beta",
   delta: "Delta",
 };
+
+/** Category groupings for display in the card */
+const DISPLAY_CATEGORIES = [
+  { id: "cyberlimb", label: "Cyberlimbs", type: "cyberware" },
+  { id: "headware", label: "Headware", type: "cyberware" },
+  { id: "eyeware", label: "Eyeware", type: "cyberware" },
+  { id: "earware", label: "Earware", type: "cyberware" },
+  { id: "bodyware", label: "Bodyware", type: "cyberware" },
+  { id: "cybernetic-weapon", label: "Cybernetic Weapons", type: "cyberware" },
+  { id: "basic", label: "Basic Bioware", type: "bioware" },
+  { id: "cultured", label: "Cultured Bioware", type: "bioware" },
+  { id: "cosmetic", label: "Cosmetic Bioware", type: "bioware" },
+] as const;
 
 // =============================================================================
 // HELPERS
@@ -599,8 +612,8 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
+  // Single unified modal for adding augmentations (cyberware or bioware)
   const [isAugModalOpen, setIsAugModalOpen] = useState(false);
-  const [augModalType, setAugModalType] = useState<AugmentationType>("cyberware");
   const [enhancementModalCyberware, setEnhancementModalCyberware] = useState<CyberwareItem | null>(
     null
   );
@@ -722,11 +735,37 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     return bonuses;
   }, [selectedCyberware, selectedBioware]);
 
-  // Open augmentation modal
-  const openAugModal = useCallback((type: AugmentationType) => {
-    setAugModalType(type);
-    setIsAugModalOpen(true);
-  }, []);
+  // Combined and grouped augmentations for display
+  const allAugmentations = useMemo(() => {
+    const items: Array<{
+      item: CyberwareItem | BiowareItem;
+      type: "cyberware" | "bioware";
+      displayCategory: string;
+    }> = [];
+
+    selectedCyberware.forEach((item) => {
+      items.push({ item, type: "cyberware", displayCategory: item.category });
+    });
+
+    selectedBioware.forEach((item) => {
+      items.push({ item, type: "bioware", displayCategory: item.category });
+    });
+
+    return items;
+  }, [selectedCyberware, selectedBioware]);
+
+  // Group items by category for display
+  const itemsByCategory = useMemo(() => {
+    const grouped: Record<string, typeof allAugmentations> = {};
+
+    for (const aug of allAugmentations) {
+      const cat = aug.displayCategory;
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat].push(aug);
+    }
+
+    return grouped;
+  }, [allAugmentations]);
 
   // Add augmentation (actual implementation)
   const actuallyAddAugmentation = useCallback(
@@ -1253,7 +1292,21 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
 
   return (
     <>
-      <CreationCard title="Augmentations" status={validationStatus}>
+      <CreationCard
+        title="Augmentations"
+        status={validationStatus}
+        headerAction={
+          allAugmentations.length > 0 ? (
+            <button
+              onClick={() => setIsAugModalOpen(true)}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          ) : undefined
+        }
+      >
         <div className="space-y-4">
           {/* Essence bar - compact style */}
           <div className="space-y-1">
@@ -1348,109 +1401,102 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
             </div>
           )}
 
-          {/* CYBERWARE Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Cpu className="h-3.5 w-3.5 text-cyan-500" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Cyberware
-                </span>
-                {selectedCyberware.length > 0 && (
-                  <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
-                    {selectedCyberware.length}
-                  </span>
-                )}
-              </div>
-              <button
-                onClick={() => openAugModal("cyberware")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            </div>
-            {selectedCyberware.length > 0 ? (
-              <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
-                {selectedCyberware.map((item) =>
-                  isCyberlimb(item) ? (
-                    <CyberlimbAugmentationItem
-                      key={item.id}
-                      item={item}
-                      onRemove={() => item.id && removeCyberware(item.id)}
-                      onAddEnhancement={() => setEnhancementModalCyberware(item)}
-                      onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
-                      onAddAccessory={() => setAccessoryModalCyberlimb(item)}
-                      onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
-                      onAddWeapon={() => setWeaponModalCyberlimb(item)}
-                      onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
-                    />
-                  ) : (
-                    <AugmentationItem
-                      key={item.id}
-                      item={item}
-                      type="cyberware"
-                      onRemove={() => item.id && removeCyberware(item.id)}
-                      onAddEnhancement={
-                        item.capacity && item.capacity > 0
-                          ? () => setEnhancementModalCyberware(item)
-                          : undefined
-                      }
-                      onRemoveEnhancement={
-                        item.id && item.capacity && item.capacity > 0
-                          ? (idx) => removeEnhancement(item.id!, idx)
-                          : undefined
-                      }
-                    />
-                  )
-                )}
-              </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No cyberware installed</p>
-              </div>
-            )}
-          </div>
+          {/* Selected Augmentations - Grouped by Category */}
+          {allAugmentations.length > 0 ? (
+            <div className="space-y-4">
+              {DISPLAY_CATEGORIES.map((cat) => {
+                const items = itemsByCategory[cat.id];
+                if (!items || items.length === 0) return null;
 
-          {/* BIOWARE Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <Heart className="h-3.5 w-3.5 text-pink-500" />
-                <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                  Bioware
-                </span>
-                {selectedBioware.length > 0 && (
-                  <span className="rounded-full bg-pink-100 px-1.5 py-0.5 text-[10px] font-medium text-pink-700 dark:bg-pink-900/50 dark:text-pink-300">
-                    {selectedBioware.length}
-                  </span>
-                )}
-              </div>
+                return (
+                  <div key={cat.id}>
+                    {/* Category Header */}
+                    <div className="flex items-center gap-2 text-xs font-medium text-zinc-500 dark:text-zinc-400 mb-2">
+                      {cat.type === "cyberware" ? (
+                        <Cpu className="h-3.5 w-3.5 text-cyan-500" />
+                      ) : (
+                        <Heart className="h-3.5 w-3.5 text-pink-500" />
+                      )}
+                      <span className="uppercase tracking-wider">{cat.label}</span>
+                      <span
+                        className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
+                          cat.type === "cyberware"
+                            ? "bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
+                            : "bg-pink-100 text-pink-700 dark:bg-pink-900/50 dark:text-pink-300"
+                        }`}
+                      >
+                        {items.length}
+                      </span>
+                    </div>
+
+                    {/* Items Container */}
+                    <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
+                      {items.map(({ item, type }) => {
+                        // Type guard: when type is cyberware, item is CyberwareItem
+                        if (type === "cyberware") {
+                          const cyberItem = item as CyberwareItem;
+                          if (isCyberlimb(cyberItem)) {
+                            const limbItem = cyberItem as CyberlimbItem;
+                            return (
+                              <CyberlimbAugmentationItem
+                                key={item.id}
+                                item={limbItem}
+                                onRemove={() => item.id && removeCyberware(item.id)}
+                                onAddEnhancement={() => setEnhancementModalCyberware(cyberItem)}
+                                onRemoveEnhancement={(idx) => removeEnhancement(item.id!, idx)}
+                                onAddAccessory={() => setAccessoryModalCyberlimb(limbItem)}
+                                onRemoveAccessory={(idx) => removeAccessory(item.id!, idx)}
+                                onAddWeapon={() => setWeaponModalCyberlimb(limbItem)}
+                                onRemoveWeapon={(idx) => removeWeapon(item.id!, idx)}
+                              />
+                            );
+                          }
+                          return (
+                            <AugmentationItem
+                              key={item.id}
+                              item={cyberItem}
+                              type="cyberware"
+                              onRemove={() => item.id && removeCyberware(item.id)}
+                              onAddEnhancement={
+                                cyberItem.capacity && cyberItem.capacity > 0
+                                  ? () => setEnhancementModalCyberware(cyberItem)
+                                  : undefined
+                              }
+                              onRemoveEnhancement={
+                                item.id && cyberItem.capacity && cyberItem.capacity > 0
+                                  ? (idx) => removeEnhancement(item.id!, idx)
+                                  : undefined
+                              }
+                            />
+                          );
+                        }
+                        // Bioware
+                        return (
+                          <AugmentationItem
+                            key={item.id}
+                            item={item}
+                            type="bioware"
+                            onRemove={() => item.id && removeBioware(item.id)}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No augmentations installed</p>
               <button
-                onClick={() => openAugModal("bioware")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+                onClick={() => setIsAugModalOpen(true)}
+                className="mt-2 flex items-center gap-1 mx-auto rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
               >
                 <Plus className="h-3 w-3" />
-                Add
+                Add Augmentation
               </button>
             </div>
-            {selectedBioware.length > 0 ? (
-              <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
-                {selectedBioware.map((item) => (
-                  <AugmentationItem
-                    key={item.id}
-                    item={item}
-                    type="bioware"
-                    onRemove={() => item.id && removeBioware(item.id)}
-                  />
-                ))}
-              </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No bioware installed</p>
-              </div>
-            )}
-          </div>
+          )}
 
           {/* Footer Summary */}
           <SummaryFooter
@@ -1462,12 +1508,12 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         </div>
       </CreationCard>
 
-      {/* Augmentation Modal */}
+      {/* Unified Augmentation Modal */}
       <AugmentationModal
         isOpen={isAugModalOpen}
         onClose={() => setIsAugModalOpen(false)}
         onAdd={handleAddAugmentation}
-        augmentationType={augModalType}
+        augmentationType="cyberware"
         remainingEssence={remainingEssence}
         remainingNuyen={remainingNuyen}
         isAwakened={isAwakened}
