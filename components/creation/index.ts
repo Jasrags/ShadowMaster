@@ -14,7 +14,6 @@ export { ComplexFormsCard } from "./ComplexFormsCard";
 export { FociCard } from "./foci";
 
 // Phase 4: Resources & Gear Components
-export { GearCard } from "./GearCard";
 export { GearPanel } from "./gear";
 export { WeaponsPanel } from "./WeaponsPanel";
 export { ArmorPanel } from "./armor";

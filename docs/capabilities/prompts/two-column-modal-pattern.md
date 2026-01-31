@@ -236,3 +236,116 @@ interface [Item]ModalProps {
 | ---------- | ----------------------- | ----------- |
 | SkillsCard | `skills/SkillModal.tsx` | blue        |
 | SpellsCard | `spells/SpellModal.tsx` | emerald     |
+
+---
+
+## Category Grouping Pattern (Card Display)
+
+Display selected items grouped by category within creation cards. This pattern groups items under simple uppercase category headers.
+
+### Reference Implementations
+
+- `components/creation/WeaponsPanel.tsx` - Groups weapons by ranged/melee/throwing
+- `components/creation/spells/SpellsCard.tsx` - Groups spells by combat/detection/health/etc.
+
+### Visual Pattern
+
+```
+SELECTED WEAPONS (2)
+
+RANGED
+┌─────────────────────────────────────────────────┐
+│ > Ares Light Fire 70            ¥570 [2 mods] × │
+└─────────────────────────────────────────────────┘
+
+MELEE
+┌─────────────────────────────────────────────────┐
+│ > Staff                                 ¥100  × │
+└─────────────────────────────────────────────────┘
+```
+
+### Grouping Logic
+
+```tsx
+// 1. Define category types and labels
+type CategoryKey = "ranged" | "melee" | "throwing";
+
+const CATEGORY_LABELS: Record<CategoryKey, string> = {
+  ranged: "Ranged",
+  melee: "Melee",
+  throwing: "Throwing",
+};
+
+// 2. Create categorization function
+function getItemCategory(item: ItemType): CategoryKey {
+  const subcategory = item.subcategory?.toLowerCase() || "";
+  if (["blade", "club", "melee"].includes(subcategory)) return "melee";
+  if (["grenade", "throwing"].includes(subcategory)) return "throwing";
+  return "ranged"; // default
+}
+
+// 3. Group items with useMemo
+const itemsByCategory = useMemo(() => {
+  const grouped: Record<CategoryKey, ItemType[]> = {
+    ranged: [],
+    melee: [],
+    throwing: [],
+  };
+  for (const item of selectedItems) {
+    grouped[getItemCategory(item)].push(item);
+  }
+  return grouped;
+}, [selectedItems]);
+```
+
+### Render Pattern
+
+```tsx
+{
+  selectedItems.length > 0 && (
+    <div className="space-y-4">
+      {/* Section header with total count */}
+      <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+        Selected Items ({selectedItems.length})
+      </h4>
+
+      {/* Iterate categories, skip empty ones */}
+      {(Object.entries(itemsByCategory) as [CategoryKey, ItemType[]][]).map(
+        ([category, items]) =>
+          items.length > 0 && (
+            <div key={category}>
+              {/* Category header */}
+              <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                {CATEGORY_LABELS[category]}
+              </h5>
+              {/* Items container */}
+              <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                {items.map((item) => (
+                  <ItemRow key={item.id} item={item} onRemove={handleRemove} />
+                ))}
+              </div>
+            </div>
+          )
+      )}
+    </div>
+  );
+}
+```
+
+### Styling Reference
+
+| Element              | Classes                                                                                                     |
+| -------------------- | ----------------------------------------------------------------------------------------------------------- |
+| Section header (h4)  | `text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400`                           |
+| Category header (h5) | `mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500`                                       |
+| Items container      | `divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700` |
+| Category spacing     | `space-y-4` on parent container                                                                             |
+
+### Implementation Checklist
+
+- [ ] Define category type and labels constant
+- [ ] Create `getItemCategory()` function based on item data
+- [ ] Add `itemsByCategory` useMemo grouping
+- [ ] Replace flat list rendering with grouped render pattern
+- [ ] Verify empty categories are hidden
+- [ ] Test with items in multiple categories

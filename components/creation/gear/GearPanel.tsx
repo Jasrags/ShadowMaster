@@ -41,6 +41,38 @@ import { InfoTooltip } from "@/components/ui";
 
 const KARMA_TO_NUYEN_RATE = 2000;
 
+// Gear category keys and labels for grouped display
+type GearCategoryKey =
+  | "electronics"
+  | "tools"
+  | "survival"
+  | "medical"
+  | "security"
+  | "miscellaneous"
+  | "rfidTags";
+
+const GEAR_CATEGORY_LABELS: Record<GearCategoryKey, string> = {
+  electronics: "Electronics",
+  tools: "Tools",
+  survival: "Survival",
+  medical: "Medical",
+  security: "Security",
+  miscellaneous: "Miscellaneous",
+  rfidTags: "RFID Tags",
+};
+
+// Get category from gear item
+function getGearCategory(gear: GearItem): GearCategoryKey {
+  const category = gear.category?.toLowerCase() || "";
+  if (category === "electronics") return "electronics";
+  if (category === "tools") return "tools";
+  if (category === "survival") return "survival";
+  if (category === "medical") return "medical";
+  if (category === "security") return "security";
+  if (category === "rfidtags" || category === "rfid-tags") return "rfidTags";
+  return "miscellaneous";
+}
+
 // =============================================================================
 // HELPERS
 // =============================================================================
@@ -80,6 +112,23 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     () => (state.selections?.gear || []) as GearItem[],
     [state.selections?.gear]
   );
+
+  // Group gear by category for display
+  const gearByCategory = useMemo(() => {
+    const grouped: Record<GearCategoryKey, GearItem[]> = {
+      electronics: [],
+      tools: [],
+      survival: [],
+      medical: [],
+      security: [],
+      miscellaneous: [],
+      rfidTags: [],
+    };
+    for (const gear of selectedGear) {
+      grouped[getGearCategory(gear)].push(gear);
+    }
+    return grouped;
+  }, [selectedGear]);
 
   // Find gear being modified
   const modifyingGear = useMemo(
@@ -479,18 +528,34 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
             </div>
           </div>
 
-          {/* Gear List */}
+          {/* Selected gear grouped by category */}
           {selectedGear.length > 0 ? (
-            <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
-              {selectedGear.map((gear) => (
-                <GearRow
-                  key={gear.id}
-                  gear={gear}
-                  onRemove={removeGear}
-                  onAddMod={handleAddMod}
-                  onRemoveMod={handleRemoveMod}
-                />
-              ))}
+            <div className="space-y-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Selected Gear ({selectedGear.length})
+              </h4>
+
+              {(Object.entries(gearByCategory) as [GearCategoryKey, GearItem[]][]).map(
+                ([category, items]) =>
+                  items.length > 0 && (
+                    <div key={category}>
+                      <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                        {GEAR_CATEGORY_LABELS[category]}
+                      </h5>
+                      <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                        {items.map((gear) => (
+                          <GearRow
+                            key={gear.id}
+                            gear={gear}
+                            onRemove={removeGear}
+                            onAddMod={handleAddMod}
+                            onRemoveMod={handleRemoveMod}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )
+              )}
             </div>
           ) : (
             <EmptyState message="No gear purchased" />
@@ -507,6 +572,13 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         onClose={() => setIsPurchaseModalOpen(false)}
         remaining={remaining}
         onPurchase={addGear}
+        purchasedGearIds={selectedGear.map((g) => {
+          // Extract catalog ID from "{catalogId}-{timestamp}" format
+          // Timestamp is the last segment after the final hyphen
+          const id = g.id || "";
+          const lastHyphen = id.lastIndexOf("-");
+          return lastHyphen > 0 ? id.slice(0, lastHyphen) : id;
+        })}
       />
 
       {/* Modification Modal */}

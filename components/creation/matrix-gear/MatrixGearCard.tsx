@@ -3,13 +3,13 @@
 /**
  * MatrixGearCard
  *
- * Card for purchasing matrix gear (commlinks and cyberdecks) during character creation.
- * Follows the WeaponsPanel pattern with:
+ * Card for purchasing matrix gear (commlinks, cyberdecks, software) during character creation.
+ * Follows the WeaponsPanel category grouping pattern with:
  * - Nuyen budget bar at top
- * - Category sections (Commlinks, Cyberdecks)
- * - Per-category add buttons
+ * - Single Add button opening unified modal
+ * - Items grouped by category (Commlinks, Cyberdecks, Software)
  * - Legality warnings
- * - Modal-driven selection
+ * - Modal-driven selection with bulk-add support
  *
  * Shares budget with other gear panels via state.budgets["nuyen"]
  */
@@ -29,9 +29,7 @@ import type {
 } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
-import { CommlinkPurchaseModal } from "./CommlinkPurchaseModal";
-import { CyberdeckPurchaseModal } from "./CyberdeckPurchaseModal";
-import { DataSoftwarePurchaseModal } from "./DataSoftwarePurchaseModal";
+import { MatrixGearModal } from "./MatrixGearModal";
 import {
   Lock,
   Plus,
@@ -42,17 +40,24 @@ import {
   ShoppingCart,
   GraduationCap,
   AlertTriangle,
-  ChevronDown,
-  ChevronRight,
   X,
 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
+
+type MatrixGearCategory = "commlinks" | "cyberdecks" | "software";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
 const KARMA_TO_NUYEN_RATE = 2000;
+
+// Category labels for grouped display
+const MATRIX_CATEGORY_LABELS: Record<MatrixGearCategory, string> = {
+  commlinks: "Commlinks",
+  cyberdecks: "Cyberdecks",
+  software: "Software",
+};
 
 // =============================================================================
 // HELPERS
@@ -205,83 +210,6 @@ function DataSoftwareRow({
 }
 
 // =============================================================================
-// CATEGORY SECTION
-// =============================================================================
-
-interface CategorySectionProps {
-  title: string;
-  icon: React.ElementType;
-  iconColor: string;
-  badgeColor: string;
-  count: number;
-  onAddClick: () => void;
-  children: React.ReactNode;
-  emptyMessage: string;
-}
-
-function CategorySection({
-  title,
-  icon: Icon,
-  iconColor,
-  badgeColor,
-  count,
-  onAddClick,
-  children,
-  emptyMessage,
-}: CategorySectionProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
-
-  return (
-    <div>
-      <div className="mb-2 flex items-center justify-between">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="flex items-center gap-2 hover:opacity-80"
-        >
-          <div className="text-zinc-400">
-            {isCollapsed ? (
-              <ChevronRight className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronDown className="h-3.5 w-3.5" />
-            )}
-          </div>
-          <Icon className={`h-3.5 w-3.5 ${iconColor}`} />
-          <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            {title}
-          </span>
-          {count > 0 && (
-            <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${badgeColor}`}>
-              {count}
-            </span>
-          )}
-        </button>
-        <button
-          onClick={onAddClick}
-          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-        >
-          <Plus className="h-3 w-3" />
-          Add
-        </button>
-      </div>
-
-      {!isCollapsed && (
-        <>
-          {count > 0 ? (
-            <div className="rounded-lg border border-zinc-200 bg-white px-3 divide-y divide-zinc-100 dark:border-zinc-700 dark:bg-zinc-900 dark:divide-zinc-800">
-              {children}
-            </div>
-          ) : (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-              <p className="text-xs text-zinc-400 dark:text-zinc-500">{emptyMessage}</p>
-            </div>
-          )}
-        </>
-      )}
-    </div>
-  );
-}
-
-// =============================================================================
 // MAIN COMPONENT
 // =============================================================================
 
@@ -292,9 +220,8 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
-  const [isCommlinkModalOpen, setIsCommlinkModalOpen] = useState(false);
-  const [isCyberdeckModalOpen, setIsCyberdeckModalOpen] = useState(false);
-  const [isDataSoftwareModalOpen, setIsDataSoftwareModalOpen] = useState(false);
+  const [isMatrixGearModalOpen, setIsMatrixGearModalOpen] = useState(false);
+  const [initialCategory, setInitialCategory] = useState<MatrixGearCategory>("commlinks");
 
   // Get selected items from state
   const selectedCommlinks = useMemo(
@@ -311,6 +238,19 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     () => (state.selections?.software || []) as CharacterDataSoftware[],
     [state.selections?.software]
   );
+
+  // Group items by category for display
+  const matrixGearByCategory = useMemo(
+    () => ({
+      commlinks: selectedCommlinks,
+      cyberdecks: selectedCyberdecks,
+      software: selectedSoftware,
+    }),
+    [selectedCommlinks, selectedCyberdecks, selectedSoftware]
+  );
+
+  // Total items across all categories
+  const totalItems = selectedCommlinks.length + selectedCyberdecks.length + selectedSoftware.length;
 
   // Check if character has a device to run software
   const hasCompatibleDevice = selectedCommlinks.length > 0 || selectedCyberdecks.length > 0;
@@ -394,7 +334,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     onConvert: handleKarmaConvert,
   });
 
-  // Add commlink (actual implementation)
+  // Add commlink (actual implementation) - modal stays open for bulk-add
   const actuallyAddCommlink = useCallback(
     (commlink: CommlinkData) => {
       const newCommlink: CharacterCommlink = {
@@ -415,8 +355,6 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
           commlinks: [...selectedCommlinks, newCommlink],
         },
       });
-
-      setIsCommlinkModalOpen(false);
     },
     [selectedCommlinks, state.selections, updateState]
   );
@@ -453,7 +391,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     [selectedCommlinks, state.selections, updateState]
   );
 
-  // Add cyberdeck (actual implementation)
+  // Add cyberdeck (actual implementation) - modal stays open for bulk-add
   const actuallyAddCyberdeck = useCallback(
     (cyberdeck: CyberdeckData) => {
       const newCyberdeck: CharacterCyberdeck = {
@@ -486,8 +424,6 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
           cyberdecks: [...selectedCyberdecks, newCyberdeck],
         },
       });
-
-      setIsCyberdeckModalOpen(false);
     },
     [selectedCyberdecks, state.selections, updateState]
   );
@@ -524,7 +460,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     [selectedCyberdecks, state.selections, updateState]
   );
 
-  // Add data software (actual implementation)
+  // Add data software (actual implementation) - modal stays open for bulk-add
   const actuallyAddSoftware = useCallback(
     (software: CharacterDataSoftware) => {
       updateState({
@@ -533,7 +469,6 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
           software: [...selectedSoftware, software],
         },
       });
-      setIsDataSoftwareModalOpen(false);
     },
     [selectedSoftware, state.selections, updateState]
   );
@@ -661,67 +596,105 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
             </div>
           )}
 
-          {/* Commlinks Section */}
-          <CategorySection
-            title="Commlinks"
-            icon={Smartphone}
-            iconColor="text-cyan-500"
-            badgeColor="bg-cyan-100 text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300"
-            count={selectedCommlinks.length}
-            onAddClick={() => setIsCommlinkModalOpen(true)}
-            emptyMessage="No commlinks purchased"
-          >
-            {selectedCommlinks.map((commlink) => (
-              <CommlinkRow
-                key={commlink.id || commlink.catalogId}
-                commlink={commlink}
-                onRemove={removeCommlink}
-              />
-            ))}
-          </CategorySection>
+          {/* Category Header with Add Button */}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <Cpu className="h-3.5 w-3.5 text-cyan-500" />
+              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Matrix Gear
+              </span>
+              {totalItems > 0 && (
+                <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400">
+                  {totalItems}
+                </span>
+              )}
+            </div>
+            <button
+              onClick={() => {
+                setInitialCategory("commlinks");
+                setIsMatrixGearModalOpen(true);
+              }}
+              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+            >
+              <Plus className="h-3 w-3" />
+              Add
+            </button>
+          </div>
 
-          {/* Cyberdecks Section */}
-          <CategorySection
-            title="Cyberdecks"
-            icon={Cpu}
-            iconColor="text-purple-500"
-            badgeColor="bg-purple-100 text-purple-700 dark:bg-purple-900/50 dark:text-purple-300"
-            count={selectedCyberdecks.length}
-            onAddClick={() => setIsCyberdeckModalOpen(true)}
-            emptyMessage="No cyberdecks purchased"
-          >
-            {selectedCyberdecks.map((cyberdeck) => (
-              <CyberdeckRow
-                key={cyberdeck.id || cyberdeck.catalogId}
-                cyberdeck={cyberdeck}
-                onRemove={removeCyberdeck}
-              />
-            ))}
-          </CategorySection>
+          {/* Selected matrix gear grouped by category */}
+          {totalItems > 0 && (
+            <div className="space-y-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Selected Matrix Gear ({totalItems})
+              </h4>
 
-          {/* Data Software Section */}
-          <CategorySection
-            title="Data Software"
-            icon={Database}
-            iconColor="text-blue-500"
-            badgeColor="bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"
-            count={selectedSoftware.length}
-            onAddClick={() => setIsDataSoftwareModalOpen(true)}
-            emptyMessage="No data software purchased"
-          >
-            {selectedSoftware.map((software) => (
-              <DataSoftwareRow key={software.id} software={software} onRemove={removeSoftware} />
-            ))}
-          </CategorySection>
+              {/* Commlinks */}
+              {matrixGearByCategory.commlinks.length > 0 && (
+                <div>
+                  <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                    {MATRIX_CATEGORY_LABELS.commlinks}
+                  </h5>
+                  <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                    {matrixGearByCategory.commlinks.map((commlink) => (
+                      <CommlinkRow
+                        key={commlink.id || commlink.catalogId}
+                        commlink={commlink}
+                        onRemove={removeCommlink}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Cyberdecks */}
+              {matrixGearByCategory.cyberdecks.length > 0 && (
+                <div>
+                  <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                    {MATRIX_CATEGORY_LABELS.cyberdecks}
+                  </h5>
+                  <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                    {matrixGearByCategory.cyberdecks.map((cyberdeck) => (
+                      <CyberdeckRow
+                        key={cyberdeck.id || cyberdeck.catalogId}
+                        cyberdeck={cyberdeck}
+                        onRemove={removeCyberdeck}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Software */}
+              {matrixGearByCategory.software.length > 0 && (
+                <div>
+                  <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                    {MATRIX_CATEGORY_LABELS.software}
+                  </h5>
+                  <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                    {matrixGearByCategory.software.map((software) => (
+                      <DataSoftwareRow
+                        key={software.id}
+                        software={software}
+                        onRemove={removeSoftware}
+                      />
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Empty state */}
+          {totalItems === 0 && (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">No matrix gear selected</p>
+            </div>
+          )}
 
           {/* Footer Summary */}
           <div className="flex items-center justify-between border-t border-zinc-200 pt-3 dark:border-zinc-700">
             <span className="text-xs text-zinc-500 dark:text-zinc-400">
-              Total:{" "}
-              {selectedCommlinks.length + selectedCyberdecks.length + selectedSoftware.length} item
-              {selectedCommlinks.length + selectedCyberdecks.length + selectedSoftware.length !== 1
-                ? "s"
-                : ""}
+              Total: {totalItems} item{totalItems !== 1 ? "s" : ""}
             </span>
             <span className="text-xs font-medium text-zinc-900 dark:text-zinc-100">
               {formatCurrency(matrixSpent)}¥
@@ -730,28 +703,18 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
         </div>
       </CreationCard>
 
-      {/* Commlink Purchase Modal */}
-      <CommlinkPurchaseModal
-        isOpen={isCommlinkModalOpen}
-        onClose={() => setIsCommlinkModalOpen(false)}
+      {/* Matrix Gear Purchase Modal */}
+      <MatrixGearModal
+        isOpen={isMatrixGearModalOpen}
+        onClose={() => setIsMatrixGearModalOpen(false)}
+        initialCategory={initialCategory}
         remaining={remaining}
-        onPurchase={addCommlink}
-      />
-
-      {/* Cyberdeck Purchase Modal */}
-      <CyberdeckPurchaseModal
-        isOpen={isCyberdeckModalOpen}
-        onClose={() => setIsCyberdeckModalOpen(false)}
-        remaining={remaining}
-        onPurchase={addCyberdeck}
-      />
-
-      {/* Data Software Purchase Modal */}
-      <DataSoftwarePurchaseModal
-        isOpen={isDataSoftwareModalOpen}
-        onClose={() => setIsDataSoftwareModalOpen(false)}
-        remaining={remaining}
-        onPurchase={addSoftware}
+        onPurchaseCommlink={addCommlink}
+        onPurchaseCyberdeck={addCyberdeck}
+        onPurchaseSoftware={addSoftware}
+        existingCommlinks={selectedCommlinks}
+        existingCyberdecks={selectedCyberdecks}
+        existingSoftware={selectedSoftware}
         hasCompatibleDevice={hasCompatibleDevice}
       />
 

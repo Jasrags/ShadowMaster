@@ -4,17 +4,21 @@
  * GearPurchaseModal
  *
  * Split-pane modal for browsing and purchasing gear.
- * Left side: Category filters, search, and gear list
+ * Left side: Category filters, search, and gear list with sticky headers
  * Right side: Selected gear details with rating selection
+ *
+ * Follows the two-column bulk-add pattern:
+ * - Modal stays open after adding items for bulk purchases
+ * - Already-added items show strikethrough + checkmark
+ * - Footer shows "Done" and "Add Gear" buttons
  */
 
-import { useState, useMemo, useRef } from "react";
-import { useVirtualizer } from "@tanstack/react-virtual";
+import { useState, useMemo, useCallback } from "react";
 import { useGear, type GearItemData, type GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
-import { BaseModalRoot } from "@/components/ui";
-import { Search, Minus, Plus, AlertTriangle, X } from "lucide-react";
+import { BaseModalRoot, ModalFooter } from "@/components/ui";
+import { Search, Minus, Plus, AlertTriangle, X, Check } from "lucide-react";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 
 // =============================================================================
@@ -42,6 +46,29 @@ const GEAR_CATEGORIES: Array<{ id: GearCategory; label: string }> = [
   { id: "survival", label: "Survival" },
   { id: "rfidTags", label: "RFID Tags" },
   { id: "miscellaneous", label: "Misc" },
+];
+
+/** Labels for sticky category headers */
+const CATEGORY_LABELS: Record<GearCategory, string> = {
+  all: "All Gear",
+  electronics: "Electronics",
+  tools: "Tools",
+  survival: "Survival",
+  medical: "Medical",
+  security: "Security",
+  miscellaneous: "Miscellaneous",
+  rfidTags: "RFID Tags",
+};
+
+/** Category display order for grouped view */
+const CATEGORY_ORDER: GearCategory[] = [
+  "electronics",
+  "tools",
+  "medical",
+  "security",
+  "survival",
+  "rfidTags",
+  "miscellaneous",
 ];
 
 // =============================================================================
@@ -196,6 +223,8 @@ interface GearPurchaseModalProps {
   onClose: () => void;
   remaining: number;
   onPurchase: (gear: GearItemData, rating?: number, quantity?: number) => void;
+  /** IDs of gear already purchased (for already-added visual state) */
+  purchasedGearIds?: string[];
 }
 
 // =============================================================================
@@ -206,14 +235,16 @@ function GearListItem({
   gear,
   isSelected,
   canAfford,
+  isAlreadyAdded,
   onClick,
 }: {
   gear: GearItemData;
   isSelected: boolean;
   canAfford: boolean;
+  isAlreadyAdded: boolean;
   onClick: () => void;
 }) {
-  const isDisabled = !canAfford;
+  const isDisabled = !canAfford || isAlreadyAdded;
   const gearHasRating = hasRating(gear);
   const ratingBounds = getRatingBounds(gear);
 
@@ -224,15 +255,23 @@ function GearListItem({
       className={`w-full rounded-lg border p-2.5 text-left transition-all ${
         isSelected
           ? "border-emerald-400 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
-          : !isDisabled
-            ? "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
-            : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+          : isAlreadyAdded
+            ? "cursor-not-allowed border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
+            : !canAfford
+              ? "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+              : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
+            <span
+              className={`truncate text-sm font-medium ${
+                isAlreadyAdded
+                  ? "text-zinc-400 line-through dark:text-zinc-500"
+                  : "text-zinc-900 dark:text-zinc-100"
+              }`}
+            >
               {gear.name}
             </span>
             {gearHasRating && (
@@ -240,8 +279,15 @@ function GearListItem({
                 R1-{ratingBounds.max}
               </span>
             )}
+            {isAlreadyAdded && <Check className="h-4 w-4 flex-shrink-0 text-emerald-500" />}
           </div>
-          <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
+          <div
+            className={`mt-0.5 flex flex-wrap gap-x-2 text-xs ${
+              isAlreadyAdded
+                ? "text-zinc-400 dark:text-zinc-500"
+                : "text-zinc-500 dark:text-zinc-400"
+            }`}
+          >
             <span className="capitalize">{gear.category}</span>
             <span>
               Avail: {getAvailabilityDisplay(getGearAvailability(gear), gear.legality)}
@@ -250,7 +296,13 @@ function GearListItem({
           </div>
         </div>
         <div className="flex-shrink-0 text-right">
-          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
+          <div
+            className={`font-mono text-sm font-medium ${
+              isAlreadyAdded
+                ? "text-zinc-400 dark:text-zinc-500"
+                : "text-zinc-900 dark:text-zinc-100"
+            }`}
+          >
             {formatCurrency(getGearCost(gear))}¥
             {(gear.costPerRating || gear.ratingSpec?.costScaling?.perRating) && "/R"}
           </div>
@@ -269,6 +321,7 @@ export function GearPurchaseModal({
   onClose,
   remaining,
   onPurchase,
+  purchasedGearIds = [],
 }: GearPurchaseModalProps) {
   const gearCatalog = useGear();
 
@@ -277,6 +330,7 @@ export function GearPurchaseModal({
   const [selectedGear, setSelectedGear] = useState<GearItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
   const [selectedPacks, setSelectedPacks] = useState(1);
+  const [addedThisSession, setAddedThisSession] = useState(0);
 
   // Get gear for current category
   const categoryGear = useMemo(
@@ -363,45 +417,74 @@ export function GearPurchaseModal({
 
   const canAfford = selectedGearCost <= remaining;
   const availabilityOk = selectedGearAvail <= MAX_AVAILABILITY;
-  const canPurchase = canAfford && availabilityOk;
+  const canPurchase = canAfford && availabilityOk && selectedGear !== null;
 
-  // Virtualization setup for gear list
-  const scrollContainerRef = useRef<HTMLDivElement>(null);
-  const rowVirtualizer = useVirtualizer({
-    count: filteredGear.length,
-    getScrollElement: () => scrollContainerRef.current,
-    estimateSize: () => 72, // Approximate height of GearListItem
-    overscan: 5,
-  });
+  // Group filtered gear by category for sticky headers (only when showing "all")
+  const gearByCategory = useMemo(() => {
+    if (selectedCategory !== "all") {
+      // When filtering by specific category, no grouping needed
+      return null;
+    }
+    const grouped: Partial<Record<GearCategory, GearItemData[]>> = {};
+    filteredGear.forEach((gear) => {
+      const cat = (gear.category as GearCategory) || "miscellaneous";
+      if (!grouped[cat]) grouped[cat] = [];
+      grouped[cat]!.push(gear);
+    });
+    return grouped;
+  }, [filteredGear, selectedCategory]);
 
-  // Reset selection when modal opens/closes
-  const handleClose = () => {
+  // Full reset on close
+  const resetState = useCallback(() => {
     setSearchQuery("");
+    setSelectedCategory("all");
     setSelectedGear(null);
     setSelectedRating(1);
     setSelectedPacks(1);
-    setSelectedCategory("all");
-    onClose();
-  };
+    setAddedThisSession(0);
+  }, []);
 
-  const handlePurchase = () => {
+  // Partial reset after adding (preserves search/category)
+  const resetForNextItem = useCallback(() => {
+    setSelectedGear(null);
+    setSelectedRating(1);
+    setSelectedPacks(1);
+    // PRESERVE: searchQuery, selectedCategory, addedThisSession
+  }, []);
+
+  // Handle close with full reset
+  const handleClose = useCallback(() => {
+    resetState();
+    onClose();
+  }, [resetState, onClose]);
+
+  // Handle purchase - stays open for bulk-add
+  const handlePurchase = useCallback(() => {
     if (selectedGear && canPurchase) {
       // For stackable items, pass the quantity (number of packs)
       // The parent component will multiply by pack size if needed
       const quantity = isStackable ? selectedPacks : undefined;
       onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined, quantity);
-      setSelectedGear(null);
-      setSelectedRating(1);
-      setSelectedPacks(1);
+      setAddedThisSession((prev) => prev + 1);
+      resetForNextItem(); // Keep modal open for bulk adding
     }
-  };
+  }, [
+    selectedGear,
+    canPurchase,
+    isStackable,
+    selectedPacks,
+    onPurchase,
+    ratingBounds.hasRating,
+    selectedRating,
+    resetForNextItem,
+  ]);
 
   // Reset rating and packs when selecting new gear
-  const handleSelectGear = (gear: GearItemData) => {
+  const handleSelectGear = useCallback((gear: GearItemData) => {
     setSelectedGear(gear);
     setSelectedRating(1);
     setSelectedPacks(1);
-  };
+  }, []);
 
   return (
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="2xl">
@@ -476,44 +559,50 @@ export function GearPurchaseModal({
 
           {/* Content - Split Pane */}
           <div className="flex flex-1 overflow-hidden">
-            {/* Left: Gear List - Virtualized */}
-            <div
-              ref={scrollContainerRef}
-              className="w-1/2 overflow-y-auto border-r border-zinc-100 p-4 dark:border-zinc-800"
-            >
+            {/* Left: Gear List with Sticky Headers */}
+            <div className="w-1/2 overflow-y-auto border-r border-zinc-100 dark:border-zinc-800">
               {filteredGear.length === 0 ? (
                 <p className="py-8 text-center text-sm text-zinc-500">No gear found</p>
+              ) : gearByCategory ? (
+                // Grouped by category with sticky headers (when "all" is selected)
+                CATEGORY_ORDER.filter((cat) => gearByCategory[cat]?.length).map((category) => (
+                  <div key={category}>
+                    <div className="sticky top-0 z-10 bg-zinc-100 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                      {CATEGORY_LABELS[category]}
+                    </div>
+                    <div className="space-y-2 px-4 py-2">
+                      {gearByCategory[category]!.map((gear) => {
+                        const cost = getGearCost(gear);
+                        const isAlreadyAdded = purchasedGearIds.includes(gear.id);
+                        return (
+                          <GearListItem
+                            key={gear.id}
+                            gear={gear}
+                            isSelected={selectedGear?.id === gear.id}
+                            canAfford={cost <= remaining}
+                            isAlreadyAdded={isAlreadyAdded}
+                            onClick={() => handleSelectGear(gear)}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                ))
               ) : (
-                <div
-                  style={{
-                    height: `${rowVirtualizer.getTotalSize()}px`,
-                    width: "100%",
-                    position: "relative",
-                  }}
-                >
-                  {rowVirtualizer.getVirtualItems().map((virtualRow) => {
-                    const gear = filteredGear[virtualRow.index];
+                // Flat list when filtering by specific category
+                <div className="space-y-2 p-4">
+                  {filteredGear.map((gear) => {
                     const cost = getGearCost(gear);
+                    const isAlreadyAdded = purchasedGearIds.includes(gear.id);
                     return (
-                      <div
+                      <GearListItem
                         key={gear.id}
-                        style={{
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          width: "100%",
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`,
-                          padding: "4px 0",
-                        }}
-                      >
-                        <GearListItem
-                          gear={gear}
-                          isSelected={selectedGear?.id === gear.id}
-                          canAfford={cost <= remaining}
-                          onClick={() => handleSelectGear(gear)}
-                        />
-                      </div>
+                        gear={gear}
+                        isSelected={selectedGear?.id === gear.id}
+                        canAfford={cost <= remaining}
+                        isAlreadyAdded={isAlreadyAdded}
+                        onClick={() => handleSelectGear(gear)}
+                      />
                     );
                   })}
                 </div>
@@ -667,27 +756,6 @@ export function GearPurchaseModal({
                       </div>
                     </div>
                   )}
-
-                  {/* Purchase Button */}
-                  <div className="pt-2">
-                    <button
-                      onClick={handlePurchase}
-                      disabled={!canPurchase}
-                      className={`w-full rounded-lg py-3 text-sm font-medium transition-colors ${
-                        canPurchase
-                          ? "bg-amber-500 text-white hover:bg-amber-600"
-                          : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-                      }`}
-                    >
-                      {!canAfford
-                        ? `Cannot Afford (${formatCurrency(selectedGearCost)}¥)`
-                        : !availabilityOk
-                          ? `Availability Too High (${selectedGearAvail})`
-                          : isStackable
-                            ? `Purchase ${selectedPacks}× (${selectedPacks * packSize} ${unitLabel}) - ${formatCurrency(selectedGearCost)}¥`
-                            : `Purchase - ${formatCurrency(selectedGearCost)}¥`}
-                    </button>
-                  </div>
                 </div>
               ) : (
                 <div className="flex h-full items-center justify-center text-zinc-400 dark:text-zinc-500">
@@ -698,17 +766,42 @@ export function GearPurchaseModal({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between border-t border-zinc-200 px-6 py-3 dark:border-zinc-700">
+          <ModalFooter>
             <div className="text-sm text-zinc-500 dark:text-zinc-400">
-              {filteredGear.length} items available
+              {addedThisSession > 0 && (
+                <span className="mr-2 text-emerald-600 dark:text-emerald-400">
+                  {addedThisSession} added
+                </span>
+              )}
+              <span className="font-mono font-medium text-zinc-900 dark:text-zinc-100">
+                {formatCurrency(remaining)}¥
+              </span>{" "}
+              remaining
             </div>
-            <button
-              onClick={close}
-              className="px-4 py-2 text-sm font-medium text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100"
-            >
-              Cancel
-            </button>
-          </div>
+            <div className="flex gap-3">
+              <button
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-600 hover:bg-zinc-100 dark:text-zinc-400 dark:hover:bg-zinc-800"
+              >
+                Done
+              </button>
+              <button
+                onClick={handlePurchase}
+                disabled={!canPurchase}
+                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
+                  canPurchase
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+                }`}
+              >
+                {canPurchase && selectedGear
+                  ? isStackable
+                    ? `Add Gear (${selectedPacks * packSize} ${unitLabel} - ${formatCurrency(selectedGearCost)}¥)`
+                    : `Add Gear (${formatCurrency(selectedGearCost)}¥)`
+                  : "Add Gear"}
+              </button>
+            </div>
+          </ModalFooter>
         </div>
       )}
     </BaseModalRoot>
