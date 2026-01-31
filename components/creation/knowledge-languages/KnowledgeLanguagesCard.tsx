@@ -22,6 +22,8 @@ import { LanguageRow } from "./LanguageRow";
 import { KnowledgeSkillRow } from "./KnowledgeSkillRow";
 import { AddLanguageModal } from "./AddLanguageModal";
 import { AddKnowledgeSkillModal } from "./AddKnowledgeSkillModal";
+import { KnowledgeSkillSpecModal } from "./KnowledgeSkillSpecModal";
+import { SPEC_KNOWLEDGE_POINT_COST } from "./constants";
 
 interface KnowledgeLanguagesCardProps {
   state: CreationState;
@@ -31,6 +33,7 @@ interface KnowledgeLanguagesCardProps {
 export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguagesCardProps) {
   const [showAddLanguage, setShowAddLanguage] = useState(false);
   const [showAddKnowledge, setShowAddKnowledge] = useState(false);
+  const [specModalSkillIndex, setSpecModalSkillIndex] = useState<number | null>(null);
 
   // Get attributes for knowledge points calculation
   const attributes = useMemo(() => {
@@ -52,12 +55,14 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
     return (state.selections.knowledgeSkills || []) as KnowledgeSkill[];
   }, [state.selections.knowledgeSkills]);
 
-  // Calculate points spent (languages + knowledge skills ratings)
+  // Calculate points spent (languages + knowledge skills ratings + specializations)
   // Native language is free
   const knowledgePointsSpent = useMemo(() => {
     const langPoints = languages.filter((l) => !l.isNative).reduce((sum, l) => sum + l.rating, 0);
     const skillPoints = knowledgeSkills.reduce((sum, s) => sum + s.rating, 0);
-    return langPoints + skillPoints;
+    const specPoints =
+      knowledgeSkills.filter((s) => s.specialization).length * SPEC_KNOWLEDGE_POINT_COST;
+    return langPoints + skillPoints + specPoints;
   }, [languages, knowledgeSkills]);
 
   const knowledgePointsRemaining = knowledgePointsTotal - knowledgePointsSpent;
@@ -174,16 +179,58 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
 
   // Handle add knowledge skill
   const handleAddKnowledge = useCallback(
-    (name: string, category: KnowledgeCategory, rating: number) => {
+    (name: string, category: KnowledgeCategory, rating: number, specialization?: string) => {
       const newSkill: KnowledgeSkill = {
         name,
         category,
         rating,
+        ...(specialization && { specialization }),
       };
       updateState({
         selections: {
           ...state.selections,
           knowledgeSkills: [...knowledgeSkills, newSkill],
+        },
+      });
+    },
+    [knowledgeSkills, state.selections, updateState]
+  );
+
+  // Handle open specialization modal
+  const handleOpenSpecModal = useCallback((index: number) => {
+    setSpecModalSkillIndex(index);
+  }, []);
+
+  // Handle add specialization to a knowledge skill
+  const handleAddSpecialization = useCallback(
+    (spec: string) => {
+      if (specModalSkillIndex === null) return;
+      const newSkills = [...knowledgeSkills];
+      newSkills[specModalSkillIndex] = {
+        ...newSkills[specModalSkillIndex],
+        specialization: spec,
+      };
+      updateState({
+        selections: {
+          ...state.selections,
+          knowledgeSkills: newSkills,
+        },
+      });
+      setSpecModalSkillIndex(null);
+    },
+    [specModalSkillIndex, knowledgeSkills, state.selections, updateState]
+  );
+
+  // Handle remove specialization from a knowledge skill
+  const handleRemoveSpecialization = useCallback(
+    (index: number) => {
+      const newSkills = [...knowledgeSkills];
+      const { specialization: _, ...skillWithoutSpec } = newSkills[index];
+      newSkills[index] = skillWithoutSpec as KnowledgeSkill;
+      updateState({
+        selections: {
+          ...state.selections,
+          knowledgeSkills: newSkills,
         },
       });
     },
@@ -283,6 +330,11 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
                   skill={skill}
                   onRatingChange={(delta) => handleKnowledgeRatingChange(index, delta)}
                   onRemove={() => handleRemoveKnowledge(index)}
+                  onAddSpecialization={() => handleOpenSpecModal(index)}
+                  onRemoveSpecialization={() => handleRemoveSpecialization(index)}
+                  canAddSpecialization={
+                    !skill.specialization && knowledgePointsRemaining >= SPEC_KNOWLEDGE_POINT_COST
+                  }
                 />
               ))}
             </div>
@@ -313,6 +365,16 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
         onAdd={handleAddKnowledge}
         pointsRemaining={knowledgePointsRemaining}
       />
+
+      {specModalSkillIndex !== null && (
+        <KnowledgeSkillSpecModal
+          isOpen={true}
+          onClose={() => setSpecModalSkillIndex(null)}
+          onAdd={handleAddSpecialization}
+          skillName={knowledgeSkills[specModalSkillIndex]?.name ?? ""}
+          pointsRemaining={knowledgePointsRemaining}
+        />
+      )}
     </CreationCard>
   );
 }
