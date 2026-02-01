@@ -450,6 +450,9 @@ function extractSpentValues(
     quantity: number;
     modifications?: Array<{ cost: number }>;
   }>;
+  const drones = (selections.drones || []) as Array<{ cost: number }>;
+  const rccs = (selections.rccs || []) as Array<{ cost: number }>;
+  const autosofts = (selections.autosofts || []) as Array<{ cost: number }>;
   const commlinks = (selections.commlinks || []) as Array<{ cost: number }>;
   const cyberdecks = (selections.cyberdecks || []) as Array<{ cost: number }>;
   const software = (selections.software || []) as Array<{ cost: number }>;
@@ -499,6 +502,11 @@ function extractSpentValues(
     return sum + baseCost + modCost;
   }, 0);
 
+  // Calculate drones, RCCs, and autosofts spending
+  const dronesSpent = drones.reduce((sum, d) => sum + (d.cost || 0), 0);
+  const rccsSpent = rccs.reduce((sum, r) => sum + (r.cost || 0), 0);
+  const autosoftsSpent = autosofts.reduce((sum, a) => sum + (a.cost || 0), 0);
+
   // Calculate lifestyle spending (derived from selections)
   const lifestyles = (selections.lifestyles || []) as Array<{
     monthlyCost: number;
@@ -537,6 +545,9 @@ function extractSpentValues(
     biowareSpent +
     fociSpent +
     vehiclesSpent +
+    dronesSpent +
+    rccsSpent +
+    autosoftsSpent +
     lifestyleSpent +
     commlinksSpent +
     cyberdecksSpent +
