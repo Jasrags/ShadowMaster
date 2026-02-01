@@ -69,7 +69,7 @@
     "@tanstack/react-virtual": "^3.13.18",
     "bcryptjs": "^3.0.3",
     "lucide-react": "^0.561.0",
-    "next": "16.0.7",
+    "next": "16.1.5",
     "nodemailer": "^7.0.12",
     "pino": "^10.3.0",
     "react": "19.2.0",
