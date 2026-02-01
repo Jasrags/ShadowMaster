@@ -33,6 +33,10 @@ export type { PasswordChangedEmailTemplateProps } from "./password-changed";
 export { EmailChangedEmailTemplate, maskEmail } from "./email-changed";
 export type { EmailChangedEmailTemplateProps } from "./email-changed";
 
+// Export admin notification email template
+export { AdminNotificationEmailTemplate, getAdminNotificationSubject } from "./admin-notification";
+export type { AdminNotificationProps, AdminNotificationType } from "./admin-notification";
+
 /**
  * Rendered template output
  */

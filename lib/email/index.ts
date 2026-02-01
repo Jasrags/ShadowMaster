@@ -62,3 +62,12 @@ export {
   sendPasswordChangedEmail,
   sendEmailChangedEmail,
 } from "./security-alerts";
+
+// Admin Notifications
+export {
+  getAdminEmails,
+  isAdminNotificationEnabled,
+  sendAdminNewUserNotification,
+  sendAdminLockoutNotification,
+  sendAdminPasswordResetNotification,
+} from "./admin-notifications";

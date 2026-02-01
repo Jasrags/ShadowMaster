@@ -25,6 +25,7 @@ import { sendEmail, renderTemplate } from "@/lib/email";
 import { PasswordResetEmailTemplate } from "@/lib/email/templates/password-reset-email";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
+import { sendAdminPasswordResetNotification } from "@/lib/email/admin-notifications";
 import { isStrongPassword } from "./validation";
 
 /** Token size in bytes (32 bytes = 256 bits of entropy) */
@@ -197,6 +198,11 @@ export async function requestPasswordReset(
   if (user) {
     // Send reset email (errors are logged but not returned)
     await sendPasswordResetEmail(user.id, user.email, user.username, baseUrl);
+
+    // Send admin notification (fire-and-forget)
+    sendAdminPasswordResetNotification(user.id, user.email, user.username, new Date(), ip).catch(
+      (err) => console.error("Admin notification failed:", err)
+    );
   }
 
   // Always return success to prevent email enumeration
