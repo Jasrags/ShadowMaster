@@ -2,7 +2,7 @@
 # Optimized for production deployment with minimal image size
 
 # Stage 1: Dependencies
-FROM node:20-alpine AS deps
+FROM node:25-alpine AS deps
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
@@ -13,7 +13,7 @@ COPY package.json pnpm-lock.yaml ./
 RUN pnpm install --frozen-lockfile --prod=false
 
 # Stage 2: Builder
-FROM node:20-alpine AS builder
+FROM node:25-alpine AS builder
 RUN corepack enable && corepack prepare pnpm@latest --activate
 WORKDIR /app
 
@@ -36,7 +36,7 @@ ENV NEXT_PUBLIC_GIT_SHA=${NEXT_PUBLIC_GIT_SHA}
 RUN pnpm build
 
 # Stage 3: Runner (Production)
-FROM node:20-alpine AS runner
+FROM node:25-alpine AS runner
 WORKDIR /app
 
 # Set production environment
