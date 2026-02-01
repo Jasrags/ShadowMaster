@@ -383,7 +383,7 @@ export function ArmorPurchaseModal({
         <div className="flex max-h-[85vh] flex-col">
           {/* Header */}
           <div className="flex items-center justify-between px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
-            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Select Armor</h2>
+            <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">Add Armor</h2>
             <button
               onClick={close}
               className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800"

@@ -1,2 +1,2 @@
 export { MatrixGearCard } from "./MatrixGearCard";
-export { DataSoftwarePurchaseModal } from "./DataSoftwarePurchaseModal";
+export { MatrixGearModal } from "./MatrixGearModal";

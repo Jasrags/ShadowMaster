@@ -7,9 +7,9 @@
  *
  * Features:
  * - Dual budget progress bars (Positive costs / Negative gains)
- * - Two sections with [+ Add] buttons
+ * - Single [+ Add] button in header opens unified modal
  * - Selected qualities as removable cards with descriptions
- * - Modal selection with search and category grouping
+ * - Unified modal selection with type toggle, search, and category grouping
  * - Specification selection for qualities that require it
  * - Level selection for leveled qualities
  */
@@ -38,8 +38,8 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const { getBudget } = useCreationBudgets();
   const karmaBudget = getBudget("karma");
 
-  const [showPositiveModal, setShowPositiveModal] = useState(false);
-  const [showNegativeModal, setShowNegativeModal] = useState(false);
+  // Modal state
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Get existing skill and skill group selections for cross-validation
   const existingSkillIds = useMemo(() => {
@@ -111,7 +111,12 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const isPositiveOver = positiveKarmaSpent > MAX_POSITIVE_KARMA;
   const isNegativeOver = negativeKarmaGained > MAX_NEGATIVE_KARMA;
 
-  // Add a quality
+  // Open modal
+  const handleOpenModal = useCallback(() => {
+    setIsModalOpen(true);
+  }, []);
+
+  // Add a quality (callback from modal)
   // Phase 4.2: Store karma in each selection, context derives totals from selections
   const handleAddQuality = useCallback(
     (qualityId: string, isPositive: boolean, specification?: string, level?: number) => {
@@ -175,7 +180,19 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   }, [isPositiveOver, isNegativeOver, selectedPositive, selectedNegative]);
 
   return (
-    <CreationCard title="Qualities" status={validationStatus}>
+    <CreationCard
+      title="Qualities"
+      status={validationStatus}
+      headerAction={
+        <button
+          onClick={handleOpenModal}
+          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add
+        </button>
+      }
+    >
       <div className="space-y-3">
         {/* Budget indicators */}
         <div className="grid gap-3 sm:grid-cols-2">
@@ -199,18 +216,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
 
         {/* Positive Qualities Section */}
         <div>
-          <div className="mb-1 flex items-center justify-between">
-            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Positive Qualities
-            </h4>
-            <button
-              onClick={() => setShowPositiveModal(true)}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Positive
-            </button>
-          </div>
+          <h4 className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Positive Qualities
+          </h4>
           {selectedPositive.length === 0 ? (
             <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
               <p className="text-xs text-zinc-400 dark:text-zinc-500">
@@ -241,18 +249,9 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
 
         {/* Negative Qualities Section */}
         <div>
-          <div className="mb-1 flex items-center justify-between">
-            <h4 className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Negative Qualities
-            </h4>
-            <button
-              onClick={() => setShowNegativeModal(true)}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3.5 w-3.5" />
-              Negative
-            </button>
-          </div>
+          <h4 className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+            Negative Qualities
+          </h4>
           {selectedNegative.length === 0 ? (
             <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
               <p className="text-xs text-zinc-400 dark:text-zinc-500">
@@ -289,32 +288,21 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         />
       </div>
 
-      {/* Modals */}
+      {/* Unified Modal */}
       <QualitySelectionModal
-        isOpen={showPositiveModal}
-        onClose={() => setShowPositiveModal(false)}
-        isPositive={true}
-        qualities={positiveQualities}
-        selectedIds={selectedPositive.map((s) => s.id)}
-        usedKarma={positiveKarmaSpent}
-        maxKarma={MAX_POSITIVE_KARMA}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        defaultType="positive"
+        positiveQualities={positiveQualities}
+        negativeQualities={negativeQualities}
+        selectedPositiveIds={selectedPositive.map((s) => s.id)}
+        selectedNegativeIds={selectedNegative.map((s) => s.id)}
+        positiveKarmaUsed={positiveKarmaSpent}
+        negativeKarmaUsed={negativeKarmaGained}
+        maxPositiveKarma={MAX_POSITIVE_KARMA}
+        maxNegativeKarma={MAX_NEGATIVE_KARMA}
         karmaBalance={karmaBalance}
-        onAdd={(id, spec, level) => handleAddQuality(id, true, spec, level)}
-        skillGroups={skillGroups}
-        existingSkillIds={existingSkillIds}
-        existingSkillGroupIds={existingSkillGroupIds}
-      />
-
-      <QualitySelectionModal
-        isOpen={showNegativeModal}
-        onClose={() => setShowNegativeModal(false)}
-        isPositive={false}
-        qualities={negativeQualities}
-        selectedIds={selectedNegative.map((s) => s.id)}
-        usedKarma={negativeKarmaGained}
-        maxKarma={MAX_NEGATIVE_KARMA}
-        karmaBalance={karmaBalance}
-        onAdd={(id, spec, level) => handleAddQuality(id, false, spec, level)}
+        onAdd={handleAddQuality}
         skillGroups={skillGroups}
         existingSkillIds={existingSkillIds}
         existingSkillGroupIds={existingSkillGroupIds}

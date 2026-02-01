@@ -23,7 +23,7 @@ import type { SpellData } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import { SpellModal, SpellListItem } from "./spells";
-import { Lock, Plus, Sparkles } from "lucide-react";
+import { Lock, Plus } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -339,7 +339,19 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
   }
 
   return (
-    <CreationCard title="Spells" status={validationStatus}>
+    <CreationCard
+      title="Spells"
+      status={validationStatus}
+      headerAction={
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add
+        </button>
+      }
+    >
       <div className="space-y-4">
         {/* Spells Budget */}
         <BudgetIndicator
@@ -363,28 +375,6 @@ export function SpellsCard({ state, updateState }: SpellsCardProps) {
             </p>
           </div>
         )}
-
-        {/* Category Header with Add Button */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Sparkles className="h-3.5 w-3.5 text-emerald-500" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Spells
-            </span>
-            {selectedSpells.length > 0 && (
-              <span className="rounded-full bg-emerald-100 px-1.5 py-0.5 text-[10px] font-medium text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400">
-                {selectedSpells.length}
-              </span>
-            )}
-          </div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-          >
-            <Plus className="h-3 w-3" />
-            Add
-          </button>
-        </div>
 
         {/* Selected spells grouped by category */}
         {selectedSpells.length > 0 && (

@@ -40,6 +40,48 @@ import { InfoTooltip } from "@/components/ui";
 
 const KARMA_TO_NUYEN_RATE = 2000;
 
+// Armor category keys and labels for grouped display
+type ArmorCategoryKey = "body" | "clothing" | "helmets" | "shields" | "fba" | "accessories";
+
+const ARMOR_CATEGORY_LABELS: Record<ArmorCategoryKey, string> = {
+  body: "Body Armor",
+  clothing: "Clothing",
+  helmets: "Helmets",
+  shields: "Shields",
+  fba: "Full Body Armor",
+  accessories: "Accessories",
+};
+
+// Categorize armor item based on name and properties
+function getArmorCategory(armor: ArmorItem): ArmorCategoryKey {
+  const name = armor.name.toLowerCase();
+  const subcategory = armor.subcategory?.toLowerCase() || "";
+
+  // Custom clothing items
+  if (armor.isCustom || subcategory === "clothing") return "clothing";
+
+  // Shields
+  if (name.includes("shield") || subcategory === "shield") return "shields";
+
+  // Helmets
+  if (name.includes("helmet") || subcategory === "helmet") return "helmets";
+
+  // Full body armor
+  if (
+    name.includes("full body") ||
+    name.includes("mil-spec") ||
+    name.includes("hardened mil-spec") ||
+    subcategory === "full-body-armor"
+  )
+    return "fba";
+
+  // Accessories (armor modifiers that add to existing armor)
+  if (armor.armorModifier) return "accessories";
+
+  // Default to body armor
+  return "body";
+}
+
 // =============================================================================
 // HELPERS
 // =============================================================================
@@ -90,6 +132,22 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     () => (state.selections?.armor || []) as ArmorItem[],
     [state.selections?.armor]
   );
+
+  // Group armor by category for display
+  const armorByCategory = useMemo(() => {
+    const grouped: Record<ArmorCategoryKey, ArmorItem[]> = {
+      body: [],
+      clothing: [],
+      helmets: [],
+      shields: [],
+      fba: [],
+      accessories: [],
+    };
+    for (const armor of selectedArmor) {
+      grouped[getArmorCategory(armor)].push(armor);
+    }
+    return grouped;
+  }, [selectedArmor]);
 
   // Calculate budget (shared with GearCard and WeaponsPanel)
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -482,18 +540,34 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
             </div>
           </div>
 
-          {/* Armor List */}
+          {/* Selected armor grouped by category */}
           {selectedArmor.length > 0 ? (
-            <div className="rounded-lg border border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-900 px-3 divide-y divide-zinc-100 dark:divide-zinc-800">
-              {selectedArmor.map((armor) => (
-                <ArmorRow
-                  key={armor.id}
-                  armor={armor}
-                  onRemove={removeArmor}
-                  onAddMod={handleAddMod}
-                  onRemoveMod={handleRemoveMod}
-                />
-              ))}
+            <div className="space-y-4">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                Selected Armor ({selectedArmor.length})
+              </h4>
+
+              {(Object.entries(armorByCategory) as [ArmorCategoryKey, ArmorItem[]][]).map(
+                ([category, items]) =>
+                  items.length > 0 && (
+                    <div key={category}>
+                      <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                        {ARMOR_CATEGORY_LABELS[category]}
+                      </h5>
+                      <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                        {items.map((armor) => (
+                          <ArmorRow
+                            key={armor.id}
+                            armor={armor}
+                            onRemove={removeArmor}
+                            onAddMod={handleAddMod}
+                            onRemoveMod={handleRemoveMod}
+                          />
+                        ))}
+                      </div>
+                    </div>
+                  )
+              )}
             </div>
           ) : (
             <EmptyState message="No armor purchased" />

@@ -236,3 +236,9 @@ interface [Item]ModalProps {
 | ---------- | ----------------------- | ----------- |
 | SkillsCard | `skills/SkillModal.tsx` | blue        |
 | SpellsCard | `spells/SpellModal.tsx` | emerald     |
+
+---
+
+## Related Patterns
+
+- **[Unified Category Modal Pattern](./unified-category-modal-pattern.md)** - Extends this pattern with type toggle buttons, category counts, and card-side grouped display. Use when a modal needs to handle multiple distinct item types (e.g., cyberware + bioware).

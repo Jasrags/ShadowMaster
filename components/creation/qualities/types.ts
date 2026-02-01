@@ -11,13 +11,28 @@ export interface SelectedQuality {
 export interface QualitySelectionModalProps {
   isOpen: boolean;
   onClose: () => void;
-  isPositive: boolean;
-  qualities: QualityData[];
-  selectedIds: string[];
-  usedKarma: number;
-  maxKarma: number;
+  /** Initial type to show when modal opens (defaults to 'positive') */
+  defaultType?: "positive" | "negative";
+  /** All positive qualities from the ruleset */
+  positiveQualities: QualityData[];
+  /** All negative qualities from the ruleset */
+  negativeQualities: QualityData[];
+  /** IDs of already-selected positive qualities */
+  selectedPositiveIds: string[];
+  /** IDs of already-selected negative qualities */
+  selectedNegativeIds: string[];
+  /** Karma spent on positive qualities */
+  positiveKarmaUsed: number;
+  /** Karma gained from negative qualities */
+  negativeKarmaUsed: number;
+  /** Maximum karma for positive qualities (typically 25) */
+  maxPositiveKarma: number;
+  /** Maximum karma for negative qualities (typically 25) */
+  maxNegativeKarma: number;
+  /** Current karma balance available */
   karmaBalance: number;
-  onAdd: (qualityId: string, specification?: string, level?: number) => void;
+  /** Callback when a quality is added - isPositive indicates the type */
+  onAdd: (qualityId: string, isPositive: boolean, specification?: string, level?: number) => void;
   skillGroups: SkillGroupData[];
   existingSkillIds: string[]; // Skills currently selected by the user
   existingSkillGroupIds: string[]; // Skill groups currently selected by the user
