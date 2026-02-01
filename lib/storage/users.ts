@@ -123,9 +123,14 @@ function normalizeUserRole(role: UserRole | UserRole[]): UserRole[] {
 function normalizeUserDefaults(user: User): User {
   return {
     ...user,
-    preferences: user.preferences ?? {
-      theme: "system",
-      navigationCollapsed: false,
+    preferences: {
+      theme: user.preferences?.theme ?? "system",
+      navigationCollapsed: user.preferences?.navigationCollapsed ?? false,
+      defaultEdition: user.preferences?.defaultEdition,
+      communications: user.preferences?.communications ?? {
+        productUpdates: false,
+        campaignNotifications: true,
+      },
     },
     failedLoginAttempts: user.failedLoginAttempts ?? 0,
     lockoutUntil: user.lockoutUntil ?? null,
@@ -212,6 +217,10 @@ export async function createUser(userData: NewUserData): Promise<User> {
     preferences: {
       theme: "system",
       navigationCollapsed: false,
+      communications: {
+        productUpdates: false,
+        campaignNotifications: true,
+      },
     },
     createdAt: new Date().toISOString(),
     lastLogin: null,

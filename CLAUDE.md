@@ -73,7 +73,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
 
 ```
 /app                    # Next.js App Router pages and API routes
-  /api                  # API route handlers (~133 route files)
+  /api                  # API route handlers (~144 route files)
   /characters           # Character pages (create, view, edit, advancement)
   /campaigns            # Campaign management pages
 /lib                    # Core business logic
@@ -200,7 +200,7 @@ When modifying files in `/components/creation/`:
 ## Testing
 
 ```bash
-pnpm test          # Unit tests (~249 test files)
+pnpm test          # Unit tests (~276 test files)
 pnpm test:e2e      # E2E tests
 ```
 
