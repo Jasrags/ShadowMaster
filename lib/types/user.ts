@@ -8,10 +8,29 @@ export type UserRole = "user" | "administrator" | "gamemaster";
  */
 export type AccountStatus = "active" | "suspended" | "locked";
 
+/**
+ * User communication preferences
+ * Controls which optional emails the user receives
+ */
+export interface CommunicationPreferences {
+  /**
+   * Product updates: new features, tips, release notes
+   * @default false (opt-in required)
+   */
+  productUpdates: boolean;
+
+  /**
+   * Campaign notifications: session reminders, GM messages to players
+   * @default true (opt-out available)
+   */
+  campaignNotifications: boolean;
+}
+
 export interface UserSettings {
   theme: "light" | "dark" | "system";
   navigationCollapsed: boolean;
   defaultEdition?: string;
+  communications?: CommunicationPreferences;
 }
 
 export interface User {
