@@ -281,6 +281,106 @@ describe("extractSpentValues", () => {
       expect(spent["nuyen"]).toBeGreaterThanOrEqual(2000);
     });
   });
+
+  describe("rigging equipment spending derivation", () => {
+    it("includes vehicles in nuyen spending", () => {
+      const stateBudgets = {};
+      const selections = {
+        vehicles: [
+          { cost: 3000, quantity: 1 },
+          { cost: 5000, quantity: 2 },
+        ],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      // 3000 + (5000 * 2) = 13000
+      expect(spent["nuyen"]).toBe(13000);
+    });
+
+    it("includes drones in nuyen spending", () => {
+      const stateBudgets = {};
+      const selections = {
+        drones: [{ cost: 1000 }, { cost: 2500 }, { cost: 500 }],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      expect(spent["nuyen"]).toBe(4000);
+    });
+
+    it("includes RCCs in nuyen spending", () => {
+      const stateBudgets = {};
+      const selections = {
+        rccs: [{ cost: 1400 }, { cost: 3000 }],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      expect(spent["nuyen"]).toBe(4400);
+    });
+
+    it("includes autosofts in nuyen spending", () => {
+      const stateBudgets = {};
+      const selections = {
+        autosofts: [{ cost: 500 }, { cost: 1000 }, { cost: 750 }],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      expect(spent["nuyen"]).toBe(2250);
+    });
+
+    it("combines all rigging equipment in nuyen spending", () => {
+      const stateBudgets = {};
+      const selections = {
+        vehicles: [{ cost: 3000, quantity: 1 }],
+        drones: [{ cost: 1000 }],
+        rccs: [{ cost: 1400 }],
+        autosofts: [{ cost: 500 }],
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        null,
+        undefined,
+        emptySkillCategories
+      );
+
+      // 3000 + 1000 + 1400 + 500 = 5900
+      expect(spent["nuyen"]).toBe(5900);
+    });
+  });
 });
 
 // =============================================================================

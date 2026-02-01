@@ -43,6 +43,7 @@
     "check-tests:strict": "pnpm dlx tsx scripts/check-test-coverage.ts --strict",
     "validate-characters": "pnpm dlx tsx scripts/validate-example-characters.ts",
     "validate-creation-docs": "pnpm dlx tsx scripts/validate-creation-docs.ts",
+    "generate-diagrams": "pnpm dlx tsx scripts/generate-component-diagrams.ts",
     "audit:creation": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts",
     "audit:creation:strict": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --strict",
     "audit:creation:verbose": "pnpm dlx tsx scripts/audit/creation-ux-audit.ts --verbose",
