@@ -3,7 +3,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import { hashPassword, verifyPassword } from "../password";
+import { hashPassword, verifyPassword, verifyCredentials } from "../password";
 
 describe("Password Hashing", () => {
   describe("hashPassword", () => {
@@ -127,5 +127,108 @@ describe("Password Hashing", () => {
 
       expect(results.every((r) => r === true)).toBe(true);
     }, 15000); // bcrypt with 12 salt rounds is intentionally slow
+  });
+
+  describe("verifyCredentials", () => {
+    it("should return valid=true for correct password and hash", async () => {
+      const password = "correct-password";
+      const hash = await hashPassword(password);
+
+      const result = await verifyCredentials(password, hash);
+
+      expect(result.valid).toBe(true);
+      expect(result.error).toBeNull();
+    });
+
+    it("should return valid=false for wrong password", async () => {
+      const hash = await hashPassword("correct-password");
+
+      const result = await verifyCredentials("wrong-password", hash);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBeNull();
+    });
+
+    it("should return error for empty password", async () => {
+      const hash = await hashPassword("some-password");
+
+      const result = await verifyCredentials("", hash);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("Password is required");
+    });
+
+    it("should return error for null password", async () => {
+      const hash = await hashPassword("some-password");
+
+      const result = await verifyCredentials(null, hash);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("Password is required");
+    });
+
+    it("should return error for undefined password", async () => {
+      const hash = await hashPassword("some-password");
+
+      const result = await verifyCredentials(undefined, hash);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("Password is required");
+    });
+
+    it("should return valid=false with no error for null hash (user not found)", async () => {
+      const result = await verifyCredentials("any-password", null);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBeNull(); // No specific error to prevent enumeration
+    });
+
+    it("should return valid=false with no error for undefined hash", async () => {
+      const result = await verifyCredentials("any-password", undefined);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBeNull();
+    });
+
+    it("should prioritize password validation error over hash missing", async () => {
+      // When both password and hash are missing, password error takes precedence
+      const result = await verifyCredentials("", null);
+
+      expect(result.valid).toBe(false);
+      expect(result.error).toBe("Password is required");
+    });
+
+    it("should always run bcrypt for timing safety", async () => {
+      // This test verifies the timing-safe property by measuring execution times.
+      // All paths should take similar time (~100ms for bcrypt with 12 rounds).
+      const hash = await hashPassword("test-password");
+
+      const measureTime = async (fn: () => Promise<unknown>) => {
+        const start = performance.now();
+        await fn();
+        return performance.now() - start;
+      };
+
+      // Valid credentials
+      const validTime = await measureTime(() => verifyCredentials("test-password", hash));
+      // Invalid password
+      const invalidTime = await measureTime(() => verifyCredentials("wrong-password", hash));
+      // Empty password (should still run bcrypt)
+      const emptyPasswordTime = await measureTime(() => verifyCredentials("", hash));
+      // Null hash (should still run bcrypt against dummy)
+      const nullHashTime = await measureTime(() => verifyCredentials("any-password", null));
+
+      // All times should be within same order of magnitude (bcrypt dominates)
+      // We use a generous threshold since bcrypt timing can vary
+      const times = [validTime, invalidTime, emptyPasswordTime, nullHashTime];
+      const minTime = Math.min(...times);
+      const maxTime = Math.max(...times);
+
+      // All paths should take meaningful time (bcrypt is ~50-200ms with 12 rounds)
+      expect(minTime).toBeGreaterThan(10); // At least 10ms indicates bcrypt ran
+
+      // Max time shouldn't be more than 5x min time (generous threshold for CI variance)
+      expect(maxTime / minTime).toBeLessThan(5);
+    }, 30000); // Extended timeout for multiple bcrypt operations
   });
 });

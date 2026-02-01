@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, clearSession } from "@/lib/auth/session";
 import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
-import { verifyPassword, hashPassword } from "@/lib/auth/password";
+import { verifyCredentials, hashPassword } from "@/lib/auth/password";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 import { isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
@@ -17,7 +17,8 @@ export async function POST(request: NextRequest) {
 
     const { currentPassword, newPassword } = await request.json();
 
-    if (!currentPassword || !newPassword) {
+    // Validate new password is provided (currentPassword validated by verifyCredentials)
+    if (!newPassword) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
     }
 
@@ -35,16 +36,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Verify current password
-    const isValid = await verifyPassword(currentPassword, user.passwordHash);
-    if (!isValid) {
+    // Verify current password using timing-safe verification
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL
+    const { valid, error } = await verifyCredentials(currentPassword, user.passwordHash);
+    if (error) {
+      return NextResponse.json({ error }, { status: 400 });
+    }
+    if (!valid) {
       await AuditLogger.log({
         event: "signin.failure",
         userId,
         ip,
         metadata: { context: "password_change", reason: "invalid_current_password" },
       });
-      return NextResponse.json({ error: "Incorrect current password" }, { status: 400 });
+      return NextResponse.json({ error: "Incorrect current password" }, { status: 401 });
     }
 
     // Update password and increment session version to revoke all existing sessions

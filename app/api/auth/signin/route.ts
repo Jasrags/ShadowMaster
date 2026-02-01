@@ -5,7 +5,7 @@ import {
   incrementFailedAttempts,
   resetFailedAttempts,
 } from "@/lib/storage/users";
-import { verifyPassword } from "@/lib/auth/password";
+import { verifyCredentials } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
 import { RateLimiter } from "@/lib/security/rate-limit";
@@ -15,11 +15,6 @@ import type { SigninRequest, AuthResponse } from "@/lib/types/user";
 // Rate limit configuration
 const IP_LIMIT = { windowMs: 15 * 60 * 1000, max: 20 }; // 20 attempts per 15 mins per IP
 const ACCOUNT_LIMIT = { windowMs: 15 * 60 * 1000, max: 5 }; // 5 attempts per 15 mins per Email
-
-// Dummy hash for timing-safe comparison when user doesn't exist
-// This prevents timing attacks that could enumerate valid emails by comparing
-// response times (bcrypt takes ~100ms vs instant return for non-existent users)
-const DUMMY_PASSWORD_HASH = "$2a$12$LQv3c1yqBWVHxkd0LHAkCOYz6TtxMQJqhN8/X4u4Q0o5u4Q0o5u4Q";
 
 export async function POST(request: NextRequest): Promise<NextResponse<AuthResponse>> {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
@@ -38,8 +33,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // Validate input
-    if (!email || !password) {
+    // Validate email (required for rate limiting - password validated by verifyCredentials)
+    if (!email) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
         { status: 400 }
@@ -68,12 +63,17 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     const failResponse = () =>
       NextResponse.json({ success: false, error: "Invalid email or password" }, { status: 401 });
 
-    // 4. Timing-safe password verification
-    // ALWAYS run bcrypt.compare to prevent timing attacks that could enumerate valid emails
-    // Non-existent users compare against DUMMY_PASSWORD_HASH (~100ms bcrypt work)
-    const isValid = await verifyPassword(password, user?.passwordHash ?? DUMMY_PASSWORD_HASH);
+    // 4. Timing-safe credential verification
+    // verifyCredentials ALWAYS runs bcrypt first, then validates inputs.
+    // This satisfies CodeQL by ensuring the security check cannot be bypassed.
+    const { valid, error } = await verifyCredentials(password, user?.passwordHash);
 
-    // 5. Check if user exists (after bcrypt to maintain constant timing)
+    // 5. Handle validation errors (password empty/missing)
+    if (error) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
+    }
+
+    // 6. Check if user exists (after bcrypt to maintain constant timing)
     if (!user) {
       await AuditLogger.log({
         event: "signin.failure",
@@ -84,7 +84,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 6. Check lockout status
+    // 7. Check lockout status
     if (user.lockoutUntil && new Date(user.lockoutUntil) > new Date()) {
       await AuditLogger.log({ event: "lockout.triggered", userId: user.id, email, ip });
       return NextResponse.json(
@@ -93,8 +93,8 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // 7. Check password validity
-    if (!isValid) {
+    // 8. Check password validity
+    if (!valid) {
       await incrementFailedAttempts(user.id);
       await AuditLogger.log({
         event: "signin.failure",
@@ -106,7 +106,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 8. Success - Reset attempts and create session
+    // 9. Success - Reset attempts and create session
     await resetFailedAttempts(user.id);
     const updatedUser = await updateUser(user.id, {
       lastLogin: new Date().toISOString(),

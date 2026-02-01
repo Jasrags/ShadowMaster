@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById, updateUser, incrementSessionVersion } from "@/lib/storage/users";
-import { verifyPassword, hashPassword } from "@/lib/auth/password";
+import { verifyCredentials, hashPassword } from "@/lib/auth/password";
 import { isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
 
@@ -18,7 +18,8 @@ export async function POST(req: NextRequest) {
 
     const { currentPassword, newPassword } = await req.json();
 
-    if (!currentPassword || !newPassword) {
+    // Validate new password is provided (currentPassword validated by verifyCredentials)
+    if (!newPassword) {
       return NextResponse.json(
         { success: false, error: "Missing required fields" },
         { status: 400 }
@@ -30,9 +31,13 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
-    // Verify current password
-    const isPasswordCorrect = await verifyPassword(currentPassword, user.passwordHash);
-    if (!isPasswordCorrect) {
+    // Verify current password using timing-safe verification
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL
+    const { valid, error } = await verifyCredentials(currentPassword, user.passwordHash);
+    if (error) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
+    }
+    if (!valid) {
       return NextResponse.json(
         { success: false, error: "Incorrect current password" },
         { status: 401 }
