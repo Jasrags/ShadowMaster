@@ -98,6 +98,11 @@ describe("POST /api/account/delete", () => {
 
   it("should return 400 when password missing", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({
+      valid: false,
+      error: "Password is required",
+    });
 
     const request = createMockRequest("http://localhost:3000/api/account/delete", {});
 
@@ -106,7 +111,7 @@ describe("POST /api/account/delete", () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Password confirmation required");
+    expect(data.error).toBe("Password is required");
   });
 
   it("should return 404 when user not found", async () => {
@@ -128,7 +133,7 @@ describe("POST /api/account/delete", () => {
   it("should return 401 when password incorrect", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/account/delete", {
       password: "wrongpassword",
@@ -140,14 +145,17 @@ describe("POST /api/account/delete", () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Incorrect password");
-    expect(passwordModule.verifyPassword).toHaveBeenCalledWith("wrongpassword", "hashed-password");
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
+      "wrongpassword",
+      "hashed-password"
+    );
     expect(storageModule.deleteUser).not.toHaveBeenCalled();
   });
 
   it("should delete user and clear session on success", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.deleteUser).mockResolvedValue(undefined);
 
     const request = createMockRequest("http://localhost:3000/api/account/delete", {
@@ -167,7 +175,7 @@ describe("POST /api/account/delete", () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("specific-user-id");
     const specificUser = { ...mockUser, id: "specific-user-id" };
     vi.mocked(storageModule.getUserById).mockResolvedValue(specificUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.deleteUser).mockResolvedValue(undefined);
 
     const request = createMockRequest("http://localhost:3000/api/account/delete", {
@@ -183,7 +191,7 @@ describe("POST /api/account/delete", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.deleteUser).mockRejectedValue(new Error("Database error"));
 
     const request = createMockRequest("http://localhost:3000/api/account/delete", {
