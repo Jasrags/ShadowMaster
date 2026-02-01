@@ -12,7 +12,10 @@
 #   Caddy terminates TLS, so internal traffic doesn't need HTTPS.
 #
 # Required environment variables (set in Portainer):
-#   CF_API_TOKEN  - Cloudflare API token with Zone:DNS:Edit permission
+#   CF_API_TOKEN   - Cloudflare API token with Zone:DNS:Edit permission
+#   RESEND_API_KEY - Resend API key (from resend.com/api-keys)
+#
+# Alternative email (Mailtrap for staging - currently disabled):
 #   MAILTRAP_USER - Mailtrap SMTP username (from mailtrap.io inbox settings)
 #   MAILTRAP_PASS - Mailtrap SMTP password
 #
@@ -63,15 +66,20 @@ services:
       - NODE_ENV=production
       - PORT=3000 # Next.js internal port
       - HOSTNAME=0.0.0.0
-      # Email configuration (Mailtrap for staging)
-      - EMAIL_TRANSPORT=smtp
-      - EMAIL_FROM=${EMAIL_FROM:-noreply@shadowmaster.app}
+      # Email configuration
+      # - EMAIL_FROM=${EMAIL_FROM:-noreply@shadowmaster.app}
+      - EMAIL_FROM=${EMAIL_FROM:-noreply@jasrags.net}
       - EMAIL_FROM_NAME=${EMAIL_FROM_NAME:-Shadow Master}
-      - SMTP_HOST=sandbox.smtp.mailtrap.io
-      - SMTP_PORT=2525
-      - SMTP_SECURE=false
-      - SMTP_USER=${MAILTRAP_USER}
-      - SMTP_PASS=${MAILTRAP_PASS}
+      # --- Resend (production emails) ---
+      - EMAIL_TRANSPORT=resend
+      - RESEND_API_KEY=${RESEND_API_KEY}
+      # --- Mailtrap (staging sandbox - uncomment to use) ---
+      # - EMAIL_TRANSPORT=smtp
+      # - SMTP_HOST=sandbox.smtp.mailtrap.io
+      # - SMTP_PORT=2525
+      # - SMTP_SECURE=false
+      # - SMTP_USER=${MAILTRAP_USER}
+      # - SMTP_PASS=${MAILTRAP_PASS}
     volumes:
       - shadow-master-data:/app/data
     healthcheck:
