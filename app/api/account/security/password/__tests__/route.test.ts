@@ -101,6 +101,11 @@ describe("POST /api/account/security/password", () => {
 
   it("should return 400 when currentPassword missing", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({
+      valid: false,
+      error: "Password is required",
+    });
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       newPassword: "NewPassword123!",
@@ -111,11 +116,14 @@ describe("POST /api/account/security/password", () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Missing required fields");
+    expect(data.error).toBe("Password is required");
   });
 
   it("should return 400 when newPassword missing", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    // verifyCredentials runs before newPassword check now
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "oldpassword",
@@ -127,6 +135,11 @@ describe("POST /api/account/security/password", () => {
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Missing required fields");
+    // Verify verifyCredentials was called before the newPassword check
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
+      "oldpassword",
+      "old-hashed-password"
+    );
   });
 
   it("should return 404 when user not found", async () => {
@@ -144,12 +157,14 @@ describe("POST /api/account/security/password", () => {
     expect(response.status).toBe(404);
     expect(data.success).toBe(false);
     expect(data.error).toBe("User not found");
+    // verifyCredentials should NOT be called when user not found
+    expect(passwordModule.verifyCredentials).not.toHaveBeenCalled();
   });
 
   it("should return 401 when current password incorrect", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "wrongpassword",
@@ -162,7 +177,7 @@ describe("POST /api/account/security/password", () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Incorrect current password");
-    expect(passwordModule.verifyPassword).toHaveBeenCalledWith(
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
       "wrongpassword",
       "old-hashed-password"
     );
@@ -172,7 +187,7 @@ describe("POST /api/account/security/password", () => {
   it("should return 400 when new password is too weak (defense-in-depth)", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/account/security/password", {
       currentPassword: "correctoldpassword",
@@ -191,7 +206,7 @@ describe("POST /api/account/security/password", () => {
   it("should update password hash on success", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("new-hashed-password");
     vi.mocked(storageModule.updateUser).mockResolvedValue(undefined as unknown as never);
     vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
@@ -218,7 +233,7 @@ describe("POST /api/account/security/password", () => {
   it("should increment session version (ADR-001 compliance)", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("new-hashed-password");
     vi.mocked(storageModule.updateUser).mockResolvedValue(undefined as unknown as never);
     vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
@@ -239,7 +254,7 @@ describe("POST /api/account/security/password", () => {
   it("should send password changed notification email on success", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("new-hashed-password");
     vi.mocked(storageModule.updateUser).mockResolvedValue(undefined as unknown as never);
     vi.mocked(storageModule.incrementSessionVersion).mockResolvedValue(
@@ -267,7 +282,7 @@ describe("POST /api/account/security/password", () => {
     const consoleErrorSpy = vi.spyOn(console, "error").mockImplementation(() => {});
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
     vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("new-hashed-password");
     vi.mocked(storageModule.updateUser).mockRejectedValue(new Error("Database error"));
 

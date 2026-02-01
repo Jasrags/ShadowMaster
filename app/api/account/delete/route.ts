@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession, clearSession } from "@/lib/auth/session";
 import { getUserById, deleteUser } from "@/lib/storage/users";
-import { verifyPassword } from "@/lib/auth/password";
+import { verifyCredentials } from "@/lib/auth/password";
 
 /**
  * POST: Explicitly confirmed account deletion protocol.
@@ -16,21 +16,19 @@ export async function POST(req: NextRequest) {
     }
 
     const { password } = await req.json();
-    if (!password) {
-      return NextResponse.json(
-        { success: false, error: "Password confirmation required" },
-        { status: 400 }
-      );
-    }
 
     const user = await getUserById(userId);
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
-    // Verify password before deletion for security
-    const isPasswordCorrect = await verifyPassword(password, user.passwordHash);
-    if (!isPasswordCorrect) {
+    // Verify password using timing-safe verification
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL
+    const { valid, error } = await verifyCredentials(password, user.passwordHash);
+    if (error) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
+    }
+    if (!valid) {
       return NextResponse.json({ success: false, error: "Incorrect password" }, { status: 401 });
     }
 

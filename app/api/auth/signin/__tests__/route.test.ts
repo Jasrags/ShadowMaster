@@ -115,7 +115,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.resetFailedAttempts).mockResolvedValue(mockUser);
     vi.mocked(storageModule.updateUser).mockResolvedValue({
       ...mockUser,
@@ -137,7 +137,10 @@ describe("POST /api/auth/signin", () => {
     expect(data.user.lastLogin).toBeDefined();
 
     expect(storageModule.getUserByEmail).toHaveBeenCalledWith("test@example.com");
-    expect(passwordModule.verifyPassword).toHaveBeenCalledWith("ValidPass123!", "hashed-password");
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
+      "ValidPass123!",
+      "hashed-password"
+    );
     expect(storageModule.resetFailedAttempts).toHaveBeenCalledWith(mockUser.id);
     expect(storageModule.updateUser).toHaveBeenCalledWith(
       mockUser.id,
@@ -153,6 +156,9 @@ describe("POST /api/auth/signin", () => {
       password: "ValidPass123!",
     };
 
+    // verifyCredentials runs first (with null hash since no user), then email check
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
+
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     const response = await POST(request);
@@ -161,7 +167,10 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Email and password are required");
+    // getUserByEmail not called because email is falsy
     expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    // But verifyCredentials IS called (with undefined hash) before the email check
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith("ValidPass123!", undefined);
   });
 
   it("should return 400 when password is missing", async () => {
@@ -169,6 +178,12 @@ describe("POST /api/auth/signin", () => {
       email: "test@example.com",
     };
 
+    vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({
+      valid: false,
+      error: "Password is required",
+    });
+
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     const response = await POST(request);
@@ -176,8 +191,7 @@ describe("POST /api/auth/signin", () => {
 
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
-    expect(data.error).toBe("Email and password are required");
-    expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    expect(data.error).toBe("Password is required");
   });
 
   it("should return 401 when user does not exist", async () => {
@@ -187,7 +201,8 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    // verifyCredentials returns valid=false with no error when hash is null (user not found)
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
@@ -197,8 +212,8 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Invalid email or password");
-    // verifyPassword should ALWAYS be called for timing-safe comparison
-    expect(passwordModule.verifyPassword).toHaveBeenCalled();
+    // verifyCredentials should ALWAYS be called for timing-safe comparison
+    expect(passwordModule.verifyCredentials).toHaveBeenCalled();
     expect(sessionModule.createSession).not.toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
@@ -208,25 +223,23 @@ describe("POST /api/auth/signin", () => {
     );
   });
 
-  it("should always call verifyPassword for timing-safe comparison (prevents email enumeration)", async () => {
+  it("should always call verifyCredentials for timing-safe comparison (prevents email enumeration)", async () => {
     const requestBody = {
       email: "nonexistent@example.com",
       password: "ValidPass123!",
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     await POST(request);
 
-    // Verify that verifyPassword is called with a dummy hash when user doesn't exist
+    // Verify that verifyCredentials is called even when user doesn't exist
     // This ensures consistent timing regardless of whether the user exists
-    expect(passwordModule.verifyPassword).toHaveBeenCalledWith(
-      "ValidPass123!",
-      expect.stringMatching(/^\$2a\$/) // bcrypt hash format
-    );
+    // (verifyCredentials internally uses a dummy hash when hash is null/undefined)
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith("ValidPass123!", undefined);
   });
 
   it("should return 401 when password is incorrect", async () => {
@@ -236,7 +249,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
     vi.mocked(storageModule.incrementFailedAttempts).mockResolvedValue(mockUser);
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
@@ -247,7 +260,7 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(401);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Invalid email or password");
-    expect(passwordModule.verifyPassword).toHaveBeenCalledWith(
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
       "WrongPassword123!",
       "hashed-password"
     );
@@ -273,6 +286,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(lockedUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
@@ -282,8 +296,8 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(403);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Account is temporarily locked. Please try again in 15 minutes.");
-    // With timing-safe login, verifyPassword is always called to prevent email enumeration via timing attacks
-    expect(passwordModule.verifyPassword).toHaveBeenCalled();
+    // With timing-safe login, verifyCredentials is always called to prevent email enumeration via timing attacks
+    expect(passwordModule.verifyCredentials).toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
         event: "lockout.triggered",
@@ -324,6 +338,10 @@ describe("POST /api/auth/signin", () => {
       password: "ValidPass123!",
     };
 
+    // Account rate limiting now happens AFTER verifyCredentials
+    vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
+
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     const response = await POST(request);
@@ -332,7 +350,10 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(429);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Too many attempts for this account. Please try again later.");
-    expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    // getUserByEmail IS called now (before verifyCredentials)
+    expect(storageModule.getUserByEmail).toHaveBeenCalledWith("test@example.com");
+    // verifyCredentials IS called before account rate limiting
+    expect(passwordModule.verifyCredentials).toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
         event: "signin.failure",
@@ -372,7 +393,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.resetFailedAttempts).mockResolvedValue(mockUser);
     vi.mocked(storageModule.updateUser).mockResolvedValue({
       ...mockUser,
@@ -403,7 +424,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(userWithFailedAttempts);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.resetFailedAttempts).mockResolvedValue(mockUser);
     vi.mocked(storageModule.updateUser).mockResolvedValue({
       ...userWithFailedAttempts,
@@ -425,7 +446,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(false);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
     vi.mocked(storageModule.incrementFailedAttempts).mockResolvedValue(mockUser);
 
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
@@ -442,7 +463,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.resetFailedAttempts).mockResolvedValue(mockUser);
     vi.mocked(storageModule.updateUser).mockResolvedValue({
       ...mockUser,
@@ -469,7 +490,7 @@ describe("POST /api/auth/signin", () => {
     };
 
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
-    vi.mocked(passwordModule.verifyPassword).mockResolvedValue(true);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
     vi.mocked(storageModule.resetFailedAttempts).mockResolvedValue(mockUser);
     vi.mocked(storageModule.updateUser).mockResolvedValue({
       ...mockUser,
