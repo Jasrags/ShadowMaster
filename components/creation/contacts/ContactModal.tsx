@@ -169,7 +169,7 @@ export function ContactModal({
         {/* Header */}
         <div className="flex shrink-0 items-center justify-between border-b border-zinc-200 px-4 py-3 dark:border-zinc-700">
           <h3 className="text-lg font-semibold text-emerald-700 dark:text-emerald-400">
-            {isEditing ? "Edit Contact" : "New Contact"}
+            {isEditing ? "Edit Contact" : "Add Contact"}
           </h3>
           <button
             onClick={onClose}

@@ -16,14 +16,12 @@ import { useMemo, useCallback, useState } from "react";
 import type { CreationState, KnowledgeSkill, LanguageSkill } from "@/lib/types";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "../shared";
 import { Plus } from "lucide-react";
-import { MAX_SKILL_RATING } from "./constants";
+import { MAX_SKILL_RATING, SPEC_KNOWLEDGE_POINT_COST } from "./constants";
 import type { KnowledgeCategory } from "./types";
 import { LanguageRow } from "./LanguageRow";
 import { KnowledgeSkillRow } from "./KnowledgeSkillRow";
-import { AddLanguageModal } from "./AddLanguageModal";
-import { AddKnowledgeSkillModal } from "./AddKnowledgeSkillModal";
+import { KnowledgeLanguageModal } from "./KnowledgeLanguageModal";
 import { KnowledgeSkillSpecModal } from "./KnowledgeSkillSpecModal";
-import { SPEC_KNOWLEDGE_POINT_COST } from "./constants";
 
 interface KnowledgeLanguagesCardProps {
   state: CreationState;
@@ -31,8 +29,8 @@ interface KnowledgeLanguagesCardProps {
 }
 
 export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguagesCardProps) {
-  const [showAddLanguage, setShowAddLanguage] = useState(false);
-  const [showAddKnowledge, setShowAddKnowledge] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [modalDefaultMode, setModalDefaultMode] = useState<"language" | "knowledge">("language");
   const [specModalSkillIndex, setSpecModalSkillIndex] = useState<number | null>(null);
 
   // Get attributes for knowledge points calculation
@@ -279,7 +277,10 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
               Languages
             </h4>
             <button
-              onClick={() => setShowAddLanguage(true)}
+              onClick={() => {
+                setModalDefaultMode("language");
+                setShowModal(true);
+              }}
               className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
             >
               <Plus className="h-3.5 w-3.5" />
@@ -311,7 +312,10 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
               Knowledge Skills
             </h4>
             <button
-              onClick={() => setShowAddKnowledge(true)}
+              onClick={() => {
+                setModalDefaultMode("knowledge");
+                setShowModal(true);
+              }}
               className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
             >
               <Plus className="h-3.5 w-3.5" />
@@ -350,20 +354,17 @@ export function KnowledgeLanguagesCard({ state, updateState }: KnowledgeLanguage
       </div>
 
       {/* Modals */}
-      <AddLanguageModal
-        isOpen={showAddLanguage}
-        onClose={() => setShowAddLanguage(false)}
-        onAdd={handleAddLanguage}
-        existingLanguages={languages.map((l) => l.name)}
+      <KnowledgeLanguageModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        onAddLanguage={handleAddLanguage}
+        onAddKnowledgeSkill={handleAddKnowledge}
+        existingLanguages={languages}
+        existingKnowledgeSkills={knowledgeSkills}
         hasNativeLanguage={hasMaxNativeLanguages}
+        hasBilingualQuality={hasBilingualQuality}
         pointsRemaining={knowledgePointsRemaining}
-      />
-
-      <AddKnowledgeSkillModal
-        isOpen={showAddKnowledge}
-        onClose={() => setShowAddKnowledge(false)}
-        onAdd={handleAddKnowledge}
-        pointsRemaining={knowledgePointsRemaining}
+        defaultMode={modalDefaultMode}
       />
 
       {specModalSkillIndex !== null && (

@@ -45,7 +45,7 @@ import {
   WeaponModificationModal,
   AmmunitionModal,
 } from "./weapons";
-import { Lock, Plus, Crosshair, AlertTriangle } from "lucide-react";
+import { Lock, Plus, AlertTriangle } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
@@ -622,7 +622,19 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
 
   return (
     <>
-      <CreationCard title="Weapons" status={validationStatus}>
+      <CreationCard
+        title="Weapons"
+        status={validationStatus}
+        headerAction={
+          <button
+            onClick={() => setIsPurchaseModalOpen(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add
+          </button>
+        }
+      >
         <div className="space-y-4">
           {/* Nuyen Budget Bar */}
           <div className="space-y-1">
@@ -679,28 +691,6 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
               )}
             </div>
           )}
-
-          {/* Category Header with Add Button */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Crosshair className="h-3.5 w-3.5 text-blue-500" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Weapons
-              </span>
-              {selectedWeapons.length > 0 && (
-                <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/40 dark:text-blue-400">
-                  {selectedWeapons.length}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => setIsPurchaseModalOpen(true)}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3 w-3" />
-              Add
-            </button>
-          </div>
 
           {/* Selected weapons grouped by category */}
           {selectedWeapons.length > 0 && (

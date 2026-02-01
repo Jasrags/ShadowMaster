@@ -341,7 +341,7 @@ export function WeaponPurchaseModal({
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="full" className="max-w-4xl">
       {({ close }) => (
         <>
-          <ModalHeader title="Select Weapon" onClose={close} />
+          <ModalHeader title="Add Weapon" onClose={close} />
 
           {/* Search & Filters */}
           <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">

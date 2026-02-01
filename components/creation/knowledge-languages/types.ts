@@ -25,23 +25,23 @@ export interface KnowledgeSkillSpecModalProps {
   pointsRemaining: number;
 }
 
-export interface AddLanguageModalProps {
-  isOpen: boolean;
-  onClose: () => void;
-  onAdd: (name: string, rating: number, isNative: boolean) => void;
-  existingLanguages: string[];
-  hasNativeLanguage: boolean;
-  pointsRemaining: number;
-}
+// Note: AddLanguageModalProps and AddKnowledgeSkillModalProps were removed
+// when the separate modals were unified into KnowledgeLanguageModal
 
-export interface AddKnowledgeSkillModalProps {
+export interface KnowledgeLanguageModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (
+  onAddLanguage: (name: string, rating: number, isNative: boolean) => void;
+  onAddKnowledgeSkill: (
     name: string,
     category: KnowledgeCategory,
     rating: number,
     specialization?: string
   ) => void;
+  existingLanguages: LanguageSkill[];
+  existingKnowledgeSkills: KnowledgeSkill[];
+  hasNativeLanguage: boolean;
+  hasBilingualQuality: boolean;
   pointsRemaining: number;
+  defaultMode?: "language" | "knowledge";
 }

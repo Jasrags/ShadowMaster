@@ -538,7 +538,22 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
 
   return (
     <>
-      <CreationCard title="Matrix Gear" status={validationStatus}>
+      <CreationCard
+        title="Matrix Gear"
+        status={validationStatus}
+        headerAction={
+          <button
+            onClick={() => {
+              setInitialCategory("commlinks");
+              setIsMatrixGearModalOpen(true);
+            }}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add
+          </button>
+        }
+      >
         <div className="space-y-4">
           {/* Nuyen Budget Bar */}
           <div className="space-y-1">
@@ -595,31 +610,6 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
               )}
             </div>
           )}
-
-          {/* Category Header with Add Button */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Cpu className="h-3.5 w-3.5 text-cyan-500" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Matrix Gear
-              </span>
-              {totalItems > 0 && (
-                <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400">
-                  {totalItems}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => {
-                setInitialCategory("commlinks");
-                setIsMatrixGearModalOpen(true);
-              }}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3 w-3" />
-              Add
-            </button>
-          </div>
 
           {/* Selected matrix gear grouped by category */}
           {totalItems > 0 && (

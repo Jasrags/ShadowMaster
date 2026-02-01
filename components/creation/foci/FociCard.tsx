@@ -272,6 +272,15 @@ export function FociCard({ state, updateState }: FociCardProps) {
             : "Optional magical enhancements"
         }
         status={validationStatus}
+        headerAction={
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3.5 w-3.5" />
+            Add
+          </button>
+        }
       >
         <div className="space-y-4">
           {/* Karma Summary */}
@@ -283,28 +292,6 @@ export function FociCard({ state, updateState }: FociCardProps) {
               </span>
             </div>
           )}
-
-          {/* Category Header with Add Button */}
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <Sparkles className="h-3.5 w-3.5 text-purple-500" />
-              <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                Foci
-              </span>
-              {foci.length > 0 && (
-                <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/40 dark:text-purple-400">
-                  {foci.length}
-                </span>
-              )}
-            </div>
-            <button
-              onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3 w-3" />
-              Add
-            </button>
-          </div>
 
           {/* Foci List */}
           {foci.length > 0 && (

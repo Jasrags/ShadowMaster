@@ -273,7 +273,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
             }`}
           >
             <Plus className="h-4 w-4" />
-            Contact
+            Add
           </button>
         }
       >
