@@ -6,6 +6,8 @@ import type { Character } from "@/lib/types";
 import { useAuth } from "@/lib/auth/AuthProvider";
 import { CharacterImportDialog } from "./components/CharacterImportDialog";
 import { StabilityShield } from "@/components/sync";
+import { BaseModalRoot, ModalBody, ModalFooter } from "@/components/ui";
+import { AlertTriangle, X } from "lucide-react";
 
 // Extended character type with owner info for admin mode
 interface CharacterWithOwner extends Character {
@@ -164,6 +166,99 @@ function ShieldIcon({ className }: { className?: string }) {
 }
 
 // =============================================================================
+// DELETE CONFIRMATION MODAL
+// =============================================================================
+
+interface DeleteCharacterModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  onConfirm: () => void;
+  characterName: string;
+  isDeleting: boolean;
+}
+
+function DeleteCharacterModal({
+  isOpen,
+  onClose,
+  onConfirm,
+  characterName,
+  isDeleting,
+}: DeleteCharacterModalProps) {
+  return (
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="sm" zIndex={60}>
+      {({ close }) => (
+        <>
+          {/* Red-themed danger header */}
+          <div className="flex items-center justify-between border-b border-red-200 bg-red-50 px-6 py-4 dark:border-red-800 dark:bg-red-900/20">
+            <div className="flex items-center gap-2">
+              <AlertTriangle className="h-5 w-5 text-red-600 dark:text-red-400" />
+              <h2 className="text-lg font-semibold text-red-900 dark:text-red-100">
+                Delete Character
+              </h2>
+            </div>
+            <button
+              onClick={close}
+              aria-label="Close modal"
+              className="rounded-lg p-2 text-red-400 transition-colors hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-800 dark:hover:text-red-300"
+            >
+              <X className="h-5 w-5" aria-hidden="true" />
+            </button>
+          </div>
+
+          <ModalBody className="p-6">
+            <div className="space-y-4 text-center">
+              <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-red-100 dark:bg-red-900/30">
+                <TrashIcon className="h-6 w-6 text-red-600 dark:text-red-400" />
+              </div>
+              <div>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400">
+                  Are you sure you want to delete
+                </p>
+                <p className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                  {characterName}
+                </p>
+              </div>
+              <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                This action cannot be undone. All character data will be permanently removed.
+              </p>
+            </div>
+          </ModalBody>
+
+          <ModalFooter>
+            <div className="flex w-full justify-end gap-3">
+              <button
+                onClick={close}
+                disabled={isDeleting}
+                className="rounded-lg border border-zinc-300 bg-white px-4 py-2 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 disabled:opacity-50 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={onConfirm}
+                disabled={isDeleting}
+                className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-red-700 disabled:opacity-50"
+              >
+                {isDeleting ? (
+                  <>
+                    <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <TrashIcon className="h-4 w-4" />
+                    Delete Character
+                  </>
+                )}
+              </button>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
+  );
+}
+
+// =============================================================================
 // ARCHETYPE HELPERS
 // =============================================================================
 
@@ -247,40 +342,21 @@ type ViewMode = "grid" | "list";
 
 interface CharacterCardProps {
   character: CharacterWithOwner;
-  onDelete: (id: string) => void;
+  onDeleteClick: (character: CharacterWithOwner) => void;
   viewMode?: ViewMode;
   isAdminMode?: boolean;
 }
 
 function CharacterCard({
   character,
-  onDelete,
+  onDeleteClick,
   viewMode = "grid",
   isAdminMode = false,
 }: CharacterCardProps) {
-  const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleDelete = async (e: React.MouseEvent) => {
+  const handleDeleteClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-
-    if (!confirm(`Are you sure you want to delete ${character.name || "this character"}?`)) {
-      return;
-    }
-
-    setIsDeleting(true);
-    try {
-      const response = await fetch(`/api/characters/${character.id}`, {
-        method: "DELETE",
-      });
-
-      if (response.ok) {
-        onDelete(character.id);
-      }
-    } catch (error) {
-      console.error("Failed to delete character:", error);
-    }
-    setIsDeleting(false);
+    onDeleteClick(character);
   };
 
   const cardClass = getArchetypeCardClass(character);
@@ -379,9 +455,8 @@ function CharacterCard({
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
               <button
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                onClick={handleDeleteClick}
+                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
                 aria-label={`Delete ${character.name || "character"}`}
               >
                 <TrashIcon className="w-4 h-4" />
@@ -487,9 +562,8 @@ function CharacterCard({
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
               <button
-                onClick={handleDelete}
-                disabled={isDeleting}
-                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100 disabled:opacity-50"
+                onClick={handleDeleteClick}
+                className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
                 aria-label={`Delete ${character.name || "character"}`}
               >
                 <TrashIcon className="w-4 h-4" />
@@ -631,6 +705,10 @@ export default function CharactersPage() {
   const [owners, setOwners] = useState<Array<{ id: string; username: string }>>([]);
   const [ownerFilter, setOwnerFilter] = useState<string>("");
 
+  // Delete modal state
+  const [characterToDelete, setCharacterToDelete] = useState<CharacterWithOwner | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   // Check if user is admin
   const isAdmin = user?.role?.includes("administrator") ?? false;
 
@@ -673,8 +751,33 @@ export default function CharactersPage() {
     }
   }, [isAdminMode]);
 
-  const handleDelete = (id: string) => {
-    setCharacters((prev) => prev.filter((c) => c.id !== id));
+  const handleDeleteClick = (character: CharacterWithOwner) => {
+    setCharacterToDelete(character);
+  };
+
+  const handleCloseDeleteModal = () => {
+    if (!isDeleting) {
+      setCharacterToDelete(null);
+    }
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!characterToDelete) return;
+
+    setIsDeleting(true);
+    try {
+      const response = await fetch(`/api/characters/${characterToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setCharacters((prev) => prev.filter((c) => c.id !== characterToDelete.id));
+        setCharacterToDelete(null);
+      }
+    } catch (error) {
+      console.error("Failed to delete character:", error);
+    }
+    setIsDeleting(false);
   };
 
   const handleImport = async (characterData: object) => {
@@ -967,7 +1070,7 @@ export default function CharactersPage() {
                     <CharacterCard
                       key={character.id}
                       character={character}
-                      onDelete={handleDelete}
+                      onDeleteClick={handleDeleteClick}
                       viewMode="grid"
                       isAdminMode={isAdminMode}
                     />
@@ -979,7 +1082,7 @@ export default function CharactersPage() {
                     <CharacterCard
                       key={character.id}
                       character={character}
-                      onDelete={handleDelete}
+                      onDeleteClick={handleDeleteClick}
                       viewMode="list"
                       isAdminMode={isAdminMode}
                     />
@@ -990,6 +1093,15 @@ export default function CharactersPage() {
           )}
         </>
       )}
+
+      {/* Delete Confirmation Modal */}
+      <DeleteCharacterModal
+        isOpen={characterToDelete !== null}
+        onClose={handleCloseDeleteModal}
+        onConfirm={handleConfirmDelete}
+        characterName={characterToDelete?.name || "Unnamed Runner"}
+        isDeleting={isDeleting}
+      />
     </div>
   );
 }
