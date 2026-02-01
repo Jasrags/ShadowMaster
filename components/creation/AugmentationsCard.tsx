@@ -1296,15 +1296,13 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
         title="Augmentations"
         status={validationStatus}
         headerAction={
-          allAugmentations.length > 0 ? (
-            <button
-              onClick={() => setIsAugModalOpen(true)}
-              className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-            >
-              <Plus className="h-3 w-3" />
-              Add
-            </button>
-          ) : undefined
+          <button
+            onClick={() => setIsAugModalOpen(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3 w-3" />
+            Add
+          </button>
         }
       >
         <div className="space-y-4">
@@ -1486,15 +1484,8 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               })}
             </div>
           ) : (
-            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
               <p className="text-xs text-zinc-400 dark:text-zinc-500">No augmentations installed</p>
-              <button
-                onClick={() => setIsAugModalOpen(true)}
-                className="mt-2 flex items-center gap-1 mx-auto rounded-lg bg-amber-500 px-3 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add Augmentation
-              </button>
             </div>
           )}
 

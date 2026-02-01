@@ -28,10 +28,8 @@ import {
   useKarmaConversionPrompt,
 } from "./shared";
 import {
-  VehicleModal,
-  DroneModal,
-  RCCModal,
-  AutosoftModal,
+  VehicleSystemModal,
+  type VehicleSystemSelection,
   type VehicleSelection,
   type DroneSelection,
   type RCCSelection,
@@ -43,8 +41,6 @@ import { InfoTooltip } from "@/components/ui";
 // =============================================================================
 // CONSTANTS
 // =============================================================================
-
-type OpenModal = "vehicle" | "drone" | "rcc" | "autosoft" | null;
 
 interface OwnedVehicle {
   id: string;
@@ -91,7 +87,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
-  const [openModal, setOpenModal] = useState<OpenModal>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Get selections from state
   const selectedVehicles = useMemo(
@@ -353,6 +349,27 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     [remaining, actuallyAddAutosoft, karmaConversionPrompt]
   );
 
+  // Unified add handler for VehicleSystemModal
+  const handleUnifiedAdd = useCallback(
+    (selection: VehicleSystemSelection) => {
+      switch (selection.type) {
+        case "vehicle":
+          addVehicle(selection.selection);
+          break;
+        case "drone":
+          addDrone(selection.selection);
+          break;
+        case "rcc":
+          addRCC(selection.selection);
+          break;
+        case "autosoft":
+          addAutosoft(selection.selection);
+          break;
+      }
+    },
+    [addVehicle, addDrone, addRCC, addAutosoft]
+  );
+
   // Remove items
   const removeVehicle = useCallback(
     (id: string) => {
@@ -430,8 +447,16 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     <>
       <CreationCard
         title="Vehicles & Drones"
-        description={`${totalItems} items • ${formatCurrency(vehiclesSpent)}¥`}
         status={validationStatus}
+        headerAction={
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+          >
+            <Plus className="h-3 w-3" />
+            Add
+          </button>
+        }
       >
         <div className="space-y-4">
           {/* Nuyen bar - compact style */}
@@ -461,29 +486,27 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
             </div>
           </div>
 
+          {/* Empty state */}
+          {totalItems === 0 && (
+            <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
+              <p className="text-xs text-zinc-400 dark:text-zinc-500">
+                No vehicles or drones selected
+              </p>
+            </div>
+          )}
+
           {/* VEHICLES Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          {selectedVehicles.length > 0 && (
+            <div>
+              <div className="mb-2 flex items-center gap-2">
                 <Car className="h-3.5 w-3.5 text-blue-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Vehicles
                 </span>
-                {selectedVehicles.length > 0 && (
-                  <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
-                    {selectedVehicles.length}
-                  </span>
-                )}
+                <span className="rounded-full bg-blue-100 px-1.5 py-0.5 text-[10px] font-medium text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                  {selectedVehicles.length}
+                </span>
               </div>
-              <button
-                onClick={() => setOpenModal("vehicle")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            </div>
-            {selectedVehicles.length > 0 ? (
               <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
                 {selectedVehicles.map((v, index) => (
                   <div key={v.id}>
@@ -511,36 +534,21 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No vehicles purchased</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* DRONES Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          {selectedDrones.length > 0 && (
+            <div>
+              <div className="mb-2 flex items-center gap-2">
                 <Bot className="h-3.5 w-3.5 text-green-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Drones
                 </span>
-                {selectedDrones.length > 0 && (
-                  <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
-                    {selectedDrones.length}
-                  </span>
-                )}
+                <span className="rounded-full bg-green-100 px-1.5 py-0.5 text-[10px] font-medium text-green-700 dark:bg-green-900/50 dark:text-green-300">
+                  {selectedDrones.length}
+                </span>
               </div>
-              <button
-                onClick={() => setOpenModal("drone")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            </div>
-            {selectedDrones.length > 0 ? (
               <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
                 {selectedDrones.map((d, index) => (
                   <div key={d.id}>
@@ -568,36 +576,21 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No drones purchased</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* RCCS Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          {selectedRCCs.length > 0 && (
+            <div>
+              <div className="mb-2 flex items-center gap-2">
                 <Wifi className="h-3.5 w-3.5 text-purple-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   RCCs
                 </span>
-                {selectedRCCs.length > 0 && (
-                  <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
-                    {selectedRCCs.length}
-                  </span>
-                )}
+                <span className="rounded-full bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                  {selectedRCCs.length}
+                </span>
               </div>
-              <button
-                onClick={() => setOpenModal("rcc")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            </div>
-            {selectedRCCs.length > 0 ? (
               <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
                 {selectedRCCs.map((r, index) => (
                   <div key={r.id}>
@@ -625,36 +618,21 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No RCCs purchased</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* AUTOSOFTS Section */}
-          <div>
-            <div className="mb-2 flex items-center justify-between">
-              <div className="flex items-center gap-2">
+          {selectedAutosofts.length > 0 && (
+            <div>
+              <div className="mb-2 flex items-center gap-2">
                 <Code className="h-3.5 w-3.5 text-cyan-500" />
                 <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
                   Autosofts
                 </span>
-                {selectedAutosofts.length > 0 && (
-                  <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
-                    {selectedAutosofts.length}
-                  </span>
-                )}
+                <span className="rounded-full bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/50 dark:text-cyan-300">
+                  {selectedAutosofts.length}
+                </span>
               </div>
-              <button
-                onClick={() => setOpenModal("autosoft")}
-                className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-              >
-                <Plus className="h-3 w-3" />
-                Add
-              </button>
-            </div>
-            {selectedAutosofts.length > 0 ? (
               <div className="rounded-lg border border-zinc-200 p-2 dark:border-zinc-700">
                 {selectedAutosofts.map((a, index) => (
                   <div key={a.id}>
@@ -682,20 +660,11 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                   </div>
                 ))}
               </div>
-            ) : (
-              <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
-                <p className="text-xs text-zinc-400 dark:text-zinc-500">No autosofts purchased</p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Footer Summary */}
           <SummaryFooter count={totalItems} total={vehiclesSpent} format="currency" label="item" />
-
-          {/* Help text */}
-          <p className="text-[10px] text-zinc-500 dark:text-zinc-400">
-            RCCs and autosofts are useful for riggers controlling drones.
-          </p>
         </div>
       </CreationCard>
 
@@ -715,36 +684,19 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
         />
       )}
 
-      {/* Vehicle Modal */}
-      <VehicleModal
-        isOpen={openModal === "vehicle"}
-        onClose={() => setOpenModal(null)}
-        onAdd={addVehicle}
+      {/* Unified Vehicle System Modal */}
+      <VehicleSystemModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAdd={handleUnifiedAdd}
+        initialType="vehicle"
         remainingNuyen={remaining}
-      />
-
-      {/* Drone Modal */}
-      <DroneModal
-        isOpen={openModal === "drone"}
-        onClose={() => setOpenModal(null)}
-        onAdd={addDrone}
-        remainingNuyen={remaining}
-      />
-
-      {/* RCC Modal */}
-      <RCCModal
-        isOpen={openModal === "rcc"}
-        onClose={() => setOpenModal(null)}
-        onAdd={addRCC}
-        remainingNuyen={remaining}
-      />
-
-      {/* Autosoft Modal */}
-      <AutosoftModal
-        isOpen={openModal === "autosoft"}
-        onClose={() => setOpenModal(null)}
-        onAdd={addAutosoft}
-        remainingNuyen={remaining}
+        ownedItems={{
+          vehicleIds: selectedVehicles.map((v) => v.catalogId),
+          droneIds: selectedDrones.map((d) => d.catalogId),
+          rccIds: selectedRCCs.map((r) => r.catalogId),
+          autosoftIds: selectedAutosofts.map((a) => a.catalogId),
+        }}
       />
     </>
   );
