@@ -6,6 +6,7 @@ import { SettingsSection, SettingsNavigation } from "./components/SettingsNaviga
 import { AccountSection } from "./components/AccountSection";
 import { SecuritySection } from "./components/SecuritySection";
 import { PreferencesSection } from "./components/PreferencesSection";
+import { CommunicationsSection } from "./components/CommunicationsSection";
 import { DataManagementSection } from "./components/DataManagementSection";
 import { PrivacySection } from "./components/PrivacySection";
 
@@ -87,6 +88,7 @@ export default function SettingsPage() {
             <SecuritySection onChangePassword={handleChangePassword} />
           )}
           {activeSection === "preferences" && <PreferencesSection />}
+          {activeSection === "communications" && <CommunicationsSection />}
           {activeSection === "data" && <DataManagementSection onExport={handleExport} />}
           {activeSection === "privacy" && <PrivacySection onDeleteAccount={handleDeleteAccount} />}
         </div>

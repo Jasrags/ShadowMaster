@@ -1,6 +1,12 @@
-import { User, Shield, Sliders, Database, EyeOff } from "lucide-react";
+import { User, Shield, Sliders, Database, EyeOff, Mail } from "lucide-react";
 
-export type SettingsSection = "account" | "security" | "preferences" | "data" | "privacy";
+export type SettingsSection =
+  | "account"
+  | "security"
+  | "preferences"
+  | "communications"
+  | "data"
+  | "privacy";
 
 interface SettingsNavigationProps {
   activeSection: SettingsSection;
@@ -11,6 +17,7 @@ const navigation = [
   { name: "Account", href: "account", icon: User },
   { name: "Security", href: "security", icon: Shield },
   { name: "Preferences", href: "preferences", icon: Sliders },
+  { name: "Communications", href: "communications", icon: Mail },
   { name: "Data Management", href: "data", icon: Database },
   { name: "Privacy", href: "privacy", icon: EyeOff },
 ] as const;
