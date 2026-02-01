@@ -34,7 +34,10 @@ export type SecurityEvent =
   | "email.delivery_failed"
   | "security_email.lockout_sent"
   | "security_email.password_changed_sent"
-  | "security_email.email_changed_sent";
+  | "security_email.email_changed_sent"
+  | "admin_notification.new_user_sent"
+  | "admin_notification.lockout_sent"
+  | "admin_notification.password_reset_sent";
 
 export interface SecurityRecord {
   timestamp: string;

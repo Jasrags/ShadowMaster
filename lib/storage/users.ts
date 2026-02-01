@@ -361,6 +361,13 @@ export async function incrementFailedAttempts(userId: string): Promise<User> {
           )
         )
         .catch((err) => console.error("Failed to send lockout alert email:", err));
+
+      // Send admin notification for lockout (fire-and-forget)
+      import("@/lib/email/admin-notifications")
+        .then(({ sendAdminLockoutNotification }) =>
+          sendAdminLockoutNotification(userId, user.email, user.username, lockoutTime, newAttempts)
+        )
+        .catch((err) => console.error("Admin lockout notification failed:", err));
     }
   }
 

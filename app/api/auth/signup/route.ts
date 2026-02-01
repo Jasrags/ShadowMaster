@@ -5,6 +5,7 @@ import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
 import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
 import { sendVerificationEmail } from "@/lib/auth/email-verification";
+import { sendAdminNewUserNotification } from "@/lib/email";
 import { RateLimiter } from "@/lib/security/rate-limit";
 import { AuditLogger } from "@/lib/security/audit-logger";
 import type { SignupRequest, AuthResponse } from "@/lib/types/user";
@@ -88,6 +89,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
 
     sendVerificationEmail(user.id, user.email, user.username, baseUrl).catch((err) => {
       console.error("Failed to send verification email:", err);
+    });
+
+    // Send admin notification (non-blocking)
+    sendAdminNewUserNotification(user.id, user.email, user.username, new Date()).catch((err) => {
+      console.error("Admin notification failed:", err);
     });
 
     return response;
