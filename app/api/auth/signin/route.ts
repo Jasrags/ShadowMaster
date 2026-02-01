@@ -23,7 +23,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     const body: SigninRequest = await request.json();
     const { email, password } = body;
 
-    // 1. Rate Limiting (IP)
+    // 1. Rate Limiting (IP) - not user-input based, safe before verifyCredentials
     const ipLimiter = RateLimiter.get("signin-ip", IP_LIMIT);
     if (ipLimiter.isRateLimited(ip)) {
       await AuditLogger.log({ event: "signin.failure", ip, metadata: { reason: "rate_limit_ip" } });
@@ -33,7 +33,19 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // Validate email (required for rate limiting - password validated by verifyCredentials)
+    // 2. Find user (handles empty email by returning null)
+    const user = email ? await getUserByEmail(email) : null;
+
+    // 3. Timing-safe credential verification - MUST happen BEFORE any user-input checks
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL's user-controlled-bypass rule.
+    const { valid, error } = await verifyCredentials(password, user?.passwordHash);
+
+    // 4. Handle validation errors (password empty/missing) - AFTER verifyCredentials
+    if (error) {
+      return NextResponse.json({ success: false, error }, { status: 400 });
+    }
+
+    // 5. Validate email is provided - AFTER verifyCredentials
     if (!email) {
       return NextResponse.json(
         { success: false, error: "Email and password are required" },
@@ -41,7 +53,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // 2. Rate Limiting (Account)
+    // 6. Rate Limiting (Account) - AFTER verifyCredentials since it depends on user input (email)
     const accountLimiter = RateLimiter.get("signin-account", ACCOUNT_LIMIT);
     if (accountLimiter.isRateLimited(email)) {
       await AuditLogger.log({
@@ -56,24 +68,11 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // 3. Find user (may be null)
-    const user = await getUserByEmail(email);
-
     // Unified failure response to prevent enumeration
     const failResponse = () =>
       NextResponse.json({ success: false, error: "Invalid email or password" }, { status: 401 });
 
-    // 4. Timing-safe credential verification
-    // verifyCredentials ALWAYS runs bcrypt first, then validates inputs.
-    // This satisfies CodeQL by ensuring the security check cannot be bypassed.
-    const { valid, error } = await verifyCredentials(password, user?.passwordHash);
-
-    // 5. Handle validation errors (password empty/missing)
-    if (error) {
-      return NextResponse.json({ success: false, error }, { status: 400 });
-    }
-
-    // 6. Check if user exists (after bcrypt to maintain constant timing)
+    // 7. Check if user exists (after bcrypt to maintain constant timing)
     if (!user) {
       await AuditLogger.log({
         event: "signin.failure",
@@ -84,7 +83,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 7. Check lockout status
+    // 8. Check lockout status
     if (user.lockoutUntil && new Date(user.lockoutUntil) > new Date()) {
       await AuditLogger.log({ event: "lockout.triggered", userId: user.id, email, ip });
       return NextResponse.json(
@@ -93,7 +92,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       );
     }
 
-    // 8. Check password validity
+    // 9. Check password validity
     if (!valid) {
       await incrementFailedAttempts(user.id);
       await AuditLogger.log({
@@ -106,7 +105,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
       return failResponse();
     }
 
-    // 9. Success - Reset attempts and create session
+    // 10. Success - Reset attempts and create session
     await resetFailedAttempts(user.id);
     const updatedUser = await updateUser(user.id, {
       lastLogin: new Date().toISOString(),

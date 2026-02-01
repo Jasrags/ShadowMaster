@@ -11,6 +11,7 @@ import { sendPasswordChangedEmail } from "@/lib/email/security-alerts";
  */
 export async function POST(req: NextRequest) {
   try {
+    // 1. Session check - not user-input based, safe before verifyCredentials
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
@@ -18,25 +19,22 @@ export async function POST(req: NextRequest) {
 
     const { currentPassword, newPassword } = await req.json();
 
-    // Validate new password is provided (currentPassword validated by verifyCredentials)
-    if (!newPassword) {
-      return NextResponse.json(
-        { success: false, error: "Missing required fields" },
-        { status: 400 }
-      );
-    }
-
+    // 2. Get user
     const user = await getUserById(userId);
     if (!user) {
       return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
     }
 
-    // Verify current password using timing-safe verification
-    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL
+    // 3. Verify current password - MUST happen BEFORE any user-input checks
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL's user-controlled-bypass rule.
     const { valid, error } = await verifyCredentials(currentPassword, user.passwordHash);
+
+    // 4. Handle validation errors (currentPassword empty/missing) - AFTER verifyCredentials
     if (error) {
       return NextResponse.json({ success: false, error }, { status: 400 });
     }
+
+    // 5. Check password validity - AFTER verifyCredentials
     if (!valid) {
       return NextResponse.json(
         { success: false, error: "Incorrect current password" },
@@ -44,7 +42,15 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Validate new password strength (defense-in-depth)
+    // 6. Validate new password is provided - AFTER verifyCredentials
+    if (!newPassword) {
+      return NextResponse.json(
+        { success: false, error: "Missing required fields" },
+        { status: 400 }
+      );
+    }
+
+    // 7. Validate new password strength (defense-in-depth) - AFTER verifyCredentials
     if (!isStrongPassword(newPassword)) {
       const errorMessage = getPasswordStrengthError(newPassword);
       return NextResponse.json(

@@ -122,6 +122,9 @@ describe("POST /api/settings/password", () => {
 
   it("should return 400 when newPassword missing", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    // verifyCredentials runs before newPassword check now
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest({
       currentPassword: "oldpassword",
@@ -132,10 +135,18 @@ describe("POST /api/settings/password", () => {
 
     expect(response.status).toBe(400);
     expect(data.error).toBe("Missing required fields");
+    // Verify verifyCredentials was called before the newPassword check
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith(
+      "oldpassword",
+      "old-hashed-password"
+    );
   });
 
   it("should return 400 when newPassword is too weak (defense-in-depth)", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    // verifyCredentials runs before newPassword strength check now
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest({
       currentPassword: "oldpassword",
@@ -151,6 +162,9 @@ describe("POST /api/settings/password", () => {
 
   it("should return 400 when newPassword is missing required characters", async () => {
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(storageModule.getUserById).mockResolvedValue(mockUser);
+    // verifyCredentials runs before newPassword strength check now
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
 
     const request = createMockRequest({
       currentPassword: "oldpassword",
@@ -178,6 +192,8 @@ describe("POST /api/settings/password", () => {
 
     expect(response.status).toBe(404);
     expect(data.error).toBe("User not found");
+    // verifyCredentials should NOT be called when user not found
+    expect(passwordModule.verifyCredentials).not.toHaveBeenCalled();
   });
 
   it("should return 401 when current password incorrect", async () => {

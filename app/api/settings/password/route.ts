@@ -10,6 +10,7 @@ export async function POST(request: NextRequest) {
   const ip = request.headers.get("x-forwarded-for") || "unknown";
 
   try {
+    // 1. Session check - not user-input based, safe before verifyCredentials
     const userId = await getSession();
     if (!userId) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -17,31 +18,22 @@ export async function POST(request: NextRequest) {
 
     const { currentPassword, newPassword } = await request.json();
 
-    // Validate new password is provided (currentPassword validated by verifyCredentials)
-    if (!newPassword) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
-    }
-
-    // Validate new password strength (defense-in-depth)
-    if (!isStrongPassword(newPassword)) {
-      const errorMessage = getPasswordStrengthError(newPassword);
-      return NextResponse.json(
-        { error: errorMessage || "Password does not meet strength requirements" },
-        { status: 400 }
-      );
-    }
-
+    // 2. Get user
     const user = await getUserById(userId);
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // Verify current password using timing-safe verification
-    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL
+    // 3. Verify current password - MUST happen BEFORE any user-input checks
+    // verifyCredentials ALWAYS runs bcrypt first, satisfying CodeQL's user-controlled-bypass rule.
     const { valid, error } = await verifyCredentials(currentPassword, user.passwordHash);
+
+    // 4. Handle validation errors (currentPassword empty/missing) - AFTER verifyCredentials
     if (error) {
       return NextResponse.json({ error }, { status: 400 });
     }
+
+    // 5. Check password validity - AFTER verifyCredentials
     if (!valid) {
       await AuditLogger.log({
         event: "signin.failure",
@@ -50,6 +42,20 @@ export async function POST(request: NextRequest) {
         metadata: { context: "password_change", reason: "invalid_current_password" },
       });
       return NextResponse.json({ error: "Incorrect current password" }, { status: 401 });
+    }
+
+    // 6. Validate new password is provided - AFTER verifyCredentials
+    if (!newPassword) {
+      return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
+    }
+
+    // 7. Validate new password strength (defense-in-depth) - AFTER verifyCredentials
+    if (!isStrongPassword(newPassword)) {
+      const errorMessage = getPasswordStrengthError(newPassword);
+      return NextResponse.json(
+        { error: errorMessage || "Password does not meet strength requirements" },
+        { status: 400 }
+      );
     }
 
     // Update password and increment session version to revoke all existing sessions

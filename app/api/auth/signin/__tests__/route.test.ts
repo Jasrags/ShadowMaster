@@ -156,6 +156,9 @@ describe("POST /api/auth/signin", () => {
       password: "ValidPass123!",
     };
 
+    // verifyCredentials runs first (with null hash since no user), then email check
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: false, error: null });
+
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     const response = await POST(request);
@@ -164,7 +167,10 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(400);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Email and password are required");
+    // getUserByEmail not called because email is falsy
     expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    // But verifyCredentials IS called (with undefined hash) before the email check
+    expect(passwordModule.verifyCredentials).toHaveBeenCalledWith("ValidPass123!", undefined);
   });
 
   it("should return 400 when password is missing", async () => {
@@ -332,6 +338,10 @@ describe("POST /api/auth/signin", () => {
       password: "ValidPass123!",
     };
 
+    // Account rate limiting now happens AFTER verifyCredentials
+    vi.mocked(storageModule.getUserByEmail).mockResolvedValue(mockUser);
+    vi.mocked(passwordModule.verifyCredentials).mockResolvedValue({ valid: true, error: null });
+
     const request = createMockRequest("http://localhost:3000/api/auth/signin", requestBody, "POST");
 
     const response = await POST(request);
@@ -340,7 +350,10 @@ describe("POST /api/auth/signin", () => {
     expect(response.status).toBe(429);
     expect(data.success).toBe(false);
     expect(data.error).toBe("Too many attempts for this account. Please try again later.");
-    expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    // getUserByEmail IS called now (before verifyCredentials)
+    expect(storageModule.getUserByEmail).toHaveBeenCalledWith("test@example.com");
+    // verifyCredentials IS called before account rate limiting
+    expect(passwordModule.verifyCredentials).toHaveBeenCalled();
     expect(AuditLogger.log).toHaveBeenCalledWith(
       expect.objectContaining({
         event: "signin.failure",
