@@ -66,8 +66,8 @@ importers:
         specifier: ^2025.12.18
         version: 2025.12.18(hono@4.11.1)(zod@4.1.13)
       '@modelcontextprotocol/server-memory':
-        specifier: ^2025.11.25
-        version: 2025.11.25(hono@4.11.1)(zod@4.1.13)
+        specifier: ^2026.1.26
+        version: 2026.1.26(hono@4.11.1)(zod@4.1.13)
       '@modelcontextprotocol/server-sequential-thinking':
         specifier: ^2025.12.18
         version: 2025.12.18(hono@4.11.1)(zod@4.1.13)
@@ -325,6 +325,10 @@ packages:
     resolution: {integrity: sha512-cjQ7ZlQ0Mv3b47hABuTevyTuYN4i+loJKGeV9flcCgIK37cCXRh+L1bd3iBHlynerhQ7BhCkn2BPbQUL+rGqFg==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/code-frame@7.29.0':
+    resolution: {integrity: sha512-9NhCeYjq9+3uxgdtp20LSiJXJvN0FeCtNGpJxuMFZ1Kv3cWUNb6DOhJwUvcVCzKGR66cw4njwM6hrJLqgOwbcw==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/compat-data@7.28.5':
     resolution: {integrity: sha512-6uFXyCayocRbqhZOB+6XcuZbkMNimwfVGFji8CTZnCzOHVGvDqzvitu1re2AU5LROliz7eQPhB8CpAMvnx9EjA==}
     engines: {node: '>=6.9.0'}
@@ -394,6 +398,10 @@ packages:
 
   '@babel/runtime@7.28.4':
     resolution: {integrity: sha512-Q/N6JNWvIvPnLDvjlE1OUBLPQHH6l3CltCEsHIujp45zQUSSh8K+gHnaEX45yAT1nyngnINhvWtzN+Nb9D8RAQ==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/runtime@7.28.6':
+    resolution: {integrity: sha512-05WQkdpL9COIMz4LjTxGpPNCdlpyimKppYNoJ5Di5EUObifl8t4tuLuUBBZEpoLYOmfvIWrsp9fCl0HoPRVTdA==}
     engines: {node: '>=6.9.0'}
 
   '@babel/template@7.27.2':
@@ -882,8 +890,8 @@ packages:
     resolution: {integrity: sha512-wg3nn5L5xOdMGlPb1nAFknS3bjxJJEWKgzhDAHKf+i65r9WbxyluyCm66hx1hOcV9qZZH9twzroRHRQprJxQ7w==}
     hasBin: true
 
-  '@modelcontextprotocol/server-memory@2025.11.25':
-    resolution: {integrity: sha512-woL22c8U+9bvp+VQVxDatzg2pMr94jSp5Z+1GyTOvGmfZINjypkyA1ID8I/4HgR/ecATRxFznSK85AESaV+1MA==}
+  '@modelcontextprotocol/server-memory@2026.1.26':
+    resolution: {integrity: sha512-7F0hbaEB4lVqkYhNWmrC5jJjEWPCofgXd7OIk3h97HyvJL6aTAhlUNYaH8lCDxAzlK9sr2pLCkZEYI+m4HSOiA==}
     hasBin: true
 
   '@modelcontextprotocol/server-sequential-thinking@2025.12.18':
@@ -4890,6 +4898,7 @@ packages:
   whatwg-encoding@3.1.1:
     resolution: {integrity: sha512-6qN4hJdMwfYBtE3YBTTHhoeuUrDBPZmbQaxWAqSALV/MeEnR5z1xd8UKud2RAkFoPkmB+hli1TZSnyi84xz1vQ==}
     engines: {node: '>=18'}
+    deprecated: Use @exodus/bytes instead for a more spec-conformant and faster implementation
 
   whatwg-mimetype@4.0.0:
     resolution: {integrity: sha512-QaKxh0eNIi2mE9p2vEdzfagOKHCcj1pJ56EEHGQOVxp8r9/iszLUUV7v89x9O1p/T+NlTM5W7jW6+cz4Fq1YVg==}
@@ -5465,6 +5474,12 @@ snapshots:
       js-tokens: 4.0.0
       picocolors: 1.1.1
 
+  '@babel/code-frame@7.29.0':
+    dependencies:
+      '@babel/helper-validator-identifier': 7.28.5
+      js-tokens: 4.0.0
+      picocolors: 1.1.1
+
   '@babel/compat-data@7.28.5': {}
 
   '@babel/core@7.28.5':
@@ -5549,6 +5564,8 @@ snapshots:
       '@babel/helper-plugin-utils': 7.27.1
 
   '@babel/runtime@7.28.4': {}
+
+  '@babel/runtime@7.28.6': {}
 
   '@babel/template@7.27.2':
     dependencies:
@@ -5997,7 +6014,7 @@ snapshots:
       - supports-color
       - zod
 
-  '@modelcontextprotocol/server-memory@2025.11.25(hono@4.11.1)(zod@4.1.13)':
+  '@modelcontextprotocol/server-memory@2026.1.26(hono@4.11.1)(zod@4.1.13)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
     transitivePeerDependencies:
@@ -7753,8 +7770,8 @@ snapshots:
 
   '@testing-library/dom@10.4.1':
     dependencies:
-      '@babel/code-frame': 7.27.1
-      '@babel/runtime': 7.28.4
+      '@babel/code-frame': 7.29.0
+      '@babel/runtime': 7.28.6
       '@types/aria-query': 5.0.4
       aria-query: 5.3.0
       dom-accessibility-api: 0.5.16
