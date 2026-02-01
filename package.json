@@ -107,7 +107,7 @@
     "husky": "^9.0.0",
     "jsdom": "^27.3.0",
     "knip": "^5.77.1",
-    "lint-staged": "^15.0.0",
+    "lint-staged": "^16.2.7",
     "next-devtools-mcp": "^0.3.7",
     "nodemon": "^3.1.11",
     "pino-pretty": "^13.1.3",
