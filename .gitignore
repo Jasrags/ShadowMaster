@@ -69,3 +69,6 @@ next-env.d.ts
 seattle-locations.json
 /data/editions/sr5/core-rulebook.json.backup
 .pommel/
+
+# Sentry Config File
+.env.sentry-build-plugin
