@@ -735,7 +735,8 @@ export async function exportLocations(campaignId: ID): Promise<Location[]> {
  */
 export async function importLocations(campaignId: ID, locations: Location[]): Promise<Location[]> {
   const now = new Date().toISOString();
-  const idMap: Record<string, string> = {};
+  // Use Object.create(null) for prototype-less object to prevent property injection
+  const idMap: Record<string, string> = Object.create(null);
   const newLocations: Location[] = [];
 
   // 1. Generate new IDs for all imported locations

@@ -83,11 +83,23 @@ export async function POST(
     const monitorSize = team.baseGrunts.conditionMonitorSize;
     const useSimplified = team.options?.useSimplifiedRules ?? false;
 
+    // Build allowlist of valid grunt IDs to prevent property injection attacks
+    const validGruntIds = new Set<string>([
+      ...Object.keys(individualGrunts.grunts),
+      ...(individualGrunts.lieutenant ? [individualGrunts.lieutenant.id] : []),
+      ...(individualGrunts.specialists ? Object.keys(individualGrunts.specialists) : []),
+    ]);
+
     const results: DamageResult[] = [];
     let newDeaths = 0;
 
     // Process each grunt
     for (const gruntId of body.gruntIds) {
+      // Validate gruntId against allowlist to prevent property injection
+      if (!validGruntIds.has(gruntId)) {
+        continue;
+      }
+
       // Find grunt in grunts, lieutenant, or specialists
       let grunt = individualGrunts.grunts[gruntId];
       let gruntLocation: "grunts" | "lieutenant" | "specialists" = "grunts";
