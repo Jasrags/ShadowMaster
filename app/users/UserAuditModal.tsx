@@ -29,6 +29,7 @@ export default function UserAuditModal({ user, isOpen, onClose }: UserAuditModal
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/audit?limit=50&order=desc`);
       const data = await response.json();
 
