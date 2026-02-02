@@ -18,6 +18,7 @@ import type {
   ID,
   LocationConnection,
 } from "../types";
+import { validateLocationData, validateLocationTemplateData, assertValid } from "./validation";
 
 /**
  * Get the locations directory for a campaign
@@ -98,9 +99,15 @@ function getTemplateFilePath(templateId: string): string {
 }
 
 /**
- * Write location to file atomically
+ * Write location to file atomically.
+ *
+ * Validates data structure before writing to prevent malformed
+ * data persistence (CWE-73 mitigation).
  */
 async function writeLocation(campaignId: string, location: Location): Promise<void> {
+  // Validate data before writing (defense-in-depth for CWE-73)
+  assertValid(validateLocationData(location), "Location");
+
   await ensureLocationsDirectory(campaignId);
   const filePath = getLocationFilePath(campaignId, location.id);
   const tempFilePath = `${filePath}.tmp`;
@@ -621,6 +628,9 @@ export async function createLocationTemplate(
     createdAt: now,
     updatedAt: now,
   };
+
+  // Validate data before writing (defense-in-depth for CWE-73)
+  assertValid(validateLocationTemplateData(template), "LocationTemplate");
 
   const filePath = getTemplateFilePath(template.id);
   await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
