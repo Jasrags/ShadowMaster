@@ -63,8 +63,8 @@ importers:
         specifier: '>=1.25.2'
         version: 1.25.2(hono@4.11.1)(zod@4.1.13)
       '@modelcontextprotocol/server-filesystem':
-        specifier: ^2025.12.18
-        version: 2025.12.18(hono@4.11.1)(zod@4.1.13)
+        specifier: ^2026.1.14
+        version: 2026.1.14(hono@4.11.1)(zod@4.1.13)
       '@modelcontextprotocol/server-memory':
         specifier: ^2026.1.26
         version: 2026.1.26(hono@4.11.1)(zod@4.1.13)
@@ -886,8 +886,8 @@ packages:
       '@cfworker/json-schema':
         optional: true
 
-  '@modelcontextprotocol/server-filesystem@2025.12.18':
-    resolution: {integrity: sha512-wg3nn5L5xOdMGlPb1nAFknS3bjxJJEWKgzhDAHKf+i65r9WbxyluyCm66hx1hOcV9qZZH9twzroRHRQprJxQ7w==}
+  '@modelcontextprotocol/server-filesystem@2026.1.14':
+    resolution: {integrity: sha512-bGAfu3fWRVeF10NxvPhFBDlRen6ExSx6YkKJzoVgQMNrbdVVV4okfGGQ3KBRu9ygXYfw5/N9ermHAJXA0uys+g==}
     hasBin: true
 
   '@modelcontextprotocol/server-memory@2026.1.26':
@@ -2891,8 +2891,8 @@ packages:
     resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
-  diff@5.2.0:
-    resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
+  diff@5.2.2:
+    resolution: {integrity: sha512-vtcDfH3TOjP8UekytvnHH1o1P4FcUdt4eQ1Y+Abap1tk/OB2MWQvcwS2ClCd1zuIhc3JKOx6p3kod8Vfys3E+A==}
     engines: {node: '>=0.3.1'}
 
   doctrine@2.1.0:
@@ -5005,6 +5005,11 @@ packages:
     peerDependencies:
       zod: ^3.25 || ^4
 
+  zod-to-json-schema@3.25.1:
+    resolution: {integrity: sha512-pM/SU9d3YAggzi6MtR4h7ruuQlqKtad8e9S0fmxcMi+ueAK5Korys/aWcV9LIIHTVbj01NdzxcnXSN+O74ZIVA==}
+    peerDependencies:
+      zod: ^3.25 || ^4
+
   zod-validation-error@4.0.2:
     resolution: {integrity: sha512-Q6/nZLe6jxuU80qb/4uJ4t5v2VEZ44lzQjPDhYJNztRQ4wyWc6VF3D3Kb/fAuPetZQnhS3hnajCf9CsWesghLQ==}
     engines: {node: '>=18.0.0'}
@@ -6001,13 +6006,13 @@ snapshots:
       - hono
       - supports-color
 
-  '@modelcontextprotocol/server-filesystem@2025.12.18(hono@4.11.1)(zod@4.1.13)':
+  '@modelcontextprotocol/server-filesystem@2026.1.14(hono@4.11.1)(zod@4.1.13)':
     dependencies:
       '@modelcontextprotocol/sdk': 1.25.2(hono@4.11.1)(zod@4.1.13)
-      diff: 5.2.0
+      diff: 5.2.2
       glob: 10.5.0
       minimatch: 10.1.1
-      zod-to-json-schema: 3.25.0(zod@4.1.13)
+      zod-to-json-schema: 3.25.1(zod@4.1.13)
     transitivePeerDependencies:
       - '@cfworker/json-schema'
       - hono
@@ -8480,7 +8485,7 @@ snapshots:
 
   detect-libc@2.1.2: {}
 
-  diff@5.2.0: {}
+  diff@5.2.2: {}
 
   doctrine@2.1.0:
     dependencies:
@@ -11001,6 +11006,10 @@ snapshots:
       zod: 3.25.76
 
   zod-to-json-schema@3.25.0(zod@4.1.13):
+    dependencies:
+      zod: 4.1.13
+
+  zod-to-json-schema@3.25.1(zod@4.1.13):
     dependencies:
       zod: 4.1.13
 
