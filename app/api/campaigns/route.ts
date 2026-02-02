@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCampaignsByUserId, createCampaign } from "@/lib/storage/campaigns";
 import type { CreateCampaignRequest, CampaignsListResponse, CampaignResponse } from "@/lib/types";
+import { apiLogger } from "@/lib/logging";
 
 /**
  * GET /api/campaigns - List all campaigns the user is involved in
@@ -116,7 +117,7 @@ export async function POST(request: NextRequest): Promise<NextResponse<CampaignR
       userRole: "gm",
     });
   } catch (error) {
-    console.error("Create campaign error:", error);
+    apiLogger.error({ error }, "Create campaign error");
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }

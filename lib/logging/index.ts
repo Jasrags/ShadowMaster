@@ -43,6 +43,9 @@ export {
   apiLogger,
 } from "./child-loggers";
 
+// Sanitization utilities
+export { sanitizeLogValue } from "./sanitize";
+
 // Types
 export type { LogLevel, LogContext, LoggerConfig } from "./types";
 export { REDACTED_FIELDS } from "./types";
