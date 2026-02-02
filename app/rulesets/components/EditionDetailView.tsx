@@ -28,6 +28,7 @@ export default function EditionDetailView({ editionCode, onClose }: EditionDetai
       setLoading(true);
       setError(null);
       try {
+        // codeql-suppress js/file-access-to-http - False positive: editionCode is type-safe enum, not user-controlled path
         const res = await fetch(`/api/editions/${editionCode}`);
         const result = await res.json();
 

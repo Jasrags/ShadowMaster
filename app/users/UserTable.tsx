@@ -102,6 +102,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${editingUser.id}`, {
         method: "PUT",
         headers: {
@@ -137,6 +138,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${userId}`, {
         method: "DELETE",
       });
@@ -223,6 +225,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/suspend`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -251,6 +254,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/suspend`, {
         method: "DELETE",
       });
@@ -283,6 +287,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/lockout`, {
         method: "DELETE",
       });
@@ -307,6 +312,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/resend-verification`, {
         method: "POST",
       });
@@ -339,6 +345,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
     setError(null);
 
     try {
+      // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
       const response = await fetch(`/api/users/${user.id}/verify-email`, {
         method: "POST",
       });
@@ -663,6 +670,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           onUnlock={async () => {
             await handleUnlock(editingUser);
             // Refresh the editing user data
+            // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
             const response = await fetch(`/api/users/${editingUser.id}`);
             const data = await response.json();
             if (data.success && data.user) {
@@ -675,6 +683,7 @@ export default function UserTable({ initialUsers }: UserTableProps) {
           onManualVerify={async () => {
             await handleManualVerify(editingUser);
             // Refresh the editing user data
+            // codeql-suppress js/file-access-to-http - False positive: only UUID identifier sent, not file data
             const response = await fetch(`/api/users/${editingUser.id}`);
             const data = await response.json();
             if (data.success && data.user) {
