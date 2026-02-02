@@ -15,6 +15,7 @@ import {
   retireCharacter,
   killCharacter,
 } from "@/lib/storage/characters";
+import { apiLogger } from "@/lib/logging";
 
 type GameplayAction =
   | { action: "damage"; physical: number; stun: number }
@@ -102,7 +103,8 @@ export async function POST(
       character,
     });
   } catch (error) {
-    console.error("Failed to apply gameplay action:", error);
+    const { characterId } = await params;
+    apiLogger.error({ error, characterId }, "Failed to apply gameplay action");
     const message = error instanceof Error ? error.message : "Failed to apply action";
     return NextResponse.json({ success: false, error: message }, { status: 500 });
   }

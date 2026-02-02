@@ -19,6 +19,7 @@ import {
   getMaxEdge,
 } from "@/lib/storage/characters";
 import type { EdgeRequest } from "@/lib/types";
+import { apiLogger } from "@/lib/logging";
 
 /**
  * GET /api/characters/[characterId]/edge
@@ -164,7 +165,8 @@ export async function POST(
       { status: 400 }
     );
   } catch (error) {
-    console.error("Error managing Edge:", error);
+    const { characterId } = await params;
+    apiLogger.error({ error, characterId }, "Error managing Edge");
     return NextResponse.json(
       {
         success: false,

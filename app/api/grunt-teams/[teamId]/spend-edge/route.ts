@@ -12,6 +12,7 @@ import { authorizeCampaign } from "@/lib/auth/campaign";
 import { getGruntTeam, spendGroupEdge } from "@/lib/storage/grunts";
 import { canSpendEdge } from "@/lib/rules/grunts";
 import type { GruntTeamResponse, SpendEdgeRequest } from "@/lib/types/grunts";
+import { apiLogger } from "@/lib/logging";
 
 /**
  * POST /api/grunt-teams/[teamId]/spend-edge
@@ -76,7 +77,8 @@ export async function POST(
       team: updatedTeam,
     });
   } catch (error) {
-    console.error("Spend Edge error:", error);
+    const { teamId } = await params;
+    apiLogger.error({ error, teamId }, "Spend Edge error");
     const errorMessage = error instanceof Error ? error.message : "An error occurred";
     return NextResponse.json({ success: false, error: errorMessage }, { status: 500 });
   }

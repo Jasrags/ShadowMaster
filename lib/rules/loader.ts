@@ -31,6 +31,7 @@ import {
   getCreationMethod,
   getAllCreationMethods,
 } from "../storage/editions";
+import { rulesetLogger } from "../logging";
 
 // =============================================================================
 // LOADER FUNCTIONS
@@ -82,7 +83,7 @@ export async function loadRuleset(config: RulesetLoadConfig): Promise<LoadResult
         };
       }
       // Other books are optional - log warning but continue
-      console.warn(`Book '${bookId}' not found for edition '${editionCode}'`);
+      rulesetLogger.warn({ bookId, editionCode }, "Optional book not found, skipping");
       continue;
     }
 
