@@ -8,11 +8,11 @@
  *
  * Features:
  * - Progress bar for power point budget
- * - Power list with levels and PP costs
+ * - Power list grouped by activation type with compact rows
  * - Mystic Adept PP allocation slider
  * - Karma purchase for additional PP
  * - Modal-style power selection with search
- * - Power rows with +/- level controls
+ * - Inline level controls for rated powers
  */
 
 import { useMemo, useCallback, useState } from "react";
@@ -21,8 +21,8 @@ import type { CreationState, AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
-import { AdeptPowerModal } from "./adept-powers";
-import { Lock, Plus, Minus, Zap, AlertTriangle } from "lucide-react";
+import { AdeptPowerModal, AdeptPowerListItem } from "./adept-powers";
+import { Lock, Plus, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -33,6 +33,18 @@ const POWER_POINT_KARMA_COST = 5;
 // Paths that can have adept powers
 const ADEPT_PATHS = ["adept", "mystic-adept"];
 
+/** Display order for activation types */
+const ACTIVATION_ORDER = ["free", "simple", "complex", "interrupt", "other"] as const;
+
+/** Human-readable activation type labels */
+const ACTIVATION_LABELS: Record<string, string> = {
+  free: "Free Action",
+  simple: "Simple Action",
+  complex: "Complex Action",
+  interrupt: "Interrupt Action",
+  other: "Passive / Other",
+};
+
 // =============================================================================
 // TYPES
 // =============================================================================
@@ -40,110 +52,6 @@ const ADEPT_PATHS = ["adept", "mystic-adept"];
 interface AdeptPowersCardProps {
   state: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
-}
-
-// =============================================================================
-// POWER ROW COMPONENT
-// =============================================================================
-
-function PowerRow({
-  power,
-  rating,
-  specification,
-  powerPointCost,
-  maxLevel,
-  isLeveled,
-  onIncrease,
-  onDecrease,
-  onRemove,
-}: {
-  power: AdeptPowerCatalogItem;
-  rating?: number;
-  specification?: string;
-  powerPointCost: number;
-  maxLevel?: number;
-  isLeveled: boolean;
-  onIncrease?: () => void;
-  onDecrease?: () => void;
-  onRemove: () => void;
-}) {
-  const canIncrease =
-    isLeveled && rating !== undefined && maxLevel !== undefined && rating < maxLevel;
-  const canDecrease = isLeveled && rating !== undefined && rating > 1;
-
-  return (
-    <div className="rounded-lg border border-zinc-200 bg-white p-3 dark:border-zinc-700 dark:bg-zinc-900">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-2">
-            <Zap className="h-4 w-4 text-violet-500" />
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {power.name}
-              {rating && isLeveled && ` ${rating}`}
-              {specification && ` (${specification})`}
-            </span>
-          </div>
-
-          <div className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">{power.description}</div>
-
-          {power.activation && (
-            <div className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
-              Activation: {power.activation}
-            </div>
-          )}
-        </div>
-
-        <div className="flex flex-col items-end gap-2">
-          {/* PP Cost badge */}
-          <span className="rounded bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/50 dark:text-violet-300">
-            {powerPointCost.toFixed(2)} PP
-          </span>
-
-          {/* Level controls for leveled powers */}
-          {isLeveled && rating !== undefined && (
-            <div className="flex items-center gap-1">
-              <button
-                onClick={onDecrease}
-                disabled={!canDecrease}
-                aria-label={`Decrease ${power.name} level`}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  canDecrease
-                    ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Minus className="h-3 w-3" aria-hidden="true" />
-              </button>
-              <div className="flex h-6 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-medium text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-                {rating}
-              </div>
-              <button
-                onClick={onIncrease}
-                disabled={!canIncrease}
-                aria-label={`Increase ${power.name} level`}
-                className={`flex h-6 w-6 items-center justify-center rounded transition-colors ${
-                  canIncrease
-                    ? "bg-violet-500 text-white hover:bg-violet-600"
-                    : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-                }`}
-              >
-                <Plus className="h-3 w-3" aria-hidden="true" />
-              </button>
-            </div>
-          )}
-
-          {/* Remove button */}
-          <button
-            onClick={onRemove}
-            aria-label={`Remove ${power.name}`}
-            className="text-xs text-zinc-400 hover:text-red-500"
-          >
-            Remove
-          </button>
-        </div>
-      </div>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -345,6 +253,23 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     ]
   );
 
+  // Update power specification (attribute or skill)
+  const handleUpdateSpec = useCallback(
+    (powerId: string, spec: string) => {
+      const updatedPowers = selectedPowers.map((p) =>
+        p.id === powerId ? { ...p, specification: spec || undefined } : p
+      );
+
+      updateState({
+        selections: {
+          ...state.selections,
+          adeptPowers: updatedPowers,
+        },
+      });
+    },
+    [selectedPowers, state.selections, updateState]
+  );
+
   // Purchase power point with karma (mystic adepts only)
   const handlePurchasePowerPoint = useCallback(() => {
     if (!isMysticAdept) return;
@@ -377,6 +302,32 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     return Math.ceil(ppFromAllocationSpent);
   }, [ppSpent, karmaPurchasedPP]);
 
+  // Group selected powers by activation type
+  const powersGroupedByActivation = useMemo(() => {
+    const groups: Record<string, Array<{ power: AdeptPower; catalog: AdeptPowerCatalogItem }>> = {};
+
+    selectedPowers.forEach((power) => {
+      const catalog = getPowerById(power.catalogId);
+      if (!catalog) return;
+
+      const activation = catalog.activation || "other";
+      if (!groups[activation]) groups[activation] = [];
+      groups[activation].push({ power, catalog });
+    });
+
+    return groups;
+  }, [selectedPowers, getPowerById]);
+
+  // Check if any powers are missing required specification
+  const hasIncompletePowers = useMemo(() => {
+    return selectedPowers.some((power) => {
+      const catalog = getPowerById(power.catalogId);
+      if (!catalog) return false;
+      const needsSpec = catalog.requiresAttribute || catalog.requiresSkill;
+      return needsSpec && !power.specification;
+    });
+  }, [selectedPowers, getPowerById]);
+
   // Handle mystic adept PP allocation
   const handleAllocationChange = useCallback(
     (value: number) => {
@@ -395,10 +346,11 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   // Validation status
   const validationStatus = useMemo(() => {
     if (!canHaveAdeptPowers) return "pending";
+    if (hasIncompletePowers) return "warning";
     if (selectedPowers.length > 0) return "valid";
     if (powerPointBudget > 0) return "warning";
     return "pending";
-  }, [canHaveAdeptPowers, selectedPowers.length, powerPointBudget]);
+  }, [canHaveAdeptPowers, hasIncompletePowers, selectedPowers.length, powerPointBudget]);
 
   // Power budget source
   const budgetSource = useMemo(() => {
@@ -432,18 +384,25 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
       title="Adept Powers"
       description={`${ppRemaining.toFixed(2)} / ${powerPointBudget.toFixed(2)} PP remaining`}
       status={validationStatus}
+      headerAction={
+        <button
+          onClick={() => setShowAddModal(true)}
+          className="flex items-center gap-1 rounded-lg bg-amber-500 px-2.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-amber-600"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Add
+        </button>
+      }
     >
       <div className="space-y-4">
         {/* Power Point Budget */}
         <BudgetIndicator
           label="Power Points"
-          description="Allocate power points to adept powers"
+          tooltip={budgetSource}
           spent={ppSpent}
           total={powerPointBudget}
-          source={budgetSource}
-          mode="card"
+          mode="compact"
           displayFormat="decimal2"
-          variant="violet"
         />
 
         {/* Mystic Adept Allocation */}
@@ -506,59 +465,93 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
           </div>
         )}
 
-        {/* Category Section Header */}
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2">
-            <Zap className="h-3.5 w-3.5 text-violet-500" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-              Adept Powers
-            </span>
-            {selectedPowers.length > 0 && (
-              <span className="rounded-full bg-violet-100 px-1.5 py-0.5 text-[10px] font-medium text-violet-700 dark:bg-violet-900/40 dark:text-violet-400">
-                {selectedPowers.length}
-              </span>
+        {/* Incomplete powers warning */}
+        {hasIncompletePowers && (
+          <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+            <p className="text-sm font-medium text-amber-800 dark:text-amber-200">
+              Selection Required
+            </p>
+            <p className="mt-1 text-xs text-amber-600 dark:text-amber-400">
+              Some powers require you to select which attribute or skill they affect.
+            </p>
+          </div>
+        )}
+
+        {/* Selected powers grouped by activation type */}
+        {selectedPowers.length > 0 && (
+          <div className="space-y-4">
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+              Selected Powers ({selectedPowers.length})
+            </h4>
+
+            {ACTIVATION_ORDER.filter((act) => powersGroupedByActivation[act]?.length > 0).map(
+              (activation) => (
+                <div key={activation}>
+                  <h5 className="mb-2 text-xs font-medium uppercase text-zinc-400 dark:text-zinc-500">
+                    {ACTIVATION_LABELS[activation]}
+                  </h5>
+                  <div className="divide-y divide-zinc-100 rounded-lg border border-zinc-200 px-3 dark:divide-zinc-800 dark:border-zinc-700">
+                    {powersGroupedByActivation[activation].map(({ power, catalog }) => {
+                      const isLeveled = catalog.hasRating === true;
+                      const needsSpec = !!(
+                        (catalog.requiresAttribute || catalog.requiresSkill) &&
+                        !power.specification
+                      );
+                      const specType = catalog.requiresSkill
+                        ? "skill"
+                        : catalog.requiresAttribute
+                          ? "attribute"
+                          : undefined;
+                      const validSpecs = catalog.requiresSkill
+                        ? catalog.validSkills
+                        : catalog.requiresAttribute
+                          ? catalog.validAttributes
+                          : undefined;
+
+                      // Calculate if level can be changed
+                      const canIncrease =
+                        isLeveled &&
+                        power.rating !== undefined &&
+                        catalog.maxRating !== undefined &&
+                        power.rating < catalog.maxRating &&
+                        calculateCost(catalog, power.rating + 1) - power.powerPointCost <=
+                          ppRemaining;
+                      const canDecrease =
+                        isLeveled && power.rating !== undefined && power.rating > 1;
+
+                      return (
+                        <AdeptPowerListItem
+                          key={power.id}
+                          displayName={power.name}
+                          activation={activation}
+                          powerPointCost={power.powerPointCost}
+                          isLeveled={isLeveled}
+                          level={power.rating}
+                          maxLevel={catalog.maxRating}
+                          canIncrease={canIncrease}
+                          canDecrease={canDecrease}
+                          onIncrease={() => handleUpdateLevel(power.id, 1)}
+                          onDecrease={() => handleUpdateLevel(power.id, -1)}
+                          needsSpec={needsSpec}
+                          specification={power.specification}
+                          specType={specType}
+                          validSpecs={validSpecs}
+                          onSpecChange={(spec) => handleUpdateSpec(power.id, spec)}
+                          onRemove={() => handleRemovePower(power.id)}
+                        />
+                      );
+                    })}
+                  </div>
+                </div>
+              )
             )}
           </div>
-          <button
-            onClick={() => setShowAddModal(true)}
-            className="flex items-center gap-1 rounded-lg bg-amber-500 px-2 py-1 text-xs font-medium text-white transition-colors hover:bg-amber-600"
-          >
-            <Plus className="h-3 w-3" />
-            Add
-          </button>
-        </div>
+        )}
 
         {/* Empty state */}
         {selectedPowers.length === 0 && (
           <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
             <p className="text-xs text-zinc-400 dark:text-zinc-500">No adept powers selected</p>
-          </div>
-        )}
-
-        {/* Selected powers */}
-        {selectedPowers.length > 0 && (
-          <div className="space-y-2">
-            {selectedPowers.map((power) => {
-              const catalogPower = getPowerById(power.catalogId);
-              if (!catalogPower) return null;
-
-              const isLeveled = catalogPower.hasRating === true;
-
-              return (
-                <PowerRow
-                  key={power.id}
-                  power={catalogPower}
-                  rating={power.rating}
-                  specification={power.specification}
-                  powerPointCost={power.powerPointCost}
-                  maxLevel={catalogPower.maxRating}
-                  isLeveled={isLeveled}
-                  onIncrease={() => handleUpdateLevel(power.id, 1)}
-                  onDecrease={() => handleUpdateLevel(power.id, -1)}
-                  onRemove={() => handleRemovePower(power.id)}
-                />
-              );
-            })}
           </div>
         )}
 
