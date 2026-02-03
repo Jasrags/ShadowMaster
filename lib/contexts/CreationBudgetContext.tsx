@@ -152,7 +152,8 @@ const CreationBudgetContext = createContext<CreationBudgetContextValue | null>(n
 function calculateBudgetTotals(
   priorities: Record<string, string> | undefined,
   selections: Record<string, unknown>,
-  priorityTable: PriorityTableData | null
+  priorityTable: PriorityTableData | null,
+  stateBudgets: Record<string, unknown>
 ): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
   const totals: Record<
     string,
@@ -263,10 +264,25 @@ function calculateBudgetTotals(
       };
     }
     if (["adept", "mystic-adept"].includes(magicPath)) {
-      // Power points = Magic rating (from special attributes)
-      const magicRating = (selections["special-attributes"] as Record<string, number>)?.magic || 0;
+      // Get base magic rating from priority table (same logic as AdeptPowersCard)
+      let basePowerPoints = 0;
+
+      if (magicPriority && priorityTable?.table[magicPriority]) {
+        const option = magicData?.options?.find((o) => o.path === magicPath);
+        basePowerPoints = option?.magicRating || 0;
+      }
+
+      // For mystic adepts, use their allocated PP split (not base magic rating)
+      if (magicPath === "mystic-adept") {
+        basePowerPoints = (selections["power-points-allocation"] as number) || 0;
+      }
+
+      // Add karma-purchased power points (5 karma per PP)
+      const karmaSpentPowerPoints = (stateBudgets?.["karma-spent-power-points"] as number) || 0;
+      const karmaPurchasedPP = Math.floor(karmaSpentPowerPoints / 5);
+
       totals["power-points"] = {
-        total: magicRating,
+        total: basePowerPoints + karmaPurchasedPP,
         label: "Power Points",
         displayFormat: "decimal" as "number" | "currency", // Cast for now, used for PP display
       };
@@ -838,8 +854,14 @@ export function CreationBudgetProvider({
 
   // Calculate budget totals from priorities
   const budgetTotals = useMemo(
-    () => calculateBudgetTotals(creationState.priorities, creationState.selections, priorityTable),
-    [creationState.priorities, creationState.selections, priorityTable]
+    () =>
+      calculateBudgetTotals(
+        creationState.priorities,
+        creationState.selections,
+        priorityTable,
+        creationState.budgets
+      ),
+    [creationState.priorities, creationState.selections, priorityTable, creationState.budgets]
   );
 
   // Extract spent values from state and selections
