@@ -152,9 +152,12 @@ function SheetCreationContent({
   }, [existingCharacter, campaign, ready, loading, loadRuleset]);
 
   // Handle edition selection
-  const handleEditionSelect = async (edition: EditionCode) => {
+  const handleEditionSelect = (edition: EditionCode) => {
     setSelectedEdition(edition);
-    await loadRuleset(edition);
+    loadRuleset(edition).catch((e) => {
+      console.error("Failed to load ruleset:", e);
+      // Error state is handled by useRulesetStatus().error
+    });
   };
 
   // Update creation state
@@ -189,81 +192,93 @@ function SheetCreationContent({
     // Increment version for this save attempt
     const currentVersion = ++saveVersionRef.current;
 
-    const saveTimeout = setTimeout(async () => {
-      // Abort any in-flight request before starting a new one
-      if (abortControllerRef.current) {
-        abortControllerRef.current.abort();
-      }
-      abortControllerRef.current = new AbortController();
-      const signal = abortControllerRef.current.signal;
+    const saveTimeout = setTimeout(() => {
+      // Wrap async logic in IIFE with .catch() to handle promise rejections
+      // This prevents unhandled rejections when setTimeout callback runs during HMR
+      (async () => {
+        // Abort any in-flight request before starting a new one
+        if (abortControllerRef.current) {
+          abortControllerRef.current.abort();
+        }
+        abortControllerRef.current = new AbortController();
+        const signal = abortControllerRef.current.signal;
 
-      setIsSaving(true);
-      try {
-        if (characterId) {
-          // Update existing draft - include name so it syncs with characterName
-          const characterName = (creationState.selections.characterName as string) || undefined;
-          await fetch(`/api/characters/${characterId}`, {
-            method: "PATCH",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...(characterName && { name: characterName }),
-              metadata: {
-                creationState,
-                creationMode: "sheet",
-              },
-            }),
-            signal,
-          });
-        } else {
-          // Create new draft
-          const res = await fetch("/api/characters", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              editionId: ruleset?.editionId || "sr5",
-              editionCode: editionCode || selectedEdition,
-              creationMethodId: creationState.creationMethodId,
-              name: (creationState.selections.characterName as string) || "Unnamed Runner",
-              campaignId,
-            }),
-            signal,
-          });
-          const data = await res.json();
-          if (data.success && data.character?.id) {
-            // Ignore response if a newer save has started
-            if (currentVersion !== saveVersionRef.current) return;
-
-            setCharacterId(data.character.id);
-            updateState({ characterId: data.character.id });
-            // Save the creation state to the new character
-            const newCharacterName =
-              (creationState.selections.characterName as string) || undefined;
-            await fetch(`/api/characters/${data.character.id}`, {
+        setIsSaving(true);
+        try {
+          if (characterId) {
+            // Update existing draft - include name so it syncs with characterName
+            const characterName = (creationState.selections.characterName as string) || undefined;
+            await fetch(`/api/characters/${characterId}`, {
               method: "PATCH",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify({
-                ...(newCharacterName && { name: newCharacterName }),
+                ...(characterName && { name: characterName }),
                 metadata: {
-                  creationState: {
-                    ...creationState,
-                    characterId: data.character.id,
-                  },
+                  creationState,
                   creationMode: "sheet",
                 },
               }),
               signal,
             });
+          } else {
+            // Create new draft
+            const res = await fetch("/api/characters", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({
+                editionId: ruleset?.editionId || "sr5",
+                editionCode: editionCode || selectedEdition,
+                creationMethodId: creationState.creationMethodId,
+                name: (creationState.selections.characterName as string) || "Unnamed Runner",
+                campaignId,
+              }),
+              signal,
+            });
+            if (!res.ok) {
+              throw new Error(`HTTP ${res.status}`);
+            }
+            const data = await res.json();
+            if (data.success && data.character?.id) {
+              // Ignore response if a newer save has started
+              if (currentVersion !== saveVersionRef.current) return;
+
+              setCharacterId(data.character.id);
+              updateState({ characterId: data.character.id });
+              // Save the creation state to the new character
+              const newCharacterName =
+                (creationState.selections.characterName as string) || undefined;
+              await fetch(`/api/characters/${data.character.id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                  ...(newCharacterName && { name: newCharacterName }),
+                  metadata: {
+                    creationState: {
+                      ...creationState,
+                      characterId: data.character.id,
+                    },
+                    creationMode: "sheet",
+                  },
+                }),
+                signal,
+              });
+            }
+          }
+
+          // Only update lastSaved if this is still the current version
+          if (currentVersion === saveVersionRef.current) {
+            setLastSaved(new Date());
+            setSaveError(null);
+            clearLocalBackup(); // Clear localStorage backup after successful server save
+          }
+        } finally {
+          // Only update isSaving if this is still the current version
+          if (currentVersion === saveVersionRef.current) {
+            setIsSaving(false);
           }
         }
-
-        // Only update lastSaved if this is still the current version
-        if (currentVersion === saveVersionRef.current) {
-          setLastSaved(new Date());
-          setSaveError(null);
-          clearLocalBackup(); // Clear localStorage backup after successful server save
-        }
-      } catch (e) {
-        // Ignore aborted requests
+      })().catch((e) => {
+        // Handle promise rejections from the async IIFE
         if (e instanceof Error && e.name === "AbortError") {
           return;
         }
@@ -271,13 +286,9 @@ function SheetCreationContent({
         // Set error state if this is still the current version
         if (currentVersion === saveVersionRef.current) {
           setSaveError("Failed to save changes");
-        }
-      } finally {
-        // Only update isSaving if this is still the current version
-        if (currentVersion === saveVersionRef.current) {
           setIsSaving(false);
         }
-      }
+      });
     }, 1000); // 1 second debounce
 
     return () => clearTimeout(saveTimeout);
@@ -312,6 +323,9 @@ function SheetCreationContent({
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
+      if (!res.ok) {
+        throw new Error(`HTTP ${res.status}`);
+      }
       const data = await res.json();
       if (data.success) {
         router.push(`/characters/${characterId}`);
@@ -424,6 +438,9 @@ export default function SheetCreationPage() {
         // Load campaign if campaignId provided
         if (campaignId) {
           const res = await fetch(`/api/campaigns/${campaignId}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
           const data = await res.json();
           if (data.success) {
             setCampaign(data.campaign);
@@ -433,6 +450,9 @@ export default function SheetCreationPage() {
         // Load existing character if characterId provided
         if (existingCharacterId) {
           const res = await fetch(`/api/characters/${existingCharacterId}`);
+          if (!res.ok) {
+            throw new Error(`HTTP ${res.status}`);
+          }
           const data = await res.json();
           if (data.success && data.character) {
             setExistingCharacter({
