@@ -21,7 +21,8 @@ import type { CreationState, AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
-import { Lock, Search, Plus, Minus, X, Zap, AlertTriangle } from "lucide-react";
+import { AdeptPowerModal } from "./adept-powers";
+import { Lock, Plus, Minus, Zap, AlertTriangle } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
@@ -155,11 +156,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   const { getBudget } = useCreationBudgets();
   const karmaBudget = getBudget("karma");
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [showAddModal, setShowAddModal] = useState(false);
-  const [selectedPowerId, setSelectedPowerId] = useState<string | null>(null);
-  const [selectedLevel, setSelectedLevel] = useState(1);
-  const [selectedSpec, setSelectedSpec] = useState<string>("");
 
   // Get magic rating
   const magicRating = useMemo(() => {
@@ -209,15 +206,6 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
 
   const ppRemaining = Math.round((powerPointBudget - ppSpent) * 100) / 100;
 
-  // Filter powers
-  const filteredPowers = useMemo(() => {
-    if (!searchQuery.trim()) return adeptPowersCatalog;
-    const search = searchQuery.toLowerCase();
-    return adeptPowersCatalog.filter(
-      (p) => p.name.toLowerCase().includes(search) || p.description.toLowerCase().includes(search)
-    );
-  }, [adeptPowersCatalog, searchQuery]);
-
   // Get power by ID
   const getPowerById = useCallback(
     (id: string) => adeptPowersCatalog.find((p) => p.id === id),
@@ -241,61 +229,54 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     [selectedPowers]
   );
 
-  // Add power
-  const handleAddPower = useCallback(() => {
-    if (!selectedPowerId) return;
+  // Add power (called from modal)
+  const handleAddPower = useCallback(
+    (powerId: string, level: number, spec?: string) => {
+      const power = getPowerById(powerId);
+      if (!power) return;
 
-    const power = getPowerById(selectedPowerId);
-    if (!power) return;
+      const cost = calculateCost(power, level);
+      if (cost > ppRemaining) return;
 
-    const cost = calculateCost(power, selectedLevel);
-    if (cost > ppRemaining) return;
+      // Check if already selected (for non-multiple powers)
+      if (isPowerSelected(powerId) && !power.requiresSkill && !power.requiresAttribute) {
+        return;
+      }
 
-    // Check if already selected (for non-multiple powers)
-    if (isPowerSelected(selectedPowerId) && !power.requiresSkill && !power.requiresAttribute) {
-      return;
-    }
+      const newPower: AdeptPower = {
+        id: `${powerId}-${Date.now()}`,
+        catalogId: powerId,
+        name: power.name,
+        rating: power.hasRating ? level : undefined,
+        powerPointCost: cost,
+        specification: spec,
+      };
 
-    const newPower: AdeptPower = {
-      id: `${selectedPowerId}-${Date.now()}`,
-      catalogId: selectedPowerId,
-      name: power.name,
-      rating: power.hasRating ? selectedLevel : undefined,
-      powerPointCost: cost,
-      specification: selectedSpec || undefined,
-    };
+      const updatedPowers = [...selectedPowers, newPower];
 
-    const updatedPowers = [...selectedPowers, newPower];
-
-    updateState({
-      selections: {
-        ...state.selections,
-        adeptPowers: updatedPowers,
-      },
-      budgets: {
-        ...state.budgets,
-        "power-points-spent": ppSpent + cost,
-      },
-    });
-
-    setSelectedPowerId(null);
-    setSelectedLevel(1);
-    setSelectedSpec("");
-    setShowAddModal(false);
-  }, [
-    selectedPowerId,
-    selectedLevel,
-    selectedSpec,
-    getPowerById,
-    calculateCost,
-    ppRemaining,
-    isPowerSelected,
-    selectedPowers,
-    ppSpent,
-    state.selections,
-    state.budgets,
-    updateState,
-  ]);
+      updateState({
+        selections: {
+          ...state.selections,
+          adeptPowers: updatedPowers,
+        },
+        budgets: {
+          ...state.budgets,
+          "power-points-spent": ppSpent + cost,
+        },
+      });
+    },
+    [
+      getPowerById,
+      calculateCost,
+      ppRemaining,
+      isPowerSelected,
+      selectedPowers,
+      ppSpent,
+      state.selections,
+      state.budgets,
+      updateState,
+    ]
+  );
 
   // Remove power
   const handleRemovePower = useCallback(
@@ -410,10 +391,6 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
     },
     [state.selections, updateState, minPPAllocation]
   );
-
-  // Get selected power data
-  const selectedPowerData = selectedPowerId ? getPowerById(selectedPowerId) : null;
-  const selectedCost = selectedPowerData ? calculateCost(selectedPowerData, selectedLevel) : 0;
 
   // Validation status
   const validationStatus = useMemo(() => {
@@ -593,256 +570,16 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
         />
 
         {/* Add Power Modal */}
-        {showAddModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-            {/* Backdrop */}
-            <div
-              className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-              onClick={() => {
-                setShowAddModal(false);
-                setSelectedPowerId(null);
-                setSelectedLevel(1);
-                setSelectedSpec("");
-              }}
-            />
-
-            {/* Modal */}
-            <div className="relative max-h-[85vh] w-full max-w-2xl overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900">
-              {/* Header */}
-              <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-700">
-                <div className="flex items-center gap-2">
-                  <Zap className="h-5 w-5 text-violet-500" />
-                  <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                    ADD ADEPT POWER
-                  </h2>
-                </div>
-                <button
-                  onClick={() => {
-                    setShowAddModal(false);
-                    setSelectedPowerId(null);
-                    setSelectedLevel(1);
-                    setSelectedSpec("");
-                  }}
-                  className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
-                >
-                  <X className="h-5 w-5" />
-                </button>
-              </div>
-
-              {/* Budget info */}
-              <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
-                <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                  <span className="font-medium text-violet-600 dark:text-violet-400">
-                    {ppRemaining.toFixed(2)} PP remaining
-                  </span>
-                </p>
-              </div>
-
-              {/* Search */}
-              <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
-                <div className="relative">
-                  <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                  <input
-                    type="text"
-                    placeholder="Search powers..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-violet-500 focus:outline-none focus:ring-1 focus:ring-violet-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                  />
-                </div>
-              </div>
-
-              {/* Power list */}
-              <div className="max-h-[40vh] overflow-y-auto p-4">
-                <div className="space-y-2">
-                  {filteredPowers.slice(0, 30).map((power) => {
-                    const isSelected = selectedPowerId === power.id;
-                    const alreadyHas = isPowerSelected(power.id);
-                    // Get base cost from unified ratings table or top-level powerPointCost
-                    const baseCost =
-                      power.hasRating && power.ratings
-                        ? power.ratings[1]?.powerPointCost || 0
-                        : power.powerPointCost || 0;
-                    const costDisplay = power.hasRating
-                      ? `${baseCost.toFixed(2)}/level`
-                      : `${baseCost.toFixed(2)} PP`;
-
-                    return (
-                      <button
-                        key={power.id}
-                        onClick={() => {
-                          setSelectedPowerId(isSelected ? null : power.id);
-                          setSelectedLevel(1);
-                          setSelectedSpec("");
-                        }}
-                        disabled={alreadyHas && !power.requiresSkill && !power.requiresAttribute}
-                        className={`flex w-full items-center justify-between rounded-lg px-4 py-3 text-left transition-all ${
-                          isSelected
-                            ? "bg-violet-50 ring-2 ring-violet-300 dark:bg-violet-900/30 dark:ring-violet-700"
-                            : alreadyHas
-                              ? "cursor-not-allowed bg-zinc-100 opacity-50 dark:bg-zinc-800"
-                              : "bg-zinc-50 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:hover:bg-zinc-800"
-                        }`}
-                      >
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                              {power.name}
-                            </span>
-                            {alreadyHas && (
-                              <span className="text-[10px] text-zinc-400">(already added)</span>
-                            )}
-                          </div>
-                          <div className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400 line-clamp-1">
-                            {power.description}
-                          </div>
-                        </div>
-                        <span className="shrink-0 rounded bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700 dark:bg-violet-900/50 dark:text-violet-300">
-                          {costDisplay}
-                        </span>
-                      </button>
-                    );
-                  })}
-
-                  {filteredPowers.length === 0 && (
-                    <div className="py-8 text-center text-sm text-zinc-500 dark:text-zinc-400">
-                      No powers found matching your search
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* Selected power configuration */}
-              {selectedPowerData && (
-                <div className="border-t border-zinc-200 bg-violet-50 p-4 dark:border-zinc-700 dark:bg-violet-900/20">
-                  <div className="mb-3 font-medium text-violet-900 dark:text-violet-100">
-                    Configure: {selectedPowerData.name}
-                  </div>
-
-                  {/* Level selector */}
-                  {selectedPowerData.hasRating && (
-                    <div className="mb-3">
-                      <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
-                        Level
-                      </div>
-                      <div className="flex gap-1">
-                        {Array.from(
-                          { length: selectedPowerData.maxRating || 4 },
-                          (_, i) => i + 1
-                        ).map((lvl) => {
-                          const lvlCost = calculateCost(selectedPowerData, lvl);
-                          const canAfford = lvlCost <= ppRemaining;
-                          return (
-                            <button
-                              key={lvl}
-                              onClick={() => setSelectedLevel(lvl)}
-                              disabled={!canAfford}
-                              className={`flex h-8 w-8 items-center justify-center rounded text-sm font-medium transition-colors ${
-                                selectedLevel === lvl
-                                  ? "bg-violet-500 text-white"
-                                  : canAfford
-                                    ? "bg-white text-zinc-600 hover:bg-violet-100 dark:bg-zinc-700 dark:text-zinc-300"
-                                    : "cursor-not-allowed bg-zinc-200 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-600"
-                              }`}
-                            >
-                              {lvl}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Attribute selector */}
-                  {selectedPowerData.requiresAttribute && selectedPowerData.validAttributes && (
-                    <div className="mb-3">
-                      <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
-                        Attribute
-                      </div>
-                      <select
-                        value={selectedSpec}
-                        onChange={(e) => setSelectedSpec(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
-                      >
-                        <option value="">Select attribute...</option>
-                        {selectedPowerData.validAttributes.map((attr) => (
-                          <option key={attr} value={attr}>
-                            {attr.charAt(0).toUpperCase() + attr.slice(1)}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Skill selector */}
-                  {selectedPowerData.requiresSkill && selectedPowerData.validSkills && (
-                    <div className="mb-3">
-                      <div className="mb-1.5 text-xs font-medium text-violet-700 dark:text-violet-300">
-                        Skill
-                      </div>
-                      <select
-                        value={selectedSpec}
-                        onChange={(e) => setSelectedSpec(e.target.value)}
-                        className="w-full rounded-lg border border-zinc-300 bg-white px-3 py-2 text-sm dark:border-zinc-600 dark:bg-zinc-800"
-                      >
-                        <option value="">Select skill...</option>
-                        {selectedPowerData.validSkills.map((skill) => (
-                          <option key={skill} value={skill}>
-                            {skill
-                              .split("-")
-                              .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
-                              .join(" ")}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                  )}
-
-                  {/* Cost and add button */}
-                  <div className="flex items-center justify-between pt-2">
-                    <span
-                      className={`text-sm font-medium ${
-                        selectedCost > ppRemaining
-                          ? "text-red-600 dark:text-red-400"
-                          : "text-violet-700 dark:text-violet-300"
-                      }`}
-                    >
-                      Cost: {selectedCost.toFixed(2)} PP
-                      {selectedCost > ppRemaining && " (insufficient PP)"}
-                    </span>
-                    <button
-                      onClick={handleAddPower}
-                      disabled={
-                        selectedCost > ppRemaining ||
-                        (selectedPowerData.requiresAttribute && !selectedSpec) ||
-                        (selectedPowerData.requiresSkill && !selectedSpec)
-                      }
-                      className="flex items-center gap-1.5 rounded-lg bg-violet-500 px-4 py-2 text-sm font-medium text-white hover:bg-violet-600 disabled:cursor-not-allowed disabled:bg-zinc-300 disabled:text-zinc-500"
-                    >
-                      <Plus className="h-4 w-4" />
-                      Add Power
-                    </button>
-                  </div>
-                </div>
-              )}
-
-              {/* Footer */}
-              {!selectedPowerData && (
-                <div className="flex items-center justify-end border-t border-zinc-200 px-6 py-4 dark:border-zinc-700">
-                  <button
-                    onClick={() => {
-                      setShowAddModal(false);
-                      setSelectedPowerId(null);
-                    }}
-                    className="rounded-lg bg-zinc-200 px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
-                  >
-                    Cancel
-                  </button>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
+        <AdeptPowerModal
+          isOpen={showAddModal}
+          onClose={() => setShowAddModal(false)}
+          onAdd={handleAddPower}
+          allPowers={adeptPowersCatalog}
+          ppRemaining={ppRemaining}
+          selectedPowers={selectedPowers}
+          isPowerSelected={isPowerSelected}
+          calculateCost={calculateCost}
+        />
       </div>
     </CreationCard>
   );
