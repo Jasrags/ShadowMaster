@@ -382,7 +382,6 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
   return (
     <CreationCard
       title="Adept Powers"
-      description={`${ppRemaining.toFixed(2)} / ${powerPointBudget.toFixed(2)} PP remaining`}
       status={validationStatus}
       headerAction={
         <button
