@@ -40,6 +40,7 @@ import {
   useGroupBreaking,
   useKarmaPurchase,
   getKarmaSpent,
+  removeFromDesignations,
 } from "./skills";
 import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
@@ -664,6 +665,31 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       const newSpecs = { ...specializations };
       delete newSpecs[skillId];
 
+      // Clean up free skill designations if this skill was designated
+      let newFreeSkillDesignations = freeSkillDesignations;
+      if (designatedSkillIds.has(skillId) && newFreeSkillDesignations) {
+        // Determine which type this skill was designated under and remove it
+        if (newFreeSkillDesignations.magical?.includes(skillId)) {
+          newFreeSkillDesignations = removeFromDesignations(
+            newFreeSkillDesignations,
+            skillId,
+            "magical"
+          );
+        } else if (newFreeSkillDesignations.resonance?.includes(skillId)) {
+          newFreeSkillDesignations = removeFromDesignations(
+            newFreeSkillDesignations,
+            skillId,
+            "resonance"
+          );
+        } else if (newFreeSkillDesignations.active?.includes(skillId)) {
+          newFreeSkillDesignations = removeFromDesignations(
+            newFreeSkillDesignations,
+            skillId,
+            "active"
+          );
+        }
+      }
+
       // Check if karma was spent on this skill and clean it up
       const currentKarmaSpent = (state.selections.skillKarmaSpent as {
         skillRaises: Record<string, number>;
@@ -703,6 +729,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             skills: newSkills,
             skillSpecializations: newSpecs,
             skillKarmaSpent: newKarmaSpent,
+            freeSkillDesignations: newFreeSkillDesignations,
           },
         });
       } else {
@@ -711,11 +738,19 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             ...state.selections,
             skills: newSkills,
             skillSpecializations: newSpecs,
+            freeSkillDesignations: newFreeSkillDesignations,
           },
         });
       }
     },
-    [skills, specializations, state.selections, updateState]
+    [
+      skills,
+      specializations,
+      designatedSkillIds,
+      freeSkillDesignations,
+      state.selections,
+      updateState,
+    ]
   );
 
   // Handle removing a skill group
