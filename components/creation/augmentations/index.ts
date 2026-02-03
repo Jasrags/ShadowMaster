@@ -4,6 +4,7 @@
  * Cyberware and bioware management for character creation.
  */
 
+// Modal components
 export {
   AugmentationModal,
   type AugmentationType,
@@ -20,3 +21,19 @@ export {
   type CyberlimbAccessorySelection,
 } from "./CyberlimbAccessoryModal";
 export { CyberlimbWeaponModal, type CyberlimbWeaponSelection } from "./CyberlimbWeaponModal";
+
+// Display components
+export { AugmentationItem, type AugmentationItemProps } from "./AugmentationItem";
+export {
+  CyberlimbAugmentationItem,
+  type CyberlimbAugmentationItemProps,
+} from "./CyberlimbAugmentationItem";
+
+// Utilities
+export {
+  formatCurrency,
+  formatEssence,
+  GRADE_DISPLAY,
+  DISPLAY_CATEGORIES,
+  type DisplayCategory,
+} from "./utils";

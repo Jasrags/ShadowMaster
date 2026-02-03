@@ -15,27 +15,12 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { useSkills, usePriorityTable } from "@/lib/rules";
+import { useSkills } from "@/lib/rules";
+import { getGroupRating, isGroupBroken } from "@/lib/rules/skills/group-utils";
 import {
-  getGroupRating,
-  isGroupBroken,
-  createBrokenGroup,
-  createRestoredGroup,
-  normalizeGroupValue,
-  canRestoreGroup,
+  calculateSkillRaiseKarmaCost,
+  calculateSkillGroupRaiseKarmaCost,
 } from "@/lib/rules/skills/group-utils";
-import {
-  getFreeSkillsFromMagicPriority,
-  getSkillsWithFreeAllocation,
-  getFreeSkillAllocationStatus,
-  getDesignatedFreeSkills,
-  getDesignatedSkillFreeRating,
-  canDesignateForFreeSkill,
-  type FreeSkillDesignations,
-} from "@/lib/rules/skills/free-skills";
-import { FREE_SKILL_TYPE_LABELS } from "./magic-path/constants";
-import { FreeSkillsPanel } from "./skills/FreeSkillsPanel";
-import { FreeSkillDesignationModal } from "./skills/FreeSkillDesignationModal";
 import type { CreationState } from "@/lib/types";
 import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { useCreationBudgets } from "@/lib/contexts";
@@ -49,12 +34,13 @@ import {
   SkillKarmaConfirmModal,
   SkillGroupKarmaConfirmModal,
   SkillSpecModal,
-  type SkillCustomizeChanges,
+  FreeSkillsPanel,
+  FreeSkillDesignationModal,
+  useSkillDesignations,
+  useGroupBreaking,
+  useKarmaPurchase,
+  getKarmaSpent,
 } from "./skills";
-import {
-  calculateSkillRaiseKarmaCost,
-  calculateSkillGroupRaiseKarmaCost,
-} from "@/lib/rules/skills/group-utils";
 import { Plus, Users, X, AlertTriangle, Star, RefreshCw } from "lucide-react";
 
 // =============================================================================
@@ -231,40 +217,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const [isSkillModalOpen, setIsSkillModalOpen] = useState(false);
   const [isGroupModalOpen, setIsGroupModalOpen] = useState(false);
 
-  // Customization flow state
-  const [customizeTarget, setCustomizeTarget] = useState<{
-    skillId: string;
-    groupId: string;
-  } | null>(null);
-  const [pendingChanges, setPendingChanges] = useState<SkillCustomizeChanges | null>(null);
-  const [isBreakModalOpen, setIsBreakModalOpen] = useState(false);
-
-  // Karma purchase confirmation state (for individual skills when skill points exhausted)
-  const [karmaSkillPurchase, setKarmaSkillPurchase] = useState<{
-    skillId: string;
-    skillName: string;
-    currentRating: number;
-  } | null>(null);
-
-  // Karma purchase confirmation state (for skill groups when group points exhausted)
-  const [karmaGroupPurchase, setKarmaGroupPurchase] = useState<{
-    groupId: string;
-    groupName: string;
-    skillCount: number;
-    currentRating: number;
-  } | null>(null);
-
   // Specialization modal state (for individual skills)
   const [specModalTarget, setSpecModalTarget] = useState<string | null>(null);
-
-  // Free skill designation modal state
-  const [freeSkillDesignationModal, setFreeSkillDesignationModal] = useState<{
-    type: string;
-    label: string;
-    freeRating: number;
-    totalSlots: number;
-    currentDesignations: string[];
-  } | null>(null);
 
   // Get character's magical path
   const magicPath = state.selections["magical-path"] as string | undefined;
@@ -299,8 +253,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     return aptitudeQuality?.specification || undefined;
   }, [state.selections.positiveQualities]);
 
-  // Get free skills from magic priority (using skill categories from ruleset)
-  const priorityTable = usePriorityTable();
+  // Build skill categories map for designation hooks
   const skillCategories = useMemo(() => {
     const categories: Record<string, string | undefined> = {};
     for (const skill of activeSkills) {
@@ -308,47 +261,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     }
     return categories;
   }, [activeSkills]);
-
-  // Get free skill configurations from magic priority
-  const freeSkillConfigs = useMemo(() => {
-    return getFreeSkillsFromMagicPriority(priorityTable, state.priorities?.magic, magicPath);
-  }, [priorityTable, state.priorities?.magic, magicPath]);
-
-  // Get explicit free skill designations from state
-  const freeSkillDesignations = useMemo(() => {
-    return state.selections.freeSkillDesignations as FreeSkillDesignations | undefined;
-  }, [state.selections.freeSkillDesignations]);
-
-  // Check if explicit designations exist (new system)
-  const hasExplicitDesignations = useMemo(() => {
-    return !!(
-      freeSkillDesignations &&
-      ((freeSkillDesignations.magical && freeSkillDesignations.magical.length > 0) ||
-        (freeSkillDesignations.resonance && freeSkillDesignations.resonance.length > 0) ||
-        (freeSkillDesignations.active && freeSkillDesignations.active.length > 0))
-    );
-  }, [freeSkillDesignations]);
-
-  // Get set of designated skill IDs for quick lookup
-  const designatedSkillIds = useMemo(() => {
-    return getDesignatedFreeSkills(freeSkillDesignations);
-  }, [freeSkillDesignations]);
-
-  // Get free skill allocation status for UI display
-  const freeSkillAllocationStatuses = useMemo(() => {
-    const skills = (state.selections.skills || {}) as Record<string, number>;
-    return getFreeSkillAllocationStatus(
-      skills,
-      freeSkillConfigs,
-      freeSkillDesignations,
-      FREE_SKILL_TYPE_LABELS
-    );
-  }, [state.selections.skills, freeSkillConfigs, freeSkillDesignations]);
-
-  // Check if there are any free skill configs (show panel if so)
-  const hasFreeSkillConfigs = useMemo(() => {
-    return freeSkillConfigs.some((config) => config.type !== "magicalGroup");
-  }, [freeSkillConfigs]);
 
   // Map of skill ID to name for display
   const skillNameMap = useMemo(() => {
@@ -358,23 +270,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     }
     return map;
   }, [activeSkills]);
-
-  // Legacy: Get free skill IDs for automatic allocation (used when no explicit designations)
-  const freeSkillIds = useMemo(() => {
-    // If explicit designations exist, use those instead
-    if (hasExplicitDesignations) {
-      return designatedSkillIds;
-    }
-    // Fall back to automatic allocation
-    const skills = (state.selections.skills || {}) as Record<string, number>;
-    return getSkillsWithFreeAllocation(skills, freeSkillConfigs, skillCategories);
-  }, [
-    hasExplicitDesignations,
-    designatedSkillIds,
-    state.selections.skills,
-    freeSkillConfigs,
-    skillCategories,
-  ]);
 
   // Get skills in the incompetent group (for conflict detection)
   const incompetentSkills = useMemo(() => {
@@ -401,23 +296,96 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   // Calculate points spent
   // Note: karmaRatingPoints are rating points purchased with karma, not counted as skill points
   const karmaRatingPoints = useMemo(() => {
-    return (
-      (state.selections.skillKarmaSpent as { skillRatingPoints?: number } | undefined)
-        ?.skillRatingPoints || 0
-    );
-  }, [state.selections.skillKarmaSpent]);
+    return getKarmaSpent(state.selections).skillRatingPoints || 0;
+  }, [state.selections]);
 
   // Group rating points purchased with karma (not counted as group points)
   const karmaGroupRatingPoints = useMemo(() => {
-    return (
-      (state.selections.skillKarmaSpent as { groupRatingPoints?: number } | undefined)
-        ?.groupRatingPoints || 0
-    );
-  }, [state.selections.skillKarmaSpent]);
+    return getKarmaSpent(state.selections).groupRatingPoints || 0;
+  }, [state.selections]);
 
   // Use budget context for spent values - it handles free skill points, karma purchases, etc.
   const skillPointsSpent = skillBudget?.spent ?? 0;
   const groupPointsSpent = groupBudget?.spent ?? 0;
+  const skillPointsRemaining = skillPoints - skillPointsSpent;
+  const groupPointsRemaining = skillGroupPoints - groupPointsSpent;
+
+  // Use extracted hooks for skill designations, group breaking, and karma purchases
+  const designations = useSkillDesignations(
+    state,
+    updateState,
+    skillCategories,
+    skills,
+    activeSkills
+  );
+
+  // Destructure designation hook values
+  const {
+    freeSkillConfigs,
+    freeSkillDesignations,
+    designatedSkillIds,
+    freeSkillAllocationStatuses,
+    hasFreeSkillConfigs,
+    freeSkillIds,
+    freeSkillDesignationModal,
+    handleOpenDesignationModal,
+    handleConfirmDesignations,
+    handleUndesignateSkill,
+    handleDesignateSkillFromList,
+    canSkillBeDesignated,
+    getSkillFreeRating: getDesignatedSkillFreeRating,
+    closeDesignationModal: setFreeSkillDesignationModal,
+  } = designations;
+
+  const groupBreaking = useGroupBreaking(
+    state,
+    updateState,
+    skills,
+    groups,
+    specializations,
+    skillGroups,
+    activeSkills,
+    karmaRemaining
+  );
+
+  // Destructure group breaking hook values
+  const {
+    customizeTarget,
+    pendingChanges,
+    isBreakModalOpen,
+    handleOpenCustomize,
+    handleCloseCustomize,
+    handleCustomizeApply,
+    handleConfirmBreak,
+    handleCancelBreak,
+    handleRestoreGroup,
+  } = groupBreaking;
+
+  const karmaPurchase = useKarmaPurchase(
+    state,
+    updateState,
+    skills,
+    groups,
+    skillGroups,
+    activeSkills,
+    skillPointsRemaining,
+    groupPointsRemaining,
+    karmaRemaining
+  );
+
+  // Destructure karma purchase hook values
+  const {
+    getPurchaseMode,
+    getGroupPurchaseMode,
+    karmaSkillPurchase,
+    karmaGroupPurchase,
+    handleOpenKarmaConfirm,
+    handleConfirmKarmaPurchase,
+    closeSkillKarmaConfirm: setKarmaSkillPurchase,
+    handleOpenGroupKarmaConfirm,
+    handleConfirmGroupKarmaPurchase,
+    closeGroupKarmaConfirm: setKarmaGroupPurchase,
+  } = karmaPurchase;
 
   // Calculate total specializations (for display purposes)
   const totalSpecializations = useMemo(() => {
@@ -425,9 +393,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   }, [specializations]);
 
   const specializationSkillPointCost = totalSpecializations * SKILL_POINTS_PER_SPECIALIZATION;
-
-  const skillPointsRemaining = skillPoints - skillPointsSpent;
-  const groupPointsRemaining = skillGroupPoints - groupPointsSpent;
   const isSkillsOverBudget = skillPointsRemaining < 0;
   const isGroupsOverBudget = groupPointsRemaining < 0;
 
@@ -835,570 +800,6 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     [specializations, state.selections, updateState]
   );
 
-  // =============================================================================
-  // FREE SKILL DESIGNATION HANDLERS
-  // =============================================================================
-
-  // Handle opening the free skill designation modal for a specific type
-  const handleOpenDesignationModal = useCallback(
-    (type: string) => {
-      const status = freeSkillAllocationStatuses.find((s) => s.type === type);
-      if (!status) return;
-
-      setFreeSkillDesignationModal({
-        type,
-        label: status.label,
-        freeRating: status.freeRating,
-        totalSlots: status.totalSlots,
-        currentDesignations: status.designatedSkillIds,
-      });
-    },
-    [freeSkillAllocationStatuses]
-  );
-
-  // Handle confirming free skill designations from modal
-  const handleConfirmDesignations = useCallback(
-    (type: string, selectedSkillIds: string[]) => {
-      // Update designations for this type
-      const newDesignations: FreeSkillDesignations = {
-        ...freeSkillDesignations,
-      };
-
-      // Set the designations for this type
-      switch (type) {
-        case "magical":
-          newDesignations.magical = selectedSkillIds;
-          break;
-        case "resonance":
-          newDesignations.resonance = selectedSkillIds;
-          break;
-        case "active":
-          newDesignations.active = selectedSkillIds;
-          break;
-      }
-
-      // Find the config for this type to get the free rating
-      const config = freeSkillConfigs.find((c) => c.type === type);
-      const freeRating = config?.rating || 0;
-
-      // Auto-set designated skills to free rating if they're lower
-      const newSkills = { ...skills };
-      for (const skillId of selectedSkillIds) {
-        const currentRating = skills[skillId] || 0;
-        if (currentRating < freeRating) {
-          newSkills[skillId] = freeRating;
-        }
-      }
-
-      updateState({
-        selections: {
-          ...state.selections,
-          skills: newSkills,
-          freeSkillDesignations: newDesignations,
-        },
-      });
-
-      setFreeSkillDesignationModal(null);
-    },
-    [freeSkillDesignations, freeSkillConfigs, skills, state.selections, updateState]
-  );
-
-  // Handle undesignating a skill from the FreeSkillsPanel
-  const handleUndesignateSkill = useCallback(
-    (skillId: string, type: string) => {
-      const newDesignations: FreeSkillDesignations = {
-        ...freeSkillDesignations,
-      };
-
-      // Remove the skill from designations for this type
-      switch (type) {
-        case "magical":
-          newDesignations.magical = (newDesignations.magical || []).filter((id) => id !== skillId);
-          break;
-        case "resonance":
-          newDesignations.resonance = (newDesignations.resonance || []).filter(
-            (id) => id !== skillId
-          );
-          break;
-        case "active":
-          newDesignations.active = (newDesignations.active || []).filter((id) => id !== skillId);
-          break;
-      }
-
-      updateState({
-        selections: {
-          ...state.selections,
-          freeSkillDesignations: newDesignations,
-        },
-      });
-    },
-    [freeSkillDesignations, state.selections, updateState]
-  );
-
-  // Handle designating a skill directly from SkillListItem
-  const handleDesignateSkillFromList = useCallback(
-    (skillId: string) => {
-      // Find the first free skill type that this skill qualifies for and has available slots
-      const skillCategory = skillCategories[skillId];
-
-      for (const status of freeSkillAllocationStatuses) {
-        if (status.remainingSlots <= 0) continue;
-
-        const { canDesignate } = canDesignateForFreeSkill(
-          skillId,
-          skillCategory,
-          status.type,
-          status.designatedSkillIds,
-          status.totalSlots
-        );
-
-        if (canDesignate) {
-          // Add to designations and auto-set rating
-          const newDesignations: FreeSkillDesignations = {
-            ...freeSkillDesignations,
-          };
-
-          switch (status.type) {
-            case "magical":
-              newDesignations.magical = [...(newDesignations.magical || []), skillId];
-              break;
-            case "resonance":
-              newDesignations.resonance = [...(newDesignations.resonance || []), skillId];
-              break;
-            case "active":
-              newDesignations.active = [...(newDesignations.active || []), skillId];
-              break;
-          }
-
-          // Auto-set skill to free rating if lower
-          const newSkills = { ...skills };
-          const currentRating = skills[skillId] || 0;
-          if (currentRating < status.freeRating) {
-            newSkills[skillId] = status.freeRating;
-          }
-
-          updateState({
-            selections: {
-              ...state.selections,
-              skills: newSkills,
-              freeSkillDesignations: newDesignations,
-            },
-          });
-          return;
-        }
-      }
-    },
-    [
-      skillCategories,
-      freeSkillAllocationStatuses,
-      freeSkillDesignations,
-      skills,
-      state.selections,
-      updateState,
-    ]
-  );
-
-  // Check if a skill can be designated (for SkillListItem button)
-  const canSkillBeDesignated = useCallback(
-    (skillId: string): boolean => {
-      // Already designated?
-      if (designatedSkillIds.has(skillId)) return false;
-
-      const skillCategory = skillCategories[skillId];
-
-      for (const status of freeSkillAllocationStatuses) {
-        if (status.remainingSlots <= 0) continue;
-
-        const { canDesignate } = canDesignateForFreeSkill(
-          skillId,
-          skillCategory,
-          status.type,
-          status.designatedSkillIds,
-          status.totalSlots
-        );
-
-        if (canDesignate) return true;
-      }
-
-      return false;
-    },
-    [designatedSkillIds, skillCategories, freeSkillAllocationStatuses]
-  );
-
-  // =============================================================================
-  // KARMA SKILL PURCHASE HELPERS
-  // =============================================================================
-
-  /**
-   * Determine the purchase mode for increasing a skill's rating.
-   * - 'skill-points': Use skill points (green + button)
-   * - 'karma': Use karma (amber + button, opens confirmation modal)
-   * - 'disabled': Cannot increase (gray + button with tooltip)
-   */
-  const getPurchaseMode = useCallback(
-    (
-      currentRating: number,
-      isAtMax: boolean
-    ): { mode: "skill-points" | "karma" | "disabled"; disabledReason?: string } => {
-      if (isAtMax) {
-        return { mode: "disabled", disabledReason: "Maximum rating reached" };
-      }
-      if (skillPointsRemaining > 0) {
-        return { mode: "skill-points" };
-      }
-      // Skill points exhausted - check if karma purchase is possible
-      const karmaCost = calculateSkillRaiseKarmaCost(currentRating, currentRating + 1);
-      if (karmaRemaining >= karmaCost) {
-        return { mode: "karma" };
-      }
-      return {
-        mode: "disabled",
-        disabledReason: `No skill points. Need ${karmaCost} karma (have ${karmaRemaining})`,
-      };
-    },
-    [skillPointsRemaining, karmaRemaining]
-  );
-
-  /**
-   * Determine the purchase mode for increasing a skill group's rating.
-   * - 'group-points': Use group points (purple + button)
-   * - 'karma': Use karma (amber + button, opens confirmation modal)
-   * - 'disabled': Cannot increase (gray + button with tooltip)
-   */
-  const getGroupPurchaseMode = useCallback(
-    (
-      currentRating: number,
-      isAtMax: boolean
-    ): { mode: "group-points" | "karma" | "disabled"; disabledReason?: string } => {
-      if (isAtMax) {
-        return { mode: "disabled", disabledReason: "Maximum rating reached" };
-      }
-      if (groupPointsRemaining > 0) {
-        return { mode: "group-points" };
-      }
-      // Group points exhausted - check if karma purchase is possible
-      const karmaCost = calculateSkillGroupRaiseKarmaCost(currentRating, currentRating + 1);
-      if (karmaRemaining >= karmaCost) {
-        return { mode: "karma" };
-      }
-      return {
-        mode: "disabled",
-        disabledReason: `No group points. Need ${karmaCost} karma (have ${karmaRemaining})`,
-      };
-    },
-    [groupPointsRemaining, karmaRemaining]
-  );
-
-  // Handle opening karma confirmation modal for skill
-  const handleOpenKarmaConfirm = useCallback(
-    (skillId: string) => {
-      const skillData = activeSkills.find((s) => s.id === skillId);
-      const currentRating = skills[skillId] || 0;
-      if (skillData) {
-        setKarmaSkillPurchase({
-          skillId,
-          skillName: skillData.name,
-          currentRating,
-        });
-      }
-    },
-    [activeSkills, skills]
-  );
-
-  // Handle confirming karma purchase
-  const handleConfirmKarmaPurchase = useCallback(() => {
-    if (!karmaSkillPurchase) return;
-
-    const { skillId, currentRating } = karmaSkillPurchase;
-    const newRating = currentRating + 1;
-    const karmaCost = calculateSkillRaiseKarmaCost(currentRating, newRating);
-
-    // Update skill rating
-    const newSkills = { ...skills, [skillId]: newRating };
-
-    // Track karma spent on skill raises
-    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
-      skillRaises: Record<string, number>;
-      skillRatingPoints: number;
-      specializations: number;
-    }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
-
-    const newKarmaSpent = {
-      skillRaises: {
-        ...currentKarmaSpent.skillRaises,
-        [skillId]: (currentKarmaSpent.skillRaises[skillId] || 0) + karmaCost,
-      },
-      // Track that 1 more rating point was purchased with karma
-      skillRatingPoints: currentKarmaSpent.skillRatingPoints + 1,
-      specializations: currentKarmaSpent.specializations,
-    };
-
-    updateState({
-      selections: {
-        ...state.selections,
-        skills: newSkills,
-        skillKarmaSpent: newKarmaSpent,
-      },
-    });
-
-    setKarmaSkillPurchase(null);
-  }, [karmaSkillPurchase, skills, state.selections, updateState]);
-
-  // Handle opening karma confirmation modal for skill group
-  const handleOpenGroupKarmaConfirm = useCallback(
-    (groupId: string) => {
-      const groupData = skillGroups.find((g) => g.id === groupId);
-      const groupValue = groups[groupId];
-      if (groupData && groupValue) {
-        setKarmaGroupPurchase({
-          groupId,
-          groupName: groupData.name,
-          skillCount: groupData.skills.length,
-          currentRating: getGroupRating(groupValue),
-        });
-      }
-    },
-    [skillGroups, groups]
-  );
-
-  // Handle confirming karma purchase for skill group
-  const handleConfirmGroupKarmaPurchase = useCallback(() => {
-    if (!karmaGroupPurchase) return;
-
-    const { groupId, currentRating } = karmaGroupPurchase;
-    const newRating = currentRating + 1;
-    const karmaCost = calculateSkillGroupRaiseKarmaCost(currentRating, newRating);
-
-    // Update group rating (preserve isBroken state if applicable)
-    const groupValue = groups[groupId];
-    const isBroken = isGroupBroken(groupValue);
-    const newGroups = {
-      ...groups,
-      [groupId]: isBroken ? { rating: newRating, isBroken: true } : newRating,
-    };
-
-    // Track karma spent on group raises
-    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
-      skillRaises: Record<string, number>;
-      skillRatingPoints: number;
-      specializations: number;
-      groupRaises?: Record<string, number>;
-      groupRatingPoints?: number;
-    }) || {
-      skillRaises: {},
-      skillRatingPoints: 0,
-      specializations: 0,
-      groupRaises: {},
-      groupRatingPoints: 0,
-    };
-
-    const newKarmaSpent = {
-      ...currentKarmaSpent,
-      groupRaises: {
-        ...(currentKarmaSpent.groupRaises || {}),
-        [groupId]: ((currentKarmaSpent.groupRaises || {})[groupId] || 0) + karmaCost,
-      },
-      // Track that 1 more group rating point was purchased with karma
-      groupRatingPoints: (currentKarmaSpent.groupRatingPoints || 0) + 1,
-    };
-
-    updateState({
-      selections: {
-        ...state.selections,
-        skillGroups: newGroups,
-        skillKarmaSpent: newKarmaSpent,
-      },
-    });
-
-    setKarmaGroupPurchase(null);
-  }, [karmaGroupPurchase, groups, state.selections, updateState]);
-
-  // =============================================================================
-  // SKILL GROUP BREAKING HANDLERS
-  // =============================================================================
-
-  // Open customization modal for a group skill
-  const handleOpenCustomize = useCallback((skillId: string, groupId: string) => {
-    setCustomizeTarget({ skillId, groupId });
-  }, []);
-
-  // Close customization modal
-  const handleCloseCustomize = useCallback(() => {
-    setCustomizeTarget(null);
-    setPendingChanges(null);
-  }, []);
-
-  // User applied changes in customize modal - show break confirmation
-  const handleCustomizeApply = useCallback((changes: SkillCustomizeChanges) => {
-    setPendingChanges(changes);
-    setIsBreakModalOpen(true);
-  }, []);
-
-  // User confirmed breaking the group - execute the break
-  const handleConfirmBreak = useCallback(() => {
-    if (!customizeTarget || !pendingChanges) return;
-
-    const { skillId, groupId } = customizeTarget;
-    const groupData = skillGroups.find((g) => g.id === groupId);
-    if (!groupData) return;
-
-    const currentGroupValue = groups[groupId];
-    const groupRating = getGroupRating(currentGroupValue);
-
-    // 1. Mark group as broken (keep it, don't delete - for budget tracking)
-    const newGroups = {
-      ...groups,
-      [groupId]: createBrokenGroup(currentGroupValue),
-    };
-
-    // 2. Add all member skills as individual skills at group rating
-    const newSkills = { ...skills };
-    groupData.skills.forEach((memberSkillId) => {
-      newSkills[memberSkillId] = groupRating;
-    });
-
-    // 3. Apply the triggering change (raised rating)
-    if (pendingChanges.newRating) {
-      newSkills[skillId] = pendingChanges.newRating;
-    }
-
-    // 4. Add specializations if any
-    const newSpecs = { ...specializations };
-    if (pendingChanges.specializations && pendingChanges.specializations.length > 0) {
-      newSpecs[skillId] = [...(newSpecs[skillId] || []), ...pendingChanges.specializations];
-    }
-
-    // 5. Track karma spent
-    const currentKarmaSpent = (state.selections.skillKarmaSpent as {
-      skillRaises: Record<string, number>;
-      skillRatingPoints: number;
-      specializations: number;
-    }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
-
-    const newKarmaSpent = {
-      skillRaises: { ...currentKarmaSpent.skillRaises },
-      skillRatingPoints: currentKarmaSpent.skillRatingPoints,
-      specializations: currentKarmaSpent.specializations,
-    };
-
-    // Calculate karma for skill raise
-    if (pendingChanges.newRating && pendingChanges.newRating > groupRating) {
-      // Karma cost for the raise portion only
-      let raiseCost = 0;
-      const ratingPointsRaised = pendingChanges.newRating - groupRating;
-      for (let r = groupRating + 1; r <= pendingChanges.newRating; r++) {
-        raiseCost += r * 2;
-      }
-      newKarmaSpent.skillRaises[skillId] = (newKarmaSpent.skillRaises[skillId] || 0) + raiseCost;
-      // Track the number of rating points purchased with karma
-      newKarmaSpent.skillRatingPoints += ratingPointsRaised;
-    }
-
-    // Specializations now cost skill points, not karma - no karma tracking needed
-
-    updateState({
-      selections: {
-        ...state.selections,
-        skillGroups: newGroups,
-        skills: newSkills,
-        skillSpecializations: newSpecs,
-        skillKarmaSpent: newKarmaSpent,
-      },
-    });
-
-    // Close modals
-    setIsBreakModalOpen(false);
-    setCustomizeTarget(null);
-    setPendingChanges(null);
-  }, [
-    customizeTarget,
-    pendingChanges,
-    groups,
-    skills,
-    specializations,
-    skillGroups,
-    state.selections,
-    updateState,
-  ]);
-
-  // Cancel break confirmation
-  const handleCancelBreak = useCallback(() => {
-    setIsBreakModalOpen(false);
-    // Keep customize modal open so user can adjust
-  }, []);
-
-  // Restore a broken group when all member skills have equal ratings
-  const handleRestoreGroup = useCallback(
-    (groupId: string) => {
-      const groupData = skillGroups.find((g) => g.id === groupId);
-      if (!groupData) return;
-
-      // Verify restoration is still valid
-      const { canRestore, commonRating } = canRestoreGroup(groupData.skills, skills);
-      if (!canRestore || commonRating === undefined) return;
-
-      // Track karma refunds for skills being merged back into group
-      const currentKarmaSpent = (state.selections.skillKarmaSpent as {
-        skillRaises: Record<string, number>;
-        skillRatingPoints: number;
-        specializations: number;
-      }) || { skillRaises: {}, skillRatingPoints: 0, specializations: 0 };
-
-      let karmaRatingPointsToRefund = 0;
-      const newKarmaRaises = { ...currentKarmaSpent.skillRaises };
-
-      // Remove member skills from individual skills
-      const newSkills = { ...skills };
-      const newSpecs = { ...specializations };
-      groupData.skills.forEach((skillId) => {
-        // If karma was spent on this skill, refund it
-        if (newKarmaRaises[skillId]) {
-          const skillRating = skills[skillId] || 0;
-          karmaRatingPointsToRefund += Math.min(
-            skillRating,
-            currentKarmaSpent.skillRatingPoints || 0
-          );
-          delete newKarmaRaises[skillId];
-        }
-        delete newSkills[skillId];
-        // Note: Per SR5 rules discussion, specializations prevent group restoration
-        // However, we allow it here and just remove the specs
-        // This could be made stricter if needed
-        delete newSpecs[skillId];
-      });
-
-      // Restore the group with the common rating
-      const newGroups = {
-        ...groups,
-        [groupId]: createRestoredGroup(commonRating),
-      };
-
-      const newKarmaSpent =
-        karmaRatingPointsToRefund > 0 ||
-        Object.keys(newKarmaRaises).length !== Object.keys(currentKarmaSpent.skillRaises).length
-          ? {
-              ...currentKarmaSpent,
-              skillRaises: newKarmaRaises,
-              skillRatingPoints: Math.max(
-                0,
-                (currentKarmaSpent.skillRatingPoints || 0) - karmaRatingPointsToRefund
-              ),
-            }
-          : undefined;
-
-      updateState({
-        selections: {
-          ...state.selections,
-          skillGroups: newGroups,
-          skills: newSkills,
-          skillSpecializations: newSpecs,
-          ...(newKarmaSpent && { skillKarmaSpent: newKarmaSpent }),
-        },
-      });
-    },
-    [groups, skills, specializations, skillGroups, state.selections, updateState]
-  );
-
   // Get skill data by ID
   const getSkillData = useCallback(
     (skillId: string) => {
@@ -1464,38 +865,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const hasIncompetentConflicts =
     incompetentConflicts.skillIds.length > 0 || incompetentConflicts.groupId !== null;
 
-  // Detect broken groups that can be restored
-  // A group can be restored when all member skills exist with equal ratings
-  const restorableGroups = useMemo(() => {
-    const restorable: Array<{
-      groupId: string;
-      groupName: string;
-      currentRating: number;
-    }> = [];
-
-    Object.entries(groups).forEach(([groupId, value]) => {
-      const normalized = normalizeGroupValue(value);
-      if (!normalized.isBroken) return;
-
-      const groupData = skillGroups.find((g) => g.id === groupId);
-      if (!groupData) return;
-
-      // Use canRestoreGroup helper to check if restoration is possible
-      const { canRestore, commonRating } = canRestoreGroup(groupData.skills, skills);
-
-      if (canRestore && commonRating !== undefined) {
-        restorable.push({
-          groupId,
-          groupName: groupData.name,
-          currentRating: commonRating,
-        });
-      }
-    });
-
-    return restorable;
-  }, [groups, skills, skillGroups]);
-
-  const hasRestorableGroups = restorableGroups.length > 0;
+  // Use hook values for restorable groups
+  const { restorableGroups, hasRestorableGroups } = groupBreaking;
 
   // Get validation status
   const validationStatus = useMemo(() => {
@@ -1757,11 +1128,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
                   // Check if this skill is designated for free allocation
                   const isDesignated = designatedSkillIds.has(entry.skillId);
                   const freeRating = isDesignated
-                    ? getDesignatedSkillFreeRating(
-                        entry.skillId,
-                        freeSkillConfigs,
-                        freeSkillDesignations
-                      )
+                    ? getDesignatedSkillFreeRating(entry.skillId)
                     : undefined;
                   const canDesignate =
                     !isGroupSkill && hasFreeSkillConfigs && canSkillBeDesignated(entry.skillId);
@@ -1964,7 +1331,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       {karmaSkillPurchase && (
         <SkillKarmaConfirmModal
           isOpen={true}
-          onClose={() => setKarmaSkillPurchase(null)}
+          onClose={setKarmaSkillPurchase}
           onConfirm={handleConfirmKarmaPurchase}
           skillName={karmaSkillPurchase.skillName}
           currentRating={karmaSkillPurchase.currentRating}
@@ -1981,7 +1348,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       {karmaGroupPurchase && (
         <SkillGroupKarmaConfirmModal
           isOpen={true}
-          onClose={() => setKarmaGroupPurchase(null)}
+          onClose={setKarmaGroupPurchase}
           onConfirm={handleConfirmGroupKarmaPurchase}
           groupName={karmaGroupPurchase.groupName}
           skillCount={karmaGroupPurchase.skillCount}
@@ -2020,7 +1387,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
       {freeSkillDesignationModal && (
         <FreeSkillDesignationModal
           isOpen={true}
-          onClose={() => setFreeSkillDesignationModal(null)}
+          onClose={setFreeSkillDesignationModal}
           onConfirm={(selectedIds) =>
             handleConfirmDesignations(freeSkillDesignationModal.type, selectedIds)
           }

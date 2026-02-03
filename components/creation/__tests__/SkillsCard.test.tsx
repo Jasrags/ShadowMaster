@@ -52,15 +52,57 @@ vi.mock("../skills", () => ({
   SkillKarmaConfirmModal: () => null,
   SkillGroupKarmaConfirmModal: () => null,
   SkillSpecModal: () => null,
-}));
-
-vi.mock("../skills/FreeSkillsPanel", () => ({
   FreeSkillsPanel: () => null,
+  FreeSkillDesignationModal: () => null,
+  // Utilities
+  getKarmaSpent: () => ({ skillRaises: {}, skillRatingPoints: 0, specializations: {} }),
+  EMPTY_KARMA_SPENT: { skillRaises: {}, skillRatingPoints: 0, specializations: {} },
+  // Custom hooks
+  useSkillDesignations: () => ({
+    freeSkillConfigs: [],
+    freeSkillDesignations: undefined,
+    hasExplicitDesignations: false,
+    designatedSkillIds: new Set(),
+    freeSkillAllocationStatuses: [],
+    hasFreeSkillConfigs: false,
+    freeSkillIds: new Set(),
+    freeSkillDesignationModal: null,
+    handleOpenDesignationModal: vi.fn(),
+    handleConfirmDesignations: vi.fn(),
+    handleUndesignateSkill: vi.fn(),
+    handleDesignateSkillFromList: vi.fn(),
+    canSkillBeDesignated: () => false,
+    getSkillFreeRating: () => undefined,
+    closeDesignationModal: vi.fn(),
+  }),
+  useGroupBreaking: () => ({
+    customizeTarget: null,
+    pendingChanges: null,
+    isBreakModalOpen: false,
+    restorableGroups: [],
+    hasRestorableGroups: false,
+    handleOpenCustomize: vi.fn(),
+    handleCloseCustomize: vi.fn(),
+    handleCustomizeApply: vi.fn(),
+    handleConfirmBreak: vi.fn(),
+    handleCancelBreak: vi.fn(),
+    handleRestoreGroup: vi.fn(),
+  }),
+  useKarmaPurchase: () => ({
+    getPurchaseMode: () => ({ mode: "skill-points" }),
+    getGroupPurchaseMode: () => ({ mode: "group-points" }),
+    karmaSkillPurchase: null,
+    karmaGroupPurchase: null,
+    handleOpenKarmaConfirm: vi.fn(),
+    handleConfirmKarmaPurchase: vi.fn(),
+    closeSkillKarmaConfirm: vi.fn(),
+    handleOpenGroupKarmaConfirm: vi.fn(),
+    handleConfirmGroupKarmaPurchase: vi.fn(),
+    closeGroupKarmaConfirm: vi.fn(),
+  }),
 }));
 
-vi.mock("../skills/FreeSkillDesignationModal", () => ({
-  FreeSkillDesignationModal: () => null,
-}));
+// Note: FreeSkillsPanel and FreeSkillDesignationModal are now exported from ../skills barrel
 
 vi.mock("@/lib/rules/skills/group-utils", () => ({
   getGroupRating: (value: number | { rating: number; isBroken?: boolean }) =>
