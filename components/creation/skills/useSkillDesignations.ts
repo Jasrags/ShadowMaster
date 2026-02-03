@@ -196,18 +196,29 @@ export function useSkillDesignations(
   );
 
   // Handle undesignating a skill from the FreeSkillsPanel
+  // Also removes the skill itself to keep states in sync
   const handleUndesignateSkill = useCallback(
     (skillId: string, type: string) => {
       const newDesignations = removeFromDesignations(freeSkillDesignations || {}, skillId, type);
 
+      // Also remove the skill itself
+      const newSkills = { ...skills };
+      delete newSkills[skillId];
+
+      // Remove any specializations for this skill
+      const newSpecs = { ...(state.selections.skillSpecializations as Record<string, string[]>) };
+      delete newSpecs[skillId];
+
       updateState({
         selections: {
           ...state.selections,
+          skills: newSkills,
+          skillSpecializations: newSpecs,
           freeSkillDesignations: newDesignations,
         },
       });
     },
-    [freeSkillDesignations, state.selections, updateState]
+    [freeSkillDesignations, skills, state.selections, updateState]
   );
 
   // Handle designating a skill directly from SkillListItem
