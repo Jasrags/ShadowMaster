@@ -34,6 +34,19 @@ vi.mock("../../qualities", () => ({
   })),
 }));
 
+vi.mock("../../skills/free-skills", () => ({
+  canDesignateForFreeSkill: vi.fn(() => ({ canDesignate: true })),
+  getFreeSkillAllocationStatus: vi.fn(() => []),
+}));
+
+vi.mock("../../contacts", () => ({
+  getMaxConnection: vi.fn((editionCode: string) => (editionCode === "sr6" ? 6 : 12)),
+  getMaxLoyalty: vi.fn(() => 6),
+  calculateContactPoints: vi.fn(
+    (contact: { connection: number; loyalty: number }) => contact.connection + contact.loyalty
+  ),
+}));
+
 // Import mocked functions
 import { getMetatypeAttributeLimits, validateAllConstraints } from "../../constraint-validation";
 import { validateKarmaLimits, validateAllQualities } from "../../qualities";
@@ -967,6 +980,394 @@ describe("Character Validator", () => {
       expect(result.completeness.percentage).toBeDefined();
       expect(result.completeness.percentage).toBeGreaterThanOrEqual(0);
       expect(result.completeness.percentage).toBeLessThanOrEqual(100);
+    });
+  });
+
+  // ===========================================================================
+  // MENTOR SPIRIT VALIDATOR (Task 1)
+  // ===========================================================================
+
+  describe("mentorSpirit validation (via magicValidator)", () => {
+    it("should return error when mundane character has mentor spirit", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        mentorSpirit: "bear",
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MENTOR_SPIRIT_INVALID_PATH",
+          field: "mentorSpirit",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when technomancer has mentor spirit", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "technomancer",
+        mentorSpirit: "bear",
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MENTOR_SPIRIT_TECHNOMANCER",
+          field: "mentorSpirit",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should not return error when full-mage has mentor spirit", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        mentorSpirit: "bear",
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MENTOR_SPIRIT_INVALID_PATH" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MENTOR_SPIRIT_TECHNOMANCER" })
+      );
+    });
+
+    it("should not return error when adept has mentor spirit", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        mentorSpirit: "wolf",
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MENTOR_SPIRIT_INVALID_PATH" })
+      );
+    });
+
+    it("should return info warning when mage has no mentor spirit at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        mentorSpirit: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NO_MENTOR_SPIRIT",
+          field: "mentorSpirit",
+          severity: "info",
+        })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // INITIATION / METAMAGICS VALIDATOR (Task 2)
+  // ===========================================================================
+
+  describe("initiation/metamagics validation (via magicValidator)", () => {
+    it("should not return error when initiateGrade is 0", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        initiateGrade: 0,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "INITIATION_AT_CREATION" })
+      );
+    });
+
+    it("should return error when initiateGrade is > 0 at creation", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        initiateGrade: 1,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "INITIATION_AT_CREATION",
+          field: "initiateGrade",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when metamagics are selected at creation", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        metamagics: ["centering"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "METAMAGICS_AT_CREATION",
+          field: "metamagics",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should not check initiation for mundane characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        initiateGrade: 0,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "INITIATION_AT_CREATION" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // FREE SKILL VALIDATOR (Task 4)
+  // ===========================================================================
+
+  describe("freeSkillValidator (via validateCharacter)", () => {
+    it("should return no issues when no free skills needed (mundane)", async () => {
+      const character = createMinimalCharacter({ magicalPath: "mundane" });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "FREE_SKILL_WRONG_CATEGORY" })
+      );
+    });
+
+    it("should return error when non-mage has magical free skill designations", async () => {
+      const character = createMinimalCharacter({ magicalPath: "mundane" });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          freeSkillDesignations: {
+            magical: ["spellcasting"],
+          },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "FREE_SKILL_WRONG_CATEGORY",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when non-technomancer has resonance free skill designations", async () => {
+      const character = createMinimalCharacter({ magicalPath: "full-mage" });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          freeSkillDesignations: {
+            resonance: ["compiling"],
+          },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "FREE_SKILL_WRONG_CATEGORY",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return no error when mage has correct magical skill designations", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        skills: { spellcasting: 5, summoning: 5 },
+      });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          freeSkillDesignations: {
+            magical: ["spellcasting", "summoning"],
+          },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "FREE_SKILL_WRONG_CATEGORY" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // CONTACT VALIDATOR (Task 5)
+  // ===========================================================================
+
+  describe("contactValidator (via validateCharacter)", () => {
+    it("should return no issues when contacts are within limits", async () => {
+      const character = createMinimalCharacter({
+        contacts: [
+          { name: "Fixer", connection: 4, loyalty: 3 },
+          { name: "Street Doc", connection: 3, loyalty: 4 },
+        ],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "CONTACT_CONNECTION_EXCEEDED" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "CONTACT_LOYALTY_EXCEEDED" })
+      );
+    });
+
+    it("should return error when contact connection exceeds max", async () => {
+      const character = createMinimalCharacter({
+        contacts: [{ name: "Big Boss", connection: 13, loyalty: 3 }],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "CONTACT_CONNECTION_EXCEEDED",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when contact loyalty exceeds max", async () => {
+      const character = createMinimalCharacter({
+        contacts: [{ name: "BFF", connection: 3, loyalty: 7 }],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "CONTACT_LOYALTY_EXCEEDED",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should warn when total contact points exceed charisma budget", async () => {
+      const character = createMinimalCharacter({
+        attributes: { cha: 2 }, // CHA 2 × 3 = 6 point budget
+        contacts: [
+          { name: "Fixer", connection: 4, loyalty: 3 }, // 7 points
+        ],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "CONTACT_POINTS_EXCEEDED",
+          severity: "warning",
+        })
+      );
     });
   });
 });

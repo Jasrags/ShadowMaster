@@ -24,7 +24,7 @@ import type {
   ItemLegality,
 } from "@/lib/types";
 import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
-import type { CharacterRCC } from "@/lib/types/character";
+import type { CharacterRCC, CharacterDrone, CharacterAutosoft } from "@/lib/types/character";
 
 // =============================================================================
 // CONSTANTS
@@ -67,7 +67,16 @@ export interface GearValidationError {
   code: GearValidationErrorCode;
   message: string;
   itemName: string;
-  itemType: "gear" | "weapon" | "armor" | "cyberdeck" | "commlink" | "rcc" | "modification";
+  itemType:
+    | "gear"
+    | "weapon"
+    | "armor"
+    | "cyberdeck"
+    | "commlink"
+    | "rcc"
+    | "modification"
+    | "drone"
+    | "autosoft";
   field?: string;
   details?: Record<string, unknown>;
 }
@@ -136,6 +145,15 @@ export function validateAllGear(
   errors.push(...validateCyberdecks(character.cyberdecks ?? [], ctx));
   errors.push(...validateCommlinks(character.commlinks ?? [], ctx));
   errors.push(...validateRCCs(character.rccs ?? [], ctx));
+
+  // Validate drones (availability + legality)
+  errors.push(...validateDrones(character.drones ?? [], ctx));
+
+  // Validate autosofts (availability only)
+  errors.push(...validateAutosofts(character.autosofts ?? [], ctx));
+
+  // TODO: Validate vehicles - the Vehicle type lacks availability/legality fields.
+  // Once Vehicle type is updated to include these, add vehicle validation here.
 
   return {
     valid: errors.length === 0,
@@ -309,6 +327,61 @@ function validateRCCs(rccs: CharacterRCC[], context: GearValidationContext): Gea
     // Check device rating
     const ratingResult = validateDeviceRating(rcc.deviceRating, rcc.name, "rcc", context);
     if (ratingResult) errors.push(ratingResult);
+  }
+
+  return errors;
+}
+
+// =============================================================================
+// DRONE & AUTOSOFT VALIDATION
+// =============================================================================
+
+/**
+ * Validate drones for availability and legality
+ */
+function validateDrones(
+  drones: CharacterDrone[],
+  context: GearValidationContext
+): GearValidationError[] {
+  const errors: GearValidationError[] = [];
+
+  for (const drone of drones) {
+    // Check availability
+    if (drone.availability !== undefined) {
+      const availResult = validateAvailability(
+        drone.availability,
+        drone.customName || drone.name,
+        "drone",
+        context,
+        drone.legality
+      );
+      if (availResult) errors.push(availResult);
+    }
+  }
+
+  return errors;
+}
+
+/**
+ * Validate autosofts for availability
+ */
+function validateAutosofts(
+  autosofts: CharacterAutosoft[],
+  context: GearValidationContext
+): GearValidationError[] {
+  const errors: GearValidationError[] = [];
+
+  for (const autosoft of autosofts) {
+    // Check availability only (autosofts have no legality field)
+    if (autosoft.availability !== undefined) {
+      const availResult = validateAvailability(
+        autosoft.availability,
+        autosoft.name,
+        "autosoft",
+        context
+      );
+      if (availResult) errors.push(availResult);
+    }
   }
 
   return errors;
