@@ -445,9 +445,12 @@ function extractSpentValues(
   spent["skill-group-points"] = totalGroupRatings - karmaGroupRatingPoints - freeSkillGroupPoints;
 
   // Calculate knowledge points spent from selections (languages + knowledge skills)
-  const languages = (selections.languages || []) as Array<{ rating: number }>;
+  // Native languages are free and do not count toward the knowledge point budget (SR5 Core)
+  const languages = (selections.languages || []) as Array<{ rating: number; isNative?: boolean }>;
   const knowledgeSkills = (selections.knowledgeSkills || []) as Array<{ rating: number }>;
-  const languagePointsSpent = languages.reduce((sum, lang) => sum + (lang.rating || 0), 0);
+  const languagePointsSpent = languages
+    .filter((lang) => !lang.isNative)
+    .reduce((sum, lang) => sum + (lang.rating || 0), 0);
   const knowledgePointsSpent = knowledgeSkills.reduce((sum, skill) => sum + (skill.rating || 0), 0);
   spent["knowledge-points"] = languagePointsSpent + knowledgePointsSpent;
 
