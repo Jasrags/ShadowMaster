@@ -1370,4 +1370,416 @@ describe("Character Validator", () => {
       );
     });
   });
+
+  // ===========================================================================
+  // KNOWLEDGE & LANGUAGE VALIDATOR
+  // ===========================================================================
+
+  describe("knowledgeLanguageValidator (via validateCharacter)", () => {
+    it("should return error when no native language at finalization", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [{ name: "English", rating: 4, isNative: false }],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_NATIVE_LANGUAGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when no languages at all at finalization", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_NATIVE_LANGUAGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should pass with one native language", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [{ name: "English", rating: 0, isNative: true }],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_NATIVE_LANGUAGE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "TOO_MANY_NATIVE_LANGUAGES" })
+      );
+    });
+
+    it("should pass with bilingual quality and 2 native languages", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 0, isNative: true },
+          ],
+          positiveQualities: ["bilingual"],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "TOO_MANY_NATIVE_LANGUAGES" })
+      );
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "BILINGUAL_REQUIRES_TWO_NATIVE" })
+      );
+    });
+
+    it("should warn when bilingual quality has only 1 native language", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [{ name: "English", rating: 0, isNative: true }],
+          positiveQualities: ["bilingual"],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "BILINGUAL_REQUIRES_TWO_NATIVE",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should return error with too many native languages (no bilingual)", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 0, isNative: true },
+          ],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "TOO_MANY_NATIVE_LANGUAGES",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error with too many native languages (with bilingual, > 2)", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 0, isNative: true },
+            { name: "Spanish", rating: 0, isNative: true },
+          ],
+          positiveQualities: ["bilingual"],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "TOO_MANY_NATIVE_LANGUAGES",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when language rating is below 1", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 0, isNative: false },
+          ],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "LANGUAGE_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when language rating is above 6", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 7, isNative: false },
+          ],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "LANGUAGE_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when knowledge skill rating is below 1", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [{ name: "English", rating: 0, isNative: true }],
+          knowledgeSkills: [{ name: "Corp Politics", category: "street", rating: 0 }],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "KNOWLEDGE_SKILL_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when knowledge skill rating is above 6", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [{ name: "English", rating: 0, isNative: true }],
+          knowledgeSkills: [{ name: "Corp Politics", category: "street", rating: 8 }],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "KNOWLEDGE_SKILL_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when knowledge points are overspent", async () => {
+      // INT 3 + LOG 3 = 6, budget = 12
+      const character = createMinimalCharacter({
+        attributes: { bod: 3, agi: 3, rea: 3, str: 3, wil: 3, log: 3, int: 3, cha: 3 },
+      });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 4, isNative: false },
+          ],
+          knowledgeSkills: [
+            { name: "Corp Politics", category: "street", rating: 5 },
+            { name: "Gang Turf", category: "street", rating: 5 },
+          ],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      // Total: 4 (Japanese) + 5 + 5 = 14, budget = 12
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "KNOWLEDGE_POINTS_OVERSPENT",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should pass when knowledge points are within budget", async () => {
+      // INT 3 + LOG 3 = 6, budget = 12
+      const character = createMinimalCharacter({
+        attributes: { bod: 3, agi: 3, rea: 3, str: 3, wil: 3, log: 3, int: 3, cha: 3 },
+      });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 3, isNative: false },
+          ],
+          knowledgeSkills: [
+            { name: "Corp Politics", category: "street", rating: 4 },
+            { name: "Gang Turf", category: "street", rating: 4 },
+          ],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      // Total: 3 + 4 + 4 = 11, budget = 12
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "KNOWLEDGE_POINTS_OVERSPENT" })
+      );
+    });
+
+    it("should pass when languages and knowledge skills are empty", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {} as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      // No knowledge/language errors in creation mode with no data
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_NATIVE_LANGUAGE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "LANGUAGE_RATING_OUT_OF_RANGE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "KNOWLEDGE_SKILL_RATING_OUT_OF_RANGE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "KNOWLEDGE_POINTS_OVERSPENT" })
+      );
+    });
+
+    it("should handle bilingual quality as SelectedQuality object", async () => {
+      const character = createMinimalCharacter();
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          languages: [
+            { name: "English", rating: 0, isNative: true },
+            { name: "Japanese", rating: 0, isNative: true },
+          ],
+          positiveQualities: [{ id: "bilingual", karma: 5 }],
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "TOO_MANY_NATIVE_LANGUAGES" })
+      );
+    });
+  });
 });

@@ -33,7 +33,7 @@ import { validateAllQualities, validateKarmaLimits } from "../qualities";
 import { getModule } from "../merge";
 import { getGroupRating, isGroupBroken } from "../skills/group-utils";
 import type { CreationSelections } from "@/lib/types/creation-selections";
-import type { LanguageSkill } from "@/lib/types/character";
+import type { LanguageSkill, KnowledgeSkill } from "@/lib/types/character";
 import type { ComplexFormData, SkillGroupData } from "../loader-types";
 import {
   canDesignateForFreeSkill,
@@ -41,6 +41,7 @@ import {
   type FreeSkillConfig,
 } from "../skills/free-skills";
 import { getMaxConnection, getMaxLoyalty, calculateContactPoints } from "../contacts";
+import { getQualityId } from "@/lib/types/creation-selections";
 
 // =============================================================================
 // CORE VALIDATORS
@@ -643,6 +644,151 @@ const contactValidator: ValidatorDefinition = {
 };
 
 /**
+ * Validate knowledge skills and language selections
+ *
+ * SR5 Rules:
+ * - Characters must have at least one native language at finalization
+ * - The Bilingual quality grants exactly 2 native languages; without it, max 1
+ * - Non-native language ratings must be 1-6
+ * - Knowledge skill ratings must be 1-6
+ * - Knowledge skill points budget: (INT + LOG) × 2
+ */
+const knowledgeLanguageValidator: ValidatorDefinition = {
+  id: "knowledge-languages",
+  name: "Knowledge & Languages",
+  description: "Validates knowledge skills and language selections",
+  modes: ["creation", "finalization"],
+  priority: 8,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState, mode } = context;
+
+    // Only validate when creation state is available (during creation flow)
+    if (!creationState?.selections) {
+      return issues;
+    }
+
+    const languages: LanguageSkill[] =
+      (creationState.selections.languages as LanguageSkill[] | undefined) ?? [];
+    const knowledgeSkills: KnowledgeSkill[] =
+      (creationState.selections.knowledgeSkills as KnowledgeSkill[] | undefined) ?? [];
+
+    // Determine if character has the bilingual quality
+    const positiveQualities =
+      (creationState.selections.positiveQualities as Array<string | { id: string }> | undefined) ??
+      [];
+    const hasBilingual = positiveQualities.some((q) => getQualityId(q) === "bilingual");
+
+    // Count native languages
+    const nativeLanguages = languages.filter((lang) => lang.isNative);
+    const nativeCount = nativeLanguages.length;
+    const maxNative = hasBilingual ? 2 : 1;
+
+    // 1. Native language required (finalization only)
+    if (mode === "finalization" && nativeCount === 0 && languages.length > 0) {
+      issues.push({
+        code: "MISSING_NATIVE_LANGUAGE",
+        message: "Character must have at least one native language selected",
+        field: "languages",
+        severity: "error",
+        suggestion: "Mark one of your languages as native",
+      });
+    }
+
+    // Also flag at finalization if no languages at all
+    if (mode === "finalization" && languages.length === 0) {
+      issues.push({
+        code: "MISSING_NATIVE_LANGUAGE",
+        message: "Character must have at least one native language selected",
+        field: "languages",
+        severity: "error",
+        suggestion: "Add a native language in the Knowledge & Languages step",
+      });
+    }
+
+    // 2. Bilingual quality consistency
+    if (hasBilingual && nativeCount < 2 && nativeCount > 0) {
+      issues.push({
+        code: "BILINGUAL_REQUIRES_TWO_NATIVE",
+        message: `Bilingual quality requires 2 native languages, but only ${nativeCount} selected`,
+        field: "languages",
+        severity: "warning",
+        suggestion: "Select a second native language to match the Bilingual quality",
+      });
+    }
+
+    if (nativeCount > maxNative) {
+      issues.push({
+        code: "TOO_MANY_NATIVE_LANGUAGES",
+        message: `Too many native languages (${nativeCount}): maximum is ${maxNative}${hasBilingual ? " with Bilingual quality" : ""}`,
+        field: "languages",
+        severity: "error",
+        suggestion: hasBilingual
+          ? "Remove native designation from extra languages"
+          : "Take the Bilingual quality to have 2 native languages, or remove extra native designations",
+      });
+    }
+
+    // 3. Language rating limits (non-native)
+    for (const lang of languages) {
+      if (!lang.isNative && (lang.rating < 1 || lang.rating > 6)) {
+        issues.push({
+          code: "LANGUAGE_RATING_OUT_OF_RANGE",
+          message: `Language "${lang.name}" has rating ${lang.rating}, must be 1-6`,
+          field: "languages",
+          severity: "error",
+        });
+      }
+    }
+
+    // 4. Knowledge skill rating limits
+    for (const skill of knowledgeSkills) {
+      if (skill.rating < 1 || skill.rating > 6) {
+        issues.push({
+          code: "KNOWLEDGE_SKILL_RATING_OUT_OF_RANGE",
+          message: `Knowledge skill "${skill.name}" has rating ${skill.rating}, must be 1-6`,
+          field: "knowledgeSkills",
+          severity: "error",
+        });
+      }
+    }
+
+    // 5. Knowledge points overspent (creation mode only)
+    if (mode === "creation" || mode === "finalization") {
+      const attributes = character.attributes ?? {};
+      const int = attributes["int"] ?? attributes["intuition"] ?? 0;
+      const log = attributes["log"] ?? attributes["logic"] ?? 0;
+      const knowledgePointsBudget = (int + log) * 2;
+
+      if (knowledgePointsBudget > 0) {
+        // Calculate total knowledge points spent
+        // Languages: non-native language ratings + specialization costs (not native which are free)
+        const languagePointsSpent = languages
+          .filter((lang) => !lang.isNative)
+          .reduce((sum, lang) => sum + lang.rating, 0);
+
+        // Knowledge skills: sum of ratings
+        const knowledgePointsSpent = knowledgeSkills.reduce((sum, skill) => sum + skill.rating, 0);
+
+        const totalSpent = languagePointsSpent + knowledgePointsSpent;
+
+        if (totalSpent > knowledgePointsBudget) {
+          issues.push({
+            code: "KNOWLEDGE_POINTS_OVERSPENT",
+            message: `Knowledge points overspent: ${totalSpent} used of ${knowledgePointsBudget} available ((INT ${int} + LOG ${log}) × 2)`,
+            field: "knowledgeSkills",
+            severity: "error",
+            suggestion: "Reduce knowledge skill or language ratings to stay within budget",
+          });
+        }
+      }
+    }
+
+    return issues;
+  },
+};
+
+/**
  * Validate campaign-specific rules
  */
 const campaignValidator: ValidatorDefinition = {
@@ -997,6 +1143,7 @@ const validators: ValidatorDefinition[] = [
   contactValidator,
   contactBudgetValidator,
   knowledgeBudgetValidator,
+  knowledgeLanguageValidator,
   campaignValidator,
 ];
 
