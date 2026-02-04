@@ -556,6 +556,111 @@ describe("skill points with free skills derivation", () => {
   });
 });
 
+describe("skill points with broken groups derivation", () => {
+  const firearmsGroupDef = { id: "firearms", skills: ["automatics", "longarms", "pistols"] };
+  const stealthGroupDef = { id: "stealth", skills: ["disguise", "palming", "sneaking"] };
+
+  it("subtracts broken group base ratings from skill points", () => {
+    const stateBudgets = {};
+    // Firearms group at 5, broken by raising pistols to 6
+    const selections = {
+      skills: { automatics: 5, longarms: 5, pistols: 6 },
+      skillGroups: { firearms: { rating: 5, isBroken: true } },
+    };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      null,
+      undefined,
+      emptySkillCategories,
+      [firearmsGroupDef]
+    );
+
+    // Total ratings: 5+5+6 = 16
+    // Broken group offset: min(5,5)+min(5,5)+min(6,5) = 5+5+5 = 15
+    // Expected: 16 - 15 = 1
+    expect(spent["skill-points"]).toBe(1);
+  });
+
+  it("does not subtract offset when no groups are broken", () => {
+    const stateBudgets = {};
+    const selections = {
+      skills: { automatics: 5, longarms: 5, pistols: 5 },
+      skillGroups: { firearms: { rating: 5, isBroken: false } },
+    };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      null,
+      undefined,
+      emptySkillCategories,
+      [firearmsGroupDef]
+    );
+
+    // Total ratings: 15, no broken groups, offset = 0
+    expect(spent["skill-points"]).toBe(15);
+  });
+
+  it("handles multiple broken groups", () => {
+    const stateBudgets = {};
+    const selections = {
+      skills: {
+        automatics: 5,
+        longarms: 5,
+        pistols: 6,
+        disguise: 3,
+        palming: 4,
+        sneaking: 3,
+      },
+      skillGroups: {
+        firearms: { rating: 5, isBroken: true },
+        stealth: { rating: 3, isBroken: true },
+      },
+    };
+
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      null,
+      undefined,
+      emptySkillCategories,
+      [firearmsGroupDef, stealthGroupDef]
+    );
+
+    // Total ratings: 5+5+6+3+4+3 = 26
+    // Firearms offset: 5+5+5 = 15
+    // Stealth offset: 3+3+3 = 9
+    // Expected: 26 - 15 - 9 = 2
+    expect(spent["skill-points"]).toBe(2);
+  });
+
+  it("defaults to no offset when skillGroupDefs omitted (backward compat)", () => {
+    const stateBudgets = {};
+    const selections = {
+      skills: { automatics: 5, longarms: 5, pistols: 6 },
+      skillGroups: { firearms: { rating: 5, isBroken: true } },
+    };
+
+    // Call without 7th argument - should default to empty array
+    const spent = extractSpentValues(
+      stateBudgets,
+      selections,
+      emptyTotals,
+      null,
+      undefined,
+      emptySkillCategories
+    );
+
+    // No group defs means offset = 0, so full ratings are counted
+    expect(spent["skill-points"]).toBe(16);
+  });
+});
+
 describe("validateBudgets", () => {
   describe("karma conversion limit validation", () => {
     it("allows up to 10 karma for nuyen conversion", () => {
@@ -600,6 +705,228 @@ describe("validateBudgets", () => {
 
       const conversionError = errors.find((e) => e.constraintId === "karma-conversion-limit");
       expect(conversionError).toBeUndefined();
+    });
+  });
+
+  describe("issue #247: broken skill group budget (full character scenario)", () => {
+    // Real SR5 skill group definitions from core-rulebook.json
+    const sr5SkillGroupDefs = [
+      { id: "firearms", skills: ["automatics", "longarms", "pistols"] },
+      { id: "stealth", skills: ["disguise", "palming", "sneaking"] },
+      { id: "athletics", skills: ["gymnastics", "running", "swimming"] },
+    ];
+
+    // Mock priority table: Skills A = 46/10, Skills B = 36/5
+    const mockPriorityTable = {
+      levels: ["A", "B", "C", "D", "E"],
+      categories: [],
+      table: {
+        A: {
+          skills: { skillPoints: 46, skillGroupPoints: 10 },
+          attributes: 24,
+          metatype: { specialAttributePoints: { human: 7 } },
+          resources: 75000,
+          magic: {},
+        },
+        B: {
+          skills: { skillPoints: 36, skillGroupPoints: 5 },
+          attributes: 20,
+          metatype: { specialAttributePoints: { human: 4 } },
+          resources: 50000,
+          magic: {},
+        },
+      },
+    };
+
+    it("correctly budgets a street samurai with broken Firearms group", () => {
+      // Character: Street Samurai, Human
+      // Priority: Skills A (46 skill points, 10 group points)
+      // Skill Groups: Firearms 5 (broken), Athletics 3
+      // Individual Skills: automatics 5, longarms 5, pistols 6 (broken out),
+      //   perception 4, sneaking 3, etiquette 2
+      // Karma spent: 12 karma to raise pistols 5→6 (6×2=12)
+      const stateBudgets = {};
+      const priorities = { skills: "A" };
+      const selections = {
+        skillGroups: {
+          firearms: { rating: 5, isBroken: true },
+          athletics: 3, // not broken, legacy number format
+        },
+        skills: {
+          // Broken group members (all 3 added to individual skills)
+          automatics: 5,
+          longarms: 5,
+          pistols: 6, // raised above group with karma
+          // Other individual skills
+          perception: 4,
+          sneaking: 3,
+          etiquette: 2,
+        },
+        skillKarmaSpent: {
+          skillRatingPoints: 1, // 1 rating point purchased with karma (pistols 5→6)
+          skillRaises: { pistols: 12 }, // 6×2 = 12 karma
+          specializations: 0,
+        },
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        mockPriorityTable,
+        priorities,
+        emptySkillCategories,
+        sr5SkillGroupDefs
+      );
+
+      // --- Skill group points ---
+      // firearms (broken, rating 5) + athletics (rating 3) = 8 group points
+      expect(spent["skill-group-points"]).toBe(8);
+
+      // --- Skill points ---
+      // Total individual ratings: 5+5+6+4+3+2 = 25
+      // Karma rating points: 1 (pistols 5→6)
+      // Broken group offset: min(5,5)+min(5,5)+min(6,5) = 5+5+5 = 15
+      // Spent skill points: 25 - 1 - 15 = 9
+      //   (perception 4 + sneaking 3 + etiquette 2 = 9 — just the non-group skills)
+      expect(spent["skill-points"]).toBe(9);
+    });
+
+    it("shows the bug (before fix) when skillGroupDefs is omitted", () => {
+      // Same character but without skill group definitions
+      // This simulates backward-compat behavior — no offset applied
+      const stateBudgets = {};
+      const priorities = { skills: "A" };
+      const selections = {
+        skillGroups: {
+          firearms: { rating: 5, isBroken: true },
+          athletics: 3,
+        },
+        skills: {
+          automatics: 5,
+          longarms: 5,
+          pistols: 6,
+          perception: 4,
+          sneaking: 3,
+          etiquette: 2,
+        },
+        skillKarmaSpent: {
+          skillRatingPoints: 1,
+          skillRaises: { pistols: 12 },
+          specializations: 0,
+        },
+      };
+
+      // Without 7th arg, defaults to empty array → no offset
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        mockPriorityTable,
+        priorities,
+        emptySkillCategories
+        // no skillGroupDefs — backward compat
+      );
+
+      // Without the fix: 25 - 1 = 24 (the old buggy value)
+      // The 15 base points from the Firearms group are double-counted
+      expect(spent["skill-points"]).toBe(24);
+    });
+
+    it("handles a rigger with two broken groups and specializations", () => {
+      // Priority: Skills B (36 skill points, 5 group points)
+      // Skill Groups: Firearms 4 (broken), Stealth 3 (broken)
+      // Firearms members: automatics 4, longarms 5, pistols 4
+      // Stealth members: disguise 3, palming 4, sneaking 3
+      // Other skills: pilot-ground-craft 5, electronic-warfare 3
+      // Specializations: pistols (Semi-Automatics), sneaking (Urban)
+      const stateBudgets = {};
+      const priorities = { skills: "B" };
+      const selections = {
+        skillGroups: {
+          firearms: { rating: 4, isBroken: true },
+          stealth: { rating: 3, isBroken: true },
+        },
+        skills: {
+          automatics: 4,
+          longarms: 5, // raised above group with karma
+          pistols: 4,
+          disguise: 3,
+          palming: 4, // raised above group with karma
+          sneaking: 3,
+          "pilot-ground-craft": 5,
+          "electronic-warfare": 3,
+        },
+        skillKarmaSpent: {
+          skillRatingPoints: 2, // longarms 4→5 (1 pt) + palming 3→4 (1 pt)
+          skillRaises: { longarms: 10, palming: 8 }, // 5×2=10, 4×2=8
+          specializations: 0,
+        },
+        skillSpecializations: {
+          pistols: ["Semi-Automatics"],
+          sneaking: ["Urban"],
+        },
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        mockPriorityTable,
+        priorities,
+        emptySkillCategories,
+        sr5SkillGroupDefs
+      );
+
+      // Skill group points: firearms 4 + stealth 3 = 7
+      expect(spent["skill-group-points"]).toBe(7);
+
+      // Skill points calculation:
+      // Total ratings: 4+5+4+3+4+3+5+3 = 31
+      // Specializations: 2 (pistols + sneaking)
+      // Karma rating points: 2
+      // Broken group offset:
+      //   firearms: min(4,4)+min(5,4)+min(4,4) = 4+4+4 = 12
+      //   stealth: min(3,3)+min(4,3)+min(3,3) = 3+3+3 = 9
+      //   total offset: 21
+      // Spent: 31 + 2 - 2 - 21 = 10
+      //   (pilot-ground-craft 5 + electronic-warfare 3 + 2 specs = 10)
+      expect(spent["skill-points"]).toBe(10);
+    });
+
+    it("correctly handles non-broken groups (no offset applied)", () => {
+      // Character with intact skill groups — no offset should be applied
+      // Skill Groups: Firearms 5 (intact), Athletics 3 (intact)
+      // Only non-group individual skills
+      const stateBudgets = {};
+      const priorities = { skills: "A" };
+      const selections = {
+        skillGroups: {
+          firearms: { rating: 5, isBroken: false },
+          athletics: 3,
+        },
+        skills: {
+          perception: 4,
+          sneaking: 3,
+          etiquette: 2,
+        },
+      };
+
+      const spent = extractSpentValues(
+        stateBudgets,
+        selections,
+        emptyTotals,
+        mockPriorityTable,
+        priorities,
+        emptySkillCategories,
+        sr5SkillGroupDefs
+      );
+
+      // Group points: 5 + 3 = 8
+      expect(spent["skill-group-points"]).toBe(8);
+
+      // No broken groups, no offset. Total: 4+3+2 = 9
+      expect(spent["skill-points"]).toBe(9);
     });
   });
 
