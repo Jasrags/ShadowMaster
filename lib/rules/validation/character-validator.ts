@@ -189,6 +189,14 @@ const MYSTIC_ADEPT_RESTRICTED_SKILLS = ["counterspelling"];
 // Magical paths that support mentor spirits
 const MENTOR_SPIRIT_PATHS = ["full-mage", "adept", "mystic-adept", "aspected-mage"];
 
+// Magical paths that require a tradition selection
+const TRADITION_REQUIRED_PATHS = ["full-mage", "mystic-adept", "aspected-mage"];
+
+// Map creation selection values to character field values
+const MAGICAL_PATH_SELECTION_MAP: Record<string, string> = {
+  magician: "full-mage",
+};
+
 /**
  * Validate magic-specific requirements
  */
@@ -200,12 +208,27 @@ const magicValidator: ValidatorDefinition = {
   priority: 4,
   validate: (context) => {
     const issues: ValidationIssue[] = [];
-    const { character, mode } = context;
+    const { character, mode, creationState } = context;
+
+    // Resolve magical path — character field uses "full-mage", selections use "magician"
+    const rawMagicalPath =
+      character.magicalPath && character.magicalPath !== "mundane"
+        ? character.magicalPath
+        : (creationState?.selections?.["magical-path"] as string | undefined);
+
+    // Normalize: map selection values (e.g. "magician") to character values (e.g. "full-mage")
+    const normalizedPath = rawMagicalPath
+      ? (MAGICAL_PATH_SELECTION_MAP[rawMagicalPath] ?? rawMagicalPath)
+      : undefined;
+
+    // Resolve tradition from character or creationState
+    const tradition =
+      character.tradition || (creationState?.selections?.["tradition"] as string | undefined);
 
     // --- Mentor spirit validation (applies even to mundane/technomancer) ---
 
     if (character.mentorSpirit) {
-      if (!character.magicalPath || character.magicalPath === "mundane") {
+      if (!normalizedPath || normalizedPath === "mundane") {
         issues.push({
           code: "MENTOR_SPIRIT_INVALID_PATH",
           message: "Mundane characters cannot have a mentor spirit",
@@ -213,7 +236,7 @@ const magicValidator: ValidatorDefinition = {
           severity: "error",
           suggestion: "Remove the mentor spirit or select a magical path",
         });
-      } else if (character.magicalPath === "technomancer") {
+      } else if (normalizedPath === "technomancer") {
         issues.push({
           code: "MENTOR_SPIRIT_TECHNOMANCER",
           message:
@@ -222,10 +245,10 @@ const magicValidator: ValidatorDefinition = {
           severity: "error",
           suggestion: "Remove the mentor spirit from this technomancer",
         });
-      } else if (!MENTOR_SPIRIT_PATHS.includes(character.magicalPath)) {
+      } else if (!MENTOR_SPIRIT_PATHS.includes(normalizedPath)) {
         issues.push({
           code: "MENTOR_SPIRIT_INVALID_PATH",
-          message: `Magical path "${character.magicalPath}" does not support mentor spirits`,
+          message: `Magical path "${normalizedPath}" does not support mentor spirits`,
           field: "mentorSpirit",
           severity: "error",
         });
@@ -235,8 +258,8 @@ const magicValidator: ValidatorDefinition = {
     // --- Initiation / metamagics at creation validation ---
 
     if (
-      character.magicalPath &&
-      character.magicalPath !== "mundane" &&
+      normalizedPath &&
+      normalizedPath !== "mundane" &&
       (mode === "creation" || mode === "finalization")
     ) {
       if (character.initiateGrade !== undefined && character.initiateGrade > 0) {
@@ -262,13 +285,13 @@ const magicValidator: ValidatorDefinition = {
 
     // --- Remaining magic checks only apply to magical characters ---
 
-    if (!character.magicalPath || character.magicalPath === "mundane") {
+    if (!normalizedPath || normalizedPath === "mundane") {
       return issues;
     }
 
     // Mentor spirit info-level warning for valid paths without one selected
     if (
-      MENTOR_SPIRIT_PATHS.includes(character.magicalPath) &&
+      MENTOR_SPIRIT_PATHS.includes(normalizedPath) &&
       !character.mentorSpirit &&
       mode === "finalization"
     ) {
@@ -280,22 +303,19 @@ const magicValidator: ValidatorDefinition = {
       });
     }
 
-    // Full mage or mystic adept should have tradition
-    if (
-      (character.magicalPath === "full-mage" || character.magicalPath === "mystic-adept") &&
-      !character.tradition
-    ) {
+    // Tradition required for full mage, mystic adept, aspected mage
+    if (TRADITION_REQUIRED_PATHS.includes(normalizedPath) && !tradition) {
       issues.push({
         code: "MISSING_TRADITION",
-        message: "Magical character should have a tradition selected",
+        message: "Magical character must have a tradition selected",
         field: "tradition",
-        severity: "warning",
+        severity: mode === "finalization" ? "error" : "warning",
         suggestion: "Select a magical tradition (e.g., Hermetic, Shaman)",
       });
     }
 
     // Mystic adepts cannot have Counterspelling skill (SR5 Core p.69)
-    if (character.magicalPath === "mystic-adept" && character.skills) {
+    if (normalizedPath === "mystic-adept" && character.skills) {
       const skillsObj = character.skills as Record<string, number>;
       for (const restrictedSkill of MYSTIC_ADEPT_RESTRICTED_SKILLS) {
         if (skillsObj[restrictedSkill] && skillsObj[restrictedSkill] > 0) {
@@ -312,7 +332,7 @@ const magicValidator: ValidatorDefinition = {
 
     // Adepts and mystic adepts should have adept powers
     if (
-      (character.magicalPath === "adept" || character.magicalPath === "mystic-adept") &&
+      (normalizedPath === "adept" || normalizedPath === "mystic-adept") &&
       (!character.adeptPowers || character.adeptPowers.length === 0)
     ) {
       issues.push({
@@ -326,7 +346,7 @@ const magicValidator: ValidatorDefinition = {
 
     // Full mages and mystic adepts should have spells
     if (
-      (character.magicalPath === "full-mage" || character.magicalPath === "mystic-adept") &&
+      (normalizedPath === "full-mage" || normalizedPath === "mystic-adept") &&
       (!character.spells || character.spells.length === 0)
     ) {
       issues.push({
@@ -340,14 +360,14 @@ const magicValidator: ValidatorDefinition = {
 
     // Technomancers should have complex forms
     if (
-      character.magicalPath === "technomancer" &&
+      normalizedPath === "technomancer" &&
       (!character.complexForms || character.complexForms.length === 0)
     ) {
       issues.push({
         code: "NO_COMPLEX_FORMS",
         message: "Technomancer has no complex forms selected",
         field: "complexForms",
-        severity: context.mode === "finalization" ? "error" : "warning",
+        severity: mode === "finalization" ? "error" : "warning",
       });
     }
 

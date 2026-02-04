@@ -439,7 +439,7 @@ describe("Character Validator", () => {
       );
     });
 
-    it("should return warning when full-mage has no tradition", async () => {
+    it("should return warning when full-mage has no tradition in creation mode", async () => {
       const character = createMinimalCharacter({
         magicalPath: "full-mage",
         tradition: undefined,
@@ -456,7 +456,173 @@ describe("Character Validator", () => {
         expect.objectContaining({
           code: "MISSING_TRADITION",
           field: "tradition",
+          severity: "warning",
         })
+      );
+    });
+
+    it("should return error when full-mage has no tradition at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_TRADITION",
+          field: "tradition",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when mystic-adept has no tradition at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_TRADITION",
+          field: "tradition",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should return error when aspected-mage has no tradition at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "aspected-mage",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_TRADITION",
+          field: "tradition",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should not return MISSING_TRADITION when tradition is set", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        tradition: "hermetic",
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+    });
+
+    it("should resolve MISSING_TRADITION via creationState selections", async () => {
+      // During creation, character.magicalPath may not be set — use creationState
+      const character = createMinimalCharacter({
+        magicalPath: "mundane", // Not yet mapped from selections
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          "magical-path": "magician", // selection value, maps to "full-mage"
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "MISSING_TRADITION",
+          field: "tradition",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should not return MISSING_TRADITION when tradition is in creationState", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          "magical-path": "magician",
+          tradition: "hermetic",
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+    });
+
+    it("should not return MISSING_TRADITION for adept at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        tradition: undefined,
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
+      );
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "MISSING_TRADITION" })
       );
     });
 

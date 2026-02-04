@@ -644,6 +644,13 @@ function ValidationSummary({
     if (Object.keys(priorities).length < 5) items.push("Set all 5 priorities");
     if (!selections.metatype) items.push("Select a metatype");
     if (!selections["magical-path"]) items.push("Select a magic/resonance path");
+
+    // Tradition required for magician, mystic-adept, aspected-mage
+    const TRADITION_PATHS = ["magician", "mystic-adept", "aspected-mage"];
+    const magicPathSel = selections["magical-path"] as string | undefined;
+    if (magicPathSel && TRADITION_PATHS.includes(magicPathSel) && !selections["tradition"])
+      items.push("Select a tradition");
+
     if (!selections.identities || selections.identities.length === 0)
       items.push("Add at least one identity (SIN)");
     if (!selections.lifestyles || selections.lifestyles.length === 0)
