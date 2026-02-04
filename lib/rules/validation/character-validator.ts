@@ -47,6 +47,161 @@ import { getQualityId } from "@/lib/types/creation-selections";
 // CORE VALIDATORS
 // =============================================================================
 
+// Reverse of MAGICAL_PATH_SELECTION_MAP: character field → priority table path
+const CHARACTER_TO_PRIORITY_PATH: Record<string, string> = {
+  "full-mage": "magician",
+};
+
+const PRIORITY_CATEGORIES = ["metatype", "attributes", "magic", "skills", "resources"] as const;
+const VALID_LEVELS = ["A", "B", "C", "D", "E"] as const;
+
+/**
+ * Validate priority assignment consistency.
+ * Ensures unique A-E levels, metatype validity for chosen priority,
+ * and magic path validity for chosen priority.
+ */
+const priorityConsistencyValidator: ValidatorDefinition = {
+  id: "priority-consistency",
+  name: "Priority Consistency",
+  description:
+    "Validates priority assignments are complete, unique, and consistent with selections",
+  modes: ["creation", "finalization"],
+  priority: 0,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState, ruleset, mode } = context;
+
+    // Only applies to priority-based creation methods
+    if (!creationState?.priorities) {
+      return issues;
+    }
+
+    const priorities = creationState.priorities;
+
+    // --- Check 1: Completeness & Uniqueness ---
+
+    const assignedCategories = Object.keys(priorities);
+    const missingCategories = PRIORITY_CATEGORIES.filter((c) => !assignedCategories.includes(c));
+
+    if (missingCategories.length > 0) {
+      issues.push({
+        code: "PRIORITY_INCOMPLETE",
+        message: `Priority assignments incomplete — missing: ${missingCategories.join(", ")}`,
+        field: "priorities",
+        severity: mode === "finalization" ? "error" : "warning",
+      });
+    }
+
+    // Validate each assigned level is A-E
+    for (const [category, level] of Object.entries(priorities)) {
+      if (!(VALID_LEVELS as readonly string[]).includes(level)) {
+        issues.push({
+          code: "PRIORITY_INVALID_LEVEL",
+          message: `Priority "${category}" has invalid level "${level}" — must be A through E`,
+          field: `priorities.${category}`,
+          severity: "error",
+        });
+      }
+    }
+
+    // Check for duplicate levels
+    const levelCounts: Record<string, string[]> = {};
+    for (const [category, level] of Object.entries(priorities)) {
+      if (!levelCounts[level]) levelCounts[level] = [];
+      levelCounts[level].push(category);
+    }
+
+    let hasDuplicates = false;
+    for (const [level, categories] of Object.entries(levelCounts)) {
+      if (categories.length > 1) {
+        hasDuplicates = true;
+        issues.push({
+          code: "PRIORITY_DUPLICATE_LEVEL",
+          message: `Priority level ${level} is assigned to multiple categories: ${categories.join(", ")}`,
+          field: "priorities",
+          severity: "error",
+        });
+      }
+    }
+
+    // Short-circuit: metatype/magic checks are meaningless with duplicates
+    if (hasDuplicates) {
+      return issues;
+    }
+
+    // Load priority table from ruleset
+    const prioritiesModule = getModule<{
+      table: Record<
+        string,
+        {
+          metatype: { available: string[] };
+          magic: { options: Array<{ path: string }> };
+        }
+      >;
+    }>(ruleset, "priorities");
+
+    if (!prioritiesModule?.table) {
+      return issues;
+    }
+
+    const table = prioritiesModule.table;
+
+    // --- Check 2: Metatype validity ---
+
+    const metatypeLevel = priorities.metatype;
+    if (metatypeLevel && character.metatype && table[metatypeLevel]) {
+      const availableMetatypes = table[metatypeLevel].metatype.available;
+      if (!availableMetatypes.includes(character.metatype)) {
+        issues.push({
+          code: "PRIORITY_METATYPE_INVALID",
+          message: `Metatype "${character.metatype}" is not available at priority ${metatypeLevel} — available: ${availableMetatypes.join(", ")}`,
+          field: "metatype",
+          severity: "error",
+        });
+      }
+    }
+
+    // --- Check 3: Magic path validity ---
+
+    const magicLevel = priorities.magic;
+    if (magicLevel && table[magicLevel]) {
+      // Resolve magic path from character or creation selections
+      const rawMagicalPath =
+        character.magicalPath && character.magicalPath !== "mundane"
+          ? character.magicalPath
+          : (creationState?.selections?.["magical-path"] as string | undefined);
+
+      if (rawMagicalPath && rawMagicalPath !== "mundane") {
+        // Map character field values back to priority table values (e.g. "full-mage" → "magician")
+        const priorityPath = CHARACTER_TO_PRIORITY_PATH[rawMagicalPath] ?? rawMagicalPath;
+        const availablePaths = table[magicLevel].magic.options.map((o) => o.path);
+
+        if (!availablePaths.includes(priorityPath)) {
+          issues.push({
+            code: "PRIORITY_MAGIC_PATH_INVALID",
+            message: `Magic path "${rawMagicalPath}" is not available at priority ${magicLevel} — available: ${availablePaths.join(", ") || "none"}`,
+            field: "magicalPath",
+            severity: "error",
+          });
+        }
+      } else {
+        // Mundane with non-E magic priority is a waste
+        const magicOptions = table[magicLevel].magic.options;
+        if (magicOptions.length > 0) {
+          issues.push({
+            code: "PRIORITY_MAGIC_WASTED",
+            message: `Mundane character has magic priority ${magicLevel} — magic options are available but unused`,
+            field: "magicalPath",
+            severity: "warning",
+          });
+        }
+      }
+    }
+
+    return issues;
+  },
+};
+
 /**
  * Validate basic character info is complete
  */
@@ -1152,6 +1307,7 @@ const knowledgeBudgetValidator: ValidatorDefinition = {
 // =============================================================================
 
 const validators: ValidatorDefinition[] = [
+  priorityConsistencyValidator,
   basicInfoValidator,
   attributeValidator,
   identityValidator,
