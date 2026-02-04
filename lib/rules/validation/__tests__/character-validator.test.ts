@@ -1948,4 +1948,479 @@ describe("Character Validator", () => {
       );
     });
   });
+
+  // ===========================================================================
+  // SPELL VALIDATOR
+  // ===========================================================================
+
+  describe("spellValidator (via validateCharacter)", () => {
+    // Helper: ruleset with spell catalog and priority table
+    function createSpellRuleset(spellLimit = 10) {
+      return createMinimalRuleset({
+        modules: {
+          magic: {
+            spells: {
+              combat: [
+                {
+                  id: "stunbolt",
+                  name: "Stunbolt",
+                  category: "combat",
+                  type: "mana",
+                  range: "LOS",
+                  duration: "instant",
+                  drain: "F-3",
+                },
+                {
+                  id: "manabolt",
+                  name: "Manabolt",
+                  category: "combat",
+                  type: "mana",
+                  range: "LOS",
+                  duration: "instant",
+                  drain: "F-3",
+                },
+                {
+                  id: "powerbolt",
+                  name: "Powerbolt",
+                  category: "combat",
+                  type: "physical",
+                  range: "LOS",
+                  duration: "instant",
+                  drain: "F-3",
+                },
+              ],
+              detection: [
+                {
+                  id: "detect-life",
+                  name: "Detect Life",
+                  category: "detection",
+                  type: "mana",
+                  range: "Touch",
+                  duration: "sustained",
+                  drain: "F-3",
+                },
+              ],
+              health: [
+                {
+                  id: "heal",
+                  name: "Heal",
+                  category: "health",
+                  type: "mana",
+                  range: "Touch",
+                  duration: "permanent",
+                  drain: "F-4",
+                },
+              ],
+              illusion: [
+                {
+                  id: "invisibility",
+                  name: "Invisibility",
+                  category: "illusion",
+                  type: "mana",
+                  range: "LOS",
+                  duration: "sustained",
+                  drain: "F-1",
+                },
+              ],
+              manipulation: [
+                {
+                  id: "levitate",
+                  name: "Levitate",
+                  category: "manipulation",
+                  type: "physical",
+                  range: "LOS",
+                  duration: "sustained",
+                  drain: "F-2",
+                },
+              ],
+            },
+          },
+          priorities: {
+            table: {
+              A: {
+                metatype: {
+                  available: ["human", "elf", "dwarf", "ork", "troll"],
+                  specialAttributePoints: { human: 9 },
+                },
+                magic: {
+                  options: [
+                    { path: "magician", spells: spellLimit },
+                    { path: "mystic-adept", spells: spellLimit },
+                  ],
+                },
+              },
+              B: {
+                metatype: {
+                  available: ["human", "elf", "dwarf", "ork", "troll"],
+                  specialAttributePoints: { human: 7 },
+                },
+                magic: {
+                  options: [
+                    { path: "magician", spells: 7 },
+                    { path: "mystic-adept", spells: 7 },
+                    { path: "aspected-mage" },
+                  ],
+                },
+              },
+              C: {
+                metatype: {
+                  available: ["human", "elf", "dwarf", "ork"],
+                  specialAttributePoints: { human: 5 },
+                },
+                magic: { options: [] },
+              },
+              D: {
+                metatype: { available: ["human", "elf"], specialAttributePoints: { human: 3 } },
+                magic: { options: [] },
+              },
+              E: {
+                metatype: { available: ["human"], specialAttributePoints: { human: 1 } },
+                magic: { options: [] },
+              },
+            },
+          },
+        },
+      });
+    }
+
+    it("should produce no errors for valid spell allocation", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: ["stunbolt", "heal", "invisibility"],
+      });
+      const ruleset = createSpellRuleset();
+      const creationState = createMinimalCreationState({
+        priorities: { metatype: "B", attributes: "C", magic: "A", skills: "D", resources: "E" },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_DUPLICATE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_NOT_FOUND" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_ASPECT_RESTRICTED" })
+      );
+    });
+
+    it("should reject duplicate spell IDs", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: ["stunbolt", "heal", "stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_DUPLICATE",
+          field: "spells",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject unknown spell IDs", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: ["stunbolt", "totally-fake-spell"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_NOT_FOUND",
+          field: "spells",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject exceeding priority spell limit", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: ["stunbolt", "manabolt", "powerbolt"],
+      });
+      const ruleset = createSpellRuleset(2); // Limit of 2
+      const creationState = createMinimalCreationState({
+        priorities: { metatype: "B", attributes: "C", magic: "A", skills: "D", resources: "E" },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_LIMIT_EXCEEDED",
+          field: "spells",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject spells for aspected conjurer", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "aspected-mage",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          skillGroups: { conjuring: 4 },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_ASPECT_RESTRICTED",
+          field: "spells",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject spells for aspected enchanter", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "aspected-mage",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          skillGroups: { enchanting: 3 },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_ASPECT_RESTRICTED",
+          field: "spells",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should allow spells for aspected sorcerer", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "aspected-mage",
+        spells: ["stunbolt", "heal"],
+      });
+      const ruleset = createSpellRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          skillGroups: { sorcery: 4 },
+        } as CreationState["selections"],
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_ASPECT_RESTRICTED" })
+      );
+    });
+
+    it("should allow spells for full-mage", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: ["stunbolt", "heal"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_ASPECT_RESTRICTED" })
+      );
+    });
+
+    it("should allow spells for mystic-adept", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_ASPECT_RESTRICTED" })
+      );
+    });
+
+    it("should skip validation entirely for mundane characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_DUPLICATE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_NOT_FOUND" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_ASPECT_RESTRICTED" })
+      );
+    });
+
+    it("should skip validation entirely for adept characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_DUPLICATE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_NOT_FOUND" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" })
+      );
+    });
+
+    it("should skip validation entirely for technomancer characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "technomancer",
+        spells: ["stunbolt"],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_DUPLICATE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_NOT_FOUND" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_LIMIT_EXCEEDED" })
+      );
+    });
+
+    it("should handle CharacterSpell object format", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: [
+          { id: "spell-1", catalogId: "stunbolt", name: "Stunbolt" },
+          { id: "spell-2", catalogId: "heal", name: "Heal" },
+        ],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_NOT_FOUND" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SPELL_DUPLICATE" })
+      );
+    });
+
+    it("should detect duplicates in CharacterSpell object format", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        spells: [
+          { id: "spell-1", catalogId: "stunbolt", name: "Stunbolt" },
+          { id: "spell-2", catalogId: "stunbolt", name: "Stunbolt" },
+        ],
+      });
+      const ruleset = createSpellRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SPELL_DUPLICATE",
+          field: "spells",
+        })
+      );
+    });
+  });
 });

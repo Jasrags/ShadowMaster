@@ -33,8 +33,8 @@ import { validateAllQualities, validateKarmaLimits } from "../qualities";
 import { getModule } from "../merge";
 import { getGroupRating, isGroupBroken } from "../skills/group-utils";
 import type { CreationSelections } from "@/lib/types/creation-selections";
-import type { LanguageSkill, KnowledgeSkill } from "@/lib/types/character";
-import type { ComplexFormData, SkillGroupData } from "../loader-types";
+import type { LanguageSkill, KnowledgeSkill, CharacterSpell } from "@/lib/types/character";
+import type { ComplexFormData, SkillGroupData, SpellsCatalogData } from "../loader-types";
 import {
   canDesignateForFreeSkill,
   getFreeSkillAllocationStatus,
@@ -1085,6 +1085,160 @@ const complexFormValidator: ValidatorDefinition = {
 };
 
 // =============================================================================
+// SPELL VALIDATOR
+// =============================================================================
+
+/** Extract spell ID from mixed string | CharacterSpell format */
+function extractSpellId(entry: string | CharacterSpell): string {
+  return typeof entry === "string" ? entry : entry.catalogId;
+}
+
+/** Magical paths that can cast spells */
+const SPELL_CASTING_PATHS = ["full-mage", "aspected-mage", "mystic-adept"];
+
+/**
+ * Validate spell allocation for spellcasters
+ */
+const spellValidator: ValidatorDefinition = {
+  id: "spells",
+  name: "Spells",
+  description: "Validates spell allocation for spellcasters",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, ruleset, creationState } = context;
+
+    // Resolve magical path (same pattern as magicValidator)
+    const rawMagicalPath =
+      character.magicalPath && character.magicalPath !== "mundane"
+        ? character.magicalPath
+        : (creationState?.selections?.["magical-path"] as string | undefined);
+    const normalizedPath = rawMagicalPath
+      ? (MAGICAL_PATH_SELECTION_MAP[rawMagicalPath] ?? rawMagicalPath)
+      : undefined;
+
+    // Only applies to spellcasting paths
+    if (!normalizedPath || !SPELL_CASTING_PATHS.includes(normalizedPath)) {
+      return issues;
+    }
+
+    // Aspected mage restriction — only sorcery aspect can cast spells
+    if (normalizedPath === "aspected-mage") {
+      const skillGroups = creationState?.selections?.skillGroups;
+      if (skillGroups) {
+        const groupKeys = Object.keys(skillGroups);
+        const hasSorcery = groupKeys.includes("sorcery");
+        const hasConjuring = groupKeys.includes("conjuring");
+        const hasEnchanting = groupKeys.includes("enchanting");
+
+        if ((hasConjuring || hasEnchanting) && !hasSorcery) {
+          issues.push({
+            code: "SPELL_ASPECT_RESTRICTED",
+            message: `Aspected ${hasConjuring ? "conjurer" : "enchanter"} cannot select spells — only sorcery-aspected mages can cast spells`,
+            field: "spells",
+            severity: "error",
+          });
+          return issues;
+        }
+      }
+      // No magical group selected yet — skip aspect check (allow incomplete state)
+    }
+
+    const spellEntries = character.spells || [];
+    if (spellEntries.length === 0) {
+      return issues; // NO_SPELLS is already handled by magicValidator
+    }
+
+    const spellIds = spellEntries.map(extractSpellId);
+
+    // Spell limit check from priority table
+    if (creationState?.priorities?.magic) {
+      const magicLevel = creationState.priorities.magic;
+      const prioritiesModule = getModule<{
+        table: Record<
+          string,
+          {
+            magic: {
+              options: Array<{ path: string; spells?: number }>;
+            };
+          }
+        >;
+      }>(ruleset, "priorities");
+
+      if (prioritiesModule?.table) {
+        const levelData = prioritiesModule.table[magicLevel];
+        if (levelData?.magic?.options) {
+          // Map character path to priority table path
+          const priorityPath = CHARACTER_TO_PRIORITY_PATH[normalizedPath] ?? normalizedPath;
+          const matchingOption = levelData.magic.options.find((o) => o.path === priorityPath);
+          if (matchingOption?.spells !== undefined && spellIds.length > matchingOption.spells) {
+            issues.push({
+              code: "SPELL_LIMIT_EXCEEDED",
+              message: `Cannot select more than ${matchingOption.spells} spells (selected: ${spellIds.length})`,
+              field: "spells",
+              severity: "error",
+            });
+          }
+        }
+      }
+    }
+
+    // Get spells catalog from merged ruleset
+    const magicModule = getModule<{ spells?: SpellsCatalogData }>(ruleset, "magic");
+    const spellsCatalog = magicModule?.spells;
+
+    // Flatten all spell categories into a single lookup set
+    const catalogSpellIds = new Set<string>();
+    if (spellsCatalog) {
+      for (const category of Object.values(spellsCatalog)) {
+        if (Array.isArray(category)) {
+          for (const spell of category) {
+            catalogSpellIds.add(spell.id);
+          }
+        }
+      }
+    }
+
+    const invalidSpells: string[] = [];
+    const duplicateSpells: string[] = [];
+    const seenSpells = new Set<string>();
+
+    for (const spellId of spellIds) {
+      if (seenSpells.has(spellId)) {
+        duplicateSpells.push(spellId);
+      } else {
+        seenSpells.add(spellId);
+      }
+
+      if (catalogSpellIds.size > 0 && !catalogSpellIds.has(spellId)) {
+        invalidSpells.push(spellId);
+      }
+    }
+
+    if (invalidSpells.length > 0) {
+      issues.push({
+        code: "SPELL_NOT_FOUND",
+        message: `Spells not found in ruleset: ${invalidSpells.join(", ")}`,
+        field: "spells",
+        severity: "error",
+      });
+    }
+
+    if (duplicateSpells.length > 0) {
+      issues.push({
+        code: "SPELL_DUPLICATE",
+        message: `Duplicate spells selected: ${duplicateSpells.join(", ")}`,
+        field: "spells",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
 // SKILL GROUP CONSTRAINT VALIDATOR
 // =============================================================================
 
@@ -1314,6 +1468,7 @@ const validators: ValidatorDefinition[] = [
   magicValidator,
   qualityValidator,
   complexFormValidator,
+  spellValidator,
   skillGroupConstraintValidator,
   freeSkillValidator,
   contactValidator,
