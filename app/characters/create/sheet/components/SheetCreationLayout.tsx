@@ -84,6 +84,23 @@ const FociCard = dynamic(
 // TYPES
 // =============================================================================
 
+interface ServerValidationResult {
+  errors: Array<{
+    code: string;
+    message: string;
+    field?: string;
+    severity: string;
+    suggestion?: string;
+  }>;
+  warnings: Array<{
+    code: string;
+    message: string;
+    field?: string;
+    severity: string;
+    suggestion?: string;
+  }>;
+}
+
 interface SheetCreationLayoutProps {
   creationState: CreationState;
   updateState: (updates: Partial<CreationState>) => void;
@@ -94,6 +111,7 @@ interface SheetCreationLayoutProps {
   onRetry?: () => void;
   campaignId?: string;
   campaign?: Campaign | null;
+  serverValidation?: ServerValidationResult | null;
 }
 
 // =============================================================================
@@ -601,74 +619,167 @@ function ValidationSummary({
   lastSaved,
   saveError,
   onRetry,
+  serverValidation,
+  creationState,
 }: {
   onFinalize: () => void;
   isSaving: boolean;
   lastSaved: Date | null;
   saveError?: string | null;
   onRetry?: () => void;
+  serverValidation?: ServerValidationResult | null;
+  creationState: CreationState;
 }) {
   const { canFinalize, isValid, errors } = useCreationBudgets();
 
+  const hasServerErrors = serverValidation && serverValidation.errors.length > 0;
+  const hasServerWarnings = serverValidation && serverValidation.warnings.length > 0;
+
+  // Compute incomplete requirements matching server-side finalization validators
+  const incompleteItems = useMemo(() => {
+    const items: string[] = [];
+    const priorities = creationState.priorities || {};
+    const selections = creationState.selections || {};
+
+    if (Object.keys(priorities).length < 5) items.push("Set all 5 priorities");
+    if (!selections.metatype) items.push("Select a metatype");
+    if (!selections["magical-path"]) items.push("Select a magic/resonance path");
+    if (!selections.identities || selections.identities.length === 0)
+      items.push("Add at least one identity (SIN)");
+    if (!selections.lifestyles || selections.lifestyles.length === 0)
+      items.push("Add at least one lifestyle");
+
+    return items;
+  }, [creationState.priorities, creationState.selections]);
+
   return (
-    <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
-      {/* Left: status info */}
-      <div className="flex items-center gap-4 text-xs">
-        {saveError ? (
-          <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
-            <AlertCircle className="h-3 w-3" />
-            <span>Save failed</span>
-            {onRetry && (
-              <button onClick={onRetry} className="font-medium underline hover:no-underline">
-                Retry
-              </button>
-            )}
+    <div>
+      {/* Completion checklist */}
+      {incompleteItems.length > 0 && (
+        <div className="border-b border-blue-200 bg-blue-50 px-4 py-2.5 dark:border-blue-900/50 dark:bg-blue-950/30 sm:px-6">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-blue-600 dark:text-blue-400" />
+            <div className="flex min-w-0 flex-wrap gap-x-3 gap-y-1 text-xs text-blue-800 dark:text-blue-200">
+              {incompleteItems.map((item) => (
+                <span key={item} className="flex items-center gap-1">
+                  <span className="text-blue-400 dark:text-blue-500">&bull;</span>
+                  {item}
+                </span>
+              ))}
+            </div>
           </div>
-        ) : isSaving ? (
-          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
-            <Loader2 className="h-3 w-3 animate-spin" />
-            Saving...
-          </div>
-        ) : lastSaved ? (
-          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
-            <Save className="h-3 w-3" />
-            Saved {lastSaved.toLocaleTimeString()}
-          </div>
-        ) : (
-          <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
-            <Clock className="h-3 w-3" />
-            Not yet saved
-          </div>
-        )}
+        </div>
+      )}
 
-        {!isValid && errors.length > 0 && (
-          <span className="text-red-600 dark:text-red-400">
-            Fix {errors.length} error{errors.length !== 1 ? "s" : ""} to continue
-          </span>
-        )}
+      {/* Server validation errors panel */}
+      {hasServerErrors && (
+        <div className="border-b border-red-200 bg-red-50 px-4 py-3 dark:border-red-900/50 dark:bg-red-950/30 sm:px-6">
+          <div className="flex items-start gap-2">
+            <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-red-600 dark:text-red-400" />
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-red-800 dark:text-red-200">
+                Cannot finalize character
+              </p>
+              <ul className="mt-1 space-y-1">
+                {serverValidation.errors.map((err, i) => (
+                  <li key={i} className="text-xs text-red-700 dark:text-red-300">
+                    {err.message}
+                    {err.suggestion && (
+                      <span className="ml-1 text-red-600 dark:text-red-400">
+                        — {err.suggestion}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Server validation warnings panel */}
+      {hasServerWarnings && (
+        <div className="border-b border-amber-200 bg-amber-50 px-4 py-3 dark:border-amber-900/50 dark:bg-amber-950/30 sm:px-6">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <div className="min-w-0">
+              <ul className="space-y-1">
+                {serverValidation.warnings.map((warn, i) => (
+                  <li key={i} className="text-xs text-amber-700 dark:text-amber-300">
+                    {warn.message}
+                    {warn.suggestion && (
+                      <span className="ml-1 text-amber-600 dark:text-amber-400">
+                        — {warn.suggestion}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Existing status bar */}
+      <div className="flex items-center justify-between gap-4 px-4 py-3 sm:px-6">
+        {/* Left: status info */}
+        <div className="flex items-center gap-4 text-xs">
+          {saveError ? (
+            <div className="flex items-center gap-2 text-red-600 dark:text-red-400">
+              <AlertCircle className="h-3 w-3" />
+              <span>Save failed</span>
+              {onRetry && (
+                <button onClick={onRetry} className="font-medium underline hover:no-underline">
+                  Retry
+                </button>
+              )}
+            </div>
+          ) : isSaving ? (
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              Saving...
+            </div>
+          ) : lastSaved ? (
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <Save className="h-3 w-3" />
+              Saved {lastSaved.toLocaleTimeString()}
+            </div>
+          ) : (
+            <div className="flex items-center gap-2 text-zinc-500 dark:text-zinc-400">
+              <Clock className="h-3 w-3" />
+              Not yet saved
+            </div>
+          )}
+
+          {!isValid && errors.length > 0 && (
+            <span className="text-red-600 dark:text-red-400">
+              Fix {errors.length} error{errors.length !== 1 ? "s" : ""} to continue
+            </span>
+          )}
+        </div>
+
+        {/* Right: finalize button */}
+        <button
+          onClick={onFinalize}
+          disabled={!canFinalize || isSaving}
+          className={`shrink-0 rounded-lg px-6 py-2 text-sm font-medium transition-colors ${
+            canFinalize && !isSaving
+              ? "bg-emerald-600 text-white hover:bg-emerald-700"
+              : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
+          }`}
+        >
+          {isSaving ? (
+            <span className="flex items-center gap-2">
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Saving...
+            </span>
+          ) : canFinalize ? (
+            "Create Character"
+          ) : (
+            "Complete All Sections"
+          )}
+        </button>
       </div>
-
-      {/* Right: finalize button */}
-      <button
-        onClick={onFinalize}
-        disabled={!canFinalize || isSaving}
-        className={`shrink-0 rounded-lg px-6 py-2 text-sm font-medium transition-colors ${
-          canFinalize && !isSaving
-            ? "bg-emerald-600 text-white hover:bg-emerald-700"
-            : "cursor-not-allowed bg-zinc-100 text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500"
-        }`}
-      >
-        {isSaving ? (
-          <span className="flex items-center gap-2">
-            <Loader2 className="h-4 w-4 animate-spin" />
-            Saving...
-          </span>
-        ) : canFinalize ? (
-          "Create Character"
-        ) : (
-          "Complete All Sections"
-        )}
-      </button>
     </div>
   );
 }
@@ -687,6 +798,7 @@ export function SheetCreationLayout({
   onRetry,
   campaignId: _campaignId, // Used in Phase 5+
   campaign: _campaign, // Used in Phase 5+
+  serverValidation,
 }: SheetCreationLayoutProps) {
   // Determine what sections are available based on selections
   const magicPath = creationState.selections["magical-path"] as string | undefined;
@@ -830,6 +942,8 @@ export function SheetCreationLayout({
           lastSaved={lastSaved}
           saveError={saveError}
           onRetry={onRetry}
+          serverValidation={serverValidation}
+          creationState={creationState}
         />
       </div>
     </div>
