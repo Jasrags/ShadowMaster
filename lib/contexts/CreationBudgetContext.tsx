@@ -32,6 +32,7 @@ import {
   type FreeSkillDesignations,
 } from "../rules/skills/free-skills";
 import { FREE_SKILL_TYPE_LABELS } from "@/components/creation/magic-path/constants";
+import { calculateBrokenGroupSkillPointOffset } from "../rules/skills/group-utils";
 
 // =============================================================================
 // SKILL CATEGORY HELPERS
@@ -304,7 +305,8 @@ function extractSpentValues(
   totals: Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }>,
   priorityTable: PriorityTableData | null,
   priorities: Record<string, string> | undefined,
-  skillCategories: Record<string, string | undefined>
+  skillCategories: Record<string, string | undefined>,
+  skillGroupDefs: { id: string; skills: string[] }[] = []
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -369,9 +371,17 @@ function extractSpentValues(
     }
   }
 
+  // Extract skill groups early - needed for both skill-points offset and group-points calculation
+  // Handles both legacy (number) and new ({ rating, isBroken }) formats
+  const skillGroups = (selections.skillGroups || {}) as Record<
+    string,
+    number | { rating: number; isBroken: boolean }
+  >;
+
   // Calculate skill points spent from selections
   // Subtract rating points purchased with karma (those don't count against skill point budget)
   // Subtract free skill points from magic priority (those don't count against skill point budget)
+  // Subtract broken group base ratings (already funded by group points)
   // Include specializations (1 skill point each during creation)
   const skills = (selections.skills || {}) as Record<string, number>;
   const totalSkillRatings = Object.values(skills).reduce((sum, rating) => sum + rating, 0);
@@ -408,16 +418,19 @@ function extractSpentValues(
     ? calculateFreePointsFromDesignations(skills, freeSkillConfigs, freeSkillDesignations)
     : calculateFreeSkillPointsUsed(skills, freeSkillConfigs, skillCategories);
 
-  spent["skill-points"] = totalSkillRatings + totalSpecPoints - karmaRatingPoints - freeSkillPoints;
+  // Calculate broken group offset: base ratings already funded by group points
+  const brokenGroupOffset = calculateBrokenGroupSkillPointOffset(
+    skillGroups,
+    skills,
+    skillGroupDefs
+  );
+
+  spent["skill-points"] =
+    totalSkillRatings + totalSpecPoints - karmaRatingPoints - freeSkillPoints - brokenGroupOffset;
 
   // Calculate skill group points spent from selections
-  // Handles both legacy (number) and new ({ rating, isBroken }) formats
   // Subtract karma-purchased group rating points - they don't count against group point budget
   // Subtract free skill group points from magic priority (aspected mages)
-  const skillGroups = (selections.skillGroups || {}) as Record<
-    string,
-    number | { rating: number; isBroken: boolean }
-  >;
   const totalGroupRatings = Object.values(skillGroups).reduce<number>((sum, value) => {
     const rating = typeof value === "number" ? value : value.rating;
     return sum + rating;
@@ -848,8 +861,8 @@ export function CreationBudgetProvider({
 
   const validationTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Get skill data from ruleset for category lookups
-  const { activeSkills } = useSkills();
+  // Get skill data from ruleset for category lookups and group definitions
+  const { activeSkills, skillGroups: skillGroupDefs } = useSkills();
   const skillCategories = useMemo(() => buildSkillCategoriesMap(activeSkills), [activeSkills]);
 
   // Calculate budget totals from priorities
@@ -873,7 +886,8 @@ export function CreationBudgetProvider({
         budgetTotals,
         priorityTable,
         creationState.priorities,
-        skillCategories
+        skillCategories,
+        skillGroupDefs
       ),
     [
       creationState.budgets,
@@ -882,6 +896,7 @@ export function CreationBudgetProvider({
       priorityTable,
       creationState.priorities,
       skillCategories,
+      skillGroupDefs,
     ]
   );
 

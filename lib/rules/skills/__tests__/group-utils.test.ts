@@ -19,6 +19,7 @@ import {
   calculateSpecializationKarmaCost,
   canRestoreGroup,
   calculateGroupPointsSpent,
+  calculateBrokenGroupSkillPointOffset,
   getActiveGroups,
   getBrokenGroups,
   type NormalizedGroupValue,
@@ -356,6 +357,141 @@ describe("Skill Group Utilities", () => {
 
     it("should return empty object for empty input", () => {
       expect(getBrokenGroups({})).toEqual({});
+    });
+  });
+
+  // ===========================================================================
+  // BROKEN GROUP SKILL POINT OFFSET
+  // ===========================================================================
+
+  describe("calculateBrokenGroupSkillPointOffset", () => {
+    const firearmsGroupDef = { id: "firearms", skills: ["automatics", "longarms", "pistols"] };
+    const stealthGroupDef = { id: "stealth", skills: ["disguise", "palming", "sneaking"] };
+
+    it("should return 0 when no groups are broken", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: false },
+      };
+      const skills = { automatics: 5, longarms: 5, pistols: 5 };
+
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(0);
+    });
+
+    it("should return 0 when no skill group definitions provided", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: true },
+      };
+      const skills = { automatics: 5, longarms: 5, pistols: 6 };
+
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [])).toBe(0);
+    });
+
+    it("should calculate offset for a single broken group", () => {
+      // Firearms group at rating 5, broken by raising pistols to 6
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: true },
+      };
+      const skills = { automatics: 5, longarms: 5, pistols: 6 };
+
+      // offset = min(5,5) + min(5,5) + min(6,5) = 5 + 5 + 5 = 15
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(
+        15
+      );
+    });
+
+    it("should calculate offset for multiple broken groups", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: true },
+        stealth: { rating: 3, isBroken: true },
+      };
+      const skills = {
+        automatics: 5,
+        longarms: 5,
+        pistols: 6,
+        disguise: 3,
+        palming: 4,
+        sneaking: 3,
+      };
+
+      // firearms offset = min(5,5) + min(5,5) + min(6,5) = 15
+      // stealth offset = min(3,3) + min(4,3) + min(3,3) = 3 + 3 + 3 = 9
+      expect(
+        calculateBrokenGroupSkillPointOffset(skillGroups, skills, [
+          firearmsGroupDef,
+          stealthGroupDef,
+        ])
+      ).toBe(24);
+    });
+
+    it("should handle member skills missing from individual skills map", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: true },
+      };
+      // Only pistols is in skills - automatics and longarms are missing
+      const skills = { pistols: 6 };
+
+      // offset = min(6,5) = 5 (automatics and longarms are skipped)
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(5);
+    });
+
+    it("should ignore non-broken groups", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: false },
+        stealth: { rating: 3, isBroken: true },
+      };
+      const skills = {
+        automatics: 5,
+        longarms: 5,
+        pistols: 5,
+        disguise: 3,
+        palming: 4,
+        sneaking: 3,
+      };
+
+      // Only stealth is broken: min(3,3) + min(4,3) + min(3,3) = 9
+      expect(
+        calculateBrokenGroupSkillPointOffset(skillGroups, skills, [
+          firearmsGroupDef,
+          stealthGroupDef,
+        ])
+      ).toBe(9);
+    });
+
+    it("should handle group not found in definitions", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        "unknown-group": { rating: 5, isBroken: true },
+      };
+      const skills = { "skill-a": 5 };
+
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(0);
+    });
+
+    it("should handle empty inputs", () => {
+      expect(calculateBrokenGroupSkillPointOffset({}, {}, [])).toBe(0);
+      expect(calculateBrokenGroupSkillPointOffset({}, {}, [firearmsGroupDef])).toBe(0);
+      expect(calculateBrokenGroupSkillPointOffset({}, { pistols: 5 }, [firearmsGroupDef])).toBe(0);
+    });
+
+    it("should handle member skill with rating 0", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 5, isBroken: true },
+      };
+      const skills = { automatics: 0, longarms: 5, pistols: 6 };
+
+      // offset = 0 (automatics skipped) + min(5,5) + min(6,5) = 0 + 5 + 5 = 10
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(
+        10
+      );
+    });
+
+    it("should handle broken group with rating 0", () => {
+      const skillGroups: Record<string, SkillGroupValue> = {
+        firearms: { rating: 0, isBroken: true },
+      };
+      const skills = { automatics: 1, longarms: 1, pistols: 2 };
+
+      // Group rating is 0, so early continue - offset = 0
+      expect(calculateBrokenGroupSkillPointOffset(skillGroups, skills, [firearmsGroupDef])).toBe(0);
     });
   });
 });

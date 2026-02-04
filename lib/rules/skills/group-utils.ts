@@ -187,6 +187,52 @@ export function canRestoreGroup(
 // =============================================================================
 
 /**
+ * Calculate the skill rating points from broken groups that are already
+ * funded by skill group points and should be subtracted from the
+ * skill-points budget.
+ *
+ * When a group is broken, its member skills are added to `selections.skills`
+ * at their full ratings. But the base ratings (up to the group rating) were
+ * already paid for by skill-group-points. This function calculates that
+ * overlap so the budget calculation can subtract it.
+ *
+ * @param skillGroups - Map of group ID to skill group value (from selections)
+ * @param skills - Map of skill ID to rating (from selections)
+ * @param skillGroupDefs - Skill group definitions with member skill IDs (from ruleset)
+ * @returns Total skill rating points already funded by group points
+ */
+export function calculateBrokenGroupSkillPointOffset(
+  skillGroups: Record<string, SkillGroupValue>,
+  skills: Record<string, number>,
+  skillGroupDefs: { id: string; skills: string[] }[]
+): number {
+  if (skillGroupDefs.length === 0) return 0;
+
+  let offset = 0;
+
+  for (const [groupId, value] of Object.entries(skillGroups)) {
+    if (!isGroupBroken(value)) continue;
+
+    const groupRating = getGroupRating(value);
+    if (groupRating === 0) continue;
+
+    // Find the group definition to get member skill IDs
+    const groupDef = skillGroupDefs.find((def) => def.id === groupId);
+    if (!groupDef) continue;
+
+    for (const memberSkillId of groupDef.skills) {
+      const memberRating = skills[memberSkillId];
+      if (memberRating === undefined || memberRating === 0) continue;
+
+      // The base portion (up to groupRating) is funded by group points
+      offset += Math.min(memberRating, groupRating);
+    }
+  }
+
+  return offset;
+}
+
+/**
  * Calculate total skill group points spent.
  *
  * Only counts non-broken groups toward the budget.
