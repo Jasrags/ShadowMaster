@@ -30,6 +30,11 @@ import {
   type ValidationContext,
 } from "../constraint-validation";
 import { validateAllQualities, validateKarmaLimits } from "../qualities";
+import { getModule } from "../merge";
+import { getGroupRating, isGroupBroken } from "../skills/group-utils";
+import type { CreationSelections } from "@/lib/types/creation-selections";
+import type { LanguageSkill } from "@/lib/types/character";
+import type { ComplexFormData, SkillGroupData } from "../loader-types";
 
 // =============================================================================
 // CORE VALIDATORS
@@ -258,7 +263,7 @@ const magicValidator: ValidatorDefinition = {
         code: "NO_COMPLEX_FORMS",
         message: "Technomancer has no complex forms selected",
         field: "complexForms",
-        severity: "warning",
+        severity: context.mode === "finalization" ? "error" : "warning",
       });
     }
 
@@ -366,6 +371,307 @@ const campaignValidator: ValidatorDefinition = {
 };
 
 // =============================================================================
+// COMPLEX FORM VALIDATOR
+// =============================================================================
+
+/**
+ * Validate complex form allocation for technomancers
+ */
+const complexFormValidator: ValidatorDefinition = {
+  id: "complex-forms",
+  name: "Complex Forms",
+  description: "Validates complex form allocation for technomancers",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, ruleset } = context;
+
+    // Only applies to technomancers
+    if (character.magicalPath !== "technomancer") {
+      return issues;
+    }
+
+    const formIds = character.complexForms || [];
+    if (formIds.length === 0) {
+      return issues; // NO_COMPLEX_FORMS is already handled by magicValidator
+    }
+
+    // Get form limit from resonance rating (SR5: Resonance × 2)
+    const resonance = character.specialAttributes?.resonance ?? 0;
+    const formLimit = resonance * 2;
+
+    // Check form limit
+    if (formIds.length > formLimit) {
+      issues.push({
+        code: "CF_LIMIT_EXCEEDED",
+        message: `Cannot select more than ${formLimit} complex forms (selected: ${formIds.length})`,
+        field: "complexForms",
+        severity: "error",
+      });
+    }
+
+    // Get complex forms catalog from merged ruleset
+    const magicModule = getModule<{ complexForms?: ComplexFormData[] }>(ruleset, "magic");
+    const formsCatalog = magicModule?.complexForms || [];
+
+    const invalidForms: string[] = [];
+    const duplicateForms: string[] = [];
+    const seenForms = new Set<string>();
+
+    for (const formId of formIds) {
+      if (seenForms.has(formId)) {
+        duplicateForms.push(formId);
+      } else {
+        seenForms.add(formId);
+      }
+
+      if (!formsCatalog.find((f) => f.id === formId)) {
+        invalidForms.push(formId);
+      }
+    }
+
+    if (invalidForms.length > 0) {
+      issues.push({
+        code: "CF_NOT_FOUND",
+        message: `Complex forms not found in ruleset: ${invalidForms.join(", ")}`,
+        field: "complexForms",
+        severity: "error",
+      });
+    }
+
+    if (duplicateForms.length > 0) {
+      issues.push({
+        code: "CF_DUPLICATE",
+        message: `Duplicate complex forms selected: ${duplicateForms.join(", ")}`,
+        field: "complexForms",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
+// SKILL GROUP CONSTRAINT VALIDATOR
+// =============================================================================
+
+/**
+ * Validate skill group constraints - individual skill points cannot be
+ * allocated to skills in an active (non-broken) group during creation.
+ * Only karma can be used to raise skills within an active group.
+ */
+const skillGroupConstraintValidator: ValidatorDefinition = {
+  id: "skill-group-constraints",
+  name: "Skill Group Constraints",
+  description: "Validates that individual skill points are not used in active skill groups",
+  modes: ["creation", "finalization"],
+  priority: 7,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { creationState, ruleset } = context;
+
+    if (!creationState) return issues;
+
+    const selections = creationState.selections as CreationSelections;
+    const skillGroups = selections.skillGroups || {};
+    const skills = (selections.skills || {}) as Record<string, number>;
+    const skillKarmaSpent = selections.skillKarmaSpent;
+
+    // Get skill group definitions from merged ruleset to map group -> member skills
+    const skillsModule = getModule<{ skillGroups?: SkillGroupData[] }>(ruleset, "skills");
+    const skillGroupDefs = skillsModule?.skillGroups || [];
+
+    for (const [groupId, groupValue] of Object.entries(skillGroups)) {
+      // Broken groups are exempt - individual allocation is allowed
+      if (isGroupBroken(groupValue)) continue;
+
+      const rating = getGroupRating(groupValue);
+      if (rating === 0) continue;
+
+      // Find the group definition
+      const groupDef = skillGroupDefs.find((def) => def.id === groupId);
+      if (!groupDef) continue;
+
+      // Check if any member skill has individual skill points allocated
+      for (const memberSkillId of groupDef.skills) {
+        const memberRating = skills[memberSkillId];
+        if (memberRating === undefined || memberRating === 0) continue;
+
+        // Check if this raise was done via karma (which is allowed)
+        const hasKarmaRaise =
+          skillKarmaSpent?.skillRaises?.[memberSkillId] !== undefined &&
+          skillKarmaSpent.skillRaises[memberSkillId] > 0;
+
+        if (!hasKarmaRaise) {
+          issues.push({
+            code: "SG_INDIVIDUAL_SKILL_IN_GROUP",
+            message: `Skill "${memberSkillId}" cannot use skill points while in active group "${groupId}" (use karma instead)`,
+            field: `skills.${memberSkillId}`,
+            severity: "error",
+            suggestion: "Break the skill group first, or use karma to raise individual skills",
+          });
+        }
+      }
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
+// CONTACT BUDGET VALIDATOR
+// =============================================================================
+
+/**
+ * Validate contact point budget during character creation.
+ * Free pool = Charisma × 3. Overflow costs karma.
+ */
+const contactBudgetValidator: ValidatorDefinition = {
+  id: "contact-budget",
+  name: "Contact Budget",
+  description: "Validates contact point allocation against charisma-based budget",
+  modes: ["creation", "finalization"],
+  priority: 8,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState } = context;
+
+    if (!creationState) return issues;
+
+    const selections = creationState.selections as CreationSelections;
+    const contacts = selections.contacts || [];
+
+    // Validate individual contact ratings
+    for (let i = 0; i < contacts.length; i++) {
+      const contact = contacts[i];
+      if (contact.connection < 1) {
+        issues.push({
+          code: "CONTACT_INVALID_CONNECTION",
+          message: `Contact "${contact.name || `#${i + 1}`}" has invalid connection rating (${contact.connection}), minimum is 1`,
+          field: `contacts[${i}].connection`,
+          severity: "error",
+        });
+      }
+      if (contact.loyalty < 1) {
+        issues.push({
+          code: "CONTACT_INVALID_LOYALTY",
+          message: `Contact "${contact.name || `#${i + 1}`}" has invalid loyalty rating (${contact.loyalty}), minimum is 1`,
+          field: `contacts[${i}].loyalty`,
+          severity: "error",
+        });
+      }
+    }
+
+    // Calculate free pool and total cost
+    const charisma = character.attributes?.charisma ?? 0;
+    const freePool = charisma * 3;
+    const totalCost = contacts.reduce((sum, c) => sum + (c.connection || 0) + (c.loyalty || 0), 0);
+    const overflow = totalCost - freePool;
+
+    if (overflow > 0) {
+      issues.push({
+        code: "CONTACT_KARMA_OVERFLOW",
+        message: `Contact points exceed free pool by ${overflow} (${totalCost} spent, ${freePool} free from CHA × 3). Overflow costs karma.`,
+        field: "contacts",
+        severity: "info",
+      });
+    }
+
+    // At finalization, warn if no contacts selected
+    if (context.mode === "finalization" && contacts.length === 0) {
+      issues.push({
+        code: "CONTACT_NONE_SELECTED",
+        message: "No contacts selected — consider adding contacts for your character",
+        field: "contacts",
+        severity: "warning",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
+// KNOWLEDGE POINT BUDGET VALIDATOR
+// =============================================================================
+
+/**
+ * Validate knowledge point budget during character creation.
+ * Budget = (Intuition + Logic) × 2.
+ */
+const knowledgeBudgetValidator: ValidatorDefinition = {
+  id: "knowledge-budget",
+  name: "Knowledge Budget",
+  description: "Validates knowledge and language point allocation",
+  modes: ["creation", "finalization"],
+  priority: 9,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState } = context;
+
+    if (!creationState) return issues;
+
+    const selections = creationState.selections as CreationSelections;
+    const languages = (selections.languages || []) as LanguageSkill[];
+    const knowledgeSkills = (selections.knowledgeSkills || []) as Array<{ rating: number }>;
+
+    // Calculate budget: (Intuition + Logic) × 2
+    const intuition = character.attributes?.intuition ?? 0;
+    const logic = character.attributes?.logic ?? 0;
+    const budget = (intuition + logic) * 2;
+
+    // Calculate spent: sum of ratings excluding native languages
+    const languagePointsSpent = languages
+      .filter((lang) => !lang.isNative)
+      .reduce((sum, lang) => sum + (lang.rating || 0), 0);
+    const knowledgePointsSpent = knowledgeSkills.reduce(
+      (sum, skill) => sum + (skill.rating || 0),
+      0
+    );
+    const totalSpent = languagePointsSpent + knowledgePointsSpent;
+
+    // Over budget → error
+    if (totalSpent > budget) {
+      issues.push({
+        code: "KNOWLEDGE_BUDGET_EXCEEDED",
+        message: `Knowledge points exceed budget: ${totalSpent} spent, ${budget} available ((INT ${intuition} + LOG ${logic}) × 2)`,
+        field: "knowledgeSkills",
+        severity: "error",
+      });
+    }
+
+    if (context.mode === "finalization") {
+      // No native language at finalization → warning
+      const hasNative = languages.some((lang) => lang.isNative);
+      if (!hasNative) {
+        issues.push({
+          code: "KNOWLEDGE_NO_NATIVE_LANGUAGE",
+          message: "No native language selected",
+          field: "languages",
+          severity: "warning",
+          suggestion: "Select a native language for your character",
+        });
+      }
+
+      // Unspent points at finalization → warning
+      const remaining = budget - totalSpent;
+      if (remaining > 0) {
+        issues.push({
+          code: "KNOWLEDGE_POINTS_REMAINING",
+          message: `${remaining} knowledge points remaining — consider adding more knowledge skills or languages`,
+          field: "knowledgeSkills",
+          severity: "warning",
+        });
+      }
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
 // VALIDATOR REGISTRY
 // =============================================================================
 
@@ -375,6 +681,10 @@ const validators: ValidatorDefinition[] = [
   identityValidator,
   magicValidator,
   qualityValidator,
+  complexFormValidator,
+  skillGroupConstraintValidator,
+  contactBudgetValidator,
+  knowledgeBudgetValidator,
   campaignValidator,
 ];
 
