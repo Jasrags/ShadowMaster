@@ -99,6 +99,24 @@ function SheetCreationContent({
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [serverValidation, setServerValidation] = useState<{
+    errors: Array<{
+      code: string;
+      message: string;
+      field?: string;
+      severity: string;
+      suggestion?: string;
+    }>;
+    warnings: Array<{
+      code: string;
+      message: string;
+      field?: string;
+      severity: string;
+      suggestion?: string;
+    }>;
+  } | null>(null);
+  const serverValidationRef = useRef(serverValidation);
+  serverValidationRef.current = serverValidation;
 
   // Refs for managing auto-save race conditions
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -162,6 +180,9 @@ function SheetCreationContent({
 
   // Update creation state
   const updateState = useCallback((updates: Partial<CreationState>) => {
+    if (serverValidationRef.current) {
+      setServerValidation(null);
+    }
     setCreationState((prev) => ({
       ...prev,
       ...updates,
@@ -317,12 +338,25 @@ function SheetCreationContent({
   const handleFinalize = useCallback(async () => {
     if (!characterId) return;
 
+    setServerValidation(null);
     setIsSaving(true);
     try {
       const res = await fetch(`/api/characters/${characterId}/finalize`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
       });
+
+      if (res.status === 400) {
+        const data = await res.json();
+        if (data.validation) {
+          setServerValidation({
+            errors: data.validation.errors || [],
+            warnings: data.validation.warnings || [],
+          });
+          return;
+        }
+      }
+
       if (!res.ok) {
         throw new Error(`HTTP ${res.status}`);
       }
@@ -407,6 +441,7 @@ function SheetCreationContent({
           onRetry={handleRetry}
           campaignId={campaignId}
           campaign={campaign}
+          serverValidation={serverValidation}
         />
       </CreationBudgetProvider>
     );
