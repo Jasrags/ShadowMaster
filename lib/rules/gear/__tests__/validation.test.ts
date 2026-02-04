@@ -550,6 +550,215 @@ describe("validateAllGear - Multiple Issues", () => {
 // CONSTANTS TESTS
 // =============================================================================
 
+// =============================================================================
+// DRONE VALIDATION TESTS
+// =============================================================================
+
+describe("validateAllGear - Drones", () => {
+  it("should pass for drones with availability <= 12", () => {
+    const character = createTestCharacter({
+      drones: [
+        {
+          catalogId: "mct-fly-spy",
+          name: "MCT Fly-Spy",
+          size: "mini",
+          handling: 4,
+          speed: 3,
+          acceleration: 3,
+          body: 1,
+          armor: 0,
+          pilot: 3,
+          sensor: 3,
+          cost: 2000,
+          availability: 8,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it("should fail for drones with availability > 12 at creation", () => {
+    const character = createTestCharacter({
+      drones: [
+        {
+          catalogId: "ares-paladin",
+          name: "Ares Paladin",
+          size: "large",
+          handling: 3,
+          speed: 4,
+          acceleration: 3,
+          body: 6,
+          armor: 12,
+          pilot: 4,
+          sensor: 4,
+          cost: 75000,
+          availability: 18,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_EXCEEDED");
+    expect(result.errors[0].itemType).toBe("drone");
+    expect(result.errors[0].itemName).toBe("Ares Paladin");
+  });
+
+  it("should fail for drones with restricted legality at creation", () => {
+    const character = createTestCharacter({
+      drones: [
+        {
+          catalogId: "steel-lynx",
+          name: "Steel Lynx",
+          size: "medium",
+          handling: 5,
+          speed: 4,
+          acceleration: 3,
+          body: 4,
+          armor: 6,
+          pilot: 3,
+          sensor: 3,
+          cost: 25000,
+          availability: 10,
+          legality: "restricted",
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_RESTRICTED");
+    expect(result.errors[0].itemType).toBe("drone");
+  });
+
+  it("should fail for drones with forbidden legality at creation", () => {
+    const character = createTestCharacter({
+      drones: [
+        {
+          catalogId: "military-drone",
+          name: "Military Drone",
+          size: "large",
+          handling: 5,
+          speed: 5,
+          acceleration: 4,
+          body: 8,
+          armor: 15,
+          pilot: 5,
+          sensor: 5,
+          cost: 200000,
+          availability: 10,
+          legality: "forbidden",
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_FORBIDDEN");
+    expect(result.errors[0].itemType).toBe("drone");
+  });
+
+  it("should pass for active character with high availability drones", () => {
+    const character = createTestCharacter({
+      status: "active",
+      drones: [
+        {
+          catalogId: "ares-paladin",
+          name: "Ares Paladin",
+          size: "large",
+          handling: 3,
+          speed: 4,
+          acceleration: 3,
+          body: 6,
+          armor: 12,
+          pilot: 4,
+          sensor: 4,
+          cost: 75000,
+          availability: 18,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+});
+
+// =============================================================================
+// AUTOSOFT VALIDATION TESTS
+// =============================================================================
+
+describe("validateAllGear - Autosofts", () => {
+  it("should pass for autosofts with availability <= 12", () => {
+    const character = createTestCharacter({
+      autosofts: [
+        {
+          catalogId: "clearsight",
+          name: "Clearsight",
+          category: "perception",
+          rating: 4,
+          cost: 2000,
+          availability: 8,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it("should fail for autosofts with availability > 12 at creation", () => {
+    const character = createTestCharacter({
+      autosofts: [
+        {
+          catalogId: "targeting-r6",
+          name: "Targeting (Assault Rifles) 6",
+          category: "combat",
+          rating: 6,
+          target: "assault-rifles",
+          cost: 6000,
+          availability: 18,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_EXCEEDED");
+    expect(result.errors[0].itemType).toBe("autosoft");
+    expect(result.errors[0].itemName).toBe("Targeting (Assault Rifles) 6");
+  });
+
+  it("should pass for active character with high availability autosofts", () => {
+    const character = createTestCharacter({
+      status: "active",
+      autosofts: [
+        {
+          catalogId: "targeting-r6",
+          name: "Targeting 6",
+          category: "combat",
+          rating: 6,
+          cost: 6000,
+          availability: 18,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+});
+
+// =============================================================================
+// CONSTANTS TESTS
+// =============================================================================
+
 describe("CREATION_CONSTRAINTS", () => {
   it("should have correct default values per SR5 rules", () => {
     expect(CREATION_CONSTRAINTS.maxAvailabilityAtCreation).toBe(12);

@@ -35,6 +35,12 @@ import { getGroupRating, isGroupBroken } from "../skills/group-utils";
 import type { CreationSelections } from "@/lib/types/creation-selections";
 import type { LanguageSkill } from "@/lib/types/character";
 import type { ComplexFormData, SkillGroupData } from "../loader-types";
+import {
+  canDesignateForFreeSkill,
+  getFreeSkillAllocationStatus,
+  type FreeSkillConfig,
+} from "../skills/free-skills";
+import { getMaxConnection, getMaxLoyalty, calculateContactPoints } from "../contacts";
 
 // =============================================================================
 // CORE VALIDATORS
@@ -179,6 +185,9 @@ const identityValidator: ValidatorDefinition = {
 // Skills that mystic adepts cannot learn (SR5 Core p.69)
 const MYSTIC_ADEPT_RESTRICTED_SKILLS = ["counterspelling"];
 
+// Magical paths that support mentor spirits
+const MENTOR_SPIRIT_PATHS = ["full-mage", "adept", "mystic-adept", "aspected-mage"];
+
 /**
  * Validate magic-specific requirements
  */
@@ -190,10 +199,84 @@ const magicValidator: ValidatorDefinition = {
   priority: 4,
   validate: (context) => {
     const issues: ValidationIssue[] = [];
-    const { character } = context;
+    const { character, mode } = context;
+
+    // --- Mentor spirit validation (applies even to mundane/technomancer) ---
+
+    if (character.mentorSpirit) {
+      if (!character.magicalPath || character.magicalPath === "mundane") {
+        issues.push({
+          code: "MENTOR_SPIRIT_INVALID_PATH",
+          message: "Mundane characters cannot have a mentor spirit",
+          field: "mentorSpirit",
+          severity: "error",
+          suggestion: "Remove the mentor spirit or select a magical path",
+        });
+      } else if (character.magicalPath === "technomancer") {
+        issues.push({
+          code: "MENTOR_SPIRIT_TECHNOMANCER",
+          message:
+            "Technomancers use paragons, not mentor spirits. Paragon support is not yet implemented.",
+          field: "mentorSpirit",
+          severity: "error",
+          suggestion: "Remove the mentor spirit from this technomancer",
+        });
+      } else if (!MENTOR_SPIRIT_PATHS.includes(character.magicalPath)) {
+        issues.push({
+          code: "MENTOR_SPIRIT_INVALID_PATH",
+          message: `Magical path "${character.magicalPath}" does not support mentor spirits`,
+          field: "mentorSpirit",
+          severity: "error",
+        });
+      }
+    }
+
+    // --- Initiation / metamagics at creation validation ---
+
+    if (
+      character.magicalPath &&
+      character.magicalPath !== "mundane" &&
+      (mode === "creation" || mode === "finalization")
+    ) {
+      if (character.initiateGrade !== undefined && character.initiateGrade > 0) {
+        issues.push({
+          code: "INITIATION_AT_CREATION",
+          message: "Initiation grade must be 0 at character creation",
+          field: "initiateGrade",
+          severity: "error",
+          suggestion: "Initiation is available through advancement after character creation",
+        });
+      }
+
+      if (character.metamagics && character.metamagics.length > 0) {
+        issues.push({
+          code: "METAMAGICS_AT_CREATION",
+          message: "Metamagics cannot be selected at character creation",
+          field: "metamagics",
+          severity: "error",
+          suggestion: "Metamagics are unlocked through initiation during advancement",
+        });
+      }
+    }
+
+    // --- Remaining magic checks only apply to magical characters ---
 
     if (!character.magicalPath || character.magicalPath === "mundane") {
       return issues;
+    }
+
+    // Mentor spirit info-level warning for valid paths without one selected
+    if (
+      MENTOR_SPIRIT_PATHS.includes(character.magicalPath) &&
+      !character.mentorSpirit &&
+      mode === "finalization"
+    ) {
+      issues.push({
+        code: "NO_MENTOR_SPIRIT",
+        message: "No mentor spirit selected (optional but recommended)",
+        field: "mentorSpirit",
+        severity: "info",
+      });
     }
 
     // Full mage or mystic adept should have tradition
@@ -326,6 +409,233 @@ const qualityValidator: ValidatorDefinition = {
         field: error.field || "qualities",
         severity: "error",
       });
+    }
+
+    return issues;
+  },
+};
+
+/**
+ * Validate free skill designations from creation state
+ */
+const freeSkillValidator: ValidatorDefinition = {
+  id: "free-skills",
+  name: "Free Skill Allocation",
+  description: "Validates free skill designations match allowed categories and slot counts",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState, ruleset, mode } = context;
+
+    // Only relevant if we have creation state with free skill data
+    if (!creationState?.selections) {
+      return issues;
+    }
+
+    const designations = creationState.selections.freeSkillDesignations;
+    if (!designations) {
+      return issues;
+    }
+
+    // Build skill categories from ruleset (if available)
+    const skillCategories: Record<string, string | undefined> = {};
+    const skillsModule = ruleset.modules?.skills as
+      | { skills?: Array<{ id: string; category?: string }> }
+      | undefined;
+    if (skillsModule?.skills) {
+      for (const skill of skillsModule.skills) {
+        skillCategories[skill.id] = skill.category;
+      }
+    }
+
+    // Get free skill configs from the magic priority selection
+    // These come from the priority table via the creation method
+    const freeSkillConfigs: FreeSkillConfig[] = [];
+
+    // Extract from creationState selections if available
+    // The free skill configs are determined by the magic priority and path
+    // We reconstruct them from the designations to validate
+    const magicalPath = character.magicalPath;
+
+    // Build expected config based on magical path and designations
+    if (magicalPath === "full-mage" || magicalPath === "mystic-adept") {
+      // Magicians get magical free skills
+      if (designations.magical) {
+        freeSkillConfigs.push({
+          type: "magical",
+          rating: 5, // Default; actual rating comes from priority table
+          count: designations.magical.length, // Validate based on actual designations
+        });
+      }
+    } else if (magicalPath === "technomancer") {
+      // Technomancers get resonance free skills
+      if (designations.resonance) {
+        freeSkillConfigs.push({
+          type: "resonance",
+          rating: 5,
+          count: designations.resonance.length,
+        });
+      }
+    } else if (magicalPath === "adept") {
+      // Adepts get active free skills
+      if (designations.active) {
+        freeSkillConfigs.push({
+          type: "active",
+          rating: 4,
+          count: designations.active.length,
+        });
+      }
+    }
+
+    // Validate designated skills match allowed categories
+    if (designations.magical && designations.magical.length > 0) {
+      if (
+        !magicalPath ||
+        (magicalPath !== "full-mage" &&
+          magicalPath !== "mystic-adept" &&
+          magicalPath !== "aspected-mage")
+      ) {
+        issues.push({
+          code: "FREE_SKILL_WRONG_CATEGORY",
+          message:
+            "Magical free skills are only available for magicians, mystic adepts, and aspected mages",
+          field: "freeSkillDesignations.magical",
+          severity: "error",
+        });
+      } else {
+        // Validate each designated skill is actually a magical skill
+        for (const skillId of designations.magical) {
+          const result = canDesignateForFreeSkill(
+            skillId,
+            skillCategories[skillId],
+            "magical",
+            designations.magical.filter((id) => id !== skillId),
+            designations.magical.length
+          );
+          if (!result.canDesignate && result.reason === `Skill must be magical type`) {
+            issues.push({
+              code: "FREE_SKILL_WRONG_CATEGORY",
+              message: `Skill "${skillId}" is not a magical skill and cannot receive free magical allocation`,
+              field: `freeSkillDesignations.magical`,
+              severity: "error",
+            });
+          }
+        }
+      }
+    }
+
+    if (designations.resonance && designations.resonance.length > 0) {
+      if (magicalPath !== "technomancer") {
+        issues.push({
+          code: "FREE_SKILL_WRONG_CATEGORY",
+          message: "Resonance free skills are only available for technomancers",
+          field: "freeSkillDesignations.resonance",
+          severity: "error",
+        });
+      } else {
+        for (const skillId of designations.resonance) {
+          const result = canDesignateForFreeSkill(
+            skillId,
+            skillCategories[skillId],
+            "resonance",
+            designations.resonance.filter((id) => id !== skillId),
+            designations.resonance.length
+          );
+          if (!result.canDesignate && result.reason === `Skill must be resonance type`) {
+            issues.push({
+              code: "FREE_SKILL_WRONG_CATEGORY",
+              message: `Skill "${skillId}" is not a resonance skill and cannot receive free resonance allocation`,
+              field: `freeSkillDesignations.resonance`,
+              severity: "error",
+            });
+          }
+        }
+      }
+    }
+
+    // Check for unused free skill slots at finalization (warning only)
+    if (mode === "finalization" && freeSkillConfigs.length > 0) {
+      const skills = (character.skills as Record<string, number>) ?? {};
+      const statuses = getFreeSkillAllocationStatus(skills, freeSkillConfigs, designations);
+
+      for (const status of statuses) {
+        if (status.remainingSlots > 0) {
+          issues.push({
+            code: "FREE_SKILL_SLOTS_UNUSED",
+            message: `${status.remainingSlots} free ${status.type} skill slot(s) unused`,
+            field: "freeSkillDesignations",
+            severity: "warning",
+            suggestion: `Designate ${status.type} skills to use your free skill allocation`,
+          });
+        }
+      }
+    }
+
+    return issues;
+  },
+};
+
+/**
+ * Validate contact ratings against edition limits
+ */
+const contactValidator: ValidatorDefinition = {
+  id: "contacts",
+  name: "Contacts",
+  description: "Validates contact ratings against edition limits",
+  modes: ["creation", "finalization"],
+  priority: 7,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character } = context;
+
+    if (!character.contacts || character.contacts.length === 0) {
+      return issues;
+    }
+
+    const editionCode = character.editionCode ?? "sr5";
+    const maxConnection = getMaxConnection(editionCode);
+    const maxLoyalty = getMaxLoyalty(editionCode);
+
+    for (const contact of character.contacts) {
+      if (contact.connection > maxConnection) {
+        issues.push({
+          code: "CONTACT_CONNECTION_EXCEEDED",
+          message: `Contact "${contact.name}" has connection ${contact.connection}, which exceeds the maximum of ${maxConnection} for ${editionCode}`,
+          field: "contacts",
+          severity: "error",
+        });
+      }
+
+      if (contact.loyalty > maxLoyalty) {
+        issues.push({
+          code: "CONTACT_LOYALTY_EXCEEDED",
+          message: `Contact "${contact.name}" has loyalty ${contact.loyalty}, which exceeds the maximum of ${maxLoyalty} for ${editionCode}`,
+          field: "contacts",
+          severity: "error",
+        });
+      }
+    }
+
+    // Warn if total contact points exceed charisma-based budget
+    if (character.attributes) {
+      const charisma = character.attributes["cha"] ?? character.attributes["charisma"] ?? 0;
+      if (charisma > 0) {
+        const contactBudget = charisma * 3; // SR5: CHA × 3 free contact points
+        const totalPoints = character.contacts.reduce(
+          (sum, c) => sum + calculateContactPoints(c),
+          0
+        );
+        if (totalPoints > contactBudget) {
+          issues.push({
+            code: "CONTACT_POINTS_EXCEEDED",
+            message: `Total contact points (${totalPoints}) exceed budget of ${contactBudget} (Charisma ${charisma} × 3)`,
+            field: "contacts",
+            severity: "warning",
+            suggestion: "Reduce contact ratings or remove contacts to stay within budget",
+          });
+        }
+      }
     }
 
     return issues;
@@ -683,6 +993,8 @@ const validators: ValidatorDefinition[] = [
   qualityValidator,
   complexFormValidator,
   skillGroupConstraintValidator,
+  freeSkillValidator,
+  contactValidator,
   contactBudgetValidator,
   knowledgeBudgetValidator,
   campaignValidator,
