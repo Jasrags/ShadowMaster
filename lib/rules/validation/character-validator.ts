@@ -10,7 +10,7 @@
  * - Constraint: "Validation failures MUST prevent character finalization"
  */
 
-import type { Character, CharacterDraft } from "@/lib/types/character";
+import type { Character, CharacterDraft, AdeptPower } from "@/lib/types/character";
 import type { MergedRuleset, Campaign, CreationMethod } from "@/lib/types";
 import type { CreationState } from "@/lib/types/creation";
 import {
@@ -34,7 +34,12 @@ import { getModule } from "../merge";
 import { getGroupRating, isGroupBroken } from "../skills/group-utils";
 import type { CreationSelections } from "@/lib/types/creation-selections";
 import type { LanguageSkill, KnowledgeSkill, CharacterSpell } from "@/lib/types/character";
-import type { ComplexFormData, SkillGroupData, SpellsCatalogData } from "../loader-types";
+import type {
+  ComplexFormData,
+  SkillGroupData,
+  SpellsCatalogData,
+  AdeptPowerCatalogItem,
+} from "../loader-types";
 import {
   canDesignateForFreeSkill,
   getFreeSkillAllocationStatus,
@@ -1096,6 +1101,9 @@ function extractSpellId(entry: string | CharacterSpell): string {
 /** Magical paths that can cast spells */
 const SPELL_CASTING_PATHS = ["full-mage", "aspected-mage", "mystic-adept"];
 
+/** Magical paths that can have adept powers */
+const ADEPT_POWER_PATHS = ["adept", "mystic-adept"];
+
 /**
  * Validate spell allocation for spellcasters
  */
@@ -1230,6 +1238,182 @@ const spellValidator: ValidatorDefinition = {
         code: "SPELL_DUPLICATE",
         message: `Duplicate spells selected: ${duplicateSpells.join(", ")}`,
         field: "spells",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
+// ADEPT POWER VALIDATOR
+// =============================================================================
+
+/** Calculate the expected PP cost from the catalog power definition */
+function calculateExpectedPowerPointCost(
+  power: AdeptPower,
+  catalogPower: AdeptPowerCatalogItem
+): number | undefined {
+  if (catalogPower.hasRating && power.rating !== undefined && catalogPower.ratings) {
+    const ratingEntry = catalogPower.ratings[power.rating];
+    return ratingEntry?.powerPointCost;
+  }
+  return catalogPower.powerPointCost;
+}
+
+/** Build a composite key for duplicate detection: catalogId|specification */
+function buildAdeptPowerDuplicateKey(power: AdeptPower): string {
+  return `${power.catalogId}|${power.specification ?? ""}`;
+}
+
+/**
+ * Validate adept power allocation for adepts and mystic adepts
+ */
+const adeptPowerValidator: ValidatorDefinition = {
+  id: "adept-powers",
+  name: "Adept Powers",
+  description: "Validates adept power allocation for adepts and mystic adepts",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, ruleset, creationState } = context;
+
+    // Resolve magical path (same pattern as spellValidator)
+    const rawMagicalPath =
+      character.magicalPath && character.magicalPath !== "mundane"
+        ? character.magicalPath
+        : (creationState?.selections?.["magical-path"] as string | undefined);
+    const normalizedPath = rawMagicalPath
+      ? (MAGICAL_PATH_SELECTION_MAP[rawMagicalPath] ?? rawMagicalPath)
+      : undefined;
+
+    // Only applies to adept power paths
+    if (!normalizedPath || !ADEPT_POWER_PATHS.includes(normalizedPath)) {
+      return issues;
+    }
+
+    const powers = character.adeptPowers || [];
+    if (powers.length === 0) {
+      return issues; // NO_ADEPT_POWERS is already handled by magicValidator
+    }
+
+    // Get adept powers catalog from merged ruleset
+    const adeptModule = getModule<{ powers: AdeptPowerCatalogItem[] }>(ruleset, "adeptPowers");
+    const powersCatalog = adeptModule?.powers || [];
+    const catalogMap = new Map(powersCatalog.map((p) => [p.id, p]));
+
+    // Calculate PP budget
+    let ppBudget = 0;
+    if (normalizedPath === "adept") {
+      ppBudget = character.specialAttributes?.magic ?? 0;
+    } else if (normalizedPath === "mystic-adept") {
+      const allocatedPP =
+        (creationState?.selections?.["power-points-allocation"] as number | undefined) ?? 0;
+      const karmaSpentOnPP =
+        (creationState?.budgets?.["karma-spent-power-points"] as number | undefined) ?? 0;
+      ppBudget = allocatedPP + Math.floor(karmaSpentOnPP / 5);
+    }
+
+    // Check: zero budget but powers selected
+    if (ppBudget === 0) {
+      issues.push({
+        code: "ADEPT_POWER_NO_BUDGET",
+        message: `Adept has powers selected but 0 power points available`,
+        field: "adeptPowers",
+        severity: normalizedPath === "mystic-adept" ? "warning" : "error",
+      });
+    }
+
+    const seenKeys = new Set<string>();
+    let totalCost = 0;
+
+    for (const power of powers) {
+      const catalogPower = catalogMap.get(power.catalogId);
+
+      // Check: catalog existence
+      if (!catalogPower) {
+        issues.push({
+          code: "ADEPT_POWER_NOT_FOUND",
+          message: `Adept power "${power.catalogId}" not found in ruleset`,
+          field: "adeptPowers",
+          severity: "error",
+        });
+        continue;
+      }
+
+      // Check: duplicates (same catalogId + specification)
+      const dupeKey = buildAdeptPowerDuplicateKey(power);
+      if (seenKeys.has(dupeKey)) {
+        issues.push({
+          code: "ADEPT_POWER_DUPLICATE",
+          message: `Duplicate adept power: ${power.catalogId}${power.specification ? ` (${power.specification})` : ""}`,
+          field: "adeptPowers",
+          severity: "error",
+        });
+      } else {
+        seenKeys.add(dupeKey);
+      }
+
+      // Check: rating required for rated powers
+      if (catalogPower.hasRating) {
+        if (power.rating === undefined || power.rating === null) {
+          issues.push({
+            code: "ADEPT_POWER_RATING_REQUIRED",
+            message: `Adept power "${power.catalogId}" requires a rating`,
+            field: "adeptPowers",
+            severity: "error",
+          });
+        } else {
+          const minRating = catalogPower.minRating ?? 1;
+          const maxRating = catalogPower.maxRating ?? 6;
+          if (power.rating < minRating || power.rating > maxRating) {
+            issues.push({
+              code: "ADEPT_POWER_RATING_OUT_OF_RANGE",
+              message: `Adept power "${power.catalogId}" rating ${power.rating} is outside valid range ${minRating}-${maxRating}`,
+              field: "adeptPowers",
+              severity: "error",
+            });
+          }
+        }
+      }
+
+      // Check: specification required
+      if (
+        (catalogPower.requiresSkill ||
+          catalogPower.requiresAttribute ||
+          catalogPower.requiresLimit) &&
+        !power.specification
+      ) {
+        issues.push({
+          code: "ADEPT_POWER_REQUIRES_SPECIFICATION",
+          message: `Adept power "${power.catalogId}" requires a specification (skill, attribute, or limit)`,
+          field: "adeptPowers",
+          severity: "error",
+        });
+      }
+
+      // Check: cost correctness
+      const expectedCost = calculateExpectedPowerPointCost(power, catalogPower);
+      if (expectedCost !== undefined && Math.abs(power.powerPointCost - expectedCost) > 0.001) {
+        issues.push({
+          code: "ADEPT_POWER_COST_MISMATCH",
+          message: `Adept power "${power.catalogId}" cost ${power.powerPointCost} does not match expected ${expectedCost}`,
+          field: "adeptPowers",
+          severity: "error",
+        });
+      }
+
+      totalCost += power.powerPointCost;
+    }
+
+    // Check: total PP cost exceeds budget
+    if (ppBudget > 0 && totalCost - ppBudget > 0.001) {
+      issues.push({
+        code: "ADEPT_POWER_PP_EXCEEDED",
+        message: `Total power point cost (${totalCost}) exceeds available budget (${ppBudget})`,
+        field: "adeptPowers",
         severity: "error",
       });
     }
@@ -1469,6 +1653,7 @@ const validators: ValidatorDefinition[] = [
   qualityValidator,
   complexFormValidator,
   spellValidator,
+  adeptPowerValidator,
   skillGroupConstraintValidator,
   freeSkillValidator,
   contactValidator,

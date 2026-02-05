@@ -2423,4 +2423,780 @@ describe("Character Validator", () => {
       );
     });
   });
+
+  // ===========================================================================
+  // ADEPT POWER VALIDATOR
+  // ===========================================================================
+
+  describe("adeptPowerValidator (via validateCharacter)", () => {
+    // Helper: ruleset with adept power catalog
+    function createAdeptPowerRuleset() {
+      return createMinimalRuleset({
+        modules: {
+          adeptPowers: {
+            powers: [
+              {
+                id: "astral-perception",
+                name: "Astral Perception",
+                powerPointCost: 1,
+                hasRating: false,
+                description: "See the astral plane",
+              },
+              {
+                id: "combat-sense",
+                name: "Combat Sense",
+                hasRating: true,
+                minRating: 1,
+                maxRating: 6,
+                ratings: {
+                  1: { powerPointCost: 0.5 },
+                  2: { powerPointCost: 1.0 },
+                  3: { powerPointCost: 1.5 },
+                  4: { powerPointCost: 2.0 },
+                  5: { powerPointCost: 2.5 },
+                  6: { powerPointCost: 3.0 },
+                },
+                description: "Combat awareness",
+              },
+              {
+                id: "critical-strike",
+                name: "Critical Strike",
+                powerPointCost: 0.5,
+                hasRating: false,
+                requiresSkill: true,
+                validSkills: ["unarmed-combat", "blades"],
+                description: "Boost unarmed damage",
+              },
+              {
+                id: "attribute-boost",
+                name: "Attribute Boost",
+                hasRating: true,
+                minRating: 1,
+                maxRating: 4,
+                requiresAttribute: true,
+                validAttributes: ["agility", "body", "strength", "reaction"],
+                ratings: {
+                  1: { powerPointCost: 0.25 },
+                  2: { powerPointCost: 0.5 },
+                  3: { powerPointCost: 0.75 },
+                  4: { powerPointCost: 1.0 },
+                },
+                description: "Boost an attribute",
+              },
+              {
+                id: "improved-potential",
+                name: "Improved Potential",
+                hasRating: true,
+                minRating: 1,
+                maxRating: 4,
+                requiresLimit: true,
+                validLimits: ["physical", "mental", "social"],
+                ratings: {
+                  1: { powerPointCost: 0.5 },
+                  2: { powerPointCost: 1.0 },
+                  3: { powerPointCost: 1.5 },
+                  4: { powerPointCost: 2.0 },
+                },
+                description: "Increase a limit",
+              },
+            ],
+          },
+        },
+      });
+    }
+
+    // --- Happy path ---
+
+    it("should produce no errors for a valid adept power allocation", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+          {
+            id: "p2",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 2,
+            powerPointCost: 1.0,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: expect.stringMatching(/^ADEPT_POWER_/) })
+      );
+    });
+
+    it("should skip validation for mundane characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+
+    it("should skip validation for technomancer characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "technomancer",
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+
+    it("should skip validation for full-mage characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+
+    it("should produce no errors when adept has empty powers array", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: expect.stringMatching(/^ADEPT_POWER_/) })
+      );
+    });
+
+    // --- Catalog existence ---
+
+    it("should reject unknown catalogId", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          { id: "p1", catalogId: "totally-fake-power", name: "Fake", powerPointCost: 1 },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_NOT_FOUND",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should report multiple unknown catalogIds", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          { id: "p1", catalogId: "fake-one", name: "Fake 1", powerPointCost: 1 },
+          { id: "p2", catalogId: "fake-two", name: "Fake 2", powerPointCost: 1 },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      const notFound = result.errors.filter((e) => e.code === "ADEPT_POWER_NOT_FOUND");
+      expect(notFound).toHaveLength(2);
+    });
+
+    // --- Duplicates ---
+
+    it("should reject identical duplicate (same catalogId, no spec)", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+          {
+            id: "p2",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_DUPLICATE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should allow different specifications of the same power", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "attribute-boost",
+            name: "Attribute Boost (Agility)",
+            rating: 2,
+            powerPointCost: 0.5,
+            specification: "agility",
+          },
+          {
+            id: "p2",
+            catalogId: "attribute-boost",
+            name: "Attribute Boost (Strength)",
+            rating: 2,
+            powerPointCost: 0.5,
+            specification: "strength",
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_DUPLICATE" })
+      );
+    });
+
+    it("should reject same catalogId with same specification", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "attribute-boost",
+            name: "Attribute Boost (Agility)",
+            rating: 2,
+            powerPointCost: 0.5,
+            specification: "agility",
+          },
+          {
+            id: "p2",
+            catalogId: "attribute-boost",
+            name: "Attribute Boost (Agility)",
+            rating: 3,
+            powerPointCost: 0.75,
+            specification: "agility",
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_DUPLICATE",
+          severity: "error",
+        })
+      );
+    });
+
+    // --- PP budget ---
+
+    it("should reject when total PP cost exceeds budget", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 2 }, // Only 2 PP
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+          {
+            id: "p2",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 3,
+            powerPointCost: 1.5,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_PP_EXCEEDED",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should pass when total PP cost exactly equals budget", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 2 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+          {
+            id: "p2",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 2,
+            powerPointCost: 1.0,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_PP_EXCEEDED" })
+      );
+    });
+
+    it("should handle fractional PP costs correctly", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 1 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 1,
+            powerPointCost: 0.5,
+          },
+          {
+            id: "p2",
+            catalogId: "critical-strike",
+            name: "Critical Strike",
+            powerPointCost: 0.5,
+            specification: "unarmed-combat",
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_PP_EXCEEDED" })
+      );
+    });
+
+    it("should calculate mystic adept PP budget from creation state", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 2,
+            powerPointCost: 1.0,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {
+          "power-points-allocation": 2,
+        } as CreationState["selections"],
+        budgets: {},
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      // 2 PP allocated, cost 1.0 — should pass
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_PP_EXCEEDED" })
+      );
+    });
+
+    it("should warn when zero PP budget and powers selected (mystic adept)", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+      const creationState = createMinimalCreationState({
+        selections: {} as CreationState["selections"],
+        budgets: {},
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_NO_BUDGET",
+        })
+      );
+    });
+
+    it("should error when zero PP budget and powers selected (adept)", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 0 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_NO_BUDGET",
+          severity: "error",
+        })
+      );
+    });
+
+    // --- Rating validation ---
+
+    it("should reject rated power with missing rating", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          { id: "p1", catalogId: "combat-sense", name: "Combat Sense", powerPointCost: 0.5 },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_RATING_REQUIRED",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject rating above maxRating", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 7,
+            powerPointCost: 3.5,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject rating below minRating", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "combat-sense",
+            name: "Combat Sense",
+            rating: 0,
+            powerPointCost: 0,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_RATING_OUT_OF_RANGE",
+          severity: "error",
+        })
+      );
+    });
+
+    // --- Specification validation ---
+
+    it("should reject power requiring skill specification when missing", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          { id: "p1", catalogId: "critical-strike", name: "Critical Strike", powerPointCost: 0.5 },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_REQUIRES_SPECIFICATION",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject power requiring attribute specification when missing", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "attribute-boost",
+            name: "Attribute Boost",
+            rating: 2,
+            powerPointCost: 0.5,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_REQUIRES_SPECIFICATION",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should reject power requiring limit specification when missing", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "improved-potential",
+            name: "Improved Potential",
+            rating: 1,
+            powerPointCost: 0.5,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_REQUIRES_SPECIFICATION",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should accept power with valid specification", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "critical-strike",
+            name: "Critical Strike (Unarmed)",
+            powerPointCost: 0.5,
+            specification: "unarmed-combat",
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_REQUIRES_SPECIFICATION" })
+      );
+    });
+
+    // --- Cost validation ---
+
+    it("should reject mismatched power point cost", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 2,
+          }, // Should be 1
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "ADEPT_POWER_COST_MISMATCH",
+          severity: "error",
+        })
+      );
+    });
+
+    it("should accept correct power point cost", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [
+          {
+            id: "p1",
+            catalogId: "astral-perception",
+            name: "Astral Perception",
+            powerPointCost: 1,
+          },
+        ],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_COST_MISMATCH" })
+      );
+    });
+
+    // --- Modes ---
+
+    it("should run in creation mode", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [{ id: "p1", catalogId: "totally-fake", name: "Fake", powerPointCost: 1 }],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+
+    it("should run in finalization mode", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        adeptPowers: [{ id: "p1", catalogId: "totally-fake", name: "Fake", powerPointCost: 1 }],
+      });
+      const ruleset = createAdeptPowerRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "finalization" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+  });
 });
