@@ -325,6 +325,43 @@ const GRADE_QUALITY_ORDER: Record<string, number> = {
   delta: 4,
 };
 
+// =============================================================================
+// CREATION GRADE RESTRICTIONS
+// =============================================================================
+
+/**
+ * Maximum grade quality index allowed at character creation.
+ * Alpha (index 2) is the maximum; beta and delta require post-creation acquisition.
+ */
+export const CREATION_MAX_GRADE = 2;
+
+/**
+ * Check if a grade is available during character creation.
+ * Per SR5 rules, beta and delta grade augmentations are not available at creation.
+ *
+ * @param grade - The cyberware or bioware grade to check
+ * @returns True if the grade can be selected during creation
+ */
+export function isGradeAvailableAtCreation(grade: CyberwareGrade | BiowareGrade): boolean {
+  return (GRADE_QUALITY_ORDER[grade] ?? 1) <= CREATION_MAX_GRADE;
+}
+
+/**
+ * Get cyberware grades available during character creation.
+ * Excludes beta and delta grades.
+ */
+export function getCreationAvailableCyberwareGrades(): CyberwareGrade[] {
+  return ["used", "standard", "alpha"];
+}
+
+/**
+ * Get bioware grades available during character creation.
+ * Excludes beta and delta grades. Note: bioware cannot have "used" grade.
+ */
+export function getCreationAvailableBiowareGrades(): BiowareGrade[] {
+  return ["standard", "alpha"];
+}
+
 /**
  * Compare two grades by quality
  *
