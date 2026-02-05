@@ -50,6 +50,8 @@ import type {
   ActionsCatalogData,
   DataSoftwareCatalogData,
   DataSoftwareCatalogItemData,
+  DrugCatalogItemData,
+  ToxinCatalogItemData,
 } from "./loader-types";
 export type {
   QualityData,
@@ -81,6 +83,8 @@ export type {
   ActionsCatalogData,
   DataSoftwareCatalogData,
   DataSoftwareCatalogItemData,
+  DrugCatalogItemData,
+  ToxinCatalogItemData,
 };
 
 // =============================================================================
@@ -317,6 +321,8 @@ export interface GearCatalogData {
   industrialChemicals: GearItemData[];
   visionEnhancements?: GearItemData[];
   audioEnhancements?: GearItemData[];
+  drugs?: DrugCatalogItemData[];
+  toxins?: ToxinCatalogItemData[];
 }
 
 export interface SpellData {
@@ -981,6 +987,22 @@ export function useRulesetStatus(): {
 export function useGear(): GearCatalogData | null {
   const { data } = useRuleset();
   return data.gear;
+}
+
+/**
+ * Hook to get drugs catalog from gear module
+ */
+export function useDrugs(): DrugCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.gear?.drugs || [];
+}
+
+/**
+ * Hook to get toxins catalog from gear module
+ */
+export function useToxins(): ToxinCatalogItemData[] {
+  const { data } = useRuleset();
+  return data.gear?.toxins || [];
 }
 
 /**

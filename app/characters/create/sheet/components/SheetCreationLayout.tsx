@@ -36,6 +36,7 @@ import {
   GearPanel,
   WeaponsPanel,
   ArmorPanel,
+  DrugsPanel,
   MatrixGearCard,
   AugmentationsCard,
   VehiclesCard,
@@ -926,6 +927,9 @@ export function SheetCreationLayout({
 
           {/* Armor - Phase 4 (New) */}
           <ArmorPanel state={creationState} updateState={updateState} />
+
+          {/* Drugs & Toxins - Phase 4 */}
+          <DrugsPanel state={creationState} updateState={updateState} />
 
           {/* Matrix Gear - Phase 4 (Commlinks & Cyberdecks) */}
           <MatrixGearCard state={creationState} updateState={updateState} />

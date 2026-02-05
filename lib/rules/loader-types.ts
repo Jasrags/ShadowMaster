@@ -432,6 +432,56 @@ export interface SensorsCatalogData {
 }
 
 /**
+ * Drug catalog item data structure
+ */
+export interface DrugCatalogItemData {
+  id: string;
+  name: string;
+  category: string;
+  vector: string[];
+  speed: string;
+  duration: string;
+  addictionType: string;
+  addictionRating: number;
+  addictionThreshold: number;
+  effects: {
+    active: Record<string, unknown> | null;
+    crash: Record<string, unknown> | null;
+  };
+  cost: number;
+  availability: number;
+  legality?: ItemLegality;
+  stackable?: boolean;
+  consumable?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
+ * Toxin catalog item data structure
+ */
+export interface ToxinCatalogItemData {
+  id: string;
+  name: string;
+  category: string;
+  vector: string[];
+  speed: string;
+  penetration: number;
+  power: number;
+  effects: string[];
+  duration?: string;
+  cost: number;
+  availability: number;
+  legality?: ItemLegality;
+  stackable?: boolean;
+  consumable?: boolean;
+  description?: string;
+  page?: number;
+  source?: string;
+}
+
+/**
  * Gear catalog data structure
  */
 export interface GearCatalogData {
@@ -465,6 +515,8 @@ export interface GearCatalogData {
   security: GearItemData[];
   miscellaneous: GearItemData[];
   ammunition: GearItemData[];
+  drugs?: DrugCatalogItemData[];
+  toxins?: ToxinCatalogItemData[];
 }
 
 // =============================================================================
