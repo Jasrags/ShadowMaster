@@ -1,4 +1,4 @@
-import type { QualityData, SkillGroupData } from "@/lib/rules/loader-types";
+import type { QualityData, SkillGroupData, SkillData } from "@/lib/rules";
 
 export interface SelectedQuality {
   id: string;
@@ -34,6 +34,7 @@ export interface QualitySelectionModalProps {
   /** Callback when a quality is added - isPositive indicates the type */
   onAdd: (qualityId: string, isPositive: boolean, specification?: string, level?: number) => void;
   skillGroups: SkillGroupData[];
+  skills: SkillData[];
   existingSkillIds: string[]; // Skills currently selected by the user
   existingSkillGroupIds: string[]; // Skill groups currently selected by the user
 }
