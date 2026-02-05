@@ -2101,6 +2101,202 @@ describe("Character Validator", () => {
         expect.objectContaining({ code: "TOO_MANY_NATIVE_LANGUAGES" })
       );
     });
+
+    describe("duplicate detection", () => {
+      it("should detect duplicate languages (exact match)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [
+              { name: "English", rating: 0, isNative: true },
+              { name: "English", rating: 3, isNative: false },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({
+            code: "LANGUAGE_DUPLICATE",
+            severity: "error",
+            field: "languages",
+          })
+        );
+      });
+
+      it("should detect duplicate languages (case-insensitive)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [
+              { name: "English", rating: 0, isNative: true },
+              { name: "ENGLISH", rating: 3, isNative: false },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({
+            code: "LANGUAGE_DUPLICATE",
+            severity: "error",
+          })
+        );
+      });
+
+      it("should pass with unique languages (no false positives)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [
+              { name: "English", rating: 0, isNative: true },
+              { name: "Japanese", rating: 3, isNative: false },
+              { name: "Spanish", rating: 2, isNative: false },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).not.toContainEqual(
+          expect.objectContaining({ code: "LANGUAGE_DUPLICATE" })
+        );
+      });
+
+      it("should detect duplicate knowledge skills (exact match)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [{ name: "English", rating: 0, isNative: true }],
+            knowledgeSkills: [
+              { name: "Corp Politics", category: "street", rating: 3 },
+              { name: "Corp Politics", category: "academic", rating: 2 },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({
+            code: "KNOWLEDGE_SKILL_DUPLICATE",
+            severity: "error",
+            field: "knowledgeSkills",
+          })
+        );
+      });
+
+      it("should detect duplicate knowledge skills (case-insensitive)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [{ name: "English", rating: 0, isNative: true }],
+            knowledgeSkills: [
+              { name: "Corp Politics", category: "street", rating: 3 },
+              { name: "CORP POLITICS", category: "street", rating: 2 },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({
+            code: "KNOWLEDGE_SKILL_DUPLICATE",
+            severity: "error",
+          })
+        );
+      });
+
+      it("should pass with unique knowledge skills (no false positives)", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [{ name: "English", rating: 0, isNative: true }],
+            knowledgeSkills: [
+              { name: "Corp Politics", category: "street", rating: 3 },
+              { name: "Gang Turf", category: "street", rating: 2 },
+              { name: "Matrix Architecture", category: "academic", rating: 4 },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).not.toContainEqual(
+          expect.objectContaining({ code: "KNOWLEDGE_SKILL_DUPLICATE" })
+        );
+      });
+
+      it("should detect both language and knowledge skill duplicates simultaneously", async () => {
+        const character = createMinimalCharacter();
+        const ruleset = createMinimalRuleset();
+        const creationState = createMinimalCreationState({
+          selections: {
+            languages: [
+              { name: "English", rating: 0, isNative: true },
+              { name: "english", rating: 3, isNative: false },
+            ],
+            knowledgeSkills: [
+              { name: "Corp Politics", category: "street", rating: 3 },
+              { name: "corp politics", category: "academic", rating: 2 },
+            ],
+          } as CreationState["selections"],
+        });
+
+        const result = await validateCharacter({
+          character,
+          ruleset,
+          creationState,
+          mode: "creation",
+        });
+
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({ code: "LANGUAGE_DUPLICATE" })
+        );
+        expect(result.errors).toContainEqual(
+          expect.objectContaining({ code: "KNOWLEDGE_SKILL_DUPLICATE" })
+        );
+      });
+    });
   });
 
   // ===========================================================================
