@@ -25,6 +25,15 @@ export {
   isCharacterValid,
 } from "./character-validator";
 
+// Budget calculator types and functions
+export type { NuyenBreakdown, KarmaBreakdown } from "./budget-calculator";
+export {
+  calculateNuyenSpent,
+  calculateKarmaSpent,
+  KARMA_TO_NUYEN_LIMIT,
+  SR5_KARMA_BUDGET,
+} from "./budget-calculator";
+
 // Re-export from constraint validation module for backwards compatibility
 export {
   type ValidationResult,
