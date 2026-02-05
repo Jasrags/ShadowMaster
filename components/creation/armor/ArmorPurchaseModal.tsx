@@ -11,6 +11,7 @@
 import { useState, useMemo, useCallback } from "react";
 import type { ArmorData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
+import { isLegalAtCreation, CREATION_CONSTRAINTS } from "@/lib/rules/gear/validation";
 import { BaseModalRoot, ModalFooter } from "@/components/ui";
 import { Search, Shield, AlertTriangle, X, Plus, Shirt } from "lucide-react";
 
@@ -18,7 +19,7 @@ import { Search, Shield, AlertTriangle, X, Plus, Shirt } from "lucide-react";
 // CONSTANTS
 // =============================================================================
 
-const MAX_AVAILABILITY = 12;
+const MAX_AVAILABILITY = CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
 
 const ARMOR_CATEGORIES = [
   { id: "all", label: "All Armor" },
@@ -252,6 +253,7 @@ export function ArmorPurchaseModal({
   onPurchaseCustom,
 }: ArmorPurchaseModalProps) {
   const [searchQuery, setSearchQuery] = useState("");
+  const [showOnlyLegal, setShowOnlyLegal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<ArmorCategory>("all");
   const [selectedArmor, setSelectedArmor] = useState<ArmorData | null>(null);
 
@@ -269,6 +271,7 @@ export function ArmorPurchaseModal({
   // Full reset on close
   const resetState = useCallback(() => {
     setSearchQuery("");
+    setShowOnlyLegal(false);
     setSelectedCategory("all");
     setSelectedArmor(null);
     setAddedThisSession(0);
@@ -282,7 +285,7 @@ export function ArmorPurchaseModal({
     }
   };
 
-  // Filter armor by category and search
+  // Filter armor by category, search, and legality
   const filteredArmor = useMemo(() => {
     let items = armorCatalog;
 
@@ -300,9 +303,14 @@ export function ArmorPurchaseModal({
     // Filter by availability
     items = items.filter((a) => a.availability <= MAX_AVAILABILITY);
 
+    // Filter by legality
+    if (showOnlyLegal) {
+      items = items.filter((a) => isLegalAtCreation(a.availability, a.legality));
+    }
+
     // Sort by name
     return items.sort((a, b) => a.name.localeCompare(b.name));
-  }, [armorCatalog, selectedCategory, searchQuery]);
+  }, [armorCatalog, selectedCategory, searchQuery, showOnlyLegal]);
 
   // Count items per category for badges
   const categoryCounts = useMemo(() => {
@@ -394,16 +402,27 @@ export function ArmorPurchaseModal({
 
           {/* Search & Filters */}
           <div className="px-6 py-3 border-b border-zinc-100 dark:border-zinc-800 space-y-3">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                placeholder="Search armor..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-              />
+            {/* Search + Legal Filter */}
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                <input
+                  type="text"
+                  placeholder="Search armor..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                />
+              </div>
+              <label className="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                <input
+                  type="checkbox"
+                  checked={showOnlyLegal}
+                  onChange={(e) => setShowOnlyLegal(e.target.checked)}
+                  className="h-3.5 w-3.5 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-zinc-600"
+                />
+                Legal only
+              </label>
             </div>
 
             {/* Category Pills */}

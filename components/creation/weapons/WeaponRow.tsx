@@ -15,6 +15,7 @@ import {
   isMountBased,
   type ModifiableItem,
 } from "@/lib/rules/modifications";
+import { LegalityBadge } from "@/components/creation/shared/LegalityBadge";
 import { ChevronDown, ChevronRight, X, Wifi, Plus } from "lucide-react";
 
 // =============================================================================
@@ -187,7 +188,7 @@ export function WeaponRow({
   const hasExpandableContent = true;
 
   // Legality
-  const legality = (weapon as Weapon & { legality?: ItemLegality }).legality;
+  const legality = weapon.legality;
 
   return (
     <div>
@@ -245,6 +246,9 @@ export function WeaponRow({
             [{totalRounds} rds]
           </span>
         )}
+
+        {/* Legality badge */}
+        <LegalityBadge legality={legality} availability={weapon.availability} />
 
         {/* Separator */}
         <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600 shrink-0" />

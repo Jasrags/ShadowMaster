@@ -38,6 +38,7 @@ import {
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
+  LegalityWarnings,
 } from "./shared";
 import {
   WeaponRow,
@@ -45,7 +46,7 @@ import {
   WeaponModificationModal,
   AmmunitionModal,
 } from "./weapons";
-import { Lock, Plus, AlertTriangle } from "lucide-react";
+import { Lock, Plus } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
@@ -182,31 +183,24 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Calculate legality warnings
-  const legalityWarnings = useMemo(() => {
-    const restricted: Weapon[] = [];
-    const forbidden: Weapon[] = [];
-
+  // Build flat list for legality warnings (weapons + their mods)
+  const legalityItems = useMemo(() => {
+    const items: Array<{
+      name: string;
+      legality?: import("@/lib/types").ItemLegality;
+      availability?: number;
+    }> = [];
     for (const weapon of selectedWeapons) {
-      // Check weapon legality
-      const legality = (weapon as Weapon & { legality?: string }).legality;
-      if (legality === "restricted") {
-        restricted.push(weapon);
-      } else if (legality === "forbidden") {
-        forbidden.push(weapon);
-      }
-
-      // Check mod legality
+      items.push({
+        name: weapon.name,
+        legality: weapon.legality,
+        availability: weapon.availability,
+      });
       for (const mod of weapon.modifications || []) {
-        if (mod.legality === "restricted" && !restricted.includes(weapon)) {
-          restricted.push(weapon);
-        } else if (mod.legality === "forbidden" && !forbidden.includes(weapon)) {
-          forbidden.push(weapon);
-        }
+        items.push({ name: mod.name, legality: mod.legality, availability: mod.availability });
       }
     }
-
-    return { restricted, forbidden };
+    return items;
   }, [selectedWeapons]);
 
   // Karma conversion hook
@@ -248,6 +242,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         accuracy: weapon.accuracy,
         cost: weapon.cost,
         availability: weapon.availability,
+        legality: weapon.legality,
         quantity,
         wirelessBonus: weapon.wirelessBonus,
         modifications: [],
@@ -663,34 +658,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
           </div>
 
           {/* Legality Warnings */}
-          {(legalityWarnings.restricted.length > 0 || legalityWarnings.forbidden.length > 0) && (
-            <div className="space-y-2">
-              {legalityWarnings.forbidden.length > 0 && (
-                <div className="flex items-start gap-2 rounded-lg bg-red-50 p-2 dark:bg-red-900/20">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
-                  <div className="text-xs">
-                    <span className="font-medium text-red-700 dark:text-red-300">
-                      {legalityWarnings.forbidden.length} forbidden item
-                      {legalityWarnings.forbidden.length !== 1 ? "s" : ""}
-                    </span>
-                    <span className="text-red-600 dark:text-red-400"> - illegal to possess</span>
-                  </div>
-                </div>
-              )}
-              {legalityWarnings.restricted.length > 0 && (
-                <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-2 dark:bg-amber-900/20">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
-                  <div className="text-xs">
-                    <span className="font-medium text-amber-700 dark:text-amber-300">
-                      {legalityWarnings.restricted.length} restricted item
-                      {legalityWarnings.restricted.length !== 1 ? "s" : ""}
-                    </span>
-                    <span className="text-amber-600 dark:text-amber-400"> - requires license</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          <LegalityWarnings items={legalityItems} />
 
           {/* Selected weapons grouped by category */}
           {selectedWeapons.length > 0 && (

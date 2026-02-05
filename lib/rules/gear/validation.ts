@@ -628,6 +628,35 @@ export function isAvailabilityValidForCreation(
 }
 
 /**
+ * Client-facing legality status for creation UI feedback.
+ */
+export type CreationLegalityStatus = "legal" | "restricted" | "forbidden" | "over-availability";
+
+/**
+ * Check if an item is legal at character creation.
+ * Uses CREATION_CONSTRAINTS for availability threshold.
+ */
+export function isLegalAtCreation(availability: number, legality?: ItemLegality): boolean {
+  if (legality === "forbidden") return false;
+  if (legality === "restricted") return false;
+  return availability <= CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
+}
+
+/**
+ * Get the specific legality status for creation UI display.
+ * Returns the most severe issue first.
+ */
+export function getCreationLegalityStatus(
+  availability: number,
+  legality?: ItemLegality
+): CreationLegalityStatus {
+  if (legality === "forbidden") return "forbidden";
+  if (legality === "restricted") return "restricted";
+  if (availability > CREATION_CONSTRAINTS.maxAvailabilityAtCreation) return "over-availability";
+  return "legal";
+}
+
+/**
  * Quick check if a device rating is valid for creation
  */
 export function isDeviceRatingValidForCreation(deviceRating: number): boolean {

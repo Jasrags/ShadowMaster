@@ -740,6 +740,8 @@ export interface GearItem {
   /** Total cost including mods */
   cost: number;
   availability?: number;
+  /** Legality status: "restricted" (R) or "forbidden" (F) */
+  legality?: ItemLegality;
   rating?: number;
   /** Total capacity for modifications */
   capacity?: number;

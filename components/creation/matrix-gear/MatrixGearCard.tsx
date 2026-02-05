@@ -28,7 +28,13 @@ import type {
   CharacterDataSoftware,
 } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CreationCard, KarmaConversionModal, useKarmaConversionPrompt } from "../shared";
+import {
+  CreationCard,
+  KarmaConversionModal,
+  useKarmaConversionPrompt,
+  LegalityWarnings,
+  LegalityBadge,
+} from "../shared";
 import { MatrixGearModal } from "./MatrixGearModal";
 import {
   Lock,
@@ -39,7 +45,6 @@ import {
   Map,
   ShoppingCart,
   GraduationCap,
-  AlertTriangle,
   X,
 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
@@ -102,6 +107,7 @@ function CommlinkRow({
           <span className="rounded bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400">
             DR {commlink.deviceRating}
           </span>
+          <LegalityBadge legality={commlink.legality} availability={commlink.availability} />
         </div>
       </div>
       <span className="shrink-0 text-xs font-medium text-zinc-600 dark:text-zinc-400">
@@ -142,6 +148,7 @@ function CyberdeckRow({
           <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/40 dark:text-purple-400">
             DR {cyberdeck.deviceRating}
           </span>
+          <LegalityBadge legality={cyberdeck.legality} availability={cyberdeck.availability} />
         </div>
         <div className="text-xs text-zinc-500 dark:text-zinc-400">
           ASDF: {asdf} | Programs: {cyberdeck.programSlots}
@@ -288,28 +295,28 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const remaining = totalNuyen - totalSpent;
   const isOverBudget = remaining < 0;
 
-  // Calculate legality warnings
-  const legalityWarnings = useMemo(() => {
-    const restricted: Array<{ name: string }> = [];
-    const forbidden: Array<{ name: string }> = [];
-
+  // Build flat list for legality warnings
+  const legalityItems = useMemo(() => {
+    const items: Array<{
+      name: string;
+      legality?: import("@/lib/types").ItemLegality;
+      availability?: number;
+    }> = [];
     for (const commlink of selectedCommlinks) {
-      if (commlink.legality === "restricted") {
-        restricted.push(commlink);
-      } else if (commlink.legality === "forbidden") {
-        forbidden.push(commlink);
-      }
+      items.push({
+        name: commlink.name,
+        legality: commlink.legality,
+        availability: commlink.availability,
+      });
     }
-
     for (const cyberdeck of selectedCyberdecks) {
-      if (cyberdeck.legality === "restricted") {
-        restricted.push(cyberdeck);
-      } else if (cyberdeck.legality === "forbidden") {
-        forbidden.push(cyberdeck);
-      }
+      items.push({
+        name: cyberdeck.name,
+        legality: cyberdeck.legality,
+        availability: cyberdeck.availability,
+      });
     }
-
-    return { restricted, forbidden };
+    return items;
   }, [selectedCommlinks, selectedCyberdecks]);
 
   // Karma conversion hook
@@ -582,34 +589,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
           </div>
 
           {/* Legality Warnings */}
-          {(legalityWarnings.restricted.length > 0 || legalityWarnings.forbidden.length > 0) && (
-            <div className="space-y-2">
-              {legalityWarnings.forbidden.length > 0 && (
-                <div className="flex items-start gap-2 rounded-lg bg-red-50 p-2 dark:bg-red-900/20">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-red-500 mt-0.5" />
-                  <div className="text-xs">
-                    <span className="font-medium text-red-700 dark:text-red-300">
-                      {legalityWarnings.forbidden.length} forbidden item
-                      {legalityWarnings.forbidden.length !== 1 ? "s" : ""}
-                    </span>
-                    <span className="text-red-600 dark:text-red-400"> - illegal to possess</span>
-                  </div>
-                </div>
-              )}
-              {legalityWarnings.restricted.length > 0 && (
-                <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-2 dark:bg-amber-900/20">
-                  <AlertTriangle className="h-4 w-4 shrink-0 text-amber-500 mt-0.5" />
-                  <div className="text-xs">
-                    <span className="font-medium text-amber-700 dark:text-amber-300">
-                      {legalityWarnings.restricted.length} restricted item
-                      {legalityWarnings.restricted.length !== 1 ? "s" : ""}
-                    </span>
-                    <span className="text-amber-600 dark:text-amber-400"> - requires license</span>
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
+          <LegalityWarnings items={legalityItems} />
 
           {/* Selected matrix gear grouped by category */}
           {totalItems > 0 && (

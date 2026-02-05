@@ -18,3 +18,6 @@ export type {
   UseKarmaConversionPromptReturn,
 } from "./useKarmaConversionPrompt";
 export { RatingSelector, useRatingSelection } from "./RatingSelector";
+export { LegalityWarnings } from "./LegalityWarnings";
+export type { LegalityWarningItem } from "./LegalityWarnings";
+export { LegalityBadge } from "./LegalityBadge";

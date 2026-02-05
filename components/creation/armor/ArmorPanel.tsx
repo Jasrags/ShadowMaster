@@ -27,6 +27,7 @@ import {
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
+  LegalityWarnings,
 } from "../shared";
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
@@ -539,6 +540,9 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
               />
             </div>
           </div>
+
+          {/* Legality Warnings */}
+          <LegalityWarnings items={selectedArmor} />
 
           {/* Selected armor grouped by category */}
           {selectedArmor.length > 0 ? (
