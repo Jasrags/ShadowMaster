@@ -126,6 +126,7 @@ function createMockCharacter(overrides?: Partial<Character>): Character {
 function createMockVehicle(overrides?: Partial<Vehicle>): Vehicle {
   return {
     id: TEST_VEHICLE_ID,
+    catalogId: "westwind-3000",
     name: "Westwind 3000",
     type: "ground",
     handling: 5,
@@ -135,6 +136,8 @@ function createMockVehicle(overrides?: Partial<Vehicle>): Vehicle {
     armor: 6,
     pilot: 2,
     sensor: 3,
+    cost: 150000,
+    availability: 12,
     ...overrides,
   };
 }

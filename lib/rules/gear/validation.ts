@@ -22,6 +22,7 @@ import type {
   InstalledArmorMod,
   InstalledGearMod,
   ItemLegality,
+  Vehicle,
 } from "@/lib/types";
 import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
 import type { CharacterRCC, CharacterDrone, CharacterAutosoft } from "@/lib/types/character";
@@ -76,7 +77,8 @@ export interface GearValidationError {
     | "rcc"
     | "modification"
     | "drone"
-    | "autosoft";
+    | "autosoft"
+    | "vehicle";
   field?: string;
   details?: Record<string, unknown>;
 }
@@ -152,8 +154,8 @@ export function validateAllGear(
   // Validate autosofts (availability only)
   errors.push(...validateAutosofts(character.autosofts ?? [], ctx));
 
-  // TODO: Validate vehicles - the Vehicle type lacks availability/legality fields.
-  // Once Vehicle type is updated to include these, add vehicle validation here.
+  // Validate vehicles (availability + legality)
+  errors.push(...validateVehicles(character.vehicles ?? [], ctx));
 
   return {
     valid: errors.length === 0,
@@ -379,6 +381,32 @@ function validateAutosofts(
         autosoft.name,
         "autosoft",
         context
+      );
+      if (availResult) errors.push(availResult);
+    }
+  }
+
+  return errors;
+}
+
+/**
+ * Validate vehicles for availability and legality
+ */
+function validateVehicles(
+  vehicles: Vehicle[],
+  context: GearValidationContext
+): GearValidationError[] {
+  const errors: GearValidationError[] = [];
+
+  for (const vehicle of vehicles) {
+    // Check availability and legality
+    if (vehicle.availability !== undefined) {
+      const availResult = validateAvailability(
+        vehicle.availability,
+        vehicle.name,
+        "vehicle",
+        context,
+        vehicle.legality
       );
       if (availResult) errors.push(availResult);
     }
