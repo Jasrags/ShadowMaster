@@ -1138,6 +1138,8 @@ export interface EssenceHole {
 
 export interface Vehicle {
   id?: ID;
+  /** Reference to catalog vehicle ID */
+  catalogId: string;
   name: string;
   type: "ground" | "water" | "air" | "drone";
   handling: number;
@@ -1148,6 +1150,12 @@ export interface Vehicle {
   pilot: number;
   sensor: number;
   seats?: number;
+  /** Purchase cost in nuyen */
+  cost: number;
+  /** Availability rating */
+  availability: number;
+  /** Legality status (restricted/forbidden) */
+  legality?: ItemLegality;
   notes?: string;
 }
 

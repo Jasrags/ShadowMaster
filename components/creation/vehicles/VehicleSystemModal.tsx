@@ -29,6 +29,7 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { LegalityBadge } from "../shared/LegalityBadge";
 import {
   Search,
   Car,
@@ -683,6 +684,17 @@ export function VehicleSystemModal({
     canAfford = displayCost <= remainingNuyen;
     const isDisabled = isOwned;
 
+    // Get legality and availability for the badge (autosofts don't have legality)
+    const itemLegality =
+      activeType === "autosoft"
+        ? undefined
+        : (item as VehicleCatalogItemData | DroneCatalogItemData | RCCCatalogItemData).legality;
+    // Autosofts have availabilityPerRating, other items have availability
+    const itemAvailability =
+      activeType === "autosoft"
+        ? (item as AutosoftCatalogItemData).availabilityPerRating
+        : (item as VehicleCatalogItemData | DroneCatalogItemData | RCCCatalogItemData).availability;
+
     return (
       <button
         key={item.id}
@@ -700,6 +712,7 @@ export function VehicleSystemModal({
       >
         <div className="flex items-center gap-2">
           <span className={isOwned ? "line-through" : ""}>{item.name}</span>
+          <LegalityBadge legality={itemLegality} availability={itemAvailability} />
           {activeType === "drone" && (item as DroneCatalogItemData).canFly && (
             <span title="Can fly">
               <Plane className="h-3 w-3 text-sky-400" />

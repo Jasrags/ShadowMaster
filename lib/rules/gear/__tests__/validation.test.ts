@@ -756,6 +756,177 @@ describe("validateAllGear - Autosofts", () => {
 });
 
 // =============================================================================
+// VEHICLE VALIDATION TESTS
+// =============================================================================
+
+describe("validateAllGear - Vehicles", () => {
+  it("should pass for vehicles with availability <= 12", () => {
+    const character = createTestCharacter({
+      vehicles: [
+        {
+          catalogId: "dodge-scoot",
+          name: "Dodge Scoot",
+          type: "ground",
+          handling: 4,
+          speed: 3,
+          acceleration: 1,
+          body: 4,
+          armor: 4,
+          pilot: 1,
+          sensor: 1,
+          seats: 1,
+          cost: 3000,
+          availability: 0,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it("should fail for vehicles with availability > 12 at creation", () => {
+    const character = createTestCharacter({
+      vehicles: [
+        {
+          catalogId: "ares-roadmaster",
+          name: "Ares Roadmaster",
+          type: "ground",
+          handling: 3,
+          speed: 3,
+          acceleration: 1,
+          body: 18,
+          armor: 14,
+          pilot: 1,
+          sensor: 2,
+          seats: 8,
+          cost: 52000,
+          availability: 14,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_EXCEEDED");
+    expect(result.errors[0].itemType).toBe("vehicle");
+    expect(result.errors[0].itemName).toBe("Ares Roadmaster");
+  });
+
+  it("should fail for vehicles with restricted legality at creation", () => {
+    const character = createTestCharacter({
+      vehicles: [
+        {
+          catalogId: "gmc-bulldog-stepvan",
+          name: "GMC Bulldog Step-Van",
+          type: "ground",
+          handling: 4,
+          speed: 3,
+          acceleration: 2,
+          body: 16,
+          armor: 12,
+          pilot: 1,
+          sensor: 2,
+          seats: 4,
+          cost: 35000,
+          availability: 8,
+          legality: "restricted",
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_RESTRICTED");
+    expect(result.errors[0].itemType).toBe("vehicle");
+  });
+
+  it("should fail for vehicles with forbidden legality at creation", () => {
+    const character = createTestCharacter({
+      vehicles: [
+        {
+          catalogId: "ares-citymaster",
+          name: "Ares Citymaster",
+          type: "ground",
+          handling: 2,
+          speed: 2,
+          acceleration: 1,
+          body: 20,
+          armor: 20,
+          pilot: 1,
+          sensor: 3,
+          seats: 6,
+          cost: 330000,
+          availability: 10,
+          legality: "forbidden",
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].code).toBe("AVAILABILITY_FORBIDDEN");
+    expect(result.errors[0].itemType).toBe("vehicle");
+  });
+
+  it("should pass for active character with high availability vehicles", () => {
+    const character = createTestCharacter({
+      status: "active",
+      vehicles: [
+        {
+          catalogId: "ares-roadmaster",
+          name: "Ares Roadmaster",
+          type: "ground",
+          handling: 3,
+          speed: 3,
+          acceleration: 1,
+          body: 18,
+          armor: 14,
+          pilot: 1,
+          sensor: 2,
+          seats: 8,
+          cost: 52000,
+          availability: 14,
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+
+  it("should pass for active character with restricted vehicles", () => {
+    const character = createTestCharacter({
+      status: "active",
+      vehicles: [
+        {
+          catalogId: "gmc-bulldog-stepvan",
+          name: "GMC Bulldog Step-Van",
+          type: "ground",
+          handling: 4,
+          speed: 3,
+          acceleration: 2,
+          body: 16,
+          armor: 12,
+          pilot: 1,
+          sensor: 2,
+          seats: 4,
+          cost: 35000,
+          availability: 8,
+          legality: "restricted",
+        },
+      ],
+    });
+
+    const result = validateAllGear(character);
+    expect(result.valid).toBe(true);
+    expect(result.errors).toHaveLength(0);
+  });
+});
+
+// =============================================================================
 // CONSTANTS TESTS
 // =============================================================================
 

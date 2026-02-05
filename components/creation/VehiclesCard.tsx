@@ -26,7 +26,10 @@ import {
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
+  LegalityWarnings,
+  LegalityBadge,
 } from "./shared";
+import type { LegalityWarningItem } from "./shared";
 import {
   VehicleSystemModal,
   type VehicleSystemSelection,
@@ -419,6 +422,23 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     [selectedAutosofts, state.selections, updateState]
   );
 
+  // Legality items for warnings (combine vehicles, drones, RCCs)
+  const legalityItems: LegalityWarningItem[] = useMemo(() => {
+    const items: LegalityWarningItem[] = [];
+
+    for (const v of selectedVehicles) {
+      items.push({ name: v.name, legality: v.legality, availability: v.availability });
+    }
+    for (const d of selectedDrones) {
+      items.push({ name: d.name, legality: d.legality, availability: d.availability });
+    }
+    for (const r of selectedRCCs) {
+      items.push({ name: r.name, legality: r.legality, availability: r.availability });
+    }
+
+    return items;
+  }, [selectedVehicles, selectedDrones, selectedRCCs]);
+
   // Validation status
   const validationStatus = useMemo(() => {
     if (remaining < 0) return "error";
@@ -486,6 +506,9 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
             </div>
           </div>
 
+          {/* Legality Warnings */}
+          <LegalityWarnings items={legalityItems} />
+
           {/* Empty state */}
           {totalItems === 0 && (
             <div className="rounded-lg border-2 border-dashed border-zinc-200 p-3 text-center dark:border-zinc-700">
@@ -514,9 +537,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
                     )}
                     <div className="flex items-center justify-between py-1">
-                      <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
-                        {v.name}
-                      </span>
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
+                          {v.name}
+                        </span>
+                        <LegalityBadge legality={v.legality} availability={v.availability} />
+                      </div>
                       <div className="flex items-center gap-1">
                         <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                           ¥{formatCurrency(v.cost)}
@@ -556,9 +582,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
                     )}
                     <div className="flex items-center justify-between py-1">
-                      <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
-                        {d.name}
-                      </span>
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
+                          {d.name}
+                        </span>
+                        <LegalityBadge legality={d.legality} availability={d.availability} />
+                      </div>
                       <div className="flex items-center gap-1">
                         <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                           ¥{formatCurrency(d.cost)}
@@ -598,9 +627,12 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
                       <div className="my-1.5 border-t border-zinc-100 dark:border-zinc-800" />
                     )}
                     <div className="flex items-center justify-between py-1">
-                      <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
-                        {r.name}
-                      </span>
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="truncate text-sm text-zinc-900 dark:text-zinc-100">
+                          {r.name}
+                        </span>
+                        <LegalityBadge legality={r.legality} availability={r.availability} />
+                      </div>
                       <div className="flex items-center gap-1">
                         <span className="shrink-0 text-sm font-medium text-zinc-900 dark:text-zinc-100">
                           ¥{formatCurrency(r.cost)}
