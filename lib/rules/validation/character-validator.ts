@@ -887,6 +887,48 @@ const knowledgeLanguageValidator: ValidatorDefinition = {
     const knowledgeSkills: KnowledgeSkill[] =
       (creationState.selections.knowledgeSkills as KnowledgeSkill[] | undefined) ?? [];
 
+    // Duplicate language detection (case-insensitive)
+    const seenLanguages = new Set<string>();
+    const duplicateLanguages: string[] = [];
+    for (const lang of languages) {
+      const key = lang.name.toLowerCase().trim();
+      if (seenLanguages.has(key)) {
+        duplicateLanguages.push(lang.name);
+      } else {
+        seenLanguages.add(key);
+      }
+    }
+    if (duplicateLanguages.length > 0) {
+      issues.push({
+        code: "LANGUAGE_DUPLICATE",
+        message: `Duplicate languages selected: ${duplicateLanguages.join(", ")}`,
+        field: "languages",
+        severity: "error",
+        suggestion: "Remove duplicate language entries",
+      });
+    }
+
+    // Duplicate knowledge skill detection (case-insensitive)
+    const seenKnowledgeSkills = new Set<string>();
+    const duplicateKnowledgeSkills: string[] = [];
+    for (const skill of knowledgeSkills) {
+      const key = skill.name.toLowerCase().trim();
+      if (seenKnowledgeSkills.has(key)) {
+        duplicateKnowledgeSkills.push(skill.name);
+      } else {
+        seenKnowledgeSkills.add(key);
+      }
+    }
+    if (duplicateKnowledgeSkills.length > 0) {
+      issues.push({
+        code: "KNOWLEDGE_SKILL_DUPLICATE",
+        message: `Duplicate knowledge skills selected: ${duplicateKnowledgeSkills.join(", ")}`,
+        field: "knowledgeSkills",
+        severity: "error",
+        suggestion: "Remove duplicate knowledge skill entries",
+      });
+    }
+
     // Determine if character has the bilingual quality
     const positiveQualities =
       (creationState.selections.positiveQualities as Array<string | { id: string }> | undefined) ??
