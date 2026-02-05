@@ -4636,6 +4636,7 @@
             "summary": "Raise one skill max to 7 at creation, 13 after.",
             "requiresSpecification": true,
             "specificationLabel": "Skill",
+            "specificationSource": "skills",
             "statModifiers": {
               "skillMaxBonus": 1
             },
