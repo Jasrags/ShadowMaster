@@ -10,7 +10,14 @@
  * - Constraint: "Validation failures MUST prevent character finalization"
  */
 
-import type { Character, CharacterDraft, AdeptPower, FocusItem } from "@/lib/types/character";
+import type {
+  Character,
+  CharacterDraft,
+  AdeptPower,
+  FocusItem,
+  CyberwareItem,
+  BiowareItem,
+} from "@/lib/types/character";
 import type { MergedRuleset, Campaign, CreationMethod } from "@/lib/types";
 import type { CreationState } from "@/lib/types/creation";
 import {
@@ -55,6 +62,9 @@ import {
   KARMA_TO_NUYEN_LIMIT,
   SR5_KARMA_BUDGET,
 } from "./budget-calculator";
+import { isGradeAvailableAtCreation, applyGradeToAvailability } from "../augmentations/grades";
+import { isCyberlimb } from "@/lib/types/cyberlimb";
+import { CREATION_CONSTRAINTS } from "../gear/validation";
 
 // =============================================================================
 // CORE VALIDATORS
@@ -631,6 +641,112 @@ const qualityValidator: ValidatorDefinition = {
         field: error.field || "qualities",
         severity: "error",
       });
+    }
+
+    return issues;
+  },
+};
+
+/**
+ * Validate augmentation grades, availability, and capacity
+ *
+ * Rules enforced:
+ * - Beta and Delta grades are not available at character creation (max: Alpha)
+ * - Availability with grade modifiers cannot exceed 12 at creation
+ * - Cyberlimb capacity cannot be exceeded
+ * - Forbidden items cannot be purchased at creation
+ */
+const augmentationValidator: ValidatorDefinition = {
+  id: "augmentations",
+  name: "Augmentations",
+  description: "Validates augmentation grades, availability, and capacity",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { creationState } = context;
+
+    const cyberware = (creationState?.selections?.cyberware || []) as CyberwareItem[];
+    const bioware = (creationState?.selections?.bioware || []) as BiowareItem[];
+    const maxAvail = CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
+
+    // Validate cyberware
+    for (const item of cyberware) {
+      // Grade restriction
+      if (!isGradeAvailableAtCreation(item.grade)) {
+        issues.push({
+          code: "AUGMENTATION_GRADE_NOT_AVAILABLE",
+          message: `${item.name} uses ${item.grade} grade, not available at creation (max: alpha)`,
+          field: "cyberware",
+          severity: "error",
+        });
+      }
+
+      // Availability with grade modifier
+      const finalAvail = applyGradeToAvailability(item.availability ?? 0, item.grade, true);
+      if (finalAvail > maxAvail) {
+        issues.push({
+          code: "AUGMENTATION_AVAILABILITY_EXCEEDED",
+          message: `${item.name} availability ${finalAvail} exceeds max ${maxAvail}`,
+          field: "cyberware",
+          severity: "error",
+        });
+      }
+
+      // Cyberlimb capacity overflow
+      if (isCyberlimb(item)) {
+        const capacity = item.baseCapacity || item.capacity || 0;
+        const used = item.capacityUsed || 0;
+        if (used > capacity) {
+          issues.push({
+            code: "CYBERLIMB_CAPACITY_EXCEEDED",
+            message: `${item.name} capacity exceeded: ${used}/${capacity}`,
+            field: "cyberware",
+            severity: "error",
+          });
+        }
+      }
+
+      // Forbidden items
+      if (item.legality === "forbidden") {
+        issues.push({
+          code: "AUGMENTATION_FORBIDDEN",
+          message: `${item.name} is forbidden at character creation`,
+          field: "cyberware",
+          severity: "error",
+        });
+      }
+    }
+
+    // Validate bioware (same pattern, no capacity check)
+    for (const item of bioware) {
+      if (!isGradeAvailableAtCreation(item.grade)) {
+        issues.push({
+          code: "AUGMENTATION_GRADE_NOT_AVAILABLE",
+          message: `${item.name} uses ${item.grade} grade, not available at creation (max: alpha)`,
+          field: "bioware",
+          severity: "error",
+        });
+      }
+
+      const finalAvail = applyGradeToAvailability(item.availability ?? 0, item.grade, false);
+      if (finalAvail > maxAvail) {
+        issues.push({
+          code: "AUGMENTATION_AVAILABILITY_EXCEEDED",
+          message: `${item.name} availability ${finalAvail} exceeds max ${maxAvail}`,
+          field: "bioware",
+          severity: "error",
+        });
+      }
+
+      if (item.legality === "forbidden") {
+        issues.push({
+          code: "AUGMENTATION_FORBIDDEN",
+          message: `${item.name} is forbidden at character creation`,
+          field: "bioware",
+          severity: "error",
+        });
+      }
     }
 
     return issues;
@@ -2109,6 +2225,7 @@ const validators: ValidatorDefinition[] = [
   identityValidator,
   magicValidator,
   qualityValidator,
+  augmentationValidator,
   skillRatingValidator,
   complexFormValidator,
   spellValidator,

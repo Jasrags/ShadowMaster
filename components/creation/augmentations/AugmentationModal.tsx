@@ -28,6 +28,10 @@ import {
   type CyberwareCatalogItemData,
   type BiowareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
+import {
+  getCreationAvailableCyberwareGrades,
+  getCreationAvailableBiowareGrades,
+} from "@/lib/rules/augmentations/grades";
 import type { CyberwareGrade, BiowareGrade, ItemLegality, CyberwareItem } from "@/lib/types";
 import {
   type CyberlimbLocation,
@@ -317,13 +321,18 @@ export function AugmentationModal({
     setSelectedSkill(null);
   }, []);
 
-  // Available grades based on type
+  // Available grades based on type, filtered by creation restrictions
   const availableGrades = useMemo(() => {
-    if (isCyberware) {
-      return cyberwareGrades;
-    }
-    // Bioware can't have "used" grade
-    return biowareGrades.filter((g) => g.id !== "used");
+    // Get creation-available grade IDs
+    const creationGradeIds = isCyberware
+      ? getCreationAvailableCyberwareGrades()
+      : getCreationAvailableBiowareGrades();
+
+    // Filter ruleset grades to only those available at creation
+    const allGrades = isCyberware ? cyberwareGrades : biowareGrades;
+    return allGrades.filter((g) =>
+      creationGradeIds.includes(g.id as (typeof creationGradeIds)[number])
+    );
   }, [isCyberware, cyberwareGrades, biowareGrades]);
 
   // Filter catalog items

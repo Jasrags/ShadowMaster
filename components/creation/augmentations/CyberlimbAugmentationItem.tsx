@@ -8,7 +8,7 @@
  */
 
 import { useMemo, useState } from "react";
-import { ChevronDown, ChevronRight, Plus, Shield, X } from "lucide-react";
+import { ChevronDown, ChevronRight, Plus, Shield, X, AlertTriangle } from "lucide-react";
 import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 import { formatCurrency, formatEssence, GRADE_DISPLAY } from "./utils";
 
@@ -289,9 +289,34 @@ export function CyberlimbAugmentationItem({
             )}
           </div>
 
-          {/* Capacity summary */}
-          <div className="text-[10px] text-zinc-400 dark:text-zinc-500">
-            Capacity: {item.capacityUsed || 0}/{totalCapacity} used ({remainingCapacity} remaining)
+          {/* Capacity Bar */}
+          <div className="space-y-1">
+            <div className="flex items-center justify-between text-[10px]">
+              <span className="text-zinc-500 dark:text-zinc-400">Capacity</span>
+              <span
+                className={
+                  remainingCapacity < 0
+                    ? "font-medium text-red-500"
+                    : "text-zinc-600 dark:text-zinc-300"
+                }
+              >
+                {item.capacityUsed || 0} / {totalCapacity}
+              </span>
+            </div>
+            <div className="h-1.5 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+              <div
+                className={`h-full transition-all ${remainingCapacity < 0 ? "bg-red-500" : "bg-cyan-500"}`}
+                style={{
+                  width: `${Math.min(100, ((item.capacityUsed || 0) / totalCapacity) * 100)}%`,
+                }}
+              />
+            </div>
+            {remainingCapacity < 0 && (
+              <div className="flex items-center gap-1 text-[10px] text-red-500">
+                <AlertTriangle className="h-3 w-3" />
+                <span>Capacity exceeded by {Math.abs(remainingCapacity)}</span>
+              </div>
+            )}
           </div>
         </div>
       )}

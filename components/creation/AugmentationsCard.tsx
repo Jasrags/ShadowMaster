@@ -23,6 +23,8 @@ import {
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
+  LegalityWarnings,
+  type LegalityWarningItem,
 } from "./shared";
 import {
   AugmentationModal,
@@ -41,6 +43,7 @@ import {
   type InstalledCyberlimb,
   type InstalledSkillLinkedBioware,
 } from "./augmentations";
+import { applyGradeToAvailability } from "@/lib/rules/augmentations/grades";
 import {
   type CyberlimbLocation,
   type CyberlimbType,
@@ -225,6 +228,23 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
 
     return grouped;
   }, [allAugmentations]);
+
+  // Build legality warning items with grade-adjusted availability
+  const legalityWarningItems = useMemo((): LegalityWarningItem[] => {
+    const items: LegalityWarningItem[] = [];
+
+    for (const item of selectedCyberware) {
+      const finalAvail = applyGradeToAvailability(item.availability ?? 0, item.grade, true);
+      items.push({ name: item.name, legality: item.legality, availability: finalAvail });
+    }
+
+    for (const item of selectedBioware) {
+      const finalAvail = applyGradeToAvailability(item.availability ?? 0, item.grade, false);
+      items.push({ name: item.name, legality: item.legality, availability: finalAvail });
+    }
+
+    return items;
+  }, [selectedCyberware, selectedBioware]);
 
   // Add augmentation (actual implementation)
   const actuallyAddAugmentation = useCallback(
@@ -857,6 +877,9 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
               ))}
             </div>
           )}
+
+          {/* Legality warnings for augmentations */}
+          <LegalityWarnings items={legalityWarningItems} />
 
           {/* Selected Augmentations - Grouped by Category */}
           {allAugmentations.length > 0 ? (
