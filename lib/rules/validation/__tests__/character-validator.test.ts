@@ -8,6 +8,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import type { Character, CharacterDraft } from "@/lib/types/character";
 import type { MergedRuleset, CreationMethod, Campaign, CreationState } from "@/lib/types";
+import { FocusType } from "@/lib/types/edition";
 import {
   validateCharacter,
   validateForFinalization,
@@ -3349,6 +3350,455 @@ describe("Character Validator", () => {
 
       expect(result.errors).toContainEqual(
         expect.objectContaining({ code: "ADEPT_POWER_NOT_FOUND" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // FOCI VALIDATOR
+  // ===========================================================================
+
+  describe("fociValidator (via validateCharacter)", () => {
+    // Helper: ruleset with foci catalog
+    function createFociRuleset() {
+      return createMinimalRuleset({
+        modules: {
+          foci: {
+            foci: [
+              {
+                id: "weapon-focus",
+                name: "Weapon Focus",
+                type: "weapon",
+                costMultiplier: 7000,
+                bondingKarmaMultiplier: 3,
+                availability: 0,
+                legality: "restricted",
+              },
+              {
+                id: "power-focus",
+                name: "Power Focus",
+                type: "power",
+                costMultiplier: 18000,
+                bondingKarmaMultiplier: 8,
+                availability: 0,
+                legality: "restricted",
+              },
+              {
+                id: "qi-focus",
+                name: "Qi Focus",
+                type: "qi",
+                costMultiplier: 3000,
+                bondingKarmaMultiplier: 2,
+                availability: 0,
+                legality: "restricted",
+              },
+              {
+                id: "spell-focus",
+                name: "Spell Focus",
+                type: "spell",
+                costMultiplier: 4000,
+                bondingKarmaMultiplier: 4,
+                availability: 0,
+                legality: "restricted",
+              },
+            ],
+          },
+        },
+      });
+    }
+
+    // --- Happy path ---
+
+    it("should produce no errors for valid bonded foci", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: true,
+            karmaToBond: 9, // 3 × 3
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+      const creationState = createMinimalCreationState({
+        budgets: { "karma-spent-foci": 9 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: expect.stringMatching(/^FOCUS_/) })
+      );
+    });
+
+    // --- Mundane skip ---
+
+    it("should skip validation for mundane characters", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mundane",
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: true,
+            karmaToBond: 999, // Wrong, but should be skipped
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      const focusIssues = [...result.errors, ...result.warnings].filter((i) =>
+        i.code.startsWith("FOCUS_")
+      );
+      expect(focusIssues).toHaveLength(0);
+    });
+
+    // --- Empty foci ---
+
+    it("should skip validation when foci array is empty", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      const focusIssues = [...result.errors, ...result.warnings].filter((i) =>
+        i.code.startsWith("FOCUS_")
+      );
+      expect(focusIssues).toHaveLength(0);
+    });
+
+    // --- Catalog existence ---
+
+    it("should reject unknown catalogId", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "totally-fake-focus",
+            name: "Fake",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: false,
+            karmaToBond: 9,
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "FOCUS_NOT_FOUND" }));
+    });
+
+    // --- Bonding karma mismatch ---
+
+    it("should reject bonding karma mismatch", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: true,
+            karmaToBond: 12, // Should be 9 (3 × 3)
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: "FOCUS_KARMA_MISMATCH" })
+      );
+    });
+
+    it("should not produce FOCUS_KARMA_MISMATCH for correct karma", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "power-focus",
+            name: "Power Focus",
+            type: FocusType.Power,
+            force: 2,
+            bonded: true,
+            karmaToBond: 16, // 2 × 8 = correct
+            cost: 36000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+      const creationState = createMinimalCreationState({
+        budgets: { "karma-spent-foci": 16 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "FOCUS_KARMA_MISMATCH" })
+      );
+    });
+
+    // --- Force range ---
+
+    it("should reject force < 1", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 0,
+            bonded: false,
+            karmaToBond: 0,
+            cost: 0,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: "FOCUS_FORCE_OUT_OF_RANGE" })
+      );
+    });
+
+    it("should reject force > 6", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 7,
+            bonded: false,
+            karmaToBond: 21,
+            cost: 49000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({ code: "FOCUS_FORCE_OUT_OF_RANGE" })
+      );
+    });
+
+    // --- Qi focus path restriction ---
+
+    it("should reject qi focus on magician", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "qi-focus",
+            name: "Qi Focus",
+            type: FocusType.Qi,
+            force: 2,
+            bonded: true,
+            karmaToBond: 4, // 2 × 2
+            cost: 6000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "creation" });
+
+      expect(result.errors).toContainEqual(expect.objectContaining({ code: "FOCUS_QI_NOT_ADEPT" }));
+    });
+
+    it("should allow qi focus on adept", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "qi-focus",
+            name: "Qi Focus",
+            type: FocusType.Qi,
+            force: 2,
+            bonded: true,
+            karmaToBond: 4, // 2 × 2
+            cost: 6000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+      const creationState = createMinimalCreationState({
+        budgets: { "karma-spent-foci": 4 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "FOCUS_QI_NOT_ADEPT" })
+      );
+    });
+
+    it("should allow qi focus on mystic-adept", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "mystic-adept",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "qi-focus",
+            name: "Qi Focus",
+            type: FocusType.Qi,
+            force: 2,
+            bonded: true,
+            karmaToBond: 4, // 2 × 2
+            cost: 6000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+      const creationState = createMinimalCreationState({
+        budgets: { "karma-spent-foci": 4 },
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "FOCUS_QI_NOT_ADEPT" })
+      );
+    });
+
+    // --- Budget integrity ---
+
+    it("should warn on budget mismatch", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: true,
+            karmaToBond: 9, // 3 × 3
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+      const creationState = createMinimalCreationState({
+        budgets: { "karma-spent-foci": 5 }, // Should be 9
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        creationState,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({ code: "FOCUS_KARMA_BUDGET_MISMATCH", severity: "warning" })
+      );
+    });
+
+    // --- All unbonded at finalization ---
+
+    it("should produce info when all foci are unbonded at finalization", async () => {
+      const character = createMinimalCharacter({
+        magicalPath: "full-mage",
+        specialAttributes: { edge: 2, essence: 6, magic: 6 },
+        foci: [
+          {
+            id: "f1",
+            catalogId: "weapon-focus",
+            name: "Weapon Focus",
+            type: FocusType.Weapon,
+            force: 3,
+            bonded: false,
+            karmaToBond: 9,
+            cost: 21000,
+            availability: 0,
+          },
+        ],
+      });
+      const ruleset = createFociRuleset();
+
+      const result = await validateCharacter({ character, ruleset, mode: "finalization" });
+
+      const allIssues = [...result.errors, ...result.warnings];
+      expect(allIssues).toContainEqual(
+        expect.objectContaining({ code: "FOCUS_NONE_BONDED", severity: "info" })
       );
     });
   });

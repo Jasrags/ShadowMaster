@@ -10,7 +10,7 @@
  * - Constraint: "Validation failures MUST prevent character finalization"
  */
 
-import type { Character, CharacterDraft, AdeptPower } from "@/lib/types/character";
+import type { Character, CharacterDraft, AdeptPower, FocusItem } from "@/lib/types/character";
 import type { MergedRuleset, Campaign, CreationMethod } from "@/lib/types";
 import type { CreationState } from "@/lib/types/creation";
 import {
@@ -39,6 +39,7 @@ import type {
   SkillGroupData,
   SpellsCatalogData,
   AdeptPowerCatalogItem,
+  FocusCatalogItemData,
 } from "../loader-types";
 import {
   canDesignateForFreeSkill,
@@ -1456,6 +1457,137 @@ const adeptPowerValidator: ValidatorDefinition = {
 };
 
 // =============================================================================
+// FOCI VALIDATOR
+// =============================================================================
+
+/** Magical paths that can bond foci */
+const FOCI_PATHS = ["full-mage", "aspected-mage", "mystic-adept", "adept"];
+
+/** Magical paths that can bond qi foci (adept powers only) */
+const QI_FOCUS_PATHS = ["adept", "mystic-adept"];
+
+/**
+ * Validate foci bonding karma for magical characters
+ */
+const fociValidator: ValidatorDefinition = {
+  id: "foci",
+  name: "Foci",
+  description: "Validates foci bonding karma calculations and path restrictions",
+  modes: ["creation", "finalization"],
+  priority: 6,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, ruleset, creationState, mode } = context;
+
+    // Resolve magical path (same pattern as adeptPowerValidator)
+    const rawMagicalPath =
+      character.magicalPath && character.magicalPath !== "mundane"
+        ? character.magicalPath
+        : (creationState?.selections?.["magical-path"] as string | undefined);
+    const normalizedPath = rawMagicalPath
+      ? (MAGICAL_PATH_SELECTION_MAP[rawMagicalPath] ?? rawMagicalPath)
+      : undefined;
+
+    // Only applies to magical paths that can bond foci
+    if (!normalizedPath || !FOCI_PATHS.includes(normalizedPath)) {
+      return issues;
+    }
+
+    // Get foci from character or creation selections
+    const foci: FocusItem[] =
+      character.foci || (creationState?.selections?.foci as FocusItem[] | undefined) || [];
+
+    if (foci.length === 0) {
+      return issues;
+    }
+
+    // Get foci catalog from merged ruleset
+    const fociModule = getModule<{ foci: FocusCatalogItemData[] }>(ruleset, "foci");
+    const fociCatalog = fociModule?.foci || [];
+    const catalogMap = new Map(fociCatalog.map((f) => [f.id, f]));
+
+    let totalBondedKarma = 0;
+
+    for (const focus of foci) {
+      const catalogFocus = catalogMap.get(focus.catalogId);
+
+      // Check: catalog existence
+      if (!catalogFocus) {
+        issues.push({
+          code: "FOCUS_NOT_FOUND",
+          message: `Focus "${focus.catalogId}" not found in ruleset`,
+          field: "foci",
+          severity: "error",
+        });
+        continue;
+      }
+
+      // Check: force range (1-6 for starting characters)
+      if (focus.force < 1 || focus.force > 6) {
+        issues.push({
+          code: "FOCUS_FORCE_OUT_OF_RANGE",
+          message: `Focus "${focus.catalogId}" has force ${focus.force}, must be 1-6`,
+          field: "foci",
+          severity: "error",
+        });
+      }
+
+      // Check: bonding karma formula (karmaToBond = force × bondingKarmaMultiplier)
+      const expectedKarma = focus.force * catalogFocus.bondingKarmaMultiplier;
+      if (focus.karmaToBond !== expectedKarma) {
+        issues.push({
+          code: "FOCUS_KARMA_MISMATCH",
+          message: `Focus "${focus.catalogId}" bonding karma ${focus.karmaToBond} does not match expected ${expectedKarma} (force ${focus.force} × multiplier ${catalogFocus.bondingKarmaMultiplier})`,
+          field: "foci",
+          severity: "error",
+        });
+      }
+
+      // Check: qi focus path restriction (only adepts and mystic adepts)
+      if (catalogFocus.type === "qi" && !QI_FOCUS_PATHS.includes(normalizedPath)) {
+        issues.push({
+          code: "FOCUS_QI_NOT_ADEPT",
+          message: `Qi focus "${focus.catalogId}" can only be used by adepts and mystic adepts`,
+          field: "foci",
+          severity: "error",
+        });
+      }
+
+      if (focus.bonded) {
+        totalBondedKarma += focus.karmaToBond;
+      }
+    }
+
+    // Check: budget integrity — budgets["karma-spent-foci"] should match sum of bonded karmaToBond
+    const budgetKarma = (creationState?.budgets?.["karma-spent-foci"] as number | undefined) ?? 0;
+    if (budgetKarma !== totalBondedKarma) {
+      issues.push({
+        code: "FOCUS_KARMA_BUDGET_MISMATCH",
+        message: `Foci karma budget (${budgetKarma}) does not match sum of bonded foci karma (${totalBondedKarma})`,
+        field: "foci",
+        severity: "warning",
+      });
+    }
+
+    // Check: all foci unbonded at finalization (info level)
+    if (mode === "finalization") {
+      const anyBonded = foci.some((f) => f.bonded);
+      if (!anyBonded) {
+        issues.push({
+          code: "FOCUS_NONE_BONDED",
+          message:
+            "All foci are unbonded — bonding costs karma but provides no benefit until bonded",
+          field: "foci",
+          severity: "info",
+        });
+      }
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
 // SKILL GROUP CONSTRAINT VALIDATOR
 // =============================================================================
 
@@ -1687,6 +1819,7 @@ const validators: ValidatorDefinition[] = [
   complexFormValidator,
   spellValidator,
   adeptPowerValidator,
+  fociValidator,
   skillGroupConstraintValidator,
   freeSkillValidator,
   contactValidator,
