@@ -32,7 +32,7 @@ import {
 import { ArmorRow } from "./ArmorRow";
 import { ArmorPurchaseModal, type CustomClothingItem } from "./ArmorPurchaseModal";
 import { ArmorModificationModal } from "./ArmorModificationModal";
-import { Lock, Plus } from "lucide-react";
+import { Lock, Plus, AlertTriangle } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
 // =============================================================================
@@ -81,6 +81,14 @@ function getArmorCategory(armor: ArmorItem): ArmorCategoryKey {
 
   // Default to body armor
   return "body";
+}
+
+/**
+ * Check if an armor category is "main armor" (non-stackable).
+ * Body armor and full body armor cannot be worn together.
+ */
+function isMainArmorCategory(category: ArmorCategoryKey): boolean {
+  return category === "body" || category === "fba";
 }
 
 // =============================================================================
@@ -149,6 +157,13 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     }
     return grouped;
   }, [selectedArmor]);
+
+  // Detect armor stacking (multiple main armor pieces)
+  const mainArmorItems = useMemo(() => {
+    return selectedArmor.filter((a) => isMainArmorCategory(getArmorCategory(a)));
+  }, [selectedArmor]);
+
+  const hasArmorStacking = mainArmorItems.length > 1;
 
   // Calculate budget (shared with GearCard and WeaponsPanel)
   const karmaConversion = (state.budgets?.["karma-spent-gear"] as number) || 0;
@@ -543,6 +558,18 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
 
           {/* Legality Warnings */}
           <LegalityWarnings items={selectedArmor} />
+
+          {/* Armor Stacking Warning */}
+          {hasArmorStacking && (
+            <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-2 text-amber-800 dark:border-amber-800/50 dark:bg-amber-900/20 dark:text-amber-200">
+              <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0" />
+              <div className="text-xs">
+                <span className="font-medium">Multiple main armor pieces: </span>
+                {mainArmorItems.map((a) => a.name).join(", ")}. Only one main armor piece can be
+                worn at a time. Consider using armor accessories instead.
+              </div>
+            </div>
+          )}
 
           {/* Selected armor grouped by category */}
           {selectedArmor.length > 0 ? (

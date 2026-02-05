@@ -5,7 +5,7 @@
  *
  * Card for entering character biographical information during creation.
  * Features:
- * - Street name input
+ * - Street name input with length limit
  * - Physical description
  * - Background/history
  * - All fields optional
@@ -14,6 +14,12 @@
 import { useCallback } from "react";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+const MAX_CHARACTER_NAME_LENGTH = 100;
 
 // =============================================================================
 // TYPES
@@ -38,6 +44,11 @@ export function CharacterInfoCard({ state, updateState }: CharacterInfoCardProps
   // Check completion status
   const hasName = characterName.trim().length > 0;
   const hasAnyInfo = hasName || description.trim().length > 0 || background.trim().length > 0;
+
+  // Name length tracking
+  const nameLength = characterName.length;
+  const isNameNearLimit = nameLength >= MAX_CHARACTER_NAME_LENGTH - 10; // Within 10 chars of limit
+  const isNameAtOrOverLimit = nameLength >= MAX_CHARACTER_NAME_LENGTH;
 
   // Update handlers
   const handleUpdate = useCallback(
@@ -68,9 +79,32 @@ export function CharacterInfoCard({ state, updateState }: CharacterInfoCardProps
             type="text"
             value={characterName}
             onChange={(e) => handleUpdate("characterName", e.target.value)}
-            className="w-full rounded border border-zinc-300 bg-white px-2 py-1.5 text-sm focus:border-blue-500 focus:outline-none dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-100"
+            maxLength={MAX_CHARACTER_NAME_LENGTH + 10} // Allow slight overflow for feedback
+            className={`w-full rounded border bg-white px-2 py-1.5 text-sm focus:outline-none dark:bg-zinc-800 dark:text-zinc-100 ${
+              isNameAtOrOverLimit
+                ? "border-amber-500 focus:border-amber-600 dark:border-amber-500"
+                : "border-zinc-300 focus:border-blue-500 dark:border-zinc-600"
+            }`}
             placeholder="Your runner handle"
           />
+          <div className="mt-1 flex items-center justify-between">
+            <span
+              className={`text-xs ${
+                isNameAtOrOverLimit
+                  ? "font-medium text-amber-600 dark:text-amber-400"
+                  : isNameNearLimit
+                    ? "text-amber-500 dark:text-amber-400"
+                    : "text-zinc-400"
+              }`}
+            >
+              {nameLength}/{MAX_CHARACTER_NAME_LENGTH}
+            </span>
+            {isNameAtOrOverLimit && (
+              <span className="text-xs text-amber-600 dark:text-amber-400">
+                Name exceeds recommended length
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Gender */}

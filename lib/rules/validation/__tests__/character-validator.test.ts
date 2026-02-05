@@ -1914,7 +1914,7 @@ describe("Character Validator", () => {
 
     it("should warn when total contact points exceed charisma budget", async () => {
       const character = createMinimalCharacter({
-        attributes: { cha: 2 }, // CHA 2 × 3 = 6 point budget
+        attributes: { charisma: 2 }, // CHA 2 × 3 = 6 point budget
         contacts: [
           { name: "Fixer", connection: 4, loyalty: 3 }, // 7 points
         ],
@@ -4240,6 +4240,269 @@ describe("Character Validator", () => {
       const allIssues = [...result.errors, ...result.warnings];
       expect(allIssues).toContainEqual(
         expect.objectContaining({ code: "FOCUS_NONE_BONDED", severity: "info" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // NAME LENGTH VALIDATOR (Issue #264)
+  // ===========================================================================
+
+  describe("basicInfoValidator - name length (via validateCharacter)", () => {
+    it("should return warning when name exceeds 100 characters", async () => {
+      const longName = "A".repeat(101);
+      const character = createMinimalCharacter({ name: longName });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NAME_TOO_LONG",
+          field: "name",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should not warn when name is exactly 100 characters", async () => {
+      const exactName = "A".repeat(100);
+      const character = createMinimalCharacter({ name: exactName });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "NAME_TOO_LONG" })
+      );
+    });
+
+    it("should not warn when name is under 100 characters", async () => {
+      const shortName = "Test Runner";
+      const character = createMinimalCharacter({ name: shortName });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "NAME_TOO_LONG" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // DUPLICATE CONTACT NAME VALIDATOR (Issue #264)
+  // ===========================================================================
+
+  describe("contactValidator - duplicate names (via validateCharacter)", () => {
+    it("should warn when duplicate contact names exist", async () => {
+      const character = createMinimalCharacter({
+        contacts: [
+          { name: "Fixer", connection: 4, loyalty: 3 },
+          { name: "Fixer", connection: 2, loyalty: 2 },
+        ],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "CONTACT_DUPLICATE_NAME",
+          field: "contacts",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should warn for case-insensitive duplicates", async () => {
+      const character = createMinimalCharacter({
+        contacts: [
+          { name: "Fixer", connection: 4, loyalty: 3 },
+          { name: "fixer", connection: 2, loyalty: 2 },
+        ],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "CONTACT_DUPLICATE_NAME",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should not warn when all contact names are unique", async () => {
+      const character = createMinimalCharacter({
+        contacts: [
+          { name: "Fixer", connection: 4, loyalty: 3 },
+          { name: "Street Doc", connection: 3, loyalty: 4 },
+        ],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "CONTACT_DUPLICATE_NAME" })
+      );
+    });
+  });
+
+  // ===========================================================================
+  // ARMOR STACKING VALIDATOR (Issue #264)
+  // ===========================================================================
+
+  describe("armorStackingValidator (via validateCharacter)", () => {
+    it("should warn when multiple body armor pieces are selected", async () => {
+      const character = createMinimalCharacter({
+        armor: [
+          { id: "a1", name: "Armor Jacket", armorRating: 12 },
+          { id: "a2", name: "Lined Coat", armorRating: 9 },
+        ] as Character["armor"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "ARMOR_STACKING",
+          field: "armor",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should warn when body armor and full body armor are selected", async () => {
+      const character = createMinimalCharacter({
+        armor: [
+          { id: "a1", name: "Armor Jacket", armorRating: 12 },
+          { id: "a2", name: "Full Body Armor", armorRating: 20, subcategory: "full-body-armor" },
+        ] as Character["armor"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "ARMOR_STACKING",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should not warn when single armor plus accessories", async () => {
+      const character = createMinimalCharacter({
+        armor: [
+          { id: "a1", name: "Armor Jacket", armorRating: 12 },
+          { id: "a2", name: "Ballistic Helmet", armorRating: 2 },
+          { id: "a3", name: "Riot Shield", armorRating: 6, armorModifier: true },
+        ] as Character["armor"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "ARMOR_STACKING" })
+      );
+    });
+
+    it("should not warn when only one armor piece is selected", async () => {
+      const character = createMinimalCharacter({
+        armor: [{ id: "a1", name: "Armor Jacket", armorRating: 12 }] as Character["armor"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "ARMOR_STACKING" })
+      );
+    });
+
+    it("should not warn when no armor is selected", async () => {
+      const character = createMinimalCharacter({ armor: [] });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "ARMOR_STACKING" })
+      );
+    });
+
+    it("should not warn when only clothing items are selected", async () => {
+      const character = createMinimalCharacter({
+        armor: [
+          { id: "a1", name: "Synth Leather Jacket", armorRating: 0, subcategory: "clothing" },
+          {
+            id: "a2",
+            name: "Executive Suite",
+            armorRating: 0,
+            subcategory: "clothing",
+            isCustom: true,
+          },
+        ] as Character["armor"],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "ARMOR_STACKING" })
       );
     });
   });
