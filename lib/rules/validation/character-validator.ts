@@ -638,6 +638,99 @@ const qualityValidator: ValidatorDefinition = {
 };
 
 /**
+ * Validate skill ratings against creation limits and Aptitude quality
+ *
+ * Rules enforced:
+ * - Base skill rating cap at creation is 6
+ * - Rating 7 is only allowed with the Aptitude quality for that specific skill
+ * - Only one skill can reach rating 7, even with Aptitude (you can only take Aptitude once)
+ * - Zero skills warning at finalization (not blocking)
+ */
+const skillRatingValidator: ValidatorDefinition = {
+  id: "skill-ratings",
+  name: "Skill Ratings",
+  description: "Validates skill ratings against creation limits and Aptitude quality",
+  modes: ["creation", "finalization"],
+  priority: 6, // After qualities (5), before skill-group-constraints (7)
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState, mode } = context;
+
+    // Get skills from character or creation selections
+    const skills: Record<string, number> =
+      (character.skills as Record<string, number>) ||
+      (creationState?.selections?.skills as Record<string, number>) ||
+      {};
+
+    // Zero skills warning (finalization only)
+    const totalSkillPoints = Object.values(skills).reduce((sum, r) => sum + r, 0);
+    if (mode === "finalization" && totalSkillPoints === 0) {
+      issues.push({
+        code: "NO_ACTIVE_SKILLS",
+        message: "No active skills have been allocated",
+        field: "skills",
+        severity: "warning",
+        suggestion: "Consider allocating skill points to at least one active skill",
+      });
+    }
+
+    // Find Aptitude quality and its specification
+    const aptitudeQuality = character.positiveQualities?.find((q) => {
+      const qualityId = q.qualityId || q.id;
+      return qualityId === "aptitude";
+    });
+    const aptitudeSkill = aptitudeQuality?.specification?.toLowerCase();
+
+    // Validate each skill rating
+    const skillsAtSeven: string[] = [];
+    for (const [skillId, rating] of Object.entries(skills)) {
+      if (rating > 7) {
+        // Absolute maximum of 7 at creation
+        issues.push({
+          code: "SKILL_EXCEEDS_MAXIMUM",
+          message: `Skill "${skillId}" rating ${rating} exceeds maximum of 7 at creation`,
+          field: `skills.${skillId}`,
+          severity: "error",
+        });
+      } else if (rating === 7) {
+        skillsAtSeven.push(skillId);
+
+        if (!aptitudeQuality) {
+          // Rating 7 without any Aptitude quality
+          issues.push({
+            code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE",
+            message: `Skill "${skillId}" at rating 7 requires Aptitude quality`,
+            field: `skills.${skillId}`,
+            severity: "error",
+          });
+        } else if (aptitudeSkill && skillId.toLowerCase() !== aptitudeSkill) {
+          // Rating 7 but Aptitude is for a different skill
+          issues.push({
+            code: "SKILL_EXCEEDS_LIMIT_WRONG_APTITUDE",
+            message: `Skill "${skillId}" at rating 7 not allowed (Aptitude is for "${aptitudeQuality.specification}")`,
+            field: `skills.${skillId}`,
+            severity: "error",
+          });
+        }
+        // else: rating 7 with correct Aptitude - valid
+      }
+    }
+
+    // Multiple skills at 7 check (can only have Aptitude once)
+    if (skillsAtSeven.length > 1) {
+      issues.push({
+        code: "APTITUDE_MULTIPLE_SKILLS",
+        message: `Multiple skills at rating 7 (${skillsAtSeven.join(", ")}): Aptitude only allows one`,
+        field: "skills",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+/**
  * Validate free skill designations from creation state
  */
 const freeSkillValidator: ValidatorDefinition = {
@@ -2016,6 +2109,7 @@ const validators: ValidatorDefinition[] = [
   identityValidator,
   magicValidator,
   qualityValidator,
+  skillRatingValidator,
   complexFormValidator,
   spellValidator,
   adeptPowerValidator,

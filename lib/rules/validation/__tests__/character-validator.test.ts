@@ -976,6 +976,251 @@ describe("Character Validator", () => {
   });
 
   // ===========================================================================
+  // SKILL RATING VALIDATOR
+  // ===========================================================================
+
+  describe("skillRatingValidator (via validateCharacter)", () => {
+    it("should error when skill at 7 without Aptitude quality", async () => {
+      const character = createMinimalCharacter({
+        skills: { pistols: 7 },
+        positiveQualities: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE",
+          field: "skills.pistols",
+        })
+      );
+    });
+
+    it("should error when skill at 7 with Aptitude for different skill", async () => {
+      const character = createMinimalCharacter({
+        skills: { athletics: 7 },
+        positiveQualities: [
+          {
+            qualityId: "aptitude",
+            specification: "Pistols",
+            source: "creation",
+          },
+        ],
+      }) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SKILL_EXCEEDS_LIMIT_WRONG_APTITUDE",
+          field: "skills.athletics",
+        })
+      );
+    });
+
+    it("should pass when skill at 7 with correct Aptitude", async () => {
+      const character = createMinimalCharacter({
+        skills: { pistols: 7 },
+        positiveQualities: [
+          {
+            qualityId: "aptitude",
+            specification: "Pistols",
+            source: "creation",
+          },
+        ],
+      }) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_WRONG_APTITUDE" })
+      );
+    });
+
+    it("should match Aptitude case-insensitively", async () => {
+      const character = createMinimalCharacter({
+        skills: { Pistols: 7 }, // Capital P
+        positiveQualities: [
+          {
+            qualityId: "aptitude",
+            specification: "pistols", // lowercase
+            source: "creation",
+          },
+        ],
+      }) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_WRONG_APTITUDE" })
+      );
+    });
+
+    it("should error when multiple skills at 7 even with Aptitude", async () => {
+      const character = createMinimalCharacter({
+        skills: { pistols: 7, athletics: 7 },
+        positiveQualities: [
+          {
+            qualityId: "aptitude",
+            specification: "Pistols",
+            source: "creation",
+          },
+        ],
+      }) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "APTITUDE_MULTIPLE_SKILLS",
+          field: "skills",
+        })
+      );
+    });
+
+    it("should error when skill exceeds 7", async () => {
+      const character = createMinimalCharacter({
+        skills: { pistols: 8 },
+        positiveQualities: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.valid).toBe(false);
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SKILL_EXCEEDS_MAXIMUM",
+          field: "skills.pistols",
+        })
+      );
+    });
+
+    it("should warn when no skills at finalization", async () => {
+      const character = createMinimalCharacter({
+        skills: {},
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.warnings).toContainEqual(
+        expect.objectContaining({
+          code: "NO_ACTIVE_SKILLS",
+          field: "skills",
+          severity: "warning",
+        })
+      );
+    });
+
+    it("should NOT warn when no skills in creation mode", async () => {
+      const character = createMinimalCharacter({
+        skills: {},
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.warnings).not.toContainEqual(
+        expect.objectContaining({ code: "NO_ACTIVE_SKILLS" })
+      );
+    });
+
+    it("should pass when all skills at 6 or below", async () => {
+      const character = createMinimalCharacter({
+        skills: { pistols: 6, athletics: 4, perception: 5 },
+        positiveQualities: [],
+      });
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE" })
+      );
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_MAXIMUM" })
+      );
+    });
+
+    it("should work with legacy id field for Aptitude quality", async () => {
+      // Test backward compatibility with legacy 'id' field instead of 'qualityId'
+      const character = createMinimalCharacter({
+        skills: { pistols: 7 },
+        positiveQualities: [
+          {
+            qualityId: "", // Empty string to simulate missing qualityId
+            id: "aptitude", // Legacy field
+            specification: "Pistols",
+            source: "creation",
+          } as Character["positiveQualities"][0],
+        ],
+      }) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "creation",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SKILL_EXCEEDS_LIMIT_NO_APTITUDE" })
+      );
+    });
+  });
+
+  // ===========================================================================
   // CAMPAIGN VALIDATOR
   // ===========================================================================
 
