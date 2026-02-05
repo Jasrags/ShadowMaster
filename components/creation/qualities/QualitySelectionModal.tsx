@@ -44,6 +44,7 @@ export function QualitySelectionModal({
   karmaBalance,
   onAdd,
   skillGroups,
+  skills,
   existingSkillIds,
   existingSkillGroupIds,
 }: QualitySelectionModalProps) {
@@ -171,6 +172,25 @@ export function QualitySelectionModal({
 
     return null;
   }, [selectedQuality, specification, skillGroups, existingSkillIds, existingSkillGroupIds]);
+
+  // Check for warning when selecting Aptitude for a skill the character doesn't have
+  const aptitudeWarningInfo = useMemo(() => {
+    if (!selectedQuality || selectedQuality.id !== "aptitude" || !specification) {
+      return null;
+    }
+
+    // Check if the character has this skill selected
+    const hasSkill = existingSkillIds.includes(specification);
+    if (hasSkill) {
+      return null;
+    }
+
+    // Find the skill name for display
+    const selectedSkill = skills.find((s) => s.id === specification);
+    return {
+      skillName: selectedSkill?.name || specification,
+    };
+  }, [selectedQuality, specification, existingSkillIds, skills]);
 
   // Select a quality
   const handleSelectQuality = useCallback(
@@ -544,6 +564,43 @@ export function QualitySelectionModal({
                                   <div className="mt-1 text-xs">
                                     These skills will need to be removed if you add this quality.
                                   </div>
+                                </div>
+                              </div>
+                            )}
+                          </>
+                        ) : selectedQuality.specificationSource === "skills" ? (
+                          // Dynamic options from skills
+                          <>
+                            <div className="relative mt-2">
+                              <select
+                                value={specification}
+                                onChange={(e) => setSpecification(e.target.value)}
+                                className={`w-full appearance-none rounded-lg border border-zinc-200 bg-white py-2 pl-3 pr-10 text-sm focus:outline-none focus:ring-1 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 ${
+                                  isPositive
+                                    ? "focus:border-blue-500 focus:ring-blue-500"
+                                    : "focus:border-orange-500 focus:ring-orange-500"
+                                }`}
+                              >
+                                <option value="">
+                                  Select {selectedQuality.specificationLabel}...
+                                </option>
+                                {skills.map((skill) => (
+                                  <option key={skill.id} value={skill.id}>
+                                    {skill.name}
+                                  </option>
+                                ))}
+                              </select>
+                              <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                            </div>
+                            {/* Warning for Aptitude quality when skill not selected */}
+                            {aptitudeWarningInfo && (
+                              <div className="mt-2 flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-800 dark:bg-amber-900/20">
+                                <AlertTriangle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-600 dark:text-amber-400" />
+                                <div className="text-sm text-amber-700 dark:text-amber-300">
+                                  <strong>Note:</strong> You don&apos;t have{" "}
+                                  <strong>{aptitudeWarningInfo.skillName}</strong> selected as a
+                                  skill yet. Aptitude increases a skill&apos;s maximum rating, so
+                                  you&apos;ll want to add this skill to benefit from this quality.
                                 </div>
                               </div>
                             )}

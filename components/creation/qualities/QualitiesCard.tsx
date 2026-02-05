@@ -34,7 +34,7 @@ interface QualitiesCardProps {
 
 export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
   const { positive: positiveQualities, negative: negativeQualities } = useQualities();
-  const { skillGroups } = useSkills();
+  const { skillGroups, activeSkills } = useSkills();
   const { getBudget } = useCreationBudgets();
   const karmaBudget = getBudget("karma");
 
@@ -304,6 +304,7 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
         karmaBalance={karmaBalance}
         onAdd={handleAddQuality}
         skillGroups={skillGroups}
+        skills={activeSkills}
         existingSkillIds={existingSkillIds}
         existingSkillGroupIds={existingSkillGroupIds}
       />
