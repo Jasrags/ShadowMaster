@@ -47,6 +47,7 @@ export interface LicenseModalProps {
   onClose: () => void;
   onSave: (license: NewLicenseState) => void;
   sinType: "fake" | "real";
+  sinRating?: number;
   nuyenRemaining: number;
   initialData?: NewLicenseState;
   isEditMode?: boolean;

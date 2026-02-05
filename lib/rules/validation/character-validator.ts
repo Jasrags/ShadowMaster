@@ -339,6 +339,39 @@ const identityValidator: ValidatorDefinition = {
       });
     }
 
+    // Validate fake SIN ratings and license constraints
+    if (character.identities) {
+      character.identities.forEach((identity, i) => {
+        const sin = identity.sin;
+        if (sin?.type === "fake") {
+          const sinRating = sin.rating;
+          if (sinRating < 1 || sinRating > 6) {
+            issues.push({
+              code: "SIN_RATING_OUT_OF_RANGE",
+              message: `Fake SIN rating must be between 1 and 6 (got ${sinRating})`,
+              field: `identities[${i}].sin.rating`,
+              severity: "error",
+              suggestion: "Set the fake SIN rating to a value between 1 and 6",
+            });
+          }
+
+          if (identity.licenses) {
+            identity.licenses.forEach((license, j) => {
+              if (license.rating !== undefined && license.rating > sinRating) {
+                issues.push({
+                  code: "LICENSE_EXCEEDS_SIN_RATING",
+                  message: `License rating (${license.rating}) cannot exceed SIN rating (${sinRating})`,
+                  field: `identities[${i}].licenses[${j}].rating`,
+                  severity: "error",
+                  suggestion: "Reduce the license rating to match or be below the SIN rating",
+                });
+              }
+            });
+          }
+        }
+      });
+    }
+
     return issues;
   },
 };

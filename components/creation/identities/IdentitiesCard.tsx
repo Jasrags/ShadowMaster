@@ -507,6 +507,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
             onClose={closeModal}
             onSave={(license) => handleAddLicense(editingIdentityIndex!, license)}
             sinType={currentIdentity.sin.type}
+            sinRating={currentIdentity.sin.type === "fake" ? currentIdentity.sin.rating : undefined}
             nuyenRemaining={nuyenRemaining}
           />
 
@@ -520,6 +521,9 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                 closeModal();
               }}
               sinType={currentIdentity.sin.type}
+              sinRating={
+                currentIdentity.sin.type === "fake" ? currentIdentity.sin.rating : undefined
+              }
               nuyenRemaining={nuyenRemaining}
               isEditMode
               initialData={{

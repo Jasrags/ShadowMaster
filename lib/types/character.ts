@@ -637,7 +637,7 @@ export enum SinnerQuality {
 export type SIN =
   | {
       type: "fake";
-      rating: number; // 1-4 for fake SINs
+      rating: number; // 1-6 for fake SINs
     }
   | {
       type: "real";
@@ -650,7 +650,7 @@ export type SIN =
 export interface License {
   id?: ID;
   type: "fake" | "real";
-  rating?: number; // 1-4 for fake licenses (must match SIN rating if fake)
+  rating?: number; // 1-6 for fake licenses (must not exceed SIN rating)
   name: string; // License name/type (e.g., "Firearms License", "Driver's License")
   sinId?: ID; // Reference to the SIN this license is tied to
   notes?: string;
