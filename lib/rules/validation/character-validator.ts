@@ -48,6 +48,13 @@ import {
 } from "../skills/free-skills";
 import { getMaxConnection, getMaxLoyalty, calculateContactPoints } from "../contacts";
 import { getQualityId } from "@/lib/types/creation-selections";
+import type { PriorityTableData } from "../loader-types";
+import {
+  calculateNuyenSpent,
+  calculateKarmaSpent,
+  KARMA_TO_NUYEN_LIMIT,
+  SR5_KARMA_BUDGET,
+} from "./budget-calculator";
 
 // =============================================================================
 // CORE VALIDATORS
@@ -1848,6 +1855,157 @@ const knowledgeBudgetValidator: ValidatorDefinition = {
 };
 
 // =============================================================================
+// NUYEN BUDGET VALIDATOR
+// =============================================================================
+
+/** Rate for karma-to-nuyen conversion (2,000¥ per karma) */
+const KARMA_TO_NUYEN_RATE = 2000;
+
+/**
+ * Server-side nuyen budget validation.
+ *
+ * Recalculates nuyen spending from selections and validates against:
+ * - Total budget from priority table + karma conversion
+ * - Client-reported spending (mismatch = tampering)
+ */
+const nuyenBudgetValidator: ValidatorDefinition = {
+  id: "nuyen-budget",
+  name: "Nuyen Budget",
+  description: "Server-side validation of nuyen spending against available budget",
+  modes: ["finalization"],
+  priority: 11,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { creationState, ruleset } = context;
+
+    if (!creationState) return issues;
+
+    const selections = creationState.selections as CreationSelections;
+    const priorities = creationState.priorities || {};
+
+    // Get priority table from ruleset
+    const priorityTable = getModule<PriorityTableData>(ruleset, "priorities");
+    if (!priorityTable) {
+      // No priority table = can't validate nuyen budget
+      return issues;
+    }
+
+    // Get base nuyen from resources priority
+    const resourcePriority = priorities.resources;
+    if (!resourcePriority) return issues;
+
+    const priorityLevel = priorityTable.table[resourcePriority];
+    const baseNuyen = (priorityLevel?.resources as number) || 0;
+
+    // Get karma-to-nuyen conversion
+    const karmaSpentGear = (creationState.budgets?.["karma-spent-gear"] as number) || 0;
+    const conversionNuyen = karmaSpentGear * KARMA_TO_NUYEN_RATE;
+
+    // Total available nuyen
+    const totalBudget = baseNuyen + conversionNuyen;
+
+    // Calculate server-side nuyen spending
+    const nuyenBreakdown = calculateNuyenSpent(selections);
+    const serverSpent = nuyenBreakdown.total;
+
+    // Get client-reported spending (from the budget context's calculations)
+    const clientSpent = (creationState.budgets?.["nuyen-spent"] as number) ?? serverSpent;
+
+    // Check for mismatch between server and client calculations
+    if (Math.abs(serverSpent - clientSpent) > 0.01) {
+      issues.push({
+        code: "NUYEN_CALCULATION_MISMATCH",
+        message: `Nuyen calculation mismatch: server calculated ${serverSpent.toLocaleString()}¥, client reported ${clientSpent.toLocaleString()}¥`,
+        field: "nuyen",
+        severity: "error",
+      });
+    }
+
+    // Check if over budget
+    if (serverSpent > totalBudget) {
+      const overage = serverSpent - totalBudget;
+      issues.push({
+        code: "NUYEN_BUDGET_EXCEEDED",
+        message: `Nuyen budget exceeded by ${overage.toLocaleString()}¥ (${serverSpent.toLocaleString()}¥ spent, ${totalBudget.toLocaleString()}¥ available)`,
+        field: "nuyen",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
+// KARMA BUDGET VALIDATOR
+// =============================================================================
+
+/**
+ * Server-side karma budget validation.
+ *
+ * Recalculates karma spending from selections and validates against:
+ * - Fixed 25 karma budget (SR5)
+ * - Karma-to-nuyen conversion limit (max 10)
+ * - Client-reported spending (mismatch = tampering)
+ */
+const karmaBudgetValidator: ValidatorDefinition = {
+  id: "karma-budget",
+  name: "Karma Budget",
+  description: "Server-side validation of karma spending against available budget",
+  modes: ["finalization"],
+  priority: 12,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { creationState } = context;
+
+    if (!creationState) return issues;
+
+    const selections = creationState.selections as CreationSelections;
+    const budgets = creationState.budgets || {};
+
+    // Calculate server-side karma spending
+    const karmaBreakdown = calculateKarmaSpent(selections, budgets);
+    const serverSpent = karmaBreakdown.total;
+
+    // Get client-reported spending
+    const clientSpent = (budgets["karma-spent"] as number) ?? serverSpent;
+
+    // Check karma-to-nuyen conversion limit (max 10 karma)
+    if (karmaBreakdown.karmaToNuyen > KARMA_TO_NUYEN_LIMIT) {
+      issues.push({
+        code: "KARMA_TO_NUYEN_LIMIT_EXCEEDED",
+        message: `Karma-to-nuyen conversion exceeds limit: ${karmaBreakdown.karmaToNuyen} karma spent, maximum ${KARMA_TO_NUYEN_LIMIT} allowed`,
+        field: "karma",
+        severity: "error",
+      });
+    }
+
+    // Check for mismatch between server and client calculations
+    if (Math.abs(serverSpent - clientSpent) > 0.01) {
+      issues.push({
+        code: "KARMA_CALCULATION_MISMATCH",
+        message: `Karma calculation mismatch: server calculated ${serverSpent}, client reported ${clientSpent}`,
+        field: "karma",
+        severity: "error",
+      });
+    }
+
+    // Check if over budget
+    if (serverSpent > SR5_KARMA_BUDGET) {
+      const overage = serverSpent - SR5_KARMA_BUDGET;
+      issues.push({
+        code: "KARMA_BUDGET_EXCEEDED",
+        message: `Karma budget exceeded by ${overage} (${serverSpent} spent, ${SR5_KARMA_BUDGET} available)`,
+        field: "karma",
+        severity: "error",
+      });
+    }
+
+    return issues;
+  },
+};
+
+// =============================================================================
 // VALIDATOR REGISTRY
 // =============================================================================
 
@@ -1868,6 +2026,8 @@ const validators: ValidatorDefinition[] = [
   contactBudgetValidator,
   knowledgeBudgetValidator,
   knowledgeLanguageValidator,
+  nuyenBudgetValidator,
+  karmaBudgetValidator,
   campaignValidator,
 ];
 
