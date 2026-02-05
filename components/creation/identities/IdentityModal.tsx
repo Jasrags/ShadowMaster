@@ -95,7 +95,7 @@ export function IdentityModal({
             >
               <div className="font-medium text-zinc-900 dark:text-zinc-100">Fake SIN</div>
               <div className="mt-0.5 text-sm text-zinc-500 dark:text-zinc-400">
-                Purchased as gear (Rating 1-4)
+                Purchased as gear (Rating 1-6)
               </div>
             </button>
 
@@ -138,7 +138,7 @@ export function IdentityModal({
               onChange={(e) => setFormState({ ...formState, sinRating: parseInt(e.target.value) })}
               className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             >
-              {[1, 2, 3, 4].map((r) => (
+              {[1, 2, 3, 4, 5, 6].map((r) => (
                 <option key={r} value={r}>
                   Rating {r} ({(r * SIN_COST_PER_RATING).toLocaleString()})
                 </option>

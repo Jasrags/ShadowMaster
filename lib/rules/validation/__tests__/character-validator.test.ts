@@ -417,6 +417,159 @@ describe("Character Validator", () => {
         expect.objectContaining({ code: "MISSING_LIFESTYLE" })
       );
     });
+
+    it("should return error when fake SIN rating is below 1", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Bad SIN",
+            sin: { type: "fake", rating: 0 },
+            licenses: [],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SIN_RATING_OUT_OF_RANGE",
+          field: "identities[0].sin.rating",
+        })
+      );
+    });
+
+    it("should return error when fake SIN rating is above 6", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Bad SIN",
+            sin: { type: "fake", rating: 7 },
+            licenses: [],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "SIN_RATING_OUT_OF_RANGE",
+          field: "identities[0].sin.rating",
+        })
+      );
+    });
+
+    it("should pass when fake SIN rating is 6", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Good SIN",
+            sin: { type: "fake", rating: 6 },
+            licenses: [],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "SIN_RATING_OUT_OF_RANGE" })
+      );
+    });
+
+    it("should return error when license rating exceeds SIN rating", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Test SIN",
+            sin: { type: "fake", rating: 3 },
+            licenses: [{ id: "lic-1", type: "fake", name: "Firearms", rating: 4 }],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "LICENSE_EXCEEDS_SIN_RATING",
+          field: "identities[0].licenses[0].rating",
+        })
+      );
+    });
+
+    it("should pass when license rating equals SIN rating", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Test SIN",
+            sin: { type: "fake", rating: 4 },
+            licenses: [{ id: "lic-1", type: "fake", name: "Firearms", rating: 4 }],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "LICENSE_EXCEEDS_SIN_RATING" })
+      );
+    });
+
+    it("should pass when license rating is less than SIN rating", async () => {
+      const character = createMinimalCharacter({
+        identities: [
+          {
+            id: "sin-1",
+            name: "Test SIN",
+            sin: { type: "fake", rating: 4 },
+            licenses: [{ id: "lic-1", type: "fake", name: "Firearms", rating: 2 }],
+          },
+        ],
+      } as Partial<Character>) as Character;
+      const ruleset = createMinimalRuleset();
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        mode: "finalization",
+      });
+
+      expect(result.errors).not.toContainEqual(
+        expect.objectContaining({ code: "LICENSE_EXCEEDS_SIN_RATING" })
+      );
+    });
   });
 
   // ===========================================================================

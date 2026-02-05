@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useCallback, useMemo } from "react";
+import { AlertTriangle } from "lucide-react";
 import { Modal } from "./Modal";
 import { LICENSE_COST_PER_RATING, COMMON_LICENSE_TYPES } from "./constants";
 import type { LicenseModalProps, NewLicenseState } from "./types";
@@ -10,6 +11,7 @@ export function LicenseModal({
   onClose,
   onSave,
   sinType,
+  sinRating,
   nuyenRemaining,
   initialData,
   isEditMode,
@@ -128,16 +130,22 @@ export function LicenseModal({
               onChange={(e) => setFormState({ ...formState, rating: parseInt(e.target.value) })}
               className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
             >
-              {[1, 2, 3, 4].map((r) => (
+              {Array.from({ length: sinRating ?? 6 }, (_, i) => i + 1).map((r) => (
                 <option key={r} value={r}>
                   Rating {r} ({(r * LICENSE_COST_PER_RATING).toLocaleString()})
                 </option>
               ))}
             </select>
             <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
-              Fake licenses must have a rating between 1-4. Higher ratings are more expensive but
-              harder to detect.
+              Fake licenses must have a rating between 1-{sinRating ?? 6}. Higher ratings are more
+              expensive but harder to detect.
             </p>
+            {sinRating !== undefined && (
+              <div className="mt-1.5 flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+                <AlertTriangle className="h-3.5 w-3.5" />
+                <span>License rating cannot exceed the SIN rating ({sinRating})</span>
+              </div>
+            )}
           </div>
         )}
 
