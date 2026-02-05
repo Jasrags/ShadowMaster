@@ -65,6 +65,14 @@ import {
 import { isGradeAvailableAtCreation, applyGradeToAvailability } from "../augmentations/grades";
 import { isCyberlimb } from "@/lib/types/cyberlimb";
 import { CREATION_CONSTRAINTS } from "../gear/validation";
+import type { ArmorItem } from "@/lib/types";
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
+
+/** Maximum length for character names */
+const MAX_CHARACTER_NAME_LENGTH = 100;
 
 // =============================================================================
 // CORE VALIDATORS
@@ -232,39 +240,94 @@ const basicInfoValidator: ValidatorDefinition = {
   id: "basic-info",
   name: "Basic Information",
   description: "Validates name, metatype, and essential character info",
-  modes: ["finalization"],
+  modes: ["creation", "finalization"],
   priority: 1,
   validate: (context) => {
     const issues: ValidationIssue[] = [];
-    const { character } = context;
+    const { character, mode } = context;
 
     if (!character.name || character.name.trim() === "") {
+      // Missing name is only an error at finalization
+      if (mode === "finalization") {
+        issues.push({
+          code: "MISSING_NAME",
+          message: "Character must have a name",
+          field: "name",
+          severity: "error",
+        });
+      }
+    } else {
+      // Name length check (warning, not blocking)
+      if (character.name.trim().length > MAX_CHARACTER_NAME_LENGTH) {
+        issues.push({
+          code: "NAME_TOO_LONG",
+          message: `Character name exceeds ${MAX_CHARACTER_NAME_LENGTH} characters`,
+          field: "name",
+          severity: "warning",
+          suggestion: `Shorten name to ${MAX_CHARACTER_NAME_LENGTH} characters or less`,
+        });
+      }
+    }
+
+    if (mode === "finalization") {
+      if (!character.metatype || character.metatype.trim() === "") {
+        issues.push({
+          code: "MISSING_METATYPE",
+          message: "Character must have a metatype selected",
+          field: "metatype",
+          severity: "error",
+        });
+      }
+
+      if (!character.magicalPath) {
+        issues.push({
+          code: "MISSING_MAGICAL_PATH",
+          message: "Character must have a magical path selected (including mundane)",
+          field: "magicalPath",
+          severity: "error",
+        });
+      }
+    }
+
+    return issues;
+  },
+};
+
+/**
+ * Validate character name uniqueness within user's characters.
+ * Warns when character name matches another of the user's characters.
+ */
+const duplicateCharacterNameValidator: ValidatorDefinition = {
+  id: "duplicate-character-name",
+  name: "Duplicate Character Name",
+  description: "Warns when character name matches another of user's characters",
+  modes: ["creation", "finalization"],
+  priority: 1,
+  validate: async (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character } = context;
+
+    // Use ownerId - the Character type uses ownerId, not userId
+    const ownerId = character.ownerId;
+    if (!character.name || !ownerId) return issues;
+
+    const { getUserCharacters } = await import("@/lib/storage/characters");
+    const userCharacters = await getUserCharacters(ownerId);
+
+    const normalizedName = character.name.toLowerCase().trim();
+    const duplicates = userCharacters.filter(
+      (c) => c.id !== character.id && c.name?.toLowerCase().trim() === normalizedName
+    );
+
+    if (duplicates.length > 0) {
       issues.push({
-        code: "MISSING_NAME",
-        message: "Character must have a name",
+        code: "DUPLICATE_CHARACTER_NAME",
+        message: `You already have a character named "${character.name}"`,
         field: "name",
-        severity: "error",
+        severity: "warning",
+        suggestion: "Consider using a unique name to avoid confusion",
       });
     }
-
-    if (!character.metatype || character.metatype.trim() === "") {
-      issues.push({
-        code: "MISSING_METATYPE",
-        message: "Character must have a metatype selected",
-        field: "metatype",
-        severity: "error",
-      });
-    }
-
-    if (!character.magicalPath) {
-      issues.push({
-        code: "MISSING_MAGICAL_PATH",
-        message: "Character must have a magical path selected (including mundane)",
-        field: "magicalPath",
-        severity: "error",
-      });
-    }
-
     return issues;
   },
 };
@@ -753,6 +816,93 @@ const augmentationValidator: ValidatorDefinition = {
   },
 };
 
+// =============================================================================
+// ARMOR STACKING VALIDATOR
+// =============================================================================
+
+/** Armor categories that count as "main armor" (cannot stack) */
+type MainArmorCategory = "body" | "fba";
+
+/** Armor categories that are accessories (can stack with main armor) */
+type AccessoryCategory = "clothing" | "helmets" | "shields" | "accessories";
+
+/**
+ * Categorize armor item based on name and properties.
+ * Used to determine if multiple main armor pieces are selected.
+ */
+function getArmorCategory(armor: ArmorItem): MainArmorCategory | AccessoryCategory {
+  const name = armor.name.toLowerCase();
+  const subcategory = armor.subcategory?.toLowerCase() || "";
+
+  // Custom clothing items
+  if (armor.isCustom || subcategory === "clothing") return "clothing";
+
+  // Shields
+  if (name.includes("shield") || subcategory === "shield") return "shields";
+
+  // Helmets
+  if (name.includes("helmet") || subcategory === "helmet") return "helmets";
+
+  // Full body armor
+  if (
+    name.includes("full body") ||
+    name.includes("mil-spec") ||
+    name.includes("hardened mil-spec") ||
+    subcategory === "full-body-armor"
+  )
+    return "fba";
+
+  // Accessories (armor modifiers that add to existing armor)
+  if (armor.armorModifier) return "accessories";
+
+  // Default to body armor
+  return "body";
+}
+
+/**
+ * Check if a category counts as main armor (non-stackable).
+ */
+function isMainArmor(category: string): category is MainArmorCategory {
+  return category === "body" || category === "fba";
+}
+
+/**
+ * Validate armor stacking - multiple main armor pieces should trigger a warning.
+ */
+const armorStackingValidator: ValidatorDefinition = {
+  id: "armor-stacking",
+  name: "Armor Stacking",
+  description: "Warns when multiple main armor pieces are selected",
+  modes: ["creation", "finalization"],
+  priority: 7,
+  validate: (context) => {
+    const issues: ValidationIssue[] = [];
+    const { character, creationState } = context;
+
+    const armor: ArmorItem[] =
+      character.armor || (creationState?.selections?.armor as ArmorItem[]) || [];
+
+    if (armor.length <= 1) {
+      return issues;
+    }
+
+    // Filter to main armor (body, fba) - not accessories/clothing
+    const mainArmor = armor.filter((a) => isMainArmor(getArmorCategory(a)));
+
+    if (mainArmor.length > 1) {
+      issues.push({
+        code: "ARMOR_STACKING",
+        message: `Multiple main armor pieces: ${mainArmor.map((a) => a.name).join(", ")}`,
+        field: "armor",
+        severity: "warning",
+        suggestion: "Only one main armor piece can be worn. Accessories add to base armor.",
+      });
+    }
+
+    return issues;
+  },
+};
+
 /**
  * Validate skill ratings against creation limits and Aptitude quality
  *
@@ -1048,9 +1198,30 @@ const contactValidator: ValidatorDefinition = {
       }
     }
 
+    // Duplicate contact name check (case-insensitive)
+    const seenNames = new Set<string>();
+    const duplicates: string[] = [];
+    for (const contact of character.contacts) {
+      const key = contact.name.toLowerCase().trim();
+      if (seenNames.has(key)) {
+        duplicates.push(contact.name);
+      } else {
+        seenNames.add(key);
+      }
+    }
+    if (duplicates.length > 0) {
+      issues.push({
+        code: "CONTACT_DUPLICATE_NAME",
+        message: `Duplicate contact names: ${duplicates.join(", ")}`,
+        field: "contacts",
+        severity: "warning",
+        suggestion: "Consider using unique names to distinguish contacts",
+      });
+    }
+
     // Warn if total contact points exceed charisma-based budget
     if (character.attributes) {
-      const charisma = character.attributes["cha"] ?? character.attributes["charisma"] ?? 0;
+      const charisma = character.attributes.charisma ?? 0;
       if (charisma > 0) {
         const contactBudget = charisma * 3; // SR5: CHA × 3 free contact points
         const totalPoints = character.contacts.reduce(
@@ -2221,11 +2392,13 @@ const karmaBudgetValidator: ValidatorDefinition = {
 const validators: ValidatorDefinition[] = [
   priorityConsistencyValidator,
   basicInfoValidator,
+  duplicateCharacterNameValidator,
   attributeValidator,
   identityValidator,
   magicValidator,
   qualityValidator,
   augmentationValidator,
+  armorStackingValidator,
   skillRatingValidator,
   complexFormValidator,
   spellValidator,

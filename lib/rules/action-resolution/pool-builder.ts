@@ -17,6 +17,7 @@ import type { EffectConditionType, ActiveWirelessBonuses } from "@/lib/types/wir
 import { DEFAULT_DICE_RULES } from "./dice-engine";
 import { calculateEncumbrance } from "../encumbrance/calculator";
 import { calculateContextualWirelessBonuses } from "../wireless/bonus-calculator";
+import { normalizeAttributeKey } from "@/lib/constants/attributes";
 
 // =============================================================================
 // WOUND MODIFIER CALCULATION
@@ -78,50 +79,18 @@ export function createWoundModifier(
 // =============================================================================
 
 /**
- * Get attribute value from character
+ * Get attribute value from character.
+ * Uses normalizeAttributeKey to handle abbreviations (bod, agi, etc.).
  */
 export function getAttributeValue(character: Character, attributeName: string): number {
   if (!character.attributes) return 0;
 
-  const normalizedName = attributeName.toLowerCase();
+  const normalizedName = normalizeAttributeKey(attributeName);
 
-  // Check common attribute names
-  switch (normalizedName) {
-    case "body":
-    case "bod":
-      return character.attributes.body ?? 0;
-    case "agility":
-    case "agi":
-      return character.attributes.agility ?? 0;
-    case "reaction":
-    case "rea":
-      return character.attributes.reaction ?? 0;
-    case "strength":
-    case "str":
-      return character.attributes.strength ?? 0;
-    case "willpower":
-    case "wil":
-      return character.attributes.willpower ?? 0;
-    case "logic":
-    case "log":
-      return character.attributes.logic ?? 0;
-    case "intuition":
-    case "int":
-      return character.attributes.intuition ?? 0;
-    case "charisma":
-    case "cha":
-      return character.attributes.charisma ?? 0;
-    case "edge":
-      return character.attributes.edge ?? 0;
-    case "magic":
-    case "mag":
-      return character.attributes.magic ?? 0;
-    case "resonance":
-    case "res":
-      return character.attributes.resonance ?? 0;
-    default:
-      return 0;
-  }
+  // Direct property access using normalized name
+  const value = character.attributes[normalizedName as keyof typeof character.attributes];
+
+  return typeof value === "number" ? value : 0;
 }
 
 /**
