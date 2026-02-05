@@ -250,6 +250,8 @@ export interface GearSelections {
   commlinks?: CharacterCommlink[];
   cyberdecks?: CharacterCyberdeck[];
   software?: CharacterDataSoftware[];
+  drugs?: GearItem[];
+  toxins?: GearItem[];
 }
 
 /**
@@ -405,7 +407,9 @@ export function hasGearSelections(selections: CreationSelections): boolean {
   const hasGear = Array.isArray(selections.gear) && selections.gear.length > 0;
   const hasWeapons = Array.isArray(selections.weapons) && selections.weapons.length > 0;
   const hasArmor = Array.isArray(selections.armor) && selections.armor.length > 0;
-  return hasGear || hasWeapons || hasArmor;
+  const hasDrugs = Array.isArray(selections.drugs) && selections.drugs.length > 0;
+  const hasToxins = Array.isArray(selections.toxins) && selections.toxins.length > 0;
+  return hasGear || hasWeapons || hasArmor || hasDrugs || hasToxins;
 }
 
 /**
@@ -584,6 +588,20 @@ export function getBioware(selections: CreationSelections): BiowareItem[] {
  */
 export function getGear(selections: CreationSelections): GearItem[] {
   return (selections.gear || []) as GearItem[];
+}
+
+/**
+ * Safely get drugs
+ */
+export function getDrugs(selections: CreationSelections): GearItem[] {
+  return (selections.drugs || []) as GearItem[];
+}
+
+/**
+ * Safely get toxins
+ */
+export function getToxins(selections: CreationSelections): GearItem[] {
+  return (selections.toxins || []) as GearItem[];
 }
 
 /**

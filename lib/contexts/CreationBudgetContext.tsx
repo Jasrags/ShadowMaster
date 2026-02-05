@@ -488,6 +488,8 @@ function extractSpentValues(
   const commlinks = (selections.commlinks || []) as Array<{ cost: number }>;
   const cyberdecks = (selections.cyberdecks || []) as Array<{ cost: number }>;
   const software = (selections.software || []) as Array<{ cost: number }>;
+  const drugs = (selections.drugs || []) as Array<{ cost: number; quantity: number }>;
+  const toxins = (selections.toxins || []) as Array<{ cost: number; quantity: number }>;
   const identities = (selections.identities || []) as Array<{
     sin: { type: string; rating: number };
     licenses?: Array<{ type: string; rating: number }>;
@@ -554,6 +556,12 @@ function extractSpentValues(
   const cyberdecksSpent = cyberdecks.reduce((sum, d) => sum + (d.cost || 0), 0);
   const softwareSpent = software.reduce((sum, s) => sum + (s.cost || 0), 0);
 
+  // Calculate drugs spending
+  const drugsSpent = drugs.reduce((sum, d) => sum + d.cost * (d.quantity || 1), 0);
+
+  // Calculate toxins spending
+  const toxinsSpent = toxins.reduce((sum, t) => sum + t.cost * (t.quantity || 1), 0);
+
   // Calculate identity spending (fake SINs and licenses)
   // Fake SIN: Rating × 2,500¥, Fake License: Rating × 200¥
   const SIN_COST_PER_RATING = 2500;
@@ -584,6 +592,8 @@ function extractSpentValues(
     commlinksSpent +
     cyberdecksSpent +
     softwareSpent +
+    drugsSpent +
+    toxinsSpent +
     identitiesSpent;
 
   // ============================================================================

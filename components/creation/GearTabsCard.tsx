@@ -11,12 +11,22 @@
 import { useState, useMemo, useCallback } from "react";
 import type { CreationState } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { Package, Sword, Shield, Cpu, Car, AlertCircle, CheckCircle2 } from "lucide-react";
+import {
+  Package,
+  Sword,
+  Shield,
+  Cpu,
+  Car,
+  FlaskConical,
+  AlertCircle,
+  CheckCircle2,
+} from "lucide-react";
 
 // Import individual panels
 import { GearPanel } from "./gear/GearPanel";
 import { WeaponsPanel } from "./WeaponsPanel";
 import { ArmorPanel } from "./armor";
+import { DrugsPanel } from "./drugs-toxins";
 import { AugmentationsCard } from "./AugmentationsCard";
 import { VehiclesCard } from "./VehiclesCard";
 
@@ -29,7 +39,7 @@ interface GearTabsCardProps {
   updateState: (updates: Partial<CreationState>) => void;
 }
 
-type TabId = "gear" | "weapons" | "armor" | "augmentations" | "vehicles";
+type TabId = "gear" | "weapons" | "armor" | "drugs-toxins" | "augmentations" | "vehicles";
 
 interface TabConfig {
   id: TabId;
@@ -71,6 +81,16 @@ const TABS: TabConfig[] = [
     },
   },
   {
+    id: "drugs-toxins",
+    label: "Drugs",
+    icon: FlaskConical,
+    getBadge: (state) => {
+      const drugs = (state.selections.drugs || []) as unknown[];
+      const toxins = (state.selections.toxins || []) as unknown[];
+      return { count: drugs.length + toxins.length };
+    },
+  },
+  {
     id: "augmentations",
     label: "Augmentations",
     icon: Cpu,
@@ -109,6 +129,8 @@ export function GearTabsCard({ state, updateState }: GearTabsCardProps) {
     const gear = (state.selections.gear || []) as unknown[];
     const weapons = (state.selections.weapons || []) as unknown[];
     const armor = (state.selections.armor || []) as unknown[];
+    const drugs = (state.selections.drugs || []) as unknown[];
+    const toxins = (state.selections.toxins || []) as unknown[];
     const cyberware = (state.selections.cyberware || []) as unknown[];
     const bioware = (state.selections.bioware || []) as unknown[];
     const vehicles = (state.selections.vehicles || []) as unknown[];
@@ -119,6 +141,8 @@ export function GearTabsCard({ state, updateState }: GearTabsCardProps) {
         gear.length +
         weapons.length +
         armor.length +
+        drugs.length +
+        toxins.length +
         cyberware.length +
         bioware.length +
         vehicles.length +
@@ -143,6 +167,8 @@ export function GearTabsCard({ state, updateState }: GearTabsCardProps) {
         return <WeaponsPanel state={state} updateState={updateState} />;
       case "armor":
         return <ArmorPanel state={state} updateState={updateState} />;
+      case "drugs-toxins":
+        return <DrugsPanel state={state} updateState={updateState} />;
       case "augmentations":
         return <AugmentationsCard state={state} updateState={updateState} />;
       case "vehicles":

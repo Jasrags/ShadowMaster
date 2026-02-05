@@ -17,6 +17,7 @@ export { FociCard } from "./foci";
 export { GearPanel } from "./gear";
 export { WeaponsPanel } from "./WeaponsPanel";
 export { ArmorPanel } from "./armor";
+export { DrugsPanel } from "./drugs-toxins";
 export { MatrixGearCard } from "./matrix-gear";
 export { AugmentationsCard } from "./AugmentationsCard";
 export { VehiclesCard } from "./VehiclesCard";
