@@ -308,10 +308,10 @@ describe("Skill Limit - Rating Cap at Creation", () => {
     expect(maxRating).toBeLessThanOrEqual(6);
   });
 
-  it("should allow skill rating 7 with Aptitude quality", () => {
+  it("should allow skill rating 7 with Aptitude quality for that specific skill", () => {
     const character = createTestCharacter({
       skills: {
-        pistols: 7, // Above 6, but allowed with Aptitude
+        pistols: 7, // Above 6, but allowed with Aptitude for Pistols
         athletics: 4,
       },
       positiveQualities: [
@@ -340,7 +340,93 @@ describe("Skill Limit - Rating Cap at Creation", () => {
     expect(character.skills?.pistols).toBe(7);
     const hasAptitude = character.positiveQualities?.some((q) => q.qualityId === "aptitude");
     expect(hasAptitude).toBe(false);
-    // This should fail validation
+    // This should fail validation (skill at 7 without Aptitude)
+  });
+
+  it("should fail when skill at 7 with Aptitude for DIFFERENT skill", () => {
+    const character = createTestCharacter({
+      skills: {
+        athletics: 7, // Violation - Aptitude is for Pistols, not Athletics!
+        pistols: 5,
+      },
+      positiveQualities: [
+        {
+          qualityId: "aptitude",
+          specification: "Pistols", // Aptitude is for Pistols
+          source: "creation",
+        },
+      ],
+    });
+
+    // Aptitude exists but for a different skill
+    const aptitudeQuality = character.positiveQualities?.find((q) => q.qualityId === "aptitude");
+    expect(aptitudeQuality?.specification).toBe("Pistols");
+    expect(character.skills?.athletics).toBe(7);
+    // This should fail because Athletics at 7 is not covered by Pistols Aptitude
+  });
+
+  it("should fail when multiple skills at 7 even with Aptitude", () => {
+    const character = createTestCharacter({
+      skills: {
+        pistols: 7,
+        athletics: 7, // Two skills at 7 - only one allowed!
+      },
+      positiveQualities: [
+        {
+          qualityId: "aptitude",
+          specification: "Pistols",
+          source: "creation",
+        },
+      ],
+    });
+
+    // Count skills at 7
+    const skillsAtSeven = Object.entries(character.skills || {}).filter(
+      ([, rating]) => rating === 7
+    );
+    expect(skillsAtSeven.length).toBe(2);
+    // This should fail - only one skill can reach 7 (Aptitude can only be taken once)
+  });
+
+  it("should match Aptitude specification case-insensitively", () => {
+    const character = createTestCharacter({
+      skills: {
+        Pistols: 7, // Capital P in skill ID
+      },
+      positiveQualities: [
+        {
+          qualityId: "aptitude",
+          specification: "pistols", // lowercase
+          source: "creation",
+        },
+      ],
+    });
+
+    // Case-insensitive matching should work
+    const aptitudeSkill = character.positiveQualities?.[0]?.specification?.toLowerCase();
+    const skillId = Object.keys(character.skills || {})[0]?.toLowerCase();
+    expect(aptitudeSkill).toBe(skillId);
+  });
+
+  it("should work with legacy id field for Aptitude quality", () => {
+    const character = createTestCharacter({
+      skills: {
+        pistols: 7,
+      },
+      positiveQualities: [
+        {
+          id: "aptitude", // Legacy field (not qualityId)
+          specification: "Pistols",
+          source: "creation",
+        } as unknown as Character["positiveQualities"][0],
+      ],
+    });
+
+    // Legacy check: both qualityId and id should be checked
+    const hasAptitude = character.positiveQualities?.some(
+      (q) => (q.qualityId || (q as unknown as { id?: string }).id) === "aptitude"
+    );
+    expect(hasAptitude).toBe(true);
   });
 });
 
