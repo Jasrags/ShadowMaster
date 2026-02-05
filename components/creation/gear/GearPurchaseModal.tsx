@@ -17,6 +17,7 @@ import { useState, useMemo, useCallback } from "react";
 import { useGear, type GearItemData, type GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
+import { isLegalAtCreation, CREATION_CONSTRAINTS } from "@/lib/rules/gear/validation";
 import { BaseModalRoot, ModalFooter } from "@/components/ui";
 import { Search, Minus, Plus, AlertTriangle, X, Check } from "lucide-react";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
@@ -25,7 +26,7 @@ import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantityS
 // CONSTANTS
 // =============================================================================
 
-const MAX_AVAILABILITY = 12;
+const MAX_AVAILABILITY = CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
 
 type GearCategory =
   | "all"
@@ -327,6 +328,7 @@ export function GearPurchaseModal({
 
   const [selectedCategory, setSelectedCategory] = useState<GearCategory>("all");
   const [searchQuery, setSearchQuery] = useState("");
+  const [showOnlyLegal, setShowOnlyLegal] = useState(false);
   const [selectedGear, setSelectedGear] = useState<GearItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
   const [selectedPacks, setSelectedPacks] = useState(1);
@@ -363,9 +365,13 @@ export function GearPurchaseModal({
     };
   }, [gearCatalog]);
 
-  // Filter by search and availability
+  // Filter by search, availability, and legality
   const filteredGear = useMemo(() => {
     let items = categoryGear.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY);
+
+    if (showOnlyLegal) {
+      items = items.filter((g) => isLegalAtCreation(getMinimumAvailability(g), g.legality));
+    }
 
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
@@ -376,7 +382,7 @@ export function GearPurchaseModal({
 
     // Sort alphabetically
     return items.sort((a, b) => a.name.localeCompare(b.name));
-  }, [categoryGear, searchQuery]);
+  }, [categoryGear, searchQuery, showOnlyLegal]);
 
   // Get rating bounds for selected gear
   const ratingBounds = useMemo(() => {
@@ -438,6 +444,7 @@ export function GearPurchaseModal({
   const resetState = useCallback(() => {
     setSearchQuery("");
     setSelectedCategory("all");
+    setShowOnlyLegal(false);
     setSelectedGear(null);
     setSelectedRating(1);
     setSelectedPacks(1);
@@ -543,17 +550,28 @@ export function GearPurchaseModal({
             })}
           </div>
 
-          {/* Search */}
+          {/* Search + Legal Filter */}
           <div className="border-b border-zinc-100 px-6 py-3 dark:border-zinc-800">
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                placeholder="Search gear..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-              />
+            <div className="flex items-center gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                <input
+                  type="text"
+                  placeholder="Search gear..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full rounded-lg border border-zinc-200 bg-white py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                />
+              </div>
+              <label className="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
+                <input
+                  type="checkbox"
+                  checked={showOnlyLegal}
+                  onChange={(e) => setShowOnlyLegal(e.target.checked)}
+                  className="h-3.5 w-3.5 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-zinc-600"
+                />
+                Legal only
+              </label>
             </div>
           </div>
 

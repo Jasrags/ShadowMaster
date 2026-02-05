@@ -11,6 +11,7 @@
 
 import { useState } from "react";
 import type { GearItem } from "@/lib/types";
+import { LegalityBadge } from "@/components/creation/shared/LegalityBadge";
 import { ChevronDown, ChevronRight, X, Plus } from "lucide-react";
 
 // =============================================================================
@@ -106,6 +107,7 @@ export function GearRow({ gear, onRemove, onAddMod, onRemoveMod }: GearRowProps)
               {modCount} mod{modCount !== 1 ? "s" : ""}
             </span>
           )}
+          <LegalityBadge legality={gear.legality} availability={gear.availability} />
         </div>
 
         {/* Controls */}

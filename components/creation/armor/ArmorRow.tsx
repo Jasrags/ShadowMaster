@@ -10,6 +10,7 @@
 
 import { useState } from "react";
 import type { ArmorItem } from "@/lib/types";
+import { LegalityBadge } from "@/components/creation/shared/LegalityBadge";
 import { ChevronDown, ChevronRight, X, Plus, Shirt } from "lucide-react";
 
 // =============================================================================
@@ -94,6 +95,8 @@ export function ArmorRow({ armor, onRemove, onAddMod, onRemoveMod }: ArmorRowPro
             </span>
           )}
         </span>
+
+        <LegalityBadge legality={armor.legality} availability={armor.availability} />
 
         {/* Cost */}
         <span className="shrink-0 font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">

@@ -28,6 +28,7 @@ import {
   SummaryFooter,
   KarmaConversionModal,
   useKarmaConversionPrompt,
+  LegalityWarnings,
 } from "../shared";
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
@@ -272,6 +273,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         category: gearData.category,
         cost: unitCost,
         availability,
+        legality: gearData.legality,
         quantity: totalUnits,
         rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
         capacity,
@@ -527,6 +529,9 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
               />
             </div>
           </div>
+
+          {/* Legality Warnings */}
+          <LegalityWarnings items={selectedGear} />
 
           {/* Selected gear grouped by category */}
           {selectedGear.length > 0 ? (
