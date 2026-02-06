@@ -15,7 +15,7 @@
  * - Mentor spirit selection (optional quality)
  */
 
-import { useMemo, useCallback, useState } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import {
   useMagicPaths,
   usePriorityTable,
@@ -278,6 +278,18 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const selectedTraditionData = traditions.find((t) => t.id === selectedTradition);
   const selectedMentorData = mentorSpirits.find((m) => m.id === selectedMentorSpiritId);
 
+  // Mundane only (Priority E) - computed before early returns so the effect hook is always called
+  const isMundaneOnly = availableOptions.length === 0;
+
+  // Auto-select mundane path for Priority E
+  useEffect(() => {
+    if (isMundaneOnly && !selectedPath) {
+      updateState({
+        selections: { ...state.selections, "magical-path": "mundane" },
+      });
+    }
+  }, [isMundaneOnly, selectedPath, state.selections, updateState]);
+
   // Validation status
   const validationStatus = useMemo(() => {
     if (!magicPriority) return "pending";
@@ -299,8 +311,6 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     );
   }
 
-  // Mundane only (Priority E)
-  const isMundaneOnly = availableOptions.length === 0;
   if (isMundaneOnly) {
     return (
       <CreationCard

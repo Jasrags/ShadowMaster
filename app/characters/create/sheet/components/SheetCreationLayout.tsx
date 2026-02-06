@@ -644,7 +644,8 @@ function ValidationSummary({
 
     if (Object.keys(priorities).length < 5) items.push("Set all 5 priorities");
     if (!selections.metatype) items.push("Select a metatype");
-    if (!selections["magical-path"]) items.push("Select a magic/resonance path");
+    if (!selections["magical-path"] && priorities?.magic !== "E")
+      items.push("Select a magic/resonance path");
 
     // Tradition required for magician, mystic-adept, aspected-mage
     const TRADITION_PATHS = ["magician", "mystic-adept", "aspected-mage"];
