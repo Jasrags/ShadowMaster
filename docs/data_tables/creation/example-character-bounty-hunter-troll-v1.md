@@ -21,13 +21,13 @@ A Salish-Sidhe national troll working as a bounty hunter in the Pacific Northwes
 
 ## Priority Selection
 
-| Priority | Category        | Allocation                                      | Confidence |
-| -------- | --------------- | ----------------------------------------------- | ---------- |
-| A        | Skills          | 46 points / 10 skill groups                     | 100%       |
-| B        | Attributes      | 20 points                                       | 100%       |
-| C        | Metatype        | Troll (5 special attribute points → 1 Edge + ?) | 95%        |
-| D        | Resources       | 50,000¥                                         | 100%       |
-| E        | Magic/Resonance | Mundane                                         | 100%       |
+| Priority | Category        | Allocation                                        | Confidence |
+| -------- | --------------- | ------------------------------------------------- | ---------- |
+| A        | Skills          | 46 points / 10 skill groups                       | 100%       |
+| B        | Metatype        | Troll (0 special attribute points; Edge = 1 base) | 100%       |
+| C        | Attributes      | 16 points                                         | 100%       |
+| D        | Resources       | 50,000¥                                           | 100%       |
+| E        | Magic/Resonance | Mundane                                           | 100%       |
 
 ---
 
@@ -52,7 +52,7 @@ A Salish-Sidhe national troll working as a bounty hunter in the Pacific Northwes
 | ------- | --- | --- | --- | --- | --- | --- | --- |
 | 7 (8)\* | 3   | 3   | 8   | 3   | 3   | 3   | 2   |
 
-\*Body shown as 7(8) in source - the (8) likely reflects armor bonus or damage calculation
+\*Body shown as 7(8) in source - the (8) reflects BOD 7 + 1 Troll dermal armor for damage resistance
 
 ### Attribute Points Calculation
 
@@ -68,17 +68,15 @@ A Salish-Sidhe national troll working as a bounty hunter in the Pacific Northwes
 | Charisma  | 2       | 1          | 1                |
 | **Total** |         |            | **16**           |
 
-**Note:** 16 points purchased indicates Priority B (20 points) with 4 points remaining, OR Priority C (16 points) exactly. Given the resources level (Priority D = 50K¥), Priority B Attributes is more likely.
-
-**Revised Calculation:** The stat block shows 7(8) for Body which may indicate Body 8 purchased (3 points from base 5), bringing total to 17 points. With Strength at natural max (10 for Troll), that would be 5 points, totaling 20 points = Priority B exact match.
+**Note:** 16 points purchased = Priority C (16 points) exact match. Troll is only available at Metatype Priority A or B, so Metatype takes Priority B (0 special), leaving Attributes at Priority C.
 
 ### Special Attributes
 
-| Attribute | Value | Notes                                                                   |
-| --------- | ----- | ----------------------------------------------------------------------- |
-| Essence   | 6.0   | No augmentations                                                        |
-| Edge      | 1     | From Metatype Priority C (5 special - 4 used elsewhere or just 1 taken) |
-| Magic     | —     | Mundane                                                                 |
+| Attribute | Value | Notes                                                                    |
+| --------- | ----- | ------------------------------------------------------------------------ |
+| Essence   | 6.0   | No augmentations                                                         |
+| Edge      | 1     | Metatype Priority B (0 special attribute points; Edge 1 = metatype base) |
+| Magic     | —     | Mundane                                                                  |
 
 ---
 
@@ -126,38 +124,38 @@ A Salish-Sidhe national troll working as a bounty hunter in the Pacific Northwes
 
 ### Active Skills (46 points from Priority A)
 
-| Skill                 | Rating | Linked Attr | Notes          | Points |
-| --------------------- | ------ | ----------- | -------------- | ------ |
-| Animal Handling       | 2      | Charisma    | —              | 2      |
-| Archery               | 4      | Agility     | —              | 4      |
-| Armorer               | 1      | Logic       | —              | 1      |
-| Auto Mechanics        | 1      | Logic       | —              | 1      |
-| Blades                | 3      | Agility     | —              | 3      |
-| Clubs                 | 3      | Agility     | —              | 3      |
-| Computer              | 1      | Logic       | —              | 1      |
-| Con                   | 2      | Charisma    | —              | 2      |
-| Electronics Warfare   | 1      | Logic       | —              | 1      |
-| First Aid             | 3      | Logic       | —              | 3      |
-| Intimidation          | 5      | Charisma    | Primary social | 5      |
-| Locksmith             | 3      | Agility     | —              | 3      |
-| Longarms              | 4      | Agility     | —              | 4      |
-| Palming               | 1      | Agility     | —              | 1      |
-| Perception            | 3      | Intuition   | —              | 3      |
-| Pilot Ground Vehicles | 2      | Reaction    | —              | 2      |
-| Pistols               | 4      | Agility     | —              | 4      |
-| Sneaking              | 3      | Agility     | —              | 3      |
-| Throwing Weapons      | 1      | Agility     | —              | 1      |
-| Unarmed Combat        | 5      | Agility     | —              | 5      |
-| **Total**             |        |             |                | **52** |
+| Skill               | Rating | Linked Attr | Notes          | Points |
+| ------------------- | ------ | ----------- | -------------- | ------ |
+| Animal Handling     | 2      | Charisma    | —              | 2      |
+| Archery             | 4      | Agility     | —              | 4      |
+| Armorer             | 1      | Logic       | —              | 1      |
+| Automotive Mechanic | 1      | Logic       | —              | 1      |
+| Blades              | 3      | Agility     | —              | 3      |
+| Clubs               | 3      | Agility     | —              | 3      |
+| Computer            | 1      | Logic       | —              | 1      |
+| Con                 | 2      | Charisma    | —              | 2      |
+| Electronic Warfare  | 1      | Logic       | —              | 1      |
+| First Aid           | 3      | Logic       | —              | 3      |
+| Intimidation        | 5      | Charisma    | Primary social | 5      |
+| Locksmith           | 3      | Agility     | —              | 3      |
+| Longarms            | 4      | Agility     | —              | 4      |
+| Palming             | 1      | Agility     | —              | 1      |
+| Perception          | 3      | Intuition   | —              | 3      |
+| Pilot Ground Craft  | 2      | Reaction    | —              | 2      |
+| Pistols             | 4      | Agility     | —              | 4      |
+| Sneaking            | 3      | Agility     | —              | 3      |
+| Throwing Weapons    | 1      | Agility     | —              | 1      |
+| Unarmed Combat      | 5      | Agility     | —              | 5      |
+| **Total**           |        |             |                | **52** |
 
 **Skill Points Discrepancy:** Total skill points = 52, but Priority A only provides 46. This means 6 points were likely purchased with Karma (see Karma Expenditure section).
 
 **Karma-Optimal Allocation:** Per skill instructions, the cheapest skills to buy with karma are rating 1 skills (2 karma each):
 
 - Armorer 1 (2 karma)
-- Auto Mechanics 1 (2 karma)
+- Automotive Mechanic 1 (2 karma)
 - Computer 1 (2 karma)
-- Electronics Warfare 1 (2 karma)
+- Electronic Warfare 1 (2 karma)
 - Palming 1 (2 karma)
 - Throwing Weapons 1 (2 karma)
 
@@ -228,16 +226,16 @@ This accounts for 6 skills × 2 karma = 12 karma. The remaining 46 points from p
 
 **Starting Karma:** 25 (Standard level)
 
-| Category           | Items                                                  | Cost | Running Total  |
-| ------------------ | ------------------------------------------------------ | ---- | -------------- |
-| Positive Qualities | Bilingual (5), Guts (10), Natural Athlete (7)          | 22   | 22             |
-| Negative Qualities | Allergy Soy Minor (-10), SINner National (-5)          | -15  | 7              |
-| Skills (×6 R1)     | Armorer, Auto Mech, Computer, E-War, Palming, Throwing | 12   | 19             |
-| Contacts Overflow  | 2 Karma beyond CHA×3 pool                              | 2    | 21             |
-| **Total Spent**    |                                                        | 36   |                |
-| **Qualities Net**  | 22 - 15 = 7                                            |      |                |
-| **Final Total**    | 7 + 12 + 2 = 21                                        |      |                |
-| **Remaining**      | 25 - 21 = **4 Karma**                                  |      | ✓ ≤7 carryover |
+| Category           | Items                                                      | Cost | Running Total  |
+| ------------------ | ---------------------------------------------------------- | ---- | -------------- |
+| Positive Qualities | Bilingual (5), Guts (10), Natural Athlete (7)              | 22   | 22             |
+| Negative Qualities | Allergy Soy Minor (-10), SINner National (-5)              | -15  | 7              |
+| Skills (×6 R1)     | Armorer, Auto Mechanic, Computer, E-War, Palming, Throwing | 12   | 19             |
+| Contacts Overflow  | 2 Karma beyond CHA×3 pool                                  | 2    | 21             |
+| **Total Spent**    |                                                            | 36   |                |
+| **Qualities Net**  | 22 - 15 = 7                                                |      |                |
+| **Final Total**    | 7 + 12 + 2 = 21                                            |      |                |
+| **Remaining**      | 25 - 21 = **4 Karma**                                      |      | ✓ ≤7 carryover |
 
 ---
 
@@ -263,7 +261,7 @@ This accounts for 6 skills × 2 karma = 12 karma. The remaining 46 points from p
 
 | Item                    | Rating | Cost   | Notes                           |
 | ----------------------- | ------ | ------ | ------------------------------- |
-| Renraku Sensei Commlink | DR 3   | 1,000¥ | Mid-range commlink              |
+| Renraku Sensei          | DR 3   | 1,000¥ | Mid-range commlink (commlink)   |
 | Binoculars, Optical     | —      | 50¥    | Simple optical (no electronics) |
 | Biometric Reader        | DR 3   | 200¥   | Target identification           |
 | Sensor Array (Handheld) | R 3    | 3,000¥ | Electronic Warfare limit 3      |
@@ -591,12 +589,16 @@ This accounts for 6 skills × 2 karma = 12 karma. The remaining 46 points from p
 
 ### Close Matches / Auto-Corrections
 
-| Stat Block Name      | Database Name         | Correction      |
-| -------------------- | --------------------- | --------------- |
-| Binoculars (optical) | Binoculars, Optical   | Punctuation     |
-| Chemical grenades    | Gas Grenade (CS/Tear) | Renamed to type |
-| Auto mechanics kit   | Armorer Toolkit       | Closest match   |
-| Standard ammo        | Regular Rounds        | Synonym         |
+| Stat Block Name         | Database Name         | Correction      |
+| ----------------------- | --------------------- | --------------- |
+| Binoculars (optical)    | Binoculars, Optical   | Punctuation     |
+| Chemical grenades       | Gas Grenade (CS/Tear) | Renamed to type |
+| Auto mechanics kit      | Armorer Toolkit       | Closest match   |
+| Standard ammo           | Regular Rounds        | Synonym         |
+| Auto Mechanics          | Automotive Mechanic   | Skill renamed   |
+| Electronics Warfare     | Electronic Warfare    | Skill renamed   |
+| Pilot Ground Vehicles   | Pilot Ground Craft    | Skill renamed   |
+| Renraku Sensei Commlink | Renraku Sensei        | Strip suffix    |
 
 ### Missing from Database
 
@@ -618,10 +620,10 @@ This accounts for 6 skills × 2 karma = 12 karma. The remaining 46 points from p
 | Check                 | Status | Notes                       |
 | --------------------- | ------ | --------------------------- |
 | All priorities unique | ✓      | A/B/C/D/E each used once    |
-| Attributes match      | ✓      | 16-20 points = Priority B   |
+| Attributes match      | ✓      | 16 points = Priority C      |
 | Skills match          | ~      | 52 points need 6 from karma |
 | Resources match       | ✓      | ~44K ≤ 50K Priority D       |
-| Metatype match        | ✓      | Troll at Priority C         |
+| Metatype match        | ✓      | Troll at Priority B         |
 | Magic/Resonance match | ✓      | Mundane = Priority E        |
 
 ### Creation Limits Validation
