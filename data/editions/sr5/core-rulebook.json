@@ -8722,6 +8722,19 @@
             "description": "Standard clothing. Cost varies from 20¥ for vending machine flats to 100,000¥+ for high fashion. Use custom clothing for specific items."
           },
           {
+            "id": "electrochromatic-tshirt",
+            "name": "Electrochromatic T-shirt",
+            "category": "armor",
+            "subcategory": "clothing",
+            "armorRating": 0,
+            "capacity": 0,
+            "cost": 500,
+            "availability": 0,
+            "description": "Color-changing T-shirt using electrochromatic fabric. Can shift colors and patterns on command.",
+            "page": 437,
+            "source": "Core"
+          },
+          {
             "id": "full-body-armor",
             "name": "Full Body Armor",
             "category": "armor",
@@ -10143,59 +10156,40 @@
             }
           },
           {
-            "id": "hardware-toolkit",
-            "name": "Hardware Toolkit",
+            "id": "tool-kit",
+            "name": "Tool Kit",
             "category": "tools",
             "cost": 500,
             "availability": 4,
-            "description": "Electronics repair and modification tools."
-          },
-          {
-            "id": "armorer-toolkit",
-            "name": "Armorer Toolkit",
-            "category": "tools",
-            "cost": 500,
-            "availability": 8,
-            "description": "Weapon maintenance and modification tools.",
-            "legality": "restricted"
-          },
-          {
-            "id": "alchemy-kit",
-            "name": "Alchemy Kit",
-            "category": "tools",
-            "cost": 500,
-            "availability": 4,
-            "description": "Tools and materials for creating alchemical preparations. Required for Alchemy skill tests.",
-            "page": 306,
-            "source": "Core"
-          },
-          {
-            "id": "armorer-shop",
-            "name": "Armorer Shop",
-            "category": "tools",
-            "cost": 5000,
-            "availability": 8,
-            "description": "Upgraded facility for weapon and armor modifications. Provides +2 dice pool bonus to Armorer tests.",
-            "legality": "restricted",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "description": "Portable toolkit containing basic gear for standard repairs and tasks for a specific skill. Must specify which skill (e.g., Armorer, Automotive Mechanic, Hardware, etc.).",
             "page": 443,
             "source": "Core"
           },
           {
-            "id": "disguise-kit",
-            "name": "Disguise Kit",
+            "id": "tool-shop",
+            "name": "Tool Shop",
             "category": "tools",
-            "cost": 500,
-            "availability": 4,
-            "description": "Makeup and prosthetics for disguises."
+            "cost": 5000,
+            "availability": 8,
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "description": "Transportable workshop (fits in a van) with advanced tools for building and repairing. Provides +2 dice pool bonus. Must specify which skill.",
+            "page": 443,
+            "source": "Core"
           },
           {
-            "id": "forgery-kit",
-            "name": "Forgery Kit",
+            "id": "tool-facility",
+            "name": "Tool Facility",
             "category": "tools",
-            "cost": 1000,
+            "cost": 50000,
             "availability": 8,
-            "description": "Document and credential forgery tools.",
-            "legality": "restricted"
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "description": "Immobile facility requiring a building, containing heavy machines for very advanced constructions and modifications. Must specify which skill.",
+            "page": 443,
+            "source": "Core"
           },
           {
             "id": "chisel-crowbar",
@@ -15197,6 +15191,25 @@
             "page": 462
           },
           {
+            "id": "chrysler-nissan-jackrabbit",
+            "name": "Chrysler-Nissan Jackrabbit",
+            "category": "cars",
+            "handling": {
+              "onRoad": 4,
+              "offRoad": 3
+            },
+            "speed": 3,
+            "acceleration": 2,
+            "body": 8,
+            "armor": 4,
+            "pilot": 1,
+            "sensor": 2,
+            "seats": 2,
+            "cost": 10000,
+            "availability": 0,
+            "page": 462
+          },
+          {
             "id": "hyundai-shin-hyung",
             "name": "Hyundai Shin-Hyung",
             "category": "cars",
@@ -16823,6 +16836,32 @@
             "page": 318,
             "source": "SR5",
             "legality": "restricted"
+          },
+          {
+            "id": "alchemy-focus",
+            "name": "Alchemy Focus",
+            "type": "alchemy",
+            "costMultiplier": 5000,
+            "bondingKarmaMultiplier": 3,
+            "availability": 0,
+            "description": "Adds its Force rating as a dice pool modifier to Alchemy tests for creating alchemical preparations.",
+            "page": 318,
+            "source": "SR5",
+            "legality": "restricted"
+          },
+          {
+            "id": "counterspelling-focus",
+            "name": "Counterspelling Focus",
+            "type": "counterspelling",
+            "costMultiplier": 4000,
+            "bondingKarmaMultiplier": 2,
+            "availability": 0,
+            "description": "Adds its Force rating as a dice pool modifier to Counterspelling tests for a specific spell category.",
+            "page": 318,
+            "source": "SR5",
+            "legality": "restricted",
+            "requiresCategorySelection": true,
+            "categorySelectionLabel": "Select spell category"
           }
         ]
       }

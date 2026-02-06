@@ -750,6 +750,8 @@ export interface GearItem {
   /** Installed modifications on this item */
   modifications?: InstalledGearMod[];
   notes?: string;
+  /** Specification text (e.g., skill name for tools) */
+  specification?: string;
   metadata?: Metadata;
   /**
    * Weight in kilograms for encumbrance calculation.

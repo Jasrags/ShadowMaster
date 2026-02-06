@@ -223,7 +223,12 @@ interface GearPurchaseModalProps {
   isOpen: boolean;
   onClose: () => void;
   remaining: number;
-  onPurchase: (gear: GearItemData, rating?: number, quantity?: number) => void;
+  onPurchase: (
+    gear: GearItemData,
+    rating?: number,
+    quantity?: number,
+    specification?: string
+  ) => void;
   /** IDs of gear already purchased (for already-added visual state) */
   purchasedGearIds?: string[];
 }
@@ -332,6 +337,7 @@ export function GearPurchaseModal({
   const [selectedGear, setSelectedGear] = useState<GearItemData | null>(null);
   const [selectedRating, setSelectedRating] = useState(1);
   const [selectedPacks, setSelectedPacks] = useState(1);
+  const [specification, setSpecification] = useState("");
   const [addedThisSession, setAddedThisSession] = useState(0);
 
   // Get gear for current category
@@ -423,7 +429,8 @@ export function GearPurchaseModal({
 
   const canAfford = selectedGearCost <= remaining;
   const availabilityOk = selectedGearAvail <= MAX_AVAILABILITY;
-  const canPurchase = canAfford && availabilityOk && selectedGear !== null;
+  const specificationOk = !selectedGear?.requiresSpecification || specification.trim().length > 0;
+  const canPurchase = canAfford && availabilityOk && specificationOk && selectedGear !== null;
 
   // Group filtered gear by category for sticky headers (only when showing "all")
   const gearByCategory = useMemo(() => {
@@ -448,6 +455,7 @@ export function GearPurchaseModal({
     setSelectedGear(null);
     setSelectedRating(1);
     setSelectedPacks(1);
+    setSpecification("");
     setAddedThisSession(0);
   }, []);
 
@@ -456,6 +464,7 @@ export function GearPurchaseModal({
     setSelectedGear(null);
     setSelectedRating(1);
     setSelectedPacks(1);
+    setSpecification("");
     // PRESERVE: searchQuery, selectedCategory, addedThisSession
   }, []);
 
@@ -471,7 +480,8 @@ export function GearPurchaseModal({
       // For stackable items, pass the quantity (number of packs)
       // The parent component will multiply by pack size if needed
       const quantity = isStackable ? selectedPacks : undefined;
-      onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined, quantity);
+      const spec = selectedGear.requiresSpecification ? specification.trim() : undefined;
+      onPurchase(selectedGear, ratingBounds.hasRating ? selectedRating : undefined, quantity, spec);
       setAddedThisSession((prev) => prev + 1);
       resetForNextItem(); // Keep modal open for bulk adding
     }
@@ -480,6 +490,7 @@ export function GearPurchaseModal({
     canPurchase,
     isStackable,
     selectedPacks,
+    specification,
     onPurchase,
     ratingBounds.hasRating,
     selectedRating,
@@ -491,6 +502,7 @@ export function GearPurchaseModal({
     setSelectedGear(gear);
     setSelectedRating(1);
     setSelectedPacks(1);
+    setSpecification("");
   }, []);
 
   return (
@@ -591,7 +603,8 @@ export function GearPurchaseModal({
                     <div className="space-y-2 px-4 py-2">
                       {gearByCategory[category]!.map((gear) => {
                         const cost = getGearCost(gear);
-                        const isAlreadyAdded = purchasedGearIds.includes(gear.id);
+                        const isAlreadyAdded =
+                          !gear.requiresSpecification && purchasedGearIds.includes(gear.id);
                         return (
                           <GearListItem
                             key={gear.id}
@@ -611,7 +624,8 @@ export function GearPurchaseModal({
                 <div className="space-y-2 p-4">
                   {filteredGear.map((gear) => {
                     const cost = getGearCost(gear);
-                    const isAlreadyAdded = purchasedGearIds.includes(gear.id);
+                    const isAlreadyAdded =
+                      !gear.requiresSpecification && purchasedGearIds.includes(gear.id);
                     return (
                       <GearListItem
                         key={gear.id}
@@ -647,6 +661,28 @@ export function GearPurchaseModal({
                     <p className="text-sm text-zinc-600 dark:text-zinc-400">
                       {selectedGear.description}
                     </p>
+                  )}
+
+                  {/* Specification Input */}
+                  {selectedGear.requiresSpecification && (
+                    <div className="space-y-1.5">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                        {selectedGear.specificationLabel || "Specification"}
+                        <span className="ml-0.5 text-red-500">*</span>
+                      </label>
+                      <input
+                        type="text"
+                        value={specification}
+                        onChange={(e) => setSpecification(e.target.value)}
+                        placeholder={`Enter ${(selectedGear.specificationLabel || "specification").toLowerCase()}...`}
+                        className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-amber-500 focus:outline-none focus:ring-1 focus:ring-amber-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
+                      />
+                      {specification.trim().length === 0 && (
+                        <p className="text-xs text-amber-600 dark:text-amber-400">
+                          {selectedGear.specificationLabel || "Specification"} is required
+                        </p>
+                      )}
+                    </div>
                   )}
 
                   {/* Rating Selector */}

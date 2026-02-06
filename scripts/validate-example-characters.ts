@@ -274,7 +274,7 @@ function loadCatalogData(): CatalogData {
   }
 
   // Extract foci
-  const fociModule = data.modules?.magic?.payload?.foci;
+  const fociModule = data.modules?.foci?.payload?.foci;
   if (Array.isArray(fociModule)) {
     for (const focus of fociModule) {
       if (focus.id) {

@@ -220,7 +220,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
   // Add gear (actual implementation)
   const actuallyAddGear = useCallback(
-    (gearData: GearItemData, rating?: number, quantity?: number) => {
+    (gearData: GearItemData, rating?: number, quantity?: number, specification?: string) => {
       const hasRatingFlag = gearData.hasRating || gearData.ratingSpec?.rating?.hasRating;
       const effectiveRating = rating || 1;
       const effectiveQuantity = quantity || 1;
@@ -263,7 +263,9 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
       // Build the display name
       let displayName = gearData.name;
-      if (hasRatingFlag || hasUnifiedRatings(gearData)) {
+      if (specification) {
+        displayName = `${gearData.name} (${specification})`;
+      } else if (hasRatingFlag || hasUnifiedRatings(gearData)) {
         displayName = `${gearData.name} (Rating ${effectiveRating})`;
       }
 
@@ -276,6 +278,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         legality: gearData.legality,
         quantity: totalUnits,
         rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
+        specification,
         capacity,
         capacityUsed: 0,
         modifications: [],
@@ -295,7 +298,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
   // Add gear (with karma conversion prompt if needed)
   const addGear = useCallback(
-    (gearData: GearItemData, rating?: number, quantity?: number) => {
+    (gearData: GearItemData, rating?: number, quantity?: number, specification?: string) => {
       const unitCost = calculateGearCost(gearData, rating);
       const effectiveQuantity = quantity || 1;
       // For stackable items: quantity is number of packs, unitCost is per unit
@@ -305,7 +308,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
 
       // Check if already affordable
       if (totalCost <= remaining) {
-        actuallyAddGear(gearData, rating, quantity);
+        actuallyAddGear(gearData, rating, quantity, specification);
         return;
       }
 
@@ -323,7 +326,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
           itemName = `${itemName} (${effectiveQuantity * packSize} units)`;
         }
         karmaConversionPrompt.promptConversion(itemName, totalCost, () => {
-          actuallyAddGear(gearData, rating, quantity);
+          actuallyAddGear(gearData, rating, quantity, specification);
         });
         return;
       }
