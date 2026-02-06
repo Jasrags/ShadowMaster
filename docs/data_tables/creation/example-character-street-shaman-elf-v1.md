@@ -469,7 +469,7 @@ The published archetype significantly exceeds Priority E resources. Possible exp
 | Medkit                  | medkit                  | ✓      |
 | Medkit Supplies         | medkit-supplies         | ✓      |
 | Respirator              | respirator              | ✓      |
-| Alchemy Kit             | alchemy-kit             | ✓      |
+| Tool Kit (Alchemy)      | tool-kit                | ✓      |
 | Flashlight              | flashlight              | ✓      |
 | Fake SIN                | fake-sin                | ✓      |
 | Fake License            | fake-license            | ✓      |
