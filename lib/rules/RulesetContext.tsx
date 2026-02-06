@@ -248,6 +248,11 @@ export interface GearItemData {
    * When present, cost and availability apply to this quantity.
    */
   quantity?: number;
+
+  /** Whether this item requires a specification (e.g., skill name for tools) */
+  requiresSpecification?: boolean;
+  /** Label for the specification input (e.g., "Skill") */
+  specificationLabel?: string;
 }
 
 export interface WeaponData extends GearItemData {

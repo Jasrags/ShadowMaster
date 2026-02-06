@@ -366,6 +366,11 @@ export interface GearItemData {
    * @deprecated Use ratings table or ratingSpec.capacityCostScaling.perRating instead
    */
   capacityPerRating?: boolean;
+
+  /** Whether this item requires a specification (e.g., skill name for tools) */
+  requiresSpecification?: boolean;
+  /** Label for the specification input (e.g., "Skill") */
+  specificationLabel?: string;
 }
 
 /**
