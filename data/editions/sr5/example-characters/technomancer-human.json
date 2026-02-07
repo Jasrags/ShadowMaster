@@ -50,31 +50,82 @@
     "sneaking": 2
   },
   "knowledgeSkills": [
-    { "name": "Business", "category": "academic", "rating": 4, "specialization": "Finance" },
+    {
+      "name": "Business",
+      "category": "academic",
+      "rating": 4,
+      "specialization": "Finance"
+    },
     {
       "name": "Club Music",
       "category": "interests",
       "rating": 2,
       "specialization": "Classic Dubstep"
     },
-    { "name": "Economics", "category": "academic", "rating": 4 },
-    { "name": "NeoNET", "category": "professional", "rating": 4 },
-    { "name": "Sports", "category": "interests", "rating": 2, "specialization": "Baseball" },
-    { "name": "Street Life", "category": "street", "rating": 1 }
+    {
+      "name": "Economics",
+      "category": "academic",
+      "rating": 4
+    },
+    {
+      "name": "NeoNET",
+      "category": "professional",
+      "rating": 4
+    },
+    {
+      "name": "Sports",
+      "category": "interests",
+      "rating": 2,
+      "specialization": "Baseball"
+    },
+    {
+      "name": "Street Life",
+      "category": "street",
+      "rating": 1
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "German", "rating": 2, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "German",
+      "rating": 2,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "analytical-mind", "rating": 1 },
-    { "qualityId": "codeslinger", "rating": 1, "specification": "Snoop" },
-    { "qualityId": "home-ground", "rating": 1, "specification": "Digital Turf: NeoNET" }
+    {
+      "qualityId": "analytical-mind",
+      "rating": 1
+    },
+    {
+      "qualityId": "codeslinger",
+      "rating": 1,
+      "specification": "Snoop"
+    },
+    {
+      "qualityId": "home-ground",
+      "rating": 1,
+      "specification": "Digital Turf: NeoNET"
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "combat-paralysis", "rating": 1 },
-    { "qualityId": "insomnia", "rating": 2 },
-    { "qualityId": "prejudiced", "rating": 1, "specification": "NeoNET Citizens (Vocal)" }
+    {
+      "qualityId": "combat-paralysis",
+      "rating": 1
+    },
+    {
+      "qualityId": "insomnia",
+      "rating": 2
+    },
+    {
+      "qualityId": "prejudiced",
+      "rating": 1,
+      "specification": "NeoNET Citizens (Vocal)"
+    }
   ],
   "complexForms": [
     {
@@ -144,7 +195,12 @@
     }
   ],
   "gear": [
-    { "name": "Data Tap", "category": "electronics", "quantity": 1, "cost": 300 },
+    {
+      "name": "Data Tap",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 300
+    },
     {
       "name": "Earbuds",
       "category": "sensor-housing",
@@ -161,15 +217,63 @@
       "rating": 1,
       "notes": "Image Link"
     },
-    { "name": "Headjammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 6 },
-    { "name": "Datachips (Blank)", "category": "electronics", "quantity": 50, "cost": 25 },
-    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
-    { "name": "Mapsoft (Seattle)", "category": "software", "quantity": 1, "cost": 100 },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 250, "rating": 3 },
-    { "name": "Respirator", "category": "survival", "quantity": 1, "cost": 50, "rating": 1 },
-    { "name": "RFID Tags", "category": "electronics", "quantity": 50, "cost": 5 },
-    { "name": "Stealth Tags", "category": "electronics", "quantity": 30, "cost": 300 },
-    { "name": "Plastic Restraints", "category": "security", "quantity": 10, "cost": 20 }
+    {
+      "name": "Headjammer",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 600,
+      "rating": 6
+    },
+    {
+      "name": "Datachips (Blank)",
+      "category": "electronics",
+      "quantity": 50,
+      "cost": 25
+    },
+    {
+      "name": "Flashlight",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 25
+    },
+    {
+      "name": "Mapsoft (Seattle)",
+      "category": "software",
+      "quantity": 1,
+      "cost": 100
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 250,
+      "rating": 3
+    },
+    {
+      "name": "Respirator",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 50,
+      "rating": 1
+    },
+    {
+      "name": "RFID Tags",
+      "category": "electronics",
+      "quantity": 50,
+      "cost": 5
+    },
+    {
+      "name": "Stealth Tags",
+      "category": "electronics",
+      "quantity": 30,
+      "cost": 300
+    },
+    {
+      "name": "Plastic Restraints",
+      "category": "security",
+      "quantity": 10,
+      "cost": 20
+    }
   ],
   "drones": [
     {
@@ -257,7 +361,10 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 3 },
+      "sin": {
+        "type": "fake",
+        "rating": 3
+      },
       "licenses": []
     }
   ],
@@ -287,7 +394,10 @@
     "composure": 9,
     "judgeIntentions": 10,
     "memory": 11,
-    "liftCarry": 6
+    "liftCarry": 6,
+    "movementWalk": 6,
+    "movementRun": 12,
+    "overflow": 3
   },
   "condition": {
     "physicalDamage": 0,

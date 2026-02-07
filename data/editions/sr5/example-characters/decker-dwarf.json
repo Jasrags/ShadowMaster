@@ -49,23 +49,66 @@
     "hacking": ["Hack on the Fly"]
   },
   "knowledgeSkills": [
-    { "name": "Cannibalizing Hardware", "category": "professional", "rating": 5 },
-    { "name": "Detective Novels", "category": "interests", "rating": 3 },
-    { "name": "Matrix Security", "category": "professional", "rating": 4 }
+    {
+      "name": "Cannibalizing Hardware",
+      "category": "professional",
+      "rating": 5
+    },
+    {
+      "name": "Detective Novels",
+      "category": "interests",
+      "rating": 3
+    },
+    {
+      "name": "Matrix Security",
+      "category": "professional",
+      "rating": 4
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Japanese", "rating": 3, "isNative": false },
-    { "name": "Salish", "rating": 3, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Japanese",
+      "rating": 3,
+      "isNative": false
+    },
+    {
+      "name": "Salish",
+      "rating": 3,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "analytical-mind", "rating": 1 },
-    { "qualityId": "aptitude", "rating": 1, "specification": "Hacking" },
-    { "qualityId": "code-slinger", "rating": 1, "specification": "Brute Force" }
+    {
+      "qualityId": "analytical-mind",
+      "rating": 1
+    },
+    {
+      "qualityId": "aptitude",
+      "rating": 1,
+      "specification": "Hacking"
+    },
+    {
+      "qualityId": "code-slinger",
+      "rating": 1,
+      "specification": "Brute Force"
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "allergy", "rating": 2, "specification": "Sunlight (Mild)" },
-    { "qualityId": "code-of-honor", "rating": 1, "specification": "Metahumans" }
+    {
+      "qualityId": "allergy",
+      "rating": 2,
+      "specification": "Sunlight (Mild)"
+    },
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "Metahumans"
+    }
   ],
   "racialQualities": [
     "Thermographic Vision",
@@ -85,7 +128,9 @@
       "cost": 31500,
       "availability": 12,
       "legality": "restricted",
-      "attributeBonuses": { "logic": 1 }
+      "attributeBonuses": {
+        "logic": 1
+      }
     },
     {
       "catalogId": "cybereyes",
@@ -149,7 +194,12 @@
     }
   ],
   "gear": [
-    { "name": "Lockpick Set", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "Lockpick Set",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 250
+    },
     {
       "name": "DocWagon Contract",
       "category": "services",
@@ -157,7 +207,13 @@
       "cost": 5000,
       "notes": "Basic"
     },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 1500, "rating": 6 },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 1500,
+      "rating": 6
+    },
     {
       "name": "Linguasoft (Sperethiel)",
       "category": "skillsoft",
@@ -195,18 +251,48 @@
     }
   ],
   "programs": [
-    { "catalogId": "armor", "name": "Armor", "category": "hacking", "cost": 250 },
+    {
+      "catalogId": "armor",
+      "name": "Armor",
+      "category": "hacking",
+      "cost": 250
+    },
     {
       "catalogId": "biofeedback-filter",
       "name": "Biofeedback Filter",
       "category": "hacking",
       "cost": 250
     },
-    { "catalogId": "edit", "name": "Edit", "category": "hacking", "cost": 250 },
-    { "catalogId": "encryption", "name": "Encryption", "category": "hacking", "cost": 250 },
-    { "catalogId": "hammer", "name": "Hammer", "category": "hacking", "cost": 250 },
-    { "catalogId": "signal-scrub", "name": "Signal Scrub", "category": "hacking", "cost": 250 },
-    { "catalogId": "toolbox", "name": "Toolbox", "category": "hacking", "cost": 250 }
+    {
+      "catalogId": "edit",
+      "name": "Edit",
+      "category": "hacking",
+      "cost": 250
+    },
+    {
+      "catalogId": "encryption",
+      "name": "Encryption",
+      "category": "hacking",
+      "cost": 250
+    },
+    {
+      "catalogId": "hammer",
+      "name": "Hammer",
+      "category": "hacking",
+      "cost": 250
+    },
+    {
+      "catalogId": "signal-scrub",
+      "name": "Signal Scrub",
+      "category": "hacking",
+      "cost": 250
+    },
+    {
+      "catalogId": "toolbox",
+      "name": "Toolbox",
+      "category": "hacking",
+      "cost": 250
+    }
   ],
   "armor": [
     {
@@ -264,7 +350,10 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": []
     }
   ],
@@ -294,7 +383,10 @@
     "composure": 7,
     "judgeIntentions": 6,
     "memory": 10,
-    "liftCarry": 6
+    "liftCarry": 6,
+    "movementWalk": 4,
+    "movementRun": 8,
+    "overflow": 3
   },
   "condition": {
     "physicalDamage": 0,

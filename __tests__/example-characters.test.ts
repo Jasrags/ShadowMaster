@@ -46,6 +46,9 @@ interface CharacterDerivedStats {
   judgeIntentions: number;
   memory: number;
   liftCarry: number;
+  movementWalk: number;
+  movementRun: number;
+  overflow: number;
 }
 
 interface ExampleCharacter {
@@ -295,6 +298,9 @@ describe("Example Character Fixtures", () => {
         "judgeIntentions",
         "memory",
         "liftCarry",
+        "movementWalk",
+        "movementRun",
+        "overflow",
       ];
 
       for (const [_file, char] of characters) {
@@ -351,6 +357,30 @@ describe("Example Character Fixtures", () => {
       for (const [_file, char] of characters) {
         expect(char.derivedStats.initiativeBase).toBeGreaterThan(0);
         expect(char.derivedStats.initiativeDice).toBeGreaterThanOrEqual(1);
+      }
+    });
+
+    it("should have reasonable movement walk (AGI × 2, within ±2 for augmentations)", () => {
+      for (const [_file, char] of characters) {
+        const calculated = char.attributes.agility * 2;
+        const actual = char.derivedStats.movementWalk;
+        expect(Math.abs(calculated - actual)).toBeLessThanOrEqual(2);
+      }
+    });
+
+    it("should have reasonable movement run (AGI × 4, within ±4 for augmentations)", () => {
+      for (const [_file, char] of characters) {
+        const calculated = char.attributes.agility * 4;
+        const actual = char.derivedStats.movementRun;
+        expect(Math.abs(calculated - actual)).toBeLessThanOrEqual(4);
+      }
+    });
+
+    it("should have reasonable overflow (BOD, within ±2 for augmentations)", () => {
+      for (const [_file, char] of characters) {
+        const calculated = char.attributes.body;
+        const actual = char.derivedStats.overflow;
+        expect(Math.abs(calculated - actual)).toBeLessThanOrEqual(2);
       }
     });
   });

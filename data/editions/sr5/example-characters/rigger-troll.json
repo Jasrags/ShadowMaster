@@ -37,21 +37,55 @@
     "pistols": 3
   },
   "knowledgeSkills": [
-    { "name": "Backstreets", "category": "street", "rating": 3 },
-    { "name": "Sci-Fi Flicks", "category": "interests", "rating": 2 },
-    { "name": "Seattle Waterways", "category": "street", "rating": 1 },
-    { "name": "Smuggling Routes", "category": "street", "rating": 4 }
+    {
+      "name": "Backstreets",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Sci-Fi Flicks",
+      "category": "interests",
+      "rating": 2
+    },
+    {
+      "name": "Seattle Waterways",
+      "category": "street",
+      "rating": 1
+    },
+    {
+      "name": "Smuggling Routes",
+      "category": "street",
+      "rating": 4
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Salish", "rating": 2, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Salish",
+      "rating": 2,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "gearhead", "rating": 1 },
-    { "qualityId": "natural-hardening", "rating": 1 }
+    {
+      "qualityId": "gearhead",
+      "rating": 1
+    },
+    {
+      "qualityId": "natural-hardening",
+      "rating": 1
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "allergy", "rating": 2, "specification": "Sunlight (Moderate)" }
+    {
+      "qualityId": "allergy",
+      "rating": 2,
+      "specification": "Sunlight (Moderate)"
+    }
   ],
   "racialQualities": [
     "Thermographic Vision",
@@ -109,7 +143,9 @@
       "cost": 32000,
       "availability": 8,
       "legality": "restricted",
-      "attributeBonuses": { "agility": 2 }
+      "attributeBonuses": {
+        "agility": 2
+      }
     },
     {
       "catalogId": "smuggling-compartment",
@@ -139,7 +175,13 @@
       "loyalty": 3,
       "notes": "Maritime information"
     },
-    { "name": "Fixer", "type": "Fixer", "connection": 1, "loyalty": 1, "notes": "Jobs" }
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 1,
+      "loyalty": 1,
+      "notes": "Jobs"
+    }
   ],
   "gear": [
     {
@@ -157,7 +199,13 @@
       "cost": 50000,
       "notes": "Platinum (1 year)"
     },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 1500, "rating": 6 }
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 1500,
+      "rating": 6
+    }
   ],
   "vehicles": [
     {
@@ -286,7 +334,10 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": []
     }
   ],
@@ -317,7 +368,10 @@
     "composure": 7,
     "judgeIntentions": 9,
     "memory": 7,
-    "liftCarry": 10
+    "liftCarry": 10,
+    "movementWalk": 4,
+    "movementRun": 8,
+    "overflow": 5
   },
   "condition": {
     "physicalDamage": 0,

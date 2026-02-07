@@ -40,29 +40,87 @@
     "summoning": 4
   },
   "knowledgeSkills": [
-    { "name": "Action Trids", "category": "interests", "rating": 3 },
-    { "name": "Critters", "category": "academic", "rating": 3 },
-    { "name": "Magic Theory", "category": "academic", "rating": 4 },
-    { "name": "Urban Brawl", "category": "interests", "rating": 3 }
+    {
+      "name": "Action Trids",
+      "category": "interests",
+      "rating": 3
+    },
+    {
+      "name": "Critters",
+      "category": "academic",
+      "rating": 3
+    },
+    {
+      "name": "Magic Theory",
+      "category": "academic",
+      "rating": 4
+    },
+    {
+      "name": "Urban Brawl",
+      "category": "interests",
+      "rating": 3
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Spanish", "rating": 3, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Spanish",
+      "rating": 3,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "focused-concentration", "rating": 3 },
-    { "qualityId": "high-pain-tolerance", "rating": 1 }
+    {
+      "qualityId": "focused-concentration",
+      "rating": 3
+    },
+    {
+      "qualityId": "high-pain-tolerance",
+      "rating": 1
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "distinctive-style", "rating": 1, "specification": "Troll Poser" },
-    { "qualityId": "prejudiced", "rating": 1, "specification": "Elves (Biased)" }
+    {
+      "qualityId": "distinctive-style",
+      "rating": 1,
+      "specification": "Troll Poser"
+    },
+    {
+      "qualityId": "prejudiced",
+      "rating": 1,
+      "specification": "Elves (Biased)"
+    }
   ],
   "spells": [
-    { "id": "spell-ball-lightning", "catalogId": "ball-lightning", "name": "Ball Lightning" },
-    { "id": "spell-clout", "catalogId": "clout", "name": "Clout" },
-    { "id": "spell-combat-sense", "catalogId": "combat-sense", "name": "Combat Sense" },
-    { "id": "spell-flamethrower", "catalogId": "flamethrower", "name": "Flamethrower" },
-    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
+    {
+      "id": "spell-ball-lightning",
+      "catalogId": "ball-lightning",
+      "name": "Ball Lightning"
+    },
+    {
+      "id": "spell-clout",
+      "catalogId": "clout",
+      "name": "Clout"
+    },
+    {
+      "id": "spell-combat-sense",
+      "catalogId": "combat-sense",
+      "name": "Combat Sense"
+    },
+    {
+      "id": "spell-flamethrower",
+      "catalogId": "flamethrower",
+      "name": "Flamethrower"
+    },
+    {
+      "id": "spell-heal",
+      "catalogId": "heal",
+      "name": "Heal"
+    },
     {
       "id": "spell-increase-agility",
       "catalogId": "increase-attribute",
@@ -74,9 +132,21 @@
       "catalogId": "increase-reflexes",
       "name": "Increase Reflexes"
     },
-    { "id": "spell-manaball", "catalogId": "manaball", "name": "Manaball" },
-    { "id": "spell-physical-mask", "catalogId": "physical-mask", "name": "Physical Mask" },
-    { "id": "spell-stunbolt", "catalogId": "stunbolt", "name": "Stunbolt" }
+    {
+      "id": "spell-manaball",
+      "catalogId": "manaball",
+      "name": "Manaball"
+    },
+    {
+      "id": "spell-physical-mask",
+      "catalogId": "physical-mask",
+      "name": "Physical Mask"
+    },
+    {
+      "id": "spell-stunbolt",
+      "catalogId": "stunbolt",
+      "name": "Stunbolt"
+    }
   ],
   "contacts": [
     {
@@ -142,8 +212,17 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 2 },
-      "licenses": [{ "type": "fake", "rating": 2, "name": "Magic License" }]
+      "sin": {
+        "type": "fake",
+        "rating": 2
+      },
+      "licenses": [
+        {
+          "type": "fake",
+          "rating": 2,
+          "name": "Magic License"
+        }
+      ]
     }
   ],
   "lifestyles": [
@@ -168,7 +247,10 @@
     "composure": 6,
     "judgeIntentions": 5,
     "memory": 8,
-    "liftCarry": 8
+    "liftCarry": 8,
+    "movementWalk": 6,
+    "movementRun": 12,
+    "overflow": 5
   },
   "condition": {
     "physicalDamage": 0,

@@ -61,14 +61,38 @@
     "etiquette": ["Street"]
   },
   "knowledgeSkills": [
-    { "name": "Business", "category": "academic", "rating": 2 },
-    { "name": "Seattle Street Gangs", "category": "street", "rating": 4 },
-    { "name": "Sprawl Life", "category": "street", "rating": 3 },
-    { "name": "Street Drugs", "category": "street", "rating": 2 }
+    {
+      "name": "Business",
+      "category": "academic",
+      "rating": 2
+    },
+    {
+      "name": "Seattle Street Gangs",
+      "category": "street",
+      "rating": 4
+    },
+    {
+      "name": "Sprawl Life",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Street Drugs",
+      "category": "street",
+      "rating": 2
+    }
   ],
   "languages": [
-    { "name": "English (City Speak)", "rating": 0, "isNative": true },
-    { "name": "Or'zet", "rating": 2, "isNative": false }
+    {
+      "name": "English (City Speak)",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Or'zet",
+      "rating": 2,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
     {
@@ -135,12 +159,43 @@
     }
   ],
   "gear": [
-    { "name": "Armorer Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Automotive Mechanics Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Cybertechnology Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Industrial Mechanic Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 3 },
+    {
+      "name": "Armorer Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Automotive Mechanics Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Cybertechnology Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Industrial Mechanic Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Survival Kit",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 500,
+      "rating": 3
+    },
     {
       "name": "Glasses",
       "category": "sensor-housing",
@@ -149,8 +204,19 @@
       "rating": 1,
       "notes": "Image Link"
     },
-    { "name": "Jazz", "category": "drugs", "quantity": 4, "cost": 300, "notes": "Combat drug" },
-    { "name": "Plastic Restraints", "category": "restraints", "quantity": 10, "cost": 50 }
+    {
+      "name": "Jazz",
+      "category": "drugs",
+      "quantity": 4,
+      "cost": 300,
+      "notes": "Combat drug"
+    },
+    {
+      "name": "Plastic Restraints",
+      "category": "restraints",
+      "quantity": 10,
+      "cost": 50
+    }
   ],
   "armor": [
     {
@@ -291,7 +357,13 @@
         "type": "fake",
         "rating": 3
       },
-      "licenses": [{ "type": "fake", "rating": 3, "name": "Gun License" }]
+      "licenses": [
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Gun License"
+        }
+      ]
     }
   ],
   "lifestyles": [
@@ -314,7 +386,10 @@
     "composure": 8,
     "judgeIntentions": 7,
     "memory": 7,
-    "liftCarry": 14
+    "liftCarry": 14,
+    "movementWalk": 8,
+    "movementRun": 16,
+    "overflow": 7
   },
   "condition": {
     "physicalDamage": 0,
