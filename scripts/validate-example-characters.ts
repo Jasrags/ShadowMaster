@@ -78,6 +78,9 @@ interface Character {
     judgeIntentions: number;
     memory: number;
     liftCarry: number;
+    movementWalk: number;
+    movementRun: number;
+    overflow: number;
   };
   [key: string]: unknown;
 }
@@ -324,6 +327,13 @@ function calculateDerivedStats(char: Character) {
   // Lift/Carry: STR + BOD
   const liftCarry = attr.strength + attr.body;
 
+  // Movement: Walk = AGI × 2, Run = AGI × 4 (SR5 Core p.101)
+  const movementWalk = attr.agility * 2;
+  const movementRun = attr.agility * 4;
+
+  // Overflow: BOD (extra physical damage boxes before death)
+  const overflow = attr.body;
+
   return {
     physicalLimit,
     mentalLimit,
@@ -336,6 +346,9 @@ function calculateDerivedStats(char: Character) {
     judgeIntentions,
     memory,
     liftCarry,
+    movementWalk,
+    movementRun,
+    overflow,
   };
 }
 
@@ -470,6 +483,9 @@ function validateCharacter(
     checkStat("memory");
     checkStat("liftCarry", 2);
     checkStat("physicalConditionMonitor", 1); // Toughness can add +1
+    checkStat("movementWalk", 2); // Allow variance for augmented agility
+    checkStat("movementRun", 4); // Allow variance (augmented AGI × 4 spread)
+    checkStat("overflow", 2); // Allow variance for augmented body
   }
 
   return result;

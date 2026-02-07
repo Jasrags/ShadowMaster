@@ -94,21 +94,55 @@
     "sneaking": ["Urban"]
   },
   "knowledgeSkills": [
-    { "name": "Egyptian Ceramics", "category": "interests", "rating": 2 },
-    { "name": "Weapon Manufacturers", "category": "professional", "rating": 4 }
+    {
+      "name": "Egyptian Ceramics",
+      "category": "interests",
+      "rating": 2
+    },
+    {
+      "name": "Weapon Manufacturers",
+      "category": "professional",
+      "rating": 4
+    }
   ],
   "languages": [
-    { "name": "Lakota", "rating": 0, "isNative": true },
-    { "name": "English", "rating": 5, "isNative": false },
-    { "name": "Sperethiel", "rating": 4, "isNative": false }
+    {
+      "name": "Lakota",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "English",
+      "rating": 5,
+      "isNative": false
+    },
+    {
+      "name": "Sperethiel",
+      "rating": 4,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "guts", "rating": 1 },
-    { "qualityId": "natural-athlete", "rating": 1 }
+    {
+      "qualityId": "guts",
+      "rating": 1
+    },
+    {
+      "qualityId": "natural-athlete",
+      "rating": 1
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "addiction", "rating": 1, "specification": "BTLs (Mild)" },
-    { "qualityId": "code-of-honor", "rating": 1, "specification": "Assassin's Creed" }
+    {
+      "qualityId": "addiction",
+      "rating": 1,
+      "specification": "BTLs (Mild)"
+    },
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "Assassin's Creed"
+    }
   ],
   "racialQualities": ["Low-Light Vision", "+1 Agility", "+2 Charisma"],
   "contacts": [
@@ -159,7 +193,12 @@
       "rating": 4,
       "notes": "2 resupplies"
     },
-    { "name": "Trauma Patch", "category": "medical", "quantity": 2, "cost": 1000 },
+    {
+      "name": "Trauma Patch",
+      "category": "medical",
+      "quantity": 2,
+      "cost": 1000
+    },
     {
       "name": "Gecko Tape Gloves",
       "category": "survival",
@@ -167,7 +206,13 @@
       "cost": 250,
       "notes": "Wall climbing"
     },
-    { "name": "Maglock Passkey", "category": "tools", "quantity": 1, "cost": 6000, "rating": 3 }
+    {
+      "name": "Maglock Passkey",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 6000,
+      "rating": 3
+    }
   ],
   "vehicles": [
     {
@@ -312,18 +357,44 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 5 },
+      "sin": {
+        "type": "fake",
+        "rating": 5
+      },
       "licenses": [
-        { "type": "fake", "rating": 5, "name": "Gun License" },
-        { "type": "fake", "rating": 5, "name": "Gun License" },
-        { "type": "fake", "rating": 5, "name": "Gun License" },
-        { "type": "fake", "rating": 5, "name": "Gun License" },
-        { "type": "fake", "rating": 5, "name": "Gun License" }
+        {
+          "type": "fake",
+          "rating": 5,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 5,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 5,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 5,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 5,
+          "name": "Gun License"
+        }
       ]
     },
     {
       "name": "Secondary Identity",
-      "sin": { "type": "fake", "rating": 5 },
+      "sin": {
+        "type": "fake",
+        "rating": 5
+      },
       "licenses": []
     }
   ],
@@ -347,7 +418,10 @@
     "composure": 5,
     "judgeIntentions": 6,
     "memory": 4,
-    "liftCarry": 5
+    "liftCarry": 5,
+    "movementWalk": 12,
+    "movementRun": 24,
+    "overflow": 3
   },
   "condition": {
     "physicalDamage": 0,

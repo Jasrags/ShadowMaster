@@ -55,27 +55,85 @@
     "throwing-weapons": 3
   },
   "knowledgeSkills": [
-    { "name": "Bogota", "category": "street", "rating": 3 },
-    { "name": "Catholicism", "category": "interests", "rating": 2 },
-    { "name": "Military Procedures", "category": "professional", "rating": 4 },
-    { "name": "Politics", "category": "academic", "rating": 3 },
-    { "name": "Psychology", "category": "academic", "rating": 2 },
-    { "name": "Sociology", "category": "academic", "rating": 2 }
+    {
+      "name": "Bogota",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Catholicism",
+      "category": "interests",
+      "rating": 2
+    },
+    {
+      "name": "Military Procedures",
+      "category": "professional",
+      "rating": 4
+    },
+    {
+      "name": "Politics",
+      "category": "academic",
+      "rating": 3
+    },
+    {
+      "name": "Psychology",
+      "category": "academic",
+      "rating": 2
+    },
+    {
+      "name": "Sociology",
+      "category": "academic",
+      "rating": 2
+    }
   ],
   "languages": [
-    { "name": "Spanish", "rating": 0, "isNative": true },
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Aztlaner Spanish", "rating": 2, "isNative": false },
-    { "name": "Latin", "rating": 1, "isNative": false }
+    {
+      "name": "Spanish",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Aztlaner Spanish",
+      "rating": 2,
+      "isNative": false
+    },
+    {
+      "name": "Latin",
+      "rating": 1,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "bilingual", "rating": 1, "specification": "English" },
-    { "qualityId": "guts", "rating": 1 },
-    { "qualityId": "high-pain-tolerance", "rating": 1 }
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "English"
+    },
+    {
+      "qualityId": "guts",
+      "rating": 1
+    },
+    {
+      "qualityId": "high-pain-tolerance",
+      "rating": 1
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "addiction", "rating": 1, "specification": "Alcohol (Mild)" },
-    { "qualityId": "code-of-honor", "rating": 1, "specification": "Civilians and Noncombatants" }
+    {
+      "qualityId": "addiction",
+      "rating": 1,
+      "specification": "Alcohol (Mild)"
+    },
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "Civilians and Noncombatants"
+    }
   ],
   "cyberware": [
     {
@@ -87,7 +145,9 @@
       "essenceCost": 1.0,
       "cost": 15000,
       "availability": 4,
-      "attributeBonuses": { "strength": 2 },
+      "attributeBonuses": {
+        "strength": 2
+      },
       "notes": "Custom Agility 5, Custom Strength 5"
     }
   ],
@@ -106,7 +166,13 @@
       "loyalty": 3,
       "notes": "Information"
     },
-    { "name": "Fixer", "type": "Fixer", "connection": 2, "loyalty": 2, "notes": "Jobs" },
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 2,
+      "loyalty": 2,
+      "notes": "Jobs"
+    },
     {
       "name": "Mr. Johnson",
       "type": "Corporate",
@@ -116,10 +182,30 @@
     }
   ],
   "gear": [
-    { "name": "Armorer Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
-    { "name": "Gas Mask", "category": "survival", "quantity": 1, "cost": 200 },
+    {
+      "name": "Armorer Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Climbing Gear",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Flashlight",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 25
+    },
+    {
+      "name": "Gas Mask",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
     {
       "name": "Grapple Gun",
       "category": "survival",
@@ -127,8 +213,19 @@
       "cost": 500,
       "notes": "200m standard rope"
     },
-    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 3 },
+    {
+      "name": "Survival Kit",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 500,
+      "rating": 3
+    },
     {
       "name": "Goggles",
       "category": "sensor-housing",
@@ -137,10 +234,31 @@
       "rating": 4,
       "notes": "Flare Compensation, Image Link, Low-Light Vision, Smartlink"
     },
-    { "name": "Jazz", "category": "drugs", "quantity": 8, "cost": 600 },
-    { "name": "Kamikaze", "category": "drugs", "quantity": 1, "cost": 100 },
-    { "name": "Area Jammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 4 },
-    { "name": "Micro-Transceivers", "category": "electronics", "quantity": 2, "cost": 200 },
+    {
+      "name": "Jazz",
+      "category": "drugs",
+      "quantity": 8,
+      "cost": 600
+    },
+    {
+      "name": "Kamikaze",
+      "category": "drugs",
+      "quantity": 1,
+      "cost": 100
+    },
+    {
+      "name": "Area Jammer",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 600,
+      "rating": 4
+    },
+    {
+      "name": "Micro-Transceivers",
+      "category": "electronics",
+      "quantity": 2,
+      "cost": 200
+    },
     {
       "name": "Smart Firing Platform",
       "category": "weapons-accessory",
@@ -427,9 +545,21 @@
         "rating": 3
       },
       "licenses": [
-        { "type": "fake", "rating": 3, "name": "Concealed Carry License" },
-        { "type": "fake", "rating": 3, "name": "Gun License" },
-        { "type": "fake", "rating": 3, "name": "Hunting License" }
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Concealed Carry License"
+        },
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Hunting License"
+        }
       ]
     }
   ],
@@ -453,7 +583,10 @@
     "composure": 6,
     "judgeIntentions": 6,
     "memory": 6,
-    "liftCarry": 7
+    "liftCarry": 7,
+    "movementWalk": 10,
+    "movementRun": 20,
+    "overflow": 4
   },
   "condition": {
     "physicalDamage": 0,

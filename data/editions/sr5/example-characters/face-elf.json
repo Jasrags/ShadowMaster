@@ -51,14 +51,38 @@
     "unarmed-combat": 2
   },
   "knowledgeSkills": [
-    { "name": "Business", "category": "academic", "rating": 4 },
-    { "name": "High Fashion", "category": "interests", "rating": 4 },
-    { "name": "Sports", "category": "interests", "rating": 4 }
+    {
+      "name": "Business",
+      "category": "academic",
+      "rating": 4
+    },
+    {
+      "name": "High Fashion",
+      "category": "interests",
+      "rating": 4
+    },
+    {
+      "name": "Sports",
+      "category": "interests",
+      "rating": 4
+    }
   ],
   "languages": [
-    { "name": "Cantonese", "rating": 0, "isNative": true },
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Japanese", "rating": 4, "isNative": false }
+    {
+      "name": "Cantonese",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Japanese",
+      "rating": 4,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
     {
@@ -131,10 +155,31 @@
     }
   ],
   "gear": [
-    { "name": "Bug Scanner", "category": "electronics", "quantity": 1, "cost": 400 },
-    { "name": "Data Tap", "category": "electronics", "quantity": 1, "cost": 300 },
-    { "name": "Area Jammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 4 },
-    { "name": "Tag Eraser", "category": "electronics", "quantity": 1, "cost": 450 },
+    {
+      "name": "Bug Scanner",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 400
+    },
+    {
+      "name": "Data Tap",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 300
+    },
+    {
+      "name": "Area Jammer",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 600,
+      "rating": 4
+    },
+    {
+      "name": "Tag Eraser",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 450
+    },
     {
       "name": "White Noise Generator",
       "category": "electronics",
@@ -142,8 +187,18 @@
       "cost": 150,
       "rating": 6
     },
-    { "name": "Hardware Toolkit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Lockpick Set", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "Hardware Toolkit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Lockpick Set",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 250
+    },
     {
       "name": "Glasses",
       "category": "sensor-housing",
@@ -152,8 +207,18 @@
       "rating": 1,
       "notes": "Image Link"
     },
-    { "name": "Micro-Transceivers", "category": "electronics", "quantity": 2, "cost": 100 },
-    { "name": "Stealth Tags", "category": "rfid", "quantity": 20, "cost": 200 }
+    {
+      "name": "Micro-Transceivers",
+      "category": "electronics",
+      "quantity": 2,
+      "cost": 100
+    },
+    {
+      "name": "Stealth Tags",
+      "category": "rfid",
+      "quantity": 20,
+      "cost": 200
+    }
   ],
   "armor": [
     {
@@ -309,8 +374,16 @@
         "rating": 4
       },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Concealed Carry Permit" },
-        { "type": "fake", "rating": 4, "name": "Gun License" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry Permit"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Gun License"
+        }
       ]
     }
   ],
@@ -335,7 +408,10 @@
     "composure": 11,
     "judgeIntentions": 11,
     "memory": 8,
-    "liftCarry": 5
+    "liftCarry": 5,
+    "movementWalk": 8,
+    "movementRun": 16,
+    "overflow": 3
   },
   "condition": {
     "physicalDamage": 0,

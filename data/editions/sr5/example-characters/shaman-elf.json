@@ -56,37 +56,116 @@
     "unarmed-combat": 1
   },
   "knowledgeSkills": [
-    { "name": "Politics", "category": "academic", "rating": 2 },
-    { "name": "Salish-Sidhe Nation", "category": "street", "rating": 3 },
-    { "name": "Sprawl Life", "category": "street", "rating": 4 },
-    { "name": "Tarislar", "category": "street", "rating": 4 },
-    { "name": "Tir Tairngire", "category": "street", "rating": 2 }
+    {
+      "name": "Politics",
+      "category": "academic",
+      "rating": 2
+    },
+    {
+      "name": "Salish-Sidhe Nation",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Sprawl Life",
+      "category": "street",
+      "rating": 4
+    },
+    {
+      "name": "Tarislar",
+      "category": "street",
+      "rating": 4
+    },
+    {
+      "name": "Tir Tairngire",
+      "category": "street",
+      "rating": 2
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Salish", "rating": 2, "isNative": false },
-    { "name": "Sperethiel", "rating": 0, "isNative": true }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Salish",
+      "rating": 2,
+      "isNative": false
+    },
+    {
+      "name": "Sperethiel",
+      "rating": 0,
+      "isNative": true
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "bilingual", "rating": 1, "specification": "Sperethiel" },
-    { "qualityId": "mentor-spirit", "rating": 1, "specification": "Bear" },
-    { "qualityId": "spirit-affinity", "rating": 1, "specification": "Beast Spirits" }
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "Sperethiel"
+    },
+    {
+      "qualityId": "mentor-spirit",
+      "rating": 1,
+      "specification": "Bear"
+    },
+    {
+      "qualityId": "spirit-affinity",
+      "rating": 1,
+      "specification": "Beast Spirits"
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "gremlins", "rating": 2 },
-    { "qualityId": "prejudiced", "rating": 1, "specification": "Hermetic Magicians (Biased)" },
-    { "qualityId": "simsense-vertigo", "rating": 1 }
+    {
+      "qualityId": "gremlins",
+      "rating": 2
+    },
+    {
+      "qualityId": "prejudiced",
+      "rating": 1,
+      "specification": "Hermetic Magicians (Biased)"
+    },
+    {
+      "qualityId": "simsense-vertigo",
+      "rating": 1
+    }
   ],
   "racialQualities": ["Low-Light Vision"],
   "spells": [
-    { "id": "spell-antidote", "catalogId": "antidote", "name": "Antidote" },
-    { "id": "spell-cure-disease", "catalogId": "cure-disease", "name": "Cure Disease" },
-    { "id": "spell-entertainment", "catalogId": "entertainment", "name": "Entertainment" },
-    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
-    { "id": "spell-mana-bolt", "catalogId": "manabolt", "name": "Mana Bolt" }
+    {
+      "id": "spell-antidote",
+      "catalogId": "antidote",
+      "name": "Antidote"
+    },
+    {
+      "id": "spell-cure-disease",
+      "catalogId": "cure-disease",
+      "name": "Cure Disease"
+    },
+    {
+      "id": "spell-entertainment",
+      "catalogId": "entertainment",
+      "name": "Entertainment"
+    },
+    {
+      "id": "spell-heal",
+      "catalogId": "heal",
+      "name": "Heal"
+    },
+    {
+      "id": "spell-mana-bolt",
+      "catalogId": "manabolt",
+      "name": "Mana Bolt"
+    }
   ],
   "contacts": [
-    { "name": "Street Ganger", "type": "Gang", "connection": 2, "loyalty": 3 },
+    {
+      "name": "Street Ganger",
+      "type": "Gang",
+      "connection": 2,
+      "loyalty": 3
+    },
     {
       "name": "Talismonger",
       "type": "Magic",
@@ -117,7 +196,12 @@
     }
   ],
   "gear": [
-    { "name": "Alchemy Kit", "category": "magical", "quantity": 1, "cost": 500 },
+    {
+      "name": "Alchemy Kit",
+      "category": "magical",
+      "quantity": 1,
+      "cost": 500
+    },
     {
       "name": "Magical Lodge Materials",
       "category": "magical",
@@ -125,10 +209,31 @@
       "cost": 1500,
       "rating": 3
     },
-    { "name": "Biomonitor", "category": "medical", "quantity": 1, "cost": 300 },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 4 },
-    { "name": "Medkit Supplies", "category": "medical", "quantity": 1, "cost": 200 },
-    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 }
+    {
+      "name": "Biomonitor",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 300
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 500,
+      "rating": 4
+    },
+    {
+      "name": "Medkit Supplies",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Flashlight",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 25
+    }
   ],
   "foci": [
     {
@@ -207,10 +312,21 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 3 },
+      "sin": {
+        "type": "fake",
+        "rating": 3
+      },
       "licenses": [
-        { "type": "fake", "rating": 3, "name": "Magic License" },
-        { "type": "fake", "rating": 3, "name": "Medicine License" }
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Magic License"
+        },
+        {
+          "type": "fake",
+          "rating": 3,
+          "name": "Medicine License"
+        }
       ]
     }
   ],
@@ -236,7 +352,10 @@
     "composure": 10,
     "judgeIntentions": 10,
     "memory": 8,
-    "liftCarry": 9
+    "liftCarry": 9,
+    "movementWalk": 8,
+    "movementRun": 16,
+    "overflow": 4
   },
   "condition": {
     "physicalDamage": 0,

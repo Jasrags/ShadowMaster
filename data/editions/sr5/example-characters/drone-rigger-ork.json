@@ -43,15 +43,40 @@
     "pistols": 3
   },
   "knowledgeSkills": [
-    { "name": "Automotive Mechanics", "category": "professional", "rating": 5 },
-    { "name": "Drone Designs", "category": "professional", "rating": 2 },
-    { "name": "Vehicle Chop Shops", "category": "street", "rating": 4 }
+    {
+      "name": "Automotive Mechanics",
+      "category": "professional",
+      "rating": 5
+    },
+    {
+      "name": "Drone Designs",
+      "category": "professional",
+      "rating": 2
+    },
+    {
+      "name": "Vehicle Chop Shops",
+      "category": "street",
+      "rating": 4
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Or'zet", "rating": 3, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Or'zet",
+      "rating": 3,
+      "isNative": false
+    }
   ],
-  "positiveQualities": [{ "qualityId": "juryrigger", "rating": 1 }],
+  "positiveQualities": [
+    {
+      "qualityId": "juryrigger",
+      "rating": 1
+    }
+  ],
   "negativeQualities": [],
   "racialQualities": ["Low-Light Vision", "+3 Body", "+2 Strength"],
   "cyberware": [
@@ -89,7 +114,9 @@
       "rating": 2,
       "cost": 26000,
       "availability": 8,
-      "attributeBonuses": { "reaction": 2 }
+      "attributeBonuses": {
+        "reaction": 2
+      }
     }
   ],
   "contacts": [
@@ -117,10 +144,30 @@
       "rating": 4,
       "notes": "Image Link, Smartlink, Thermographic Vision, Vision Magnification"
     },
-    { "name": "Aeronautics Mechanic Kit", "category": "tools", "quantity": 1, "cost": 500 },
-    { "name": "Armorer Shop", "category": "tools", "quantity": 1, "cost": 5000 },
-    { "name": "Automotive Mechanic Facility", "category": "tools", "quantity": 1, "cost": 50000 },
-    { "name": "Miniwelder", "category": "tools", "quantity": 1, "cost": 250 },
+    {
+      "name": "Aeronautics Mechanic Kit",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 500
+    },
+    {
+      "name": "Armorer Shop",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 5000
+    },
+    {
+      "name": "Automotive Mechanic Facility",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 50000
+    },
+    {
+      "name": "Miniwelder",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 250
+    },
     {
       "name": "DocWagon Contract",
       "category": "services",
@@ -314,10 +361,21 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Gun License" },
-        { "type": "fake", "rating": 4, "name": "Drone License" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Gun License"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Drone License"
+        }
       ]
     }
   ],
@@ -348,7 +406,10 @@
     "composure": 6,
     "judgeIntentions": 4,
     "memory": 7,
-    "liftCarry": 7
+    "liftCarry": 7,
+    "movementWalk": 6,
+    "movementRun": 12,
+    "overflow": 4
   },
   "condition": {
     "physicalDamage": 0,

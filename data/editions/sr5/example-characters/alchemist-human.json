@@ -47,39 +47,118 @@
     "impersonation": ["Human"]
   },
   "knowledgeSkills": [
-    { "name": "Magical Community", "category": "street", "rating": 4, "specialization": "Seattle" },
-    { "name": "Magical Forensics", "category": "professional", "rating": 3 },
-    { "name": "Police Procedures", "category": "professional", "rating": 3 },
-    { "name": "Sprawl Dive Bars", "category": "interests", "rating": 3 }
+    {
+      "name": "Magical Community",
+      "category": "street",
+      "rating": 4,
+      "specialization": "Seattle"
+    },
+    {
+      "name": "Magical Forensics",
+      "category": "professional",
+      "rating": 3
+    },
+    {
+      "name": "Police Procedures",
+      "category": "professional",
+      "rating": 3
+    },
+    {
+      "name": "Sprawl Dive Bars",
+      "category": "interests",
+      "rating": 3
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Spanish", "rating": 0, "isNative": true },
-    { "name": "Sperethiel", "rating": 4, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Spanish",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Sperethiel",
+      "rating": 4,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "bilingual", "rating": 1, "specification": "Spanish" },
-    { "qualityId": "first-impression", "rating": 1 },
-    { "qualityId": "mentor-spirit", "rating": 1, "specification": "Snake" },
-    { "qualityId": "national-sin", "rating": 1, "specification": "Aztlan" }
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "Spanish"
+    },
+    {
+      "qualityId": "first-impression",
+      "rating": 1
+    },
+    {
+      "qualityId": "mentor-spirit",
+      "rating": 1,
+      "specification": "Snake"
+    },
+    {
+      "qualityId": "national-sin",
+      "rating": 1,
+      "specification": "Aztlan"
+    }
   ],
   "negativeQualities": [
-    { "qualityId": "addiction", "rating": 1, "specification": "Alcohol (Mild)" },
-    { "qualityId": "bad-luck", "rating": 1 }
+    {
+      "qualityId": "addiction",
+      "rating": 1,
+      "specification": "Alcohol (Mild)"
+    },
+    {
+      "qualityId": "bad-luck",
+      "rating": 1
+    }
   ],
   "spells": [
-    { "id": "spell-analyze-truth", "catalogId": "analyze-truth", "name": "Analyze Truth" },
-    { "id": "spell-armor", "catalogId": "armor", "name": "Armor" },
-    { "id": "spell-clairvoyance", "catalogId": "clairvoyance", "name": "Clairvoyance" },
+    {
+      "id": "spell-analyze-truth",
+      "catalogId": "analyze-truth",
+      "name": "Analyze Truth"
+    },
+    {
+      "id": "spell-armor",
+      "catalogId": "armor",
+      "name": "Armor"
+    },
+    {
+      "id": "spell-clairvoyance",
+      "catalogId": "clairvoyance",
+      "name": "Clairvoyance"
+    },
     {
       "id": "spell-detect-individual",
       "catalogId": "detect-individual",
       "name": "Detect Individual"
     },
-    { "id": "spell-flamethrower", "catalogId": "flamethrower", "name": "Flamethrower" },
-    { "id": "spell-heal", "catalogId": "heal", "name": "Heal" },
-    { "id": "spell-physical-barrier", "catalogId": "physical-barrier", "name": "Physical Barrier" },
-    { "id": "spell-stealth", "catalogId": "stealth", "name": "Stealth" }
+    {
+      "id": "spell-flamethrower",
+      "catalogId": "flamethrower",
+      "name": "Flamethrower"
+    },
+    {
+      "id": "spell-heal",
+      "catalogId": "heal",
+      "name": "Heal"
+    },
+    {
+      "id": "spell-physical-barrier",
+      "catalogId": "physical-barrier",
+      "name": "Physical Barrier"
+    },
+    {
+      "id": "spell-stealth",
+      "catalogId": "stealth",
+      "name": "Stealth"
+    }
   ],
   "contacts": [
     {
@@ -209,12 +288,25 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 4 },
-      "licenses": [{ "type": "fake", "rating": 4, "name": "Private Detective License" }]
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
+      "licenses": [
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Private Detective License"
+        }
+      ]
     },
     {
       "name": "National Identity",
-      "sin": { "type": "national", "rating": 0, "nation": "Aztlan" },
+      "sin": {
+        "type": "national",
+        "rating": 0,
+        "nation": "Aztlan"
+      },
       "licenses": []
     }
   ],
@@ -240,7 +332,10 @@
     "composure": 10,
     "judgeIntentions": 11,
     "memory": 9,
-    "liftCarry": 6
+    "liftCarry": 6,
+    "movementWalk": 6,
+    "movementRun": 12,
+    "overflow": 3
   },
   "condition": {
     "physicalDamage": 0,

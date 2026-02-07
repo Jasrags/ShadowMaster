@@ -93,20 +93,57 @@
     "unarmed-combat": 6
   },
   "knowledgeSkills": [
-    { "name": "Kung Fu", "category": "interests", "rating": 4 },
-    { "name": "Seattle Parkour", "category": "street", "rating": 4 },
-    { "name": "Seattle Squats", "category": "street", "rating": 2 },
-    { "name": "Triads", "category": "street", "rating": 2 }
+    {
+      "name": "Kung Fu",
+      "category": "interests",
+      "rating": 4
+    },
+    {
+      "name": "Seattle Parkour",
+      "category": "street",
+      "rating": 4
+    },
+    {
+      "name": "Seattle Squats",
+      "category": "street",
+      "rating": 2
+    },
+    {
+      "name": "Triads",
+      "category": "street",
+      "rating": 2
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Mandarin", "rating": 0, "isNative": true }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Mandarin",
+      "rating": 0,
+      "isNative": true
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "bilingual", "rating": 1, "specification": "Mandarin" },
-    { "qualityId": "double-jointed", "rating": 1 },
-    { "qualityId": "natural-athlete", "rating": 1 },
-    { "qualityId": "pain-resistance", "rating": 1 }
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "Mandarin"
+    },
+    {
+      "qualityId": "double-jointed",
+      "rating": 1
+    },
+    {
+      "qualityId": "natural-athlete",
+      "rating": 1
+    },
+    {
+      "qualityId": "pain-resistance",
+      "rating": 1
+    }
   ],
   "negativeQualities": [
     {
@@ -147,11 +184,37 @@
       "rating": 1,
       "notes": "Image Link"
     },
-    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Flashlight", "category": "survival", "quantity": 1, "cost": 25 },
-    { "name": "Lockpicks", "category": "tools", "quantity": 1, "cost": 250 },
-    { "name": "Survival Kit", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Respirator", "category": "survival", "quantity": 1, "cost": 50, "rating": 1 }
+    {
+      "name": "Climbing Gear",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Flashlight",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 25
+    },
+    {
+      "name": "Lockpicks",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 250
+    },
+    {
+      "name": "Survival Kit",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Respirator",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 50,
+      "rating": 1
+    }
   ],
   "armor": [
     {
@@ -259,7 +322,10 @@
   "identities": [
     {
       "name": "Primary Identity",
-      "sin": { "type": "fake", "rating": 1 },
+      "sin": {
+        "type": "fake",
+        "rating": 1
+      },
       "licenses": []
     }
   ],
@@ -283,7 +349,10 @@
     "composure": 6,
     "judgeIntentions": 6,
     "memory": 6,
-    "liftCarry": 10
+    "liftCarry": 10,
+    "movementWalk": 10,
+    "movementRun": 20,
+    "overflow": 5
   },
   "condition": {
     "physicalDamage": 0,

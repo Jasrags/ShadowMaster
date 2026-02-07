@@ -35,22 +35,66 @@
     "unarmed-combat": 2
   },
   "knowledgeSkills": [
-    { "name": "Great Restaurants", "category": "interests", "rating": 2 },
-    { "name": "Law Enforcement", "category": "street", "rating": 2 },
-    { "name": "Poetry", "category": "academic", "rating": 1 },
-    { "name": "Safe Houses", "category": "street", "rating": 3 }
+    {
+      "name": "Great Restaurants",
+      "category": "interests",
+      "rating": 2
+    },
+    {
+      "name": "Law Enforcement",
+      "category": "street",
+      "rating": 2
+    },
+    {
+      "name": "Poetry",
+      "category": "academic",
+      "rating": 1
+    },
+    {
+      "name": "Safe Houses",
+      "category": "street",
+      "rating": 3
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Japanese", "rating": 2, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Japanese",
+      "rating": 2,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "ambidextrous", "rating": 1 },
-    { "qualityId": "code-of-honor", "rating": 1, "specification": "Bushido" },
-    { "qualityId": "guts", "rating": 1 },
-    { "qualityId": "home-ground", "rating": 1, "specification": "Street Politics" }
+    {
+      "qualityId": "ambidextrous",
+      "rating": 1
+    },
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "Bushido"
+    },
+    {
+      "qualityId": "guts",
+      "rating": 1
+    },
+    {
+      "qualityId": "home-ground",
+      "rating": 1,
+      "specification": "Street Politics"
+    }
   ],
-  "negativeQualities": [{ "qualityId": "incompetent", "rating": 1, "specification": "Acting" }],
+  "negativeQualities": [
+    {
+      "qualityId": "incompetent",
+      "rating": 1,
+      "specification": "Acting"
+    }
+  ],
   "racialQualities": ["Low-Light Vision"],
   "cyberware": [
     {
@@ -176,7 +220,9 @@
       "cost": 190000,
       "availability": 12,
       "legality": "restricted",
-      "attributeBonuses": { "reaction": 2 },
+      "attributeBonuses": {
+        "reaction": 2
+      },
       "initiativeDiceBonus": 2
     },
     {
@@ -192,13 +238,48 @@
       "notes": "+1 die to physical tests"
     }
   ],
-  "contacts": [{ "name": "Fixer", "type": "Fixer", "connection": 4, "loyalty": 2 }],
+  "contacts": [
+    {
+      "name": "Fixer",
+      "type": "Fixer",
+      "connection": 4,
+      "loyalty": 2
+    }
+  ],
   "gear": [
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 500, "rating": 3 },
-    { "name": "Medkit", "category": "medical", "quantity": 1, "cost": 1500, "rating": 6 },
-    { "name": "Spatial Recognizer", "category": "audio-enhancement", "quantity": 1, "cost": 1000 },
-    { "name": "Area Jammer", "category": "electronics", "quantity": 1, "cost": 600, "rating": 4 },
-    { "name": "Micro-Transceiver", "category": "electronics", "quantity": 1, "cost": 100 },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 500,
+      "rating": 3
+    },
+    {
+      "name": "Medkit",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 1500,
+      "rating": 6
+    },
+    {
+      "name": "Spatial Recognizer",
+      "category": "audio-enhancement",
+      "quantity": 1,
+      "cost": 1000
+    },
+    {
+      "name": "Area Jammer",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 600,
+      "rating": 4
+    },
+    {
+      "name": "Micro-Transceiver",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 100
+    },
     {
       "name": "White Noise Generator",
       "category": "electronics",
@@ -206,8 +287,19 @@
       "cost": 150,
       "rating": 6
     },
-    { "name": "Stim Patches", "category": "medical", "quantity": 5, "cost": 250, "rating": 6 },
-    { "name": "Trauma Patches", "category": "medical", "quantity": 2, "cost": 1000 }
+    {
+      "name": "Stim Patches",
+      "category": "medical",
+      "quantity": 5,
+      "cost": 250,
+      "rating": 6
+    },
+    {
+      "name": "Trauma Patches",
+      "category": "medical",
+      "quantity": 2,
+      "cost": 1000
+    }
   ],
   "armor": [
     {
@@ -417,38 +509,98 @@
   "identities": [
     {
       "name": "Identity 1",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Concealed Carry" },
-        { "type": "fake", "rating": 4, "name": "Firearms" },
-        { "type": "fake", "rating": 4, "name": "Augmentations" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Firearms"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Augmentations"
+        }
       ]
     },
     {
       "name": "Identity 2",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Concealed Carry" },
-        { "type": "fake", "rating": 4, "name": "Firearms" },
-        { "type": "fake", "rating": 4, "name": "Augmentations" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Firearms"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Augmentations"
+        }
       ]
     },
     {
       "name": "Identity 3",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Concealed Carry" },
-        { "type": "fake", "rating": 4, "name": "Firearms" },
-        { "type": "fake", "rating": 4, "name": "Augmentations" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Firearms"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Augmentations"
+        }
       ]
     },
     {
       "name": "Identity 4",
-      "sin": { "type": "fake", "rating": 4 },
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
       "licenses": [
-        { "type": "fake", "rating": 4, "name": "Concealed Carry" },
-        { "type": "fake", "rating": 4, "name": "Firearms" },
-        { "type": "fake", "rating": 4, "name": "Augmentations" }
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Firearms"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Augmentations"
+        }
       ]
     }
   ],
@@ -472,7 +624,10 @@
     "composure": 5,
     "judgeIntentions": 5,
     "memory": 5,
-    "liftCarry": 12
+    "liftCarry": 12,
+    "movementWalk": 12,
+    "movementRun": 24,
+    "overflow": 7
   },
   "condition": {
     "physicalDamage": 0,

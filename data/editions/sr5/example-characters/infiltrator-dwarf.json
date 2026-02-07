@@ -40,19 +40,52 @@
     "swimming": 2
   },
   "knowledgeSkills": [
-    { "name": "Building Layouts", "category": "professional", "rating": 4 },
-    { "name": "Corporate Security Systems", "category": "professional", "rating": 5 },
-    { "name": "Extreme Sports", "category": "interests", "rating": 2 },
-    { "name": "Infiltration Techniques", "category": "professional", "rating": 3 }
+    {
+      "name": "Building Layouts",
+      "category": "professional",
+      "rating": 4
+    },
+    {
+      "name": "Corporate Security Systems",
+      "category": "professional",
+      "rating": 5
+    },
+    {
+      "name": "Extreme Sports",
+      "category": "interests",
+      "rating": 2
+    },
+    {
+      "name": "Infiltration Techniques",
+      "category": "professional",
+      "rating": 3
+    }
   ],
   "languages": [
-    { "name": "English", "rating": 0, "isNative": true },
-    { "name": "Japanese", "rating": 4, "isNative": false }
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Japanese",
+      "rating": 4,
+      "isNative": false
+    }
   ],
   "positiveQualities": [
-    { "qualityId": "catlike", "rating": 1 },
-    { "qualityId": "double-jointed", "rating": 1 },
-    { "qualityId": "natural-athlete", "rating": 1 }
+    {
+      "qualityId": "catlike",
+      "rating": 1
+    },
+    {
+      "qualityId": "double-jointed",
+      "rating": 1
+    },
+    {
+      "qualityId": "natural-athlete",
+      "rating": 1
+    }
   ],
   "negativeQualities": [],
   "racialQualities": [
@@ -75,10 +108,22 @@
       "cost": 6000,
       "availability": 6,
       "enhancements": [
-        { "name": "Low-Light Vision", "capacity": 2 },
-        { "name": "Smartlink", "capacity": 3 },
-        { "name": "Thermographic Vision", "capacity": 2 },
-        { "name": "Vision Enhancement 1", "capacity": 0 }
+        {
+          "name": "Low-Light Vision",
+          "capacity": 2
+        },
+        {
+          "name": "Smartlink",
+          "capacity": 3
+        },
+        {
+          "name": "Thermographic Vision",
+          "capacity": 2
+        },
+        {
+          "name": "Vision Enhancement 1",
+          "capacity": 0
+        }
       ]
     },
     {
@@ -109,8 +154,18 @@
     }
   ],
   "gear": [
-    { "name": "Climbing Gear", "category": "survival", "quantity": 1, "cost": 200 },
-    { "name": "Crowbar", "category": "tools", "quantity": 1, "cost": 20 },
+    {
+      "name": "Climbing Gear",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200
+    },
+    {
+      "name": "Crowbar",
+      "category": "tools",
+      "quantity": 1,
+      "cost": 20
+    },
     {
       "name": "Grapple Gun",
       "category": "survival",
@@ -125,9 +180,24 @@
       "cost": 4500,
       "rating": 3
     },
-    { "name": "Rappelling Gloves", "category": "survival", "quantity": 1, "cost": 70 },
-    { "name": "Tag Eraser", "category": "electronics", "quantity": 1, "cost": 450 },
-    { "name": "Micro-Transceiver", "category": "electronics", "quantity": 1, "cost": 100 }
+    {
+      "name": "Rappelling Gloves",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 70
+    },
+    {
+      "name": "Tag Eraser",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 450
+    },
+    {
+      "name": "Micro-Transceiver",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 100
+    }
   ],
   "armor": [
     {
@@ -209,7 +279,13 @@
         "type": "fake",
         "rating": 4
       },
-      "licenses": [{ "type": "fake", "rating": 4, "name": "Gun License" }]
+      "licenses": [
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Gun License"
+        }
+      ]
     }
   ],
   "lifestyles": [
@@ -232,7 +308,10 @@
     "composure": 8,
     "judgeIntentions": 9,
     "memory": 9,
-    "liftCarry": 10
+    "liftCarry": 10,
+    "movementWalk": 12,
+    "movementRun": 24,
+    "overflow": 5
   },
   "condition": {
     "physicalDamage": 0,
