@@ -212,25 +212,25 @@ export function ComplexFormsCard({ state, updateState }: ComplexFormsCardProps) 
           </div>
           <div className="mt-2 grid grid-cols-4 gap-2 text-center text-xs">
             <div>
-              <div className="font-bold text-cyan-900 dark:text-cyan-100">
+              <div className="font-mono font-bold text-cyan-900 dark:text-cyan-100">
                 {livingPersona.attack}
               </div>
               <div className="text-cyan-600 dark:text-cyan-400">ATK</div>
             </div>
             <div>
-              <div className="font-bold text-cyan-900 dark:text-cyan-100">
+              <div className="font-mono font-bold text-cyan-900 dark:text-cyan-100">
                 {livingPersona.sleaze}
               </div>
               <div className="text-cyan-600 dark:text-cyan-400">SLZ</div>
             </div>
             <div>
-              <div className="font-bold text-cyan-900 dark:text-cyan-100">
+              <div className="font-mono font-bold text-cyan-900 dark:text-cyan-100">
                 {livingPersona.dataProcessing}
               </div>
               <div className="text-cyan-600 dark:text-cyan-400">DP</div>
             </div>
             <div>
-              <div className="font-bold text-cyan-900 dark:text-cyan-100">
+              <div className="font-mono font-bold text-cyan-900 dark:text-cyan-100">
                 {livingPersona.firewall}
               </div>
               <div className="text-cyan-600 dark:text-cyan-400">FW</div>

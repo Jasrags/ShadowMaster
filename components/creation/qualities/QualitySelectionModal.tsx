@@ -723,7 +723,7 @@ export function QualitySelectionModal({
                           Karma {isPositive ? "Cost" : "Gain"}
                         </span>
                         <span
-                          className={`text-2xl font-bold ${
+                          className={`text-2xl font-mono font-bold ${
                             isPositive
                               ? "text-blue-600 dark:text-blue-400"
                               : "text-orange-600 dark:text-orange-400"

@@ -159,7 +159,7 @@ export function SkillGroupBreakModal({
                     Karma Cost
                   </span>
                   <span
-                    className={`text-lg font-bold ${
+                    className={`text-lg font-mono font-bold ${
                       isOverBudget
                         ? "text-red-600 dark:text-red-400"
                         : "text-zinc-900 dark:text-zinc-100"

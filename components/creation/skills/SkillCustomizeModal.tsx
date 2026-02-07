@@ -218,7 +218,7 @@ export function SkillCustomizeModal({
                     <Minus className="h-4 w-4" />
                   </button>
                   <div className="flex items-baseline gap-2">
-                    <span className="text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                    <span className="text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
                       {targetRating}
                     </span>
                     {targetRating > currentRating && (

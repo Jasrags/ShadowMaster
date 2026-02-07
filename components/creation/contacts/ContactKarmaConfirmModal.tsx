@@ -93,21 +93,21 @@ export function ContactKarmaConfirmModal({
               <div className="flex items-center justify-center gap-4">
                 <div className="flex flex-col items-center">
                   <span className="text-xs text-zinc-500 dark:text-zinc-400">Connection</span>
-                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-lg font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
+                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-blue-100 text-lg font-mono font-bold text-blue-700 dark:bg-blue-900/50 dark:text-blue-300">
                     {connection}
                   </div>
                 </div>
                 <span className="text-xl text-zinc-300 dark:text-zinc-600">+</span>
                 <div className="flex flex-col items-center">
                   <span className="text-xs text-zinc-500 dark:text-zinc-400">Loyalty</span>
-                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-lg font-bold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">
+                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-rose-100 text-lg font-mono font-bold text-rose-700 dark:bg-rose-900/50 dark:text-rose-300">
                     {loyalty}
                   </div>
                 </div>
                 <span className="text-xl text-zinc-300 dark:text-zinc-600">=</span>
                 <div className="flex flex-col items-center">
                   <span className="text-xs text-zinc-500 dark:text-zinc-400">Total</span>
-                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-lg font-bold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
+                  <div className="mt-1 flex h-10 w-10 items-center justify-center rounded-lg bg-indigo-100 text-lg font-mono font-bold text-indigo-700 dark:bg-indigo-900/50 dark:text-indigo-300">
                     {contactKarmaCost}
                   </div>
                 </div>

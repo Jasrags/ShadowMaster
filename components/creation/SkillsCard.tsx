@@ -158,7 +158,7 @@ function SkillGroupCard({
 
           {/* Show rating badge for broken groups (read-only) */}
           {isBroken && (
-            <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-200 text-sm font-bold text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+            <div className="flex h-7 w-8 items-center justify-center rounded bg-zinc-200 text-sm font-mono font-bold text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
               {rating}
             </div>
           )}

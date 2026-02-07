@@ -27,7 +27,7 @@ export function LanguageRow({ language, onRatingChange, onRemove }: LanguageRowP
       <div className="flex items-center gap-1">
         {isNative ? (
           <>
-            <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+            <div className="flex h-7 w-8 items-center justify-center rounded bg-purple-100 text-sm font-mono font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
               N
             </div>
             {/* Separator */}

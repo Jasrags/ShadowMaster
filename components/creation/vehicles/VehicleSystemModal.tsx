@@ -1011,7 +1011,7 @@ export function VehicleSystemModal({
             <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               Device Rating
             </div>
-            <div className="mt-1 text-2xl font-bold text-purple-600 dark:text-purple-400">
+            <div className="mt-1 text-2xl font-mono font-bold text-purple-600 dark:text-purple-400">
               {rcc.deviceRating}
             </div>
           </div>
@@ -1019,13 +1019,13 @@ export function VehicleSystemModal({
             <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
               Data Processing
             </div>
-            <div className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+            <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
               {rcc.dataProcessing}
             </div>
           </div>
           <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
             <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Firewall</div>
-            <div className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+            <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
               {rcc.firewall}
             </div>
           </div>
@@ -1088,7 +1088,7 @@ export function VehicleSystemModal({
             >
               <Minus className="h-4 w-4" />
             </button>
-            <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+            <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
               {selectedRating}
             </div>
             <button

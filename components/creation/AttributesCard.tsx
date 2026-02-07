@@ -202,7 +202,7 @@ function InlineAttributeRow({
           </button>
 
           <div
-            className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
+            className="flex h-7 w-8 items-center justify-center rounded bg-zinc-100 text-sm font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"
             aria-live="polite"
             aria-atomic="true"
           >
@@ -304,7 +304,7 @@ function SpecialAttributeRow({
           </button>
 
           <div
-            className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${config.bgColor} ${config.textColor}`}
+            className={`flex h-7 w-8 items-center justify-center rounded text-sm font-mono font-bold ${config.bgColor} ${config.textColor}`}
             aria-live="polite"
             aria-atomic="true"
           >

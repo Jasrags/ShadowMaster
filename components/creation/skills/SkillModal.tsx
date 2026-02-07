@@ -445,7 +445,7 @@ export function SkillModal({
                           <Minus className="h-4 w-4" />
                         </button>
                         <div
-                          className={`flex h-10 w-14 items-center justify-center rounded-lg text-xl font-bold ${
+                          className={`flex h-10 w-14 items-center justify-center rounded-lg text-xl font-mono font-bold ${
                             usingKarma
                               ? "bg-amber-100 text-amber-900 dark:bg-amber-900/50 dark:text-amber-100"
                               : "bg-zinc-100 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100"

@@ -391,7 +391,7 @@ export function CyberlimbAccessoryModal({
                           >
                             <Minus className="h-4 w-4" />
                           </button>
-                          <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                          <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                             {rating}
                           </div>
                           <button
@@ -419,7 +419,7 @@ export function CyberlimbAccessoryModal({
                       <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
                         <div className="text-xs text-zinc-500 dark:text-zinc-400">Capacity</div>
                         <div
-                          className={`mt-1 text-xl font-bold ${
+                          className={`mt-1 text-xl font-mono font-bold ${
                             fitsCapacity
                               ? "text-sky-600 dark:text-sky-400"
                               : "text-red-600 dark:text-red-400"
@@ -431,7 +431,7 @@ export function CyberlimbAccessoryModal({
                       <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
                         <div className="text-xs text-zinc-500 dark:text-zinc-400">Cost</div>
                         <div
-                          className={`mt-1 text-xl font-bold ${
+                          className={`mt-1 text-xl font-mono font-bold ${
                             canAfford
                               ? "text-zinc-900 dark:text-zinc-100"
                               : "text-red-600 dark:text-red-400"
@@ -443,7 +443,7 @@ export function CyberlimbAccessoryModal({
                       <div className="rounded-lg bg-zinc-50 p-3 text-center dark:bg-zinc-800">
                         <div className="text-xs text-zinc-500 dark:text-zinc-400">Availability</div>
                         <div
-                          className={`mt-1 text-xl font-bold ${
+                          className={`mt-1 text-xl font-mono font-bold ${
                             meetsAvailability
                               ? "text-zinc-900 dark:text-zinc-100"
                               : "text-red-600 dark:text-red-400"

@@ -385,7 +385,7 @@ export function AutosoftModal({
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                        <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                           {selectedRating}
                         </div>
                         <button

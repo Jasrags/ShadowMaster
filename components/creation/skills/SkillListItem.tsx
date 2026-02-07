@@ -175,7 +175,7 @@ export function SkillListItem({
             // Group skill: read-only rating display with customize button
             <>
               <div
-                className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${ratingBgColor}`}
+                className={`flex h-7 w-8 items-center justify-center rounded text-sm font-mono font-bold ${ratingBgColor}`}
               >
                 {rating}
               </div>
