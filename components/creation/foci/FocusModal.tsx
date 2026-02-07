@@ -288,7 +288,7 @@ export function FocusModal({
                     >
                       <Minus className="h-4 w-4" />
                     </button>
-                    <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                    <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                       {force}
                     </div>
                     <button
@@ -367,20 +367,20 @@ export function FocusModal({
                   <div className="grid grid-cols-3 gap-4 text-center">
                     <div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400">Cost</div>
-                      <div className="mt-1 text-lg font-bold text-zinc-900 dark:text-zinc-100">
+                      <div className="mt-1 text-lg font-mono font-bold text-zinc-900 dark:text-zinc-100">
                         {cost.toLocaleString()}¥
                       </div>
                     </div>
                     <div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400">Bonding</div>
-                      <div className="mt-1 text-lg font-bold text-purple-600 dark:text-purple-400">
+                      <div className="mt-1 text-lg font-mono font-bold text-purple-600 dark:text-purple-400">
                         {karmaToBond} karma
                       </div>
                     </div>
                     <div>
                       <div className="text-xs text-zinc-500 dark:text-zinc-400">Availability</div>
                       <div
-                        className={`mt-1 text-lg font-bold ${
+                        className={`mt-1 text-lg font-mono font-bold ${
                           exceedsAvailability
                             ? "text-red-600 dark:text-red-400"
                             : "text-zinc-900 dark:text-zinc-100"

@@ -493,7 +493,7 @@ export function DrugsPurchaseModal({
                           <span className="text-xs text-purple-600 dark:text-purple-400">
                             Power
                           </span>
-                          <p className="text-lg font-bold text-purple-800 dark:text-purple-200">
+                          <p className="text-lg font-mono font-bold text-purple-800 dark:text-purple-200">
                             {(selectedItem as ToxinCatalogItemData).power}
                           </p>
                         </div>
@@ -501,7 +501,7 @@ export function DrugsPurchaseModal({
                           <span className="text-xs text-purple-600 dark:text-purple-400">
                             Penetration
                           </span>
-                          <p className="text-lg font-bold text-purple-800 dark:text-purple-200">
+                          <p className="text-lg font-mono font-bold text-purple-800 dark:text-purple-200">
                             {(selectedItem as ToxinCatalogItemData).penetration}
                           </p>
                         </div>

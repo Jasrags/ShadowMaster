@@ -88,11 +88,11 @@ export function SkillGroupKarmaConfirmModal({
 
               {/* Rating change display */}
               <div className="flex items-center justify-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 text-xl font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-purple-100 text-xl font-mono font-bold text-purple-700 dark:bg-purple-900/50 dark:text-purple-300">
                   {currentRating}
                 </div>
                 <ArrowRight className="h-5 w-5 text-amber-500" />
-                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-100 text-xl font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
+                <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-amber-100 text-xl font-mono font-bold text-amber-700 dark:bg-amber-900/50 dark:text-amber-300">
                   {newRating}
                 </div>
               </div>

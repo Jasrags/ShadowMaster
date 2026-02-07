@@ -174,7 +174,9 @@ export function BudgetIndicator({
         {/* Header: label and remaining value */}
         <div className="flex items-center justify-between">
           <div className="text-sm font-medium text-zinc-900 dark:text-zinc-100">{label}</div>
-          <div className={`text-lg font-bold ${getCardValueColor()}`}>{formatValue(remaining)}</div>
+          <div className={`text-lg font-mono font-bold ${getCardValueColor()}`}>
+            {formatValue(remaining)}
+          </div>
         </div>
 
         {/* Description */}

@@ -78,7 +78,7 @@ function StatBlock({
       title={tooltip}
     >
       <div className={`text-[10px] font-medium ${labelColorClass}`}>{label}</div>
-      <div className={`font-bold ${textColorClass}`}>{value}</div>
+      <div className={`font-mono font-bold ${textColorClass}`}>{value}</div>
     </div>
   );
 }
@@ -358,7 +358,7 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
         {augmentationEffects.essenceLoss > 0 && (
           <div className="rounded border border-amber-200 bg-amber-50 p-2 text-center dark:border-amber-800 dark:bg-amber-900/20">
             <div className="text-xs font-medium text-amber-600 dark:text-amber-400">Essence</div>
-            <div className="font-bold text-amber-700 dark:text-amber-300">
+            <div className="font-mono font-bold text-amber-700 dark:text-amber-300">
               {derivedStats.essence.toFixed(2)}
             </div>
             <div className="text-[10px] text-amber-500">

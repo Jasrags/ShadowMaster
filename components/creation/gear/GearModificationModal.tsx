@@ -389,7 +389,7 @@ export function GearModificationModal({
                         >
                           <Minus className="h-4 w-4" />
                         </button>
-                        <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
+                        <div className="flex h-10 w-12 items-center justify-center rounded bg-zinc-100 text-lg font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
                           {selectedRating}
                         </div>
                         <button

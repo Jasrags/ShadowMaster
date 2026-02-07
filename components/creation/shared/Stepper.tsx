@@ -175,7 +175,7 @@ export function Stepper({
 
         {/* Value display */}
         <div
-          className={`flex h-7 w-8 items-center justify-center rounded text-sm font-bold ${VALUE_DISPLAY_CLASSES[valueColor]}`}
+          className={`flex h-7 w-8 items-center justify-center rounded text-sm font-mono font-bold ${VALUE_DISPLAY_CLASSES[valueColor]}`}
           aria-live="polite"
           aria-atomic="true"
         >

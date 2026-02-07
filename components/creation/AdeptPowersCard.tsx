@@ -416,7 +416,7 @@ export function AdeptPowersCard({ state, updateState }: AdeptPowersCardProps) {
                   Split Magic between spells and powers
                 </div>
               </div>
-              <div className="text-lg font-bold text-amber-600 dark:text-amber-400">
+              <div className="text-lg font-mono font-bold text-amber-600 dark:text-amber-400">
                 {basePowerPointBudget} / {magicRating}
               </div>
             </div>

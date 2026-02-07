@@ -316,7 +316,7 @@ export function RCCModal({
                         <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                           Device Rating
                         </div>
-                        <div className="mt-1 text-2xl font-bold text-blue-600 dark:text-blue-400">
+                        <div className="mt-1 text-2xl font-mono font-bold text-blue-600 dark:text-blue-400">
                           {selectedRCC.deviceRating}
                         </div>
                       </div>
@@ -324,7 +324,7 @@ export function RCCModal({
                         <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                           Data Processing
                         </div>
-                        <div className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
                           {selectedRCC.dataProcessing}
                         </div>
                       </div>
@@ -332,7 +332,7 @@ export function RCCModal({
                         <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
                           Firewall
                         </div>
-                        <div className="mt-1 text-2xl font-bold text-zinc-900 dark:text-zinc-100">
+                        <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
                           {selectedRCC.firewall}
                         </div>
                       </div>
