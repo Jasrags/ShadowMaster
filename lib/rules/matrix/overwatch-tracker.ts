@@ -19,7 +19,7 @@ import { checkConvergence } from "./overwatch-calculator";
  * Generate a unique session ID
  */
 function generateSessionId(): string {
-  return `os-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`;
+  return `os-${crypto.randomUUID()}`;
 }
 
 /**

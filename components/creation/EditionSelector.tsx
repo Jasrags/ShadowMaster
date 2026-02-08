@@ -148,7 +148,7 @@ export function EditionSelector({ onSelect }: EditionSelectorProps) {
               <h3
                 className={`mt-4 text-lg font-semibold transition-colors ${
                   edition.available
-                    ? `text-zinc-900 dark:text-zinc-50 group-hover:${accent.text.split(" ")[0].replace("text-", "text-")}`
+                    ? `text-zinc-900 dark:text-zinc-50 group-hover:${accent.text.split(" ")[0]}`
                     : "text-zinc-500 dark:text-zinc-500"
                 }`}
               >
