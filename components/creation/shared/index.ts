@@ -21,3 +21,7 @@ export { RatingSelector, useRatingSelection } from "./RatingSelector";
 export { LegalityWarnings } from "./LegalityWarnings";
 export type { LegalityWarningItem } from "./LegalityWarnings";
 export { LegalityBadge } from "./LegalityBadge";
+export { BulkQuantitySelector } from "./BulkQuantitySelector";
+export type { BulkQuantitySelectorProps } from "./BulkQuantitySelector";
+export { LifestyleModificationSelector } from "./LifestyleModificationSelector";
+export { LifestyleSubscriptionSelector } from "./LifestyleSubscriptionSelector";
