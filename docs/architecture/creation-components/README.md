@@ -1,6 +1,6 @@
 # Creation Components Architecture
 
-This documentation provides visual hierarchy diagrams for all 82 React components (plus 31 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
+This documentation provides visual hierarchy diagrams for all 86 React components (plus 31 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
 
 > **Keeping in sync:** Run `pnpm validate-creation-docs` to check for drift between code and documentation.
 
@@ -14,7 +14,7 @@ This documentation provides visual hierarchy diagrams for all 82 React component
 | [03-skills-system](./03-skills-system.md)         | Skills (9), KnowledgeLanguages (8)                                   |
 | [04-qualities-magic](./04-qualities-magic.md)     | Qualities (7), Spells, AdeptPowers, ComplexForms, Foci (3)           |
 | [05-gear-equipment](./05-gear-equipment.md)       | Gear (5), Weapons (5), Armor (5)                                     |
-| [06-matrix-vehicles](./06-matrix-vehicles.md)     | MatrixGear (5), Vehicles (5), Augmentations (5)                      |
+| [06-matrix-vehicles](./06-matrix-vehicles.md)     | MatrixGear (7), Vehicles (5), Augmentations (5)                      |
 | [07-social-identity](./07-social-identity.md)     | Contacts (6), Identities (9)                                         |
 | [08-context-data-flow](./08-context-data-flow.md) | CreationBudgetContext, RulesetContext, hooks                         |
 
@@ -29,7 +29,7 @@ This documentation provides visual hierarchy diagrams for all 82 React component
 | Gear & Equipment  | 3 panels             | 15     |
 | Matrix & Vehicles | 3 cards              | 15     |
 | Social & Identity | 2 cards              | 15     |
-| **Total**         | **~32 Cards/Panels** | **88** |
+| **Total**         | **~32 Cards/Panels** | **90** |
 
 ## Color Key
 
@@ -96,7 +96,7 @@ Row (Item Display)
 ├── identities/                 # SINs and licenses (9 files)
 ├── knowledge-languages/        # Knowledge skills (8 files)
 ├── magic-path/                 # Magic traditions (6 files)
-├── matrix-gear/                # Cyberdecks, commlinks (5 files)
+├── matrix-gear/                # Cyberdecks, commlinks (7 files)
 ├── metatype/                   # Metatype selection (5 files)
 ├── qualities/                  # Qualities system (7 files)
 ├── skills/                     # Active skills (9 files)

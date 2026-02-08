@@ -28,96 +28,19 @@ import {
   type CyberdeckData,
   type DataSoftwareCatalogItemData,
 } from "@/lib/rules/RulesetContext";
-import type {
-  CharacterCommlink,
-  CharacterCyberdeck,
-  CharacterDataSoftware,
-  ItemLegality,
-} from "@/lib/types";
-import { isLegalAtCreation, CREATION_CONSTRAINTS } from "@/lib/rules/gear/validation";
+import type { CharacterCommlink, CharacterCyberdeck, CharacterDataSoftware } from "@/lib/types";
+import { isLegalAtCreation } from "@/lib/rules/gear/validation";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
 import {
-  Search,
-  Smartphone,
-  Cpu,
-  Database,
-  Map,
-  ShoppingCart,
-  GraduationCap,
-  AlertTriangle,
-  Minus,
-  Plus,
-} from "lucide-react";
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-const MAX_AVAILABILITY = CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
-
-type MatrixGearCategory = "commlinks" | "cyberdecks" | "software";
-type SoftwareSubcategory = "datasoft" | "mapsoft" | "shopsoft" | "tutorsoft";
-
-const MATRIX_CATEGORIES = [
-  { id: "commlinks" as const, label: "Commlinks", icon: Smartphone },
-  { id: "cyberdecks" as const, label: "Cyberdecks", icon: Cpu },
-  { id: "software" as const, label: "Software", icon: Database },
-];
-
-const SOFTWARE_SUBCATEGORIES = [
-  {
-    id: "datasoft" as const,
-    label: "Datasoft",
-    icon: Database,
-    color: "text-blue-500",
-    bgColor: "bg-blue-50 dark:bg-blue-900/20",
-  },
-  {
-    id: "mapsoft" as const,
-    label: "Mapsoft",
-    icon: Map,
-    color: "text-green-500",
-    bgColor: "bg-green-50 dark:bg-green-900/20",
-  },
-  {
-    id: "shopsoft" as const,
-    label: "Shopsoft",
-    icon: ShoppingCart,
-    color: "text-amber-500",
-    bgColor: "bg-amber-50 dark:bg-amber-900/20",
-  },
-  {
-    id: "tutorsoft" as const,
-    label: "Tutorsoft",
-    icon: GraduationCap,
-    color: "text-purple-500",
-    bgColor: "bg-purple-50 dark:bg-purple-900/20",
-  },
-];
-
-// =============================================================================
-// HELPERS
-// =============================================================================
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
-  let display = String(availability);
-  if (legality === "restricted") display += "R";
-  if (legality === "forbidden") display += "F";
-  return display;
-}
-
-function formatAttributeArray(deck: CyberdeckData): string {
-  const attrs = deck.attributes;
-  return `${attrs.attack}/${attrs.sleaze}/${attrs.dataProcessing}/${attrs.firewall}`;
-}
+  formatCurrency,
+  MAX_AVAILABILITY,
+  SOFTWARE_SUBCATEGORIES,
+  type MatrixGearCategory,
+  type SoftwareSubcategory,
+} from "./matrixGearHelpers";
+import { CommlinkListItem, CyberdeckListItem, SoftwareListItem } from "./MatrixGearListItems";
+import { MatrixGearDetailsPane } from "./MatrixGearDetailsPane";
+import { MatrixGearFilters } from "./MatrixGearFilters";
 
 // =============================================================================
 // TYPES
@@ -140,212 +63,6 @@ export interface MatrixGearModalProps {
   existingSoftware?: CharacterDataSoftware[];
   /** Whether character has a device to run software */
   hasCompatibleDevice: boolean;
-}
-
-// =============================================================================
-// COMMLINK LIST ITEM
-// =============================================================================
-
-function CommlinkListItem({
-  commlink,
-  isSelected,
-  canAfford,
-  onClick,
-}: {
-  commlink: CommlinkData;
-  isSelected: boolean;
-  canAfford: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={!canAfford}
-      className={`w-full rounded-lg border p-2.5 text-left transition-all ${
-        isSelected
-          ? "border-cyan-400 bg-cyan-50 dark:border-cyan-600 dark:bg-cyan-900/30"
-          : canAfford
-            ? "border-zinc-200 bg-white hover:border-cyan-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-cyan-500"
-            : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <Smartphone className="h-3.5 w-3.5 text-cyan-500" />
-            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {commlink.name}
-            </span>
-            <span className="rounded bg-cyan-100 px-1.5 py-0.5 text-[10px] font-medium text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-400">
-              DR {commlink.deviceRating}
-            </span>
-          </div>
-          <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <span>Avail: {getAvailabilityDisplay(commlink.availability, commlink.legality)}</span>
-          </div>
-        </div>
-        <div className="flex-shrink-0 text-right">
-          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {formatCurrency(commlink.cost)}¥
-          </div>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-// =============================================================================
-// CYBERDECK LIST ITEM
-// =============================================================================
-
-function CyberdeckListItem({
-  cyberdeck,
-  isSelected,
-  canAfford,
-  onClick,
-}: {
-  cyberdeck: CyberdeckData;
-  isSelected: boolean;
-  canAfford: boolean;
-  onClick: () => void;
-}) {
-  return (
-    <button
-      onClick={onClick}
-      disabled={!canAfford}
-      className={`w-full rounded-lg border p-2.5 text-left transition-all ${
-        isSelected
-          ? "border-purple-400 bg-purple-50 dark:border-purple-600 dark:bg-purple-900/30"
-          : canAfford
-            ? "border-zinc-200 bg-white hover:border-purple-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-purple-500"
-            : "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <Cpu className="h-3.5 w-3.5 text-purple-500" />
-            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {cyberdeck.name}
-            </span>
-            <span className="rounded bg-purple-100 px-1.5 py-0.5 text-[10px] font-medium text-purple-700 dark:bg-purple-900/40 dark:text-purple-400">
-              DR {cyberdeck.deviceRating}
-            </span>
-          </div>
-          <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
-            <span>ASDF: {formatAttributeArray(cyberdeck)}</span>
-            <span>Programs: {cyberdeck.programs}</span>
-          </div>
-        </div>
-        <div className="flex-shrink-0 text-right">
-          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {formatCurrency(cyberdeck.cost)}¥
-          </div>
-          <div className="text-xs text-zinc-500">
-            {getAvailabilityDisplay(cyberdeck.availability, cyberdeck.legality)}
-          </div>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-// =============================================================================
-// SOFTWARE LIST ITEM
-// =============================================================================
-
-function SoftwareListItem({
-  item,
-  subcategory,
-  isSelected,
-  onClick,
-}: {
-  item: DataSoftwareCatalogItemData;
-  subcategory: SoftwareSubcategory;
-  isSelected: boolean;
-  onClick: () => void;
-}) {
-  const config = SOFTWARE_SUBCATEGORIES.find((s) => s.id === subcategory)!;
-  const Icon = config.icon;
-
-  const costDisplay = item.hasRating
-    ? `${formatCurrency(item.ratings?.["1"]?.cost || 400)}¥ - ${formatCurrency(item.ratings?.["6"]?.cost || 2400)}¥`
-    : `${formatCurrency(item.cost || 0)}¥`;
-
-  return (
-    <button
-      onClick={onClick}
-      className={`w-full rounded-lg border p-2.5 text-left transition-all ${
-        isSelected
-          ? `${config.bgColor} border-zinc-300 dark:border-zinc-600`
-          : "border-zinc-200 bg-white hover:border-zinc-300 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-zinc-600"
-      }`}
-    >
-      <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <div className="flex items-center gap-1.5">
-            <Icon className={`h-3.5 w-3.5 ${config.color}`} />
-            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
-              {item.name}
-            </span>
-            {item.hasRating && (
-              <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400">
-                R{item.minRating || 1}-{item.maxRating || 6}
-              </span>
-            )}
-          </div>
-          {item.effects && (
-            <p className="mt-0.5 truncate text-xs text-zinc-500 dark:text-zinc-400">
-              {item.effects}
-            </p>
-          )}
-        </div>
-        <div className="flex-shrink-0 text-right">
-          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
-            {costDisplay}
-          </div>
-        </div>
-      </div>
-    </button>
-  );
-}
-
-// =============================================================================
-// RATING SELECTOR
-// =============================================================================
-
-function RatingSelector({
-  value,
-  min,
-  max,
-  onChange,
-}: {
-  value: number;
-  min: number;
-  max: number;
-  onChange: (rating: number) => void;
-}) {
-  return (
-    <div className="flex items-center gap-3">
-      <button
-        onClick={() => onChange(Math.max(min, value - 1))}
-        disabled={value <= min}
-        className="rounded-lg border border-zinc-200 p-2 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
-      >
-        <Minus className="h-4 w-4" />
-      </button>
-      <span className="w-8 text-center text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-        {value}
-      </span>
-      <button
-        onClick={() => onChange(Math.min(max, value + 1))}
-        disabled={value >= max}
-        className="rounded-lg border border-zinc-200 p-2 text-zinc-600 transition-colors hover:bg-zinc-100 disabled:cursor-not-allowed disabled:opacity-50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:bg-zinc-800"
-      >
-        <Plus className="h-4 w-4" />
-      </button>
-    </div>
-  );
 }
 
 // =============================================================================
@@ -424,6 +141,20 @@ export function MatrixGearModal({
     resetState();
     onClose();
   }, [resetState, onClose]);
+
+  // Handle category change (also clears selections)
+  const handleCategoryChange = useCallback((category: MatrixGearCategory) => {
+    setSelectedCategory(category);
+    setSelectedCommlinkId(null);
+    setSelectedCyberdeckId(null);
+    setSelectedSoftwareId(null);
+  }, []);
+
+  // Handle software type change (also clears software selection)
+  const handleSoftwareTypeChange = useCallback((type: SoftwareSubcategory) => {
+    setSelectedSoftwareType(type);
+    setSelectedSoftwareId(null);
+  }, []);
 
   // Filter commlinks
   const filteredCommlinks = useMemo(() => {
@@ -701,103 +432,17 @@ export function MatrixGearModal({
         <>
           <ModalHeader title="Add Matrix Gear" onClose={close} />
 
-          {/* Search & Category Filters */}
-          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
-            {/* Search + Legal Filter */}
-            <div className="flex items-center gap-3">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                <input
-                  type="text"
-                  placeholder={`Search ${selectedCategory}...`}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:border-cyan-500 focus:outline-none focus:ring-1 focus:ring-cyan-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                />
-              </div>
-              <label className="flex shrink-0 cursor-pointer items-center gap-1.5 text-xs text-zinc-600 dark:text-zinc-400">
-                <input
-                  type="checkbox"
-                  checked={showOnlyLegal}
-                  onChange={(e) => setShowOnlyLegal(e.target.checked)}
-                  className="h-3.5 w-3.5 rounded border-zinc-300 text-emerald-600 focus:ring-emerald-500 dark:border-zinc-600"
-                />
-                Legal only
-              </label>
-            </div>
-
-            {/* Category Pills */}
-            <div className="mt-3 flex flex-wrap gap-2">
-              {MATRIX_CATEGORIES.map((cat) => {
-                const Icon = cat.icon;
-                return (
-                  <button
-                    key={cat.id}
-                    onClick={() => {
-                      setSelectedCategory(cat.id);
-                      setSelectedCommlinkId(null);
-                      setSelectedCyberdeckId(null);
-                      setSelectedSoftwareId(null);
-                    }}
-                    className={`flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                      selectedCategory === cat.id
-                        ? cat.id === "commlinks"
-                          ? "bg-cyan-500 text-white"
-                          : cat.id === "cyberdecks"
-                            ? "bg-purple-500 text-white"
-                            : "bg-blue-500 text-white"
-                        : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                    }`}
-                  >
-                    <Icon className="h-3.5 w-3.5" />
-                    {cat.label}
-                  </button>
-                );
-              })}
-            </div>
-
-            {/* Software Sub-Pills */}
-            {selectedCategory === "software" && (
-              <div className="mt-2 flex flex-wrap gap-1.5">
-                {SOFTWARE_SUBCATEGORIES.map((sub) => {
-                  const Icon = sub.icon;
-                  return (
-                    <button
-                      key={sub.id}
-                      onClick={() => {
-                        setSelectedSoftwareType(sub.id);
-                        setSelectedSoftwareId(null);
-                      }}
-                      className={`flex items-center gap-1 rounded-full px-2.5 py-0.5 text-[11px] font-medium transition-colors ${
-                        selectedSoftwareType === sub.id
-                          ? `${sub.bgColor} ${sub.color}`
-                          : "bg-zinc-50 text-zinc-500 hover:bg-zinc-100 dark:bg-zinc-800/50 dark:text-zinc-400 dark:hover:bg-zinc-800"
-                      }`}
-                    >
-                      <Icon className="h-3 w-3" />
-                      {sub.label}
-                    </button>
-                  );
-                })}
-              </div>
-            )}
-
-            {/* Device Warning for Software */}
-            {selectedCategory === "software" && !hasCompatibleDevice && (
-              <div className="mt-3 flex items-start gap-2 rounded-lg bg-amber-50 p-2.5 dark:bg-amber-900/20">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                <div className="text-xs">
-                  <span className="font-medium text-amber-700 dark:text-amber-300">
-                    Software requires a commlink or cyberdeck.
-                  </span>
-                  <span className="text-amber-600 dark:text-amber-400">
-                    {" "}
-                    You can still purchase for later use.
-                  </span>
-                </div>
-              </div>
-            )}
-          </div>
+          <MatrixGearFilters
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            showOnlyLegal={showOnlyLegal}
+            onShowOnlyLegalChange={setShowOnlyLegal}
+            selectedCategory={selectedCategory}
+            onCategoryChange={handleCategoryChange}
+            selectedSoftwareType={selectedSoftwareType}
+            onSoftwareTypeChange={handleSoftwareTypeChange}
+            hasCompatibleDevice={hasCompatibleDevice}
+          />
 
           <ModalBody scrollable={false}>
             {/* Content - Split Pane */}
@@ -937,319 +582,22 @@ export function MatrixGearModal({
 
               {/* Right Pane: Detail Preview */}
               <div className="w-1/2 overflow-y-auto p-6">
-                {/* Commlink Detail */}
-                {selectedCategory === "commlinks" && selectedCommlink && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                        {selectedCommlink.name}
-                      </h3>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">Commlink</p>
-                    </div>
-
-                    {selectedCommlink.description && (
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {selectedCommlink.description}
-                      </p>
-                    )}
-
-                    <div className="space-y-3">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Statistics
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Device Rating</span>
-                          <span className="font-medium text-cyan-600 dark:text-cyan-400">
-                            {selectedCommlink.deviceRating}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Data Processing</span>
-                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                            {selectedCommlink.deviceRating}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Firewall</span>
-                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                            {selectedCommlink.deviceRating}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Availability</span>
-                          <span
-                            className={`font-medium ${
-                              selectedCommlink.legality === "forbidden"
-                                ? "text-red-600 dark:text-red-400"
-                                : selectedCommlink.legality === "restricted"
-                                  ? "text-amber-600 dark:text-amber-400"
-                                  : "text-zinc-900 dark:text-zinc-100"
-                            }`}
-                          >
-                            {getAvailabilityDisplay(
-                              selectedCommlink.availability,
-                              selectedCommlink.legality
-                            )}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Cost */}
-                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                          Cost
-                        </span>
-                        <span
-                          className={`font-semibold ${
-                            selectedCommlink.cost <= remaining
-                              ? "text-cyan-600 dark:text-cyan-400"
-                              : "text-red-600 dark:text-red-400"
-                          }`}
-                        >
-                          {formatCurrency(selectedCommlink.cost)}¥
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Cyberdeck Detail */}
-                {selectedCategory === "cyberdecks" && selectedCyberdeck && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                        {selectedCyberdeck.name}
-                      </h3>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">Cyberdeck</p>
-                    </div>
-
-                    {selectedCyberdeck.description && (
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {selectedCyberdeck.description}
-                      </p>
-                    )}
-
-                    <div className="space-y-3">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Device Statistics
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2 text-sm">
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Device Rating</span>
-                          <span className="font-medium text-purple-600 dark:text-purple-400">
-                            {selectedCyberdeck.deviceRating}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-zinc-50 px-3 py-2 dark:bg-zinc-800">
-                          <span className="text-zinc-500 dark:text-zinc-400">Program Slots</span>
-                          <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                            {selectedCyberdeck.programs}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="space-y-3">
-                      <h4 className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                        Matrix Attributes (ASDF)
-                      </h4>
-                      <div className="grid grid-cols-2 gap-2">
-                        <div className="flex justify-between rounded bg-red-50 px-3 py-2 text-sm dark:bg-red-900/20">
-                          <span className="text-red-600 dark:text-red-400">Attack</span>
-                          <span className="font-medium text-red-700 dark:text-red-300">
-                            {selectedCyberdeck.attributes.attack}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-yellow-50 px-3 py-2 text-sm dark:bg-yellow-900/20">
-                          <span className="text-yellow-600 dark:text-yellow-400">Sleaze</span>
-                          <span className="font-medium text-yellow-700 dark:text-yellow-300">
-                            {selectedCyberdeck.attributes.sleaze}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-blue-50 px-3 py-2 text-sm dark:bg-blue-900/20">
-                          <span className="text-blue-600 dark:text-blue-400">Data Proc</span>
-                          <span className="font-medium text-blue-700 dark:text-blue-300">
-                            {selectedCyberdeck.attributes.dataProcessing}
-                          </span>
-                        </div>
-                        <div className="flex justify-between rounded bg-green-50 px-3 py-2 text-sm dark:bg-green-900/20">
-                          <span className="text-green-600 dark:text-green-400">Firewall</span>
-                          <span className="font-medium text-green-700 dark:text-green-300">
-                            {selectedCyberdeck.attributes.firewall}
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Legality Warning */}
-                    {(selectedCyberdeck.legality === "restricted" ||
-                      selectedCyberdeck.legality === "forbidden") && (
-                      <div
-                        className={`rounded-lg p-3 ${
-                          selectedCyberdeck.legality === "forbidden"
-                            ? "bg-red-50 dark:bg-red-900/20"
-                            : "bg-amber-50 dark:bg-amber-900/20"
-                        }`}
-                      >
-                        <div
-                          className={`flex items-center gap-2 text-sm font-medium ${
-                            selectedCyberdeck.legality === "forbidden"
-                              ? "text-red-700 dark:text-red-300"
-                              : "text-amber-700 dark:text-amber-300"
-                          }`}
-                        >
-                          <AlertTriangle className="h-4 w-4" />
-                          {selectedCyberdeck.legality === "forbidden"
-                            ? "Forbidden - Illegal to possess"
-                            : "Restricted - Requires license"}
-                        </div>
-                      </div>
-                    )}
-
-                    {/* Cost */}
-                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                          Cost
-                        </span>
-                        <span
-                          className={`font-semibold ${
-                            selectedCyberdeck.cost <= remaining
-                              ? "text-purple-600 dark:text-purple-400"
-                              : "text-red-600 dark:text-red-400"
-                          }`}
-                        >
-                          {formatCurrency(selectedCyberdeck.cost)}¥
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Software Detail */}
-                {selectedCategory === "software" && selectedSoftware && (
-                  <div className="space-y-4">
-                    <div>
-                      <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-                        {selectedSoftware.name}
-                      </h3>
-                      <p className="text-sm text-zinc-500 dark:text-zinc-400">
-                        {SOFTWARE_SUBCATEGORIES.find((s) => s.id === selectedSoftwareType)?.label}
-                      </p>
-                    </div>
-
-                    {selectedSoftware.description && (
-                      <p className="text-sm text-zinc-600 dark:text-zinc-400">
-                        {selectedSoftware.description}
-                      </p>
-                    )}
-
-                    {selectedSoftware.effects && (
-                      <div className="space-y-1">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                          Effect
-                        </span>
-                        <p className="rounded bg-zinc-50 px-3 py-2 text-sm text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                          {selectedSoftware.effects}
-                        </p>
-                      </div>
-                    )}
-
-                    {/* Specific Details Input */}
-                    {selectedSoftware.requiresSpecificDetails && (
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                          {selectedSoftware.specificDetailsLabel || "Details"} *
-                        </label>
-                        <input
-                          type="text"
-                          value={specificDetails}
-                          onChange={(e) => setSpecificDetails(e.target.value)}
-                          placeholder={
-                            selectedSoftware.specificDetailsPlaceholder || "Enter details..."
-                          }
-                          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 placeholder-zinc-400 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                        />
-                      </div>
-                    )}
-
-                    {/* Skill Selection (for Tutorsoft) */}
-                    {selectedSoftware.requiresSkillSelection && (
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                          Skill *
-                        </label>
-                        <select
-                          value={selectedSkillId}
-                          onChange={(e) => setSelectedSkillId(e.target.value)}
-                          className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-900 focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100"
-                        >
-                          <option value="">Select a skill...</option>
-                          {eligibleSkills.map((skill) => (
-                            <option key={skill.id} value={skill.id}>
-                              {skill.name}
-                            </option>
-                          ))}
-                        </select>
-                      </div>
-                    )}
-
-                    {/* Rating Selector */}
-                    {selectedSoftware.hasRating && (
-                      <div className="space-y-2">
-                        <label className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                          Rating
-                        </label>
-                        <RatingSelector
-                          value={rating}
-                          min={selectedSoftware.minRating || 1}
-                          max={Math.min(
-                            selectedSoftware.maxRating || 6,
-                            Math.max(
-                              ...Object.entries(selectedSoftware.ratings || {})
-                                .filter(([, data]) => data.availability <= MAX_AVAILABILITY)
-                                .map(([r]) => parseInt(r, 10))
-                            )
-                          )}
-                          onChange={setRating}
-                        />
-                      </div>
-                    )}
-
-                    {/* Cost */}
-                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                          Cost
-                        </span>
-                        <span
-                          className={`font-semibold ${
-                            calculateSoftwareCost() <= remaining
-                              ? "text-blue-600 dark:text-blue-400"
-                              : "text-red-600 dark:text-red-400"
-                          }`}
-                        >
-                          {formatCurrency(calculateSoftwareCost())}¥
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Empty State */}
-                {((selectedCategory === "commlinks" && !selectedCommlink) ||
-                  (selectedCategory === "cyberdecks" && !selectedCyberdeck) ||
-                  (selectedCategory === "software" && !selectedSoftware)) && (
-                  <div className="flex h-full flex-col items-center justify-center text-zinc-400">
-                    {selectedCategory === "commlinks" && <Smartphone className="h-12 w-12" />}
-                    {selectedCategory === "cyberdecks" && <Cpu className="h-12 w-12" />}
-                    {selectedCategory === "software" && <Database className="h-12 w-12" />}
-                    <p className="mt-4 text-sm">Select an item from the list</p>
-                  </div>
-                )}
+                <MatrixGearDetailsPane
+                  selectedCategory={selectedCategory}
+                  selectedSoftwareType={selectedSoftwareType}
+                  remaining={remaining}
+                  selectedCommlink={selectedCommlink}
+                  selectedCyberdeck={selectedCyberdeck}
+                  selectedSoftware={selectedSoftware}
+                  specificDetails={specificDetails}
+                  onSpecificDetailsChange={setSpecificDetails}
+                  selectedSkillId={selectedSkillId}
+                  onSelectedSkillIdChange={setSelectedSkillId}
+                  rating={rating}
+                  onRatingChange={setRating}
+                  eligibleSkills={eligibleSkills}
+                  calculateSoftwareCost={calculateSoftwareCost}
+                />
               </div>
             </div>
           </ModalBody>

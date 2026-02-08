@@ -8,13 +8,15 @@ Matrix equipment (commlinks, cyberdecks), vehicles/drones, and augmentations (cy
 graph TD
     subgraph "Matrix Gear"
         MatrixGearCard[MatrixGearCard]
-        CommlinkPurchaseModal[CommlinkPurchaseModal]
-        CyberdeckPurchaseModal[CyberdeckPurchaseModal]
-        DataSoftwarePurchaseModal[DataSoftwarePurchaseModal]
+        MatrixGearModal[MatrixGearModal]
+        MatrixGearFilters[MatrixGearFilters]
+        MatrixGearDetailsPane[MatrixGearDetailsPane]
+        MatrixGearListItems[MatrixGearListItems]
 
-        MatrixGearCard --> CommlinkPurchaseModal
-        MatrixGearCard --> CyberdeckPurchaseModal
-        MatrixGearCard --> DataSoftwarePurchaseModal
+        MatrixGearCard --> MatrixGearModal
+        MatrixGearModal --> MatrixGearFilters
+        MatrixGearModal --> MatrixGearDetailsPane
+        MatrixGearModal --> MatrixGearListItems
     end
 
     subgraph "Vehicles & Drones"
@@ -44,9 +46,10 @@ graph TD
     end
 
     style MatrixGearCard fill:#3b82f6,color:#fff
-    style CommlinkPurchaseModal fill:#8b5cf6,color:#fff
-    style CyberdeckPurchaseModal fill:#8b5cf6,color:#fff
-    style DataSoftwarePurchaseModal fill:#8b5cf6,color:#fff
+    style MatrixGearModal fill:#8b5cf6,color:#fff
+    style MatrixGearFilters fill:#06b6d4,color:#fff
+    style MatrixGearDetailsPane fill:#06b6d4,color:#fff
+    style MatrixGearListItems fill:#06b6d4,color:#fff
     style VehiclesCard fill:#3b82f6,color:#fff
     style VehicleModal fill:#8b5cf6,color:#fff
     style DroneModal fill:#8b5cf6,color:#fff
@@ -71,35 +74,56 @@ Main container for matrix equipment. Features:
 - Cyberdeck selection (for deckers)
 - Programs and software
 
-### CommlinkPurchaseModal
+### MatrixGearModal
 
-Location: `/components/creation/matrix-gear/CommlinkPurchaseModal.tsx`
+Location: `/components/creation/matrix-gear/MatrixGearModal.tsx`
 
-Commlink selection:
+Unified two-column modal for purchasing commlinks, cyberdecks, and software:
 
-- Device rating comparison
-- Data processing, Firewall stats
-- Built-in features
+- Category tabs with bulk-add workflow
+- Virtualized lists for performance
+- State management, filtering logic, and purchase handlers
 
-### CyberdeckPurchaseModal
+### MatrixGearFilters
 
-Location: `/components/creation/matrix-gear/CyberdeckPurchaseModal.tsx`
+Location: `/components/creation/matrix-gear/MatrixGearFilters.tsx`
 
-Cyberdeck selection for deckers:
+Search and filter controls:
 
-- Attack, Sleaze, Data Processing, Firewall
-- Program slots
-- Cost comparison
+- Search input with category-aware placeholder
+- Legal-only toggle
+- Category pills (Commlinks, Cyberdecks, Software)
+- Software subcategory pills (Datasoft, Mapsoft, Shopsoft, Tutorsoft)
+- Device compatibility warning
 
-### DataSoftwarePurchaseModal
+### MatrixGearDetailsPane
 
-Location: `/components/creation/matrix-gear/DataSoftwarePurchaseModal.tsx`
+Location: `/components/creation/matrix-gear/MatrixGearDetailsPane.tsx`
 
-Software and program selection:
+Right-pane detail preview:
 
-- Common programs
-- Agents
-- Data files
+- Commlink details (device rating, data processing, firewall)
+- Cyberdeck details (ASDF attributes, program slots, legality warnings)
+- Software details (effects, specific details input, skill selection, rating selector)
+- Cost card with affordability indicator
+
+### MatrixGearListItems
+
+Location: `/components/creation/matrix-gear/MatrixGearListItems.tsx`
+
+Virtualized list item components:
+
+- CommlinkListItem, CyberdeckListItem, SoftwareListItem
+- RatingSelector (shared +/- control)
+
+### matrixGearHelpers
+
+Location: `/components/creation/matrix-gear/matrixGearHelpers.ts`
+
+Constants and utility functions:
+
+- `formatCurrency()`, `getAvailabilityDisplay()`, `formatAttributeArray()`
+- `MAX_AVAILABILITY`, category configs, type aliases
 
 ## Vehicles & Drones (`/vehicles/`)
 
@@ -208,12 +232,12 @@ Cyberlimb weapon selection:
 
 ## File Summary
 
-| Folder            | Files | Components                      |
-| ----------------- | ----- | ------------------------------- |
-| `/matrix-gear/`   | 5     | 1 card, 3 modals                |
-| `/vehicles/`      | 5     | 4 modals                        |
-| `/augmentations/` | 5     | 4 modals                        |
-| Root              | 2     | VehiclesCard, AugmentationsCard |
+| Folder            | Files | Components                                             |
+| ----------------- | ----- | ------------------------------------------------------ |
+| `/matrix-gear/`   | 7     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel |
+| `/vehicles/`      | 5     | 4 modals                                               |
+| `/augmentations/` | 5     | 4 modals                                               |
+| Root              | 2     | VehiclesCard, AugmentationsCard                        |
 
 ## Budget Integration
 
