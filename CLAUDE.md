@@ -60,8 +60,8 @@ pnpm check-tests      # Check for missing tests (non-blocking)
 
 ## Tech Stack
 
-- **Next.js 16.0.7** with App Router (React Server Components)
-- **React 19.2.0** with React Aria Components for accessibility
+- **Next.js 16.1.6** with App Router (React Server Components)
+- **React 19.2.4** with React Aria Components for accessibility
 - **TypeScript 5** with strict mode
 - **Tailwind CSS 4** with dark mode
 - **File-based storage** (JSON in `/data` - no database)
@@ -78,7 +78,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
   /campaigns            # Campaign management pages
 /lib                    # Core business logic
   /types                # TypeScript type definitions
-  /storage              # File-based data persistence (~42 modules)
+  /storage              # File-based data persistence (~21 modules)
   /rules                # Ruleset and game mechanics
     /action-resolution  # Action execution framework
     /advancement        # Karma advancement system
@@ -91,7 +91,7 @@ pnpm check-tests      # Check for missing tests (non-blocking)
   /combat               # Combat session management
   /security             # Rate limiting, audit logging
 /components             # Shared React components
-  /creation             # Character creation cards (~83 components in 15 subfolders)
+  /creation             # Character creation cards (~97 components in 19 subfolders)
   /combat               # Combat UI components
 /data                   # JSON file storage (acts as database)
   /editions/{code}/     # Edition data (edition.json, core-rulebook.json, grunt-templates/)
@@ -125,7 +125,7 @@ Sheet-based, single-page character creation with all sections visible simultaneo
 **Critical Files:**
 
 - `/app/characters/create/sheet/page.tsx` - Entry point
-- `/components/creation/` - Creation card components (60 components)
+- `/components/creation/` - Creation card components (~97)
 - `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
 ### 3. Character Lifecycle System
@@ -200,7 +200,7 @@ When modifying files in `/components/creation/`:
 ## Testing
 
 ```bash
-pnpm test          # Unit tests (~276 test files)
+pnpm test          # Unit tests (~300 test files)
 pnpm test:e2e      # E2E tests
 ```
 
@@ -225,7 +225,7 @@ Comprehensive docs in `/docs/`:
 
 **Ruleset System:** 4. `/lib/rules/loader.ts` + `merge.ts` - Ruleset core 5. `/lib/rules/RulesetContext.tsx` - Ruleset hooks
 
-**Character Creation:** 6. `/app/characters/create/sheet/page.tsx` - Entry point 7. `/components/creation/` - Creation cards (60) 8. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
+**Character Creation:** 6. `/app/characters/create/sheet/page.tsx` - Entry point 7. `/components/creation/` - Creation cards (~97) 8. `/lib/contexts/CreationBudgetContext.tsx` - Budget tracking
 
 **Combat & GM Tools:** 9. `/lib/combat/CombatSessionContext.tsx` - Combat state 10. `/lib/rules/grunts.ts` - NPC system
 

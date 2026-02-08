@@ -32,7 +32,7 @@ function countFiles(pattern: string, excludePattern?: string): number {
   try {
     let cmd = `find ${ROOT} -path "${pattern}" -type f`;
     if (excludePattern) {
-      cmd += ` | grep -v "${excludePattern}"`;
+      cmd += ` | grep -Ev "${excludePattern}"`;
     }
     cmd += " | wc -l";
     return parseInt(execSync(cmd, { encoding: "utf-8" }).trim(), 10);
@@ -62,11 +62,16 @@ function extractNumberFromClaudeMd(pattern: RegExp): number | null {
 }
 
 // Check 1: Creation component count
-const creationComponents = countFiles(`${ROOT}/components/creation/**/*.tsx`, "node_modules");
-// Look for patterns like "(89 components" or "89 total components"
+const creationComponents = parseInt(
+  execSync(`find ${ROOT}/components/creation -name "*.tsx" -type f | wc -l`, {
+    encoding: "utf-8",
+  }).trim(),
+  10
+);
+// Look for patterns like "(~97 components" or "97 total components" or "(~97)"
 const documentedComponents =
-  extractNumberFromClaudeMd(/\((\d+)\s*(?:total\s*)?components/i) ??
-  extractNumberFromClaudeMd(/(\d+)\s*components\)/i);
+  extractNumberFromClaudeMd(/\(~?(\d+)\s*(?:total\s*)?components/i) ??
+  extractNumberFromClaudeMd(/~(\d+)\s*components/i);
 results.push({
   check: "Creation components",
   expected: documentedComponents ?? "unknown",
@@ -95,8 +100,14 @@ results.push({
       : undefined,
 });
 
-// Check 3: Test file count
-const testFiles = countFiles(`${ROOT}/**/*.test.ts`, "node_modules");
+// Check 3: Test file count (includes .test.ts and .test.tsx)
+const testFiles = parseInt(
+  execSync(
+    `find ${ROOT} -type f \\( -name "*.test.ts" -o -name "*.test.tsx" \\) -not -path "*/node_modules/*" | wc -l`,
+    { encoding: "utf-8" }
+  ).trim(),
+  10
+);
 const documentedTests = extractNumberFromClaudeMd(/~?(\d+)\s*test\s*files/i);
 results.push({
   check: "Test files",
