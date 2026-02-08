@@ -19,6 +19,11 @@ export { SkillSpecModal } from "./SkillSpecModal";
 export { FreeSkillsPanel } from "./FreeSkillsPanel";
 export { FreeSkillDesignationModal } from "./FreeSkillDesignationModal";
 
+// Extracted sub-components
+export { SkillGroupCard, type SkillGroupCardProps } from "./SkillGroupCard";
+export { SkillsListSection, type SkillsListSectionProps } from "./SkillsListSection";
+export { SkillsModalsSection, type SkillsModalsSectionProps } from "./SkillsModalsSection";
+
 // Custom hooks
 export {
   useSkillDesignations,
@@ -34,6 +39,14 @@ export {
   type SkillKarmaPurchaseState,
   type GroupKarmaPurchaseState,
 } from "./useKarmaPurchase";
+export {
+  useSkillsCardHandlers,
+  type UseSkillsCardHandlersResult,
+  type SkillListEntry,
+  MAX_SKILL_RATING,
+  MAX_SKILL_RATING_WITH_APTITUDE,
+  MAX_GROUP_RATING,
+} from "./useSkillsCardHandlers";
 
 // Utilities
 export {

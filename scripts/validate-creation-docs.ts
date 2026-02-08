@@ -174,7 +174,7 @@ function checkComponentCounts(): ValidationResult {
     metatype: { minTsx: 2, maxTsx: 4 },
     qualities: { minTsx: 2, maxTsx: 5 },
     shared: { minTsx: 6, maxTsx: 15 },
-    skills: { minTsx: 6, maxTsx: 12 },
+    skills: { minTsx: 6, maxTsx: 13 },
     vehicles: { minTsx: 3, maxTsx: 6 },
     weapons: { minTsx: 3, maxTsx: 6 },
   };

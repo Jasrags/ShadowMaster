@@ -8,6 +8,10 @@ Active skills, skill groups, and knowledge/language skills.
 graph TD
     subgraph "Active Skills"
         SkillsCard[SkillsCard]
+        SkillsListSection[SkillsListSection]
+        SkillsModalsSection[SkillsModalsSection]
+        FreeSkillsPanel[FreeSkillsPanel]
+        SkillGroupCard[SkillGroupCard]
         SkillListItem[SkillListItem]
         SkillModal[SkillModal]
         SkillGroupModal[SkillGroupModal]
@@ -16,15 +20,21 @@ graph TD
         SkillCustomizeModal[SkillCustomizeModal]
         SkillKarmaConfirmModal[SkillKarmaConfirmModal]
         SkillGroupKarmaConfirmModal[SkillGroupKarmaConfirmModal]
+        FreeSkillDesignationModal[FreeSkillDesignationModal]
 
-        SkillsCard --> SkillListItem
-        SkillsCard --> SkillModal
-        SkillsCard --> SkillGroupModal
-        SkillsCard --> SkillGroupBreakModal
-        SkillsCard --> SkillSpecModal
-        SkillsCard --> SkillCustomizeModal
-        SkillsCard --> SkillKarmaConfirmModal
-        SkillsCard --> SkillGroupKarmaConfirmModal
+        SkillsCard --> FreeSkillsPanel
+        SkillsCard --> SkillsListSection
+        SkillsCard --> SkillsModalsSection
+        SkillsListSection --> SkillGroupCard
+        SkillsListSection --> SkillListItem
+        SkillsModalsSection --> SkillModal
+        SkillsModalsSection --> SkillGroupModal
+        SkillsModalsSection --> SkillGroupBreakModal
+        SkillsModalsSection --> SkillSpecModal
+        SkillsModalsSection --> SkillCustomizeModal
+        SkillsModalsSection --> SkillKarmaConfirmModal
+        SkillsModalsSection --> SkillGroupKarmaConfirmModal
+        SkillsModalsSection --> FreeSkillDesignationModal
     end
 
     subgraph "Knowledge & Languages"
@@ -41,6 +51,9 @@ graph TD
     end
 
     style SkillsCard fill:#3b82f6,color:#fff
+    style SkillsListSection fill:#22c55e,color:#fff
+    style SkillsModalsSection fill:#22c55e,color:#fff
+    style SkillGroupCard fill:#22c55e,color:#fff
     style SkillListItem fill:#22c55e,color:#fff
     style SkillModal fill:#8b5cf6,color:#fff
     style SkillGroupModal fill:#8b5cf6,color:#fff
@@ -49,6 +62,8 @@ graph TD
     style SkillCustomizeModal fill:#8b5cf6,color:#fff
     style SkillKarmaConfirmModal fill:#8b5cf6,color:#fff
     style SkillGroupKarmaConfirmModal fill:#8b5cf6,color:#fff
+    style FreeSkillsPanel fill:#22c55e,color:#fff
+    style FreeSkillDesignationModal fill:#8b5cf6,color:#fff
     style KnowledgeLanguagesCard fill:#3b82f6,color:#fff
     style KnowledgeSkillRow fill:#22c55e,color:#fff
     style LanguageRow fill:#22c55e,color:#fff
@@ -62,12 +77,46 @@ graph TD
 
 Location: `/components/creation/SkillsCard.tsx`
 
-Main container for active skill selection. Features:
+Main container for active skill selection. Delegates to extracted sub-components for list rendering and modal management. Uses `useSkillsCardHandlers` hook for handler logic. Features:
 
 - Individual skill selection and rating
 - Skill group selection
 - Specialization management
 - Karma spending for additional skills
+- Budget indicators and validation status
+
+### SkillsListSection
+
+Location: `/components/creation/skills/SkillsListSection.tsx`
+
+Renders the skill groups list and individual skills list. Extracted from SkillsCard for maintainability.
+
+- Skill groups with SkillGroupCard sub-components
+- Individual skills with SkillListItem sub-components
+- Add buttons for skills and groups
+- Empty state displays
+
+### SkillsModalsSection
+
+Location: `/components/creation/skills/SkillsModalsSection.tsx`
+
+Renders all modal dialogs used by the SkillsCard component:
+
+- Skill/group add modals
+- Customization and break confirmation modals
+- Karma purchase confirmation modals
+- Specialization and free skill designation modals
+
+### SkillGroupCard
+
+Location: `/components/creation/skills/SkillGroupCard.tsx`
+
+Display component for a skill group within the skills list:
+
+- Group name and member skills
+- Rating controls (increase/decrease)
+- Karma purchase and restore actions
+- Broken group indicator
 
 ### SkillListItem
 
@@ -139,6 +188,22 @@ Location: `/components/creation/skills/SkillGroupKarmaConfirmModal.tsx`
 
 Confirmation dialog for karma-based skill group purchases when group points are exhausted
 
+### FreeSkillsPanel
+
+Location: `/components/creation/skills/FreeSkillsPanel.tsx`
+
+Panel for managing free skill allocations from magic priority:
+
+- Displays allocation slots and status
+- Designate/undesignate skills
+- Opens FreeSkillDesignationModal
+
+### FreeSkillDesignationModal
+
+Location: `/components/creation/skills/FreeSkillDesignationModal.tsx`
+
+Modal for selecting skills to designate as free allocations from magic priority
+
 ## Knowledge & Languages (`/knowledge-languages/`)
 
 ### KnowledgeLanguagesCard
@@ -199,13 +264,22 @@ Modal for adding languages:
 | `types.ts`     | Knowledge/language types       |
 | `index.ts`     | Exports KnowledgeLanguagesCard |
 
+## Supporting Hooks
+
+| Hook                    | Location                           | Purpose                                             |
+| ----------------------- | ---------------------------------- | --------------------------------------------------- |
+| `useSkillsCardHandlers` | `/skills/useSkillsCardHandlers.ts` | Handler callbacks, data accessors, spec modal state |
+| `useSkillDesignations`  | `/skills/useSkillDesignations.ts`  | Free skill designation management                   |
+| `useGroupBreaking`      | `/skills/useGroupBreaking.ts`      | Group break/restore logic                           |
+| `useKarmaPurchase`      | `/skills/useKarmaPurchase.ts`      | Karma purchase mode and confirmation                |
+
 ## File Summary
 
-| Folder                  | Files | Components               |
-| ----------------------- | ----- | ------------------------ |
-| `/skills/`              | 9     | 1 card, 1 item, 7 modals |
-| `/knowledge-languages/` | 8     | 1 card, 2 rows, 2 modals |
-| Root                    | 1     | SkillsCard.tsx           |
+| Folder                  | Files | Components                                    |
+| ----------------------- | ----- | --------------------------------------------- |
+| `/skills/`              | 13    | 1 card, 3 sections, 1 item, 7 modals, 1 panel |
+| `/knowledge-languages/` | 8     | 1 card, 2 rows, 2 modals                      |
+| Root                    | 1     | SkillsCard.tsx                                |
 
 ## Budget Integration
 

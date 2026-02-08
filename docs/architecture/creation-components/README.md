@@ -1,6 +1,6 @@
 # Creation Components Architecture
 
-This documentation provides visual hierarchy diagrams for all 93 React components (plus 38 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
+This documentation provides visual hierarchy diagrams for all 97 React components (plus 38 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
 
 > **Keeping in sync:** Run `pnpm validate-creation-docs` to check for drift between code and documentation.
 
@@ -11,7 +11,7 @@ This documentation provides visual hierarchy diagrams for all 93 React component
 | [00-layout-overview](./00-layout-overview.md)     | Three-column layout from SheetCreationLayout                         |
 | [01-shared-primitives](./01-shared-primitives.md) | CreationCard, BudgetIndicator, ValidationBadge, etc. (12 components) |
 | [02-foundation-cards](./02-foundation-cards.md)   | Priority, Metatype, MagicPath, CharacterInfo, DerivedStats           |
-| [03-skills-system](./03-skills-system.md)         | Skills (9), KnowledgeLanguages (8)                                   |
+| [03-skills-system](./03-skills-system.md)         | Skills (13), KnowledgeLanguages (8)                                  |
 | [04-qualities-magic](./04-qualities-magic.md)     | Qualities (7), Spells, AdeptPowers, ComplexForms, Foci (3)           |
 | [05-gear-equipment](./05-gear-equipment.md)       | Gear (5), Weapons (5), Armor (5)                                     |
 | [06-matrix-vehicles](./06-matrix-vehicles.md)     | MatrixGear (7), Vehicles (9), Augmentations (9)                      |
@@ -20,16 +20,16 @@ This documentation provides visual hierarchy diagrams for all 93 React component
 
 ## Component Count Summary
 
-| Category          | Components           | Files  |
-| ----------------- | -------------------- | ------ |
-| Shared Primitives | 12                   | 13     |
-| Foundation Cards  | 5 cards              | 17     |
-| Skills System     | 2 cards              | 17     |
-| Qualities & Magic | 5 cards              | 13     |
-| Gear & Equipment  | 3 panels             | 15     |
-| Matrix & Vehicles | 3 cards              | 23     |
-| Social & Identity | 2 cards              | 15     |
-| **Total**         | **~32 Cards/Panels** | **98** |
+| Category          | Components           | Files   |
+| ----------------- | -------------------- | ------- |
+| Shared Primitives | 12                   | 13      |
+| Foundation Cards  | 5 cards              | 17      |
+| Skills System     | 2 cards              | 21      |
+| Qualities & Magic | 5 cards              | 13      |
+| Gear & Equipment  | 3 panels             | 15      |
+| Matrix & Vehicles | 3 cards              | 23      |
+| Social & Identity | 2 cards              | 15      |
+| **Total**         | **~32 Cards/Panels** | **102** |
 
 ## Color Key
 
