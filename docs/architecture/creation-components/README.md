@@ -1,6 +1,6 @@
 # Creation Components Architecture
 
-This documentation provides visual hierarchy diagrams for all 90 React components (plus 35 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
+This documentation provides visual hierarchy diagrams for all 93 React components (plus 38 supporting TS files) in `/components/creation/`, used during character creation in Shadow Master.
 
 > **Keeping in sync:** Run `pnpm validate-creation-docs` to check for drift between code and documentation.
 
@@ -14,7 +14,7 @@ This documentation provides visual hierarchy diagrams for all 90 React component
 | [03-skills-system](./03-skills-system.md)         | Skills (9), KnowledgeLanguages (8)                                   |
 | [04-qualities-magic](./04-qualities-magic.md)     | Qualities (7), Spells, AdeptPowers, ComplexForms, Foci (3)           |
 | [05-gear-equipment](./05-gear-equipment.md)       | Gear (5), Weapons (5), Armor (5)                                     |
-| [06-matrix-vehicles](./06-matrix-vehicles.md)     | MatrixGear (7), Vehicles (9), Augmentations (5)                      |
+| [06-matrix-vehicles](./06-matrix-vehicles.md)     | MatrixGear (7), Vehicles (9), Augmentations (9)                      |
 | [07-social-identity](./07-social-identity.md)     | Contacts (6), Identities (9)                                         |
 | [08-context-data-flow](./08-context-data-flow.md) | CreationBudgetContext, RulesetContext, hooks                         |
 
@@ -27,9 +27,9 @@ This documentation provides visual hierarchy diagrams for all 90 React component
 | Skills System     | 2 cards              | 17     |
 | Qualities & Magic | 5 cards              | 13     |
 | Gear & Equipment  | 3 panels             | 15     |
-| Matrix & Vehicles | 3 cards              | 19     |
+| Matrix & Vehicles | 3 cards              | 23     |
 | Social & Identity | 2 cards              | 15     |
-| **Total**         | **~32 Cards/Panels** | **94** |
+| **Total**         | **~32 Cards/Panels** | **98** |
 
 ## Color Key
 
@@ -89,7 +89,7 @@ Row (Item Display)
 ├── index.ts                    # Main exports (organized by phase)
 ├── *.tsx                       # Root-level card components (15)
 ├── armor/                      # Armor subsystem (5 files)
-├── augmentations/              # Cyberware/bioware (5 files)
+├── augmentations/              # Cyberware/bioware (9 files)
 ├── contacts/                   # Contact management (6 files)
 ├── foci/                       # Magical foci (3 files)
 ├── gear/                       # General equipment (5 files)

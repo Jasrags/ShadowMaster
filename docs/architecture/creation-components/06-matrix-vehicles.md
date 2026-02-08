@@ -35,11 +35,17 @@ graph TD
     subgraph "Augmentations"
         AugmentationsCard[AugmentationsCard]
         AugmentationModal[AugmentationModal]
+        AugmentationFilters[AugmentationFilters]
+        AugmentationDetailsPane[AugmentationDetailsPane]
+        AugmentationItemButton[AugmentationItemButton]
         CyberwareEnhancementModal[CyberwareEnhancementModal]
         CyberlimbAccessoryModal[CyberlimbAccessoryModal]
         CyberlimbWeaponModal[CyberlimbWeaponModal]
 
         AugmentationsCard --> AugmentationModal
+        AugmentationModal --> AugmentationFilters
+        AugmentationModal --> AugmentationDetailsPane
+        AugmentationModal --> AugmentationItemButton
         AugmentationModal --> CyberwareEnhancementModal
         AugmentationModal --> CyberlimbAccessoryModal
         AugmentationModal --> CyberlimbWeaponModal
@@ -57,6 +63,9 @@ graph TD
     style VehicleSystemItemButton fill:#06b6d4,color:#fff
     style AugmentationsCard fill:#3b82f6,color:#fff
     style AugmentationModal fill:#8b5cf6,color:#fff
+    style AugmentationFilters fill:#06b6d4,color:#fff
+    style AugmentationDetailsPane fill:#06b6d4,color:#fff
+    style AugmentationItemButton fill:#06b6d4,color:#fff
     style CyberwareEnhancementModal fill:#8b5cf6,color:#fff
     style CyberlimbAccessoryModal fill:#8b5cf6,color:#fff
     style CyberlimbWeaponModal fill:#8b5cf6,color:#fff
@@ -207,12 +216,60 @@ Main container for cyberware and bioware. Features:
 
 Location: `/components/creation/augmentations/AugmentationModal.tsx`
 
-Main augmentation browser:
+Unified two-column modal for purchasing cyberware and bioware:
 
-- Cyberware catalog
-- Bioware catalog
-- Essence cost display
-- Grade selection
+- Type toggle (Cyberware / Bioware)
+- State management, filtering logic, and purchase handlers
+- Cyberlimb location selection and conflict detection
+- Skill-linked bioware target selection
+
+### AugmentationFilters
+
+Location: `/components/creation/augmentations/AugmentationFilters.tsx`
+
+Search and filter controls:
+
+- Type toggle buttons (Cyberware / Bioware)
+- Search input with type-aware placeholder
+- Category pills with item counts
+- Grade selector dropdown
+- AugmentationHeaderIcon helper for modal header
+
+### AugmentationDetailsPane
+
+Location: `/components/creation/augmentations/AugmentationDetailsPane.tsx`
+
+Right-pane detail preview:
+
+- Item info (name, description)
+- Rating selector for rated items
+- Cyberlimb location selector with conflict indicators
+- Skill selector for skill-linked bioware
+- Stats grid (essence, cost, availability)
+- Bonuses, wireless bonus, capacity info
+- Magic/resonance warning for awakened characters
+- Validation errors
+
+### AugmentationItemButton
+
+Location: `/components/creation/augmentations/AugmentationItemButton.tsx`
+
+List item button component:
+
+- Grade-adjusted essence, cost, and availability preview
+- Rating range indicators for rated items
+- Affordability and essence fit validation
+
+### augmentationModalHelpers
+
+Location: `/components/creation/augmentations/augmentationModalHelpers.ts`
+
+Constants and utility functions:
+
+- `getAvailabilityDisplay()`, `getLocationConflict()`
+- Re-exports `formatCurrency()`, `formatEssence()` from `./utils.ts`
+- `MAX_AVAILABILITY`, category constants, `GRADE_LABELS`, `LOCATION_LABELS`
+- `AugmentationType`, `InstalledCyberlimb`, `InstalledSkillLinkedBioware` types
 
 ### CyberwareEnhancementModal
 
@@ -245,12 +302,12 @@ Cyberlimb weapon selection:
 
 ## File Summary
 
-| Folder            | Files | Components                                             |
-| ----------------- | ----- | ------------------------------------------------------ |
-| `/matrix-gear/`   | 7     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel |
-| `/vehicles/`      | 9     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel |
-| `/augmentations/` | 5     | 4 modals                                               |
-| Root              | 2     | VehiclesCard, AugmentationsCard                        |
+| Folder            | Files | Components                                                      |
+| ----------------- | ----- | --------------------------------------------------------------- |
+| `/matrix-gear/`   | 7     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel          |
+| `/vehicles/`      | 9     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel          |
+| `/augmentations/` | 9     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 utils, 1 barrel |
+| Root              | 2     | VehiclesCard, AugmentationsCard                                 |
 
 ## Budget Integration
 
