@@ -21,15 +21,15 @@ graph TD
 
     subgraph "Vehicles & Drones"
         VehiclesCard[VehiclesCard]
-        VehicleModal[VehicleModal]
-        DroneModal[DroneModal]
-        RCCModal[RCCModal]
-        AutosoftModal[AutosoftModal]
+        VehicleSystemModal[VehicleSystemModal]
+        VehicleSystemFilters[VehicleSystemFilters]
+        VehicleSystemDetailsPane[VehicleSystemDetailsPane]
+        VehicleSystemItemButton[VehicleSystemItemButton]
 
-        VehiclesCard --> VehicleModal
-        VehiclesCard --> DroneModal
-        VehiclesCard --> RCCModal
-        VehiclesCard --> AutosoftModal
+        VehiclesCard --> VehicleSystemModal
+        VehicleSystemModal --> VehicleSystemFilters
+        VehicleSystemModal --> VehicleSystemDetailsPane
+        VehicleSystemModal --> VehicleSystemItemButton
     end
 
     subgraph "Augmentations"
@@ -51,10 +51,10 @@ graph TD
     style MatrixGearDetailsPane fill:#06b6d4,color:#fff
     style MatrixGearListItems fill:#06b6d4,color:#fff
     style VehiclesCard fill:#3b82f6,color:#fff
-    style VehicleModal fill:#8b5cf6,color:#fff
-    style DroneModal fill:#8b5cf6,color:#fff
-    style RCCModal fill:#8b5cf6,color:#fff
-    style AutosoftModal fill:#8b5cf6,color:#fff
+    style VehicleSystemModal fill:#8b5cf6,color:#fff
+    style VehicleSystemFilters fill:#06b6d4,color:#fff
+    style VehicleSystemDetailsPane fill:#06b6d4,color:#fff
+    style VehicleSystemItemButton fill:#06b6d4,color:#fff
     style AugmentationsCard fill:#3b82f6,color:#fff
     style AugmentationModal fill:#8b5cf6,color:#fff
     style CyberwareEnhancementModal fill:#8b5cf6,color:#fff
@@ -138,45 +138,58 @@ Main container for vehicles and drones. Features:
 - RCC (Rigger Command Console)
 - Autosofts
 
-### VehicleModal
+### VehicleSystemModal
 
-Location: `/components/creation/vehicles/VehicleModal.tsx`
+Location: `/components/creation/vehicles/VehicleSystemModal.tsx`
 
-Vehicle selection:
+Unified two-column modal for purchasing vehicles, drones, RCCs, and autosofts:
 
-- Type filtering (Ground, Air, Water, etc.)
-- Speed, Handling, Armor stats
-- Modification slots
+- Type tabs (Vehicle, Drone, RCC, Autosoft) with bulk-add workflow
+- Virtualized lists for performance
+- State management, filtering logic, and purchase handlers
 
-### DroneModal
+### VehicleSystemFilters
 
-Location: `/components/creation/vehicles/DroneModal.tsx`
+Location: `/components/creation/vehicles/VehicleSystemFilters.tsx`
 
-Drone selection:
+Search and filter controls:
 
-- Size categories
-- Sensor packages
-- Weapon mounts
+- Type tabs with color-coded active states
+- Search input with type-aware placeholder
+- Subcategory filter pills (vehicle categories, drone sizes, RCC tiers, autosoft categories)
+- VehicleSystemHeaderIcon helper for modal header
 
-### RCCModal
+### VehicleSystemDetailsPane
 
-Location: `/components/creation/vehicles/RCCModal.tsx`
+Location: `/components/creation/vehicles/VehicleSystemDetailsPane.tsx`
 
-Rigger Command Console selection:
+Right-pane detail preview:
 
-- Device rating
-- Noise reduction
-- Data processing
+- Vehicle details (handling, speed, body, armor, pilot, sensor)
+- Drone details (stats, aerial/aquatic indicators)
+- RCC details (device rating, data processing, firewall, features)
+- Autosoft details (rating selector, availability, cost per rating)
+- Cost card with affordability indicator
 
-### AutosoftModal
+### VehicleSystemItemButton
 
-Location: `/components/creation/vehicles/AutosoftModal.tsx`
+Location: `/components/creation/vehicles/VehicleSystemItemButton.tsx`
 
-Autosoft selection for drones:
+List item button component:
 
-- Targeting autosofts
-- Maneuvering autosofts
-- Electronic warfare
+- Ownership and affordability indicators
+- Legality badges and type-specific metadata
+- Color-coded selection states per vehicle system type
+
+### vehicleSystemHelpers
+
+Location: `/components/creation/vehicles/vehicleSystemHelpers.ts`
+
+Constants and utility functions:
+
+- `formatCurrency()`, `getAvailabilityDisplay()`, `isItemAvailable()`, `getRatingTier()`, `getMaxAvailableRating()`
+- `MAX_AVAILABILITY`, `TYPE_TABS`, category constants, `CATEGORY_DISPLAY_NAMES`
+- `VehicleSystemType` type definition
 
 ## Augmentations (`/augmentations/`)
 
@@ -235,7 +248,7 @@ Cyberlimb weapon selection:
 | Folder            | Files | Components                                             |
 | ----------------- | ----- | ------------------------------------------------------ |
 | `/matrix-gear/`   | 7     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel |
-| `/vehicles/`      | 5     | 4 modals                                               |
+| `/vehicles/`      | 9     | 1 card, 1 modal, 3 sub-components, 1 helpers, 1 barrel |
 | `/augmentations/` | 5     | 4 modals                                               |
 | Root              | 2     | VehiclesCard, AugmentationsCard                        |
 

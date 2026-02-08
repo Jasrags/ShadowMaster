@@ -15,12 +15,12 @@
  */
 
 import { useMemo, useState, useCallback, useEffect, useRef } from "react";
+import { Plus } from "lucide-react";
 import {
   useVehicles,
   useDrones,
   useRCCs,
   useAutosofts,
-  formatHandlingRating,
   type VehicleCatalogItemData,
   type DroneCatalogItemData,
   type RCCCatalogItemData,
@@ -29,146 +29,24 @@ import {
 } from "@/lib/rules/RulesetContext";
 import type { ItemLegality } from "@/lib/types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
-import { LegalityBadge } from "../shared/LegalityBadge";
 import {
-  Search,
-  Car,
-  Bot,
-  Wifi,
-  Cpu,
-  Check,
-  AlertTriangle,
-  Plus,
-  Minus,
-  Info,
-  Plane,
-  Waves,
-} from "lucide-react";
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-const MAX_AVAILABILITY = 12;
-
-/** Vehicle system types */
-export type VehicleSystemType = "vehicle" | "drone" | "rcc" | "autosoft";
-
-/** Tab configuration for each type */
-const TYPE_TABS: {
-  id: VehicleSystemType;
-  label: string;
-  icon: typeof Car;
-  color: string;
-  activeColor: string;
-}[] = [
-  {
-    id: "vehicle",
-    label: "Vehicles",
-    icon: Car,
-    color: "text-blue-500",
-    activeColor: "bg-blue-500 text-white",
-  },
-  {
-    id: "drone",
-    label: "Drones",
-    icon: Bot,
-    color: "text-green-500",
-    activeColor: "bg-green-500 text-white",
-  },
-  {
-    id: "rcc",
-    label: "RCCs",
-    icon: Wifi,
-    color: "text-purple-500",
-    activeColor: "bg-purple-500 text-white",
-  },
-  {
-    id: "autosoft",
-    label: "Autosofts",
-    icon: Cpu,
-    color: "text-cyan-500",
-    activeColor: "bg-cyan-500 text-white",
-  },
-];
-
-/** Vehicle subcategories */
-const VEHICLE_CATEGORIES = [
-  { id: "all", label: "All" },
-  { id: "bikes", label: "Bikes" },
-  { id: "cars", label: "Cars" },
-  { id: "trucks", label: "Trucks" },
-  { id: "boats", label: "Boats" },
-  { id: "submarines", label: "Subs" },
-  { id: "fixed-wing", label: "Fixed-Wing" },
-  { id: "rotorcraft", label: "Rotorcraft" },
-  { id: "vtol", label: "VTOL" },
-  { id: "walkers", label: "Walkers" },
-] as const;
-
-/** Drone size categories */
-const DRONE_SIZES = [
-  { id: "all", label: "All" },
-  { id: "micro", label: "Micro" },
-  { id: "mini", label: "Mini" },
-  { id: "small", label: "Small" },
-  { id: "medium", label: "Medium" },
-  { id: "large", label: "Large" },
-] as const;
-
-/** RCC tier categories */
-const RCC_TIERS = [
-  { id: "all", label: "All" },
-  { id: "entry", label: "Entry (1-2)" },
-  { id: "professional", label: "Professional (3-4)" },
-  { id: "elite", label: "Elite (5-6)" },
-] as const;
-
-/** Autosoft category filter */
-const AUTOSOFT_CATEGORIES = [
-  { id: "all", label: "All" },
-  { id: "combat", label: "Combat" },
-  { id: "perception", label: "Perception" },
-  { id: "movement", label: "Movement" },
-  { id: "defense", label: "Defense" },
-  { id: "stealth", label: "Stealth" },
-  { id: "electronic-warfare", label: "EW" },
-] as const;
-
-/** Display names for category headers */
-const CATEGORY_DISPLAY_NAMES: Record<string, string> = {
-  // Vehicles
-  bikes: "Bikes",
-  cars: "Cars",
-  trucks: "Trucks & Vans",
-  boats: "Boats",
-  submarines: "Submarines",
-  "fixed-wing": "Fixed-Wing Aircraft",
-  rotorcraft: "Rotorcraft",
-  vtol: "VTOL/LAV",
-  walkers: "Walkers",
-  // Drones
-  micro: "Micro Drones",
-  mini: "Mini Drones",
-  small: "Small Drones",
-  medium: "Medium Drones",
-  large: "Large Drones",
-  // RCCs
-  entry: "Entry Level (Rating 1-2)",
-  professional: "Professional (Rating 3-4)",
-  elite: "Elite Grade (Rating 5-6)",
-  // Autosofts
-  combat: "Combat",
-  perception: "Perception",
-  movement: "Movement",
-  defense: "Defense",
-  stealth: "Stealth",
-  "electronic-warfare": "Electronic Warfare",
-};
+  formatCurrency,
+  isItemAvailable,
+  getRatingTier,
+  getMaxAvailableRating,
+  getTypeColor,
+  CATEGORY_DISPLAY_NAMES,
+  type VehicleSystemType,
+} from "./vehicleSystemHelpers";
+import { VehicleSystemItemButton } from "./VehicleSystemItemButton";
+import { VehicleSystemDetailsPane } from "./VehicleSystemDetailsPane";
+import { VehicleSystemFilters, VehicleSystemHeaderIcon } from "./VehicleSystemFilters";
 
 // =============================================================================
 // TYPES
 // =============================================================================
+
+export { type VehicleSystemType } from "./vehicleSystemHelpers";
 
 export interface VehicleSelection {
   catalogId: string;
@@ -251,41 +129,6 @@ interface VehicleSystemModalProps {
 }
 
 // =============================================================================
-// HELPERS
-// =============================================================================
-
-function formatCurrency(value: number): string {
-  return new Intl.NumberFormat("en-US", {
-    style: "decimal",
-    minimumFractionDigits: 0,
-    maximumFractionDigits: 0,
-  }).format(value);
-}
-
-function getAvailabilityDisplay(availability: number, legality?: ItemLegality): string {
-  let display = String(availability);
-  if (legality === "restricted") display += "R";
-  if (legality === "forbidden") display += "F";
-  return display;
-}
-
-function isItemAvailable(availability: number): boolean {
-  return availability <= MAX_AVAILABILITY;
-}
-
-function getRatingTier(rating: number): string {
-  if (rating <= 2) return "entry";
-  if (rating <= 4) return "professional";
-  return "elite";
-}
-
-function getMaxAvailableRating(availabilityPerRating: number, maxRating: number): number {
-  if (availabilityPerRating === 0) return maxRating;
-  const maxByAvailability = Math.floor(MAX_AVAILABILITY / availabilityPerRating);
-  return Math.min(maxRating, maxByAvailability);
-}
-
-// =============================================================================
 // COMPONENT
 // =============================================================================
 
@@ -360,20 +203,6 @@ export function VehicleSystemModal({
     setSelectedItemId(null);
     setSelectedRating(1);
   }, []);
-
-  // Get subcategories for current type
-  const subcategories = useMemo(() => {
-    switch (activeType) {
-      case "vehicle":
-        return VEHICLE_CATEGORIES;
-      case "drone":
-        return DRONE_SIZES;
-      case "rcc":
-        return RCC_TIERS;
-      case "autosoft":
-        return AUTOSOFT_CATEGORIES;
-    }
-  }, [activeType]);
 
   // Filter items based on current type and filters
   const filteredItems = useMemo(() => {
@@ -491,7 +320,6 @@ export function VehicleSystemModal({
   const getCurrentCost = useCallback(() => {
     if (!selectedItem) return 0;
     if (activeType === "autosoft") return autosoftCost;
-    // Cast to types that have cost property
     return (selectedItem as VehicleCatalogItemData | DroneCatalogItemData | RCCCatalogItemData)
       .cost;
   }, [selectedItem, activeType, autosoftCost]);
@@ -633,594 +461,38 @@ export function VehicleSystemModal({
     onClose();
   }, [resetState, onClose]);
 
-  // Get type-specific colors
-  const getTypeColor = (type: VehicleSystemType) => {
-    switch (type) {
+  // Get owned IDs for the current type
+  const currentOwnedIds = useMemo(() => {
+    switch (activeType) {
       case "vehicle":
-        return "blue";
+        return ownedVehicleIds;
       case "drone":
-        return "green";
+        return ownedDroneIds;
       case "rcc":
-        return "purple";
+        return ownedRCCIds;
       case "autosoft":
-        return "cyan";
+        return ownedAutosoftIds;
     }
-  };
+  }, [activeType, ownedVehicleIds, ownedDroneIds, ownedRCCIds, ownedAutosoftIds]);
 
   const activeColor = getTypeColor(activeType);
-
-  // Render item button
-  const renderItemButton = (
-    item:
-      | VehicleCatalogItemData
-      | DroneCatalogItemData
-      | RCCCatalogItemData
-      | AutosoftCatalogItemData
-  ) => {
-    const isSelected = selectedItemId === item.id;
-    let isOwned = false;
-    let canAfford = true;
-    let displayCost = 0;
-
-    switch (activeType) {
-      case "vehicle":
-        isOwned = ownedVehicleIds.includes(item.id);
-        displayCost = (item as VehicleCatalogItemData).cost;
-        break;
-      case "drone":
-        isOwned = ownedDroneIds.includes(item.id);
-        displayCost = (item as DroneCatalogItemData).cost;
-        break;
-      case "rcc":
-        isOwned = ownedRCCIds.includes(item.id);
-        displayCost = (item as RCCCatalogItemData).cost;
-        break;
-      case "autosoft":
-        isOwned = ownedAutosoftIds.includes(item.id);
-        displayCost = (item as AutosoftCatalogItemData).costPerRating; // Show per-rating cost
-        break;
-    }
-
-    canAfford = displayCost <= remainingNuyen;
-    const isDisabled = isOwned;
-
-    // Get legality and availability for the badge (autosofts don't have legality)
-    const itemLegality =
-      activeType === "autosoft"
-        ? undefined
-        : (item as VehicleCatalogItemData | DroneCatalogItemData | RCCCatalogItemData).legality;
-    // Autosofts have availabilityPerRating, other items have availability
-    const itemAvailability =
-      activeType === "autosoft"
-        ? (item as AutosoftCatalogItemData).availabilityPerRating
-        : (item as VehicleCatalogItemData | DroneCatalogItemData | RCCCatalogItemData).availability;
-
-    return (
-      <button
-        key={item.id}
-        onClick={() => !isDisabled && setSelectedItemId(item.id)}
-        disabled={isDisabled}
-        className={`flex w-full items-center justify-between px-4 py-2 text-left text-sm transition-colors ${
-          isSelected
-            ? `bg-${activeColor}-50 text-${activeColor}-700 dark:bg-${activeColor}-900/30 dark:text-${activeColor}-300`
-            : isOwned
-              ? "cursor-not-allowed bg-zinc-50 text-zinc-400 dark:bg-zinc-800/50 dark:text-zinc-500"
-              : !canAfford
-                ? "text-red-400 dark:text-red-500"
-                : `rounded-md text-zinc-700 hover:outline hover:outline-1 hover:outline-${activeColor}-400 dark:text-zinc-300 dark:hover:outline-${activeColor}-500`
-        }`}
-      >
-        <div className="flex items-center gap-2">
-          <span className={isOwned ? "line-through" : ""}>{item.name}</span>
-          <LegalityBadge legality={itemLegality} availability={itemAvailability} />
-          {activeType === "drone" && (item as DroneCatalogItemData).canFly && (
-            <span title="Can fly">
-              <Plane className="h-3 w-3 text-sky-400" />
-            </span>
-          )}
-          {activeType === "drone" && (item as DroneCatalogItemData).isAquatic && (
-            <span title="Aquatic">
-              <Waves className="h-3 w-3 text-cyan-400" />
-            </span>
-          )}
-          {activeType === "rcc" && (
-            <span className="text-xs text-zinc-400">
-              R{(item as RCCCatalogItemData).deviceRating}
-            </span>
-          )}
-          {activeType === "autosoft" && (item as AutosoftCatalogItemData).requiresTarget && (
-            <span className="text-[10px] text-amber-500">
-              ({(item as AutosoftCatalogItemData).targetType})
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          <span className={`text-xs ${!canAfford && !isOwned ? "text-red-400" : "text-zinc-400"}`}>
-            {formatCurrency(displayCost)}¥{activeType === "autosoft" ? "/R" : ""}
-          </span>
-          {isOwned && <Check className="h-4 w-4 text-emerald-500" />}
-          {!canAfford && !isOwned && <AlertTriangle className="h-3.5 w-3.5 text-red-400" />}
-        </div>
-      </button>
-    );
-  };
-
-  // Render details pane
-  const renderDetails = () => {
-    if (!selectedItem) {
-      const ActiveIcon = TYPE_TABS.find((t) => t.id === activeType)?.icon || Car;
-      return (
-        <div className="flex h-full flex-col items-center justify-center text-zinc-400">
-          <ActiveIcon className="h-12 w-12" />
-          <p className="mt-4 text-sm">
-            Select {activeType === "rcc" ? "an RCC" : `a ${activeType}`} from the list
-          </p>
-        </div>
-      );
-    }
-
-    const cost = getCurrentCost();
-
-    return (
-      <div className="space-y-6">
-        {/* Item Header */}
-        <div>
-          <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
-            {selectedItem.name}
-          </h3>
-          {renderSubtitle()}
-        </div>
-
-        {/* Type-specific content */}
-        {renderTypeSpecificContent()}
-
-        {/* Description */}
-        {selectedItem.description && (
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">{selectedItem.description}</p>
-        )}
-
-        {/* Cost Card */}
-        <div className="rounded-lg border border-zinc-200 bg-zinc-50 p-4 dark:border-zinc-700 dark:bg-zinc-800/50">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Cost{activeType === "autosoft" ? ` (Rating ${selectedRating})` : ""}
-            </span>
-            <span
-              className={`text-lg font-semibold ${
-                !canAffordSelected
-                  ? "text-red-600 dark:text-red-400"
-                  : "text-zinc-900 dark:text-zinc-100"
-              }`}
-            >
-              {formatCurrency(cost)}¥
-            </span>
-          </div>
-          <div className="mt-2 flex items-center justify-between text-sm">
-            <span className="text-zinc-500 dark:text-zinc-400">Remaining</span>
-            <span
-              className={`font-medium ${
-                remainingNuyen - cost < 0
-                  ? "text-red-600 dark:text-red-400"
-                  : "text-emerald-600 dark:text-emerald-400"
-              }`}
-            >
-              {formatCurrency(remainingNuyen - cost)}¥
-            </span>
-          </div>
-        </div>
-
-        {/* Warnings */}
-        {isAlreadyOwned && (
-          <div className="flex items-center gap-2 rounded-lg bg-emerald-50 px-3 py-2 text-sm text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300">
-            <Check className="h-4 w-4" />
-            <span>You already own this {activeType === "rcc" ? "RCC" : activeType}</span>
-          </div>
-        )}
-
-        {!canAffordSelected && !isAlreadyOwned && (
-          <div className="flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-700 dark:bg-red-900/20 dark:text-red-300">
-            <AlertTriangle className="h-4 w-4" />
-            <span>Insufficient funds</span>
-          </div>
-        )}
-      </div>
-    );
-  };
-
-  // Render subtitle based on type
-  const renderSubtitle = () => {
-    switch (activeType) {
-      case "vehicle": {
-        const vehicle = selectedItem as VehicleCatalogItemData;
-        return (
-          <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            {CATEGORY_DISPLAY_NAMES[vehicle.category] || vehicle.category}
-          </div>
-        );
-      }
-      case "drone": {
-        const drone = selectedItem as DroneCatalogItemData;
-        return (
-          <div className="mt-1 flex items-center gap-3 text-sm text-zinc-500 dark:text-zinc-400">
-            <span className="capitalize">{drone.size}</span>
-            <span>•</span>
-            <span className="capitalize">{drone.droneType}</span>
-            {drone.canFly && (
-              <>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-sky-500">
-                  <Plane className="h-3.5 w-3.5" />
-                  Aerial
-                </span>
-              </>
-            )}
-            {drone.isAquatic && (
-              <>
-                <span>•</span>
-                <span className="flex items-center gap-1 text-cyan-500">
-                  <Waves className="h-3.5 w-3.5" />
-                  Aquatic
-                </span>
-              </>
-            )}
-          </div>
-        );
-      }
-      case "rcc":
-        return (
-          <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            Rigger Command Console
-          </div>
-        );
-      case "autosoft": {
-        const autosoft = selectedItem as AutosoftCatalogItemData;
-        return (
-          <div className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">
-            {CATEGORY_DISPLAY_NAMES[autosoft.category] || autosoft.category}
-          </div>
-        );
-      }
-    }
-  };
-
-  // Render type-specific content
-  const renderTypeSpecificContent = () => {
-    switch (activeType) {
-      case "vehicle":
-        return renderVehicleDetails();
-      case "drone":
-        return renderDroneDetails();
-      case "rcc":
-        return renderRCCDetails();
-      case "autosoft":
-        return renderAutosoftDetails();
-    }
-  };
-
-  const renderVehicleDetails = () => {
-    const vehicle = selectedItem as VehicleCatalogItemData;
-    return (
-      <>
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Handling</div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {formatHandlingRating(vehicle.handling)}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Speed / Accel
-            </div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {vehicle.speed} / {vehicle.acceleration}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Body / Armor</div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {vehicle.body} / {vehicle.armor}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Pilot / Sensor
-            </div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {vehicle.pilot} / {vehicle.sensor}
-            </div>
-          </div>
-        </div>
-
-        {/* Additional Info */}
-        <div className="space-y-2">
-          {vehicle.seats && (
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-zinc-600 dark:text-zinc-400">Seats</span>
-              <span className="font-medium text-zinc-900 dark:text-zinc-100">{vehicle.seats}</span>
-            </div>
-          )}
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-zinc-600 dark:text-zinc-400">Availability</span>
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {getAvailabilityDisplay(vehicle.availability, vehicle.legality)}
-            </span>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const renderDroneDetails = () => {
-    const drone = selectedItem as DroneCatalogItemData;
-    return (
-      <>
-        {/* Stats Grid */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Handling</div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {drone.handling}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Speed / Accel
-            </div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {drone.speed} / {drone.acceleration}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Body / Armor</div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {drone.body} / {drone.armor}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Pilot / Sensor
-            </div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {drone.pilot} / {drone.sensor}
-            </div>
-          </div>
-        </div>
-
-        {/* Availability */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-zinc-600 dark:text-zinc-400">Availability</span>
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {getAvailabilityDisplay(drone.availability, drone.legality)}
-            </span>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  const renderRCCDetails = () => {
-    const rcc = selectedItem as RCCCatalogItemData;
-    return (
-      <>
-        {/* Stats Grid */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Device Rating
-            </div>
-            <div className="mt-1 text-2xl font-mono font-bold text-purple-600 dark:text-purple-400">
-              {rcc.deviceRating}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Data Processing
-            </div>
-            <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
-              {rcc.dataProcessing}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Firewall</div>
-            <div className="mt-1 text-2xl font-mono font-bold text-zinc-900 dark:text-zinc-100">
-              {rcc.firewall}
-            </div>
-          </div>
-        </div>
-
-        {/* Availability */}
-        <div className="space-y-2">
-          <div className="flex items-center justify-between text-sm">
-            <span className="text-zinc-600 dark:text-zinc-400">Availability</span>
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {getAvailabilityDisplay(rcc.availability, rcc.legality)}
-            </span>
-          </div>
-        </div>
-
-        {/* Features Info */}
-        <div className="rounded-lg bg-purple-50 p-4 dark:bg-purple-900/20">
-          <div className="text-xs font-semibold uppercase tracking-wider text-purple-600 dark:text-purple-400">
-            RCC Features
-          </div>
-          <ul className="mt-2 space-y-1 text-sm text-purple-700 dark:text-purple-300">
-            <li>• Share up to {rcc.deviceRating} autosofts with drones</li>
-            <li>• Control up to {rcc.deviceRating * 3} drones simultaneously</li>
-            <li>• Noise reduction: {rcc.deviceRating}</li>
-          </ul>
-        </div>
-      </>
-    );
-  };
-
-  const renderAutosoftDetails = () => {
-    const autosoft = selectedItem as AutosoftCatalogItemData;
-    const currentAvailability = autosoft.availabilityPerRating * selectedRating;
-
-    return (
-      <>
-        {/* Target Requirement Warning */}
-        {autosoft.requiresTarget && (
-          <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-3 text-sm text-amber-700 dark:bg-amber-900/20 dark:text-amber-300">
-            <Info className="mt-0.5 h-4 w-4 flex-shrink-0" />
-            <span>
-              This autosoft requires a specific {autosoft.targetType} target. You&apos;ll specify
-              this when assigning to a drone.
-            </span>
-          </div>
-        )}
-
-        {/* Rating Selector */}
-        <div>
-          <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Rating</label>
-          <div className="mt-2 flex items-center gap-3">
-            <button
-              onClick={() => handleRatingChange(-1)}
-              disabled={selectedRating <= 1}
-              className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                selectedRating > 1
-                  ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-200"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Minus className="h-4 w-4" />
-            </button>
-            <div className="flex h-10 w-14 items-center justify-center rounded-lg bg-zinc-100 text-xl font-mono font-bold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-100">
-              {selectedRating}
-            </div>
-            <button
-              onClick={() => handleRatingChange(1)}
-              disabled={
-                selectedRating >= maxAvailableRating ||
-                autosoft.costPerRating * (selectedRating + 1) > remainingNuyen
-              }
-              className={`flex h-9 w-9 items-center justify-center rounded-lg transition-colors ${
-                selectedRating < maxAvailableRating &&
-                autosoft.costPerRating * (selectedRating + 1) <= remainingNuyen
-                  ? "bg-cyan-500 text-white hover:bg-cyan-600"
-                  : "cursor-not-allowed bg-zinc-100 text-zinc-300 dark:bg-zinc-800 dark:text-zinc-600"
-              }`}
-            >
-              <Plus className="h-4 w-4" />
-            </button>
-            <span className="text-xs text-zinc-400">Max: {maxAvailableRating}</span>
-          </div>
-        </div>
-
-        {/* Stats at current rating */}
-        <div className="grid grid-cols-2 gap-3">
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">Availability</div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {currentAvailability}
-            </div>
-          </div>
-          <div className="rounded-lg bg-zinc-50 p-3 dark:bg-zinc-800/50">
-            <div className="text-xs font-medium text-zinc-500 dark:text-zinc-400">
-              Cost per Rating
-            </div>
-            <div className="mt-1 text-lg font-semibold text-zinc-900 dark:text-zinc-100">
-              {formatCurrency(autosoft.costPerRating)}¥
-            </div>
-          </div>
-        </div>
-      </>
-    );
-  };
-
-  // Get active tab info
-  const activeTab = TYPE_TABS.find((t) => t.id === activeType)!;
 
   return (
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="full" className="max-w-4xl">
       {({ close }) => (
         <>
           <ModalHeader title="Add Vehicle/Drone" onClose={close}>
-            <div
-              className={`ml-2 rounded-lg p-1.5 ${
-                activeType === "vehicle"
-                  ? "bg-blue-100 text-blue-600 dark:bg-blue-900/50 dark:text-blue-300"
-                  : activeType === "drone"
-                    ? "bg-green-100 text-green-600 dark:bg-green-900/50 dark:text-green-300"
-                    : activeType === "rcc"
-                      ? "bg-purple-100 text-purple-600 dark:bg-purple-900/50 dark:text-purple-300"
-                      : "bg-cyan-100 text-cyan-600 dark:bg-cyan-900/50 dark:text-cyan-300"
-              }`}
-            >
-              <activeTab.icon className="h-4 w-4" />
-            </div>
+            <VehicleSystemHeaderIcon activeType={activeType} />
           </ModalHeader>
 
-          {/* Type Tabs */}
-          <div className="flex gap-2 border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
-            {TYPE_TABS.map((tab) => {
-              const Icon = tab.icon;
-              const isActive = activeType === tab.id;
-              return (
-                <button
-                  key={tab.id}
-                  onClick={() => handleTypeChange(tab.id)}
-                  className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    isActive
-                      ? tab.activeColor
-                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                  }`}
-                >
-                  <Icon className="h-4 w-4" />
-                  {tab.label}
-                </button>
-              );
-            })}
-          </div>
-
-          {/* Search and Filters */}
-          <div className="border-b border-zinc-200 px-6 py-3 dark:border-zinc-700">
-            {/* Search */}
-            <div className="relative">
-              <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-              <input
-                type="text"
-                placeholder={`Search ${activeType === "rcc" ? "RCCs" : activeType + "s"}...`}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className={`w-full rounded-lg border border-zinc-200 bg-zinc-50 py-2 pl-10 pr-4 text-sm text-zinc-900 placeholder-zinc-400 focus:outline-none focus:ring-1 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-100 ${
-                  activeType === "vehicle"
-                    ? "focus:border-blue-500 focus:ring-blue-500"
-                    : activeType === "drone"
-                      ? "focus:border-green-500 focus:ring-green-500"
-                      : activeType === "rcc"
-                        ? "focus:border-purple-500 focus:ring-purple-500"
-                        : "focus:border-cyan-500 focus:ring-cyan-500"
-                }`}
-              />
-            </div>
-
-            {/* Subcategory Filter */}
-            <div className="mt-3 flex flex-wrap gap-2">
-              {subcategories.map((cat) => (
-                <button
-                  key={cat.id}
-                  onClick={() => setSubcategory(cat.id)}
-                  className={`rounded-full px-3 py-1 text-xs font-medium transition-colors ${
-                    subcategory === cat.id
-                      ? activeType === "vehicle"
-                        ? "bg-blue-500 text-white"
-                        : activeType === "drone"
-                          ? "bg-green-500 text-white"
-                          : activeType === "rcc"
-                            ? "bg-purple-500 text-white"
-                            : "bg-cyan-500 text-white"
-                      : "bg-zinc-100 text-zinc-600 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-400 dark:hover:bg-zinc-700"
-                  }`}
-                >
-                  {cat.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          <VehicleSystemFilters
+            activeType={activeType}
+            onTypeChange={handleTypeChange}
+            searchQuery={searchQuery}
+            onSearchQueryChange={setSearchQuery}
+            subcategory={subcategory}
+            onSubcategoryChange={setSubcategory}
+          />
 
           <ModalBody scrollable={false}>
             {/* Content - Split Pane */}
@@ -1232,7 +504,17 @@ export function VehicleSystemModal({
                     <div className="sticky top-0 z-10 bg-zinc-50 px-4 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
                       {CATEGORY_DISPLAY_NAMES[category] || category}
                     </div>
-                    {items.map((item) => renderItemButton(item))}
+                    {items.map((item) => (
+                      <VehicleSystemItemButton
+                        key={item.id}
+                        item={item}
+                        activeType={activeType}
+                        isSelected={selectedItemId === item.id}
+                        ownedIds={currentOwnedIds}
+                        remainingNuyen={remainingNuyen}
+                        onSelect={setSelectedItemId}
+                      />
+                    ))}
                   </div>
                 ))}
                 {Object.keys(itemsByCategory).length === 0 && (
@@ -1243,7 +525,19 @@ export function VehicleSystemModal({
               </div>
 
               {/* Right Pane - Details */}
-              <div className="w-1/2 overflow-y-auto p-6">{renderDetails()}</div>
+              <div className="w-1/2 overflow-y-auto p-6">
+                <VehicleSystemDetailsPane
+                  activeType={activeType}
+                  selectedItem={selectedItem}
+                  currentCost={getCurrentCost()}
+                  canAffordSelected={canAffordSelected}
+                  isAlreadyOwned={isAlreadyOwned}
+                  remainingNuyen={remainingNuyen}
+                  selectedRating={selectedRating}
+                  maxAvailableRating={maxAvailableRating}
+                  onRatingChange={handleRatingChange}
+                />
+              </div>
             </div>
           </ModalBody>
 
