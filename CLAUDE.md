@@ -25,6 +25,10 @@ This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when 
 | **Account Security**      | Password changes, lockout management, email verification |
 | **Ruleset Snapshots**     | Version control with drift detection and migration       |
 
+## Git Workflow
+
+Always create a feature branch BEFORE making any commits. Never commit directly to main. Use the pattern: `git checkout -b feature/<issue-number>-<short-description>` before any code changes.
+
 ## Development Commands
 
 ```bash
@@ -189,6 +193,10 @@ Always use TypeScript storage layer (`readJsonFile()`, `writeJsonFile()`) instea
 - **TypeScript object keys**: `camelCase`
 - Run `pnpm verify-naming` to validate naming conventions in data files
 
+### Pre-Commit Checklist
+
+After implementing any feature, always run `pnpm type-check` and `pnpm test` before committing. Fix all TypeScript errors and test failures before creating a commit.
+
 ### Keeping Documentation in Sync
 
 When modifying files in `/components/creation/`:
@@ -196,6 +204,22 @@ When modifying files in `/components/creation/`:
 - Update the hierarchy diagrams in `/docs/architecture/creation-components/` if adding, removing, or reorganizing components
 - Run `pnpm validate-creation-docs` to check for drift between code and documentation
 - Key files to update: `README.md` (component counts), feature-specific docs (hierarchy diagrams)
+
+## Workflow Patterns
+
+When working on GitHub issues, split into TWO separate sessions: (1) exploration + plan creation, (2) implementation + PR. Do not try to explore AND implement in one session — start implementation immediately if a plan already exists.
+
+## Tools & Preferences
+
+Use `gh` CLI for all GitHub operations (issue creation, PR creation, etc.) instead of MCP GitHub tools. Example: `gh pr create --title 'feat: ...' --body '...'`
+
+## Project Conventions
+
+This is a TypeScript project. All source files use `.ts` and `.tsx` extensions. When writing grep/search patterns, always include both `.ts` and `.tsx` extensions. Use extended regex (`grep -E`) when using alternation patterns.
+
+## Implementation Guidelines
+
+When implementing validators or features that follow existing patterns in the codebase, read at least one existing implementation first and match its patterns exactly (enum usage, type narrowing approach, mock structure in tests).
 
 ## Testing
 
