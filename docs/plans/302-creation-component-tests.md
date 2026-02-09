@@ -17,33 +17,33 @@ Only 3/97 creation components have tests (3.1%). Need to add tests for Tier 1 co
 
 ### PR 1: Simple cards (low mock complexity)
 
-- [ ] `CharacterInfoCard.test.tsx` (~170 LOC source, no hooks to mock beyond shared `CreationCard`)
+- [x] `CharacterInfoCard.test.tsx` (23 tests)
   - Mocks: `./shared` (CreationCard stub)
   - Tests: renders inputs, name length limit, updates state on change, empty state
-- [ ] `PrioritySelectionCard.test.tsx` (~467 LOC source)
+- [x] `PrioritySelectionCard.test.tsx` (26 tests)
   - Mocks: `@/lib/rules` (usePriorityTable), `./shared` (CreationCard stub)
   - Tests: renders 5 priority rows, swap via arrow buttons, default order, budget summaries per row
 
 ### PR 2: Magic-dependent cards
 
-- [ ] `SpellsCard.test.tsx` (~463 LOC source)
+- [x] `SpellsCard.test.tsx` (21 tests)
   - Mocks: `@/lib/rules` (useSpells, usePriorityTable), `@/lib/contexts` (useCreationBudgets), `./spells` (SpellModal, SpellListItem stubs)
   - Tests: locked when not magician, renders spell list, add/remove spells, karma overflow, grouped by category
-- [ ] `ComplexFormsCard.test.tsx` (~337 LOC source)
+- [x] `ComplexFormsCard.test.tsx` (24 tests)
   - Mocks: `@/lib/rules` (useComplexForms, usePriorityTable), `@/lib/contexts` (useCreationBudgets)
   - Tests: locked when not technomancer, renders form list, search filter, add/remove forms, karma cost
 
 ### PR 3: Equipment cards (high complexity)
 
-- [ ] `AugmentationsCard.test.tsx` (~1053 LOC source)
+- [x] `AugmentationsCard.test.tsx` (24 tests)
   - Mocks: `@/lib/rules/RulesetContext` (useAugmentationRules, calculateMagicLoss), `@/lib/contexts` (useCreationBudgets), `./augmentations` (AugmentationModal + item components as stubs), `@/lib/rules/augmentations/grades`, `@/lib/types/cyberlimb`
-  - Tests: locked state, renders essence bar, add/remove augmentation, magic loss warning, cyberware vs bioware toggle, grade effects
-- [ ] `VehiclesCard.test.tsx` (~735 LOC source)
+  - Tests: locked state, essence bar, add/remove augmentation, magic/resonance loss warnings, attribute bonuses, validation status
+- [x] `VehiclesCard.test.tsx` (23 tests)
   - Mocks: `@/lib/contexts` (useCreationBudgets), `./vehicles` (VehicleSystemModal stub), `./shared` (CreationCard, SummaryFooter, etc.)
-  - Tests: locked state, renders vehicle/drone/RCC sections, add/remove items, budget tracking, legality warnings
-- [ ] `WeaponsPanel.test.tsx` (~755 LOC source)
+  - Tests: locked state, vehicle/drone/RCC/autosoft sections, add/remove items, budget tracking, validation status
+- [x] `WeaponsPanel.test.tsx` (21 tests)
   - Mocks: `@/lib/rules/RulesetContext` (useGear, useWeaponModifications, useRuleset), `@/lib/rules/gear/weapon-customization`, `@/lib/contexts` (useCreationBudgets), `./weapons` (WeaponRow, modals as stubs)
-  - Tests: locked state, renders weapon list grouped by category, add/remove weapon, modification flow, ammunition, karma-to-nuyen
+  - Tests: locked state, grouped display by category, add/remove weapon, legality warnings, budget tracking, validation status
 
 ## Files to Create
 
@@ -62,8 +62,9 @@ Only 3/97 creation components have tests (3.1%). Need to add tests for Tier 1 co
 - `components/creation/__tests__/AttributesCard.test.tsx` — primary mock pattern
 - `components/creation/__tests__/SkillsCard.test.tsx` — sub-component mocking pattern
 
-## Estimated Scope
+## Results
 
-- ~7 new test files, ~500-700 lines each
-- 3 PRs to keep reviews manageable
-- Each PR should pass `pnpm test` independently
+- 7 test files, 162 tests total
+- PR 1: CharacterInfoCard (23) + PrioritySelectionCard (26) = 49 tests
+- PR 2: SpellsCard (21) + ComplexFormsCard (24) = 45 tests
+- PR 3: AugmentationsCard (24) + VehiclesCard (23) + WeaponsPanel (21) = 68 tests
