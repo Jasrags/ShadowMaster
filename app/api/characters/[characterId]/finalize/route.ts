@@ -26,7 +26,7 @@ import {
   appendAuditEntry,
   type TransitionContext,
 } from "@/lib/rules/character/state-machine";
-import { validateForFinalization } from "@/lib/rules/validation";
+import { validateForFinalization, materializeFromCreationState } from "@/lib/rules/validation";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { loadCreationMethod } from "@/lib/rules/loader";
 import type { CreationState } from "@/lib/types/creation";
@@ -90,15 +90,23 @@ export async function POST(
     // Get creation state from character metadata if available
     const creationState = character.metadata?.creationState as CreationState | undefined;
 
+    // Materialize creation selections to top-level character fields.
+    // During creation, all data lives in metadata.creationState.selections;
+    // top-level fields (metatype, attributes, skills, etc.) remain at defaults.
+    // Materializing ensures validators and post-creation systems find the data.
+    const materializedCharacter = (
+      creationState ? materializeFromCreationState(character, creationState) : character
+    ) as typeof character;
+
     // Load campaign if character is in one
     let campaign: Campaign | undefined;
-    if (character.campaignId) {
-      campaign = (await getCampaignById(character.campaignId)) || undefined;
+    if (materializedCharacter.campaignId) {
+      campaign = (await getCampaignById(materializedCharacter.campaignId)) || undefined;
     }
 
     // Run comprehensive validation
     const validationResult = await validateForFinalization(
-      character,
+      materializedCharacter,
       ruleset,
       creationMethod,
       creationState,
@@ -135,7 +143,7 @@ export async function POST(
 
       const characterWithApproval = appendAuditEntry(
         {
-          ...character,
+          ...materializedCharacter,
           approvalStatus: "pending",
           updatedAt: new Date().toISOString(),
         },
@@ -162,7 +170,11 @@ export async function POST(
       note: "Character finalized via API",
     };
 
-    const transitionResult = await executeTransition(character, "active", transitionContext);
+    const transitionResult = await executeTransition(
+      materializedCharacter,
+      "active",
+      transitionContext
+    );
 
     if (!transitionResult.success) {
       return NextResponse.json(
