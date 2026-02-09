@@ -25,6 +25,9 @@ export {
   isCharacterValid,
 } from "./character-validator";
 
+// Materialization
+export { materializeFromCreationState } from "./materialize";
+
 // Budget calculator types and functions
 export type { NuyenBreakdown, KarmaBreakdown } from "./budget-calculator";
 export {
