@@ -72,6 +72,31 @@ const CATEGORY_ORDER: GearCategory[] = [
   "miscellaneous",
 ];
 
+/** Map sub-categories to their parent display category for grouped view */
+function getDisplayCategory(category: string): GearCategory {
+  switch (category) {
+    case "audio-devices":
+    case "optical-devices":
+    case "imaging-devices":
+      return "electronics";
+    case "restraints":
+      return "tools";
+    case "grapple-gun":
+      return "survival";
+    case "rfid-tags":
+      return "rfidTags";
+    case "electronics":
+    case "tools":
+    case "medical":
+    case "security":
+    case "survival":
+    case "rfidTags":
+      return category as GearCategory;
+    default:
+      return "miscellaneous";
+  }
+}
+
 // =============================================================================
 // HELPERS
 // =============================================================================
@@ -250,7 +275,7 @@ function GearListItem({
   isAlreadyAdded: boolean;
   onClick: () => void;
 }) {
-  const isDisabled = !canAfford || isAlreadyAdded;
+  const isDisabled = !canAfford;
   const gearHasRating = hasRating(gear);
   const ratingBounds = getRatingBounds(gear);
 
@@ -440,7 +465,7 @@ export function GearPurchaseModal({
     }
     const grouped: Partial<Record<GearCategory, GearItemData[]>> = {};
     filteredGear.forEach((gear) => {
-      const cat = (gear.category as GearCategory) || "miscellaneous";
+      const cat = getDisplayCategory(gear.category);
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat]!.push(gear);
     });
