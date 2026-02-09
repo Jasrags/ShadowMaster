@@ -29,6 +29,30 @@ export {
   type CyberlimbAugmentationItemProps,
 } from "./CyberlimbAugmentationItem";
 
+// Sub-components and helpers
+export {
+  AugmentationFilters,
+  AugmentationHeaderIcon,
+  type AugmentationFiltersProps,
+} from "./AugmentationFilters";
+export {
+  AugmentationDetailsPane,
+  type AugmentationDetailsPaneProps,
+} from "./AugmentationDetailsPane";
+export { AugmentationItemButton, type AugmentationItemButtonProps } from "./AugmentationItemButton";
+export {
+  formatCurrency as augmentationFormatCurrency,
+  formatEssence as augmentationFormatEssence,
+  getAvailabilityDisplay as augmentationGetAvailabilityDisplay,
+  getLocationConflict,
+  MAX_AVAILABILITY as AUGMENTATION_MAX_AVAILABILITY,
+  GRADE_LABELS,
+  CYBERWARE_CATEGORIES,
+  BIOWARE_CATEGORIES,
+  CATEGORY_LABELS as AUGMENTATION_CATEGORY_LABELS,
+  LOCATION_LABELS,
+} from "./augmentationModalHelpers";
+
 // Utilities
 export {
   formatCurrency,

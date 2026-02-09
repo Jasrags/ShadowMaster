@@ -20,6 +20,104 @@ vi.mock("@/lib/contexts", () => ({
   useCreationBudgets: vi.fn(),
 }));
 
+// Mock extracted sub-components imported from direct paths by SkillsCard
+vi.mock("../skills/SkillsModalsSection", () => ({
+  SkillsModalsSection: ({
+    isSkillModalOpen,
+    isGroupModalOpen,
+  }: {
+    isSkillModalOpen: boolean;
+    isGroupModalOpen: boolean;
+  }) => (
+    <>
+      {isSkillModalOpen && <div data-testid="skill-modal">Skill Modal</div>}
+      {isGroupModalOpen && <div data-testid="skill-group-modal">Skill Group Modal</div>}
+    </>
+  ),
+}));
+
+vi.mock("../skills/SkillsListSection", () => ({
+  SkillsListSection: ({
+    skillGroupPoints,
+    groups,
+    allSkillsSorted,
+    handlers,
+    onOpenGroupModal,
+    onOpenSkillModal,
+  }: {
+    skillGroupPoints: number;
+    groups: Record<string, unknown>;
+    allSkillsSorted: Array<{
+      skillId: string;
+      rating: number;
+      source: { type: string; groupId?: string; groupName?: string };
+    }>;
+    handlers: {
+      getSkillData: (id: string) => { name: string; linkedAttribute: string } | undefined;
+      getGroupData: (id: string) => { name: string; skills: string[] } | undefined;
+      handleRemoveSkill: (id: string) => void;
+    };
+    onOpenGroupModal: () => void;
+    onOpenSkillModal: () => void;
+  }) => (
+    <>
+      {skillGroupPoints > 0 && (
+        <div>
+          <button onClick={onOpenGroupModal} className="bg-amber-500">
+            Group
+          </button>
+          {Object.keys(groups).length === 0 ? (
+            <p>No skill groups added</p>
+          ) : (
+            Object.entries(groups).map(([groupId]) => {
+              const groupData = handlers.getGroupData(groupId);
+              if (!groupData) return null;
+              return (
+                <div key={groupId}>
+                  <span>{groupData.name}</span>
+                </div>
+              );
+            })
+          )}
+        </div>
+      )}
+      <div>
+        <button onClick={onOpenSkillModal} className="bg-amber-500">
+          Skill
+        </button>
+        {allSkillsSorted.length === 0 ? (
+          <p>No skills added</p>
+        ) : (
+          allSkillsSorted.map(
+            (entry: { skillId: string; rating: number; source: { type: string } }) => {
+              const skillData = handlers.getSkillData(entry.skillId);
+              if (!skillData) return null;
+              const isGroupSkill = entry.source.type === "group";
+              return (
+                <div
+                  key={entry.skillId}
+                  data-testid={`skill-item-${skillData.name.toLowerCase().replace(/\s+/g, "-")}`}
+                >
+                  <span>{skillData.name}</span>
+                  <span data-testid="skill-rating">{entry.rating}</span>
+                  {!isGroupSkill && (
+                    <button
+                      onClick={() => handlers.handleRemoveSkill(entry.skillId)}
+                      data-testid={`remove-${skillData.name.toLowerCase()}`}
+                    >
+                      Remove
+                    </button>
+                  )}
+                </div>
+              );
+            }
+          )
+        )}
+      </div>
+    </>
+  ),
+}));
+
 // Mock the sub-components that use modals (to simplify testing)
 vi.mock("../skills", () => ({
   SkillModal: ({ isOpen }: { isOpen: boolean }) =>
