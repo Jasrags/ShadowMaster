@@ -3,14 +3,15 @@
 /**
  * CreationCard
  *
- * Base card component for sheet-driven creation sections.
- * Provides consistent styling with header, validation badge, and content area.
+ * Card component for sheet-driven creation sections. Thin wrapper around BaseCard
+ * that adds validation-specific features: status-based border colors, ValidationBadge,
+ * and auto-collapse on valid status.
  *
  * Phase 6.1: Added collapsible functionality with localStorage persistence.
  */
 
-import { ReactNode, useState, useEffect, useCallback, useRef } from "react";
-import { ChevronDown, ChevronRight } from "lucide-react";
+import { ReactNode, useEffect, useRef, useState } from "react";
+import { BaseCard } from "./BaseCard";
 import { ValidationBadge } from "./ValidationBadge";
 
 type ValidationStatus = "valid" | "warning" | "error" | "pending";
@@ -36,30 +37,16 @@ interface CreationCardProps {
   autoCollapseOnValid?: boolean;
 }
 
-const STORAGE_KEY_PREFIX = "creation-card-collapsed-";
-
-/**
- * Get collapsed state from localStorage
- */
-function getStoredCollapsedState(id: string): boolean | null {
-  if (typeof window === "undefined") return null;
-  try {
-    const stored = localStorage.getItem(`${STORAGE_KEY_PREFIX}${id}`);
-    return stored !== null ? stored === "true" : null;
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Store collapsed state in localStorage
- */
-function setStoredCollapsedState(id: string, collapsed: boolean): void {
-  if (typeof window === "undefined") return;
-  try {
-    localStorage.setItem(`${STORAGE_KEY_PREFIX}${id}`, String(collapsed));
-  } catch {
-    // Ignore storage errors
+function getBorderColor(status: ValidationStatus): string {
+  switch (status) {
+    case "valid":
+      return "border-emerald-300 dark:border-emerald-500/30";
+    case "warning":
+      return "border-amber-300 dark:border-amber-500/30";
+    case "error":
+      return "border-red-300 dark:border-red-500/30";
+    default:
+      return "border-zinc-200 dark:border-zinc-700";
   }
 }
 
@@ -78,20 +65,11 @@ export function CreationCard({
   collapsedSummary,
   autoCollapseOnValid = false,
 }: CreationCardProps) {
-  // Initialize collapsed state
-  const [isCollapsed, setIsCollapsed] = useState(() => {
-    if (!collapsible) return false;
-    if (id) {
-      const stored = getStoredCollapsedState(id);
-      if (stored !== null) return stored;
-    }
-    return defaultCollapsed;
-  });
-
-  // Track previous status for auto-collapse (using ref to avoid cascading renders)
   const prevStatusRef = useRef(status);
+  // undefined = no force override, true = force collapse
+  const [forceCollapsed, setForceCollapsed] = useState<boolean | undefined>(undefined);
 
-  // Auto-collapse when status becomes valid
+  // Auto-collapse when status transitions to valid
   useEffect(() => {
     if (
       autoCollapseOnValid &&
@@ -99,95 +77,36 @@ export function CreationCard({
       status === "valid" &&
       prevStatusRef.current !== "valid"
     ) {
-      setIsCollapsed(true);
-      if (id) setStoredCollapsedState(id, true);
+      setForceCollapsed(true);
     }
     prevStatusRef.current = status;
-  }, [status, autoCollapseOnValid, collapsible, id]);
+  }, [status, autoCollapseOnValid, collapsible]);
 
-  // Toggle collapsed state
-  const toggleCollapsed = useCallback(() => {
-    if (!collapsible) return;
-    const newState = !isCollapsed;
-    setIsCollapsed(newState);
-    if (id) setStoredCollapsedState(id, newState);
-  }, [collapsible, isCollapsed, id]);
-
-  const getBorderColor = () => {
-    switch (status) {
-      case "valid":
-        return "border-emerald-300 dark:border-emerald-500/30";
-      case "warning":
-        return "border-amber-300 dark:border-amber-500/30";
-      case "error":
-        return "border-red-300 dark:border-red-500/30";
-      default:
-        return "border-zinc-200 dark:border-zinc-700";
+  // Clear the force override after it's been applied (so user can manually toggle)
+  useEffect(() => {
+    if (forceCollapsed !== undefined) {
+      const timer = setTimeout(() => setForceCollapsed(undefined), 0);
+      return () => clearTimeout(timer);
     }
-  };
-
-  const CollapseIcon = isCollapsed ? ChevronRight : ChevronDown;
+  }, [forceCollapsed]);
 
   return (
-    <div className={`rounded-lg border bg-white dark:bg-zinc-900 ${getBorderColor()} ${className}`}>
-      {/* Header */}
-      <div
-        className={`flex items-start justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800 ${
-          collapsible ? "cursor-pointer select-none" : ""
-        }`}
-        onClick={collapsible ? toggleCollapsed : undefined}
-        onKeyDown={
-          collapsible
-            ? (e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  toggleCollapsed();
-                }
-              }
-            : undefined
-        }
-        role={collapsible ? "button" : undefined}
-        tabIndex={collapsible ? 0 : undefined}
-        aria-expanded={collapsible ? !isCollapsed : undefined}
-      >
-        <div className="flex min-w-0 flex-1 items-start gap-2">
-          {collapsible && (
-            <CollapseIcon
-              className="mt-0.5 h-4 w-4 shrink-0 text-zinc-400 transition-transform dark:text-zinc-500"
-              aria-hidden="true"
-            />
-          )}
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h3 className="font-medium text-zinc-900 dark:text-zinc-100">{title}</h3>
-              <ValidationBadge
-                status={status}
-                errorCount={errorCount}
-                warningCount={warningCount}
-              />
-            </div>
-            {description && !isCollapsed && (
-              <p className="mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
-            )}
-            {/* Show summary when collapsed */}
-            {isCollapsed && collapsedSummary && (
-              <div className="mt-1 text-sm text-zinc-600 dark:text-zinc-400">
-                {collapsedSummary}
-              </div>
-            )}
-          </div>
-        </div>
-        {headerAction && <div onClick={(e) => e.stopPropagation()}>{headerAction}</div>}
-      </div>
-
-      {/* Content - with animation */}
-      <div
-        className={`overflow-hidden transition-all duration-200 ease-in-out ${
-          isCollapsed ? "max-h-0" : "max-h-[5000px]"
-        }`}
-      >
-        <div className="p-4">{children}</div>
-      </div>
-    </div>
+    <BaseCard
+      id={id}
+      title={title}
+      description={description}
+      headerAction={headerAction}
+      headerExtra={
+        <ValidationBadge status={status} errorCount={errorCount} warningCount={warningCount} />
+      }
+      className={className}
+      collapsible={collapsible}
+      defaultCollapsed={defaultCollapsed}
+      collapsedSummary={collapsedSummary}
+      borderClassName={getBorderColor(status)}
+      forceCollapsed={forceCollapsed}
+    >
+      {children}
+    </BaseCard>
   );
 }
