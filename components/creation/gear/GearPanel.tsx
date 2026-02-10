@@ -580,13 +580,6 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         onClose={() => setIsPurchaseModalOpen(false)}
         remaining={remaining}
         onPurchase={addGear}
-        purchasedGearIds={selectedGear.map((g) => {
-          // Extract catalog ID from "{catalogId}-{timestamp}" format
-          // Timestamp is the last segment after the final hyphen
-          const id = g.id || "";
-          const lastHyphen = id.lastIndexOf("-");
-          return lastHyphen > 0 ? id.slice(0, lastHyphen) : id;
-        })}
       />
 
       {/* Modification Modal */}

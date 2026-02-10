@@ -19,7 +19,7 @@ import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { isLegalAtCreation, CREATION_CONSTRAINTS } from "@/lib/rules/gear/validation";
 import { BaseModalRoot, ModalFooter } from "@/components/ui";
-import { Search, Minus, Plus, AlertTriangle, X, Check } from "lucide-react";
+import { Search, Minus, Plus, AlertTriangle, X } from "lucide-react";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
 
 // =============================================================================
@@ -254,8 +254,6 @@ interface GearPurchaseModalProps {
     quantity?: number,
     specification?: string
   ) => void;
-  /** IDs of gear already purchased (for already-added visual state) */
-  purchasedGearIds?: string[];
 }
 
 // =============================================================================
@@ -266,13 +264,11 @@ function GearListItem({
   gear,
   isSelected,
   canAfford,
-  isAlreadyAdded,
   onClick,
 }: {
   gear: GearItemData;
   isSelected: boolean;
   canAfford: boolean;
-  isAlreadyAdded: boolean;
   onClick: () => void;
 }) {
   const isDisabled = !canAfford;
@@ -286,23 +282,15 @@ function GearListItem({
       className={`w-full rounded-lg border p-2.5 text-left transition-all ${
         isSelected
           ? "border-emerald-400 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
-          : isAlreadyAdded
-            ? "cursor-not-allowed border-zinc-200 bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800/50"
-            : !canAfford
-              ? "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
-              : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
+          : !canAfford
+            ? "cursor-not-allowed border-zinc-200 bg-zinc-100 opacity-50 dark:border-zinc-700 dark:bg-zinc-800"
+            : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-900 dark:hover:border-emerald-500/50"
       }`}
     >
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1.5">
-            <span
-              className={`truncate text-sm font-medium ${
-                isAlreadyAdded
-                  ? "text-zinc-400 line-through dark:text-zinc-500"
-                  : "text-zinc-900 dark:text-zinc-100"
-              }`}
-            >
+            <span className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100">
               {gear.name}
             </span>
             {gearHasRating && (
@@ -310,15 +298,8 @@ function GearListItem({
                 R1-{ratingBounds.max}
               </span>
             )}
-            {isAlreadyAdded && <Check className="h-4 w-4 flex-shrink-0 text-emerald-500" />}
           </div>
-          <div
-            className={`mt-0.5 flex flex-wrap gap-x-2 text-xs ${
-              isAlreadyAdded
-                ? "text-zinc-400 dark:text-zinc-500"
-                : "text-zinc-500 dark:text-zinc-400"
-            }`}
-          >
+          <div className="mt-0.5 flex flex-wrap gap-x-2 text-xs text-zinc-500 dark:text-zinc-400">
             <span className="capitalize">{gear.category}</span>
             <span>
               Avail: {getAvailabilityDisplay(getGearAvailability(gear), gear.legality)}
@@ -327,13 +308,7 @@ function GearListItem({
           </div>
         </div>
         <div className="flex-shrink-0 text-right">
-          <div
-            className={`font-mono text-sm font-medium ${
-              isAlreadyAdded
-                ? "text-zinc-400 dark:text-zinc-500"
-                : "text-zinc-900 dark:text-zinc-100"
-            }`}
-          >
+          <div className="font-mono text-sm font-medium text-zinc-900 dark:text-zinc-100">
             {formatCurrency(getGearCost(gear))}¥
             {(gear.costPerRating || gear.ratingSpec?.costScaling?.perRating) && "/R"}
           </div>
@@ -352,7 +327,6 @@ export function GearPurchaseModal({
   onClose,
   remaining,
   onPurchase,
-  purchasedGearIds = [],
 }: GearPurchaseModalProps) {
   const gearCatalog = useGear();
 
@@ -628,15 +602,12 @@ export function GearPurchaseModal({
                     <div className="space-y-2 px-4 py-2">
                       {gearByCategory[category]!.map((gear) => {
                         const cost = getGearCost(gear);
-                        const isAlreadyAdded =
-                          !gear.requiresSpecification && purchasedGearIds.includes(gear.id);
                         return (
                           <GearListItem
                             key={gear.id}
                             gear={gear}
                             isSelected={selectedGear?.id === gear.id}
                             canAfford={cost <= remaining}
-                            isAlreadyAdded={isAlreadyAdded}
                             onClick={() => handleSelectGear(gear)}
                           />
                         );
@@ -649,15 +620,12 @@ export function GearPurchaseModal({
                 <div className="space-y-2 p-4">
                   {filteredGear.map((gear) => {
                     const cost = getGearCost(gear);
-                    const isAlreadyAdded =
-                      !gear.requiresSpecification && purchasedGearIds.includes(gear.id);
                     return (
                       <GearListItem
                         key={gear.id}
                         gear={gear}
                         isSelected={selectedGear?.id === gear.id}
                         canAfford={cost <= remaining}
-                        isAlreadyAdded={isAlreadyAdded}
                         onClick={() => handleSelectGear(gear)}
                       />
                     );
