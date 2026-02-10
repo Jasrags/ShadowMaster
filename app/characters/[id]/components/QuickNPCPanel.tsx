@@ -26,7 +26,7 @@ import {
 } from "lucide-react";
 import { useCombatSession } from "@/lib/combat";
 import type { CombatParticipant } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 /**
  * Quick NPC template for fast opponent creation
@@ -142,14 +142,20 @@ interface QuickNPCPanelProps {
   /** Current session ID */
   sessionId?: string;
   /** Current theme */
-  theme: Theme;
+  theme?: Theme;
   /** Callback when NPC is added */
   onNPCAdded?: (participant: CombatParticipant) => void;
   /** Callback when NPC is removed */
   onNPCRemoved?: (participantId: string) => void;
 }
 
-export function QuickNPCPanel({ sessionId, theme, onNPCAdded, onNPCRemoved }: QuickNPCPanelProps) {
+export function QuickNPCPanel({
+  sessionId,
+  theme: themeProp,
+  onNPCAdded,
+  onNPCRemoved,
+}: QuickNPCPanelProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   const { session, isInCombat } = useCombatSession();
   const [isExpanded, setIsExpanded] = useState(true);
   const [isLoading, setIsLoading] = useState(false);

@@ -34,7 +34,7 @@ import type { ActionPool, EdgeActionType, ActionContext } from "@/lib/types";
 import { useAvailableActions, type ActionAvailabilityResult } from "@/lib/rules/RulesetContext";
 import { TargetSelector } from "./TargetSelector";
 import type { Character, ActionDefinition } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 interface ActionPanelProps {
   /** Character data */
@@ -54,7 +54,7 @@ interface ActionPanelProps {
   /** Callback to open dice roller with a pool */
   onOpenDiceRoller: (pool: number, context: string) => void;
   /** Current theme */
-  theme: Theme;
+  theme?: Theme;
 }
 
 interface QuickRollButtonProps {
@@ -62,10 +62,17 @@ interface QuickRollButtonProps {
   pool: number;
   context: string;
   onClick: (pool: number, context: string) => void;
-  theme: Theme;
+  theme?: Theme;
 }
 
-function QuickRollButton({ label, pool, context, onClick, theme }: QuickRollButtonProps) {
+function QuickRollButton({
+  label,
+  pool,
+  context,
+  onClick,
+  theme: themeProp,
+}: QuickRollButtonProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   return (
     <Button
       onPress={() => onClick(pool, context)}
@@ -96,7 +103,7 @@ interface CombatActionButtonProps {
   isAvailable: boolean;
   isInCombat: boolean;
   isLoading?: boolean;
-  theme: Theme;
+  theme?: Theme;
 }
 
 /**
@@ -156,8 +163,9 @@ function CombatActionButton({
   isAvailable,
   isInCombat,
   isLoading,
-  theme,
+  theme: themeProp,
 }: CombatActionButtonProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   const typeColors = {
     free: "bg-emerald-500/20 border-emerald-500/30 text-emerald-500",
     simple: "bg-blue-500/20 border-blue-500/30 text-blue-500",
@@ -214,6 +222,7 @@ export function ActionPanel({
   onOpenDiceRoller,
   theme,
 }: ActionPanelProps) {
+  const t = theme || THEMES[DEFAULT_THEME];
   // Combat session context
   const { isInCombat, isMyTurn, executeAction, isLoading: combatLoading } = useCombatSession();
   const actionEconomy = useActionEconomy();
@@ -455,27 +464,25 @@ export function ActionPanel({
   };
 
   return (
-    <div className={`rounded-lg overflow-hidden ${theme.components.section.wrapper}`}>
+    <div className={`rounded-lg overflow-hidden ${t.components.section.wrapper}`}>
       {/* Header - Always visible */}
       <button
         onClick={onToggleExpand}
         className={`
           w-full flex items-center justify-between p-3
-          ${theme.components.section.header}
+          ${t.components.section.header}
           hover:opacity-80 transition-opacity
         `}
       >
         <div className="flex items-center gap-3">
-          <Dice1 className={`w-5 h-5 ${theme.colors.accent}`} />
-          <span className={`font-medium ${theme.colors.heading}`}>Action Panel</span>
+          <Dice1 className={`w-5 h-5 ${t.colors.accent}`} />
+          <span className={`font-medium ${t.colors.heading}`}>Action Panel</span>
         </div>
         <div className="flex items-center gap-3">
           {/* Edge Quick Display */}
           <div className="flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
-            <span
-              className={`${theme.fonts.mono} text-sm font-bold text-rose-500 dark:text-rose-400`}
-            >
+            <span className={`${t.fonts.mono} text-sm font-bold text-rose-500 dark:text-rose-400`}>
               {edgeCurrent}/{edgeMaximum}
             </span>
           </div>
@@ -483,24 +490,24 @@ export function ActionPanel({
           {woundModifier !== 0 && (
             <span
               className={`
-              text-xs ${theme.fonts.mono} px-2 py-0.5 rounded border
-              ${theme.components.badge.negative}
+              text-xs ${t.fonts.mono} px-2 py-0.5 rounded border
+              ${t.components.badge.negative}
             `}
             >
               {woundModifier}
             </span>
           )}
           {isExpanded ? (
-            <ChevronUp className={`w-4 h-4 ${theme.colors.muted}`} />
+            <ChevronUp className={`w-4 h-4 ${t.colors.muted}`} />
           ) : (
-            <ChevronDown className={`w-4 h-4 ${theme.colors.muted}`} />
+            <ChevronDown className={`w-4 h-4 ${t.colors.muted}`} />
           )}
         </div>
       </button>
 
       {/* Expanded Content */}
       {isExpanded && (
-        <div className={`p-4 space-y-4 border-t ${theme.colors.border}`}>
+        <div className={`p-4 space-y-4 border-t ${t.colors.border}`}>
           {/* Edge Tracker - Using standalone EdgeTracker component */}
           <EdgeTracker
             current={edgeCurrent}
@@ -515,29 +522,29 @@ export function ActionPanel({
 
           {/* Limits */}
           <div
-            className={`grid grid-cols-3 gap-2 p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+            className={`grid grid-cols-3 gap-2 p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
           >
             <div className="text-center">
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                 Physical
               </div>
-              <div className={`${theme.fonts.mono} font-bold text-red-500 dark:text-red-400`}>
+              <div className={`${t.fonts.mono} font-bold text-red-500 dark:text-red-400`}>
                 {physicalLimit}
               </div>
             </div>
             <div className="text-center">
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                 Mental
               </div>
-              <div className={`${theme.fonts.mono} font-bold text-blue-500 dark:text-blue-400`}>
+              <div className={`${t.fonts.mono} font-bold text-blue-500 dark:text-blue-400`}>
                 {mentalLimit}
               </div>
             </div>
             <div className="text-center">
-              <div className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                 Social
               </div>
-              <div className={`${theme.fonts.mono} font-bold text-pink-500 dark:text-pink-400`}>
+              <div className={`${t.fonts.mono} font-bold text-pink-500 dark:text-pink-400`}>
                 {socialLimit}
               </div>
             </div>
@@ -551,8 +558,8 @@ export function ActionPanel({
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "quick"
-                    ? `${theme.colors.accent} bg-background shadow-sm`
-                    : `${theme.colors.muted} hover:text-foreground`
+                    ? `${t.colors.accent} bg-background shadow-sm`
+                    : `${t.colors.muted} hover:text-foreground`
                 }
               `}
             >
@@ -565,8 +572,8 @@ export function ActionPanel({
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "combat"
-                    ? `${theme.colors.accent} bg-background shadow-sm`
-                    : `${theme.colors.muted} hover:text-foreground`
+                    ? `${t.colors.accent} bg-background shadow-sm`
+                    : `${t.colors.muted} hover:text-foreground`
                 }
                 ${isInCombat ? "ring-1 ring-amber-500/50" : ""}
               `}
@@ -583,8 +590,8 @@ export function ActionPanel({
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "advanced"
-                    ? `${theme.colors.accent} bg-background shadow-sm`
-                    : `${theme.colors.muted} hover:text-foreground`
+                    ? `${t.colors.accent} bg-background shadow-sm`
+                    : `${t.colors.muted} hover:text-foreground`
                 }
               `}
             >
@@ -597,15 +604,15 @@ export function ActionPanel({
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "history"
-                    ? `${theme.colors.accent} bg-background shadow-sm`
-                    : `${theme.colors.muted} hover:text-foreground`
+                    ? `${t.colors.accent} bg-background shadow-sm`
+                    : `${t.colors.muted} hover:text-foreground`
                 }
               `}
             >
               <History className="w-3 h-3" />
               History
               {combinedHistory.length > 0 && (
-                <span className={`text-[10px] ${theme.fonts.mono} px-1 rounded bg-muted`}>
+                <span className={`text-[10px] ${t.fonts.mono} px-1 rounded bg-muted`}>
                   {combinedHistory.length}
                 </span>
               )}
@@ -615,7 +622,7 @@ export function ActionPanel({
           {/* Quick Rolls Tab */}
           {activeTab === "quick" && (
             <div className="space-y-2">
-              <div className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}>
+              <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                 Common Tests
               </div>
               <div className="grid grid-cols-2 gap-2">
@@ -624,42 +631,42 @@ export function ActionPanel({
                   pool={pools.initiative}
                   context="Initiative (REA + INT)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
                 <QuickRollButton
                   label="Perception"
                   pool={pools.perception}
                   context="Perception (INT + Perception)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
                 <QuickRollButton
                   label="Composure"
                   pool={pools.composure}
                   context="Composure (CHA + WIL)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
                 <QuickRollButton
                   label="Judge Intent"
                   pool={pools.judgeIntentions}
                   context="Judge Intentions (CHA + INT)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
                 <QuickRollButton
                   label="Memory"
                   pool={pools.memory}
                   context="Memory (LOG + WIL)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
                 <QuickRollButton
                   label="Lift/Carry"
                   pool={pools.liftCarry}
                   context="Lift/Carry (BOD + STR)"
                   onClick={onOpenDiceRoller}
-                  theme={theme}
+                  theme={t}
                 />
               </div>
             </div>
@@ -671,18 +678,16 @@ export function ActionPanel({
               {/* Action Economy Display (when in combat) */}
               {isInCombat && actionEconomy && (
                 <div
-                  className={`p-2 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+                  className={`p-2 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
                 >
-                  <div
-                    className={`text-[10px] uppercase ${theme.fonts.mono} ${theme.colors.muted} mb-2`}
-                  >
+                  <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted} mb-2`}>
                     Actions Remaining
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1" title="Free Actions">
                       <span className="text-xs text-muted-foreground">F</span>
                       <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
                           actionEconomy.free > 0
                             ? "bg-emerald-500/20 text-emerald-500"
                             : "bg-muted text-muted-foreground"
@@ -694,7 +699,7 @@ export function ActionPanel({
                     <div className="flex items-center gap-1" title="Simple Actions">
                       <span className="text-xs text-muted-foreground">S</span>
                       <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
                           actionEconomy.simple > 0
                             ? "bg-blue-500/20 text-blue-500"
                             : "bg-muted text-muted-foreground"
@@ -706,7 +711,7 @@ export function ActionPanel({
                     <div className="flex items-center gap-1" title="Complex Actions">
                       <span className="text-xs text-muted-foreground">C</span>
                       <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${theme.fonts.mono} ${
+                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
                           actionEconomy.complex > 0
                             ? "bg-purple-500/20 text-purple-500"
                             : "bg-muted text-muted-foreground"
@@ -730,9 +735,7 @@ export function ActionPanel({
                   {/* Available Actions */}
                   {availableActions.length > 0 && (
                     <div className="space-y-2">
-                      <div
-                        className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
-                      >
+                      <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                         Available Actions
                       </div>
                       <div className="space-y-1">
@@ -762,7 +765,7 @@ export function ActionPanel({
                               isAvailable={canUse}
                               isInCombat={isInCombat}
                               isLoading={combatLoading}
-                              theme={theme}
+                              theme={t}
                             />
                           );
                         })}
@@ -774,7 +777,7 @@ export function ActionPanel({
                   {unavailableActions.length > 0 && (
                     <div className="space-y-2">
                       <div
-                        className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted} flex items-center gap-2`}
+                        className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted} flex items-center gap-2`}
                       >
                         <Lock className="w-3 h-3" />
                         Unavailable Actions
@@ -819,7 +822,7 @@ export function ActionPanel({
                                 {action.name}
                               </span>
                               <span
-                                className={`text-[10px] ${theme.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}
+                                className={`text-[10px] ${t.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}
                               >
                                 {typeLabels[actionType]}
                               </span>
@@ -828,7 +831,7 @@ export function ActionPanel({
                           );
                         })}
                       </div>
-                      <div className={`text-[10px] ${theme.colors.muted} italic`}>
+                      <div className={`text-[10px] ${t.colors.muted} italic`}>
                         Hover over an action to see requirements
                       </div>
                     </div>
@@ -839,9 +842,7 @@ export function ActionPanel({
                     <>
                       {/* Attack Actions */}
                       <div className="space-y-2">
-                        <div
-                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
-                        >
+                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                           Attack Actions
                         </div>
                         <div className="space-y-1">
@@ -857,7 +858,7 @@ export function ActionPanel({
                             isAvailable={canUseAction("complex")}
                             isInCombat={isInCombat}
                             isLoading={combatLoading}
-                            theme={theme}
+                            theme={t}
                           />
                           <CombatActionButton
                             label="Ranged Attack"
@@ -871,16 +872,14 @@ export function ActionPanel({
                             isAvailable={canUseAction("simple")}
                             isInCombat={isInCombat}
                             isLoading={combatLoading}
-                            theme={theme}
+                            theme={t}
                           />
                         </div>
                       </div>
 
                       {/* Defense Actions */}
                       <div className="space-y-2">
-                        <div
-                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
-                        >
+                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                           Defense Actions
                         </div>
                         <div className="space-y-1">
@@ -896,7 +895,7 @@ export function ActionPanel({
                             isAvailable={canUseAction("interrupt")}
                             isInCombat={isInCombat}
                             isLoading={combatLoading}
-                            theme={theme}
+                            theme={t}
                           />
                           <CombatActionButton
                             label="Block"
@@ -910,16 +909,14 @@ export function ActionPanel({
                             isAvailable={canUseAction("interrupt")}
                             isInCombat={isInCombat}
                             isLoading={combatLoading}
-                            theme={theme}
+                            theme={t}
                           />
                         </div>
                       </div>
 
                       {/* Resistance */}
                       <div className="space-y-2">
-                        <div
-                          className={`text-xs uppercase ${theme.fonts.mono} ${theme.colors.muted}`}
-                        >
+                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
                           Resistance
                         </div>
                         <div className="space-y-1">
@@ -935,7 +932,7 @@ export function ActionPanel({
                             isAvailable={true}
                             isInCombat={isInCombat}
                             isLoading={combatLoading}
-                            theme={theme}
+                            theme={t}
                           />
                         </div>
                       </div>
@@ -954,7 +951,7 @@ export function ActionPanel({
                     >
                       <ArrowLeft className="w-4 h-4" />
                     </Button>
-                    <span className={`text-sm font-medium ${theme.colors.heading}`}>
+                    <span className={`text-sm font-medium ${t.colors.heading}`}>
                       Select Target for {selectedAction.name}
                     </span>
                   </div>
@@ -962,7 +959,7 @@ export function ActionPanel({
                   {/* Target Selector */}
                   <TargetSelector
                     characterId={character.id}
-                    theme={theme}
+                    theme={t}
                     onTargetSelect={handleTargetSelect}
                     variant="inline"
                     selectedTargetId={selectedTargetId}
@@ -974,8 +971,8 @@ export function ActionPanel({
                     className={`
                       w-full flex items-center justify-center gap-2
                       px-3 py-2 rounded text-sm
-                      ${theme.components.card.wrapper} ${theme.components.card.border}
-                      ${theme.colors.muted} hover:text-foreground
+                      ${t.components.card.wrapper} ${t.components.card.border}
+                      ${t.colors.muted} hover:text-foreground
                       transition-colors
                     `}
                   >
@@ -1003,24 +1000,24 @@ export function ActionPanel({
                     >
                       <ArrowLeft className="w-4 h-4" />
                     </Button>
-                    <span className={`text-sm font-medium ${theme.colors.heading}`}>
+                    <span className={`text-sm font-medium ${t.colors.heading}`}>
                       Confirm Action
                     </span>
                   </div>
 
                   {/* Action Summary */}
                   <div
-                    className={`p-3 rounded ${theme.components.card.wrapper} ${theme.components.card.border}`}
+                    className={`p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
                   >
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                         {getActionIcon(selectedAction)}
                       </div>
                       <div>
-                        <div className={`font-medium ${theme.colors.heading}`}>
+                        <div className={`font-medium ${t.colors.heading}`}>
                           {selectedAction.name}
                         </div>
-                        <div className={`text-xs ${theme.colors.muted}`}>
+                        <div className={`text-xs ${t.colors.muted}`}>
                           {selectedAction.description}
                         </div>
                       </div>
@@ -1036,8 +1033,8 @@ export function ActionPanel({
 
                     {/* Dice Pool Preview */}
                     <div className="flex items-center justify-between p-2 rounded bg-muted/30">
-                      <span className={`text-sm ${theme.colors.muted}`}>Dice Pool:</span>
-                      <span className={`font-bold ${theme.fonts.mono} ${theme.colors.accent}`}>
+                      <span className={`text-sm ${t.colors.muted}`}>Dice Pool:</span>
+                      <span className={`font-bold ${t.fonts.mono} ${t.colors.accent}`}>
                         {calculateActionPool(selectedAction)}d6
                       </span>
                     </div>
@@ -1120,12 +1117,12 @@ export function ActionPanel({
             <div
               className={`
               flex items-center gap-2 p-2 rounded text-xs border
-              ${theme.components.badge.negative}
+              ${t.components.badge.negative}
             `}
             >
               <span>Wound Modifier:</span>
-              <span className={`${theme.fonts.mono} font-bold`}>{woundModifier}</span>
-              <span className={theme.colors.muted}>(applied to all tests)</span>
+              <span className={`${t.fonts.mono} font-bold`}>{woundModifier}</span>
+              <span className={t.colors.muted}>(applied to all tests)</span>
             </div>
           )}
         </div>
