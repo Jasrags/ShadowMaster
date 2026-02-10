@@ -18,6 +18,7 @@ import {
 } from "@/lib/rules";
 import { calculateLimit, calculateWoundModifier } from "@/lib/rules/qualities";
 import { ArrowLeft, Download, Pencil, Dice5, Printer, TrendingUp, Users, X } from "lucide-react";
+import { downloadCharacterJson } from "@/lib/utils";
 import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { Section } from "./components/Section";
 import { InteractiveConditionMonitor } from "./components/InteractiveConditionMonitor";
@@ -433,16 +434,7 @@ function CharacterSheet({
 
   const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
 
-  const handleExport = () => {
-    const dataStr =
-      "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(character, null, 2));
-    const downloadAnchorNode = document.createElement("a");
-    downloadAnchorNode.setAttribute("href", dataStr);
-    downloadAnchorNode.setAttribute("download", `${character.name || "character"}.json`);
-    document.body.appendChild(downloadAnchorNode);
-    downloadAnchorNode.click();
-    downloadAnchorNode.remove();
-  };
+  const handleExport = () => downloadCharacterJson(character);
 
   // Dice roller open helper
   const openDiceRoller = (pool: number, context?: string) => {

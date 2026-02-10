@@ -7,7 +7,8 @@ import { useAuth } from "@/lib/auth/AuthProvider";
 import { CharacterImportDialog } from "./components/CharacterImportDialog";
 import { StabilityShield } from "@/components/sync";
 import { BaseModalRoot, ModalBody, ModalFooter } from "@/components/ui";
-import { AlertTriangle, X } from "lucide-react";
+import { AlertTriangle, Download, X } from "lucide-react";
+import { downloadCharacterJson } from "@/lib/utils";
 
 // Extended character type with owner info for admin mode
 interface CharacterWithOwner extends Character {
@@ -343,6 +344,7 @@ type ViewMode = "grid" | "list";
 interface CharacterCardProps {
   character: CharacterWithOwner;
   onDeleteClick: (character: CharacterWithOwner) => void;
+  onExportClick: (character: CharacterWithOwner) => void;
   viewMode?: ViewMode;
   isAdminMode?: boolean;
 }
@@ -350,6 +352,7 @@ interface CharacterCardProps {
 function CharacterCard({
   character,
   onDeleteClick,
+  onExportClick,
   viewMode = "grid",
   isAdminMode = false,
 }: CharacterCardProps) {
@@ -357,6 +360,12 @@ function CharacterCard({
     e.preventDefault();
     e.stopPropagation();
     onDeleteClick(character);
+  };
+
+  const handleExportClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    onExportClick(character);
   };
 
   const cardClass = getArchetypeCardClass(character);
@@ -449,11 +458,18 @@ function CharacterCard({
               </div>
             </div>
 
-            {/* Date & Delete */}
+            {/* Date, Export & Delete */}
             <div className="flex items-center gap-3">
               <span className="text-xs text-muted-foreground hidden md:block font-mono">
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
+              <button
+                onClick={handleExportClick}
+                className="p-1.5 rounded text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/10 transition-colors opacity-0 group-hover:opacity-100"
+                aria-label={`Export ${character.name || "character"}`}
+              >
+                <Download className="w-4 h-4" />
+              </button>
               <button
                 onClick={handleDeleteClick}
                 className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
@@ -561,6 +577,13 @@ function CharacterCard({
               <span className="text-xs text-muted-foreground font-mono">
                 {new Date(character.updatedAt || character.createdAt).toLocaleDateString()}
               </span>
+              <button
+                onClick={handleExportClick}
+                className="p-1.5 rounded text-muted-foreground hover:text-emerald-500 hover:bg-emerald-500/10 transition-colors opacity-0 group-hover:opacity-100"
+                aria-label={`Export ${character.name || "character"}`}
+              >
+                <Download className="w-4 h-4" />
+              </button>
               <button
                 onClick={handleDeleteClick}
                 className="p-1.5 rounded text-muted-foreground hover:text-red-500 hover:bg-red-500/10 transition-colors opacity-0 group-hover:opacity-100"
@@ -753,6 +776,10 @@ export default function CharactersPage() {
 
   const handleDeleteClick = (character: CharacterWithOwner) => {
     setCharacterToDelete(character);
+  };
+
+  const handleExportClick = (character: CharacterWithOwner) => {
+    downloadCharacterJson(character);
   };
 
   const handleCloseDeleteModal = () => {
@@ -1071,6 +1098,7 @@ export default function CharactersPage() {
                       key={character.id}
                       character={character}
                       onDeleteClick={handleDeleteClick}
+                      onExportClick={handleExportClick}
                       viewMode="grid"
                       isAdminMode={isAdminMode}
                     />
@@ -1083,6 +1111,7 @@ export default function CharactersPage() {
                       key={character.id}
                       character={character}
                       onDeleteClick={handleDeleteClick}
+                      onExportClick={handleExportClick}
                       viewMode="list"
                       isAdminMode={isAdminMode}
                     />
