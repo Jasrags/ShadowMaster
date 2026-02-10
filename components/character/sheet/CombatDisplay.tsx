@@ -4,13 +4,13 @@ import { DisplayCard } from "./DisplayCard";
 import { Swords } from "lucide-react";
 import { CombatQuickReference } from "@/app/characters/[id]/components/CombatQuickReference";
 import type { Character } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 interface CombatDisplayProps {
   character: Character;
   woundModifier: number;
   physicalLimit: number;
-  theme: Theme;
+  theme?: Theme;
   onPoolSelect: (pool: number, context: string) => void;
 }
 
@@ -21,13 +21,14 @@ export function CombatDisplay({
   theme,
   onPoolSelect,
 }: CombatDisplayProps) {
+  const t = theme || THEMES[DEFAULT_THEME];
   return (
     <DisplayCard title="Combat" icon={<Swords className="h-4 w-4 text-zinc-400" />}>
       <CombatQuickReference
         character={character}
         woundModifier={woundModifier}
         physicalLimit={physicalLimit}
-        theme={theme}
+        theme={t}
         onPoolSelect={onPoolSelect}
       />
     </DisplayCard>

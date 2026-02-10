@@ -11,7 +11,6 @@ import { RulesetProvider, useRuleset, useMergedRuleset, useRulesetStatus } from 
 import { calculateLimit, calculateWoundModifier } from "@/lib/rules/qualities";
 import { ArrowLeft, Download, Pencil, Dice5, Printer, TrendingUp, Users, X } from "lucide-react";
 import { downloadCharacterJson } from "@/lib/utils";
-import { THEMES, DEFAULT_THEME, type Theme, type ThemeId } from "@/lib/themes";
 import { ActionPanel } from "./components/ActionPanel";
 import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
@@ -45,39 +44,6 @@ import {
 } from "@/components/character/sheet";
 
 // =============================================================================
-// THEME SELECTOR
-// =============================================================================
-
-function ThemeSelector({
-  currentTheme,
-  onSelect,
-}: {
-  currentTheme: ThemeId;
-  onSelect: (id: ThemeId) => void;
-}) {
-  return (
-    <div className="flex items-center gap-1 bg-muted/20 p-1 rounded-lg border border-border/50">
-      {Object.values(THEMES).map((theme) => (
-        <button
-          key={theme.id}
-          onClick={() => onSelect(theme.id)}
-          className={`
-            px-3 py-1.5 text-xs font-medium rounded-md transition-all
-            ${
-              currentTheme === theme.id
-                ? "bg-emerald-500 text-white shadow-sm"
-                : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-            }
-          `}
-        >
-          {theme.name}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-// =============================================================================
 // MAIN CHARACTER SHEET PAGE
 // =============================================================================
 
@@ -108,15 +74,7 @@ function CharacterSheet({
   const { ready, loading: rulesetLoading } = useRulesetStatus();
   const ruleset = useMergedRuleset();
 
-  // Theme State
-  const {
-    preferences: sheetPrefs,
-    updatePreference: updateSheetPref,
-    isLoading: prefsLoading,
-  } = useCharacterSheetPreferences(character.id);
-
-  const currentThemeId = sheetPrefs.theme;
-  const theme = THEMES[currentThemeId] || THEMES[DEFAULT_THEME];
+  const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
 
   // ActionPanel state
   const [actionPanelExpanded, setActionPanelExpanded] = useState(true);
@@ -126,10 +84,6 @@ function CharacterSheet({
       loadRuleset(character.editionCode);
     }
   }, [character.editionCode, loadRuleset]);
-
-  const handleThemeChange = (id: ThemeId) => {
-    updateSheetPref("theme", id);
-  };
 
   const handleToggleDiceRoller = useCallback(() => {
     const newValue = !showDiceRoller;
@@ -243,9 +197,7 @@ function CharacterSheet({
   };
 
   return (
-    <div
-      className={`character-sheet min-h-screen transition-colors duration-300 ${theme.colors.background} p-4 sm:p-6 lg:p-8`}
-    >
+    <div className="character-sheet min-h-screen transition-colors duration-300 bg-background p-4 sm:p-6 lg:p-8">
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
         <div className="flex items-center justify-between print-hidden">
@@ -275,7 +227,6 @@ function CharacterSheet({
 
         {/* Actions Bar */}
         <div className="flex items-center justify-end gap-2 mb-4 print-hidden">
-          <ThemeSelector currentTheme={currentThemeId} onSelect={handleThemeChange} />
           <Button
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
             onPress={() => window.print()}
@@ -287,7 +238,7 @@ function CharacterSheet({
             className="p-2 text-muted-foreground hover:text-foreground transition-colors"
             onPress={handleToggleDiceRoller}
           >
-            <Dice5 className={`w-6 h-6 ${showDiceRoller ? theme.colors.accent : ""}`} />
+            <Dice5 className={`w-6 h-6 ${showDiceRoller ? "text-emerald-400" : ""}`} />
           </Button>
           {character.status === "active" && (
             <>
@@ -319,12 +270,7 @@ function CharacterSheet({
 
         {/* Admin Actions Panel */}
         {isAdmin && (
-          <AdminActionsPanel
-            character={character}
-            isAdmin={isAdmin}
-            theme={theme}
-            onStatusChange={onRefresh}
-          />
+          <AdminActionsPanel character={character} isAdmin={isAdmin} onStatusChange={onRefresh} />
         )}
 
         {/* Character Header Card */}
@@ -343,7 +289,7 @@ function CharacterSheet({
         >
           <Modal
             className={({ isEntering, isExiting }) => `
-              w-full max-w-lg overflow-hidden rounded-xl border ${theme.colors.border} ${theme.colors.card} shadow-2xl
+              w-full max-w-lg overflow-hidden rounded-xl border border-border bg-card/80 backdrop-blur-sm shadow-2xl
               ${isEntering ? "animate-in zoom-in-95 duration-300" : ""}
               ${isExiting ? "animate-out zoom-out-95 duration-200" : ""}
             `}
@@ -351,10 +297,8 @@ function CharacterSheet({
             <Dialog className="outline-none">
               {({ close }) => (
                 <div className="flex flex-col">
-                  <div
-                    className={`flex items-center justify-between p-4 border-b ${theme.colors.border}`}
-                  >
-                    <Heading slot="title" className={`text-lg font-bold ${theme.colors.heading}`}>
+                  <div className="flex items-center justify-between p-4 border-b border-border">
+                    <Heading slot="title" className="text-lg font-bold text-foreground">
                       Dice Roller
                     </Heading>
                     <Button
@@ -411,7 +355,6 @@ function CharacterSheet({
               woundModifier={woundModifier}
               physicalMonitorMax={physicalMonitorMax}
               stunMonitorMax={stunMonitorMax}
-              theme={theme}
               readonly={character.status !== "draft" && character.status !== "active"}
               onDamageApplied={handleDamageApplied}
             />
@@ -420,7 +363,6 @@ function CharacterSheet({
               character={character}
               woundModifier={woundModifier}
               physicalLimit={physicalLimit}
-              theme={theme}
               onPoolSelect={(pool, context) => openDiceRoller(pool, context)}
             />
 
@@ -434,17 +376,12 @@ function CharacterSheet({
               isExpanded={actionPanelExpanded}
               onToggleExpand={() => setActionPanelExpanded(!actionPanelExpanded)}
               onOpenDiceRoller={(pool, context) => openDiceRoller(pool, context)}
-              theme={theme}
             />
 
             {/* Quick Combat Controls */}
-            <QuickCombatControls
-              character={character}
-              editionCode={character.editionCode}
-              theme={theme}
-            />
+            <QuickCombatControls character={character} editionCode={character.editionCode} />
 
-            <QuickNPCPanel theme={theme} />
+            <QuickNPCPanel />
           </div>
 
           {/* Middle Column - Skills & Powers */}
@@ -509,16 +446,11 @@ function CharacterSheet({
             {/* Inventory Management Panel */}
             <InventoryPanel
               character={character}
-              theme={theme}
               onUpdate={(updated) => setCharacter(updated)}
               showActions={character.status === "active"}
             />
 
-            <QualitiesDisplay
-              character={character}
-              theme={theme}
-              onUpdate={(updated) => setCharacter(updated)}
-            />
+            <QualitiesDisplay character={character} onUpdate={(updated) => setCharacter(updated)} />
 
             <GearDisplay gear={(character.gear || []).filter((item) => item.category !== "drug")} />
 

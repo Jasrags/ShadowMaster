@@ -29,7 +29,7 @@ import {
 } from "lucide-react";
 import { useCombatSession } from "@/lib/combat";
 import type { Character } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 interface QuickCombatControlsProps {
   /** Character data */
@@ -37,7 +37,7 @@ interface QuickCombatControlsProps {
   /** Edition code */
   editionCode: string;
   /** Current theme */
-  theme: Theme;
+  theme?: Theme;
   /** Callback when combat state changes */
   onCombatStateChange?: (isInCombat: boolean) => void;
 }
@@ -83,9 +83,10 @@ function rollInitiative(character: Character): {
 export function QuickCombatControls({
   character,
   editionCode,
-  theme,
+  theme: themeProp,
   onCombatStateChange,
 }: QuickCombatControlsProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   // Combat session context
   const {
     session,

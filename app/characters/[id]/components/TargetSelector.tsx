@@ -15,13 +15,13 @@ import { Button, Dialog, DialogTrigger, Modal, ModalOverlay, Heading } from "rea
 import { Target, X, Shield, Heart, AlertTriangle, User, Bot, Skull } from "lucide-react";
 import { useCombatSession } from "@/lib/combat";
 import type { CombatParticipant } from "@/lib/types";
-import type { Theme } from "@/lib/themes";
+import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
 
 interface TargetSelectorProps {
   /** Character ID (to exclude self from targets) */
   characterId: string;
   /** Current theme */
-  theme: Theme;
+  theme?: Theme;
   /** Callback when target is selected */
   onTargetSelect: (targetId: string, targetName: string) => void;
   /** Optional filter for valid target types */
@@ -74,10 +74,11 @@ interface TargetCardProps {
   participant: CombatParticipant;
   isSelected: boolean;
   onSelect: () => void;
-  theme: Theme;
+  theme?: Theme;
 }
 
-function TargetCard({ participant, isSelected, onSelect, theme }: TargetCardProps) {
+function TargetCard({ participant, isSelected, onSelect, theme: themeProp }: TargetCardProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   const isDefeated = participant.status === "out";
 
   return (
@@ -153,12 +154,13 @@ function TargetCard({ participant, isSelected, onSelect, theme }: TargetCardProp
 
 export function TargetSelector({
   characterId,
-  theme,
+  theme: themeProp,
   onTargetSelect,
   validTargetTypes,
   variant = "modal",
   selectedTargetId,
 }: TargetSelectorProps) {
+  const theme = themeProp || THEMES[DEFAULT_THEME];
   const { session, participant } = useCombatSession();
   const [isOpen, setIsOpen] = useState(false);
 
