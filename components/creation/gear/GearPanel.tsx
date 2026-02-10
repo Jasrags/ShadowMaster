@@ -128,6 +128,9 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     for (const gear of selectedGear) {
       grouped[getGearCategory(gear)].push(gear);
     }
+    Object.values(grouped).forEach((items) => {
+      items.sort((a, b) => a.name.localeCompare(b.name));
+    });
     return grouped;
   }, [selectedGear]);
 
