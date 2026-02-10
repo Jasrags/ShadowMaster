@@ -1,3 +1,5 @@
+export { BaseCard } from "./BaseCard";
+export type { BaseCardProps } from "./BaseCard";
 export { BudgetIndicator, LegacyBudgetIndicator } from "./BudgetIndicator";
 export { CardSkeleton } from "./CardSkeleton";
 export { CreationCard } from "./CreationCard";

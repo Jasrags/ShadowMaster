@@ -1,5 +1,12 @@
 "use client";
 
+/**
+ * @deprecated Use DisplayCard from @/components/character/sheet instead.
+ * This component uses the legacy theme system. New display components should
+ * use DisplayCard which follows the creation card styling (zinc/emerald palette).
+ * Existing usages will migrate incrementally in Phase 4.
+ */
+
 import React from "react";
 import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
 
