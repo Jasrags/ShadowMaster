@@ -4931,9 +4931,13 @@
                       "id": "home-ground-astral",
                       "type": "dice-pool-modifier",
                       "trigger": "astral-test",
-                      "target": { "category": "astral" },
+                      "target": {
+                        "category": "astral"
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 },
@@ -4946,9 +4950,13 @@
                       "id": "home-ground-social",
                       "type": "dice-pool-modifier",
                       "trigger": "skill-test",
-                      "target": { "skills": ["etiquette", "negotiation"] },
+                      "target": {
+                        "skills": ["etiquette", "negotiation"]
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 },
@@ -4961,9 +4969,13 @@
                       "id": "home-ground-matrix",
                       "type": "dice-pool-modifier",
                       "trigger": "matrix-action",
-                      "target": { "category": "matrix" },
+                      "target": {
+                        "category": "matrix"
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 },
@@ -4976,9 +4988,13 @@
                       "id": "home-ground-vehicle",
                       "type": "dice-pool-modifier",
                       "trigger": "vehicle-test",
-                      "target": { "category": "vehicle" },
+                      "target": {
+                        "category": "vehicle"
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 },
@@ -4991,9 +5007,13 @@
                       "id": "home-ground-stealth",
                       "type": "dice-pool-modifier",
                       "trigger": "skill-test",
-                      "target": { "skills": ["sneaking", "perception"] },
+                      "target": {
+                        "skills": ["sneaking", "perception"]
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 },
@@ -5006,9 +5026,13 @@
                       "id": "home-ground-leadership",
                       "type": "dice-pool-modifier",
                       "trigger": "skill-test",
-                      "target": { "skills": ["leadership", "intimidation"] },
+                      "target": {
+                        "skills": ["leadership", "intimidation"]
+                      },
                       "value": 2,
-                      "condition": { "location": "home-ground" }
+                      "condition": {
+                        "location": "home-ground"
+                      }
                     }
                   ]
                 }
@@ -7119,7 +7143,8 @@
               "ap": -4,
               "availability": 12,
               "cost": 4000,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 2.5
             },
             {
               "id": "extendable-baton",
@@ -7132,7 +7157,8 @@
               "ap": 0,
               "reach": 1,
               "accuracy": 5,
-              "wirelessBonus": "Readying is a Free Action instead of a Simple Action."
+              "wirelessBonus": "Readying is a Free Action instead of a Simple Action.",
+              "weight": 0.5
             },
             {
               "id": "forearm-snap-blades",
@@ -7145,7 +7171,8 @@
               "availability": 7,
               "cost": 200,
               "wirelessBonus": "Readying is a Free Action instead of a Simple Action.",
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.3
             },
             {
               "id": "katana",
@@ -7170,7 +7197,8 @@
               "damage": "(STR+1)P",
               "ap": -1,
               "availability": 0,
-              "cost": 10
+              "cost": 10,
+              "weight": 0.15
             },
             {
               "id": "knucks",
@@ -7180,7 +7208,8 @@
               "damage": "(STR+1)P",
               "availability": 2,
               "cost": 100,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.2
             },
             {
               "id": "monofilament-whip",
@@ -7193,7 +7222,8 @@
               "availability": 12,
               "cost": 10000,
               "legality": "forbidden",
-              "wirelessBonus": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy."
+              "wirelessBonus": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy.",
+              "weight": 0.3
             },
             {
               "id": "pole-arm",
@@ -7206,7 +7236,8 @@
               "ap": -2,
               "availability": 6,
               "cost": 1000,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3
             },
             {
               "id": "sap",
@@ -7216,7 +7247,8 @@
               "accuracy": 5,
               "damage": "(STR+2)P",
               "availability": 2,
-              "cost": 30
+              "cost": 30,
+              "weight": 0.3
             },
             {
               "id": "shock-gloves",
@@ -7229,7 +7261,8 @@
               "ap": -5,
               "reach": 0,
               "accuracy": 0,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.3
             },
             {
               "id": "staff",
@@ -7240,7 +7273,8 @@
               "reach": 2,
               "damage": "(STR+3)P",
               "availability": 3,
-              "cost": 100
+              "cost": 100,
+              "weight": 1.5
             },
             {
               "id": "stun-baton",
@@ -7254,7 +7288,8 @@
               "reach": 1,
               "accuracy": 4,
               "legality": "restricted",
-              "wirelessBonus": "Recharges by induction (1 charge per hour)."
+              "wirelessBonus": "Recharges by induction (1 charge per hour).",
+              "weight": 0.6
             },
             {
               "id": "survival-knife",
@@ -7267,7 +7302,8 @@
               "ap": -1,
               "reach": 0,
               "accuracy": 5,
-              "wirelessBonus": "Displays ARO of local maps, GPS position, and can make commcalls."
+              "wirelessBonus": "Displays ARO of local maps, GPS position, and can make commcalls.",
+              "weight": 0.3
             },
             {
               "id": "sword",
@@ -7280,7 +7316,8 @@
               "ap": -2,
               "reach": 1,
               "accuracy": 6,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 1.5
             },
             {
               "id": "telescoping-staff",
@@ -7292,7 +7329,8 @@
               "damage": "(STR+2)P",
               "availability": 4,
               "cost": 350,
-              "wirelessBonus": "Extending is a Free Action instead of a Simple Action."
+              "wirelessBonus": "Extending is a Free Action instead of a Simple Action.",
+              "weight": 1
             }
           ],
           "pistols": [
@@ -7309,7 +7347,8 @@
               "ammo": 16,
               "availability": 3,
               "cost": 200,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.6
             },
             {
               "id": "ares-light-fire-75",
@@ -7326,9 +7365,16 @@
               "cost": 1250,
               "legality": "forbidden",
               "builtInModifications": [
-                { "modificationId": "smartgun-internal", "mount": "internal" },
-                { "modificationId": "silencer-light-fire-75", "mount": "barrel" }
-              ]
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "silencer-light-fire-75",
+                  "mount": "barrel"
+                }
+              ],
+              "weight": 0.65
             },
             {
               "id": "ares-predator-v",
@@ -7366,7 +7412,8 @@
               "cost": 950,
               "skill": "exotic-ranged-weapon",
               "description": "Fires DMSO gel packs that deliver chemicals as Contact vector toxins. Uses Light Pistol ranges. Can accept top and underbarrel-mounted accessories.",
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.7
             },
             {
               "id": "ares-viper-slivergun",
@@ -7384,8 +7431,12 @@
               "legality": "forbidden",
               "allowedAmmoTypes": ["flechette-rounds"],
               "builtInModifications": [
-                { "modificationId": "silencer-suppressor", "mount": "barrel" }
-              ]
+                {
+                  "modificationId": "silencer-suppressor",
+                  "mount": "barrel"
+                }
+              ],
+              "weight": 1.1
             },
             {
               "id": "beretta-201t",
@@ -7401,7 +7452,13 @@
               "availability": 7,
               "cost": 210,
               "legality": "restricted",
-              "builtInModifications": [{ "modificationId": "stock-folding", "mount": "stock" }]
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                }
+              ],
+              "weight": 0.7
             },
             {
               "id": "browning-ultra-power",
@@ -7416,8 +7473,14 @@
               "ammo": 10,
               "availability": 4,
               "cost": 640,
-              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }],
-              "legality": "restricted"
+              "builtInModifications": [
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
+              "legality": "restricted",
+              "weight": 1.2
             },
             {
               "id": "colt-america-l36",
@@ -7432,7 +7495,8 @@
               "rc": 0,
               "ammo": 11,
               "accuracy": 7,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.6
             },
             {
               "id": "colt-government-2066",
@@ -7447,7 +7511,8 @@
               "ammo": 14,
               "availability": 7,
               "cost": 425,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 1.1
             },
             {
               "id": "defiance-ex-shocker",
@@ -7461,7 +7526,8 @@
               "rc": 0,
               "ammo": 4,
               "availability": 0,
-              "cost": 250
+              "cost": 250,
+              "weight": 0.5
             },
             {
               "id": "fichetti-pain-inducer",
@@ -7478,7 +7544,8 @@
               "skill": "exotic-ranged-weapon",
               "description": "Microwave weapon. Toxin attack: Power 8, Immediate, resist with Body + Willpower. If modified Power exceeds Mental limit, target must flee. Uses SMG ranges. Can take top and underbarrel accessories.",
               "wirelessBonus": "Recharges by induction at 1 charge per hour.",
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.8
             },
             {
               "id": "fichetti-security-600",
@@ -7495,9 +7562,16 @@
               "accuracy": 6,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "stock-folding", "mount": "stock" },
-                { "modificationId": "laser-sight", "mount": "top" }
-              ]
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
+              "weight": 0.7
             },
             {
               "id": "fichetti-tiffani-needler",
@@ -7514,7 +7588,8 @@
               "cost": 1000,
               "legality": "restricted",
               "wirelessBonus": "You can change the color of the Tiffani Needler with a Simple Action.",
-              "allowedAmmoTypes": ["flechette-rounds"]
+              "allowedAmmoTypes": ["flechette-rounds"],
+              "weight": 0.3
             },
             {
               "id": "parashield-dart-pistol",
@@ -7532,7 +7607,8 @@
               "description": "Industry standard dart pistol. Fires injection darts with narcoject or other payload. Uses Heavy Pistol ranges. Can take top-mounted accessories only.",
               "wirelessBonus": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1).",
               "excludedMounts": ["barrel", "under"],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.8
             },
             {
               "id": "parashield-dart-rifle",
@@ -7555,7 +7631,8 @@
                   "mount": "top"
                 }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3.5
             },
             {
               "id": "remington-roomsweeper",
@@ -7570,7 +7647,8 @@
               "rc": 0,
               "ammo": 8,
               "accuracy": 4,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 1.2
             },
             {
               "id": "ruger-super-warhawk",
@@ -7585,7 +7663,8 @@
               "rc": 0,
               "ammo": 6,
               "accuracy": 5,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 1.3
             },
             {
               "id": "streetline-special",
@@ -7601,7 +7680,8 @@
               "ammo": 6,
               "accuracy": 4,
               "legality": "restricted",
-              "madDetectionModifier": -2
+              "madDetectionModifier": -2,
+              "weight": 0.25
             },
             {
               "id": "taurus-omni-6",
@@ -7617,7 +7697,13 @@
               "availability": 3,
               "cost": 300,
               "legality": "restricted",
-              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }]
+              "builtInModifications": [
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
+              "weight": 0.7
             },
             {
               "id": "walther-palm-pistol",
@@ -7632,7 +7718,8 @@
               "ammo": 2,
               "availability": 4,
               "cost": 180,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 0.2
             },
             {
               "id": "yamaha-pulsar",
@@ -7646,7 +7733,8 @@
               "rc": 0,
               "ammo": 4,
               "availability": 0,
-              "cost": 180
+              "cost": 180,
+              "weight": 0.5
             }
           ],
           "smgs": [
@@ -7664,10 +7752,18 @@
               "ammo": 40,
               "accuracy": 5,
               "builtInModifications": [
-                { "modificationId": "smartgun-internal", "mount": "internal" },
-                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 }
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "gas-vent-system",
+                  "mount": "barrel",
+                  "rating": 2
+                }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 1.5
             },
             {
               "id": "ceska-black-scorpion",
@@ -7683,7 +7779,13 @@
               "availability": 6,
               "cost": 270,
               "legality": "restricted",
-              "builtInModifications": [{ "modificationId": "stock-folding", "mount": "stock" }]
+              "builtInModifications": [
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                }
+              ],
+              "weight": 1.3
             },
             {
               "id": "colt-cobra-tz-120",
@@ -7700,10 +7802,21 @@
               "cost": 660,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "stock-folding", "mount": "stock" },
-                { "modificationId": "laser-sight", "mount": "top" },
-                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 }
-              ]
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                },
+                {
+                  "modificationId": "gas-vent-system",
+                  "mount": "barrel",
+                  "rating": 2
+                }
+              ],
+              "weight": 2.5
             },
             {
               "id": "fn-p93-praetor",
@@ -7720,9 +7833,16 @@
               "cost": 900,
               "legality": "forbidden",
               "builtInModifications": [
-                { "modificationId": "stock-rigid", "mount": "stock" },
-                { "modificationId": "flashlight", "mount": "under" }
-              ]
+                {
+                  "modificationId": "stock-rigid",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "flashlight",
+                  "mount": "under"
+                }
+              ],
+              "weight": 3
             },
             {
               "id": "hk-227",
@@ -7739,10 +7859,20 @@
               "accuracy": 5,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "stock-retractable", "mount": "stock" },
-                { "modificationId": "smartgun-internal", "mount": "internal" },
-                { "modificationId": "silencer-suppressor", "mount": "barrel" }
-              ]
+                {
+                  "modificationId": "stock-retractable",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "silencer-suppressor",
+                  "mount": "barrel"
+                }
+              ],
+              "weight": 2.7
             },
             {
               "id": "ingram-smartgun-x",
@@ -7759,10 +7889,21 @@
               "accuracy": 4,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "gas-vent-system", "mount": "barrel", "rating": 2 },
-                { "modificationId": "smartgun-internal", "mount": "internal" },
-                { "modificationId": "silencer-suppressor", "mount": "barrel" }
-              ]
+                {
+                  "modificationId": "gas-vent-system",
+                  "mount": "barrel",
+                  "rating": 2
+                },
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "silencer-suppressor",
+                  "mount": "barrel"
+                }
+              ],
+              "weight": 2.5
             },
             {
               "id": "sck-model-100",
@@ -7779,9 +7920,16 @@
               "accuracy": 5,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "smartgun-internal", "mount": "internal" },
-                { "modificationId": "stock-folding", "mount": "stock" }
-              ]
+                {
+                  "modificationId": "smartgun-internal",
+                  "mount": "internal"
+                },
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                }
+              ],
+              "weight": 2.8
             },
             {
               "id": "steyr-tmp",
@@ -7797,7 +7945,13 @@
               "availability": 8,
               "cost": 350,
               "legality": "restricted",
-              "builtInModifications": [{ "modificationId": "laser-sight", "mount": "top" }]
+              "builtInModifications": [
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
+              "weight": 1.4
             },
             {
               "id": "uzi-iv",
@@ -7814,9 +7968,16 @@
               "accuracy": 4,
               "legality": "restricted",
               "builtInModifications": [
-                { "modificationId": "stock-folding", "mount": "stock" },
-                { "modificationId": "laser-sight", "mount": "top" }
-              ]
+                {
+                  "modificationId": "stock-folding",
+                  "mount": "stock"
+                },
+                {
+                  "modificationId": "laser-sight",
+                  "mount": "top"
+                }
+              ],
+              "weight": 2.2
             }
           ],
           "rifles": [
@@ -7833,7 +7994,8 @@
               "rc": 0,
               "ammo": 38,
               "accuracy": 5,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3.5
             },
             {
               "id": "ares-alpha",
@@ -7890,7 +8052,8 @@
                 }
               ],
               "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 4.5
             },
             {
               "id": "armtech-mgl-12",
@@ -7915,7 +8078,8 @@
                 "thermal-smoke-grenade"
               ],
               "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 5.5
             },
             {
               "id": "aztechnology-striker",
@@ -7936,7 +8100,8 @@
               ],
               "description": "Extremely light disposable launcher. Perfect for delivering a punch and making a quick getaway.",
               "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 3
             },
             {
               "id": "colt-m23",
@@ -7951,7 +8116,8 @@
               "rc": 0,
               "ammo": 40,
               "accuracy": 4,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3.2
             },
             {
               "id": "fn-har",
@@ -7977,7 +8143,8 @@
                   "rating": 2
                 }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 4
             },
             {
               "id": "ingram-valiant",
@@ -8007,7 +8174,8 @@
                   "rating": 2
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 8.5
             },
             {
               "id": "krime-cannon",
@@ -8024,7 +8192,8 @@
               "cost": 21000,
               "allowedAmmoTypes": ["assault-cannon-rounds"],
               "description": "Cheap heavy weapon big on attitude and firepower. Comes standard with troll modification.",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 15
             },
             {
               "id": "onotari-interceptor",
@@ -8051,7 +8220,8 @@
                 }
               ],
               "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 9
             },
             {
               "id": "panther-xxl",
@@ -8073,7 +8243,8 @@
                   "mount": "internal"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 18
             },
             {
               "id": "rpk-hmg",
@@ -8095,7 +8266,8 @@
                   "mount": "under"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 25
             },
             {
               "id": "stoner-ares-m202",
@@ -8110,7 +8282,8 @@
               "ammo": 50,
               "availability": 12,
               "cost": 7000,
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 12
             },
             {
               "id": "yamaha-raiden",
@@ -8135,7 +8308,8 @@
                   "mount": "barrel"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 4.2
             }
           ],
           "shotguns": [
@@ -8152,7 +8326,8 @@
               "rc": 0,
               "ammo": 5,
               "accuracy": 4,
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3.5
             },
             {
               "id": "enfield-as-7",
@@ -8175,7 +8350,8 @@
                   "mount": "top"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 4
             },
             {
               "id": "pjss-model-55",
@@ -8197,7 +8373,8 @@
                   "mount": "stock"
                 }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 3.2
             }
           ],
           "sniperRifles": [
@@ -8224,7 +8401,8 @@
                   "mount": "top"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 5.5
             },
             {
               "id": "cavalier-arms-crockett-ebr",
@@ -8249,7 +8427,8 @@
                   "mount": "top"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 5
             },
             {
               "id": "ranger-arms-sm-5",
@@ -8279,7 +8458,8 @@
                   "mount": "stock"
                 }
               ],
-              "legality": "forbidden"
+              "legality": "forbidden",
+              "weight": 4.5
             },
             {
               "id": "remington-950",
@@ -8301,7 +8481,8 @@
                   "mount": "top"
                 }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 4
             },
             {
               "id": "ruger-101",
@@ -8326,7 +8507,8 @@
                   "mount": "stock"
                 }
               ],
-              "legality": "restricted"
+              "legality": "restricted",
+              "weight": 4.2
             }
           ],
           "throwingWeapons": [
@@ -8342,7 +8524,8 @@
               "accuracy": "physical",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.05
             },
             {
               "id": "throwing-knife",
@@ -8356,7 +8539,8 @@
               "accuracy": "physical",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.15
             }
           ],
           "bows": [
@@ -8376,7 +8560,8 @@
               "cost": "Rating*100",
               "description": "Bows have a rating from 1-6. Damage is (Rating + 2)P, AP is -(Rating / 4 rounded down). A character needs minimum STR equal to the bow's rating to use it.",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 1
             }
           ],
           "crossbows": [
@@ -8392,7 +8577,8 @@
               "availability": 2,
               "cost": 300,
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 1.5
             },
             {
               "id": "medium-crossbow",
@@ -8407,7 +8593,8 @@
               "cost": 500,
               "legality": "restricted",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 2.5
             },
             {
               "id": "heavy-crossbow",
@@ -8422,7 +8609,8 @@
               "cost": 1000,
               "legality": "restricted",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 4
             }
           ],
           "projectileAmmunition": [
@@ -8438,7 +8626,8 @@
               "cost": "Rating*2",
               "description": "Standard arrows for bows. Rating must match bow rating.",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 0.03
             },
             {
               "id": "injection-arrow",
@@ -8453,7 +8642,8 @@
               "legality": "restricted",
               "description": "Hollow arrows designed to deliver drugs or toxins on impact.",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 0.04
             },
             {
               "id": "bolt",
@@ -8464,7 +8654,8 @@
               "cost": 5,
               "description": "Standard bolts for crossbows.",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 0.04
             },
             {
               "id": "injection-bolt",
@@ -8476,7 +8667,8 @@
               "legality": "restricted",
               "description": "Hollow bolts designed to deliver drugs or toxins on impact.",
               "page": 424,
-              "source": "Core"
+              "source": "Core",
+              "weight": 0.05
             }
           ],
           "grenades": [
@@ -8492,7 +8684,8 @@
               "availability": 18,
               "legality": "forbidden",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 5
             },
             {
               "id": "flash-bang-grenade",
@@ -8506,7 +8699,8 @@
               "blast": "10m radius",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "flash-pak",
@@ -8518,7 +8712,8 @@
               "blast": "Special",
               "availability": 4,
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.3
             },
             {
               "id": "fragmentation-grenade",
@@ -8532,7 +8727,8 @@
               "blast": "-1/m",
               "legality": "forbidden",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "fragmentation-rocket",
@@ -8546,7 +8742,8 @@
               "availability": 12,
               "legality": "forbidden",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 4.5
             },
             {
               "id": "gas",
@@ -8558,7 +8755,8 @@
               "blast": "10m Radius",
               "availability": 2,
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "gas-grenade-cs-tear",
@@ -8572,7 +8770,8 @@
               "blast": "10m radius",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "high-explosive-grenade",
@@ -8586,7 +8785,8 @@
               "blast": "-2/m",
               "legality": "forbidden",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "high-explosive-rocket",
@@ -8600,7 +8800,8 @@
               "availability": 18,
               "legality": "forbidden",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 5
             },
             {
               "id": "smoke-grenade",
@@ -8614,7 +8815,8 @@
               "blast": "10m radius",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             },
             {
               "id": "thermal-smoke-grenade",
@@ -8628,7 +8830,8 @@
               "blast": "10m radius",
               "legality": "restricted",
               "stackable": true,
-              "consumable": true
+              "consumable": true,
+              "weight": 0.4
             }
           ]
         },
@@ -8642,7 +8845,8 @@
             "capacity": 4,
             "cost": 200,
             "availability": 0,
-            "description": "Synthleather jacket or duster. Never goes out of style and offers a modicum of protection."
+            "description": "Synthleather jacket or duster. Never goes out of style and offers a modicum of protection.",
+            "weight": 1.5
           },
           {
             "id": "actioneer-business-clothes",
@@ -8653,7 +8857,8 @@
             "capacity": 8,
             "cost": 1500,
             "availability": 8,
-            "description": "High-end business attire with integrated armor weave for the corporate shadowrunner."
+            "description": "High-end business attire with integrated armor weave for the corporate shadowrunner.",
+            "weight": 2
           },
           {
             "id": "armor-clothing",
@@ -8664,7 +8869,8 @@
             "capacity": 6,
             "cost": 450,
             "availability": 2,
-            "description": "Fashionable clothing with hidden armor weave."
+            "description": "Fashionable clothing with hidden armor weave.",
+            "weight": 1.5
           },
           {
             "id": "armor-jacket",
@@ -8697,7 +8903,8 @@
             "armorModifier": true,
             "cost": 1200,
             "availability": 12,
-            "legality": "restricted"
+            "legality": "restricted",
+            "weight": 5
           },
           {
             "id": "chameleon-suit",
@@ -8708,7 +8915,8 @@
             "cost": 1700,
             "availability": 10,
             "description": "Thermoptic camouflage suit with ruthenium coating.",
-            "legality": "restricted"
+            "legality": "restricted",
+            "weight": 3
           },
           {
             "id": "clothing",
@@ -8719,7 +8927,8 @@
             "capacity": 0,
             "cost": 50,
             "availability": 0,
-            "description": "Standard clothing. Cost varies from 20¥ for vending machine flats to 100,000¥+ for high fashion. Use custom clothing for specific items."
+            "description": "Standard clothing. Cost varies from 20¥ for vending machine flats to 100,000¥+ for high fashion. Use custom clothing for specific items.",
+            "weight": 0.5
           },
           {
             "id": "electrochromatic-tshirt",
@@ -8732,7 +8941,8 @@
             "availability": 0,
             "description": "Color-changing T-shirt using electrochromatic fabric. Can shift colors and patterns on command.",
             "page": 437,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           },
           {
             "id": "full-body-armor",
@@ -8755,7 +8965,8 @@
             "armorModifier": true,
             "cost": 500,
             "availability": 0,
-            "parentArmor": "full-body-armor"
+            "parentArmor": "full-body-armor",
+            "weight": 1.5
           },
           {
             "id": "helmet",
@@ -8766,7 +8977,8 @@
             "armorModifier": true,
             "cost": 100,
             "availability": 2,
-            "description": "Standard protective helmet."
+            "description": "Standard protective helmet.",
+            "weight": 1
           },
           {
             "id": "lined-coat",
@@ -8776,7 +8988,8 @@
             "capacity": 9,
             "cost": 900,
             "availability": 4,
-            "description": "Long armored coat popular with street samurai."
+            "description": "Long armored coat popular with street samurai.",
+            "weight": 2.5
           },
           {
             "id": "riot-shield",
@@ -8787,7 +9000,8 @@
             "armorModifier": true,
             "cost": 1000,
             "availability": 10,
-            "legality": "restricted"
+            "legality": "restricted",
+            "weight": 4.5
           },
           {
             "id": "urban-explorer-jumpsuit",
@@ -8797,7 +9011,8 @@
             "capacity": 9,
             "cost": 650,
             "availability": 8,
-            "description": "Full-body jumpsuit with integrated armor."
+            "description": "Full-body jumpsuit with integrated armor.",
+            "weight": 2
           },
           {
             "id": "urban-explorer-jumpsuit-helmet",
@@ -8808,7 +9023,8 @@
             "armorModifier": true,
             "cost": 100,
             "availability": 0,
-            "parentArmor": "urban-explorer-jumpsuit"
+            "parentArmor": "urban-explorer-jumpsuit",
+            "weight": 1
           },
           {
             "id": "full-body-armor-chemical-seal",
@@ -8924,7 +9140,8 @@
             "deviceRating": 1,
             "description": "Basic commlink for the budget-conscious.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "sony-emperor",
@@ -8935,7 +9152,8 @@
             "deviceRating": 2,
             "description": "Entry-level consumer commlink.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "renraku-sensei",
@@ -8946,7 +9164,8 @@
             "deviceRating": 3,
             "description": "Popular mid-range commlink.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "erika-elite",
@@ -8957,7 +9176,8 @@
             "deviceRating": 4,
             "description": "High-end consumer commlink.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "hermes-ikon",
@@ -8968,7 +9188,8 @@
             "deviceRating": 5,
             "description": "Executive-class commlink.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "transys-avalon",
@@ -8979,7 +9200,8 @@
             "deviceRating": 6,
             "description": "Top-of-the-line luxury commlink.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "fairlight-caliban",
@@ -8990,7 +9212,8 @@
             "deviceRating": 7,
             "description": "Cutting-edge personal computing.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "sim-module",
@@ -9035,7 +9258,8 @@
             "programs": 1,
             "description": "Entry-level deck for aspiring deckers.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "microdeck-summit",
@@ -9054,7 +9278,8 @@
             "programs": 1,
             "description": "Budget deck with decent specs.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "microtronica-azteca-200",
@@ -9073,7 +9298,8 @@
             "programs": 2,
             "description": "Solid mid-range deck.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "hermes-chariot",
@@ -9092,7 +9318,8 @@
             "programs": 2,
             "description": "Popular with professional deckers.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "novatech-navigator",
@@ -9111,7 +9338,8 @@
             "programs": 3,
             "description": "High-performance deck for serious work.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "renraku-tsurugi",
@@ -9130,7 +9358,8 @@
             "programs": 3,
             "description": "Corporate-quality deck.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "sony-ciy-720",
@@ -9149,7 +9378,8 @@
             "programs": 4,
             "description": "High-end deck with balanced attributes.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "shiawase-cyber-5",
@@ -9168,7 +9398,8 @@
             "programs": 5,
             "description": "Elite deck for top-tier deckers.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "fairlight-excalibur",
@@ -9187,7 +9418,8 @@
             "programs": 6,
             "description": "The legendary Excalibur - the best money can buy.",
             "page": 438,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           }
         ],
         "electronics": [
@@ -9225,7 +9457,8 @@
                 "cost": 1200,
                 "availability": 18
               }
-            }
+            },
+            "weight": 2
           },
           {
             "id": "binoculars",
@@ -9238,10 +9471,23 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0, "capacity": 1 },
-              "2": { "cost": 100, "availability": 0, "capacity": 2 },
-              "3": { "cost": 150, "availability": 0, "capacity": 3 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0,
+                "capacity": 3
+              }
+            },
+            "weight": 0.5
           },
           {
             "id": "binoculars-optical",
@@ -9251,7 +9497,8 @@
             "availability": 0,
             "description": "Simple optical binoculars without electronic enhancements.",
             "page": 444,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.4
           },
           {
             "id": "bug-scanner",
@@ -9287,7 +9534,8 @@
                 "cost": 600,
                 "availability": 6
               }
-            }
+            },
+            "weight": 0.3
           },
           {
             "id": "camera",
@@ -9300,13 +9548,38 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 100, "availability": 0, "capacity": 1 },
-              "2": { "cost": 200, "availability": 0, "capacity": 2 },
-              "3": { "cost": 300, "availability": 0, "capacity": 3 },
-              "4": { "cost": 400, "availability": 0, "capacity": 4 },
-              "5": { "cost": 500, "availability": 0, "capacity": 5 },
-              "6": { "cost": 600, "availability": 0, "capacity": 6 }
-            }
+              "1": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 200,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 300,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 0,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 500,
+                "availability": 0,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 600,
+                "availability": 0,
+                "capacity": 6
+              }
+            },
+            "weight": 0.2
           },
           {
             "id": "data-tap",
@@ -9317,7 +9590,8 @@
             "legality": "restricted",
             "description": "Physical tap for wired connections.",
             "page": 441,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "headjammer",
@@ -9331,13 +9605,32 @@
             "page": 441,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 150, "availability": 1 },
-              "2": { "cost": 300, "availability": 2 },
-              "3": { "cost": 450, "availability": 3 },
-              "4": { "cost": 600, "availability": 4 },
-              "5": { "cost": 750, "availability": 5 },
-              "6": { "cost": 900, "availability": 6 }
-            }
+              "1": {
+                "cost": 150,
+                "availability": 1
+              },
+              "2": {
+                "cost": 300,
+                "availability": 2
+              },
+              "3": {
+                "cost": 450,
+                "availability": 3
+              },
+              "4": {
+                "cost": 600,
+                "availability": 4
+              },
+              "5": {
+                "cost": 750,
+                "availability": 5
+              },
+              "6": {
+                "cost": 900,
+                "availability": 6
+              }
+            },
+            "weight": 0.15
           },
           {
             "id": "micro-transceiver",
@@ -9347,7 +9640,8 @@
             "availability": 2,
             "description": "Tiny radio transceiver for short-range communication.",
             "page": 441,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "tag-eraser",
@@ -9358,7 +9652,8 @@
             "legality": "restricted",
             "description": "Erases RFID tags within a few centimeters.",
             "page": 441,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.2
           },
           {
             "id": "white-noise-generator",
@@ -9371,13 +9666,32 @@
             "page": 441,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 1 },
-              "2": { "cost": 100, "availability": 2 },
-              "3": { "cost": 150, "availability": 3 },
-              "4": { "cost": 200, "availability": 4 },
-              "5": { "cost": 250, "availability": 5 },
-              "6": { "cost": 300, "availability": 6 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 6
+              }
+            },
+            "weight": 0.3
           },
           {
             "id": "directional-jammer",
@@ -9413,7 +9727,8 @@
                 "cost": 1200,
                 "availability": 12
               }
-            }
+            },
+            "weight": 1
           },
           {
             "id": "directional-mic",
@@ -9447,7 +9762,8 @@
                 "cost": 300,
                 "availability": 4
               }
-            }
+            },
+            "weight": 0.4
           },
           {
             "id": "goggles",
@@ -9460,13 +9776,38 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0, "capacity": 1 },
-              "2": { "cost": 100, "availability": 0, "capacity": 2 },
-              "3": { "cost": 150, "availability": 0, "capacity": 3 },
-              "4": { "cost": 200, "availability": 0, "capacity": 4 },
-              "5": { "cost": 250, "availability": 0, "capacity": 5 },
-              "6": { "cost": 300, "availability": 0, "capacity": 6 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0,
+                "capacity": 6
+              }
+            },
+            "weight": 0.15
           },
           {
             "id": "contacts",
@@ -9479,10 +9820,23 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 200, "availability": 6, "capacity": 1 },
-              "2": { "cost": 400, "availability": 6, "capacity": 2 },
-              "3": { "cost": 600, "availability": 6, "capacity": 3 }
-            }
+              "1": {
+                "cost": 200,
+                "availability": 6,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 400,
+                "availability": 6,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 600,
+                "availability": 6,
+                "capacity": 3
+              }
+            },
+            "weight": 0.01
           },
           {
             "id": "glasses",
@@ -9495,11 +9849,28 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 100, "availability": 0, "capacity": 1 },
-              "2": { "cost": 200, "availability": 0, "capacity": 2 },
-              "3": { "cost": 300, "availability": 0, "capacity": 3 },
-              "4": { "cost": 400, "availability": 0, "capacity": 4 }
-            }
+              "1": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 200,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 300,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 0,
+                "capacity": 4
+              }
+            },
+            "weight": 0.05
           },
           {
             "id": "endoscope",
@@ -9510,7 +9881,8 @@
             "capacity": 1,
             "description": "Flexible fiber-optic camera for looking around corners or into tight spaces.",
             "page": 444,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           },
           {
             "id": "mage-sight-goggles",
@@ -9521,7 +9893,8 @@
             "legality": "restricted",
             "description": "Goggles that allow non-Awakened users to see astral forms with an Assensing Test.",
             "page": 444,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.2
           },
           {
             "id": "headphones",
@@ -9534,13 +9907,38 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0, "capacity": 1 },
-              "2": { "cost": 100, "availability": 0, "capacity": 2 },
-              "3": { "cost": 150, "availability": 0, "capacity": 3 },
-              "4": { "cost": 200, "availability": 0, "capacity": 4 },
-              "5": { "cost": 250, "availability": 0, "capacity": 5 },
-              "6": { "cost": 300, "availability": 0, "capacity": 6 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0,
+                "capacity": 6
+              }
+            },
+            "weight": 0.2
           },
           {
             "id": "laser-microphone",
@@ -9556,14 +9954,39 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 100, "availability": 6, "capacity": 1 },
-              "2": { "cost": 200, "availability": 6, "capacity": 2 },
-              "3": { "cost": 300, "availability": 6, "capacity": 3 },
-              "4": { "cost": 400, "availability": 6, "capacity": 4 },
-              "5": { "cost": 500, "availability": 6, "capacity": 5 },
-              "6": { "cost": 600, "availability": 6, "capacity": 6 }
+              "1": {
+                "cost": 100,
+                "availability": 6,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 200,
+                "availability": 6,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 300,
+                "availability": 6,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 6,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 500,
+                "availability": 6,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6,
+                "capacity": 6
+              }
             },
-            "restrictions": ["no-spatial-recognizer"]
+            "restrictions": ["no-spatial-recognizer"],
+            "weight": 0.5
           },
           {
             "id": "directional-microphone",
@@ -9578,13 +10001,38 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 4, "capacity": 1 },
-              "2": { "cost": 100, "availability": 4, "capacity": 2 },
-              "3": { "cost": 150, "availability": 4, "capacity": 3 },
-              "4": { "cost": 200, "availability": 4, "capacity": 4 },
-              "5": { "cost": 250, "availability": 4, "capacity": 5 },
-              "6": { "cost": 300, "availability": 4, "capacity": 6 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 4,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 4,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 4,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 4,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 4,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 4,
+                "capacity": 6
+              }
+            },
+            "weight": 0.4
           },
           {
             "id": "ear-buds",
@@ -9597,10 +10045,23 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0, "capacity": 1 },
-              "2": { "cost": 100, "availability": 0, "capacity": 2 },
-              "3": { "cost": 150, "availability": 0, "capacity": 3 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0,
+                "capacity": 3
+              }
+            },
+            "weight": 0.02
           },
           {
             "id": "omni-directional-microphone",
@@ -9613,13 +10074,38 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0, "capacity": 1 },
-              "2": { "cost": 100, "availability": 0, "capacity": 2 },
-              "3": { "cost": 150, "availability": 0, "capacity": 3 },
-              "4": { "cost": 200, "availability": 0, "capacity": 4 },
-              "5": { "cost": 250, "availability": 0, "capacity": 5 },
-              "6": { "cost": 300, "availability": 0, "capacity": 6 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0,
+                "capacity": 4
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0,
+                "capacity": 5
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0,
+                "capacity": 6
+              }
+            },
+            "weight": 0.1
           },
           {
             "id": "micro-camera",
@@ -9628,7 +10114,8 @@
             "cost": 100,
             "availability": 0,
             "capacity": 1,
-            "description": "Miniature camera for covert surveillance."
+            "description": "Miniature camera for covert surveillance.",
+            "weight": 0.02
           },
           {
             "id": "monocle",
@@ -9641,11 +10128,28 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 120, "availability": 0, "capacity": 1 },
-              "2": { "cost": 240, "availability": 0, "capacity": 2 },
-              "3": { "cost": 360, "availability": 0, "capacity": 3 },
-              "4": { "cost": 480, "availability": 0, "capacity": 4 }
-            }
+              "1": {
+                "cost": 120,
+                "availability": 0,
+                "capacity": 1
+              },
+              "2": {
+                "cost": 240,
+                "availability": 0,
+                "capacity": 2
+              },
+              "3": {
+                "cost": 360,
+                "availability": 0,
+                "capacity": 3
+              },
+              "4": {
+                "cost": 480,
+                "availability": 0,
+                "capacity": 4
+              }
+            },
+            "weight": 0.03
           },
           {
             "id": "omni-directional-mic",
@@ -9679,7 +10183,8 @@
                 "cost": 300,
                 "availability": 0
               }
-            }
+            },
+            "weight": 0.1
           },
           {
             "id": "subvocal-mic",
@@ -9690,7 +10195,8 @@
             "availability": 4,
             "description": "Picks up subvocalized speech.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           }
         ],
         "accessories": [
@@ -9702,7 +10208,8 @@
             "cost": 150,
             "description": "Gloves for interacting with AR interfaces.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.15
           },
           {
             "id": "biometric-reader",
@@ -9713,7 +10220,8 @@
             "availability": 4,
             "description": "Scans and verifies biometric data.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.2
           },
           {
             "id": "electronic-paper",
@@ -9723,7 +10231,8 @@
             "cost": 5,
             "description": "Flexible display sheet.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.01
           },
           {
             "id": "printer",
@@ -9733,7 +10242,8 @@
             "cost": 25,
             "description": "Standard document printer.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 2
           },
           {
             "id": "satellite-link",
@@ -9744,7 +10254,8 @@
             "availability": 6,
             "description": "Satellite communication uplink.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 1.5
           },
           {
             "id": "simrig",
@@ -9755,7 +10266,8 @@
             "availability": 12,
             "description": "Records simsense experiences.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           },
           {
             "id": "trid-projector",
@@ -9765,7 +10277,8 @@
             "cost": 200,
             "description": "Projects 3D holographic images.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "trodes",
@@ -9775,7 +10288,8 @@
             "cost": 70,
             "description": "External electrodes for simsense and AR without implants.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           }
         ],
         "rfidTags": [
@@ -9917,9 +10431,21 @@
             "page": 444,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 500, "availability": 2, "capacityCost": 1 },
-              "2": { "cost": 1000, "availability": 4, "capacityCost": 2 },
-              "3": { "cost": 1500, "availability": 6, "capacityCost": 3 }
+              "1": {
+                "cost": 500,
+                "availability": 2,
+                "capacityCost": 1
+              },
+              "2": {
+                "cost": 1000,
+                "availability": 4,
+                "capacityCost": 2
+              },
+              "3": {
+                "cost": 1500,
+                "availability": 6,
+                "capacityCost": 3
+              }
             }
           },
           {
@@ -9947,9 +10473,21 @@
             "source": "Core",
             "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
             "ratings": {
-              "1": { "cost": 500, "availability": 2, "capacityCost": 1 },
-              "2": { "cost": 1000, "availability": 4, "capacityCost": 2 },
-              "3": { "cost": 1500, "availability": 6, "capacityCost": 3 }
+              "1": {
+                "cost": 500,
+                "availability": 2,
+                "capacityCost": 1
+              },
+              "2": {
+                "cost": 1000,
+                "availability": 4,
+                "capacityCost": 2
+              },
+              "3": {
+                "cost": 1500,
+                "availability": 6,
+                "capacityCost": 3
+              }
             }
           },
           {
@@ -9963,9 +10501,21 @@
             "page": 445,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 250, "availability": 3, "capacityCost": 1 },
-              "2": { "cost": 500, "availability": 6, "capacityCost": 2 },
-              "3": { "cost": 750, "availability": 9, "capacityCost": 3 }
+              "1": {
+                "cost": 250,
+                "availability": 3,
+                "capacityCost": 1
+              },
+              "2": {
+                "cost": 500,
+                "availability": 6,
+                "capacityCost": 2
+              },
+              "3": {
+                "cost": 750,
+                "availability": 9,
+                "capacityCost": 3
+              }
             }
           },
           {
@@ -9989,7 +10539,8 @@
             "cost": 250,
             "availability": 4,
             "description": "Tools for bypassing mechanical locks.",
-            "legality": "restricted"
+            "legality": "restricted",
+            "weight": 0.3
           },
           {
             "id": "autopicker",
@@ -10025,7 +10576,8 @@
                 "cost": 3000,
                 "availability": 8
               }
-            }
+            },
+            "weight": 0.3
           },
           {
             "id": "sequencer",
@@ -10061,7 +10613,8 @@
                 "cost": 1500,
                 "availability": 18
               }
-            }
+            },
+            "weight": 0.3
           },
           {
             "id": "maglock-passkey",
@@ -10089,7 +10642,8 @@
                 "cost": 8000,
                 "availability": 12
               }
-            }
+            },
+            "weight": 0.1
           },
           {
             "id": "cellular-glove-molder",
@@ -10117,7 +10671,8 @@
                 "cost": 2000,
                 "availability": 12
               }
-            }
+            },
+            "weight": 0.4
           },
           {
             "id": "keycard-copier",
@@ -10153,7 +10708,8 @@
                 "cost": 3600,
                 "availability": 8
               }
-            }
+            },
+            "weight": 0.2
           },
           {
             "id": "tool-kit",
@@ -10165,7 +10721,8 @@
             "specificationLabel": "Skill",
             "description": "Portable toolkit containing basic gear for standard repairs and tasks for a specific skill. Must specify which skill (e.g., Armorer, Automotive Mechanic, Hardware, etc.).",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 5
           },
           {
             "id": "tool-shop",
@@ -10177,7 +10734,8 @@
             "specificationLabel": "Skill",
             "description": "Transportable workshop (fits in a van) with advanced tools for building and repairing. Provides +2 dice pool bonus. Must specify which skill.",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 200
           },
           {
             "id": "tool-facility",
@@ -10189,7 +10747,8 @@
             "specificationLabel": "Skill",
             "description": "Immobile facility requiring a building, containing heavy machines for very advanced constructions and modifications. Must specify which skill.",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 2000
           },
           {
             "id": "chisel-crowbar",
@@ -10199,7 +10758,8 @@
             "availability": 0,
             "description": "Doubles effective Strength when forcing a door or container.",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 1
           },
           {
             "id": "miniwelder",
@@ -10209,7 +10769,8 @@
             "availability": 2,
             "description": "Portable welder with 30 minutes of operation. DV 25 against barriers.",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 1.5
           },
           {
             "id": "miniwelder-fuel-canister",
@@ -10219,7 +10780,8 @@
             "availability": 2,
             "description": "Replacement fuel for miniwelder.",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "monofilament-chainsaw",
@@ -10229,7 +10791,8 @@
             "availability": 8,
             "description": "Motorized saw with monofilament wire. DV 8P (doubled vs barriers), Acc 3, Reach 1, AP -6. Uses Exotic Melee Weapon skill.",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 4
           }
         ],
         "sensors": {
@@ -10245,10 +10808,23 @@
               "page": 446,
               "source": "Core",
               "ratings": {
-                "1": { "cost": 100, "availability": 0, "capacity": 1 },
-                "2": { "cost": 200, "availability": 0, "capacity": 2 },
-                "3": { "cost": 300, "availability": 0, "capacity": 3 }
-              }
+                "1": {
+                  "cost": 100,
+                  "availability": 0,
+                  "capacity": 1
+                },
+                "2": {
+                  "cost": 200,
+                  "availability": 0,
+                  "capacity": 2
+                },
+                "3": {
+                  "cost": 300,
+                  "availability": 0,
+                  "capacity": 3
+                }
+              },
+              "weight": 0.5
             },
             {
               "id": "wall-mounted-housing",
@@ -10261,13 +10837,38 @@
               "page": 446,
               "source": "Core",
               "ratings": {
-                "1": { "cost": 250, "availability": 0, "capacity": 1 },
-                "2": { "cost": 500, "availability": 0, "capacity": 2 },
-                "3": { "cost": 750, "availability": 0, "capacity": 3 },
-                "4": { "cost": 1000, "availability": 0, "capacity": 4 },
-                "5": { "cost": 1250, "availability": 0, "capacity": 5 },
-                "6": { "cost": 1500, "availability": 0, "capacity": 6 }
-              }
+                "1": {
+                  "cost": 250,
+                  "availability": 0,
+                  "capacity": 1
+                },
+                "2": {
+                  "cost": 500,
+                  "availability": 0,
+                  "capacity": 2
+                },
+                "3": {
+                  "cost": 750,
+                  "availability": 0,
+                  "capacity": 3
+                },
+                "4": {
+                  "cost": 1000,
+                  "availability": 0,
+                  "capacity": 4
+                },
+                "5": {
+                  "cost": 1250,
+                  "availability": 0,
+                  "capacity": 5
+                },
+                "6": {
+                  "cost": 1500,
+                  "availability": 0,
+                  "capacity": 6
+                }
+              },
+              "weight": 1.5
             },
             {
               "id": "sensor-array",
@@ -10281,14 +10882,36 @@
               "page": 446,
               "source": "Core",
               "ratings": {
-                "2": { "cost": 2000, "availability": 7 },
-                "3": { "cost": 3000, "availability": 7 },
-                "4": { "cost": 4000, "availability": 7 },
-                "5": { "cost": 5000, "availability": 7 },
-                "6": { "cost": 6000, "availability": 7 },
-                "7": { "cost": 7000, "availability": 7 },
-                "8": { "cost": 8000, "availability": 7 }
-              }
+                "2": {
+                  "cost": 2000,
+                  "availability": 7
+                },
+                "3": {
+                  "cost": 3000,
+                  "availability": 7
+                },
+                "4": {
+                  "cost": 4000,
+                  "availability": 7
+                },
+                "5": {
+                  "cost": 5000,
+                  "availability": 7
+                },
+                "6": {
+                  "cost": 6000,
+                  "availability": 7
+                },
+                "7": {
+                  "cost": 7000,
+                  "availability": 7
+                },
+                "8": {
+                  "cost": 8000,
+                  "availability": 7
+                }
+              },
+              "weight": 5
             },
             {
               "id": "single-sensor",
@@ -10302,14 +10925,36 @@
               "page": 446,
               "source": "Core",
               "ratings": {
-                "2": { "cost": 200, "availability": 5 },
-                "3": { "cost": 300, "availability": 5 },
-                "4": { "cost": 400, "availability": 5 },
-                "5": { "cost": 500, "availability": 5 },
-                "6": { "cost": 600, "availability": 5 },
-                "7": { "cost": 700, "availability": 5 },
-                "8": { "cost": 800, "availability": 5 }
-              }
+                "2": {
+                  "cost": 200,
+                  "availability": 5
+                },
+                "3": {
+                  "cost": 300,
+                  "availability": 5
+                },
+                "4": {
+                  "cost": 400,
+                  "availability": 5
+                },
+                "5": {
+                  "cost": 500,
+                  "availability": 5
+                },
+                "6": {
+                  "cost": 600,
+                  "availability": 5
+                },
+                "7": {
+                  "cost": 700,
+                  "availability": 5
+                },
+                "8": {
+                  "cost": 800,
+                  "availability": 5
+                }
+              },
+              "weight": 0.3
             }
           ],
           "maxRatingByHousing": {
@@ -10459,13 +11104,32 @@
             "page": 447,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 10, "availability": 1 },
-              "2": { "cost": 20, "availability": 2 },
-              "3": { "cost": 30, "availability": 3 },
-              "4": { "cost": 40, "availability": 4 },
-              "5": { "cost": 50, "availability": 5 },
-              "6": { "cost": 60, "availability": 6 }
-            }
+              "1": {
+                "cost": 10,
+                "availability": 1
+              },
+              "2": {
+                "cost": 20,
+                "availability": 2
+              },
+              "3": {
+                "cost": 30,
+                "availability": 3
+              },
+              "4": {
+                "cost": 40,
+                "availability": 4
+              },
+              "5": {
+                "cost": 50,
+                "availability": 5
+              },
+              "6": {
+                "cost": 60,
+                "availability": 6
+              }
+            },
+            "weight": 0.3
           },
           {
             "id": "maglock",
@@ -10478,13 +11142,32 @@
             "page": 447,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 100, "availability": 1 },
-              "2": { "cost": 200, "availability": 2 },
-              "3": { "cost": 300, "availability": 3 },
-              "4": { "cost": 400, "availability": 4 },
-              "5": { "cost": 500, "availability": 5 },
-              "6": { "cost": 600, "availability": 6 }
-            }
+              "1": {
+                "cost": 100,
+                "availability": 1
+              },
+              "2": {
+                "cost": 200,
+                "availability": 2
+              },
+              "3": {
+                "cost": 300,
+                "availability": 3
+              },
+              "4": {
+                "cost": 400,
+                "availability": 4
+              },
+              "5": {
+                "cost": 500,
+                "availability": 5
+              },
+              "6": {
+                "cost": 600,
+                "availability": 6
+              }
+            },
+            "weight": 0.5
           },
           {
             "id": "maglock-keypad-cardreader",
@@ -10511,10 +11194,22 @@
             "page": 447,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 250, "availability": 1 },
-              "2": { "cost": 500, "availability": 2 },
-              "3": { "cost": 750, "availability": 3 },
-              "4": { "cost": 1000, "availability": 4 }
+              "1": {
+                "cost": 250,
+                "availability": 1
+              },
+              "2": {
+                "cost": 500,
+                "availability": 2
+              },
+              "3": {
+                "cost": 750,
+                "availability": 3
+              },
+              "4": {
+                "cost": 1000,
+                "availability": 4
+              }
             }
           },
           {
@@ -10541,7 +11236,8 @@
             "structure": 2,
             "description": "Standard metal handcuffs with mechanical or wireless lock.",
             "page": 447,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           },
           {
             "id": "restraints-plasteel",
@@ -10554,7 +11250,8 @@
             "structure": 2,
             "description": "Flash-fused restraints that must be cut free.",
             "page": 447,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.4
           },
           {
             "id": "restraints-plastic",
@@ -10567,7 +11264,8 @@
             "structure": 1,
             "description": "Disposable plastic zip-tie restraints, pack of 10.",
             "page": 447,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "containment-manacles",
@@ -10580,7 +11278,8 @@
             "structure": 2,
             "description": "Restricts movement to a shuffle, prevents cyber-implant weapon extension.",
             "page": 447,
-            "source": "Core"
+            "source": "Core",
+            "weight": 1
           }
         ],
         "survival": [
@@ -10595,13 +11294,32 @@
             "page": 449,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 150, "availability": 2 },
-              "2": { "cost": 300, "availability": 4 },
-              "3": { "cost": 450, "availability": 6 },
-              "4": { "cost": 600, "availability": 8 },
-              "5": { "cost": 750, "availability": 10 },
-              "6": { "cost": 900, "availability": 12 }
-            }
+              "1": {
+                "cost": 150,
+                "availability": 2
+              },
+              "2": {
+                "cost": 300,
+                "availability": 4
+              },
+              "3": {
+                "cost": 450,
+                "availability": 6
+              },
+              "4": {
+                "cost": 600,
+                "availability": 8
+              },
+              "5": {
+                "cost": 750,
+                "availability": 10
+              },
+              "6": {
+                "cost": 900,
+                "availability": 12
+              }
+            },
+            "weight": 1
           },
           {
             "id": "climbing-gear",
@@ -10611,7 +11329,8 @@
             "availability": 0,
             "description": "Backpack full of rope (400-kilo test), ascent/descent harness, gloves, carabiners, crampons, and other gear for assisted climbing.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 5
           },
           {
             "id": "rappelling-gloves",
@@ -10621,7 +11340,8 @@
             "availability": 0,
             "description": "Special fabric gloves providing +2 dice pool bonus on tests to hold grip on a grapple line. Required for using microwire safely.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.15
           },
           {
             "id": "flashlight",
@@ -10631,7 +11351,8 @@
             "availability": 0,
             "description": "Long-lasting, super bright flashlight. Available in low-light and infrared versions. Can be mounted to weapon's top or under-barrel mount.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.2
           },
           {
             "id": "diving-gear",
@@ -10641,7 +11362,8 @@
             "availability": 6,
             "description": "Diving suit, partial facemask with snorkel, breathing regulator, air tank with 2 hours of air, and inflatable vest. Regulator and tank protect against inhalation toxins. Wet suit provides Rating 1 resistance to Cold damage.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 12
           },
           {
             "id": "gecko-tape-gloves",
@@ -10652,7 +11374,8 @@
             "description": "Dry adhesive gloves, kneepads, and slip-on-soles with millions of microscopic hairs that bond to surfaces. Allows assisted climbing. Useless when wet. Wireless: adhesive can be neutralized with wireless signal.",
             "page": 449,
             "source": "Core",
-            "wirelessBonus": "Adhesive outer layer can be temporarily neutralized with a wireless signal, useful for getting on and off without sticking."
+            "wirelessBonus": "Adhesive outer layer can be temporarily neutralized with a wireless signal, useful for getting on and off without sticking.",
+            "weight": 0.2
           },
           {
             "id": "hazmat-suit",
@@ -10663,7 +11386,8 @@
             "description": "Full body suit with internal air tank (4 hours). Provides chemical seal and protects from contact and inhalation vector toxins. Many include Geiger counter.",
             "page": 449,
             "source": "Core",
-            "wirelessBonus": "Analyzes and transmits information about the environment you're not touching or breathing."
+            "wirelessBonus": "Analyzes and transmits information about the environment you're not touching or breathing.",
+            "weight": 4
           },
           {
             "id": "light-stick",
@@ -10673,7 +11397,8 @@
             "availability": 0,
             "description": "Bend, snap, and shake for three hours of soft chemical illumination covering a ten-meter radius.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "magnesium-torch",
@@ -10683,7 +11408,8 @@
             "availability": 0,
             "description": "Strike and activate for five minutes of bright torchlight.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "micro-flare-launcher",
@@ -10701,7 +11427,8 @@
               "ap": -5,
               "mode": "SS",
               "ammo": "1(ml)"
-            }
+            },
+            "weight": 0.5
           },
           {
             "id": "micro-flares",
@@ -10711,7 +11438,8 @@
             "availability": 0,
             "description": "Ammunition for micro flare launcher.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "grapple-gun",
@@ -10729,7 +11457,8 @@
               "ap": -2,
               "mode": "SS",
               "ammo": "1(ml)"
-            }
+            },
+            "weight": 1.5
           },
           {
             "id": "catalyst-stick",
@@ -10740,7 +11469,8 @@
             "legality": "forbidden",
             "description": "Reusable stick that triggers a chemical reaction in stealth rope, crumbling it to dust within seconds and leaving almost no trace.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "microwire",
@@ -10752,7 +11482,8 @@
             "weightUnit": "kg",
             "description": "Extremely thin (nearly monofilament) resilient fiber rope. Can only be grabbed with rappelling gloves; without them it inflicts 8P damage AP -8. Supports up to 100 kg.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "myomeric-rope",
@@ -10764,7 +11495,8 @@
             "lengthUnit": "meters",
             "description": "Made of special myomeric fiber, this rope's movement can be controlled remotely (max 30m). Can wind like a snake to reach around obstacles or tie to ledges. Moves at 2 meters per Combat Turn.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.5
           },
           {
             "id": "standard-rope",
@@ -10776,7 +11508,8 @@
             "weightUnit": "kg",
             "description": "Standard climbing rope supporting up to 400 kg.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 3
           },
           {
             "id": "stealth-rope",
@@ -10789,7 +11522,8 @@
             "weightUnit": "kg",
             "description": "Special rope that crumbles to dust when touched with a catalyst stick, leaving almost no trace. Supports up to 400 kg.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 3
           },
           {
             "id": "survival-kit",
@@ -10799,7 +11533,8 @@
             "availability": 4,
             "description": "Rugged bag containing knife, lighter, matches, compass, lightweight thermal blanket, several days' worth of ration bars, water-purification unit, and more. Good for a go-bag.",
             "page": 449,
-            "source": "Core"
+            "source": "Core",
+            "weight": 3
           },
           {
             "id": "respirator",
@@ -10812,13 +11547,32 @@
             "page": 449,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 50, "availability": 0 },
-              "2": { "cost": 100, "availability": 0 },
-              "3": { "cost": 150, "availability": 0 },
-              "4": { "cost": 200, "availability": 0 },
-              "5": { "cost": 250, "availability": 0 },
-              "6": { "cost": 300, "availability": 0 }
-            }
+              "1": {
+                "cost": 50,
+                "availability": 0
+              },
+              "2": {
+                "cost": 100,
+                "availability": 0
+              },
+              "3": {
+                "cost": 150,
+                "availability": 0
+              },
+              "4": {
+                "cost": 200,
+                "availability": 0
+              },
+              "5": {
+                "cost": 250,
+                "availability": 0
+              },
+              "6": {
+                "cost": 300,
+                "availability": 0
+              }
+            },
+            "weight": 0.2
           },
           {
             "id": "gas-mask",
@@ -10829,7 +11583,8 @@
             "description": "Air-supplied re-breather covering your face, providing immunity to inhalation-vector toxin attacks. Includes one-hour clean-air supply (replacements 40¥). Can attach to larger air tanks. Cannot be combined with a respirator.",
             "page": 449,
             "source": "Core",
-            "wirelessBonus": "Analyzes and gives information about the surrounding air that you're not breathing."
+            "wirelessBonus": "Analyzes and gives information about the surrounding air that you're not breathing.",
+            "weight": 0.5
           }
         ],
         "industrialChemicals": [
@@ -10843,7 +11598,8 @@
             "consumable": true,
             "description": "Spray can with enough solvent to dissolve about a square meter of fast-drying aerosol superglue.",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           },
           {
             "id": "glue-sprayer",
@@ -10855,7 +11611,8 @@
             "consumable": true,
             "description": "Fast-drying aerosol superglue for gluing two rigid surfaces together. Holds enough for about a square meter (an exterior door or picture window). Takes 1 Combat Turn to harden. Glue has Body and Strength 5 for forcing (Opposed Body + Strength Test).",
             "page": 448,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.4
           },
           {
             "id": "thermite-burning-bar",
@@ -10869,7 +11626,8 @@
             "description": "Thermite gel incendiary material on a rod with handle and frame used to melt holes in iron, steel, and plasteel. Inflicts Fire Damage DV 30P. Must be set carefully; cannot be used as a weapon unless target is tied up or unconscious.",
             "page": 448,
             "source": "Core",
-            "wirelessBonus": "Can be activated wirelessly."
+            "wirelessBonus": "Can be activated wirelessly.",
+            "weight": 1
           }
         ],
         "medical": [
@@ -11096,7 +11854,8 @@
             "description": "Compact device measuring life signs (heart rate, blood pressure, temperature, etc.) and analyzing blood, sweat, and skin samples. Worn as armband/wristband or integrated into clothing/commlinks.",
             "page": 450,
             "source": "Core",
-            "wirelessBonus": "Shares information with designated wireless devices and can auto-alert DocWagon or other ambulance services if life signs reach certain thresholds."
+            "wirelessBonus": "Shares information with designated wireless devices and can auto-alert DocWagon or other ambulance services if life signs reach certain thresholds.",
+            "weight": 0.1
           },
           {
             "id": "disposable-syringe",
@@ -11108,7 +11867,8 @@
             "consumable": true,
             "description": "Plastic syringe with metal needle for single use. Can apply injection-vector toxins. Uncooperative victims may need to be immobilized or grappled first.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "medkit",
@@ -11122,13 +11882,32 @@
             "source": "Core",
             "wirelessBonus": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating.",
             "ratings": {
-              "1": { "cost": 250, "availability": 1 },
-              "2": { "cost": 500, "availability": 2 },
-              "3": { "cost": 750, "availability": 3 },
-              "4": { "cost": 1000, "availability": 4 },
-              "5": { "cost": 1250, "availability": 5 },
-              "6": { "cost": 1500, "availability": 6 }
-            }
+              "1": {
+                "cost": 250,
+                "availability": 1
+              },
+              "2": {
+                "cost": 500,
+                "availability": 2
+              },
+              "3": {
+                "cost": 750,
+                "availability": 3
+              },
+              "4": {
+                "cost": 1000,
+                "availability": 4
+              },
+              "5": {
+                "cost": 1250,
+                "availability": 5
+              },
+              "6": {
+                "cost": 1500,
+                "availability": 6
+              }
+            },
+            "weight": 1
           },
           {
             "id": "medkit-supplies",
@@ -11140,7 +11919,8 @@
             "consumable": true,
             "description": "Replacement supplies for medkit after use.",
             "page": 450,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.3
           }
         ],
         "security": [
@@ -11177,7 +11957,8 @@
                 "cost": 600,
                 "availability": 6
               }
-            }
+            },
+            "weight": 0.2
           },
           {
             "id": "pressure-mat",
@@ -11185,7 +11966,8 @@
             "category": "security",
             "cost": 200,
             "availability": 6,
-            "description": "Floor-mounted pressure sensor."
+            "description": "Floor-mounted pressure sensor.",
+            "weight": 0.5
           },
           {
             "id": "tripwire",
@@ -11193,7 +11975,8 @@
             "category": "security",
             "cost": 50,
             "availability": 4,
-            "description": "Concealed wire alarm trigger."
+            "description": "Concealed wire alarm trigger.",
+            "weight": 0.05
           }
         ],
         "miscellaneous": [
@@ -11270,12 +12053,30 @@
             "page": 443,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 2500, "availability": 3 },
-              "2": { "cost": 5000, "availability": 6 },
-              "3": { "cost": 7500, "availability": 9 },
-              "4": { "cost": 10000, "availability": 12 },
-              "5": { "cost": 12500, "availability": 15 },
-              "6": { "cost": 15000, "availability": 18 }
+              "1": {
+                "cost": 2500,
+                "availability": 3
+              },
+              "2": {
+                "cost": 5000,
+                "availability": 6
+              },
+              "3": {
+                "cost": 7500,
+                "availability": 9
+              },
+              "4": {
+                "cost": 10000,
+                "availability": 12
+              },
+              "5": {
+                "cost": 12500,
+                "availability": 15
+              },
+              "6": {
+                "cost": 15000,
+                "availability": 18
+              }
             }
           },
           {
@@ -11290,12 +12091,30 @@
             "page": 443,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 200, "availability": 3 },
-              "2": { "cost": 400, "availability": 6 },
-              "3": { "cost": 600, "availability": 9 },
-              "4": { "cost": 800, "availability": 12 },
-              "5": { "cost": 1000, "availability": 15 },
-              "6": { "cost": 1200, "availability": 18 }
+              "1": {
+                "cost": 200,
+                "availability": 3
+              },
+              "2": {
+                "cost": 400,
+                "availability": 6
+              },
+              "3": {
+                "cost": 600,
+                "availability": 9
+              },
+              "4": {
+                "cost": 800,
+                "availability": 12
+              },
+              "5": {
+                "cost": 1000,
+                "availability": 15
+              },
+              "6": {
+                "cost": 1200,
+                "availability": 18
+              }
             }
           },
           {
@@ -11309,18 +12128,54 @@
             "page": 280,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 500, "availability": 2 },
-              "2": { "cost": 1000, "availability": 4 },
-              "3": { "cost": 1500, "availability": 6 },
-              "4": { "cost": 2000, "availability": 8 },
-              "5": { "cost": 2500, "availability": 10 },
-              "6": { "cost": 3000, "availability": 12 },
-              "7": { "cost": 3500, "availability": 14 },
-              "8": { "cost": 4000, "availability": 16 },
-              "9": { "cost": 4500, "availability": 18 },
-              "10": { "cost": 5000, "availability": 20 },
-              "11": { "cost": 5500, "availability": 22 },
-              "12": { "cost": 6000, "availability": 24 }
+              "1": {
+                "cost": 500,
+                "availability": 2
+              },
+              "2": {
+                "cost": 1000,
+                "availability": 4
+              },
+              "3": {
+                "cost": 1500,
+                "availability": 6
+              },
+              "4": {
+                "cost": 2000,
+                "availability": 8
+              },
+              "5": {
+                "cost": 2500,
+                "availability": 10
+              },
+              "6": {
+                "cost": 3000,
+                "availability": 12
+              },
+              "7": {
+                "cost": 3500,
+                "availability": 14
+              },
+              "8": {
+                "cost": 4000,
+                "availability": 16
+              },
+              "9": {
+                "cost": 4500,
+                "availability": 18
+              },
+              "10": {
+                "cost": 5000,
+                "availability": 20
+              },
+              "11": {
+                "cost": 5500,
+                "availability": 22
+              },
+              "12": {
+                "cost": 6000,
+                "availability": 24
+              }
             }
           }
         ],
@@ -11337,7 +12192,8 @@
             "apModifier": -4,
             "availability": 12,
             "legality": "forbidden",
-            "description": "Armor-Piercing Discarding Sabot."
+            "description": "Armor-Piercing Discarding Sabot.",
+            "weight": 0.15
           },
           {
             "id": "assault-cannon-rounds",
@@ -11349,7 +12205,8 @@
             "stackable": true,
             "consumable": true,
             "availability": 12,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "weight": 1.5
           },
           {
             "id": "explosive-rounds",
@@ -11364,7 +12221,8 @@
             "apModifier": -1,
             "availability": 9,
             "legality": "forbidden",
-            "description": "Explosive rounds."
+            "description": "Explosive rounds.",
+            "weight": 0.15
           },
           {
             "id": "flechette-rounds",
@@ -11379,7 +12237,8 @@
             "apModifier": 5,
             "availability": 6,
             "legality": "restricted",
-            "description": "Flechette rounds."
+            "description": "Flechette rounds.",
+            "weight": 0.1
           },
           {
             "id": "gel-rounds",
@@ -11394,7 +12253,8 @@
             "apModifier": 2,
             "availability": 2,
             "legality": "restricted",
-            "description": "Non-lethal rounds (Stun damage)."
+            "description": "Non-lethal rounds (Stun damage).",
+            "weight": 0.15
           },
           {
             "id": "hollow-point-rounds",
@@ -11408,7 +12268,8 @@
             "damageModifier": "+1",
             "apModifier": 2,
             "availability": 4,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "weight": 0.15
           },
           {
             "id": "injection-rounds",
@@ -11420,7 +12281,8 @@
             "stackable": true,
             "consumable": true,
             "availability": 4,
-            "legality": "restricted"
+            "legality": "restricted",
+            "weight": 0.15
           },
           {
             "id": "regular-rounds",
@@ -11433,7 +12295,8 @@
             "consumable": true,
             "availability": 2,
             "legality": "restricted",
-            "description": "Standard ammunition."
+            "description": "Standard ammunition.",
+            "weight": 0.15
           },
           {
             "id": "stick-n-shock",
@@ -11472,7 +12335,8 @@
             "consumable": true,
             "availability": 6,
             "legality": "restricted",
-            "description": "Visible tracers for aimed fire."
+            "description": "Visible tracers for aimed fire.",
+            "weight": 0.15
           }
         ],
         "toxins": [
@@ -12800,37 +13664,49 @@
                 "cost": 3000,
                 "availability": 4,
                 "essenceCost": 0.5,
-                "effects": { "armorBonus": 1 }
+                "effects": {
+                  "armorBonus": 1
+                }
               },
               "2": {
                 "cost": 6000,
                 "availability": 8,
                 "essenceCost": 1,
-                "effects": { "armorBonus": 2 }
+                "effects": {
+                  "armorBonus": 2
+                }
               },
               "3": {
                 "cost": 9000,
                 "availability": 12,
                 "essenceCost": 1.5,
-                "effects": { "armorBonus": 3 }
+                "effects": {
+                  "armorBonus": 3
+                }
               },
               "4": {
                 "cost": 12000,
                 "availability": 16,
                 "essenceCost": 2,
-                "effects": { "armorBonus": 4 }
+                "effects": {
+                  "armorBonus": 4
+                }
               },
               "5": {
                 "cost": 15000,
                 "availability": 20,
                 "essenceCost": 2.5,
-                "effects": { "armorBonus": 5 }
+                "effects": {
+                  "armorBonus": 5
+                }
               },
               "6": {
                 "cost": 18000,
                 "availability": 24,
                 "essenceCost": 3,
-                "effects": { "armorBonus": 6 }
+                "effects": {
+                  "armorBonus": 6
+                }
               }
             },
             "category": "bodyware",
@@ -12881,25 +13757,45 @@
                 "cost": 25000,
                 "availability": 5,
                 "essenceCost": 1,
-                "effects": { "attributeBonuses": { "strength": 1, "agility": 1 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "strength": 1,
+                    "agility": 1
+                  }
+                }
               },
               "2": {
                 "cost": 50000,
                 "availability": 10,
                 "essenceCost": 2,
-                "effects": { "attributeBonuses": { "strength": 2, "agility": 2 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "strength": 2,
+                    "agility": 2
+                  }
+                }
               },
               "3": {
                 "cost": 75000,
                 "availability": 15,
                 "essenceCost": 3,
-                "effects": { "attributeBonuses": { "strength": 3, "agility": 3 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "strength": 3,
+                    "agility": 3
+                  }
+                }
               },
               "4": {
                 "cost": 100000,
                 "availability": 20,
                 "essenceCost": 4,
-                "effects": { "attributeBonuses": { "strength": 4, "agility": 4 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "strength": 4,
+                    "agility": 4
+                  }
+                }
               }
             },
             "category": "bodyware",
@@ -12919,19 +13815,31 @@
                 "cost": 13000,
                 "availability": 5,
                 "essenceCost": 0.3,
-                "effects": { "attributeBonuses": { "reaction": 1 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "reaction": 1
+                  }
+                }
               },
               "2": {
                 "cost": 26000,
                 "availability": 10,
                 "essenceCost": 0.6,
-                "effects": { "attributeBonuses": { "reaction": 2 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "reaction": 2
+                  }
+                }
               },
               "3": {
                 "cost": 39000,
                 "availability": 15,
                 "essenceCost": 0.9,
-                "effects": { "attributeBonuses": { "reaction": 3 } }
+                "effects": {
+                  "attributeBonuses": {
+                    "reaction": 3
+                  }
+                }
               }
             },
             "category": "bodyware",
@@ -14245,7 +15153,7 @@
             "id": "implant-weapon-smg",
             "name": "Implant Weapon (Submachine Gun)",
             "category": "cybernetic-weapon",
-            "essenceCost": 1.0,
+            "essenceCost": 1,
             "cost": 4800,
             "availability": 12,
             "capacityCost": 8,
@@ -14817,7 +15725,9 @@
                 "availability": 6,
                 "essenceCost": 0.5,
                 "effects": {
-                  "attributeBonuses": { "reaction": 1 },
+                  "attributeBonuses": {
+                    "reaction": 1
+                  },
                   "initiativeDice": 1
                 }
               },
@@ -14826,7 +15736,9 @@
                 "availability": 12,
                 "essenceCost": 1,
                 "effects": {
-                  "attributeBonuses": { "reaction": 2 },
+                  "attributeBonuses": {
+                    "reaction": 2
+                  },
                   "initiativeDice": 2
                 }
               },
@@ -14835,7 +15747,9 @@
                 "availability": 18,
                 "essenceCost": 1.5,
                 "effects": {
-                  "attributeBonuses": { "reaction": 3 },
+                  "attributeBonuses": {
+                    "reaction": 3
+                  },
                   "initiativeDice": 3
                 }
               }
@@ -14878,25 +15792,33 @@
                 "cost": 6500,
                 "availability": 8,
                 "essenceCost": 0.25,
-                "effects": { "armorBonus": 1 }
+                "effects": {
+                  "armorBonus": 1
+                }
               },
               "2": {
                 "cost": 13000,
                 "availability": 12,
                 "essenceCost": 0.5,
-                "effects": { "armorBonus": 2 }
+                "effects": {
+                  "armorBonus": 2
+                }
               },
               "3": {
                 "cost": 22000,
                 "availability": 14,
                 "essenceCost": 0.75,
-                "effects": { "armorBonus": 3 }
+                "effects": {
+                  "armorBonus": 3
+                }
               },
               "4": {
                 "cost": 33000,
                 "availability": 16,
                 "essenceCost": 1,
-                "effects": { "armorBonus": 4 }
+                "effects": {
+                  "armorBonus": 4
+                }
               }
             },
             "description": "Bonus Armor equal to Rating (compatible with bone lacing). Cannot be combined with dermal plating or other skin augmentations that provide armor.",
@@ -14967,19 +15889,25 @@
                 "cost": 8500,
                 "availability": 8,
                 "essenceCost": 0.1,
-                "effects": { "dicePoolModifier": 1 }
+                "effects": {
+                  "dicePoolModifier": 1
+                }
               },
               "2": {
                 "cost": 17000,
                 "availability": 12,
                 "essenceCost": 0.2,
-                "effects": { "dicePoolModifier": 2 }
+                "effects": {
+                  "dicePoolModifier": 2
+                }
               },
               "3": {
                 "cost": 25500,
                 "availability": 14,
                 "essenceCost": 0.3,
-                "effects": { "dicePoolModifier": 3 }
+                "effects": {
+                  "dicePoolModifier": 3
+                }
               }
             },
             "description": "+Rating dice to Cardiovascular tests (fatigue, holding breath, etc.).",
@@ -16587,12 +17515,30 @@
             "page": 442,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 1000, "availability": 3 },
-              "2": { "cost": 2000, "availability": 6 },
-              "3": { "cost": 3000, "availability": 9 },
-              "4": { "cost": 8000, "availability": 12 },
-              "5": { "cost": 10000, "availability": 15 },
-              "6": { "cost": 12000, "availability": 18 }
+              "1": {
+                "cost": 1000,
+                "availability": 3
+              },
+              "2": {
+                "cost": 2000,
+                "availability": 6
+              },
+              "3": {
+                "cost": 3000,
+                "availability": 9
+              },
+              "4": {
+                "cost": 8000,
+                "availability": 12
+              },
+              "5": {
+                "cost": 10000,
+                "availability": 15
+              },
+              "6": {
+                "cost": 12000,
+                "availability": 18
+              }
             }
           }
         ],
@@ -16663,12 +17609,30 @@
             "page": 442,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 400, "availability": 1 },
-              "2": { "cost": 800, "availability": 2 },
-              "3": { "cost": 1200, "availability": 3 },
-              "4": { "cost": 1600, "availability": 4 },
-              "5": { "cost": 2000, "availability": 5 },
-              "6": { "cost": 2400, "availability": 6 }
+              "1": {
+                "cost": 400,
+                "availability": 1
+              },
+              "2": {
+                "cost": 800,
+                "availability": 2
+              },
+              "3": {
+                "cost": 1200,
+                "availability": 3
+              },
+              "4": {
+                "cost": 1600,
+                "availability": 4
+              },
+              "5": {
+                "cost": 2000,
+                "availability": 5
+              },
+              "6": {
+                "cost": 2400,
+                "availability": 6
+              }
             }
           }
         ],
@@ -16690,12 +17654,30 @@
             "page": 442,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 5000, "availability": 8 },
-              "2": { "cost": 10000, "availability": 8 },
-              "3": { "cost": 15000, "availability": 8 },
-              "4": { "cost": 20000, "availability": 8 },
-              "5": { "cost": 25000, "availability": 8 },
-              "6": { "cost": 30000, "availability": 8 }
+              "1": {
+                "cost": 5000,
+                "availability": 8
+              },
+              "2": {
+                "cost": 10000,
+                "availability": 8
+              },
+              "3": {
+                "cost": 15000,
+                "availability": 8
+              },
+              "4": {
+                "cost": 20000,
+                "availability": 8
+              },
+              "5": {
+                "cost": 25000,
+                "availability": 8
+              },
+              "6": {
+                "cost": 30000,
+                "availability": 8
+              }
             }
           },
           {
@@ -16714,12 +17696,30 @@
             "page": 442,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 2000, "availability": 4 },
-              "2": { "cost": 4000, "availability": 4 },
-              "3": { "cost": 6000, "availability": 4 },
-              "4": { "cost": 8000, "availability": 4 },
-              "5": { "cost": 10000, "availability": 4 },
-              "6": { "cost": 12000, "availability": 4 }
+              "1": {
+                "cost": 2000,
+                "availability": 4
+              },
+              "2": {
+                "cost": 4000,
+                "availability": 4
+              },
+              "3": {
+                "cost": 6000,
+                "availability": 4
+              },
+              "4": {
+                "cost": 8000,
+                "availability": 4
+              },
+              "5": {
+                "cost": 10000,
+                "availability": 4
+              },
+              "6": {
+                "cost": 12000,
+                "availability": 4
+              }
             }
           },
           {
@@ -16738,12 +17738,30 @@
             "page": 442,
             "source": "Core",
             "ratings": {
-              "1": { "cost": 1000, "availability": 2 },
-              "2": { "cost": 2000, "availability": 2 },
-              "3": { "cost": 3000, "availability": 2 },
-              "4": { "cost": 4000, "availability": 2 },
-              "5": { "cost": 5000, "availability": 2 },
-              "6": { "cost": 6000, "availability": 2 }
+              "1": {
+                "cost": 1000,
+                "availability": 2
+              },
+              "2": {
+                "cost": 2000,
+                "availability": 2
+              },
+              "3": {
+                "cost": 3000,
+                "availability": 2
+              },
+              "4": {
+                "cost": 4000,
+                "availability": 2
+              },
+              "5": {
+                "cost": 5000,
+                "availability": 2
+              },
+              "6": {
+                "cost": 6000,
+                "availability": 2
+              }
             }
           }
         ]
@@ -17864,23 +18882,62 @@
               "essence": 6
             },
             "initiative": "8 + 1D6",
-            "movement": { "walk": 2, "run": 8, "sprint": 4 },
-            "conditionMonitor": { "physical": 10, "stun": 10 },
-            "limits": { "physical": 6, "mental": 4, "social": 5 },
+            "movement": {
+              "walk": 2,
+              "run": 8,
+              "sprint": 4
+            },
+            "conditionMonitor": {
+              "physical": 10,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 6,
+              "mental": 4,
+              "social": 5
+            },
             "armor": 0,
             "skills": [
-              { "name": "Intimidation", "rating": 4 },
-              { "name": "Perception", "rating": 5, "specialization": "Smell", "bonus": 2 },
-              { "name": "Running", "rating": 5 },
-              { "name": "Tracking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 5 }
+              {
+                "name": "Intimidation",
+                "rating": 4
+              },
+              {
+                "name": "Perception",
+                "rating": 5,
+                "specialization": "Smell",
+                "bonus": 2
+              },
+              {
+                "name": "Running",
+                "rating": 5
+              },
+              {
+                "name": "Tracking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 5
+              }
             ],
             "powers": [
-              { "id": "enhanced-senses", "details": "Hearing, Smell" },
-              { "id": "natural-weapon", "details": "Claws/Bite: (STR+1)P, AP —" }
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Smell"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Claws/Bite: (STR+1)P, AP —"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+1)P", "ap": "—" }
+              {
+                "name": "Claws/Bite",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": "—"
+              }
             ],
             "page": 402,
             "source": "Core"
@@ -17902,20 +18959,56 @@
               "essence": 6
             },
             "initiative": "8 + 2D6",
-            "movement": { "walk": 2, "run": 6, "sprint": 4 },
-            "conditionMonitor": { "physical": 11, "stun": 10 },
-            "limits": { "physical": 7, "mental": 4, "social": 5 },
+            "movement": {
+              "walk": 2,
+              "run": 6,
+              "sprint": 4
+            },
+            "conditionMonitor": {
+              "physical": 11,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 7,
+              "mental": 4,
+              "social": 5
+            },
             "armor": 0,
             "skills": [
-              { "name": "Perception", "rating": 5 },
-              { "name": "Running", "rating": 5 },
-              { "name": "Sneaking", "rating": 6 },
-              { "name": "Tracking", "rating": 4 },
-              { "name": "Unarmed Combat", "rating": 7 }
+              {
+                "name": "Perception",
+                "rating": 5
+              },
+              {
+                "name": "Running",
+                "rating": 5
+              },
+              {
+                "name": "Sneaking",
+                "rating": 6
+              },
+              {
+                "name": "Tracking",
+                "rating": 4
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 7
+              }
             ],
-            "powers": [{ "id": "natural-weapon", "details": "Claws/Bite: (STR+3)P, AP –1" }],
+            "powers": [
+              {
+                "id": "natural-weapon",
+                "details": "Claws/Bite: (STR+3)P, AP –1"
+              }
+            ],
             "naturalWeapons": [
-              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+3)P", "ap": -1 }
+              {
+                "name": "Claws/Bite",
+                "type": "melee",
+                "damage": "(STR+3)P",
+                "ap": -1
+              }
             ],
             "page": 402,
             "source": "Core"
@@ -17937,17 +19030,45 @@
               "essence": 6
             },
             "initiative": "8 + 1D6",
-            "movement": { "walk": 3, "run": 10, "sprint": 6 },
-            "conditionMonitor": { "physical": 12, "stun": 10 },
-            "limits": { "physical": 10, "mental": 4, "social": 6 },
+            "movement": {
+              "walk": 3,
+              "run": 10,
+              "sprint": 6
+            },
+            "conditionMonitor": {
+              "physical": 12,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 10,
+              "mental": 4,
+              "social": 6
+            },
             "armor": 0,
             "skills": [
-              { "name": "Running", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 1 }
+              {
+                "name": "Running",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 1
+              }
             ],
-            "powers": [{ "id": "natural-weapon", "details": "Kick: (STR+1)P, AP —, Reach 1" }],
+            "powers": [
+              {
+                "id": "natural-weapon",
+                "details": "Kick: (STR+1)P, AP —, Reach 1"
+              }
+            ],
             "naturalWeapons": [
-              { "name": "Kick", "type": "melee", "damage": "(STR+1)P", "ap": "—", "reach": 1 }
+              {
+                "name": "Kick",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": "—",
+                "reach": 1
+              }
             ],
             "page": 402,
             "source": "Core"
@@ -17973,21 +19094,56 @@
               "walk": 3,
               "run": 8,
               "sprint": 4,
-              "swim": { "walk": 3, "run": 8, "sprint": 4 }
+              "swim": {
+                "walk": 3,
+                "run": 8,
+                "sprint": 4
+              }
             },
-            "conditionMonitor": { "physical": 11, "stun": 10 },
-            "limits": { "physical": 7, "mental": 3, "social": 4 },
+            "conditionMonitor": {
+              "physical": 11,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 7,
+              "mental": 3,
+              "social": 4
+            },
             "armor": 2,
             "skills": [
-              { "name": "Perception", "rating": 6, "specialization": "Smell", "bonus": 2 },
-              { "name": "Swimming", "rating": 10 },
-              { "name": "Unarmed Combat", "rating": 8 }
+              {
+                "name": "Perception",
+                "rating": 6,
+                "specialization": "Smell",
+                "bonus": 2
+              },
+              {
+                "name": "Swimming",
+                "rating": 10
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 8
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 2 },
-              { "id": "natural-weapon", "details": "Bite: (STR+2)P, AP –2" }
+              {
+                "id": "armor",
+                "rating": 2
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: (STR+2)P, AP –2"
+              }
             ],
-            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+2)P", "ap": -2 }],
+            "naturalWeapons": [
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -2
+              }
+            ],
             "page": 403,
             "source": "Core"
           },
@@ -18008,23 +19164,62 @@
               "essence": 6
             },
             "initiative": "9 + 2D6",
-            "movement": { "walk": 2, "run": 8, "sprint": 4 },
-            "conditionMonitor": { "physical": 10, "stun": 10 },
-            "limits": { "physical": 6, "mental": 4, "social": 5 },
+            "movement": {
+              "walk": 2,
+              "run": 8,
+              "sprint": 4
+            },
+            "conditionMonitor": {
+              "physical": 10,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 6,
+              "mental": 4,
+              "social": 5
+            },
             "armor": 0,
             "skills": [
-              { "name": "Perception", "rating": 5, "specialization": "Smell", "bonus": 2 },
-              { "name": "Running", "rating": 5 },
-              { "name": "Sneaking", "rating": 5 },
-              { "name": "Tracking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 7 }
+              {
+                "name": "Perception",
+                "rating": 5,
+                "specialization": "Smell",
+                "bonus": 2
+              },
+              {
+                "name": "Running",
+                "rating": 5
+              },
+              {
+                "name": "Sneaking",
+                "rating": 5
+              },
+              {
+                "name": "Tracking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 7
+              }
             ],
             "powers": [
-              { "id": "enhanced-senses", "details": "Hearing, Smell" },
-              { "id": "natural-weapon", "details": "Claws/Bite: (STR+2)P, AP –1" }
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Smell"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Claws/Bite: (STR+2)P, AP –1"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Claws/Bite", "type": "melee", "damage": "(STR+2)P", "ap": -1 }
+              {
+                "name": "Claws/Bite",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -1
+              }
             ],
             "page": 403,
             "source": "Core"
@@ -18047,27 +19242,78 @@
               "magic": 5
             },
             "initiative": "11 + 2D6",
-            "movement": { "walk": 2, "run": 6, "sprint": 4 },
-            "conditionMonitor": { "physical": 12, "stun": 10 },
-            "limits": { "physical": 9, "mental": 5, "social": 7 },
+            "movement": {
+              "walk": 2,
+              "run": 6,
+              "sprint": 4
+            },
+            "conditionMonitor": {
+              "physical": 12,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 9,
+              "mental": 5,
+              "social": 7
+            },
             "armor": 3,
             "skills": [
-              { "name": "Intimidation", "rating": 7 },
-              { "name": "Perception", "rating": 6 },
-              { "name": "Running", "rating": 5 },
-              { "name": "Tracking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 8 }
+              {
+                "name": "Intimidation",
+                "rating": 7
+              },
+              {
+                "name": "Perception",
+                "rating": 6
+              },
+              {
+                "name": "Running",
+                "rating": 5
+              },
+              {
+                "name": "Tracking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 8
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 3 },
-              { "id": "dual-natured" },
-              { "id": "enhanced-senses", "details": "Hearing, Smell, Sonar" },
-              { "id": "fear" },
-              { "id": "immunity", "details": "Barghest Howls" },
-              { "id": "natural-weapon", "details": "Bite: (STR+2)P, AP –1" },
-              { "id": "paralyzing-howl" }
+              {
+                "id": "armor",
+                "rating": 3
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Smell, Sonar"
+              },
+              {
+                "id": "fear"
+              },
+              {
+                "id": "immunity",
+                "details": "Barghest Howls"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: (STR+2)P, AP –1"
+              },
+              {
+                "id": "paralyzing-howl"
+              }
             ],
-            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+2)P", "ap": -1 }],
+            "naturalWeapons": [
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -1
+              }
+            ],
             "page": 403,
             "source": "Core"
           },
@@ -18093,26 +19339,75 @@
               "walk": 1,
               "run": 5,
               "sprint": 1,
-              "swim": { "walk": 2, "run": 8, "sprint": 2 }
+              "swim": {
+                "walk": 2,
+                "run": 8,
+                "sprint": 2
+              }
             },
-            "conditionMonitor": { "physical": 11, "stun": 11 },
-            "limits": { "physical": 8, "mental": 4, "social": 5 },
+            "conditionMonitor": {
+              "physical": 11,
+              "stun": 11
+            },
+            "limits": {
+              "physical": 8,
+              "mental": 4,
+              "social": 5
+            },
             "armor": 7,
             "skills": [
-              { "name": "Infiltrating", "rating": 3 },
-              { "name": "Perception", "rating": 4 },
-              { "name": "Running", "rating": 2 },
-              { "name": "Sneaking", "rating": 3 },
-              { "name": "Swimming", "rating": 8 },
-              { "name": "Unarmed Combat", "rating": 6 }
+              {
+                "name": "Infiltrating",
+                "rating": 3
+              },
+              {
+                "name": "Perception",
+                "rating": 4
+              },
+              {
+                "name": "Running",
+                "rating": 2
+              },
+              {
+                "name": "Sneaking",
+                "rating": 3
+              },
+              {
+                "name": "Swimming",
+                "rating": 8
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 6
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 7 },
-              { "id": "natural-weapon", "details": "Bite: 8P, AP –2" },
-              { "id": "petrification" }
+              {
+                "id": "armor",
+                "rating": 7
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: 8P, AP –2"
+              },
+              {
+                "id": "petrification"
+              }
             ],
-            "weaknesses": [{ "id": "vulnerability", "details": "Own Gaze" }],
-            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "8P", "ap": -2 }],
+            "weaknesses": [
+              {
+                "id": "vulnerability",
+                "details": "Own Gaze"
+              }
+            ],
+            "naturalWeapons": [
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "8P",
+                "ap": -2
+              }
+            ],
             "page": 403,
             "source": "Core"
           },
@@ -18134,23 +19429,65 @@
               "magic": 5
             },
             "initiative": "7 + 1D6",
-            "movement": { "walk": 2, "run": 8, "sprint": 3 },
-            "conditionMonitor": { "physical": 10, "stun": 10 },
-            "limits": { "physical": 6, "mental": 4, "social": 4 },
+            "movement": {
+              "walk": 2,
+              "run": 8,
+              "sprint": 3
+            },
+            "conditionMonitor": {
+              "physical": 10,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 6,
+              "mental": 4,
+              "social": 4
+            },
             "armor": 1,
             "skills": [
-              { "name": "Perception", "rating": 3 },
-              { "name": "Running", "rating": 7 },
-              { "name": "Sneaking", "rating": 5 },
-              { "name": "Unarmed Combat", "rating": 7 }
+              {
+                "name": "Perception",
+                "rating": 3
+              },
+              {
+                "name": "Running",
+                "rating": 7
+              },
+              {
+                "name": "Sneaking",
+                "rating": 5
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 7
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 1 },
-              { "id": "immunity", "details": "Own Touch" },
-              { "id": "natural-weapon", "details": "Claws: (STR)P, AP –1" },
-              { "id": "paralyzing-touch", "details": "Tail" }
+              {
+                "id": "armor",
+                "rating": 1
+              },
+              {
+                "id": "immunity",
+                "details": "Own Touch"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Claws: (STR)P, AP –1"
+              },
+              {
+                "id": "paralyzing-touch",
+                "details": "Tail"
+              }
             ],
-            "naturalWeapons": [{ "name": "Claws", "type": "melee", "damage": "(STR)P", "ap": -1 }],
+            "naturalWeapons": [
+              {
+                "name": "Claws",
+                "type": "melee",
+                "damage": "(STR)P",
+                "ap": -1
+              }
+            ],
             "page": 404,
             "source": "Core"
           },
@@ -18172,26 +19509,75 @@
               "magic": 4
             },
             "initiative": "10 + 1D6",
-            "movement": { "walk": 1, "run": 2, "sprint": 1 },
-            "conditionMonitor": { "physical": 9, "stun": 10 },
-            "limits": { "physical": 3, "mental": 4, "social": 7 },
+            "movement": {
+              "walk": 1,
+              "run": 2,
+              "sprint": 1
+            },
+            "conditionMonitor": {
+              "physical": 9,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 3,
+              "mental": 4,
+              "social": 7
+            },
             "armor": 0,
             "skills": [
-              { "name": "Climbing", "rating": 5 },
-              { "name": "Perception", "rating": 4 },
-              { "name": "Running", "rating": 2 },
-              { "name": "Sneaking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 5 }
+              {
+                "name": "Climbing",
+                "rating": 5
+              },
+              {
+                "name": "Perception",
+                "rating": 4
+              },
+              {
+                "name": "Running",
+                "rating": 2
+              },
+              {
+                "name": "Sneaking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 5
+              }
             ],
             "powers": [
-              { "id": "animal-control", "details": "Ordinary Rats" },
-              { "id": "concealment", "details": "Self Only" },
-              { "id": "immunity", "details": "Toxins" },
-              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP —, Reach –1" }
+              {
+                "id": "animal-control",
+                "details": "Ordinary Rats"
+              },
+              {
+                "id": "concealment",
+                "details": "Self Only"
+              },
+              {
+                "id": "immunity",
+                "details": "Toxins"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: (STR+1)P, AP —, Reach –1"
+              }
             ],
-            "weaknesses": [{ "id": "allergy", "details": "Sunlight, Mild" }],
+            "weaknesses": [
+              {
+                "id": "allergy",
+                "details": "Sunlight, Mild"
+              }
+            ],
             "naturalWeapons": [
-              { "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": "—", "reach": -1 }
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": "—",
+                "reach": -1
+              }
             ],
             "page": 404,
             "source": "Core"
@@ -18214,31 +19600,85 @@
               "magic": 1
             },
             "initiative": "9 + 1D6",
-            "movement": { "walk": 2, "run": 4, "sprint": 2, "special": "As base metatype" },
-            "conditionMonitor": { "physical": 12, "stun": 11 },
-            "limits": { "physical": 8, "mental": 5, "social": 5 },
+            "movement": {
+              "walk": 2,
+              "run": 4,
+              "sprint": 2,
+              "special": "As base metatype"
+            },
+            "conditionMonitor": {
+              "physical": 12,
+              "stun": 11
+            },
+            "limits": {
+              "physical": 8,
+              "mental": 5,
+              "social": 5
+            },
             "armor": 1,
             "skills": [
-              { "name": "Assensing", "rating": 4 },
-              { "name": "Perception", "rating": 5 },
-              { "name": "Running", "rating": 3 },
-              { "name": "Sneaking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 6 }
+              {
+                "name": "Assensing",
+                "rating": 4
+              },
+              {
+                "name": "Perception",
+                "rating": 5
+              },
+              {
+                "name": "Running",
+                "rating": 3
+              },
+              {
+                "name": "Sneaking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 6
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 1 },
-              { "id": "dual-natured" },
-              { "id": "enhanced-senses", "details": "Hearing, Smell" },
-              { "id": "natural-weapon", "details": "Claws: (STR+1)P, AP –1" },
-              { "id": "sapience" }
+              {
+                "id": "armor",
+                "rating": 1
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Smell"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Claws: (STR+1)P, AP –1"
+              },
+              {
+                "id": "sapience"
+              }
             ],
             "weaknesses": [
-              { "id": "allergy", "details": "Sunlight, Moderate" },
-              { "id": "dietary-requirement", "details": "Metahuman Flesh" },
-              { "id": "reduced-senses", "details": "Blind" }
+              {
+                "id": "allergy",
+                "details": "Sunlight, Moderate"
+              },
+              {
+                "id": "dietary-requirement",
+                "details": "Metahuman Flesh"
+              },
+              {
+                "id": "reduced-senses",
+                "details": "Blind"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Claws", "type": "melee", "damage": "(STR+1)P", "ap": -1 }
+              {
+                "name": "Claws",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": -1
+              }
             ],
             "notes": "Stats for standard human ghoul. Use Metatype Attribute Modifiers for other metaspecies. Some may have Adept/Magician/Mystic Adept.",
             "page": 404,
@@ -18262,29 +19702,87 @@
               "magic": 5
             },
             "initiative": "10 + 3D6",
-            "movement": { "walk": 2, "run": 6, "sprint": 4 },
-            "conditionMonitor": { "physical": 11, "stun": 10 },
-            "limits": { "physical": 8, "mental": 4, "social": 6 },
+            "movement": {
+              "walk": 2,
+              "run": 6,
+              "sprint": 4
+            },
+            "conditionMonitor": {
+              "physical": 11,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 8,
+              "mental": 4,
+              "social": 6
+            },
             "armor": 2,
             "skills": [
-              { "name": "Exotic Ranged Weapon", "rating": 4 },
-              { "name": "Intimidation", "rating": 3 },
-              { "name": "Perception", "rating": 3 },
-              { "name": "Running", "rating": 4 },
-              { "name": "Sneaking", "rating": 5 },
-              { "name": "Tracking", "rating": 5 },
-              { "name": "Unarmed Combat", "rating": 3 }
+              {
+                "name": "Exotic Ranged Weapon",
+                "rating": 4
+              },
+              {
+                "name": "Intimidation",
+                "rating": 3
+              },
+              {
+                "name": "Perception",
+                "rating": 3
+              },
+              {
+                "name": "Running",
+                "rating": 4
+              },
+              {
+                "name": "Sneaking",
+                "rating": 5
+              },
+              {
+                "name": "Tracking",
+                "rating": 5
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 3
+              }
             ],
             "powers": [
-              { "id": "armor", "rating": 2 },
-              { "id": "dual-natured" },
-              { "id": "elemental-attack", "details": "Fire" },
-              { "id": "enhanced-senses", "details": "Hearing, Low-Light Vision, Smell" },
-              { "id": "fear" },
-              { "id": "immunity", "details": "Fire" },
-              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP –1" }
+              {
+                "id": "armor",
+                "rating": 2
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "elemental-attack",
+                "details": "Fire"
+              },
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Low-Light Vision, Smell"
+              },
+              {
+                "id": "fear"
+              },
+              {
+                "id": "immunity",
+                "details": "Fire"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: (STR+1)P, AP –1"
+              }
             ],
-            "naturalWeapons": [{ "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": -1 }],
+            "naturalWeapons": [
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": -1
+              }
+            ],
             "page": 405,
             "source": "Core"
           },
@@ -18306,20 +19804,59 @@
               "magic": 4
             },
             "initiative": "9 + 1D6",
-            "movement": { "walk": 2, "run": 4, "sprint": 2 },
-            "conditionMonitor": { "physical": 12, "stun": 10 },
-            "limits": { "physical": 9, "mental": 5, "social": 5 },
+            "movement": {
+              "walk": 2,
+              "run": 4,
+              "sprint": 2
+            },
+            "conditionMonitor": {
+              "physical": 12,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 9,
+              "mental": 5,
+              "social": 5
+            },
             "armor": 0,
             "reach": 1,
             "skills": [
-              { "name": "Assensing", "rating": 6 },
-              { "name": "Animal Calls (Professional Knowledge)", "rating": 8 },
-              { "name": "Artisan", "rating": 6 },
-              { "name": "Athletics skill group", "rating": 3 },
-              { "name": "Perception", "rating": 6 },
-              { "name": "Sneaking", "rating": 8 }
+              {
+                "name": "Assensing",
+                "rating": 6
+              },
+              {
+                "name": "Animal Calls (Professional Knowledge)",
+                "rating": 8
+              },
+              {
+                "name": "Artisan",
+                "rating": 6
+              },
+              {
+                "name": "Athletics skill group",
+                "rating": 3
+              },
+              {
+                "name": "Perception",
+                "rating": 6
+              },
+              {
+                "name": "Sneaking",
+                "rating": 8
+              }
             ],
-            "powers": [{ "id": "dual-natured" }, { "id": "mimicry" }, { "id": "sapience" }],
+            "powers": [
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "mimicry"
+              },
+              {
+                "id": "sapience"
+              }
+            ],
             "notes": "Some may have Adept/Magician/Mystic Adept.",
             "page": 406,
             "source": "Core"
@@ -18342,36 +19879,100 @@
               "magic": 6
             },
             "initiative": "9 + 2D6",
-            "movement": { "walk": 3, "run": 5, "sprint": 3 },
-            "conditionMonitor": { "physical": 10, "stun": 10 },
-            "limits": { "physical": 6, "mental": 5, "social": "5-9 (depending on Essence)" },
+            "movement": {
+              "walk": 3,
+              "run": 5,
+              "sprint": 3
+            },
+            "conditionMonitor": {
+              "physical": 10,
+              "stun": 10
+            },
+            "limits": {
+              "physical": 6,
+              "mental": 5,
+              "social": "5-9 (depending on Essence)"
+            },
             "armor": 0,
             "skills": [
-              { "name": "Perception", "rating": 5 },
-              { "name": "Running", "rating": 4 },
-              { "name": "Sneaking", "rating": 6 },
-              { "name": "Unarmed Combat", "rating": 5 }
+              {
+                "name": "Perception",
+                "rating": 5
+              },
+              {
+                "name": "Running",
+                "rating": 4
+              },
+              {
+                "name": "Sneaking",
+                "rating": 6
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 5
+              }
             ],
             "powers": [
-              { "id": "dual-natured" },
-              { "id": "enhanced-senses", "details": "Hearing, Smell, Thermographic Vision" },
-              { "id": "essence-drain" },
-              { "id": "immunity", "details": "Age, Pathogens, Toxins" },
-              { "id": "infection" },
-              { "id": "mist-form" },
-              { "id": "natural-weapon", "details": "Bite: (STR+1)P, AP –1, Reach –1" },
-              { "id": "regeneration" },
-              { "id": "sapience" }
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "enhanced-senses",
+                "details": "Hearing, Smell, Thermographic Vision"
+              },
+              {
+                "id": "essence-drain"
+              },
+              {
+                "id": "immunity",
+                "details": "Age, Pathogens, Toxins"
+              },
+              {
+                "id": "infection"
+              },
+              {
+                "id": "mist-form"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite: (STR+1)P, AP –1, Reach –1"
+              },
+              {
+                "id": "regeneration"
+              },
+              {
+                "id": "sapience"
+              }
             ],
             "weaknesses": [
-              { "id": "allergy", "details": "Sunlight, Severe" },
-              { "id": "allergy", "details": "Wood, Severe" },
-              { "id": "dietary-requirement", "details": "Metahuman Blood" },
-              { "id": "essence-loss" },
-              { "id": "induced-dormancy", "details": "Lack of Air, (Essence) Minutes" }
+              {
+                "id": "allergy",
+                "details": "Sunlight, Severe"
+              },
+              {
+                "id": "allergy",
+                "details": "Wood, Severe"
+              },
+              {
+                "id": "dietary-requirement",
+                "details": "Metahuman Blood"
+              },
+              {
+                "id": "essence-loss"
+              },
+              {
+                "id": "induced-dormancy",
+                "details": "Lack of Air, (Essence) Minutes"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Bite", "type": "melee", "damage": "(STR+1)P", "ap": -1, "reach": -1 }
+              {
+                "name": "Bite",
+                "type": "melee",
+                "damage": "(STR+1)P",
+                "ap": -1,
+                "reach": -1
+              }
             ],
             "notes": "Magic = 6 or Essence (lower). Can only consume blood. –4 to swimming tests. Sunlight damage cannot be healed by Regeneration. May have Adept/Magician/Mystic Adept.",
             "page": 406,
@@ -18399,37 +20000,99 @@
               "walk": 2,
               "run": 4,
               "sprint": 4,
-              "flight": { "walk": 3, "run": 7, "sprint": 6 }
+              "flight": {
+                "walk": 3,
+                "run": 7,
+                "sprint": 6
+              }
             },
-            "conditionMonitor": { "physical": 17, "stun": 13 },
-            "limits": { "physical": 32, "mental": 13, "social": 13 },
-            "armor": { "physical": "17H", "mystic": "9H" },
+            "conditionMonitor": {
+              "physical": 17,
+              "stun": 13
+            },
+            "limits": {
+              "physical": 32,
+              "mental": 13,
+              "social": 13
+            },
+            "armor": {
+              "physical": "17H",
+              "mystic": "9H"
+            },
             "reach": 2,
             "skills": [
-              { "name": "Assensing", "rating": 14 },
-              { "name": "Conjuring skill group", "rating": 12 },
-              { "name": "Exotic Ranged Weapon", "rating": 12 },
-              { "name": "Flight", "rating": 12 },
-              { "name": "Perception", "rating": 12 },
-              { "name": "Running", "rating": 10 },
-              { "name": "Sorcery skill group", "rating": 14 },
-              { "name": "Unarmed Combat", "rating": 12 }
+              {
+                "name": "Assensing",
+                "rating": 14
+              },
+              {
+                "name": "Conjuring skill group",
+                "rating": 12
+              },
+              {
+                "name": "Exotic Ranged Weapon",
+                "rating": 12
+              },
+              {
+                "name": "Flight",
+                "rating": 12
+              },
+              {
+                "name": "Perception",
+                "rating": 12
+              },
+              {
+                "name": "Running",
+                "rating": 10
+              },
+              {
+                "name": "Sorcery skill group",
+                "rating": 14
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 12
+              }
             ],
             "powers": [
-              { "id": "dragonspeech" },
-              { "id": "dual-natured" },
-              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "dragonspeech"
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "elemental-attack",
+                "details": "Fire"
+              },
               {
                 "id": "enhanced-senses",
                 "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
               },
-              { "id": "hardened-armor", "details": "Body" },
-              { "id": "hardened-mystic-armor", "details": "Willpower" },
-              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
-              { "id": "sapience" }
+              {
+                "id": "hardened-armor",
+                "details": "Body"
+              },
+              {
+                "id": "hardened-mystic-armor",
+                "details": "Willpower"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite/Claws: (STR+2)P, AP –4"
+              },
+              {
+                "id": "sapience"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+              {
+                "name": "Bite/Claws",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -4,
+                "reach": 2
+              }
             ],
             "description": "Approximately 30 meters long, 2 meters at the shoulder. Colorful, serpentine body with broad head, whiskers, and multiple horns. Common coloration is iridescent green with golden whiskers and belly.",
             "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
@@ -18458,37 +20121,99 @@
               "walk": 3,
               "run": 5,
               "sprint": 5,
-              "flight": { "walk": 4, "run": 8, "sprint": 7 }
+              "flight": {
+                "walk": 4,
+                "run": 8,
+                "sprint": 7
+              }
             },
-            "conditionMonitor": { "physical": 16, "stun": 13 },
-            "limits": { "physical": 29, "mental": 13, "social": 12 },
-            "armor": { "physical": "15H", "mystic": "10H" },
+            "conditionMonitor": {
+              "physical": 16,
+              "stun": 13
+            },
+            "limits": {
+              "physical": 29,
+              "mental": 13,
+              "social": 12
+            },
+            "armor": {
+              "physical": "15H",
+              "mystic": "10H"
+            },
             "reach": 2,
             "skills": [
-              { "name": "Assensing", "rating": 14 },
-              { "name": "Conjuring skill group", "rating": 12 },
-              { "name": "Exotic Ranged Weapon", "rating": 12 },
-              { "name": "Flight", "rating": 12 },
-              { "name": "Perception", "rating": 12 },
-              { "name": "Running", "rating": 10 },
-              { "name": "Sorcery skill group", "rating": 14 },
-              { "name": "Unarmed Combat", "rating": 12 }
+              {
+                "name": "Assensing",
+                "rating": 14
+              },
+              {
+                "name": "Conjuring skill group",
+                "rating": 12
+              },
+              {
+                "name": "Exotic Ranged Weapon",
+                "rating": 12
+              },
+              {
+                "name": "Flight",
+                "rating": 12
+              },
+              {
+                "name": "Perception",
+                "rating": 12
+              },
+              {
+                "name": "Running",
+                "rating": 10
+              },
+              {
+                "name": "Sorcery skill group",
+                "rating": 14
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 12
+              }
             ],
             "powers": [
-              { "id": "dragonspeech" },
-              { "id": "dual-natured" },
-              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "dragonspeech"
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "elemental-attack",
+                "details": "Fire"
+              },
               {
                 "id": "enhanced-senses",
                 "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
               },
-              { "id": "hardened-armor", "details": "Body" },
-              { "id": "hardened-mystic-armor", "details": "Willpower" },
-              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
-              { "id": "sapience" }
+              {
+                "id": "hardened-armor",
+                "details": "Body"
+              },
+              {
+                "id": "hardened-mystic-armor",
+                "details": "Willpower"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite/Claws: (STR+2)P, AP –4"
+              },
+              {
+                "id": "sapience"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+              {
+                "name": "Bite/Claws",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -4,
+                "reach": 2
+              }
             ],
             "description": "Approximately 20 meters long with a feathered body in rainbow colors. Has a wingspan of 15-18 meters. Frequently have a tail stinger or venomous fangs.",
             "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
@@ -18517,37 +20242,99 @@
               "walk": 2,
               "run": 4,
               "sprint": 4,
-              "flight": { "walk": 3, "run": 7, "sprint": 5 }
+              "flight": {
+                "walk": 3,
+                "run": 7,
+                "sprint": 5
+              }
             },
-            "conditionMonitor": { "physical": 17, "stun": 12 },
-            "limits": { "physical": 36, "mental": 11, "social": 12 },
-            "armor": { "physical": "18H", "mystic": "8H" },
+            "conditionMonitor": {
+              "physical": 17,
+              "stun": 12
+            },
+            "limits": {
+              "physical": 36,
+              "mental": 11,
+              "social": 12
+            },
+            "armor": {
+              "physical": "18H",
+              "mystic": "8H"
+            },
             "reach": 2,
             "skills": [
-              { "name": "Assensing", "rating": 14 },
-              { "name": "Conjuring skill group", "rating": 12 },
-              { "name": "Exotic Ranged Weapon", "rating": 12 },
-              { "name": "Flight", "rating": 12 },
-              { "name": "Perception", "rating": 12 },
-              { "name": "Running", "rating": 10 },
-              { "name": "Sorcery skill group", "rating": 14 },
-              { "name": "Unarmed Combat", "rating": 12 }
+              {
+                "name": "Assensing",
+                "rating": 14
+              },
+              {
+                "name": "Conjuring skill group",
+                "rating": 12
+              },
+              {
+                "name": "Exotic Ranged Weapon",
+                "rating": 12
+              },
+              {
+                "name": "Flight",
+                "rating": 12
+              },
+              {
+                "name": "Perception",
+                "rating": 12
+              },
+              {
+                "name": "Running",
+                "rating": 10
+              },
+              {
+                "name": "Sorcery skill group",
+                "rating": 14
+              },
+              {
+                "name": "Unarmed Combat",
+                "rating": 12
+              }
             ],
             "powers": [
-              { "id": "dragonspeech" },
-              { "id": "dual-natured" },
-              { "id": "elemental-attack", "details": "Fire" },
+              {
+                "id": "dragonspeech"
+              },
+              {
+                "id": "dual-natured"
+              },
+              {
+                "id": "elemental-attack",
+                "details": "Fire"
+              },
               {
                 "id": "enhanced-senses",
                 "details": "Smell, Low-Light Vision, Thermographic Vision, Wide-Band Hearing"
               },
-              { "id": "hardened-armor", "details": "Body" },
-              { "id": "hardened-mystic-armor", "details": "Willpower" },
-              { "id": "natural-weapon", "details": "Bite/Claws: (STR+2)P, AP –4" },
-              { "id": "sapience" }
+              {
+                "id": "hardened-armor",
+                "details": "Body"
+              },
+              {
+                "id": "hardened-mystic-armor",
+                "details": "Willpower"
+              },
+              {
+                "id": "natural-weapon",
+                "details": "Bite/Claws: (STR+2)P, AP –4"
+              },
+              {
+                "id": "sapience"
+              }
             ],
             "naturalWeapons": [
-              { "name": "Bite/Claws", "type": "melee", "damage": "(STR+2)P", "ap": -4, "reach": 2 }
+              {
+                "name": "Bite/Claws",
+                "type": "melee",
+                "damage": "(STR+2)P",
+                "ap": -4,
+                "reach": 2
+              }
             ],
             "description": "Largest dragon type, 37+ meters in length, 3 meters at the shoulder, with approximately 30 meter wingspan. Usually single-colored with heavy scales; some have bony plates.",
             "notes": "Has Magician quality. Individual dragons may also have: Animal Control, Compulsion, Corrosive Saliva, Fear, Influence, Noxious Breath, Venom.",
@@ -20504,9 +22291,15 @@
     "categoryModificationDefaults": {
       "mergeStrategy": "merge",
       "payload": {
-        "melee": { "capabilityMode": "none" },
-        "throwing-weapons": { "capabilityMode": "none" },
-        "grenades": { "capabilityMode": "none" },
+        "melee": {
+          "capabilityMode": "none"
+        },
+        "throwing-weapons": {
+          "capabilityMode": "none"
+        },
+        "grenades": {
+          "capabilityMode": "none"
+        },
         "taser": {
           "capabilityMode": "mount-based",
           "availableMounts": ["top"]
