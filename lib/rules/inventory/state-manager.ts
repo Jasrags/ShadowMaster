@@ -18,7 +18,7 @@ import type { GearState, EquipmentReadiness, DeviceCondition } from "@/lib/types
 /**
  * Action types for state transitions.
  */
-export type ActionType = "free" | "simple" | "complex" | "none";
+export type ActionType = "free" | "simple" | "complex" | "narrative" | "none";
 
 /**
  * Valid state transitions and their action costs.
@@ -42,22 +42,29 @@ export const STATE_TRANSITION_COSTS: Record<string, ActionType> = {
   // Taking off armor
   "worn->stored": "complex",
   // Armor doesn't go to readied/holstered
+  // Stash transitions (narrative time only)
+  "readied->stashed": "narrative",
+  "holstered->stashed": "narrative",
+  "stored->stashed": "narrative",
+  "worn->stashed": "narrative",
+  "stashed->stored": "narrative",
   // Same state = no action
   "readied->readied": "none",
   "holstered->holstered": "none",
   "stored->stored": "none",
   "worn->worn": "none",
+  "stashed->stashed": "none",
 };
 
 /**
  * Valid states for different gear types.
  */
 export const VALID_STATES: Record<string, EquipmentReadiness[]> = {
-  weapon: ["readied", "holstered", "stored"],
-  armor: ["worn", "stored"],
-  gear: ["readied", "holstered", "worn", "stored"],
+  weapon: ["readied", "holstered", "stored", "stashed"],
+  armor: ["worn", "stored", "stashed"],
+  gear: ["readied", "holstered", "worn", "stored", "stashed"],
   augmentation: ["worn"], // Augmentations are always "worn" (implanted)
-  electronics: ["readied", "holstered", "stored"],
+  electronics: ["readied", "holstered", "stored", "stashed"],
 };
 
 // =============================================================================
@@ -264,6 +271,51 @@ export function toggleAugmentationWireless<T extends { wirelessEnabled?: boolean
   };
 }
 
+// =============================================================================
+// DEVICE ACTIVATION
+// =============================================================================
+
+export interface ActivationToggleResult {
+  success: boolean;
+  previousState: boolean;
+  newState: boolean;
+  actionCost: ActionType;
+}
+
+/**
+ * Toggle device activation (power on/off) for an item.
+ * Separate from wireless — a device can be active but wireless-off.
+ * In combat, toggling activation costs a Simple Action.
+ * Outside combat, it's a Free Action.
+ */
+export function toggleActivation<T extends { state?: GearState }>(
+  item: T,
+  active: boolean,
+  gearType: string = "electronics",
+  inCombat: boolean = false
+): { item: T; result: ActivationToggleResult } {
+  const currentState: GearState = item.state ?? getDefaultState(gearType);
+  const previousActive = currentState.active ?? true;
+
+  const updatedItem = {
+    ...item,
+    state: {
+      ...currentState,
+      active,
+    },
+  };
+
+  return {
+    item: updatedItem,
+    result: {
+      success: true,
+      previousState: previousActive,
+      newState: active,
+      actionCost: inCombat ? "simple" : "free",
+    },
+  };
+}
+
 /**
  * Set wireless state for all items on a character.
  * Respects the global wirelessBonusesEnabled flag.
@@ -402,8 +454,10 @@ export function getEquipmentStateSummary(character: Character): {
   readiedWeapons: number;
   holsteredWeapons: number;
   storedWeapons: number;
+  stashedWeapons: number;
   wornArmor: number;
   storedArmor: number;
+  stashedArmor: number;
   wirelessEnabled: number;
   wirelessDisabled: number;
   brickedDevices: number;
@@ -415,8 +469,10 @@ export function getEquipmentStateSummary(character: Character): {
   let readiedWeapons = 0;
   let holsteredWeapons = 0;
   let storedWeapons = 0;
+  let stashedWeapons = 0;
   let wornArmor = 0;
   let storedArmor = 0;
+  let stashedArmor = 0;
   let wirelessEnabled = 0;
   let wirelessDisabled = 0;
   let brickedDevices = 0;
@@ -425,6 +481,7 @@ export function getEquipmentStateSummary(character: Character): {
     const state = weapon.state?.readiness ?? "holstered";
     if (state === "readied") readiedWeapons++;
     else if (state === "holstered") holsteredWeapons++;
+    else if (state === "stashed") stashedWeapons++;
     else storedWeapons++;
 
     if (weapon.state?.wirelessEnabled !== false) wirelessEnabled++;
@@ -434,6 +491,7 @@ export function getEquipmentStateSummary(character: Character): {
   for (const item of armor) {
     const state = item.state?.readiness ?? (item.equipped ? "worn" : "stored");
     if (state === "worn") wornArmor++;
+    else if (state === "stashed") stashedArmor++;
     else storedArmor++;
   }
 
@@ -454,8 +512,10 @@ export function getEquipmentStateSummary(character: Character): {
     readiedWeapons,
     holsteredWeapons,
     storedWeapons,
+    stashedWeapons,
     wornArmor,
     storedArmor,
+    stashedArmor,
     wirelessEnabled,
     wirelessDisabled,
     brickedDevices,

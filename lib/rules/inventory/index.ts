@@ -10,6 +10,7 @@ export {
   type StateTransitionResult,
   type WirelessToggleResult,
   type DeviceConditionResult,
+  type ActivationToggleResult,
   // Constants
   STATE_TRANSITION_COSTS,
   VALID_STATES,
@@ -23,6 +24,8 @@ export {
   toggleWireless,
   toggleAugmentationWireless,
   setAllWireless,
+  // Device activation
+  toggleActivation,
   // Device condition
   setDeviceCondition,
   brickDevice,

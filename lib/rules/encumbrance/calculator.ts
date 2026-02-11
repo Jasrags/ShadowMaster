@@ -38,7 +38,7 @@ export function isItemCarried(item: { state?: { readiness: EquipmentReadiness } 
     // Legacy items without state default to carried
     return true;
   }
-  return item.state.readiness !== "stored";
+  return item.state.readiness !== "stored" && item.state.readiness !== "stashed";
 }
 
 /**

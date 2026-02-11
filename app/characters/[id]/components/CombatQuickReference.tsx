@@ -140,7 +140,7 @@ function hasSmartgunWirelessBonus(character: Character, weapon: Weapon): boolean
   if (!isGlobalWirelessEnabled(character)) return false;
 
   // Weapon must be available (not stored)
-  if (weapon.state?.readiness === "stored") return false;
+  if (weapon.state?.readiness === "stored" || weapon.state?.readiness === "stashed") return false;
 
   // Per-weapon wireless must be on (default true if not set)
   if (weapon.state?.wirelessEnabled === false) return false;

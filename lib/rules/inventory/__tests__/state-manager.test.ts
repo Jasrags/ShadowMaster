@@ -16,6 +16,7 @@ import {
   toggleWireless,
   toggleAugmentationWireless,
   setAllWireless,
+  toggleActivation,
   setDeviceCondition,
   brickDevice,
   repairDevice,
@@ -34,7 +35,9 @@ import {
 // Note: Using type assertions for simplified test objects.
 // Tests focus on state management logic, not full type compliance.
 
-function createWeapon(readiness: "readied" | "holstered" | "stored" = "holstered"): Weapon {
+function createWeapon(
+  readiness: "readied" | "holstered" | "stored" | "stashed" = "holstered"
+): Weapon {
   return {
     id: `weapon-${Date.now()}-${Math.random()}`,
     name: "Test Weapon",
@@ -52,7 +55,7 @@ function createWeapon(readiness: "readied" | "holstered" | "stored" = "holstered
   } as Weapon;
 }
 
-function createArmor(readiness: "worn" | "stored" = "worn"): ArmorItem {
+function createArmor(readiness: "worn" | "stored" | "stashed" = "worn"): ArmorItem {
   return {
     id: `armor-${Date.now()}-${Math.random()}`,
     name: "Test Armor",
@@ -153,6 +156,23 @@ describe("Equipment State Manager", () => {
       const transitions = getValidTransitions("worn", "augmentation");
       expect(transitions).toEqual(["worn"]);
     });
+
+    it("should include stashed for weapons", () => {
+      const transitions = getValidTransitions("holstered", "weapon");
+      expect(transitions).toContain("stashed");
+    });
+
+    it("should only allow stored as exit from stashed", () => {
+      const transitions = getValidTransitions("stashed", "weapon");
+      expect(transitions).toContain("stored");
+      expect(transitions).toContain("stashed"); // same-state
+      expect(transitions).not.toContain("readied");
+      expect(transitions).not.toContain("holstered");
+    });
+
+    it("should not include stashed for augmentations", () => {
+      expect(VALID_STATES.augmentation).not.toContain("stashed");
+    });
   });
 
   describe("getTransitionActionCost", () => {
@@ -181,6 +201,18 @@ describe("Equipment State Manager", () => {
     it("should default to complex for unknown transitions", () => {
       expect(getTransitionActionCost("readied", "worn")).toBe("complex");
     });
+
+    it("should return narrative for all stash transitions", () => {
+      expect(getTransitionActionCost("readied", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("holstered", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("stored", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("worn", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("stashed", "stored")).toBe("narrative");
+    });
+
+    it("should return none for stashed to stashed", () => {
+      expect(getTransitionActionCost("stashed", "stashed")).toBe("none");
+    });
   });
 
   describe("isValidTransition", () => {
@@ -200,6 +232,25 @@ describe("Equipment State Manager", () => {
       expect(isValidTransition("worn", "stored", "augmentation")).toBe(false);
       expect(isValidTransition("worn", "worn", "augmentation")).toBe(true);
     });
+
+    it("should validate weapon stashed transitions", () => {
+      expect(isValidTransition("holstered", "stashed", "weapon")).toBe(true);
+      expect(isValidTransition("stored", "stashed", "weapon")).toBe(true);
+      expect(isValidTransition("stashed", "stored", "weapon")).toBe(true);
+    });
+
+    it("should validate armor stashed transitions", () => {
+      expect(isValidTransition("worn", "stashed", "armor")).toBe(true);
+      expect(isValidTransition("stashed", "stored", "armor")).toBe(true);
+    });
+
+    it("should reject stashed to readied (must go through stored)", () => {
+      expect(isValidTransition("stashed", "readied", "weapon")).toBe(false);
+    });
+
+    it("should reject augmentation to stashed", () => {
+      expect(isValidTransition("worn", "stashed", "augmentation")).toBe(false);
+    });
   });
 
   describe("setEquipmentReadiness", () => {
@@ -216,6 +267,32 @@ describe("Equipment State Manager", () => {
     it("should fail for invalid transitions", () => {
       const armor = createArmor("worn");
       const result = setEquipmentReadiness(armor, "readied", "armor");
+
+      expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
+    });
+
+    it("should transition weapon from holstered to stashed with narrative cost", () => {
+      const weapon = createWeapon("holstered");
+      const result = setEquipmentReadiness(weapon, "stashed", "weapon");
+
+      expect(result.success).toBe(true);
+      expect(result.newState).toBe("stashed");
+      expect(result.actionCost).toBe("narrative");
+    });
+
+    it("should transition weapon from stashed to stored with narrative cost", () => {
+      const weapon = createWeapon("stashed");
+      const result = setEquipmentReadiness(weapon, "stored", "weapon");
+
+      expect(result.success).toBe(true);
+      expect(result.newState).toBe("stored");
+      expect(result.actionCost).toBe("narrative");
+    });
+
+    it("should fail transition from stashed to readied", () => {
+      const weapon = createWeapon("stashed");
+      const result = setEquipmentReadiness(weapon, "readied", "weapon");
 
       expect(result.success).toBe(false);
       expect(result.error).toBeDefined();
@@ -277,6 +354,55 @@ describe("Equipment State Manager", () => {
       const { result } = toggleAugmentationWireless(cyber, false);
 
       expect(result.previousState).toBe(true);
+    });
+  });
+
+  describe("toggleActivation", () => {
+    it("should toggle device activation off (free action outside combat)", () => {
+      const device = {
+        id: "device-1",
+        state: { readiness: "worn" as const, wirelessEnabled: true, active: true },
+      };
+      const { item, result } = toggleActivation(device, false);
+
+      expect(result.success).toBe(true);
+      expect(result.previousState).toBe(true);
+      expect(result.newState).toBe(false);
+      expect(result.actionCost).toBe("free");
+      expect(item.state?.active).toBe(false);
+    });
+
+    it("should toggle device activation on", () => {
+      const device = {
+        id: "device-1",
+        state: { readiness: "worn" as const, wirelessEnabled: true, active: false },
+      };
+      const { item, result } = toggleActivation(device, true);
+
+      expect(result.success).toBe(true);
+      expect(result.newState).toBe(true);
+      expect(item.state?.active).toBe(true);
+    });
+
+    it("should cost simple action in combat", () => {
+      const device = {
+        id: "device-1",
+        state: { readiness: "worn" as const, wirelessEnabled: true, active: true },
+      };
+      const { result } = toggleActivation(device, false, "electronics", true);
+
+      expect(result.actionCost).toBe("simple");
+    });
+
+    it("should default active to true when field is absent", () => {
+      const device = {
+        id: "device-1",
+        state: { readiness: "worn" as const, wirelessEnabled: true },
+      };
+      const { result } = toggleActivation(device, false);
+
+      expect(result.previousState).toBe(true);
+      expect(result.newState).toBe(false);
     });
   });
 
@@ -394,10 +520,15 @@ describe("Equipment State Manager", () => {
   });
 
   describe("getEquipmentStateSummary", () => {
-    it("should count equipment states", () => {
+    it("should count equipment states including stashed", () => {
       const character = createCharacter({
-        weapons: [createWeapon("readied"), createWeapon("holstered"), createWeapon("stored")],
-        armor: [createArmor("worn"), createArmor("stored")],
+        weapons: [
+          createWeapon("readied"),
+          createWeapon("holstered"),
+          createWeapon("stored"),
+          createWeapon("stashed"),
+        ],
+        armor: [createArmor("worn"), createArmor("stored"), createArmor("stashed")],
         cyberware: [
           {
             id: "cyber-1",
@@ -431,9 +562,11 @@ describe("Equipment State Manager", () => {
       expect(summary.readiedWeapons).toBe(1);
       expect(summary.holsteredWeapons).toBe(1);
       expect(summary.storedWeapons).toBe(1);
+      expect(summary.stashedWeapons).toBe(1);
       expect(summary.wornArmor).toBe(1);
       expect(summary.storedArmor).toBe(1);
-      expect(summary.wirelessEnabled).toBe(4); // 3 weapons + 1 cyberware
+      expect(summary.stashedArmor).toBe(1);
+      expect(summary.wirelessEnabled).toBe(5); // 4 weapons + 1 cyberware
       expect(summary.wirelessDisabled).toBe(1); // 1 cyberware disabled
     });
 
@@ -507,16 +640,28 @@ describe("Equipment State Manager", () => {
       expect(STATE_TRANSITION_COSTS["stored->readied"]).toBe("complex");
     });
 
+    it("should have stashed transition costs defined", () => {
+      expect(STATE_TRANSITION_COSTS["readied->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["holstered->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["stored->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["worn->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["stashed->stored"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["stashed->stashed"]).toBe("none");
+    });
+
     it("should have correct valid states for each gear type", () => {
       expect(VALID_STATES.weapon).toContain("readied");
       expect(VALID_STATES.weapon).toContain("holstered");
+      expect(VALID_STATES.weapon).toContain("stashed");
       expect(VALID_STATES.weapon).not.toContain("worn");
 
       expect(VALID_STATES.armor).toContain("worn");
       expect(VALID_STATES.armor).toContain("stored");
+      expect(VALID_STATES.armor).toContain("stashed");
       expect(VALID_STATES.armor).not.toContain("holstered");
 
       expect(VALID_STATES.augmentation).toEqual(["worn"]);
+      expect(VALID_STATES.augmentation).not.toContain("stashed");
     });
   });
 });
