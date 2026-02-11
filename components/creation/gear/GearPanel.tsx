@@ -282,6 +282,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         quantity: totalUnits,
         rating: hasRatingFlag || hasUnifiedRatings(gearData) ? effectiveRating : gearData.rating,
         specification,
+        weight: gearData.weight,
         capacity,
         capacityUsed: 0,
         modifications: [],
