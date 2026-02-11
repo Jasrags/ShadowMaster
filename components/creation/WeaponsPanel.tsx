@@ -243,6 +243,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
         cost: weapon.cost,
         availability: weapon.availability,
         legality: weapon.legality,
+        weight: weapon.weight,
         quantity,
         wirelessBonus: weapon.wirelessBonus,
         modifications: [],
