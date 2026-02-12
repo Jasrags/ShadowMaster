@@ -81,6 +81,19 @@ export function setupReactAriaMock() {
         {children}
       </a>
     ),
+    Button: ({
+      children,
+      className,
+      ...props
+    }: {
+      children: React.ReactNode;
+      className?: string;
+      [key: string]: unknown;
+    }) => (
+      <button className={className} {...props}>
+        {children}
+      </button>
+    ),
   }));
 }
 
@@ -118,6 +131,9 @@ export const LUCIDE_MOCK = {
   Zap: createIconMock("Zap"),
   Car: createIconMock("Car"),
   Home: createIconMock("Home"),
+  Star: createIconMock("Star"),
+  CirclePlus: createIconMock("CirclePlus"),
+  ArrowUp: createIconMock("ArrowUp"),
 };
 
 // ---------------------------------------------------------------------------
