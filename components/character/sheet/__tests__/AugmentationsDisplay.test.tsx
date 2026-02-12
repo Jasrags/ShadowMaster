@@ -3,48 +3,21 @@
  *
  * Tests the augmentations (cyberware/bioware) display.
  * Returns null when no augmentations. Shows cyberware vs bioware sections,
- * grade badges, essence cost, and attribute bonuses.
+ * grade pills, essence cost pills, and attribute bonuses.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { createSheetCharacter, MOCK_CYBERWARE, MOCK_BIOWARE } from "./test-helpers";
+import {
+  createSheetCharacter,
+  setupDisplayCardMock,
+  LUCIDE_MOCK,
+  MOCK_CYBERWARE,
+  MOCK_BIOWARE,
+} from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 import { AugmentationsDisplay } from "../AugmentationsDisplay";
 
@@ -89,17 +62,18 @@ describe("AugmentationsDisplay", () => {
     expect(screen.getByText("Wired Reflexes")).toBeInTheDocument();
   });
 
-  it("renders grade badge", () => {
+  it("renders grade pill", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
-    expect(screen.getByText("standard")).toBeInTheDocument();
+    const pill = screen.getByTestId("grade-pill");
+    expect(pill).toHaveTextContent("standard");
   });
 
-  it("renders essence cost with 2 decimal places", () => {
+  it("renders essence cost pill with 2 decimal places", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
-    expect(screen.getByText("Essence")).toBeInTheDocument();
-    expect(screen.getByText("2.00")).toBeInTheDocument();
+    const pill = screen.getByTestId("essence-pill");
+    expect(pill).toHaveTextContent("2.00");
   });
 
   it("renders attribute bonuses", () => {
@@ -117,12 +91,29 @@ describe("AugmentationsDisplay", () => {
   it("renders rating when present", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
-    expect(screen.getByText("Rating: 1")).toBeInTheDocument();
+    expect(screen.getByText(/Rating 1/)).toBeInTheDocument();
   });
 
   it("renders category", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
-    expect(screen.getByText("bodyware")).toBeInTheDocument();
+    expect(screen.getByText(/bodyware/i)).toBeInTheDocument();
+  });
+
+  it("sorts augmentations by essence cost descending", () => {
+    const lowEssence = { ...MOCK_CYBERWARE, name: "Low Essence", essenceCost: 0.5 };
+    const highEssence = { ...MOCK_CYBERWARE, name: "High Essence", essenceCost: 3.0 };
+    const character = createSheetCharacter({ cyberware: [lowEssence, highEssence] });
+    render(<AugmentationsDisplay character={character} />);
+    const rows = screen.getAllByTestId("augmentation-row");
+    expect(rows[0]).toHaveTextContent("High Essence");
+    expect(rows[1]).toHaveTextContent("Low Essence");
+  });
+
+  it("bonus pill has emerald styling", () => {
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+    const pill = screen.getByTestId("bonus-pill");
+    expect(pill.className).toContain("bg-emerald-100");
   });
 });
