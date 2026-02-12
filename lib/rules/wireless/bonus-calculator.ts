@@ -133,7 +133,11 @@ export function collectWeaponModEffects(character: Character): WirelessEffect[] 
 
   for (const weapon of weapons) {
     // Weapon must be available (not stored) and have wireless
-    if (weapon.state?.readiness === "stored" || weapon.state?.wirelessEnabled === false) {
+    if (
+      weapon.state?.readiness === "stored" ||
+      weapon.state?.readiness === "stashed" ||
+      weapon.state?.wirelessEnabled === false
+    ) {
       continue;
     }
 

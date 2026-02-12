@@ -22,26 +22,27 @@ import type { ID, ItemLegality } from "./core";
  * - holstered: Accessible, Simple Action to ready (weapons, some gear)
  * - worn: Currently worn (armor, clothing)
  * - stored: In bag/vehicle, not readily accessible
+ * - stashed: Off-site storage (safehouse, vehicle trunk); narrative time to retrieve
  */
-export type EquipmentReadiness = "readied" | "holstered" | "worn" | "stored";
+export type EquipmentReadiness = "readied" | "holstered" | "worn" | "stored" | "stashed";
 
 /**
  * Valid readiness states by gear category.
  * Used for validation during state transitions.
  */
 export const VALID_READINESS_STATES: Record<string, EquipmentReadiness[]> = {
-  weapon: ["readied", "holstered", "stored"],
-  armor: ["worn", "stored"],
-  clothing: ["worn", "stored"],
-  gear: ["worn", "holstered", "stored"],
-  electronics: ["worn", "holstered", "stored"],
+  weapon: ["readied", "holstered", "stored", "stashed"],
+  armor: ["worn", "stored", "stashed"],
+  clothing: ["worn", "stored", "stashed"],
+  gear: ["worn", "holstered", "stored", "stashed"],
+  electronics: ["worn", "holstered", "stored", "stashed"],
 };
 
 /**
  * Action cost for equipment state transitions.
  * null means the transition is not valid.
  */
-export type TransitionActionCost = "free" | "simple" | "complex" | null;
+export type TransitionActionCost = "free" | "simple" | "complex" | "narrative" | null;
 
 /**
  * Map of valid state transitions and their action costs.
@@ -54,18 +55,25 @@ export const STATE_TRANSITION_COSTS: Record<
   readied: {
     holstered: "simple",
     stored: "complex",
+    stashed: "narrative",
   },
   holstered: {
     readied: "simple",
     stored: "simple",
+    stashed: "narrative",
   },
   worn: {
     stored: "complex",
+    stashed: "narrative",
   },
   stored: {
     readied: "complex",
     holstered: "simple",
     worn: "complex",
+    stashed: "narrative",
+  },
+  stashed: {
+    stored: "narrative",
   },
 };
 
@@ -111,6 +119,12 @@ export interface GearState {
 
   /** Device condition for Matrix-capable devices (if applicable) */
   condition?: DeviceCondition;
+
+  /** Device power state; absent for non-electronic items, defaults true for electronics */
+  active?: boolean;
+
+  /** Reference to containing item (e.g., weapon in holster, gear in backpack) */
+  containedIn?: { itemId: string; slotType: string };
 }
 
 /**
@@ -128,10 +142,10 @@ export const DEFAULT_STATE_BY_CATEGORY: Record<string, Partial<GearState>> = {
   weapon: { readiness: "holstered", wirelessEnabled: true },
   armor: { readiness: "worn", wirelessEnabled: true },
   clothing: { readiness: "worn", wirelessEnabled: false },
-  cyberdeck: { readiness: "worn", wirelessEnabled: true, condition: "functional" },
-  commlink: { readiness: "worn", wirelessEnabled: true, condition: "functional" },
-  rcc: { readiness: "stored", wirelessEnabled: true, condition: "functional" },
-  drone: { readiness: "stored", wirelessEnabled: true, condition: "functional" },
+  cyberdeck: { readiness: "worn", wirelessEnabled: true, condition: "functional", active: true },
+  commlink: { readiness: "worn", wirelessEnabled: true, condition: "functional", active: true },
+  rcc: { readiness: "stored", wirelessEnabled: true, condition: "functional", active: true },
+  drone: { readiness: "stored", wirelessEnabled: true, condition: "functional", active: true },
 };
 
 // =============================================================================

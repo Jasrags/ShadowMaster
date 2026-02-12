@@ -156,6 +156,12 @@ describe("Encumbrance Calculator", () => {
       expect(isItemCarried(armor)).toBe(true);
     });
 
+    it("should return false for stashed items", () => {
+      const weapon = createWeapon(2);
+      weapon.state = { readiness: "stashed", wirelessEnabled: true };
+      expect(isItemCarried(weapon)).toBe(false);
+    });
+
     it("should return true for legacy items without state", () => {
       const weapon = {
         id: "legacy",
@@ -225,6 +231,19 @@ describe("Encumbrance Calculator", () => {
 
       const result = calculateEncumbrance(character);
       expect(result.currentWeight).toBe(13); // 10 + 3
+    });
+
+    it("should exclude stashed items from weight", () => {
+      const stashedWeapon = createWeapon(15);
+      stashedWeapon.state = { readiness: "stashed", wirelessEnabled: true };
+
+      const character = createTestCharacter({
+        weapons: [createWeapon(10), stashedWeapon], // Only 10kg counted
+        gear: [createGear(3)],
+      });
+
+      const result = calculateEncumbrance(character);
+      expect(result.currentWeight).toBe(13); // 10 + 3, stashed excluded
     });
 
     it("should detect encumbrance when over capacity", () => {
