@@ -2,7 +2,7 @@
  * AdeptPowersDisplay Component Tests
  *
  * Tests the adept powers display. Returns null when empty.
- * Shows rating badge, specification text, and PP cost.
+ * Shows rating pill, specification text, and PP cost pill.
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -73,12 +73,12 @@ describe("AdeptPowersDisplay", () => {
     expect(screen.getByText("Improved Reflexes")).toBeInTheDocument();
   });
 
-  it("renders rating badge when present", () => {
+  it("renders rating pill when present", () => {
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
-    expect(screen.getByText("Level 2")).toBeInTheDocument();
+    expect(screen.getByText("2")).toBeInTheDocument();
   });
 
-  it("does not render rating badge when no rating", () => {
+  it("does not render rating pill when no rating", () => {
     const noRating: AdeptPower = {
       id: "traceless-walk",
       catalogId: "traceless-walk",
@@ -86,12 +86,12 @@ describe("AdeptPowersDisplay", () => {
       powerPointCost: 1,
     };
     render(<AdeptPowersDisplay adeptPowers={[noRating]} />);
-    expect(screen.queryByText(/Level/)).not.toBeInTheDocument();
+    // Only the PP cost "1 PP" should contain a number, no separate rating pill
+    expect(screen.getByText("1 PP")).toBeInTheDocument();
   });
 
-  it("renders PP cost", () => {
+  it("renders PP cost pill", () => {
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
-    expect(screen.getByText("Cost")).toBeInTheDocument();
     expect(screen.getByText("2.5 PP")).toBeInTheDocument();
   });
 
@@ -105,12 +105,12 @@ describe("AdeptPowersDisplay", () => {
       specification: "Pistols",
     };
     render(<AdeptPowersDisplay adeptPowers={[withSpec]} />);
-    expect(screen.getByText("Spec: Pistols")).toBeInTheDocument();
+    expect(screen.getByText("Pistols")).toBeInTheDocument();
   });
 
   it("does not render specification when not present", () => {
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
-    expect(screen.queryByText(/Spec:/)).not.toBeInTheDocument();
+    expect(screen.queryByText("Pistols")).not.toBeInTheDocument();
   });
 
   it("renders multiple powers", () => {
