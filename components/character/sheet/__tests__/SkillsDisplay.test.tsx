@@ -1,14 +1,14 @@
 /**
  * SkillsDisplay Component Tests
  *
- * Tests the skills table. Mocks useSkills hook.
+ * Tests the grouped flex skills display. Mocks useSkills hook.
  * Covers empty state, sorted skills, dice pool calculation,
- * specializations, and onSelect callback.
+ * specializations, section headers, icons, and onSelect callback.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { createSheetCharacter, MOCK_ACTIVE_SKILLS } from "./test-helpers";
+import { createSheetCharacter, MOCK_ACTIVE_SKILLS, LUCIDE_MOCK } from "./test-helpers";
 
 vi.mock("../DisplayCard", () => ({
   DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -19,32 +19,7 @@ vi.mock("../DisplayCard", () => ({
   ),
 }));
 
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 vi.mock("@/lib/rules", () => ({
   useSkills: vi.fn(),
@@ -75,23 +50,23 @@ describe("SkillsDisplay", () => {
       skills: { pistols: 5, sneaking: 3 },
     });
     render(<SkillsDisplay character={character} />);
-    expect(screen.getByText("pistols")).toBeInTheDocument();
-    expect(screen.getByText("sneaking")).toBeInTheDocument();
+    expect(screen.getByText("Pistols")).toBeInTheDocument();
+    expect(screen.getByText("Sneaking")).toBeInTheDocument();
   });
 
-  it("renders skills sorted by rating (highest first)", () => {
+  it("renders skills sorted by rating descending within each section", () => {
     const character = createSheetCharacter({
-      skills: { sneaking: 2, pistols: 5, perception: 3 },
+      skills: { pistols: 5, automatics: 4, "unarmed-combat": 3, blades: 4 },
     });
-    render(<SkillsDisplay character={character} />);
+    const { container } = render(<SkillsDisplay character={character} />);
 
-    const rows = screen.getAllByRole("row");
-    // First data row (after header) should be the highest rated skill
-    const firstDataRow = rows[1];
-    expect(firstDataRow.textContent).toContain("pistols");
+    const rows = container.querySelectorAll('[data-testid="skill-row"]');
+    // All 4 are combat — sorted: pistols(5), automatics(4), blades(4), unarmed-combat(3)
+    expect(rows[0].textContent).toContain("Pistols");
+    expect(rows[3].textContent).toContain("Unarmed Combat");
   });
 
-  it("renders linked attribute abbreviation", () => {
+  it("renders linked attribute abbreviation with color", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
@@ -119,21 +94,22 @@ describe("SkillsDisplay", () => {
     expect(screen.getByText("11")).toBeInTheDocument();
   });
 
-  it("renders specialization when present", () => {
+  it("renders specializations as individual amber pills", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
-      skillSpecializations: { pistols: ["Semi-Automatics"] },
+      skillSpecializations: { pistols: ["Semi-Automatics", "Revolvers"] },
     });
     render(<SkillsDisplay character={character} />);
     expect(screen.getByText("Semi-Automatics")).toBeInTheDocument();
+    expect(screen.getByText("Revolvers")).toBeInTheDocument();
   });
 
-  it("renders placeholder for skills without specialization", () => {
+  it("does not render specialization placeholder for skills without specs", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
-    expect(screen.getByText("__________")).toBeInTheDocument();
+    expect(screen.queryByText("__________")).not.toBeInTheDocument();
   });
 
   it("calls onSelect with skillId, dicePool, and attrAbbr", () => {
@@ -153,25 +129,82 @@ describe("SkillsDisplay", () => {
     });
     render(<SkillsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByText("pistols"));
+    fireEvent.click(screen.getByText("Pistols"));
     expect(onSelect).toHaveBeenCalledWith("pistols", 11, "AGI");
   });
 
-  it("renders table column headers", () => {
-    const character = createSheetCharacter({ skills: { pistols: 5 } });
+  it("renders section headers for populated categories", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5, sneaking: 3 },
+    });
     render(<SkillsDisplay character={character} />);
-    expect(screen.getByText("Skill")).toBeInTheDocument();
-    expect(screen.getByText("Attr")).toBeInTheDocument();
-    expect(screen.getByText("Rtg")).toBeInTheDocument();
-    expect(screen.getByText("Spec")).toBeInTheDocument();
-    expect(screen.getByText("Dice Pool")).toBeInTheDocument();
+    expect(screen.getByText("Combat")).toBeInTheDocument();
+    expect(screen.getByText("Physical")).toBeInTheDocument();
   });
 
-  it("renders skill rating in brackets", () => {
+  it("does not render section headers for empty categories", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
-    expect(screen.getByText("[5]")).toBeInTheDocument();
+    expect(screen.getByText("Combat")).toBeInTheDocument();
+    expect(screen.queryByText("Physical")).not.toBeInTheDocument();
+    expect(screen.queryByText("Social")).not.toBeInTheDocument();
+    expect(screen.queryByText("Technical")).not.toBeInTheDocument();
+  });
+
+  it("renders BookOpen icon for individual skills, Users icon for group skills", () => {
+    const character = createSheetCharacter({
+      skills: { "unarmed-combat": 3, pistols: 5 },
+    });
+    const { container } = render(<SkillsDisplay character={character} />);
+
+    // unarmed-combat has group: null → BookOpen
+    // pistols has group: "firearms" → Users
+    const bookOpenIcons = container.querySelectorAll('[data-testid="icon-BookOpen"]');
+    const usersIcons = container.querySelectorAll('[data-testid="icon-Users"]');
+    expect(bookOpenIcons.length).toBeGreaterThanOrEqual(1);
+    expect(usersIcons.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("renders skill rating in value pill (no brackets)", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    const { container } = render(<SkillsDisplay character={character} />);
+    const ratingPill = container.querySelector('[data-testid="rating-pill"]');
+    expect(ratingPill).toBeInTheDocument();
+    expect(ratingPill!.textContent).toBe("5");
+    // No brackets
+    expect(screen.queryByText("[5]")).not.toBeInTheDocument();
+  });
+
+  it("renders dice pool in emerald pill", () => {
+    const character = createSheetCharacter({
+      attributes: {
+        body: 5,
+        agility: 6,
+        reaction: 5,
+        strength: 4,
+        willpower: 3,
+        logic: 3,
+        intuition: 4,
+        charisma: 2,
+      },
+      skills: { pistols: 5 },
+    });
+    const { container } = render(<SkillsDisplay character={character} />);
+    const poolPill = container.querySelector('[data-testid="dice-pool-pill"]');
+    expect(poolPill).toBeInTheDocument();
+    expect(poolPill!.textContent).toBe("11");
+  });
+
+  it("renders group name on line 2 for group skills", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+    // pistols has group: "firearms"
+    expect(screen.getByText(/firearms/)).toBeInTheDocument();
   });
 });
