@@ -130,6 +130,7 @@ export const LUCIDE_MOCK = {
   Fingerprint: createIconMock("Fingerprint"),
   Zap: createIconMock("Zap"),
   Car: createIconMock("Car"),
+  Dna: createIconMock("Dna"),
   Home: createIconMock("Home"),
   Star: createIconMock("Star"),
   CirclePlus: createIconMock("CirclePlus"),
