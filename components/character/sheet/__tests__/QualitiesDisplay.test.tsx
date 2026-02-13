@@ -1,13 +1,13 @@
 /**
  * QualitiesDisplay Component Tests
  *
- * Tests the qualities display with sunken containers for Positive/Negative
- * qualities, karma value pills, effect badges, dynamic state text,
- * and settings buttons.
+ * Tests the qualities display with expandable rows showing name-only
+ * in collapsed state, with details (karma, extra info, summary, effects,
+ * dynamic state, settings) revealed on expand.
  */
 
 import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import {
   setupDisplayCardMock,
   LUCIDE_MOCK,
@@ -41,6 +41,11 @@ function renderWith(overrides: {
 }) {
   const character = createSheetCharacter(overrides);
   return render(<QualitiesDisplay character={character} />);
+}
+
+function expandFirstRow() {
+  const btn = screen.getAllByTestId("expand-button")[0];
+  fireEvent.click(btn);
 }
 
 // ---------------------------------------------------------------------------
@@ -106,12 +111,55 @@ describe("QualitiesDisplay", () => {
     expect(screen.getByText("some unknown quality")).toBeInTheDocument();
   });
 
-  // --- Karma pills ---
+  // --- Expand/collapse behavior ---
+
+  it("collapsed row does not show karma pill, summary, or effects", () => {
+    renderWith({
+      positiveQualities: [{ qualityId: "high-pain-tolerance", source: "creation", rating: 1 }],
+    });
+    expect(screen.queryByTestId("karma-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    expect(screen.queryByText("Ignore wound modifiers up to rating.")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("effect-badge")).not.toBeInTheDocument();
+  });
+
+  it("click expand button shows expanded content", () => {
+    renderWith({
+      positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
+    });
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    expandFirstRow();
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+  });
+
+  it("click expand button again collapses content", () => {
+    renderWith({
+      positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
+    });
+    expandFirstRow();
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+    expandFirstRow();
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  it("chevron icon changes on expand/collapse", () => {
+    renderWith({
+      positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
+    });
+    expect(screen.getByTestId("icon-ChevronRight")).toBeInTheDocument();
+    expect(screen.queryByTestId("icon-ChevronDown")).not.toBeInTheDocument();
+    expandFirstRow();
+    expect(screen.getByTestId("icon-ChevronDown")).toBeInTheDocument();
+    expect(screen.queryByTestId("icon-ChevronRight")).not.toBeInTheDocument();
+  });
+
+  // --- Karma pills (expanded) ---
 
   it("renders positive karma pill with emerald styling", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
     });
+    expandFirstRow();
     const pill = screen.getByTestId("karma-pill");
     expect(pill).toHaveTextContent("4");
     expect(pill.className).toContain("emerald");
@@ -121,41 +169,45 @@ describe("QualitiesDisplay", () => {
     renderWith({
       negativeQualities: [{ qualityId: "bad-luck", source: "creation" }],
     });
+    expandFirstRow();
     const pill = screen.getByTestId("karma-pill");
     expect(pill).toHaveTextContent("12");
     expect(pill.className).toContain("rose");
   });
 
-  // --- Summary ---
+  // --- Summary (expanded) ---
 
-  it("renders summary text", () => {
+  it("renders summary text when expanded", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
     });
+    expandFirstRow();
     expect(screen.getByText("No off-hand penalty for using either hand.")).toBeInTheDocument();
   });
 
-  // --- Extra info ---
+  // --- Extra info (expanded) ---
 
-  it("renders rating level name in extra info", () => {
+  it("renders rating level name in extra info when expanded", () => {
     renderWith({
       positiveQualities: [{ qualityId: "high-pain-tolerance", source: "creation", rating: 2 }],
     });
+    expandFirstRow();
     const extraInfo = screen.getByTestId("extra-info");
     expect(extraInfo).toHaveTextContent("Rating 2");
   });
 
-  it("renders specification in extra info", () => {
+  it("renders specification in extra info when expanded", () => {
     renderWith({
       positiveQualities: [
         { qualityId: "ambidextrous", source: "creation", specification: "Pistols" },
       ],
     });
+    expandFirstRow();
     const extraInfo = screen.getByTestId("extra-info");
     expect(extraInfo).toHaveTextContent("Pistols");
   });
 
-  // --- Pending badge ---
+  // --- Pending badge (visible in collapsed row) ---
 
   it("shows pending badge when gmApproved is false", () => {
     renderWith({
@@ -172,12 +224,13 @@ describe("QualitiesDisplay", () => {
     expect(screen.queryByTestId("pending-badge")).not.toBeInTheDocument();
   });
 
-  // --- Effect badges ---
+  // --- Effect badges (expanded) ---
 
-  it("renders effect badges for qualities with effects", () => {
+  it("renders effect badges for qualities with effects when expanded", () => {
     renderWith({
       positiveQualities: [{ qualityId: "high-pain-tolerance", source: "creation", rating: 1 }],
     });
+    expandFirstRow();
     const badges = screen.getAllByTestId("effect-badge");
     expect(badges.length).toBe(1);
     expect(badges[0]).toHaveTextContent("wound modifier");
@@ -187,12 +240,13 @@ describe("QualitiesDisplay", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
     });
+    expandFirstRow();
     expect(screen.queryByTestId("effect-badge")).not.toBeInTheDocument();
   });
 
-  // --- Dynamic state ---
+  // --- Dynamic state (expanded) ---
 
-  it("renders dynamic state text for addiction", () => {
+  it("renders dynamic state text for addiction when expanded", () => {
     renderWith({
       negativeQualities: [
         {
@@ -217,12 +271,13 @@ describe("QualitiesDisplay", () => {
         },
       ],
     });
+    expandFirstRow();
     const stateText = screen.getByTestId("dynamic-state-text");
     expect(stateText).toHaveTextContent("MODERATE");
     expect(stateText).toHaveTextContent("Novacoke");
   });
 
-  it("renders settings button for quality with dynamic state", () => {
+  it("renders settings button for quality with dynamic state when expanded", () => {
     renderWith({
       negativeQualities: [
         {
@@ -247,6 +302,7 @@ describe("QualitiesDisplay", () => {
         },
       ],
     });
+    expandFirstRow();
     expect(screen.getByTestId("settings-button")).toBeInTheDocument();
   });
 
@@ -254,6 +310,7 @@ describe("QualitiesDisplay", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
     });
+    expandFirstRow();
     expect(screen.queryByTestId("settings-button")).not.toBeInTheDocument();
   });
 

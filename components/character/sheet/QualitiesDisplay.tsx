@@ -5,7 +5,14 @@ import type { Character, QualitySelection, QualityEffect } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { useQualities } from "@/lib/rules";
 import { DisplayCard } from "./DisplayCard";
-import { ShieldCheck, Info, Clock, AlertCircle, Settings2 } from "lucide-react";
+import {
+  ShieldCheck,
+  Clock,
+  AlertCircle,
+  Settings2,
+  ChevronDown,
+  ChevronRight,
+} from "lucide-react";
 import { DynamicStateModal } from "@/app/characters/[id]/components/DynamicStateModal";
 
 // ---------------------------------------------------------------------------
@@ -78,6 +85,8 @@ function QualityRow({
   character: Character;
   onSettingsClick: (sel: QualitySelection) => void;
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
   const rawSelection =
     typeof selection === "string" ? ({} as Partial<QualitySelection>) : selection;
   const id = typeof selection === "string" ? selection : selection.qualityId || selection.id || "";
@@ -129,100 +138,128 @@ function QualityRow({
   const extra = extraParts.join(", ");
 
   const effects = (data?.effects || []) as QualityEffect[];
+  const hasExpandableContent =
+    extra ||
+    karmaValue !== undefined ||
+    data?.summary ||
+    effects.length > 0 ||
+    rawSelection.dynamicState;
 
   return (
     <div
       data-testid="quality-row"
-      className="group relative rounded px-1 py-[7px] transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      className="rounded px-1 py-[7px] [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
-      {/* Line 1: name + pending + extra info + karma pill */}
-      <div className="flex items-center justify-between gap-2">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
-            {name}
-          </span>
-          {rawSelection.gmApproved === false && (
-            <span
-              data-testid="pending-badge"
-              className="flex shrink-0 items-center gap-0.5 rounded border border-amber-500/20 bg-amber-500/10 px-1 text-[8px] font-bold uppercase text-amber-500"
-              title="Awaiting GM Approval"
-            >
-              <Clock className="h-2 w-2" />
-              Pending
-            </span>
-          )}
-        </div>
-        <div className="flex shrink-0 items-center gap-2">
-          {extra && (
-            <span
-              data-testid="extra-info"
-              className="rounded-sm bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-500 dark:bg-zinc-800 dark:text-amber-400"
-            >
-              {extra}
-            </span>
-          )}
-          {karmaValue !== undefined && (
-            <span
-              data-testid="karma-pill"
-              className={`flex h-7 min-w-[32px] items-center justify-center rounded-md border px-1.5 font-mono text-sm font-bold ${karmaPillClasses}`}
-            >
-              {karmaValue}
-            </span>
-          )}
-        </div>
-      </div>
-
-      {/* Line 2: summary */}
-      {data?.summary && (
-        <p className="ml-0.5 mt-0.5 line-clamp-1 text-xs text-zinc-500 group-hover:line-clamp-none dark:text-zinc-400">
-          {data.summary}
-        </p>
-      )}
-
-      {/* Line 3: effect badges */}
-      {effects.length > 0 && (
-        <div className="mt-1.5 flex flex-wrap gap-1">
-          {effects.map((eff, idx) => (
-            <span
-              key={idx}
-              data-testid="effect-badge"
-              className="rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400"
-              title={eff.description}
-            >
-              {eff.type.replace(/-/g, " ")}
-            </span>
-          ))}
-        </div>
-      )}
-
-      {/* Line 4: dynamic state text */}
-      {rawSelection.dynamicState && (
-        <div
-          data-testid="dynamic-state-text"
-          className="mt-1.5 flex items-center gap-1.5 text-[9px] font-medium text-amber-500 dark:text-amber-400"
-        >
-          <AlertCircle className="h-2.5 w-2.5" />
-          <span>{renderDynamicStateText(rawSelection.dynamicState)}</span>
-        </div>
-      )}
-
-      {/* Hover actions */}
-      <div className="absolute right-1 top-1 flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
-        {data?.description && <Info className="h-3 w-3 text-zinc-400" />}
-        {rawSelection.dynamicState && (
+      {/* Collapsed row: chevron + name + pending badge */}
+      <div
+        className="flex cursor-pointer items-center gap-1.5"
+        onClick={() => setIsExpanded(!isExpanded)}
+      >
+        {hasExpandableContent ? (
           <button
-            data-testid="settings-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              onSettingsClick(rawSelection as QualitySelection);
-            }}
-            className="rounded p-1 text-zinc-400 transition-colors hover:bg-amber-500/20 hover:text-amber-500"
-            title="Manage Dynamic State"
+            data-testid="expand-button"
+            className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
           >
-            <Settings2 className="h-3.5 w-3.5" />
+            {isExpanded ? (
+              <ChevronDown className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronRight className="h-3.5 w-3.5" />
+            )}
           </button>
+        ) : (
+          <div className="w-3.5 shrink-0" />
+        )}
+        <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+          {name}
+        </span>
+        {rawSelection.gmApproved === false && (
+          <span
+            data-testid="pending-badge"
+            className="flex shrink-0 items-center gap-0.5 rounded border border-amber-500/20 bg-amber-500/10 px-1 text-[8px] font-bold uppercase text-amber-500"
+            title="Awaiting GM Approval"
+          >
+            <Clock className="h-2 w-2" />
+            Pending
+          </span>
         )}
       </div>
+
+      {/* Expanded section */}
+      {isExpanded && hasExpandableContent && (
+        <div
+          data-testid="expanded-content"
+          className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+        >
+          {/* Extra info + karma pill */}
+          {(extra || karmaValue !== undefined) && (
+            <div className="flex items-center justify-between">
+              {extra ? (
+                <span
+                  data-testid="extra-info"
+                  className="rounded-sm bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-500 dark:bg-zinc-800 dark:text-amber-400"
+                >
+                  {extra}
+                </span>
+              ) : (
+                <span />
+              )}
+              {karmaValue !== undefined && (
+                <span
+                  data-testid="karma-pill"
+                  className={`flex h-7 min-w-[32px] items-center justify-center rounded-md border px-1.5 font-mono text-sm font-bold ${karmaPillClasses}`}
+                >
+                  {karmaValue}
+                </span>
+              )}
+            </div>
+          )}
+
+          {/* Summary */}
+          {data?.summary && (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">{data.summary}</p>
+          )}
+
+          {/* Effect badges */}
+          {effects.length > 0 && (
+            <div className="flex flex-wrap gap-1">
+              {effects.map((eff, idx) => (
+                <span
+                  key={idx}
+                  data-testid="effect-badge"
+                  className="rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400"
+                  title={eff.description}
+                >
+                  {eff.type.replace(/-/g, " ")}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Dynamic state text + settings button */}
+          {rawSelection.dynamicState && (
+            <div className="flex items-center justify-between">
+              <div
+                data-testid="dynamic-state-text"
+                className="flex items-center gap-1.5 text-[9px] font-medium text-amber-500 dark:text-amber-400"
+              >
+                <AlertCircle className="h-2.5 w-2.5" />
+                <span>{renderDynamicStateText(rawSelection.dynamicState)}</span>
+              </div>
+              <button
+                data-testid="settings-button"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onSettingsClick(rawSelection as QualitySelection);
+                }}
+                className="rounded p-1 text-zinc-400 transition-colors hover:bg-amber-500/20 hover:text-amber-500"
+                title="Manage Dynamic State"
+              >
+                <Settings2 className="h-3.5 w-3.5" />
+              </button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }

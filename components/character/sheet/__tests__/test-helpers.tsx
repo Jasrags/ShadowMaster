@@ -139,6 +139,8 @@ export const LUCIDE_MOCK = {
   Clock: createIconMock("Clock"),
   AlertCircle: createIconMock("AlertCircle"),
   Settings2: createIconMock("Settings2"),
+  ChevronDown: createIconMock("ChevronDown"),
+  ChevronRight: createIconMock("ChevronRight"),
 };
 
 // ---------------------------------------------------------------------------
