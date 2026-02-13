@@ -280,3 +280,4 @@ Available skills for detailed guidance:
 - `/edition-data-author` - Creating catalog items for edition JSON files
 - `/archetype-import` - Importing SR5 archetypes from sourcebook stat blocks
 - `/shadowrun-aesthetic` - UI styling guidelines
+- `/sheet-ui-redesign` - Redesign sheet display components to match creation card aesthetic
