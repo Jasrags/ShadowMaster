@@ -135,6 +135,10 @@ export const LUCIDE_MOCK = {
   Star: createIconMock("Star"),
   CirclePlus: createIconMock("CirclePlus"),
   ArrowUp: createIconMock("ArrowUp"),
+  Info: createIconMock("Info"),
+  Clock: createIconMock("Clock"),
+  AlertCircle: createIconMock("AlertCircle"),
+  Settings2: createIconMock("Settings2"),
 };
 
 // ---------------------------------------------------------------------------
@@ -419,5 +423,57 @@ export const MOCK_COMPLEX_FORMS = [
     duration: "Instant",
     fading: "L+2",
     description: "Damages matrix devices",
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Mock quality catalog data for useQualities hook
+// ---------------------------------------------------------------------------
+export const MOCK_POSITIVE_QUALITIES = [
+  {
+    id: "ambidextrous",
+    name: "Ambidextrous",
+    karmaCost: 4,
+    summary: "No off-hand penalty for using either hand.",
+    effects: [],
+  },
+  {
+    id: "high-pain-tolerance",
+    name: "High Pain Tolerance",
+    karmaCost: 7,
+    summary: "Ignore wound modifiers up to rating.",
+    levels: [
+      { level: 1, name: "Rating 1", karma: 7 },
+      { level: 2, name: "Rating 2", karma: 14 },
+      { level: 3, name: "Rating 3", karma: 21 },
+    ],
+    effects: [
+      {
+        id: "hpt-wound",
+        type: "wound-modifier",
+        trigger: "always",
+        target: {},
+        value: 1,
+        description: "Ignore 1 box of wound modifiers per rating",
+      },
+    ],
+  },
+];
+
+export const MOCK_NEGATIVE_QUALITIES = [
+  {
+    id: "bad-luck",
+    name: "Bad Luck",
+    karmaBonus: 12,
+    summary: "Glitches happen more often.",
+    effects: [],
+  },
+  {
+    id: "addiction",
+    name: "Addiction",
+    karmaBonus: 9,
+    summary: "Character is addicted to a substance.",
+    dynamicState: "addiction",
+    effects: [],
   },
 ];
