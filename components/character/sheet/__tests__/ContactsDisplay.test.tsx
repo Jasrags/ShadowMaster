@@ -2,73 +2,23 @@
  * ContactsDisplay Component Tests
  *
  * Tests the contacts network display. Shows first 5 contacts
- * with connection/loyalty ratings. Shows "+N more" link when >5.
+ * sorted by connection descending with value pills for ratings.
+ * Shows "+N more" link when >5.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import { createSheetCharacter, MOCK_CONTACTS } from "./test-helpers";
+import {
+  setupDisplayCardMock,
+  LUCIDE_MOCK,
+  setupReactAriaMock,
+  createSheetCharacter,
+  MOCK_CONTACTS,
+} from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({
-    title,
-    children,
-    headerAction,
-  }: {
-    title: string;
-    children: React.ReactNode;
-    headerAction?: React.ReactNode;
-  }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {headerAction}
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
-
-vi.mock("react-aria-components", () => ({
-  Link: ({
-    href,
-    children,
-    className,
-  }: {
-    href: string;
-    children: React.ReactNode;
-    className?: string;
-  }) => (
-    <a href={href} className={className}>
-      {children}
-    </a>
-  ),
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
+setupReactAriaMock();
 
 import { ContactsDisplay } from "../ContactsDisplay";
 
@@ -109,31 +59,33 @@ describe("ContactsDisplay", () => {
     expect(typeElements.length).toBeGreaterThanOrEqual(1);
   });
 
-  it("renders connection rating", () => {
+  it("renders connection rating in pill", () => {
     const character = createSheetCharacter({
       contacts: [{ name: "Fixer", type: "Fixer", connection: 4, loyalty: 3 }],
     });
     render(<ContactsDisplay character={character} />);
-    expect(screen.getByText("4")).toBeInTheDocument();
+    const pill = screen.getByTestId("connection-pill");
+    expect(pill).toHaveTextContent("4");
   });
 
-  it("renders loyalty rating", () => {
+  it("renders loyalty rating in pill", () => {
     const character = createSheetCharacter({
       contacts: [{ name: "Fixer", type: "Fixer", connection: 4, loyalty: 3 }],
     });
     render(<ContactsDisplay character={character} />);
-    expect(screen.getByText("3")).toBeInTheDocument();
+    const pill = screen.getByTestId("loyalty-pill");
+    expect(pill).toHaveTextContent("3");
   });
 
-  it("renders only first 5 contacts", () => {
+  it("renders only first 5 contacts after sorting", () => {
     const character = createSheetCharacter({ contacts: MOCK_CONTACTS });
     render(<ContactsDisplay character={character} />);
-    // First 5 should be visible
-    expect(screen.getByText("Bartender")).toBeInTheDocument();
+    // Sorted by connection desc: Gang Leader(5), Fixer(4), Talismonger(4), Street Doc(3), Corp Wage Slave(3)
     expect(screen.getByText("Gang Leader")).toBeInTheDocument();
-    expect(screen.getByText("Corp Wage Slave")).toBeInTheDocument();
-    // 6th should not be rendered directly
-    expect(screen.queryByText("Talismonger")).not.toBeInTheDocument();
+    expect(screen.getAllByText("Fixer").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getByText("Talismonger")).toBeInTheDocument();
+    // Bartender(2) is 6th after sorting and should not be rendered
+    expect(screen.queryByText("Bartender")).not.toBeInTheDocument();
   });
 
   it("shows +N more link when more than 5 contacts", () => {
@@ -160,5 +112,38 @@ describe("ContactsDisplay", () => {
     render(<ContactsDisplay character={character} />);
     const manageLink = screen.getByText("Manage →");
     expect(manageLink.closest("a")).toHaveAttribute("href", "/characters/char-123/contacts");
+  });
+
+  it("sorts contacts by connection descending", () => {
+    const character = createSheetCharacter({
+      contacts: [
+        { name: "Low Connect", type: "Info", connection: 1, loyalty: 5 },
+        { name: "High Connect", type: "Fixer", connection: 6, loyalty: 1 },
+        { name: "Mid Connect", type: "Gang", connection: 3, loyalty: 3 },
+      ],
+    });
+    render(<ContactsDisplay character={character} />);
+    const rows = screen.getAllByTestId("contact-row");
+    expect(rows[0]).toHaveTextContent("High Connect");
+    expect(rows[1]).toHaveTextContent("Mid Connect");
+    expect(rows[2]).toHaveTextContent("Low Connect");
+  });
+
+  it("connection pill has amber styling", () => {
+    const character = createSheetCharacter({
+      contacts: [{ name: "Fixer", type: "Fixer", connection: 4, loyalty: 3 }],
+    });
+    render(<ContactsDisplay character={character} />);
+    const pill = screen.getByTestId("connection-pill");
+    expect(pill.className).toContain("bg-amber");
+  });
+
+  it("loyalty pill has emerald styling", () => {
+    const character = createSheetCharacter({
+      contacts: [{ name: "Fixer", type: "Fixer", connection: 4, loyalty: 3 }],
+    });
+    render(<ContactsDisplay character={character} />);
+    const pill = screen.getByTestId("loyalty-pill");
+    expect(pill.className).toContain("bg-emerald");
   });
 });
