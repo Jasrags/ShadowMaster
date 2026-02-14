@@ -1,12 +1,14 @@
 /**
  * AdeptPowersDisplay Component Tests
  *
- * Tests the adept powers display. Returns null when empty.
- * Shows rating pill, specification text, and PP cost pill.
+ * Tests the adept powers display with collapsible rows.
+ * Shows name and inline rating in collapsed state.
+ * Expanded state shows description, activation, specification, and rating from catalog.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { AdeptPower } from "@/lib/types";
 
 vi.mock("../DisplayCard", () => ({
@@ -19,30 +21,48 @@ vi.mock("../DisplayCard", () => ({
 }));
 
 vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
   Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
+  ChevronDown: (props: Record<string, unknown>) => (
+    <span data-testid="icon-ChevronDown" {...props} />
+  ),
+  ChevronRight: (props: Record<string, unknown>) => (
+    <span data-testid="icon-ChevronRight" {...props} />
+  ),
+}));
+
+const mockUseAdeptPowers = vi.fn().mockReturnValue([
+  {
+    id: "improved-reflexes",
+    name: "Improved Reflexes",
+    description: "+1 Reaction and +1D6 Initiative per level.",
+    activation: "free",
+    hasRating: true,
+    minRating: 1,
+    maxRating: 3,
+  },
+  {
+    id: "improved-ability",
+    name: "Improved Ability",
+    description: "+1 Rating per level to a single Active skill.",
+    activation: "free",
+    hasRating: true,
+    minRating: 1,
+    maxRating: 4,
+  },
+  {
+    id: "traceless-walk",
+    name: "Traceless Walk",
+    description: "Leave no physical trace when walking.",
+  },
+  {
+    id: "killing-hands",
+    name: "Killing Hands",
+    description: "Unarmed attacks deal Physical damage.",
+  },
+]);
+
+vi.mock("@/lib/rules", () => ({
+  useAdeptPowers: () => mockUseAdeptPowers(),
 }));
 
 import { AdeptPowersDisplay } from "../AdeptPowersDisplay";
@@ -73,12 +93,12 @@ describe("AdeptPowersDisplay", () => {
     expect(screen.getByText("Improved Reflexes")).toBeInTheDocument();
   });
 
-  it("renders rating pill when present", () => {
+  it("renders inline rating in collapsed state", () => {
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
     expect(screen.getByText("2")).toBeInTheDocument();
   });
 
-  it("does not render rating pill when no rating", () => {
+  it("does not render rating when no rating", () => {
     const noRating: AdeptPower = {
       id: "traceless-walk",
       catalogId: "traceless-walk",
@@ -86,16 +106,50 @@ describe("AdeptPowersDisplay", () => {
       powerPointCost: 1,
     };
     render(<AdeptPowersDisplay adeptPowers={[noRating]} />);
-    // Only the PP cost "1 PP" should contain a number, no separate rating pill
-    expect(screen.getByText("1 PP")).toBeInTheDocument();
+    expect(screen.getByText("Traceless Walk")).toBeInTheDocument();
+    expect(screen.queryByText("1")).not.toBeInTheDocument();
   });
 
-  it("renders PP cost pill", () => {
+  it("shows chevron when catalog has expandable content", () => {
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
-    expect(screen.getByText("2.5 PP")).toBeInTheDocument();
+    expect(screen.getByTestId("expand-button")).toBeInTheDocument();
   });
 
-  it("renders specification text when present", () => {
+  it("does not show chevron when no catalog entry and no specification", () => {
+    mockUseAdeptPowers.mockReturnValueOnce([]);
+    const minimal: AdeptPower = {
+      id: "unknown-power",
+      catalogId: "unknown-power",
+      name: "Unknown Power",
+      powerPointCost: 1,
+    };
+    render(<AdeptPowersDisplay adeptPowers={[minimal]} />);
+    expect(screen.queryByTestId("expand-button")).not.toBeInTheDocument();
+  });
+
+  it("shows description from catalog in expanded section", async () => {
+    const user = userEvent.setup();
+    render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
+
+    // Description not visible collapsed
+    expect(screen.queryByText(/\+1 Reaction/)).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByText("+1 Reaction and +1D6 Initiative per level.")).toBeInTheDocument();
+  });
+
+  it("shows activation from catalog in expanded section", async () => {
+    const user = userEvent.setup();
+    render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByText("Free Action")).toBeInTheDocument();
+  });
+
+  it("shows specification in expanded section", async () => {
+    const user = userEvent.setup();
     const withSpec: AdeptPower = {
       id: "improved-ability",
       catalogId: "improved-ability",
@@ -105,12 +159,36 @@ describe("AdeptPowersDisplay", () => {
       specification: "Pistols",
     };
     render(<AdeptPowersDisplay adeptPowers={[withSpec]} />);
+
+    // Specification not visible collapsed
+    expect(screen.queryByText("Pistols")).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
     expect(screen.getByText("Pistols")).toBeInTheDocument();
   });
 
-  it("does not render specification when not present", () => {
+  it("shows rating with max from catalog in expanded section", async () => {
+    const user = userEvent.setup();
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
-    expect(screen.queryByText("Pistols")).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    const expanded = screen.getByTestId("expanded-content");
+    expect(expanded).toHaveTextContent("Rating:");
+    expect(expanded).toHaveTextContent("2 / 3");
+  });
+
+  it("collapses row on second chevron click", async () => {
+    const user = userEvent.setup();
+    render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 
   it("renders multiple powers", () => {
