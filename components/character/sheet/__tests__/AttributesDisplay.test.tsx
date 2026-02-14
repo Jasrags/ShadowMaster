@@ -26,6 +26,7 @@ vi.mock("lucide-react", () => ({
   Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
   CirclePlus: (props: Record<string, unknown>) => <span data-testid="icon-CirclePlus" {...props} />,
   ArrowUp: (props: Record<string, unknown>) => <span data-testid="icon-ArrowUp" {...props} />,
+  ArrowDown: (props: Record<string, unknown>) => <span data-testid="icon-ArrowDown" {...props} />,
 }));
 
 vi.mock("@/components/ui", () => ({
@@ -117,9 +118,9 @@ describe("AttributesDisplay", () => {
     });
     render(<AttributesDisplay character={character} />);
 
-    // Tooltip should show both source names
-    expect(screen.getByText("Wired Reflexes")).toBeInTheDocument();
-    expect(screen.getByText("Muscle Toner")).toBeInTheDocument();
+    // Tooltip should show both source names (may appear in both aug + essence tooltips)
+    expect(screen.getAllByText("Wired Reflexes").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Muscle Toner").length).toBeGreaterThanOrEqual(1);
     // Total row should show "Total Aug"
     expect(screen.getByText("Total Aug")).toBeInTheDocument();
   });
@@ -216,5 +217,53 @@ describe("AttributesDisplay", () => {
     // Click on Reaction row - should be base 5 + aug 1 = 6
     fireEvent.click(screen.getByText("Reaction"));
     expect(onSelect).toHaveBeenCalledWith("reaction", 6);
+  });
+
+  it("shows essence loss tooltip when augmentations present", () => {
+    const character = createSheetCharacter({
+      specialAttributes: { edge: 3, essence: 3.8 },
+      cyberware: [MOCK_CYBERWARE],
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Loss badge should be present with aria label
+    const lossButton = screen.getByLabelText("Essence loss details");
+    expect(lossButton).toBeInTheDocument();
+    // Badge and tooltip both show the cost (badge + item row)
+    expect(screen.getAllByText("-2.00").length).toBe(2);
+    // Tooltip shows augmentation name (may also appear in attribute tooltip)
+    expect(screen.getAllByText("Wired Reflexes").length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("shows total row in essence tooltip when multiple augmentations", () => {
+    const character = createSheetCharacter({
+      specialAttributes: { edge: 3, essence: 3.8 },
+      cyberware: [MOCK_CYBERWARE],
+      bioware: [MOCK_BIOWARE],
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Both sources should appear (may also appear in attribute tooltips)
+    expect(screen.getAllByText("Wired Reflexes").length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText("Muscle Toner").length).toBeGreaterThanOrEqual(1);
+    // Total row should appear
+    expect(screen.getByText("Total Loss")).toBeInTheDocument();
+    // Total = 2.00 + 0.20 = 2.20 (appears in both badge and total row)
+    expect(screen.getAllByText("-2.20").length).toBe(2);
+  });
+
+  it("does not show essence loss tooltip when no augmentations", () => {
+    const character = createSheetCharacter({
+      specialAttributes: { edge: 3, essence: 6 },
+      cyberware: [],
+      bioware: [],
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Essence value should render
+    expect(screen.getByText("6.00")).toBeInTheDocument();
+    // No loss badge or ArrowDown icon
+    expect(screen.queryByLabelText("Essence loss details")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("icon-ArrowDown")).not.toBeInTheDocument();
   });
 });
