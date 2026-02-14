@@ -7,18 +7,7 @@ import { DisplayCard } from "./DisplayCard";
 import { ATTRIBUTE_DISPLAY, getAttributeBonus } from "./constants";
 import { Tooltip } from "@/components/ui";
 import { Button as AriaButton } from "react-aria-components";
-import {
-  Crosshair,
-  Swords,
-  Footprints,
-  Heart,
-  Cpu,
-  Car,
-  Sparkles,
-  Zap,
-  ChevronDown,
-  ChevronRight,
-} from "lucide-react";
+import { Crosshair, ChevronDown, ChevronRight } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -57,13 +46,13 @@ interface EnrichedSkill {
 // ---------------------------------------------------------------------------
 
 const SKILL_SECTIONS = [
-  { key: "combat", label: "Combat", icon: Swords, iconColor: "text-red-400" },
-  { key: "physical", label: "Physical", icon: Footprints, iconColor: "text-amber-400" },
-  { key: "social", label: "Social", icon: Heart, iconColor: "text-pink-400" },
-  { key: "technical", label: "Technical", icon: Cpu, iconColor: "text-blue-400" },
-  { key: "vehicle", label: "Vehicle", icon: Car, iconColor: "text-orange-400" },
-  { key: "magical", label: "Magical", icon: Sparkles, iconColor: "text-purple-400" },
-  { key: "resonance", label: "Resonance", icon: Zap, iconColor: "text-cyan-400" },
+  { key: "combat", label: "Combat" },
+  { key: "physical", label: "Physical" },
+  { key: "social", label: "Social" },
+  { key: "technical", label: "Technical" },
+  { key: "vehicle", label: "Vehicle" },
+  { key: "magical", label: "Magical" },
+  { key: "resonance", label: "Resonance" },
 ];
 
 // ---------------------------------------------------------------------------
@@ -304,12 +293,10 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
       ) : (
         <div className="space-y-3">
           {SKILL_SECTIONS.filter((section) => grouped.has(section.key)).map((section) => {
-            const Icon = section.icon;
             const sectionSkills = grouped.get(section.key)!;
             return (
               <div key={section.key}>
-                <div className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-                  <Icon className={`h-3 w-3 ${section.iconColor}`} />
+                <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   {section.label}
                 </div>
                 <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">

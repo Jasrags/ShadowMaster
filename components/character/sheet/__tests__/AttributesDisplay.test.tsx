@@ -2,8 +2,8 @@
  * AttributesDisplay Component Tests
  *
  * Tests the character attributes display with Physical/Mental/Special
- * grouped sections, augmentation pills with tooltips, and special
- * attribute icons.
+ * grouped sections, augmentation pills with tooltips, and essence
+ * loss breakdown.
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -21,10 +21,6 @@ vi.mock("../DisplayCard", () => ({
 
 vi.mock("lucide-react", () => ({
   BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Star: (props: Record<string, unknown>) => <span data-testid="icon-Star" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  CirclePlus: (props: Record<string, unknown>) => <span data-testid="icon-CirclePlus" {...props} />,
   ArrowUp: (props: Record<string, unknown>) => <span data-testid="icon-ArrowUp" {...props} />,
   ArrowDown: (props: Record<string, unknown>) => <span data-testid="icon-ArrowDown" {...props} />,
 }));
@@ -165,16 +161,6 @@ describe("AttributesDisplay", () => {
     render(<AttributesDisplay character={character} />);
     expect(screen.queryByText("Magic")).not.toBeInTheDocument();
     expect(screen.queryByText("Resonance")).not.toBeInTheDocument();
-  });
-
-  it("renders special attribute icons", () => {
-    const character = createSheetCharacter({
-      specialAttributes: { edge: 3, essence: 6, magic: 5 },
-    });
-    render(<AttributesDisplay character={character} />);
-    expect(screen.getByTestId("icon-Star")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-CirclePlus")).toBeInTheDocument();
-    expect(screen.getByTestId("icon-Sparkles")).toBeInTheDocument();
   });
 
   it("calls onSelect with attribute id and total value when clicked", () => {

@@ -3,7 +3,7 @@
 import type { Character } from "@/lib/types";
 import { DisplayCard } from "./DisplayCard";
 import { getAttributeBonus } from "./constants";
-import { BarChart3, Star, Sparkles, Cpu, CirclePlus, ArrowUp, ArrowDown } from "lucide-react";
+import { BarChart3, ArrowUp, ArrowDown } from "lucide-react";
 import { Tooltip } from "@/components/ui";
 import { Button as AriaButton } from "react-aria-components";
 
@@ -26,53 +26,7 @@ const MENTAL_ATTRIBUTES = [
   { id: "charisma", label: "Charisma" },
 ];
 
-/**
- * Special attribute display config.
- * Dark-mode colors match the approved HTML mock exactly; light-mode
- * uses the closest readable equivalent on a white/zinc-50 background.
- */
-const SPECIAL_ATTR_CONFIG: Record<
-  string,
-  {
-    icon: React.ComponentType<{ className?: string }>;
-    iconColor: string;
-    nameColor: string;
-    pillClasses: string;
-  }
-> = {
-  // Edge — amber  (mock: icon #f59e0b, name #fbbf24, pill bg amber/15)
-  edge: {
-    icon: Star,
-    iconColor: "text-amber-500",
-    nameColor: "text-amber-600 dark:text-amber-400",
-    pillClasses:
-      "bg-amber-50 border-amber-200 text-amber-700 dark:bg-amber-500/15 dark:border-amber-500/20 dark:text-amber-400",
-  },
-  // Essence — cyan  (mock: icon #22d3ee, name #67e8f9, pill bg cyan/12)
-  essence: {
-    icon: CirclePlus,
-    iconColor: "text-cyan-500 dark:text-cyan-400",
-    nameColor: "text-cyan-600 dark:text-cyan-300",
-    pillClasses:
-      "bg-cyan-50 border-cyan-200 text-cyan-700 dark:bg-cyan-400/12 dark:border-cyan-400/20 dark:text-cyan-300",
-  },
-  // Magic — purple  (mock: icon #a855f7, name #c084fc, pill bg purple/15)
-  magic: {
-    icon: Sparkles,
-    iconColor: "text-purple-500",
-    nameColor: "text-purple-600 dark:text-purple-400",
-    pillClasses:
-      "bg-purple-50 border-purple-200 text-purple-700 dark:bg-purple-500/15 dark:border-purple-500/20 dark:text-purple-400",
-  },
-  // Resonance — sky  (mock: icon #38bdf8, name #7dd3fc, pill bg sky/12)
-  resonance: {
-    icon: Cpu,
-    iconColor: "text-sky-500 dark:text-sky-400",
-    nameColor: "text-sky-600 dark:text-sky-300",
-    pillClasses:
-      "bg-sky-50 border-sky-200 text-sky-700 dark:bg-sky-400/12 dark:border-sky-400/20 dark:text-sky-300",
-  },
-};
+const SPECIAL_ATTRIBUTES = ["edge", "essence", "magic", "resonance"];
 
 // ---------------------------------------------------------------------------
 // Sub-components
@@ -197,10 +151,8 @@ function SpecialAttributeRow({
   essenceLosses?: Array<{ source: string; cost: number }>;
   onClick?: () => void;
 }) {
-  const config = SPECIAL_ATTR_CONFIG[attrKey];
-  if (!config) return null;
+  if (!SPECIAL_ATTRIBUTES.includes(attrKey)) return null;
 
-  const Icon = config.icon;
   const label = attrKey.charAt(0).toUpperCase() + attrKey.slice(1);
   const isEssence = attrKey === "essence";
   const displayValue = isEssence ? value.toFixed(2) : String(value);
@@ -214,10 +166,7 @@ function SpecialAttributeRow({
         isEssence ? "" : "cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
       }`}
     >
-      <div className="flex items-center gap-1.5">
-        <Icon className={`h-3.5 w-3.5 shrink-0 ${config.iconColor}`} />
-        <span className={`text-[13px] font-medium ${config.nameColor}`}>{label}</span>
-      </div>
+      <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">{label}</span>
       <div className="flex items-center gap-2">
         {hasEssenceLoss && (
           <span onClick={(e) => e.stopPropagation()}>
@@ -237,7 +186,7 @@ function SpecialAttributeRow({
           </span>
         )}
         <div
-          className={`flex h-7 items-center justify-center rounded-md border font-mono text-sm font-bold ${config.pillClasses} ${
+          className={`flex h-7 items-center justify-center rounded-md font-mono text-sm font-bold bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50 ${
             isEssence ? "w-12" : "w-8"
           }`}
         >
