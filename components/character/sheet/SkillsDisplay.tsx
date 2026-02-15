@@ -59,31 +59,30 @@ const SKILL_SECTIONS = [
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function SkillRow({ skill, onClick }: { skill: EnrichedSkill; onClick?: () => void }) {
+function SkillRow({
+  skill,
+  onSelect,
+}: {
+  skill: EnrichedSkill;
+  onSelect?: (skillId: string, rating: number, attrAbbr?: string) => void;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   return (
     <div
       data-testid="skill-row"
-      onClick={onClick}
+      onClick={() => setIsExpanded(!isExpanded)}
       className="group cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       {/* Collapsed row: Chevron + Name + Rating ... Dice Pool */}
       <div className="flex min-w-0 items-center gap-1.5">
-        <button
-          data-testid="expand-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsExpanded(!isExpanded);
-          }}
-          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-        >
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
             <ChevronDown className="h-3.5 w-3.5" />
           ) : (
             <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </button>
+        </span>
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {skill.name}
         </span>
@@ -99,7 +98,13 @@ function SkillRow({ skill, onClick }: { skill: EnrichedSkill; onClick?: () => vo
           </span>
         )}
         {skill.poolBreakdown ? (
-          <span className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
+          <span
+            className="ml-auto shrink-0"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.(skill.id, skill.dicePool, skill.attrAbbr);
+            }}
+          >
             <Tooltip
               content={<PoolTooltipContent breakdown={skill.poolBreakdown} />}
               delay={200}
@@ -108,19 +113,24 @@ function SkillRow({ skill, onClick }: { skill: EnrichedSkill; onClick?: () => vo
               <AriaButton
                 data-testid="dice-pool-pill"
                 aria-label={`${skill.name} dice pool breakdown`}
-                className="rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                onPress={() => onSelect?.(skill.id, skill.dicePool, skill.attrAbbr)}
+                className="cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 {skill.dicePool}
               </AriaButton>
             </Tooltip>
           </span>
         ) : (
-          <span
+          <button
             data-testid="dice-pool-pill"
-            className="ml-auto shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
+            onClick={(e) => {
+              e.stopPropagation();
+              onSelect?.(skill.id, skill.dicePool, skill.attrAbbr);
+            }}
+            className="ml-auto shrink-0 cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
           >
             {skill.dicePool}
-          </span>
+          </button>
         )}
       </div>
 
@@ -297,11 +307,7 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
                 </div>
                 <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
                   {sectionSkills.map((skill) => (
-                    <SkillRow
-                      key={skill.id}
-                      skill={skill}
-                      onClick={() => onSelect?.(skill.id, skill.dicePool, skill.attrAbbr)}
-                    />
+                    <SkillRow key={skill.id} skill={skill} onSelect={onSelect} />
                   ))}
                 </div>
               </div>

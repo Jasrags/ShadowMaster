@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import type { Character, Weapon } from "@/lib/types";
+import type { Character, Weapon, InstalledWeaponMod } from "@/lib/types";
 import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
 import { ChevronDown, ChevronRight, Swords } from "lucide-react";
@@ -51,6 +51,16 @@ function calculateWeaponPool(
 }
 
 // ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function formatLegality(legality: string): string {
+  if (legality === "restricted") return "R";
+  if (legality === "forbidden") return "F";
+  return "";
+}
+
+// ---------------------------------------------------------------------------
 // Stat pill color configs
 // ---------------------------------------------------------------------------
 
@@ -59,6 +69,7 @@ const STAT_COLORS = {
   ap: "border-amber-500/20 bg-amber-500/12 text-amber-600 dark:text-amber-300",
   accuracy: "border-cyan-500/20 bg-cyan-500/12 text-cyan-600 dark:text-cyan-300",
   reach: "border-purple-500/20 bg-purple-500/12 text-purple-600 dark:text-purple-300",
+  rc: "border-orange-500/20 bg-orange-500/12 text-orange-600 dark:text-orange-300",
   mode: "border-zinc-300/40 bg-zinc-100/60 text-zinc-600 dark:border-zinc-600/30 dark:bg-zinc-700/30 dark:text-zinc-300",
 };
 
@@ -83,34 +94,39 @@ function WeaponRow({
   return (
     <div
       data-testid="weapon-row"
-      onClick={() => onSelect?.(pool, label)}
-      className={`px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50 ${onSelect ? "cursor-pointer" : ""}`}
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="group cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       {/* Collapsed row: Chevron + Name ... Pool pill */}
       <div className="flex min-w-0 items-center gap-1.5">
-        <button
-          data-testid="expand-button"
-          onClick={(e) => {
-            e.stopPropagation();
-            setIsExpanded(!isExpanded);
-          }}
-          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-        >
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
             <ChevronDown className="h-3.5 w-3.5" />
           ) : (
             <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </button>
+        </span>
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {weapon.name}
         </span>
-        <span
-          data-testid="pool-pill"
-          className="ml-auto shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
+        {weapon.subcategory && (
+          <span
+            data-testid="weapon-type"
+            className="truncate text-[10px] text-zinc-400 dark:text-zinc-500"
+          >
+            ({weapon.subcategory})
+          </span>
+        )}
+        <button
+          data-testid="dice-pool-pill"
+          onClick={(e) => {
+            e.stopPropagation();
+            onSelect?.(pool, label);
+          }}
+          className="ml-auto shrink-0 cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
         >
           {pool}
-        </span>
+        </button>
       </div>
 
       {/* Expanded section */}
@@ -118,7 +134,7 @@ function WeaponRow({
         <div
           data-testid="expanded-content"
           onClick={(e) => e.stopPropagation()}
-          className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+          className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
           {/* Stat pills */}
           <div className="flex flex-wrap gap-1.5">
@@ -158,12 +174,71 @@ function WeaponRow({
                 MODE {modeStr}
               </span>
             )}
+            {!isMelee && weapon.recoil != null && weapon.recoil > 0 && (
+              <span
+                data-testid="rc-pill"
+                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.rc}`}
+              >
+                RC {weapon.recoil}
+              </span>
+            )}
           </div>
 
-          {/* Subcategory */}
-          {weapon.subcategory && (
-            <div className="text-[10px] uppercase tracking-wider text-zinc-500">
-              {weapon.subcategory}
+          {/* Stats row */}
+          {weapon.availability != null && (
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+              <span data-testid="stat-availability">
+                Avail{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {weapon.availability}
+                  {weapon.legality ? formatLegality(weapon.legality) : ""}
+                </span>
+              </span>
+            </div>
+          )}
+
+          {/* Ammo state */}
+          {weapon.ammoState && (
+            <div data-testid="ammo-section">
+              <div className="flex items-baseline gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="text-[10px] font-semibold uppercase tracking-wider">Ammo</span>
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {weapon.ammoState.currentRounds}/{weapon.ammoState.magazineCapacity}
+                </span>
+                {weapon.ammoState.loadedAmmoTypeId && (
+                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                    {weapon.ammoState.loadedAmmoTypeId.replace(/-/g, " ")}
+                  </span>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* Modifications */}
+          {weapon.modifications && weapon.modifications.length > 0 && (
+            <div data-testid="modifications-section">
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                Modifications
+              </div>
+              <div className="space-y-0.5">
+                {weapon.modifications.map((mod: InstalledWeaponMod, idx: number) => (
+                  <div
+                    key={`${mod.catalogId}-${idx}`}
+                    data-testid="mod-row"
+                    className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400"
+                  >
+                    <span className="font-medium text-zinc-700 dark:text-zinc-300">{mod.name}</span>
+                    {mod.mount && (
+                      <span className="text-[10px] uppercase text-zinc-400 dark:text-zinc-500">
+                        {mod.mount}
+                      </span>
+                    )}
+                    {mod.rating != null && (
+                      <span className="font-mono text-zinc-500">R{mod.rating}</span>
+                    )}
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>

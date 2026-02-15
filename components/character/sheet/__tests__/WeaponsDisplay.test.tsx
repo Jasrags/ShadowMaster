@@ -164,7 +164,7 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = agility(6) + pistols(5) = 11
-    expect(screen.getByTestId("pool-pill")).toHaveTextContent("11");
+    expect(screen.getByTestId("dice-pool-pill")).toHaveTextContent("11");
   });
 
   it("calculates dice pool for melee weapon (strength based)", () => {
@@ -184,19 +184,19 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = strength(4) + blades(4) = 8
-    expect(screen.getByTestId("pool-pill")).toHaveTextContent("8");
+    expect(screen.getByTestId("dice-pool-pill")).toHaveTextContent("8");
   });
 
   it("pool pill has emerald styling", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    const poolPill = screen.getByTestId("pool-pill");
+    const poolPill = screen.getByTestId("dice-pool-pill");
     expect(poolPill.className).toContain("emerald");
   });
 
   // --- onSelect behavior ---
 
-  it("calls onSelect with pool and label when weapon row is clicked", () => {
+  it("calls onSelect with pool and label when dice pool pill is clicked", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       attributes: {
@@ -214,18 +214,19 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByTestId("weapon-row"));
+    fireEvent.click(screen.getByTestId("dice-pool-pill"));
     expect(onSelect).toHaveBeenCalled();
     expect(onSelect.mock.calls[0][0]).toBe(11); // pool = agility(6) + pistols(5)
   });
 
-  it("expand button does not trigger onSelect", () => {
+  it("clicking row expands instead of triggering onSelect", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByText("Ares Predator V"));
     expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
   });
 
   it("clicking expanded content does not trigger onSelect", () => {
@@ -238,12 +239,108 @@ describe("WeaponsDisplay", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
-  // --- Subcategory ---
+  // --- Recoil compensation ---
 
-  it("renders subcategory text when expanded", () => {
+  it("renders RC pill for ranged weapons with recoil", () => {
+    const rangedWithRC = { ...MOCK_RANGED_WEAPON, recoil: 2 };
+    const character = createSheetCharacter({ weapons: [rangedWithRC] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("rc-pill")).toHaveTextContent("RC 2");
+  });
+
+  it("hides RC pill when recoil is 0 or absent", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByText("Heavy Pistols")).toBeInTheDocument();
+    expect(screen.queryByTestId("rc-pill")).not.toBeInTheDocument();
+  });
+
+  // --- Stats row (availability, cost, subcategory) ---
+
+  it("renders availability with legality letter when expanded", () => {
+    const rangedWithAvail = {
+      ...MOCK_RANGED_WEAPON,
+      availability: 5,
+      legality: "restricted" as const,
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithAvail] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-availability")).toHaveTextContent("Avail 5R");
+  });
+
+  it("renders weapon type after name on collapsed row", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    const weaponType = screen.getByTestId("weapon-type");
+    expect(weaponType).toHaveTextContent("(Heavy Pistols)");
+  });
+
+  // --- Ammo state ---
+
+  it("renders ammo section when weapon has ammoState", () => {
+    const rangedWithAmmo = {
+      ...MOCK_RANGED_WEAPON,
+      ammoState: { loadedAmmoTypeId: "regular", currentRounds: 10, magazineCapacity: 15 },
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithAmmo] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    const ammoSection = screen.getByTestId("ammo-section");
+    expect(ammoSection).toHaveTextContent("10/15");
+    expect(ammoSection).toHaveTextContent("regular");
+  });
+
+  it("hides ammo section when no ammoState", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("ammo-section")).not.toBeInTheDocument();
+  });
+
+  // --- Modifications ---
+
+  it("renders modifications section when weapon has mods", () => {
+    const rangedWithMods = {
+      ...MOCK_RANGED_WEAPON,
+      modifications: [
+        {
+          catalogId: "smartgun-internal",
+          name: "Smartgun System (Internal)",
+          mount: "internal" as const,
+          capacityUsed: 2,
+          cost: 200,
+          availability: 4,
+        },
+        {
+          catalogId: "silencer",
+          name: "Silencer",
+          mount: "barrel" as const,
+          capacityUsed: 1,
+          cost: 500,
+          availability: 8,
+          legality: "restricted" as const,
+        },
+      ],
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithMods] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("modifications-section")).toBeInTheDocument();
+    const modRows = screen.getAllByTestId("mod-row");
+    expect(modRows).toHaveLength(2);
+    expect(modRows[0]).toHaveTextContent("Smartgun System (Internal)");
+    expect(modRows[0]).toHaveTextContent("internal");
+    expect(modRows[1]).toHaveTextContent("Silencer");
+    expect(modRows[1]).toHaveTextContent("barrel");
+  });
+
+  it("hides modifications section when no mods", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("modifications-section")).not.toBeInTheDocument();
   });
 });
