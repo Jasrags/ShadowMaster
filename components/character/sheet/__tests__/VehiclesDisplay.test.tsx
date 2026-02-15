@@ -1,94 +1,33 @@
 /**
  * VehiclesDisplay Component Tests
  *
- * Tests the vehicles & drones display. Returns null when all arrays empty.
- * Shows vehicle stats grid, drone size labels, RCC device rating/firewall.
+ * Tests the vehicles & drones display with expandable rows grouped into
+ * Vehicles/Drones/RCCs sections. Validates section grouping, collapsed/expanded
+ * states, type badges, primary pills, stats, autosofts, and notes rendering.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
-import type { Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
+import userEvent from "@testing-library/user-event";
+import {
+  setupDisplayCardMock,
+  LUCIDE_MOCK,
+  MOCK_VEHICLE,
+  MOCK_VEHICLE_WITH_OPTIONS,
+  MOCK_DRONE,
+  MOCK_DRONE_WITH_AUTOSOFTS,
+  MOCK_RCC,
+  MOCK_RCC_WITH_OPTIONS,
+} from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 import { VehiclesDisplay } from "../VehiclesDisplay";
 
-const mockVehicle: Vehicle = {
-  catalogId: "dodge-scoot",
-  name: "Dodge Scoot",
-  type: "ground",
-  handling: 4,
-  speed: 3,
-  acceleration: 1,
-  body: 4,
-  armor: 4,
-  pilot: 1,
-  sensor: 1,
-  seats: 1,
-  cost: 3000,
-  availability: 4,
-};
-
-const mockDrone: CharacterDrone = {
-  catalogId: "fly-spy",
-  name: "MCT Fly-Spy",
-  size: "mini",
-  handling: 4,
-  speed: 3,
-  acceleration: 2,
-  body: 1,
-  armor: 0,
-  pilot: 3,
-  sensor: 3,
-  cost: 2000,
-  availability: 4,
-};
-
-const mockRCC: CharacterRCC = {
-  catalogId: "rcc-standard",
-  name: "RCC-Standard",
-  deviceRating: 5,
-  dataProcessing: 4,
-  firewall: 3,
-  cost: 11000,
-  availability: 6,
-};
-
 describe("VehiclesDisplay", () => {
+  // --- Empty state ---
+
   it("returns null when all arrays are empty", () => {
     const { container } = render(<VehiclesDisplay vehicles={[]} drones={[]} rccs={[]} />);
     expect(container.innerHTML).toBe("");
@@ -99,70 +38,318 @@ describe("VehiclesDisplay", () => {
     expect(container.innerHTML).toBe("");
   });
 
-  it("renders vehicle name", () => {
-    render(<VehiclesDisplay vehicles={[mockVehicle]} />);
+  // --- Section grouping ---
+
+  it("renders Vehicles section for vehicles", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    expect(screen.getByText("Vehicles")).toBeInTheDocument();
+  });
+
+  it("renders Drones section for drones", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    expect(screen.getByText("Drones")).toBeInTheDocument();
+  });
+
+  it("renders RCCs section for RCCs", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    expect(screen.getByText("RCCs")).toBeInTheDocument();
+  });
+
+  it("hides Drones section when only vehicles present", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    expect(screen.queryByText("Drones")).not.toBeInTheDocument();
+    expect(screen.queryByText("RCCs")).not.toBeInTheDocument();
+  });
+
+  it("hides Vehicles section when only drones present", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    expect(screen.queryByText("Vehicles")).not.toBeInTheDocument();
+    expect(screen.queryByText("RCCs")).not.toBeInTheDocument();
+  });
+
+  it("renders all three sections when all types present", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} drones={[MOCK_DRONE]} rccs={[MOCK_RCC]} />);
+    expect(screen.getByText("Vehicles")).toBeInTheDocument();
+    expect(screen.getByText("Drones")).toBeInTheDocument();
+    expect(screen.getByText("RCCs")).toBeInTheDocument();
+  });
+
+  // --- Collapsed row: Vehicle ---
+
+  it("renders vehicle name in collapsed row", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
     expect(screen.getByText("Dodge Scoot")).toBeInTheDocument();
   });
 
-  it("renders vehicle type label", () => {
-    render(<VehiclesDisplay vehicles={[mockVehicle]} />);
-    expect(screen.getByText("Vehicle")).toBeInTheDocument();
+  it("renders vehicle type badge", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    const badge = screen.getByTestId("type-badge");
+    expect(badge).toHaveTextContent("ground");
   });
 
-  it("renders vehicle stats grid (handling, speed, body, armor)", () => {
-    render(<VehiclesDisplay vehicles={[mockVehicle]} />);
-    expect(screen.getByText("Hand")).toBeInTheDocument();
-    expect(screen.getByText("Spd")).toBeInTheDocument();
-    expect(screen.getByText("Body")).toBeInTheDocument();
-    // "Armor" label in the stats grid
-    const armorLabels = screen.getAllByText("Armor");
-    expect(armorLabels.length).toBeGreaterThanOrEqual(1);
+  it("renders vehicle BOD pill", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    const pill = screen.getByTestId("primary-pill");
+    expect(pill).toHaveTextContent("BOD 4");
+    expect(pill.className).toContain("sky");
   });
 
-  it("renders drone name and size label", () => {
-    render(<VehiclesDisplay drones={[mockDrone]} />);
+  // --- Collapsed row: Drone ---
+
+  it("renders drone name in collapsed row", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
     expect(screen.getByText("MCT Fly-Spy")).toBeInTheDocument();
-    expect(screen.getByText("mini Drone")).toBeInTheDocument();
   });
 
-  it("renders drone stats grid", () => {
-    render(<VehiclesDisplay drones={[mockDrone]} />);
-    expect(screen.getByText("Hand")).toBeInTheDocument();
-    expect(screen.getByText("Spd")).toBeInTheDocument();
+  it("renders drone customName when present", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_WITH_AUTOSOFTS]} />);
+    expect(screen.getByText("Rex")).toBeInTheDocument();
   });
 
-  it("renders RCC name", () => {
-    render(<VehiclesDisplay rccs={[mockRCC]} />);
+  it("renders drone size badge", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    const badge = screen.getByTestId("type-badge");
+    expect(badge).toHaveTextContent("mini");
+  });
+
+  it("renders drone BOD pill", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    const pill = screen.getByTestId("primary-pill");
+    expect(pill).toHaveTextContent("BOD 1");
+  });
+
+  // --- Collapsed row: RCC ---
+
+  it("renders RCC name in collapsed row", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
     expect(screen.getByText("RCC-Standard")).toBeInTheDocument();
   });
 
-  it("renders RCC type label", () => {
-    render(<VehiclesDisplay rccs={[mockRCC]} />);
-    expect(screen.getByText("RCC")).toBeInTheDocument();
+  it("renders RCC customName when present", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC_WITH_OPTIONS]} />);
+    expect(screen.getByText("Command Node")).toBeInTheDocument();
   });
 
-  it("renders RCC device rating", () => {
-    render(<VehiclesDisplay rccs={[mockRCC]} />);
-    expect(screen.getByText("Rating")).toBeInTheDocument();
-    expect(screen.getByText("5")).toBeInTheDocument();
+  it("renders RCC type badge", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    const badge = screen.getByTestId("type-badge");
+    expect(badge).toHaveTextContent("RCC");
   });
 
-  it("renders RCC data processing and firewall", () => {
-    render(<VehiclesDisplay rccs={[mockRCC]} />);
-    expect(screen.getByText("Data Proc")).toBeInTheDocument();
-    expect(screen.getByText("Firewall")).toBeInTheDocument();
+  it("renders RCC DR pill", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    const pill = screen.getByTestId("primary-pill");
+    expect(pill).toHaveTextContent("DR 5");
   });
 
-  it("renders mixed vehicle types", () => {
-    render(<VehiclesDisplay vehicles={[mockVehicle]} drones={[mockDrone]} rccs={[mockRCC]} />);
+  // --- Expand/collapse ---
+
+  it("does not show expanded content by default", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  it("expands row on chevron click", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+  });
+
+  it("collapses row on second chevron click", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  // --- Expanded stats: Vehicle/Drone ---
+
+  it("renders handling stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-handling")).toHaveTextContent("4");
+  });
+
+  it("renders speed stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-speed")).toHaveTextContent("3");
+  });
+
+  it("renders acceleration stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-acceleration")).toHaveTextContent("1");
+  });
+
+  it("renders pilot stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-pilot")).toHaveTextContent("1");
+  });
+
+  it("renders sensor stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-sensor")).toHaveTextContent("1");
+  });
+
+  it("renders armor stat when vehicle expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-armor")).toHaveTextContent("4");
+  });
+
+  it("renders seats stat for vehicles when expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-seats")).toHaveTextContent("1");
+  });
+
+  it("does not render seats stat for drones", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("stat-seats")).not.toBeInTheDocument();
+  });
+
+  // --- Expanded stats: RCC ---
+
+  it("renders data processing stat when RCC expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-data-processing")).toHaveTextContent("4");
+  });
+
+  it("renders firewall stat when RCC expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-firewall")).toHaveTextContent("3");
+  });
+
+  it("does not render vehicle stats for RCC", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay rccs={[MOCK_RCC]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("stat-handling")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-speed")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-armor")).not.toBeInTheDocument();
+  });
+
+  // --- Availability & Cost ---
+
+  it("renders availability when expanded", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    const avail = screen.getByTestId("stat-availability");
+    expect(avail).toHaveTextContent("4");
+  });
+
+  it("renders availability with legality suffix", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE_WITH_OPTIONS]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    const avail = screen.getByTestId("stat-availability");
+    expect(avail).toHaveTextContent("12R");
+  });
+
+  it("renders cost formatted with yen", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    const cost = screen.getByTestId("stat-cost");
+    expect(cost).toHaveTextContent("3,000¥");
+  });
+
+  it("renders large cost with comma formatting", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE_WITH_OPTIONS]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    const cost = screen.getByTestId("stat-cost");
+    expect(cost).toHaveTextContent("52,000¥");
+  });
+
+  // --- Autosofts ---
+
+  it("renders installed autosofts for drone", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay drones={[MOCK_DRONE_WITH_AUTOSOFTS]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("autosofts-section")).toBeInTheDocument();
+    expect(screen.getByText("Installed Autosofts")).toBeInTheDocument();
+    const rows = screen.getAllByTestId("autosoft-row");
+    expect(rows).toHaveLength(2);
+    expect(screen.getByText("Clearsight")).toBeInTheDocument();
+    expect(screen.getByText("Targeting (Automatics)")).toBeInTheDocument();
+  });
+
+  it("renders running autosofts for RCC", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay rccs={[MOCK_RCC_WITH_OPTIONS]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("autosofts-section")).toBeInTheDocument();
+    expect(screen.getByText("Running Autosofts")).toBeInTheDocument();
+    const rows = screen.getAllByTestId("autosoft-row");
+    expect(rows).toHaveLength(2);
+    expect(screen.getByText("Electronic Warfare")).toBeInTheDocument();
+    expect(screen.getByText("Stealth")).toBeInTheDocument();
+  });
+
+  it("does not render autosofts section when none present", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("autosofts-section")).not.toBeInTheDocument();
+  });
+
+  // --- Notes ---
+
+  it("renders notes when present", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE_WITH_OPTIONS]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("notes")).toHaveTextContent("Armored transport vehicle");
+  });
+
+  it("does not render notes when absent", async () => {
+    const user = userEvent.setup();
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("notes")).not.toBeInTheDocument();
+  });
+
+  // --- Multiple items ---
+
+  it("renders multiple items in the same section", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE, MOCK_VEHICLE_WITH_OPTIONS]} />);
+    expect(screen.getByText("Dodge Scoot")).toBeInTheDocument();
+    expect(screen.getByText("Ares Roadmaster")).toBeInTheDocument();
+    const rows = screen.getAllByTestId("vehicle-row");
+    expect(rows).toHaveLength(2);
+  });
+
+  it("renders items across multiple sections", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} drones={[MOCK_DRONE]} rccs={[MOCK_RCC]} />);
     expect(screen.getByText("Dodge Scoot")).toBeInTheDocument();
     expect(screen.getByText("MCT Fly-Spy")).toBeInTheDocument();
     expect(screen.getByText("RCC-Standard")).toBeInTheDocument();
-  });
-
-  it("renders only vehicles when drones/rccs not provided", () => {
-    render(<VehiclesDisplay vehicles={[mockVehicle]} />);
-    expect(screen.getByText("Dodge Scoot")).toBeInTheDocument();
-    expect(screen.getByTestId("display-card")).toBeInTheDocument();
+    const rows = screen.getAllByTestId("vehicle-row");
+    expect(rows).toHaveLength(3);
   });
 });
