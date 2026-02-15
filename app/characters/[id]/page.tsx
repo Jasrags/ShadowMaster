@@ -421,6 +421,8 @@ function CharacterSheet({
               character={character}
               onSelect={(pool, label) => openDiceRoller(pool, label)}
             />
+
+            <QualitiesDisplay character={character} onUpdate={(updated) => setCharacter(updated)} />
           </div>
 
           {/* Right Column - Gear & Assets */}
@@ -449,8 +451,6 @@ function CharacterSheet({
               onUpdate={(updated) => setCharacter(updated)}
               showActions={character.status === "active"}
             />
-
-            <QualitiesDisplay character={character} onUpdate={(updated) => setCharacter(updated)} />
 
             <GearDisplay gear={(character.gear || []).filter((item) => item.category !== "drug")} />
 
