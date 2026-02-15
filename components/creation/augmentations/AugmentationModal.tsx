@@ -489,9 +489,7 @@ export function AugmentationModal({
     if (!selectedItem || !canAdd || !rawSelectedItem) return;
 
     const isRatedItem = hasUnifiedRatings(rawSelectedItem);
-    const displayName = isRatedItem
-      ? `${rawSelectedItem.name} (Rating ${selectedRating})`
-      : rawSelectedItem.name;
+    const displayName = rawSelectedItem.name;
 
     // Extract effects from rating table if applicable
     let armorBonus: number | undefined;

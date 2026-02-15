@@ -46,13 +46,10 @@ export function AugmentationItem({
 
   // Format item name with rating
   const displayName = useMemo(() => {
-    // Check if name already contains rating info like "(Rating X)" and convert to RX
-    const ratingMatch = item.name.match(/\(Rating (\d+)\)/);
-    if (ratingMatch) {
-      return item.name.replace(/\s*\(Rating (\d+)\)/, ` R${ratingMatch[1]}`);
-    }
-    return item.name;
-  }, [item.name]);
+    // Strip legacy "(Rating N)" suffix if present, use the rating field instead
+    const baseName = item.name.replace(/\s*\(Rating \d+\)/, "");
+    return item.rating != null ? `${baseName} R${item.rating}` : baseName;
+  }, [item.name, item.rating]);
 
   // Format category display
   const categoryDisplay = useMemo(() => {

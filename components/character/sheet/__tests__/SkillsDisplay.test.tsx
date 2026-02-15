@@ -7,8 +7,13 @@
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { createSheetCharacter, MOCK_ACTIVE_SKILLS, LUCIDE_MOCK } from "./test-helpers";
+import { render, screen, fireEvent, within } from "@testing-library/react";
+import {
+  createSheetCharacter,
+  MOCK_ACTIVE_SKILLS,
+  MOCK_BIOWARE,
+  LUCIDE_MOCK,
+} from "./test-helpers";
 
 vi.mock("../DisplayCard", () => ({
   DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
@@ -23,6 +28,31 @@ vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 vi.mock("@/lib/rules", () => ({
   useSkills: vi.fn(),
+}));
+
+vi.mock("@/components/ui", () => ({
+  Tooltip: ({ children, content }: { children: React.ReactNode; content: React.ReactNode }) => (
+    <div>
+      {children}
+      <div data-testid="tooltip-content">{content}</div>
+    </div>
+  ),
+}));
+
+vi.mock("react-aria-components", () => ({
+  Button: ({
+    children,
+    className,
+    ...props
+  }: {
+    children: React.ReactNode;
+    className?: string;
+    [key: string]: unknown;
+  }) => (
+    <button className={className} {...props}>
+      {children}
+    </button>
+  ),
 }));
 
 import { useSkills } from "@/lib/rules";
@@ -66,13 +96,18 @@ describe("SkillsDisplay", () => {
     expect(rows[3].textContent).toContain("Unarmed Combat");
   });
 
-  it("renders linked attribute abbreviation with color", () => {
+  it("shows linked attribute abbreviation in expanded section", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
-    // Pistols is linked to Agility → AGI
-    expect(screen.getByText("AGI")).toBeInTheDocument();
+    // Not visible when collapsed
+    expect(screen.queryByText("AGI")).not.toBeInTheDocument();
+    // Expand the skill row
+    fireEvent.click(screen.getByTestId("expand-button"));
+    const expanded = screen.getByTestId("expanded-content");
+    expect(within(expanded).getByText("AGI")).toBeInTheDocument();
+    expect(within(expanded).getByText("Agility")).toBeInTheDocument();
   });
 
   it("calculates dice pool (skill rating + attribute + augmentation)", () => {
@@ -89,17 +124,22 @@ describe("SkillsDisplay", () => {
       },
       skills: { pistols: 5 },
     });
-    render(<SkillsDisplay character={character} />);
+    const { container } = render(<SkillsDisplay character={character} />);
     // Pool = pistols(5) + agility(6) = 11
-    expect(screen.getByText("11")).toBeInTheDocument();
+    const poolPill = container.querySelector('[data-testid="dice-pool-pill"]');
+    expect(poolPill!.textContent).toBe("11");
   });
 
-  it("renders specializations as individual amber pills", () => {
+  it("renders specializations inline on collapsed row and in expanded section", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
       skillSpecializations: { pistols: ["Semi-Automatics", "Revolvers"] },
     });
     render(<SkillsDisplay character={character} />);
+    // Visible inline on collapsed row as parenthetical
+    expect(screen.getByText("(Semi-Automatics, Revolvers)")).toBeInTheDocument();
+    // Also visible as tags in expanded section
+    fireEvent.click(screen.getByTestId("expand-button"));
     expect(screen.getByText("Semi-Automatics")).toBeInTheDocument();
     expect(screen.getByText("Revolvers")).toBeInTheDocument();
   });
@@ -153,30 +193,20 @@ describe("SkillsDisplay", () => {
     expect(screen.queryByText("Technical")).not.toBeInTheDocument();
   });
 
-  it("renders BookOpen icon for individual skills, Users icon for group skills", () => {
-    const character = createSheetCharacter({
-      skills: { "unarmed-combat": 3, pistols: 5 },
-    });
-    const { container } = render(<SkillsDisplay character={character} />);
-
-    // unarmed-combat has group: null → BookOpen
-    // pistols has group: "firearms" → Users
-    const bookOpenIcons = container.querySelectorAll('[data-testid="icon-BookOpen"]');
-    const usersIcons = container.querySelectorAll('[data-testid="icon-Users"]');
-    expect(bookOpenIcons.length).toBeGreaterThanOrEqual(1);
-    expect(usersIcons.length).toBeGreaterThanOrEqual(1);
-  });
-
-  it("renders skill rating in value pill (no brackets)", () => {
+  it("renders skill rating inline with skill name", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     const { container } = render(<SkillsDisplay character={character} />);
-    const ratingPill = container.querySelector('[data-testid="rating-pill"]');
-    expect(ratingPill).toBeInTheDocument();
-    expect(ratingPill!.textContent).toBe("5");
-    // No brackets
-    expect(screen.queryByText("[5]")).not.toBeInTheDocument();
+    const ratingEl = container.querySelector('[data-testid="rating-pill"]');
+    expect(ratingEl).toBeInTheDocument();
+    expect(ratingEl!.textContent).toBe("5");
+    // Rating is inline text (span), not a boxed pill
+    expect(ratingEl!.tagName).toBe("SPAN");
+    // Sits within the same row as the skill name
+    const row = container.querySelector('[data-testid="skill-row"]')!;
+    expect(row.textContent).toContain("Pistols");
+    expect(row.textContent).toContain("5");
   });
 
   it("renders dice pool in emerald pill", () => {
@@ -199,12 +229,98 @@ describe("SkillsDisplay", () => {
     expect(poolPill!.textContent).toBe("11");
   });
 
-  it("renders group name on line 2 for group skills", () => {
+  it("shows group name in expanded section", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
-    // pistols has group: "firearms"
+    // Not visible when collapsed
+    expect(screen.queryByText(/firearms/)).not.toBeInTheDocument();
+    // Expand the skill row
+    fireEvent.click(screen.getByTestId("expand-button"));
     expect(screen.getByText(/firearms/)).toBeInTheDocument();
+  });
+
+  it("shows defaultable badge in expanded section", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("default-badge")).toHaveTextContent("Can Default");
+  });
+
+  it("toggles expanded section on chevron click", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+    // Initially collapsed
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    // Expand
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+    // Collapse
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  it("clicking expanded content does not trigger onSelect", () => {
+    const onSelect = vi.fn();
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} onSelect={onSelect} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByTestId("expanded-content"));
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("shows pool breakdown tooltip with attribute and skill values", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+
+    const tooltipContent = screen.getByTestId("tooltip-content");
+    expect(within(tooltipContent).getByText("Agility")).toBeInTheDocument();
+    expect(within(tooltipContent).getByText("6")).toBeInTheDocument();
+    expect(within(tooltipContent).getByText("Skill")).toBeInTheDocument();
+    expect(within(tooltipContent).getByText("Total")).toBeInTheDocument();
+  });
+
+  it("shows augmentation bonuses in pool breakdown tooltip", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+      bioware: [MOCK_BIOWARE], // Muscle Toner: agility +2
+    });
+    render(<SkillsDisplay character={character} />);
+
+    const tooltipContent = screen.getByTestId("tooltip-content");
+    expect(within(tooltipContent).getByText("Muscle Toner")).toBeInTheDocument();
+    expect(within(tooltipContent).getByText("+2")).toBeInTheDocument();
+  });
+
+  it("renders dice pool pill as focusable button with aria-label", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+
+    const pill = screen.getByTestId("dice-pool-pill");
+    expect(pill.tagName).toBe("BUTTON");
+    expect(pill).toHaveAttribute("aria-label", "Pistols dice pool breakdown");
+  });
+
+  it("clicking dice pool pill does not trigger onSelect", () => {
+    const onSelect = vi.fn();
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} onSelect={onSelect} />);
+
+    const pill = screen.getByTestId("dice-pool-pill");
+    fireEvent.click(pill);
+    expect(onSelect).not.toHaveBeenCalled();
   });
 });

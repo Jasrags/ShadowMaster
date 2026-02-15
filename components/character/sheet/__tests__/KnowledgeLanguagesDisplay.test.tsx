@@ -1,13 +1,14 @@
 /**
  * KnowledgeLanguagesDisplay Component Tests
  *
- * Tests the knowledge skills and languages display.
- * Uses grouped sunken sections with value pills, category subtitles,
- * specialization amber pills, and native emerald pills.
+ * Tests the knowledge skills and languages display with collapsible rows.
+ * Knowledge skills have chevron expand/collapse with category and specialization
+ * in the expanded section. Languages use a spacer for alignment.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import { createSheetCharacter, setupDisplayCardMock, LUCIDE_MOCK } from "./test-helpers";
 
 setupDisplayCardMock();
@@ -30,11 +31,27 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(screen.getByText("Security Design")).toBeInTheDocument();
   });
 
-  it("renders knowledge skill category", () => {
+  it("shows chevron for knowledge skill rows", () => {
     const character = createSheetCharacter({
       knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
+    expect(screen.getByTestId("expand-button")).toBeInTheDocument();
+  });
+
+  it("renders knowledge skill category in expanded section", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
+    });
+    render(<KnowledgeLanguagesDisplay character={character} />);
+
+    // Category not visible collapsed
+    expect(screen.queryByText("professional")).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
     expect(screen.getByText("professional")).toBeInTheDocument();
   });
 
@@ -137,7 +154,8 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(pills[2]).toHaveTextContent("2");
   });
 
-  it("renders specialization as amber pill when present", () => {
+  it("renders specialization as amber pill in expanded section", async () => {
+    const user = userEvent.setup();
     const character = createSheetCharacter({
       knowledgeSkills: [
         {
@@ -149,16 +167,40 @@ describe("KnowledgeLanguagesDisplay", () => {
       ],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
+
+    // Specialization not visible collapsed
+    expect(screen.queryByTestId("specialization-pill")).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
     const specPill = screen.getByTestId("specialization-pill");
     expect(specPill).toHaveTextContent("Maglocks");
     expect(specPill.className).toContain("amber");
   });
 
-  it("does not render specialization when absent", () => {
+  it("does not render specialization when absent", async () => {
+    const user = userEvent.setup();
     const character = createSheetCharacter({
       knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
     expect(screen.queryByTestId("specialization-pill")).not.toBeInTheDocument();
+  });
+
+  it("collapses row on second chevron click", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
+    });
+    render(<KnowledgeLanguagesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 });

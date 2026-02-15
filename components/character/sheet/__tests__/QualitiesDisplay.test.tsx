@@ -62,20 +62,20 @@ describe("QualitiesDisplay", () => {
 
   // --- Section headers ---
 
-  it("renders Positive Qualities section header", () => {
+  it("renders Positive section header", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
       negativeQualities: [],
     });
-    expect(screen.getByText("Positive Qualities")).toBeInTheDocument();
+    expect(screen.getByText("Positive")).toBeInTheDocument();
   });
 
-  it("renders Negative Qualities section header", () => {
+  it("renders Negative section header", () => {
     renderWith({
       positiveQualities: [],
       negativeQualities: [{ qualityId: "bad-luck", source: "creation" }],
     });
-    expect(screen.getByText("Negative Qualities")).toBeInTheDocument();
+    expect(screen.getByText("Negative")).toBeInTheDocument();
   });
 
   it("renders both section headers when both types present", () => {
@@ -83,8 +83,8 @@ describe("QualitiesDisplay", () => {
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
       negativeQualities: [{ qualityId: "bad-luck", source: "creation" }],
     });
-    expect(screen.getByText("Positive Qualities")).toBeInTheDocument();
-    expect(screen.getByText("Negative Qualities")).toBeInTheDocument();
+    expect(screen.getByText("Positive")).toBeInTheDocument();
+    expect(screen.getByText("Negative")).toBeInTheDocument();
   });
 
   it("hides Negative section when no negative qualities", () => {
@@ -92,7 +92,7 @@ describe("QualitiesDisplay", () => {
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
       negativeQualities: [],
     });
-    expect(screen.queryByText("Negative Qualities")).not.toBeInTheDocument();
+    expect(screen.queryByText("Negative")).not.toBeInTheDocument();
   });
 
   // --- Quality names ---

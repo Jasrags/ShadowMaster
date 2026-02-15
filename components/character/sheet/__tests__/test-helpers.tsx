@@ -135,6 +135,7 @@ export const LUCIDE_MOCK = {
   Star: createIconMock("Star"),
   CirclePlus: createIconMock("CirclePlus"),
   ArrowUp: createIconMock("ArrowUp"),
+  ArrowDown: createIconMock("ArrowDown"),
   Info: createIconMock("Info"),
   Clock: createIconMock("Clock"),
   AlertCircle: createIconMock("AlertCircle"),
