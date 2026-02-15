@@ -3,15 +3,15 @@
 import { useState } from "react";
 import type { Character, CyberwareItem, BiowareItem } from "@/lib/types";
 import { DisplayCard } from "./DisplayCard";
-import { ChevronDown, ChevronRight, Cpu, Dna } from "lucide-react";
+import { ChevronDown, ChevronRight, Cpu } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Section & variant configuration
 // ---------------------------------------------------------------------------
 
 const AUGMENTATION_SECTIONS = [
-  { key: "cyber" as const, label: "Cyberware", icon: Cpu, iconColor: "text-cyan-400" },
-  { key: "bio" as const, label: "Bioware", icon: Dna, iconColor: "text-emerald-400" },
+  { key: "cyber" as const, label: "Cyberware" },
+  { key: "bio" as const, label: "Bioware" },
 ];
 
 const VARIANT_COLORS = {
@@ -155,12 +155,11 @@ export function AugmentationsDisplay({ character }: AugmentationsDisplayProps) {
   return (
     <DisplayCard title="Augmentations" icon={<Cpu className="h-4 w-4 text-zinc-400" />}>
       <div className="space-y-3">
-        {AUGMENTATION_SECTIONS.map(({ key, label, icon: Icon, iconColor }) => {
+        {AUGMENTATION_SECTIONS.map(({ key, label }) => {
           if (items[key].length === 0) return null;
           return (
             <div key={key}>
-              <div className="mb-1 flex items-center gap-1.5 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-                <Icon className={`h-3 w-3 ${iconColor}`} />
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                 {label}
               </div>
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
