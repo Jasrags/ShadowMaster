@@ -105,10 +105,9 @@ function WeaponRow({
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {weapon.name}
         </span>
-        <span className="flex-1" />
         <span
           data-testid="pool-pill"
-          className="flex h-6 min-w-[1.5rem] items-center justify-center rounded-md border border-emerald-500/20 bg-emerald-500/12 px-1.5 font-mono text-xs font-bold text-emerald-600 dark:text-emerald-300"
+          className="ml-auto shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
         >
           {pool}
         </span>
