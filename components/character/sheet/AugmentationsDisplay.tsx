@@ -40,21 +40,18 @@ function AugmentationRow({
   return (
     <div
       data-testid="augmentation-row"
-      className="px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       {/* Collapsed row: Chevron + Name + Rating */}
       <div className="flex min-w-0 items-center gap-1.5">
-        <button
-          data-testid="expand-button"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-        >
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
             <ChevronDown className="h-3.5 w-3.5" />
           ) : (
             <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </button>
+        </span>
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {item.name.replace(/\s*\(Rating \d+\)/, "")}
         </span>
@@ -66,25 +63,21 @@ function AugmentationRow({
             {item.rating}
           </span>
         )}
+        <span
+          data-testid="essence-pill"
+          className={`ml-auto shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${colors.pill}`}
+        >
+          {(item.essenceCost ?? 0).toFixed(2)}
+        </span>
       </div>
 
       {/* Expanded section */}
       {isExpanded && (
         <div
           data-testid="expanded-content"
+          onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {/* Essence cost */}
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">
-            Essence:{" "}
-            <span
-              data-testid="essence-pill"
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${colors.pill}`}
-            >
-              {(item.essenceCost ?? 0).toFixed(2)}
-            </span>
-          </div>
-
           {/* Grade */}
           <div className="text-xs text-zinc-500 dark:text-zinc-400">
             Grade:{" "}

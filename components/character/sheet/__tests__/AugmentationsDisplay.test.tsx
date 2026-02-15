@@ -160,14 +160,9 @@ describe("AugmentationsDisplay", () => {
     expect(screen.getByText("AGILITY +2")).toBeInTheDocument();
   });
 
-  it("renders essence cost pill in expanded section", async () => {
-    const user = userEvent.setup();
+  it("renders essence cost pill in collapsed row", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
-
-    expect(screen.queryByTestId("essence-pill")).not.toBeInTheDocument();
-
-    await user.click(screen.getByTestId("expand-button"));
 
     const pill = screen.getByTestId("essence-pill");
     expect(pill).toHaveTextContent("2.00");
