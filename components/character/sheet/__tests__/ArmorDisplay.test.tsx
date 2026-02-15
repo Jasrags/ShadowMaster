@@ -81,14 +81,9 @@ describe("ArmorDisplay", () => {
     expect(pill.className).toContain("sky");
   });
 
-  it("renders accessory badge for armor modifiers", () => {
+  it("renders subcategory label when subcategory is present", () => {
     render(<ArmorDisplay armor={[MOCK_ARMOR_ACCESSORY]} />);
-    expect(screen.getByTestId("accessory-badge")).toHaveTextContent("Accessory");
-  });
-
-  it("does not render accessory badge for regular armor", () => {
-    render(<ArmorDisplay armor={[MOCK_ARMOR_EQUIPPED]} />);
-    expect(screen.queryByTestId("accessory-badge")).not.toBeInTheDocument();
+    expect(screen.getByTestId("subcategory-label")).toBeInTheDocument();
   });
 
   it("does not show expanded content by default", () => {

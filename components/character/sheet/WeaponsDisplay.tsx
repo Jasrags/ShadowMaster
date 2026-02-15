@@ -61,19 +61,6 @@ function formatLegality(legality: string): string {
 }
 
 // ---------------------------------------------------------------------------
-// Stat pill color configs
-// ---------------------------------------------------------------------------
-
-const STAT_COLORS = {
-  damage: "border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300",
-  ap: "border-amber-500/20 bg-amber-500/12 text-amber-600 dark:text-amber-300",
-  accuracy: "border-cyan-500/20 bg-cyan-500/12 text-cyan-600 dark:text-cyan-300",
-  reach: "border-purple-500/20 bg-purple-500/12 text-purple-600 dark:text-purple-300",
-  rc: "border-orange-500/20 bg-orange-500/12 text-orange-600 dark:text-orange-300",
-  mode: "border-zinc-300/40 bg-zinc-100/60 text-zinc-600 dark:border-zinc-600/30 dark:bg-zinc-700/30 dark:text-zinc-300",
-};
-
-// ---------------------------------------------------------------------------
 // WeaponRow
 // ---------------------------------------------------------------------------
 
@@ -136,50 +123,50 @@ function WeaponRow({
           onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {/* Stat pills */}
-          <div className="flex flex-wrap gap-1.5">
-            <span
-              data-testid="damage-pill"
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.damage}`}
-            >
-              DMG {weapon.damage}
+          {/* Stats row */}
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <span data-testid="stat-damage">
+              Damage{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {weapon.damage}
+              </span>
             </span>
-            <span
-              data-testid="ap-pill"
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.ap}`}
-            >
-              AP {weapon.ap}
+            <span data-testid="stat-ap">
+              AP{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {weapon.ap}
+              </span>
             </span>
             {!isMelee && (
-              <span
-                data-testid="accuracy-pill"
-                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.accuracy}`}
-              >
-                ACC {weapon.accuracy || "-"}
+              <span data-testid="stat-accuracy">
+                Accuracy{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {weapon.accuracy || "-"}
+                </span>
               </span>
             )}
             {isMelee && weapon.reach != null && Number(weapon.reach) !== 0 && (
-              <span
-                data-testid="reach-pill"
-                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.reach}`}
-              >
-                RCH {weapon.reach}
+              <span data-testid="stat-reach">
+                Reach{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {weapon.reach}
+                </span>
               </span>
             )}
             {!isMelee && modeStr && (
-              <span
-                data-testid="mode-pill"
-                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.mode}`}
-              >
-                MODE {modeStr}
+              <span data-testid="stat-mode">
+                Mode{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {modeStr}
+                </span>
               </span>
             )}
             {!isMelee && weapon.recoil != null && weapon.recoil > 0 && (
-              <span
-                data-testid="rc-pill"
-                className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${STAT_COLORS.rc}`}
-              >
-                RC {weapon.recoil}
+              <span data-testid="stat-rc">
+                RC{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {weapon.recoil}
+                </span>
               </span>
             )}
           </div>

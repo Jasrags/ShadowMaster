@@ -50,41 +50,26 @@ function VehicleRow({ item }: { item: VehicleItem }) {
 
   const badgeText = isRCC(item) ? "RCC" : isDrone(item) ? item.size : item.type;
 
-  const primaryLabel = isRCC(item) ? "DR" : "BOD";
+  const primaryLabel = isRCC(item) ? "DR" : "Body";
   const primaryValue = isRCC(item) ? item.deviceRating : item.body;
 
   return (
     <div
       data-testid="vehicle-row"
-      className="px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
-      {/* Collapsed row: Chevron + Name + Type badge + Primary pill */}
+      {/* Collapsed row: Chevron + Name */}
       <div className="flex min-w-0 items-center gap-1.5">
-        <button
-          data-testid="expand-button"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-        >
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
             <ChevronDown className="h-3.5 w-3.5" />
           ) : (
             <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </button>
+        </span>
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {displayName}
-        </span>
-        <span
-          data-testid="type-badge"
-          className="rounded border border-zinc-400/20 bg-zinc-400/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase text-zinc-500 dark:text-zinc-400"
-        >
-          {badgeText}
-        </span>
-        <span
-          data-testid="primary-pill"
-          className="ml-auto shrink-0 rounded border border-sky-500/20 bg-sky-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-sky-600 dark:text-sky-300"
-        >
-          {primaryLabel} {primaryValue}
         </span>
       </div>
 
@@ -92,10 +77,23 @@ function VehicleRow({ item }: { item: VehicleItem }) {
       {isExpanded && (
         <div
           data-testid="expanded-content"
+          onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
           {/* Stats row */}
           <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <span data-testid="stat-type">
+              Type{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {badgeText.charAt(0).toUpperCase() + badgeText.slice(1)}
+              </span>
+            </span>
+            <span data-testid="stat-body">
+              {primaryLabel}{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {primaryValue}
+              </span>
+            </span>
             {!isRCC(item) && (
               <>
                 <span data-testid="stat-handling">
@@ -164,9 +162,9 @@ function VehicleRow({ item }: { item: VehicleItem }) {
             )}
           </div>
 
-          {/* Availability & Cost */}
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
-            {item.availability != null && (
+          {/* Availability */}
+          {item.availability != null && (
+            <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
               <span data-testid="stat-availability">
                 Avail{" "}
                 <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
@@ -174,16 +172,8 @@ function VehicleRow({ item }: { item: VehicleItem }) {
                   {item.legality ? formatLegality(item.legality) : ""}
                 </span>
               </span>
-            )}
-            {item.cost != null && (
-              <span data-testid="stat-cost">
-                Cost{" "}
-                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
-                  {item.cost.toLocaleString()}&yen;
-                </span>
-              </span>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* Autosofts — Drone installed */}
           {isDrone(item) && item.installedAutosofts && item.installedAutosofts.length > 0 && (

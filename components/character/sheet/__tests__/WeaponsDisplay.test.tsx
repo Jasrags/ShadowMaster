@@ -86,34 +86,34 @@ describe("WeaponsDisplay", () => {
     expect(within(expandBtn).getByTestId("icon-ChevronDown")).toBeInTheDocument();
   });
 
-  // --- Stat pills (require expanding) ---
+  // --- Expanded stats (require expanding) ---
 
-  it("renders damage value in pill", () => {
+  it("renders damage stat when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("damage-pill")).toHaveTextContent("DMG 8P");
+    expect(screen.getByTestId("stat-damage")).toHaveTextContent("Damage 8P");
   });
 
-  it("renders AP value in pill", () => {
+  it("renders AP stat when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("ap-pill")).toHaveTextContent("AP -1");
+    expect(screen.getByTestId("stat-ap")).toHaveTextContent("AP -1");
   });
 
-  it("renders mode for ranged weapons in pill", () => {
+  it("renders mode for ranged weapons when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("mode-pill")).toHaveTextContent("MODE SA");
+    expect(screen.getByTestId("stat-mode")).toHaveTextContent("Mode SA");
   });
 
-  it("renders accuracy for ranged weapons in pill", () => {
+  it("renders accuracy for ranged weapons when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("accuracy-pill")).toHaveTextContent("ACC 5");
+    expect(screen.getByTestId("stat-accuracy")).toHaveTextContent("Accuracy 5");
   });
 
   it("renders reach for melee weapons with non-zero reach", () => {
@@ -121,28 +121,28 @@ describe("WeaponsDisplay", () => {
     const character = createSheetCharacter({ weapons: [meleeWithReach] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("reach-pill")).toHaveTextContent("RCH 2");
+    expect(screen.getByTestId("stat-reach")).toHaveTextContent("Reach 2");
   });
 
-  it("hides reach pill when reach is 0", () => {
+  it("hides reach stat when reach is 0", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("reach-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-reach")).not.toBeInTheDocument();
   });
 
-  it("does not render accuracy pill for melee weapons", () => {
+  it("does not render accuracy stat for melee weapons", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("accuracy-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-accuracy")).not.toBeInTheDocument();
   });
 
-  it("does not render mode pill for melee weapons", () => {
+  it("does not render mode stat for melee weapons", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("mode-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-mode")).not.toBeInTheDocument();
   });
 
   // --- Pool calculation ---
@@ -241,19 +241,19 @@ describe("WeaponsDisplay", () => {
 
   // --- Recoil compensation ---
 
-  it("renders RC pill for ranged weapons with recoil", () => {
+  it("renders RC stat for ranged weapons with recoil", () => {
     const rangedWithRC = { ...MOCK_RANGED_WEAPON, recoil: 2 };
     const character = createSheetCharacter({ weapons: [rangedWithRC] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("rc-pill")).toHaveTextContent("RC 2");
+    expect(screen.getByTestId("stat-rc")).toHaveTextContent("RC 2");
   });
 
-  it("hides RC pill when recoil is 0 or absent", () => {
+  it("hides RC stat when recoil is 0 or absent", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("rc-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-rc")).not.toBeInTheDocument();
   });
 
   // --- Stats row (availability, cost, subcategory) ---

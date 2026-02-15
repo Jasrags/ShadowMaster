@@ -53,12 +53,12 @@ function ArmorRow({ item }: { item: ArmorItem }) {
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {item.name}
         </span>
-        {item.armorModifier && (
+        {item.subcategory && (
           <span
-            data-testid="accessory-badge"
-            className="rounded border border-amber-500/20 bg-amber-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase text-amber-600 dark:text-amber-300"
+            data-testid="subcategory-label"
+            className="truncate text-[10px] text-zinc-400 dark:text-zinc-500"
           >
-            Accessory
+            ({item.subcategory.charAt(0).toUpperCase() + item.subcategory.slice(1)})
           </span>
         )}
         <span
