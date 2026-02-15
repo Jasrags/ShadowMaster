@@ -50,16 +50,14 @@ function renderDynamicStateText(
 const QUALITY_SECTIONS = [
   {
     key: "positive" as const,
-    label: "Positive Qualities",
-    dotColor: "bg-emerald-500",
+    label: "Positive",
     getKarma: (data: QualityData | undefined) => data?.karmaCost,
     karmaPillClasses:
       "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-400/12 dark:border-emerald-400/20 dark:text-emerald-300",
   },
   {
     key: "negative" as const,
-    label: "Negative Qualities",
-    dotColor: "bg-rose-500",
+    label: "Negative",
     getKarma: (data: QualityData | undefined) => data?.karmaBonus,
     karmaPillClasses:
       "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-400/12 dark:border-rose-400/20 dark:text-rose-300",
@@ -304,11 +302,8 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
                 const { config, selections, catalog } = s;
                 return (
                   <div key={config.key}>
-                    <div className="mb-1 flex items-center gap-2 px-1">
-                      <div className={`h-1.5 w-1.5 rounded-full ${config.dotColor}`} />
-                      <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
-                        {config.label}
-                      </span>
+                    <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                      {config.label}
                     </div>
                     <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
                       {selections.map((selection) => {
