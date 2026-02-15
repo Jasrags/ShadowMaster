@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import type { Character, CyberwareItem, BiowareItem } from "@/lib/types";
 import { DisplayCard } from "./DisplayCard";
-import { Cpu, Dna } from "lucide-react";
+import { ChevronDown, ChevronRight, Cpu, Dna } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Section & variant configuration
@@ -33,54 +34,95 @@ function AugmentationRow({
   item: CyberwareItem | BiowareItem;
   variant: "cyber" | "bio";
 }) {
+  const [isExpanded, setIsExpanded] = useState(false);
   const colors = VARIANT_COLORS[variant];
 
   return (
     <div
       data-testid="augmentation-row"
-      className="rounded px-1 py-[7px] transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      className="px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
-      {/* Line 1: Name + grade pill ... essence pill */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
-            {item.name}
-          </span>
-          <span
-            data-testid="grade-pill"
-            className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase ${colors.pill}`}
-          >
-            {item.grade}
-          </span>
-        </div>
-        <span
-          data-testid="essence-pill"
-          className={`flex h-7 w-12 items-center justify-center rounded-md border font-mono text-sm font-bold ${colors.pill}`}
+      {/* Collapsed row: Chevron + Name + Rating */}
+      <div className="flex min-w-0 items-center gap-1.5">
+        <button
+          data-testid="expand-button"
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
         >
-          {(item.essenceCost ?? 0).toFixed(2)}
+          {isExpanded ? (
+            <ChevronDown className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronRight className="h-3.5 w-3.5" />
+          )}
+        </button>
+        <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+          {item.name.replace(/\s*\(Rating \d+\)/, "")}
         </span>
-      </div>
-
-      {/* Line 2: Category + optional rating */}
-      <div className="ml-0.5 mt-0.5 text-xs capitalize text-zinc-500 dark:text-zinc-400">
-        {item.category.replace(/-/g, " ")}
         {item.rating != null && (
-          <span className="text-zinc-400 dark:text-zinc-500"> &bull; Rating {item.rating}</span>
+          <span
+            data-testid="rating-pill"
+            className="font-mono text-xs text-zinc-500 dark:text-zinc-500"
+          >
+            {item.rating}
+          </span>
         )}
       </div>
 
-      {/* Line 3: Attribute bonuses (conditional) */}
-      {item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0 && (
-        <div className="mt-1 flex flex-wrap gap-1.5">
-          {Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
+      {/* Expanded section */}
+      {isExpanded && (
+        <div
+          data-testid="expanded-content"
+          className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+        >
+          {/* Essence cost */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            Essence:{" "}
             <span
-              key={attr}
-              data-testid="bonus-pill"
-              className="inline-flex rounded-full bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+              data-testid="essence-pill"
+              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${colors.pill}`}
             >
-              {attr.toUpperCase()} +{bonus}
+              {(item.essenceCost ?? 0).toFixed(2)}
             </span>
-          ))}
+          </div>
+
+          {/* Grade */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            Grade:{" "}
+            <span
+              data-testid="grade-pill"
+              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase ${colors.pill}`}
+            >
+              {item.grade}
+            </span>
+          </div>
+
+          {/* Category */}
+          <div className="text-xs text-zinc-500 dark:text-zinc-400">
+            Category:{" "}
+            <span className="font-medium capitalize text-zinc-700 dark:text-zinc-300">
+              {item.category.replace(/-/g, " ")}
+            </span>
+          </div>
+
+          {/* Attribute bonuses (conditional) */}
+          {item.attributeBonuses && Object.keys(item.attributeBonuses).length > 0 && (
+            <div className="flex flex-wrap gap-1.5">
+              {Object.entries(item.attributeBonuses).map(([attr, bonus]) => (
+                <span
+                  key={attr}
+                  data-testid="bonus-pill"
+                  className="inline-flex rounded-full bg-emerald-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-300"
+                >
+                  {attr.toUpperCase()} +{bonus}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Notes (conditional) */}
+          {item.notes && (
+            <p className="text-xs leading-relaxed text-zinc-500 dark:text-zinc-400">{item.notes}</p>
+          )}
         </div>
       )}
     </div>
@@ -121,7 +163,7 @@ export function AugmentationsDisplay({ character }: AugmentationsDisplayProps) {
                 <Icon className={`h-3 w-3 ${iconColor}`} />
                 {label}
               </div>
-              <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
+              <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
                 {items[key].map((item, idx) => (
                   <AugmentationRow key={`${key}-${idx}`} item={item} variant={key} />
                 ))}
