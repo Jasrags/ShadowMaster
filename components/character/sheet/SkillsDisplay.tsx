@@ -66,66 +66,62 @@ function SkillRow({ skill, onClick }: { skill: EnrichedSkill; onClick?: () => vo
     <div
       data-testid="skill-row"
       onClick={onClick}
-      className="group cursor-pointer rounded px-1 py-[7px] transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      className="group cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       {/* Collapsed row: Chevron + Name + Rating ... Dice Pool */}
-      <div className="flex items-center justify-between">
-        <div className="flex min-w-0 items-center gap-1.5">
-          <button
-            data-testid="expand-button"
-            onClick={(e) => {
-              e.stopPropagation();
-              setIsExpanded(!isExpanded);
-            }}
-            className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
-            {isExpanded ? (
-              <ChevronDown className="h-3.5 w-3.5" />
-            ) : (
-              <ChevronRight className="h-3.5 w-3.5" />
-            )}
-          </button>
-          <span className="truncate text-sm font-medium text-zinc-800 dark:text-zinc-200">
-            {skill.name}
-          </span>
-          <span
-            data-testid="rating-pill"
-            className="font-mono text-xs text-zinc-500 dark:text-zinc-500"
-          >
-            {skill.rating}
-          </span>
-          {skill.specs.length > 0 && (
-            <span className="truncate text-[11px] text-zinc-400 dark:text-zinc-500">
-              ({skill.specs.join(", ")})
-            </span>
-          )}
-        </div>
-        <div className="flex items-center gap-2">
-          {skill.poolBreakdown ? (
-            <span onClick={(e) => e.stopPropagation()}>
-              <Tooltip
-                content={<PoolTooltipContent breakdown={skill.poolBreakdown} />}
-                delay={200}
-                showArrow={false}
-              >
-                <AriaButton
-                  data-testid="dice-pool-pill"
-                  aria-label={`${skill.name} dice pool breakdown`}
-                  className="flex h-7 w-10 items-center justify-center rounded-md font-mono text-sm font-bold border border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
-                >
-                  {skill.dicePool}
-                </AriaButton>
-              </Tooltip>
-            </span>
+      <div className="flex min-w-0 items-center gap-1.5">
+        <button
+          data-testid="expand-button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setIsExpanded(!isExpanded);
+          }}
+          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
+        >
+          {isExpanded ? (
+            <ChevronDown className="h-3.5 w-3.5" />
           ) : (
-            <div
-              data-testid="dice-pool-pill"
-              className="flex h-7 w-10 items-center justify-center rounded-md font-mono text-sm font-bold border border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300"
-            >
-              {skill.dicePool}
-            </div>
+            <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </div>
+        </button>
+        <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+          {skill.name}
+        </span>
+        <span
+          data-testid="rating-pill"
+          className="font-mono text-[11px] text-zinc-500 dark:text-zinc-500"
+        >
+          {skill.rating}
+        </span>
+        {skill.specs.length > 0 && (
+          <span className="truncate text-[10px] text-zinc-400 dark:text-zinc-500">
+            ({skill.specs.join(", ")})
+          </span>
+        )}
+        {skill.poolBreakdown ? (
+          <span className="ml-auto shrink-0" onClick={(e) => e.stopPropagation()}>
+            <Tooltip
+              content={<PoolTooltipContent breakdown={skill.poolBreakdown} />}
+              delay={200}
+              showArrow={false}
+            >
+              <AriaButton
+                data-testid="dice-pool-pill"
+                aria-label={`${skill.name} dice pool breakdown`}
+                className="rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+              >
+                {skill.dicePool}
+              </AriaButton>
+            </Tooltip>
+          </span>
+        ) : (
+          <span
+            data-testid="dice-pool-pill"
+            className="ml-auto shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
+          >
+            {skill.dicePool}
+          </span>
+        )}
       </div>
 
       {/* Expanded section */}
@@ -299,7 +295,7 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
                 <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   {section.label}
                 </div>
-                <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
+                <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
                   {sectionSkills.map((skill) => (
                     <SkillRow
                       key={skill.id}
