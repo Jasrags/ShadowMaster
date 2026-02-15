@@ -1,50 +1,22 @@
 /**
  * WeaponsDisplay Component Tests
  *
- * Tests the weapons display with ranged/melee split tables.
- * Returns null when no weapons. Tests damage, AP, mode columns,
- * dice pool calculation, and onSelect callback.
+ * Tests the weapons display with ranged/melee expandable rows,
+ * stat pills, pool calculations, and onSelect callback.
  */
 
 import { describe, it, expect, vi } from "vitest";
-import { render, screen, fireEvent } from "@testing-library/react";
-import { createSheetCharacter, MOCK_RANGED_WEAPON, MOCK_MELEE_WEAPON } from "./test-helpers";
+import { render, screen, fireEvent, within } from "@testing-library/react";
+import {
+  setupDisplayCardMock,
+  LUCIDE_MOCK,
+  createSheetCharacter,
+  MOCK_RANGED_WEAPON,
+  MOCK_MELEE_WEAPON,
+} from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 import { WeaponsDisplay } from "../WeaponsDisplay";
 
@@ -84,37 +56,96 @@ describe("WeaponsDisplay", () => {
     expect(screen.getByText("Melee Weapons")).toBeInTheDocument();
   });
 
-  it("renders damage value", () => {
+  // --- Expand/collapse behavior ---
+
+  it("hides expanded content by default", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByText("8P")).toBeInTheDocument();
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 
-  it("renders AP value", () => {
+  it("expand button toggles expanded content", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByText("-1")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 
-  it("renders mode for ranged weapons", () => {
+  it("chevron icon switches between ChevronRight and ChevronDown", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByText("SA")).toBeInTheDocument();
+
+    const expandBtn = screen.getByTestId("expand-button");
+    expect(within(expandBtn).getByTestId("icon-ChevronRight")).toBeInTheDocument();
+
+    fireEvent.click(expandBtn);
+    expect(within(expandBtn).getByTestId("icon-ChevronDown")).toBeInTheDocument();
   });
 
-  it("renders accuracy for ranged weapons", () => {
+  // --- Stat pills (require expanding) ---
+
+  it("renders damage value in pill", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByText("5")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("damage-pill")).toHaveTextContent("DMG 8P");
   });
 
-  it("renders reach for melee weapons", () => {
-    // A melee weapon with reach 2
+  it("renders AP value in pill", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("ap-pill")).toHaveTextContent("AP -1");
+  });
+
+  it("renders mode for ranged weapons in pill", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("mode-pill")).toHaveTextContent("MODE SA");
+  });
+
+  it("renders accuracy for ranged weapons in pill", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("accuracy-pill")).toHaveTextContent("ACC 5");
+  });
+
+  it("renders reach for melee weapons with non-zero reach", () => {
     const meleeWithReach = { ...MOCK_MELEE_WEAPON, reach: 2 };
     const character = createSheetCharacter({ weapons: [meleeWithReach] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByText("2")).toBeInTheDocument();
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("reach-pill")).toHaveTextContent("RCH 2");
   });
+
+  it("hides reach pill when reach is 0", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("reach-pill")).not.toBeInTheDocument();
+  });
+
+  it("does not render accuracy pill for melee weapons", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("accuracy-pill")).not.toBeInTheDocument();
+  });
+
+  it("does not render mode pill for melee weapons", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("mode-pill")).not.toBeInTheDocument();
+  });
+
+  // --- Pool calculation ---
 
   it("calculates dice pool for ranged weapon (agility based)", () => {
     const character = createSheetCharacter({
@@ -133,7 +164,7 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = agility(6) + pistols(5) = 11
-    expect(screen.getByText("11")).toBeInTheDocument();
+    expect(screen.getByTestId("pool-pill")).toHaveTextContent("11");
   });
 
   it("calculates dice pool for melee weapon (strength based)", () => {
@@ -153,10 +184,19 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = strength(4) + blades(4) = 8
-    expect(screen.getByText("8")).toBeInTheDocument();
+    expect(screen.getByTestId("pool-pill")).toHaveTextContent("8");
   });
 
-  it("calls onSelect with pool and label when weapon is clicked", () => {
+  it("pool pill has emerald styling", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    const poolPill = screen.getByTestId("pool-pill");
+    expect(poolPill.className).toContain("emerald");
+  });
+
+  // --- onSelect behavior ---
+
+  it("calls onSelect with pool and label when weapon row is clicked", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       attributes: {
@@ -174,14 +214,36 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByText("Ares Predator V"));
+    fireEvent.click(screen.getByTestId("weapon-row"));
     expect(onSelect).toHaveBeenCalled();
     expect(onSelect.mock.calls[0][0]).toBe(11); // pool = agility(6) + pistols(5)
   });
 
-  it("renders subcategory text", () => {
+  it("expand button does not trigger onSelect", () => {
+    const onSelect = vi.fn();
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} onSelect={onSelect} />);
+
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  it("clicking expanded content does not trigger onSelect", () => {
+    const onSelect = vi.fn();
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} onSelect={onSelect} />);
+
+    fireEvent.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByTestId("expanded-content"));
+    expect(onSelect).not.toHaveBeenCalled();
+  });
+
+  // --- Subcategory ---
+
+  it("renders subcategory text when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
     expect(screen.getByText("Heavy Pistols")).toBeInTheDocument();
   });
 });
