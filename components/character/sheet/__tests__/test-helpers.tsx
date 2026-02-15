@@ -226,6 +226,7 @@ export const MOCK_ARMOR_EQUIPPED = {
   cost: 1000,
   quantity: 1,
   readiness: "ready" as const,
+  state: { readiness: "worn" as const, wirelessEnabled: true },
 };
 
 export const MOCK_ARMOR_STORED = {
@@ -237,6 +238,55 @@ export const MOCK_ARMOR_STORED = {
   cost: 900,
   quantity: 1,
   readiness: "stored" as const,
+  state: { readiness: "stored" as const, wirelessEnabled: false },
+};
+
+export const MOCK_ARMOR_WITH_MODS = {
+  name: "Full Body Armor",
+  category: "armor",
+  subcategory: "full-body-armor",
+  armorRating: 15,
+  equipped: true,
+  cost: 8000,
+  quantity: 1,
+  readiness: "ready" as const,
+  state: { readiness: "worn" as const, wirelessEnabled: true },
+  availability: 14,
+  legality: "restricted" as const,
+  capacity: 15,
+  capacityUsed: 7,
+  weight: 8,
+  modifications: [
+    {
+      catalogId: "fire-resistance",
+      name: "Fire Resistance",
+      rating: 3,
+      capacityUsed: 3,
+      cost: 750,
+      availability: 6,
+    },
+    {
+      catalogId: "chemical-protection",
+      name: "Chemical Protection",
+      rating: 4,
+      capacityUsed: 4,
+      cost: 1000,
+      availability: 6,
+    },
+  ],
+};
+
+export const MOCK_ARMOR_ACCESSORY = {
+  name: "Ballistic Shield",
+  category: "armor",
+  subcategory: "shields",
+  armorRating: 6,
+  armorModifier: true,
+  equipped: true,
+  cost: 1200,
+  quantity: 1,
+  readiness: "ready" as const,
+  state: { readiness: "worn" as const, wirelessEnabled: false },
 };
 
 // ---------------------------------------------------------------------------
