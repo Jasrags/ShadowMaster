@@ -1,50 +1,20 @@
 /**
  * LifestylesDisplay Component Tests
  *
- * Tests the lifestyles display. Returns null when empty.
- * Shows primary lifestyle highlighting, monthly cost formatting,
- * and location display.
+ * Tests the lifestyles display with expandable-row pattern.
+ * Returns null when empty. Shows primary lifestyle badge,
+ * monthly cost pills, location annotation, and expanded details
+ * (prepaid months, notes, modifications, subscriptions).
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
 import type { Lifestyle } from "@/lib/types";
+import { setupDisplayCardMock, LUCIDE_MOCK } from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
 import { LifestylesDisplay } from "../LifestylesDisplay";
 
@@ -56,6 +26,9 @@ const baseLifestyle: Lifestyle = {
 };
 
 describe("LifestylesDisplay", () => {
+  // -----------------------------------------------------------------------
+  // Null / empty
+  // -----------------------------------------------------------------------
   it("returns null when lifestyles array is empty", () => {
     const { container } = render(<LifestylesDisplay lifestyles={[]} />);
     expect(container.innerHTML).toBe("");
@@ -68,41 +41,46 @@ describe("LifestylesDisplay", () => {
     expect(container.innerHTML).toBe("");
   });
 
+  // -----------------------------------------------------------------------
+  // Collapsed row
+  // -----------------------------------------------------------------------
   it("renders lifestyle type", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} />);
     expect(screen.getByText("medium")).toBeInTheDocument();
   });
 
-  it("renders monthly cost with yen symbol and /mo suffix", () => {
+  it("renders monthly cost in cost pill", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} />);
-    expect(screen.getByText("¥5,000/mo")).toBeInTheDocument();
+    const pill = screen.getByTestId("cost-pill");
+    expect(pill).toHaveTextContent("¥5,000/mo");
   });
 
-  it("renders location when present", () => {
+  it("renders location as inline annotation", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} />);
-    expect(screen.getByText("Downtown Seattle")).toBeInTheDocument();
+    expect(screen.getByText("(Downtown Seattle)")).toBeInTheDocument();
   });
 
   it("does not render location when not present", () => {
     const noLocation: Lifestyle = { ...baseLifestyle, location: undefined };
     render(<LifestylesDisplay lifestyles={[noLocation]} />);
-    expect(screen.queryByText("Downtown Seattle")).not.toBeInTheDocument();
+    expect(screen.queryByText(/Downtown Seattle/)).not.toBeInTheDocument();
   });
 
-  it("highlights primary lifestyle", () => {
+  it("highlights primary lifestyle with badge", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="lifestyle-1" />);
-    expect(screen.getByText("Primary")).toBeInTheDocument();
+    const badge = screen.getByTestId("primary-badge");
+    expect(badge).toHaveTextContent("Primary");
   });
 
-  it("uses emerald styling for primary lifestyle", () => {
+  it("uses emerald styling for primary badge", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="lifestyle-1" />);
-    const card = screen.getByText("medium").closest("div[class*='rounded']");
-    expect(card?.className).toContain("emerald");
+    const badge = screen.getByTestId("primary-badge");
+    expect(badge.className).toContain("emerald");
   });
 
   it("does not show Primary badge for non-primary lifestyles", () => {
     render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="other-id" />);
-    expect(screen.queryByText("Primary")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("primary-badge")).not.toBeInTheDocument();
   });
 
   it("renders multiple lifestyles", () => {
@@ -118,11 +96,10 @@ describe("LifestylesDisplay", () => {
         primaryLifestyleId="lifestyle-1"
       />
     );
+    const rows = screen.getAllByTestId("lifestyle-row");
+    expect(rows).toHaveLength(2);
     expect(screen.getByText("medium")).toBeInTheDocument();
     expect(screen.getByText("low")).toBeInTheDocument();
-    expect(screen.getByText("Primary")).toBeInTheDocument();
-    expect(screen.getByText("¥5,000/mo")).toBeInTheDocument();
-    expect(screen.getByText("¥2,000/mo")).toBeInTheDocument();
   });
 
   it("formats large monthly costs with commas", () => {
@@ -132,6 +109,168 @@ describe("LifestylesDisplay", () => {
       monthlyCost: 100000,
     };
     render(<LifestylesDisplay lifestyles={[expensive]} />);
-    expect(screen.getByText("¥100,000/mo")).toBeInTheDocument();
+    const pill = screen.getByTestId("cost-pill");
+    expect(pill).toHaveTextContent("¥100,000/mo");
+  });
+
+  // -----------------------------------------------------------------------
+  // Expand / collapse
+  // -----------------------------------------------------------------------
+  it("does not show expanded content by default", () => {
+    render(<LifestylesDisplay lifestyles={[baseLifestyle]} />);
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  it("expands on click and collapses on second click", async () => {
+    const user = userEvent.setup();
+    const richLifestyle: Lifestyle = {
+      ...baseLifestyle,
+      prepaidMonths: 3,
+    };
+    render(<LifestylesDisplay lifestyles={[richLifestyle]} />);
+
+    // Click to expand
+    await user.click(screen.getByTestId("lifestyle-row"));
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+
+    // Click to collapse
+    await user.click(screen.getByTestId("lifestyle-row"));
+    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+  });
+
+  it("shows ChevronRight when collapsed and ChevronDown when expanded", async () => {
+    const user = userEvent.setup();
+    const richLifestyle: Lifestyle = {
+      ...baseLifestyle,
+      prepaidMonths: 3,
+    };
+    render(<LifestylesDisplay lifestyles={[richLifestyle]} />);
+
+    const expandBtn = screen.getByTestId("expand-button");
+    expect(expandBtn.querySelector('[data-testid="icon-ChevronRight"]')).toBeInTheDocument();
+    expect(expandBtn.querySelector('[data-testid="icon-ChevronDown"]')).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("lifestyle-row"));
+    expect(expandBtn.querySelector('[data-testid="icon-ChevronDown"]')).toBeInTheDocument();
+    expect(expandBtn.querySelector('[data-testid="icon-ChevronRight"]')).not.toBeInTheDocument();
+  });
+
+  // -----------------------------------------------------------------------
+  // Expanded details
+  // -----------------------------------------------------------------------
+  it("shows prepaid months when present", async () => {
+    const user = userEvent.setup();
+    const lifestyle: Lifestyle = {
+      ...baseLifestyle,
+      prepaidMonths: 6,
+    };
+    render(<LifestylesDisplay lifestyles={[lifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+    const stat = screen.getByTestId("stat-prepaid");
+    expect(stat).toHaveTextContent("Prepaid");
+    expect(stat).toHaveTextContent("6 mo");
+  });
+
+  it("shows custom expenses and income when present", async () => {
+    const user = userEvent.setup();
+    const lifestyle: Lifestyle = {
+      ...baseLifestyle,
+      customExpenses: 500,
+      customIncome: 1200,
+    };
+    render(<LifestylesDisplay lifestyles={[lifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+    expect(screen.getByTestId("stat-expenses")).toHaveTextContent("¥500");
+    expect(screen.getByTestId("stat-income")).toHaveTextContent("¥1,200");
+  });
+
+  it("shows notes when present", async () => {
+    const user = userEvent.setup();
+    const lifestyle: Lifestyle = {
+      ...baseLifestyle,
+      notes: "Near a Stuffer Shack",
+    };
+    render(<LifestylesDisplay lifestyles={[lifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+    const notes = screen.getByTestId("notes");
+    expect(notes).toHaveTextContent("Near a Stuffer Shack");
+  });
+
+  it("shows modifications with type badge and modifier", async () => {
+    const user = userEvent.setup();
+    const lifestyle: Lifestyle = {
+      ...baseLifestyle,
+      modifications: [
+        {
+          name: "Extra Secure",
+          type: "positive",
+          modifierType: "percentage",
+          modifier: 20,
+        },
+        {
+          name: "Cramped",
+          type: "negative",
+          modifierType: "fixed",
+          modifier: -1000,
+        },
+      ],
+    };
+    render(<LifestylesDisplay lifestyles={[lifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+
+    expect(screen.getByTestId("modifications-section")).toBeInTheDocument();
+    const modRows = screen.getAllByTestId("mod-row");
+    expect(modRows).toHaveLength(2);
+    expect(screen.getByText("Extra Secure")).toBeInTheDocument();
+    expect(screen.getByText("+20%")).toBeInTheDocument();
+    expect(screen.getByText("Cramped")).toBeInTheDocument();
+    expect(screen.getByText("-1,000¥")).toBeInTheDocument();
+
+    const typeBadges = screen.getAllByTestId("mod-type");
+    expect(typeBadges[0]).toHaveTextContent("positive");
+    expect(typeBadges[1]).toHaveTextContent("negative");
+  });
+
+  it("shows subscriptions with category and cost", async () => {
+    const user = userEvent.setup();
+    const lifestyle: Lifestyle = {
+      ...baseLifestyle,
+      subscriptions: [
+        {
+          name: "DocWagon Gold",
+          monthlyCost: 500,
+          category: "medical",
+        },
+        {
+          name: "GridGuide",
+          monthlyCost: 50,
+        },
+      ],
+    };
+    render(<LifestylesDisplay lifestyles={[lifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+
+    expect(screen.getByTestId("subscriptions-section")).toBeInTheDocument();
+    const subRows = screen.getAllByTestId("sub-row");
+    expect(subRows).toHaveLength(2);
+    expect(screen.getByText("DocWagon Gold")).toBeInTheDocument();
+    expect(screen.getByText("(medical)")).toBeInTheDocument();
+    expect(screen.getByText("GridGuide")).toBeInTheDocument();
+  });
+
+  it("does not render stats/mods/subs sections when data is absent", async () => {
+    const user = userEvent.setup();
+    // baseLifestyle has no prepaidMonths, notes, mods, or subs — but we still
+    // need *something* to trigger the expanded section to render. We'll just
+    // click and verify the sections are NOT present.
+    render(<LifestylesDisplay lifestyles={[baseLifestyle]} />);
+    await user.click(screen.getByTestId("lifestyle-row"));
+
+    // expanded-content is rendered but no sub-sections inside
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+    expect(screen.queryByTestId("stat-prepaid")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("notes")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("modifications-section")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("subscriptions-section")).not.toBeInTheDocument();
   });
 });
