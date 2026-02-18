@@ -34,6 +34,7 @@ export {
   useFoci,
   useSpirits,
   useDrugs,
+  useGear,
 } from "./RulesetContext";
 
 export type {
