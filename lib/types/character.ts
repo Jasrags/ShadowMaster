@@ -370,9 +370,6 @@ export interface Character {
   /** Character identities (each with SIN and licenses) */
   identities?: Identity[];
 
-  /** Primary lifestyle ID (reference to lifestyles array) */
-  primaryLifestyleId?: ID;
-
   /** All lifestyles owned by character */
   lifestyles?: Lifestyle[];
 

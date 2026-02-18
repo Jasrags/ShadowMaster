@@ -462,10 +462,7 @@ function CharacterSheet({
 
             <IdentitiesDisplay character={character} />
 
-            <LifestylesDisplay
-              lifestyles={character.lifestyles || []}
-              primaryLifestyleId={character.primaryLifestyleId}
-            />
+            <LifestylesDisplay lifestyles={character.lifestyles || []} />
           </div>
         </div>
 

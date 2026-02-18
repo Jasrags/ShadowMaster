@@ -2,9 +2,9 @@
  * LifestylesDisplay Component Tests
  *
  * Tests the lifestyles display with expandable-row pattern.
- * Returns null when empty. Shows primary lifestyle badge,
- * monthly cost pills, location annotation, and expanded details
- * (prepaid months, notes, modifications, subscriptions).
+ * Returns null when empty. Shows monthly cost pills, location
+ * annotation, and expanded details (prepaid months, notes,
+ * modifications, subscriptions).
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -66,23 +66,6 @@ describe("LifestylesDisplay", () => {
     expect(screen.queryByText(/Downtown Seattle/)).not.toBeInTheDocument();
   });
 
-  it("highlights primary lifestyle with badge", () => {
-    render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="lifestyle-1" />);
-    const badge = screen.getByTestId("primary-badge");
-    expect(badge).toHaveTextContent("Primary");
-  });
-
-  it("uses emerald styling for primary badge", () => {
-    render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="lifestyle-1" />);
-    const badge = screen.getByTestId("primary-badge");
-    expect(badge.className).toContain("emerald");
-  });
-
-  it("does not show Primary badge for non-primary lifestyles", () => {
-    render(<LifestylesDisplay lifestyles={[baseLifestyle]} primaryLifestyleId="other-id" />);
-    expect(screen.queryByTestId("primary-badge")).not.toBeInTheDocument();
-  });
-
   it("renders multiple lifestyles", () => {
     const secondLifestyle: Lifestyle = {
       id: "lifestyle-2",
@@ -90,12 +73,7 @@ describe("LifestylesDisplay", () => {
       monthlyCost: 2000,
       location: "Redmond Barrens",
     };
-    render(
-      <LifestylesDisplay
-        lifestyles={[baseLifestyle, secondLifestyle]}
-        primaryLifestyleId="lifestyle-1"
-      />
-    );
+    render(<LifestylesDisplay lifestyles={[baseLifestyle, secondLifestyle]} />);
     const rows = screen.getAllByTestId("lifestyle-row");
     expect(rows).toHaveLength(2);
     expect(screen.getByText("medium")).toBeInTheDocument();

@@ -42,15 +42,7 @@ const IDENTITY_SECTIONS = [
 // IdentityRow
 // ---------------------------------------------------------------------------
 
-function IdentityRow({
-  identity,
-  lifestyles,
-  primaryLifestyleId,
-}: {
-  identity: Identity;
-  lifestyles: Lifestyle[];
-  primaryLifestyleId?: string;
-}) {
+function IdentityRow({ identity, lifestyles }: { identity: Identity; lifestyles: Lifestyle[] }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const associatedLifestyles = identity.id
@@ -132,14 +124,6 @@ function IdentityRow({
                       <span className="font-medium capitalize text-zinc-700 dark:text-zinc-300">
                         {ls.type}
                       </span>
-                      {primaryLifestyleId === ls.id && (
-                        <span
-                          data-testid="lifestyle-primary-badge"
-                          className="shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1 text-[9px] font-bold uppercase text-emerald-600 dark:text-emerald-300"
-                        >
-                          Primary
-                        </span>
-                      )}
                       <span
                         data-testid="lifestyle-cost"
                         className="ml-auto shrink-0 font-mono text-[11px] text-zinc-500 dark:text-zinc-500"
@@ -234,7 +218,6 @@ export function IdentitiesDisplay({ character }: IdentitiesDisplayProps) {
                     key={identity.id || `identity-${idx}`}
                     identity={identity}
                     lifestyles={character.lifestyles || []}
-                    primaryLifestyleId={character.primaryLifestyleId}
                   />
                 ))}
               </div>

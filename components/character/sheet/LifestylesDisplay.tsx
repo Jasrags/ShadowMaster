@@ -24,7 +24,7 @@ function formatModifier(mod: LifestyleModification): string {
 // LifestyleRow
 // ---------------------------------------------------------------------------
 
-function LifestyleRow({ lifestyle, isPrimary }: { lifestyle: Lifestyle; isPrimary: boolean }) {
+function LifestyleRow({ lifestyle }: { lifestyle: Lifestyle }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const hasStats =
@@ -56,14 +56,6 @@ function LifestyleRow({ lifestyle, isPrimary }: { lifestyle: Lifestyle; isPrimar
         {lifestyle.location && (
           <span className="truncate text-[10px] text-zinc-400 dark:text-zinc-500">
             ({lifestyle.location})
-          </span>
-        )}
-        {isPrimary && (
-          <span
-            data-testid="primary-badge"
-            className="shrink-0 rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase text-emerald-600 dark:text-emerald-300"
-          >
-            Primary
           </span>
         )}
         <span
@@ -190,21 +182,16 @@ function LifestyleRow({ lifestyle, isPrimary }: { lifestyle: Lifestyle; isPrimar
 
 interface LifestylesDisplayProps {
   lifestyles: Lifestyle[];
-  primaryLifestyleId?: string;
 }
 
-export function LifestylesDisplay({ lifestyles, primaryLifestyleId }: LifestylesDisplayProps) {
+export function LifestylesDisplay({ lifestyles }: LifestylesDisplayProps) {
   if (!lifestyles || lifestyles.length === 0) return null;
 
   return (
     <DisplayCard title="Lifestyles" icon={<Home className="h-4 w-4 text-zinc-400" />}>
       <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         {lifestyles.map((lifestyle, index) => (
-          <LifestyleRow
-            key={lifestyle.id ?? `lifestyle-${index}`}
-            lifestyle={lifestyle}
-            isPrimary={primaryLifestyleId === lifestyle.id}
-          />
+          <LifestyleRow key={lifestyle.id ?? `lifestyle-${index}`} lifestyle={lifestyle} />
         ))}
       </div>
     </DisplayCard>

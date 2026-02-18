@@ -284,32 +284,6 @@ describe("IdentitiesDisplay", () => {
     expect(screen.getByText("Downtown Seattle")).toBeInTheDocument();
   });
 
-  it("renders primary badge when lifestyle is primary", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({
-      identities: [MOCK_IDENTITY_FAKE],
-      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
-      primaryLifestyleId: "lifestyle-1",
-    });
-    render(<IdentitiesDisplay character={character} />);
-
-    await user.click(screen.getByTestId("identity-row"));
-    expect(screen.getByTestId("lifestyle-primary-badge")).toBeInTheDocument();
-  });
-
-  it("does not render primary badge when not primary", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({
-      identities: [MOCK_IDENTITY_FAKE],
-      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
-      primaryLifestyleId: "lifestyle-other",
-    });
-    render(<IdentitiesDisplay character={character} />);
-
-    await user.click(screen.getByTestId("identity-row"));
-    expect(screen.queryByTestId("lifestyle-primary-badge")).not.toBeInTheDocument();
-  });
-
   it("no lifestyles section when no association", async () => {
     const user = userEvent.setup();
     const unlinkedLifestyle: Lifestyle = {
