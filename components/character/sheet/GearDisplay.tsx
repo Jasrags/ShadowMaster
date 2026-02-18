@@ -5,7 +5,7 @@ import type { GearItem } from "@/lib/types";
 import type { GearItemData, GearCatalogData } from "@/lib/rules/RulesetContext";
 import { useGear } from "@/lib/rules";
 import { DisplayCard } from "./DisplayCard";
-import { ChevronDown, ChevronRight, Package } from "lucide-react";
+import { ChevronDown, ChevronRight, Package, Wifi } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -135,6 +135,12 @@ function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItem
           >
             ×{item.quantity}
           </span>
+        )}
+        {extras?.wirelessBonus && (
+          <Wifi
+            data-testid="wireless-icon"
+            className="ml-auto h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+          />
         )}
       </div>
 

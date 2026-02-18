@@ -127,6 +127,7 @@ export const LUCIDE_MOCK = {
   Cpu: createIconMock("Cpu"),
   BookOpen: createIconMock("BookOpen"),
   Users: createIconMock("Users"),
+  Wifi: createIconMock("Wifi"),
   Fingerprint: createIconMock("Fingerprint"),
   Zap: createIconMock("Zap"),
   Car: createIconMock("Car"),

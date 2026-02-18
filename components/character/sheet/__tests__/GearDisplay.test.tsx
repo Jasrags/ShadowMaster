@@ -458,6 +458,20 @@ describe("GearDisplay", () => {
     expect(cap).toHaveTextContent("3/8");
   });
 
+  // --- Wireless indicator icon ---
+
+  it("renders wireless icon when catalog item has wireless bonus", () => {
+    render(<GearDisplay gear={[makeGear({ name: "Headjammer", category: "electronics" })]} />);
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+  });
+
+  it("does not render wireless icon when no wireless bonus", () => {
+    render(
+      <GearDisplay gear={[makeGear({ name: "Micro-Transceiver", category: "electronics" })]} />
+    );
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+  });
+
   // --- Edge cases ---
 
   it("renders spacer for non-expandable item", () => {

@@ -121,40 +121,105 @@ Indented container with left border accent, containing detail sub-sections:
       data-testid="expanded-content"
       className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
     >
-      {/* Stats row: label + mono value pairs */}
+      {/* 1. Description — italic, from catalog */}
+      {catalogItem?.description && (
+        <p className="text-xs italic text-zinc-500 dark:text-zinc-400">{catalogItem.description}</p>
+      )}
+      {/* 2. Wireless Bonus — bold label + text from catalog */}
+      {extras?.wirelessBonus && (
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+          <span className="font-semibold text-zinc-600 dark:text-zinc-300">Wireless:</span>{" "}
+          {extras.wirelessBonus}
+        </div>
+      )}
+      {/* 3. Stats row — Avail, Cost, Weight in a flex-wrap row (only render each if present) */}
       <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
-        <span data-testid="stat-handling">
-          Handling{" "}
-          <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">{value}</span>
-        </span>
-      </div>
-      {/* Availability & Cost */}
-      <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
-        <span data-testid="stat-availability">
-          Avail{" "}
-          <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
-            {avail}
-            {legalitySuffix}
+        {avail != null && (
+          <span data-testid="stat-availability">
+            Avail{" "}
+            <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+              {avail}
+              {legalitySuffix}
+            </span>
           </span>
-        </span>
-        <span data-testid="stat-cost">
-          Cost{" "}
-          <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
-            {cost.toLocaleString()}&yen;
+        )}
+        {cost > 0 && (
+          <span data-testid="stat-cost">
+            Cost{" "}
+            <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+              ¥{cost}
+            </span>
           </span>
-        </span>
+        )}
+        {weight != null && (
+          <span data-testid="stat-weight">
+            Weight{" "}
+            <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+              {weight}kg
+            </span>
+          </span>
+        )}
       </div>
-      {/* Conditional sections (modifications, autosofts, notes) */}
+      {/* 4. Capacity — used/total if item has capacity */}
+      {item.capacity != null && (
+        <div className="text-xs text-zinc-500 dark:text-zinc-400">
+          Capacity{" "}
+          <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+            {item.capacityUsed ?? 0}/{item.capacity}
+          </span>
+        </div>
+      )}
+      {/* 5. Modifications — subsection label + list of mod names with optional ratings */}
+      {/* 6. Notes — character-specific notes */}
+      {/* 7. Source reference — dim footnote */}
+      {extras?.page != null && (
+        <p className="text-[10px] text-zinc-400 dark:text-zinc-600">
+          {extras.source ?? "Core"} p.{extras.page}
+        </p>
+      )}
     </div>
   );
 }
 ```
 
+### Catalog Fallback
+
+When displaying item stats, character item fields take priority but catalog data fills gaps. This pattern allows character-specific overrides while keeping catalog data as a baseline:
+
+```tsx
+const avail = item.availability ?? catalogItem?.availability;
+const legality = item.legality ?? catalogItem?.legality;
+const cost = item.cost || catalogItem?.cost || 0;
+```
+
+Use `findCatalogItem()` (or equivalent) to look up the catalog entry by name, then merge fields with nullish coalescing (`??`) for optional fields and logical OR (`||`) for numeric defaults.
+
+### Collapsed Row Indicators
+
+Collapsed rows can show small indicator icons pushed to the right side for at-a-glance visibility. The canonical example is the **wireless indicator**: a small cyan Wifi icon shown when the catalog item has a `wirelessBonus` field.
+
+```tsx
+{
+  extras?.wirelessBonus && (
+    <Wifi
+      data-testid="wireless-icon"
+      className="ml-auto h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+    />
+  );
+}
+```
+
+- Use `ml-auto` to push the icon to the far right of the flex row
+- Place it as the **last element** in the flex row so it anchors right
+- Keep icons small (`h-3 w-3`) to avoid visual clutter
+- Use semantic colors matching the indicator meaning (cyan for wireless)
+
 ### Key Rules
 
 - **Row click = expand/collapse.** The entire row is the click target.
-- **Collapsed row shows:** name + classification badge + primary value pill only.
+- **Collapsed row shows:** name + classification badge + primary value pill only. May also include a **wireless indicator icon** (cyan Wifi) pushed right when the item has a wireless bonus.
 - **All detail stats** (handling, speed, mods, notes, etc.) go in the expanded section.
+- **Stats resolve with catalog fallback:** character data takes priority, catalog fills gaps (see Catalog Fallback above).
 - **Critical status** (e.g., pending badge) stays inline in the collapsed row for at-a-glance visibility.
 - **Import** `ChevronDown`, `ChevronRight` from `lucide-react`.
 
@@ -309,4 +374,6 @@ components/character/sheet/VehiclesDisplay.tsx    — type guards, type badges, 
 components/character/sheet/SkillsDisplay.tsx      — compact rows, dice pool pill with tooltip + dice roller click, row expand/collapse
 components/character/sheet/AttributesDisplay.tsx  — compact rows, value pills, augmentation/essence tooltips
 components/character/sheet/QualitiesDisplay.tsx   — expandable rows, karma pills, effect badges
+components/character/sheet/GearDisplay.tsx        — category-grouped expandable rows, catalog integration (description, wireless bonus, source ref), catalog fallback for stats, wireless indicator icon
+components/character/sheet/DrugsDisplay.tsx       — expandable rows, drug catalog integration (effects, addiction, delivery), catalog fallback for availability
 ```
