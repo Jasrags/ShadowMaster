@@ -1,8 +1,148 @@
 "use client";
 
-import type { Character } from "@/lib/types";
+import { useState } from "react";
+import type { Character, Identity } from "@/lib/types";
+import { SinnerQuality } from "@/lib/types";
 import { DisplayCard } from "./DisplayCard";
-import { Fingerprint } from "lucide-react";
+import { ChevronDown, ChevronRight, Fingerprint } from "lucide-react";
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function formatSinnerQuality(quality: SinnerQuality): string {
+  switch (quality) {
+    case SinnerQuality.National:
+      return "National";
+    case SinnerQuality.Criminal:
+      return "Criminal";
+    case SinnerQuality.CorporateLimited:
+      return "Corporate (Limited)";
+    case SinnerQuality.CorporateBorn:
+      return "Corporate Born";
+    default:
+      return String(quality);
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Section config
+// ---------------------------------------------------------------------------
+
+const IDENTITY_SECTIONS = [
+  { key: "real" as const, label: "Real SINs" },
+  { key: "fake" as const, label: "Fake SINs" },
+];
+
+// ---------------------------------------------------------------------------
+// IdentityRow
+// ---------------------------------------------------------------------------
+
+function IdentityRow({ identity }: { identity: Identity }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  const hasExpandableContent = identity.licenses.length > 0 || !!identity.notes;
+
+  const isFake = identity.sin.type === "fake";
+
+  return (
+    <div
+      data-testid="identity-row"
+      className={`px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50${
+        hasExpandableContent
+          ? " cursor-pointer transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
+          : ""
+      }`}
+      onClick={hasExpandableContent ? () => setIsExpanded(!isExpanded) : undefined}
+    >
+      {/* Collapsed row: chevron + name + SIN badge + value pill */}
+      <div className="flex min-w-0 items-center gap-1.5">
+        {hasExpandableContent ? (
+          <span data-testid="expand-button" className="shrink-0 text-zinc-400">
+            {isExpanded ? (
+              <ChevronDown className="h-3.5 w-3.5" />
+            ) : (
+              <ChevronRight className="h-3.5 w-3.5" />
+            )}
+          </span>
+        ) : (
+          <div className="w-3.5 shrink-0" />
+        )}
+        <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+          {identity.name}
+        </span>
+        <span
+          data-testid="sin-type-badge"
+          className="shrink-0 rounded border border-zinc-400/20 bg-zinc-400/10 px-1 text-[9px] font-bold uppercase text-zinc-500 dark:text-zinc-400"
+        >
+          {isFake ? "Fake" : "Real"}
+        </span>
+        <span
+          data-testid="value-pill"
+          className={`ml-auto shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
+            isFake
+              ? "border-violet-500/20 bg-violet-500/12 text-violet-600 dark:text-violet-300"
+              : "border-amber-500/20 bg-amber-500/12 text-amber-600 dark:text-amber-300"
+          }`}
+        >
+          {identity.sin.type === "fake"
+            ? `R${identity.sin.rating}`
+            : formatSinnerQuality(identity.sin.sinnerQuality)}
+        </span>
+      </div>
+
+      {/* Expanded section */}
+      {isExpanded && hasExpandableContent && (
+        <div
+          data-testid="expanded-content"
+          className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+          onClick={(e) => e.stopPropagation()}
+        >
+          {/* Licenses */}
+          {identity.licenses.length > 0 && (
+            <div data-testid="licenses-section">
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                Licenses
+              </div>
+              <div className="space-y-0.5">
+                {identity.licenses.map((license, idx) => (
+                  <div
+                    key={license.id || `license-${idx}`}
+                    data-testid="license-row"
+                    className="flex items-center gap-2 text-xs text-zinc-600 dark:text-zinc-400"
+                  >
+                    <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                      {license.name}
+                    </span>
+                    {license.rating != null && (
+                      <span className="font-mono text-[11px] text-zinc-500 dark:text-zinc-500">
+                        R{license.rating}
+                      </span>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Notes */}
+          {identity.notes && (
+            <p
+              data-testid="identity-notes"
+              className="text-xs italic text-zinc-500 dark:text-zinc-400"
+            >
+              {identity.notes}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// IdentitiesDisplay
+// ---------------------------------------------------------------------------
 
 interface IdentitiesDisplayProps {
   character: Character;
@@ -13,50 +153,29 @@ export function IdentitiesDisplay({ character }: IdentitiesDisplayProps) {
 
   if (identities.length === 0) return null;
 
+  const grouped: Record<"real" | "fake", Identity[]> = {
+    real: identities.filter((i) => i.sin.type === "real"),
+    fake: identities.filter((i) => i.sin.type === "fake"),
+  };
+
   return (
     <DisplayCard title="Identities & SINs" icon={<Fingerprint className="h-4 w-4 text-zinc-400" />}>
       <div className="space-y-3">
-        {identities.map((identity, index) => (
-          <div
-            key={identity.id || `identity-${index}`}
-            className="p-3 bg-zinc-50 dark:bg-zinc-800/30 rounded border border-zinc-200 dark:border-zinc-700"
-          >
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
-                {identity.name}
-              </span>
-              <span
-                className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded border ${
-                  identity.sin.type === "real"
-                    ? "text-amber-500 border-amber-500/30 bg-amber-500/5"
-                    : "text-violet-400 border-violet-500/30 bg-violet-500/5"
-                }`}
-              >
-                {identity.sin.type === "real"
-                  ? `Real SIN (${identity.sin.sinnerQuality})`
-                  : `Fake SIN R${identity.sin.rating}`}
-              </span>
-            </div>
-            {identity.licenses.length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-2">
-                {identity.licenses.map((license, lIdx) => (
-                  <span
-                    key={license.id || `license-${lIdx}`}
-                    className="px-2 py-0.5 text-[10px] font-mono bg-zinc-100 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400 rounded border border-zinc-200 dark:border-zinc-700"
-                  >
-                    {license.name}
-                    {license.rating ? ` R${license.rating}` : ""}
-                  </span>
+        {IDENTITY_SECTIONS.map(({ key, label }) => {
+          if (grouped[key].length === 0) return null;
+          return (
+            <div key={key}>
+              <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                {label}
+              </div>
+              <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+                {grouped[key].map((identity, idx) => (
+                  <IdentityRow key={identity.id || `identity-${idx}`} identity={identity} />
                 ))}
               </div>
-            )}
-            {identity.notes && (
-              <p className="text-[11px] text-zinc-500 dark:text-zinc-400 mt-2 italic">
-                {identity.notes}
-              </p>
-            )}
-          </div>
-        ))}
+            </div>
+          );
+        })}
       </div>
     </DisplayCard>
   );
