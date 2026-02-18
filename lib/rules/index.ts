@@ -33,6 +33,7 @@ export {
   useAdeptPowers,
   useFoci,
   useSpirits,
+  useDrugs,
 } from "./RulesetContext";
 
 export type {
