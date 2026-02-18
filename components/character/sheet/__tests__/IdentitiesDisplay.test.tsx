@@ -17,6 +17,26 @@ import {
   MOCK_IDENTITY_REAL,
 } from "./test-helpers";
 import { SinnerQuality } from "@/lib/types";
+import type { Lifestyle } from "@/lib/types";
+
+// ---------------------------------------------------------------------------
+// Mock lifestyle data
+// ---------------------------------------------------------------------------
+
+const MOCK_LIFESTYLE_MEDIUM: Lifestyle = {
+  id: "lifestyle-1",
+  type: "medium",
+  monthlyCost: 5000,
+  location: "Downtown Seattle",
+  associatedIdentityId: "id-fake-1",
+};
+
+const MOCK_LIFESTYLE_LOW: Lifestyle = {
+  id: "lifestyle-2",
+  type: "low",
+  monthlyCost: 2000,
+  associatedIdentityId: "id-real-1",
+};
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
@@ -232,6 +252,116 @@ describe("IdentitiesDisplay", () => {
     await user.click(screen.getByTestId("identity-row"));
     expect(screen.getByTestId("identity-notes")).toHaveTextContent("Born in Seattle");
     expect(screen.queryByTestId("licenses-section")).not.toBeInTheDocument();
+  });
+
+  // --- Expanded lifestyles ---
+
+  it("renders lifestyles section with label when expanded", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.getByTestId("lifestyles-section")).toBeInTheDocument();
+    expect(screen.getByText("Lifestyles")).toBeInTheDocument();
+    const row = screen.getByTestId("lifestyle-row");
+    expect(row).toHaveTextContent("medium");
+    expect(screen.getByTestId("lifestyle-cost")).toHaveTextContent("¥5,000/mo");
+  });
+
+  it("renders lifestyle location on its own line", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.getByText("Downtown Seattle")).toBeInTheDocument();
+  });
+
+  it("renders primary badge when lifestyle is primary", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
+      primaryLifestyleId: "lifestyle-1",
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.getByTestId("lifestyle-primary-badge")).toBeInTheDocument();
+  });
+
+  it("does not render primary badge when not primary", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [MOCK_LIFESTYLE_MEDIUM],
+      primaryLifestyleId: "lifestyle-other",
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.queryByTestId("lifestyle-primary-badge")).not.toBeInTheDocument();
+  });
+
+  it("no lifestyles section when no association", async () => {
+    const user = userEvent.setup();
+    const unlinkedLifestyle: Lifestyle = {
+      id: "lifestyle-unlinked",
+      type: "high",
+      monthlyCost: 10000,
+    };
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [unlinkedLifestyle],
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.queryByTestId("lifestyles-section")).not.toBeInTheDocument();
+  });
+
+  it("lifestyle-only identity is expandable", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_REAL],
+      lifestyles: [MOCK_LIFESTYLE_LOW],
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    expect(screen.getByTestId("expand-button")).toBeInTheDocument();
+    await user.click(screen.getByTestId("identity-row"));
+    expect(screen.getByTestId("lifestyles-section")).toBeInTheDocument();
+    expect(screen.getByTestId("lifestyle-cost")).toHaveTextContent("¥2,000/mo");
+    expect(screen.queryByTestId("licenses-section")).not.toBeInTheDocument();
+  });
+
+  it("renders multiple lifestyles for one identity", async () => {
+    const user = userEvent.setup();
+    const secondLifestyle: Lifestyle = {
+      id: "lifestyle-3",
+      type: "high",
+      monthlyCost: 10000,
+      location: "Bellevue",
+      associatedIdentityId: "id-fake-1",
+    };
+    const character = createSheetCharacter({
+      identities: [MOCK_IDENTITY_FAKE],
+      lifestyles: [MOCK_LIFESTYLE_MEDIUM, secondLifestyle],
+    });
+    render(<IdentitiesDisplay character={character} />);
+
+    await user.click(screen.getByTestId("identity-row"));
+    const rows = screen.getAllByTestId("lifestyle-row");
+    expect(rows).toHaveLength(2);
+    expect(rows[0]).toHaveTextContent("medium");
+    expect(rows[1]).toHaveTextContent("high");
   });
 
   // --- Multiple identities ---
