@@ -53,6 +53,7 @@ next-env.d.ts
 /data/characters
 /data/campaigns
 /data/activity
+/data/migrations
 /data/security
 /data/combat
 /data/emails/*
@@ -67,6 +68,7 @@ next-env.d.ts
 .claude/*
 !.claude/skills/
 seattle-locations.json
+/mockups
 /data/editions/sr5/core-rulebook.json.backup
 .pommel/
 

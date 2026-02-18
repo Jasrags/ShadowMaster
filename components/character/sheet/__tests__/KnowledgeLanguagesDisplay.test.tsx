@@ -1,14 +1,13 @@
 /**
  * KnowledgeLanguagesDisplay Component Tests
  *
- * Tests the knowledge skills and languages display with collapsible rows.
- * Knowledge skills have chevron expand/collapse with category and specialization
- * in the expanded section. Languages use a spacer for alignment.
+ * Tests the knowledge skills and languages display with flat rows.
+ * Knowledge skills show category and specialization inline.
+ * Rating is shown as an emerald pill that triggers onSelect.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
 import { createSheetCharacter, setupDisplayCardMock, LUCIDE_MOCK } from "./test-helpers";
 
 setupDisplayCardMock();
@@ -31,38 +30,39 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(screen.getByText("Security Design")).toBeInTheDocument();
   });
 
-  it("shows chevron for knowledge skill rows", () => {
+  it("renders category annotation inline", () => {
     const character = createSheetCharacter({
       knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
-    expect(screen.getByTestId("expand-button")).toBeInTheDocument();
+    expect(screen.getByText("(professional)")).toBeInTheDocument();
   });
 
-  it("renders knowledge skill category in expanded section", async () => {
-    const user = userEvent.setup();
+  it("renders specialization inline as amber pill", () => {
     const character = createSheetCharacter({
-      knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
+      knowledgeSkills: [
+        {
+          name: "Security Design",
+          category: "professional",
+          rating: 4,
+          specialization: "Maglocks",
+        },
+      ],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
 
-    // Category not visible collapsed
-    expect(screen.queryByText("professional")).not.toBeInTheDocument();
-
-    await user.click(screen.getByTestId("expand-button"));
-
-    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
-    expect(screen.getByText("professional")).toBeInTheDocument();
+    const specPill = screen.getByTestId("specialization-pill");
+    expect(specPill).toHaveTextContent("Maglocks");
+    expect(specPill.className).toContain("amber");
   });
 
-  it("renders knowledge skill rating as value pill", () => {
+  it("renders knowledge skill rating in compact format", () => {
     const character = createSheetCharacter({
       knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
     });
     render(<KnowledgeLanguagesDisplay character={character} />);
-    const pill = screen.getAllByTestId("rating-pill")[0];
+    const pill = screen.getByTestId("rating-pill");
     expect(pill).toHaveTextContent("4");
-    expect(screen.queryByText("[4]")).not.toBeInTheDocument();
   });
 
   it("renders native language name with emerald N pill", () => {
@@ -76,7 +76,7 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(nativePill.className).toContain("emerald");
   });
 
-  it("renders non-native language name with rating pill", () => {
+  it("renders non-native language name with rating", () => {
     const character = createSheetCharacter({
       languages: [{ name: "Japanese", rating: 3, isNative: false }],
     });
@@ -86,25 +86,25 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(pill).toHaveTextContent("3");
   });
 
-  it("calls onSelect for knowledge skill clicks", () => {
+  it("calls onSelect when clicking knowledge skill emerald pill", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
     });
     render(<KnowledgeLanguagesDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByText("Security Design"));
+    fireEvent.click(screen.getByTestId("dice-pool-pill"));
     expect(onSelect).toHaveBeenCalledWith(4, "Security Design");
   });
 
-  it("calls onSelect for non-native language clicks", () => {
+  it("calls onSelect when clicking non-native language emerald pill", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       languages: [{ name: "Japanese", rating: 3, isNative: false }],
     });
     render(<KnowledgeLanguagesDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByText("Japanese"));
+    fireEvent.click(screen.getByTestId("dice-pool-pill"));
     expect(onSelect).toHaveBeenCalledWith(3, "Japanese");
   });
 
@@ -152,55 +152,5 @@ describe("KnowledgeLanguagesDisplay", () => {
     expect(pills[0]).toHaveTextContent("5");
     expect(pills[1]).toHaveTextContent("3");
     expect(pills[2]).toHaveTextContent("2");
-  });
-
-  it("renders specialization as amber pill in expanded section", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({
-      knowledgeSkills: [
-        {
-          name: "Security Design",
-          category: "professional",
-          rating: 4,
-          specialization: "Maglocks",
-        },
-      ],
-    });
-    render(<KnowledgeLanguagesDisplay character={character} />);
-
-    // Specialization not visible collapsed
-    expect(screen.queryByTestId("specialization-pill")).not.toBeInTheDocument();
-
-    await user.click(screen.getByTestId("expand-button"));
-
-    const specPill = screen.getByTestId("specialization-pill");
-    expect(specPill).toHaveTextContent("Maglocks");
-    expect(specPill.className).toContain("amber");
-  });
-
-  it("does not render specialization when absent", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({
-      knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
-    });
-    render(<KnowledgeLanguagesDisplay character={character} />);
-
-    await user.click(screen.getByTestId("expand-button"));
-
-    expect(screen.queryByTestId("specialization-pill")).not.toBeInTheDocument();
-  });
-
-  it("collapses row on second chevron click", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({
-      knowledgeSkills: [{ name: "Security Design", category: "professional", rating: 4 }],
-    });
-    render(<KnowledgeLanguagesDisplay character={character} />);
-
-    await user.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
-
-    await user.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 });
