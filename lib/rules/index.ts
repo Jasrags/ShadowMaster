@@ -35,6 +35,7 @@ export {
   useSpirits,
   useDrugs,
   useGear,
+  useVehiclesCatalog,
 } from "./RulesetContext";
 
 export type {
@@ -64,6 +65,11 @@ export type {
   ComplexFormData,
   SpriteTypeData,
   SpritePowerData,
+  VehiclesCatalogData,
+  VehicleCatalogItemData,
+  DroneCatalogItemData,
+  RCCCatalogItemData,
+  DroneWeaponMountsData,
 } from "./RulesetContext";
 
 // Gameplay utilities - Client-safe
