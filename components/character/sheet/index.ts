@@ -17,7 +17,6 @@ export { FociDisplay } from "./FociDisplay";
 export { GearDisplay } from "./GearDisplay";
 export { IdentitiesDisplay } from "./IdentitiesDisplay";
 export { KnowledgeLanguagesDisplay } from "./KnowledgeLanguagesDisplay";
-export { LifestylesDisplay } from "./LifestylesDisplay";
 export { QualitiesDisplay } from "./QualitiesDisplay";
 export { SkillsDisplay } from "./SkillsDisplay";
 export { SpellsDisplay } from "./SpellsDisplay";

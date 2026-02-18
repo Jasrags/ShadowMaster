@@ -33,7 +33,6 @@ import {
   IdentitiesDisplay,
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
-  LifestylesDisplay,
   QualitiesDisplay,
   SkillsDisplay,
   SpellsDisplay,
@@ -461,8 +460,6 @@ function CharacterSheet({
             <ContactsDisplay character={character} />
 
             <IdentitiesDisplay character={character} />
-
-            <LifestylesDisplay lifestyles={character.lifestyles || []} />
           </div>
         </div>
 
