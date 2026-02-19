@@ -2,156 +2,155 @@
  * DerivedStatsDisplay Component Tests
  *
  * Tests the derived stats panel (limits, initiative, condition monitors,
- * pools, movement, armor). Optional sections only render when data is provided.
+ * pools, movement, armor). Accepts a Character object and computes
+ * all derived values internally with formula breakdown tooltips.
  */
 
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
+import { setupDisplayCardMock, setupReactAriaMock, LUCIDE_MOCK } from "./test-helpers";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid={`display-card-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-")}`}>
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
-
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
+setupDisplayCardMock();
+setupReactAriaMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
+vi.mock("@/components/ui", () => ({
+  Tooltip: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
 
 import { DerivedStatsDisplay } from "../DerivedStatsDisplay";
+import type { Character } from "@/lib/types";
+import { createSheetCharacter } from "./test-helpers";
 
-const requiredProps = {
-  physicalLimit: 7,
-  mentalLimit: 5,
-  socialLimit: 4,
-  initiative: 9,
-};
+// Base character with known attribute values for predictable derived stats
+// BOD=5 AGI=6 REA=5 STR=4 WIL=3 LOG=3 INT=4 CHA=2 ESS=4.2
+const baseCharacter: Character = createSheetCharacter({
+  attributes: {
+    body: 5,
+    agility: 6,
+    reaction: 5,
+    strength: 4,
+    willpower: 3,
+    logic: 3,
+    intuition: 4,
+    charisma: 2,
+  },
+  specialAttributes: {
+    edge: 3,
+    essence: 4.2,
+  },
+});
 
 describe("DerivedStatsDisplay", () => {
-  describe("required stats", () => {
+  describe("initiative", () => {
     it("renders initiative with dice notation", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
+      render(<DerivedStatsDisplay character={baseCharacter} />);
+      // initiative = REA(5) + INT(4) = 9
       expect(screen.getByText("9+1d6")).toBeInTheDocument();
     });
 
-    it("renders all three limits", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
-      expect(screen.getByText("Physical")).toBeInTheDocument();
-      expect(screen.getByText("7")).toBeInTheDocument();
-      expect(screen.getByText("Mental")).toBeInTheDocument();
-      expect(screen.getByText("5")).toBeInTheDocument();
-      expect(screen.getByText("Social")).toBeInTheDocument();
-      expect(screen.getByText("4")).toBeInTheDocument();
-    });
-
     it("renders section headers", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
+      render(<DerivedStatsDisplay character={baseCharacter} />);
       // "Initiative" appears both as a section header and a stat label
       expect(screen.getAllByText("Initiative").length).toBeGreaterThanOrEqual(2);
-      expect(screen.getByText("Limits")).toBeInTheDocument();
     });
   });
 
-  describe("condition monitors (optional)", () => {
-    it("does not render condition monitors section when not provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
-      expect(screen.queryByText("Condition Monitors")).not.toBeInTheDocument();
+  describe("limits", () => {
+    it("renders all three limit labels", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
+      expect(screen.getByText("Limits")).toBeInTheDocument();
+      expect(screen.getByText("Physical")).toBeInTheDocument();
+      expect(screen.getByText("Mental")).toBeInTheDocument();
+      expect(screen.getByText("Social")).toBeInTheDocument();
     });
 
-    it("renders condition monitors when provided", () => {
-      render(
-        <DerivedStatsDisplay
-          {...requiredProps}
-          physicalMonitorMax={11}
-          stunMonitorMax={10}
-          overflow={5}
-        />
-      );
+    it("computes correct limit values from attributes", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
+      // physicalLimit = ceil((4*2 + 5 + 5) / 3) = ceil(18/3) = 6
+      // mentalLimit = ceil((3*2 + 4 + 3) / 3) = ceil(13/3) = 5
+      // socialLimit = ceil((2*2 + 3 + ceil(4.2)) / 3) = ceil(12/3) = 4
+      // Values 6, 5, 4 may appear multiple times; check they exist
+      expect(screen.getAllByText("6").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("5").length).toBeGreaterThanOrEqual(1);
+      expect(screen.getAllByText("4").length).toBeGreaterThanOrEqual(1);
+    });
+  });
+
+  describe("condition monitors", () => {
+    it("renders condition monitors section", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
       expect(screen.getByText("Condition Monitors")).toBeInTheDocument();
       expect(screen.getByText("Physical CM")).toBeInTheDocument();
-      expect(screen.getByText("11")).toBeInTheDocument();
       expect(screen.getByText("Stun CM")).toBeInTheDocument();
-      expect(screen.getByText("10")).toBeInTheDocument();
       expect(screen.getByText("Overflow")).toBeInTheDocument();
+    });
+
+    it("computes correct condition monitor values", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
+      // physicalCM = ceil(5/2) + 8 = 11
+      expect(screen.getByText("11")).toBeInTheDocument();
+      // stunCM = ceil(3/2) + 8 = 10
+      expect(screen.getByText("10")).toBeInTheDocument();
     });
   });
 
-  describe("pools (optional)", () => {
-    it("does not render pools section when not provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
-      expect(screen.queryByText("Pools")).not.toBeInTheDocument();
-    });
-
-    it("renders pools when provided", () => {
-      render(
-        <DerivedStatsDisplay
-          {...requiredProps}
-          composure={5}
-          judgeIntentions={6}
-          memory={7}
-          liftCarry={8}
-        />
-      );
+  describe("pools", () => {
+    it("renders all secondary pools", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
       expect(screen.getByText("Pools")).toBeInTheDocument();
       expect(screen.getByText("Composure")).toBeInTheDocument();
       expect(screen.getByText("Judge Intentions")).toBeInTheDocument();
       expect(screen.getByText("Memory")).toBeInTheDocument();
-      expect(screen.getByText("8 kg")).toBeInTheDocument();
+      // liftCarry = BOD(5) + STR(4) = 9 kg
+      expect(screen.getByText("9 kg")).toBeInTheDocument();
     });
   });
 
-  describe("movement (optional)", () => {
-    it("does not render movement section when not provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
-      expect(screen.queryByText("Movement")).not.toBeInTheDocument();
-    });
-
-    it("renders movement when provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} walkSpeed={10} runSpeed={20} />);
+  describe("movement", () => {
+    it("renders walk and run speeds", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
       expect(screen.getByText("Movement")).toBeInTheDocument();
-      expect(screen.getByText("10m")).toBeInTheDocument();
-      expect(screen.getByText("20m")).toBeInTheDocument();
+      // walk = AGI(6) * 2 = 12
+      expect(screen.getByText("12m")).toBeInTheDocument();
+      // run = AGI(6) * 4 = 24
+      expect(screen.getByText("24m")).toBeInTheDocument();
     });
   });
 
-  describe("armor (optional)", () => {
-    it("does not render armor section when not provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} />);
-      // Armor section header should not appear
+  describe("armor", () => {
+    it("does not render armor section when character has no armor", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
       const armorHeaders = screen.queryAllByText("Armor");
-      // There should be no "Armor" section header (the stat block label is "Total")
       expect(armorHeaders.length).toBe(0);
     });
 
-    it("renders armor total when provided", () => {
-      render(<DerivedStatsDisplay {...requiredProps} armorTotal={12} />);
+    it("renders armor total from equipped armor", () => {
+      const charWithArmor = createSheetCharacter({
+        ...baseCharacter,
+        armor: [
+          {
+            name: "Armor Jacket",
+            category: "armor",
+            subcategory: "armor",
+            armorRating: 12,
+            equipped: true,
+            cost: 1000,
+            quantity: 1,
+          },
+          {
+            name: "Lined Coat",
+            category: "armor",
+            subcategory: "armor",
+            armorRating: 9,
+            equipped: false,
+            cost: 900,
+            quantity: 1,
+          },
+        ],
+      });
+      render(<DerivedStatsDisplay character={charWithArmor} />);
       expect(screen.getByText("Total")).toBeInTheDocument();
+      // Only equipped armor counts: 12
       expect(screen.getByText("12")).toBeInTheDocument();
     });
   });
