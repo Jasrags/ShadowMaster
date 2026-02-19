@@ -178,7 +178,7 @@ function CharacterSheet({
   };
 
   return (
-    <div className="character-sheet min-h-screen transition-colors duration-300 bg-background p-4 sm:p-6 lg:p-8">
+    <div className="character-sheet min-h-screen transition-colors duration-300">
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
         <div className="flex items-center justify-between print-hidden">
