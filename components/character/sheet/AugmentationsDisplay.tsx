@@ -14,47 +14,28 @@ const AUGMENTATION_SECTIONS = [
   { key: "bio" as const, label: "Bioware" },
 ];
 
-const VARIANT_COLORS = {
-  cyber: {
-    pill: "bg-cyan-50 border-cyan-200 text-cyan-700 dark:bg-cyan-400/12 dark:border-cyan-400/20 dark:text-cyan-300",
-  },
-  bio: {
-    pill: "border border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300",
-  },
-};
-
 // ---------------------------------------------------------------------------
 // AugmentationRow
 // ---------------------------------------------------------------------------
 
-function AugmentationRow({
-  item,
-  variant,
-}: {
-  item: CyberwareItem | BiowareItem;
-  variant: "cyber" | "bio";
-}) {
+function AugmentationRow({ item }: { item: CyberwareItem | BiowareItem }) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const colors = VARIANT_COLORS[variant];
 
   return (
     <div
       data-testid="augmentation-row"
-      className="px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       {/* Collapsed row: Chevron + Name + Rating */}
       <div className="flex min-w-0 items-center gap-1.5">
-        <button
-          data-testid="expand-button"
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-        >
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
             <ChevronDown className="h-3.5 w-3.5" />
           ) : (
             <ChevronRight className="h-3.5 w-3.5" />
           )}
-        </button>
+        </span>
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {item.name.replace(/\s*\(Rating \d+\)/, "")}
         </span>
@@ -72,35 +53,28 @@ function AugmentationRow({
       {isExpanded && (
         <div
           data-testid="expanded-content"
+          onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {/* Essence cost */}
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">
-            Essence:{" "}
-            <span
-              data-testid="essence-pill"
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${colors.pill}`}
-            >
-              {(item.essenceCost ?? 0).toFixed(2)}
+          {/* Stats row */}
+          <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400">
+            <span data-testid="stat-essence">
+              Essence{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {(item.essenceCost ?? 0).toFixed(2)}
+              </span>
             </span>
-          </div>
-
-          {/* Grade */}
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">
-            Grade:{" "}
-            <span
-              data-testid="grade-pill"
-              className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold uppercase ${colors.pill}`}
-            >
-              {item.grade}
+            <span data-testid="stat-grade">
+              Grade{" "}
+              <span className="font-mono font-semibold capitalize text-zinc-700 dark:text-zinc-300">
+                {item.grade}
+              </span>
             </span>
-          </div>
-
-          {/* Category */}
-          <div className="text-xs text-zinc-500 dark:text-zinc-400">
-            Category:{" "}
-            <span className="font-medium capitalize text-zinc-700 dark:text-zinc-300">
-              {item.category.replace(/-/g, " ")}
+            <span data-testid="stat-category">
+              Category{" "}
+              <span className="font-medium capitalize text-zinc-700 dark:text-zinc-300">
+                {item.category.replace(/-/g, " ")}
+              </span>
             </span>
           </div>
 
@@ -164,7 +138,7 @@ export function AugmentationsDisplay({ character }: AugmentationsDisplayProps) {
               </div>
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
                 {items[key].map((item, idx) => (
-                  <AugmentationRow key={`${key}-${idx}`} item={item} variant={key} />
+                  <AugmentationRow key={`${key}-${idx}`} item={item} />
                 ))}
               </div>
             </div>

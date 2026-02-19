@@ -169,7 +169,7 @@ describe("SkillsDisplay", () => {
     });
     render(<SkillsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByText("Pistols"));
+    fireEvent.click(screen.getByTestId("dice-pool-pill"));
     expect(onSelect).toHaveBeenCalledWith("pistols", 11, "AGI");
   });
 
@@ -312,15 +312,15 @@ describe("SkillsDisplay", () => {
     expect(pill).toHaveAttribute("aria-label", "Pistols dice pool breakdown");
   });
 
-  it("clicking dice pool pill does not trigger onSelect", () => {
+  it("clicking row expands instead of triggering onSelect", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} onSelect={onSelect} />);
 
-    const pill = screen.getByTestId("dice-pool-pill");
-    fireEvent.click(pill);
+    fireEvent.click(screen.getByText("Pistols"));
     expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
   });
 });

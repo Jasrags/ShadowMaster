@@ -7,7 +7,7 @@
 
 import { vi } from "vitest";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
-import type { Character } from "@/lib/types";
+import type { Character, Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
 import { SinnerQuality } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -127,6 +127,7 @@ export const LUCIDE_MOCK = {
   Cpu: createIconMock("Cpu"),
   BookOpen: createIconMock("BookOpen"),
   Users: createIconMock("Users"),
+  Wifi: createIconMock("Wifi"),
   Fingerprint: createIconMock("Fingerprint"),
   Zap: createIconMock("Zap"),
   Car: createIconMock("Car"),
@@ -530,3 +531,103 @@ export const MOCK_NEGATIVE_QUALITIES = [
     effects: [],
   },
 ];
+
+// ---------------------------------------------------------------------------
+// Mock vehicle data
+// ---------------------------------------------------------------------------
+export const MOCK_VEHICLE: Vehicle = {
+  catalogId: "dodge-scoot",
+  name: "Dodge Scoot",
+  type: "ground",
+  handling: 4,
+  speed: 3,
+  acceleration: 1,
+  body: 4,
+  armor: 4,
+  pilot: 1,
+  sensor: 1,
+  seats: 1,
+  cost: 3000,
+  availability: 4,
+};
+
+export const MOCK_VEHICLE_WITH_OPTIONS: Vehicle = {
+  catalogId: "ares-roadmaster",
+  name: "Ares Roadmaster",
+  type: "ground",
+  handling: 3,
+  speed: 4,
+  acceleration: 2,
+  body: 18,
+  armor: 14,
+  pilot: 3,
+  sensor: 3,
+  seats: 6,
+  cost: 52000,
+  availability: 12,
+  legality: "restricted",
+  notes: "Armored transport vehicle",
+};
+
+// ---------------------------------------------------------------------------
+// Mock drone data
+// ---------------------------------------------------------------------------
+export const MOCK_DRONE: CharacterDrone = {
+  catalogId: "fly-spy",
+  name: "MCT Fly-Spy",
+  size: "mini",
+  handling: 4,
+  speed: 3,
+  acceleration: 2,
+  body: 1,
+  armor: 0,
+  pilot: 3,
+  sensor: 3,
+  cost: 2000,
+  availability: 4,
+};
+
+export const MOCK_DRONE_WITH_AUTOSOFTS: CharacterDrone = {
+  catalogId: "gm-nissan-doberman",
+  name: "GM-Nissan Doberman",
+  customName: "Rex",
+  size: "medium",
+  handling: 5,
+  speed: 4,
+  acceleration: 2,
+  body: 4,
+  armor: 4,
+  pilot: 3,
+  sensor: 3,
+  cost: 5000,
+  availability: 4,
+  installedAutosofts: ["Clearsight", "Targeting (Automatics)"],
+  notes: "Guard drone with targeting software",
+};
+
+// ---------------------------------------------------------------------------
+// Mock RCC data
+// ---------------------------------------------------------------------------
+export const MOCK_RCC: CharacterRCC = {
+  catalogId: "rcc-standard",
+  name: "RCC-Standard",
+  deviceRating: 5,
+  dataProcessing: 4,
+  firewall: 3,
+  cost: 11000,
+  availability: 6,
+};
+
+export const MOCK_RCC_WITH_OPTIONS: CharacterRCC = {
+  catalogId: "vulcan-liegelord",
+  name: "Vulcan Liegelord",
+  customName: "Command Node",
+  deviceRating: 7,
+  dataProcessing: 6,
+  firewall: 6,
+  cost: 68500,
+  availability: 14,
+  legality: "restricted",
+  runningAutosofts: ["Electronic Warfare", "Stealth"],
+  notes: "High-end rigger command console",
+};

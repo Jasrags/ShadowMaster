@@ -2,7 +2,7 @@
  * WeaponsDisplay Component Tests
  *
  * Tests the weapons display with ranged/melee expandable rows,
- * stat pills, pool calculations, and onSelect callback.
+ * stat pills, pool calculations, catalog integration, and onSelect callback.
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -17,6 +17,85 @@ import {
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
+
+// ---------------------------------------------------------------------------
+// Catalog mock
+// ---------------------------------------------------------------------------
+
+const MOCK_GEAR_CATALOG = {
+  categories: [],
+  weapons: {
+    melee: [
+      {
+        id: "combat-knife",
+        name: "Combat Knife",
+        category: "blades",
+        subcategory: "blades",
+        damage: "6P",
+        ap: -3,
+        reach: 0,
+        cost: 300,
+        availability: 4,
+        legality: "restricted",
+        weight: 0.5,
+        description: "A sturdy combat blade for close encounters.",
+      },
+      {
+        id: "extendable-baton",
+        name: "Extendable Baton",
+        category: "clubs",
+        subcategory: "clubs",
+        damage: "5P",
+        ap: 0,
+        reach: 1,
+        cost: 100,
+        availability: 4,
+        description: "A collapsible baton with wireless readout.",
+        wirelessBonus: "The baton displays its current extend/retract status via AR.",
+      },
+    ],
+    pistols: [
+      {
+        id: "ares-predator-v",
+        name: "Ares Predator V",
+        category: "pistols",
+        subcategory: "heavy-pistols",
+        damage: "8P",
+        ap: -1,
+        mode: ["SA"],
+        accuracy: 5,
+        cost: 725,
+        availability: 5,
+        legality: "restricted",
+        weight: 1.5,
+        description: "The quintessential shadowrunner sidearm.",
+        wirelessBonus: "Smartgun system provides +1 accuracy via wireless.",
+      },
+    ],
+    smgs: [],
+    rifles: [],
+    shotguns: [],
+    sniperRifles: [],
+    throwingWeapons: [],
+    grenades: [],
+  },
+  armor: [],
+  commlinks: [],
+  cyberdecks: [],
+  electronics: [],
+  tools: [],
+  survival: [],
+  medical: [],
+  security: [],
+  miscellaneous: [],
+  ammunition: [],
+  rfidTags: [],
+  industrialChemicals: [],
+};
+
+vi.mock("@/lib/rules", () => ({
+  useGear: () => MOCK_GEAR_CATALOG,
+}));
 
 import { WeaponsDisplay } from "../WeaponsDisplay";
 
@@ -56,6 +135,14 @@ describe("WeaponsDisplay", () => {
     expect(screen.getByText("Melee Weapons")).toBeInTheDocument();
   });
 
+  // --- Title tooltip ---
+
+  it("renders title tooltip on weapon name", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    expect(screen.getByTitle("Ares Predator V")).toBeInTheDocument();
+  });
+
   // --- Expand/collapse behavior ---
 
   it("hides expanded content by default", () => {
@@ -86,34 +173,78 @@ describe("WeaponsDisplay", () => {
     expect(within(expandBtn).getByTestId("icon-ChevronDown")).toBeInTheDocument();
   });
 
-  // --- Stat pills (require expanding) ---
+  // --- Catalog description ---
 
-  it("renders damage value in pill", () => {
-    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+  it("renders catalog description when expanded and catalogId matches", () => {
+    const rangedWithCatalogId = { ...MOCK_RANGED_WEAPON, catalogId: "ares-predator-v" };
+    const character = createSheetCharacter({ weapons: [rangedWithCatalogId] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("damage-pill")).toHaveTextContent("DMG 8P");
+    expect(screen.getByTestId("weapon-description")).toHaveTextContent(
+      "The quintessential shadowrunner sidearm."
+    );
   });
 
-  it("renders AP value in pill", () => {
+  it("hides description when no catalogId match", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("ap-pill")).toHaveTextContent("AP -1");
+    expect(screen.queryByTestId("weapon-description")).not.toBeInTheDocument();
   });
 
-  it("renders mode for ranged weapons in pill", () => {
-    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+  // --- Wireless indicator ---
+
+  it("shows wireless icon for weapons with wirelessBonus in catalog", () => {
+    const rangedWithCatalogId = { ...MOCK_RANGED_WEAPON, catalogId: "ares-predator-v" };
+    const character = createSheetCharacter({ weapons: [rangedWithCatalogId] });
     render(<WeaponsDisplay character={character} />);
-    fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("mode-pill")).toHaveTextContent("MODE SA");
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
   });
 
-  it("renders accuracy for ranged weapons in pill", () => {
+  it("shows wireless icon for weapons with wirelessBonus on character data", () => {
+    const rangedWithWireless = {
+      ...MOCK_RANGED_WEAPON,
+      wirelessBonus: "Provides +1 accuracy.",
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithWireless] });
+    render(<WeaponsDisplay character={character} />);
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+  });
+
+  it("hides wireless icon for weapons without wirelessBonus", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+  });
+
+  // --- Expanded stats (require expanding) ---
+
+  it("renders damage stat when expanded", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("accuracy-pill")).toHaveTextContent("ACC 5");
+    expect(screen.getByTestId("stat-damage")).toHaveTextContent("Damage 8P");
+  });
+
+  it("renders AP stat when expanded", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-ap")).toHaveTextContent("AP -1");
+  });
+
+  it("renders mode for ranged weapons when expanded", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-mode")).toHaveTextContent("Mode SA");
+  });
+
+  it("renders accuracy for ranged weapons when expanded", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-accuracy")).toHaveTextContent("Accuracy 5");
   });
 
   it("renders reach for melee weapons with non-zero reach", () => {
@@ -121,28 +252,112 @@ describe("WeaponsDisplay", () => {
     const character = createSheetCharacter({ weapons: [meleeWithReach] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByTestId("reach-pill")).toHaveTextContent("RCH 2");
+    expect(screen.getByTestId("stat-reach")).toHaveTextContent("Reach 2");
   });
 
-  it("hides reach pill when reach is 0", () => {
+  it("hides reach stat when reach is 0", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("reach-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-reach")).not.toBeInTheDocument();
   });
 
-  it("does not render accuracy pill for melee weapons", () => {
+  it("does not render accuracy stat for melee weapons", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("accuracy-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-accuracy")).not.toBeInTheDocument();
   });
 
-  it("does not render mode pill for melee weapons", () => {
+  it("does not render mode stat for melee weapons", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.queryByTestId("mode-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-mode")).not.toBeInTheDocument();
+  });
+
+  // --- Avail + Cost row ---
+
+  it("renders availability with legality letter when expanded", () => {
+    const rangedWithAvail = {
+      ...MOCK_RANGED_WEAPON,
+      availability: 5,
+      legality: "restricted" as const,
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithAvail] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-availability")).toHaveTextContent("Avail 5R");
+  });
+
+  it("renders cost in avail+cost row when expanded", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-cost")).toHaveTextContent("Cost ¥725");
+  });
+
+  it("falls back to catalog availability and legality when not on character weapon", () => {
+    const weaponNoCatalogStats = {
+      ...MOCK_RANGED_WEAPON,
+      availability: undefined,
+      legality: undefined,
+      catalogId: "ares-predator-v",
+    };
+    const character = createSheetCharacter({ weapons: [weaponNoCatalogStats] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-availability")).toHaveTextContent("Avail 5R");
+  });
+
+  it("renders weight from catalog when expanded", () => {
+    const weaponWithCatalog = { ...MOCK_RANGED_WEAPON, catalogId: "ares-predator-v" };
+    const character = createSheetCharacter({ weapons: [weaponWithCatalog] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-weight")).toHaveTextContent("Weight 1.5kg");
+  });
+
+  it("prefers character weight over catalog weight", () => {
+    const weaponWithWeight = { ...MOCK_RANGED_WEAPON, catalogId: "ares-predator-v", weight: 2 };
+    const character = createSheetCharacter({ weapons: [weaponWithWeight] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-weight")).toHaveTextContent("Weight 2kg");
+  });
+
+  it("hides weight when not available from either source", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("stat-weight")).not.toBeInTheDocument();
+  });
+
+  it("renders weapon type after name on collapsed row", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    const weaponType = screen.getByTestId("weapon-type");
+    expect(weaponType).toHaveTextContent("(Heavy Pistols)");
+  });
+
+  // --- Notes ---
+
+  it("renders notes in expanded view when present", () => {
+    const rangedWithNotes = {
+      ...MOCK_RANGED_WEAPON,
+      notes: "Primary sidearm, always loaded.",
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithNotes] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("notes")).toHaveTextContent("Primary sidearm, always loaded.");
+  });
+
+  it("hides notes when not present", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("notes")).not.toBeInTheDocument();
   });
 
   // --- Pool calculation ---
@@ -164,7 +379,7 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = agility(6) + pistols(5) = 11
-    expect(screen.getByTestId("pool-pill")).toHaveTextContent("11");
+    expect(screen.getByTestId("dice-pool-pill")).toHaveTextContent("11");
   });
 
   it("calculates dice pool for melee weapon (strength based)", () => {
@@ -184,19 +399,19 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} />);
     // Pool = strength(4) + blades(4) = 8
-    expect(screen.getByTestId("pool-pill")).toHaveTextContent("8");
+    expect(screen.getByTestId("dice-pool-pill")).toHaveTextContent("8");
   });
 
   it("pool pill has emerald styling", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    const poolPill = screen.getByTestId("pool-pill");
+    const poolPill = screen.getByTestId("dice-pool-pill");
     expect(poolPill.className).toContain("emerald");
   });
 
   // --- onSelect behavior ---
 
-  it("calls onSelect with pool and label when weapon row is clicked", () => {
+  it("calls onSelect with pool and label when dice pool pill is clicked", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({
       attributes: {
@@ -214,18 +429,19 @@ describe("WeaponsDisplay", () => {
     });
     render(<WeaponsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByTestId("weapon-row"));
+    fireEvent.click(screen.getByTestId("dice-pool-pill"));
     expect(onSelect).toHaveBeenCalled();
     expect(onSelect.mock.calls[0][0]).toBe(11); // pool = agility(6) + pistols(5)
   });
 
-  it("expand button does not trigger onSelect", () => {
+  it("clicking row expands instead of triggering onSelect", () => {
     const onSelect = vi.fn();
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} onSelect={onSelect} />);
 
-    fireEvent.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByText("Ares Predator V"));
     expect(onSelect).not.toHaveBeenCalled();
+    expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
   });
 
   it("clicking expanded content does not trigger onSelect", () => {
@@ -238,12 +454,87 @@ describe("WeaponsDisplay", () => {
     expect(onSelect).not.toHaveBeenCalled();
   });
 
-  // --- Subcategory ---
+  // --- Recoil compensation ---
 
-  it("renders subcategory text when expanded", () => {
+  it("renders RC stat for ranged weapons with recoil", () => {
+    const rangedWithRC = { ...MOCK_RANGED_WEAPON, recoil: 2 };
+    const character = createSheetCharacter({ weapons: [rangedWithRC] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("stat-rc")).toHaveTextContent("RC 2");
+  });
+
+  it("hides RC stat when recoil is 0 or absent", () => {
     const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByText("Heavy Pistols")).toBeInTheDocument();
+    expect(screen.queryByTestId("stat-rc")).not.toBeInTheDocument();
+  });
+
+  // --- Ammo state ---
+
+  it("renders ammo section when weapon has ammoState", () => {
+    const rangedWithAmmo = {
+      ...MOCK_RANGED_WEAPON,
+      ammoState: { loadedAmmoTypeId: "regular", currentRounds: 10, magazineCapacity: 15 },
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithAmmo] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    const ammoSection = screen.getByTestId("ammo-section");
+    expect(ammoSection).toHaveTextContent("10/15");
+    expect(ammoSection).toHaveTextContent("regular");
+  });
+
+  it("hides ammo section when no ammoState", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("ammo-section")).not.toBeInTheDocument();
+  });
+
+  // --- Modifications ---
+
+  it("renders modifications section when weapon has mods", () => {
+    const rangedWithMods = {
+      ...MOCK_RANGED_WEAPON,
+      modifications: [
+        {
+          catalogId: "smartgun-internal",
+          name: "Smartgun System (Internal)",
+          mount: "internal" as const,
+          capacityUsed: 2,
+          cost: 200,
+          availability: 4,
+        },
+        {
+          catalogId: "silencer",
+          name: "Silencer",
+          mount: "barrel" as const,
+          capacityUsed: 1,
+          cost: 500,
+          availability: 8,
+          legality: "restricted" as const,
+        },
+      ],
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithMods] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("modifications-section")).toBeInTheDocument();
+    const modRows = screen.getAllByTestId("mod-row");
+    expect(modRows).toHaveLength(2);
+    expect(modRows[0]).toHaveTextContent("Smartgun System (Internal)");
+    expect(modRows[0]).toHaveTextContent("internal");
+    expect(modRows[1]).toHaveTextContent("Silencer");
+    expect(modRows[1]).toHaveTextContent("barrel");
+  });
+
+  it("hides modifications section when no mods", () => {
+    const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+    render(<WeaponsDisplay character={character} />);
+    fireEvent.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("modifications-section")).not.toBeInTheDocument();
   });
 });

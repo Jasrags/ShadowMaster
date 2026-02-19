@@ -1,8 +1,8 @@
 /**
  * QualitiesDisplay Component Tests
  *
- * Tests the qualities display with expandable rows showing name-only
- * in collapsed state, with details (karma, extra info, summary, effects,
+ * Tests the qualities display with expandable rows showing name, extra info,
+ * and karma pill in collapsed state, with details (summary, effects,
  * dynamic state, settings) revealed on expand.
  */
 
@@ -113,11 +113,10 @@ describe("QualitiesDisplay", () => {
 
   // --- Expand/collapse behavior ---
 
-  it("collapsed row does not show karma pill, summary, or effects", () => {
+  it("collapsed row does not show summary or effects", () => {
     renderWith({
       positiveQualities: [{ qualityId: "high-pain-tolerance", source: "creation", rating: 1 }],
     });
-    expect(screen.queryByTestId("karma-pill")).not.toBeInTheDocument();
     expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
     expect(screen.queryByText("Ignore wound modifiers up to rating.")).not.toBeInTheDocument();
     expect(screen.queryByTestId("effect-badge")).not.toBeInTheDocument();
@@ -153,13 +152,12 @@ describe("QualitiesDisplay", () => {
     expect(screen.queryByTestId("icon-ChevronRight")).not.toBeInTheDocument();
   });
 
-  // --- Karma pills (expanded) ---
+  // --- Karma pills (collapsed row) ---
 
   it("renders positive karma pill with emerald styling", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
     });
-    expandFirstRow();
     const pill = screen.getByTestId("karma-pill");
     expect(pill).toHaveTextContent("4");
     expect(pill.className).toContain("emerald");
@@ -169,7 +167,6 @@ describe("QualitiesDisplay", () => {
     renderWith({
       negativeQualities: [{ qualityId: "bad-luck", source: "creation" }],
     });
-    expandFirstRow();
     const pill = screen.getByTestId("karma-pill");
     expect(pill).toHaveTextContent("12");
     expect(pill.className).toContain("rose");
@@ -185,26 +182,22 @@ describe("QualitiesDisplay", () => {
     expect(screen.getByText("No off-hand penalty for using either hand.")).toBeInTheDocument();
   });
 
-  // --- Extra info (expanded) ---
+  // --- Extra info (collapsed row) ---
 
-  it("renders rating level name in extra info when expanded", () => {
+  it("renders rating level as inline annotation", () => {
     renderWith({
       positiveQualities: [{ qualityId: "high-pain-tolerance", source: "creation", rating: 2 }],
     });
-    expandFirstRow();
-    const extraInfo = screen.getByTestId("extra-info");
-    expect(extraInfo).toHaveTextContent("Rating 2");
+    expect(screen.getByText("(Rating 2)")).toBeInTheDocument();
   });
 
-  it("renders specification in extra info when expanded", () => {
+  it("renders specification as inline annotation", () => {
     renderWith({
       positiveQualities: [
         { qualityId: "ambidextrous", source: "creation", specification: "Pistols" },
       ],
     });
-    expandFirstRow();
-    const extraInfo = screen.getByTestId("extra-info");
-    expect(extraInfo).toHaveTextContent("Pistols");
+    expect(screen.getByText("(Pistols)")).toBeInTheDocument();
   });
 
   // --- Pending badge (visible in collapsed row) ---

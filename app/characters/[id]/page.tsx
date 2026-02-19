@@ -33,7 +33,6 @@ import {
   IdentitiesDisplay,
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
-  LifestylesDisplay,
   QualitiesDisplay,
   SkillsDisplay,
   SpellsDisplay,
@@ -153,13 +152,6 @@ function CharacterSheet({
     );
   }, [character, ruleset]);
 
-  const armorTotal = useMemo(() => {
-    if (!character.armor || character.armor.length === 0) return 0;
-    return character.armor
-      .filter((a) => a.equipped)
-      .reduce((sum, a) => sum + (a.armorRating || 0), 0);
-  }, [character.armor]);
-
   if (!ready || rulesetLoading) {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
@@ -175,17 +167,6 @@ function CharacterSheet({
       </div>
     );
   }
-
-  const initiative = (character.attributes?.reaction || 1) + (character.attributes?.intuition || 1);
-
-  const composure = (character.attributes?.charisma || 1) + (character.attributes?.willpower || 1);
-  const judgeIntentions =
-    (character.attributes?.charisma || 1) + (character.attributes?.intuition || 1);
-  const memoryPool = (character.attributes?.logic || 1) + (character.attributes?.willpower || 1);
-  const liftCarry = (character.attributes?.body || 1) + (character.attributes?.strength || 1);
-  const walkSpeed = (character.attributes?.agility || 1) * 2;
-  const runSpeed = (character.attributes?.agility || 1) * 4;
-  const overflow = character.attributes?.body || 1;
 
   const handleExport = () => downloadCharacterJson(character);
 
@@ -333,22 +314,7 @@ function CharacterSheet({
               onSelect={(attrId, val) => openDiceRoller(val, ATTRIBUTE_DISPLAY[attrId]?.abbr)}
             />
 
-            <DerivedStatsDisplay
-              physicalLimit={physicalLimit}
-              mentalLimit={mentalLimit}
-              socialLimit={socialLimit}
-              initiative={initiative}
-              physicalMonitorMax={physicalMonitorMax}
-              stunMonitorMax={stunMonitorMax}
-              overflow={overflow}
-              composure={composure}
-              judgeIntentions={judgeIntentions}
-              memory={memoryPool}
-              liftCarry={liftCarry}
-              walkSpeed={walkSpeed}
-              runSpeed={runSpeed}
-              armorTotal={armorTotal}
-            />
+            <DerivedStatsDisplay character={character} />
 
             <ConditionDisplay
               character={character}
@@ -461,11 +427,6 @@ function CharacterSheet({
             <ContactsDisplay character={character} />
 
             <IdentitiesDisplay character={character} />
-
-            <LifestylesDisplay
-              lifestyles={character.lifestyles || []}
-              primaryLifestyleId={character.primaryLifestyleId}
-            />
           </div>
         </div>
 

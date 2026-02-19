@@ -81,14 +81,9 @@ describe("ArmorDisplay", () => {
     expect(pill.className).toContain("sky");
   });
 
-  it("renders accessory badge for armor modifiers", () => {
+  it("renders subcategory label when subcategory is present", () => {
     render(<ArmorDisplay armor={[MOCK_ARMOR_ACCESSORY]} />);
-    expect(screen.getByTestId("accessory-badge")).toHaveTextContent("Accessory");
-  });
-
-  it("does not render accessory badge for regular armor", () => {
-    render(<ArmorDisplay armor={[MOCK_ARMOR_EQUIPPED]} />);
-    expect(screen.queryByTestId("accessory-badge")).not.toBeInTheDocument();
+    expect(screen.getByTestId("subcategory-label")).toBeInTheDocument();
   });
 
   it("does not show expanded content by default", () => {
@@ -129,16 +124,6 @@ describe("ArmorDisplay", () => {
     expect(avail).toHaveTextContent("14R");
   });
 
-  it("renders cost formatted with yen when expanded", async () => {
-    const user = userEvent.setup();
-    render(<ArmorDisplay armor={[MOCK_ARMOR_WITH_MODS]} />);
-
-    await user.click(screen.getAllByTestId("expand-button")[0]);
-
-    const cost = screen.getByTestId("stat-cost");
-    expect(cost).toHaveTextContent("8,000¥");
-  });
-
   it("renders weight when present and expanded", async () => {
     const user = userEvent.setup();
     render(<ArmorDisplay armor={[MOCK_ARMOR_WITH_MODS]} />);
@@ -157,15 +142,15 @@ describe("ArmorDisplay", () => {
     expect(screen.queryByTestId("stat-availability")).not.toBeInTheDocument();
   });
 
-  // --- Capacity bar ---
+  // --- Capacity ---
 
-  it("renders capacity section for non-custom armor", async () => {
+  it("renders capacity as used/total text for non-custom armor", async () => {
     const user = userEvent.setup();
     render(<ArmorDisplay armor={[MOCK_ARMOR_WITH_MODS]} />);
 
     await user.click(screen.getAllByTestId("expand-button")[0]);
-    expect(screen.getByTestId("capacity-section")).toBeInTheDocument();
-    expect(screen.getByText("8/15")).toBeInTheDocument();
+    const section = screen.getByTestId("capacity-section");
+    expect(section).toHaveTextContent("Capacity 7/15");
   });
 
   it("hides capacity section for custom items", async () => {
@@ -175,35 +160,6 @@ describe("ArmorDisplay", () => {
 
     await user.click(screen.getByTestId("expand-button"));
     expect(screen.queryByTestId("capacity-section")).not.toBeInTheDocument();
-  });
-
-  it("renders capacity bar with emerald color at low usage", async () => {
-    const user = userEvent.setup();
-    render(<ArmorDisplay armor={[MOCK_ARMOR_WITH_MODS]} />);
-
-    await user.click(screen.getAllByTestId("expand-button")[0]);
-    const bar = screen.getByTestId("capacity-bar");
-    expect(bar.className).toContain("bg-emerald-500");
-  });
-
-  it("renders capacity bar with amber color at high usage", async () => {
-    const user = userEvent.setup();
-    const highUsage = { ...MOCK_ARMOR_WITH_MODS, capacity: 10, capacityUsed: 8 };
-    render(<ArmorDisplay armor={[highUsage]} />);
-
-    await user.click(screen.getAllByTestId("expand-button")[0]);
-    const bar = screen.getByTestId("capacity-bar");
-    expect(bar.className).toContain("bg-amber-500");
-  });
-
-  it("renders capacity bar with red color at critical usage", async () => {
-    const user = userEvent.setup();
-    const criticalUsage = { ...MOCK_ARMOR_WITH_MODS, capacity: 10, capacityUsed: 10 };
-    render(<ArmorDisplay armor={[criticalUsage]} />);
-
-    await user.click(screen.getAllByTestId("expand-button")[0]);
-    const bar = screen.getByTestId("capacity-bar");
-    expect(bar.className).toContain("bg-red-500");
   });
 
   // --- Modifications ---
@@ -217,7 +173,7 @@ describe("ArmorDisplay", () => {
     expect(screen.getByText("Modifications")).toBeInTheDocument();
   });
 
-  it("renders mod names, ratings, and capacity used", async () => {
+  it("renders mod names and ratings", async () => {
     const user = userEvent.setup();
     render(<ArmorDisplay armor={[MOCK_ARMOR_WITH_MODS]} />);
 
@@ -226,13 +182,10 @@ describe("ArmorDisplay", () => {
     const modRows = screen.getAllByTestId("mod-row");
     expect(modRows).toHaveLength(2);
 
-    expect(screen.getByText("Fire Resistance")).toBeInTheDocument();
-    expect(screen.getByText("R3")).toBeInTheDocument();
-    expect(screen.getByText("[3]")).toBeInTheDocument();
-
-    expect(screen.getByText("Chemical Protection")).toBeInTheDocument();
-    expect(screen.getByText("R4")).toBeInTheDocument();
-    expect(screen.getByText("[4]")).toBeInTheDocument();
+    expect(modRows[0]).toHaveTextContent("Fire Resistance");
+    expect(modRows[0]).toHaveTextContent("3");
+    expect(modRows[1]).toHaveTextContent("Chemical Protection");
+    expect(modRows[1]).toHaveTextContent("4");
   });
 
   it("does not render modifications section when no mods", async () => {

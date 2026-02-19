@@ -105,10 +105,10 @@ function CoreAttributeRow({
   return (
     <div
       onClick={onClick}
-      className="group flex cursor-pointer items-center justify-between rounded px-1 py-[7px] transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      className="group flex cursor-pointer items-center justify-between px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
       <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">{label}</span>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         {isAugmented && (
           <span onClick={(e) => e.stopPropagation()}>
             <Tooltip
@@ -126,15 +126,15 @@ function CoreAttributeRow({
             </Tooltip>
           </span>
         )}
-        <div
-          className={`flex h-7 w-8 items-center justify-center rounded-md font-mono text-sm font-bold ${
+        <span
+          className={`rounded px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
             isAugmented
               ? "border border-emerald-500/20 bg-emerald-500/12 text-emerald-300"
               : "bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50"
           }`}
         >
           {effective}
-        </div>
+        </span>
       </div>
     </div>
   );
@@ -162,12 +162,12 @@ function SpecialAttributeRow({
   return (
     <div
       onClick={isEssence ? undefined : onClick}
-      className={`group flex items-center justify-between rounded px-1 py-[7px] transition-colors [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50 ${
+      className={`group flex items-center justify-between px-3 py-1.5 transition-colors [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50 ${
         isEssence ? "" : "cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
       }`}
     >
       <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">{label}</span>
-      <div className="flex items-center gap-2">
+      <div className="flex items-center gap-1.5">
         {hasEssenceLoss && (
           <span onClick={(e) => e.stopPropagation()}>
             <Tooltip
@@ -185,13 +185,9 @@ function SpecialAttributeRow({
             </Tooltip>
           </span>
         )}
-        <div
-          className={`flex h-7 items-center justify-center rounded-md font-mono text-sm font-bold bg-zinc-200 text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50 ${
-            isEssence ? "w-12" : "w-8"
-          }`}
-        >
+        <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50">
           {displayValue}
-        </div>
+        </span>
       </div>
     </div>
   );
@@ -216,7 +212,7 @@ export function AttributesDisplay({ character, onSelect }: AttributesDisplayProp
         <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
           {title}
         </div>
-        <div className="mb-3 rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
+        <div className="mb-3 overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
           {attrs.map(({ id, label }) => {
             const base = character.attributes[id] || 0;
             const bonuses = getAttributeBonus(character, id);
@@ -246,7 +242,7 @@ export function AttributesDisplay({ character, onSelect }: AttributesDisplayProp
       <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
         Special
       </div>
-      <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
+      <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         <SpecialAttributeRow
           attrKey="edge"
           value={character.specialAttributes.edge}

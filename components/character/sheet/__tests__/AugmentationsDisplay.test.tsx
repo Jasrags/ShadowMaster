@@ -123,17 +123,28 @@ describe("AugmentationsDisplay", () => {
 
   // --- Expanded content ---
 
-  it("renders grade pill in expanded section", async () => {
+  it("renders essence cost in expanded section", async () => {
     const user = userEvent.setup();
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
 
-    expect(screen.queryByTestId("grade-pill")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-essence")).not.toBeInTheDocument();
 
     await user.click(screen.getByTestId("expand-button"));
 
-    const pill = screen.getByTestId("grade-pill");
-    expect(pill).toHaveTextContent("standard");
+    expect(screen.getByTestId("stat-essence")).toHaveTextContent("2.00");
+  });
+
+  it("renders grade in expanded section", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+
+    expect(screen.queryByTestId("stat-grade")).not.toBeInTheDocument();
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("stat-grade")).toHaveTextContent("standard");
   });
 
   it("renders attribute bonuses in expanded section", async () => {
@@ -160,29 +171,16 @@ describe("AugmentationsDisplay", () => {
     expect(screen.getByText("AGILITY +2")).toBeInTheDocument();
   });
 
-  it("renders essence cost pill in expanded section", async () => {
-    const user = userEvent.setup();
-    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
-    render(<AugmentationsDisplay character={character} />);
-
-    expect(screen.queryByTestId("essence-pill")).not.toBeInTheDocument();
-
-    await user.click(screen.getByTestId("expand-button"));
-
-    const pill = screen.getByTestId("essence-pill");
-    expect(pill).toHaveTextContent("2.00");
-  });
-
   it("renders category in expanded section", async () => {
     const user = userEvent.setup();
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
 
-    expect(screen.queryByText(/bodyware/i)).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-category")).not.toBeInTheDocument();
 
     await user.click(screen.getByTestId("expand-button"));
 
-    expect(screen.getByText("bodyware")).toBeInTheDocument();
+    expect(screen.getByTestId("stat-category")).toHaveTextContent("bodyware");
   });
 
   it("bonus pill has emerald styling in expanded section", async () => {

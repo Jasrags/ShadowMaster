@@ -53,14 +53,13 @@ const QUALITY_SECTIONS = [
     label: "Positive",
     getKarma: (data: QualityData | undefined) => data?.karmaCost,
     karmaPillClasses:
-      "bg-emerald-50 border-emerald-200 text-emerald-700 dark:bg-emerald-400/12 dark:border-emerald-400/20 dark:text-emerald-300",
+      "border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300",
   },
   {
     key: "negative" as const,
     label: "Negative",
     getKarma: (data: QualityData | undefined) => data?.karmaBonus,
-    karmaPillClasses:
-      "bg-rose-50 border-rose-200 text-rose-700 dark:bg-rose-400/12 dark:border-rose-400/20 dark:text-rose-300",
+    karmaPillClasses: "border-rose-500/20 bg-rose-500/12 text-rose-600 dark:text-rose-300",
   },
 ];
 
@@ -136,40 +135,37 @@ function QualityRow({
   const extra = extraParts.join(", ");
 
   const effects = (data?.effects || []) as QualityEffect[];
-  const hasExpandableContent =
-    extra ||
-    karmaValue !== undefined ||
-    data?.summary ||
-    effects.length > 0 ||
-    rawSelection.dynamicState;
+  const hasExpandableContent = !!data?.summary || effects.length > 0 || !!rawSelection.dynamicState;
 
   return (
     <div
       data-testid="quality-row"
-      className="rounded px-1 py-[7px] [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      className={`px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50${
+        hasExpandableContent
+          ? " cursor-pointer transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
+          : ""
+      }`}
+      onClick={hasExpandableContent ? () => setIsExpanded(!isExpanded) : undefined}
     >
-      {/* Collapsed row: chevron + name + pending badge */}
-      <div
-        className="flex cursor-pointer items-center gap-1.5"
-        onClick={() => setIsExpanded(!isExpanded)}
-      >
+      {/* Collapsed row: chevron + name + pending badge + extra + karma pill */}
+      <div className="flex min-w-0 items-center gap-1.5">
         {hasExpandableContent ? (
-          <button
-            data-testid="expand-button"
-            className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
+          <span data-testid="expand-button" className="shrink-0 text-zinc-400">
             {isExpanded ? (
               <ChevronDown className="h-3.5 w-3.5" />
             ) : (
               <ChevronRight className="h-3.5 w-3.5" />
             )}
-          </button>
+          </span>
         ) : (
           <div className="w-3.5 shrink-0" />
         )}
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {name}
         </span>
+        {extra && (
+          <span className="shrink-0 text-[10px] text-zinc-400 dark:text-zinc-500">({extra})</span>
+        )}
         {rawSelection.gmApproved === false && (
           <span
             data-testid="pending-badge"
@@ -180,6 +176,14 @@ function QualityRow({
             Pending
           </span>
         )}
+        {karmaValue !== undefined && (
+          <span
+            data-testid="karma-pill"
+            className={`ml-auto shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${karmaPillClasses}`}
+          >
+            {karmaValue}
+          </span>
+        )}
       </div>
 
       {/* Expanded section */}
@@ -187,31 +191,8 @@ function QualityRow({
         <div
           data-testid="expanded-content"
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+          onClick={(e) => e.stopPropagation()}
         >
-          {/* Extra info + karma pill */}
-          {(extra || karmaValue !== undefined) && (
-            <div className="flex items-center justify-between">
-              {extra ? (
-                <span
-                  data-testid="extra-info"
-                  className="rounded-sm bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] font-bold text-amber-500 dark:bg-zinc-800 dark:text-amber-400"
-                >
-                  {extra}
-                </span>
-              ) : (
-                <span />
-              )}
-              {karmaValue !== undefined && (
-                <span
-                  data-testid="karma-pill"
-                  className={`flex h-7 min-w-[32px] items-center justify-center rounded-md border px-1.5 font-mono text-sm font-bold ${karmaPillClasses}`}
-                >
-                  {karmaValue}
-                </span>
-              )}
-            </div>
-          )}
-
           {/* Summary */}
           {data?.summary && (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">{data.summary}</p>
@@ -305,7 +286,7 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
                     <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                       {config.label}
                     </div>
-                    <div className="rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-1 dark:border-zinc-800 dark:bg-zinc-950">
+                    <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
                       {selections.map((selection) => {
                         const id =
                           typeof selection === "string"
