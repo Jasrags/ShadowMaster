@@ -12,12 +12,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCharacterById, rollbackMigration } from "@/lib/storage/characters";
+import { getCharacterById, updateCharacter, rollbackMigration } from "@/lib/storage/characters";
+import { captureRulesetSnapshot } from "@/lib/storage/ruleset-snapshots";
 import { executeMigration, validateMigrationPlan } from "@/lib/rules/sync/migration-engine";
 import {
   recordMigrationStart,
   recordMigrationComplete,
   recordMigrationRollback,
+  recordManualResync,
 } from "@/lib/rules/sync/sync-audit";
 import type { MigrationPlan } from "@/lib/types";
 
@@ -55,6 +57,26 @@ export async function POST(request: NextRequest, { params }: RouteParams): Promi
 
     // Parse request body
     const body = await request.json();
+
+    // Fresh sync: create baseline snapshot for characters with no existing snapshot
+    if (body.freshSync === true) {
+      const versionRef = await captureRulesetSnapshot(character.editionCode);
+      const now = new Date().toISOString();
+
+      await updateCharacter(userId, characterId, {
+        rulesetSnapshotId: versionRef.snapshotId,
+        rulesetVersion: versionRef,
+        syncStatus: "synchronized",
+        legalityStatus: "rules-legal",
+        lastSyncAt: now,
+        lastSyncCheck: now,
+      });
+
+      await recordManualResync(userId, character, versionRef);
+
+      return NextResponse.json({ success: true, freshSync: true });
+    }
+
     const plan = body.plan as MigrationPlan;
 
     if (!plan) {

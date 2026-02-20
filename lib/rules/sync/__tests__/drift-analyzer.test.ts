@@ -165,7 +165,7 @@ describe("Drift Analyzer", () => {
   // ===========================================================================
 
   describe("analyzeCharacterDrift", () => {
-    it("should return empty report when no current snapshot exists for edition", async () => {
+    it("should return empty report with noBaseline when no current snapshot exists for edition", async () => {
       const character = createMockCharacter({
         editionCode: "sr5",
         rulesetSnapshotId: "old-snapshot",
@@ -177,9 +177,10 @@ describe("Drift Analyzer", () => {
 
       expect(report.changes).toEqual([]);
       expect(report.overallSeverity).toBe("none");
+      expect(report.noBaseline).toBe(true);
     });
 
-    it("should return empty report when character already on current snapshot", async () => {
+    it("should return empty report without noBaseline when character already on current snapshot", async () => {
       const character = createMockCharacter({
         editionCode: "sr5",
         rulesetSnapshotId: "current-snapshot",
@@ -193,11 +194,12 @@ describe("Drift Analyzer", () => {
 
       expect(report.changes).toEqual([]);
       expect(report.overallSeverity).toBe("none");
+      expect(report.noBaseline).toBeFalsy();
       // Should not load full snapshots
       expect(getRulesetSnapshot).not.toHaveBeenCalled();
     });
 
-    it("should return empty report when character snapshot not found", async () => {
+    it("should return empty report with noBaseline when character snapshot not found", async () => {
       const character = createMockCharacter({
         editionCode: "sr5",
         rulesetSnapshotId: "missing-snapshot",
@@ -212,6 +214,7 @@ describe("Drift Analyzer", () => {
 
       expect(report.changes).toEqual([]);
       expect(report.overallSeverity).toBe("none");
+      expect(report.noBaseline).toBe(true);
     });
 
     it("should throw when current ruleset snapshot not found", async () => {

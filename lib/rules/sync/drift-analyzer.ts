@@ -669,6 +669,7 @@ function createEmptyDriftReportNoBaseline(character: Character): DriftReport {
     overallSeverity: "none",
     changes: [],
     recommendations: [],
+    noBaseline: true,
   };
 }
 
