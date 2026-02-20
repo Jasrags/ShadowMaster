@@ -96,6 +96,8 @@ export interface DriftReport {
   changes: DriftChange[];
   /** Recommended migration actions */
   recommendations: MigrationRecommendation[];
+  /** True when no baseline snapshot exists (missing or never captured) */
+  noBaseline?: boolean;
 }
 
 /**

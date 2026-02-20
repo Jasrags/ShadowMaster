@@ -39,6 +39,7 @@ interface MigrationWizardProps {
 export function MigrationWizard({ characterId, onClose, onComplete }: MigrationWizardProps) {
   const wizard = useMigrationWizard(characterId);
   const [isApplying, setIsApplying] = useState(false);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   // Get breaking changes that need decisions
   const breakingChanges = wizard.report?.changes.filter((c) => c.severity === "breaking") || [];
@@ -61,6 +62,24 @@ export function MigrationWizard({ characterId, onClose, onComplete }: MigrationW
     }
   };
 
+  const handleFreshSync = async () => {
+    setIsSyncing(true);
+    try {
+      const response = await fetch(`/api/characters/${characterId}/sync/migrate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ freshSync: true }),
+      });
+
+      if (response.ok) {
+        onComplete?.();
+        onClose();
+      }
+    } finally {
+      setIsSyncing(false);
+    }
+  };
+
   if (!wizard.report) {
     return (
       <WizardContainer onClose={onClose}>
@@ -71,19 +90,28 @@ export function MigrationWizard({ characterId, onClose, onComplete }: MigrationW
     );
   }
 
+  const isNoBaseline = wizard.report.noBaseline && wizard.report.changes.length === 0;
+
   return (
     <WizardContainer onClose={onClose}>
       {/* Progress indicator */}
-      <WizardProgress
-        currentStep={wizard.currentStep}
-        totalSteps={wizard.totalSteps}
-        breakingChanges={breakingChanges.length}
-      />
+      {!isNoBaseline && (
+        <WizardProgress
+          currentStep={wizard.currentStep}
+          totalSteps={wizard.totalSteps}
+          breakingChanges={breakingChanges.length}
+        />
+      )}
 
       {/* Content area */}
       <div className="p-6">
         {wizard.currentStep === 0 && (
-          <ReviewStep report={wizard.report} breakingCount={breakingChanges.length} />
+          <ReviewStep
+            report={wizard.report}
+            breakingCount={breakingChanges.length}
+            onFreshSync={isNoBaseline ? handleFreshSync : undefined}
+            isSyncing={isSyncing}
+          />
         )}
 
         {currentChange && (
@@ -101,17 +129,19 @@ export function MigrationWizard({ characterId, onClose, onComplete }: MigrationW
         )}
       </div>
 
-      {/* Footer with navigation */}
-      <WizardFooter
-        currentStep={wizard.currentStep}
-        totalSteps={wizard.totalSteps}
-        canApply={wizard.canApply}
-        isApplying={isApplying}
-        onPrev={wizard.prevStep}
-        onNext={wizard.nextStep}
-        onApply={handleApply}
-        onCancel={onClose}
-      />
+      {/* Footer with navigation (hidden when showing fresh sync UI) */}
+      {!isNoBaseline && (
+        <WizardFooter
+          currentStep={wizard.currentStep}
+          totalSteps={wizard.totalSteps}
+          canApply={wizard.canApply}
+          isApplying={isApplying}
+          onPrev={wizard.prevStep}
+          onNext={wizard.nextStep}
+          onApply={handleApply}
+          onCancel={onClose}
+        />
+      )}
     </WizardContainer>
   );
 }
@@ -226,11 +256,47 @@ function WizardProgress({ currentStep, totalSteps, breakingChanges }: WizardProg
 // =============================================================================
 
 interface ReviewStepProps {
-  report: { changes: DriftChange[] };
+  report: { changes: DriftChange[]; noBaseline?: boolean };
   breakingCount: number;
+  onFreshSync?: () => void;
+  isSyncing?: boolean;
 }
 
-function ReviewStep({ report, breakingCount }: ReviewStepProps) {
+function ReviewStep({ report, breakingCount, onFreshSync, isSyncing }: ReviewStepProps) {
+  // No baseline: show fresh sync UI
+  if (report.noBaseline && report.changes.length === 0 && onFreshSync) {
+    return (
+      <div className="space-y-6">
+        <div>
+          <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-2">
+            Ruleset Snapshot Missing
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-gray-400">
+            This character references a ruleset snapshot that no longer exists. This can happen when
+            a character was created before the snapshot system was set up.
+          </p>
+        </div>
+
+        <div className="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4">
+          <p className="text-sm text-blue-700 dark:text-blue-300 mb-4">
+            Sync to the current rules to create a baseline snapshot. Future ruleset changes will be
+            tracked against this baseline.
+          </p>
+          <button
+            onClick={onFreshSync}
+            disabled={isSyncing}
+            className={`
+              px-4 py-2 text-sm font-medium text-white rounded-lg
+              ${isSyncing ? "bg-gray-400 cursor-not-allowed" : "bg-blue-600 hover:bg-blue-700"}
+            `}
+          >
+            {isSyncing ? "Syncing..." : "Sync to Current Rules"}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const nonBreaking = report.changes.filter((c) => c.severity !== "breaking");
   const breaking = report.changes.filter((c) => c.severity === "breaking");
 
