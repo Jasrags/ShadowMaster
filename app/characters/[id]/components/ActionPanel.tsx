@@ -5,8 +5,6 @@ import { Button } from "react-aria-components";
 import {
   Dice1,
   Zap,
-  ChevronDown,
-  ChevronUp,
   Swords,
   Shield,
   Target,
@@ -25,6 +23,7 @@ import {
   History,
   Sliders,
 } from "lucide-react";
+import { DisplayCard } from "@/components/character/sheet/DisplayCard";
 import { useEdge, useActionResolver, useActionHistory } from "@/lib/rules/action-resolution/hooks";
 import { useCombatSession, useActionEconomy } from "@/lib/combat";
 import { ActionPoolBuilder } from "@/components/action-resolution/ActionPoolBuilder";
@@ -47,10 +46,6 @@ interface ActionPanelProps {
   mentalLimit: number;
   /** Social limit */
   socialLimit: number;
-  /** Whether the panel is expanded */
-  isExpanded: boolean;
-  /** Callback to toggle expansion */
-  onToggleExpand: () => void;
   /** Callback to open dice roller with a pool */
   onOpenDiceRoller: (pool: number, context: string) => void;
   /** Current theme */
@@ -217,8 +212,6 @@ export function ActionPanel({
   physicalLimit,
   mentalLimit,
   socialLimit,
-  isExpanded,
-  onToggleExpand,
   onOpenDiceRoller,
   theme,
 }: ActionPanelProps) {
@@ -464,97 +457,71 @@ export function ActionPanel({
   };
 
   return (
-    <div className={`rounded-lg overflow-hidden ${t.components.section.wrapper}`}>
-      {/* Header - Always visible */}
-      <button
-        onClick={onToggleExpand}
-        className={`
-          w-full flex items-center justify-between p-3
-          ${t.components.section.header}
-          hover:opacity-80 transition-opacity
-        `}
-      >
+    <DisplayCard
+      id="sheet-action-panel"
+      title="Action Panel"
+      icon={<Dice1 className="w-5 h-5 text-amber-500" />}
+      collapsible
+      headerAction={
         <div className="flex items-center gap-3">
-          <Dice1 className={`w-5 h-5 ${t.colors.accent}`} />
-          <span className={`font-medium ${t.colors.heading}`}>Action Panel</span>
-        </div>
-        <div className="flex items-center gap-3">
-          {/* Edge Quick Display */}
           <div className="flex items-center gap-1.5">
             <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
-            <span className={`${t.fonts.mono} text-sm font-bold text-rose-500 dark:text-rose-400`}>
+            <span className="font-mono text-sm font-bold text-rose-500 dark:text-rose-400">
               {edgeCurrent}/{edgeMaximum}
             </span>
           </div>
-          {/* Wound Modifier Display */}
           {woundModifier !== 0 && (
-            <span
-              className={`
-              text-xs ${t.fonts.mono} px-2 py-0.5 rounded border
-              ${t.components.badge.negative}
-            `}
-            >
+            <span className="font-mono text-xs px-2 py-0.5 rounded border text-red-500 border-red-500/30 bg-red-500/10">
               {woundModifier}
             </span>
           )}
-          {isExpanded ? (
-            <ChevronUp className={`w-4 h-4 ${t.colors.muted}`} />
-          ) : (
-            <ChevronDown className={`w-4 h-4 ${t.colors.muted}`} />
-          )}
         </div>
-      </button>
+      }
+    >
+      <div className="space-y-4">
+        {/* Edge Tracker - Using standalone EdgeTracker component */}
+        <EdgeTracker
+          current={edgeCurrent}
+          maximum={edgeMaximum}
+          isLoading={edgeLoading}
+          onSpend={spendEdge}
+          onRestore={restoreEdge}
+          onRestoreFull={restoreFullEdge}
+          showControls={true}
+          size="md"
+        />
 
-      {/* Expanded Content */}
-      {isExpanded && (
-        <div className={`p-4 space-y-4 border-t ${t.colors.border}`}>
-          {/* Edge Tracker - Using standalone EdgeTracker component */}
-          <EdgeTracker
-            current={edgeCurrent}
-            maximum={edgeMaximum}
-            isLoading={edgeLoading}
-            onSpend={spendEdge}
-            onRestore={restoreEdge}
-            onRestoreFull={restoreFullEdge}
-            showControls={true}
-            size="md"
-          />
-
-          {/* Limits */}
-          <div
-            className={`grid grid-cols-3 gap-2 p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
-          >
-            <div className="text-center">
-              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                Physical
-              </div>
-              <div className={`${t.fonts.mono} font-bold text-red-500 dark:text-red-400`}>
-                {physicalLimit}
-              </div>
+        {/* Limits */}
+        <div
+          className={`grid grid-cols-3 gap-2 p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
+        >
+          <div className="text-center">
+            <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+              Physical
             </div>
-            <div className="text-center">
-              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                Mental
-              </div>
-              <div className={`${t.fonts.mono} font-bold text-blue-500 dark:text-blue-400`}>
-                {mentalLimit}
-              </div>
-            </div>
-            <div className="text-center">
-              <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                Social
-              </div>
-              <div className={`${t.fonts.mono} font-bold text-pink-500 dark:text-pink-400`}>
-                {socialLimit}
-              </div>
+            <div className={`${t.fonts.mono} font-bold text-red-500 dark:text-red-400`}>
+              {physicalLimit}
             </div>
           </div>
+          <div className="text-center">
+            <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>Mental</div>
+            <div className={`${t.fonts.mono} font-bold text-blue-500 dark:text-blue-400`}>
+              {mentalLimit}
+            </div>
+          </div>
+          <div className="text-center">
+            <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted}`}>Social</div>
+            <div className={`${t.fonts.mono} font-bold text-pink-500 dark:text-pink-400`}>
+              {socialLimit}
+            </div>
+          </div>
+        </div>
 
-          {/* Tab Navigation */}
-          <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/30">
-            <button
-              onClick={() => setActiveTab("quick")}
-              className={`
+        {/* Tab Navigation */}
+        <div className="flex items-center gap-1 p-1 rounded-lg bg-muted/30">
+          <button
+            onClick={() => setActiveTab("quick")}
+            className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "quick"
@@ -562,13 +529,13 @@ export function ActionPanel({
                     : `${t.colors.muted} hover:text-foreground`
                 }
               `}
-            >
-              <Dice1 className="w-3 h-3" />
-              Quick
-            </button>
-            <button
-              onClick={() => setActiveTab("combat")}
-              className={`
+          >
+            <Dice1 className="w-3 h-3" />
+            Quick
+          </button>
+          <button
+            onClick={() => setActiveTab("combat")}
+            className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "combat"
@@ -577,16 +544,14 @@ export function ActionPanel({
                 }
                 ${isInCombat ? "ring-1 ring-amber-500/50" : ""}
               `}
-            >
-              <Swords className={`w-3 h-3 ${isInCombat ? "text-amber-500" : ""}`} />
-              Combat
-              {isInCombat && (
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />
-              )}
-            </button>
-            <button
-              onClick={() => setActiveTab("advanced")}
-              className={`
+          >
+            <Swords className={`w-3 h-3 ${isInCombat ? "text-amber-500" : ""}`} />
+            Combat
+            {isInCombat && <span className="w-1.5 h-1.5 rounded-full bg-amber-500 animate-pulse" />}
+          </button>
+          <button
+            onClick={() => setActiveTab("advanced")}
+            className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "advanced"
@@ -594,13 +559,13 @@ export function ActionPanel({
                     : `${t.colors.muted} hover:text-foreground`
                 }
               `}
-            >
-              <Sliders className="w-3 h-3" />
-              Advanced
-            </button>
-            <button
-              onClick={() => setActiveTab("history")}
-              className={`
+          >
+            <Sliders className="w-3 h-3" />
+            Advanced
+          </button>
+          <button
+            onClick={() => setActiveTab("history")}
+            className={`
                 flex-1 flex items-center justify-center gap-1 px-2 py-1.5 rounded-md text-xs font-medium transition-colors
                 ${
                   activeTab === "history"
@@ -608,453 +573,449 @@ export function ActionPanel({
                     : `${t.colors.muted} hover:text-foreground`
                 }
               `}
-            >
-              <History className="w-3 h-3" />
-              History
-              {combinedHistory.length > 0 && (
-                <span className={`text-[10px] ${t.fonts.mono} px-1 rounded bg-muted`}>
-                  {combinedHistory.length}
-                </span>
-              )}
-            </button>
-          </div>
+          >
+            <History className="w-3 h-3" />
+            History
+            {combinedHistory.length > 0 && (
+              <span className={`text-[10px] ${t.fonts.mono} px-1 rounded bg-muted`}>
+                {combinedHistory.length}
+              </span>
+            )}
+          </button>
+        </div>
 
-          {/* Quick Rolls Tab */}
-          {activeTab === "quick" && (
-            <div className="space-y-2">
-              <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                Common Tests
-              </div>
-              <div className="grid grid-cols-2 gap-2">
-                <QuickRollButton
-                  label="Initiative"
-                  pool={pools.initiative}
-                  context="Initiative (REA + INT)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-                <QuickRollButton
-                  label="Perception"
-                  pool={pools.perception}
-                  context="Perception (INT + Perception)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-                <QuickRollButton
-                  label="Composure"
-                  pool={pools.composure}
-                  context="Composure (CHA + WIL)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-                <QuickRollButton
-                  label="Judge Intent"
-                  pool={pools.judgeIntentions}
-                  context="Judge Intentions (CHA + INT)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-                <QuickRollButton
-                  label="Memory"
-                  pool={pools.memory}
-                  context="Memory (LOG + WIL)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-                <QuickRollButton
-                  label="Lift/Carry"
-                  pool={pools.liftCarry}
-                  context="Lift/Carry (BOD + STR)"
-                  onClick={onOpenDiceRoller}
-                  theme={t}
-                />
-              </div>
+        {/* Quick Rolls Tab */}
+        {activeTab === "quick" && (
+          <div className="space-y-2">
+            <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+              Common Tests
             </div>
-          )}
+            <div className="grid grid-cols-2 gap-2">
+              <QuickRollButton
+                label="Initiative"
+                pool={pools.initiative}
+                context="Initiative (REA + INT)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+              <QuickRollButton
+                label="Perception"
+                pool={pools.perception}
+                context="Perception (INT + Perception)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+              <QuickRollButton
+                label="Composure"
+                pool={pools.composure}
+                context="Composure (CHA + WIL)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+              <QuickRollButton
+                label="Judge Intent"
+                pool={pools.judgeIntentions}
+                context="Judge Intentions (CHA + INT)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+              <QuickRollButton
+                label="Memory"
+                pool={pools.memory}
+                context="Memory (LOG + WIL)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+              <QuickRollButton
+                label="Lift/Carry"
+                pool={pools.liftCarry}
+                context="Lift/Carry (BOD + STR)"
+                onClick={onOpenDiceRoller}
+                theme={t}
+              />
+            </div>
+          </div>
+        )}
 
-          {/* Combat Actions Tab */}
-          {activeTab === "combat" && (
-            <div className="space-y-4">
-              {/* Action Economy Display (when in combat) */}
-              {isInCombat && actionEconomy && (
-                <div
-                  className={`p-2 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
-                >
-                  <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted} mb-2`}>
-                    Actions Remaining
+        {/* Combat Actions Tab */}
+        {activeTab === "combat" && (
+          <div className="space-y-4">
+            {/* Action Economy Display (when in combat) */}
+            {isInCombat && actionEconomy && (
+              <div
+                className={`p-2 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
+              >
+                <div className={`text-[10px] uppercase ${t.fonts.mono} ${t.colors.muted} mb-2`}>
+                  Actions Remaining
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-1" title="Free Actions">
+                    <span className="text-xs text-muted-foreground">F</span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
+                        actionEconomy.free > 0
+                          ? "bg-emerald-500/20 text-emerald-500"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
+                    </span>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1" title="Free Actions">
-                      <span className="text-xs text-muted-foreground">F</span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
-                          actionEconomy.free > 0
-                            ? "bg-emerald-500/20 text-emerald-500"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {actionEconomy.free >= 999 ? "∞" : actionEconomy.free}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1" title="Simple Actions">
-                      <span className="text-xs text-muted-foreground">S</span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
-                          actionEconomy.simple > 0
-                            ? "bg-blue-500/20 text-blue-500"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {actionEconomy.simple}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1" title="Complex Actions">
-                      <span className="text-xs text-muted-foreground">C</span>
-                      <span
-                        className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
-                          actionEconomy.complex > 0
-                            ? "bg-purple-500/20 text-purple-500"
-                            : "bg-muted text-muted-foreground"
-                        }`}
-                      >
-                        {actionEconomy.complex}
-                      </span>
-                    </div>
-                    <div className="flex items-center gap-1" title="Interrupt Available">
-                      <Shield
-                        className={`w-4 h-4 ${actionEconomy.interrupt ? "text-amber-500" : "text-muted-foreground"}`}
-                      />
-                    </div>
+                  <div className="flex items-center gap-1" title="Simple Actions">
+                    <span className="text-xs text-muted-foreground">S</span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
+                        actionEconomy.simple > 0
+                          ? "bg-blue-500/20 text-blue-500"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {actionEconomy.simple}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1" title="Complex Actions">
+                    <span className="text-xs text-muted-foreground">C</span>
+                    <span
+                      className={`px-2 py-0.5 rounded text-xs font-bold ${t.fonts.mono} ${
+                        actionEconomy.complex > 0
+                          ? "bg-purple-500/20 text-purple-500"
+                          : "bg-muted text-muted-foreground"
+                      }`}
+                    >
+                      {actionEconomy.complex}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1" title="Interrupt Available">
+                    <Shield
+                      className={`w-4 h-4 ${actionEconomy.interrupt ? "text-amber-500" : "text-muted-foreground"}`}
+                    />
                   </div>
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Multi-step Flow UI */}
-              {flowStep === "select" && (
-                <>
-                  {/* Available Actions */}
-                  {availableActions.length > 0 && (
-                    <div className="space-y-2">
-                      <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                        Available Actions
-                      </div>
-                      <div className="space-y-1">
-                        {availableActions.map((result) => {
-                          const action = result.action;
-                          const pool = calculateActionPool(action);
-                          const actionType = action.type as
-                            | "free"
-                            | "simple"
-                            | "complex"
-                            | "interrupt";
-                          const canUse = canUseAction(actionType);
-
-                          return (
-                            <CombatActionButton
-                              key={action.id}
-                              label={action.name}
-                              icon={getActionIcon(action)}
-                              pool={pool}
-                              context={action.description}
-                              actionId={action.id}
-                              actionType={actionType}
-                              onClick={() => {
-                                handleSelectAction(action);
-                              }}
-                              onExecuteAction={handleExecuteAction}
-                              isAvailable={canUse}
-                              isInCombat={isInCombat}
-                              isLoading={combatLoading}
-                              theme={t}
-                            />
-                          );
-                        })}
-                      </div>
+            {/* Multi-step Flow UI */}
+            {flowStep === "select" && (
+              <>
+                {/* Available Actions */}
+                {availableActions.length > 0 && (
+                  <div className="space-y-2">
+                    <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+                      Available Actions
                     </div>
-                  )}
+                    <div className="space-y-1">
+                      {availableActions.map((result) => {
+                        const action = result.action;
+                        const pool = calculateActionPool(action);
+                        const actionType = action.type as
+                          | "free"
+                          | "simple"
+                          | "complex"
+                          | "interrupt";
+                        const canUse = canUseAction(actionType);
 
-                  {/* Unavailable Actions (grayed out with reasons) */}
-                  {unavailableActions.length > 0 && (
-                    <div className="space-y-2">
-                      <div
-                        className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted} flex items-center gap-2`}
-                      >
-                        <Lock className="w-3 h-3" />
-                        Unavailable Actions
-                      </div>
-                      <div className="space-y-1">
-                        {unavailableActions.map((result) => {
-                          const action = result.action;
-                          const actionType = action.type as
-                            | "free"
-                            | "simple"
-                            | "complex"
-                            | "interrupt";
-                          const typeColors: Record<string, string> = {
-                            free: "border-emerald-500/20",
-                            simple: "border-blue-500/20",
-                            complex: "border-purple-500/20",
-                            interrupt: "border-amber-500/20",
-                          };
-                          const typeLabels: Record<string, string> = {
-                            free: "F",
-                            simple: "S",
-                            complex: "C",
-                            interrupt: "Int",
-                          };
+                        return (
+                          <CombatActionButton
+                            key={action.id}
+                            label={action.name}
+                            icon={getActionIcon(action)}
+                            pool={pool}
+                            context={action.description}
+                            actionId={action.id}
+                            actionType={actionType}
+                            onClick={() => {
+                              handleSelectAction(action);
+                            }}
+                            onExecuteAction={handleExecuteAction}
+                            isAvailable={canUse}
+                            isInCombat={isInCombat}
+                            isLoading={combatLoading}
+                            theme={t}
+                          />
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
 
-                          return (
-                            <div
-                              key={action.id}
-                              className={`
+                {/* Unavailable Actions (grayed out with reasons) */}
+                {unavailableActions.length > 0 && (
+                  <div className="space-y-2">
+                    <div
+                      className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted} flex items-center gap-2`}
+                    >
+                      <Lock className="w-3 h-3" />
+                      Unavailable Actions
+                    </div>
+                    <div className="space-y-1">
+                      {unavailableActions.map((result) => {
+                        const action = result.action;
+                        const actionType = action.type as
+                          | "free"
+                          | "simple"
+                          | "complex"
+                          | "interrupt";
+                        const typeColors: Record<string, string> = {
+                          free: "border-emerald-500/20",
+                          simple: "border-blue-500/20",
+                          complex: "border-purple-500/20",
+                          interrupt: "border-amber-500/20",
+                        };
+                        const typeLabels: Record<string, string> = {
+                          free: "F",
+                          simple: "S",
+                          complex: "C",
+                          interrupt: "Int",
+                        };
+
+                        return (
+                          <div
+                            key={action.id}
+                            className={`
                                 flex items-center gap-2 w-full
                                 px-3 py-2 rounded border
                                 bg-muted/30 ${typeColors[actionType]}
                                 opacity-50 cursor-not-allowed
                                 text-sm
                               `}
-                              title={result.reasons.join(", ")}
+                            title={result.reasons.join(", ")}
+                          >
+                            <span className="w-5 h-5 flex items-center justify-center text-muted-foreground">
+                              {getActionIcon(action)}
+                            </span>
+                            <span className="flex-1 text-left font-medium text-muted-foreground">
+                              {action.name}
+                            </span>
+                            <span
+                              className={`text-[10px] ${t.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}
                             >
-                              <span className="w-5 h-5 flex items-center justify-center text-muted-foreground">
-                                {getActionIcon(action)}
-                              </span>
-                              <span className="flex-1 text-left font-medium text-muted-foreground">
-                                {action.name}
-                              </span>
-                              <span
-                                className={`text-[10px] ${t.fonts.mono} px-1.5 py-0.5 rounded bg-background/50 text-muted-foreground`}
-                              >
-                                {typeLabels[actionType]}
-                              </span>
-                              <AlertCircle className="w-4 h-4 text-amber-500" />
-                            </div>
-                          );
-                        })}
+                              {typeLabels[actionType]}
+                            </span>
+                            <AlertCircle className="w-4 h-4 text-amber-500" />
+                          </div>
+                        );
+                      })}
+                    </div>
+                    <div className={`text-[10px] ${t.colors.muted} italic`}>
+                      Hover over an action to see requirements
+                    </div>
+                  </div>
+                )}
+
+                {/* Fallback: Show legacy hardcoded actions if no actions loaded */}
+                {allActions.length === 0 && (
+                  <>
+                    {/* Attack Actions */}
+                    <div className="space-y-2">
+                      <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+                        Attack Actions
                       </div>
-                      <div className={`text-[10px] ${t.colors.muted} italic`}>
-                        Hover over an action to see requirements
+                      <div className="space-y-1">
+                        <CombatActionButton
+                          label="Melee Attack"
+                          icon={<HandMetal className="w-4 h-4" />}
+                          pool={combatPools.meleeAttack + woundModifier}
+                          context="Melee Attack (AGI + Combat Skill)"
+                          actionId="melee-attack"
+                          actionType="complex"
+                          onClick={onOpenDiceRoller}
+                          onExecuteAction={handleExecuteAction}
+                          isAvailable={canUseAction("complex")}
+                          isInCombat={isInCombat}
+                          isLoading={combatLoading}
+                          theme={t}
+                        />
+                        <CombatActionButton
+                          label="Ranged Attack"
+                          icon={<Target className="w-4 h-4" />}
+                          pool={combatPools.rangedAttack + woundModifier}
+                          context="Ranged Attack (AGI + Firearms)"
+                          actionId="ranged-attack"
+                          actionType="simple"
+                          onClick={onOpenDiceRoller}
+                          onExecuteAction={handleExecuteAction}
+                          isAvailable={canUseAction("simple")}
+                          isInCombat={isInCombat}
+                          isLoading={combatLoading}
+                          theme={t}
+                        />
                       </div>
                     </div>
-                  )}
 
-                  {/* Fallback: Show legacy hardcoded actions if no actions loaded */}
-                  {allActions.length === 0 && (
-                    <>
-                      {/* Attack Actions */}
-                      <div className="space-y-2">
-                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                          Attack Actions
-                        </div>
-                        <div className="space-y-1">
-                          <CombatActionButton
-                            label="Melee Attack"
-                            icon={<HandMetal className="w-4 h-4" />}
-                            pool={combatPools.meleeAttack + woundModifier}
-                            context="Melee Attack (AGI + Combat Skill)"
-                            actionId="melee-attack"
-                            actionType="complex"
-                            onClick={onOpenDiceRoller}
-                            onExecuteAction={handleExecuteAction}
-                            isAvailable={canUseAction("complex")}
-                            isInCombat={isInCombat}
-                            isLoading={combatLoading}
-                            theme={t}
-                          />
-                          <CombatActionButton
-                            label="Ranged Attack"
-                            icon={<Target className="w-4 h-4" />}
-                            pool={combatPools.rangedAttack + woundModifier}
-                            context="Ranged Attack (AGI + Firearms)"
-                            actionId="ranged-attack"
-                            actionType="simple"
-                            onClick={onOpenDiceRoller}
-                            onExecuteAction={handleExecuteAction}
-                            isAvailable={canUseAction("simple")}
-                            isInCombat={isInCombat}
-                            isLoading={combatLoading}
-                            theme={t}
-                          />
-                        </div>
+                    {/* Defense Actions */}
+                    <div className="space-y-2">
+                      <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+                        Defense Actions
                       </div>
-
-                      {/* Defense Actions */}
-                      <div className="space-y-2">
-                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                          Defense Actions
-                        </div>
-                        <div className="space-y-1">
-                          <CombatActionButton
-                            label="Dodge"
-                            icon={<Move className="w-4 h-4" />}
-                            pool={combatPools.dodge + woundModifier}
-                            context="Dodge (REA + INT + Gymnastics)"
-                            actionId="dodge"
-                            actionType="interrupt"
-                            onClick={onOpenDiceRoller}
-                            onExecuteAction={handleExecuteAction}
-                            isAvailable={canUseAction("interrupt")}
-                            isInCombat={isInCombat}
-                            isLoading={combatLoading}
-                            theme={t}
-                          />
-                          <CombatActionButton
-                            label="Block"
-                            icon={<Shield className="w-4 h-4" />}
-                            pool={combatPools.block + woundModifier}
-                            context="Block (REA + Unarmed Combat)"
-                            actionId="block"
-                            actionType="interrupt"
-                            onClick={onOpenDiceRoller}
-                            onExecuteAction={handleExecuteAction}
-                            isAvailable={canUseAction("interrupt")}
-                            isInCombat={isInCombat}
-                            isLoading={combatLoading}
-                            theme={t}
-                          />
-                        </div>
+                      <div className="space-y-1">
+                        <CombatActionButton
+                          label="Dodge"
+                          icon={<Move className="w-4 h-4" />}
+                          pool={combatPools.dodge + woundModifier}
+                          context="Dodge (REA + INT + Gymnastics)"
+                          actionId="dodge"
+                          actionType="interrupt"
+                          onClick={onOpenDiceRoller}
+                          onExecuteAction={handleExecuteAction}
+                          isAvailable={canUseAction("interrupt")}
+                          isInCombat={isInCombat}
+                          isLoading={combatLoading}
+                          theme={t}
+                        />
+                        <CombatActionButton
+                          label="Block"
+                          icon={<Shield className="w-4 h-4" />}
+                          pool={combatPools.block + woundModifier}
+                          context="Block (REA + Unarmed Combat)"
+                          actionId="block"
+                          actionType="interrupt"
+                          onClick={onOpenDiceRoller}
+                          onExecuteAction={handleExecuteAction}
+                          isAvailable={canUseAction("interrupt")}
+                          isInCombat={isInCombat}
+                          isLoading={combatLoading}
+                          theme={t}
+                        />
                       </div>
+                    </div>
 
-                      {/* Resistance */}
-                      <div className="space-y-2">
-                        <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
-                          Resistance
-                        </div>
-                        <div className="space-y-1">
-                          <CombatActionButton
-                            label="Soak Damage"
-                            icon={<Shield className="w-4 h-4" />}
-                            pool={combatPools.soak}
-                            context="Soak (BOD + Armor)"
-                            actionId="soak"
-                            actionType="free"
-                            onClick={onOpenDiceRoller}
-                            onExecuteAction={handleExecuteAction}
-                            isAvailable={true}
-                            isInCombat={isInCombat}
-                            isLoading={combatLoading}
-                            theme={t}
-                          />
-                        </div>
+                    {/* Resistance */}
+                    <div className="space-y-2">
+                      <div className={`text-xs uppercase ${t.fonts.mono} ${t.colors.muted}`}>
+                        Resistance
                       </div>
-                    </>
-                  )}
-                </>
-              )}
+                      <div className="space-y-1">
+                        <CombatActionButton
+                          label="Soak Damage"
+                          icon={<Shield className="w-4 h-4" />}
+                          pool={combatPools.soak}
+                          context="Soak (BOD + Armor)"
+                          actionId="soak"
+                          actionType="free"
+                          onClick={onOpenDiceRoller}
+                          onExecuteAction={handleExecuteAction}
+                          isAvailable={true}
+                          isInCombat={isInCombat}
+                          isLoading={combatLoading}
+                          theme={t}
+                        />
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
+            )}
 
-              {/* Target Selection Step */}
-              {flowStep === "target" && selectedAction && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      onPress={resetFlow}
-                      className="p-1.5 rounded hover:bg-muted transition-colors"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </Button>
-                    <span className={`text-sm font-medium ${t.colors.heading}`}>
-                      Select Target for {selectedAction.name}
-                    </span>
-                  </div>
-
-                  {/* Target Selector */}
-                  <TargetSelector
-                    characterId={character.id}
-                    theme={t}
-                    onTargetSelect={handleTargetSelect}
-                    variant="inline"
-                    selectedTargetId={selectedTargetId}
-                  />
-
-                  {/* Skip target button for actions that don't strictly require it */}
+            {/* Target Selection Step */}
+            {flowStep === "target" && selectedAction && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
                   <Button
-                    onPress={() => setFlowStep("confirm")}
-                    className={`
+                    onPress={resetFlow}
+                    className="p-1.5 rounded hover:bg-muted transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </Button>
+                  <span className={`text-sm font-medium ${t.colors.heading}`}>
+                    Select Target for {selectedAction.name}
+                  </span>
+                </div>
+
+                {/* Target Selector */}
+                <TargetSelector
+                  characterId={character.id}
+                  theme={t}
+                  onTargetSelect={handleTargetSelect}
+                  variant="inline"
+                  selectedTargetId={selectedTargetId}
+                />
+
+                {/* Skip target button for actions that don't strictly require it */}
+                <Button
+                  onPress={() => setFlowStep("confirm")}
+                  className={`
                       w-full flex items-center justify-center gap-2
                       px-3 py-2 rounded text-sm
                       ${t.components.card.wrapper} ${t.components.card.border}
                       ${t.colors.muted} hover:text-foreground
                       transition-colors
                     `}
-                  >
-                    Skip (no target)
-                  </Button>
-                </div>
-              )}
+                >
+                  Skip (no target)
+                </Button>
+              </div>
+            )}
 
-              {/* Confirm Step */}
-              {flowStep === "confirm" && selectedAction && (
-                <div className="space-y-3">
-                  <div className="flex items-center gap-2">
-                    <Button
-                      onPress={() => {
-                        const needsTarget =
-                          selectedAction.subcategory === "ranged" ||
-                          selectedAction.subcategory === "melee";
-                        if (needsTarget && isInCombat) {
-                          setFlowStep("target");
-                        } else {
-                          resetFlow();
-                        }
-                      }}
-                      className="p-1.5 rounded hover:bg-muted transition-colors"
-                    >
-                      <ArrowLeft className="w-4 h-4" />
-                    </Button>
-                    <span className={`text-sm font-medium ${t.colors.heading}`}>
-                      Confirm Action
+            {/* Confirm Step */}
+            {flowStep === "confirm" && selectedAction && (
+              <div className="space-y-3">
+                <div className="flex items-center gap-2">
+                  <Button
+                    onPress={() => {
+                      const needsTarget =
+                        selectedAction.subcategory === "ranged" ||
+                        selectedAction.subcategory === "melee";
+                      if (needsTarget && isInCombat) {
+                        setFlowStep("target");
+                      } else {
+                        resetFlow();
+                      }
+                    }}
+                    className="p-1.5 rounded hover:bg-muted transition-colors"
+                  >
+                    <ArrowLeft className="w-4 h-4" />
+                  </Button>
+                  <span className={`text-sm font-medium ${t.colors.heading}`}>Confirm Action</span>
+                </div>
+
+                {/* Action Summary */}
+                <div
+                  className={`p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
+                      {getActionIcon(selectedAction)}
+                    </div>
+                    <div>
+                      <div className={`font-medium ${t.colors.heading}`}>{selectedAction.name}</div>
+                      <div className={`text-xs ${t.colors.muted}`}>
+                        {selectedAction.description}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Target Display */}
+                  {selectedTargetName && (
+                    <div className="flex items-center gap-2 mb-3 p-2 rounded bg-amber-500/10 border border-amber-500/30">
+                      <Target className="w-4 h-4 text-amber-500" />
+                      <span className="text-sm text-amber-500">Target: {selectedTargetName}</span>
+                    </div>
+                  )}
+
+                  {/* Dice Pool Preview */}
+                  <div className="flex items-center justify-between p-2 rounded bg-muted/30">
+                    <span className={`text-sm ${t.colors.muted}`}>Dice Pool:</span>
+                    <span className={`font-bold ${t.fonts.mono} ${t.colors.accent}`}>
+                      {calculateActionPool(selectedAction)}d6
                     </span>
                   </div>
+                </div>
 
-                  {/* Action Summary */}
-                  <div
-                    className={`p-3 rounded ${t.components.card.wrapper} ${t.components.card.border}`}
-                  >
-                    <div className="flex items-center gap-3 mb-3">
-                      <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                        {getActionIcon(selectedAction)}
-                      </div>
-                      <div>
-                        <div className={`font-medium ${t.colors.heading}`}>
-                          {selectedAction.name}
-                        </div>
-                        <div className={`text-xs ${t.colors.muted}`}>
-                          {selectedAction.description}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Target Display */}
-                    {selectedTargetName && (
-                      <div className="flex items-center gap-2 mb-3 p-2 rounded bg-amber-500/10 border border-amber-500/30">
-                        <Target className="w-4 h-4 text-amber-500" />
-                        <span className="text-sm text-amber-500">Target: {selectedTargetName}</span>
-                      </div>
-                    )}
-
-                    {/* Dice Pool Preview */}
-                    <div className="flex items-center justify-between p-2 rounded bg-muted/30">
-                      <span className={`text-sm ${t.colors.muted}`}>Dice Pool:</span>
-                      <span className={`font-bold ${t.fonts.mono} ${t.colors.accent}`}>
-                        {calculateActionPool(selectedAction)}d6
-                      </span>
-                    </div>
-                  </div>
-
-                  {/* Execute Button */}
-                  <Button
-                    onPress={async () => {
-                      const pool = calculateActionPool(selectedAction);
-                      if (isInCombat) {
-                        await handleExecuteAction(selectedAction.id);
-                      }
-                      onOpenDiceRoller(
-                        pool,
-                        `${selectedAction.name}${selectedTargetName ? ` vs ${selectedTargetName}` : ""}`
-                      );
-                      resetFlow();
-                    }}
-                    isDisabled={combatLoading}
-                    className={`
+                {/* Execute Button */}
+                <Button
+                  onPress={async () => {
+                    const pool = calculateActionPool(selectedAction);
+                    if (isInCombat) {
+                      await handleExecuteAction(selectedAction.id);
+                    }
+                    onOpenDiceRoller(
+                      pool,
+                      `${selectedAction.name}${selectedTargetName ? ` vs ${selectedTargetName}` : ""}`
+                    );
+                    resetFlow();
+                  }}
+                  isDisabled={combatLoading}
+                  className={`
                       w-full flex items-center justify-center gap-2
                       px-4 py-3 rounded font-medium
                       bg-emerald-500 text-white
@@ -1062,71 +1023,70 @@ export function ActionPanel({
                       disabled:opacity-50 disabled:cursor-not-allowed
                       transition-colors
                     `}
-                  >
-                    <Check className="w-4 h-4" />
-                    Roll {calculateActionPool(selectedAction)}d6
-                  </Button>
-                </div>
-              )}
-            </div>
-          )}
+                >
+                  <Check className="w-4 h-4" />
+                  Roll {calculateActionPool(selectedAction)}d6
+                </Button>
+              </div>
+            )}
+          </div>
+        )}
 
-          {/* Advanced Tab - ActionPoolBuilder */}
-          {activeTab === "advanced" && (
-            <div className="space-y-4">
-              <ActionPoolBuilder
-                attributes={character.attributes || {}}
-                skills={skillsForBuilder}
-                woundModifier={woundModifier}
-                limits={{
-                  physical: physicalLimit,
-                  mental: mentalLimit,
-                  social: socialLimit,
-                }}
-                currentEdge={edgeCurrent}
-                maxEdge={edgeMaximum}
-                isLoading={isRolling}
-                onRoll={handleAdvancedRoll}
-                size="sm"
-                showAdvanced={true}
-              />
-            </div>
-          )}
+        {/* Advanced Tab - ActionPoolBuilder */}
+        {activeTab === "advanced" && (
+          <div className="space-y-4">
+            <ActionPoolBuilder
+              attributes={character.attributes || {}}
+              skills={skillsForBuilder}
+              woundModifier={woundModifier}
+              limits={{
+                physical: physicalLimit,
+                mental: mentalLimit,
+                social: socialLimit,
+              }}
+              currentEdge={edgeCurrent}
+              maxEdge={edgeMaximum}
+              isLoading={isRolling}
+              onRoll={handleAdvancedRoll}
+              size="sm"
+              showAdvanced={true}
+            />
+          </div>
+        )}
 
-          {/* History Tab - ActionHistory */}
-          {activeTab === "history" && (
-            <div className="space-y-4">
-              <ActionHistory
-                actions={combinedHistory}
-                isLoading={historyLoading}
-                hasMore={hasMoreHistory}
-                onLoadMore={loadMoreHistory}
-                showReroll={edgeCurrent > 0}
-                onReroll={(action) => {
-                  // Re-roll using Second Chance edge action
-                  executeRoll(action.pool, action.context, "second-chance");
-                }}
-                maxVisible={5}
-                size="sm"
-              />
-            </div>
-          )}
+        {/* History Tab - ActionHistory */}
+        {activeTab === "history" && (
+          <div className="space-y-4">
+            <ActionHistory
+              actions={combinedHistory}
+              isLoading={historyLoading}
+              hasMore={hasMoreHistory}
+              onLoadMore={loadMoreHistory}
+              showReroll={edgeCurrent > 0}
+              onReroll={(action) => {
+                // Re-roll using Second Chance edge action
+                executeRoll(action.pool, action.context, "second-chance");
+              }}
+              maxVisible={5}
+              size="sm"
+            />
+          </div>
+        )}
 
-          {/* Wound Modifier Warning */}
-          {woundModifier !== 0 && (
-            <div
-              className={`
+        {/* Wound Modifier Warning */}
+        {woundModifier !== 0 && (
+          <div
+            className={`
               flex items-center gap-2 p-2 rounded text-xs border
               ${t.components.badge.negative}
             `}
-            >
-              <span>Wound Modifier:</span>
-              <span className={`${t.fonts.mono} font-bold`}>{woundModifier}</span>
-              <span className={t.colors.muted}>(applied to all tests)</span>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
+          >
+            <span>Wound Modifier:</span>
+            <span className={`${t.fonts.mono} font-bold`}>{woundModifier}</span>
+            <span className={t.colors.muted}>(applied to all tests)</span>
+          </div>
+        )}
+      </div>
+    </DisplayCard>
   );
 }

@@ -75,9 +75,6 @@ function CharacterSheet({
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
 
-  // ActionPanel state
-  const [actionPanelExpanded, setActionPanelExpanded] = useState(true);
-
   useEffect(() => {
     if (character.editionCode) {
       loadRuleset(character.editionCode);
@@ -339,8 +336,6 @@ function CharacterSheet({
               physicalLimit={physicalLimit}
               mentalLimit={mentalLimit}
               socialLimit={socialLimit}
-              isExpanded={actionPanelExpanded}
-              onToggleExpand={() => setActionPanelExpanded(!actionPanelExpanded)}
               onOpenDiceRoller={(pool, context) => openDiceRoller(pool, context)}
             />
 
