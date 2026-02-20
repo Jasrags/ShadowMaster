@@ -17,11 +17,6 @@ function formatLegality(legality: string): string {
   return "";
 }
 
-function formatType(type: string): string {
-  if (!type) return "";
-  return type.charAt(0).toUpperCase() + type.slice(1);
-}
-
 // ---------------------------------------------------------------------------
 // FocusRow
 // ---------------------------------------------------------------------------
@@ -63,12 +58,6 @@ function FocusRow({ item, catalogItem }: { item: FocusItem; catalogItem?: FocusC
         <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
           {item.name}
         </span>
-        <span
-          data-testid="type-badge"
-          className="shrink-0 rounded border border-zinc-300/40 bg-zinc-100 px-1.5 py-0.5 font-mono text-[10px] uppercase text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
-        >
-          {formatType(item.type)}
-        </span>
         {item.bonded && (
           <span
             data-testid="bonded-badge"
@@ -92,16 +81,6 @@ function FocusRow({ item, catalogItem }: { item: FocusItem; catalogItem?: FocusC
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
           onClick={(e) => e.stopPropagation()}
         >
-          {/* Description */}
-          {catalogItem?.description && (
-            <p
-              data-testid="focus-description"
-              className="text-xs italic text-zinc-500 dark:text-zinc-400"
-            >
-              {catalogItem.description}
-            </p>
-          )}
-
           {/* Stats row */}
           {(avail != null || cost > 0 || !!item.karmaToBond) && (
             <div
@@ -134,6 +113,16 @@ function FocusRow({ item, catalogItem }: { item: FocusItem; catalogItem?: FocusC
                 </span>
               )}
             </div>
+          )}
+
+          {/* Description */}
+          {catalogItem?.description && (
+            <p
+              data-testid="focus-description"
+              className="text-xs italic text-zinc-500 dark:text-zinc-400"
+            >
+              {catalogItem.description}
+            </p>
           )}
 
           {/* Notes */}

@@ -116,12 +116,6 @@ describe("FociDisplay", () => {
       expect(screen.getByText("Power Focus")).toBeInTheDocument();
     });
 
-    it("renders type badge with formatted type", () => {
-      render(<FociDisplay foci={[baseFocus]} />);
-      const badge = screen.getByTestId("type-badge");
-      expect(badge).toHaveTextContent("Power");
-    });
-
     it("renders force pill", () => {
       render(<FociDisplay foci={[baseFocus]} />);
       const pill = screen.getByTestId("force-pill");

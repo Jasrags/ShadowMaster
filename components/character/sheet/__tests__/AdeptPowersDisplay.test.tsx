@@ -134,7 +134,7 @@ describe("AdeptPowersDisplay", () => {
     // Description not visible collapsed
     expect(screen.queryByText(/\+1 Reaction/)).not.toBeInTheDocument();
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
 
     expect(screen.getByText("+1 Reaction and +1D6 Initiative per level.")).toBeInTheDocument();
   });
@@ -143,7 +143,7 @@ describe("AdeptPowersDisplay", () => {
     const user = userEvent.setup();
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
 
     expect(screen.getByText("Free Action")).toBeInTheDocument();
   });
@@ -163,7 +163,7 @@ describe("AdeptPowersDisplay", () => {
     // Specification not visible collapsed
     expect(screen.queryByText("Pistols")).not.toBeInTheDocument();
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
 
     expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
     expect(screen.getByText("Pistols")).toBeInTheDocument();
@@ -173,21 +173,21 @@ describe("AdeptPowersDisplay", () => {
     const user = userEvent.setup();
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
 
     const expanded = screen.getByTestId("expanded-content");
     expect(expanded).toHaveTextContent("Rating:");
     expect(expanded).toHaveTextContent("2 / 3");
   });
 
-  it("collapses row on second chevron click", async () => {
+  it("collapses row on second click", async () => {
     const user = userEvent.setup();
     render(<AdeptPowersDisplay adeptPowers={[basePower]} />);
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
     expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
 
-    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("power-row"));
     expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
   });
 

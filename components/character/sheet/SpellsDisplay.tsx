@@ -81,16 +81,6 @@ function SpellRow({ spell }: { spell: SpellData }) {
           onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {/* Description */}
-          {spell.description && (
-            <p
-              data-testid="spell-description"
-              className="text-xs italic text-zinc-500 dark:text-zinc-400"
-            >
-              {spell.description}
-            </p>
-          )}
-
           {/* Stats row */}
           <div
             data-testid="stats-row"
@@ -124,6 +114,16 @@ function SpellRow({ spell }: { spell: SpellData }) {
                 {toTitleCase(spell.damage)}
               </span>
             </div>
+          )}
+
+          {/* Description */}
+          {spell.description && (
+            <p
+              data-testid="spell-description"
+              className="text-xs italic text-zinc-500 dark:text-zinc-400"
+            >
+              {spell.description}
+            </p>
           )}
         </div>
       )}
