@@ -661,6 +661,7 @@ export interface Identity {
   name: string; // Identity name (e.g., "John Smith", "Jane Doe")
   sin: SIN; // Exactly one SIN (fake or real)
   licenses: License[]; // 0+ licenses tied to this identity's SIN
+  subscriptions?: LifestyleSubscription[]; // Subscriptions (DocWagon, food service, etc.)
   associatedLifestyleId?: ID; // Optional reference to a lifestyle
   notes?: string;
 }
@@ -686,6 +687,7 @@ export interface LifestyleSubscription {
   id?: ID;
   catalogId?: string; // Reference to ruleset subscription ID
   name: string;
+  level?: string; // e.g., "Basic", "Gold", "Platinum"
   monthlyCost: number;
   category?: string; // e.g., "medical", "security", "food", "entertainment"
   notes?: string;

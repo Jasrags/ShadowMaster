@@ -1,7 +1,8 @@
 "use client";
 
-import { X, FileText, Home, Edit2 } from "lucide-react";
-import type { Identity, Lifestyle } from "@/lib/types";
+import { X, FileText, Home, Edit2, CreditCard } from "lucide-react";
+import type { Identity, Lifestyle, LifestyleSubscription } from "@/lib/types";
+import { LifestyleSubscriptionSelector } from "../shared/LifestyleSubscriptionSelector";
 import { SINNER_QUALITY_LABELS, LIFESTYLE_TYPES } from "./constants";
 
 interface IdentityCardProps {
@@ -12,6 +13,8 @@ interface IdentityCardProps {
   onAddLicense: () => void;
   onEditLicense: (licenseIndex: number) => void;
   onRemoveLicense: (licenseIndex: number) => void;
+  onAddSubscription: (subscription: LifestyleSubscription) => void;
+  onRemoveSubscription: (subscriptionIndex: number) => void;
   onAddLifestyle: () => void;
   onEditLifestyle: (lifestyleId: string) => void;
   onRemoveLifestyle: (lifestyleId: string) => void;
@@ -25,6 +28,8 @@ export function IdentityCard({
   onAddLicense,
   onEditLicense,
   onRemoveLicense,
+  onAddSubscription,
+  onRemoveSubscription,
   onAddLifestyle,
   onEditLifestyle,
   onRemoveLifestyle,
@@ -132,6 +137,58 @@ export function IdentityCard({
             </div>
           ) : (
             <p className="text-xs text-zinc-500 dark:text-zinc-400">No licenses added yet.</p>
+          )}
+        </div>
+
+        {/* Subscriptions Section */}
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Subscriptions
+              {identity.subscriptions?.length ? ` (${identity.subscriptions.length})` : ""}
+            </span>
+            <LifestyleSubscriptionSelector
+              onAdd={onAddSubscription}
+              existingSubscriptions={identity.subscriptions || []}
+            />
+          </div>
+
+          {identity.subscriptions && identity.subscriptions.length > 0 ? (
+            <div className="space-y-1.5">
+              {identity.subscriptions.map((sub, subIndex) => (
+                <div
+                  key={sub.id || sub.catalogId || subIndex}
+                  className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2 dark:bg-zinc-700/50"
+                >
+                  <div className="flex items-center gap-2">
+                    <CreditCard className="h-3.5 w-3.5 text-zinc-400" />
+                    <span className="text-sm text-zinc-700 dark:text-zinc-300">{sub.name}</span>
+                    {sub.level && (
+                      <span className="rounded border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-300">
+                        {sub.level}
+                      </span>
+                    )}
+                    {sub.category && (
+                      <span className="rounded-full bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
+                        {sub.category}
+                      </span>
+                    )}
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      {sub.monthlyCost.toLocaleString()}/mo
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => onRemoveSubscription(subIndex)}
+                    className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                    title="Remove subscription"
+                  >
+                    <X className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">No subscriptions added yet.</p>
           )}
         </div>
 

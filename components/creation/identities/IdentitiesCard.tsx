@@ -15,7 +15,15 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { Plus, AlertTriangle } from "lucide-react";
-import type { CreationState, Identity, License, SIN, SinnerQuality, Lifestyle } from "@/lib/types";
+import type {
+  CreationState,
+  Identity,
+  License,
+  LifestyleSubscription,
+  SIN,
+  SinnerQuality,
+  Lifestyle,
+} from "@/lib/types";
 import { SinnerQuality as SinnerQualityEnum } from "@/lib/types/character";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, SummaryFooter } from "../shared";
@@ -83,6 +91,7 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
   const totalCosts = useMemo(() => {
     let sinsCost = 0;
     let licensesCost = 0;
+    let subscriptionsCost = 0;
     let lifestylesCost = 0;
 
     identities.forEach((identity) => {
@@ -94,6 +103,9 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
           licensesCost += license.rating * LICENSE_COST_PER_RATING;
         }
       });
+      identity.subscriptions?.forEach((sub) => {
+        subscriptionsCost += sub.monthlyCost;
+      });
     });
 
     lifestyles.forEach((lifestyle) => {
@@ -103,8 +115,9 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
     return {
       sinsCost,
       licensesCost,
+      subscriptionsCost,
       lifestylesCost,
-      total: sinsCost + licensesCost + lifestylesCost,
+      total: sinsCost + licensesCost + subscriptionsCost + lifestylesCost,
     };
   }, [identities, lifestyles]);
 
@@ -201,6 +214,45 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
     [identities, state.selections, updateState]
   );
 
+  const handleAddSubscription = useCallback(
+    (identityIndex: number, subscription: LifestyleSubscription) => {
+      const updatedIdentities = [...identities];
+      const identity = { ...updatedIdentities[identityIndex] };
+      identity.subscriptions = [
+        ...(identity.subscriptions || []),
+        { ...subscription, id: `subscription-${Date.now()}` },
+      ];
+      updatedIdentities[identityIndex] = identity;
+
+      updateState({
+        selections: {
+          ...state.selections,
+          identities: updatedIdentities,
+        },
+      });
+    },
+    [identities, state.selections, updateState]
+  );
+
+  const handleRemoveSubscription = useCallback(
+    (identityIndex: number, subscriptionIndex: number) => {
+      const updatedIdentities = [...identities];
+      const identity = { ...updatedIdentities[identityIndex] };
+      identity.subscriptions = (identity.subscriptions || []).filter(
+        (_, i) => i !== subscriptionIndex
+      );
+      updatedIdentities[identityIndex] = identity;
+
+      updateState({
+        selections: {
+          ...state.selections,
+          identities: updatedIdentities,
+        },
+      });
+    },
+    [identities, state.selections, updateState]
+  );
+
   const handleAddLifestyle = useCallback(
     (identityIndex: number, lifestyleData: NewLifestyleState) => {
       const lifestyleType = LIFESTYLE_TYPES.find((l) => l.id === lifestyleData.type);
@@ -219,8 +271,6 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         notes: lifestyleData.notes || undefined,
         modifications:
           lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
-        subscriptions:
-          lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
         // Associate with the identity
         associatedIdentityId: identity.id,
       };
@@ -330,8 +380,6 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
         notes: lifestyleData.notes || undefined,
         modifications:
           lifestyleData.modifications.length > 0 ? lifestyleData.modifications : undefined,
-        subscriptions:
-          lifestyleData.subscriptions.length > 0 ? lifestyleData.subscriptions : undefined,
       };
 
       const updatedLifestyles = [...lifestyles];
@@ -437,6 +485,8 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                   onAddLicense={() => openAddLicenseModal(index)}
                   onEditLicense={(licenseIndex) => openEditLicenseModal(index, licenseIndex)}
                   onRemoveLicense={(licenseIndex) => handleRemoveLicense(index, licenseIndex)}
+                  onAddSubscription={(sub) => handleAddSubscription(index, sub)}
+                  onRemoveSubscription={(subIndex) => handleRemoveSubscription(index, subIndex)}
                   onAddLifestyle={() => openAddLifestyleModal(index)}
                   onEditLifestyle={(lifestyleId) => openEditLifestyleModal(index, lifestyleId)}
                   onRemoveLifestyle={(lifestyleId) => handleRemoveLifestyleById(lifestyleId)}
@@ -560,7 +610,6 @@ export function IdentitiesCard({ state, updateState }: IdentitiesCardProps) {
                 customIncome: currentLifestyle.customIncome || 0,
                 notes: currentLifestyle.notes || "",
                 modifications: currentLifestyle.modifications || [],
-                subscriptions: currentLifestyle.subscriptions || [],
               }}
             />
           )}
