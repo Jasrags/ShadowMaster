@@ -307,7 +307,12 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
   const hasSkills = enriched.length > 0;
 
   return (
-    <DisplayCard title="Skills" icon={<Crosshair className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-skills"
+      title="Skills"
+      icon={<Crosshair className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       {!hasSkills ? (
         <p className="text-sm text-zinc-500 italic px-1">No skills assigned</p>
       ) : (

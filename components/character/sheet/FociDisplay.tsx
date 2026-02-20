@@ -161,7 +161,12 @@ export function FociDisplay({ foci }: FociDisplayProps) {
   if (foci.length === 0) return null;
 
   return (
-    <DisplayCard title="Foci" icon={<Sparkles className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-foci"
+      title="Foci"
+      icon={<Sparkles className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         {foci.map((focus, idx) => {
           const catalogItem = catalog.find((c) => c.id === focus.catalogId);

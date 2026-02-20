@@ -59,8 +59,10 @@ export function ContactsDisplay({ character }: ContactsDisplayProps) {
 
   return (
     <DisplayCard
+      id="sheet-contacts"
       title="Contacts"
       icon={<Users className="h-4 w-4 text-zinc-400" />}
+      collapsible
       headerAction={
         <Link
           href={`/characters/${character.id}/contacts`}

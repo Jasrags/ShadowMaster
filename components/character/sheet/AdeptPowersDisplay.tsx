@@ -120,7 +120,12 @@ export function AdeptPowersDisplay({ adeptPowers }: AdeptPowersDisplayProps) {
   if (!adeptPowers || adeptPowers.length === 0) return null;
 
   return (
-    <DisplayCard title="Adept Powers" icon={<Zap className="h-4 w-4 text-amber-400" />}>
+    <DisplayCard
+      id="sheet-adept-powers"
+      title="Adept Powers"
+      icon={<Zap className="h-4 w-4 text-amber-400" />}
+      collapsible
+    >
       <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 overflow-hidden">
         {adeptPowers.map((power, idx) => (
           <PowerRow

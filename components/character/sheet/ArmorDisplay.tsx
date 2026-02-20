@@ -157,7 +157,12 @@ export function ArmorDisplay({ armor }: ArmorDisplayProps) {
   };
 
   return (
-    <DisplayCard title="Armor" icon={<Shield className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-armor"
+      title="Armor"
+      icon={<Shield className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {ARMOR_SECTIONS.map(({ key, label }) => {
           if (grouped[key].length === 0) return null;

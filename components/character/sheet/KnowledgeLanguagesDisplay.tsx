@@ -111,8 +111,10 @@ export function KnowledgeLanguagesDisplay({ character, onSelect }: KnowledgeLang
 
   return (
     <DisplayCard
+      id="sheet-knowledge-languages"
       title="Knowledge & Languages"
       icon={<BookOpen className="h-4 w-4 text-zinc-400" />}
+      collapsible
     >
       {knowledgeSkills.length === 0 && languages.length === 0 ? (
         <p className="text-sm text-zinc-500 italic px-1">No knowledge skills or languages</p>

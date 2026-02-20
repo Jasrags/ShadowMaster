@@ -203,7 +203,12 @@ export function IdentitiesDisplay({ character }: IdentitiesDisplayProps) {
   };
 
   return (
-    <DisplayCard title="Identities & SINs" icon={<Fingerprint className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-identities"
+      title="Identities & SINs"
+      icon={<Fingerprint className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {IDENTITY_SECTIONS.map(({ key, label }) => {
           if (grouped[key].length === 0) return null;

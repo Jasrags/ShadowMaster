@@ -27,7 +27,12 @@ export function ConditionDisplay({
 }: ConditionDisplayProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   return (
-    <DisplayCard title="Condition" icon={<Heart className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-condition"
+      title="Condition"
+      icon={<Heart className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-6">
         {woundModifier !== 0 && (
           <div className="p-2 rounded text-center bg-amber-50 dark:bg-amber-500/10 border border-amber-300 dark:border-amber-500/30 text-amber-700 dark:text-amber-400">

@@ -127,7 +127,12 @@ export function AugmentationsDisplay({ character }: AugmentationsDisplayProps) {
   };
 
   return (
-    <DisplayCard title="Augmentations" icon={<Cpu className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-augmentations"
+      title="Augmentations"
+      icon={<Cpu className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {AUGMENTATION_SECTIONS.map(({ key, label }) => {
           if (items[key].length === 0) return null;

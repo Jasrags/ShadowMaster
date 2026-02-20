@@ -379,7 +379,12 @@ export function VehiclesDisplay({ vehicles, drones, rccs }: VehiclesDisplayProps
   };
 
   return (
-    <DisplayCard title="Vehicles & Drones" icon={<Car className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-vehicles"
+      title="Vehicles & Drones"
+      icon={<Car className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {VEHICLE_SECTIONS.map(({ key, label }) => {
           if (grouped[key].length === 0) return null;

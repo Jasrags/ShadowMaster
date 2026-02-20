@@ -165,7 +165,12 @@ export function SpellsDisplay({ spells }: SpellsDisplayProps) {
   if (!grouped) return null;
 
   return (
-    <DisplayCard title="Spells" icon={<Sparkles className="h-4 w-4 text-violet-400" />}>
+    <DisplayCard
+      id="sheet-spells"
+      title="Spells"
+      icon={<Sparkles className="h-4 w-4 text-violet-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {SPELL_SECTIONS.map(({ key, label }) => {
           const sectionSpells = grouped[key];

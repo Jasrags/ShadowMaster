@@ -139,7 +139,12 @@ export function ComplexFormsDisplay({ complexForms }: ComplexFormsDisplayProps) 
   if (complexForms.length === 0) return null;
 
   return (
-    <DisplayCard title="Complex Forms" icon={<Braces className="h-4 w-4 text-cyan-400" />}>
+    <DisplayCard
+      id="sheet-complex-forms"
+      title="Complex Forms"
+      icon={<Braces className="h-4 w-4 text-cyan-400" />}
+      collapsible
+    >
       <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         {rows.map(({ id, form }) =>
           form ? <ComplexFormRow key={id} form={form} /> : <FallbackRow key={id} formId={id} />

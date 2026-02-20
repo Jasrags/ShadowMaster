@@ -272,7 +272,12 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
 
   return (
     <>
-      <DisplayCard title="Qualities" icon={<ShieldCheck className="h-4 w-4 text-zinc-400" />}>
+      <DisplayCard
+        id="sheet-qualities"
+        title="Qualities"
+        icon={<ShieldCheck className="h-4 w-4 text-zinc-400" />}
+        collapsible
+      >
         {!hasQualities ? (
           <p className="px-1 text-sm italic text-zinc-500">No qualities selected</p>
         ) : (
