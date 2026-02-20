@@ -97,6 +97,7 @@ export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakd
   const identities = (selections.identities || []) as Array<{
     sin: { type: string; rating: number };
     licenses?: Array<{ type: string; rating: number }>;
+    subscriptions?: Array<{ monthlyCost: number }>;
   }>;
 
   // Calculate gear spending
@@ -156,7 +157,7 @@ export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakd
   const cyberdecksSpent = cyberdecks.reduce((sum, d) => sum + (d.cost || 0), 0);
   const softwareSpent = software.reduce((sum, s) => sum + (s.cost || 0), 0);
 
-  // Calculate identity spending (fake SINs and licenses)
+  // Calculate identity spending (fake SINs, licenses, and subscriptions)
   const identitiesSpent = identities.reduce((sum, identity) => {
     const sinCost =
       identity.sin?.type === "fake" ? (identity.sin.rating || 0) * SIN_COST_PER_RATING : 0;
@@ -164,7 +165,9 @@ export function calculateNuyenSpent(selections: CreationSelections): NuyenBreakd
       identity.licenses?.reduce((lSum, lic) => {
         return lSum + (lic.type === "fake" ? (lic.rating || 0) * LICENSE_COST_PER_RATING : 0);
       }, 0) || 0;
-    return sum + sinCost + licensesCost;
+    const subscriptionsCost =
+      identity.subscriptions?.reduce((sSum, sub) => sSum + (sub.monthlyCost || 0), 0) || 0;
+    return sum + sinCost + licensesCost + subscriptionsCost;
   }, 0);
 
   // Total nuyen spent

@@ -1,104 +1,194 @@
 "use client";
 
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import { DisplayCard } from "./DisplayCard";
-import { Sparkles } from "lucide-react";
+import { ChevronDown, ChevronRight, Sparkles } from "lucide-react";
 import { useSpells, type SpellData, type SpellsCatalogData } from "@/lib/rules";
+
+// ---------------------------------------------------------------------------
+// Section configuration
+// ---------------------------------------------------------------------------
+
+const SPELL_SECTIONS = [
+  { key: "combat" as const, label: "Combat" },
+  { key: "detection" as const, label: "Detection" },
+  { key: "health" as const, label: "Health" },
+  { key: "illusion" as const, label: "Illusion" },
+  { key: "manipulation" as const, label: "Manipulation" },
+];
+
+// ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function toTitleCase(s: string): string {
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
+function findSpellInCatalog(
+  catalog: SpellsCatalogData | null,
+  spellId: string
+): SpellData | undefined {
+  if (!catalog) return undefined;
+  for (const cat of Object.keys(catalog)) {
+    const spells = catalog[cat as keyof SpellsCatalogData];
+    const found = spells.find((s) => s.id === spellId);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+// ---------------------------------------------------------------------------
+// SpellRow
+// ---------------------------------------------------------------------------
+
+function SpellRow({ spell }: { spell: SpellData }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+
+  return (
+    <div
+      data-testid="spell-row"
+      onClick={() => setIsExpanded(!isExpanded)}
+      className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+    >
+      {/* Collapsed row: Chevron + Name ... Drain pill */}
+      <div className="flex min-w-0 items-center gap-1.5">
+        <span data-testid="expand-button" className="shrink-0 text-zinc-400">
+          {isExpanded ? (
+            <ChevronDown className="h-3.5 w-3.5" />
+          ) : (
+            <ChevronRight className="h-3.5 w-3.5" />
+          )}
+        </span>
+        <span
+          title={spell.name}
+          className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200"
+        >
+          {spell.name}
+        </span>
+        <span
+          data-testid="drain-pill"
+          className="ml-auto shrink-0 rounded border border-violet-500/20 bg-violet-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-violet-600 dark:text-violet-300"
+        >
+          {spell.drain}
+        </span>
+      </div>
+
+      {/* Expanded section */}
+      {isExpanded && (
+        <div
+          data-testid="expanded-content"
+          onClick={(e) => e.stopPropagation()}
+          className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
+        >
+          {/* Stats row */}
+          <div
+            data-testid="stats-row"
+            className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-zinc-500 dark:text-zinc-400"
+          >
+            <span data-testid="stat-type">
+              Type{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {toTitleCase(spell.type)}
+              </span>
+            </span>
+            <span data-testid="stat-range">
+              Range{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {toTitleCase(spell.range)}
+              </span>
+            </span>
+            <span data-testid="stat-duration">
+              Duration{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {toTitleCase(spell.duration)}
+              </span>
+            </span>
+          </div>
+
+          {/* Damage (combat spells only) */}
+          {spell.damage && (
+            <div data-testid="stat-damage" className="text-xs text-zinc-500 dark:text-zinc-400">
+              Damage{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {toTitleCase(spell.damage)}
+              </span>
+            </div>
+          )}
+
+          {/* Description */}
+          {spell.description && (
+            <p
+              data-testid="spell-description"
+              className="text-xs italic text-zinc-500 dark:text-zinc-400"
+            >
+              {spell.description}
+            </p>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// SpellsDisplay
+// ---------------------------------------------------------------------------
 
 interface SpellsDisplayProps {
   spells: Array<string | { id: string }>;
   onSelect?: (pool: number, label: string) => void;
 }
 
-function SpellItem({
-  spellId,
-  spellsCatalog,
-  onSelect,
-}: {
-  spellId: string;
-  spellsCatalog: SpellsCatalogData | null;
-  onSelect?: (pool: number, label: string) => void;
-}) {
-  const spell = useMemo(() => {
-    if (!spellsCatalog) return null;
-    for (const cat in spellsCatalog) {
-      const categorySpells = spellsCatalog[cat as keyof typeof spellsCatalog] as SpellData[];
-      const found = categorySpells.find((s) => s.id === spellId);
-      if (found) return found;
-    }
-    return null;
-  }, [spellId, spellsCatalog]);
-
-  if (!spell) return null;
-
-  return (
-    <div
-      onClick={() => onSelect?.(6, spell.name)}
-      className="p-3 rounded transition-all cursor-pointer group bg-zinc-50 dark:bg-zinc-800/30 hover:bg-zinc-100 dark:hover:bg-zinc-800/50 border border-violet-500/30"
-    >
-      <div className="flex items-start justify-between">
-        <div className="space-y-1">
-          <div className="flex items-center gap-2">
-            <span className="text-sm font-bold text-zinc-700 dark:text-zinc-200 transition-colors group-hover:text-violet-500 dark:group-hover:text-violet-400">
-              {spell.name}
-            </span>
-            <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 uppercase tracking-tighter px-1.5 py-0.5 border border-zinc-300 dark:border-zinc-600 rounded">
-              {spell.category}
-            </span>
-          </div>
-          {spell.description && (
-            <p className="text-[11px] text-zinc-500 dark:text-zinc-400 line-clamp-2 leading-relaxed">
-              {spell.description}
-            </p>
-          )}
-          <div className="flex flex-wrap gap-x-4 gap-y-1 text-[11px] font-mono mt-1">
-            <div className="flex gap-1.5">
-              <span className="text-zinc-400 dark:text-zinc-500">TYPE</span>
-              <span className="text-blue-500 dark:text-blue-400 uppercase">{spell.type}</span>
-            </div>
-            <div className="flex gap-1.5">
-              <span className="text-zinc-400 dark:text-zinc-500">RANGE</span>
-              <span className="text-emerald-500 dark:text-emerald-400 uppercase">
-                {spell.range}
-              </span>
-            </div>
-            <div className="flex gap-1.5">
-              <span className="text-zinc-400 dark:text-zinc-500">DUR</span>
-              <span className="text-amber-500 dark:text-amber-400 uppercase">{spell.duration}</span>
-            </div>
-          </div>
-        </div>
-        <div className="text-right shrink-0">
-          <div className="text-[10px] text-zinc-500 dark:text-zinc-400 uppercase font-mono leading-none mb-1">
-            Drain
-          </div>
-          <div className="text-sm font-mono text-violet-500 dark:text-violet-400 font-bold leading-none">
-            {spell.drain}
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-export function SpellsDisplay({ spells, onSelect }: SpellsDisplayProps) {
+export function SpellsDisplay({ spells }: SpellsDisplayProps) {
   const spellsCatalog = useSpells();
 
-  if (!spells || spells.length === 0) return null;
+  // Resolve spell IDs to catalog data and group by category
+  const grouped = useMemo(() => {
+    if (!spells || spells.length === 0) return null;
+
+    const groups: Record<string, SpellData[]> = {};
+    for (const entry of spells) {
+      const id = typeof entry === "string" ? entry : entry.id;
+      const spell = findSpellInCatalog(spellsCatalog, id);
+      if (!spell) continue;
+      const cat = spell.category;
+      if (!groups[cat]) groups[cat] = [];
+      groups[cat].push(spell);
+    }
+
+    // Return null if nothing resolved
+    if (Object.keys(groups).length === 0) return null;
+    return groups;
+  }, [spells, spellsCatalog]);
+
+  if (!grouped) return null;
 
   return (
-    <DisplayCard title="Spells" icon={<Sparkles className="h-4 w-4 text-violet-400" />}>
+    <DisplayCard
+      id="sheet-spells"
+      title="Spells"
+      icon={<Sparkles className="h-4 w-4 text-violet-400" />}
+      collapsible
+    >
       <div className="space-y-3">
-        {spells.map((spellEntry, idx) => {
-          const spellId =
-            typeof spellEntry === "string" ? spellEntry : (spellEntry as { id: string }).id;
+        {SPELL_SECTIONS.map(({ key, label }) => {
+          const sectionSpells = grouped[key];
+          if (!sectionSpells || sectionSpells.length === 0) return null;
           return (
-            <SpellItem
-              key={spellId || idx}
-              spellId={spellId}
-              spellsCatalog={spellsCatalog}
-              onSelect={onSelect}
-            />
+            <div key={key}>
+              <div
+                data-testid={`section-label-${key}`}
+                className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500"
+              >
+                {label}
+              </div>
+              <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+                {sectionSpells.map((spell) => (
+                  <SpellRow key={spell.id} spell={spell} />
+                ))}
+              </div>
+            </div>
           );
         })}
       </div>

@@ -23,7 +23,12 @@ export function CombatDisplay({
 }: CombatDisplayProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   return (
-    <DisplayCard title="Combat" icon={<Swords className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-combat"
+      title="Combat"
+      icon={<Swords className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <CombatQuickReference
         character={character}
         woundModifier={woundModifier}

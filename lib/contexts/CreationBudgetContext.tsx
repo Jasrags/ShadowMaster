@@ -493,6 +493,7 @@ function extractSpentValues(
   const identities = (selections.identities || []) as Array<{
     sin: { type: string; rating: number };
     licenses?: Array<{ type: string; rating: number }>;
+    subscriptions?: Array<{ monthlyCost: number }>;
   }>;
 
   // Calculate gear spending
@@ -573,7 +574,9 @@ function extractSpentValues(
       identity.licenses?.reduce((lSum, lic) => {
         return lSum + (lic.type === "fake" ? (lic.rating || 0) * LICENSE_COST_PER_RATING : 0);
       }, 0) || 0;
-    return sum + sinCost + licensesCost;
+    const subscriptionsCost =
+      identity.subscriptions?.reduce((sSum, sub) => sSum + (sub.monthlyCost || 0), 0) || 0;
+    return sum + sinCost + licensesCost + subscriptionsCost;
   }, 0);
 
   // Total nuyen spent

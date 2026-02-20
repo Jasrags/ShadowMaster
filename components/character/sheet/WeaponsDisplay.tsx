@@ -341,7 +341,12 @@ export function WeaponsDisplay({ character, onSelect }: WeaponsDisplayProps) {
   const items: Record<"ranged" | "melee", Weapon[]> = { ranged, melee };
 
   return (
-    <DisplayCard title="Weapons" icon={<Swords className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-weapons"
+      title="Weapons"
+      icon={<Swords className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {WEAPON_SECTIONS.map(({ key, label }) => {
           if (items[key].length === 0) return null;

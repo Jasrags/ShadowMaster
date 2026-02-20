@@ -1,4 +1,4 @@
-import type { LifestyleModification, LifestyleSubscription, SinnerQuality } from "@/lib/types";
+import type { LifestyleModification, SinnerQuality } from "@/lib/types";
 
 export type ModalType =
   | "identity"
@@ -28,7 +28,6 @@ export interface NewLifestyleState {
   customIncome: number;
   notes: string;
   modifications: LifestyleModification[];
-  subscriptions: LifestyleSubscription[];
 }
 
 export interface IdentityModalProps {

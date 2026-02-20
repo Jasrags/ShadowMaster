@@ -34,21 +34,25 @@ function PowerRow({
   );
 
   return (
-    <div className="px-3 py-1.5 hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t border-zinc-200 dark:border-zinc-800/50">
+    <div
+      data-testid="power-row"
+      className={`px-3 py-1.5 [&+&]:border-t border-zinc-200 dark:border-zinc-800/50${
+        hasExpandableContent
+          ? " cursor-pointer transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
+          : ""
+      }`}
+      onClick={hasExpandableContent ? () => setIsExpanded(!isExpanded) : undefined}
+    >
       {/* Collapsed row: Chevron + Name + Rating */}
       <div className="flex min-w-0 items-center gap-1.5">
         {hasExpandableContent ? (
-          <button
-            data-testid="expand-button"
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="shrink-0 text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300"
-          >
+          <span data-testid="expand-button" className="shrink-0 text-zinc-400">
             {isExpanded ? (
               <ChevronDown className="h-3.5 w-3.5" />
             ) : (
               <ChevronRight className="h-3.5 w-3.5" />
             )}
-          </button>
+          </span>
         ) : (
           <span className="inline-block w-3.5 shrink-0" />
         )}
@@ -64,13 +68,9 @@ function PowerRow({
       {isExpanded && (
         <div
           data-testid="expanded-content"
+          onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {catalogEntry?.description && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              {catalogEntry.description}
-            </p>
-          )}
           {catalogEntry?.activation && (
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               Activation:{" "}
@@ -95,6 +95,11 @@ function PowerRow({
               </span>
             </div>
           )}
+          {catalogEntry?.description && (
+            <p className="text-xs italic text-zinc-500 dark:text-zinc-400">
+              {catalogEntry.description}
+            </p>
+          )}
         </div>
       )}
     </div>
@@ -115,7 +120,12 @@ export function AdeptPowersDisplay({ adeptPowers }: AdeptPowersDisplayProps) {
   if (!adeptPowers || adeptPowers.length === 0) return null;
 
   return (
-    <DisplayCard title="Adept Powers" icon={<Zap className="h-4 w-4 text-amber-400" />}>
+    <DisplayCard
+      id="sheet-adept-powers"
+      title="Adept Powers"
+      icon={<Zap className="h-4 w-4 text-amber-400" />}
+      collapsible
+    >
       <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-950 overflow-hidden">
         {adeptPowers.map((power, idx) => (
           <PowerRow

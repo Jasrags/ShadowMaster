@@ -15,8 +15,7 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import { Theme, THEMES, DEFAULT_THEME } from "@/lib/themes";
-import { Section } from "./Section";
+import { DisplayCard } from "@/components/character/sheet/DisplayCard";
 import { EncumbranceBar } from "./EncumbranceBar";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
@@ -43,7 +42,6 @@ import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 
 interface InventoryPanelProps {
   character: Character;
-  theme?: Theme;
   /** Callback when character is updated */
   onUpdate?: (updatedCharacter: Character) => void;
   /** Whether to show action buttons */
@@ -382,13 +380,7 @@ function AmmoRow({ ammo }: AmmoRowProps) {
 // MAIN COMPONENT
 // =============================================================================
 
-export function InventoryPanel({
-  character,
-  theme,
-  onUpdate,
-  showActions = false,
-}: InventoryPanelProps) {
-  const t = theme || THEMES[DEFAULT_THEME];
+export function InventoryPanel({ character, onUpdate, showActions = false }: InventoryPanelProps) {
   const [activeTab, setActiveTab] = useState<InventoryTab>("weapons");
 
   // Get inventory data
@@ -635,15 +627,18 @@ export function InventoryPanel({
   };
 
   return (
-    <Section theme={t} title="Inventory" icon={<Backpack className="w-4 h-4 text-amber-500" />}>
+    <DisplayCard
+      id="sheet-inventory"
+      title="Inventory"
+      icon={<Backpack className="w-4 h-4 text-amber-500" />}
+      collapsible
+    >
       <div className="space-y-4">
         {/* Encumbrance bar */}
-        <EncumbranceBar encumbrance={encumbrance} showDetails theme={t} />
+        <EncumbranceBar encumbrance={encumbrance} showDetails />
 
         {/* Global wireless toggle */}
-        <div
-          className={`flex items-center justify-between p-2 rounded-lg border ${t.colors.card} ${t.colors.border}`}
-        >
+        <div className="flex items-center justify-between p-2 rounded-lg border border-border bg-card">
           <div className="flex items-center gap-2">
             {globalWireless ? (
               <Wifi className="w-4 h-4 text-cyan-400" />
@@ -771,6 +766,6 @@ export function InventoryPanel({
           </div>
         </div>
       </div>
-    </Section>
+    </DisplayCard>
   );
 }

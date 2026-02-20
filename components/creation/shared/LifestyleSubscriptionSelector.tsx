@@ -51,6 +51,7 @@ export function LifestyleSubscriptionSelector({
     const subscription: LifestyleSubscription = {
       catalogId: selectedSubData.id,
       name: selectedSubData.name,
+      level: selectedSubData.level,
       monthlyCost,
       category: selectedSubData.category,
     };
@@ -64,7 +65,7 @@ export function LifestyleSubscriptionSelector({
   return (
     <DialogTrigger isOpen={isOpen} onOpenChange={setIsOpen}>
       <Button className="rounded px-2.5 py-1 text-xs font-medium text-white bg-blue-600 hover:bg-blue-700">
-        + Add Subscription
+        + Add
       </Button>
       <Modal className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
         <Dialog className="max-h-[80vh] w-full max-w-2xl overflow-y-auto rounded-lg border border-zinc-200 bg-white p-6 shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
@@ -106,6 +107,11 @@ export function LifestyleSubscriptionSelector({
                                 <h4 className="font-medium text-zinc-900 dark:text-zinc-50">
                                   {sub.name}
                                 </h4>
+                                {sub.level && (
+                                  <span className="rounded border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-300">
+                                    {sub.level}
+                                  </span>
+                                )}
                                 {sub.category && (
                                   <span className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
                                     {sub.category}

@@ -96,18 +96,16 @@ describe("SkillsDisplay", () => {
     expect(rows[3].textContent).toContain("Unarmed Combat");
   });
 
-  it("shows linked attribute abbreviation in expanded section", () => {
+  it("shows linked attribute in expanded section", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
     // Not visible when collapsed
-    expect(screen.queryByText("AGI")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-linked-attr")).not.toBeInTheDocument();
     // Expand the skill row
     fireEvent.click(screen.getByTestId("expand-button"));
-    const expanded = screen.getByTestId("expanded-content");
-    expect(within(expanded).getByText("AGI")).toBeInTheDocument();
-    expect(within(expanded).getByText("Agility")).toBeInTheDocument();
+    expect(screen.getByTestId("stat-linked-attr")).toHaveTextContent("Linked Attr Agility");
   });
 
   it("calculates dice pool (skill rating + attribute + augmentation)", () => {
@@ -229,16 +227,16 @@ describe("SkillsDisplay", () => {
     expect(poolPill!.textContent).toBe("11");
   });
 
-  it("shows group name in expanded section", () => {
+  it("shows group name in title case in expanded section", () => {
     const character = createSheetCharacter({
       skills: { pistols: 5 },
     });
     render(<SkillsDisplay character={character} />);
     // Not visible when collapsed
-    expect(screen.queryByText(/firearms/)).not.toBeInTheDocument();
+    expect(screen.queryByTestId("stat-group")).not.toBeInTheDocument();
     // Expand the skill row
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByText(/firearms/)).toBeInTheDocument();
+    expect(screen.getByTestId("stat-group")).toHaveTextContent("Group Firearms");
   });
 
   it("shows defaultable badge in expanded section", () => {

@@ -235,7 +235,12 @@ export function AttributesDisplay({ character, onSelect }: AttributesDisplayProp
   }
 
   return (
-    <DisplayCard title="Attributes" icon={<BarChart3 className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-attributes"
+      title="Attributes"
+      icon={<BarChart3 className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       {renderCoreSection("Physical", PHYSICAL_ATTRIBUTES)}
       {renderCoreSection("Mental", MENTAL_ATTRIBUTES)}
 

@@ -129,7 +129,12 @@ export function DerivedStatsDisplay({ character }: DerivedStatsDisplayProps) {
   const hasArmor = equippedArmor.length > 0;
 
   return (
-    <DisplayCard title="Derived Stats" icon={<Activity className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-derived-stats"
+      title="Derived Stats"
+      icon={<Activity className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {/* Initiative */}
         <div>

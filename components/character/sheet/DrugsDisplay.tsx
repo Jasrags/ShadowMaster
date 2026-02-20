@@ -298,7 +298,12 @@ export function DrugsDisplay({ drugs }: DrugsDisplayProps) {
   if (drugs.length === 0) return null;
 
   return (
-    <DisplayCard title="Drugs & Toxins" icon={<Pill className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-drugs"
+      title="Drugs & Toxins"
+      icon={<Pill className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
         {drugs.map((drug, idx) => {
           const catalogData = catalog.find((c: DrugCatalogItemData) => c.name === drug.name);

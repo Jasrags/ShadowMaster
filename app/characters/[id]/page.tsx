@@ -75,9 +75,6 @@ function CharacterSheet({
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
 
-  // ActionPanel state
-  const [actionPanelExpanded, setActionPanelExpanded] = useState(true);
-
   useEffect(() => {
     if (character.editionCode) {
       loadRuleset(character.editionCode);
@@ -178,7 +175,7 @@ function CharacterSheet({
   };
 
   return (
-    <div className="character-sheet min-h-screen transition-colors duration-300 bg-background p-4 sm:p-6 lg:p-8">
+    <div className="character-sheet min-h-screen transition-colors duration-300">
       <div className="space-y-6 max-w-7xl mx-auto">
         {/* Navigation Header */}
         <div className="flex items-center justify-between print-hidden">
@@ -339,8 +336,6 @@ function CharacterSheet({
               physicalLimit={physicalLimit}
               mentalLimit={mentalLimit}
               socialLimit={socialLimit}
-              isExpanded={actionPanelExpanded}
-              onToggleExpand={() => setActionPanelExpanded(!actionPanelExpanded)}
               onOpenDiceRoller={(pool, context) => openDiceRoller(pool, context)}
             />
 

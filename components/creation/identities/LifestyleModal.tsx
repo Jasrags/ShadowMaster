@@ -2,9 +2,8 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { X } from "lucide-react";
-import type { LifestyleModification, LifestyleSubscription } from "@/lib/types";
+import type { LifestyleModification } from "@/lib/types";
 import { LifestyleModificationSelector } from "../shared/LifestyleModificationSelector";
-import { LifestyleSubscriptionSelector } from "../shared/LifestyleSubscriptionSelector";
 import { Modal } from "./Modal";
 import { LIFESTYLE_TYPES } from "./constants";
 import type { LifestyleModalProps, NewLifestyleState } from "./types";
@@ -24,7 +23,6 @@ export function LifestyleModal({
     customIncome: 0,
     notes: "",
     modifications: [],
-    subscriptions: [],
   };
 
   const [formState, setFormState] = useState<NewLifestyleState>(initialData || defaultFormState);
@@ -54,8 +52,7 @@ export function LifestyleModal({
     }
     return sum + mod.modifier * (mod.type === "positive" ? 1 : -1);
   }, 0);
-  const subscriptionsCost = formState.subscriptions.reduce((sum, sub) => sum + sub.monthlyCost, 0);
-  const totalCost = Math.max(0, baseCost + modificationsCost + subscriptionsCost);
+  const totalCost = Math.max(0, baseCost + modificationsCost);
 
   const canAfford = totalCost <= nuyenRemaining;
   const canSave = formState.type && canAfford;
@@ -76,22 +73,6 @@ export function LifestyleModal({
     });
   };
 
-  // Add subscription handler
-  const handleAddSubscription = (sub: LifestyleSubscription) => {
-    setFormState({
-      ...formState,
-      subscriptions: [...formState.subscriptions, sub],
-    });
-  };
-
-  // Remove subscription handler
-  const handleRemoveSubscription = (index: number) => {
-    setFormState({
-      ...formState,
-      subscriptions: formState.subscriptions.filter((_, i) => i !== index),
-    });
-  };
-
   const handleSave = () => {
     if (canSave) {
       onSave(formState);
@@ -102,7 +83,6 @@ export function LifestyleModal({
         customIncome: 0,
         notes: "",
         modifications: [],
-        subscriptions: [],
       });
       onClose();
     }
@@ -116,7 +96,6 @@ export function LifestyleModal({
       customIncome: 0,
       notes: "",
       modifications: [],
-      subscriptions: [],
     });
     onClose();
   };
@@ -213,53 +192,6 @@ export function LifestyleModal({
           )}
         </div>
 
-        {/* Subscriptions */}
-        <div>
-          <div className="mb-2 flex items-center justify-between">
-            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-              Subscriptions
-            </label>
-            <LifestyleSubscriptionSelector
-              onAdd={handleAddSubscription}
-              existingSubscriptions={formState.subscriptions}
-            />
-          </div>
-          {formState.subscriptions.length > 0 ? (
-            <div className="space-y-2">
-              {formState.subscriptions.map((sub, index) => (
-                <div
-                  key={sub.catalogId || index}
-                  className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{sub.name}</span>
-                    {sub.category && (
-                      <span className="rounded-full bg-zinc-200 px-1.5 py-0.5 text-[10px] font-medium text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
-                        {sub.category}
-                      </span>
-                    )}
-                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
-                      {sub.monthlyCost.toLocaleString()}/mo
-                    </span>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => handleRemoveSubscription(index)}
-                    className="text-zinc-400 hover:text-red-500"
-                  >
-                    <X className="h-4 w-4" />
-                  </button>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              No subscriptions added. Click &quot;+ Add Subscription&quot; to add services like
-              DocWagon contracts.
-            </p>
-          )}
-        </div>
-
         {/* Custom Expenses / Income */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -330,12 +262,6 @@ export function LifestyleModal({
                     {modificationsCost > 0 ? "+" : ""}
                     {modificationsCost.toLocaleString()}
                   </span>
-                </div>
-              )}
-              {subscriptionsCost > 0 && (
-                <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
-                  <span>Subscriptions</span>
-                  <span>+{subscriptionsCost.toLocaleString()}</span>
                 </div>
               )}
               <div className="flex justify-between border-t border-zinc-200 pt-1 font-medium text-zinc-900 dark:border-zinc-700 dark:text-zinc-100">

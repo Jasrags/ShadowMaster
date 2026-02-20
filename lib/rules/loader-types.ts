@@ -267,6 +267,7 @@ export interface LifestyleData {
 export interface LifestyleSubscriptionCatalogItem {
   id: string;
   name: string;
+  level?: string;
   monthlyCost?: number;
   yearlyCost?: number;
   costPerRating?: boolean;

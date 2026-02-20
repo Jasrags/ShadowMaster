@@ -276,7 +276,12 @@ export function GearDisplay({ gear }: GearDisplayProps) {
 
   if (!gear || gear.length === 0) {
     return (
-      <DisplayCard title="General Gear" icon={<Package className="h-4 w-4 text-zinc-400" />}>
+      <DisplayCard
+        id="sheet-gear"
+        title="General Gear"
+        icon={<Package className="h-4 w-4 text-zinc-400" />}
+        collapsible
+      >
         <p className="text-sm text-zinc-500 italic">No gear acquired</p>
       </DisplayCard>
     );
@@ -302,7 +307,12 @@ export function GearDisplay({ gear }: GearDisplayProps) {
   });
 
   return (
-    <DisplayCard title="General Gear" icon={<Package className="h-4 w-4 text-zinc-400" />}>
+    <DisplayCard
+      id="sheet-gear"
+      title="General Gear"
+      icon={<Package className="h-4 w-4 text-zinc-400" />}
+      collapsible
+    >
       <div className="space-y-3">
         {categoryKeys.map((cat) => (
           <div key={cat}>
