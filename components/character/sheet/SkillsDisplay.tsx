@@ -10,6 +10,17 @@ import { Button as AriaButton } from "react-aria-components";
 import { Crosshair, ChevronDown, ChevronRight } from "lucide-react";
 
 // ---------------------------------------------------------------------------
+// Helpers
+// ---------------------------------------------------------------------------
+
+function toTitleCase(s: string): string {
+  return s
+    .split(/[\s-]+/)
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -141,16 +152,19 @@ function SkillRow({
           onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-2 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {/* Attribute + Defaultable */}
+          {/* Linked Attribute + Defaultable */}
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1.5 text-xs">
-              {skill.attrAbbr && (
-                <span className={`font-bold ${skill.attrColor || ""}`}>{skill.attrAbbr}</span>
-              )}
-              {skill.linkedAttribute && (
-                <span className="text-zinc-500 dark:text-zinc-400">{skill.linkedAttribute}</span>
-              )}
-            </div>
+            {skill.linkedAttribute && (
+              <span
+                data-testid="stat-linked-attr"
+                className="text-xs text-zinc-500 dark:text-zinc-400"
+              >
+                Linked Attr{" "}
+                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                  {toTitleCase(skill.linkedAttribute)}
+                </span>
+              </span>
+            )}
             <span
               data-testid="default-badge"
               className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${
@@ -165,10 +179,10 @@ function SkillRow({
 
           {/* Group */}
           {skill.group && (
-            <div className="text-xs text-zinc-500 dark:text-zinc-400">
-              Group:{" "}
-              <span className="font-medium text-zinc-700 dark:text-zinc-300">
-                {skill.group.replace(/-/g, " ")}
+            <div data-testid="stat-group" className="text-xs text-zinc-500 dark:text-zinc-400">
+              Group{" "}
+              <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                {toTitleCase(skill.group)}
               </span>
             </div>
           )}

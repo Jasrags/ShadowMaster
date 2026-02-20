@@ -440,6 +440,17 @@ export const MOCK_SPELLS_CATALOG = {
       drain: "F-3",
       description: "A bolt of mana energy",
     },
+    {
+      id: "powerbolt",
+      name: "Powerbolt",
+      category: "combat" as const,
+      type: "physical" as const,
+      range: "LOS",
+      duration: "Instant",
+      drain: "F-2",
+      damage: "physical",
+      description: "A bolt of destructive energy",
+    },
   ],
   detection: [],
   health: [
@@ -454,7 +465,18 @@ export const MOCK_SPELLS_CATALOG = {
       description: "Heals physical damage",
     },
   ],
-  illusion: [],
+  illusion: [
+    {
+      id: "invisibility",
+      name: "Invisibility",
+      category: "illusion" as const,
+      type: "mana" as const,
+      range: "LOS",
+      duration: "Sustained",
+      drain: "F-1",
+      description: "Makes the subject invisible to normal vision",
+    },
+  ],
   manipulation: [],
 };
 
