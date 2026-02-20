@@ -1,115 +1,204 @@
 /**
  * ComplexFormsDisplay Component Tests
  *
- * Tests the complex forms display for technomancers.
- * Returns null when empty. Mocks useComplexForms hook.
- * Tests both catalog-matched and fallback (unmatched) rendering.
+ * Tests the complex forms display with expandable rows for technomancers.
+ * Covers empty state, collapsed row content, expand/collapse behavior,
+ * expanded details, fallback rendering, and onSelect isolation.
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { MOCK_COMPLEX_FORMS } from "./test-helpers";
+import { setupDisplayCardMock, LUCIDE_MOCK, MOCK_COMPLEX_FORMS } from "./test-helpers";
+import type { ComplexFormData } from "@/lib/rules";
 
-vi.mock("../DisplayCard", () => ({
-  DisplayCard: ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div data-testid="display-card">
-      <h2>{title}</h2>
-      {children}
-    </div>
-  ),
-}));
+// ---------------------------------------------------------------------------
+// Mocks
+// ---------------------------------------------------------------------------
 
-vi.mock("lucide-react", () => ({
-  Activity: (props: Record<string, unknown>) => <span data-testid="icon-Activity" {...props} />,
-  Shield: (props: Record<string, unknown>) => <span data-testid="icon-Shield" {...props} />,
-  Heart: (props: Record<string, unknown>) => <span data-testid="icon-Heart" {...props} />,
-  Brain: (props: Record<string, unknown>) => <span data-testid="icon-Brain" {...props} />,
-  Footprints: (props: Record<string, unknown>) => <span data-testid="icon-Footprints" {...props} />,
-  ShieldCheck: (props: Record<string, unknown>) => (
-    <span data-testid="icon-ShieldCheck" {...props} />
-  ),
-  BarChart3: (props: Record<string, unknown>) => <span data-testid="icon-BarChart3" {...props} />,
-  Crosshair: (props: Record<string, unknown>) => <span data-testid="icon-Crosshair" {...props} />,
-  Swords: (props: Record<string, unknown>) => <span data-testid="icon-Swords" {...props} />,
-  Package: (props: Record<string, unknown>) => <span data-testid="icon-Package" {...props} />,
-  Pill: (props: Record<string, unknown>) => <span data-testid="icon-Pill" {...props} />,
-  Sparkles: (props: Record<string, unknown>) => <span data-testid="icon-Sparkles" {...props} />,
-  Braces: (props: Record<string, unknown>) => <span data-testid="icon-Braces" {...props} />,
-  Cpu: (props: Record<string, unknown>) => <span data-testid="icon-Cpu" {...props} />,
-  BookOpen: (props: Record<string, unknown>) => <span data-testid="icon-BookOpen" {...props} />,
-  Users: (props: Record<string, unknown>) => <span data-testid="icon-Users" {...props} />,
-  Fingerprint: (props: Record<string, unknown>) => (
-    <span data-testid="icon-Fingerprint" {...props} />
-  ),
-  Zap: (props: Record<string, unknown>) => <span data-testid="icon-Zap" {...props} />,
-  Car: (props: Record<string, unknown>) => <span data-testid="icon-Car" {...props} />,
-  Home: (props: Record<string, unknown>) => <span data-testid="icon-Home" {...props} />,
-}));
+setupDisplayCardMock();
+vi.mock("lucide-react", () => LUCIDE_MOCK);
 
+const MOCK_FORM_NO_DESC: ComplexFormData = {
+  id: "static-veil",
+  name: "Static Veil",
+  target: "Persona",
+  duration: "Sustained",
+  fading: "L+1",
+};
+
+let mockCatalog: ComplexFormData[] = MOCK_COMPLEX_FORMS as ComplexFormData[];
 vi.mock("@/lib/rules", () => ({
-  useComplexForms: vi.fn(),
+  useComplexForms: () => mockCatalog,
 }));
 
-import { useComplexForms } from "@/lib/rules";
 import { ComplexFormsDisplay } from "../ComplexFormsDisplay";
+
+// ---------------------------------------------------------------------------
+// Tests
+// ---------------------------------------------------------------------------
 
 describe("ComplexFormsDisplay", () => {
   beforeEach(() => {
-    vi.mocked(useComplexForms).mockReturnValue(MOCK_COMPLEX_FORMS);
+    mockCatalog = MOCK_COMPLEX_FORMS as ComplexFormData[];
   });
 
-  it("returns null when complexForms array is empty", () => {
-    const { container } = render(<ComplexFormsDisplay complexForms={[]} />);
-    expect(container.innerHTML).toBe("");
+  // -------------------------------------------------------------------------
+  // Empty state
+  // -------------------------------------------------------------------------
+
+  describe("empty state", () => {
+    it("returns null when complexForms array is empty", () => {
+      const { container } = render(<ComplexFormsDisplay complexForms={[]} />);
+      expect(container.innerHTML).toBe("");
+    });
   });
 
-  it("renders complex form from catalog with full metadata", () => {
-    render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
-    expect(screen.getByText("Cleaner")).toBeInTheDocument();
-    expect(screen.getByText("Persona")).toBeInTheDocument();
-    expect(screen.getByText("Permanent")).toBeInTheDocument();
-    expect(screen.getByText("L+1")).toBeInTheDocument();
+  // -------------------------------------------------------------------------
+  // Collapsed row
+  // -------------------------------------------------------------------------
+
+  describe("collapsed row", () => {
+    it("renders form name", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.getByText("Cleaner")).toBeInTheDocument();
+    });
+
+    it("renders target badge", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.getByTestId("target-badge")).toHaveTextContent("Persona");
+    });
+
+    it("renders fading pill", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.getByTestId("fading-pill")).toHaveTextContent("L+1");
+    });
+
+    it("does not show expanded content in collapsed state", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    });
+
+    it("does not show stats row in collapsed state", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.queryByTestId("stats-row")).not.toBeInTheDocument();
+    });
   });
 
-  it("renders fading value", () => {
-    render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
-    expect(screen.getByText("Fading")).toBeInTheDocument();
-    expect(screen.getByText("L+1")).toBeInTheDocument();
+  // -------------------------------------------------------------------------
+  // Expand / collapse
+  // -------------------------------------------------------------------------
+
+  describe("expand/collapse", () => {
+    it("shows expand chevron (collapsed by default)", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.getByTestId("expand-button")).toBeInTheDocument();
+      expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    });
+
+    it("expands on click to show details", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+    });
+
+    it("collapses on second click", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.queryByTestId("expanded-content")).not.toBeInTheDocument();
+    });
+
+    it("expands rows independently", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner", "resonance-spike"]} />);
+      const rows = screen.getAllByTestId("complex-form-row");
+
+      fireEvent.click(rows[0]);
+      expect(screen.getAllByTestId("expanded-content")).toHaveLength(1);
+
+      fireEvent.click(rows[1]);
+      expect(screen.getAllByTestId("expanded-content")).toHaveLength(2);
+    });
   });
 
-  it("renders target and duration metadata", () => {
-    render(<ComplexFormsDisplay complexForms={["resonance-spike"]} />);
-    expect(screen.getByText("Device")).toBeInTheDocument();
-    expect(screen.getByText("Instant")).toBeInTheDocument();
+  // -------------------------------------------------------------------------
+  // Expanded details
+  // -------------------------------------------------------------------------
+
+  describe("expanded details", () => {
+    it("shows target stat", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.getByTestId("stat-target")).toHaveTextContent("Persona");
+    });
+
+    it("shows duration stat", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.getByTestId("stat-duration")).toHaveTextContent("Permanent");
+    });
+
+    it("shows description when present", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.getByTestId("form-description")).toHaveTextContent(
+        "Removes marks from a persona"
+      );
+    });
+
+    it("does not show description when absent", () => {
+      mockCatalog = [MOCK_FORM_NO_DESC];
+      render(<ComplexFormsDisplay complexForms={["static-veil"]} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(screen.queryByTestId("form-description")).not.toBeInTheDocument();
+    });
   });
 
-  it("renders description when available", () => {
-    render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
-    expect(screen.getByText("Removes marks from a persona")).toBeInTheDocument();
+  // -------------------------------------------------------------------------
+  // Fallback rows
+  // -------------------------------------------------------------------------
+
+  describe("fallback rows", () => {
+    it("renders kebab-to-space name for unmatched ID", () => {
+      render(<ComplexFormsDisplay complexForms={["unknown-form"]} />);
+      expect(screen.getByText("unknown form")).toBeInTheDocument();
+    });
+
+    it("renders fallback when catalog is empty", () => {
+      mockCatalog = [];
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} />);
+      expect(screen.getByTestId("fallback-row")).toBeInTheDocument();
+      expect(screen.getByText("cleaner")).toBeInTheDocument();
+    });
   });
 
-  it("renders fallback for unmatched form ID", () => {
-    render(<ComplexFormsDisplay complexForms={["unknown-form"]} />);
-    expect(screen.getByText("unknown form")).toBeInTheDocument();
+  // -------------------------------------------------------------------------
+  // Multiple forms
+  // -------------------------------------------------------------------------
+
+  describe("multiple forms", () => {
+    it("renders all forms", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner", "resonance-spike"]} />);
+      expect(screen.getByText("Cleaner")).toBeInTheDocument();
+      expect(screen.getByText("Resonance Spike")).toBeInTheDocument();
+    });
+
+    it("renders correct number of rows", () => {
+      render(<ComplexFormsDisplay complexForms={["cleaner", "resonance-spike"]} />);
+      expect(screen.getAllByTestId("complex-form-row")).toHaveLength(2);
+    });
   });
 
-  it("calls onSelect callback when catalog form is clicked", () => {
-    const onSelect = vi.fn();
-    render(<ComplexFormsDisplay complexForms={["cleaner"]} onSelect={onSelect} />);
-    fireEvent.click(screen.getByText("Cleaner"));
-    expect(onSelect).toHaveBeenCalledWith(6, "Cleaner");
-  });
+  // -------------------------------------------------------------------------
+  // onSelect prop
+  // -------------------------------------------------------------------------
 
-  it("calls onSelect callback when fallback form is clicked", () => {
-    const onSelect = vi.fn();
-    render(<ComplexFormsDisplay complexForms={["unknown-form"]} onSelect={onSelect} />);
-    fireEvent.click(screen.getByText("unknown form"));
-    expect(onSelect).toHaveBeenCalledWith(6, "unknown form");
-  });
-
-  it("renders multiple complex forms", () => {
-    render(<ComplexFormsDisplay complexForms={["cleaner", "resonance-spike"]} />);
-    expect(screen.getByText("Cleaner")).toBeInTheDocument();
-    expect(screen.getByText("Resonance Spike")).toBeInTheDocument();
+  describe("onSelect prop", () => {
+    it("does not call onSelect when row is clicked", () => {
+      const onSelect = vi.fn();
+      render(<ComplexFormsDisplay complexForms={["cleaner"]} onSelect={onSelect} />);
+      fireEvent.click(screen.getByTestId("complex-form-row"));
+      expect(onSelect).not.toHaveBeenCalled();
+    });
   });
 });

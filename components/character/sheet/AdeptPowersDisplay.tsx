@@ -71,11 +71,6 @@ function PowerRow({
           onClick={(e) => e.stopPropagation()}
           className="ml-5 mt-2 space-y-1.5 border-l-2 border-zinc-200 pl-3 dark:border-zinc-700"
         >
-          {catalogEntry?.description && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400 leading-relaxed">
-              {catalogEntry.description}
-            </p>
-          )}
           {catalogEntry?.activation && (
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               Activation:{" "}
@@ -99,6 +94,11 @@ function PowerRow({
                 {power.rating || 1} / {catalogEntry.maxRating}
               </span>
             </div>
+          )}
+          {catalogEntry?.description && (
+            <p className="text-xs italic text-zinc-500 dark:text-zinc-400">
+              {catalogEntry.description}
+            </p>
           )}
         </div>
       )}
