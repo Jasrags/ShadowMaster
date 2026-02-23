@@ -7163,6 +7163,13 @@
               "reach": 1,
               "accuracy": 5,
               "wirelessBonus": "Readying is a Free Action instead of a Simple Action.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Readying is a Free Action instead of a Simple Action."
+                }
+              ],
               "weight": 0.5
             },
             {
@@ -7176,6 +7183,13 @@
               "availability": 7,
               "cost": 200,
               "wirelessBonus": "Readying is a Free Action instead of a Simple Action.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Readying is a Free Action instead of a Simple Action."
+                }
+              ],
               "legality": "restricted",
               "weight": 0.3
             },
@@ -7228,6 +7242,13 @@
               "cost": 10000,
               "legality": "forbidden",
               "wirelessBonus": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy."
+                }
+              ],
               "weight": 0.3
             },
             {
@@ -7267,6 +7288,7 @@
               "reach": 0,
               "accuracy": 0,
               "legality": "restricted",
+              "wirelessBonus": "Recharges by induction, regaining one charge per full hour of wireless-enabled time.",
               "weight": 0.3
             },
             {
@@ -7294,6 +7316,13 @@
               "accuracy": 4,
               "legality": "restricted",
               "wirelessBonus": "Recharges by induction (1 charge per hour).",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Recharges by induction (1 charge per hour)."
+                }
+              ],
               "weight": 0.6
             },
             {
@@ -7308,6 +7337,13 @@
               "reach": 0,
               "accuracy": 5,
               "wirelessBonus": "Displays ARO of local maps, GPS position, and can make commcalls.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Displays ARO of local maps, GPS position, and can make commcalls."
+                }
+              ],
               "weight": 0.3
             },
             {
@@ -7335,6 +7371,13 @@
               "availability": 4,
               "cost": 350,
               "wirelessBonus": "Extending is a Free Action instead of a Simple Action.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Extending is a Free Action instead of a Simple Action."
+                }
+              ],
               "weight": 1
             }
           ],
@@ -7532,6 +7575,7 @@
               "ammo": 4,
               "availability": 0,
               "cost": 250,
+              "wirelessBonus": "A successful hit informs you of the target's basic health and Condition Monitors.",
               "weight": 0.5
             },
             {
@@ -7549,6 +7593,13 @@
               "skill": "exotic-ranged-weapon",
               "description": "Microwave weapon. Toxin attack: Power 8, Immediate, resist with Body + Willpower. If modified Power exceeds Mental limit, target must flee. Uses SMG ranges. Can take top and underbarrel accessories.",
               "wirelessBonus": "Recharges by induction at 1 charge per hour.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Recharges by induction at 1 charge per hour."
+                }
+              ],
               "legality": "restricted",
               "weight": 0.8
             },
@@ -7593,6 +7644,13 @@
               "cost": 1000,
               "legality": "restricted",
               "wirelessBonus": "You can change the color of the Tiffani Needler with a Simple Action.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can change the color of the Tiffani Needler with a Simple Action."
+                }
+              ],
               "allowedAmmoTypes": ["flechette-rounds"],
               "weight": 0.3
             },
@@ -7611,6 +7669,13 @@
               "skill": "exotic-ranged-weapon",
               "description": "Industry standard dart pistol. Fires injection darts with narcoject or other payload. Uses Heavy Pistol ranges. Can take top-mounted accessories only.",
               "wirelessBonus": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1).",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1)."
+                }
+              ],
               "excludedMounts": ["barrel", "under"],
               "legality": "restricted",
               "weight": 0.8
@@ -7630,6 +7695,13 @@
               "skill": "exotic-ranged-weapon",
               "description": "Compressed air dart rifle for long-range takedowns. Uses Sport Rifle ranges. Can mount top and underbarrel accessories.",
               "wirelessBonus": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1).",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Dart reports whether it struck home and successfully injected. May report gross physical anomalies (Device Rating 1)."
+                }
+              ],
               "builtInModifications": [
                 {
                   "modificationId": "imaging-scope",
@@ -7739,6 +7811,7 @@
               "ammo": 4,
               "availability": 0,
               "cost": 180,
+              "wirelessBonus": "A successful hit informs you of the target's basic health and Condition Monitors.",
               "weight": 0.5
             }
           ],
@@ -8057,6 +8130,13 @@
                 }
               ],
               "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Use wireless link trigger for grenades without DNI."
+                }
+              ],
               "legality": "forbidden",
               "weight": 4.5
             },
@@ -8083,6 +8163,13 @@
                 "thermal-smoke-grenade"
               ],
               "wirelessBonus": "Use wireless link trigger for grenades without DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Use wireless link trigger for grenades without DNI."
+                }
+              ],
               "legality": "forbidden",
               "weight": 5.5
             },
@@ -8105,6 +8192,13 @@
               ],
               "description": "Extremely light disposable launcher. Perfect for delivering a punch and making a quick getaway.",
               "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Use wireless link trigger for missiles without DNI."
+                }
+              ],
               "legality": "forbidden",
               "weight": 3
             },
@@ -8225,6 +8319,13 @@
                 }
               ],
               "wirelessBonus": "Use wireless link trigger for missiles without DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Use wireless link trigger for missiles without DNI."
+                }
+              ],
               "legality": "forbidden",
               "weight": 9
             },
@@ -8530,6 +8631,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown.",
               "weight": 0.05
             },
             {
@@ -8545,6 +8647,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown.",
               "weight": 0.15
             }
           ],
@@ -8690,6 +8793,7 @@
               "legality": "forbidden",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 5
             },
             {
@@ -8705,6 +8809,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8718,6 +8823,7 @@
               "availability": 4,
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "Avoids directing strong flashes at subscribed characters (half glare penalties). Recharges by induction (1 charge/hour). Can also use wireless link trigger without DNI.",
               "weight": 0.3
             },
             {
@@ -8733,6 +8839,7 @@
               "legality": "forbidden",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8748,6 +8855,7 @@
               "legality": "forbidden",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 4.5
             },
             {
@@ -8761,6 +8869,7 @@
               "availability": 2,
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8776,6 +8885,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8791,6 +8901,7 @@
               "legality": "forbidden",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8806,6 +8917,7 @@
               "legality": "forbidden",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 5
             },
             {
@@ -8821,6 +8933,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             },
             {
@@ -8836,6 +8949,7 @@
               "legality": "restricted",
               "stackable": true,
               "consumable": true,
+              "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
               "weight": 0.4
             }
           ]
@@ -9463,7 +9577,15 @@
                 "availability": 18
               }
             },
-            "weight": 2
+            "weight": 2,
+            "wirelessBonus": "Designate devices/personas to not interfere with.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Designate devices/personas to not interfere with."
+              }
+            ]
           },
           {
             "id": "binoculars",
@@ -9733,7 +9855,15 @@
                 "availability": 12
               }
             },
-            "weight": 1
+            "weight": 1,
+            "wirelessBonus": "Designate devices/personas to not interfere with.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Designate devices/personas to not interfere with."
+              }
+            ]
           },
           {
             "id": "directional-mic",
@@ -10477,6 +10607,15 @@
             "page": 445,
             "source": "Core",
             "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 500,
@@ -10505,6 +10644,16 @@
             "description": "Block out background noise and focus on specific sounds or patterns. Includes speech, word, and sound pattern recognition. Each rating point lets you select a single sound group and focus on it. Can record others for playback or set triggered monitoring.",
             "page": 445,
             "source": "Core",
+            "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception vs specific sound only."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 250,
@@ -10533,7 +10682,16 @@
             "description": "Pinpoints the source of a sound. Provides +2 bonus on limit in Perception Tests to find the source of a specific sound. Cannot be installed in laser microphones.",
             "page": 445,
             "source": "Core",
-            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source."
+            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifier": 2,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Applies when looking for a sound's source."
+              }
+            ]
           }
         ],
         "tools": [
@@ -11380,6 +11538,13 @@
             "page": 449,
             "source": "Core",
             "wirelessBonus": "Adhesive outer layer can be temporarily neutralized with a wireless signal, useful for getting on and off without sticking.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Adhesive outer layer can be temporarily neutralized with a wireless signal, useful for getting on and off without sticking."
+              }
+            ],
             "weight": 0.2
           },
           {
@@ -11392,6 +11557,13 @@
             "page": 449,
             "source": "Core",
             "wirelessBonus": "Analyzes and transmits information about the environment you're not touching or breathing.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Analyzes and transmits information about the environment you're not touching or breathing."
+              }
+            ],
             "weight": 4
           },
           {
@@ -11589,6 +11761,13 @@
             "page": 449,
             "source": "Core",
             "wirelessBonus": "Analyzes and gives information about the surrounding air that you're not breathing.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Analyzes and gives information about the surrounding air that you're not breathing."
+              }
+            ],
             "weight": 0.5
           }
         ],
@@ -11632,6 +11811,13 @@
             "page": 448,
             "source": "Core",
             "wirelessBonus": "Can be activated wirelessly.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Can be activated wirelessly."
+              }
+            ],
             "weight": 1
           }
         ],
@@ -11860,6 +12046,13 @@
             "page": 450,
             "source": "Core",
             "wirelessBonus": "Shares information with designated wireless devices and can auto-alert DocWagon or other ambulance services if life signs reach certain thresholds.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Shares information with designated wireless devices and can auto-alert DocWagon or other ambulance services if life signs reach certain thresholds."
+              }
+            ],
             "weight": 0.1
           },
           {
@@ -11886,6 +12079,13 @@
             "page": 450,
             "source": "Core",
             "wirelessBonus": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 250,
@@ -12842,6 +13042,13 @@
             "cost": 600,
             "description": "Smartgun accessory for grenade/rocket launchers. Requires wireless to function. Both grenades and launcher must have wireless enabled.",
             "wirelessBonus": "Reduces scatter distance by 2m per net hit instead of 1m. Can detonate grenade/rocket remotely.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Reduces scatter distance by 2m per net hit instead of 1m. Can detonate grenade/rocket remotely."
+              }
+            ],
             "compatibleWeapons": ["grenade-launcher", "rocket-launcher"],
             "page": 432,
             "source": "Core",
@@ -12856,6 +13063,13 @@
             "recoilCompensation": 2,
             "description": "Provides 2 points of Recoil Compensation when properly deployed.",
             "wirelessBonus": "Folding up or deploying is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Folding up or deploying is a Free Action."
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -12878,6 +13092,13 @@
             "concealabilityModifier": -1,
             "description": "Small holster worn on ankle, forearm, small of back, etc. Adds -1 to the item's Concealability. Only fits pistols and tasers.",
             "wirelessBonus": "Additional –1 to Concealability.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Additional -1 to Concealability."
+              }
+            ],
             "compatibleWeapons": [
               "hold-out-pistol",
               "light-pistol",
@@ -12927,6 +13148,13 @@
             "recoilCompensation": 6,
             "description": "Heavy upper-body harness with motorized gyro-stabilized arm. Weapon mounts to harness. Neutralizes up to 6 points of recoil and movement modifiers. Attaching/removing weapon is a Simple Action. Putting on harness takes 5 minutes.",
             "wirelessBonus": "Quick-release to exit harness is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Quick-release to exit harness is a Free Action."
+              }
+            ],
             "minimumWeaponSize": "rifle",
             "page": 432,
             "source": "Core"
@@ -12939,6 +13167,13 @@
             "concealabilityModifier": -1,
             "description": "Forearm slide for quick-drawing small weapons. Threshold for quick draw is 2. Gives weapon –1 Concealability modifier.",
             "wirelessBonus": "Ready weapon as a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Ready weapon as a Free Action."
+              }
+            ],
             "compatibleWeapons": ["hold-out-pistol", "light-pistol", "taser"],
             "page": 432,
             "source": "Core",
@@ -12952,6 +13187,13 @@
             "cost": 300,
             "description": "Classic scope with micro camera and vision magnification. Has Capacity 3 for vision enhancements.",
             "wirelessBonus": "Share line of sight with team.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Share line of sight with team."
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -12965,6 +13207,19 @@
             "accuracyModifier": 1,
             "description": "Projects a visible dot on target. Can mount on top or underbarrel. Increases Accuracy by 1 (not cumulative with smartlink). Activating/deactivating is a Simple Action.",
             "wirelessBonus": "+1 dice pool bonus (not cumulative with smartlink). Activating/deactivating is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "isDicePool": true,
+                "description": "Not cumulative with smartlink."
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Activating/deactivating is a Free Action."
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -12986,6 +13241,13 @@
             "cost": 50,
             "description": "Allows targeting around corners with -2 dice pool penalty instead of -3.",
             "wirelessBonus": "Dice pool penalty for shooting around corners is –1 instead of –2.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Dice pool penalty for shooting around corners is -1 instead of -2."
+              }
+            ],
             "page": 433,
             "source": "Core"
           },
@@ -13069,6 +13331,13 @@
             "cost": 500,
             "description": "Reduces sound and flash of weapon discharge. -4 dice pool modifier on Perception Tests to notice or locate firer. Cannot be used with revolvers or shotguns.",
             "wirelessBonus": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound."
+              }
+            ],
             "incompatibleWeapons": ["revolver", "shotgun"],
             "page": 433,
             "source": "Core",
@@ -13082,6 +13351,13 @@
             "cost": 750,
             "description": "Special barrel-mounted silencer developed exclusively for the Light Fire 70. Provides -5 dice pool modifier on Perception Tests to notice or locate firer (additional -1 beyond standard silencers).",
             "wirelessBonus": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound."
+              }
+            ],
             "compatibleWeapons": ["ares-light-fire-70"],
             "page": 426,
             "source": "Core",
@@ -13095,6 +13371,13 @@
             "cost": 0,
             "description": "Integral barrel-mounted silencer exclusive to the Light Fire 75. Provides -5 dice pool modifier on Perception Tests to notice or locate firer (additional -1 beyond standard silencers).",
             "wirelessBonus": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Rating 2 microphone with Select Sound Filter alerts you if someone reacts to shot sound."
+              }
+            ],
             "compatibleWeapons": ["ares-light-fire-75"],
             "page": 426,
             "source": "Core",
@@ -13109,6 +13392,13 @@
             "recoilCompensation": 5,
             "description": "Non-mobile robotic tripod. Smartgun-equipped weapon mounts to platform. 180-degree arc, 60-degree inclination. Pilot 3, Targeting autosoft 3. Initiative: Pilot x 2 + 4D6. Provides 5 points of Recoil Compensation.",
             "wirelessBonus": "Fire mounted weapon remotely like a drone. Use implanted smartlink in VR.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Fire mounted weapon remotely like a drone. Use implanted smartlink in VR."
+              }
+            ],
             "page": 433,
             "source": "Core",
             "legality": "forbidden"
@@ -13122,6 +13412,25 @@
             "accuracyModifier": 2,
             "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "condition": "gear_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "attack_pool",
+                "modifier": 2,
+                "condition": "cyberware_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Ejecting a clip and changing fire modes are Free Actions."
+              }
+            ],
             "page": 433,
             "source": "Core",
             "legality": "restricted"
@@ -13136,6 +13445,25 @@
             "accuracyModifier": 2,
             "description": "External smartgun system. Can mount on top or underbarrel. Requires Armorer + Logic (4, 1 hour) Extended Test to install. Increases Accuracy by 2 when used with smartlink. Camera has capacity 1 for vision enhancements.",
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "condition": "gear_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "attack_pool",
+                "modifier": 2,
+                "condition": "cyberware_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Ejecting a clip and changing fire modes are Free Actions."
+              }
+            ],
             "page": 433,
             "source": "Core",
             "legality": "restricted"
@@ -13168,6 +13496,13 @@
             "recoilCompensation": 6,
             "description": "Provides stable base for firing. 6 points of Recoil Compensation when deployed.",
             "wirelessBonus": "Folding up, deploying, or removing is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Folding up, deploying, or removing is a Free Action."
+              }
+            ],
             "minimumWeaponSize": "rifle",
             "page": 433,
             "source": "Core"
@@ -13215,6 +13550,13 @@
             "cost": 3000,
             "description": "Airtight environmental control providing complete protection against contact and inhalation vector chemicals. Requires full body armor with helmet.",
             "wirelessBonus": "Activating the chemical seal is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Activating the chemical seal is a Free Action."
+              }
+            ],
             "requirements": ["full-body-armor", "helmet"],
             "page": 437,
             "source": "Core",
@@ -13327,6 +13669,13 @@
             "cost": 250,
             "description": "Electrically charged strips that inflict Electricity damage to anyone touching you. 10 charges, recharges 1 per 10 seconds when plugged in.",
             "wirelessBonus": "Activating or deactivating is a Free Action. Recharges by induction (1 charge per hour).",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Activating or deactivating is a Free Action. Recharges by induction (1 charge per hour)."
+              }
+            ],
             "page": 438,
             "source": "Core",
             "legality": "restricted"
@@ -13343,6 +13692,16 @@
             "costPerRating": true,
             "description": "Reduces thermal signature. Adds rating to limit on Sneaking tests against thermographic vision or thermal sensors.",
             "wirelessBonus": "+Rating dice pool bonus to Sneaking tests against heat-based detection.",
+            "wirelessEffects": [
+              {
+                "type": "skill",
+                "skill": "sneaking",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "stealth_test",
+                "description": "Against heat-based detection only."
+              }
+            ],
             "page": 438,
             "source": "Core",
             "ratingSpec": {
@@ -13381,6 +13740,15 @@
             "applicableCategories": ["audio-devices", "helmets"],
             "description": "Provides efficient noise filtering and audio enhancement.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "page": 445,
             "source": "Core",
             "ratingSpec": {
@@ -13416,6 +13784,15 @@
             "applicableCategories": ["audio-devices", "helmets"],
             "description": "Allows user to selectively filter specific sounds.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception vs specific sound only."
+              }
+            ],
             "page": 445,
             "source": "Core",
             "ratingSpec": {
@@ -13619,6 +13996,14 @@
             "category": "eyeware",
             "description": "Replacement eyes with 4 capacity for upgrades.",
             "wirelessBonus": "When wirelessly enabled, gives +1 limit to Perception tests.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "limit": "mental",
+                "condition": "perception_test"
+              }
+            ],
             "page": 453
           },
           {
@@ -13656,6 +14041,15 @@
             "category": "earware",
             "description": "Replacement ears with 4 capacity.",
             "wirelessBonus": "+1 limit to audio Perception tests.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "limit": "mental",
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "page": 454
           },
           {
@@ -13749,6 +14143,13 @@
             "category": "bodyware",
             "description": "1 hour of internal oxygen supply.",
             "wirelessBonus": "Activating or deactivating is a Free Action. Always aware of exact air level and purity.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Activating or deactivating is a Free Action. Always aware of exact air level and purity."
+              }
+            ],
             "page": 456
           },
           {
@@ -13850,6 +14251,13 @@
             "category": "bodyware",
             "description": "+Rating REA (adjust Initiative and Physical limit accordingly). Incompatible with wired reflexes and other Reaction enhancements.",
             "wirelessBonus": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4 if both have wireless active.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4."
+              }
+            ],
             "page": 457,
             "legality": "restricted",
             "incompatibleWith": ["wired-reflexes"]
@@ -13879,12 +14287,13 @@
             },
             "category": "bodyware",
             "description": "+1 REA, +1D6 Initiative.",
-            "wirelessBonus": "+1 Initiative.",
+            "wirelessBonus": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4.",
             "page": 457,
             "wirelessEffects": [
               {
-                "type": "initiative",
-                "modifier": 1
+                "type": "special",
+                "modifier": 0,
+                "description": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4."
               }
             ],
             "attributeBonuses": {
@@ -13903,6 +14312,12 @@
             "availability": 2,
             "description": "Standard neural interface for DNI. Allows connection to electronic devices.",
             "wirelessBonus": "Can switch between devices and maintain multiple connections without physical contact. Rating 1 noise reduction.",
+            "wirelessEffects": [
+              {
+                "type": "noise_reduction",
+                "modifier": 1
+              }
+            ],
             "page": 452
           },
           {
@@ -14103,6 +14518,13 @@
             "costPerRating": true,
             "description": "Interprets knowsofts and linguasofts. Can run activesofts with skillwires.",
             "wirelessBonus": "Increases total skill rating limit to Rating x 3.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Increases total skill rating limit to Rating x 3."
+              }
+            ],
             "page": 452,
             "ratingSpec": {
               "rating": {
@@ -14496,6 +14918,13 @@
             "availability": 4,
             "description": "Small concealed compartment in fingertip.",
             "wirelessBonus": "Inserting or removing an item is a Simple Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Inserting or removing an item is a Simple Action."
+              }
+            ],
             "page": 456
           },
           {
@@ -14520,6 +14949,13 @@
             "costPerRating": true,
             "description": "Use activesofts up to rating (requires skilljack). Incompatible with reflex recorder bioware.",
             "wirelessBonus": "+1 to relevant inherent Limit (Physical, Mental, or Social) for skills used through skillwires.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "description": "Applies to the relevant inherent Limit (Physical, Mental, or Social) for skills used through skillwires."
+              }
+            ],
             "page": 455,
             "legality": "restricted",
             "incompatibleWith": ["reflex-recorder"],
@@ -14552,6 +14988,13 @@
             "availability": 6,
             "description": "Shielded compartment for smuggling items.",
             "wirelessBonus": "Inserting or retrieving an object is a Simple Action.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Inserting or retrieving an object is a Simple Action."
+              }
+            ],
             "page": 457
           },
           {

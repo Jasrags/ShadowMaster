@@ -63,7 +63,9 @@ export type EffectConditionType =
   | "vehicle_test" // Only during vehicle tests
   | "perception_test" // Only during perception tests
   | "stealth_test" // Only during stealth tests
-  | "combat"; // Only during combat
+  | "combat" // Only during combat
+  | "gear_smartlink" // Wireless smartlink via gear (glasses, goggles)
+  | "cyberware_smartlink"; // Wireless smartlink via cyberware (cybereyes, datajack)
 
 // =============================================================================
 // WIRELESS EFFECT STRUCTURE
@@ -194,34 +196,39 @@ export const EMPTY_WIRELESS_BONUSES: ActiveWirelessBonuses = {
  * These are reference implementations for the most common effects.
  */
 export const COMMON_WIRELESS_EFFECTS: Record<string, WirelessEffect[]> = {
-  // Smartgun System: +2 dice pool to ranged attacks
+  // Smartgun System: +1 (gear smartlink) or +2 (cyberware smartlink) dice pool
   "smartgun-system": [
+    { type: "attack_pool", modifier: 1, condition: "gear_smartlink", isDicePool: true },
+    { type: "attack_pool", modifier: 2, condition: "cyberware_smartlink", isDicePool: true },
     {
-      type: "attack_pool",
-      modifier: 2,
-      condition: "ranged_attack",
-      isDicePool: true,
+      type: "special",
+      modifier: 0,
+      description: "Ejecting a clip and changing fire modes are Free Actions.",
     },
   ],
 
-  // Wired Reflexes Rating 1-3: +1/2/3 Initiative
-  "wired-reflexes-1": [{ type: "initiative", modifier: 1 }],
-  "wired-reflexes-2": [{ type: "initiative", modifier: 2 }],
-  "wired-reflexes-3": [{ type: "initiative", modifier: 3 }],
+  // Wired Reflexes: stacking compatibility with reaction enhancers (all ratings same wireless bonus)
+  "wired-reflexes": [
+    {
+      type: "special",
+      modifier: 0,
+      description:
+        "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4.",
+    },
+  ],
 
-  // Synaptic Booster 1-3: +1/2/3 Initiative Dice (wireless adds +1 Initiative)
-  "synaptic-booster-1": [{ type: "initiative", modifier: 1 }],
-  "synaptic-booster-2": [{ type: "initiative", modifier: 1 }],
-  "synaptic-booster-3": [{ type: "initiative", modifier: 1 }],
+  // Reaction Enhancers: stacking compatibility with wired reflexes
+  "reaction-enhancers": [
+    {
+      type: "special",
+      modifier: 0,
+      description:
+        "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4.",
+    },
+  ],
 
   // Muscle Toner: +1 Agility (wireless)
   "muscle-toner": [{ type: "attribute", attribute: "agility", modifier: 1 }],
-
-  // Muscle Replacement: +1 Strength (wireless)
-  "muscle-replacement": [{ type: "attribute", attribute: "strength", modifier: 1 }],
-
-  // Reaction Enhancers: +1 Reaction (wireless)
-  "reaction-enhancers": [{ type: "attribute", attribute: "reaction", modifier: 1 }],
 
   // Cybereyes with vision enhancement: +1 to visual perception
   "cybereyes-vision-enhancement": [
