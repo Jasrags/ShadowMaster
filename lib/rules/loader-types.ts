@@ -372,6 +372,8 @@ export interface GearItemData {
   requiresSpecification?: boolean;
   /** Label for the specification input (e.g., "Skill") */
   specificationLabel?: string;
+  /** Weight in kilograms */
+  weight?: number;
 }
 
 /**
@@ -462,6 +464,8 @@ export interface DrugCatalogItemData {
   description?: string;
   page?: number;
   source?: string;
+  /** Weight in kilograms per dose */
+  weight?: number;
 }
 
 /**
@@ -485,6 +489,8 @@ export interface ToxinCatalogItemData {
   description?: string;
   page?: number;
   source?: string;
+  /** Weight in kilograms per dose */
+  weight?: number;
 }
 
 /**
