@@ -9153,7 +9153,8 @@
             "cost": 6000,
             "availability": 6,
             "parentArmor": "full-body-armor",
-            "description": "Hermetically seals the suit against chemical and biological agents."
+            "description": "Hermetically seals the suit against chemical and biological agents.",
+            "weight": 1.5
           },
           {
             "id": "full-body-armor-environmental-adaptation",
@@ -9163,7 +9164,8 @@
             "cost": 1000,
             "availability": 3,
             "parentArmor": "full-body-armor",
-            "description": "Adapts the suit to extreme environmental conditions."
+            "description": "Adapts the suit to extreme environmental conditions.",
+            "weight": 1
           }
         ],
         "armorModifications": [
@@ -10439,7 +10441,8 @@
             "consumable": true,
             "description": "Basic RFID tags, sold per 10.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "datachip",
@@ -10452,7 +10455,8 @@
             "consumable": true,
             "description": "Small data storage chips, sold per 10.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "security-tags",
@@ -10466,7 +10470,8 @@
             "consumable": true,
             "description": "Encrypted security tags, sold per 10.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "sensor-tags",
@@ -10480,7 +10485,8 @@
             "consumable": true,
             "description": "RFID tags with built-in sensors, sold per 10.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "stealth-tags",
@@ -10495,7 +10501,8 @@
             "consumable": true,
             "description": "Hard to detect RFID tags, sold per 10.",
             "page": 440,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           }
         ],
         "visionEnhancements": [
@@ -11858,7 +11865,8 @@
                 "cost": 300,
                 "availability": 6
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "tranq-patch",
@@ -11912,7 +11920,8 @@
                 "cost": 250,
                 "availability": 20
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "trauma-patch",
@@ -11949,7 +11958,8 @@
                 "cost": 120,
                 "availability": 12
               }
-            }
+            },
+            "weight": 0.1
           },
           {
             "id": "antidote-patch",
@@ -11986,7 +11996,8 @@
                 "cost": 300,
                 "availability": 6
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "slap-patch",
@@ -11996,7 +12007,8 @@
             "availability": 0,
             "stackable": true,
             "consumable": true,
-            "description": "Adhesive bandage with antiseptic."
+            "description": "Adhesive bandage with antiseptic.",
+            "weight": 0.02
           },
           {
             "id": "chem-patch",
@@ -12034,7 +12046,8 @@
                 "cost": 300,
                 "availability": 6
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "biomonitor",
@@ -12191,7 +12204,8 @@
             "category": "miscellaneous",
             "cost": 25,
             "availability": 0,
-            "description": "Anonymous payment stick."
+            "description": "Anonymous payment stick.",
+            "weight": 0.05
           },
           {
             "id": "standard-credstick",
@@ -12201,7 +12215,8 @@
             "maxValue": 5000,
             "description": "Standard payment device. Max value: 5,000¥",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "silver-credstick",
@@ -12211,7 +12226,8 @@
             "maxValue": 20000,
             "description": "Silver-tier payment device. Max value: 20,000¥",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "gold-credstick",
@@ -12222,7 +12238,8 @@
             "maxValue": 100000,
             "description": "Gold-tier payment device. Max value: 100,000¥",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "platinum-credstick",
@@ -12233,7 +12250,8 @@
             "maxValue": 500000,
             "description": "Platinum-tier payment device. Max value: 500,000¥",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "ebony-credstick",
@@ -12244,7 +12262,8 @@
             "maxValue": 1000000,
             "description": "Ebony-tier payment device. Max value: 1,000,000¥",
             "page": 443,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "fake-sin",
@@ -12282,7 +12301,8 @@
                 "cost": 15000,
                 "availability": 18
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "fake-license",
@@ -12320,7 +12340,8 @@
                 "cost": 1200,
                 "availability": 18
               }
-            }
+            },
+            "weight": 0.05
           },
           {
             "id": "magical-lodge-materials",
@@ -12381,7 +12402,8 @@
                 "cost": 6000,
                 "availability": 24
               }
-            }
+            },
+            "weight": 5
           }
         ],
         "ammunition": [
@@ -12516,7 +12538,8 @@
             "apModifier": -5,
             "availability": 6,
             "legality": "restricted",
-            "description": "Electrical rounds."
+            "description": "Electrical rounds.",
+            "weight": 0.15
           },
           {
             "id": "taser-rounds",
@@ -12527,7 +12550,8 @@
             "quantity": 10,
             "stackable": true,
             "consumable": true,
-            "availability": 3
+            "availability": 3,
+            "weight": 0.1
           },
           {
             "id": "tracer-rounds",
@@ -12562,7 +12586,8 @@
             "consumable": true,
             "description": "An irritant that affects the eyes, skin, and mucus membranes, causing them to burn and water. Stimulates physiological panic response. Washing with soap and water removes it. Becomes inert after 2 minutes in air.",
             "page": 408,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "gamma-scopolamine",
@@ -12581,7 +12606,8 @@
             "consumable": true,
             "description": "Derived from nightshade, this neuromuscular blocking agent paralyzes its target immediately, causing dizziness, pupil dilation, speech loss, delirium, and paralysis. After primary effects wear off, acts as truth serum for another hour (reduce Willpower by 3, minimum 1).",
             "page": 408,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "narcoject",
@@ -12599,7 +12625,8 @@
             "consumable": true,
             "description": "A common tranquilizer typically used with dart guns. Has no side effects.",
             "page": 408,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "nausea-gas",
@@ -12618,7 +12645,8 @@
             "consumable": true,
             "description": "Riot control agent that causes nausea and a crippling need to vomit. Becomes inert after 2 minutes in air.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "neuro-stun-viii",
@@ -12637,7 +12665,8 @@
             "consumable": true,
             "description": "Colorless and odorless industry standard knockout gas for emergency containment. Becomes inert after 10 minutes in air.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "neuro-stun-ix",
@@ -12656,7 +12685,8 @@
             "consumable": true,
             "description": "Colorless and odorless knockout gas. More concentrated than VIII. Becomes inert after 1 minute in air.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "neuro-stun-x",
@@ -12675,7 +12705,8 @@
             "consumable": true,
             "description": "Most potent Neuro-Stun variant with -2 Penetration to bypass protection. Becomes inert after 1 minute in air.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "pepper-punch",
@@ -12693,7 +12724,8 @@
             "consumable": true,
             "description": "Irritant combining CS and oleoresin capsicum (hot pepper extract). Typically deployed as liquid spray for personal defense. Often tagged with RFID or dyes to identify victims. Causes intense burning on skin, especially eyes, nose, and mouth.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.1
           },
           {
             "id": "seven-7",
@@ -12712,7 +12744,8 @@
             "consumable": true,
             "description": "Colorless and odorless gas developed to bypass chemical protection measures. Causes Physical damage, cramping, nausea, and double vision. Becomes inert after 10 minutes in air.",
             "page": 409,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           }
         ],
         "drugs": [
@@ -12742,7 +12775,8 @@
             "consumable": true,
             "description": "A tranquilizing narcotic opiate synthesized from poppy plants. Takes its name from the sensations users feel. Good for escapism and blocking out the world.",
             "page": 411,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "cram",
@@ -12771,7 +12805,8 @@
             "consumable": true,
             "description": "Extremely popular stimulant. Users appear hyper-alert, almost paranoid, reacting quickly without thought. Prone to irrational outbursts, jitteriness, and fidgeting.",
             "page": 411,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "deepweed",
@@ -12803,7 +12838,8 @@
             "consumable": true,
             "description": "Narcotic derived from Awakened kelp by Caribbean houngans. Extremely enticing to the Awakened. Forces any magically active user to astrally perceive, even adepts without the ability.",
             "page": 411,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "jazz",
@@ -12834,7 +12870,8 @@
             "consumable": true,
             "description": "Stimulant designed for law enforcement against augmented street samurai. Usually taken from single-dose inhaler (popper). Makes users jumpy and hyper as caffeinated two-year-olds.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "kamikaze",
@@ -12872,7 +12909,8 @@
             "consumable": true,
             "description": "Tailored combat stimulant with destructive effect on metabolism. Users are near-crazed with feelings of imperviousness and invincibility, exhibiting almost no regard for their own well-being. Excess doses cause anxiety, hallucinations, uncontrolled movements, and death.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "long-haul",
@@ -12902,7 +12940,8 @@
             "consumable": true,
             "description": "Synthesized hormones and brain-regulating chemicals that keep user awake without fatigue. Second dose after crash adds 1D6÷2 days but inflicts 10 unresisted Stun and forces crash.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "nitro",
@@ -12936,7 +12975,8 @@
             "consumable": true,
             "description": "Dangerous combination of potent drugs favored by troll gangers. Powerful stimulant that can easily kill a user. Users feel infused with energy, suffer diminished attention span, and talk incessantly.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.05
           },
           {
             "id": "novacoke",
@@ -12970,7 +13010,8 @@
             "consumable": true,
             "description": "Highly addictive social stimulant derived from coca plants.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "psyche",
@@ -12999,7 +13040,8 @@
             "consumable": true,
             "description": "Designer stimulant prized by magicians and technomancers. Users are simultaneously hyper-aware and detached, easily absorbed by detail and obsessive about certain facts or problems.",
             "page": 412,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           },
           {
             "id": "zen",
@@ -13026,7 +13068,8 @@
             "consumable": true,
             "description": "Psychedelic hallucinogen popular among those looking to escape reality or seeking trance-like states.",
             "page": 413,
-            "source": "Core"
+            "source": "Core",
+            "weight": 0.02
           }
         ]
       }
