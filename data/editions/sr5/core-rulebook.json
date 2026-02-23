@@ -7228,6 +7228,13 @@
               "cost": 10000,
               "legality": "forbidden",
               "wirelessBonus": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Ready as Free Action. Safety system auto-retracts on glitch. +2 Accuracy."
+                }
+              ],
               "weight": 0.3
             },
             {
@@ -10493,6 +10500,15 @@
             "page": 445,
             "source": "Core",
             "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 500,
@@ -10521,6 +10537,16 @@
             "description": "Block out background noise and focus on specific sounds or patterns. Includes speech, word, and sound pattern recognition. Each rating point lets you select a single sound group and focus on it. Can record others for playback or set triggered monitoring.",
             "page": 445,
             "source": "Core",
+            "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception vs specific sound only."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 250,
@@ -10549,7 +10575,16 @@
             "description": "Pinpoints the source of a sound. Provides +2 bonus on limit in Perception Tests to find the source of a specific sound. Cannot be installed in laser microphones.",
             "page": 445,
             "source": "Core",
-            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source."
+            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifier": 2,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Applies when looking for a sound's source."
+              }
+            ]
           }
         ],
         "tools": [
@@ -11902,6 +11937,13 @@
             "page": 450,
             "source": "Core",
             "wirelessBonus": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Provides dice pool bonus equal to rating to First Aid + Logic tests, or can operate itself with dice pool of Rating x 2 and limit equal to Rating."
+              }
+            ],
             "ratings": {
               "1": {
                 "cost": 250,
@@ -12981,6 +13023,19 @@
             "accuracyModifier": 1,
             "description": "Projects a visible dot on target. Can mount on top or underbarrel. Increases Accuracy by 1 (not cumulative with smartlink). Activating/deactivating is a Simple Action.",
             "wirelessBonus": "+1 dice pool bonus (not cumulative with smartlink). Activating/deactivating is a Free Action.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "isDicePool": true,
+                "description": "Not cumulative with smartlink."
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Activating/deactivating is a Free Action."
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -13002,6 +13057,13 @@
             "cost": 50,
             "description": "Allows targeting around corners with -2 dice pool penalty instead of -3.",
             "wirelessBonus": "Dice pool penalty for shooting around corners is –1 instead of –2.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Dice pool penalty for shooting around corners is -1 instead of -2."
+              }
+            ],
             "page": 433,
             "source": "Core"
           },
@@ -13397,6 +13459,16 @@
             "costPerRating": true,
             "description": "Reduces thermal signature. Adds rating to limit on Sneaking tests against thermographic vision or thermal sensors.",
             "wirelessBonus": "+Rating dice pool bonus to Sneaking tests against heat-based detection.",
+            "wirelessEffects": [
+              {
+                "type": "skill",
+                "skill": "sneaking",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "stealth_test",
+                "description": "Against heat-based detection only."
+              }
+            ],
             "page": 438,
             "source": "Core",
             "ratingSpec": {
@@ -13435,6 +13507,15 @@
             "applicableCategories": ["audio-devices", "helmets"],
             "description": "Provides efficient noise filtering and audio enhancement.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "page": 445,
             "source": "Core",
             "ratingSpec": {
@@ -13470,6 +13551,15 @@
             "applicableCategories": ["audio-devices", "helmets"],
             "description": "Allows user to selectively filter specific sounds.",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
+            "wirelessEffects": [
+              {
+                "type": "perception",
+                "modifierPerRating": true,
+                "isDicePool": true,
+                "condition": "perception_test",
+                "description": "Audio Perception vs specific sound only."
+              }
+            ],
             "page": 445,
             "source": "Core",
             "ratingSpec": {
@@ -13673,6 +13763,14 @@
             "category": "eyeware",
             "description": "Replacement eyes with 4 capacity for upgrades.",
             "wirelessBonus": "When wirelessly enabled, gives +1 limit to Perception tests.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "limit": "mental",
+                "condition": "perception_test"
+              }
+            ],
             "page": 453
           },
           {
@@ -13710,6 +13808,15 @@
             "category": "earware",
             "description": "Replacement ears with 4 capacity.",
             "wirelessBonus": "+1 limit to audio Perception tests.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "limit": "mental",
+                "condition": "perception_test",
+                "description": "Audio Perception tests only."
+              }
+            ],
             "page": 454
           },
           {
@@ -13965,6 +14072,12 @@
             "availability": 2,
             "description": "Standard neural interface for DNI. Allows connection to electronic devices.",
             "wirelessBonus": "Can switch between devices and maintain multiple connections without physical contact. Rating 1 noise reduction.",
+            "wirelessEffects": [
+              {
+                "type": "noise_reduction",
+                "modifier": 1
+              }
+            ],
             "page": 452
           },
           {
@@ -14165,6 +14278,13 @@
             "costPerRating": true,
             "description": "Interprets knowsofts and linguasofts. Can run activesofts with skillwires.",
             "wirelessBonus": "Increases total skill rating limit to Rating x 3.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Increases total skill rating limit to Rating x 3."
+              }
+            ],
             "page": 452,
             "ratingSpec": {
               "rating": {
@@ -14582,6 +14702,13 @@
             "costPerRating": true,
             "description": "Use activesofts up to rating (requires skilljack). Incompatible with reflex recorder bioware.",
             "wirelessBonus": "+1 to relevant inherent Limit (Physical, Mental, or Social) for skills used through skillwires.",
+            "wirelessEffects": [
+              {
+                "type": "limit",
+                "modifier": 1,
+                "description": "Applies to the relevant inherent Limit (Physical, Mental, or Social) for skills used through skillwires."
+              }
+            ],
             "page": 455,
             "legality": "restricted",
             "incompatibleWith": ["reflex-recorder"],
