@@ -13122,6 +13122,25 @@
             "accuracyModifier": 2,
             "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "condition": "gear_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "attack_pool",
+                "modifier": 2,
+                "condition": "cyberware_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Ejecting a clip and changing fire modes are Free Actions."
+              }
+            ],
             "page": 433,
             "source": "Core",
             "legality": "restricted"
@@ -13136,6 +13155,25 @@
             "accuracyModifier": 2,
             "description": "External smartgun system. Can mount on top or underbarrel. Requires Armorer + Logic (4, 1 hour) Extended Test to install. Increases Accuracy by 2 when used with smartlink. Camera has capacity 1 for vision enhancements.",
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
+            "wirelessEffects": [
+              {
+                "type": "attack_pool",
+                "modifier": 1,
+                "condition": "gear_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "attack_pool",
+                "modifier": 2,
+                "condition": "cyberware_smartlink",
+                "isDicePool": true
+              },
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Ejecting a clip and changing fire modes are Free Actions."
+              }
+            ],
             "page": 433,
             "source": "Core",
             "legality": "restricted"
@@ -13850,6 +13888,13 @@
             "category": "bodyware",
             "description": "+Rating REA (adjust Initiative and Physical limit accordingly). Incompatible with wired reflexes and other Reaction enhancements.",
             "wirelessBonus": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4 if both have wireless active.",
+            "wirelessEffects": [
+              {
+                "type": "special",
+                "modifier": 0,
+                "description": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4."
+              }
+            ],
             "page": 457,
             "legality": "restricted",
             "incompatibleWith": ["wired-reflexes"]
@@ -13879,12 +13924,13 @@
             },
             "category": "bodyware",
             "description": "+1 REA, +1D6 Initiative.",
-            "wirelessBonus": "+1 Initiative.",
+            "wirelessBonus": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4.",
             "page": 457,
             "wirelessEffects": [
               {
-                "type": "initiative",
-                "modifier": 1
+                "type": "special",
+                "modifier": 0,
+                "description": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4."
               }
             ],
             "attributeBonuses": {
