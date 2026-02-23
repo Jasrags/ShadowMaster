@@ -11,18 +11,19 @@ Gap analysis comparing the [SR5 Wireless Bonuses Catalog](SR5_Wireless_Bonuses_C
 | Metric                                        | Count |
 | --------------------------------------------- | ----- |
 | Items with `wirelessBonus` text               | 77    |
-| Items with `wirelessEffects` arrays           | 61    |
-| Items with text but **no** structured effects | 16    |
+| Items with `wirelessEffects` arrays           | 77    |
+| Items with text but **no** structured effects | 0     |
 
-The 16 remaining items without `wirelessEffects` are grenades/rockets (11) and weapons (5) that received `wirelessBonus` text in Phase 1 but whose effects (wireless trigger, cumulative smart-throwing bonuses) are deferred until the relevant subsystems exist.
+All 77 items with `wirelessBonus` text now have corresponding `wirelessEffects` arrays.
 
 ### Items With Structured `wirelessEffects`
 
-All 61 items have both `wirelessBonus` text and a `wirelessEffects` array:
+All 77 items have both `wirelessBonus` text and a `wirelessEffects` array:
 
 - **10 original items**: `smartgun-internal`, `smartgun-external`, `control-rig`, `reaction-enhancers`, `wired-reflexes`, `cyberlimb-gyromount`, `cyberlimb-holster`, `cyberlimb-hydraulic-jacks`, `cyberlimb-large-smuggling-compartment`, `muscle-toner`
 - **15 augmentation/gear items** (Phase 2 prep): `datajack`, `cybereyes`, `cyberears`, `audio-enhancement` (×2), `select-sound-filter`, `skilljack`, `skillwires`, `spatial-recognizer`, `thermal-damping`, `medkit`, `laser-sight`, `monofilament-whip`, `periscope`
 - **36 Tier 2–6 items** (Phase 4): See section 3 below
+- **16 deferred items** (Phase 5): See section 3 Tier 7 below
 
 ---
 
@@ -35,9 +36,9 @@ Phase 1 (commit `de07918`) added `wirelessBonus` text to all 16 items:
 
 ---
 
-## 3. Items Missing `wirelessEffects` Arrays — RESOLVED (Phases 2 + 4)
+## 3. Items Missing `wirelessEffects` Arrays — RESOLVED (Phases 2, 4, + 5)
 
-All 47 unique items that had `wirelessBonus` text without structured effects have been resolved.
+All 63 unique items that had `wirelessBonus` text without structured effects have been resolved.
 
 ### Tier 1: Structured Effects (Phase 2, commit `589f4d6`)
 
@@ -77,6 +78,16 @@ All 47 unique items that had `wirelessBonus` text without structured effects hav
 
 All Tier 2–6 items use `{ "type": "special", "modifier": 0, "description": "..." }` since their effects are action-economy, informational, or otherwise non-mechanical.
 
+### Tier 7: Deferred Items — Wireless Trigger, Cumulative, and Info-on-Hit (Phase 5)
+
+16 items that were deferred from earlier phases because their effects (wireless trigger, cumulative bonuses, info-on-hit) didn't map to existing structured effect types. All use `{ "type": "special", "modifier": 0, "description": "..." }`:
+
+- **10 grenades/rockets** (wireless trigger): `flash-bang-grenade`, `fragmentation-grenade`, `gas`, `gas-grenade-cs-tear`, `high-explosive-grenade`, `smoke-grenade`, `thermal-smoke-grenade`, `anti-vehicle-rocket`, `fragmentation-rocket`, `high-explosive-rocket`
+- **1 flash-pak** (compound bonus): `flash-pak`
+- **2 throwing weapons** (cumulative smart-throwing): `shuriken`, `throwing-knife`
+- **2 tasers** (target info on hit): `defiance-ex-shocker`, `yamaha-pulsar`
+- **1 melee** (induction recharging): `shock-gloves`
+
 ---
 
 ## 4. Items Entirely Missing from CRB JSON
@@ -105,6 +116,7 @@ These 3 items are not in `core-rulebook.json` and are excluded from this audit s
 | Phase 2 | Structured `wirelessEffects` Tier 1 (13) | Complete |
 | Phase 3 | Resolve missing CRB entries (jammers)    | Complete |
 | Phase 4 | Tier 2–6 `wirelessEffects` (36)          | Complete |
+| Phase 5 | Deferred items `wirelessEffects` (16)    | Complete |
 
 ---
 

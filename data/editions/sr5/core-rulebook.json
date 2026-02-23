@@ -7289,6 +7289,13 @@
               "accuracy": 0,
               "legality": "restricted",
               "wirelessBonus": "Recharges by induction, regaining one charge per full hour of wireless-enabled time.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Recharges by induction, regaining one charge per full hour of wireless-enabled time."
+                }
+              ],
               "weight": 0.3
             },
             {
@@ -7576,6 +7583,13 @@
               "availability": 0,
               "cost": 250,
               "wirelessBonus": "A successful hit informs you of the target's basic health and Condition Monitors.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "A successful hit informs you of the target's basic health and Condition Monitors."
+                }
+              ],
               "weight": 0.5
             },
             {
@@ -7812,6 +7826,13 @@
               "availability": 0,
               "cost": 180,
               "wirelessBonus": "A successful hit informs you of the target's basic health and Condition Monitors.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "A successful hit informs you of the target's basic health and Condition Monitors."
+                }
+              ],
               "weight": 0.5
             }
           ],
@@ -8632,6 +8653,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown."
+                }
+              ],
               "weight": 0.05
             },
             {
@@ -8648,6 +8676,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "With smartlink, each knife/shuriken thrown at same target that Combat Turn gets +1 dice pool per knife thrown."
+                }
+              ],
               "weight": 0.15
             }
           ],
@@ -8794,6 +8829,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 5
             },
             {
@@ -8810,6 +8852,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8824,6 +8873,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "Avoids directing strong flashes at subscribed characters (half glare penalties). Recharges by induction (1 charge/hour). Can also use wireless link trigger without DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "Avoids directing strong flashes at subscribed characters (half glare penalties). Recharges by induction (1 charge/hour). Can also use wireless link trigger without DNI."
+                }
+              ],
               "weight": 0.3
             },
             {
@@ -8840,6 +8896,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8856,6 +8919,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 4.5
             },
             {
@@ -8870,6 +8940,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8886,6 +8963,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8902,6 +8986,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8918,6 +9009,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 5
             },
             {
@@ -8934,6 +9032,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             },
             {
@@ -8950,6 +9055,13 @@
               "stackable": true,
               "consumable": true,
               "wirelessBonus": "You can use the wireless link trigger, even if you don't have DNI.",
+              "wirelessEffects": [
+                {
+                  "type": "special",
+                  "modifier": 0,
+                  "description": "You can use the wireless link trigger, even if you don't have DNI."
+                }
+              ],
               "weight": 0.4
             }
           ]
