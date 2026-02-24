@@ -3,7 +3,8 @@
  *
  * Tests the augmentations (cyberware/bioware) display with expandable rows.
  * Returns null when no augmentations. Shows cyberware vs bioware sections,
- * collapsed rows with name + rating, and expanded detail content.
+ * collapsed rows with name + rating, expanded detail content, and wireless
+ * management controls (toggle, bonus text, effects pills).
  */
 
 import { describe, it, expect, vi } from "vitest";
@@ -19,6 +20,35 @@ import {
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
+
+vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+  WirelessIndicator: (props: {
+    enabled: boolean;
+    globalEnabled?: boolean;
+    bonusDescription?: string;
+    onToggle?: (v: boolean) => void;
+  }) => (
+    <div
+      data-testid="wireless-indicator"
+      data-enabled={String(props.enabled)}
+      data-global-enabled={String(props.globalEnabled)}
+    >
+      {props.onToggle && (
+        <button
+          data-testid="wireless-indicator-toggle"
+          onClick={() => props.onToggle!(!props.enabled)}
+        >
+          Toggle
+        </button>
+      )}
+      {props.bonusDescription && <span>{props.bonusDescription}</span>}
+    </div>
+  ),
+}));
+
+vi.mock("@/lib/rules/wireless", () => ({
+  isGlobalWirelessEnabled: vi.fn(() => true),
+}));
 
 import { AugmentationsDisplay } from "../AugmentationsDisplay";
 
@@ -152,11 +182,12 @@ describe("AugmentationsDisplay", () => {
     const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
     render(<AugmentationsDisplay character={character} />);
 
-    expect(screen.queryByText("REACTION +1")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("bonus-pill")).not.toBeInTheDocument();
 
     await user.click(screen.getByTestId("expand-button"));
 
-    expect(screen.getByText("REACTION +1")).toBeInTheDocument();
+    const pill = screen.getByTestId("bonus-pill");
+    expect(pill).toHaveTextContent("REACTION +1");
   });
 
   it("renders bioware attribute bonuses in expanded section", async () => {
@@ -203,5 +234,119 @@ describe("AugmentationsDisplay", () => {
     await user.click(screen.getByTestId("expand-button"));
 
     expect(screen.getByText("Requires calibration")).toBeInTheDocument();
+  });
+
+  // --- Wireless controls ---
+
+  it("shows wifi icon in collapsed row when augmentation has wirelessBonus", () => {
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+  });
+
+  it("shows WifiOff icon when wireless is disabled", () => {
+    const disabled = { ...MOCK_CYBERWARE, wirelessEnabled: false };
+    const character = createSheetCharacter({ cyberware: [disabled] });
+    render(<AugmentationsDisplay character={character} />);
+    expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
+  });
+
+  it("shows no wifi icon when no wirelessBonus", () => {
+    const noWireless = { ...MOCK_CYBERWARE, wirelessBonus: undefined, wirelessEffects: undefined };
+    const character = createSheetCharacter({ cyberware: [noWireless] });
+    render(<AugmentationsDisplay character={character} />);
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+  });
+
+  it("shows wireless toggle in expanded section when editable", async () => {
+    const user = userEvent.setup();
+    const onUpdate = vi.fn();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(
+      <AugmentationsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />
+    );
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
+  });
+
+  it("hides wireless toggle in expanded section when not editable", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+  });
+
+  it("toggle calls onCharacterUpdate with toggled wirelessEnabled", async () => {
+    const user = userEvent.setup();
+    const onUpdate = vi.fn();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(
+      <AugmentationsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />
+    );
+
+    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("wireless-indicator-toggle"));
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    const updated = onUpdate.mock.calls[0][0];
+    expect(updated.cyberware[0].wirelessEnabled).toBe(false);
+  });
+
+  it("displays wirelessBonus text in read-only expanded section", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    expect(screen.getByTestId("wireless-bonus-text")).toHaveTextContent(
+      "Gain +1 Reaction while wireless is active"
+    );
+  });
+
+  it("displays wireless effects pills in expanded section", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ cyberware: [MOCK_CYBERWARE] });
+    render(<AugmentationsDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    const effectsContainer = screen.getByTestId("wireless-effects");
+    expect(effectsContainer).toBeInTheDocument();
+    expect(effectsContainer).toHaveTextContent("REACTION +1");
+  });
+
+  it("dims wireless effects when wireless is off", async () => {
+    const user = userEvent.setup();
+    const disabled = { ...MOCK_CYBERWARE, wirelessEnabled: false };
+    const character = createSheetCharacter({ cyberware: [disabled] });
+    render(<AugmentationsDisplay character={character} />);
+
+    await user.click(screen.getByTestId("expand-button"));
+
+    const effects = screen.getByTestId("wireless-effects");
+    expect(effects.className).toContain("opacity-40");
+  });
+
+  it("toggle works for bioware items", async () => {
+    const user = userEvent.setup();
+    const onUpdate = vi.fn();
+    const character = createSheetCharacter({ bioware: [MOCK_BIOWARE] });
+    render(
+      <AugmentationsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />
+    );
+
+    await user.click(screen.getByTestId("expand-button"));
+    await user.click(screen.getByTestId("wireless-indicator-toggle"));
+
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    const updated = onUpdate.mock.calls[0][0];
+    expect(updated.bioware[0].wirelessEnabled).toBe(false);
   });
 });

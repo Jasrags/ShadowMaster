@@ -400,7 +400,11 @@ function CharacterSheet({
               <ArmorDisplay armor={character.armor} />
             )}
 
-            <AugmentationsDisplay character={character} />
+            <AugmentationsDisplay
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
+            />
 
             <VehiclesDisplay
               vehicles={character.vehicles}

@@ -1118,6 +1118,15 @@ export interface BiowareItem {
   targetSkill?: string;
   /** Other special effects/notes */
   notes?: string;
+  /** Wireless bonus description (human-readable) */
+  wirelessBonus?: string;
+  /** Whether wireless is enabled for this bioware. @default true */
+  wirelessEnabled?: boolean;
+  /**
+   * Structured wireless effects.
+   * @see WirelessEffect
+   */
+  wirelessEffects?: WirelessEffect[];
 }
 
 /**

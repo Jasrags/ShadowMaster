@@ -305,6 +305,9 @@ export const MOCK_CYBERWARE = {
   cost: 39000,
   availability: 8,
   attributeBonuses: { reaction: 1 },
+  wirelessBonus: "Gain +1 Reaction while wireless is active",
+  wirelessEnabled: true,
+  wirelessEffects: [{ type: "attribute" as const, modifier: 1, attribute: "reaction" as const }],
 };
 
 export const MOCK_BIOWARE = {
@@ -318,6 +321,9 @@ export const MOCK_BIOWARE = {
   cost: 16000,
   availability: 8,
   attributeBonuses: { agility: 2 },
+  wirelessBonus: "Gain +1 Agility while wireless is active",
+  wirelessEnabled: true,
+  wirelessEffects: [{ type: "attribute" as const, modifier: 1, attribute: "agility" as const }],
 };
 
 // ---------------------------------------------------------------------------
