@@ -174,7 +174,7 @@ export function WirelessIndicator({
 
         {/* Tooltip */}
         {showTooltip && hasBonuses && isEffectivelyEnabled && (
-          <div className="absolute z-50 left-full ml-2 top-1/2 -translate-y-1/2 w-48 p-2 rounded-lg bg-popover border border-cyan-500/30 shadow-lg">
+          <div className="absolute z-50 left-full ml-2 top-1/2 -translate-y-1/2 w-48 p-2 rounded-lg bg-white dark:bg-zinc-900 border border-cyan-500/30 shadow-lg">
             <div className="flex items-center gap-1 text-xs text-cyan-400 font-medium mb-1">
               <Zap className="w-3 h-3" />
               Wireless Bonus
@@ -211,10 +211,10 @@ export function WirelessIndicator({
           disabled={disabled || isDeviceBroken || !globalEnabled}
           className={`relative rounded-full transition-colors ${toggleSizes[size]} ${
             disabled || isDeviceBroken || !globalEnabled
-              ? "bg-muted cursor-not-allowed"
+              ? "bg-zinc-300 dark:bg-zinc-700 cursor-not-allowed"
               : isEffectivelyEnabled
                 ? "bg-cyan-500"
-                : "bg-muted hover:bg-muted/80"
+                : "bg-zinc-300 dark:bg-zinc-600 hover:bg-zinc-400 dark:hover:bg-zinc-500"
           }`}
           title={
             !globalEnabled
@@ -254,7 +254,7 @@ export function WirelessIndicator({
 
       {/* Bonus tooltip */}
       {showTooltip && hasBonuses && isEffectivelyEnabled && (
-        <div className="absolute z-50 left-0 top-full mt-1 w-48 p-2 rounded-lg bg-popover border border-cyan-500/30 shadow-lg">
+        <div className="absolute z-50 left-0 top-full mt-1 w-48 p-2 rounded-lg bg-white dark:bg-zinc-900 border border-cyan-500/30 shadow-lg">
           <div className="flex items-center gap-1 text-xs text-cyan-400 font-medium mb-1">
             <Zap className="w-3 h-3" />
             Active Bonus
