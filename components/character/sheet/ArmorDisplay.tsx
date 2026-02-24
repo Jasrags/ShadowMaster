@@ -1,9 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import type { ArmorItem } from "@/lib/types";
+import type { Character, ArmorItem } from "@/lib/types";
+import type { ArmorData, GearCatalogData } from "@/lib/rules/RulesetContext";
+import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import { useGear } from "@/lib/rules";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
-import { ChevronDown, ChevronRight, Shield } from "lucide-react";
+import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { ChevronDown, ChevronRight, Shield, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -19,6 +24,88 @@ function formatLegality(legality: string): string {
   return "";
 }
 
+function getReadinessLabel(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "worn":
+      return "Worn";
+    case "stored":
+      return "Stored";
+    default:
+      return readiness;
+  }
+}
+
+function getReadinessColor(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "worn":
+      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+    case "stored":
+      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
+    default:
+      return "text-zinc-400";
+  }
+}
+
+/** Search the armor catalog array by id. */
+function findCatalogArmor(
+  catalog: GearCatalogData | null,
+  catalogId: string
+): ArmorData | undefined {
+  if (!catalog?.armor) return undefined;
+  return catalog.armor.find((item) => item.id === catalogId);
+}
+
+const ARMOR_READINESS_STATES: EquipmentReadiness[] = ["worn", "stored"];
+
+// ---------------------------------------------------------------------------
+// Local state update handlers
+// ---------------------------------------------------------------------------
+
+function changeArmorReadiness(
+  character: Character,
+  armorIndex: number,
+  newState: EquipmentReadiness,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedArmor = character.armor?.map((a, idx) =>
+    idx === armorIndex
+      ? {
+          ...a,
+          equipped: newState === "worn",
+          state: {
+            ...a.state,
+            readiness: newState,
+            wirelessEnabled: a.state?.wirelessEnabled ?? true,
+          },
+        }
+      : a
+  );
+
+  onCharacterUpdate({ ...character, armor: updatedArmor });
+}
+
+function toggleArmorWireless(
+  character: Character,
+  armorIndex: number,
+  enabled: boolean,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedArmor = character.armor?.map((a, idx) =>
+    idx === armorIndex
+      ? {
+          ...a,
+          state: {
+            ...a.state,
+            readiness: a.state?.readiness ?? ("worn" as const),
+            wirelessEnabled: enabled,
+          },
+        }
+      : a
+  );
+
+  onCharacterUpdate({ ...character, armor: updatedArmor });
+}
+
 // ---------------------------------------------------------------------------
 // Section config
 // ---------------------------------------------------------------------------
@@ -32,16 +119,42 @@ const ARMOR_SECTIONS = [
 // ArmorRow
 // ---------------------------------------------------------------------------
 
-function ArmorRow({ item }: { item: ArmorItem }) {
-  const [isExpanded, setIsExpanded] = useState(false);
+function ArmorRow({
+  item,
+  itemIndex,
+  character,
+  catalogArmor,
+  onCharacterUpdate,
+  editable,
+  isExpanded,
+  onToggleExpand,
+}: {
+  item: ArmorItem;
+  itemIndex: number;
+  character: Character;
+  catalogArmor?: ArmorData;
+  onCharacterUpdate?: (updated: Character) => void;
+  editable?: boolean;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
+}) {
+  // Readiness state
+  const readiness: EquipmentReadiness =
+    item.state?.readiness ?? (item.equipped ? "worn" : "stored");
+
+  // Wireless state
+  const hasWireless = !!(item.wirelessBonus || catalogArmor?.wirelessBonus);
+  const globalWireless = isGlobalWirelessEnabled(character);
+  const wirelessEnabled = item.state?.wirelessEnabled ?? true;
+  const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;
 
   return (
     <div
       data-testid="armor-row"
       className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
-      onClick={() => setIsExpanded(!isExpanded)}
+      onClick={onToggleExpand}
     >
-      {/* Collapsed row: Chevron + Name + Accessory badge + Rating pill */}
+      {/* Collapsed row: Chevron + Name + Accessory badge + [Readiness] [Wifi] Rating pill */}
       <div className="flex min-w-0 items-center gap-1.5">
         <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
@@ -61,9 +174,35 @@ function ArmorRow({ item }: { item: ArmorItem }) {
             ({item.subcategory.charAt(0).toUpperCase() + item.subcategory.slice(1)})
           </span>
         )}
+
+        {/* Spacer to push badges to the right */}
+        <span className="ml-auto" />
+
+        {/* Readiness badge (always visible) */}
+        <span
+          data-testid="readiness-badge"
+          className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium ${getReadinessColor(readiness)}`}
+        >
+          {getReadinessLabel(readiness)}
+        </span>
+
+        {/* State-aware wifi icon */}
+        {hasWireless &&
+          (isWirelessActive ? (
+            <Wifi
+              data-testid="wireless-icon"
+              className="h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+            />
+          ) : (
+            <WifiOff
+              data-testid="wireless-icon-off"
+              className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-500"
+            />
+          ))}
+
         <span
           data-testid="rating-pill"
-          className="ml-auto shrink-0 rounded border border-sky-500/20 bg-sky-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-sky-600 dark:text-sky-300"
+          className="shrink-0 rounded border border-sky-500/20 bg-sky-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-sky-600 dark:text-sky-300"
         >
           {item.armorRating}
         </span>
@@ -110,6 +249,54 @@ function ArmorRow({ item }: { item: ArmorItem }) {
             </div>
           )}
 
+          {/* Inventory controls section (editable only) */}
+          {editable && onCharacterUpdate && (
+            <div data-testid="inventory-controls" className="space-y-2">
+              {/* Readiness controls */}
+              <div data-testid="readiness-controls" className="flex items-center gap-1">
+                <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Readiness
+                </span>
+                {ARMOR_READINESS_STATES.map((state) => (
+                  <button
+                    key={state}
+                    data-testid={`readiness-${state}`}
+                    disabled={state === readiness}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      changeArmorReadiness(character, itemIndex, state, onCharacterUpdate);
+                    }}
+                    className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                      state === readiness
+                        ? getReadinessColor(state)
+                        : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                    }`}
+                  >
+                    {getReadinessLabel(state)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Wireless toggle */}
+              {hasWireless && (
+                <div data-testid="wireless-toggle" className="flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                    Wireless
+                  </span>
+                  <WirelessIndicator
+                    enabled={wirelessEnabled}
+                    globalEnabled={globalWireless}
+                    bonusDescription={item.wirelessBonus || catalogArmor?.wirelessBonus}
+                    onToggle={(enabled) =>
+                      toggleArmorWireless(character, itemIndex, enabled, onCharacterUpdate)
+                    }
+                    size="sm"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Modifications */}
           {item.modifications && item.modifications.length > 0 && (
             <div data-testid="modifications-section">
@@ -145,16 +332,30 @@ function ArmorRow({ item }: { item: ArmorItem }) {
 // ---------------------------------------------------------------------------
 
 interface ArmorDisplayProps {
-  armor: ArmorItem[];
+  character: Character;
+  onCharacterUpdate?: (updatedCharacter: Character) => void;
+  editable?: boolean;
 }
 
-export function ArmorDisplay({ armor }: ArmorDisplayProps) {
+export function ArmorDisplay({ character, onCharacterUpdate, editable }: ArmorDisplayProps) {
+  const catalog = useGear();
+  const [expandedIndices, setExpandedIndices] = useState<Set<number>>(new Set());
+  const armor = character.armor || [];
+
   if (armor.length === 0) return null;
 
-  const grouped: Record<"worn" | "stored", ArmorItem[]> = {
-    worn: armor.filter(isWorn),
-    stored: armor.filter((a) => !isWorn(a)),
+  const grouped: Record<"worn" | "stored", { item: ArmorItem; index: number }[]> = {
+    worn: [],
+    stored: [],
   };
+
+  armor.forEach((item, index) => {
+    if (isWorn(item)) {
+      grouped.worn.push({ item, index });
+    } else {
+      grouped.stored.push({ item, index });
+    }
+  });
 
   return (
     <DisplayCard
@@ -172,8 +373,27 @@ export function ArmorDisplay({ armor }: ArmorDisplayProps) {
                 {label}
               </div>
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
-                {grouped[key].map((item, idx) => (
-                  <ArmorRow key={`${item.name}-${idx}`} item={item} />
+                {grouped[key].map(({ item, index }) => (
+                  <ArmorRow
+                    key={`${item.name}-${index}`}
+                    item={item}
+                    itemIndex={index}
+                    character={character}
+                    catalogArmor={
+                      item.catalogId ? findCatalogArmor(catalog, item.catalogId) : undefined
+                    }
+                    onCharacterUpdate={onCharacterUpdate}
+                    editable={editable}
+                    isExpanded={expandedIndices.has(index)}
+                    onToggleExpand={() => {
+                      setExpandedIndices((prev) => {
+                        const next = new Set(prev);
+                        if (next.has(index)) next.delete(index);
+                        else next.add(index);
+                        return next;
+                      });
+                    }}
+                  />
                 ))}
               </div>
             </div>

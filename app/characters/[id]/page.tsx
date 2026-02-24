@@ -396,9 +396,11 @@ function CharacterSheet({
               editable={character.status === "active"}
             />
 
-            {character.armor && character.armor.length > 0 && (
-              <ArmorDisplay armor={character.armor} />
-            )}
+            <ArmorDisplay
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
+            />
 
             <AugmentationsDisplay
               character={character}
