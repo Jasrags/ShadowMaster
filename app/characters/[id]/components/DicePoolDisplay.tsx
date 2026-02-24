@@ -22,7 +22,16 @@ import { Wifi } from "lucide-react";
 export interface PoolModifier {
   label: string;
   value: number;
-  type: "attribute" | "skill" | "quality" | "wound" | "gear" | "situational" | "other";
+  type:
+    | "attribute"
+    | "skill"
+    | "quality"
+    | "wound"
+    | "gear"
+    | "situational"
+    | "encumbrance"
+    | "wireless"
+    | "other";
   color?: string;
 }
 
@@ -62,6 +71,8 @@ const MODIFIER_TYPE_COLORS: Record<PoolModifier["type"], string> = {
   wound: "text-red-400",
   gear: "text-amber-400",
   situational: "text-cyan-400",
+  encumbrance: "text-red-400",
+  wireless: "text-cyan-400",
   other: "text-zinc-400",
 };
 
