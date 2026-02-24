@@ -23,3 +23,4 @@ export { SkillsDisplay } from "./SkillsDisplay";
 export { SpellsDisplay } from "./SpellsDisplay";
 export { VehiclesDisplay } from "./VehiclesDisplay";
 export { WeaponsDisplay } from "./WeaponsDisplay";
+export { WirelessDisplay } from "./WirelessDisplay";

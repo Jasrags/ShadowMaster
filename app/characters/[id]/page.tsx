@@ -39,6 +39,7 @@ import {
   SpellsDisplay,
   VehiclesDisplay,
   WeaponsDisplay,
+  WirelessDisplay,
   ArmorDisplay,
   AugmentationsDisplay,
 } from "@/components/character/sheet";
@@ -315,6 +316,12 @@ function CharacterSheet({
             <DerivedStatsDisplay character={character} />
 
             <EncumbranceDisplay character={character} />
+
+            <WirelessDisplay
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
+            />
 
             <ConditionDisplay
               character={character}
