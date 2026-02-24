@@ -291,6 +291,20 @@ export const MOCK_ARMOR_ACCESSORY = {
   state: { readiness: "worn" as const, wirelessEnabled: false },
 };
 
+export const MOCK_ARMOR_WITH_WIRELESS = {
+  name: "Berwick Suit",
+  category: "armor",
+  subcategory: "armor-clothing",
+  armorRating: 8,
+  equipped: true,
+  cost: 2600,
+  quantity: 1,
+  readiness: "ready" as const,
+  state: { readiness: "worn" as const, wirelessEnabled: true },
+  wirelessBonus: "+1 to Social limit while wireless is active.",
+  catalogId: "berwick-suit",
+};
+
 // ---------------------------------------------------------------------------
 // Mock augmentation data
 // ---------------------------------------------------------------------------
