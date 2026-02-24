@@ -13,6 +13,7 @@ export {
   collectCyberwareEffects,
   collectBiowareEffects,
   collectWeaponModEffects,
+  collectArmorEffects,
   // Main calculator
   calculateWirelessBonuses,
   calculateContextualWirelessBonuses,

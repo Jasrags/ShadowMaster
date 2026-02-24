@@ -162,6 +162,29 @@ export function collectWeaponModEffects(character: Character): WirelessEffect[] 
   return effects;
 }
 
+/**
+ * Collect wireless effects from worn armor items.
+ * Only armor with readiness "worn" contributes wireless bonuses.
+ */
+export function collectArmorEffects(character: Character): WirelessEffect[] {
+  const armorItems = character.armor || [];
+  const effects: WirelessEffect[] = [];
+
+  for (const armor of armorItems) {
+    // Only worn armor contributes wireless bonuses
+    if (armor.state?.readiness !== "worn" || armor.state?.wirelessEnabled === false) {
+      // Legacy fallback: no state but equipped === true
+      if (armor.state || !armor.equipped) continue;
+    }
+
+    if (armor.wirelessEffects) {
+      effects.push(...armor.wirelessEffects);
+    }
+  }
+
+  return effects;
+}
+
 // =============================================================================
 // BONUS CALCULATION
 // =============================================================================
@@ -187,8 +210,9 @@ export function calculateWirelessBonuses(character: Character): ActiveWirelessBo
   const cyberwareEffects = collectCyberwareEffects(character);
   const biowareEffects = collectBiowareEffects(character);
   const weaponEffects = collectWeaponModEffects(character);
+  const armorEffects = collectArmorEffects(character);
 
-  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects];
+  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects, ...armorEffects];
 
   // Apply each effect to bonuses
   for (const effect of allEffects) {
@@ -217,8 +241,9 @@ export function calculateContextualWirelessBonuses(
   const cyberwareEffects = collectCyberwareEffects(character);
   const biowareEffects = collectBiowareEffects(character);
   const weaponEffects = collectWeaponModEffects(character);
+  const armorEffects = collectArmorEffects(character);
 
-  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects];
+  const allEffects = [...cyberwareEffects, ...biowareEffects, ...weaponEffects, ...armorEffects];
 
   // Only apply effects that match the context
   for (const effect of allEffects) {

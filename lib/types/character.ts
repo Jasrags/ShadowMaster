@@ -935,6 +935,9 @@ export interface ArmorItem extends GearItem {
   /** Wireless bonus description (human-readable) */
   wirelessBonus?: string;
 
+  /** Machine-readable wireless effects for calculation */
+  wirelessEffects?: WirelessEffect[];
+
   /**
    * @deprecated Use state.readiness === 'worn' instead
    * Kept for backward compatibility during migration
