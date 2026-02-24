@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
+import { Button as AriaButton } from "react-aria-components";
 import type { Character, ArmorItem } from "@/lib/types";
 import type { ArmorData, GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { EquipmentReadiness } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
+import { calculateArmorTotal } from "@/lib/rules/gameplay";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { Tooltip } from "@/components/ui";
 import { DisplayCard } from "./DisplayCard";
 import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
 import { ChevronDown, ChevronRight, Shield, Wifi, WifiOff } from "lucide-react";
@@ -114,6 +117,60 @@ const ARMOR_SECTIONS = [
   { key: "worn" as const, label: "Worn" },
   { key: "stored" as const, label: "Stored" },
 ];
+
+// ---------------------------------------------------------------------------
+// ArmorTotalTooltipContent
+// ---------------------------------------------------------------------------
+
+function ArmorTotalTooltipContent({
+  breakdown,
+}: {
+  breakdown: {
+    baseArmorName?: string;
+    baseArmor: number;
+    accessories: Array<{ name: string; rating: number }>;
+    effectiveAccessoryBonus: number;
+    rawAccessoryBonus: number;
+    strength: number;
+    totalArmor: number;
+  };
+}) {
+  const isAccessoryCapped = breakdown.rawAccessoryBonus > breakdown.strength;
+
+  return (
+    <div className="space-y-1" data-testid="armor-total-tooltip">
+      {breakdown.baseArmorName && (
+        <div className="flex items-center justify-between gap-4">
+          <span className="text-zinc-400">{breakdown.baseArmorName}</span>
+          <span className="font-mono font-semibold text-blue-400">{breakdown.baseArmor}</span>
+        </div>
+      )}
+      {breakdown.accessories.map((acc, i) => (
+        <div key={i} className="flex items-center justify-between gap-4">
+          <span className="text-zinc-400">{acc.name}</span>
+          <span className="font-mono font-semibold text-blue-400">+{acc.rating}</span>
+        </div>
+      ))}
+      {isAccessoryCapped && (
+        <div className="text-[10px] text-amber-400">
+          Accessory bonus capped at STR {breakdown.strength} (+{breakdown.effectiveAccessoryBonus}{" "}
+          of +{breakdown.rawAccessoryBonus})
+        </div>
+      )}
+      {(breakdown.baseArmorName || breakdown.accessories.length > 0) && (
+        <>
+          <div className="border-t border-zinc-600" />
+          <div className="flex items-center justify-between gap-4">
+            <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-200">
+              Total
+            </span>
+            <span className="font-mono font-bold text-blue-300">{breakdown.totalArmor}</span>
+          </div>
+        </>
+      )}
+    </div>
+  );
+}
 
 // ---------------------------------------------------------------------------
 // ArmorRow
@@ -357,12 +414,49 @@ export function ArmorDisplay({ character, onCharacterUpdate, editable }: ArmorDi
     }
   });
 
+  // Compute armor total for worn armor
+  const strength = character.attributes?.strength || 0;
+  const armorCalc = calculateArmorTotal(armor, strength);
+
+  // Build accessory breakdown for tooltip
+  const wornAccessories = grouped.worn
+    .filter(({ item }) => item.armorModifier === true)
+    .map(({ item }) => ({ name: item.name, rating: item.armorRating }));
+
+  const armorBreakdown = {
+    baseArmorName: armorCalc.baseArmorName,
+    baseArmor: armorCalc.baseArmor,
+    accessories: wornAccessories,
+    effectiveAccessoryBonus: armorCalc.effectiveAccessoryBonus,
+    rawAccessoryBonus: armorCalc.rawAccessoryBonus,
+    strength,
+    totalArmor: armorCalc.totalArmor,
+  };
+
   return (
     <DisplayCard
       id="sheet-armor"
       title="Armor"
       icon={<Shield className="h-4 w-4 text-zinc-400" />}
       collapsible
+      headerAction={
+        grouped.worn.length > 0 ? (
+          <Tooltip
+            content={<ArmorTotalTooltipContent breakdown={armorBreakdown} />}
+            delay={200}
+            showArrow={false}
+          >
+            <AriaButton
+              aria-label="Armor total breakdown"
+              className="inline-flex items-center gap-0.5 rounded bg-blue-500/15 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-blue-400 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              data-testid="armor-total-pill"
+            >
+              {armorCalc.totalArmor}
+              <Shield className="h-2.5 w-2.5" />
+            </AriaButton>
+          </Tooltip>
+        ) : undefined
+      }
     >
       <div className="space-y-3">
         {ARMOR_SECTIONS.map(({ key, label }) => {

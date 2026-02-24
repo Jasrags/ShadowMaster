@@ -54,6 +54,46 @@ vi.mock("@/lib/rules/wireless", () => ({
   isGlobalWirelessEnabled: vi.fn(() => true),
 }));
 
+vi.mock("react-aria-components", () => ({
+  Button: ({
+    children,
+    className,
+    ...props
+  }: {
+    children: React.ReactNode;
+    className?: string;
+    [key: string]: unknown;
+  }) => (
+    <button className={className} {...props}>
+      {children}
+    </button>
+  ),
+}));
+
+vi.mock("@/components/ui", () => ({
+  Tooltip: ({ content, children }: { content: React.ReactNode; children: React.ReactNode }) => (
+    <div data-testid="tooltip-wrapper">
+      {children}
+      <div data-testid="tooltip-content">{content}</div>
+    </div>
+  ),
+}));
+
+vi.mock("@/lib/rules/gameplay", () => ({
+  calculateArmorTotal: vi.fn(() => ({
+    totalArmor: 12,
+    baseArmor: 12,
+    rawAccessoryBonus: 0,
+    effectiveAccessoryBonus: 0,
+    excessOverStrength: 0,
+    agilityPenalty: 0,
+    reactionPenalty: 0,
+    isEncumbered: false,
+    baseArmorName: "Armor Jacket",
+    accessoryNames: [],
+  })),
+}));
+
 // ---------------------------------------------------------------------------
 // Catalog mock
 // ---------------------------------------------------------------------------
@@ -101,6 +141,7 @@ vi.mock("@/lib/rules", () => ({
 
 import { ArmorDisplay } from "../ArmorDisplay";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { calculateArmorTotal } from "@/lib/rules/gameplay";
 
 beforeEach(() => {
   vi.clearAllMocks();
@@ -174,7 +215,7 @@ describe("ArmorDisplay", () => {
   it("renders armor name in collapsed row", () => {
     const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
     render(<ArmorDisplay character={character} />);
-    expect(screen.getByText("Armor Jacket")).toBeInTheDocument();
+    expect(screen.getAllByText("Armor Jacket").length).toBeGreaterThanOrEqual(1);
   });
 
   it("renders armor rating in sky-colored pill", () => {
@@ -368,7 +409,7 @@ describe("ArmorDisplay", () => {
   it("renders multiple armor items", () => {
     const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED, MOCK_ARMOR_STORED] });
     render(<ArmorDisplay character={character} />);
-    expect(screen.getByText("Armor Jacket")).toBeInTheDocument();
+    expect(screen.getAllByText("Armor Jacket").length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Lined Coat")).toBeInTheDocument();
   });
 
@@ -519,6 +560,89 @@ describe("ArmorDisplay", () => {
       fireEvent.click(screen.getByTestId("expand-button"));
       const indicator = screen.getByTestId("wireless-indicator");
       expect(indicator).toHaveAttribute("data-global-enabled", "false");
+    });
+  });
+
+  // --- Armor total pill ---
+
+  describe("armor total pill", () => {
+    it("displays armor total pill when worn armor exists", () => {
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} />);
+      const pill = screen.getByTestId("armor-total-pill");
+      expect(pill).toBeInTheDocument();
+      expect(pill).toHaveTextContent("12");
+    });
+
+    it("does not display armor total pill when no worn armor", () => {
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_STORED] });
+      render(<ArmorDisplay character={character} />);
+      expect(screen.queryByTestId("armor-total-pill")).not.toBeInTheDocument();
+    });
+
+    it("tooltip shows base armor name and rating", () => {
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} />);
+      const tooltip = screen.getByTestId("armor-total-tooltip");
+      expect(tooltip).toHaveTextContent("Armor Jacket");
+      expect(tooltip).toHaveTextContent("12");
+    });
+
+    it("tooltip shows accessories with individual ratings", () => {
+      (calculateArmorTotal as ReturnType<typeof vi.fn>).mockReturnValue({
+        totalArmor: 14,
+        baseArmor: 12,
+        rawAccessoryBonus: 6,
+        effectiveAccessoryBonus: 4,
+        excessOverStrength: 2,
+        agilityPenalty: -1,
+        reactionPenalty: -1,
+        isEncumbered: true,
+        baseArmorName: "Armor Jacket",
+        accessoryNames: ["Ballistic Shield"],
+      });
+      const character = createSheetCharacter({
+        armor: [MOCK_ARMOR_EQUIPPED, MOCK_ARMOR_ACCESSORY],
+        attributes: { ...createSheetCharacter().attributes, strength: 4 },
+      });
+      render(<ArmorDisplay character={character} />);
+      const tooltip = screen.getByTestId("armor-total-tooltip");
+      expect(tooltip).toHaveTextContent("Armor Jacket");
+      expect(tooltip).toHaveTextContent("Ballistic Shield");
+      expect(tooltip).toHaveTextContent("14");
+    });
+
+    it("shows accessory capping note when raw > strength", () => {
+      (calculateArmorTotal as ReturnType<typeof vi.fn>).mockReturnValue({
+        totalArmor: 16,
+        baseArmor: 12,
+        rawAccessoryBonus: 8,
+        effectiveAccessoryBonus: 4,
+        excessOverStrength: 4,
+        agilityPenalty: -2,
+        reactionPenalty: -2,
+        isEncumbered: true,
+        baseArmorName: "Armor Jacket",
+        accessoryNames: ["Helmet", "Ballistic Mask"],
+      });
+      const character = createSheetCharacter({
+        armor: [
+          MOCK_ARMOR_EQUIPPED,
+          { ...MOCK_ARMOR_ACCESSORY, name: "Helmet", armorRating: 4 },
+          { ...MOCK_ARMOR_ACCESSORY, name: "Ballistic Mask", armorRating: 4 },
+        ],
+        attributes: { ...createSheetCharacter().attributes, strength: 4 },
+      });
+      render(<ArmorDisplay character={character} />);
+      const tooltip = screen.getByTestId("armor-total-tooltip");
+      expect(tooltip).toHaveTextContent(/capped at STR 4/);
+    });
+
+    it("has correct aria-label for accessibility", () => {
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} />);
+      const pill = screen.getByTestId("armor-total-pill");
+      expect(pill).toHaveAttribute("aria-label", "Armor total breakdown");
     });
   });
 });

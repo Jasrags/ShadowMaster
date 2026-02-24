@@ -6,7 +6,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Character, CyberwareItem, Weapon, BiowareItem } from "@/lib/types";
+import type { Character, CyberwareItem, Weapon, BiowareItem, ArmorItem } from "@/lib/types";
 import type { WirelessEffect } from "@/lib/types/wireless-effects";
 import {
   isGlobalWirelessEnabled,
@@ -15,6 +15,7 @@ import {
   collectCyberwareEffects,
   collectBiowareEffects,
   collectWeaponModEffects,
+  collectArmorEffects,
   calculateWirelessBonuses,
   calculateContextualWirelessBonuses,
   getWirelessInitiativeBonus,
@@ -376,6 +377,124 @@ describe("Wireless Bonus Calculator", () => {
     });
   });
 
+  describe("collectArmorEffects", () => {
+    it("should return empty array when no armor", () => {
+      const character = createMinimalCharacter();
+      expect(collectArmorEffects(character)).toEqual([]);
+    });
+
+    it("should collect effects from worn armor with wirelessEffects", () => {
+      const effects: WirelessEffect[] = [{ type: "defense_pool", modifier: 1 }];
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: true,
+          cost: 1000,
+          quantity: 1,
+          state: { readiness: "worn", wirelessEnabled: true },
+          wirelessEffects: effects,
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      const result = collectArmorEffects(character);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({ type: "defense_pool", modifier: 1 });
+    });
+
+    it("should skip stored armor with wirelessEffects", () => {
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: false,
+          cost: 1000,
+          quantity: 1,
+          state: { readiness: "stored", wirelessEnabled: true },
+          wirelessEffects: [{ type: "defense_pool", modifier: 1 }],
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      expect(collectArmorEffects(character)).toEqual([]);
+    });
+
+    it("should skip worn armor with wirelessEnabled false", () => {
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: true,
+          cost: 1000,
+          quantity: 1,
+          state: { readiness: "worn", wirelessEnabled: false },
+          wirelessEffects: [{ type: "defense_pool", modifier: 1 }],
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      expect(collectArmorEffects(character)).toEqual([]);
+    });
+
+    it("should collect effects from legacy equipped armor without state", () => {
+      const effects: WirelessEffect[] = [{ type: "armor", modifier: 2 }];
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: true,
+          cost: 1000,
+          quantity: 1,
+          wirelessEffects: effects,
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      const result = collectArmorEffects(character);
+      expect(result).toHaveLength(1);
+      expect(result[0]).toEqual({ type: "armor", modifier: 2 });
+    });
+
+    it("should skip legacy unequipped armor without state", () => {
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: false,
+          cost: 1000,
+          quantity: 1,
+          wirelessEffects: [{ type: "defense_pool", modifier: 1 }],
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      expect(collectArmorEffects(character)).toEqual([]);
+    });
+
+    it("should skip worn armor without wirelessEffects", () => {
+      const armor: ArmorItem[] = [
+        {
+          name: "Armor Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: true,
+          cost: 1000,
+          quantity: 1,
+          state: { readiness: "worn", wirelessEnabled: true },
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      expect(collectArmorEffects(character)).toEqual([]);
+    });
+  });
+
   // ===========================================================================
   // BONUS CALCULATION
   // ===========================================================================
@@ -457,6 +576,25 @@ describe("Wireless Bonus Calculator", () => {
       const result = calculateWirelessBonuses(character);
       expect(result.initiative).toBe(2);
       expect(result.attributes.reaction).toBe(1);
+      expect(result.defensePool).toBe(1);
+    });
+
+    it("should include armor wireless effects in aggregation", () => {
+      const armor: ArmorItem[] = [
+        {
+          name: "Smart Jacket",
+          category: "armor",
+          armorRating: 12,
+          equipped: true,
+          cost: 1000,
+          quantity: 1,
+          state: { readiness: "worn", wirelessEnabled: true },
+          wirelessEffects: [{ type: "defense_pool", modifier: 1 }],
+        } as ArmorItem,
+      ];
+      const character = createMinimalCharacter({ armor });
+
+      const result = calculateWirelessBonuses(character);
       expect(result.defensePool).toBe(1);
     });
   });
