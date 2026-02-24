@@ -144,6 +144,8 @@ export const LUCIDE_MOCK = {
   ChevronDown: createIconMock("ChevronDown"),
   ChevronRight: createIconMock("ChevronRight"),
   WifiOff: createIconMock("WifiOff"),
+  Weight: createIconMock("Weight"),
+  AlertTriangle: createIconMock("AlertTriangle"),
 };
 
 // ---------------------------------------------------------------------------

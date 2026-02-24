@@ -28,6 +28,7 @@ import {
   ContactsDisplay,
   DerivedStatsDisplay,
   DrugsDisplay,
+  EncumbranceDisplay,
   FociDisplay,
   GearDisplay,
   IdentitiesDisplay,
@@ -312,6 +313,8 @@ function CharacterSheet({
             />
 
             <DerivedStatsDisplay character={character} />
+
+            <EncumbranceDisplay character={character} />
 
             <ConditionDisplay
               character={character}

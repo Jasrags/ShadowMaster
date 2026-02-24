@@ -13,6 +13,7 @@ export { ConditionDisplay } from "./ConditionDisplay";
 export { ContactsDisplay } from "./ContactsDisplay";
 export { DerivedStatsDisplay } from "./DerivedStatsDisplay";
 export { DrugsDisplay } from "./DrugsDisplay";
+export { EncumbranceDisplay } from "./EncumbranceDisplay";
 export { FociDisplay } from "./FociDisplay";
 export { GearDisplay } from "./GearDisplay";
 export { IdentitiesDisplay } from "./IdentitiesDisplay";
