@@ -422,6 +422,9 @@ function CharacterSheet({
               vehicles={character.vehicles}
               drones={character.drones}
               rccs={character.rccs}
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
             />
 
             {/* Inventory Management Panel */}

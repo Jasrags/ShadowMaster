@@ -676,3 +676,48 @@ export const MOCK_RCC_WITH_OPTIONS: CharacterRCC = {
   runningAutosofts: ["Electronic Warfare", "Stealth"],
   notes: "High-end rigger command console",
 };
+
+// ---------------------------------------------------------------------------
+// Mock vehicle/drone/RCC data with state variants
+// ---------------------------------------------------------------------------
+export const MOCK_VEHICLE_BRICKED: Vehicle = {
+  ...MOCK_VEHICLE,
+  name: "Bricked Scoot",
+  state: { readiness: "stored", wirelessEnabled: false, condition: "bricked" },
+};
+
+export const MOCK_VEHICLE_DESTROYED: Vehicle = {
+  ...MOCK_VEHICLE,
+  name: "Destroyed Scoot",
+  state: { readiness: "stored", wirelessEnabled: false, condition: "destroyed" },
+};
+
+export const MOCK_DRONE_BRICKED: CharacterDrone = {
+  ...MOCK_DRONE,
+  name: "Bricked Fly-Spy",
+  state: { readiness: "stored", wirelessEnabled: false, condition: "bricked" },
+};
+
+export const MOCK_DRONE_DESTROYED: CharacterDrone = {
+  ...MOCK_DRONE,
+  name: "Destroyed Fly-Spy",
+  state: { readiness: "stored", wirelessEnabled: false, condition: "destroyed" },
+};
+
+export const MOCK_DRONE_WIRELESS: CharacterDrone = {
+  ...MOCK_DRONE,
+  name: "Wireless Fly-Spy",
+  state: { readiness: "stored", wirelessEnabled: true },
+};
+
+export const MOCK_RCC_BRICKED: CharacterRCC = {
+  ...MOCK_RCC,
+  name: "Bricked RCC",
+  state: { readiness: "stored", wirelessEnabled: false, condition: "bricked" },
+};
+
+export const MOCK_RCC_WIRELESS: CharacterRCC = {
+  ...MOCK_RCC,
+  name: "Wireless RCC",
+  state: { readiness: "stored", wirelessEnabled: true },
+};

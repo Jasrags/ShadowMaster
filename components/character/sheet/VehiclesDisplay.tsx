@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import type { Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
+import type { Character, Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
+import type { DeviceCondition } from "@/lib/types/gear-state";
 import type {
   VehiclesCatalogData,
   VehicleCatalogItemData,
@@ -9,8 +10,10 @@ import type {
   RCCCatalogItemData,
 } from "@/lib/rules/RulesetContext";
 import { useVehiclesCatalog } from "@/lib/rules";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
-import { ChevronDown, ChevronRight, Car } from "lucide-react";
+import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { ChevronDown, ChevronRight, Car, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -30,6 +33,83 @@ function isRCC(item: VehicleItem): item is CharacterRCC {
 
 function isDrone(item: VehicleItem): item is CharacterDrone {
   return "size" in item;
+}
+
+function isMatrixCapable(item: VehicleItem): boolean {
+  return isDrone(item) || isRCC(item);
+}
+
+// ---------------------------------------------------------------------------
+// Condition badge helper
+// ---------------------------------------------------------------------------
+
+function getConditionBadge(
+  condition?: DeviceCondition
+): { label: string; className: string } | null {
+  if (!condition || condition === "functional") return null;
+  if (condition === "bricked") {
+    return {
+      label: "BRICKED",
+      className:
+        "shrink-0 rounded border border-red-500/30 bg-red-500/10 px-1 text-[9px] font-bold uppercase text-red-500",
+    };
+  }
+  if (condition === "destroyed") {
+    return {
+      label: "DESTROYED",
+      className:
+        "shrink-0 rounded border border-red-800/30 bg-red-800/10 px-1 text-[9px] font-bold uppercase text-red-800 dark:text-red-400",
+    };
+  }
+  return null;
+}
+
+// ---------------------------------------------------------------------------
+// Wireless toggle helpers
+// ---------------------------------------------------------------------------
+
+function toggleDroneWireless(
+  character: Character,
+  droneIndex: number,
+  enabled: boolean,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedDrones = character.drones?.map((d, idx) =>
+    idx === droneIndex
+      ? {
+          ...d,
+          state: {
+            ...d.state,
+            readiness: d.state?.readiness ?? ("stored" as const),
+            wirelessEnabled: enabled,
+          },
+        }
+      : d
+  );
+
+  onCharacterUpdate({ ...character, drones: updatedDrones });
+}
+
+function toggleRCCWireless(
+  character: Character,
+  rccIndex: number,
+  enabled: boolean,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedRCCs = character.rccs?.map((r, idx) =>
+    idx === rccIndex
+      ? {
+          ...r,
+          state: {
+            ...r.state,
+            readiness: r.state?.readiness ?? ("stored" as const),
+            wirelessEnabled: enabled,
+          },
+        }
+      : r
+  );
+
+  onCharacterUpdate({ ...character, rccs: updatedRCCs });
 }
 
 // ---------------------------------------------------------------------------
@@ -102,7 +182,25 @@ function getCatalogEntry(
 // VehicleRow
 // ---------------------------------------------------------------------------
 
-function VehicleRow({ item, catalogEntry }: { item: VehicleItem; catalogEntry?: CatalogEntry }) {
+interface VehicleRowProps {
+  item: VehicleItem;
+  catalogEntry?: CatalogEntry;
+  sectionKey: "vehicles" | "drones" | "rccs";
+  itemIndex: number;
+  character?: Character;
+  onCharacterUpdate?: (updated: Character) => void;
+  editable?: boolean;
+}
+
+function VehicleRow({
+  item,
+  catalogEntry,
+  sectionKey,
+  itemIndex,
+  character,
+  onCharacterUpdate,
+  editable,
+}: VehicleRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const displayName = isRCC(item)
@@ -116,13 +214,31 @@ function VehicleRow({ item, catalogEntry }: { item: VehicleItem; catalogEntry?: 
 
   const cost = item.cost || catalogEntry?.cost || 0;
 
+  // Condition and wireless state
+  const condition = item.state?.condition;
+  const conditionBadge = getConditionBadge(condition);
+  const hasWireless = isMatrixCapable(item) && item.state != null;
+  const wirelessEnabled = item.state?.wirelessEnabled ?? false;
+  const globalWireless = character ? isGlobalWirelessEnabled(character) : true;
+  const isWirelessActive = hasWireless && wirelessEnabled && globalWireless;
+
+  // Toggle handler for this item
+  const handleWirelessToggle = (enabled: boolean) => {
+    if (!character || !onCharacterUpdate) return;
+    if (sectionKey === "drones") {
+      toggleDroneWireless(character, itemIndex, enabled, onCharacterUpdate);
+    } else if (sectionKey === "rccs") {
+      toggleRCCWireless(character, itemIndex, enabled, onCharacterUpdate);
+    }
+  };
+
   return (
     <div
       data-testid="vehicle-row"
       onClick={() => setIsExpanded(!isExpanded)}
       className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
-      {/* Collapsed row: Chevron + Name + Type badge */}
+      {/* Collapsed row: Chevron + Name + Type badge + Condition badge + Wifi icon */}
       <div className="flex min-w-0 items-center gap-1.5">
         <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
@@ -143,6 +259,28 @@ function VehicleRow({ item, catalogEntry }: { item: VehicleItem; catalogEntry?: 
         >
           {badgeLabel}
         </span>
+        {conditionBadge && (
+          <span data-testid="condition-badge" className={conditionBadge.className}>
+            {conditionBadge.label}
+          </span>
+        )}
+
+        {/* Spacer to push wifi icon right */}
+        {hasWireless && <span className="ml-auto" />}
+
+        {/* State-aware wifi icon for Matrix-capable devices */}
+        {hasWireless &&
+          (isWirelessActive ? (
+            <Wifi
+              data-testid="wireless-icon"
+              className="h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+            />
+          ) : (
+            <WifiOff
+              data-testid="wireless-icon-off"
+              className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-500"
+            />
+          ))}
       </div>
 
       {/* Expanded section */}
@@ -332,6 +470,22 @@ function VehicleRow({ item, catalogEntry }: { item: VehicleItem; catalogEntry?: 
             </div>
           )}
 
+          {/* Wireless toggle — drones & RCCs only when editable */}
+          {isMatrixCapable(item) && editable && onCharacterUpdate && character && (
+            <div data-testid="wireless-toggle" className="flex items-center gap-2">
+              <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                Wireless
+              </span>
+              <WirelessIndicator
+                enabled={wirelessEnabled}
+                globalEnabled={globalWireless}
+                condition={condition}
+                onToggle={handleWirelessToggle}
+                size="sm"
+              />
+            </div>
+          )}
+
           {/* Notes */}
           {item.notes && (
             <div data-testid="notes" className="text-xs italic text-zinc-500 dark:text-zinc-400">
@@ -362,9 +516,19 @@ interface VehiclesDisplayProps {
   vehicles?: Vehicle[];
   drones?: CharacterDrone[];
   rccs?: CharacterRCC[];
+  character?: Character;
+  onCharacterUpdate?: (updated: Character) => void;
+  editable?: boolean;
 }
 
-export function VehiclesDisplay({ vehicles, drones, rccs }: VehiclesDisplayProps) {
+export function VehiclesDisplay({
+  vehicles,
+  drones,
+  rccs,
+  character,
+  onCharacterUpdate,
+  editable,
+}: VehiclesDisplayProps) {
   const catalog = useVehiclesCatalog();
 
   const hasContent =
@@ -397,7 +561,16 @@ export function VehiclesDisplay({ vehicles, drones, rccs }: VehiclesDisplayProps
                 {grouped[key].map((item, idx) => {
                   const entry = getCatalogEntry(catalog, item);
                   return (
-                    <VehicleRow key={`${item.name}-${idx}`} item={item} catalogEntry={entry} />
+                    <VehicleRow
+                      key={`${item.name}-${idx}`}
+                      item={item}
+                      catalogEntry={entry}
+                      sectionKey={key}
+                      itemIndex={idx}
+                      character={character}
+                      onCharacterUpdate={onCharacterUpdate}
+                      editable={editable}
+                    />
                   );
                 })}
               </div>
