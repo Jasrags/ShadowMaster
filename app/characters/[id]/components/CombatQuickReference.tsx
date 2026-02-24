@@ -18,6 +18,7 @@ import { DicePoolDisplay, type PoolModifier } from "./DicePoolDisplay";
 import { Wifi, AlertTriangle } from "lucide-react";
 import { calculateWirelessBonuses, isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { calculateArmorTotal, type ArmorCalculationResult } from "@/lib/rules/gameplay";
+import { calculateEncumbrance } from "@/lib/rules/encumbrance/calculator";
 
 // =============================================================================
 // TYPES
@@ -161,7 +162,12 @@ function hasSmartgunWirelessBonus(character: Character, weapon: Weapon): boolean
   return true;
 }
 
-function getWeaponPools(character: Character, physicalLimit: number): CombatPool[] {
+function getWeaponPools(
+  character: Character,
+  physicalLimit: number,
+  armorAgilityPenalty: number,
+  weightEncumbrancePenalty: number
+): CombatPool[] {
   const weapons = (
     character.gear?.filter((g): g is Weapon => g.category === "weapons") || []
   ).slice(0, 3); // Limit to top 3 weapons
@@ -189,7 +195,7 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
 
     // Check for smartgun wireless bonus (+2 dice pool for ranged attacks)
     const smartgunBonus = hasSmartgunWirelessBonus(character, weapon) ? 2 : 0;
-    const pool = attr + skill + smartgunBonus;
+    let pool = attr + skill + smartgunBonus;
 
     const modifiers: PoolModifier[] = [
       { label: "Agility", value: attr, type: "attribute" },
@@ -199,6 +205,26 @@ function getWeaponPools(character: Character, physicalLimit: number): CombatPool
     // Add smartgun bonus to modifiers if active
     if (smartgunBonus > 0) {
       modifiers.push({ label: "Smartgun", value: smartgunBonus, type: "gear" });
+    }
+
+    // Armor encumbrance (agility penalty)
+    if (armorAgilityPenalty < 0) {
+      modifiers.push({
+        label: "Armor Encumbrance",
+        value: armorAgilityPenalty,
+        type: "encumbrance",
+      });
+      pool += armorAgilityPenalty;
+    }
+
+    // Weight encumbrance
+    if (weightEncumbrancePenalty < 0) {
+      modifiers.push({
+        label: "Weight Encumbrance",
+        value: weightEncumbrancePenalty,
+        type: "encumbrance",
+      });
+      pool += weightEncumbrancePenalty;
     }
 
     // Weapon accuracy as limit
@@ -237,39 +263,131 @@ export function CombatQuickReference({
     const armor = armorCalc.totalArmor;
     const initiative = calculateInitiative(character);
 
+    // Calculate wireless bonuses and encumbrance once
+    const globalWireless = isGlobalWirelessEnabled(character);
+    const wirelessBonuses = globalWireless ? calculateWirelessBonuses(character) : null;
+    const encumbrance = calculateEncumbrance(character);
+
     // Defense pool
+    const defenseBase = calculateDefensePool(character);
+    let defenseTotal = defenseBase;
+    const defenseModifiers: PoolModifier[] = [
+      { label: "Reaction", value: reaction, type: "attribute" },
+      { label: "Intuition", value: intuition, type: "attribute" },
+    ];
+    let defenseHasWireless = false;
+
+    if (wirelessBonuses && wirelessBonuses.defensePool > 0) {
+      defenseModifiers.push({
+        label: "Wireless Defense",
+        value: wirelessBonuses.defensePool,
+        type: "wireless",
+      });
+      defenseTotal += wirelessBonuses.defensePool;
+      defenseHasWireless = true;
+    }
+    if (armorCalc.reactionPenalty < 0) {
+      defenseModifiers.push({
+        label: "Armor Encumbrance",
+        value: armorCalc.reactionPenalty,
+        type: "encumbrance",
+      });
+      defenseTotal += armorCalc.reactionPenalty;
+    }
+    if (encumbrance.overweightPenalty < 0) {
+      defenseModifiers.push({
+        label: "Weight Encumbrance",
+        value: encumbrance.overweightPenalty,
+        type: "encumbrance",
+      });
+      defenseTotal += encumbrance.overweightPenalty;
+    }
+
     const defensePool: CombatPool = {
       label: "Defense",
-      pool: calculateDefensePool(character),
-      modifiers: [
-        { label: "Reaction", value: reaction, type: "attribute" },
-        { label: "Intuition", value: intuition, type: "attribute" },
-      ],
+      pool: defenseTotal,
+      modifiers: defenseModifiers,
       context: "Defense Test",
+      hasWirelessBonus: defenseHasWireless,
     };
 
     // Full Defense (with dodge)
     const gymnastics = getSkillRating(character, "gymnastics");
+    let fullDefenseTotal = calculateDodgePool(character);
+    const fullDefenseModifiers: PoolModifier[] = [
+      { label: "Reaction", value: reaction, type: "attribute" },
+      { label: "Intuition", value: intuition, type: "attribute" },
+      { label: "Gymnastics", value: gymnastics, type: "skill" },
+    ];
+    let fullDefenseHasWireless = false;
+
+    if (wirelessBonuses && wirelessBonuses.defensePool > 0) {
+      fullDefenseModifiers.push({
+        label: "Wireless Defense",
+        value: wirelessBonuses.defensePool,
+        type: "wireless",
+      });
+      fullDefenseTotal += wirelessBonuses.defensePool;
+      fullDefenseHasWireless = true;
+    }
+    if (armorCalc.reactionPenalty < 0) {
+      fullDefenseModifiers.push({
+        label: "Armor Encumbrance",
+        value: armorCalc.reactionPenalty,
+        type: "encumbrance",
+      });
+      fullDefenseTotal += armorCalc.reactionPenalty;
+    }
+    if (encumbrance.overweightPenalty < 0) {
+      fullDefenseModifiers.push({
+        label: "Weight Encumbrance",
+        value: encumbrance.overweightPenalty,
+        type: "encumbrance",
+      });
+      fullDefenseTotal += encumbrance.overweightPenalty;
+    }
+
     const fullDefensePool: CombatPool = {
       label: "Full Defense",
-      pool: calculateDodgePool(character),
-      modifiers: [
-        { label: "Reaction", value: reaction, type: "attribute" },
-        { label: "Intuition", value: intuition, type: "attribute" },
-        { label: "Gymnastics", value: gymnastics, type: "skill" },
-      ],
+      pool: fullDefenseTotal,
+      modifiers: fullDefenseModifiers,
       context: "Full Defense Test",
+      hasWirelessBonus: fullDefenseHasWireless,
     };
 
     // Soak (Body + Armor)
+    let soakTotal = body + armor;
+    const soakModifiers: PoolModifier[] = [
+      { label: "Body", value: body, type: "attribute" },
+      { label: "Armor", value: armor, type: "gear" },
+    ];
+    let soakHasWireless = false;
+
+    if (wirelessBonuses && wirelessBonuses.damageResist > 0) {
+      soakModifiers.push({
+        label: "Wireless Soak",
+        value: wirelessBonuses.damageResist,
+        type: "wireless",
+      });
+      soakTotal += wirelessBonuses.damageResist;
+      soakHasWireless = true;
+    }
+    if (wirelessBonuses && wirelessBonuses.armor > 0) {
+      soakModifiers.push({
+        label: "Wireless Armor",
+        value: wirelessBonuses.armor,
+        type: "wireless",
+      });
+      soakTotal += wirelessBonuses.armor;
+      soakHasWireless = true;
+    }
+
     const soakPool: CombatPool = {
       label: "Soak",
-      pool: body + armor,
-      modifiers: [
-        { label: "Body", value: body, type: "attribute" },
-        { label: "Armor", value: armor, type: "gear" },
-      ],
+      pool: soakTotal,
+      modifiers: soakModifiers,
       context: "Damage Resistance Test",
+      hasWirelessBonus: soakHasWireless,
     };
 
     // Composure (Charisma + Willpower)
@@ -309,7 +427,12 @@ export function CombatQuickReference({
     };
 
     // Weapon pools
-    const weaponPools = getWeaponPools(character, physicalLimit);
+    const weaponPools = getWeaponPools(
+      character,
+      physicalLimit,
+      armorCalc.agilityPenalty < 0 ? armorCalc.agilityPenalty : 0,
+      encumbrance.overweightPenalty
+    );
 
     return {
       initiative,
@@ -416,6 +539,7 @@ export function CombatQuickReference({
           basePool={combatData.defensePool.pool}
           modifiers={combatData.defensePool.modifiers}
           woundModifier={woundModifier}
+          hasWirelessBonus={combatData.defensePool.hasWirelessBonus}
           theme={theme}
           onClick={() =>
             onPoolSelect?.(
@@ -429,6 +553,7 @@ export function CombatQuickReference({
           basePool={combatData.fullDefensePool.pool}
           modifiers={combatData.fullDefensePool.modifiers}
           woundModifier={woundModifier}
+          hasWirelessBonus={combatData.fullDefensePool.hasWirelessBonus}
           theme={theme}
           onClick={() =>
             onPoolSelect?.(
@@ -445,6 +570,7 @@ export function CombatQuickReference({
         basePool={combatData.soakPool.pool}
         modifiers={combatData.soakPool.modifiers}
         woundModifier={0} // Soak is typically not affected by wounds
+        hasWirelessBonus={combatData.soakPool.hasWirelessBonus}
         theme={theme}
         onClick={() => onPoolSelect?.(combatData.soakPool.pool, combatData.soakPool.context)}
       />
