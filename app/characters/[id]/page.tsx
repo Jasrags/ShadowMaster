@@ -392,6 +392,8 @@ function CharacterSheet({
             <WeaponsDisplay
               character={character}
               onSelect={(pool, label) => openDiceRoller(pool, label)}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
             />
 
             {character.armor && character.armor.length > 0 && (
