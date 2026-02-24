@@ -758,6 +758,11 @@ export interface GearItem {
    * @see ADR-010 Inventory State Management
    */
   weight?: number;
+  /**
+   * Equipment state: readiness, wireless
+   * @see GearState
+   */
+  state?: GearState;
 }
 
 /**

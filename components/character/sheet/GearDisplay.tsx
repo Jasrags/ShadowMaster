@@ -1,11 +1,14 @@
 "use client";
 
 import { useState } from "react";
-import type { GearItem } from "@/lib/types";
+import type { Character, GearItem } from "@/lib/types";
 import type { GearItemData, GearCatalogData } from "@/lib/rules/RulesetContext";
+import type { EquipmentReadiness } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
-import { ChevronDown, ChevronRight, Package, Wifi } from "lucide-react";
+import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { ChevronDown, ChevronRight, Package, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -54,6 +57,86 @@ function findCatalogItem(catalog: GearCatalogData | null, name: string): GearIte
 }
 
 // ---------------------------------------------------------------------------
+// Readiness helpers
+// ---------------------------------------------------------------------------
+
+const GEAR_READINESS_STATES: EquipmentReadiness[] = ["worn", "stored", "stashed"];
+
+function getGearReadinessLabel(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "worn":
+      return "Carried";
+    case "stored":
+      return "Stored";
+    case "stashed":
+      return "Stashed";
+    default:
+      return readiness;
+  }
+}
+
+function getReadinessColor(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "worn":
+      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+    case "stored":
+      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
+    case "stashed":
+      return "text-violet-400 bg-violet-500/10 border-violet-500/30";
+    default:
+      return "text-zinc-400";
+  }
+}
+
+// ---------------------------------------------------------------------------
+// State update handlers
+// ---------------------------------------------------------------------------
+
+function changeGearReadiness(
+  character: Character,
+  gearIndex: number,
+  newState: EquipmentReadiness,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedGear = character.gear?.map((g, idx) =>
+    idx === gearIndex
+      ? {
+          ...g,
+          state: {
+            ...g.state,
+            readiness: newState,
+            wirelessEnabled: g.state?.wirelessEnabled ?? true,
+          },
+        }
+      : g
+  );
+
+  onCharacterUpdate({ ...character, gear: updatedGear });
+}
+
+function toggleGearWireless(
+  character: Character,
+  gearIndex: number,
+  enabled: boolean,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedGear = character.gear?.map((g, idx) =>
+    idx === gearIndex
+      ? {
+          ...g,
+          state: {
+            ...g.state,
+            readiness: g.state?.readiness ?? ("stored" as const),
+            wirelessEnabled: enabled,
+          },
+        }
+      : g
+  );
+
+  onCharacterUpdate({ ...character, gear: updatedGear });
+}
+
+// ---------------------------------------------------------------------------
 // Category ordering
 // ---------------------------------------------------------------------------
 
@@ -66,10 +149,33 @@ const CATEGORY_ORDER = ["electronics", "tools", "survival", "medical", "security
 /** Extra fields present in the JSON data but not on the GearItemData TS type. */
 type CatalogExtras = { wirelessBonus?: string; page?: number; source?: string };
 
-function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItemData }) {
+function GearRow({
+  item,
+  itemIndex,
+  character,
+  catalogItem,
+  onCharacterUpdate,
+  editable,
+}: {
+  item: GearItem;
+  itemIndex: number;
+  character: Character;
+  catalogItem?: GearItemData;
+  onCharacterUpdate?: (updated: Character) => void;
+  editable?: boolean;
+}) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const extras = catalogItem as (GearItemData & CatalogExtras) | undefined;
+
+  // Readiness state
+  const readiness: EquipmentReadiness = item.state?.readiness ?? "stored";
+
+  // Wireless state
+  const hasWireless = !!extras?.wirelessBonus;
+  const globalWireless = isGlobalWirelessEnabled(character);
+  const wirelessEnabled = item.state?.wirelessEnabled ?? true;
+  const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;
 
   // Resolve stats: character item takes priority, catalog fills gaps
   const avail = item.availability ?? catalogItem?.availability;
@@ -84,7 +190,8 @@ function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItem
     !!item.notes ||
     !!item.specification ||
     !!catalogItem?.description ||
-    !!extras?.wirelessBonus;
+    !!extras?.wirelessBonus ||
+    !!(editable && onCharacterUpdate);
 
   return (
     <div
@@ -136,12 +243,31 @@ function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItem
             ×{item.quantity}
           </span>
         )}
-        {extras?.wirelessBonus && (
-          <Wifi
-            data-testid="wireless-icon"
-            className="ml-auto h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
-          />
-        )}
+
+        {/* Spacer to push badges to the right */}
+        <span className="ml-auto" />
+
+        {/* Readiness badge */}
+        <span
+          data-testid="readiness-badge"
+          className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium ${getReadinessColor(readiness)}`}
+        >
+          {getGearReadinessLabel(readiness)}
+        </span>
+
+        {/* State-aware wifi icon */}
+        {hasWireless &&
+          (isWirelessActive ? (
+            <Wifi
+              data-testid="wireless-icon"
+              className="h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+            />
+          ) : (
+            <WifiOff
+              data-testid="wireless-icon-off"
+              className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-500"
+            />
+          ))}
       </div>
 
       {/* Expanded section */}
@@ -248,6 +374,54 @@ function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItem
             </p>
           )}
 
+          {/* Inventory controls (editable only) */}
+          {editable && onCharacterUpdate && (
+            <div data-testid="inventory-controls" className="space-y-2">
+              {/* Readiness controls */}
+              <div data-testid="readiness-controls" className="flex items-center gap-1">
+                <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Readiness
+                </span>
+                {GEAR_READINESS_STATES.map((state) => (
+                  <button
+                    key={state}
+                    data-testid={`readiness-${state}`}
+                    disabled={state === readiness}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      changeGearReadiness(character, itemIndex, state, onCharacterUpdate);
+                    }}
+                    className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                      state === readiness
+                        ? getReadinessColor(state)
+                        : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                    }`}
+                  >
+                    {getGearReadinessLabel(state)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Wireless toggle */}
+              {hasWireless && (
+                <div data-testid="wireless-toggle" className="flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                    Wireless
+                  </span>
+                  <WirelessIndicator
+                    enabled={wirelessEnabled}
+                    globalEnabled={globalWireless}
+                    bonusDescription={extras?.wirelessBonus}
+                    onToggle={(enabled) =>
+                      toggleGearWireless(character, itemIndex, enabled, onCharacterUpdate)
+                    }
+                    size="sm"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
           {/* Source reference */}
           {extras?.page != null && (
             <p
@@ -268,10 +442,13 @@ function GearRow({ item, catalogItem }: { item: GearItem; catalogItem?: GearItem
 // ---------------------------------------------------------------------------
 
 interface GearDisplayProps {
+  character: Character;
   gear: GearItem[];
+  onCharacterUpdate?: (updatedCharacter: Character) => void;
+  editable?: boolean;
 }
 
-export function GearDisplay({ gear }: GearDisplayProps) {
+export function GearDisplay({ character, gear, onCharacterUpdate, editable }: GearDisplayProps) {
   const catalog = useGear();
 
   if (!gear || gear.length === 0) {
@@ -288,11 +465,13 @@ export function GearDisplay({ gear }: GearDisplayProps) {
   }
 
   // Group items by category
-  const grouped: Record<string, GearItem[]> = {};
+  const grouped: Record<string, { item: GearItem; originalIndex: number }[]> = {};
   for (const item of gear) {
     const cat = item.category || "miscellaneous";
     if (!grouped[cat]) grouped[cat] = [];
-    grouped[cat].push(item);
+    // Find the original index in character.gear for state updates
+    const originalIndex = character.gear?.indexOf(item) ?? -1;
+    grouped[cat].push({ item, originalIndex });
   }
 
   // Sort category keys: defined order first, then remaining alphabetically
@@ -323,10 +502,18 @@ export function GearDisplay({ gear }: GearDisplayProps) {
               {formatCategoryLabel(cat, catalog)}
             </div>
             <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
-              {grouped[cat].map((item, idx) => {
+              {grouped[cat].map(({ item, originalIndex }, idx) => {
                 const catalogItem = findCatalogItem(catalog, item.name);
                 return (
-                  <GearRow key={`${item.name}-${idx}`} item={item} catalogItem={catalogItem} />
+                  <GearRow
+                    key={`${item.name}-${idx}`}
+                    item={item}
+                    itemIndex={originalIndex}
+                    character={character}
+                    catalogItem={catalogItem}
+                    onCharacterUpdate={onCharacterUpdate}
+                    editable={editable}
+                  />
                 );
               })}
             </div>
