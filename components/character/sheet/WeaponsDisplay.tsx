@@ -1,12 +1,17 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { Character, Weapon, InstalledWeaponMod } from "@/lib/types";
 import type { WeaponData, GearCatalogData } from "@/lib/rules/RulesetContext";
+import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import type { AmmunitionItem } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
-import { ChevronDown, ChevronRight, Swords, Wifi } from "lucide-react";
+import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { WeaponAmmoDisplay } from "@/app/characters/[id]/components/WeaponAmmoDisplay";
+import { ChevronDown, ChevronRight, Swords, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Pool calculation helper
@@ -87,6 +92,95 @@ function findCatalogWeapon(
   return undefined;
 }
 
+function getReadinessLabel(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "readied":
+      return "Readied";
+    case "holstered":
+      return "Holstered";
+    case "worn":
+      return "Worn";
+    case "stored":
+      return "Stored";
+    default:
+      return readiness;
+  }
+}
+
+function getReadinessColor(readiness: EquipmentReadiness): string {
+  switch (readiness) {
+    case "readied":
+      return "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
+    case "holstered":
+      return "text-amber-400 bg-amber-500/10 border-amber-500/30";
+    case "worn":
+      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
+    case "stored":
+      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
+    default:
+      return "text-zinc-400";
+  }
+}
+
+function getCompactAmmoBarColor(current: number, max: number): string {
+  if (max === 0) return "bg-zinc-400";
+  const pct = (current / max) * 100;
+  if (pct <= 0) return "bg-red-500";
+  if (pct <= 25) return "bg-orange-500";
+  if (pct <= 50) return "bg-yellow-500";
+  return "bg-emerald-500";
+}
+
+const WEAPON_READINESS_STATES: EquipmentReadiness[] = ["readied", "holstered", "stored"];
+
+// ---------------------------------------------------------------------------
+// Local state update handlers (matches InventoryPanel pattern)
+// ---------------------------------------------------------------------------
+
+function changeWeaponReadiness(
+  character: Character,
+  weaponId: string,
+  newState: EquipmentReadiness,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedWeapons = character.weapons?.map((w) =>
+    (w.id || w.name) === weaponId
+      ? {
+          ...w,
+          state: {
+            ...w.state,
+            readiness: newState,
+            wirelessEnabled: w.state?.wirelessEnabled ?? true,
+          },
+        }
+      : w
+  );
+
+  onCharacterUpdate({ ...character, weapons: updatedWeapons });
+}
+
+function toggleWeaponWireless(
+  character: Character,
+  weaponId: string,
+  enabled: boolean,
+  onCharacterUpdate: (updated: Character) => void
+) {
+  const updatedWeapons = character.weapons?.map((w) =>
+    (w.id || w.name) === weaponId
+      ? {
+          ...w,
+          state: {
+            ...w.state,
+            readiness: w.state?.readiness ?? ("holstered" as const),
+            wirelessEnabled: enabled,
+          },
+        }
+      : w
+  );
+
+  onCharacterUpdate({ ...character, weapons: updatedWeapons });
+}
+
 // ---------------------------------------------------------------------------
 // WeaponRow
 // ---------------------------------------------------------------------------
@@ -96,11 +190,17 @@ function WeaponRow({
   character,
   catalogWeapon,
   onSelect,
+  onCharacterUpdate,
+  editable,
+  ammunition,
 }: {
   weapon: Weapon;
   character: Character;
   catalogWeapon?: WeaponData;
   onSelect?: (pool: number, label: string) => void;
+  onCharacterUpdate?: (updated: Character) => void;
+  editable?: boolean;
+  ammunition?: AmmunitionItem[];
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const { pool, label } = calculateWeaponPool(weapon, character);
@@ -113,13 +213,104 @@ function WeaponRow({
   const cost = weapon.cost || catalogWeapon?.cost || 0;
   const weight = weapon.weight ?? catalogWeapon?.weight;
 
+  // Readiness state
+  const readiness: EquipmentReadiness = weapon.state?.readiness ?? "holstered";
+
+  // Wireless state
+  const hasWireless = !!(weapon.wirelessBonus || catalogWeapon?.wirelessBonus);
+  const globalWireless = isGlobalWirelessEnabled(character);
+  const wirelessEnabled = weapon.state?.wirelessEnabled ?? true;
+  const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;
+
+  // Weapon identifier for API calls
+  const weaponId = weapon.id || weapon.name;
+
+  // Ammo handlers
+  const handleReload = useCallback(
+    async (ammoItemId: string) => {
+      if (!character.id || !onCharacterUpdate) return;
+      try {
+        const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ ammoItemId }),
+        });
+        const result = await response.json();
+        if (result.success && result.weapon) {
+          const updatedWeapons = character.weapons?.map((w) =>
+            (w.id || w.name) === weaponId ? { ...w, ammoState: result.weapon.ammoState } : w
+          );
+          const updatedAmmunition = result.ammunition ?? character.ammunition;
+          onCharacterUpdate({
+            ...character,
+            weapons: updatedWeapons,
+            ammunition: updatedAmmunition,
+          });
+        }
+      } catch (error) {
+        console.error("Failed to reload weapon:", error);
+      }
+    },
+    [character, weaponId, onCharacterUpdate]
+  );
+
+  const handleUnload = useCallback(async () => {
+    if (!character.id || !onCharacterUpdate) return;
+    try {
+      const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
+        method: "DELETE",
+      });
+      const result = await response.json();
+      if (result.success) {
+        const updatedWeapons = character.weapons?.map((w) =>
+          (w.id || w.name) === weaponId
+            ? { ...w, ammoState: { ...w.ammoState!, currentRounds: 0, loadedAmmoTypeId: null } }
+            : w
+        );
+        const updatedAmmunition = result.ammunition ?? character.ammunition;
+        onCharacterUpdate({ ...character, weapons: updatedWeapons, ammunition: updatedAmmunition });
+      }
+    } catch (error) {
+      console.error("Failed to unload weapon:", error);
+    }
+  }, [character, weaponId, onCharacterUpdate]);
+
+  const handleSwapMagazine = useCallback(
+    async (magazineId: string) => {
+      if (!character.id || !onCharacterUpdate) return;
+      try {
+        const response = await fetch(`/api/characters/${character.id}/weapons/${weaponId}/ammo`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ magazineId }),
+        });
+        const result = await response.json();
+        if (result.success && result.weapon) {
+          const updatedWeapons = character.weapons?.map((w) =>
+            (w.id || w.name) === weaponId
+              ? {
+                  ...w,
+                  ammoState: result.weapon.ammoState,
+                  spareMagazines: result.weapon.spareMagazines,
+                }
+              : w
+          );
+          onCharacterUpdate({ ...character, weapons: updatedWeapons });
+        }
+      } catch (error) {
+        console.error("Failed to swap magazine:", error);
+      }
+    },
+    [character, weaponId, onCharacterUpdate]
+  );
+
   return (
     <div
       data-testid="weapon-row"
       onClick={() => setIsExpanded(!isExpanded)}
       className="group cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
     >
-      {/* Collapsed row: Chevron + Name ... Wifi? Pool pill */}
+      {/* Collapsed row: Chevron + Name (subcategory) [Readiness] [Ammo] [Wifi] [Pool] */}
       <div className="flex min-w-0 items-center gap-1.5">
         <span data-testid="expand-button" className="shrink-0 text-zinc-400">
           {isExpanded ? (
@@ -142,19 +333,57 @@ function WeaponRow({
             ({weapon.subcategory})
           </span>
         )}
-        {(weapon.wirelessBonus || catalogWeapon?.wirelessBonus) && (
-          <Wifi
-            data-testid="wireless-icon"
-            className="ml-auto h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
-          />
+
+        {/* Spacer to push badges to the right */}
+        <span className="ml-auto" />
+
+        {/* Readiness badge (always visible) */}
+        <span
+          data-testid="readiness-badge"
+          className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium ${getReadinessColor(readiness)}`}
+        >
+          {getReadinessLabel(readiness)}
+        </span>
+
+        {/* Compact ammo indicator */}
+        {weapon.ammoState && (
+          <span data-testid="compact-ammo" className="flex shrink-0 items-center gap-1">
+            <span className="h-1.5 w-3 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-700">
+              <span
+                className={`block h-full ${getCompactAmmoBarColor(weapon.ammoState.currentRounds, weapon.ammoState.magazineCapacity)}`}
+                style={{
+                  width: `${weapon.ammoState.magazineCapacity > 0 ? (weapon.ammoState.currentRounds / weapon.ammoState.magazineCapacity) * 100 : 0}%`,
+                }}
+              />
+            </span>
+            <span className="font-mono text-[10px] text-zinc-400 dark:text-zinc-500">
+              {weapon.ammoState.currentRounds}/{weapon.ammoState.magazineCapacity}
+            </span>
+          </span>
         )}
+
+        {/* State-aware wifi icon */}
+        {hasWireless &&
+          (isWirelessActive ? (
+            <Wifi
+              data-testid="wireless-icon"
+              className="h-3 w-3 shrink-0 text-cyan-500 dark:text-cyan-400"
+            />
+          ) : (
+            <WifiOff
+              data-testid="wireless-icon-off"
+              className="h-3 w-3 shrink-0 text-zinc-400 dark:text-zinc-500"
+            />
+          ))}
+
+        {/* Dice pool pill */}
         <button
           data-testid="dice-pool-pill"
           onClick={(e) => {
             e.stopPropagation();
             onSelect?.(pool, label);
           }}
-          className={`${weapon.wirelessBonus || catalogWeapon?.wirelessBonus ? "" : "ml-auto "}shrink-0 cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300`}
+          className="shrink-0 cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300"
         >
           {pool}
         </button>
@@ -256,20 +485,78 @@ function WeaponRow({
             </div>
           )}
 
-          {/* Ammo state */}
+          {/* Inventory controls section (editable only) */}
+          {editable && onCharacterUpdate && (
+            <div data-testid="inventory-controls" className="space-y-2">
+              {/* Readiness controls */}
+              <div data-testid="readiness-controls" className="flex items-center gap-1">
+                <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                  Readiness
+                </span>
+                {WEAPON_READINESS_STATES.map((state) => (
+                  <button
+                    key={state}
+                    data-testid={`readiness-${state}`}
+                    disabled={state === readiness}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      changeWeaponReadiness(character, weaponId, state, onCharacterUpdate);
+                    }}
+                    className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                      state === readiness
+                        ? getReadinessColor(state)
+                        : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                    }`}
+                  >
+                    {getReadinessLabel(state)}
+                  </button>
+                ))}
+              </div>
+
+              {/* Wireless toggle */}
+              {hasWireless && (
+                <div data-testid="wireless-toggle" className="flex items-center gap-2">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+                    Wireless
+                  </span>
+                  <WirelessIndicator
+                    enabled={wirelessEnabled}
+                    globalEnabled={globalWireless}
+                    bonusDescription={weapon.wirelessBonus || catalogWeapon?.wirelessBonus}
+                    onToggle={(enabled) =>
+                      toggleWeaponWireless(character, weaponId, enabled, onCharacterUpdate)
+                    }
+                    size="sm"
+                  />
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Ammo display: interactive when editable, static when read-only */}
           {weapon.ammoState && (
             <div data-testid="ammo-section">
-              <div className="flex items-baseline gap-2 text-xs text-zinc-500 dark:text-zinc-400">
-                <span className="text-[10px] font-semibold uppercase tracking-wider">Ammo</span>
-                <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
-                  {weapon.ammoState.currentRounds}/{weapon.ammoState.magazineCapacity}
-                </span>
-                {weapon.ammoState.loadedAmmoTypeId && (
-                  <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
-                    {weapon.ammoState.loadedAmmoTypeId.replace(/-/g, " ")}
+              {editable && onCharacterUpdate ? (
+                <WeaponAmmoDisplay
+                  weapon={weapon}
+                  availableAmmo={ammunition}
+                  onReload={handleReload}
+                  onUnload={handleUnload}
+                  onSwapMagazine={handleSwapMagazine}
+                />
+              ) : (
+                <div className="flex items-baseline gap-2 text-xs text-zinc-500 dark:text-zinc-400">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider">Ammo</span>
+                  <span className="font-mono font-semibold text-zinc-700 dark:text-zinc-300">
+                    {weapon.ammoState.currentRounds}/{weapon.ammoState.magazineCapacity}
                   </span>
-                )}
-              </div>
+                  {weapon.ammoState.loadedAmmoTypeId && (
+                    <span className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                      {weapon.ammoState.loadedAmmoTypeId.replace(/-/g, " ")}
+                    </span>
+                  )}
+                </div>
+              )}
             </div>
           )}
 
@@ -329,9 +616,16 @@ const WEAPON_SECTIONS = [
 interface WeaponsDisplayProps {
   character: Character;
   onSelect?: (pool: number, label: string) => void;
+  onCharacterUpdate?: (updatedCharacter: Character) => void;
+  editable?: boolean;
 }
 
-export function WeaponsDisplay({ character, onSelect }: WeaponsDisplayProps) {
+export function WeaponsDisplay({
+  character,
+  onSelect,
+  onCharacterUpdate,
+  editable,
+}: WeaponsDisplayProps) {
   const catalog = useGear();
   const ranged = character.weapons?.filter((w) => !isMeleeWeapon(w)) || [];
   const melee = character.weapons?.filter((w) => isMeleeWeapon(w)) || [];
@@ -339,6 +633,7 @@ export function WeaponsDisplay({ character, onSelect }: WeaponsDisplayProps) {
   if (ranged.length === 0 && melee.length === 0) return null;
 
   const items: Record<"ranged" | "melee", Weapon[]> = { ranged, melee };
+  const ammunition = (character.ammunition || []) as AmmunitionItem[];
 
   return (
     <DisplayCard
@@ -365,6 +660,9 @@ export function WeaponsDisplay({ character, onSelect }: WeaponsDisplayProps) {
                       weapon.catalogId ? findCatalogWeapon(catalog, weapon.catalogId) : undefined
                     }
                     onSelect={onSelect}
+                    onCharacterUpdate={onCharacterUpdate}
+                    editable={editable}
+                    ammunition={ammunition}
                   />
                 ))}
               </div>

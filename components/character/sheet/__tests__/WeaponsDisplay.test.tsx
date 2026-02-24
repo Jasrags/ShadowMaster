@@ -2,10 +2,11 @@
  * WeaponsDisplay Component Tests
  *
  * Tests the weapons display with ranged/melee expandable rows,
- * stat pills, pool calculations, catalog integration, and onSelect callback.
+ * stat pills, pool calculations, catalog integration, onSelect callback,
+ * and inventory management controls (readiness, wireless, ammo).
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent, within } from "@testing-library/react";
 import {
   setupDisplayCardMock,
@@ -17,6 +18,48 @@ import {
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
+
+// ---------------------------------------------------------------------------
+// Mock external components
+// ---------------------------------------------------------------------------
+
+vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+  WirelessIndicator: (props: {
+    enabled: boolean;
+    globalEnabled?: boolean;
+    onToggle?: (v: boolean) => void;
+  }) => (
+    <div
+      data-testid="wireless-indicator"
+      data-enabled={String(props.enabled)}
+      data-global-enabled={String(props.globalEnabled)}
+    >
+      {props.onToggle && (
+        <button
+          data-testid="wireless-indicator-toggle"
+          onClick={() => props.onToggle!(!props.enabled)}
+        >
+          Toggle
+        </button>
+      )}
+    </div>
+  ),
+}));
+
+vi.mock("@/app/characters/[id]/components/WeaponAmmoDisplay", () => ({
+  WeaponAmmoDisplay: (props: Record<string, unknown>) => (
+    <div
+      data-testid="weapon-ammo-display"
+      data-has-reload={String(!!props.onReload)}
+      data-has-unload={String(!!props.onUnload)}
+      data-has-swap={String(!!props.onSwapMagazine)}
+    />
+  ),
+}));
+
+vi.mock("@/lib/rules/wireless", () => ({
+  isGlobalWirelessEnabled: vi.fn(() => true),
+}));
 
 // ---------------------------------------------------------------------------
 // Catalog mock
@@ -98,6 +141,12 @@ vi.mock("@/lib/rules", () => ({
 }));
 
 import { WeaponsDisplay } from "../WeaponsDisplay";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+
+beforeEach(() => {
+  vi.clearAllMocks();
+  (isGlobalWirelessEnabled as ReturnType<typeof vi.fn>).mockReturnValue(true);
+});
 
 describe("WeaponsDisplay", () => {
   it("returns null when no weapons", () => {
@@ -215,6 +264,30 @@ describe("WeaponsDisplay", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
     expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+  });
+
+  it("shows WifiOff icon when wireless is disabled for a weapon", () => {
+    const rangedWithWirelessOff = {
+      ...MOCK_RANGED_WEAPON,
+      wirelessBonus: "Provides +1 accuracy.",
+      state: { readiness: "holstered" as const, wirelessEnabled: false },
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithWirelessOff] });
+    render(<WeaponsDisplay character={character} />);
+    expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+  });
+
+  it("shows WifiOff icon when global wireless is disabled", () => {
+    (isGlobalWirelessEnabled as ReturnType<typeof vi.fn>).mockReturnValue(false);
+    const rangedWithWireless = {
+      ...MOCK_RANGED_WEAPON,
+      wirelessBonus: "Provides +1 accuracy.",
+    };
+    const character = createSheetCharacter({ weapons: [rangedWithWireless] });
+    render(<WeaponsDisplay character={character} />);
+    expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
   });
 
   // --- Expanded stats (require expanding) ---
@@ -536,5 +609,258 @@ describe("WeaponsDisplay", () => {
     render(<WeaponsDisplay character={character} />);
     fireEvent.click(screen.getByTestId("expand-button"));
     expect(screen.queryByTestId("modifications-section")).not.toBeInTheDocument();
+  });
+
+  // =========================================================================
+  // Readiness badge (collapsed row, always visible)
+  // =========================================================================
+
+  describe("readiness badge", () => {
+    it("shows default 'Holstered' when weapon has no state", () => {
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} />);
+      const badge = screen.getByTestId("readiness-badge");
+      expect(badge).toHaveTextContent("Holstered");
+    });
+
+    it("shows 'Readied' with emerald color when readiness is readied", () => {
+      const readiedWeapon = {
+        ...MOCK_RANGED_WEAPON,
+        state: { readiness: "readied" as const, wirelessEnabled: true },
+      };
+      const character = createSheetCharacter({ weapons: [readiedWeapon] });
+      render(<WeaponsDisplay character={character} />);
+      const badge = screen.getByTestId("readiness-badge");
+      expect(badge).toHaveTextContent("Readied");
+      expect(badge.className).toContain("emerald");
+    });
+
+    it("shows 'Stored' when readiness is stored", () => {
+      const storedWeapon = {
+        ...MOCK_RANGED_WEAPON,
+        state: { readiness: "stored" as const, wirelessEnabled: true },
+      };
+      const character = createSheetCharacter({ weapons: [storedWeapon] });
+      render(<WeaponsDisplay character={character} />);
+      const badge = screen.getByTestId("readiness-badge");
+      expect(badge).toHaveTextContent("Stored");
+    });
+
+    it("is visible even when editable=false", () => {
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={false} />);
+      expect(screen.getByTestId("readiness-badge")).toBeInTheDocument();
+    });
+  });
+
+  // =========================================================================
+  // Readiness controls (expanded, editable only)
+  // =========================================================================
+
+  describe("readiness controls", () => {
+    it("hidden when editable=false", () => {
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={false} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("readiness-controls")).not.toBeInTheDocument();
+    });
+
+    it("hidden when onCharacterUpdate is not provided", () => {
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("readiness-controls")).not.toBeInTheDocument();
+    });
+
+    it("shown when editable=true and onCharacterUpdate provided", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-controls")).toBeInTheDocument();
+    });
+
+    it("renders three readiness buttons", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-readied")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-holstered")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-stored")).toBeInTheDocument();
+    });
+
+    it("current readiness button is disabled", () => {
+      const onUpdate = vi.fn();
+      // Default readiness is "holstered"
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-holstered")).toBeDisabled();
+      expect(screen.getByTestId("readiness-readied")).not.toBeDisabled();
+      expect(screen.getByTestId("readiness-stored")).not.toBeDisabled();
+    });
+
+    it("click calls onCharacterUpdate with new readiness", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({
+        weapons: [MOCK_RANGED_WEAPON],
+      });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-readied"));
+      expect(onUpdate).toHaveBeenCalledTimes(1);
+      const updatedChar = onUpdate.mock.calls[0][0];
+      expect(updatedChar.weapons[0].state.readiness).toBe("readied");
+    });
+  });
+
+  // =========================================================================
+  // Wireless toggle (expanded, editable, weapon has wireless)
+  // =========================================================================
+
+  describe("wireless toggle", () => {
+    it("hidden when weapon has no wirelessBonus", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+    });
+
+    it("hidden when not editable", () => {
+      const rangedWithWireless = {
+        ...MOCK_RANGED_WEAPON,
+        wirelessBonus: "Provides +1 accuracy.",
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithWireless] });
+      render(<WeaponsDisplay character={character} editable={false} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+    });
+
+    it("shown when editable + has wireless bonus", () => {
+      const onUpdate = vi.fn();
+      const rangedWithWireless = {
+        ...MOCK_RANGED_WEAPON,
+        wirelessBonus: "Provides +1 accuracy.",
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithWireless] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
+      expect(screen.getByTestId("wireless-indicator")).toBeInTheDocument();
+    });
+
+    it("WirelessIndicator receives correct props", () => {
+      const onUpdate = vi.fn();
+      const rangedWithWireless = {
+        ...MOCK_RANGED_WEAPON,
+        wirelessBonus: "Provides +1 accuracy.",
+        state: { readiness: "holstered" as const, wirelessEnabled: false },
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithWireless] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      const indicator = screen.getByTestId("wireless-indicator");
+      expect(indicator).toHaveAttribute("data-enabled", "false");
+      expect(indicator).toHaveAttribute("data-global-enabled", "true");
+    });
+  });
+
+  // =========================================================================
+  // Compact ammo bar (collapsed row)
+  // =========================================================================
+
+  describe("compact ammo bar", () => {
+    it("visible in collapsed row for weapons with ammoState", () => {
+      const rangedWithAmmo = {
+        ...MOCK_RANGED_WEAPON,
+        ammoState: { loadedAmmoTypeId: "regular", currentRounds: 10, magazineCapacity: 15 },
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithAmmo] });
+      render(<WeaponsDisplay character={character} />);
+      const compactAmmo = screen.getByTestId("compact-ammo");
+      expect(compactAmmo).toBeInTheDocument();
+      expect(compactAmmo).toHaveTextContent("10/15");
+    });
+
+    it("hidden when weapon has no ammoState", () => {
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} />);
+      expect(screen.queryByTestId("compact-ammo")).not.toBeInTheDocument();
+    });
+  });
+
+  // =========================================================================
+  // Ammo display (expanded section)
+  // =========================================================================
+
+  describe("ammo display", () => {
+    it("renders WeaponAmmoDisplay in expanded section when editable", () => {
+      const onUpdate = vi.fn();
+      const rangedWithAmmo = {
+        ...MOCK_RANGED_WEAPON,
+        ammoState: { loadedAmmoTypeId: "regular", currentRounds: 10, magazineCapacity: 15 },
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithAmmo] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      const ammoDisplay = screen.getByTestId("weapon-ammo-display");
+      expect(ammoDisplay).toBeInTheDocument();
+      expect(ammoDisplay).toHaveAttribute("data-has-reload", "true");
+      expect(ammoDisplay).toHaveAttribute("data-has-unload", "true");
+      expect(ammoDisplay).toHaveAttribute("data-has-swap", "true");
+    });
+
+    it("renders static ammo text when not editable", () => {
+      const rangedWithAmmo = {
+        ...MOCK_RANGED_WEAPON,
+        ammoState: { loadedAmmoTypeId: "regular", currentRounds: 10, magazineCapacity: 15 },
+      };
+      const character = createSheetCharacter({ weapons: [rangedWithAmmo] });
+      render(<WeaponsDisplay character={character} editable={false} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("weapon-ammo-display")).not.toBeInTheDocument();
+      const ammoSection = screen.getByTestId("ammo-section");
+      expect(ammoSection).toHaveTextContent("10/15");
+    });
+  });
+
+  // =========================================================================
+  // Local state updates
+  // =========================================================================
+
+  describe("local state updates", () => {
+    it("readiness change calls onCharacterUpdate with updated weapon state", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({
+        weapons: [MOCK_RANGED_WEAPON],
+      });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-readied"));
+
+      expect(onUpdate).toHaveBeenCalledTimes(1);
+      const updatedChar = onUpdate.mock.calls[0][0];
+      expect(updatedChar.weapons[0].state.readiness).toBe("readied");
+      expect(updatedChar.weapons[0].state.wirelessEnabled).toBe(true);
+    });
+
+    it("readiness change preserves existing wireless state", () => {
+      const onUpdate = vi.fn();
+      const weaponWithWirelessOff = {
+        ...MOCK_RANGED_WEAPON,
+        state: { readiness: "holstered" as const, wirelessEnabled: false },
+      };
+      const character = createSheetCharacter({ weapons: [weaponWithWirelessOff] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-readied"));
+
+      const updatedChar = onUpdate.mock.calls[0][0];
+      expect(updatedChar.weapons[0].state.readiness).toBe("readied");
+      expect(updatedChar.weapons[0].state.wirelessEnabled).toBe(false);
+    });
   });
 });

@@ -143,6 +143,7 @@ export const LUCIDE_MOCK = {
   Settings2: createIconMock("Settings2"),
   ChevronDown: createIconMock("ChevronDown"),
   ChevronRight: createIconMock("ChevronRight"),
+  WifiOff: createIconMock("WifiOff"),
 };
 
 // ---------------------------------------------------------------------------
