@@ -4,21 +4,31 @@
  * Tests the vehicles & drones display with expandable rows grouped into
  * Vehicles/Drones/RCCs sections. Validates section grouping, collapsed/expanded
  * states, type badges, primary pills, stats, catalog integration (description,
- * cost, source reference, weapon mounts), autosofts, and notes rendering.
+ * cost, source reference, weapon mounts), autosofts, notes rendering,
+ * condition badges, wireless icons, and wireless toggles.
  */
 
-import { describe, it, expect, vi } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+import { render, screen, fireEvent } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import type { Character } from "@/lib/types";
 import {
   setupDisplayCardMock,
+  createSheetCharacter,
   LUCIDE_MOCK,
   MOCK_VEHICLE,
   MOCK_VEHICLE_WITH_OPTIONS,
+  MOCK_VEHICLE_BRICKED,
+  MOCK_VEHICLE_DESTROYED,
   MOCK_DRONE,
   MOCK_DRONE_WITH_AUTOSOFTS,
+  MOCK_DRONE_BRICKED,
+  MOCK_DRONE_DESTROYED,
+  MOCK_DRONE_WIRELESS,
   MOCK_RCC,
   MOCK_RCC_WITH_OPTIONS,
+  MOCK_RCC_BRICKED,
+  MOCK_RCC_WIRELESS,
 } from "./test-helpers";
 import type { VehiclesCatalogData } from "@/lib/rules/RulesetContext";
 
@@ -142,15 +152,53 @@ const MOCK_VEHICLES_CATALOG: VehiclesCatalogData = {
   autosofts: [],
 };
 
+// ---------------------------------------------------------------------------
+// Mocks
+// ---------------------------------------------------------------------------
+
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
 vi.mock("@/lib/rules", () => ({
   useVehiclesCatalog: () => MOCK_VEHICLES_CATALOG,
 }));
 
+vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+  WirelessIndicator: (props: {
+    enabled: boolean;
+    globalEnabled?: boolean;
+    condition?: string;
+    onToggle?: (v: boolean) => void;
+  }) => (
+    <div
+      data-testid="wireless-indicator"
+      data-enabled={String(props.enabled)}
+      data-global-enabled={String(props.globalEnabled)}
+      data-condition={props.condition ?? ""}
+    >
+      {props.onToggle && (
+        <button
+          data-testid="wireless-indicator-toggle"
+          onClick={() => props.onToggle!(!props.enabled)}
+        >
+          toggle
+        </button>
+      )}
+    </div>
+  ),
+}));
+
+const mockIsGlobalWirelessEnabled = vi.fn((_character?: unknown) => true);
+vi.mock("@/lib/rules/wireless", () => ({
+  isGlobalWirelessEnabled: (character: unknown) => mockIsGlobalWirelessEnabled(character),
+}));
+
 import { VehiclesDisplay } from "../VehiclesDisplay";
 
 describe("VehiclesDisplay", () => {
+  beforeEach(() => {
+    mockIsGlobalWirelessEnabled.mockReturnValue(true);
+  });
+
   // --- Empty state ---
 
   it("returns null when all arrays are empty", () => {
@@ -543,5 +591,230 @@ describe("VehiclesDisplay", () => {
     expect(screen.getByText("RCC-Standard")).toBeInTheDocument();
     const rows = screen.getAllByTestId("vehicle-row");
     expect(rows).toHaveLength(3);
+  });
+
+  // =========================================================================
+  // Condition badges
+  // =========================================================================
+
+  it("shows BRICKED badge for bricked drone", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_BRICKED]} />);
+    const badge = screen.getByTestId("condition-badge");
+    expect(badge).toHaveTextContent("BRICKED");
+    expect(badge.className).toContain("red-500");
+  });
+
+  it("shows DESTROYED badge for destroyed drone", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_DESTROYED]} />);
+    const badge = screen.getByTestId("condition-badge");
+    expect(badge).toHaveTextContent("DESTROYED");
+    expect(badge.className).toContain("red-800");
+  });
+
+  it("shows BRICKED badge for bricked vehicle", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE_BRICKED]} />);
+    const badge = screen.getByTestId("condition-badge");
+    expect(badge).toHaveTextContent("BRICKED");
+  });
+
+  it("shows DESTROYED badge for destroyed vehicle", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE_DESTROYED]} />);
+    const badge = screen.getByTestId("condition-badge");
+    expect(badge).toHaveTextContent("DESTROYED");
+  });
+
+  it("shows BRICKED badge for bricked RCC", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC_BRICKED]} />);
+    const badge = screen.getByTestId("condition-badge");
+    expect(badge).toHaveTextContent("BRICKED");
+  });
+
+  it("does not show condition badge for functional drone (no state)", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    expect(screen.queryByTestId("condition-badge")).not.toBeInTheDocument();
+  });
+
+  it("does not show condition badge for drone with wireless-only state", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_WIRELESS]} />);
+    expect(screen.queryByTestId("condition-badge")).not.toBeInTheDocument();
+  });
+
+  // =========================================================================
+  // Wireless icon (collapsed row)
+  // =========================================================================
+
+  it("shows Wifi icon when drone wireless is active", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_WIRELESS]} />);
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+  });
+
+  it("shows WifiOff icon when drone wireless is disabled", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE_BRICKED]} />);
+    expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+  });
+
+  it("shows WifiOff icon when global wireless is disabled", () => {
+    mockIsGlobalWirelessEnabled.mockReturnValue(false);
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    render(<VehiclesDisplay drones={[MOCK_DRONE_WIRELESS]} character={character} />);
+    expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+  });
+
+  it("shows Wifi icon for RCC with wireless enabled", () => {
+    render(<VehiclesDisplay rccs={[MOCK_RCC_WIRELESS]} />);
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+  });
+
+  it("does not show wireless icon for vehicle (not Matrix-capable)", () => {
+    render(<VehiclesDisplay vehicles={[MOCK_VEHICLE]} />);
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+  });
+
+  it("does not show wireless icon for drone without state", () => {
+    render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+  });
+
+  // =========================================================================
+  // Wireless toggle (expanded, editable)
+  // =========================================================================
+
+  it("hides wireless toggle when not editable", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    render(
+      <VehiclesDisplay
+        drones={[MOCK_DRONE_WIRELESS]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={false}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+  });
+
+  it("hides wireless toggle for vehicles (not Matrix-capable)", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ vehicles: [MOCK_VEHICLE] });
+    render(
+      <VehiclesDisplay
+        vehicles={[MOCK_VEHICLE]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+  });
+
+  it("shows wireless toggle for editable drone", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    render(
+      <VehiclesDisplay
+        drones={[MOCK_DRONE_WIRELESS]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
+    expect(screen.getByTestId("wireless-indicator")).toBeInTheDocument();
+  });
+
+  it("shows wireless toggle for editable RCC", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ rccs: [MOCK_RCC_WIRELESS] });
+    render(
+      <VehiclesDisplay
+        rccs={[MOCK_RCC_WIRELESS]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
+    expect(screen.getByTestId("wireless-indicator")).toBeInTheDocument();
+  });
+
+  it("passes correct enabled/globalEnabled to WirelessIndicator", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    render(
+      <VehiclesDisplay
+        drones={[MOCK_DRONE_WIRELESS]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    const indicator = screen.getByTestId("wireless-indicator");
+    expect(indicator).toHaveAttribute("data-enabled", "true");
+    expect(indicator).toHaveAttribute("data-global-enabled", "true");
+  });
+
+  it("passes globalEnabled=false when global wireless is off", async () => {
+    mockIsGlobalWirelessEnabled.mockReturnValue(false);
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    render(
+      <VehiclesDisplay
+        drones={[MOCK_DRONE_WIRELESS]}
+        character={character}
+        onCharacterUpdate={vi.fn()}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    const indicator = screen.getByTestId("wireless-indicator");
+    expect(indicator).toHaveAttribute("data-global-enabled", "false");
+  });
+
+  it("calls onCharacterUpdate when drone wireless is toggled", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ drones: [MOCK_DRONE_WIRELESS] });
+    const onUpdate = vi.fn();
+    render(
+      <VehiclesDisplay
+        drones={[MOCK_DRONE_WIRELESS]}
+        character={character}
+        onCharacterUpdate={onUpdate}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByTestId("wireless-indicator-toggle"));
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    const updated = onUpdate.mock.calls[0][0] as Character;
+    expect(updated.drones?.[0].state?.wirelessEnabled).toBe(false);
+  });
+
+  it("calls onCharacterUpdate when RCC wireless is toggled", async () => {
+    const user = userEvent.setup();
+    const character = createSheetCharacter({ rccs: [MOCK_RCC_WIRELESS] });
+    const onUpdate = vi.fn();
+    render(
+      <VehiclesDisplay
+        rccs={[MOCK_RCC_WIRELESS]}
+        character={character}
+        onCharacterUpdate={onUpdate}
+        editable={true}
+      />
+    );
+    await user.click(screen.getByTestId("expand-button"));
+    fireEvent.click(screen.getByTestId("wireless-indicator-toggle"));
+    expect(onUpdate).toHaveBeenCalledTimes(1);
+    const updated = onUpdate.mock.calls[0][0] as Character;
+    expect(updated.rccs?.[0].state?.wirelessEnabled).toBe(false);
   });
 });

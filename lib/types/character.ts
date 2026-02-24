@@ -1177,6 +1177,8 @@ export interface Vehicle {
   availability: number;
   /** Legality status (restricted/forbidden) */
   legality?: ItemLegality;
+  /** Operational state (readiness, wireless, condition) */
+  state?: GearState;
   notes?: string;
 }
 
@@ -1220,6 +1222,8 @@ export interface CharacterDrone {
   legality?: ItemLegality;
   /** Installed autosofts */
   installedAutosofts?: string[];
+  /** Operational state (readiness, wireless, condition) */
+  state?: GearState;
   /** Notes */
   notes?: string;
 }
@@ -1248,6 +1252,8 @@ export interface CharacterRCC {
   legality?: ItemLegality;
   /** Currently running autosofts (shared to all slaved drones) */
   runningAutosofts?: string[];
+  /** Operational state (readiness, wireless, condition) */
+  state?: GearState;
   /** Notes */
   notes?: string;
 }
