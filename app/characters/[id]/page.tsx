@@ -421,7 +421,12 @@ function CharacterSheet({
               showActions={character.status === "active"}
             />
 
-            <GearDisplay gear={(character.gear || []).filter((item) => item.category !== "drug")} />
+            <GearDisplay
+              character={character}
+              gear={(character.gear || []).filter((item) => item.category !== "drug")}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
+            />
 
             <DrugsDisplay
               drugs={(character.gear || []).filter((item) => item.category === "drug")}
