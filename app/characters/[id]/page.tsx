@@ -16,6 +16,7 @@ import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 import { CombatSessionProvider } from "@/lib/combat";
+import { MatrixSessionProvider, useMatrixSession } from "@/lib/matrix";
 
 import {
   ATTRIBUTE_DISPLAY,
@@ -87,6 +88,7 @@ function CharacterSheet({
   const ruleset = useMergedRuleset();
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
+  const matrixSession = useMatrixSession();
 
   useEffect(() => {
     if (character.editionCode) {
@@ -403,6 +405,8 @@ function CharacterSheet({
                   character={character}
                   onCharacterUpdate={(updated) => setCharacter(updated)}
                   editable={character.status === "active"}
+                  connectionMode={matrixSession.connectionMode}
+                  overwatchScore={matrixSession.overwatchScore}
                 />
                 {(character.cyberdecks?.length ?? 0) > 0 && (
                   <CyberdeckConfigDisplay
@@ -636,18 +640,20 @@ export default function CharacterPage({ params }: CharacterPageProps) {
   return (
     <RulesetProvider>
       <CombatSessionProvider characterId={character.id} pollInterval={5000}>
-        <CharacterSheet
-          character={character}
-          setCharacter={setCharacter}
-          showDiceRoller={showDiceRoller}
-          setShowDiceRoller={setShowDiceRoller}
-          targetPool={targetPool}
-          setTargetPool={setTargetPool}
-          poolContext={poolContext}
-          setPoolContext={setPoolContext}
-          isAdmin={isAdmin}
-          onRefresh={handleStatusChange}
-        />
+        <MatrixSessionProvider character={character} onCharacterUpdate={setCharacter}>
+          <CharacterSheet
+            character={character}
+            setCharacter={setCharacter}
+            showDiceRoller={showDiceRoller}
+            setShowDiceRoller={setShowDiceRoller}
+            targetPool={targetPool}
+            setTargetPool={setTargetPool}
+            poolContext={poolContext}
+            setPoolContext={setPoolContext}
+            isAdmin={isAdmin}
+            onRefresh={handleStatusChange}
+          />
+        </MatrixSessionProvider>
       </CombatSessionProvider>
     </RulesetProvider>
   );
