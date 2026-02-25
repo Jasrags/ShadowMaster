@@ -35,6 +35,7 @@ import {
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
   MatrixActionsDisplay,
+  MatrixDevicesDisplay,
   MatrixSummaryDisplay,
   ProgramManagerDisplay,
   QualitiesDisplay,
@@ -445,6 +446,14 @@ function CharacterSheet({
               onCharacterUpdate={(updated) => setCharacter(updated)}
               editable={character.status === "active"}
             />
+
+            {hasMatrixAccess(character) && (
+              <MatrixDevicesDisplay
+                character={character}
+                onCharacterUpdate={(updated) => setCharacter(updated)}
+                editable={character.status === "active"}
+              />
+            )}
 
             <AugmentationsDisplay
               character={character}

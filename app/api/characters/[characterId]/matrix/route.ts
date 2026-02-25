@@ -192,6 +192,33 @@ export async function PATCH(
       };
     }
 
+    // Handle active device switch
+    if (body.activeDeviceId) {
+      // Validate that the device exists on this character
+      const allCyberdecks = getCharacterCyberdecks(character);
+      const allCommlinks = getCharacterCommlinks(character);
+      const deviceExists =
+        allCyberdecks.some(
+          (d) => d.id === body.activeDeviceId || d.catalogId === body.activeDeviceId
+        ) ||
+        allCommlinks.some(
+          (c) => c.id === body.activeDeviceId || c.catalogId === body.activeDeviceId
+        );
+
+      if (!deviceExists) {
+        return NextResponse.json(
+          { success: false, error: "Device not found on this character" },
+          { status: 400 }
+        );
+      }
+
+      updates.activeMatrixDeviceId = body.activeDeviceId;
+      auditDetails.activeDeviceChange = {
+        previousDeviceId: character.activeMatrixDeviceId,
+        newDeviceId: body.activeDeviceId,
+      };
+    }
+
     // Handle program loading
     if (body.loadPrograms && body.loadPrograms.length > 0) {
       const activeDeck = getActiveCyberdeck(character);

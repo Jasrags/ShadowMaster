@@ -150,6 +150,7 @@ export const LUCIDE_MOCK = {
   AlertTriangle: createIconMock("AlertTriangle"),
   Monitor: createIconMock("Monitor"),
   ArrowUpDown: createIconMock("ArrowUpDown"),
+  Smartphone: createIconMock("Smartphone"),
 };
 
 // ---------------------------------------------------------------------------
