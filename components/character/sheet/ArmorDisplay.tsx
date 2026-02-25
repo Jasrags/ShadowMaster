@@ -10,7 +10,7 @@ import { calculateArmorTotal } from "@/lib/rules/gameplay";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { Tooltip } from "@/components/ui";
 import { DisplayCard } from "./DisplayCard";
-import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { WirelessIndicator } from "./WirelessIndicator";
 import { ChevronDown, ChevronRight, Shield, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------

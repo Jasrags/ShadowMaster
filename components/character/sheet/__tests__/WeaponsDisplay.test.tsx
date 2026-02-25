@@ -23,7 +23,7 @@ vi.mock("lucide-react", () => LUCIDE_MOCK);
 // Mock external components
 // ---------------------------------------------------------------------------
 
-vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
     globalEnabled?: boolean;
@@ -46,7 +46,7 @@ vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
   ),
 }));
 
-vi.mock("@/app/characters/[id]/components/WeaponAmmoDisplay", () => ({
+vi.mock("@/components/character/sheet/WeaponAmmoDisplay", () => ({
   WeaponAmmoDisplay: (props: Record<string, unknown>) => (
     <div
       data-testid="weapon-ammo-display"

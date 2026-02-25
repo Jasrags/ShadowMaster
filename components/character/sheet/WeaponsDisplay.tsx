@@ -9,8 +9,8 @@ import { useGear } from "@/lib/rules";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
-import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
-import { WeaponAmmoDisplay } from "@/app/characters/[id]/components/WeaponAmmoDisplay";
+import { WirelessIndicator } from "./WirelessIndicator";
+import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
 import { ChevronDown, ChevronRight, Swords, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
