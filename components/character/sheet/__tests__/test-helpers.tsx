@@ -8,6 +8,8 @@
 import { vi } from "vitest";
 import { createMockCharacter } from "@/__tests__/mocks/storage";
 import type { Character, Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
+import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
+import type { CharacterProgram } from "@/lib/types/programs";
 import { SinnerQuality } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -146,6 +148,9 @@ export const LUCIDE_MOCK = {
   WifiOff: createIconMock("WifiOff"),
   Weight: createIconMock("Weight"),
   AlertTriangle: createIconMock("AlertTriangle"),
+  Monitor: createIconMock("Monitor"),
+  ArrowUpDown: createIconMock("ArrowUpDown"),
+  Smartphone: createIconMock("Smartphone"),
 };
 
 // ---------------------------------------------------------------------------
@@ -721,3 +726,174 @@ export const MOCK_RCC_WIRELESS: CharacterRCC = {
   name: "Wireless RCC",
   state: { readiness: "stored", wirelessEnabled: true },
 };
+
+// ---------------------------------------------------------------------------
+// Mock cyberdeck data
+// ---------------------------------------------------------------------------
+export const MOCK_CYBERDECK: CharacterCyberdeck = {
+  id: "deck-1",
+  catalogId: "novatech-navigator",
+  name: "Novatech Navigator",
+  deviceRating: 4,
+  attributeArray: [6, 5, 4, 3],
+  currentConfig: {
+    attack: 3,
+    sleaze: 4,
+    dataProcessing: 6,
+    firewall: 5,
+  },
+  programSlots: 5,
+  loadedPrograms: ["exploit", "stealth"],
+  cost: 40750,
+  availability: 6,
+};
+
+export const MOCK_CYBERDECK_OFFENSIVE: CharacterCyberdeck = {
+  ...MOCK_CYBERDECK,
+  id: "deck-2",
+  name: "Shiawase Cyber-5",
+  currentConfig: {
+    attack: 6,
+    sleaze: 5,
+    dataProcessing: 4,
+    firewall: 3,
+  },
+};
+
+// ---------------------------------------------------------------------------
+// Mock commlink data
+// ---------------------------------------------------------------------------
+export const MOCK_COMMLINK: CharacterCommlink = {
+  id: "comm-1",
+  catalogId: "hermes-ikon",
+  name: "Hermes Ikon",
+  deviceRating: 5,
+  dataProcessing: 5,
+  firewall: 5,
+  cost: 3000,
+  availability: 4,
+};
+
+// ---------------------------------------------------------------------------
+// Mock program data
+// ---------------------------------------------------------------------------
+export const MOCK_PROGRAMS: CharacterProgram[] = [
+  {
+    id: "prog-1",
+    catalogId: "exploit",
+    name: "Exploit",
+    category: "hacking",
+    cost: 250,
+    availability: 4,
+    loaded: true,
+  },
+  {
+    id: "prog-2",
+    catalogId: "stealth",
+    name: "Stealth",
+    category: "hacking",
+    cost: 250,
+    availability: 4,
+    loaded: true,
+  },
+  {
+    id: "prog-3",
+    catalogId: "toolbox",
+    name: "Toolbox",
+    category: "common",
+    cost: 250,
+    availability: 4,
+    loaded: false,
+  },
+  {
+    id: "prog-4",
+    catalogId: "armor",
+    name: "Armor",
+    category: "common",
+    cost: 250,
+    availability: 4,
+    loaded: false,
+  },
+  {
+    id: "prog-5",
+    catalogId: "agent",
+    name: "Agent",
+    category: "agent",
+    rating: 3,
+    cost: 3000,
+    availability: 8,
+    loaded: false,
+  },
+];
+
+// ---------------------------------------------------------------------------
+// Matrix character factories
+// ---------------------------------------------------------------------------
+
+/** Character with a cyberdeck - a full decker */
+export function createDeckerCharacter(overrides?: Partial<Character>): Character {
+  return createMockCharacter({
+    name: "Console Cowboy",
+    metatype: "Human",
+    status: "active",
+    magicalPath: "mundane",
+    editionCode: "sr5",
+    attributes: {
+      body: 3,
+      agility: 3,
+      reaction: 4,
+      strength: 2,
+      willpower: 4,
+      logic: 6,
+      intuition: 5,
+      charisma: 2,
+    },
+    specialAttributes: {
+      edge: 3,
+      essence: 6,
+    },
+    skills: {
+      hacking: 6,
+      cybercombat: 4,
+      "electronic-warfare": 4,
+      computer: 5,
+      hardware: 3,
+      software: 3,
+    },
+    cyberdecks: [MOCK_CYBERDECK],
+    programs: MOCK_PROGRAMS,
+    activeMatrixDeviceId: "deck-1",
+    ...overrides,
+  });
+}
+
+/** Character with only a commlink - basic matrix access */
+export function createCommlinkCharacter(overrides?: Partial<Character>): Character {
+  return createMockCharacter({
+    name: "Street Sam Online",
+    metatype: "Ork",
+    status: "active",
+    magicalPath: "mundane",
+    editionCode: "sr5",
+    attributes: {
+      body: 5,
+      agility: 6,
+      reaction: 5,
+      strength: 4,
+      willpower: 3,
+      logic: 3,
+      intuition: 4,
+      charisma: 2,
+    },
+    specialAttributes: {
+      edge: 3,
+      essence: 4.2,
+    },
+    skills: {
+      computer: 2,
+    },
+    commlinks: [MOCK_COMMLINK],
+    activeMatrixDeviceId: "comm-1",
+    ...overrides,
+  });
+}

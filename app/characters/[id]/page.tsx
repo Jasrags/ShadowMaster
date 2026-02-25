@@ -25,6 +25,7 @@ import {
   ComplexFormsDisplay,
   ConditionDisplay,
   ContactsDisplay,
+  CyberdeckConfigDisplay,
   DerivedStatsDisplay,
   DrugsDisplay,
   EncumbranceDisplay,
@@ -33,6 +34,10 @@ import {
   IdentitiesDisplay,
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
+  MatrixActionsDisplay,
+  MatrixDevicesDisplay,
+  MatrixSummaryDisplay,
+  ProgramManagerDisplay,
   QualitiesDisplay,
   SkillsDisplay,
   SpellsDisplay,
@@ -42,6 +47,7 @@ import {
   ArmorDisplay,
   AugmentationsDisplay,
 } from "@/components/character/sheet";
+import { hasMatrixAccess } from "@/lib/rules/matrix/cyberdeck-validator";
 
 // =============================================================================
 // MAIN CHARACTER SHEET PAGE
@@ -384,6 +390,36 @@ function CharacterSheet({
               />
             )}
 
+            {/* Matrix Operations */}
+            {hasMatrixAccess(character) && (
+              <>
+                <MatrixSummaryDisplay
+                  character={character}
+                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  editable={character.status === "active"}
+                />
+                {(character.cyberdecks?.length ?? 0) > 0 && (
+                  <CyberdeckConfigDisplay
+                    character={character}
+                    onCharacterUpdate={(updated) => setCharacter(updated)}
+                    editable={character.status === "active"}
+                  />
+                )}
+                {(character.programs?.length ?? 0) > 0 && (
+                  <ProgramManagerDisplay
+                    character={character}
+                    onCharacterUpdate={(updated) => setCharacter(updated)}
+                    editable={character.status === "active"}
+                  />
+                )}
+                <MatrixActionsDisplay
+                  character={character}
+                  onSelect={(pool, label) => openDiceRoller(pool, label)}
+                  editable={character.status === "active"}
+                />
+              </>
+            )}
+
             {/* Foci */}
             {character.foci && character.foci.length > 0 && <FociDisplay foci={character.foci} />}
 
@@ -410,6 +446,14 @@ function CharacterSheet({
               onCharacterUpdate={(updated) => setCharacter(updated)}
               editable={character.status === "active"}
             />
+
+            {hasMatrixAccess(character) && (
+              <MatrixDevicesDisplay
+                character={character}
+                onCharacterUpdate={(updated) => setCharacter(updated)}
+                editable={character.status === "active"}
+              />
+            )}
 
             <AugmentationsDisplay
               character={character}

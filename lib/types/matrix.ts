@@ -663,6 +663,9 @@ export interface UpdateMatrixStateRequest {
   /** New deck configuration */
   deckConfig?: CyberdeckAttributeConfig;
 
+  /** Switch the active matrix device (cyberdeck or commlink ID) */
+  activeDeviceId?: string;
+
   /** Connect to matrix */
   connect?: {
     mode: MatrixMode;
