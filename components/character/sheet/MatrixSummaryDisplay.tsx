@@ -1,17 +1,27 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import type { Character } from "@/lib/types";
 import type { CyberdeckAttributeConfig } from "@/lib/types/matrix";
+import type { OverwatchEvent } from "@/lib/types/matrix";
 import { DisplayCard } from "./DisplayCard";
-import { Monitor, AlertTriangle } from "lucide-react";
+import { Monitor, AlertTriangle, ChevronDown, ChevronRight, Clock } from "lucide-react";
 import {
   getActiveCyberdeck,
   getCharacterCommlinks,
   calculateMatrixConditionMonitor,
   getInitiativeDiceBonus,
 } from "@/lib/rules/matrix/cyberdeck-validator";
-import { getOverwatchWarningLevel } from "@/lib/rules/matrix/overwatch-calculator";
+import {
+  getOverwatchWarningLevel,
+  getOverwatchStatusDescription,
+} from "@/lib/rules/matrix/overwatch-calculator";
+import {
+  getSessionEvents,
+  getSessionDuration,
+  getScoreUntilConvergence,
+} from "@/lib/rules/matrix/overwatch-tracker";
+import { useOverwatchState, useMatrixSession } from "@/lib/matrix";
 
 interface MatrixSummaryDisplayProps {
   character: Character;
@@ -54,6 +64,155 @@ const OS_WARNING_COLORS: Record<string, { bar: string; text: string }> = {
   critical: { bar: "bg-red-600", text: "text-red-600 dark:text-red-400" },
 };
 
+// =============================================================================
+// Private Components: Overwatch Tracking
+// =============================================================================
+
+function OverwatchEventRow({ event }: { event: OverwatchEvent }) {
+  const time = new Date(event.timestamp).toLocaleTimeString([], {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+  });
+  const isConvergenceEvent = event.triggeredConvergence;
+
+  return (
+    <div
+      className={`flex items-center gap-2 py-1 text-[11px] ${
+        isConvergenceEvent
+          ? "font-semibold text-red-500 dark:text-red-400"
+          : "text-zinc-600 dark:text-zinc-400"
+      }`}
+    >
+      <span className="shrink-0 font-mono text-[10px] text-zinc-500">{time}</span>
+      <span className="truncate">{event.action}</span>
+      <span className="ml-auto shrink-0">
+        <span
+          className={`rounded px-1 py-0.5 font-mono text-[10px] font-semibold ${
+            isConvergenceEvent
+              ? "bg-red-500/10 text-red-500 dark:text-red-400"
+              : "bg-amber-500/10 text-amber-600 dark:text-amber-400"
+          }`}
+        >
+          +{event.scoreAdded}
+        </span>
+      </span>
+      <span className="shrink-0 font-mono text-[10px] text-zinc-500">({event.totalScore})</span>
+    </div>
+  );
+}
+
+function OverwatchDetailSection() {
+  const { score, threshold, warningLevel, isConverged, progress, session } = useOverwatchState();
+  const { connectionMode } = useMatrixSession();
+  const [eventLogExpanded, setEventLogExpanded] = useState(false);
+
+  if (!session) return null;
+
+  const osColors = OS_WARNING_COLORS[warningLevel] ?? OS_WARNING_COLORS.safe;
+  const statusDescription = getOverwatchStatusDescription(score);
+  const scoreUntilConvergence = getScoreUntilConvergence(session);
+  const events = getSessionEvents(session);
+  const duration = getSessionDuration(session);
+  const durationMinutes = Math.floor(duration / 60000);
+  const durationSeconds = Math.floor((duration % 60000) / 1000);
+
+  return (
+    <div className="space-y-2">
+      {/* Header + score */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-1">
+          <AlertTriangle className={`h-3 w-3 ${osColors.text}`} />
+          <span className={`text-[10px] font-semibold uppercase tracking-wider ${osColors.text}`}>
+            Overwatch Score
+          </span>
+        </div>
+        <span className={`font-mono text-[10px] font-semibold ${osColors.text}`}>
+          {score} / {threshold}
+        </span>
+      </div>
+
+      {/* Progress bar */}
+      <div className="relative h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
+        <div
+          className={`absolute left-0 top-0 h-full rounded-full transition-all duration-300 ${osColors.bar} ${
+            warningLevel === "critical" ? "animate-pulse" : ""
+          }`}
+          style={{ width: `${progress}%` }}
+        />
+      </div>
+
+      {/* Status description */}
+      <div className="font-mono text-[10px] uppercase text-muted-foreground">
+        {statusDescription}
+      </div>
+
+      {/* Info row */}
+      <div className="flex flex-wrap items-center gap-3">
+        <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50">
+          {scoreUntilConvergence} until convergence
+        </span>
+        <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50">
+          {Math.round(progress)}%
+        </span>
+        <span className="flex items-center gap-1 text-[10px] text-zinc-500">
+          <Clock className="h-3 w-3" />
+          {durationMinutes}m {durationSeconds}s
+        </span>
+      </div>
+
+      {/* Convergence alert */}
+      {isConverged && (
+        <div className="flex items-center gap-2 rounded border border-red-500/30 bg-red-500/10 p-2 text-xs animate-pulse">
+          <AlertTriangle className="h-4 w-4 shrink-0 text-red-500" />
+          <div>
+            <span className="font-semibold uppercase text-red-500 dark:text-red-400">
+              Convergence — GOD Has Found You!
+            </span>
+            {connectionMode !== "ar" && (
+              <span className="block text-[10px] text-red-400 dark:text-red-500">
+                Dumpshock: {connectionMode === "hot-sim-vr" ? "Physical" : "Stun"} damage
+              </span>
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Expandable event log */}
+      {events.length > 0 && (
+        <div>
+          <div
+            className="flex cursor-pointer items-center gap-1 text-zinc-500 transition-colors hover:text-zinc-300"
+            onClick={() => setEventLogExpanded(!eventLogExpanded)}
+            role="button"
+            aria-expanded={eventLogExpanded}
+          >
+            {eventLogExpanded ? (
+              <ChevronDown className="h-3 w-3" />
+            ) : (
+              <ChevronRight className="h-3 w-3" />
+            )}
+            <span className="text-[10px] font-semibold uppercase tracking-wider">
+              Event Log ({events.length})
+            </span>
+          </div>
+          {eventLogExpanded && (
+            <div className="mt-1 max-h-40 overflow-y-auto rounded border border-zinc-700/50 bg-zinc-800/50 p-2">
+              {[...events].reverse().map((event, idx) => (
+                <OverwatchEventRow key={idx} event={event} />
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
+// Main Component
+// =============================================================================
+
 export function MatrixSummaryDisplay({
   character,
   connectionMode: connectionModeProp,
@@ -95,6 +254,7 @@ export function MatrixSummaryDisplay({
 
   const overwatchScore = overwatchScoreProp ?? 0;
   const osWarningLevel = useMemo(() => getOverwatchWarningLevel(overwatchScore), [overwatchScore]);
+  const { session: activeOverwatchSession } = useOverwatchState();
 
   // Find highest ASDF attribute for highlighting
   const highestAsdf = useMemo(() => {
@@ -215,8 +375,11 @@ export function MatrixSummaryDisplay({
           </div>
         </div>
 
-        {/* Overwatch Score (cyberdeck only) */}
-        {activeDevice.type === "cyberdeck" && overwatchScore > 0 && (
+        {/* Overwatch Score — Enhanced (context-driven, active session) */}
+        {activeDevice.type === "cyberdeck" && <OverwatchDetailSection />}
+
+        {/* Overwatch Score — Legacy fallback (prop-driven, no active session) */}
+        {activeDevice.type === "cyberdeck" && !activeOverwatchSession && overwatchScore > 0 && (
           <div>
             <div className="mb-1 flex items-center justify-between">
               <div className="flex items-center gap-1">
@@ -231,7 +394,7 @@ export function MatrixSummaryDisplay({
                 {overwatchScore} / 40
               </span>
             </div>
-            <div className="relative h-2 rounded-full bg-zinc-200 dark:bg-zinc-800 overflow-hidden">
+            <div className="relative h-2 overflow-hidden rounded-full bg-zinc-200 dark:bg-zinc-800">
               <div
                 className={`absolute left-0 top-0 h-full rounded-full transition-all duration-300 ${osColors.bar}`}
                 style={{ width: `${osPercentage}%` }}
