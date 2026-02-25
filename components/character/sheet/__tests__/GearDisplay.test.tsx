@@ -101,7 +101,7 @@ vi.mock("@/lib/rules", () => ({
   useGear: () => MOCK_GEAR_CATALOG,
 }));
 
-vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
     globalEnabled?: boolean;

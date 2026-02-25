@@ -14,7 +14,6 @@ import { downloadCharacterJson } from "@/lib/utils";
 import { ActionPanel } from "./components/ActionPanel";
 import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
-import { InventoryPanel } from "./components/InventoryPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 import { CombatSessionProvider } from "@/lib/combat";
 
@@ -425,13 +424,6 @@ function CharacterSheet({
               character={character}
               onCharacterUpdate={(updated) => setCharacter(updated)}
               editable={character.status === "active"}
-            />
-
-            {/* Inventory Management Panel */}
-            <InventoryPanel
-              character={character}
-              onUpdate={(updated) => setCharacter(updated)}
-              showActions={character.status === "active"}
             />
 
             <GearDisplay

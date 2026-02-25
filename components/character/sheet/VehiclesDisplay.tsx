@@ -12,7 +12,7 @@ import type {
 import { useVehiclesCatalog } from "@/lib/rules";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
-import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { WirelessIndicator } from "./WirelessIndicator";
 import { ChevronDown, ChevronRight, Car, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------

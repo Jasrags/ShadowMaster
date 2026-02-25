@@ -7,7 +7,7 @@ import type { EquipmentReadiness } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
-import { WirelessIndicator } from "@/app/characters/[id]/components/WirelessIndicator";
+import { WirelessIndicator } from "./WirelessIndicator";
 import { ChevronDown, ChevronRight, Package, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------

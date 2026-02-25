@@ -27,7 +27,7 @@ vi.mock("lucide-react", () => LUCIDE_MOCK);
 // Mock external components
 // ---------------------------------------------------------------------------
 
-vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
     globalEnabled?: boolean;

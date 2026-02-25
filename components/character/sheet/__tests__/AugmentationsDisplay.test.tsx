@@ -21,7 +21,7 @@ import {
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
 
-vi.mock("@/app/characters/[id]/components/WirelessIndicator", () => ({
+vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
     globalEnabled?: boolean;
