@@ -46,8 +46,14 @@ import {
   WirelessDisplay,
   ArmorDisplay,
   AugmentationsDisplay,
+  RiggingSummaryDisplay,
+  DroneNetworkDisplay,
+  JumpInControlDisplay,
+  VehicleActionsDisplay,
+  AutosoftManagerDisplay,
 } from "@/components/character/sheet";
 import { hasMatrixAccess } from "@/lib/rules/matrix/cyberdeck-validator";
+import { hasRiggingAccess } from "@/components/character/sheet/rigging-helpers";
 
 // =============================================================================
 // MAIN CHARACTER SHEET PAGE
@@ -415,6 +421,37 @@ function CharacterSheet({
                 <MatrixActionsDisplay
                   character={character}
                   onSelect={(pool, label) => openDiceRoller(pool, label)}
+                  editable={character.status === "active"}
+                />
+              </>
+            )}
+
+            {/* Rigging Operations */}
+            {hasRiggingAccess(character) && (
+              <>
+                <RiggingSummaryDisplay
+                  character={character}
+                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  editable={character.status === "active"}
+                />
+                <DroneNetworkDisplay
+                  character={character}
+                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  editable={character.status === "active"}
+                />
+                <JumpInControlDisplay
+                  character={character}
+                  onCharacterUpdate={(updated) => setCharacter(updated)}
+                  editable={character.status === "active"}
+                />
+                <VehicleActionsDisplay
+                  character={character}
+                  onSelect={(pool, label) => openDiceRoller(pool, label)}
+                  editable={character.status === "active"}
+                />
+                <AutosoftManagerDisplay
+                  character={character}
+                  onCharacterUpdate={(updated) => setCharacter(updated)}
                   editable={character.status === "active"}
                 />
               </>

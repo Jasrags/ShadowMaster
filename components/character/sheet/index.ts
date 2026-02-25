@@ -29,3 +29,10 @@ export { MatrixSummaryDisplay } from "./MatrixSummaryDisplay";
 export { ProgramManagerDisplay } from "./ProgramManagerDisplay";
 export { WeaponsDisplay } from "./WeaponsDisplay";
 export { WirelessDisplay } from "./WirelessDisplay";
+
+// Rigging components
+export { RiggingSummaryDisplay } from "./RiggingSummaryDisplay";
+export { DroneNetworkDisplay } from "./DroneNetworkDisplay";
+export { JumpInControlDisplay } from "./JumpInControlDisplay";
+export { VehicleActionsDisplay } from "./VehicleActionsDisplay";
+export { AutosoftManagerDisplay } from "./AutosoftManagerDisplay";

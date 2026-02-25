@@ -151,6 +151,12 @@ export const LUCIDE_MOCK = {
   Monitor: createIconMock("Monitor"),
   ArrowUpDown: createIconMock("ArrowUpDown"),
   Smartphone: createIconMock("Smartphone"),
+  // Rigging icons
+  Gamepad2: createIconMock("Gamepad2"),
+  Radio: createIconMock("Radio"),
+  PlugZap: createIconMock("PlugZap"),
+  Signal: createIconMock("Signal"),
+  Unplug: createIconMock("Unplug"),
 };
 
 // ---------------------------------------------------------------------------
@@ -894,6 +900,96 @@ export function createCommlinkCharacter(overrides?: Partial<Character>): Charact
     },
     commlinks: [MOCK_COMMLINK],
     activeMatrixDeviceId: "comm-1",
+    ...overrides,
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Mock autosoft data
+// ---------------------------------------------------------------------------
+export const MOCK_AUTOSOFT_PERCEPTION: import("@/lib/types").CharacterAutosoft = {
+  id: "soft-1",
+  catalogId: "clearsight",
+  name: "Clearsight",
+  category: "perception",
+  rating: 3,
+  cost: 2500,
+  availability: 4,
+};
+
+export const MOCK_AUTOSOFT_COMBAT: import("@/lib/types").CharacterAutosoft = {
+  id: "soft-2",
+  catalogId: "targeting-automatics",
+  name: "Targeting (Automatics)",
+  category: "combat",
+  rating: 3,
+  target: "automatics",
+  cost: 2500,
+  availability: 4,
+};
+
+export const MOCK_AUTOSOFT_MOVEMENT: import("@/lib/types").CharacterAutosoft = {
+  id: "soft-3",
+  catalogId: "maneuvering-ground",
+  name: "Maneuvering (Ground Craft)",
+  category: "movement",
+  rating: 3,
+  target: "ground",
+  cost: 2500,
+  availability: 4,
+};
+
+// ---------------------------------------------------------------------------
+// Rigger character factory
+// ---------------------------------------------------------------------------
+
+/** Character with VCR, RCC, drones, and autosofts — a full rigger */
+export function createRiggerCharacter(overrides?: Partial<Character>): Character {
+  return createMockCharacter({
+    name: "Chrome Wheelman",
+    metatype: "Human",
+    status: "active",
+    magicalPath: "mundane",
+    editionCode: "sr5",
+    attributes: {
+      body: 4,
+      agility: 4,
+      reaction: 5,
+      strength: 3,
+      willpower: 4,
+      logic: 5,
+      intuition: 5,
+      charisma: 2,
+    },
+    specialAttributes: {
+      edge: 3,
+      essence: 3.8,
+    },
+    skills: {
+      "pilot-ground-craft": 6,
+      "pilot-aircraft": 4,
+      gunnery: 5,
+      perception: 4,
+      "electronic-warfare": 3,
+      computer: 3,
+    },
+    cyberware: [
+      {
+        catalogId: "control-rig",
+        name: "Control Rig",
+        category: "headware" as const,
+        grade: "standard" as const,
+        baseEssenceCost: 1.0,
+        essenceCost: 1.0,
+        rating: 2,
+        cost: 97000,
+        availability: 12,
+      },
+    ],
+    rccs: [MOCK_RCC],
+    drones: [MOCK_DRONE, MOCK_DRONE_WITH_AUTOSOFTS],
+    vehicles: [MOCK_VEHICLE],
+    autosofts: [MOCK_AUTOSOFT_PERCEPTION, MOCK_AUTOSOFT_COMBAT, MOCK_AUTOSOFT_MOVEMENT],
     ...overrides,
   });
 }
