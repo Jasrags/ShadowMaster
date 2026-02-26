@@ -3,10 +3,14 @@
 import { useState, useMemo } from "react";
 import type { Character } from "@/lib/types";
 import type { ActionDefinition } from "@/lib/types/action-definitions";
+import type { MatrixDicePoolResult } from "@/lib/rules/matrix/dice-pool-calculator";
 import { DisplayCard } from "./DisplayCard";
 import { Zap, ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
 import { useMatrixActions } from "@/lib/rules/RulesetContext";
-import { useMatrixMarks } from "@/lib/matrix";
+import { useMatrixMarks, useMatrixSession } from "@/lib/matrix";
+import { actionDefinitionToMatrixAction } from "@/lib/rules/matrix/action-mapper";
+import { calculateMatrixDicePool } from "@/lib/rules/matrix/dice-pool-calculator";
+import { isActionSupportedByDevice } from "@/lib/rules/matrix/action-validator";
 
 interface MatrixActionsDisplayProps {
   character: Character;
@@ -25,6 +29,12 @@ const CATEGORY_LABELS: Record<string, string> = {
   hacking: "Hacking",
   cybercombat: "Cybercombat",
   "electronic-warfare": "Electronic Warfare",
+};
+
+const CONNECTION_MODE_LABELS: Record<string, string> = {
+  ar: "AR",
+  "cold-sim-vr": "Cold-Sim VR",
+  "hot-sim-vr": "Hot-Sim VR",
 };
 
 /** Determine if an action is illegal based on its subcategory or tags */
@@ -80,19 +90,31 @@ function ActionRow({
   character,
   onSelect,
   hasMarksOnAnyTarget,
+  poolResult,
+  unsupported,
+  isHotSim,
 }: {
   action: ActionDefinition;
   character: Character;
   onSelect?: (pool: number, label: string) => void;
   hasMarksOnAnyTarget: boolean;
+  poolResult: MatrixDicePoolResult | null;
+  unsupported: boolean;
+  isHotSim: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const illegal = isActionIllegal(action);
   const marks = getMarksRequired(action);
-  const pool = estimateDicePool(action, character);
+
+  // Use full pool result if available, otherwise fall back to estimate
+  const pool = poolResult ? poolResult.pool.totalDice : estimateDicePool(action, character);
 
   return (
-    <div className="[&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50">
+    <div
+      className={`[&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50 ${
+        unsupported ? "opacity-40" : ""
+      }`}
+    >
       <div
         className="flex items-center gap-2 px-3 py-1.5 cursor-pointer transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
         onClick={() => setExpanded(!expanded)}
@@ -135,10 +157,17 @@ function ActionRow({
           </span>
         )}
 
+        {/* Hot-sim indicator */}
+        {isHotSim && (
+          <span className="rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide bg-orange-100 text-orange-700 border border-orange-300/40 dark:bg-orange-500/15 dark:text-orange-400 dark:border-orange-500/20">
+            Hot-Sim
+          </span>
+        )}
+
         <div className="flex-1" />
 
         {/* Dice pool pill */}
-        {pool > 0 && (
+        {pool > 0 && !unsupported && (
           <button
             onClick={(e) => {
               e.stopPropagation();
@@ -158,14 +187,41 @@ function ActionRow({
             <p className="text-xs italic text-zinc-500 dark:text-zinc-400">{action.description}</p>
           )}
 
-          {/* Roll formula */}
+          {/* Roll formula — enhanced when session active */}
           {action.rollConfig && (
             <div className="text-xs text-zinc-500 dark:text-zinc-400">
               <span className="font-semibold">Pool:</span>{" "}
               {[action.rollConfig.skill, action.rollConfig.attribute].filter(Boolean).join(" + ")}
               {action.rollConfig.limitType && (
-                <span className="ml-2 text-zinc-400">[Limit: {action.rollConfig.limitType}]</span>
+                <span className="ml-2 text-zinc-400">
+                  [Limit: {action.rollConfig.limitType}
+                  {poolResult && <span className="font-mono"> ({poolResult.limit})</span>}]
+                </span>
               )}
+            </div>
+          )}
+
+          {/* Pool breakdown when session active */}
+          {poolResult && poolResult.breakdown.length > 0 && (
+            <div className="space-y-0.5">
+              {poolResult.breakdown.map((component, i) => (
+                <div
+                  key={i}
+                  className="flex items-center gap-1 text-[11px] text-zinc-500 dark:text-zinc-400"
+                >
+                  <span className="w-12 text-right font-mono text-zinc-600 dark:text-zinc-300">
+                    {component.value > 0 ? "+" : ""}
+                    {component.value}
+                  </span>
+                  <span>
+                    {component.skill ??
+                      component.attribute ??
+                      component.program ??
+                      component.situation ??
+                      component.source}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
 
@@ -174,6 +230,14 @@ function ActionRow({
             <span className="font-semibold">Type:</span>{" "}
             <span className="capitalize">{action.type}</span> Action
           </div>
+
+          {/* Unsupported device warning */}
+          {unsupported && (
+            <div className="flex items-center gap-1 text-xs text-amber-500 dark:text-amber-400">
+              <AlertTriangle className="h-3 w-3" />
+              <span>Not supported by current device</span>
+            </div>
+          )}
 
           {/* Mark warning */}
           {marks > 0 && !hasMarksOnAnyTarget && (
@@ -206,6 +270,38 @@ function ActionRow({
 export function MatrixActionsDisplay({ character, onSelect }: MatrixActionsDisplayProps) {
   const matrixActions = useMatrixActions();
   const { marksHeld } = useMatrixMarks();
+  const { matrixState, connectionMode, overwatchWarningLevel } = useMatrixSession();
+
+  const isHotSim = connectionMode === "hot-sim-vr";
+
+  // Pre-compute pool results for all actions when session is active
+  const poolResults = useMemo(() => {
+    if (!matrixState) return new Map<string, MatrixDicePoolResult>();
+
+    const results = new Map<string, MatrixDicePoolResult>();
+    for (const action of matrixActions) {
+      const mapped = actionDefinitionToMatrixAction(action);
+      if (mapped) {
+        const result = calculateMatrixDicePool(character, matrixState, mapped);
+        results.set(action.id, result);
+      }
+    }
+    return results;
+  }, [matrixActions, matrixState, character]);
+
+  // Pre-compute device support for all actions
+  const unsupportedActions = useMemo(() => {
+    if (!matrixState?.activeDeviceType) return new Set<string>();
+
+    const unsupported = new Set<string>();
+    for (const action of matrixActions) {
+      const mapped = actionDefinitionToMatrixAction(action);
+      if (mapped && !isActionSupportedByDevice(mapped, matrixState.activeDeviceType)) {
+        unsupported.add(action.id);
+      }
+    }
+    return unsupported;
+  }, [matrixActions, matrixState]);
 
   // Group actions by subcategory first, then by domain category
   const categorizedActions = useMemo(() => {
@@ -236,11 +332,46 @@ export function MatrixActionsDisplay({ character, onSelect }: MatrixActionsDispl
 
   if (matrixActions.length === 0) return null;
 
+  // Connection mode badge for header
+  const connectionBadge = matrixState ? (
+    <span
+      className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${
+        isHotSim
+          ? "bg-orange-100 text-orange-700 dark:bg-orange-500/15 dark:text-orange-400"
+          : "bg-zinc-200 text-zinc-600 dark:bg-zinc-700 dark:text-zinc-300"
+      }`}
+    >
+      {CONNECTION_MODE_LABELS[connectionMode] ?? connectionMode}
+    </span>
+  ) : null;
+
+  // OS warning in header
+  const osWarning =
+    overwatchWarningLevel !== "safe" && matrixState ? (
+      <span
+        className={`rounded-full px-1.5 py-0.5 text-[9px] font-semibold uppercase tracking-wide ${
+          overwatchWarningLevel === "critical" || overwatchWarningLevel === "danger"
+            ? "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400"
+            : "bg-amber-100 text-amber-700 dark:bg-amber-500/15 dark:text-amber-400"
+        }`}
+      >
+        OS {overwatchWarningLevel}
+      </span>
+    ) : null;
+
+  const headerAction = (
+    <div className="flex items-center gap-1.5">
+      {osWarning}
+      {connectionBadge}
+    </div>
+  );
+
   return (
     <DisplayCard
       id="sheet-matrix-actions"
       title="Matrix Actions"
       icon={<Zap className="h-4 w-4 text-emerald-400" />}
+      headerAction={headerAction}
       collapsible
       defaultCollapsed
     >
@@ -258,6 +389,9 @@ export function MatrixActionsDisplay({ character, onSelect }: MatrixActionsDispl
                   character={character}
                   onSelect={onSelect}
                   hasMarksOnAnyTarget={marksHeld.length > 0}
+                  poolResult={poolResults.get(action.id) ?? null}
+                  unsupported={unsupportedActions.has(action.id)}
+                  isHotSim={isHotSim}
                 />
               ))}
             </div>
