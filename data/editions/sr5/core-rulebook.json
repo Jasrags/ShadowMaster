@@ -22886,7 +22886,608 @@
           }
         ],
         "magic": [],
-        "matrix": [],
+        "matrix": [
+          {
+            "id": "brute-force",
+            "name": "Brute Force",
+            "description": "Gain a mark on a target through sheer processing power. You may also cause Matrix damage. On a tie, no mark is placed but no alert is triggered.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "cybercombat",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "equipment",
+                "requirement": "cyberdeck",
+                "description": "Requires a cyberdeck"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "cybercombat",
+              "attribute": "logic",
+              "limitType": "Attack"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "willpower",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "mark",
+                "targetType": "target",
+                "calculation": { "baseValue": 1 },
+                "description": "Place 1 mark on target (2 marks with 4+ net hits)"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 238 }
+          },
+          {
+            "id": "hack-on-the-fly",
+            "name": "Hack on the Fly",
+            "description": "Gain a mark on a target without being noticed. Uses Sleaze to avoid detection. On a tie, no mark is placed but no alert is triggered.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "equipment",
+                "requirement": "cyberdeck",
+                "description": "Requires a cyberdeck"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "hacking",
+              "attribute": "logic",
+              "limitType": "Sleaze"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "intuition",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "mark",
+                "targetType": "target",
+                "calculation": { "baseValue": 1 },
+                "description": "Place 1 mark on target (2 marks with 4+ net hits)"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 240 }
+          },
+          {
+            "id": "data-spike",
+            "name": "Data Spike",
+            "description": "Attack a target persona or device with a concentrated burst of destructive Matrix energy, dealing Matrix damage.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "cybercombat",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "equipment",
+                "requirement": "cyberdeck",
+                "description": "Requires a cyberdeck"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "cybercombat",
+              "attribute": "logic",
+              "limitType": "Attack"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "intuition",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "damage",
+                "targetType": "target",
+                "damageType": "stun",
+                "calculation": {
+                  "formula": "attack_rating + net_hits",
+                  "addNetHits": true
+                },
+                "description": "Deal Matrix damage equal to Attack rating + net hits"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 238 }
+          },
+          {
+            "id": "crash-program",
+            "name": "Crash Program",
+            "description": "Crash a program running on a target device, forcing it to stop running.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "cybercombat",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "equipment",
+                "requirement": "cyberdeck",
+                "description": "Requires a cyberdeck"
+              },
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 1,
+                "description": "Requires 1 mark on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "cybercombat",
+              "attribute": "logic",
+              "limitType": "Attack"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "intuition",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": { "baseValue": 1 },
+                "description": "Target program stops running"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 238 }
+          },
+          {
+            "id": "matrix-perception",
+            "name": "Matrix Perception",
+            "description": "Observe the Matrix around you, spotting icons, running silent devices, and other Matrix details. Each net hit reveals one piece of information.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "intuition",
+              "limitType": "Data Processing"
+            },
+            "opposedBy": {
+              "canBeOpposed": false
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": { "addNetHits": true },
+                "description": "Each net hit reveals one piece of information about a Matrix object"
+              }
+            ],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "matrix-search",
+            "name": "Matrix Search",
+            "description": "Search the Matrix for information. Time depends on the obscurity of the information sought.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "intuition",
+              "limitType": "Data Processing",
+              "extended": true
+            },
+            "opposedBy": {
+              "canBeOpposed": false
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": { "addNetHits": true },
+                "description": "Find information. Threshold depends on obscurity."
+              }
+            ],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "trace-icon",
+            "name": "Trace Icon",
+            "description": "Determine the physical location of an icon's device. Requires 2 marks on the target.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 2,
+                "description": "Requires 2 marks on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "intuition",
+              "limitType": "Data Processing"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "willpower",
+              "defaultDefenseSkill": "sleaze"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": { "addNetHits": true },
+                "description": "Determine physical location of icon's device"
+              }
+            ],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 242 }
+          },
+          {
+            "id": "edit-file",
+            "name": "Edit File",
+            "description": "Create, change, copy, delete, or protect a file on a device or host. Requires 1 mark on the target.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 1,
+                "description": "Requires 1 mark on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "logic",
+              "limitType": "Data Processing"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "intuition",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": { "baseValue": 1 },
+                "description": "File is created, changed, copied, deleted, or protected"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 239 }
+          },
+          {
+            "id": "erase-mark",
+            "name": "Erase Mark",
+            "description": "Remove a mark from your persona or a device you own. Multi-mark erases require multiple uses.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "logic",
+              "limitType": "Attack"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "intuition",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": { "baseValue": 1 },
+                "description": "Remove one mark from your persona or device"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 240 }
+          },
+          {
+            "id": "snoop",
+            "name": "Snoop",
+            "description": "Intercept Matrix traffic to or from a target device. Requires 1 mark on the target.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 1,
+                "description": "Requires 1 mark on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "electronic-warfare",
+              "attribute": "intuition",
+              "limitType": "Sleaze"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "logic",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Intercept all Matrix traffic to and from the target"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "spoof-command",
+            "name": "Spoof Command",
+            "description": "Send a command to a device, making it appear as though it came from an authorized user. Requires 1 mark on the icon you are impersonating.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 1,
+                "description": "Requires 1 mark on the icon you are impersonating"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "hacking",
+              "attribute": "intuition",
+              "limitType": "Sleaze"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "logic",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": { "baseValue": 1 },
+                "description": "Target device accepts the spoofed command"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "control-device",
+            "name": "Control Device",
+            "description": "Operate a device as though you were its authorized user. Requires marks depending on the complexity of the action.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 1,
+                "description": "Requires 1+ marks (varies by action complexity)"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "electronic-warfare",
+              "attribute": "intuition",
+              "limitType": "Data Processing"
+            },
+            "opposedBy": {
+              "canBeOpposed": false
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": {},
+                "description": "Remotely control the device for one action"
+              }
+            ],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 238 }
+          },
+          {
+            "id": "format-device",
+            "name": "Format Device",
+            "description": "Wipe a device, erasing all data and programs. Requires 3 marks on the target.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 3,
+                "description": "Requires 3 marks on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "logic",
+              "limitType": "Sleaze"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "willpower",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": {},
+                "description": "Target device is wiped clean of all data and programs"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 239 }
+          },
+          {
+            "id": "reboot-device",
+            "name": "Reboot Device",
+            "description": "Force a device to reboot, taking it offline temporarily. All marks on and from the device are erased. Requires 3 marks on the target.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "hacking",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [
+              {
+                "type": "resource",
+                "requirement": "marks",
+                "minimumValue": 3,
+                "description": "Requires 3 marks on target"
+              }
+            ],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "computer",
+              "attribute": "logic",
+              "limitType": "Data Processing"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "willpower",
+              "defaultDefenseSkill": "firewall"
+            },
+            "effects": [
+              {
+                "type": "device_action",
+                "targetType": "device",
+                "calculation": {},
+                "description": "Device reboots and all marks on/from it are erased"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "jam-signals",
+            "name": "Jam Signals",
+            "description": "Emit jamming signals that add noise to all Matrix connections in the area.",
+            "type": "complex",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "complex" },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "electronic-warfare",
+              "attribute": "logic",
+              "limitType": "Attack"
+            },
+            "opposedBy": {
+              "canBeOpposed": false
+            },
+            "effects": [
+              {
+                "type": "pool_modifier",
+                "targetType": "area",
+                "calculation": { "addNetHits": true },
+                "description": "Create noise equal to hits for all devices in area"
+              }
+            ],
+            "tags": ["illegal"],
+            "source": { "book": "SR5 Core", "page": 240 }
+          },
+          {
+            "id": "jack-out",
+            "name": "Jack Out",
+            "description": "Disconnect from the Matrix. If you have marks on you or are link-locked, this requires a test.",
+            "type": "simple",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "simple" },
+            "prerequisites": [],
+            "modifiers": [],
+            "rollConfig": {
+              "skill": "hardware",
+              "attribute": "willpower",
+              "limitType": "Firewall"
+            },
+            "opposedBy": {
+              "canBeOpposed": true,
+              "defaultDefenseAttribute": "logic",
+              "defaultDefenseSkill": "attack"
+            },
+            "effects": [
+              {
+                "type": "state_change",
+                "targetType": "self",
+                "calculation": {},
+                "description": "Disconnect from the Matrix. Dumpshock if in VR."
+              }
+            ],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 240 }
+          },
+          {
+            "id": "send-message",
+            "name": "Send Message",
+            "description": "Send a text, audio, or video message to a user whose commcode you have.",
+            "type": "simple",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "simple" },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 241 }
+          },
+          {
+            "id": "change-icon",
+            "name": "Change Icon",
+            "description": "Change the icon of your persona or a device you own to look like anything you want.",
+            "type": "simple",
+            "domain": "matrix",
+            "subcategory": "electronic-warfare",
+            "cost": { "actionType": "simple" },
+            "prerequisites": [],
+            "modifiers": [],
+            "effects": [],
+            "tags": [],
+            "source": { "book": "SR5 Core", "page": 237 }
+          }
+        ],
         "social": [],
         "vehicle": []
       }
