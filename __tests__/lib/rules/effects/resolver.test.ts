@@ -1589,3 +1589,324 @@ describe("Resolver Integration", () => {
     expect(result.totalLimitModifier).toBe(2);
   });
 });
+
+// ---------------------------------------------------------------------------
+// AUGMENTATION GATHERING TESTS (Issue #112)
+// ---------------------------------------------------------------------------
+
+describe("Augmentation Gathering", () => {
+  it("should gather cyberware effects with correct source metadata", () => {
+    const character = createMockCharacter({
+      cyberware: [
+        {
+          catalogId: "wired-reflexes",
+          name: "Wired Reflexes",
+          category: "bodyware",
+          grade: "standard",
+          baseEssenceCost: 3,
+          essenceCost: 3,
+          rating: 2,
+          cost: 149000,
+          availability: 12,
+          wirelessEnabled: true,
+        },
+      ],
+      wirelessBonusesEnabled: true,
+    });
+    const ruleset = makeMockRuleset({
+      cyberware: {
+        items: [
+          {
+            id: "wired-reflexes",
+            name: "Wired Reflexes",
+            effects: [
+              {
+                id: "wired-reflexes-reaction",
+                type: "attribute-modifier",
+                triggers: ["always"],
+                target: { attribute: "reaction" },
+                value: { perRating: 1 },
+                stackingGroup: "reaction-augmentation",
+              },
+              {
+                id: "wired-reflexes-initiative",
+                type: "initiative-modifier",
+                triggers: ["always"],
+                target: {},
+                value: { perRating: 1 },
+                stackingGroup: "initiative-augmentation",
+                wirelessOverride: { bonusValue: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const sources = gatherEffectSources(character, ruleset);
+    expect(sources).toHaveLength(2);
+    expect(sources[0].effect.id).toBe("wired-reflexes-reaction");
+    expect(sources[0].effect.type).toBe("attribute-modifier");
+    expect(sources[1].effect.id).toBe("wired-reflexes-initiative");
+    expect(sources[1].effect.type).toBe("initiative-modifier");
+    expect(sources[0].source.type).toBe("cyberware");
+    expect(sources[0].source.rating).toBe(2);
+    expect(sources[0].source.wirelessEnabled).toBe(true);
+  });
+
+  it("should gather bioware effects (cerebral-booster → attribute-modifier)", () => {
+    const character = createMockCharacter({
+      bioware: [
+        {
+          catalogId: "cerebral-booster",
+          name: "Cerebral Booster",
+          category: "cultured",
+          grade: "standard",
+          baseEssenceCost: 0.4,
+          essenceCost: 0.4,
+          rating: 2,
+          cost: 63000,
+          availability: 14,
+          wirelessEnabled: true,
+        },
+      ],
+      wirelessBonusesEnabled: true,
+    });
+    const ruleset = makeMockRuleset({
+      bioware: {
+        items: [
+          {
+            id: "cerebral-booster",
+            name: "Cerebral Booster",
+            effects: [
+              {
+                id: "cerebral-booster-logic",
+                type: "attribute-modifier",
+                triggers: ["always"],
+                target: { attribute: "logic" },
+                value: { perRating: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const sources = gatherEffectSources(character, ruleset);
+    expect(sources).toHaveLength(1);
+    expect(sources[0].effect.id).toBe("cerebral-booster-logic");
+    expect(sources[0].effect.type).toBe("attribute-modifier");
+    expect(sources[0].source.type).toBe("bioware");
+    expect(sources[0].source.rating).toBe(2);
+  });
+
+  it("should propagate wireless enabled from cyberware source", () => {
+    const character = createMockCharacter({
+      cyberware: [
+        {
+          catalogId: "cybereyes",
+          name: "Cybereyes",
+          category: "eyeware",
+          grade: "standard",
+          baseEssenceCost: 0.3,
+          essenceCost: 0.3,
+          rating: 2,
+          cost: 6000,
+          availability: 6,
+          wirelessEnabled: true,
+        },
+      ],
+      wirelessBonusesEnabled: true,
+    });
+    const ruleset = makeMockRuleset({
+      cyberware: {
+        items: [
+          {
+            id: "cybereyes",
+            name: "Cybereyes",
+            effects: [
+              {
+                id: "cybereyes-perception-limit",
+                type: "limit-modifier",
+                triggers: ["perception-visual"],
+                target: { limit: "mental", perceptionType: "visual" },
+                value: 1,
+                requiresWireless: true,
+              },
+            ],
+          },
+        ],
+      },
+    });
+
+    const sources = gatherEffectSources(character, ruleset);
+    expect(sources).toHaveLength(1);
+    expect(sources[0].source.wirelessEnabled).toBe(true);
+    expect(sources[0].effect.requiresWireless).toBe(true);
+  });
+
+  it("should gracefully skip missing bioware catalog item", () => {
+    const character = createMockCharacter({
+      bioware: [
+        {
+          catalogId: "nonexistent-bioware",
+          name: "Ghost Bioware",
+          category: "basic",
+          grade: "standard",
+          baseEssenceCost: 0.5,
+          essenceCost: 0.5,
+          cost: 10000,
+          availability: 6,
+        },
+      ],
+    });
+    const ruleset = makeMockRuleset({ bioware: { items: [] } });
+
+    const sources = gatherEffectSources(character, ruleset);
+    expect(sources).toHaveLength(0);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// AUGMENTATION RESOLVER INTEGRATION TESTS (Issue #112)
+// ---------------------------------------------------------------------------
+
+describe("Augmentation Resolver Integration", () => {
+  it("should resolve per-rating cyberware: wired-reflexes R2 → attribute-modifier resolves to 2", () => {
+    const character = createMockCharacter({
+      cyberware: [
+        {
+          catalogId: "wired-reflexes",
+          name: "Wired Reflexes",
+          category: "bodyware",
+          grade: "standard",
+          baseEssenceCost: 3,
+          essenceCost: 3,
+          rating: 2,
+          cost: 149000,
+          availability: 12,
+          wirelessEnabled: false,
+        },
+      ],
+      wirelessBonusesEnabled: false,
+    });
+    const ruleset = makeMockRuleset({
+      cyberware: {
+        items: [
+          {
+            id: "wired-reflexes",
+            name: "Wired Reflexes",
+            effects: [
+              {
+                id: "wired-reflexes-initiative",
+                type: "initiative-modifier",
+                triggers: ["always"],
+                target: {},
+                value: { perRating: 1 },
+                wirelessOverride: { bonusValue: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const context = makeContext({ type: "initiative" });
+
+    const result = resolveEffects(character, context, ruleset);
+    // perRating 1 * rating 2 = 2, no wireless bonus
+    expect(result.totalInitiativeModifier).toBe(2);
+    expect(result.initiativeModifiers).toHaveLength(1);
+    expect(result.initiativeModifiers[0].appliedVariant).toBe("standard");
+  });
+
+  it("should apply wireless override: wired-reflexes R2 with wireless → initiative resolves to 3", () => {
+    const character = createMockCharacter({
+      cyberware: [
+        {
+          catalogId: "wired-reflexes",
+          name: "Wired Reflexes",
+          category: "bodyware",
+          grade: "standard",
+          baseEssenceCost: 3,
+          essenceCost: 3,
+          rating: 2,
+          cost: 149000,
+          availability: 12,
+          wirelessEnabled: true,
+        },
+      ],
+      wirelessBonusesEnabled: true,
+    });
+    const ruleset = makeMockRuleset({
+      cyberware: {
+        items: [
+          {
+            id: "wired-reflexes",
+            name: "Wired Reflexes",
+            effects: [
+              {
+                id: "wired-reflexes-initiative",
+                type: "initiative-modifier",
+                triggers: ["always"],
+                target: {},
+                value: { perRating: 1 },
+                wirelessOverride: { bonusValue: 1 },
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const context = makeContext({ type: "initiative" });
+
+    const result = resolveEffects(character, context, ruleset);
+    // perRating 1 * rating 2 = 2 base + wireless bonusValue 1 = 3
+    expect(result.totalInitiativeModifier).toBe(3);
+    expect(result.initiativeModifiers[0].appliedVariant).toBe("wireless");
+  });
+
+  it("should gate requiresWireless: cybereyes perception limit with wireless off → value 0", () => {
+    const character = createMockCharacter({
+      cyberware: [
+        {
+          catalogId: "cybereyes",
+          name: "Cybereyes",
+          category: "eyeware",
+          grade: "standard",
+          baseEssenceCost: 0.3,
+          essenceCost: 0.3,
+          rating: 2,
+          cost: 6000,
+          availability: 6,
+          wirelessEnabled: false,
+        },
+      ],
+      wirelessBonusesEnabled: true,
+    });
+    const ruleset = makeMockRuleset({
+      cyberware: {
+        items: [
+          {
+            id: "cybereyes",
+            name: "Cybereyes",
+            effects: [
+              {
+                id: "cybereyes-perception-limit",
+                type: "limit-modifier",
+                triggers: ["perception-visual"],
+                target: { limit: "mental", perceptionType: "visual" },
+                value: 1,
+                requiresWireless: true,
+              },
+            ],
+          },
+        ],
+      },
+    });
+    const context = makeContext({ type: "skill-test", perceptionType: "visual" });
+
+    const result = resolveEffects(character, context, ruleset);
+    // Wireless is off on the item → requiresWireless effect resolves to 0
+    expect(result.totalLimitModifier).toBe(0);
+  });
+});

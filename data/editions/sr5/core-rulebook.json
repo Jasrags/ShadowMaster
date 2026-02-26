@@ -10665,7 +10665,9 @@
                 "id": "smartlink-accuracy",
                 "type": "accuracy-modifier",
                 "triggers": ["ranged-attack"],
-                "target": { "limit": "accuracy" },
+                "target": {
+                  "limit": "accuracy"
+                },
                 "value": 2,
                 "description": "+2 Accuracy when used with smartgun"
               }
@@ -10697,8 +10699,14 @@
                 "id": "vision-enhancement-limit",
                 "type": "limit-modifier",
                 "triggers": ["perception-visual", "skill-test"],
-                "target": { "limit": "mental", "skill": "perception", "perceptionType": "visual" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "limit": "mental",
+                  "skill": "perception",
+                  "perceptionType": "visual"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+[Rating] limit on visual Perception",
                 "wirelessOverride": {
                   "type": "dice-pool-modifier",
@@ -10752,8 +10760,14 @@
                 "id": "audio-enhancement-limit",
                 "type": "limit-modifier",
                 "triggers": ["perception-audio", "skill-test"],
-                "target": { "limit": "mental", "skill": "perception", "perceptionType": "audio" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "limit": "mental",
+                  "skill": "perception",
+                  "perceptionType": "audio"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+[Rating] limit on audio Perception",
                 "wirelessOverride": {
                   "type": "dice-pool-modifier",
@@ -10804,8 +10818,13 @@
                 "id": "select-sound-filter-pool",
                 "type": "dice-pool-modifier",
                 "triggers": ["perception-audio"],
-                "target": { "skill": "perception", "perceptionType": "audio" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "skill": "perception",
+                  "perceptionType": "audio"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+[Rating] dice to isolate specific sound",
                 "requiresWireless": true
               }
@@ -10853,7 +10872,10 @@
                 "id": "spatial-recognizer-limit",
                 "type": "limit-modifier",
                 "triggers": ["perception-audio"],
-                "target": { "limit": "mental", "specificAction": "locate-sound-source" },
+                "target": {
+                  "limit": "mental",
+                  "specificAction": "locate-sound-source"
+                },
                 "value": 2,
                 "description": "+2 limit to locate sound source",
                 "wirelessOverride": {
@@ -13429,7 +13451,9 @@
                 "id": "laser-sight-accuracy",
                 "type": "accuracy-modifier",
                 "triggers": ["ranged-attack"],
-                "target": { "limit": "accuracy" },
+                "target": {
+                  "limit": "accuracy"
+                },
                 "value": 1,
                 "description": "+1 Accuracy (not cumulative with smartlink)",
                 "stackingGroup": "smartlink-laser",
@@ -13700,7 +13724,9 @@
                 "id": "smartgun-internal-accuracy",
                 "type": "accuracy-modifier",
                 "triggers": ["ranged-attack"],
-                "target": { "limit": "accuracy" },
+                "target": {
+                  "limit": "accuracy"
+                },
                 "value": 2,
                 "description": "+2 Accuracy when used with smartlink",
                 "stackingGroup": "smartlink-laser",
@@ -13749,7 +13775,9 @@
                 "id": "smartgun-external-accuracy",
                 "type": "accuracy-modifier",
                 "triggers": ["ranged-attack"],
-                "target": { "limit": "accuracy" },
+                "target": {
+                  "limit": "accuracy"
+                },
                 "value": 2,
                 "description": "+2 Accuracy when used with smartlink",
                 "stackingGroup": "smartlink-laser",
@@ -14320,7 +14348,21 @@
                 "condition": "perception_test"
               }
             ],
-            "page": 453
+            "page": 453,
+            "effects": [
+              {
+                "id": "cybereyes-perception-limit",
+                "type": "limit-modifier",
+                "triggers": ["perception-visual"],
+                "target": {
+                  "limit": "mental",
+                  "perceptionType": "visual"
+                },
+                "value": 1,
+                "description": "+1 limit to visual Perception tests",
+                "requiresWireless": true
+              }
+            ]
           },
           {
             "id": "cyberears",
@@ -14366,7 +14408,21 @@
                 "description": "Audio Perception tests only."
               }
             ],
-            "page": 454
+            "page": 454,
+            "effects": [
+              {
+                "id": "cyberears-perception-limit",
+                "type": "limit-modifier",
+                "triggers": ["perception-audio"],
+                "target": {
+                  "limit": "mental",
+                  "perceptionType": "audio"
+                },
+                "value": 1,
+                "description": "+1 limit to audio Perception tests",
+                "requiresWireless": true
+              }
+            ]
           },
           {
             "id": "dermal-plating",
@@ -14428,7 +14484,20 @@
             "description": "Bonus Armor equal to Rating (cumulative with worn armor, no Encumbrance). Cannot be combined with orthoskin or other skin augmentations that provide armor.",
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["orthoskin"]
+            "incompatibleWith": ["orthoskin"],
+            "effects": [
+              {
+                "id": "dermal-plating-armor",
+                "type": "armor-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Armor",
+                "stackingGroup": "skin-armor-augmentation"
+              }
+            ]
           },
           {
             "id": "internal-air-tank",
@@ -14524,7 +14593,33 @@
             "description": "+Rating STR and AGI. Cannot be combined with muscle augmentation or muscle toner bioware.",
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["muscle-augmentation", "muscle-toner"]
+            "incompatibleWith": ["muscle-augmentation", "muscle-toner"],
+            "effects": [
+              {
+                "id": "muscle-replacement-strength",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "strength"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Strength"
+              },
+              {
+                "id": "muscle-replacement-agility",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "agility"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Agility"
+              }
+            ]
           },
           {
             "id": "reaction-enhancers",
@@ -14576,7 +14671,22 @@
             ],
             "page": 457,
             "legality": "restricted",
-            "incompatibleWith": ["wired-reflexes"]
+            "incompatibleWith": ["wired-reflexes"],
+            "effects": [
+              {
+                "id": "reaction-enhancers-reaction",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "reaction"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Reaction",
+                "stackingGroup": "reaction-augmentation"
+              }
+            ]
           },
           {
             "id": "wired-reflexes",
@@ -14617,7 +14727,37 @@
             },
             "initiativeDiceBonus": 1,
             "legality": "restricted",
-            "incompatibleWith": ["reaction-enhancers", "synaptic-booster"]
+            "incompatibleWith": ["reaction-enhancers", "synaptic-booster"],
+            "effects": [
+              {
+                "id": "wired-reflexes-reaction",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "reaction"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Reaction",
+                "stackingGroup": "reaction-augmentation"
+              },
+              {
+                "id": "wired-reflexes-initiative",
+                "type": "initiative-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating]D6 Initiative",
+                "stackingGroup": "initiative-augmentation",
+                "wirelessOverride": {
+                  "bonusValue": 1,
+                  "description": "+1 additional Initiative Die when wireless active"
+                }
+              }
+            ]
           },
           {
             "id": "datajack",
@@ -14712,7 +14852,21 @@
                 "baseValue": 0.2,
                 "perRating": false
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "olfactory-booster-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "skill": "perception"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to smell-based Perception tests"
+              }
+            ]
           },
           {
             "id": "taste-booster",
@@ -14744,7 +14898,21 @@
                 "baseValue": 0.2,
                 "perRating": false
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "taste-booster-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "skill": "perception"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to taste-based Perception/analysis tests"
+              }
+            ]
           },
           {
             "id": "tooth-compartment",
@@ -14819,7 +14987,21 @@
                 "baseValue": 0.2,
                 "perRating": false
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "voice-modulator-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["social-test"],
+                "target": {
+                  "skill": "impersonation"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to vocal impersonation tests"
+              }
+            ]
           },
           {
             "id": "skilljack",
@@ -14960,7 +15142,21 @@
             "capacityCost": 3,
             "description": "+2 accuracy with smartgun systems. Implanted version is more effective than external.",
             "page": 454,
-            "legality": "restricted"
+            "legality": "restricted",
+            "effects": [
+              {
+                "id": "eye-smartlink-accuracy",
+                "type": "accuracy-modifier",
+                "triggers": ["ranged-attack"],
+                "target": {
+                  "limit": "accuracy"
+                },
+                "value": 2,
+                "description": "+2 Accuracy with smartgun systems",
+                "stackingGroup": "smartlink-laser",
+                "stackingPriority": 3
+              }
+            ]
           },
           {
             "id": "eye-thermographic-vision",
@@ -15009,7 +15205,22 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "eye-vision-enhancement-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["perception-visual"],
+                "target": {
+                  "skill": "perception",
+                  "perceptionType": "visual"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to visual Perception tests"
+              }
+            ]
           },
           {
             "id": "eye-vision-magnification",
@@ -15107,7 +15318,22 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "ear-audio-enhancement-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["perception-audio"],
+                "target": {
+                  "skill": "perception",
+                  "perceptionType": "audio"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to audio Perception tests"
+              }
+            ]
           },
           {
             "id": "ear-balance-augmenter",
@@ -15118,7 +15344,19 @@
             "availability": 8,
             "capacityCost": 4,
             "description": "+1 dice to tests involving balance (climbing, narrow platforms, landing after jumps).",
-            "page": 455
+            "page": 455,
+            "effects": [
+              {
+                "id": "ear-balance-augmenter-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "skill": "gymnastics"
+                },
+                "value": 1,
+                "description": "+1 die to balance-related tests"
+              }
+            ]
           },
           {
             "id": "ear-damper",
@@ -15129,7 +15367,17 @@
             "availability": 6,
             "capacityCost": 1,
             "description": "Protection from loud noises. +2 dice pool to resist sonic attacks including flashbangs.",
-            "page": 455
+            "page": 455,
+            "effects": [
+              {
+                "id": "ear-damper-resistance",
+                "type": "resistance-modifier",
+                "triggers": ["resistance-test"],
+                "target": {},
+                "value": 2,
+                "description": "+2 dice to resist sonic attacks including flashbangs"
+              }
+            ]
           },
           {
             "id": "ear-select-sound-filter",
@@ -15178,7 +15426,19 @@
             "availability": 8,
             "capacityCost": 2,
             "description": "+2 dice to locate sounds.",
-            "page": 455
+            "page": 455,
+            "effects": [
+              {
+                "id": "ear-spatial-recognizer-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["perception-audio"],
+                "target": {
+                  "specificAction": "locate-sound-source"
+                },
+                "value": 2,
+                "description": "+2 dice to locate sound source"
+              }
+            ]
           },
           {
             "id": "bone-lacing-plastic",
@@ -15193,7 +15453,17 @@
             },
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["bone-density-augmentation"]
+            "incompatibleWith": ["bone-density-augmentation"],
+            "effects": [
+              {
+                "id": "bone-lacing-plastic-dr",
+                "type": "damage-resistance-modifier",
+                "triggers": ["damage-resistance"],
+                "target": {},
+                "value": 1,
+                "description": "+1 Body for damage resistance tests"
+              }
+            ]
           },
           {
             "id": "bone-lacing-aluminum",
@@ -15208,7 +15478,17 @@
             },
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["bone-density-augmentation"]
+            "incompatibleWith": ["bone-density-augmentation"],
+            "effects": [
+              {
+                "id": "bone-lacing-aluminum-dr",
+                "type": "damage-resistance-modifier",
+                "triggers": ["damage-resistance"],
+                "target": {},
+                "value": 2,
+                "description": "+2 Body for damage resistance tests"
+              }
+            ]
           },
           {
             "id": "bone-lacing-titanium",
@@ -15223,7 +15503,17 @@
             },
             "page": 456,
             "legality": "restricted",
-            "incompatibleWith": ["bone-density-augmentation"]
+            "incompatibleWith": ["bone-density-augmentation"],
+            "effects": [
+              {
+                "id": "bone-lacing-titanium-dr",
+                "type": "damage-resistance-modifier",
+                "triggers": ["damage-resistance"],
+                "target": {},
+                "value": 3,
+                "description": "+3 Body for damage resistance tests"
+              }
+            ]
           },
           {
             "id": "fingertip-compartment",
@@ -15616,7 +15906,17 @@
               }
             ],
             "page": 457,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "effects": [
+              {
+                "id": "cyberlimb-gyromount-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 3,
+                "description": "Rating 3 recoil compensation"
+              }
+            ]
           },
           {
             "id": "cyberlimb-holster",
@@ -15699,7 +15999,30 @@
                 "baseValue": 1,
                 "perRating": true
               }
-            }
+            },
+            "effects": [
+              {
+                "id": "cyberlimb-hydraulic-jacks-limit",
+                "type": "limit-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "limit": "physical"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Physical limit for jumping/sprinting"
+              },
+              {
+                "id": "cyberlimb-hydraulic-jacks-wireless-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {},
+                "value": 1,
+                "description": "+1 dice pool to jumping, sprinting, or lifting",
+                "requiresWireless": true
+              }
+            ]
           },
           {
             "id": "cyberlimb-large-smuggling-compartment",
@@ -16105,7 +16428,21 @@
               "strength": 1
             },
             "legality": "restricted",
-            "incompatibleWith": ["muscle-replacement"]
+            "incompatibleWith": ["muscle-replacement"],
+            "effects": [
+              {
+                "id": "muscle-augmentation-strength",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "strength"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Strength"
+              }
+            ]
           },
           {
             "id": "muscle-toner",
@@ -16150,7 +16487,25 @@
               "agility": 1
             },
             "legality": "restricted",
-            "incompatibleWith": ["muscle-replacement"]
+            "incompatibleWith": ["muscle-replacement"],
+            "effects": [
+              {
+                "id": "muscle-toner-agility",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "agility"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Agility",
+                "wirelessOverride": {
+                  "bonusValue": 1,
+                  "description": "+1 additional Agility when wireless active"
+                }
+              }
+            ]
           },
           {
             "id": "pathogenic-defense",
@@ -16192,7 +16547,19 @@
             },
             "category": "basic",
             "description": "+1 dice vs. pathogens and disease.",
-            "page": 460
+            "page": 460,
+            "effects": [
+              {
+                "id": "pathogenic-defense-resistance",
+                "type": "resistance-modifier",
+                "triggers": ["resistance-test"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice vs. pathogens and disease"
+              }
+            ]
           },
           {
             "id": "symbiotes",
@@ -16266,7 +16633,19 @@
             },
             "category": "basic",
             "description": "+1 dice vs. inhaled toxins.",
-            "page": 461
+            "page": 461,
+            "effects": [
+              {
+                "id": "tracheal-filter-resistance",
+                "type": "resistance-modifier",
+                "triggers": ["resistance-test"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice vs. inhaled toxins"
+              }
+            ]
           },
           {
             "id": "tailored-pheromones",
@@ -16297,7 +16676,31 @@
             "attributeBonuses": {
               "socialLimit": 1
             },
-            "legality": "restricted"
+            "legality": "restricted",
+            "effects": [
+              {
+                "id": "tailored-pheromones-social-limit",
+                "type": "limit-modifier",
+                "triggers": ["social-test"],
+                "target": {
+                  "limit": "social"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Social Limit"
+              },
+              {
+                "id": "tailored-pheromones-social-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["social-test"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to social tests (Acting and Influence)"
+              }
+            ]
           },
           {
             "id": "bone-density-augmentation",
@@ -16376,7 +16779,19 @@
             },
             "category": "basic",
             "description": "+1 dice to Toxin Resistance tests.",
-            "page": 461
+            "page": 461,
+            "effects": [
+              {
+                "id": "toxin-extractor-resistance",
+                "type": "resistance-modifier",
+                "triggers": ["resistance-test"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to Toxin Resistance tests"
+              }
+            ]
           },
           {
             "id": "cerebral-booster",
@@ -16406,7 +16821,21 @@
             "page": 461,
             "attributeBonuses": {
               "logic": 1
-            }
+            },
+            "effects": [
+              {
+                "id": "cerebral-booster-logic",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "logic"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Logic"
+              }
+            ]
           },
           {
             "id": "damage-compensators",
@@ -16448,7 +16877,19 @@
             },
             "category": "cultured",
             "description": "Ignore 1 wound modifier.",
-            "page": 461
+            "page": 461,
+            "effects": [
+              {
+                "id": "damage-compensators-wound",
+                "type": "wound-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "Ignore [Rating] wound modifier boxes"
+              }
+            ]
           },
           {
             "id": "mnemonic-enhancer",
@@ -16475,7 +16916,21 @@
             },
             "category": "cultured",
             "description": "+1 to memory tests. +1 to Knowledge skill maximums.",
-            "page": 461
+            "page": 461,
+            "effects": [
+              {
+                "id": "mnemonic-enhancer-memory",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "testCategory": "memory"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to memory tests"
+              }
+            ]
           },
           {
             "id": "synaptic-booster",
@@ -16522,7 +16977,33 @@
             "description": "Broadened and replicated spinal nerve cells allow faster reaction time. Provides +1 Reaction and +1D6 Initiative per rating. Cannot be combined with any other Reaction or Initiative enhancement.",
             "page": 462,
             "legality": "restricted",
-            "incompatibleWith": ["wired-reflexes", "reaction-enhancers"]
+            "incompatibleWith": ["wired-reflexes", "reaction-enhancers"],
+            "effects": [
+              {
+                "id": "synaptic-booster-reaction",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "reaction"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Reaction",
+                "stackingGroup": "reaction-augmentation"
+              },
+              {
+                "id": "synaptic-booster-initiative",
+                "type": "initiative-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating]D6 Initiative",
+                "stackingGroup": "initiative-augmentation"
+              }
+            ]
           },
           {
             "id": "cat-eyes",
@@ -16542,7 +17023,29 @@
             "cost": 24000,
             "availability": 12,
             "description": "+1 to Escape Artist tests and Physical Limit.",
-            "page": 460
+            "page": 460,
+            "effects": [
+              {
+                "id": "enhanced-articulation-escape-artist",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "skill": "escape-artist"
+                },
+                "value": 1,
+                "description": "+1 die to Escape Artist tests"
+              },
+              {
+                "id": "enhanced-articulation-physical-limit",
+                "type": "limit-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "limit": "physical"
+                },
+                "value": 1,
+                "description": "+1 Physical Limit"
+              }
+            ]
           },
           {
             "id": "orthoskin",
@@ -16588,7 +17091,20 @@
             "description": "Bonus Armor equal to Rating (compatible with bone lacing). Cannot be combined with dermal plating or other skin augmentations that provide armor.",
             "page": 460,
             "legality": "restricted",
-            "incompatibleWith": ["dermal-plating"]
+            "incompatibleWith": ["dermal-plating"],
+            "effects": [
+              {
+                "id": "orthoskin-armor",
+                "type": "armor-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] Armor",
+                "stackingGroup": "skin-armor-augmentation"
+              }
+            ]
           },
           {
             "id": "platelet-factories",
@@ -16639,7 +17155,49 @@
               "strength": 1
             },
             "page": 461,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "effects": [
+              {
+                "id": "suprathyroid-gland-body",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "body"
+                },
+                "value": 1,
+                "description": "+1 Body"
+              },
+              {
+                "id": "suprathyroid-gland-agility",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "agility"
+                },
+                "value": 1,
+                "description": "+1 Agility"
+              },
+              {
+                "id": "suprathyroid-gland-reaction",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "reaction"
+                },
+                "value": 1,
+                "description": "+1 Reaction"
+              },
+              {
+                "id": "suprathyroid-gland-strength",
+                "type": "attribute-modifier",
+                "triggers": ["always"],
+                "target": {
+                  "attribute": "strength"
+                },
+                "value": 1,
+                "description": "+1 Strength"
+              }
+            ]
           },
           {
             "id": "synthacardium",
@@ -16675,7 +17233,21 @@
               }
             },
             "description": "+Rating dice to Cardiovascular tests (fatigue, holding breath, etc.).",
-            "page": 461
+            "page": 461,
+            "effects": [
+              {
+                "id": "synthacardium-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["skill-test"],
+                "target": {
+                  "testCategory": "cardiovascular"
+                },
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+[Rating] dice to cardiovascular tests (fatigue, holding breath, etc.)"
+              }
+            ]
           },
           {
             "id": "pain-editor",
@@ -16686,7 +17258,17 @@
             "availability": 18,
             "description": "Ignore all wound modifiers. Requires Willpower (3) to activate.",
             "page": 461,
-            "legality": "forbidden"
+            "legality": "forbidden",
+            "effects": [
+              {
+                "id": "pain-editor-wound",
+                "type": "wound-modifier",
+                "triggers": ["always"],
+                "target": {},
+                "value": 99,
+                "description": "Ignore all wound modifiers (requires Willpower (3) test to activate)"
+              }
+            ]
           },
           {
             "id": "sleep-regulator",
@@ -23055,7 +23637,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "cybercombat",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "equipment",
@@ -23078,12 +23662,17 @@
               {
                 "type": "mark",
                 "targetType": "target",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "Place 1 mark on target (2 marks with 4+ net hits)"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 238 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 238
+            }
           },
           {
             "id": "hack-on-the-fly",
@@ -23092,7 +23681,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "equipment",
@@ -23115,12 +23706,17 @@
               {
                 "type": "mark",
                 "targetType": "target",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "Place 1 mark on target (2 marks with 4+ net hits)"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 240 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 240
+            }
           },
           {
             "id": "data-spike",
@@ -23129,7 +23725,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "cybercombat",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "equipment",
@@ -23161,7 +23759,10 @@
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 238 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 238
+            }
           },
           {
             "id": "crash-program",
@@ -23170,7 +23771,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "cybercombat",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "equipment",
@@ -23199,12 +23802,17 @@
               {
                 "type": "device_action",
                 "targetType": "device",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "Target program stops running"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 238 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 238
+            }
           },
           {
             "id": "matrix-perception",
@@ -23213,7 +23821,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
@@ -23228,12 +23838,17 @@
               {
                 "type": "state_change",
                 "targetType": "self",
-                "calculation": { "addNetHits": true },
+                "calculation": {
+                  "addNetHits": true
+                },
                 "description": "Each net hit reveals one piece of information about a Matrix object"
               }
             ],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "matrix-search",
@@ -23242,7 +23857,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
@@ -23258,12 +23875,17 @@
               {
                 "type": "state_change",
                 "targetType": "self",
-                "calculation": { "addNetHits": true },
+                "calculation": {
+                  "addNetHits": true
+                },
                 "description": "Find information. Threshold depends on obscurity."
               }
             ],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "trace-icon",
@@ -23272,7 +23894,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23296,12 +23920,17 @@
               {
                 "type": "state_change",
                 "targetType": "self",
-                "calculation": { "addNetHits": true },
+                "calculation": {
+                  "addNetHits": true
+                },
                 "description": "Determine physical location of icon's device"
               }
             ],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 242 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 242
+            }
           },
           {
             "id": "edit-file",
@@ -23310,7 +23939,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23334,12 +23965,17 @@
               {
                 "type": "device_action",
                 "targetType": "device",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "File is created, changed, copied, deleted, or protected"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 239 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 239
+            }
           },
           {
             "id": "erase-mark",
@@ -23348,7 +23984,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
@@ -23365,12 +24003,17 @@
               {
                 "type": "state_change",
                 "targetType": "self",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "Remove one mark from your persona or device"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 240 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 240
+            }
           },
           {
             "id": "snoop",
@@ -23379,7 +24022,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23408,7 +24053,10 @@
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "spoof-command",
@@ -23417,7 +24065,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23441,12 +24091,17 @@
               {
                 "type": "device_action",
                 "targetType": "device",
-                "calculation": { "baseValue": 1 },
+                "calculation": {
+                  "baseValue": 1
+                },
                 "description": "Target device accepts the spoofed command"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "control-device",
@@ -23455,7 +24110,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23482,7 +24139,10 @@
               }
             ],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 238 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 238
+            }
           },
           {
             "id": "format-device",
@@ -23491,7 +24151,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23520,7 +24182,10 @@
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 239 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 239
+            }
           },
           {
             "id": "reboot-device",
@@ -23529,7 +24194,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "hacking",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [
               {
                 "type": "resource",
@@ -23558,7 +24225,10 @@
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "jam-signals",
@@ -23567,7 +24237,9 @@
             "type": "complex",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "complex" },
+            "cost": {
+              "actionType": "complex"
+            },
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
@@ -23582,12 +24254,17 @@
               {
                 "type": "pool_modifier",
                 "targetType": "area",
-                "calculation": { "addNetHits": true },
+                "calculation": {
+                  "addNetHits": true
+                },
                 "description": "Create noise equal to hits for all devices in area"
               }
             ],
             "tags": ["illegal"],
-            "source": { "book": "SR5 Core", "page": 240 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 240
+            }
           },
           {
             "id": "jack-out",
@@ -23596,7 +24273,9 @@
             "type": "simple",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "simple" },
+            "cost": {
+              "actionType": "simple"
+            },
             "prerequisites": [],
             "modifiers": [],
             "rollConfig": {
@@ -23618,7 +24297,10 @@
               }
             ],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 240 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 240
+            }
           },
           {
             "id": "send-message",
@@ -23627,12 +24309,17 @@
             "type": "simple",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "simple" },
+            "cost": {
+              "actionType": "simple"
+            },
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 241 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 241
+            }
           },
           {
             "id": "change-icon",
@@ -23641,12 +24328,17 @@
             "type": "simple",
             "domain": "matrix",
             "subcategory": "electronic-warfare",
-            "cost": { "actionType": "simple" },
+            "cost": {
+              "actionType": "simple"
+            },
             "prerequisites": [],
             "modifiers": [],
             "effects": [],
             "tags": [],
-            "source": { "book": "SR5 Core", "page": 237 }
+            "source": {
+              "book": "SR5 Core",
+              "page": 237
+            }
           }
         ],
         "social": [],
