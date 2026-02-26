@@ -837,6 +837,68 @@ export const MOCK_PROGRAMS: CharacterProgram[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Mock program catalog data (from ruleset, includes effects)
+// ---------------------------------------------------------------------------
+export const MOCK_PROGRAM_CATALOG = [
+  {
+    id: "exploit",
+    name: "Exploit",
+    category: "hacking" as const,
+    cost: 250,
+    availability: 4,
+    legality: "restricted" as const,
+    effects: "+2 to Hack on the Fly and Brute Force",
+    page: 245,
+    source: "Core",
+  },
+  {
+    id: "stealth",
+    name: "Stealth",
+    category: "hacking" as const,
+    cost: 250,
+    availability: 4,
+    legality: "restricted" as const,
+    effects: "+2 to defend against Matrix Perception",
+    page: 245,
+    source: "Core",
+  },
+  {
+    id: "toolbox",
+    name: "Toolbox",
+    category: "common" as const,
+    cost: 80,
+    availability: 0,
+    effects: "+1 Data Processing",
+    page: 245,
+    source: "Core",
+  },
+  {
+    id: "armor",
+    name: "Armor",
+    category: "hacking" as const,
+    cost: 250,
+    availability: 6,
+    legality: "restricted" as const,
+    effects: "+2 dice pool modifier to resist Matrix damage",
+    page: 245,
+    source: "Core",
+  },
+  {
+    id: "agent",
+    name: "Agent",
+    category: "agent" as const,
+    cost: 1000,
+    availability: 8,
+    costPerRating: 1000,
+    minRating: 1,
+    maxRating: 6,
+    effects: "Autonomous program that can perform matrix actions",
+    page: 246,
+    source: "Core",
+  },
+];
+
+// ---------------------------------------------------------------------------
 // Matrix character factories
 // ---------------------------------------------------------------------------
 

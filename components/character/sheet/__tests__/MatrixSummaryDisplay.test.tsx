@@ -105,6 +105,7 @@ const defaultMatrixSession = {
   removeMark: vi.fn(),
   clearAllMarks: vi.fn(),
   receiveMarkOnSelf: vi.fn(),
+  removeReceivedMark: vi.fn(),
   applyMatrixDamage: vi.fn(),
   healMatrixDamage: vi.fn(),
   triggerConvergence: vi.fn(),
