@@ -56,6 +56,7 @@ import {
   removeMarks as removeMarksFromState,
   clearAllMarks as clearAllMarksFromState,
   receiveMarkOnSelf as receiveMarkOnSelfState,
+  removeReceivedMarks as removeReceivedMarksFromState,
   getMarksOnTarget as getMarksOnTargetFromState,
   hasRequiredMarks as hasRequiredMarksFromState,
 } from "@/lib/rules/matrix/mark-tracker";
@@ -112,6 +113,8 @@ export interface MatrixSessionActions {
   clearAllMarks: () => void;
   /** Record a mark placed on this persona */
   receiveMarkOnSelf: (mark: MatrixMark) => void;
+  /** Remove all marks from a specific source on this persona */
+  removeReceivedMark: (markerId: string) => void;
   /** Apply matrix damage to condition monitor */
   applyMatrixDamage: (amount: number) => void;
   /** Heal matrix damage */
@@ -480,6 +483,13 @@ export function MatrixSessionProvider({ character, children }: MatrixSessionProv
     [matrixState]
   );
 
+  const removeReceivedMarkAction = useCallback((markerId: string) => {
+    setMatrixState((prev) => {
+      if (!prev) return prev;
+      return removeReceivedMarksFromState(prev, markerId);
+    });
+  }, []);
+
   const applyMatrixDamage = useCallback((amount: number) => {
     setMatrixState((prev) => {
       if (!prev) return prev;
@@ -578,6 +588,7 @@ export function MatrixSessionProvider({ character, children }: MatrixSessionProv
       removeMark: removeMarkAction,
       clearAllMarks: clearAllMarksAction,
       receiveMarkOnSelf: receiveMarkOnSelfAction,
+      removeReceivedMark: removeReceivedMarkAction,
       applyMatrixDamage,
       healMatrixDamage,
       triggerConvergence: triggerConvergenceAction,
@@ -605,6 +616,7 @@ export function MatrixSessionProvider({ character, children }: MatrixSessionProv
       removeMarkAction,
       clearAllMarksAction,
       receiveMarkOnSelfAction,
+      removeReceivedMarkAction,
       applyMatrixDamage,
       healMatrixDamage,
       triggerConvergenceAction,
@@ -654,6 +666,7 @@ export function useMatrixSession(): MatrixSessionContextValue {
       removeMark: () => ({ success: false, marksRemoved: 0, remainingMarks: 0 }),
       clearAllMarks: () => {},
       receiveMarkOnSelf: () => {},
+      removeReceivedMark: () => {},
       applyMatrixDamage: () => {},
       healMatrixDamage: () => {},
       triggerConvergence: () => null,

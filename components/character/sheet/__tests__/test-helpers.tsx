@@ -151,6 +151,10 @@ export const LUCIDE_MOCK = {
   Monitor: createIconMock("Monitor"),
   ArrowUpDown: createIconMock("ArrowUpDown"),
   Smartphone: createIconMock("Smartphone"),
+  Minus: createIconMock("Minus"),
+  Plus: createIconMock("Plus"),
+  Trash2: createIconMock("Trash2"),
+  X: createIconMock("X"),
   // Rigging icons
   Gamepad2: createIconMock("Gamepad2"),
   Radio: createIconMock("Radio"),

@@ -37,6 +37,7 @@ import {
   KnowledgeLanguagesDisplay,
   MatrixActionsDisplay,
   MatrixDevicesDisplay,
+  MatrixMarksDisplay,
   MatrixSummaryDisplay,
   ProgramManagerDisplay,
   QualitiesDisplay,
@@ -427,6 +428,7 @@ function CharacterSheet({
                   onSelect={(pool, label) => openDiceRoller(pool, label)}
                   editable={character.status === "active"}
                 />
+                <MatrixMarksDisplay character={character} />
               </>
             )}
 

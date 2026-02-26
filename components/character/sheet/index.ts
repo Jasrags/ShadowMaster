@@ -25,6 +25,7 @@ export { VehiclesDisplay } from "./VehiclesDisplay";
 export { CyberdeckConfigDisplay } from "./CyberdeckConfigDisplay";
 export { MatrixActionsDisplay } from "./MatrixActionsDisplay";
 export { MatrixDevicesDisplay } from "./MatrixDevicesDisplay";
+export { MatrixMarksDisplay } from "./MatrixMarksDisplay";
 export { MatrixSummaryDisplay } from "./MatrixSummaryDisplay";
 export { ProgramManagerDisplay } from "./ProgramManagerDisplay";
 export { WeaponsDisplay } from "./WeaponsDisplay";

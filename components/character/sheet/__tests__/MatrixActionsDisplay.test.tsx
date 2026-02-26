@@ -93,10 +93,16 @@ vi.mock("@/lib/rules/RulesetContext", () => ({
   useMatrixActions: vi.fn(),
 }));
 
+vi.mock("@/lib/matrix", () => ({
+  useMatrixMarks: vi.fn(),
+}));
+
 import { MatrixActionsDisplay } from "../MatrixActionsDisplay";
 import { useMatrixActions } from "@/lib/rules/RulesetContext";
+import { useMatrixMarks } from "@/lib/matrix";
 
 const mockUseMatrixActions = vi.mocked(useMatrixActions);
+const mockUseMatrixMarks = vi.mocked(useMatrixMarks);
 
 const deckerCharacter = createDeckerCharacter();
 
@@ -104,6 +110,12 @@ describe("MatrixActionsDisplay", () => {
   beforeEach(() => {
     vi.clearAllMocks();
     mockUseMatrixActions.mockReturnValue(MOCK_MATRIX_ACTIONS);
+    mockUseMatrixMarks.mockReturnValue({
+      marksHeld: [],
+      marksReceived: [],
+      getMarksOnTarget: () => 0,
+      hasRequiredMarks: () => false,
+    });
   });
 
   it("groups actions by category with section headers", () => {
@@ -168,5 +180,40 @@ describe("MatrixActionsDisplay", () => {
     render(<MatrixActionsDisplay character={deckerCharacter} />);
     fireEvent.click(screen.getByText("Hack on the Fly"));
     expect(screen.getByText("SR5 Core p.240")).toBeInTheDocument();
+  });
+
+  it("mark badge is red when no marks held", () => {
+    render(<MatrixActionsDisplay character={deckerCharacter} />);
+    // Edit File requires 1 mark — badge should have red styling
+    const badge = screen.getByText("1M");
+    expect(badge.className).toContain("text-red-600");
+  });
+
+  it("mark badge is amber when marks exist", () => {
+    mockUseMatrixMarks.mockReturnValue({
+      marksHeld: [
+        {
+          id: "m1",
+          targetId: "target-1",
+          targetType: "host",
+          targetName: "Test Host",
+          markCount: 1,
+          placedAt: "2025-01-01T00:00:00.000Z",
+        },
+      ],
+      marksReceived: [],
+      getMarksOnTarget: () => 1,
+      hasRequiredMarks: () => true,
+    });
+    render(<MatrixActionsDisplay character={deckerCharacter} />);
+    const badge = screen.getByText("1M");
+    expect(badge.className).toContain("text-amber-700");
+  });
+
+  it("shows mark warning text in expanded row when no marks", () => {
+    render(<MatrixActionsDisplay character={deckerCharacter} />);
+    // Expand Edit File which requires 1 mark
+    fireEvent.click(screen.getByText("Edit File"));
+    expect(screen.getByText("Requires 1 mark(s) on target before use")).toBeInTheDocument();
   });
 });
