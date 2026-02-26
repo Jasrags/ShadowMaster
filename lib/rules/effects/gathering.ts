@@ -12,6 +12,7 @@ import type { Character } from "@/lib/types";
 import type { MergedRuleset } from "@/lib/types/edition";
 import type { Quality } from "@/lib/types/qualities";
 import type { Effect, EffectSource, EffectSourceType } from "@/lib/types/effects";
+import { adaptQualityEffect } from "./quality-adapter";
 
 /**
  * An effect paired with its source metadata for resolution.
@@ -110,8 +111,6 @@ function gatherQualityEffects(character: Character, ruleset: MergedRuleset): Sou
       effects = definition.effects;
     }
 
-    const unifiedEffects = effects.filter(isUnifiedEffect);
-
     const source: EffectSource = {
       type: "quality",
       id: qualityId,
@@ -119,8 +118,15 @@ function gatherQualityEffects(character: Character, ruleset: MergedRuleset): Sou
       rating,
     };
 
-    for (const effect of unifiedEffects) {
-      results.push({ effect, source });
+    for (const rawEffect of effects) {
+      if (isUnifiedEffect(rawEffect)) {
+        results.push({ effect: rawEffect, source });
+      } else {
+        const adapted = adaptQualityEffect(rawEffect);
+        if (adapted) {
+          results.push({ effect: adapted, source });
+        }
+      }
     }
   }
 
