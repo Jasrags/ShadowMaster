@@ -2,6 +2,7 @@ export { DisplayCard } from "./DisplayCard";
 export { ATTRIBUTE_DISPLAY, getAttributeBonus, isMeleeWeapon } from "./constants";
 
 // Display components
+export { ActiveModifiersPanel } from "./ActiveModifiersPanel";
 export { AdeptPowersDisplay } from "./AdeptPowersDisplay";
 export { ArmorDisplay } from "./ArmorDisplay";
 export { AttributesDisplay } from "./AttributesDisplay";

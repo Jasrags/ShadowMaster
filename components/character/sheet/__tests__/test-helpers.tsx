@@ -155,6 +155,8 @@ export const LUCIDE_MOCK = {
   Plus: createIconMock("Plus"),
   Trash2: createIconMock("Trash2"),
   X: createIconMock("X"),
+  // Modifier icons
+  Sliders: createIconMock("Sliders"),
   // Rigging icons
   Gamepad2: createIconMock("Gamepad2"),
   Radio: createIconMock("Radio"),
