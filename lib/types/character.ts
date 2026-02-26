@@ -28,6 +28,7 @@ import type {
 } from "./gear-state";
 import type { WirelessEffect } from "./wireless-effects";
 import type { CyberlimbItem, CyberImplantWeapon } from "./cyberlimb";
+import type { ActiveModifier } from "./effects";
 
 // =============================================================================
 // CHARACTER CORE
@@ -486,6 +487,9 @@ export interface Character {
     /** Current Edge points available (defaults to edge attribute if undefined) */
     edgeCurrent?: number;
   };
+
+  /** Active modifiers applied by GM or system conditions */
+  activeModifiers?: ActiveModifier[];
 
   // -------------------------------------------------------------------------
   // Karma & Advancement
