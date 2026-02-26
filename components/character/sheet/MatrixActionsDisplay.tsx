@@ -6,6 +6,7 @@ import type { ActionDefinition } from "@/lib/types/action-definitions";
 import { DisplayCard } from "./DisplayCard";
 import { Zap, ChevronDown, ChevronRight, AlertTriangle } from "lucide-react";
 import { useMatrixActions } from "@/lib/rules/RulesetContext";
+import { useMatrixMarks } from "@/lib/matrix";
 
 interface MatrixActionsDisplayProps {
   character: Character;
@@ -78,10 +79,12 @@ function ActionRow({
   action,
   character,
   onSelect,
+  hasMarksOnAnyTarget,
 }: {
   action: ActionDefinition;
   character: Character;
   onSelect?: (pool: number, label: string) => void;
+  hasMarksOnAnyTarget: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
   const illegal = isActionIllegal(action);
@@ -116,7 +119,18 @@ function ActionRow({
 
         {/* Marks required */}
         {marks > 0 && (
-          <span className="rounded border border-amber-300/40 bg-amber-50 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400">
+          <span
+            className={`rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
+              hasMarksOnAnyTarget
+                ? "border-amber-300/40 bg-amber-50 text-amber-700 dark:border-amber-500/20 dark:bg-amber-500/10 dark:text-amber-400"
+                : "border-red-300/40 bg-red-50 text-red-600 dark:border-red-500/20 dark:bg-red-500/10 dark:text-red-400"
+            }`}
+            title={
+              hasMarksOnAnyTarget
+                ? `Requires ${marks} mark(s)`
+                : `No marks held — requires ${marks}`
+            }
+          >
             {marks}M
           </span>
         )}
@@ -161,6 +175,14 @@ function ActionRow({
             <span className="capitalize">{action.type}</span> Action
           </div>
 
+          {/* Mark warning */}
+          {marks > 0 && !hasMarksOnAnyTarget && (
+            <div className="flex items-center gap-1 text-xs text-red-500 dark:text-red-400">
+              <AlertTriangle className="h-3 w-3" />
+              <span>Requires {marks} mark(s) on target before use</span>
+            </div>
+          )}
+
           {/* OS risk indicator */}
           {illegal && (
             <div className="flex items-center gap-1 text-xs text-red-500 dark:text-red-400">
@@ -183,6 +205,7 @@ function ActionRow({
 
 export function MatrixActionsDisplay({ character, onSelect }: MatrixActionsDisplayProps) {
   const matrixActions = useMatrixActions();
+  const { marksHeld } = useMatrixMarks();
 
   // Group actions by subcategory first, then by domain category
   const categorizedActions = useMemo(() => {
@@ -234,6 +257,7 @@ export function MatrixActionsDisplay({ character, onSelect }: MatrixActionsDispl
                   action={action}
                   character={character}
                   onSelect={onSelect}
+                  hasMarksOnAnyTarget={marksHeld.length > 0}
                 />
               ))}
             </div>

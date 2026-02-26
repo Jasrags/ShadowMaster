@@ -182,10 +182,9 @@ export function MatrixDevicesDisplay({
                 {isActive && (
                   <Star className="h-3.5 w-3.5 shrink-0 fill-amber-400 text-amber-400" />
                 )}
-                <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+                <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
                   {deck.customName ?? deck.name}
                 </span>
-                <span className="ml-auto" />
                 <span
                   className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${DEVICE_TYPE_BADGE.cyberdeck.style}`}
                 >
@@ -256,10 +255,9 @@ export function MatrixDevicesDisplay({
                 {isActive && (
                   <Star className="h-3.5 w-3.5 shrink-0 fill-amber-400 text-amber-400" />
                 )}
-                <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+                <span className="min-w-0 flex-1 truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
                   {fullComm.customName ?? comm.name}
                 </span>
-                <span className="ml-auto" />
                 <span
                   className={`shrink-0 rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${DEVICE_TYPE_BADGE.commlink.style}`}
                 >
