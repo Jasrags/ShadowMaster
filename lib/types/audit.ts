@@ -57,6 +57,9 @@ export type AuditAction =
   | "cyberlimb_enhancement_removed"
   | "cyberlimb_accessory_added"
   | "cyberlimb_accessory_removed"
+  // Active modifier actions
+  | "modifier_applied"
+  | "modifier_removed"
   // Sync/Migration actions
   | "drift_detected"
   | "migration_started"

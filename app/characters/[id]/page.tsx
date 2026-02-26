@@ -20,6 +20,7 @@ import { CombatSessionProvider } from "@/lib/combat";
 import { MatrixSessionProvider, useMatrixSession } from "@/lib/matrix";
 
 import {
+  ActiveModifiersPanel,
   ATTRIBUTE_DISPLAY,
   AdeptPowersDisplay,
   AttributesDisplay,
@@ -344,6 +345,12 @@ function CharacterSheet({
             />
 
             <EffectsSummaryDisplay sources={effectSources} />
+
+            <ActiveModifiersPanel
+              character={character}
+              editable={character.status === "active"}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+            />
 
             <ConditionDisplay
               character={character}
