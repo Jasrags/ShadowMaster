@@ -232,13 +232,33 @@ export async function PATCH(
       const currentLoaded = new Set(activeDeck.loadedPrograms);
       const toLoad = body.loadPrograms.filter((id) => !currentLoaded.has(id));
 
+      // Calculate effective slots used (agents consume slots = rating)
+      const ownedPrograms = character.programs ?? [];
+      const getEffectiveSlotCost = (programId: string): number => {
+        const owned = ownedPrograms.find((p) => p.catalogId === programId);
+        if (owned?.category === "agent") {
+          return owned.rating ?? 1;
+        }
+        return 1;
+      };
+
+      let effectiveSlotsUsed = 0;
+      for (const id of currentLoaded) {
+        effectiveSlotsUsed += getEffectiveSlotCost(id);
+      }
+      let loadCost = 0;
+      for (const id of toLoad) {
+        loadCost += getEffectiveSlotCost(id);
+      }
+
       // Check slot limit
-      const totalAfterLoad = currentLoaded.size + toLoad.length;
+      const totalAfterLoad = effectiveSlotsUsed + loadCost;
       if (totalAfterLoad > activeDeck.programSlots) {
+        const slotsAvailable = activeDeck.programSlots - effectiveSlotsUsed;
         return NextResponse.json(
           {
             success: false,
-            error: `Cannot load ${toLoad.length} programs. Only ${activeDeck.programSlots - currentLoaded.size} slots available.`,
+            error: `Cannot load programs (${loadCost} slots needed). Only ${slotsAvailable} slots available.`,
           },
           { status: 400 }
         );
