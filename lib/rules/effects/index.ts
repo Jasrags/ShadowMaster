@@ -18,7 +18,7 @@ export { gatherEffectSources } from "./gathering";
 export type { SourcedEffect } from "./gathering";
 
 // Resolver (main pipeline)
-export { resolveEffects } from "./resolver";
+export { resolveEffects, resolveFromSources } from "./resolver";
 
 // Context builder
 export { EffectContextBuilder } from "./context";

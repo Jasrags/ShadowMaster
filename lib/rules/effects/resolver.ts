@@ -11,8 +11,6 @@
 import type { Character } from "@/lib/types";
 import type { MergedRuleset } from "@/lib/types/edition";
 import type {
-  Effect,
-  EffectSource,
   EffectResolutionContext,
   EffectResolutionResult,
   UnifiedResolvedEffect,
@@ -70,6 +68,32 @@ function resolveEffect(sourced: SourcedEffect): UnifiedResolvedEffect {
 }
 
 /**
+ * Resolve effects from pre-gathered sources for a given context.
+ *
+ * Use this when gathering once at a top level and resolving per-context
+ * (e.g., per-skill, for initiative, for combat) to avoid O(items × catalogs)
+ * per invocation.
+ *
+ * Pipeline:
+ * 1. Filter pre-gathered sources to applicable effects
+ * 2. Resolve values (per-rating, wireless variants)
+ * 3. Apply stacking rules
+ */
+export function resolveFromSources(
+  sources: SourcedEffect[],
+  context: EffectResolutionContext
+): EffectResolutionResult {
+  // 1. Filter to applicable effects
+  const applicable = sources.filter((s) => effectApplies(s.effect, context));
+
+  // 2. Resolve values
+  const resolved: UnifiedResolvedEffect[] = applicable.map(resolveEffect);
+
+  // 3. Apply stacking rules
+  return applyStackingRules(resolved);
+}
+
+/**
  * Resolve all applicable effects for a character in a given context.
  *
  * Pipeline:
@@ -83,15 +107,6 @@ export function resolveEffects(
   context: EffectResolutionContext,
   ruleset: MergedRuleset
 ): EffectResolutionResult {
-  // 1. Gather all effect sources
   const allSources = gatherEffectSources(character, ruleset);
-
-  // 2. Filter to applicable effects
-  const applicable = allSources.filter((s) => effectApplies(s.effect, context));
-
-  // 3. Resolve values
-  const resolved: UnifiedResolvedEffect[] = applicable.map(resolveEffect);
-
-  // 4. Apply stacking rules
-  return applyStackingRules(resolved);
+  return resolveFromSources(allSources, context);
 }

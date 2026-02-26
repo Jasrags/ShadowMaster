@@ -7,7 +7,9 @@ import { DisplayCard } from "./DisplayCard";
 import { ATTRIBUTE_DISPLAY, getAttributeBonus } from "./constants";
 import { Tooltip } from "@/components/ui";
 import { Button as AriaButton } from "react-aria-components";
-import { Crosshair, ChevronDown, ChevronRight } from "lucide-react";
+import { Crosshair, ChevronDown, ChevronRight, Wifi } from "lucide-react";
+import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
+import { EffectContextBuilder } from "@/lib/rules/effects";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -27,6 +29,7 @@ function toTitleCase(s: string): string {
 interface SkillsDisplayProps {
   character: Character;
   onSelect?: (skillId: string, rating: number, attrAbbr?: string) => void;
+  resolveEffects?: (ctx: EffectResolutionContext) => EffectResolutionResult;
 }
 
 interface PoolBreakdown {
@@ -34,6 +37,7 @@ interface PoolBreakdown {
   attrBase: number;
   skillRating: number;
   augBonuses: Array<{ source: string; value: number }>;
+  effectBonuses?: Array<{ source: string; value: number; isWireless: boolean }>;
 }
 
 interface EnrichedSkill {
@@ -125,7 +129,11 @@ function SkillRow({
                 data-testid="dice-pool-pill"
                 aria-label={`${skill.name} dice pool breakdown`}
                 onPress={() => onSelect?.(skill.id, skill.dicePool, skill.attrAbbr)}
-                className="cursor-pointer rounded border border-emerald-500/20 bg-emerald-500/12 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-emerald-600 dark:text-emerald-300 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className={`cursor-pointer rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold focus:outline-none focus:ring-2 focus:ring-emerald-500 ${
+                  skill.poolBreakdown.effectBonuses && skill.poolBreakdown.effectBonuses.length > 0
+                    ? "border-cyan-500/30 bg-cyan-500/10 text-cyan-600 dark:text-cyan-300 ring-1 ring-cyan-500/20"
+                    : "border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300"
+                }`}
               >
                 {skill.dicePool}
               </AriaButton>
@@ -212,10 +220,12 @@ function SkillRow({
 }
 
 function PoolTooltipContent({ breakdown }: { breakdown: PoolBreakdown }) {
+  const effectTotal = (breakdown.effectBonuses || []).reduce((sum, b) => sum + b.value, 0);
   const total =
     breakdown.attrBase +
     breakdown.skillRating +
-    breakdown.augBonuses.reduce((sum, b) => sum + b.value, 0);
+    breakdown.augBonuses.reduce((sum, b) => sum + b.value, 0) +
+    effectTotal;
 
   return (
     <div className="space-y-1">
@@ -233,6 +243,20 @@ function PoolTooltipContent({ breakdown }: { breakdown: PoolBreakdown }) {
           <span className="font-mono font-semibold text-emerald-400">+{b.value}</span>
         </div>
       ))}
+      {(breakdown.effectBonuses || []).map((b, i) => (
+        <div key={`eff-${i}`} className="flex items-center justify-between gap-4">
+          <span className={b.isWireless ? "text-cyan-400" : "text-violet-400"}>
+            {b.isWireless && "⚡ "}
+            {b.source}
+          </span>
+          <span
+            className={`font-mono font-semibold ${b.isWireless ? "text-cyan-400" : "text-violet-400"}`}
+          >
+            {b.value > 0 ? "+" : ""}
+            {b.value}
+          </span>
+        </div>
+      ))}
       <div className="border-t border-zinc-600" />
       <div className="flex items-center justify-between gap-4">
         <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-200">
@@ -248,7 +272,7 @@ function PoolTooltipContent({ breakdown }: { breakdown: PoolBreakdown }) {
 // Main component
 // ---------------------------------------------------------------------------
 
-export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
+export function SkillsDisplay({ character, onSelect, resolveEffects }: SkillsDisplayProps) {
   const { activeSkills } = useSkills();
   const skills = character.skills || {};
   const specializations = character.skillSpecializations || {};
@@ -262,7 +286,21 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
     const baseAttr = attrId ? character.attributes[attrId] || 0 : 0;
     const augBonuses = attrId ? getAttributeBonus(character, attrId) : [];
     const augTotal = augBonuses.reduce((sum, b) => sum + b.value, 0);
-    const dicePool = rating + (attrId ? baseAttr + augTotal : 0);
+
+    // Resolve effects for this skill
+    let effectBonus = 0;
+    let effectBonuses: Array<{ source: string; value: number; isWireless: boolean }> = [];
+    if (resolveEffects) {
+      const result = resolveEffects(EffectContextBuilder.forSkillTest(skillId).build());
+      effectBonus = result.totalDicePoolModifier;
+      effectBonuses = result.dicePoolModifiers.map((e) => ({
+        source: e.source.name,
+        value: e.resolvedValue,
+        isWireless: e.appliedVariant === "wireless",
+      }));
+    }
+
+    const dicePool = rating + (attrId ? baseAttr + augTotal : 0) + effectBonus;
 
     const rawSpecs = specializations[skillId];
     const specs = rawSpecs ? (Array.isArray(rawSpecs) ? rawSpecs : [rawSpecs]) : [];
@@ -286,6 +324,7 @@ export function SkillsDisplay({ character, onSelect }: SkillsDisplayProps) {
             attrBase: baseAttr,
             skillRating: rating,
             augBonuses,
+            effectBonuses: effectBonuses.length > 0 ? effectBonuses : undefined,
           }
         : undefined,
     };
