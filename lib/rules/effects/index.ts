@@ -22,3 +22,6 @@ export { resolveEffects } from "./resolver";
 
 // Context builder
 export { EffectContextBuilder } from "./context";
+
+// Quality adapter (Issue #110)
+export { adaptQualityEffect } from "./quality-adapter";

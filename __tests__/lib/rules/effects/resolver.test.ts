@@ -520,7 +520,7 @@ describe("Gathering", () => {
     expect(sources[0].source.name).toBe("Ambidextrous");
   });
 
-  it("should skip old-format quality effects (singular trigger)", () => {
+  it("should adapt old-format quality effects with standard triggers", () => {
     const character = createMockCharacter({
       positiveQualities: [{ qualityId: "old-quality", source: "creation" }],
     });
@@ -534,6 +534,40 @@ describe("Gathering", () => {
             karmaCost: 5,
             summary: "Test",
             effects: [oldFormatEffect],
+          },
+        ],
+        negative: [],
+      },
+    });
+
+    const sources = gatherEffectSources(character, ruleset);
+    expect(sources).toHaveLength(1);
+    expect(sources[0].effect.triggers).toEqual(["skill-test"]);
+    expect(sources[0].effect.value).toBe(2);
+    expect(sources[0].source.name).toBe("Old Quality");
+  });
+
+  it("should still skip non-adaptable old-format effects", () => {
+    const nonAdaptableEffect = {
+      id: "non-adaptable-1",
+      type: "vehicle-modifier",
+      trigger: "vehicle-operation",
+      target: { skill: "pilot-ground-craft" },
+      value: 1,
+    };
+    const character = createMockCharacter({
+      positiveQualities: [{ qualityId: "vehicle-quality", source: "creation" }],
+    });
+    const ruleset = makeMockRuleset({
+      qualities: {
+        positive: [
+          {
+            id: "vehicle-quality",
+            name: "Vehicle Quality",
+            type: "positive",
+            karmaCost: 5,
+            summary: "Test",
+            effects: [nonAdaptableEffect],
           },
         ],
         negative: [],
