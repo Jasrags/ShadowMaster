@@ -190,6 +190,25 @@ export type {
   CodeOfHonorState,
 } from "./qualities";
 
+// Unified Effect types (Issue #107 - /docs/plans/unified-effects-system.md)
+export type {
+  EffectType as UnifiedEffectType,
+  EffectTrigger as UnifiedEffectTrigger,
+  EffectTarget as UnifiedEffectTarget,
+  EffectCondition as UnifiedEffectCondition,
+  SpecificAction,
+  EffectSourceType,
+  Effect,
+  EffectSource,
+  UnifiedResolvedEffect,
+  EffectActionContext,
+  EnvironmentContext,
+  EffectResolutionContext,
+  EffectResolutionResult,
+  ActiveModifier,
+  StackingRule,
+} from "./effects";
+
 // Cyberware/Bioware grade multipliers and modifiers
 export {
   CYBERWARE_GRADE_MULTIPLIERS,
