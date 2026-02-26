@@ -323,6 +323,64 @@ function gatherAdeptPowerEffects(character: Character, ruleset: MergedRuleset): 
 }
 
 /**
+ * Gather effects from modifications installed on gear items.
+ * Handles vision/audio enhancements installed on glasses, goggles, etc.
+ */
+function gatherGearModEffects(character: Character, ruleset: MergedRuleset): SourcedEffect[] {
+  const results: SourcedEffect[] = [];
+
+  for (const item of character.gear || []) {
+    for (const mod of item.modifications || []) {
+      const catalogItem = findCatalogItem("gear", mod.catalogId, ruleset);
+      if (!catalogItem) continue;
+
+      const effects = extractEffects(catalogItem);
+      const source: EffectSource = {
+        type: "gear",
+        id: mod.catalogId,
+        name: mod.name,
+        rating: mod.rating,
+      };
+
+      for (const effect of effects) {
+        results.push({ effect, source });
+      }
+    }
+  }
+
+  return results;
+}
+
+/**
+ * Gather effects from modifications installed on weapons.
+ * Handles weapon accessories like smartgun systems, laser sights, stocks, etc.
+ */
+function gatherWeaponModEffects(character: Character, ruleset: MergedRuleset): SourcedEffect[] {
+  const results: SourcedEffect[] = [];
+
+  for (const weapon of character.weapons || []) {
+    for (const mod of weapon.modifications || []) {
+      const catalogItem = findCatalogItem("modifications", mod.catalogId, ruleset);
+      if (!catalogItem) continue;
+
+      const effects = extractEffects(catalogItem);
+      const source: EffectSource = {
+        type: "gear",
+        id: mod.catalogId,
+        name: mod.name,
+        rating: mod.rating,
+      };
+
+      for (const effect of effects) {
+        results.push({ effect, source });
+      }
+    }
+  }
+
+  return results;
+}
+
+/**
  * Gather effects from active modifiers on the character.
  * Filters out expired modifiers (by timestamp or remaining uses).
  */
@@ -358,7 +416,9 @@ export function gatherEffectSources(character: Character, ruleset: MergedRuleset
   return [
     ...gatherQualityEffects(character, ruleset),
     ...gatherGearEffects(character, ruleset),
+    ...gatherGearModEffects(character, ruleset),
     ...gatherWeaponEffects(character, ruleset),
+    ...gatherWeaponModEffects(character, ruleset),
     ...gatherArmorEffects(character, ruleset),
     ...gatherCyberwareEffects(character, ruleset),
     ...gatherBiowareEffects(character, ruleset),

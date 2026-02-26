@@ -10660,6 +10660,16 @@
             "availability": 4,
             "legality": "restricted",
             "description": "Provides targeting data from a smartgun, granting +2 accuracy.",
+            "effects": [
+              {
+                "id": "smartlink-accuracy",
+                "type": "accuracy-modifier",
+                "triggers": ["ranged-attack"],
+                "target": { "limit": "accuracy" },
+                "value": 2,
+                "description": "+2 Accuracy when used with smartgun"
+              }
+            ],
             "page": 444,
             "source": "Core"
           },
@@ -10682,6 +10692,20 @@
             "minRating": 1,
             "maxRating": 3,
             "description": "Improves visual acuity. Adds rating as dice to visual Perception tests.",
+            "effects": [
+              {
+                "id": "vision-enhancement-limit",
+                "type": "limit-modifier",
+                "triggers": ["perception-visual", "skill-test"],
+                "target": { "limit": "mental", "skill": "perception", "perceptionType": "visual" },
+                "value": { "perRating": 1 },
+                "description": "+[Rating] limit on visual Perception",
+                "wirelessOverride": {
+                  "type": "dice-pool-modifier",
+                  "description": "+[Rating] dice on visual Perception"
+                }
+              }
+            ],
             "page": 444,
             "source": "Core",
             "ratings": {
@@ -10723,6 +10747,20 @@
             "minRating": 1,
             "maxRating": 3,
             "description": "Allows hearing a broader spectrum of audio frequencies including high and low frequencies outside normal metahuman range. Fine discrimination of nuances and ability to block out distracting background noise. Adds rating to limit in audio Perception Tests.",
+            "effects": [
+              {
+                "id": "audio-enhancement-limit",
+                "type": "limit-modifier",
+                "triggers": ["perception-audio", "skill-test"],
+                "target": { "limit": "mental", "skill": "perception", "perceptionType": "audio" },
+                "value": { "perRating": 1 },
+                "description": "+[Rating] limit on audio Perception",
+                "wirelessOverride": {
+                  "type": "dice-pool-modifier",
+                  "description": "+[Rating] dice on audio Perception"
+                }
+              }
+            ],
             "page": 445,
             "source": "Core",
             "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
@@ -10761,6 +10799,17 @@
             "minRating": 1,
             "maxRating": 3,
             "description": "Block out background noise and focus on specific sounds or patterns. Includes speech, word, and sound pattern recognition. Each rating point lets you select a single sound group and focus on it. Can record others for playback or set triggered monitoring.",
+            "effects": [
+              {
+                "id": "select-sound-filter-pool",
+                "type": "dice-pool-modifier",
+                "triggers": ["perception-audio"],
+                "target": { "skill": "perception", "perceptionType": "audio" },
+                "value": { "perRating": 1 },
+                "description": "+[Rating] dice to isolate specific sound",
+                "requiresWireless": true
+              }
+            ],
             "page": 445,
             "source": "Core",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
@@ -10799,6 +10848,20 @@
             "cost": 1000,
             "availability": 4,
             "description": "Pinpoints the source of a sound. Provides +2 bonus on limit in Perception Tests to find the source of a specific sound. Cannot be installed in laser microphones.",
+            "effects": [
+              {
+                "id": "spatial-recognizer-limit",
+                "type": "limit-modifier",
+                "triggers": ["perception-audio"],
+                "target": { "limit": "mental", "specificAction": "locate-sound-source" },
+                "value": 2,
+                "description": "+2 limit to locate sound source",
+                "wirelessOverride": {
+                  "type": "dice-pool-modifier",
+                  "description": "+2 dice pool to locate sound source"
+                }
+              }
+            ],
             "page": 445,
             "source": "Core",
             "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source.",
@@ -13361,6 +13424,22 @@
             "cost": 125,
             "accuracyModifier": 1,
             "description": "Projects a visible dot on target. Can mount on top or underbarrel. Increases Accuracy by 1 (not cumulative with smartlink). Activating/deactivating is a Simple Action.",
+            "effects": [
+              {
+                "id": "laser-sight-accuracy",
+                "type": "accuracy-modifier",
+                "triggers": ["ranged-attack"],
+                "target": { "limit": "accuracy" },
+                "value": 1,
+                "description": "+1 Accuracy (not cumulative with smartlink)",
+                "stackingGroup": "smartlink-laser",
+                "stackingPriority": 1,
+                "wirelessOverride": {
+                  "type": "dice-pool-modifier",
+                  "description": "+1 dice pool (not cumulative with smartlink)"
+                }
+              }
+            ],
             "wirelessBonus": "+1 dice pool bonus (not cumulative with smartlink). Activating/deactivating is a Free Action.",
             "wirelessEffects": [
               {
@@ -13430,6 +13509,16 @@
             "cost": 50,
             "recoilCompensation": 1,
             "description": "Shock-absorbing pad for rifles, shotguns, or heavy weapons. Provides 1 point of recoil compensation.",
+            "effects": [
+              {
+                "id": "shock-pad-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 1,
+                "description": "+1 Recoil Compensation"
+              }
+            ],
             "minimumWeaponSize": "rifle",
             "page": 433,
             "source": "Core"
@@ -13442,6 +13531,16 @@
             "cost": 50,
             "recoilCompensation": 1,
             "description": "Detachable or folding shoulder stock. Provides +1 Recoil Compensation when deployed.",
+            "effects": [
+              {
+                "id": "stock-folding-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 1,
+                "description": "+1 Recoil Compensation"
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -13453,6 +13552,16 @@
             "cost": 50,
             "recoilCompensation": 1,
             "description": "Retractable shoulder stock. Provides +1 Recoil Compensation when deployed.",
+            "effects": [
+              {
+                "id": "stock-retractable-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 1,
+                "description": "+1 Recoil Compensation"
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -13464,6 +13573,16 @@
             "cost": 50,
             "recoilCompensation": 1,
             "description": "Integrated rigid shoulder stock. Provides +1 Recoil Compensation.",
+            "effects": [
+              {
+                "id": "stock-rigid-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 1,
+                "description": "+1 Recoil Compensation"
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -13475,6 +13594,16 @@
             "cost": 100,
             "recoilCompensation": 2,
             "description": "Integrated rigid shoulder stock with shock-absorbing pad. Provides +2 Recoil Compensation.",
+            "effects": [
+              {
+                "id": "stock-rigid-shock-pad-rc",
+                "type": "recoil-compensation",
+                "triggers": ["ranged-attack"],
+                "target": {},
+                "value": 2,
+                "description": "+2 Recoil Compensation"
+              }
+            ],
             "page": 432,
             "source": "Core"
           },
@@ -13566,6 +13695,22 @@
             "costMultiplier": 2,
             "accuracyModifier": 2,
             "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
+            "effects": [
+              {
+                "id": "smartgun-internal-accuracy",
+                "type": "accuracy-modifier",
+                "triggers": ["ranged-attack"],
+                "target": { "limit": "accuracy" },
+                "value": 2,
+                "description": "+2 Accuracy when used with smartlink",
+                "stackingGroup": "smartlink-laser",
+                "stackingPriority": 2,
+                "wirelessOverride": {
+                  "bonusValue": 1,
+                  "description": "+1 dice pool with gear smartlink; +2 with cyberware smartlink (not yet automated)"
+                }
+              }
+            ],
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
             "wirelessEffects": [
               {
@@ -13599,6 +13744,22 @@
             "cost": 200,
             "accuracyModifier": 2,
             "description": "External smartgun system. Can mount on top or underbarrel. Requires Armorer + Logic (4, 1 hour) Extended Test to install. Increases Accuracy by 2 when used with smartlink. Camera has capacity 1 for vision enhancements.",
+            "effects": [
+              {
+                "id": "smartgun-external-accuracy",
+                "type": "accuracy-modifier",
+                "triggers": ["ranged-attack"],
+                "target": { "limit": "accuracy" },
+                "value": 2,
+                "description": "+2 Accuracy when used with smartlink",
+                "stackingGroup": "smartlink-laser",
+                "stackingPriority": 2,
+                "wirelessOverride": {
+                  "bonusValue": 1,
+                  "description": "+1 dice pool with gear smartlink; +2 with cyberware smartlink (not yet automated)"
+                }
+              }
+            ],
             "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
             "wirelessEffects": [
               {
