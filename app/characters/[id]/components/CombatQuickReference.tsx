@@ -19,6 +19,9 @@ import { Wifi, AlertTriangle } from "lucide-react";
 import { calculateWirelessBonuses, isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { calculateArmorTotal, type ArmorCalculationResult } from "@/lib/rules/gameplay";
 import { calculateEncumbrance } from "@/lib/rules/encumbrance/calculator";
+import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
+import { EffectContextBuilder } from "@/lib/rules/effects";
+import { effectsToPoolModifiers } from "./effect-utils";
 
 // =============================================================================
 // TYPES
@@ -30,6 +33,7 @@ export interface CombatQuickReferenceProps {
   physicalLimit: number;
   onPoolSelect?: (pool: number, context: string) => void;
   theme?: Theme;
+  resolveEffects?: (ctx: EffectResolutionContext) => EffectResolutionResult;
 }
 
 interface CombatPool {
@@ -251,6 +255,7 @@ export function CombatQuickReference({
   physicalLimit,
   onPoolSelect,
   theme,
+  resolveEffects,
 }: CombatQuickReferenceProps) {
   const t = theme || THEMES[DEFAULT_THEME];
 
@@ -267,6 +272,14 @@ export function CombatQuickReference({
     const globalWireless = isGlobalWirelessEnabled(character);
     const wirelessBonuses = globalWireless ? calculateWirelessBonuses(character) : null;
     const encumbrance = calculateEncumbrance(character);
+
+    // Resolve unified effects for combat contexts
+    const initEffects = resolveEffects
+      ? resolveEffects(EffectContextBuilder.forInitiative().build())
+      : null;
+    const defenseEffects = resolveEffects
+      ? resolveEffects(EffectContextBuilder.forDefense().build())
+      : null;
 
     // Defense pool
     const defenseBase = calculateDefensePool(character);
@@ -286,6 +299,15 @@ export function CombatQuickReference({
       defenseTotal += wirelessBonuses.defensePool;
       defenseHasWireless = true;
     }
+
+    // Add unified effect modifiers for defense
+    if (defenseEffects && defenseEffects.totalDicePoolModifier !== 0) {
+      const effectMods = effectsToPoolModifiers(defenseEffects.dicePoolModifiers);
+      defenseModifiers.push(...effectMods);
+      defenseTotal += defenseEffects.totalDicePoolModifier;
+      if (effectMods.some((m) => m.type === "wireless")) defenseHasWireless = true;
+    }
+
     if (armorCalc.reactionPenalty < 0) {
       defenseModifiers.push({
         label: "Armor Encumbrance",
@@ -330,6 +352,15 @@ export function CombatQuickReference({
       fullDefenseTotal += wirelessBonuses.defensePool;
       fullDefenseHasWireless = true;
     }
+
+    // Add unified effect modifiers for full defense
+    if (defenseEffects && defenseEffects.totalDicePoolModifier !== 0) {
+      const effectMods = effectsToPoolModifiers(defenseEffects.dicePoolModifiers);
+      fullDefenseModifiers.push(...effectMods);
+      fullDefenseTotal += defenseEffects.totalDicePoolModifier;
+      if (effectMods.some((m) => m.type === "wireless")) fullDefenseHasWireless = true;
+    }
+
     if (armorCalc.reactionPenalty < 0) {
       fullDefenseModifiers.push({
         label: "Armor Encumbrance",
@@ -436,6 +467,7 @@ export function CombatQuickReference({
 
     return {
       initiative,
+      initEffects,
       armor,
       armorCalc,
       defensePool,
@@ -446,13 +478,21 @@ export function CombatQuickReference({
       memoryPool,
       weaponPools,
     };
-  }, [character, physicalLimit]);
+  }, [character, physicalLimit, resolveEffects]);
 
+  const unifiedInitBonus = combatData.initEffects?.totalInitiativeModifier ?? 0;
   const effectiveInit =
-    combatData.initiative.base + combatData.initiative.wirelessBonus + woundModifier;
+    combatData.initiative.base +
+    combatData.initiative.wirelessBonus +
+    unifiedInitBonus +
+    woundModifier;
   const totalInitDice = combatData.initiative.dice + combatData.initiative.wirelessDice;
   const hasWirelessBonus =
-    combatData.initiative.wirelessBonus > 0 || combatData.initiative.wirelessDice > 0;
+    combatData.initiative.wirelessBonus > 0 ||
+    combatData.initiative.wirelessDice > 0 ||
+    (combatData.initEffects?.initiativeModifiers ?? []).some(
+      (e) => e.appliedVariant === "wireless"
+    );
 
   return (
     <div className="space-y-4">
@@ -480,7 +520,7 @@ export function CombatQuickReference({
           >
             {effectiveInit}+{totalInitDice}d6
           </span>
-          {(woundModifier < 0 || hasWirelessBonus) && (
+          {(woundModifier < 0 || hasWirelessBonus || unifiedInitBonus !== 0) && (
             <div className="flex items-center justify-center gap-2 mt-1">
               {woundModifier < 0 && (
                 <span className="text-[10px] text-red-400">({woundModifier} wound)</span>
@@ -493,6 +533,14 @@ export function CombatQuickReference({
               {combatData.initiative.wirelessDice > 0 && (
                 <span className="text-[10px] text-cyan-400">
                   (+{combatData.initiative.wirelessDice}d6)
+                </span>
+              )}
+              {unifiedInitBonus !== 0 && (
+                <span
+                  className={`text-[10px] ${unifiedInitBonus > 0 ? "text-violet-400" : "text-red-400"}`}
+                >
+                  ({unifiedInitBonus > 0 ? "+" : ""}
+                  {unifiedInitBonus} effects)
                 </span>
               )}
             </div>

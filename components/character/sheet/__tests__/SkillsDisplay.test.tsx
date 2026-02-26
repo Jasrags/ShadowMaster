@@ -57,6 +57,7 @@ vi.mock("react-aria-components", () => ({
 
 import { useSkills } from "@/lib/rules";
 import { SkillsDisplay } from "../SkillsDisplay";
+import type { EffectResolutionResult } from "@/lib/types/effects";
 
 describe("SkillsDisplay", () => {
   beforeEach(() => {
@@ -320,5 +321,147 @@ describe("SkillsDisplay", () => {
     fireEvent.click(screen.getByText("Pistols"));
     expect(onSelect).not.toHaveBeenCalled();
     expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+  });
+
+  describe("effect modifiers", () => {
+    function mockResolveEffects() {
+      return vi.fn().mockReturnValue({
+        dicePoolModifiers: [
+          {
+            effect: {
+              id: "catlike",
+              type: "dice-pool-modifier",
+              triggers: ["always"],
+              target: {},
+              value: 2,
+            },
+            source: { type: "quality", id: "catlike", name: "Catlike" },
+            resolvedValue: 2,
+            appliedVariant: "standard",
+          },
+        ],
+        limitModifiers: [],
+        thresholdModifiers: [],
+        accuracyModifiers: [],
+        initiativeModifiers: [],
+        totalDicePoolModifier: 2,
+        totalLimitModifier: 0,
+        totalThresholdModifier: 0,
+        totalAccuracyModifier: 0,
+        totalInitiativeModifier: 0,
+        excludedByStacking: [],
+      } satisfies EffectResolutionResult);
+    }
+
+    it("adds effect modifiers to dice pool", () => {
+      const character = createSheetCharacter({
+        attributes: {
+          body: 5,
+          agility: 6,
+          reaction: 5,
+          strength: 4,
+          willpower: 3,
+          logic: 3,
+          intuition: 4,
+          charisma: 2,
+        },
+        skills: { pistols: 5 },
+      });
+      const resolveEffects = mockResolveEffects();
+      const { container } = render(
+        <SkillsDisplay character={character} resolveEffects={resolveEffects} />
+      );
+
+      // Pool = pistols(5) + agility(6) + effect(2) = 13
+      const poolPill = container.querySelector('[data-testid="dice-pool-pill"]');
+      expect(poolPill!.textContent).toBe("13");
+    });
+
+    it("shows effect bonuses in tooltip", () => {
+      const character = createSheetCharacter({
+        skills: { pistols: 5 },
+      });
+      const resolveEffects = mockResolveEffects();
+      render(<SkillsDisplay character={character} resolveEffects={resolveEffects} />);
+
+      const tooltipContent = screen.getByTestId("tooltip-content");
+      expect(within(tooltipContent).getByText("Catlike")).toBeInTheDocument();
+      expect(within(tooltipContent).getByText("+2")).toBeInTheDocument();
+    });
+
+    it("applies cyan styling to pool pill when effects are contributing", () => {
+      const character = createSheetCharacter({
+        skills: { pistols: 5 },
+      });
+      const resolveEffects = mockResolveEffects();
+      render(<SkillsDisplay character={character} resolveEffects={resolveEffects} />);
+
+      const poolPill = screen.getByTestId("dice-pool-pill");
+      expect(poolPill.className).toContain("cyan");
+    });
+
+    it("shows wireless indicator for wireless effect bonuses", () => {
+      const character = createSheetCharacter({
+        skills: { pistols: 5 },
+      });
+      const resolveEffects = vi.fn().mockReturnValue({
+        dicePoolModifiers: [
+          {
+            effect: {
+              id: "wireless-eff",
+              type: "dice-pool-modifier",
+              triggers: ["always"],
+              target: {},
+              value: 1,
+              wirelessOverride: { bonusValue: 1 },
+            },
+            source: {
+              type: "cyberware",
+              id: "cybereyes",
+              name: "Cybereyes",
+              wirelessEnabled: true,
+            },
+            resolvedValue: 2,
+            appliedVariant: "wireless",
+          },
+        ],
+        limitModifiers: [],
+        thresholdModifiers: [],
+        accuracyModifiers: [],
+        initiativeModifiers: [],
+        totalDicePoolModifier: 2,
+        totalLimitModifier: 0,
+        totalThresholdModifier: 0,
+        totalAccuracyModifier: 0,
+        totalInitiativeModifier: 0,
+        excludedByStacking: [],
+      } satisfies EffectResolutionResult);
+      render(<SkillsDisplay character={character} resolveEffects={resolveEffects} />);
+
+      // Tooltip should show the wireless effect with ⚡ prefix
+      const tooltipContent = screen.getByTestId("tooltip-content");
+      expect(tooltipContent.textContent).toContain("Cybereyes");
+    });
+
+    it("does not change pool when resolveEffects is not provided", () => {
+      const character = createSheetCharacter({
+        attributes: {
+          body: 5,
+          agility: 6,
+          reaction: 5,
+          strength: 4,
+          willpower: 3,
+          logic: 3,
+          intuition: 4,
+          charisma: 2,
+        },
+        skills: { pistols: 5 },
+      });
+      const { container } = render(<SkillsDisplay character={character} />);
+
+      // Pool = pistols(5) + agility(6) = 11 (no effects)
+      const poolPill = container.querySelector('[data-testid="dice-pool-pill"]');
+      expect(poolPill!.textContent).toBe("11");
+    });
   });
 });

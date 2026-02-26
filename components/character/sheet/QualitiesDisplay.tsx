@@ -201,16 +201,34 @@ function QualityRow({
           {/* Effect badges */}
           {effects.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {effects.map((eff, idx) => (
-                <span
-                  key={idx}
-                  data-testid="effect-badge"
-                  className="rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400"
-                  title={eff.description}
-                >
-                  {eff.type.replace(/-/g, " ")}
-                </span>
-              ))}
+              {effects.map((eff, idx) => {
+                // Check if this is a unified effect with triggers array
+                const isUnified =
+                  "triggers" in eff &&
+                  Array.isArray((eff as unknown as { triggers?: unknown }).triggers);
+                const value =
+                  isUnified && typeof eff.value === "number" ? (eff.value as number) : null;
+                const hasWirelessOverride =
+                  isUnified && "wirelessOverride" in eff && eff.wirelessOverride;
+
+                return (
+                  <span
+                    key={idx}
+                    data-testid="effect-badge"
+                    className="rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400"
+                    title={eff.description}
+                  >
+                    {eff.type.replace(/-/g, " ")}
+                    {value !== null && (
+                      <span className="ml-1 text-emerald-400">
+                        {value > 0 ? "+" : ""}
+                        {value}
+                      </span>
+                    )}
+                    {hasWirelessOverride ? <span className="ml-1 text-cyan-400">W</span> : null}
+                  </span>
+                );
+              })}
             </div>
           )}
 

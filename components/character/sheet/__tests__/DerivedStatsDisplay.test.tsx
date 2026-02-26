@@ -19,6 +19,7 @@ vi.mock("@/components/ui", () => ({
 
 import { DerivedStatsDisplay } from "../DerivedStatsDisplay";
 import type { Character } from "@/lib/types";
+import type { EffectResolutionResult } from "@/lib/types/effects";
 import { createSheetCharacter } from "./test-helpers";
 
 // Base character with known attribute values for predictable derived stats
@@ -152,6 +153,78 @@ describe("DerivedStatsDisplay", () => {
       expect(screen.getByText("Total")).toBeInTheDocument();
       // Only equipped armor counts: 12
       expect(screen.getByText("12")).toBeInTheDocument();
+    });
+  });
+
+  describe("effect modifiers", () => {
+    const emptyResult: EffectResolutionResult = {
+      dicePoolModifiers: [],
+      limitModifiers: [],
+      thresholdModifiers: [],
+      accuracyModifiers: [],
+      initiativeModifiers: [],
+      totalDicePoolModifier: 0,
+      totalLimitModifier: 0,
+      totalThresholdModifier: 0,
+      totalAccuracyModifier: 0,
+      totalInitiativeModifier: 0,
+      excludedByStacking: [],
+    };
+
+    it("adds initiative modifier from effects", () => {
+      const resolveEffects = vi.fn().mockReturnValue({
+        ...emptyResult,
+        totalInitiativeModifier: 2,
+        initiativeModifiers: [
+          {
+            effect: {
+              id: "init-eff",
+              type: "initiative-modifier",
+              triggers: ["always"],
+              target: {},
+              value: 2,
+            },
+            source: { type: "cyberware", id: "wired-reflexes", name: "Wired Reflexes" },
+            resolvedValue: 2,
+            appliedVariant: "standard",
+          },
+        ],
+      } satisfies EffectResolutionResult);
+
+      render(<DerivedStatsDisplay character={baseCharacter} resolveEffects={resolveEffects} />);
+      // Base initiative = REA(5) + INT(4) = 9, plus effect +2 = 11
+      expect(screen.getByText("11+1d6")).toBeInTheDocument();
+    });
+
+    it("adds limit modifiers from effects", () => {
+      const resolveEffects = vi.fn().mockReturnValue({
+        ...emptyResult,
+        totalLimitModifier: 1,
+        limitModifiers: [
+          {
+            effect: {
+              id: "limit-eff",
+              type: "limit-modifier",
+              triggers: ["always"],
+              target: { limit: "physical" },
+              value: 1,
+            },
+            source: { type: "quality", id: "catlike", name: "Catlike" },
+            resolvedValue: 1,
+            appliedVariant: "standard",
+          },
+        ],
+      } satisfies EffectResolutionResult);
+
+      render(<DerivedStatsDisplay character={baseCharacter} resolveEffects={resolveEffects} />);
+      // Base physical limit = ceil((4*2 + 5 + 5) / 3) = 6, plus +1 = 7
+      expect(screen.getByText("7")).toBeInTheDocument();
+    });
+
+    it("renders correctly without resolveEffects prop", () => {
+      render(<DerivedStatsDisplay character={baseCharacter} />);
+      // Base initiative = REA(5) + INT(4) = 9
+      expect(screen.getByText("9+1d6")).toBeInTheDocument();
     });
   });
 });

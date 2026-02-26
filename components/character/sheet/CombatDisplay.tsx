@@ -5,6 +5,7 @@ import { Swords } from "lucide-react";
 import { CombatQuickReference } from "@/app/characters/[id]/components/CombatQuickReference";
 import type { Character } from "@/lib/types";
 import { THEMES, DEFAULT_THEME, type Theme } from "@/lib/themes";
+import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
 
 interface CombatDisplayProps {
   character: Character;
@@ -12,6 +13,7 @@ interface CombatDisplayProps {
   physicalLimit: number;
   theme?: Theme;
   onPoolSelect: (pool: number, context: string) => void;
+  resolveEffects?: (ctx: EffectResolutionContext) => EffectResolutionResult;
 }
 
 export function CombatDisplay({
@@ -20,6 +22,7 @@ export function CombatDisplay({
   physicalLimit,
   theme,
   onPoolSelect,
+  resolveEffects,
 }: CombatDisplayProps) {
   const t = theme || THEMES[DEFAULT_THEME];
   return (
@@ -35,6 +38,7 @@ export function CombatDisplay({
         physicalLimit={physicalLimit}
         theme={t}
         onPoolSelect={onPoolSelect}
+        resolveEffects={resolveEffects}
       />
     </DisplayCard>
   );

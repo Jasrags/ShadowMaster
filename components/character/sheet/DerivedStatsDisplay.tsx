@@ -5,9 +5,12 @@ import { DisplayCard } from "./DisplayCard";
 import { Activity } from "lucide-react";
 import { Tooltip } from "@/components/ui";
 import { Button as AriaButton } from "react-aria-components";
+import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
+import { EffectContextBuilder } from "@/lib/rules/effects";
 
 interface DerivedStatsDisplayProps {
   character: Character;
+  resolveEffects?: (ctx: EffectResolutionContext) => EffectResolutionResult;
 }
 
 // ---------------------------------------------------------------------------
@@ -97,7 +100,7 @@ function StatRow({
 // Main component
 // ---------------------------------------------------------------------------
 
-export function DerivedStatsDisplay({ character }: DerivedStatsDisplayProps) {
+export function DerivedStatsDisplay({ character, resolveEffects }: DerivedStatsDisplayProps) {
   const body = attr(character, "body");
   const agility = attr(character, "agility");
   const reaction = attr(character, "reaction");
@@ -108,11 +111,42 @@ export function DerivedStatsDisplay({ character }: DerivedStatsDisplayProps) {
   const charisma = attr(character, "charisma");
   const essence = character.specialAttributes?.essence ?? 6;
 
+  // Resolve initiative effects
+  const initEffects = resolveEffects
+    ? resolveEffects(EffectContextBuilder.forInitiative().build())
+    : null;
+  const initBonus = initEffects?.totalInitiativeModifier ?? 0;
+  const initEffectItems: BreakdownItem[] = (initEffects?.initiativeModifiers ?? []).map((e) => ({
+    label: e.source.name,
+    value: e.resolvedValue > 0 ? `+${e.resolvedValue}` : `${e.resolvedValue}`,
+  }));
+
+  // Resolve limit effects using a skill-test context with "always" trigger matching
+  const limitEffects = resolveEffects
+    ? resolveEffects(EffectContextBuilder.forSkillTest("_limits").build())
+    : null;
+  const physicalLimitBonus =
+    limitEffects?.limitModifiers
+      .filter((e) => !e.effect.target.limit || e.effect.target.limit === "physical")
+      .reduce((sum, e) => sum + e.resolvedValue, 0) ?? 0;
+  const mentalLimitBonus =
+    limitEffects?.limitModifiers
+      .filter((e) => !e.effect.target.limit || e.effect.target.limit === "mental")
+      .reduce((sum, e) => sum + e.resolvedValue, 0) ?? 0;
+  const socialLimitBonus =
+    limitEffects?.limitModifiers
+      .filter((e) => !e.effect.target.limit || e.effect.target.limit === "social")
+      .reduce((sum, e) => sum + e.resolvedValue, 0) ?? 0;
+
   // Derived values
-  const initiative = reaction + intuition;
-  const physicalLimit = Math.ceil((strength * 2 + body + reaction) / 3);
-  const mentalLimit = Math.ceil((logic * 2 + intuition + willpower) / 3);
-  const socialLimit = Math.ceil((charisma * 2 + willpower + Math.ceil(essence)) / 3);
+  const baseInitiative = reaction + intuition;
+  const initiative = baseInitiative + initBonus;
+  const basePhysicalLimit = Math.ceil((strength * 2 + body + reaction) / 3);
+  const baseMentalLimit = Math.ceil((logic * 2 + intuition + willpower) / 3);
+  const baseSocialLimit = Math.ceil((charisma * 2 + willpower + Math.ceil(essence)) / 3);
+  const physicalLimit = basePhysicalLimit + physicalLimitBonus;
+  const mentalLimit = baseMentalLimit + mentalLimitBonus;
+  const socialLimit = baseSocialLimit + socialLimitBonus;
   const physicalCM = Math.ceil(body / 2) + 8;
   const stunCM = Math.ceil(willpower / 2) + 8;
   const overflow = body;
@@ -145,10 +179,11 @@ export function DerivedStatsDisplay({ character }: DerivedStatsDisplayProps) {
             <StatRow
               label="Initiative"
               value={`${initiative}+1d6`}
-              formula="REA + INT + 1d6"
+              formula={initBonus ? "REA + INT + effects + 1d6" : "REA + INT + 1d6"}
               breakdown={[
                 { label: "REA", value: reaction },
                 { label: "INT", value: intuition },
+                ...initEffectItems,
               ]}
             />
           </div>
@@ -163,31 +198,55 @@ export function DerivedStatsDisplay({ character }: DerivedStatsDisplayProps) {
             <StatRow
               label="Physical"
               value={physicalLimit}
-              formula="(STR×2 + BOD + REA) / 3"
+              formula="⌈(STR×2 + BOD + REA) / 3⌉"
               breakdown={[
                 { label: "STR × 2", value: strength * 2 },
                 { label: "BOD", value: body },
                 { label: "REA", value: reaction },
+                ...(physicalLimitBonus
+                  ? [
+                      {
+                        label: "Effects",
+                        value: `+${physicalLimitBonus}` as string | number,
+                      },
+                    ]
+                  : []),
               ]}
             />
             <StatRow
               label="Mental"
               value={mentalLimit}
-              formula="(LOG×2 + INT + WIL) / 3"
+              formula="⌈(LOG×2 + INT + WIL) / 3⌉"
               breakdown={[
                 { label: "LOG × 2", value: logic * 2 },
                 { label: "INT", value: intuition },
                 { label: "WIL", value: willpower },
+                ...(mentalLimitBonus
+                  ? [
+                      {
+                        label: "Effects",
+                        value: `+${mentalLimitBonus}` as string | number,
+                      },
+                    ]
+                  : []),
               ]}
             />
             <StatRow
               label="Social"
               value={socialLimit}
-              formula="(CHA×2 + WIL + ESS) / 3"
+              formula="⌈(CHA×2 + WIL + ESS) / 3⌉"
               breakdown={[
                 { label: "CHA × 2", value: charisma * 2 },
                 { label: "WIL", value: willpower },
                 { label: "ESS", value: Math.ceil(essence) },
+                ...(socialLimitBonus
+                  ? [
+                      {
+                        label: "Effects",
+                        value: `+${socialLimitBonus}` as string | number,
+                      },
+                    ]
+                  : []),
               ]}
             />
           </div>

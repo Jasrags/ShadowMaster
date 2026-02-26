@@ -15,6 +15,7 @@ import { ActionPanel } from "./components/ActionPanel";
 import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
+import { useCharacterEffects } from "./hooks/useCharacterEffects";
 import { CombatSessionProvider } from "@/lib/combat";
 import { MatrixSessionProvider, useMatrixSession } from "@/lib/matrix";
 
@@ -24,6 +25,7 @@ import {
   AttributesDisplay,
   CombatDisplay,
   ComplexFormsDisplay,
+  EffectsSummaryDisplay,
   ConditionDisplay,
   ContactsDisplay,
   CyberdeckConfigDisplay,
@@ -90,6 +92,10 @@ function CharacterSheet({
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
   const matrixSession = useMatrixSession();
+  const { sources: effectSources, resolve: resolveEffects } = useCharacterEffects(
+    character,
+    ruleset
+  );
 
   useEffect(() => {
     if (character.editionCode) {
@@ -327,7 +333,7 @@ function CharacterSheet({
               onSelect={(attrId, val) => openDiceRoller(val, ATTRIBUTE_DISPLAY[attrId]?.abbr)}
             />
 
-            <DerivedStatsDisplay character={character} />
+            <DerivedStatsDisplay character={character} resolveEffects={resolveEffects} />
 
             <EncumbranceDisplay character={character} />
 
@@ -336,6 +342,8 @@ function CharacterSheet({
               onCharacterUpdate={(updated) => setCharacter(updated)}
               editable={character.status === "active"}
             />
+
+            <EffectsSummaryDisplay sources={effectSources} />
 
             <ConditionDisplay
               character={character}
@@ -351,6 +359,7 @@ function CharacterSheet({
               woundModifier={woundModifier}
               physicalLimit={physicalLimit}
               onPoolSelect={(pool, context) => openDiceRoller(pool, context)}
+              resolveEffects={resolveEffects}
             />
 
             {/* Action Panel */}
@@ -373,6 +382,7 @@ function CharacterSheet({
           <div className="space-y-6">
             <SkillsDisplay
               character={character}
+              resolveEffects={resolveEffects}
               onSelect={(skillId, pool, attrAbbr) => {
                 const skillName = skillId.replace(/-/g, " ");
                 const context = attrAbbr ? `${attrAbbr} + ${skillName}` : skillName;
