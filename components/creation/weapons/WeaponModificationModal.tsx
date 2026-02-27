@@ -539,32 +539,49 @@ export function WeaponModificationModal({
                     )}
 
                     {/* Effects */}
-                    {(selectedMod.accuracyModifier ||
-                      selectedMod.recoilCompensation ||
-                      selectedMod.concealabilityModifier) && (
-                      <div className="space-y-2">
-                        <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                          Effects
-                        </span>
-                        <div className="space-y-1">
-                          {selectedMod.accuracyModifier && (
-                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                              +{selectedMod.accuracyModifier} Accuracy
+                    {(() => {
+                      const accEffect = selectedMod.effects?.find(
+                        (e) => e.type === "accuracy-modifier"
+                      );
+                      const rcEffect = selectedMod.effects?.find(
+                        (e) => e.type === "recoil-compensation"
+                      );
+                      const accValue =
+                        typeof accEffect?.value === "number"
+                          ? accEffect.value
+                          : selectedMod.accuracyModifier;
+                      const rcValue =
+                        typeof rcEffect?.value === "number"
+                          ? rcEffect.value
+                          : selectedMod.recoilCompensation;
+
+                      return (
+                        (accValue || rcValue || selectedMod.concealabilityModifier) && (
+                          <div className="space-y-2">
+                            <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
+                              Effects
+                            </span>
+                            <div className="space-y-1">
+                              {accValue && (
+                                <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                                  +{accValue} Accuracy
+                                </div>
+                              )}
+                              {rcValue && (
+                                <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                                  +{rcValue} Recoil Compensation
+                                </div>
+                              )}
+                              {selectedMod.concealabilityModifier && (
+                                <div className="text-sm text-emerald-600 dark:text-emerald-400">
+                                  {selectedMod.concealabilityModifier} Concealability
+                                </div>
+                              )}
                             </div>
-                          )}
-                          {selectedMod.recoilCompensation && (
-                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                              +{selectedMod.recoilCompensation} Recoil Compensation
-                            </div>
-                          )}
-                          {selectedMod.concealabilityModifier && (
-                            <div className="text-sm text-emerald-600 dark:text-emerald-400">
-                              {selectedMod.concealabilityModifier} Concealability
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    )}
+                          </div>
+                        )
+                      );
+                    })()}
 
                     {/* Legality Warning */}
                     {(selectedMod.legality === "restricted" ||

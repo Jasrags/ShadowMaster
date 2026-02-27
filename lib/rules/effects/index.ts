@@ -23,5 +23,5 @@ export { resolveEffects, resolveFromSources } from "./resolver";
 // Context builder
 export { EffectContextBuilder } from "./context";
 
-// Quality adapter (Issue #110)
-export { adaptQualityEffect } from "./quality-adapter";
+// Constants
+export { UNIFIED_TRIGGERS, UNIFIED_TYPES } from "./constants";

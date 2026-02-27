@@ -10,7 +10,7 @@
 import { describe, it, expect } from "vitest";
 import { readFileSync } from "fs";
 import { join } from "path";
-import { UNIFIED_TRIGGERS, UNIFIED_TYPES } from "@/lib/rules/effects/quality-adapter";
+import { UNIFIED_TRIGGERS, UNIFIED_TYPES } from "@/lib/rules/effects/constants";
 import type { SpecificAction } from "@/lib/types/effects";
 
 // ---------------------------------------------------------------------------
