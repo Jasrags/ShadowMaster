@@ -251,12 +251,11 @@ describe("AugmentationsDisplay", () => {
     expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
   });
 
-  it("shows no wifi icon when no wirelessBonus", () => {
+  it("shows wireless icon for augmentation without explicit wirelessBonus", () => {
     const noWireless = { ...MOCK_CYBERWARE, wirelessBonus: undefined, wirelessEffects: undefined };
     const character = createSheetCharacter({ cyberware: [noWireless] });
     render(<AugmentationsDisplay character={character} />);
-    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
   });
 
   it("shows wireless toggle in expanded section when editable", async () => {

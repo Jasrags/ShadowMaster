@@ -493,10 +493,23 @@ export function getEquipmentStateSummary(character: Character): {
     if (state === "worn") wornArmor++;
     else if (state === "stashed") stashedArmor++;
     else storedArmor++;
+
+    if (item.state?.wirelessEnabled !== false) wirelessEnabled++;
+    else wirelessDisabled++;
   }
 
   for (const item of cyberware) {
     if (item.wirelessEnabled !== false) wirelessEnabled++;
+    else wirelessDisabled++;
+  }
+
+  for (const item of character.bioware || []) {
+    if (item.wirelessEnabled !== false) wirelessEnabled++;
+    else wirelessDisabled++;
+  }
+
+  for (const item of character.drones || []) {
+    if (item.state?.wirelessEnabled !== false) wirelessEnabled++;
     else wirelessDisabled++;
   }
 

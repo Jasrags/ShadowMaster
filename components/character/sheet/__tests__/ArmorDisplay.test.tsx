@@ -282,11 +282,10 @@ describe("ArmorDisplay", () => {
     expect(screen.getByTestId("wireless-icon-off")).toBeInTheDocument();
   });
 
-  it("does not show wireless icons for armor without wirelessBonus", () => {
+  it("shows wireless icon for armor without explicit wirelessBonus", () => {
     const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
     render(<ArmorDisplay character={character} />);
-    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
-    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
   });
 
   // --- Expand/collapse ---
@@ -503,12 +502,12 @@ describe("ArmorDisplay", () => {
   // --- Wireless toggle (expanded, editable) ---
 
   describe("wireless toggle", () => {
-    it("hidden when armor has no wirelessBonus", () => {
+    it("shown when armor has no explicit wirelessBonus", () => {
       const onUpdate = vi.fn();
       const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
       render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
       fireEvent.click(screen.getByTestId("expand-button"));
-      expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
+      expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
     });
 
     it("hidden when not editable", () => {

@@ -674,9 +674,9 @@ describe("VehiclesDisplay", () => {
     expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
   });
 
-  it("does not show wireless icon for drone without state", () => {
+  it("shows active wireless icon for drone without explicit state (default enabled)", () => {
     render(<VehiclesDisplay drones={[MOCK_DRONE]} />);
-    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
     expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
   });
 
