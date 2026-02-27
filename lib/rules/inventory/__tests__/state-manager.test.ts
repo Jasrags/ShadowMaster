@@ -5,7 +5,7 @@
  */
 
 import { describe, it, expect } from "vitest";
-import type { Weapon, ArmorItem, Character } from "@/lib/types";
+import type { Weapon, ArmorItem, Character, BiowareItem, CharacterDrone } from "@/lib/types";
 import type { DeviceCondition } from "@/lib/types/gear-state";
 import {
   getDefaultState,
@@ -555,6 +555,66 @@ describe("Equipment State Manager", () => {
             wirelessEnabled: false,
           },
         ] as Character["cyberware"],
+        bioware: [
+          {
+            id: "bio-1",
+            catalogId: "b1",
+            name: "Synaptic Booster",
+            category: "cultured",
+            grade: "standard",
+            baseEssenceCost: 0.5,
+            essenceCost: 0.5,
+            cost: 95000,
+            availability: 12,
+            wirelessEnabled: true,
+          },
+          {
+            id: "bio-2",
+            catalogId: "b2",
+            name: "Orthoskin",
+            category: "basic",
+            grade: "standard",
+            baseEssenceCost: 0.25,
+            essenceCost: 0.25,
+            cost: 6250,
+            availability: 8,
+            wirelessEnabled: false,
+          },
+        ] as BiowareItem[],
+        drones: [
+          {
+            id: "drone-1",
+            catalogId: "d1",
+            name: "MCT Fly-Spy",
+            size: "mini",
+            handling: 4,
+            speed: 3,
+            acceleration: 3,
+            body: 1,
+            armor: 0,
+            pilot: 3,
+            sensor: 3,
+            cost: 2000,
+            availability: 6,
+            state: { readiness: "stored", wirelessEnabled: true },
+          },
+          {
+            id: "drone-2",
+            catalogId: "d2",
+            name: "GM-Nissan Doberman",
+            size: "medium",
+            handling: 5,
+            speed: 3,
+            acceleration: 3,
+            body: 4,
+            armor: 4,
+            pilot: 3,
+            sensor: 3,
+            cost: 5000,
+            availability: 4,
+            state: { readiness: "stored", wirelessEnabled: false },
+          },
+        ] as CharacterDrone[],
       });
 
       const summary = getEquipmentStateSummary(character);
@@ -566,8 +626,10 @@ describe("Equipment State Manager", () => {
       expect(summary.wornArmor).toBe(1);
       expect(summary.storedArmor).toBe(1);
       expect(summary.stashedArmor).toBe(1);
-      expect(summary.wirelessEnabled).toBe(5); // 4 weapons + 1 cyberware
-      expect(summary.wirelessDisabled).toBe(1); // 1 cyberware disabled
+      // 4 weapons + 3 armor + 1 cyberware + 1 bioware + 1 drone = 10
+      expect(summary.wirelessEnabled).toBe(10);
+      // 1 cyberware + 1 bioware + 1 drone = 3
+      expect(summary.wirelessDisabled).toBe(3);
     });
 
     it("should count bricked devices", () => {

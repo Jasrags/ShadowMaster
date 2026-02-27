@@ -217,8 +217,8 @@ function VehicleRow({
   // Condition and wireless state
   const condition = item.state?.condition;
   const conditionBadge = getConditionBadge(condition);
-  const hasWireless = isMatrixCapable(item) && item.state != null;
-  const wirelessEnabled = item.state?.wirelessEnabled ?? false;
+  const hasWireless = isMatrixCapable(item);
+  const wirelessEnabled = item.state?.wirelessEnabled ?? true;
   const globalWireless = character ? isGlobalWirelessEnabled(character) : true;
   const isWirelessActive = hasWireless && wirelessEnabled && globalWireless;
 
