@@ -35,6 +35,7 @@ import {
   EncumbranceDisplay,
   FociDisplay,
   GearDisplay,
+  MagicSummaryDisplay,
   IdentitiesDisplay,
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
@@ -396,6 +397,9 @@ function CharacterSheet({
                 openDiceRoller(pool, context);
               }}
             />
+
+            {/* Magic Operations */}
+            {character.magicalPath !== "mundane" && <MagicSummaryDisplay character={character} />}
 
             {character.spells && character.spells.length > 0 && (
               <SpellsDisplay
