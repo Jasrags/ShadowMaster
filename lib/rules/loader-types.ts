@@ -20,6 +20,7 @@ import type {
   ActionDefinition,
   ItemLegality,
 } from "../types";
+import type { Effect } from "../types/effects";
 
 // =============================================================================
 // LOADER CONFIGURATION TYPES
@@ -1384,6 +1385,8 @@ export interface WeaponModificationCatalogItemData {
   description?: string;
   /** Wireless bonus description */
   wirelessBonus?: string;
+  /** Unified effects from the effect system */
+  effects?: Effect[];
   /** Page reference */
   page?: number;
   /** Source book */

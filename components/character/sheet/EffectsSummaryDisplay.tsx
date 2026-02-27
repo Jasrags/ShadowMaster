@@ -50,8 +50,10 @@ function resolveDisplayValue(source: SourcedEffect): number {
   let value: number;
   if (typeof effect.value === "number") {
     value = effect.value;
-  } else {
+  } else if (effect.value && typeof effect.value === "object" && "perRating" in effect.value) {
     value = effect.value.perRating * (src.rating ?? 1);
+  } else {
+    return 0;
   }
 
   if (src.wirelessEnabled && effect.wirelessOverride?.bonusValue !== undefined) {

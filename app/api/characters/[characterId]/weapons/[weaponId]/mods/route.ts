@@ -67,7 +67,6 @@ const MOCK_MOD_CATALOG: Record<string, WeaponModificationCatalogItem> = {
     cost: 200,
     availability: 4,
     legality: "restricted",
-    accuracyModifier: 2,
     description: "Provides targeting assistance via DNI or image link.",
   },
   silencer: {

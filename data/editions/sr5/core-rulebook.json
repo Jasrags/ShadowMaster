@@ -4588,13 +4588,13 @@
               {
                 "id": "ambidextrous-off-hand",
                 "type": "dice-pool-modifier",
-                "trigger": "off-hand-action",
                 "target": {
                   "action": "off-hand"
                 },
                 "value": 2,
                 "negates": "off-hand-penalty",
-                "description": "Negates the -2 dice pool modifier for actions performed with the off-hand."
+                "description": "Negates the -2 dice pool modifier for actions performed with the off-hand.",
+                "triggers": ["off-hand-action"]
               }
             ]
           },
@@ -4607,7 +4607,6 @@
               {
                 "id": "analytical-mind-logic-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "attribute-test",
                 "target": {
                   "attribute": "logic"
                 },
@@ -4615,17 +4614,18 @@
                 "condition": {
                   "customCondition": "pattern-analysis"
                 },
-                "description": "+2 dice to Logic tests involving pattern recognition, evidence analysis, clue hunting, or solving puzzles."
+                "description": "+2 dice to Logic tests involving pattern recognition, evidence analysis, clue hunting, or solving puzzles.",
+                "triggers": ["attribute-test"]
               },
               {
                 "id": "analytical-mind-time-reduction",
                 "type": "time-modifier",
-                "trigger": "problem-solving",
                 "target": {
                   "action": "problem-solving"
                 },
                 "value": 0.5,
-                "description": "Reduces the time it takes the character to solve a problem by half."
+                "description": "Reduces the time it takes the character to solve a problem by half.",
+                "triggers": ["problem-solving"]
               }
             ]
           },
@@ -4644,12 +4644,12 @@
               {
                 "id": "aptitude-skill-max",
                 "type": "attribute-maximum",
-                "trigger": "always",
                 "target": {
                   "skill": "specification"
                 },
                 "value": 1,
-                "description": "Raise the maximum for one chosen skill by 1."
+                "description": "Raise the maximum for one chosen skill by 1.",
+                "triggers": ["always"]
               }
             ],
             "limit": 1
@@ -4682,12 +4682,12 @@
               {
                 "id": "catlike-sneaking-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "sneaking"
                 },
                 "value": 2,
-                "description": "+2 dice to Sneaking tests."
+                "description": "+2 dice to Sneaking tests.",
+                "triggers": ["skill-test"]
               }
             ]
           },
@@ -4728,12 +4728,12 @@
               {
                 "id": "exceptional-attribute-max",
                 "type": "attribute-maximum",
-                "trigger": "always",
                 "target": {
                   "attribute": "specification"
                 },
                 "value": 1,
-                "description": "Raise the natural maximum for one chosen attribute by 1."
+                "description": "Raise the natural maximum for one chosen attribute by 1.",
+                "triggers": ["always"]
               }
             ],
             "limit": 1,
@@ -4748,12 +4748,12 @@
               {
                 "id": "first-impression-social-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "first-meeting",
                 "target": {
                   "skillCategory": "social"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to Social tests when meeting someone for the first time."
+                "description": "+2 dice pool modifier to Social tests when meeting someone for the first time.",
+                "triggers": ["first-meeting"]
               }
             ]
           },
@@ -4807,7 +4807,6 @@
               {
                 "id": "gearhead-vehicle-boost",
                 "type": "vehicle-modifier",
-                "trigger": "vehicle-operation",
                 "target": {
                   "choice": ["speed", "handling"]
                 },
@@ -4816,22 +4815,22 @@
                   "handling": 1
                 },
                 "duration": "1d6-minutes",
-                "description": "Increase vehicle Speed by 20% OR Handling by 1 (choose one per vehicle). Lasts 1d6 minutes."
+                "description": "Increase vehicle Speed by 20% OR Handling by 1 (choose one per vehicle). Lasts 1d6 minutes.",
+                "triggers": ["vehicle-operation"]
               },
               {
                 "id": "gearhead-stunt-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "vehicle-stunt",
                 "target": {
                   "action": "vehicle-stunt"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier when performing vehicle stunts."
+                "description": "+2 dice pool modifier when performing vehicle stunts.",
+                "triggers": ["vehicle-stunt"]
               },
               {
                 "id": "gearhead-extend-duration",
                 "type": "special-ability",
-                "trigger": "duration-expiry",
                 "target": {
                   "ability": "gearhead-vehicle-boost"
                 },
@@ -4841,7 +4840,8 @@
                   "value": 1,
                   "per": "combat-turn"
                 },
-                "description": "After 1d6 minutes, may extend boost by taking 1 Stun damage (unresisted) per Combat Turn."
+                "description": "After 1d6 minutes, may extend boost by taking 1 Stun damage (unresisted) per Combat Turn.",
+                "triggers": ["duration-expiry"]
               }
             ]
           },
@@ -4854,22 +4854,22 @@
               {
                 "id": "guts-fear-resistance",
                 "type": "dice-pool-modifier",
-                "trigger": "resist-fear",
                 "target": {
                   "test": "fear-resistance"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to resist fear effects."
+                "description": "+2 dice pool modifier to resist fear effects.",
+                "triggers": ["resist-fear"]
               },
               {
                 "id": "guts-intimidation-resistance",
                 "type": "dice-pool-modifier",
-                "trigger": "resist-intimidation",
                 "target": {
                   "test": "intimidation-resistance"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to resist Intimidation tests."
+                "description": "+2 dice pool modifier to resist Intimidation tests.",
+                "triggers": ["resist-intimidation"]
               }
             ]
           },
@@ -4881,12 +4881,14 @@
               {
                 "id": "high-pain-tolerance-wound-bonus",
                 "type": "wound-modifier",
-                "trigger": "always",
                 "target": {
                   "stat": "wound-threshold"
                 },
-                "value": "rating",
-                "description": "Ignore 1 point of wound modifiers per rating."
+                "value": {
+                  "perRating": 1
+                },
+                "description": "Ignore 1 point of wound modifiers per rating.",
+                "triggers": ["always"]
               }
             ],
             "hasRating": true,
@@ -4930,14 +4932,14 @@
                     {
                       "id": "home-ground-astral",
                       "type": "dice-pool-modifier",
-                      "trigger": "astral-test",
                       "target": {
                         "category": "astral"
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["astral-test"]
                     }
                   ]
                 },
@@ -4949,14 +4951,14 @@
                     {
                       "id": "home-ground-social",
                       "type": "dice-pool-modifier",
-                      "trigger": "skill-test",
                       "target": {
                         "skills": ["etiquette", "negotiation"]
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["skill-test"]
                     }
                   ]
                 },
@@ -4968,14 +4970,14 @@
                     {
                       "id": "home-ground-matrix",
                       "type": "dice-pool-modifier",
-                      "trigger": "matrix-action",
                       "target": {
                         "category": "matrix"
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["matrix-action"]
                     }
                   ]
                 },
@@ -4987,14 +4989,14 @@
                     {
                       "id": "home-ground-vehicle",
                       "type": "dice-pool-modifier",
-                      "trigger": "vehicle-test",
                       "target": {
                         "category": "vehicle"
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["vehicle-test"]
                     }
                   ]
                 },
@@ -5006,14 +5008,14 @@
                     {
                       "id": "home-ground-stealth",
                       "type": "dice-pool-modifier",
-                      "trigger": "skill-test",
                       "target": {
                         "skills": ["sneaking", "perception"]
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["skill-test"]
                     }
                   ]
                 },
@@ -5025,14 +5027,14 @@
                     {
                       "id": "home-ground-leadership",
                       "type": "dice-pool-modifier",
-                      "trigger": "skill-test",
                       "target": {
                         "skills": ["leadership", "intimidation"]
                       },
                       "value": 2,
                       "condition": {
                         "location": "home-ground"
-                      }
+                      },
+                      "triggers": ["skill-test"]
                     }
                   ]
                 }
@@ -5052,12 +5054,12 @@
               {
                 "id": "human-looking-disguise",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "metatype-appearance"
                 },
                 "value": "pass-as-human",
-                "description": "Character appears human without close inspection. May avoid metatype-based prejudice and restrictions."
+                "description": "Character appears human without close inspection. May avoid metatype-based prejudice and restrictions.",
+                "triggers": ["always"]
               }
             ]
           },
@@ -5074,13 +5076,13 @@
               {
                 "id": "indomitable-limit-increase",
                 "type": "limit-modifier",
-                "trigger": "always",
                 "target": {
                   "limitType": "selected"
                 },
                 "value": 1,
                 "perRating": true,
-                "description": "+1 to chosen Inherent Limit per rating level. Each rating level can boost a different limit."
+                "description": "+1 to chosen Inherent Limit per rating level. Each rating level can boost a different limit.",
+                "triggers": ["always"]
               }
             ],
             "hasRating": true,
@@ -5113,24 +5115,24 @@
               {
                 "id": "juryrigger-dice-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "mechanics",
                   "condition": "temporary-fix"
                 },
                 "value": 2,
-                "description": "+2 dice to Mechanics tests for temporary fixes."
+                "description": "+2 dice to Mechanics tests for temporary fixes.",
+                "triggers": ["skill-test"]
               },
               {
                 "id": "juryrigger-threshold-reduction",
                 "type": "threshold-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "mechanics",
                   "condition": "temporary-fix"
                 },
                 "value": -1,
-                "description": "-1 to threshold for Mechanics tests involving temporary fixes."
+                "description": "-1 to threshold for Mechanics tests involving temporary fixes.",
+                "triggers": ["skill-test"]
               }
             ]
           },
@@ -5150,12 +5152,12 @@
               {
                 "id": "lucky-edge-max",
                 "type": "attribute-maximum",
-                "trigger": "always",
                 "target": {
                   "attribute": "edge"
                 },
                 "value": 1,
-                "description": "Increase the natural maximum for Edge by 1."
+                "description": "Increase the natural maximum for Edge by 1.",
+                "triggers": ["always"]
               }
             ]
           },
@@ -5168,13 +5170,15 @@
               {
                 "id": "magical-resistance-spell-defense",
                 "type": "dice-pool-modifier",
-                "trigger": "spell-resistance",
                 "target": {
                   "test": "spell-resistance"
                 },
-                "value": "rating",
+                "value": {
+                  "perRating": 1
+                },
                 "alwaysActive": true,
-                "description": "+1 die to Spell Resistance Tests per rating. This bonus cannot be turned off and applies to beneficial spells as well."
+                "description": "+1 die to Spell Resistance Tests per rating. This bonus cannot be turned off and applies to beneficial spells as well.",
+                "triggers": ["spell-resistance"]
               }
             ],
             "hasRating": true,
@@ -5223,22 +5227,22 @@
               {
                 "id": "natural-athlete-running",
                 "type": "dice-pool-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "running"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to Running tests."
+                "description": "+2 dice pool modifier to Running tests.",
+                "triggers": ["skill-test"]
               },
               {
                 "id": "natural-athlete-gymnastics",
                 "type": "dice-pool-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "gymnastics"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to Gymnastics tests."
+                "description": "+2 dice pool modifier to Gymnastics tests.",
+                "triggers": ["skill-test"]
               }
             ]
           },
@@ -5275,23 +5279,23 @@
               {
                 "id": "natural-immunity-protection",
                 "type": "immunity",
-                "trigger": "exposure",
                 "target": {
                   "substance": "specification"
                 },
                 "value": "immune",
-                "description": "Character is immune to the specified disease or toxin."
+                "description": "Character is immune to the specified disease or toxin.",
+                "triggers": ["exposure"]
               },
               {
                 "id": "natural-immunity-recovery",
                 "type": "special-ability",
-                "trigger": "exposure",
                 "target": {
                   "condition": "immunity-overwhelmed"
                 },
                 "value": "recovery",
                 "duration": "6-hours",
-                "description": "If immunity is somehow bypassed, character recovers fully within 6 hours."
+                "description": "If immunity is somehow bypassed, character recovers fully within 6 hours.",
+                "triggers": ["exposure"]
               }
             ]
           },
@@ -5304,22 +5308,22 @@
               {
                 "id": "photographic-memory-recall",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "memory"
                 },
                 "value": "perfect-recall",
-                "description": "Perfect recall of anything seen or heard. The character can make a Memory test whenever their player needs to remember something, and any information held in memory returns in perfect detail."
+                "description": "Perfect recall of anything seen or heard. The character can make a Memory test whenever their player needs to remember something, and any information held in memory returns in perfect detail.",
+                "triggers": ["always"]
               },
               {
                 "id": "photographic-memory-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "memory-test",
                 "target": {
                   "test": "memory"
                 },
                 "value": 2,
-                "description": "+2 dice pool modifier to Memory tests."
+                "description": "+2 dice pool modifier to Memory tests.",
+                "triggers": ["memory-test"]
               }
             ]
           },
@@ -5332,12 +5336,12 @@
               {
                 "id": "quick-healer-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "healing",
                 "target": {
                   "affectsOthers": false
                 },
                 "value": 2,
-                "description": "+2 dice to all Healing tests made by or on the character."
+                "description": "+2 dice to all Healing tests made by or on the character.",
+                "triggers": ["healing"]
               }
             ]
           },
@@ -5367,12 +5371,14 @@
               {
                 "id": "resistance-pathogens-toxins-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "resistance-test",
                 "target": {
                   "test": "pathogen-toxin-resistance"
                 },
-                "value": "rating",
-                "description": "+1 dice pool modifier per rating to Resistance Tests against pathogens and/or toxins."
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+1 dice pool modifier per rating to Resistance Tests against pathogens and/or toxins.",
+                "triggers": ["resistance-test"]
               }
             ]
           },
@@ -5393,12 +5399,12 @@
               {
                 "id": "spirit-affinity-service-bonus",
                 "type": "summoning-modifier",
-                "trigger": "spirit-summoning",
                 "target": {
                   "spiritType": "specification"
                 },
                 "value": 1,
-                "description": "+1 service when summoning spirits of the specified type."
+                "description": "+1 service when summoning spirits of the specified type.",
+                "triggers": ["spirit-summoning"]
               }
             ]
           },
@@ -5416,23 +5422,23 @@
               {
                 "id": "thermographic-vision-sight",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "vision"
                 },
                 "value": "thermographic",
-                "description": "Can see heat signatures, allowing detection of living beings and heat sources through darkness, smoke, or similar visual obstructions."
+                "description": "Can see heat signatures, allowing detection of living beings and heat sources through darkness, smoke, or similar visual obstructions.",
+                "triggers": ["always"]
               },
               {
                 "id": "thermographic-vision-visibility",
                 "type": "visibility-modifier",
-                "trigger": "visibility-check",
                 "target": {
                   "condition": "darkness-or-smoke"
                 },
                 "value": -1,
                 "unit": "visibility-category",
-                "description": "Reduces visibility penalty by one category when heat signatures are relevant."
+                "description": "Reduces visibility penalty by one category when heat signatures are relevant.",
+                "triggers": ["visibility-check"]
               }
             ]
           },
@@ -5445,13 +5451,13 @@
               {
                 "id": "toughness-damage-resistance",
                 "type": "dice-pool-modifier",
-                "trigger": "damage-resistance",
                 "target": {
                   "test": "damage-resistance",
                   "attribute": "body"
                 },
                 "value": 1,
-                "description": "+1 die to Body when making Damage Resistance tests."
+                "description": "+1 die to Body when making Damage Resistance tests.",
+                "triggers": ["damage-resistance"]
               }
             ]
           },
@@ -5483,12 +5489,14 @@
               {
                 "id": "will-to-live-overflow",
                 "type": "derived-stat-modifier",
-                "trigger": "always",
                 "target": {
                   "stat": "overflow"
                 },
-                "value": "rating",
-                "description": "+1 Overflow box per rating level."
+                "value": {
+                  "perRating": 1
+                },
+                "description": "+1 Overflow box per rating level.",
+                "triggers": ["always"]
               }
             ]
           }
@@ -5555,7 +5563,6 @@
               {
                 "id": "addiction-withdrawal-mental",
                 "type": "dice-pool-modifier",
-                "trigger": "withdrawal",
                 "target": {
                   "attributeCategory": "mental"
                 },
@@ -5563,12 +5570,12 @@
                 "condition": {
                   "dependencyType": "psychological"
                 },
-                "description": "Withdrawal penalty to Mental-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6."
+                "description": "Withdrawal penalty to Mental-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6.",
+                "triggers": ["withdrawal"]
               },
               {
                 "id": "addiction-withdrawal-physical",
                 "type": "dice-pool-modifier",
-                "trigger": "withdrawal",
                 "target": {
                   "attributeCategory": "physical"
                 },
@@ -5576,12 +5583,12 @@
                 "condition": {
                   "dependencyType": "physiological"
                 },
-                "description": "Withdrawal penalty to Physical-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6."
+                "description": "Withdrawal penalty to Physical-attribute tests based on severity: Mild -2, Moderate -4, Severe -4, Burnout -6.",
+                "triggers": ["withdrawal"]
               },
               {
                 "id": "addiction-social-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "always",
                 "target": {
                   "skillCategory": "social"
                 },
@@ -5589,7 +5596,8 @@
                 "condition": {
                   "minRating": 3
                 },
-                "description": "Social penalty from obvious addiction symptoms: Severe -2, Burnout -3 (applies whether in withdrawal or not)."
+                "description": "Social penalty from obvious addiction symptoms: Severe -2, Burnout -3 (applies whether in withdrawal or not).",
+                "triggers": ["always"]
               }
             ]
           },
@@ -5685,12 +5693,12 @@
               {
                 "id": "allergy-resistance-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "attacked-with-allergen",
                 "target": {
                   "test": "resistance"
                 },
                 "value": "severity-based",
-                "description": "Lose 1 die from Resistance Tests per severity level when attacked with allergen: Mild -1, Moderate -2, Severe -3, Extreme -4."
+                "description": "Lose 1 die from Resistance Tests per severity level when attacked with allergen: Mild -1, Moderate -2, Severe -3, Extreme -4.",
+                "triggers": ["attacked-with-allergen"]
               }
             ]
           },
@@ -5705,23 +5713,23 @@
               {
                 "id": "astral-beacon-signature-duration",
                 "type": "duration-modifier",
-                "trigger": "always",
                 "target": {
                   "stat": "astral-signature"
                 },
                 "value": 2,
                 "multiplier": true,
-                "description": "Astral signature lasts twice as long as normal."
+                "description": "Astral signature lasts twice as long as normal.",
+                "triggers": ["always"]
               },
               {
                 "id": "astral-beacon-assensing-threshold",
                 "type": "threshold-modifier",
-                "trigger": "being-assensed",
                 "target": {
                   "test": "assensing"
                 },
                 "value": -1,
-                "description": "Others receive -1 to the threshold of Assensing Tests to gather information about your astral signature."
+                "description": "Others receive -1 to the threshold of Assensing Tests to gather information about your astral signature.",
+                "triggers": ["being-assensed"]
               }
             ]
           },
@@ -5735,14 +5743,14 @@
               {
                 "id": "bad-luck-edge-backfire",
                 "type": "edge-modifier",
-                "trigger": "edge-use",
                 "target": {
                   "resource": "edge"
                 },
                 "value": "backfire-chance",
                 "backfireChance": "1-on-d6",
                 "oncePerSession": true,
-                "description": "Whenever Edge is used, roll 1d6. On a result of 1, the Edge use backfires dramatically. After Bad Luck triggers once per session, no further rolls needed for remaining Edge uses."
+                "description": "Whenever Edge is used, roll 1d6. On a result of 1, the Edge use backfires dramatically. After Bad Luck triggers once per session, no further rolls needed for remaining Edge uses.",
+                "triggers": ["edge-use"]
               }
             ]
           },
@@ -5755,12 +5763,12 @@
               {
                 "id": "bad-rep-notoriety",
                 "type": "derived-stat-modifier",
-                "trigger": "character-creation",
                 "target": {
                   "stat": "notoriety"
                 },
                 "value": 3,
-                "description": "Character starts play with 3 points of Notoriety."
+                "description": "Character starts play with 3 points of Notoriety.",
+                "triggers": ["character-creation"]
               }
             ],
             "buyoffRequirement": "Must confront and resolve the source of the bad reputation before buying off with Karma."
@@ -5786,47 +5794,47 @@
               {
                 "id": "code-of-honor-resist-violence",
                 "type": "required-test",
-                "trigger": "protected-group-violence",
                 "target": {
                   "test": "resist-intervention"
                 },
                 "testPool": "charisma + willpower",
                 "threshold": 4,
                 "onFailure": "must-stop-violence",
-                "description": "When anyone attempts to kill a member of the protected group, make a Charisma + Willpower (4) Test. Failure means the character must immediately stop the violence."
+                "description": "When anyone attempts to kill a member of the protected group, make a Charisma + Willpower (4) Test. Failure means the character must immediately stop the violence.",
+                "triggers": ["protected-group-violence"]
               },
               {
                 "id": "code-of-honor-public-awareness",
                 "type": "derived-stat-modifier",
-                "trigger": "witness-left-alive",
                 "target": {
                   "stat": "public-awareness"
                 },
                 "value": 1,
                 "perWitness": true,
-                "description": "+1 Public Awareness for each protected group member left alive who can remember the character."
+                "description": "+1 Public Awareness for each protected group member left alive who can remember the character.",
+                "triggers": ["witness-left-alive"]
               },
               {
                 "id": "code-of-honor-complication-roll",
                 "type": "gm-roll",
-                "trigger": "non-lethal-force-used",
                 "target": {
                   "group": "protected"
                 },
                 "dieRoll": "1d6",
                 "complicationOn": 1,
-                "description": "Each time non-lethal force is used against protected group, GM rolls 1d6. On 1, unforeseen complication occurs."
+                "description": "Each time non-lethal force is used against protected group, GM rolls 1d6. On 1, unforeseen complication occurs.",
+                "triggers": ["non-lethal-force-used"]
               },
               {
                 "id": "code-of-honor-karma-loss",
                 "type": "karma-penalty",
-                "trigger": "protected-group-killed",
                 "target": {
                   "resource": "karma"
                 },
                 "value": -1,
                 "perKill": true,
-                "description": "Lose 1 Karma for the adventure for each protected group member killed, whether intentionally or inadvertently."
+                "description": "Lose 1 Karma for the adventure for each protected group member killed, whether intentionally or inadvertently.",
+                "triggers": ["protected-group-killed"]
               }
             ]
           },
@@ -5847,12 +5855,12 @@
               {
                 "id": "codeblock-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "matrix-action",
                 "target": {
                   "action": "specification"
                 },
                 "value": -2,
-                "description": "-2 dice pool modifier to the specified Matrix action."
+                "description": "-2 dice pool modifier to the specified Matrix action.",
+                "triggers": ["matrix-action"]
               }
             ]
           },
@@ -5865,27 +5873,26 @@
               {
                 "id": "combat-paralysis-initiative",
                 "type": "initiative-modifier",
-                "trigger": "first-combat-turn",
                 "target": {
                   "stat": "initiative"
                 },
                 "value": "halved",
-                "description": "Initiative Score is halved (rounded up) during the first Combat Turn of any combat encounter."
+                "description": "Initiative Score is halved (rounded up) during the first Combat Turn of any combat encounter.",
+                "triggers": ["first-combat-turn"]
               },
               {
                 "id": "combat-paralysis-surprise",
                 "type": "dice-pool-modifier",
-                "trigger": "surprise-test",
                 "target": {
                   "test": "surprise"
                 },
                 "value": -3,
-                "description": "–3 dice pool modifier to Surprise tests."
+                "description": "–3 dice pool modifier to Surprise tests.",
+                "triggers": ["surprise-test"]
               },
               {
                 "id": "combat-paralysis-composure",
                 "type": "threshold-modifier",
-                "trigger": "composure-test",
                 "target": {
                   "test": "composure"
                 },
@@ -5893,7 +5900,8 @@
                 "condition": {
                   "situation": "under-fire-or-combat"
                 },
-                "description": "+1 threshold modifier for Composure Tests while under fire or in combat situations."
+                "description": "+1 threshold modifier for Composure Tests while under fire or in combat situations.",
+                "triggers": ["composure-test"]
               }
             ]
           },
@@ -5935,34 +5943,34 @@
               {
                 "id": "dependents-lifestyle-cost",
                 "type": "cost-modifier",
-                "trigger": "always",
                 "target": {
                   "cost": "lifestyle"
                 },
                 "value": "rating-based",
-                "description": "Increase lifestyle cost by 10%/20%/30% per month based on rating."
+                "description": "Increase lifestyle cost by 10%/20%/30% per month based on rating.",
+                "triggers": ["always"]
               },
               {
                 "id": "dependents-skill-learning-time",
                 "type": "time-modifier",
-                "trigger": "skill-improvement",
                 "target": {
                   "action": "learn-skill"
                 },
                 "value": 1.5,
                 "multiplier": true,
-                "description": "Increase time to learn or improve skills by 50%."
+                "description": "Increase time to learn or improve skills by 50%.",
+                "triggers": ["skill-improvement"]
               },
               {
                 "id": "dependents-project-time",
                 "type": "time-modifier",
-                "trigger": "long-term-project",
                 "target": {
                   "action": "project"
                 },
                 "value": 1.5,
                 "multiplier": true,
-                "description": "Increase base time for long-term projects by 50%."
+                "description": "Increase base time for long-term projects by 50%.",
+                "triggers": ["long-term-project"]
               }
             ]
           },
@@ -5979,25 +5987,25 @@
               {
                 "id": "distinctive-style-identify-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "being-identified",
                 "target": {
                   "test": "identify-trace-locate"
                 },
                 "value": 2,
                 "appliesToOthers": true,
-                "description": "+2 dice pool modifier for anyone attempting to identify, trace, or locate this character."
+                "description": "+2 dice pool modifier for anyone attempting to identify, trace, or locate this character.",
+                "triggers": ["being-identified"]
               },
               {
                 "id": "distinctive-style-memory-threshold",
                 "type": "threshold-modifier",
-                "trigger": "being-remembered",
                 "target": {
                   "test": "memory"
                 },
                 "value": -1,
                 "minimum": 1,
                 "appliesToOthers": true,
-                "description": "-1 to Difficulty Threshold (minimum 1) for NPCs making Memory Tests to recall information about the character."
+                "description": "-1 to Difficulty Threshold (minimum 1) for NPCs making Memory Tests to recall information about the character.",
+                "triggers": ["being-remembered"]
               }
             ],
             "note": "Physical in nature; does not apply to astral searches."
@@ -6016,22 +6024,22 @@
               {
                 "id": "elf-poser-pass",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "metatype-appearance"
                 },
                 "value": "pass-as-elf",
-                "description": "Can pass as an elf and avoid negative Social modifiers associated with being non-elf."
+                "description": "Can pass as an elf and avoid negative Social modifiers associated with being non-elf.",
+                "triggers": ["always"]
               },
               {
                 "id": "elf-poser-discovered",
                 "type": "social-modifier",
-                "trigger": "identity-discovered",
                 "target": {
                   "interaction": "elves"
                 },
                 "value": "contempt-hostility",
-                "description": "If an elf discovers the secret, they will likely treat the character with contempt and hostility."
+                "description": "If an elf discovers the secret, they will likely treat the character with contempt and hostility.",
+                "triggers": ["identity-discovered"]
               }
             ]
           },
@@ -6073,12 +6081,14 @@
               {
                 "id": "gremlins-glitch-threshold",
                 "type": "glitch-modifier",
-                "trigger": "technology-use",
                 "target": {
                   "category": "moderately-sophisticated-devices"
                 },
-                "value": "rating",
-                "description": "Reduce the number of 1s needed to glitch by rating when using technology. GM may require tests for normally automatic operations."
+                "value": {
+                  "perRating": 1
+                },
+                "description": "Reduce the number of 1s needed to glitch by rating when using technology. GM may require tests for normally automatic operations.",
+                "triggers": ["technology-use"]
               }
             ],
             "restrictions": {
@@ -6106,12 +6116,12 @@
               {
                 "id": "incompetent-unaware",
                 "type": "skill-restriction",
-                "trigger": "always",
                 "target": {
                   "skillGroup": "specification"
                 },
                 "value": "unaware",
-                "description": "Character is treated as 'unaware' for all skills in the specified skill group. Success Tests may be required for tasks others take for granted."
+                "description": "Character is treated as 'unaware' for all skills in the specified skill group. Success Tests may be required for tasks others take for granted.",
+                "triggers": ["always"]
               }
             ]
           },
@@ -6147,34 +6157,34 @@
               {
                 "id": "insomnia-test",
                 "type": "required-test",
-                "trigger": "rest-attempt",
                 "target": {
                   "action": "stun-recovery"
                 },
                 "testPool": "intuition + willpower",
                 "threshold": 4,
-                "description": "Before rolling Body + Willpower to recover Stun damage, roll Intuition + Willpower (4)."
+                "description": "Before rolling Body + Willpower to recover Stun damage, roll Intuition + Willpower (4).",
+                "triggers": ["rest-attempt"]
               },
               {
                 "id": "insomnia-recovery-penalty",
                 "type": "time-modifier",
-                "trigger": "insomnia-test-failed",
                 "target": {
                   "action": "stun-recovery"
                 },
                 "value": "rating-based",
-                "description": "Rating 1: Double Stun recovery time. Rating 2: No Stun recovery from rest attempt."
+                "description": "Rating 1: Double Stun recovery time. Rating 2: No Stun recovery from rest attempt.",
+                "triggers": ["insomnia-test-failed"]
               },
               {
                 "id": "insomnia-edge-refresh-block",
                 "type": "resource-modifier",
-                "trigger": "insomnia-test-failed",
                 "target": {
                   "resource": "edge-refresh"
                 },
                 "value": "blocked",
                 "duration": "up-to-24-hours",
-                "description": "Edge does not refresh and may not refresh for up to 24 hours on failed test."
+                "description": "Edge does not refresh and may not refresh for up to 24 hours on failed test.",
+                "triggers": ["insomnia-test-failed"]
               }
             ]
           },
@@ -6194,32 +6204,32 @@
               {
                 "id": "loss-of-confidence-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "specification"
                 },
                 "value": -2,
-                "description": "-2 dice pool modifier to tests involving the affected skill."
+                "description": "-2 dice pool modifier to tests involving the affected skill.",
+                "triggers": ["skill-test"]
               },
               {
                 "id": "loss-of-confidence-no-specialization",
                 "type": "restriction",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "specification"
                 },
                 "value": "no-specialization",
-                "description": "Cannot use any specialization with this skill while suffering Loss of Confidence."
+                "description": "Cannot use any specialization with this skill while suffering Loss of Confidence.",
+                "triggers": ["skill-test"]
               },
               {
                 "id": "loss-of-confidence-no-edge",
                 "type": "restriction",
-                "trigger": "skill-test",
                 "target": {
                   "skill": "specification"
                 },
                 "value": "no-edge",
-                "description": "Edge may not be used for tests involving this skill."
+                "description": "Edge may not be used for tests involving this skill.",
+                "triggers": ["skill-test"]
               }
             ]
           },
@@ -6233,13 +6243,13 @@
               {
                 "id": "low-pain-tolerance-wound-threshold",
                 "type": "wound-modifier",
-                "trigger": "always",
                 "target": {
                   "stat": "wound-threshold"
                 },
                 "value": 2,
                 "replaces": "default-wound-threshold",
-                "description": "Incur -1 wound modifier for every 2 boxes of cumulative damage (Physical + Stun) instead of the normal 3 boxes."
+                "description": "Incur -1 wound modifier for every 2 boxes of cumulative damage (Physical + Stun) instead of the normal 3 boxes.",
+                "triggers": ["always"]
               }
             ]
           },
@@ -6257,22 +6267,22 @@
               {
                 "id": "ork-poser-pass",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "metatype-appearance"
                 },
                 "value": "pass-as-ork",
-                "description": "Can pass as an ork through cosmetic biomods (tusk implants, steroids, larynx alterations)."
+                "description": "Can pass as an ork through cosmetic biomods (tusk implants, steroids, larynx alterations).",
+                "triggers": ["always"]
               },
               {
                 "id": "ork-poser-discovered",
                 "type": "social-modifier",
-                "trigger": "identity-discovered",
                 "target": {
                   "interaction": "orks"
                 },
                 "value": "variable",
-                "description": "If discovered by an ork, reaction varies from hostility to acceptance (with hazing ritual). May face stigma from prejudiced humans/elves as 'race traitor'."
+                "description": "If discovered by an ork, reaction varies from hostility to acceptance (with hazing ritual). May face stigma from prejudiced humans/elves as 'race traitor'.",
+                "triggers": ["identity-discovered"]
               }
             ]
           },
@@ -6346,22 +6356,22 @@
               {
                 "id": "prejudiced-social-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "social-test",
                 "target": {
                   "interaction": "prejudiced-group"
                 },
                 "value": "intensity-based",
-                "description": "-2 dice per severity level (Biased -2, Outspoken -4, Radical -6) for Social Tests with the target group."
+                "description": "-2 dice per severity level (Biased -2, Outspoken -4, Radical -6) for Social Tests with the target group.",
+                "triggers": ["social-test"]
               },
               {
                 "id": "prejudiced-target-bonus",
                 "type": "dice-pool-modifier",
-                "trigger": "negotiation",
                 "target": {
                   "beneficiary": "target"
                 },
                 "value": "intensity-based",
-                "description": "Target receives +2 per severity level (Biased +2, Outspoken +4, Radical +6) to their Negotiation Tests."
+                "description": "Target receives +2 per severity level (Biased +2, Outspoken +4, Radical +6) to their Negotiation Tests.",
+                "triggers": ["negotiation"]
               }
             ]
           },
@@ -6405,7 +6415,6 @@
               {
                 "id": "scorched-vr-test",
                 "type": "required-test",
-                "trigger": "enter-vr-or-slot-btl",
                 "target": {
                   "action": "matrix-immersion"
                 },
@@ -6413,24 +6422,24 @@
                 "threshold": 4,
                 "onFailure": "symptoms-6-hours",
                 "onGlitch": "symptoms-24-hours",
-                "description": "When entering VR or slotting a BTL, roll Body + Willpower (4). Failure triggers symptoms for 6 hours; glitch for 24 hours."
+                "description": "When entering VR or slotting a BTL, roll Body + Willpower (4). Failure triggers symptoms for 6 hours; glitch for 24 hours.",
+                "triggers": ["enter-vr-or-slot-btl"]
               },
               {
                 "id": "scorched-confront-test",
                 "type": "required-test",
-                "trigger": "confront-source-ic",
                 "target": {
                   "action": "face-triggering-ic"
                 },
                 "testPool": "willpower",
                 "threshold": 3,
                 "onFailure": "panic",
-                "description": "When facing the IC type that caused the Scorched condition, roll Willpower (3) to confront it without panicking."
+                "description": "When facing the IC type that caused the Scorched condition, roll Willpower (3) to confront it without panicking.",
+                "triggers": ["confront-source-ic"]
               },
               {
                 "id": "scorched-damage-vulnerability",
                 "type": "dice-pool-modifier",
-                "trigger": "damage-from-source",
                 "target": {
                   "test": "damage-resistance"
                 },
@@ -6438,7 +6447,8 @@
                 "condition": {
                   "damageSource": "triggering-ic"
                 },
-                "description": "-2 to Damage Resistance Tests when the triggering Black or Psychotropic IC inflicts damage."
+                "description": "-2 to Damage Resistance Tests when the triggering Black or Psychotropic IC inflicts damage.",
+                "triggers": ["damage-from-source"]
               }
             ]
           },
@@ -6451,28 +6461,27 @@
               {
                 "id": "sensitive-system-cyberware-cost",
                 "type": "essence-modifier",
-                "trigger": "cyberware-installation",
                 "target": {
                   "augmentationType": "cyberware"
                 },
                 "value": 2,
                 "multiplier": true,
-                "description": "Double the Essence cost of all cyberware implants."
+                "description": "Double the Essence cost of all cyberware implants.",
+                "triggers": ["cyberware-installation"]
               },
               {
                 "id": "sensitive-system-bioware-rejection",
                 "type": "restriction",
-                "trigger": "always",
                 "target": {
                   "augmentationType": "bioware"
                 },
                 "value": "forbidden",
-                "description": "Cannot have bioware implanted. The body rejects all bioware."
+                "description": "Cannot have bioware implanted. The body rejects all bioware.",
+                "triggers": ["always"]
               },
               {
                 "id": "sensitive-system-drain-fading-test",
                 "type": "required-test",
-                "trigger": "before-drain-or-fading",
                 "target": {
                   "action": "magic-or-resonance-use"
                 },
@@ -6482,7 +6491,8 @@
                 "condition": {
                   "characterType": ["awakened", "technomancer"]
                 },
-                "description": "Awakened or technomancers must roll Willpower (2) before Drain/Fading tests. Failure increases Drain/Fading Value by +2 for that test."
+                "description": "Awakened or technomancers must roll Willpower (2) before Drain/Fading tests. Failure increases Drain/Fading Value by +2 for that test.",
+                "triggers": ["before-drain-or-fading"]
               }
             ]
           },
@@ -6495,12 +6505,12 @@
               {
                 "id": "simsense-vertigo-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "simsense-use",
                 "target": {
                   "mode": ["ar", "vr", "simsense"]
                 },
                 "value": -2,
-                "description": "–2 dice pool modifier to all tests while using augmented reality, virtual reality, or simsense."
+                "description": "–2 dice pool modifier to all tests while using augmented reality, virtual reality, or simsense.",
+                "triggers": ["simsense-use"]
               }
             ]
           },
@@ -6552,22 +6562,22 @@
               {
                 "id": "sinner-tax",
                 "type": "cost-modifier",
-                "trigger": "income",
                 "target": {
                   "resource": "nuyen"
                 },
                 "value": "rating-based",
-                "description": "Tax percentage of gross income: National 15%, Criminal 15%, Corp Limited 20%, Corp Born 10%."
+                "description": "Tax percentage of gross income: National 15%, Criminal 15%, Corp Limited 20%, Corp Born 10%.",
+                "triggers": ["income"]
               },
               {
                 "id": "sinner-tracking-vulnerability",
                 "type": "special-ability",
-                "trigger": "always",
                 "target": {
                   "ability": "sin-broadcasting"
                 },
                 "value": "trackable",
-                "description": "Biometric data in Global SIN Registry makes character easier to track if a job goes sideways."
+                "description": "Biometric data in Global SIN Registry makes character easier to track if a job goes sideways.",
+                "triggers": ["always"]
               }
             ]
           },
@@ -6582,22 +6592,22 @@
               {
                 "id": "social-stress-glitch-threshold",
                 "type": "glitch-modifier",
-                "trigger": "leadership-or-etiquette",
                 "target": {
                   "skills": ["leadership", "etiquette"]
                 },
                 "value": 1,
-                "description": "When using Leadership or Etiquette skills, reduce the number of 1s required to glitch by 1."
+                "description": "When using Leadership or Etiquette skills, reduce the number of 1s required to glitch by 1.",
+                "triggers": ["leadership-or-etiquette"]
               },
               {
                 "id": "social-stress-extra-tests",
                 "type": "special-ability",
-                "trigger": "social-situation",
                 "target": {
                   "action": "interaction"
                 },
                 "value": "gm-may-require-tests",
-                "description": "GM may call for more Social Tests, particularly when situations related to the stress trigger arise."
+                "description": "GM may call for more Social Tests, particularly when situations related to the stress trigger arise.",
+                "triggers": ["social-situation"]
               }
             ]
           },
@@ -6622,43 +6632,43 @@
               {
                 "id": "spirit-bane-summon-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "summoning-binding",
                 "target": {
                   "spiritType": "specification"
                 },
                 "value": -2,
-                "description": "-2 dice pool modifier when attempting to summon or bind this spirit type."
+                "description": "-2 dice pool modifier when attempting to summon or bind this spirit type.",
+                "triggers": ["summoning-binding"]
               },
               {
                 "id": "spirit-bane-banish-resistance",
                 "type": "dice-pool-modifier",
-                "trigger": "banishment",
                 "target": {
                   "spiritType": "specification",
                   "beneficiary": "spirit"
                 },
                 "value": 2,
-                "description": "Spirit receives +2 dice pool modifier when resisting the character's banishment attempts."
+                "description": "Spirit receives +2 dice pool modifier when resisting the character's banishment attempts.",
+                "triggers": ["banishment"]
               },
               {
                 "id": "spirit-bane-hostility",
                 "type": "special-ability",
-                "trigger": "spirit-encounter",
                 "target": {
                   "spiritType": "specification"
                 },
                 "value": "hostile",
-                "description": "Spirits of this type harass the character and are reluctant to help them or their allies."
+                "description": "Spirits of this type harass the character and are reluctant to help them or their allies.",
+                "triggers": ["spirit-encounter"]
               },
               {
                 "id": "spirit-bane-targeting",
                 "type": "special-ability",
-                "trigger": "spirit-attack",
                 "target": {
                   "spiritType": "specification"
                 },
                 "value": "priority-target",
-                "description": "When ordered to attack a group containing this character, these spirits will single out and target the character first, using lethal force."
+                "description": "When ordered to attack a group containing this character, these spirits will single out and target the character first, using lethal force.",
+                "triggers": ["spirit-attack"]
               }
             ]
           },
@@ -6677,43 +6687,43 @@
               {
                 "id": "uncouth-impulse-resist",
                 "type": "dice-pool-modifier",
-                "trigger": "social-impulse-resistance",
                 "target": {
                   "skillCategory": "social"
                 },
                 "value": -2,
-                "description": "–2 dice pool modifier to tests to resist acting on a social impulse or instinct (e.g., resisting intimidation, seduction, or con attempts)."
+                "description": "–2 dice pool modifier to tests to resist acting on a social impulse or instinct (e.g., resisting intimidation, seduction, or con attempts).",
+                "triggers": ["social-impulse-resistance"]
               },
               {
                 "id": "uncouth-karma-penalty",
                 "type": "karma-penalty",
-                "trigger": "skill-advancement",
                 "target": {
                   "skillCategory": "social"
                 },
                 "value": "double",
-                "description": "Must pay double Karma costs for all Social skills."
+                "description": "Must pay double Karma costs for all Social skills.",
+                "triggers": ["skill-advancement"]
               },
               {
                 "id": "uncouth-skill-restriction",
                 "type": "skill-restriction",
-                "trigger": "skill-learning",
                 "target": {
                   "skillCategory": "social"
                 },
                 "value": "no-skill-groups",
-                "description": "Cannot learn Social skill groups; must purchase individual Social skills only."
+                "description": "Cannot learn Social skill groups; must purchase individual Social skills only.",
+                "triggers": ["skill-learning"]
               },
               {
                 "id": "uncouth-defaulting",
                 "type": "defaulting-modifier",
-                "trigger": "defaulting",
                 "target": {
                   "skillCategory": "social",
                   "condition": "incomplete-group"
                 },
                 "value": "unaware",
-                "description": "If the character does not possess an entire Social skill group, they are 'unaware' for defaulting purposes, suffering the -1 penalty for being untrained plus unable to default on group skills they don't own."
+                "description": "If the character does not possess an entire Social skill group, they are 'unaware' for defaulting purposes, suffering the -1 penalty for being untrained plus unable to default on group skills they don't own.",
+                "triggers": ["defaulting"]
               }
             ]
           },
@@ -6734,87 +6744,87 @@
               {
                 "id": "uneducated-technical-karma",
                 "type": "karma-penalty",
-                "trigger": "skill-advancement",
                 "target": {
                   "skillCategory": "technical"
                 },
                 "value": "double",
-                "description": "Must pay double Karma costs for all Technical skills."
+                "description": "Must pay double Karma costs for all Technical skills.",
+                "triggers": ["skill-advancement"]
               },
               {
                 "id": "uneducated-academic-karma",
                 "type": "karma-penalty",
-                "trigger": "skill-advancement",
                 "target": {
                   "skillType": "knowledge",
                   "knowledgeCategory": "academic"
                 },
                 "value": "double",
-                "description": "Must pay double Karma costs for all Academic Knowledge skills."
+                "description": "Must pay double Karma costs for all Academic Knowledge skills.",
+                "triggers": ["skill-advancement"]
               },
               {
                 "id": "uneducated-professional-karma",
                 "type": "karma-penalty",
-                "trigger": "skill-advancement",
                 "target": {
                   "skillType": "knowledge",
                   "knowledgeCategory": "professional"
                 },
                 "value": "double",
-                "description": "Must pay double Karma costs for all Professional Knowledge skills."
+                "description": "Must pay double Karma costs for all Professional Knowledge skills.",
+                "triggers": ["skill-advancement"]
               },
               {
                 "id": "uneducated-technical-no-default",
                 "type": "defaulting-modifier",
-                "trigger": "defaulting",
                 "target": {
                   "skillCategory": "technical"
                 },
                 "value": "cannot-default",
-                "description": "Cannot default on Technical skills."
+                "description": "Cannot default on Technical skills.",
+                "triggers": ["defaulting"]
               },
               {
                 "id": "uneducated-academic-no-default",
                 "type": "defaulting-modifier",
-                "trigger": "defaulting",
                 "target": {
                   "skillType": "knowledge",
                   "knowledgeCategory": "academic"
                 },
                 "value": "cannot-default",
-                "description": "Cannot default on Academic Knowledge skills."
+                "description": "Cannot default on Academic Knowledge skills.",
+                "triggers": ["defaulting"]
               },
               {
                 "id": "uneducated-professional-no-default",
                 "type": "defaulting-modifier",
-                "trigger": "defaulting",
                 "target": {
                   "skillType": "knowledge",
                   "knowledgeCategory": "professional"
                 },
                 "value": "cannot-default",
-                "description": "Cannot default on Professional Knowledge skills."
+                "description": "Cannot default on Professional Knowledge skills.",
+                "triggers": ["defaulting"]
               },
               {
                 "id": "uneducated-skill-restriction",
                 "type": "skill-restriction",
-                "trigger": "skill-learning",
                 "target": {
                   "skillCategories": ["technical"]
                 },
                 "value": "no-skill-groups",
-                "description": "Cannot learn Technical skill groups; must purchase individual Technical skills only."
+                "description": "Cannot learn Technical skill groups; must purchase individual Technical skills only.",
+                "triggers": ["skill-learning"]
               },
               {
                 "id": "uneducated-group-defaulting",
                 "type": "defaulting-modifier",
-                "trigger": "defaulting",
                 "target": {
                   "skillCategory": "technical",
                   "condition": "incomplete-group"
                 },
                 "value": "unaware",
-                "description": "If the character does not possess an entire Technical skill group, they are 'unaware' for defaulting purposes."
+                "description": "If the character does not possess an entire Technical skill group, they are 'unaware' for defaulting purposes.",
+                "triggers": ["defaulting"]
               }
             ]
           },
@@ -6827,7 +6837,6 @@
               {
                 "id": "unsteady-hands-test",
                 "type": "required-test",
-                "trigger": "stress-inducing-situation",
                 "attribute1": "body",
                 "attribute2": "agility",
                 "threshold": 4,
@@ -6835,19 +6844,20 @@
                   "effect": "unsteady-hands-penalty",
                   "duration": "remainder-of-turn"
                 },
-                "description": "When the character is in a stressful situation, they must make a Body + Agility (4) Test. Failure means shaky hands for the rest of the turn."
+                "description": "When the character is in a stressful situation, they must make a Body + Agility (4) Test. Failure means shaky hands for the rest of the turn.",
+                "triggers": ["stress-inducing-situation"]
               },
               {
                 "id": "unsteady-hands-penalty",
                 "type": "dice-pool-modifier",
-                "trigger": "test-failure",
                 "target": {
                   "attribute": "agility",
                   "actions": ["precision-work", "shooting", "melee", "spellcasting"]
                 },
                 "value": -2,
                 "duration": "remainder-of-turn",
-                "description": "On failed test, suffer –2 dice pool modifier to all Agility-based tests requiring steady hands (shooting, melee combat, spellcasting, etc.) for the remainder of the Combat Turn."
+                "description": "On failed test, suffer –2 dice pool modifier to all Agility-based tests requiring steady hands (shooting, melee combat, spellcasting, etc.) for the remainder of the Combat Turn.",
+                "triggers": ["test-failure"]
               }
             ],
             "stressTriggers": [
@@ -6868,22 +6878,22 @@
               {
                 "id": "weak-immune-disease",
                 "type": "power-modifier",
-                "trigger": "disease-resistance",
                 "target": {
                   "category": "disease"
                 },
                 "value": 2,
-                "description": "All diseases have +2 to their effective Power rating when resisted by this character."
+                "description": "All diseases have +2 to their effective Power rating when resisted by this character.",
+                "triggers": ["disease-resistance"]
               },
               {
                 "id": "weak-immune-toxin",
                 "type": "power-modifier",
-                "trigger": "toxin-resistance",
                 "target": {
                   "category": "toxin"
                 },
                 "value": 2,
-                "description": "All toxins have +2 to their effective Power rating when resisted by this character."
+                "description": "All toxins have +2 to their effective Power rating when resisted by this character.",
+                "triggers": ["toxin-resistance"]
               }
             ]
           }
@@ -10777,16 +10787,6 @@
             ],
             "page": 445,
             "source": "Core",
-            "wirelessBonus": "Add the audio enhancement's rating as a dice pool modifier to audio Perception Tests.",
-            "wirelessEffects": [
-              {
-                "type": "perception",
-                "modifierPerRating": true,
-                "isDicePool": true,
-                "condition": "perception_test",
-                "description": "Audio Perception tests only."
-              }
-            ],
             "ratings": {
               "1": {
                 "cost": 500,
@@ -10832,15 +10832,6 @@
             "page": 445,
             "source": "Core",
             "wirelessBonus": "+Dice Pool bonus to Audio Perception vs specific sound equal to rating.",
-            "wirelessEffects": [
-              {
-                "type": "perception",
-                "modifierPerRating": true,
-                "isDicePool": true,
-                "condition": "perception_test",
-                "description": "Audio Perception vs specific sound only."
-              }
-            ],
             "ratings": {
               "1": {
                 "cost": 250,
@@ -10885,17 +10876,7 @@
               }
             ],
             "page": 445,
-            "source": "Core",
-            "wirelessBonus": "Provides +2 dice pool modifier to Perception Tests when looking for a sound's source.",
-            "wirelessEffects": [
-              {
-                "type": "perception",
-                "modifier": 2,
-                "isDicePool": true,
-                "condition": "perception_test",
-                "description": "Applies when looking for a sound's source."
-              }
-            ]
+            "source": "Core"
           }
         ],
         "tools": [
@@ -13444,7 +13425,6 @@
             "alternateMounts": ["under"],
             "availability": 2,
             "cost": 125,
-            "accuracyModifier": 1,
             "description": "Projects a visible dot on target. Can mount on top or underbarrel. Increases Accuracy by 1 (not cumulative with smartlink). Activating/deactivating is a Simple Action.",
             "effects": [
               {
@@ -13462,20 +13442,6 @@
                   "type": "dice-pool-modifier",
                   "description": "+1 dice pool (not cumulative with smartlink)"
                 }
-              }
-            ],
-            "wirelessBonus": "+1 dice pool bonus (not cumulative with smartlink). Activating/deactivating is a Free Action.",
-            "wirelessEffects": [
-              {
-                "type": "attack_pool",
-                "modifier": 1,
-                "isDicePool": true,
-                "description": "Not cumulative with smartlink."
-              },
-              {
-                "type": "special",
-                "modifier": 0,
-                "description": "Activating/deactivating is a Free Action."
               }
             ],
             "page": 432,
@@ -13531,7 +13497,6 @@
             "mount": "stock",
             "availability": 2,
             "cost": 50,
-            "recoilCompensation": 1,
             "description": "Shock-absorbing pad for rifles, shotguns, or heavy weapons. Provides 1 point of recoil compensation.",
             "effects": [
               {
@@ -13553,7 +13518,6 @@
             "mount": "stock",
             "availability": 2,
             "cost": 50,
-            "recoilCompensation": 1,
             "description": "Detachable or folding shoulder stock. Provides +1 Recoil Compensation when deployed.",
             "effects": [
               {
@@ -13574,7 +13538,6 @@
             "mount": "stock",
             "availability": 2,
             "cost": 50,
-            "recoilCompensation": 1,
             "description": "Retractable shoulder stock. Provides +1 Recoil Compensation when deployed.",
             "effects": [
               {
@@ -13595,7 +13558,6 @@
             "mount": "stock",
             "availability": 2,
             "cost": 50,
-            "recoilCompensation": 1,
             "description": "Integrated rigid shoulder stock. Provides +1 Recoil Compensation.",
             "effects": [
               {
@@ -13616,7 +13578,6 @@
             "mount": "stock",
             "availability": 4,
             "cost": 100,
-            "recoilCompensation": 2,
             "description": "Integrated rigid shoulder stock with shock-absorbing pad. Provides +2 Recoil Compensation.",
             "effects": [
               {
@@ -13717,7 +13678,6 @@
             "mount": "internal",
             "availability": 2,
             "costMultiplier": 2,
-            "accuracyModifier": 2,
             "description": "Internal smartgun system. Increases Accuracy by 2 when used with smartlink.",
             "effects": [
               {
@@ -13737,26 +13697,6 @@
                 }
               }
             ],
-            "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
-            "wirelessEffects": [
-              {
-                "type": "attack_pool",
-                "modifier": 1,
-                "condition": "gear_smartlink",
-                "isDicePool": true
-              },
-              {
-                "type": "attack_pool",
-                "modifier": 2,
-                "condition": "cyberware_smartlink",
-                "isDicePool": true
-              },
-              {
-                "type": "special",
-                "modifier": 0,
-                "description": "Ejecting a clip and changing fire modes are Free Actions."
-              }
-            ],
             "page": 433,
             "source": "Core",
             "legality": "restricted"
@@ -13768,7 +13708,6 @@
             "alternateMounts": ["under"],
             "availability": 4,
             "cost": 200,
-            "accuracyModifier": 2,
             "description": "External smartgun system. Can mount on top or underbarrel. Requires Armorer + Logic (4, 1 hour) Extended Test to install. Increases Accuracy by 2 when used with smartlink. Camera has capacity 1 for vision enhancements.",
             "effects": [
               {
@@ -13786,26 +13725,6 @@
                   "bonusValue": 1,
                   "description": "+1 dice pool with gear smartlink; +2 with cyberware smartlink (not yet automated)"
                 }
-              }
-            ],
-            "wirelessBonus": "+1 dice pool bonus (gear smartlink) or +2 (cyberware smartlink). Ejecting clip and changing fire modes are Free Actions.",
-            "wirelessEffects": [
-              {
-                "type": "attack_pool",
-                "modifier": 1,
-                "condition": "gear_smartlink",
-                "isDicePool": true
-              },
-              {
-                "type": "attack_pool",
-                "modifier": 2,
-                "condition": "cyberware_smartlink",
-                "isDicePool": true
-              },
-              {
-                "type": "special",
-                "modifier": 0,
-                "description": "Ejecting a clip and changing fire modes are Free Actions."
               }
             ],
             "page": 433,
@@ -14340,14 +14259,6 @@
             "category": "eyeware",
             "description": "Replacement eyes with 4 capacity for upgrades.",
             "wirelessBonus": "When wirelessly enabled, gives +1 limit to Perception tests.",
-            "wirelessEffects": [
-              {
-                "type": "limit",
-                "modifier": 1,
-                "limit": "mental",
-                "condition": "perception_test"
-              }
-            ],
             "page": 453,
             "effects": [
               {
@@ -14399,15 +14310,6 @@
             "category": "earware",
             "description": "Replacement ears with 4 capacity.",
             "wirelessBonus": "+1 limit to audio Perception tests.",
-            "wirelessEffects": [
-              {
-                "type": "limit",
-                "modifier": 1,
-                "limit": "mental",
-                "condition": "perception_test",
-                "description": "Audio Perception tests only."
-              }
-            ],
             "page": 454,
             "effects": [
               {
@@ -14662,13 +14564,6 @@
             "category": "bodyware",
             "description": "+Rating REA (adjust Initiative and Physical limit accordingly). Incompatible with wired reflexes and other Reaction enhancements.",
             "wirelessBonus": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4 if both have wireless active.",
-            "wirelessEffects": [
-              {
-                "type": "special",
-                "modifier": 0,
-                "description": "Compatible with wireless wired reflexes; total Reaction bonus from both can exceed +4."
-              }
-            ],
             "page": 457,
             "legality": "restricted",
             "incompatibleWith": ["wired-reflexes"],
@@ -14713,15 +14608,7 @@
             },
             "category": "bodyware",
             "description": "+1 REA, +1D6 Initiative.",
-            "wirelessBonus": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4.",
             "page": 457,
-            "wirelessEffects": [
-              {
-                "type": "special",
-                "modifier": 0,
-                "description": "Compatible with wireless reaction enhancers; total Reaction bonus from both can exceed +4."
-              }
-            ],
             "attributeBonuses": {
               "reaction": 1
             },
@@ -15897,14 +15784,6 @@
             "compatibleLimbs": ["full-arm", "lower-arm"],
             "description": "Arm-mounted weapon stabilization system. Rating 3 recoil compensation. Activating or deactivating is a Simple Action.",
             "wirelessBonus": "Activating or deactivating the system is a Free Action.",
-            "wirelessEffects": [
-              {
-                "type": "action_economy",
-                "action": "toggle_gyromount",
-                "from": "simple",
-                "to": "free"
-              }
-            ],
             "page": 457,
             "legality": "forbidden",
             "effects": [
@@ -15973,13 +15852,6 @@
             "pairLocation": "legs",
             "description": "Requires identical Rating in both cyberlegs. Each Rating adds +1 to Physical limit for jumping/sprinting, +20% to jump distance, and reduces falling distance by 2m for damage calculation.",
             "wirelessBonus": "+1 dice pool bonus to jumping, sprinting, or lifting tests with legs.",
-            "wirelessEffects": [
-              {
-                "type": "dice_pool",
-                "skills": ["jumping", "sprinting", "lifting"],
-                "modifier": 1
-              }
-            ],
             "page": 457,
             "ratingSpec": {
               "rating": {
@@ -16474,15 +16346,7 @@
             },
             "category": "basic",
             "description": "+1 AGI.",
-            "wirelessBonus": "+1 Agility (included in higher ratings).",
             "page": 460,
-            "wirelessEffects": [
-              {
-                "type": "attribute",
-                "attribute": "agility",
-                "modifier": 1
-              }
-            ],
             "attributeBonuses": {
               "agility": 1
             },

@@ -19,6 +19,7 @@ import type {
   DynamicStateType,
 } from "./qualities";
 import type { WirelessEffect } from "./wireless-effects";
+import type { Effect } from "./effects";
 
 // =============================================================================
 // EDITION
@@ -1188,6 +1189,8 @@ export interface WeaponModificationCatalogItem {
   description?: string;
   /** Wireless bonus description */
   wirelessBonus?: string;
+  /** Unified effects from the effect system */
+  effects?: Effect[];
   /** Page reference in source material */
   page?: number;
   /** Source book reference */
