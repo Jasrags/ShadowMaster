@@ -16,39 +16,22 @@
 
 import { useMemo, useState, useCallback } from "react";
 import type { SpellData } from "@/lib/rules";
-import type { SpellSelection } from "@/lib/types";
+import type { SpellCategory, SpellSelection } from "@/lib/types";
 import { getSpellId, isSpellSelectionObject } from "@/lib/types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { SPELL_KARMA_COST, SPELL_CATEGORIES } from "@/lib/constants/magic";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 import { Search, Check, ChevronDown, Sparkles } from "lucide-react";
 
 // =============================================================================
 // CONSTANTS
 // =============================================================================
 
-const SPELL_KARMA_COST = 5;
-
-type SpellCategory = "combat" | "detection" | "health" | "illusion" | "manipulation";
-
-const SPELL_CATEGORIES: { id: SpellCategory | "all"; name: string }[] = [
+/** Spell filter categories: base categories plus "all" for the modal filter */
+const SPELL_FILTER_CATEGORIES: { id: SpellCategory | "all"; name: string }[] = [
   { id: "all", name: "All" },
-  { id: "combat", name: "Combat" },
-  { id: "detection", name: "Detection" },
-  { id: "health", name: "Health" },
-  { id: "illusion", name: "Illusion" },
-  { id: "manipulation", name: "Manipulation" },
+  ...SPELL_CATEGORIES,
 ];
-
-// Attribute display names
-const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
-};
 
 // =============================================================================
 // TYPES
@@ -73,7 +56,7 @@ export interface SpellModalProps {
  */
 function getSpellDisplayName(spell: SpellData, selectedAttribute?: string): string {
   if (spell.requiresAttributeSelection && selectedAttribute) {
-    const attrName = ATTRIBUTE_NAMES[selectedAttribute] || selectedAttribute;
+    const attrName = getCoreAttributeName(selectedAttribute);
     return spell.name.replace("[Attribute]", `[${attrName}]`);
   }
   return spell.name;
@@ -214,7 +197,7 @@ export function SpellModal({
 
             {/* Category Filter */}
             <div className="mt-3 flex flex-wrap gap-2">
-              {SPELL_CATEGORIES.map((cat) => (
+              {SPELL_FILTER_CATEGORIES.map((cat) => (
                 <button
                   key={cat.id}
                   onClick={() => setSelectedCategory(cat.id)}
@@ -380,7 +363,7 @@ export function SpellModal({
                             <option value="">-- Select --</option>
                             {selectedSpell.validAttributes.map((attr) => (
                               <option key={attr} value={attr}>
-                                {ATTRIBUTE_NAMES[attr] || attr}
+                                {getCoreAttributeName(attr)}
                               </option>
                             ))}
                           </select>
@@ -389,7 +372,7 @@ export function SpellModal({
                         <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
                           Valid attributes:{" "}
                           {selectedSpell.validAttributes
-                            .map((a) => ATTRIBUTE_NAMES[a] || a)
+                            .map((a) => getCoreAttributeName(a))
                             .join(", ")}
                         </p>
                       </div>

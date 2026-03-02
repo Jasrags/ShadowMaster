@@ -14,21 +14,7 @@
  */
 
 import { X, Sparkles, ChevronDown } from "lucide-react";
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
-};
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 
 // =============================================================================
 // TYPES
@@ -155,7 +141,7 @@ export function SpellListItem({
               <option value="">-- Select --</option>
               {validAttributes.map((attr) => (
                 <option key={attr} value={attr}>
-                  {ATTRIBUTE_NAMES[attr] || attr}
+                  {getCoreAttributeName(attr)}
                 </option>
               ))}
             </select>

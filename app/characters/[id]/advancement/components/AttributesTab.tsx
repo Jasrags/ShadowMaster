@@ -9,6 +9,11 @@ import {
   getAttributeMaximum,
 } from "@/lib/rules/advancement/validation";
 import { calculateAttributeCost, calculateEdgeCost } from "@/lib/rules/advancement/costs";
+import {
+  CORE_ATTRIBUTE_NAMES,
+  PHYSICAL_ATTRIBUTES,
+  MENTAL_ATTRIBUTES,
+} from "@/lib/constants/attributes";
 import { X, ArrowUp } from "lucide-react";
 
 interface AttributesTabProps {
@@ -17,20 +22,11 @@ interface AttributesTabProps {
   onCharacterUpdate: (updatedCharacter: Character) => void;
 }
 
+/** Core attributes plus Edge for the advancement UI */
 const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
+  ...CORE_ATTRIBUTE_NAMES,
   edge: "Edge",
 };
-
-const PHYSICAL_ATTRIBUTES = ["body", "agility", "reaction", "strength"];
-const MENTAL_ATTRIBUTES = ["willpower", "logic", "intuition", "charisma"];
 
 export function AttributesTab({ character, ruleset, onCharacterUpdate }: AttributesTabProps) {
   const [selectedAttribute, setSelectedAttribute] = useState<string | null>(null);

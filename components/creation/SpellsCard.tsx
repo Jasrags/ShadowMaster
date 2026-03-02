@@ -21,6 +21,8 @@ import type { CreationState, SpellSelection } from "@/lib/types";
 import { getSpellId, isSpellSelectionObject } from "@/lib/types";
 import type { SpellData } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
+import { SPELL_KARMA_COST, SPELL_CATEGORIES } from "@/lib/constants/magic";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import { SpellModal, SpellListItem } from "./spells";
 import { Lock, Plus } from "lucide-react";
@@ -29,32 +31,8 @@ import { Lock, Plus } from "lucide-react";
 // CONSTANTS
 // =============================================================================
 
-const SPELL_KARMA_COST = 5;
-
-type SpellCategory = "combat" | "detection" | "health" | "illusion" | "manipulation";
-
-const SPELL_CATEGORIES: { id: SpellCategory; name: string }[] = [
-  { id: "combat", name: "Combat" },
-  { id: "detection", name: "Detection" },
-  { id: "health", name: "Health" },
-  { id: "illusion", name: "Illusion" },
-  { id: "manipulation", name: "Manipulation" },
-];
-
 // Paths that can have spells
 const SPELL_PATHS = ["magician", "mystic-adept", "aspected-mage"];
-
-// Attribute display names
-const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
-};
 
 // =============================================================================
 // TYPES
@@ -75,7 +53,7 @@ interface SpellsCardProps {
 function getSpellDisplayName(spell: SpellData, selectedAttribute?: string): string {
   if (spell.requiresAttributeSelection && selectedAttribute) {
     // Replace [Attribute] with the selected attribute name
-    const attrName = ATTRIBUTE_NAMES[selectedAttribute] || selectedAttribute;
+    const attrName = getCoreAttributeName(selectedAttribute);
     return spell.name.replace("[Attribute]", `[${attrName}]`);
   }
   return spell.name;
