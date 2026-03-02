@@ -21,21 +21,30 @@ import type { ID, ItemLegality } from "./core";
  * - readied: In hand, immediately usable (weapons)
  * - holstered: Accessible, Simple Action to ready (weapons, some gear)
  * - worn: Currently worn (armor, clothing)
- * - stored: In bag/vehicle, not readily accessible
+ * - pocketed: Small items in pockets, Free Action access
+ * - carried: In bag/backpack, Complex Action to retrieve (encumbering)
+ * - stored: Legacy synonym for "carried" — kept for backward compatibility
  * - stashed: Off-site storage (safehouse, vehicle trunk); narrative time to retrieve
  */
-export type EquipmentReadiness = "readied" | "holstered" | "worn" | "stored" | "stashed";
+export type EquipmentReadiness =
+  | "readied"
+  | "holstered"
+  | "worn"
+  | "pocketed"
+  | "carried"
+  | "stored"
+  | "stashed";
 
 /**
  * Valid readiness states by gear category.
  * Used for validation during state transitions.
  */
 export const VALID_READINESS_STATES: Record<string, EquipmentReadiness[]> = {
-  weapon: ["readied", "holstered", "stored", "stashed"],
-  armor: ["worn", "stored", "stashed"],
-  clothing: ["worn", "stored", "stashed"],
-  gear: ["worn", "holstered", "stored", "stashed"],
-  electronics: ["worn", "holstered", "stored", "stashed"],
+  weapon: ["readied", "holstered", "carried", "stored", "stashed"],
+  armor: ["worn", "carried", "stored", "stashed"],
+  clothing: ["worn", "pocketed", "carried", "stored", "stashed"],
+  gear: ["worn", "holstered", "pocketed", "carried", "stored", "stashed"],
+  electronics: ["worn", "holstered", "pocketed", "carried", "stored", "stashed"],
 };
 
 /**
@@ -54,25 +63,48 @@ export const STATE_TRANSITION_COSTS: Record<
 > = {
   readied: {
     holstered: "simple",
+    pocketed: "free",
+    carried: "complex",
     stored: "complex",
     stashed: "narrative",
   },
   holstered: {
     readied: "simple",
+    pocketed: "simple",
+    carried: "simple",
     stored: "simple",
     stashed: "narrative",
   },
   worn: {
+    carried: "complex",
     stored: "complex",
+    stashed: "narrative",
+  },
+  pocketed: {
+    readied: "free",
+    holstered: "free",
+    carried: "simple",
+    stored: "simple",
+    stashed: "narrative",
+  },
+  carried: {
+    readied: "complex",
+    holstered: "simple",
+    worn: "complex",
+    pocketed: "simple",
+    stored: "free",
     stashed: "narrative",
   },
   stored: {
     readied: "complex",
     holstered: "simple",
     worn: "complex",
+    pocketed: "simple",
+    carried: "free",
     stashed: "narrative",
   },
   stashed: {
+    carried: "narrative",
     stored: "narrative",
   },
 };
@@ -103,6 +135,53 @@ export type MatrixCapableDevice =
   | "cyberware";
 
 // =============================================================================
+// STASH LOCATIONS
+// =============================================================================
+
+/**
+ * Where stashed gear is stored off-site.
+ */
+export type StashLocationType = "home" | "safehouse" | "vehicle" | "storage" | "custom";
+
+/**
+ * Details about a stash location.
+ */
+export interface StashLocationInfo {
+  type: StashLocationType;
+  /** Custom location name (required when type is "custom") */
+  customName?: string;
+}
+
+// =============================================================================
+// CONTAINMENT
+// =============================================================================
+
+/**
+ * Reference to a containing item (e.g., item inside a backpack or vehicle trunk).
+ */
+export interface ContainmentRef {
+  /** ID of the container item */
+  containerId: string;
+  /** Named slot within the container (optional) */
+  slot?: string;
+}
+
+/**
+ * Properties that make a gear item act as a container.
+ * Any GearItem with containerProperties can hold other items.
+ */
+export interface ContainerProperties {
+  /** Maximum weight the container can hold (kg) */
+  weightCapacity: number;
+  /** Maximum number of item slots (optional) */
+  slotCapacity?: number;
+  /** Restrict which gear categories can be stored (optional, all if undefined) */
+  allowedCategories?: string[];
+  /** Whether the container is rigid (prevents flexible packing) */
+  rigid?: boolean;
+}
+
+// =============================================================================
 // UNIFIED GEAR STATE
 // =============================================================================
 
@@ -124,14 +203,25 @@ export interface GearState {
   active?: boolean;
 
   /** Reference to containing item (e.g., weapon in holster, gear in backpack) */
-  containedIn?: { itemId: string; slotType: string };
+  containedIn?: ContainmentRef;
+
+  /** Where stashed gear is located (only meaningful when readiness is "stashed") */
+  stashLocation?: StashLocationInfo;
+}
+
+/**
+ * Normalize a readiness value, mapping the deprecated "stored" to "carried"
+ * for internal use. External APIs can still accept "stored".
+ */
+export function normalizeReadiness(readiness: EquipmentReadiness): EquipmentReadiness {
+  return readiness === "stored" ? "carried" : readiness;
 }
 
 /**
  * Default gear state for new items.
  */
 export const DEFAULT_GEAR_STATE: GearState = {
-  readiness: "stored",
+  readiness: "carried",
   wirelessEnabled: true,
 };
 
@@ -144,8 +234,8 @@ export const DEFAULT_STATE_BY_CATEGORY: Record<string, Partial<GearState>> = {
   clothing: { readiness: "worn", wirelessEnabled: false },
   cyberdeck: { readiness: "worn", wirelessEnabled: true, condition: "functional", active: true },
   commlink: { readiness: "worn", wirelessEnabled: true, condition: "functional", active: true },
-  rcc: { readiness: "stored", wirelessEnabled: true, condition: "functional", active: true },
-  drone: { readiness: "stored", wirelessEnabled: true, condition: "functional", active: true },
+  rcc: { readiness: "carried", wirelessEnabled: true, condition: "functional", active: true },
+  drone: { readiness: "carried", wirelessEnabled: true, condition: "functional", active: true },
 };
 
 // =============================================================================
@@ -312,6 +402,47 @@ export function calculateEncumbrancePenalty(currentWeight: number, maxCapacity: 
   const overweightPercent = ((currentWeight - maxCapacity) / maxCapacity) * 100;
   const penalty = Math.floor(overweightPercent / 10);
   return Math.min(penalty, 4); // Max -4 penalty
+}
+
+// =============================================================================
+// LOADOUTS
+// =============================================================================
+
+/**
+ * A saved gear configuration for a specific scenario.
+ * Runners can create loadouts for different run types and quickly switch.
+ */
+export interface Loadout {
+  id: ID;
+  name: string;
+  description?: string;
+  icon?: string;
+  /** Map of gear item ID to desired readiness state */
+  gearAssignments: Record<string, EquipmentReadiness>;
+  /** Map of gear item ID to stash location (for stashed items) */
+  stashAssignments?: Record<string, StashLocationInfo>;
+  /** Map of gear item ID to container assignment */
+  containerAssignments?: Record<string, ContainmentRef>;
+  /** Default readiness for items not explicitly assigned */
+  defaultReadiness: EquipmentReadiness;
+  /** Default stash location for items defaulting to stashed */
+  defaultStashLocation?: StashLocationInfo;
+  createdAt: string;
+  updatedAt: string;
+}
+
+/**
+ * Diff showing what changes when switching to a loadout.
+ */
+export interface LoadoutDiff {
+  /** Items that will be stashed (currently on person) */
+  itemsToStash: string[];
+  /** Items that will be brought (currently stashed) */
+  itemsToBring: string[];
+  /** Items that will change readiness state */
+  itemsToMove: Array<{ itemId: string; from: EquipmentReadiness; to: EquipmentReadiness }>;
+  /** Net encumbrance change in kg (positive = heavier) */
+  encumbranceChange: number;
 }
 
 // =============================================================================

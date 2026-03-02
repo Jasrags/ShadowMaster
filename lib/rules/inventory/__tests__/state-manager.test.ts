@@ -124,16 +124,16 @@ describe("Equipment State Manager", () => {
       expect(state.wirelessEnabled).toBe(true);
     });
 
-    it("should return stored state for electronics with condition", () => {
+    it("should return carried state for electronics with condition", () => {
       const state = getDefaultState("electronics");
-      expect(state.readiness).toBe("stored");
+      expect(state.readiness).toBe("carried");
       expect(state.wirelessEnabled).toBe(true);
       expect(state.condition).toBe("functional");
     });
 
-    it("should return stored state for unknown gear types", () => {
+    it("should return carried state for unknown gear types", () => {
       const state = getDefaultState("unknown");
-      expect(state.readiness).toBe("stored");
+      expect(state.readiness).toBe("carried");
     });
   });
 
@@ -162,8 +162,19 @@ describe("Equipment State Manager", () => {
       expect(transitions).toContain("stashed");
     });
 
-    it("should only allow stored as exit from stashed", () => {
+    it("should include carried for weapons", () => {
+      const transitions = getValidTransitions("holstered", "weapon");
+      expect(transitions).toContain("carried");
+    });
+
+    it("should include pocketed for gear", () => {
+      const transitions = getValidTransitions("carried", "gear");
+      expect(transitions).toContain("pocketed");
+    });
+
+    it("should only allow carried/stored as exit from stashed", () => {
       const transitions = getValidTransitions("stashed", "weapon");
+      expect(transitions).toContain("carried");
       expect(transitions).toContain("stored");
       expect(transitions).toContain("stashed"); // same-state
       expect(transitions).not.toContain("readied");
@@ -205,8 +216,11 @@ describe("Equipment State Manager", () => {
     it("should return narrative for all stash transitions", () => {
       expect(getTransitionActionCost("readied", "stashed")).toBe("narrative");
       expect(getTransitionActionCost("holstered", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("carried", "stashed")).toBe("narrative");
       expect(getTransitionActionCost("stored", "stashed")).toBe("narrative");
       expect(getTransitionActionCost("worn", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("pocketed", "stashed")).toBe("narrative");
+      expect(getTransitionActionCost("stashed", "carried")).toBe("narrative");
       expect(getTransitionActionCost("stashed", "stored")).toBe("narrative");
     });
 
@@ -235,16 +249,35 @@ describe("Equipment State Manager", () => {
 
     it("should validate weapon stashed transitions", () => {
       expect(isValidTransition("holstered", "stashed", "weapon")).toBe(true);
+      expect(isValidTransition("carried", "stashed", "weapon")).toBe(true);
       expect(isValidTransition("stored", "stashed", "weapon")).toBe(true);
+      expect(isValidTransition("stashed", "carried", "weapon")).toBe(true);
       expect(isValidTransition("stashed", "stored", "weapon")).toBe(true);
     });
 
     it("should validate armor stashed transitions", () => {
       expect(isValidTransition("worn", "stashed", "armor")).toBe(true);
+      expect(isValidTransition("stashed", "carried", "armor")).toBe(true);
       expect(isValidTransition("stashed", "stored", "armor")).toBe(true);
     });
 
-    it("should reject stashed to readied (must go through stored)", () => {
+    it("should validate carried transitions", () => {
+      expect(isValidTransition("carried", "readied", "weapon")).toBe(true);
+      expect(isValidTransition("carried", "holstered", "weapon")).toBe(true);
+      expect(isValidTransition("holstered", "carried", "weapon")).toBe(true);
+    });
+
+    it("should validate pocketed transitions for gear", () => {
+      expect(isValidTransition("pocketed", "readied", "gear")).toBe(true);
+      expect(isValidTransition("carried", "pocketed", "gear")).toBe(true);
+      expect(isValidTransition("pocketed", "carried", "gear")).toBe(true);
+    });
+
+    it("should reject pocketed for weapons", () => {
+      expect(isValidTransition("holstered", "pocketed", "weapon")).toBe(false);
+    });
+
+    it("should reject stashed to readied (must go through carried/stored)", () => {
       expect(isValidTransition("stashed", "readied", "weapon")).toBe(false);
     });
 
@@ -520,7 +553,7 @@ describe("Equipment State Manager", () => {
   });
 
   describe("getEquipmentStateSummary", () => {
-    it("should count equipment states including stashed", () => {
+    it("should count equipment states including stashed and carried", () => {
       const character = createCharacter({
         weapons: [
           createWeapon("readied"),
@@ -630,6 +663,24 @@ describe("Equipment State Manager", () => {
       expect(summary.wirelessEnabled).toBe(10);
       // 1 cyberware + 1 bioware + 1 drone = 3
       expect(summary.wirelessDisabled).toBe(3);
+      expect(summary.pocketedItems).toBe(0);
+      expect(summary.containedItems).toBe(0);
+    });
+
+    it("should count carried weapons and armor", () => {
+      const carriedWeapon = createWeapon("holstered");
+      carriedWeapon.state = { readiness: "carried", wirelessEnabled: true };
+      const carriedArmorItem = createArmor("stored");
+      carriedArmorItem.state = { readiness: "carried", wirelessEnabled: true };
+
+      const character = createCharacter({
+        weapons: [carriedWeapon],
+        armor: [carriedArmorItem],
+      });
+
+      const summary = getEquipmentStateSummary(character);
+      expect(summary.carriedWeapons).toBe(1);
+      expect(summary.carriedArmor).toBe(1);
     });
 
     it("should count bricked devices", () => {
@@ -705,22 +756,57 @@ describe("Equipment State Manager", () => {
     it("should have stashed transition costs defined", () => {
       expect(STATE_TRANSITION_COSTS["readied->stashed"]).toBe("narrative");
       expect(STATE_TRANSITION_COSTS["holstered->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["carried->stashed"]).toBe("narrative");
       expect(STATE_TRANSITION_COSTS["stored->stashed"]).toBe("narrative");
       expect(STATE_TRANSITION_COSTS["worn->stashed"]).toBe("narrative");
+      expect(STATE_TRANSITION_COSTS["stashed->carried"]).toBe("narrative");
       expect(STATE_TRANSITION_COSTS["stashed->stored"]).toBe("narrative");
       expect(STATE_TRANSITION_COSTS["stashed->stashed"]).toBe("none");
+    });
+
+    it("should have carried transition costs defined", () => {
+      expect(STATE_TRANSITION_COSTS["carried->readied"]).toBe("complex");
+      expect(STATE_TRANSITION_COSTS["readied->carried"]).toBe("complex");
+      expect(STATE_TRANSITION_COSTS["carried->holstered"]).toBe("simple");
+      expect(STATE_TRANSITION_COSTS["holstered->carried"]).toBe("simple");
+      expect(STATE_TRANSITION_COSTS["carried->worn"]).toBe("complex");
+      expect(STATE_TRANSITION_COSTS["worn->carried"]).toBe("complex");
+      expect(STATE_TRANSITION_COSTS["carried->carried"]).toBe("none");
+    });
+
+    it("should have pocketed transition costs defined", () => {
+      expect(STATE_TRANSITION_COSTS["pocketed->readied"]).toBe("free");
+      expect(STATE_TRANSITION_COSTS["readied->pocketed"]).toBe("free");
+      expect(STATE_TRANSITION_COSTS["pocketed->holstered"]).toBe("free");
+      expect(STATE_TRANSITION_COSTS["holstered->pocketed"]).toBe("simple");
+      expect(STATE_TRANSITION_COSTS["pocketed->carried"]).toBe("simple");
+      expect(STATE_TRANSITION_COSTS["carried->pocketed"]).toBe("simple");
+      expect(STATE_TRANSITION_COSTS["pocketed->pocketed"]).toBe("none");
+    });
+
+    it("should treat stored and carried as synonyms", () => {
+      expect(STATE_TRANSITION_COSTS["stored->carried"]).toBe("none");
+      expect(STATE_TRANSITION_COSTS["carried->stored"]).toBe("none");
     });
 
     it("should have correct valid states for each gear type", () => {
       expect(VALID_STATES.weapon).toContain("readied");
       expect(VALID_STATES.weapon).toContain("holstered");
+      expect(VALID_STATES.weapon).toContain("carried");
       expect(VALID_STATES.weapon).toContain("stashed");
       expect(VALID_STATES.weapon).not.toContain("worn");
 
       expect(VALID_STATES.armor).toContain("worn");
+      expect(VALID_STATES.armor).toContain("carried");
       expect(VALID_STATES.armor).toContain("stored");
       expect(VALID_STATES.armor).toContain("stashed");
       expect(VALID_STATES.armor).not.toContain("holstered");
+
+      expect(VALID_STATES.gear).toContain("pocketed");
+      expect(VALID_STATES.gear).toContain("carried");
+
+      expect(VALID_STATES.electronics).toContain("pocketed");
+      expect(VALID_STATES.electronics).toContain("carried");
 
       expect(VALID_STATES.augmentation).toEqual(["worn"]);
       expect(VALID_STATES.augmentation).not.toContain("stashed");

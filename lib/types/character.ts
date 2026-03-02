@@ -25,6 +25,8 @@ import type {
   MagazineItem,
   AmmunitionItem,
   EncumbranceState,
+  ContainerProperties,
+  Loadout,
 } from "./gear-state";
 import type { WirelessEffect } from "./wireless-effects";
 import type { CyberlimbItem, CyberImplantWeapon } from "./cyberlimb";
@@ -462,6 +464,16 @@ export interface Character {
   encumbrance?: EncumbranceState;
 
   // -------------------------------------------------------------------------
+  // Loadouts
+  // -------------------------------------------------------------------------
+
+  /** Saved gear configurations for different scenarios */
+  loadouts?: Loadout[];
+
+  /** Currently active loadout ID (null/undefined if manual configuration) */
+  activeLoadoutId?: string;
+
+  // -------------------------------------------------------------------------
   // Contacts
   // -------------------------------------------------------------------------
 
@@ -767,6 +779,13 @@ export interface GearItem {
    * @see GearState
    */
   state?: GearState;
+
+  /**
+   * Container properties for items that can hold other gear.
+   * Any GearItem with this field acts as a container (e.g., backpack, duffel bag).
+   * @see ContainerProperties
+   */
+  containerProperties?: ContainerProperties;
 }
 
 /**
