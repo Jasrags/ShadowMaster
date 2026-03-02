@@ -34,6 +34,13 @@ export { ProgramManagerDisplay } from "./ProgramManagerDisplay";
 export { WeaponsDisplay } from "./WeaponsDisplay";
 export { WirelessDisplay } from "./WirelessDisplay";
 
+// Loadout & container components
+export { ContainerContentsDisplay } from "./ContainerContentsDisplay";
+export { LoadoutDisplay } from "./LoadoutDisplay";
+export { LoadoutSummaryDisplay } from "./LoadoutSummaryDisplay";
+export { LoadoutDiffModal } from "./LoadoutDiffModal";
+export { GearLocationView } from "./GearLocationView";
+
 // Rigging components
 export { RiggingSummaryDisplay } from "./RiggingSummaryDisplay";
 export { DroneNetworkDisplay } from "./DroneNetworkDisplay";

@@ -454,7 +454,7 @@ describe("GearDisplay", () => {
 
   // --- Readiness badge (collapsed row) ---
 
-  it('shows "Carried" badge for state.readiness === "worn"', () => {
+  it('shows "Worn" badge for state.readiness === "worn"', () => {
     renderGear([
       makeGear({
         name: "Headjammer",
@@ -463,7 +463,7 @@ describe("GearDisplay", () => {
       }),
     ]);
     const badge = screen.getByTestId("readiness-badge");
-    expect(badge).toHaveTextContent("Carried");
+    expect(badge).toHaveTextContent("Worn");
     expect(badge.className).toContain("blue");
   });
 
@@ -493,10 +493,10 @@ describe("GearDisplay", () => {
     expect(badge.className).toContain("violet");
   });
 
-  it('defaults to "Stored" when no state present', () => {
+  it('defaults to "Carried" when no state present', () => {
     renderGear([makeGear({ name: "Headjammer", category: "electronics" })]);
     const badge = screen.getByTestId("readiness-badge");
-    expect(badge).toHaveTextContent("Stored");
+    expect(badge).toHaveTextContent("Carried");
   });
 
   // --- Readiness controls (expanded, editable) ---
@@ -518,15 +518,16 @@ describe("GearDisplay", () => {
     expect(screen.queryByTestId("inventory-controls")).not.toBeInTheDocument();
   });
 
-  it("shows readiness controls with Carried/Stored/Stashed buttons when editable", () => {
+  it("shows readiness controls with Holstered/Pocketed/Carried/Stashed buttons when editable", () => {
     renderGear([makeGear({ name: "Headjammer", category: "electronics" })], {
       editable: true,
       onCharacterUpdate: vi.fn(),
     });
     expandRow();
     expect(screen.getByTestId("readiness-controls")).toBeInTheDocument();
-    expect(screen.getByTestId("readiness-worn")).toHaveTextContent("Carried");
-    expect(screen.getByTestId("readiness-stored")).toHaveTextContent("Stored");
+    expect(screen.getByTestId("readiness-holstered")).toHaveTextContent("Holstered");
+    expect(screen.getByTestId("readiness-pocketed")).toHaveTextContent("Pocketed");
+    expect(screen.getByTestId("readiness-carried")).toHaveTextContent("Carried");
     expect(screen.getByTestId("readiness-stashed")).toHaveTextContent("Stashed");
   });
 
@@ -536,14 +537,14 @@ describe("GearDisplay", () => {
         makeGear({
           name: "Headjammer",
           category: "electronics",
-          state: { readiness: "worn", wirelessEnabled: true },
+          state: { readiness: "carried", wirelessEnabled: true },
         }),
       ],
       { editable: true, onCharacterUpdate: vi.fn() }
     );
     expandRow();
-    expect(screen.getByTestId("readiness-worn")).toBeDisabled();
-    expect(screen.getByTestId("readiness-stored")).not.toBeDisabled();
+    expect(screen.getByTestId("readiness-carried")).toBeDisabled();
+    expect(screen.getByTestId("readiness-holstered")).not.toBeDisabled();
     expect(screen.getByTestId("readiness-stashed")).not.toBeDisabled();
   });
 
@@ -553,16 +554,16 @@ describe("GearDisplay", () => {
       makeGear({
         name: "Headjammer",
         category: "electronics",
-        state: { readiness: "stored", wirelessEnabled: true },
+        state: { readiness: "carried", wirelessEnabled: true },
       }),
     ];
     renderGear(gear, { editable: true, onCharacterUpdate: onUpdate });
     expandRow();
-    fireEvent.click(screen.getByTestId("readiness-worn"));
+    fireEvent.click(screen.getByTestId("readiness-holstered"));
     expect(onUpdate).toHaveBeenCalledTimes(1);
     const updated = onUpdate.mock.calls[0][0] as Character;
     const updatedItem = updated.gear?.find((g) => g.name === "Headjammer");
-    expect(updatedItem?.state?.readiness).toBe("worn");
+    expect(updatedItem?.state?.readiness).toBe("holstered");
   });
 
   it("preserves wireless state during readiness change", () => {
@@ -571,12 +572,12 @@ describe("GearDisplay", () => {
       makeGear({
         name: "Headjammer",
         category: "electronics",
-        state: { readiness: "stored", wirelessEnabled: false },
+        state: { readiness: "carried", wirelessEnabled: false },
       }),
     ];
     renderGear(gear, { editable: true, onCharacterUpdate: onUpdate });
     expandRow();
-    fireEvent.click(screen.getByTestId("readiness-worn"));
+    fireEvent.click(screen.getByTestId("readiness-holstered"));
     const updated = onUpdate.mock.calls[0][0] as Character;
     const updatedItem = updated.gear?.find((g) => g.name === "Headjammer");
     expect(updatedItem?.state?.wirelessEnabled).toBe(false);

@@ -11,6 +11,7 @@ import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { Tooltip } from "@/components/ui";
 import { DisplayCard } from "./DisplayCard";
 import { WirelessIndicator } from "./WirelessIndicator";
+import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
 import { ChevronDown, ChevronRight, Shield, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -27,28 +28,6 @@ function formatLegality(legality: string): string {
   return "";
 }
 
-function getReadinessLabel(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "worn":
-      return "Worn";
-    case "stored":
-      return "Stored";
-    default:
-      return readiness;
-  }
-}
-
-function getReadinessColor(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "worn":
-      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
-    case "stored":
-      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
-    default:
-      return "text-zinc-400";
-  }
-}
-
 /** Search the armor catalog array by id. */
 function findCatalogArmor(
   catalog: GearCatalogData | null,
@@ -57,8 +36,6 @@ function findCatalogArmor(
   if (!catalog?.armor) return undefined;
   return catalog.armor.find((item) => item.id === catalogId);
 }
-
-const ARMOR_READINESS_STATES: EquipmentReadiness[] = ["worn", "stored"];
 
 // ---------------------------------------------------------------------------
 // Local state update handlers
@@ -314,7 +291,7 @@ function ArmorRow({
                 <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Readiness
                 </span>
-                {ARMOR_READINESS_STATES.map((state) => (
+                {READINESS_BY_EQUIPMENT.armor.map((state) => (
                   <button
                     key={state}
                     data-testid={`readiness-${state}`}

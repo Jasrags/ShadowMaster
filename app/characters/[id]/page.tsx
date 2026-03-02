@@ -52,6 +52,8 @@ import {
   WirelessDisplay,
   ArmorDisplay,
   AugmentationsDisplay,
+  LoadoutSummaryDisplay,
+  LoadoutDisplay,
   RiggingSummaryDisplay,
   DroneNetworkDisplay,
   JumpInControlDisplay,
@@ -338,6 +340,14 @@ function CharacterSheet({
             <DerivedStatsDisplay character={character} resolveEffects={resolveEffects} />
 
             <EncumbranceDisplay character={character} />
+
+            <LoadoutSummaryDisplay character={character} />
+
+            <LoadoutDisplay
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
+            />
 
             <WirelessDisplay
               character={character}

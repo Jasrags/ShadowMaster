@@ -11,6 +11,7 @@ import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
+import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
 import { ChevronDown, ChevronRight, Swords, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -92,36 +93,6 @@ function findCatalogWeapon(
   return undefined;
 }
 
-function getReadinessLabel(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "readied":
-      return "Readied";
-    case "holstered":
-      return "Holstered";
-    case "worn":
-      return "Worn";
-    case "stored":
-      return "Stored";
-    default:
-      return readiness;
-  }
-}
-
-function getReadinessColor(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "readied":
-      return "text-emerald-400 bg-emerald-500/10 border-emerald-500/30";
-    case "holstered":
-      return "text-amber-400 bg-amber-500/10 border-amber-500/30";
-    case "worn":
-      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
-    case "stored":
-      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
-    default:
-      return "text-zinc-400";
-  }
-}
-
 function getCompactAmmoBarColor(current: number, max: number): string {
   if (max === 0) return "bg-zinc-400";
   const pct = (current / max) * 100;
@@ -130,8 +101,6 @@ function getCompactAmmoBarColor(current: number, max: number): string {
   if (pct <= 50) return "bg-yellow-500";
   return "bg-emerald-500";
 }
-
-const WEAPON_READINESS_STATES: EquipmentReadiness[] = ["readied", "holstered", "stored"];
 
 // ---------------------------------------------------------------------------
 // Local state update handlers (matches InventoryPanel pattern)
@@ -493,7 +462,7 @@ function WeaponRow({
                 <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Readiness
                 </span>
-                {WEAPON_READINESS_STATES.map((state) => (
+                {READINESS_BY_EQUIPMENT.weapon.map((state) => (
                   <button
                     key={state}
                     data-testid={`readiness-${state}`}
