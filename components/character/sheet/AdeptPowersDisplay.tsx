@@ -6,17 +6,11 @@ import { ChevronDown, ChevronRight, Zap } from "lucide-react";
 import type { AdeptPower } from "@/lib/types";
 import { useAdeptPowers } from "@/lib/rules";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
+import { ACTIVATION_LABELS } from "@/lib/constants/magic";
 
 interface AdeptPowersDisplayProps {
   adeptPowers: AdeptPower[];
 }
-
-const ACTIVATION_LABELS: Record<string, string> = {
-  free: "Free Action",
-  simple: "Simple Action",
-  complex: "Complex Action",
-  interrupt: "Interrupt",
-};
 
 function PowerRow({
   power,

@@ -15,6 +15,7 @@
  */
 
 import { X, Zap, Minus, Plus, ChevronDown } from "lucide-react";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 
 // =============================================================================
 // CONSTANTS
@@ -47,18 +48,6 @@ const ACTIVATION_BADGES: Record<string, { letter: string; bg: string; text: stri
     bg: "bg-zinc-100 dark:bg-zinc-800",
     text: "text-zinc-600 dark:text-zinc-400",
   },
-};
-
-/** Attribute display names */
-const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
 };
 
 // =============================================================================
@@ -236,7 +225,7 @@ export function AdeptPowerListItem({
               <option value="">-- Select --</option>
               {validSpecs.map((spec) => (
                 <option key={spec} value={spec}>
-                  {specType === "skill" ? formatSkillName(spec) : ATTRIBUTE_NAMES[spec] || spec}
+                  {specType === "skill" ? formatSkillName(spec) : getCoreAttributeName(spec)}
                 </option>
               ))}
             </select>

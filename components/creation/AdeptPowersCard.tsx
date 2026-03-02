@@ -22,6 +22,7 @@ import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { useCreationBudgets } from "@/lib/contexts";
 import { CreationCard, BudgetIndicator, SummaryFooter } from "./shared";
 import { AdeptPowerModal, AdeptPowerListItem } from "./adept-powers";
+import { ACTIVATION_ORDER, ACTIVATION_LABELS } from "@/lib/constants/magic";
 import { Lock, Plus, AlertTriangle } from "lucide-react";
 
 // =============================================================================
@@ -32,18 +33,6 @@ const POWER_POINT_KARMA_COST = 5;
 
 // Paths that can have adept powers
 const ADEPT_PATHS = ["adept", "mystic-adept"];
-
-/** Display order for activation types */
-const ACTIVATION_ORDER = ["free", "simple", "complex", "interrupt", "other"] as const;
-
-/** Human-readable activation type labels */
-const ACTIVATION_LABELS: Record<string, string> = {
-  free: "Free Action",
-  simple: "Simple Action",
-  complex: "Complex Action",
-  interrupt: "Interrupt Action",
-  other: "Passive / Other",
-};
 
 // =============================================================================
 // TYPES

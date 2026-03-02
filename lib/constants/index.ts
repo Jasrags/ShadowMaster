@@ -5,3 +5,4 @@
  */
 
 export * from "./attributes";
+export * from "./magic";

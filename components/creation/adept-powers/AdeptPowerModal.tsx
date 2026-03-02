@@ -21,35 +21,9 @@ import { useMemo, useState, useCallback } from "react";
 import type { AdeptPower } from "@/lib/types";
 import type { AdeptPowerCatalogItem } from "@/lib/rules/loader-types";
 import { BaseModalRoot, ModalHeader, ModalBody, ModalFooter } from "@/components/ui";
+import { ACTIVATION_ORDER, ACTIVATION_LABELS } from "@/lib/constants/magic";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 import { Search, Check, ChevronDown, Zap } from "lucide-react";
-
-// =============================================================================
-// CONSTANTS
-// =============================================================================
-
-/** Display order for activation types */
-const ACTIVATION_ORDER = ["free", "simple", "complex", "interrupt", "other"] as const;
-
-/** Human-readable activation type labels */
-const ACTIVATION_LABELS: Record<string, string> = {
-  free: "Free Action",
-  simple: "Simple Action",
-  complex: "Complex Action",
-  interrupt: "Interrupt Action",
-  other: "Passive / Other",
-};
-
-/** Attribute display names */
-const ATTRIBUTE_NAMES: Record<string, string> = {
-  body: "Body",
-  agility: "Agility",
-  reaction: "Reaction",
-  strength: "Strength",
-  willpower: "Willpower",
-  logic: "Logic",
-  intuition: "Intuition",
-  charisma: "Charisma",
-};
 
 // =============================================================================
 // TYPES
@@ -76,7 +50,7 @@ export interface AdeptPowerModalProps {
 function getPowerDisplayName(power: AdeptPowerCatalogItem, selectedSpec?: string): string {
   if (selectedSpec) {
     if (power.requiresAttribute) {
-      const attrName = ATTRIBUTE_NAMES[selectedSpec] || selectedSpec;
+      const attrName = getCoreAttributeName(selectedSpec);
       return `${power.name} (${attrName})`;
     }
     if (power.requiresSkill) {
@@ -384,7 +358,7 @@ export function AdeptPowerModal({
                             <option value="">-- Select Attribute --</option>
                             {selectedPowerData.validAttributes.map((attr) => (
                               <option key={attr} value={attr}>
-                                {ATTRIBUTE_NAMES[attr] || attr}
+                                {getCoreAttributeName(attr)}
                               </option>
                             ))}
                           </select>
@@ -393,7 +367,7 @@ export function AdeptPowerModal({
                         <p className="mt-2 text-xs text-amber-600 dark:text-amber-400">
                           Valid attributes:{" "}
                           {selectedPowerData.validAttributes
-                            .map((a) => ATTRIBUTE_NAMES[a] || a)
+                            .map((a) => getCoreAttributeName(a))
                             .join(", ")}
                         </p>
                       </div>

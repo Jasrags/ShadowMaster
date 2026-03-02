@@ -22,6 +22,26 @@ export type SpecialAttribute = (typeof SPECIAL_ATTRIBUTES)[number];
 export type CoreAttribute = (typeof CORE_ATTRIBUTES)[number];
 export type Attribute = (typeof ALL_ATTRIBUTES)[number];
 
+/** Human-readable display names for the 8 core attributes */
+export const CORE_ATTRIBUTE_NAMES: Record<CoreAttribute, string> = {
+  body: "Body",
+  agility: "Agility",
+  reaction: "Reaction",
+  strength: "Strength",
+  willpower: "Willpower",
+  logic: "Logic",
+  intuition: "Intuition",
+  charisma: "Charisma",
+};
+
+/**
+ * Look up the display name for a core attribute, with fallback for unknown keys.
+ * Use this when the key comes from data typed as `string` rather than `CoreAttribute`.
+ */
+export function getCoreAttributeName(key: string): string {
+  return (CORE_ATTRIBUTE_NAMES as Record<string, string | undefined>)[key] ?? key;
+}
+
 // =============================================================================
 // ABBREVIATION MAPPING
 // =============================================================================

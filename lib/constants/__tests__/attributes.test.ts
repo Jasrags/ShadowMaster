@@ -9,6 +9,8 @@ import {
   SPECIAL_ATTRIBUTES,
   CORE_ATTRIBUTES,
   ALL_ATTRIBUTES,
+  CORE_ATTRIBUTE_NAMES,
+  getCoreAttributeName,
   ATTRIBUTE_ABBREVIATION_MAP,
   normalizeAttributeKey,
   isValidAttribute,
@@ -36,6 +38,45 @@ describe("Attribute Constants", () => {
 
     it("should have ALL_ATTRIBUTES as core + special", () => {
       expect(ALL_ATTRIBUTES).toEqual([...CORE_ATTRIBUTES, ...SPECIAL_ATTRIBUTES]);
+    });
+  });
+
+  describe("CORE_ATTRIBUTE_NAMES", () => {
+    it("should have a display name for every core attribute", () => {
+      for (const attr of CORE_ATTRIBUTES) {
+        expect(CORE_ATTRIBUTE_NAMES[attr]).toBeDefined();
+        expect(typeof CORE_ATTRIBUTE_NAMES[attr]).toBe("string");
+      }
+    });
+
+    it("should have capitalized display names", () => {
+      for (const attr of CORE_ATTRIBUTES) {
+        const name = CORE_ATTRIBUTE_NAMES[attr];
+        expect(name[0]).toBe(name[0].toUpperCase());
+      }
+    });
+
+    it("should have exactly 8 entries (no special attributes)", () => {
+      expect(Object.keys(CORE_ATTRIBUTE_NAMES)).toHaveLength(8);
+    });
+
+    it("should not include special attributes", () => {
+      const keys = Object.keys(CORE_ATTRIBUTE_NAMES);
+      expect(keys).not.toContain("edge");
+      expect(keys).not.toContain("magic");
+      expect(keys).not.toContain("resonance");
+    });
+  });
+
+  describe("getCoreAttributeName", () => {
+    it("should return display name for known core attributes", () => {
+      expect(getCoreAttributeName("body")).toBe("Body");
+      expect(getCoreAttributeName("charisma")).toBe("Charisma");
+    });
+
+    it("should return the key itself for unknown attributes", () => {
+      expect(getCoreAttributeName("edge")).toBe("edge");
+      expect(getCoreAttributeName("unknown")).toBe("unknown");
     });
   });
 
