@@ -177,7 +177,7 @@ function ArmorRow({
     item.state?.readiness ?? (item.equipped ? "worn" : "stored");
 
   // Wireless state
-  const hasWireless = true;
+  const hasWireless = !!(item.wirelessBonus || catalogArmor?.wirelessBonus);
   const globalWireless = isGlobalWirelessEnabled(character);
   const wirelessEnabled = item.state?.wirelessEnabled ?? true;
   const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;

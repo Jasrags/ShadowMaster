@@ -186,7 +186,7 @@ function WeaponRow({
   const readiness: EquipmentReadiness = weapon.state?.readiness ?? "holstered";
 
   // Wireless state
-  const hasWireless = true;
+  const hasWireless = !!(weapon.wirelessBonus || catalogWeapon?.wirelessBonus);
   const globalWireless = isGlobalWirelessEnabled(character);
   const wirelessEnabled = weapon.state?.wirelessEnabled ?? true;
   const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;

@@ -260,10 +260,11 @@ describe("WeaponsDisplay", () => {
     expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
   });
 
-  it("shows wireless icon for weapons without explicit wirelessBonus", () => {
+  it("does not show wireless icon for weapons without wirelessBonus", () => {
     const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
     render(<WeaponsDisplay character={character} />);
-    expect(screen.getByTestId("wireless-icon")).toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("wireless-icon-off")).not.toBeInTheDocument();
   });
 
   it("shows WifiOff icon when wireless is disabled for a weapon", () => {
@@ -720,12 +721,12 @@ describe("WeaponsDisplay", () => {
   // =========================================================================
 
   describe("wireless toggle", () => {
-    it("shown when weapon has no explicit wirelessBonus", () => {
+    it("hidden when weapon has no wirelessBonus", () => {
       const onUpdate = vi.fn();
       const character = createSheetCharacter({ weapons: [MOCK_MELEE_WEAPON] });
       render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
       fireEvent.click(screen.getByTestId("expand-button"));
-      expect(screen.getByTestId("wireless-toggle")).toBeInTheDocument();
+      expect(screen.queryByTestId("wireless-toggle")).not.toBeInTheDocument();
     });
 
     it("hidden when not editable", () => {

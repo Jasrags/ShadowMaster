@@ -733,6 +733,9 @@ export interface CyberwareCatalogItemData {
    * e.g., Skillwires is incompatible with Reflex Recorder bioware.
    */
   incompatibleWith?: string[];
+
+  /** Unified effects from the effect system */
+  effects?: Effect[];
 }
 
 /**
@@ -864,6 +867,9 @@ export interface BiowareCatalogItemData {
    * Defaults to 1 if not specified (e.g., Reflex Recorder gives +1).
    */
   skillBonus?: number;
+
+  /** Unified effects from the effect system */
+  effects?: Effect[];
 }
 
 /**

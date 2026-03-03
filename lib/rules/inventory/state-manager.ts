@@ -8,7 +8,7 @@
  * @see Capability: character.inventory-management
  */
 
-import type { Weapon, ArmorItem, GearItem, Character } from "@/lib/types";
+import type { Weapon, ArmorItem, GearItem, Character, BiowareItem } from "@/lib/types";
 import type { GearState, EquipmentReadiness, DeviceCondition } from "@/lib/types/gear-state";
 
 // =============================================================================
@@ -340,12 +340,56 @@ export function toggleActivation<T extends { state?: GearState }>(
 
 /**
  * Set wireless state for all items on a character.
- * Respects the global wirelessBonusesEnabled flag.
+ * Toggles both the global wirelessBonusesEnabled flag and
+ * each individual item's wirelessEnabled state.
  */
 export function setAllWireless(character: Character, enabled: boolean): Character {
+  const weapons = character.weapons?.map((w) => ({
+    ...w,
+    state: { ...getDefaultState("weapon"), ...w.state, wirelessEnabled: enabled },
+  }));
+
+  const armor = character.armor?.map((a) => ({
+    ...a,
+    state: {
+      ...getDefaultState("armor"),
+      ...a.state,
+      wirelessEnabled: enabled,
+    },
+  }));
+
+  const gear = character.gear?.map((g) => ({
+    ...g,
+    state: { ...getDefaultState("gear"), ...g.state, wirelessEnabled: enabled },
+  }));
+
+  const cyberware = character.cyberware?.map((c) => ({
+    ...c,
+    wirelessEnabled: enabled,
+  }));
+
+  const bioware = character.bioware?.map(
+    (b) =>
+      ({
+        ...b,
+        wirelessEnabled: enabled,
+      }) as BiowareItem
+  );
+
+  const drones = character.drones?.map((d) => ({
+    ...d,
+    state: { ...getDefaultState("gear"), ...d.state, wirelessEnabled: enabled },
+  }));
+
   return {
     ...character,
     wirelessBonusesEnabled: enabled,
+    ...(weapons && { weapons }),
+    ...(armor && { armor }),
+    ...(gear && { gear }),
+    ...(cyberware && { cyberware }),
+    ...(bioware && { bioware }),
+    ...(drones && { drones }),
   };
 }
 
@@ -517,8 +561,11 @@ export function getEquipmentStateSummary(character: Character): {
     else storedWeapons++; // "stored" legacy
 
     if (weapon.state?.containedIn) containedItems++;
-    if (weapon.state?.wirelessEnabled !== false) wirelessEnabled++;
-    else wirelessDisabled++;
+    // Only count weapons with wireless capability
+    if (weapon.wirelessBonus) {
+      if (weapon.state?.wirelessEnabled !== false) wirelessEnabled++;
+      else wirelessDisabled++;
+    }
   }
 
   for (const item of armor) {
@@ -529,8 +576,11 @@ export function getEquipmentStateSummary(character: Character): {
     else storedArmor++; // "stored" legacy
 
     if (item.state?.containedIn) containedItems++;
-    if (item.state?.wirelessEnabled !== false) wirelessEnabled++;
-    else wirelessDisabled++;
+    // Only count armor with wireless capability
+    if (item.wirelessBonus || (item.wirelessEffects && item.wirelessEffects.length > 0)) {
+      if (item.state?.wirelessEnabled !== false) wirelessEnabled++;
+      else wirelessDisabled++;
+    }
   }
 
   for (const item of gear) {
@@ -539,13 +589,19 @@ export function getEquipmentStateSummary(character: Character): {
   }
 
   for (const item of cyberware) {
-    if (item.wirelessEnabled !== false) wirelessEnabled++;
-    else wirelessDisabled++;
+    // Only count cyberware with wireless capability
+    if (item.wirelessBonus || (item.wirelessEffects && item.wirelessEffects.length > 0)) {
+      if (item.wirelessEnabled !== false) wirelessEnabled++;
+      else wirelessDisabled++;
+    }
   }
 
   for (const item of character.bioware || []) {
-    if (item.wirelessEnabled !== false) wirelessEnabled++;
-    else wirelessDisabled++;
+    // Only count bioware with wireless capability
+    if (item.wirelessBonus || (item.wirelessEffects && item.wirelessEffects.length > 0)) {
+      if (item.wirelessEnabled !== false) wirelessEnabled++;
+      else wirelessDisabled++;
+    }
   }
 
   for (const item of character.drones || []) {

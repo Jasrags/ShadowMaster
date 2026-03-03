@@ -18,6 +18,7 @@ import type {
   WeaponMountType,
   CatalogItemRatingSpec,
   ItemLegality,
+  Effect,
 } from "../types";
 import type {
   QualityData,
@@ -456,6 +457,8 @@ export interface CyberwareCatalogItemData {
   compatibleLimbs?: string[];
   /** List of augmentation IDs incompatible with this cyberware */
   incompatibleWith?: string[];
+  /** Unified effects from the effect system */
+  effects?: Effect[];
 }
 
 export interface CyberwareCatalogData {
@@ -538,6 +541,8 @@ export interface BiowareCatalogItemData {
   skillAttributeFilter?: string[];
   /** Bonus to apply to the target skill (defaults to 1) */
   skillBonus?: number;
+  /** Unified effects from the effect system */
+  effects?: Effect[];
 }
 
 export interface BiowareCatalogData {

@@ -1,11 +1,24 @@
 "use client";
 
 import { useState } from "react";
-import type { Character, CyberwareItem, BiowareItem } from "@/lib/types";
+import type { Character, CyberwareItem, BiowareItem, Effect } from "@/lib/types";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { useCyberwareCatalog, useBiowareCatalog } from "@/lib/rules/RulesetContext";
 import { DisplayCard } from "./DisplayCard";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { ChevronDown, ChevronRight, Cpu, Wifi, WifiOff } from "lucide-react";
+
+/** Extract wireless bonus description from catalog effects with wirelessOverride. */
+function getWirelessFromEffects(effects?: Effect[]): string | undefined {
+  if (!effects) return undefined;
+  const descriptions: string[] = [];
+  for (const effect of effects) {
+    if (effect.wirelessOverride?.description) {
+      descriptions.push(effect.wirelessOverride.description);
+    }
+  }
+  return descriptions.length > 0 ? descriptions.join("; ") : undefined;
+}
 
 // ---------------------------------------------------------------------------
 // Section & variant configuration
@@ -50,6 +63,7 @@ interface AugmentationRowProps {
   isCyberware: boolean;
   onCharacterUpdate?: (updatedCharacter: Character) => void;
   editable?: boolean;
+  catalogWirelessBonus?: string;
 }
 
 function AugmentationRow({
@@ -58,10 +72,15 @@ function AugmentationRow({
   isCyberware,
   onCharacterUpdate,
   editable,
+  catalogWirelessBonus,
 }: AugmentationRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const hasWireless = true;
+  const hasWireless = !!(
+    item.wirelessBonus ||
+    (item.wirelessEffects && item.wirelessEffects.length > 0) ||
+    catalogWirelessBonus
+  );
   const globalWireless = isGlobalWirelessEnabled(character);
   const wirelessEnabled = item.wirelessEnabled ?? true;
   const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;
@@ -169,7 +188,7 @@ function AugmentationRow({
               <WirelessIndicator
                 enabled={wirelessEnabled}
                 globalEnabled={globalWireless}
-                bonusDescription={item.wirelessBonus}
+                bonusDescription={item.wirelessBonus || catalogWirelessBonus}
                 effects={item.wirelessEffects}
                 onToggle={(enabled) =>
                   toggleAugWireless(character, itemId, isCyberware, enabled, onCharacterUpdate)
@@ -185,7 +204,7 @@ function AugmentationRow({
               data-testid="wireless-bonus-text"
               className={`text-xs leading-relaxed text-cyan-600 dark:text-cyan-400 ${!isWirelessActive ? "opacity-40" : ""}`}
             >
-              {item.wirelessBonus}
+              {item.wirelessBonus || catalogWirelessBonus}
             </p>
           )}
 
@@ -230,6 +249,9 @@ export function AugmentationsDisplay({
   onCharacterUpdate,
   editable,
 }: AugmentationsDisplayProps) {
+  const cyberwareCatalog = useCyberwareCatalog();
+  const biowareCatalog = useBiowareCatalog();
+
   const hasCyber = (character.cyberware?.length || 0) > 0;
   const hasBio = (character.bioware?.length || 0) > 0;
 
@@ -244,6 +266,21 @@ export function AugmentationsDisplay({
       : [],
   };
 
+  /** Resolve catalog wireless bonus for an augmentation item. */
+  function getCatalogWirelessBonus(
+    item: CyberwareItem | BiowareItem,
+    isCyberware: boolean
+  ): string | undefined {
+    if (!item.catalogId) return undefined;
+    if (isCyberware) {
+      const catalogItem = cyberwareCatalog.find((c) => c.id === item.catalogId);
+      return catalogItem?.wirelessBonus || getWirelessFromEffects(catalogItem?.effects);
+    } else {
+      const catalogItem = biowareCatalog.find((b) => b.id === item.catalogId);
+      return getWirelessFromEffects(catalogItem?.effects);
+    }
+  }
+
   return (
     <DisplayCard
       id="sheet-augmentations"
@@ -254,6 +291,7 @@ export function AugmentationsDisplay({
       <div className="space-y-3">
         {AUGMENTATION_SECTIONS.map(({ key, label }) => {
           if (items[key].length === 0) return null;
+          const isCyberware = key === "cyber";
           return (
             <div key={key}>
               <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
@@ -265,9 +303,10 @@ export function AugmentationsDisplay({
                     key={`${key}-${idx}`}
                     item={item}
                     character={character}
-                    isCyberware={key === "cyber"}
+                    isCyberware={isCyberware}
                     onCharacterUpdate={onCharacterUpdate}
                     editable={editable}
+                    catalogWirelessBonus={getCatalogWirelessBonus(item, isCyberware)}
                   />
                 ))}
               </div>

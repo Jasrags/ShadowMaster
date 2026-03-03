@@ -203,9 +203,16 @@ export async function PATCH(
     if (global) {
       const previousState = isGlobalWirelessEnabled(character);
       const updatedCharacter = setAllWireless(character, enabled);
-      await updateCharacter(userId, characterId, {
+      const updates: Partial<typeof updatedCharacter> = {
         wirelessBonusesEnabled: updatedCharacter.wirelessBonusesEnabled,
-      });
+      };
+      if (updatedCharacter.weapons) updates.weapons = updatedCharacter.weapons;
+      if (updatedCharacter.armor) updates.armor = updatedCharacter.armor;
+      if (updatedCharacter.gear) updates.gear = updatedCharacter.gear;
+      if (updatedCharacter.cyberware) updates.cyberware = updatedCharacter.cyberware;
+      if (updatedCharacter.bioware) updates.bioware = updatedCharacter.bioware;
+      if (updatedCharacter.drones) updates.drones = updatedCharacter.drones;
+      await updateCharacter(userId, characterId, updates);
 
       return NextResponse.json({
         success: true,
@@ -397,11 +404,18 @@ export async function POST(
       );
     }
 
-    // Update global wireless state
+    // Update global wireless state and all individual items
     const updatedCharacter = setAllWireless(character, enabled);
-    await updateCharacter(userId, characterId, {
+    const updates: Partial<typeof updatedCharacter> = {
       wirelessBonusesEnabled: updatedCharacter.wirelessBonusesEnabled,
-    });
+    };
+    if (updatedCharacter.weapons) updates.weapons = updatedCharacter.weapons;
+    if (updatedCharacter.armor) updates.armor = updatedCharacter.armor;
+    if (updatedCharacter.gear) updates.gear = updatedCharacter.gear;
+    if (updatedCharacter.cyberware) updates.cyberware = updatedCharacter.cyberware;
+    if (updatedCharacter.bioware) updates.bioware = updatedCharacter.bioware;
+    if (updatedCharacter.drones) updates.drones = updatedCharacter.drones;
+    await updateCharacter(userId, characterId, updates);
 
     return NextResponse.json({
       success: true,
