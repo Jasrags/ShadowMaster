@@ -11,6 +11,7 @@ import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
+import { MoveToContainerControl } from "./MoveToContainerControl";
 import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
 import { ChevronDown, ChevronRight, Swords, Wifi, WifiOff } from "lucide-react";
 
@@ -500,6 +501,15 @@ function WeaponRow({
                 </div>
               )}
             </div>
+          )}
+
+          {/* Move to container (editable only) */}
+          {editable && onCharacterUpdate && weapon.id && (
+            <MoveToContainerControl
+              character={character}
+              itemId={weapon.id}
+              onCharacterUpdate={onCharacterUpdate}
+            />
           )}
 
           {/* Ammo display: interactive when editable, static when read-only */}

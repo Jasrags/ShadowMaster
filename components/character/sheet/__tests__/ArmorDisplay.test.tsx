@@ -27,6 +27,12 @@ vi.mock("lucide-react", () => LUCIDE_MOCK);
 // Mock external components
 // ---------------------------------------------------------------------------
 
+vi.mock("@/components/character/sheet/MoveToContainerControl", () => ({
+  MoveToContainerControl: ({ itemId }: { itemId: string }) => (
+    <div data-testid="move-to-container-control" data-item-id={itemId} />
+  ),
+}));
+
 vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
@@ -561,6 +567,43 @@ describe("ArmorDisplay", () => {
       fireEvent.click(screen.getByTestId("expand-button"));
       const indicator = screen.getByTestId("wireless-indicator");
       expect(indicator).toHaveAttribute("data-global-enabled", "false");
+    });
+  });
+
+  // --- Move to container control ---
+
+  describe("move to container control", () => {
+    it("shows move-to-container control in expanded editable armor row with id", () => {
+      const onUpdate = vi.fn();
+      const armorWithId = { ...MOCK_ARMOR_EQUIPPED, id: "armor-1" };
+      const character = createSheetCharacter({ armor: [armorWithId] });
+      render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("move-to-container-control")).toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when not editable", () => {
+      const armorWithId = { ...MOCK_ARMOR_EQUIPPED, id: "armor-1" };
+      const character = createSheetCharacter({ armor: [armorWithId] });
+      render(<ArmorDisplay character={character} editable={false} onCharacterUpdate={vi.fn()} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when armor has no id", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when no onCharacterUpdate", () => {
+      const armorWithId = { ...MOCK_ARMOR_EQUIPPED, id: "armor-1" };
+      const character = createSheetCharacter({ armor: [armorWithId] });
+      render(<ArmorDisplay character={character} editable={true} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
     });
   });
 

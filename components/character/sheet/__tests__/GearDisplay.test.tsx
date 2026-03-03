@@ -101,6 +101,10 @@ vi.mock("@/lib/rules", () => ({
   useGear: () => MOCK_GEAR_CATALOG,
 }));
 
+vi.mock("@/components/character/sheet/MoveToContainerControl", () => ({
+  MoveToContainerControl: () => <div data-testid="move-to-container-control" />,
+}));
+
 vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;

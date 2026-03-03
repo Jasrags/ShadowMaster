@@ -23,6 +23,12 @@ vi.mock("lucide-react", () => LUCIDE_MOCK);
 // Mock external components
 // ---------------------------------------------------------------------------
 
+vi.mock("@/components/character/sheet/MoveToContainerControl", () => ({
+  MoveToContainerControl: ({ itemId }: { itemId: string }) => (
+    <div data-testid="move-to-container-control" data-item-id={itemId} />
+  ),
+}));
+
 vi.mock("@/components/character/sheet/WirelessIndicator", () => ({
   WirelessIndicator: (props: {
     enabled: boolean;
@@ -825,6 +831,45 @@ describe("WeaponsDisplay", () => {
       expect(screen.queryByTestId("weapon-ammo-display")).not.toBeInTheDocument();
       const ammoSection = screen.getByTestId("ammo-section");
       expect(ammoSection).toHaveTextContent("10/15");
+    });
+  });
+
+  // =========================================================================
+  // Move to container control
+  // =========================================================================
+
+  describe("move to container control", () => {
+    it("shows move-to-container control in expanded editable weapon row with id", () => {
+      const onUpdate = vi.fn();
+      const weaponWithId = { ...MOCK_RANGED_WEAPON, id: "weapon-1" };
+      const character = createSheetCharacter({ weapons: [weaponWithId] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("move-to-container-control")).toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when not editable", () => {
+      const weaponWithId = { ...MOCK_RANGED_WEAPON, id: "weapon-1" };
+      const character = createSheetCharacter({ weapons: [weaponWithId] });
+      render(<WeaponsDisplay character={character} editable={false} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when weapon has no id", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
+    });
+
+    it("does not show move-to-container when no onCharacterUpdate", () => {
+      const weaponWithId = { ...MOCK_RANGED_WEAPON, id: "weapon-1" };
+      const character = createSheetCharacter({ weapons: [weaponWithId] });
+      render(<WeaponsDisplay character={character} editable={true} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
     });
   });
 
