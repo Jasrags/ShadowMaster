@@ -441,6 +441,8 @@ export interface LoadoutDiff {
   itemsToBring: string[];
   /** Items that will change readiness state */
   itemsToMove: Array<{ itemId: string; from: EquipmentReadiness; to: EquipmentReadiness }>;
+  /** Items that will move in/out of containers */
+  containerChanges: Array<{ itemId: string; fromContainer?: string; toContainer?: string }>;
   /** Net encumbrance change in kg (positive = heavier) */
   encumbranceChange: number;
 }

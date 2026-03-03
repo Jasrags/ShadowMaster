@@ -161,12 +161,19 @@ export function deleteLoadout(character: Character, loadoutId: string): Characte
 export function getLoadoutDiff(character: Character, loadoutId: string): LoadoutDiff {
   const loadout = (character.loadouts || []).find((l) => l.id === loadoutId);
   if (!loadout) {
-    return { itemsToStash: [], itemsToBring: [], itemsToMove: [], encumbranceChange: 0 };
+    return {
+      itemsToStash: [],
+      itemsToBring: [],
+      itemsToMove: [],
+      containerChanges: [],
+      encumbranceChange: 0,
+    };
   }
 
   const itemsToStash: string[] = [];
   const itemsToBring: string[] = [];
   const itemsToMove: LoadoutDiff["itemsToMove"] = [];
+  const containerChanges: LoadoutDiff["containerChanges"] = [];
 
   const processItem = (item: GearItem | Weapon | ArmorItem) => {
     if (!item.id) return;
@@ -174,14 +181,32 @@ export function getLoadoutDiff(character: Character, loadoutId: string): Loadout
     const currentReadiness = item.state?.readiness ?? "carried";
     const targetReadiness = loadout.gearAssignments[item.id] ?? loadout.defaultReadiness;
 
-    if (currentReadiness === targetReadiness) return;
+    if (currentReadiness !== targetReadiness) {
+      if (targetReadiness === "stashed" && currentReadiness !== "stashed") {
+        itemsToStash.push(item.id);
+      } else if (currentReadiness === "stashed" && targetReadiness !== "stashed") {
+        itemsToBring.push(item.id);
+      } else {
+        itemsToMove.push({ itemId: item.id, from: currentReadiness, to: targetReadiness });
+      }
+    }
 
-    if (targetReadiness === "stashed" && currentReadiness !== "stashed") {
-      itemsToStash.push(item.id);
-    } else if (currentReadiness === "stashed" && targetReadiness !== "stashed") {
-      itemsToBring.push(item.id);
-    } else {
-      itemsToMove.push({ itemId: item.id, from: currentReadiness, to: targetReadiness });
+    // Check container assignment changes
+    if (loadout.containerAssignments) {
+      const currentContainerId = item.state?.containedIn?.containerId;
+      const targetContainerId = loadout.containerAssignments[item.id]?.containerId;
+
+      if (currentContainerId !== targetContainerId) {
+        containerChanges.push({
+          itemId: item.id,
+          fromContainer: currentContainerId
+            ? (findItemById(character, currentContainerId)?.name ?? currentContainerId)
+            : undefined,
+          toContainer: targetContainerId
+            ? (findItemById(character, targetContainerId)?.name ?? targetContainerId)
+            : undefined,
+        });
+      }
     }
   };
 
@@ -200,7 +225,7 @@ export function getLoadoutDiff(character: Character, loadoutId: string): Loadout
     if (item) encumbranceChange += item.weight ?? 0;
   }
 
-  return { itemsToStash, itemsToBring, itemsToMove, encumbranceChange };
+  return { itemsToStash, itemsToBring, itemsToMove, containerChanges, encumbranceChange };
 }
 
 /**
@@ -212,7 +237,13 @@ export function applyLoadout(character: Character, loadoutId: string): LoadoutAp
   if (!loadout) {
     return {
       success: false,
-      diff: { itemsToStash: [], itemsToBring: [], itemsToMove: [], encumbranceChange: 0 },
+      diff: {
+        itemsToStash: [],
+        itemsToBring: [],
+        itemsToMove: [],
+        containerChanges: [],
+        encumbranceChange: 0,
+      },
       errors: [`Loadout "${loadoutId}" not found`],
     };
   }
@@ -221,7 +252,14 @@ export function applyLoadout(character: Character, loadoutId: string): LoadoutAp
   const errors: string[] = [];
 
   const updateReadiness = <
-    T extends { id?: string; state?: { readiness: EquipmentReadiness; wirelessEnabled: boolean } },
+    T extends {
+      id?: string;
+      state?: {
+        readiness: EquipmentReadiness;
+        wirelessEnabled: boolean;
+        containedIn?: ContainmentRef;
+      };
+    },
   >(
     items: T[]
   ): T[] => {
@@ -236,15 +274,33 @@ export function applyLoadout(character: Character, loadoutId: string): LoadoutAp
         return item;
       }
 
-      if (item.state?.readiness === targetReadiness) return item;
+      const readinessChanged = item.state?.readiness !== targetReadiness;
 
-      return {
-        ...item,
-        state: {
-          ...(item.state ?? { readiness: "carried", wirelessEnabled: true }),
-          readiness: targetReadiness,
-        },
+      // Determine target container assignment
+      let containerChanged = false;
+      let targetContainedIn: ContainmentRef | undefined;
+      if (loadout.containerAssignments) {
+        targetContainedIn = loadout.containerAssignments[item.id];
+        const currentContainerId = item.state?.containedIn?.containerId;
+        const targetContainerId = targetContainedIn?.containerId;
+        containerChanged = currentContainerId !== targetContainerId;
+      }
+
+      if (!readinessChanged && !containerChanged) return item;
+
+      const baseState = item.state ?? { readiness: "carried" as const, wirelessEnabled: true };
+      const newState = {
+        ...baseState,
+        readiness: targetReadiness,
+        containedIn: loadout.containerAssignments ? targetContainedIn : baseState.containedIn,
       };
+
+      // Clean up undefined containedIn to avoid polluting state
+      if (!newState.containedIn) {
+        delete newState.containedIn;
+      }
+
+      return { ...item, state: newState };
     });
   };
 

@@ -308,6 +308,69 @@ describe("Loadout Manager", () => {
       const diff = getLoadoutDiff(character, "nonexistent");
       expect(diff.itemsToStash).toHaveLength(0);
       expect(diff.itemsToBring).toHaveLength(0);
+      expect(diff.containerChanges).toHaveLength(0);
+    });
+
+    it("should detect when an item moves out of a container", () => {
+      const gear = createGear("item-1", "carried");
+      gear.state = {
+        ...gear.state!,
+        containedIn: { containerId: "container-1" },
+      };
+      const container = createGear("container-1", "carried");
+      container.name = "Backpack";
+
+      const character = createCharacter({
+        gear: [gear, container],
+        loadouts: [
+          {
+            id: "no-container",
+            name: "No Container",
+            gearAssignments: { "item-1": "carried", "container-1": "carried" },
+            containerAssignments: {},
+            defaultReadiness: "stashed",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01",
+          },
+        ],
+      });
+
+      const diff = getLoadoutDiff(character, "no-container");
+      expect(diff.containerChanges).toHaveLength(1);
+      expect(diff.containerChanges[0]).toEqual({
+        itemId: "item-1",
+        fromContainer: "Backpack",
+        toContainer: undefined,
+      });
+    });
+
+    it("should detect when an item should be placed in a container", () => {
+      const gear = createGear("item-1", "carried");
+      const container = createGear("container-1", "carried");
+      container.name = "Backpack";
+
+      const character = createCharacter({
+        gear: [gear, container],
+        loadouts: [
+          {
+            id: "with-container",
+            name: "With Container",
+            gearAssignments: { "item-1": "carried", "container-1": "carried" },
+            containerAssignments: { "item-1": { containerId: "container-1" } },
+            defaultReadiness: "stashed",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01",
+          },
+        ],
+      });
+
+      const diff = getLoadoutDiff(character, "with-container");
+      expect(diff.containerChanges).toHaveLength(1);
+      expect(diff.containerChanges[0]).toEqual({
+        itemId: "item-1",
+        fromContainer: undefined,
+        toContainer: "Backpack",
+      });
     });
   });
 
@@ -375,6 +438,63 @@ describe("Loadout Manager", () => {
       const result = applyLoadout(character, "nonexistent");
       expect(result.success).toBe(false);
       expect(result.errors).toHaveLength(1);
+    });
+
+    it("should restore container assignments when applying loadout", () => {
+      const gear = createGear("item-1", "carried");
+      const container = createGear("container-1", "carried");
+      container.name = "Backpack";
+
+      const character = createCharacter({
+        gear: [gear, container],
+        loadouts: [
+          {
+            id: "packed",
+            name: "Packed",
+            gearAssignments: { "item-1": "carried", "container-1": "carried" },
+            containerAssignments: { "item-1": { containerId: "container-1" } },
+            defaultReadiness: "stashed",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01",
+          },
+        ],
+      });
+
+      const result = applyLoadout(character, "packed");
+      expect(result.success).toBe(true);
+
+      const updatedItem = result.character!.gear!.find((g) => g.id === "item-1");
+      expect(updatedItem?.state?.containedIn).toEqual({ containerId: "container-1" });
+    });
+
+    it("should clear container assignments when loadout has empty containerAssignments", () => {
+      const gear = createGear("item-1", "carried");
+      gear.state = {
+        ...gear.state!,
+        containedIn: { containerId: "container-1" },
+      };
+      const container = createGear("container-1", "carried");
+
+      const character = createCharacter({
+        gear: [gear, container],
+        loadouts: [
+          {
+            id: "unpacked",
+            name: "Unpacked",
+            gearAssignments: { "item-1": "carried", "container-1": "carried" },
+            containerAssignments: {},
+            defaultReadiness: "stashed",
+            createdAt: "2024-01-01",
+            updatedAt: "2024-01-01",
+          },
+        ],
+      });
+
+      const result = applyLoadout(character, "unpacked");
+      expect(result.success).toBe(true);
+
+      const updatedItem = result.character!.gear!.find((g) => g.id === "item-1");
+      expect(updatedItem?.state?.containedIn).toBeUndefined();
     });
 
     it("should round-trip: save → apply produces same state", () => {

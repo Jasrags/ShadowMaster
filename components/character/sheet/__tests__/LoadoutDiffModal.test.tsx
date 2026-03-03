@@ -72,6 +72,7 @@ function makeDiff(overrides?: Partial<LoadoutDiff>): LoadoutDiff {
     itemsToStash: [],
     itemsToBring: [],
     itemsToMove: [],
+    containerChanges: [],
     encumbranceChange: 0,
     ...overrides,
   };
@@ -148,7 +149,7 @@ describe("LoadoutDiffModal", () => {
     expect(screen.getByTestId("items-to-bring")).toHaveTextContent("Item item-3");
   });
 
-  it("shows items to move with from→to", () => {
+  it("shows items to move with from→to using readiness labels", () => {
     const char = createSheetCharacter({
       loadouts: [makeLoadout()],
     } as Partial<Character>);
@@ -169,7 +170,35 @@ describe("LoadoutDiffModal", () => {
     );
 
     const section = screen.getByTestId("items-to-move");
-    expect(section).toHaveTextContent("holstered → readied");
+    expect(section).toHaveTextContent("Holstered → Readied");
+  });
+
+  it("shows container changes section", () => {
+    const char = createSheetCharacter({
+      loadouts: [makeLoadout()],
+    } as Partial<Character>);
+    mockGetLoadoutDiff.mockReturnValue(
+      makeDiff({
+        containerChanges: [
+          { itemId: "item-5", fromContainer: "Backpack", toContainer: undefined },
+          { itemId: "item-6", fromContainer: undefined, toContainer: "Belt Pouch" },
+        ],
+      })
+    );
+
+    render(
+      <LoadoutDiffModal
+        isOpen
+        onClose={vi.fn()}
+        character={char}
+        loadoutId="loadout-1"
+        onConfirm={vi.fn()}
+      />
+    );
+
+    const section = screen.getByTestId("container-changes");
+    expect(section).toHaveTextContent("Backpack → loose");
+    expect(section).toHaveTextContent("→ Belt Pouch");
   });
 
   it("calls applyLoadout and onConfirm on Apply button", () => {

@@ -166,6 +166,7 @@ export const LUCIDE_MOCK = {
   // Loadout/container icons
   Pencil: createIconMock("Pencil"),
   MapPin: createIconMock("MapPin"),
+  CheckCircle2: createIconMock("CheckCircle2"),
 };
 
 // ---------------------------------------------------------------------------

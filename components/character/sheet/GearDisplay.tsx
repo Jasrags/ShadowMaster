@@ -350,7 +350,7 @@ function GearRow({
           {editable && onCharacterUpdate && (
             <div data-testid="inventory-controls" className="space-y-2">
               {/* Readiness controls */}
-              <div data-testid="readiness-controls" className="flex items-center gap-1">
+              <div data-testid="readiness-controls" className="flex flex-wrap items-center gap-1">
                 <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Readiness
                 </span>
