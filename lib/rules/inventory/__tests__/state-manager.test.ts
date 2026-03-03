@@ -446,6 +446,83 @@ describe("Equipment State Manager", () => {
 
       expect(updated.wirelessBonusesEnabled).toBe(false);
     });
+
+    it("should toggle wireless on all individual items", () => {
+      const character = createCharacter({
+        wirelessBonusesEnabled: false,
+        weapons: [createWeapon("holstered")],
+        armor: [createArmor("worn")],
+        cyberware: [
+          {
+            id: "cyber-1",
+            catalogId: "c1",
+            name: "Cyberarm",
+            category: "cyberlimb",
+            grade: "standard",
+            baseEssenceCost: 1,
+            essenceCost: 1,
+            cost: 1000,
+            availability: 5,
+            wirelessEnabled: false,
+          },
+        ] as Character["cyberware"],
+        bioware: [
+          {
+            id: "bio-1",
+            catalogId: "b1",
+            name: "Synaptic Booster",
+            category: "cultured",
+            grade: "standard",
+            baseEssenceCost: 0.5,
+            essenceCost: 0.5,
+            cost: 95000,
+            availability: 12,
+            wirelessEnabled: false,
+          },
+        ] as BiowareItem[],
+        drones: [
+          {
+            id: "drone-1",
+            catalogId: "d1",
+            name: "MCT Fly-Spy",
+            size: "mini",
+            handling: 4,
+            speed: 3,
+            acceleration: 3,
+            body: 1,
+            armor: 0,
+            pilot: 3,
+            sensor: 3,
+            cost: 2000,
+            availability: 6,
+            state: { readiness: "stored", wirelessEnabled: false },
+          },
+        ] as CharacterDrone[],
+      });
+
+      const updated = setAllWireless(character, true);
+
+      expect(updated.wirelessBonusesEnabled).toBe(true);
+      expect(updated.weapons![0].state?.wirelessEnabled).toBe(true);
+      expect(updated.armor![0].state?.wirelessEnabled).toBe(true);
+      expect(updated.cyberware![0].wirelessEnabled).toBe(true);
+      expect(updated.bioware![0].wirelessEnabled).toBe(true);
+      expect(updated.drones![0].state?.wirelessEnabled).toBe(true);
+    });
+
+    it("should toggle wireless off on all individual items", () => {
+      const character = createCharacter({
+        wirelessBonusesEnabled: true,
+        weapons: [createWeapon("holstered")],
+        armor: [createArmor("worn")],
+      });
+
+      const updated = setAllWireless(character, false);
+
+      expect(updated.wirelessBonusesEnabled).toBe(false);
+      expect(updated.weapons![0].state?.wirelessEnabled).toBe(false);
+      expect(updated.armor![0].state?.wirelessEnabled).toBe(false);
+    });
   });
 
   describe("Device Condition", () => {
@@ -554,14 +631,24 @@ describe("Equipment State Manager", () => {
 
   describe("getEquipmentStateSummary", () => {
     it("should count equipment states including stashed and carried", () => {
+      // Create weapons: 2 with wirelessBonus (counted), 2 without (not counted)
+      const weaponWithWireless1 = createWeapon("readied");
+      (weaponWithWireless1 as Weapon & { wirelessBonus?: string }).wirelessBonus = "+1 accuracy";
+      const weaponWithWireless2 = createWeapon("holstered");
+      (weaponWithWireless2 as Weapon & { wirelessBonus?: string }).wirelessBonus = "+1 accuracy";
+      const weaponNoWireless1 = createWeapon("stored");
+      const weaponNoWireless2 = createWeapon("stashed");
+
+      // Create armor: 1 with wirelessBonus (counted), 2 without (not counted)
+      const armorWithWireless = createArmor("worn");
+      (armorWithWireless as ArmorItem & { wirelessBonus?: string }).wirelessBonus =
+        "+1 social limit";
+      const armorNoWireless1 = createArmor("stored");
+      const armorNoWireless2 = createArmor("stashed");
+
       const character = createCharacter({
-        weapons: [
-          createWeapon("readied"),
-          createWeapon("holstered"),
-          createWeapon("stored"),
-          createWeapon("stashed"),
-        ],
-        armor: [createArmor("worn"), createArmor("stored"), createArmor("stashed")],
+        weapons: [weaponWithWireless1, weaponWithWireless2, weaponNoWireless1, weaponNoWireless2],
+        armor: [armorWithWireless, armorNoWireless1, armorNoWireless2],
         cyberware: [
           {
             id: "cyber-1",
@@ -574,6 +661,7 @@ describe("Equipment State Manager", () => {
             cost: 1000,
             availability: 5,
             wirelessEnabled: true,
+            wirelessBonus: "+1 Strength while wireless",
           },
           {
             id: "cyber-2",
@@ -586,6 +674,20 @@ describe("Equipment State Manager", () => {
             cost: 500,
             availability: 3,
             wirelessEnabled: false,
+            wirelessBonus: "+1 Perception while wireless",
+          },
+          {
+            id: "cyber-3",
+            catalogId: "c3",
+            name: "Datajack",
+            category: "headware",
+            grade: "standard",
+            baseEssenceCost: 0.1,
+            essenceCost: 0.1,
+            cost: 1000,
+            availability: 2,
+            wirelessEnabled: true,
+            // No wirelessBonus — should NOT be counted
           },
         ] as Character["cyberware"],
         bioware: [
@@ -600,6 +702,7 @@ describe("Equipment State Manager", () => {
             cost: 95000,
             availability: 12,
             wirelessEnabled: true,
+            wirelessBonus: "+1 Initiative while wireless",
           },
           {
             id: "bio-2",
@@ -612,6 +715,7 @@ describe("Equipment State Manager", () => {
             cost: 6250,
             availability: 8,
             wirelessEnabled: false,
+            // No wirelessBonus — should NOT be counted
           },
         ] as BiowareItem[],
         drones: [
@@ -659,10 +763,10 @@ describe("Equipment State Manager", () => {
       expect(summary.wornArmor).toBe(1);
       expect(summary.storedArmor).toBe(1);
       expect(summary.stashedArmor).toBe(1);
-      // 4 weapons + 3 armor + 1 cyberware + 1 bioware + 1 drone = 10
-      expect(summary.wirelessEnabled).toBe(10);
-      // 1 cyberware + 1 bioware + 1 drone = 3
-      expect(summary.wirelessDisabled).toBe(3);
+      // 2 weapons + 1 armor + 1 cyberware + 1 bioware + 1 drone = 6
+      expect(summary.wirelessEnabled).toBe(6);
+      // 1 cyberware + 1 drone = 2
+      expect(summary.wirelessDisabled).toBe(2);
       expect(summary.pocketedItems).toBe(0);
       expect(summary.containedItems).toBe(0);
     });

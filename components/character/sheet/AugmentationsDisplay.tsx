@@ -61,7 +61,10 @@ function AugmentationRow({
 }: AugmentationRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
-  const hasWireless = true;
+  const hasWireless = !!(
+    item.wirelessBonus ||
+    (item.wirelessEffects && item.wirelessEffects.length > 0)
+  );
   const globalWireless = isGlobalWirelessEnabled(character);
   const wirelessEnabled = item.wirelessEnabled ?? true;
   const isWirelessActive = hasWireless && globalWireless && wirelessEnabled;

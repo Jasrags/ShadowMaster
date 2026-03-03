@@ -2,10 +2,18 @@
 
 import { useMemo } from "react";
 import type { Character } from "@/lib/types";
+import type {
+  GearCatalogData,
+  WeaponData,
+  CyberwareCatalogItemData,
+  BiowareCatalogItemData,
+} from "@/lib/rules/RulesetContext";
+import { useGear } from "@/lib/rules";
+import { useCyberwareCatalog, useBiowareCatalog } from "@/lib/rules/RulesetContext";
 import { DisplayCard } from "./DisplayCard";
 import { Wifi, WifiOff } from "lucide-react";
-import { isGlobalWirelessEnabled, getWirelessBonusSummary } from "@/lib/rules/wireless";
-import { getEquipmentStateSummary } from "@/lib/rules/inventory";
+import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { setAllWireless } from "@/lib/rules/inventory";
 
 interface WirelessDisplayProps {
   character: Character;
@@ -14,22 +22,187 @@ interface WirelessDisplayProps {
 }
 
 // ---------------------------------------------------------------------------
+// Catalog helpers
+// ---------------------------------------------------------------------------
+
+/** Search all weapon subcategory arrays in the catalog to find a weapon by id. */
+function findCatalogWeapon(
+  catalog: GearCatalogData | null,
+  catalogId: string
+): WeaponData | undefined {
+  if (!catalog?.weapons) return undefined;
+  const w = catalog.weapons;
+  const arrays: WeaponData[][] = [
+    w.melee,
+    w.pistols,
+    w.smgs,
+    w.rifles,
+    w.shotguns,
+    w.sniperRifles,
+    w.throwingWeapons,
+    w.grenades,
+  ];
+  for (const arr of arrays) {
+    if (!arr) continue;
+    const found = arr.find((item) => item.id === catalogId);
+    if (found) return found;
+  }
+  return undefined;
+}
+
+/** Find a gear item across all non-weapon/non-armor categories. */
+function findCatalogGearItem(
+  catalog: GearCatalogData | null,
+  catalogId: string
+): { wirelessBonus?: string } | undefined {
+  if (!catalog) return undefined;
+  const categories: (keyof GearCatalogData)[] = [
+    "electronics",
+    "tools",
+    "survival",
+    "medical",
+    "security",
+    "miscellaneous",
+  ];
+  for (const cat of categories) {
+    const items = catalog[cat];
+    if (!Array.isArray(items)) continue;
+    const found = (items as Array<{ id: string; wirelessBonus?: string }>).find(
+      (item) => item.id === catalogId
+    );
+    if (found) return found;
+  }
+  return undefined;
+}
+
+// ---------------------------------------------------------------------------
+// Wireless counting and bonus resolution (catalog-aware)
+// ---------------------------------------------------------------------------
+
+interface WirelessCounts {
+  enabled: number;
+  disabled: number;
+}
+
+interface WirelessBonusRow {
+  category: string;
+  itemName: string;
+  description: string;
+}
+
+function getWirelessInfo(
+  character: Character,
+  gearCatalog: GearCatalogData | null,
+  cyberwareCatalog: CyberwareCatalogItemData[],
+  biowareCatalog: BiowareCatalogItemData[]
+): { counts: WirelessCounts; bonuses: WirelessBonusRow[] } {
+  let enabled = 0;
+  let disabled = 0;
+  const bonuses: WirelessBonusRow[] = [];
+  const globalOn = isGlobalWirelessEnabled(character);
+
+  // --- Weapons ---
+  for (const weapon of character.weapons || []) {
+    const catalogWeapon = weapon.catalogId
+      ? findCatalogWeapon(gearCatalog, weapon.catalogId)
+      : undefined;
+    const wb = weapon.wirelessBonus || catalogWeapon?.wirelessBonus;
+    if (!wb) continue;
+    const itemOn = weapon.state?.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+    if (globalOn && itemOn) {
+      bonuses.push({ category: "Weapon", itemName: weapon.name, description: wb });
+    }
+  }
+
+  // --- Armor ---
+  for (const item of character.armor || []) {
+    const catalogArmor = item.catalogId
+      ? gearCatalog?.armor?.find((a) => a.id === item.catalogId)
+      : undefined;
+    const wb = item.wirelessBonus || catalogArmor?.wirelessBonus;
+    if (!wb) continue;
+    const itemOn = item.state?.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+    if (globalOn && itemOn) {
+      bonuses.push({ category: "Armor", itemName: item.name, description: wb });
+    }
+  }
+
+  // --- Gear ---
+  for (const item of character.gear || []) {
+    const catalogGear = item.id ? findCatalogGearItem(gearCatalog, item.id) : undefined;
+    const wb = catalogGear?.wirelessBonus;
+    if (!wb) continue;
+    const itemOn = item.state?.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+    if (globalOn && itemOn) {
+      bonuses.push({ category: "Gear", itemName: item.name, description: wb });
+    }
+  }
+
+  // --- Cyberware ---
+  for (const item of character.cyberware || []) {
+    const catalogItem = item.catalogId
+      ? cyberwareCatalog.find((c) => c.id === item.catalogId)
+      : undefined;
+    const wb = item.wirelessBonus || catalogItem?.wirelessBonus;
+    if (!wb) continue;
+    const itemOn = item.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+    if (globalOn && itemOn) {
+      bonuses.push({ category: "Cyberware", itemName: item.name, description: wb });
+    }
+  }
+
+  // --- Bioware ---
+  for (const item of character.bioware || []) {
+    const catalogItem = item.catalogId
+      ? biowareCatalog.find((b) => b.id === item.catalogId)
+      : undefined;
+    const wb =
+      item.wirelessBonus || (catalogItem as { wirelessBonus?: string } | undefined)?.wirelessBonus;
+    if (!wb) continue;
+    const itemOn = item.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+    if (globalOn && itemOn) {
+      bonuses.push({ category: "Bioware", itemName: item.name, description: wb });
+    }
+  }
+
+  // --- Drones (always wireless-capable) ---
+  for (const drone of character.drones || []) {
+    const itemOn = drone.state?.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+  }
+
+  return { counts: { enabled, disabled }, bonuses };
+}
+
+// ---------------------------------------------------------------------------
 // Main component
 // ---------------------------------------------------------------------------
 
 export function WirelessDisplay({ character, onCharacterUpdate, editable }: WirelessDisplayProps) {
   const globalWireless = useMemo(() => isGlobalWirelessEnabled(character), [character]);
+  const gearCatalog = useGear();
+  const cyberwareCatalog = useCyberwareCatalog();
+  const biowareCatalog = useBiowareCatalog();
 
-  const equipmentSummary = useMemo(() => getEquipmentStateSummary(character), [character]);
-
-  const bonusSummary = useMemo(
-    () => (globalWireless ? getWirelessBonusSummary(character) : []),
-    [character, globalWireless]
+  const { counts, bonuses } = useMemo(
+    () => getWirelessInfo(character, gearCatalog, cyberwareCatalog, biowareCatalog),
+    [character, gearCatalog, cyberwareCatalog, biowareCatalog]
   );
 
   const handleToggle = () => {
     if (!onCharacterUpdate) return;
-    onCharacterUpdate({ ...character, wirelessBonusesEnabled: !globalWireless });
+    onCharacterUpdate(setAllWireless(character, !globalWireless));
   };
 
   return (
@@ -61,7 +234,7 @@ export function WirelessDisplay({ character, onCharacterUpdate, editable }: Wire
           </div>
           <div className="flex items-center gap-2">
             <span className="text-[10px] font-mono text-zinc-500">
-              {equipmentSummary.wirelessEnabled} on / {equipmentSummary.wirelessDisabled} off
+              {counts.enabled} on / {counts.disabled} off
             </span>
             {editable && (
               <button
@@ -89,24 +262,24 @@ export function WirelessDisplay({ character, onCharacterUpdate, editable }: Wire
             <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
               Active Bonuses
             </div>
-            {bonusSummary.length > 0 ? (
+            {bonuses.length > 0 ? (
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
-                {bonusSummary.map((bonus, i) => (
+                {bonuses.map((bonus, i) => (
                   <div
-                    key={`${bonus.category}-${i}`}
-                    className="flex items-center justify-between px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+                    key={`${bonus.category}-${bonus.itemName}-${i}`}
+                    className="px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
+                      <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wide text-zinc-400">
                         {bonus.category}
                       </span>
-                      <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
-                        {bonus.description}
+                      <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200 truncate">
+                        {bonus.itemName}
                       </span>
                     </div>
-                    <span className="rounded bg-cyan-100 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-cyan-700 dark:bg-cyan-900/30 dark:text-cyan-400">
-                      {bonus.modifier}
-                    </span>
+                    <p className="mt-0.5 text-xs leading-relaxed text-cyan-600 dark:text-cyan-400">
+                      {bonus.description}
+                    </p>
                   </div>
                 ))}
               </div>
