@@ -11,6 +11,7 @@ import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { Tooltip } from "@/components/ui";
 import { DisplayCard } from "./DisplayCard";
 import { WirelessIndicator } from "./WirelessIndicator";
+import { MoveToContainerControl } from "./MoveToContainerControl";
 import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
 import { ChevronDown, ChevronRight, Shield, Wifi, WifiOff } from "lucide-react";
 
@@ -329,6 +330,15 @@ function ArmorRow({
                 </div>
               )}
             </div>
+          )}
+
+          {/* Move to container (editable only) */}
+          {editable && onCharacterUpdate && item.id && (
+            <MoveToContainerControl
+              character={character}
+              itemId={item.id}
+              onCharacterUpdate={onCharacterUpdate}
+            />
           )}
 
           {/* Modifications */}
