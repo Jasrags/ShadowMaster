@@ -429,13 +429,14 @@ describe("ArmorDisplay", () => {
       expect(screen.queryByTestId("inventory-controls")).not.toBeInTheDocument();
     });
 
-    it("shows Worn/Stored buttons when editable", () => {
+    it("shows Worn/Carried/Stashed buttons when editable", () => {
       const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
       render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={vi.fn()} />);
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.getByTestId("readiness-controls")).toBeInTheDocument();
       expect(screen.getByTestId("readiness-worn")).toBeInTheDocument();
-      expect(screen.getByTestId("readiness-stored")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-carried")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-stashed")).toBeInTheDocument();
     });
 
     it("disables current readiness state button", () => {
@@ -443,18 +444,18 @@ describe("ArmorDisplay", () => {
       render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={vi.fn()} />);
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.getByTestId("readiness-worn")).toBeDisabled();
-      expect(screen.getByTestId("readiness-stored")).not.toBeDisabled();
+      expect(screen.getByTestId("readiness-carried")).not.toBeDisabled();
     });
 
-    it("calls onCharacterUpdate when toggling readiness to stored", () => {
+    it("calls onCharacterUpdate when toggling readiness to carried", () => {
       const onUpdate = vi.fn();
       const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
       render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
       fireEvent.click(screen.getByTestId("expand-button"));
-      fireEvent.click(screen.getByTestId("readiness-stored"));
+      fireEvent.click(screen.getByTestId("readiness-carried"));
       expect(onUpdate).toHaveBeenCalledTimes(1);
       const updated = onUpdate.mock.calls[0][0];
-      expect(updated.armor[0].state.readiness).toBe("stored");
+      expect(updated.armor[0].state.readiness).toBe("carried");
       expect(updated.armor[0].equipped).toBe(false);
     });
 
@@ -475,7 +476,7 @@ describe("ArmorDisplay", () => {
       const character = createSheetCharacter({ armor: [MOCK_ARMOR_WITH_WIRELESS] });
       render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
       fireEvent.click(screen.getByTestId("expand-button"));
-      fireEvent.click(screen.getByTestId("readiness-stored"));
+      fireEvent.click(screen.getByTestId("readiness-carried"));
       const updated = onUpdate.mock.calls[0][0];
       expect(updated.armor[0].state.wirelessEnabled).toBe(true);
     });
@@ -489,12 +490,12 @@ describe("ArmorDisplay", () => {
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
 
-      // Simulate parent re-rendering with updated character (worn -> stored)
-      fireEvent.click(screen.getByTestId("readiness-stored"));
+      // Simulate parent re-rendering with updated character (worn -> carried)
+      fireEvent.click(screen.getByTestId("readiness-carried"));
       const updated = onUpdate.mock.calls[0][0];
       rerender(<ArmorDisplay character={updated} editable={true} onCharacterUpdate={onUpdate} />);
 
-      // Row should still be expanded after moving from Worn to Stored section
+      // Row should still be expanded after moving from Worn to Carried section
       expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
     });
   });

@@ -29,28 +29,50 @@ export const STATE_TRANSITION_COSTS: Record<string, ActionType> = {
   "holstered->readied": "simple",
   // Holster a readied weapon
   "readied->holstered": "free",
-  // Draw and ready from storage (bag, etc.)
-  "stored->readied": "complex",
+  // Draw and ready from carried (bag, etc.)
+  "carried->readied": "complex",
   // Store a readied item
-  "readied->stored": "simple",
-  // Holster to storage
-  "holstered->stored": "simple",
-  // Draw from storage to holster
-  "stored->holstered": "simple",
-  // Putting on armor
-  "stored->worn": "complex",
-  // Taking off armor
-  "worn->stored": "complex",
-  // Armor doesn't go to readied/holstered
+  "readied->carried": "complex",
+  // Holster to carried
+  "holstered->carried": "simple",
+  // Draw from carried to holster
+  "carried->holstered": "simple",
+  // Putting on armor from carried
+  "carried->worn": "complex",
+  // Taking off armor to carried
+  "worn->carried": "complex",
+  // Pocketed transitions
+  "readied->pocketed": "free",
+  "pocketed->readied": "free",
+  "holstered->pocketed": "simple",
+  "pocketed->holstered": "free",
+  "carried->pocketed": "simple",
+  "pocketed->carried": "simple",
+  "pocketed->stashed": "narrative",
   // Stash transitions (narrative time only)
   "readied->stashed": "narrative",
   "holstered->stashed": "narrative",
-  "stored->stashed": "narrative",
+  "carried->stashed": "narrative",
   "worn->stashed": "narrative",
+  "stashed->carried": "narrative",
+  // Legacy "stored" aliases — stored and carried are synonyms
+  "stored->readied": "complex",
+  "readied->stored": "complex",
+  "holstered->stored": "simple",
+  "stored->holstered": "simple",
+  "stored->worn": "complex",
+  "worn->stored": "complex",
+  "stored->stashed": "narrative",
   "stashed->stored": "narrative",
+  "stored->pocketed": "simple",
+  "pocketed->stored": "simple",
+  "stored->carried": "none",
+  "carried->stored": "none",
   // Same state = no action
   "readied->readied": "none",
   "holstered->holstered": "none",
+  "pocketed->pocketed": "none",
+  "carried->carried": "none",
   "stored->stored": "none",
   "worn->worn": "none",
   "stashed->stashed": "none",
@@ -60,11 +82,11 @@ export const STATE_TRANSITION_COSTS: Record<string, ActionType> = {
  * Valid states for different gear types.
  */
 export const VALID_STATES: Record<string, EquipmentReadiness[]> = {
-  weapon: ["readied", "holstered", "stored", "stashed"],
-  armor: ["worn", "stored", "stashed"],
-  gear: ["readied", "holstered", "worn", "stored", "stashed"],
+  weapon: ["readied", "holstered", "carried", "stored", "stashed"],
+  armor: ["worn", "carried", "stored", "stashed"],
+  gear: ["readied", "holstered", "worn", "pocketed", "carried", "stored", "stashed"],
   augmentation: ["worn"], // Augmentations are always "worn" (implanted)
-  electronics: ["readied", "holstered", "stored", "stashed"],
+  electronics: ["readied", "holstered", "pocketed", "carried", "stored", "stashed"],
 };
 
 // =============================================================================
@@ -110,12 +132,12 @@ export function getDefaultState(gearType: string): GearState {
       return { readiness: "worn", wirelessEnabled: true };
     case "electronics":
       return {
-        readiness: "stored",
+        readiness: "carried",
         wirelessEnabled: true,
         condition: "functional",
       };
     default:
-      return { readiness: "stored", wirelessEnabled: true };
+      return { readiness: "carried", wirelessEnabled: true };
   }
 }
 
@@ -453,26 +475,35 @@ export function holsterAllWeapons(weapons: Weapon[]): Weapon[] {
 export function getEquipmentStateSummary(character: Character): {
   readiedWeapons: number;
   holsteredWeapons: number;
+  carriedWeapons: number;
   storedWeapons: number;
   stashedWeapons: number;
   wornArmor: number;
+  carriedArmor: number;
   storedArmor: number;
   stashedArmor: number;
+  pocketedItems: number;
+  containedItems: number;
   wirelessEnabled: number;
   wirelessDisabled: number;
   brickedDevices: number;
 } {
   const weapons = character.weapons || [];
   const armor = character.armor || [];
+  const gear = character.gear || [];
   const cyberware = character.cyberware || [];
 
   let readiedWeapons = 0;
   let holsteredWeapons = 0;
+  let carriedWeapons = 0;
   let storedWeapons = 0;
   let stashedWeapons = 0;
   let wornArmor = 0;
+  let carriedArmor = 0;
   let storedArmor = 0;
   let stashedArmor = 0;
+  let pocketedItems = 0;
+  let containedItems = 0;
   let wirelessEnabled = 0;
   let wirelessDisabled = 0;
   let brickedDevices = 0;
@@ -482,20 +513,29 @@ export function getEquipmentStateSummary(character: Character): {
     if (state === "readied") readiedWeapons++;
     else if (state === "holstered") holsteredWeapons++;
     else if (state === "stashed") stashedWeapons++;
-    else storedWeapons++;
+    else if (state === "carried") carriedWeapons++;
+    else storedWeapons++; // "stored" legacy
 
+    if (weapon.state?.containedIn) containedItems++;
     if (weapon.state?.wirelessEnabled !== false) wirelessEnabled++;
     else wirelessDisabled++;
   }
 
   for (const item of armor) {
-    const state = item.state?.readiness ?? (item.equipped ? "worn" : "stored");
+    const state = item.state?.readiness ?? (item.equipped ? "worn" : "carried");
     if (state === "worn") wornArmor++;
     else if (state === "stashed") stashedArmor++;
-    else storedArmor++;
+    else if (state === "carried") carriedArmor++;
+    else storedArmor++; // "stored" legacy
 
+    if (item.state?.containedIn) containedItems++;
     if (item.state?.wirelessEnabled !== false) wirelessEnabled++;
     else wirelessDisabled++;
+  }
+
+  for (const item of gear) {
+    if (item.state?.readiness === "pocketed") pocketedItems++;
+    if (item.state?.containedIn) containedItems++;
   }
 
   for (const item of cyberware) {
@@ -524,11 +564,15 @@ export function getEquipmentStateSummary(character: Character): {
   return {
     readiedWeapons,
     holsteredWeapons,
+    carriedWeapons,
     storedWeapons,
     stashedWeapons,
     wornArmor,
+    carriedArmor,
     storedArmor,
     stashedArmor,
+    pocketedItems,
+    containedItems,
     wirelessEnabled,
     wirelessDisabled,
     brickedDevices,

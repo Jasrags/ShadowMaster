@@ -163,6 +163,10 @@ export const LUCIDE_MOCK = {
   PlugZap: createIconMock("PlugZap"),
   Signal: createIconMock("Signal"),
   Unplug: createIconMock("Unplug"),
+  // Loadout/container icons
+  Pencil: createIconMock("Pencil"),
+  MapPin: createIconMock("MapPin"),
+  CheckCircle2: createIconMock("CheckCircle2"),
 };
 
 // ---------------------------------------------------------------------------

@@ -3,12 +3,16 @@
 import { useState } from "react";
 import type { Character, GearItem } from "@/lib/types";
 import type { GearItemData, GearCatalogData } from "@/lib/rules/RulesetContext";
-import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import type { EquipmentReadiness, ContainerProperties } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
+import { canAddToContainer, addItemToContainer, isContainer } from "@/lib/rules/inventory";
 import { DisplayCard } from "./DisplayCard";
 import { WirelessIndicator } from "./WirelessIndicator";
-import { ChevronDown, ChevronRight, Package, Wifi, WifiOff } from "lucide-react";
+import { ContainerContentsDisplay } from "./ContainerContentsDisplay";
+import { GearLocationView } from "./GearLocationView";
+import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
+import { ChevronDown, ChevronRight, Package, MapPin, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -57,38 +61,6 @@ function findCatalogItem(catalog: GearCatalogData | null, name: string): GearIte
 }
 
 // ---------------------------------------------------------------------------
-// Readiness helpers
-// ---------------------------------------------------------------------------
-
-const GEAR_READINESS_STATES: EquipmentReadiness[] = ["worn", "stored", "stashed"];
-
-function getGearReadinessLabel(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "worn":
-      return "Carried";
-    case "stored":
-      return "Stored";
-    case "stashed":
-      return "Stashed";
-    default:
-      return readiness;
-  }
-}
-
-function getReadinessColor(readiness: EquipmentReadiness): string {
-  switch (readiness) {
-    case "worn":
-      return "text-blue-400 bg-blue-500/10 border-blue-500/30";
-    case "stored":
-      return "text-zinc-400 bg-zinc-500/10 border-zinc-500/30 dark:text-zinc-500";
-    case "stashed":
-      return "text-violet-400 bg-violet-500/10 border-violet-500/30";
-    default:
-      return "text-zinc-400";
-  }
-}
-
-// ---------------------------------------------------------------------------
 // State update handlers
 // ---------------------------------------------------------------------------
 
@@ -126,7 +98,7 @@ function toggleGearWireless(
           ...g,
           state: {
             ...g.state,
-            readiness: g.state?.readiness ?? ("stored" as const),
+            readiness: g.state?.readiness ?? ("carried" as const),
             wirelessEnabled: enabled,
           },
         }
@@ -169,7 +141,7 @@ function GearRow({
   const extras = catalogItem as (GearItemData & CatalogExtras) | undefined;
 
   // Readiness state
-  const readiness: EquipmentReadiness = item.state?.readiness ?? "stored";
+  const readiness: EquipmentReadiness = item.state?.readiness ?? "carried";
 
   // Wireless state
   const hasWireless = !!extras?.wirelessBonus;
@@ -252,7 +224,7 @@ function GearRow({
           data-testid="readiness-badge"
           className={`shrink-0 rounded border px-1.5 py-0.5 text-[10px] font-medium ${getReadinessColor(readiness)}`}
         >
-          {getGearReadinessLabel(readiness)}
+          {getReadinessLabel(readiness)}
         </span>
 
         {/* State-aware wifi icon */}
@@ -378,11 +350,11 @@ function GearRow({
           {editable && onCharacterUpdate && (
             <div data-testid="inventory-controls" className="space-y-2">
               {/* Readiness controls */}
-              <div data-testid="readiness-controls" className="flex items-center gap-1">
+              <div data-testid="readiness-controls" className="flex flex-wrap items-center gap-1">
                 <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Readiness
                 </span>
-                {GEAR_READINESS_STATES.map((state) => (
+                {READINESS_BY_EQUIPMENT.gear.map((state) => (
                   <button
                     key={state}
                     data-testid={`readiness-${state}`}
@@ -397,7 +369,7 @@ function GearRow({
                         : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
                     }`}
                   >
-                    {getGearReadinessLabel(state)}
+                    {getReadinessLabel(state)}
                   </button>
                 ))}
               </div>
@@ -422,6 +394,26 @@ function GearRow({
             </div>
           )}
 
+          {/* Move to container (editable only) */}
+          {editable && onCharacterUpdate && item.id && (
+            <MoveToContainerControl
+              character={character}
+              itemId={item.id}
+              onCharacterUpdate={onCharacterUpdate}
+            />
+          )}
+
+          {/* Container contents */}
+          {item.containerProperties && item.id && (
+            <ContainerContentsDisplay
+              character={character}
+              containerId={item.id}
+              containerProperties={item.containerProperties as ContainerProperties}
+              onCharacterUpdate={onCharacterUpdate}
+              editable={editable}
+            />
+          )}
+
           {/* Source reference */}
           {extras?.page != null && (
             <p
@@ -433,6 +425,62 @@ function GearRow({
           )}
         </div>
       )}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// MoveToContainerControl
+// ---------------------------------------------------------------------------
+
+function MoveToContainerControl({
+  character,
+  itemId,
+  onCharacterUpdate,
+}: {
+  character: Character;
+  itemId: string;
+  onCharacterUpdate: (updated: Character) => void;
+}) {
+  // Find all containers on the character
+  const containers = (character.gear || []).filter(
+    (g) => g.id && g.id !== itemId && isContainer(g)
+  );
+
+  if (containers.length === 0) return null;
+
+  return (
+    <div data-testid="move-to-container" className="flex items-center gap-1.5">
+      <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+        Move to
+      </span>
+      <select
+        data-testid="container-select"
+        className="rounded border border-zinc-300 bg-zinc-50 px-1.5 py-0.5 text-[11px] text-zinc-700 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300"
+        defaultValue=""
+        onChange={(e) => {
+          const containerId = e.target.value;
+          if (!containerId) return;
+          const result = addItemToContainer(character, itemId, containerId);
+          if (result.success && result.character) {
+            onCharacterUpdate(result.character);
+          }
+          e.target.value = "";
+        }}
+      >
+        <option value="" disabled>
+          Container…
+        </option>
+        {containers.map((c) => {
+          const check = canAddToContainer(character, itemId, c.id!);
+          return (
+            <option key={c.id} value={c.id!} disabled={!check.allowed}>
+              {c.name}
+              {!check.allowed ? ` (${check.reason})` : ""}
+            </option>
+          );
+        })}
+      </select>
     </div>
   );
 }
@@ -450,6 +498,7 @@ interface GearDisplayProps {
 
 export function GearDisplay({ character, gear, onCharacterUpdate, editable }: GearDisplayProps) {
   const catalog = useGear();
+  const [viewMode, setViewMode] = useState<"category" | "location">("category");
 
   if (!gear || gear.length === 0) {
     return (
@@ -464,9 +513,42 @@ export function GearDisplay({ character, gear, onCharacterUpdate, editable }: Ge
     );
   }
 
-  // Group items by category
+  // View toggle button
+  const viewToggle = (
+    <button
+      data-testid="view-toggle"
+      onClick={() => setViewMode((m) => (m === "category" ? "location" : "category"))}
+      className="flex items-center gap-1 rounded border border-zinc-300 px-1.5 py-0.5 text-[10px] font-medium text-zinc-500 transition-colors hover:border-zinc-400 hover:text-zinc-400 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600"
+      title={viewMode === "category" ? "Switch to location view" : "Switch to category view"}
+    >
+      {viewMode === "category" ? <MapPin className="h-3 w-3" /> : <Package className="h-3 w-3" />}
+      {viewMode === "category" ? "Location" : "Category"}
+    </button>
+  );
+
+  // Location view: render GearLocationView instead of category-grouped list
+  if (viewMode === "location") {
+    return (
+      <DisplayCard
+        id="sheet-gear"
+        title="General Gear"
+        icon={<Package className="h-4 w-4 text-zinc-400" />}
+        headerAction={viewToggle}
+        collapsible
+      >
+        <GearLocationView
+          character={character}
+          onCharacterUpdate={onCharacterUpdate}
+          editable={editable}
+        />
+      </DisplayCard>
+    );
+  }
+
+  // Group items by category — exclude items inside containers (they render nested)
   const grouped: Record<string, { item: GearItem; originalIndex: number }[]> = {};
   for (const item of gear) {
+    if (item.state?.containedIn) continue;
     const cat = item.category || "miscellaneous";
     if (!grouped[cat]) grouped[cat] = [];
     // Find the original index in character.gear for state updates
@@ -490,6 +572,7 @@ export function GearDisplay({ character, gear, onCharacterUpdate, editable }: Ge
       id="sheet-gear"
       title="General Gear"
       icon={<Package className="h-4 w-4 text-zinc-400" />}
+      headerAction={viewToggle}
       collapsible
     >
       <div className="space-y-3">

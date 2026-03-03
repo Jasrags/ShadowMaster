@@ -6,12 +6,14 @@
 
 import { describe, it, expect } from "vitest";
 import type { Character, Weapon, ArmorItem, GearItem } from "@/lib/types";
+import type { EquipmentReadiness } from "@/lib/types/gear-state";
 import {
   calculateEncumbrance,
   calculateMaxCapacity,
   calculateEncumbrancePenalty,
   isItemCarried,
   getEncumbranceStatus,
+  calculateGearWeight,
   STRENGTH_CAPACITY_MULTIPLIER,
   MAX_ENCUMBRANCE_PENALTY,
 } from "../calculator";
@@ -178,6 +180,34 @@ describe("Encumbrance Calculator", () => {
       } as Weapon;
       expect(isItemCarried(weapon)).toBe(true);
     });
+
+    it("should return true for carried items", () => {
+      const weapon = createWeapon(2);
+      weapon.state = { readiness: "carried", wirelessEnabled: true };
+      expect(isItemCarried(weapon)).toBe(true);
+    });
+
+    it("should return true for pocketed items", () => {
+      const item = {
+        state: { readiness: "pocketed" as EquipmentReadiness, wirelessEnabled: false },
+      };
+      expect(isItemCarried(item)).toBe(true);
+    });
+
+    it("should return false for items inside a container", () => {
+      const weapon = createWeapon(2);
+      weapon.state = {
+        readiness: "carried",
+        wirelessEnabled: true,
+        containedIn: { containerId: "bp-1" },
+      };
+      expect(isItemCarried(weapon)).toBe(false);
+    });
+
+    it("should still return false for stored items (backward compat)", () => {
+      const weapon = createWeapon(2, true);
+      expect(isItemCarried(weapon)).toBe(false);
+    });
   });
 
   describe("calculateEncumbrancePenalty", () => {
@@ -301,6 +331,76 @@ describe("Encumbrance Calculator", () => {
       const result = calculateEncumbrance(character);
       // 0.333 * 3 = 0.999, should round to 1.00
       expect(result.currentWeight).toBe(1);
+    });
+  });
+
+  describe("container encumbrance", () => {
+    it("should not double-count items inside containers", () => {
+      const character = createTestCharacter({
+        gear: [
+          {
+            id: "backpack",
+            name: "Backpack",
+            category: "gear",
+            quantity: 1,
+            cost: 50,
+            weight: 1,
+            state: { readiness: "carried", wirelessEnabled: false },
+            containerProperties: { weightCapacity: 20 },
+          } as GearItem,
+          {
+            id: "item-in-bag",
+            name: "Item",
+            category: "gear",
+            quantity: 1,
+            cost: 10,
+            weight: 3,
+            state: {
+              readiness: "carried",
+              wirelessEnabled: false,
+              containedIn: { containerId: "backpack" },
+            },
+          } as GearItem,
+        ],
+      });
+
+      const result = calculateEncumbrance(character);
+      // Backpack (1kg) + item inside (3kg via container) = 4kg
+      expect(result.currentWeight).toBe(4);
+    });
+
+    it("should exclude stashed container and all contents", () => {
+      const character = createTestCharacter({
+        gear: [
+          {
+            id: "stashed-bag",
+            name: "Stashed Bag",
+            category: "gear",
+            quantity: 1,
+            cost: 50,
+            weight: 1,
+            state: { readiness: "stashed", wirelessEnabled: false },
+            containerProperties: { weightCapacity: 20 },
+          } as GearItem,
+          {
+            id: "item-in-stashed-bag",
+            name: "Item",
+            category: "gear",
+            quantity: 1,
+            cost: 10,
+            weight: 5,
+            state: {
+              readiness: "carried",
+              wirelessEnabled: false,
+              containedIn: { containerId: "stashed-bag" },
+            },
+          } as GearItem,
+        ],
+      });
+
+      const result = calculateEncumbrance(character);
+      // Stashed bag is not carried, so neither the bag nor its contents count
+      expect(result.currentWeight).toBe(0);
     });
   });
 

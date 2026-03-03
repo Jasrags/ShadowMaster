@@ -679,14 +679,15 @@ describe("WeaponsDisplay", () => {
       expect(screen.getByTestId("readiness-controls")).toBeInTheDocument();
     });
 
-    it("renders three readiness buttons", () => {
+    it("renders four readiness buttons", () => {
       const onUpdate = vi.fn();
       const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
       render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.getByTestId("readiness-readied")).toBeInTheDocument();
       expect(screen.getByTestId("readiness-holstered")).toBeInTheDocument();
-      expect(screen.getByTestId("readiness-stored")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-carried")).toBeInTheDocument();
+      expect(screen.getByTestId("readiness-stashed")).toBeInTheDocument();
     });
 
     it("current readiness button is disabled", () => {
@@ -697,7 +698,7 @@ describe("WeaponsDisplay", () => {
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.getByTestId("readiness-holstered")).toBeDisabled();
       expect(screen.getByTestId("readiness-readied")).not.toBeDisabled();
-      expect(screen.getByTestId("readiness-stored")).not.toBeDisabled();
+      expect(screen.getByTestId("readiness-carried")).not.toBeDisabled();
     });
 
     it("click calls onCharacterUpdate with new readiness", () => {

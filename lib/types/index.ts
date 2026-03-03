@@ -797,6 +797,12 @@ export type {
   DeviceCondition,
   MatrixCapableDevice,
   GearState,
+  StashLocationType,
+  StashLocationInfo,
+  ContainmentRef,
+  ContainerProperties,
+  Loadout,
+  LoadoutDiff,
   AmmunitionCaliber,
   AmmunitionType,
   WeaponAmmoState,
@@ -817,6 +823,7 @@ export {
   calculateEncumbrancePenalty,
   isValidTransition,
   getTransitionCost,
+  normalizeReadiness,
 } from "./gear-state";
 
 // Wireless Effect types (ADR-010)

@@ -11,6 +11,7 @@
 import type { Character, Weapon, ArmorItem, GearItem } from "@/lib/types";
 import type { EncumbranceState, EquipmentReadiness } from "@/lib/types/gear-state";
 import { getAttributeValue } from "@/lib/rules/action-resolution/pool-builder";
+import { getContainerContentWeight, isContainer } from "@/lib/rules/inventory/container-manager";
 
 // =============================================================================
 // CONSTANTS
@@ -30,15 +31,29 @@ export const MAX_ENCUMBRANCE_PENALTY = -10;
 // =============================================================================
 
 /**
- * Check if an item is currently being carried (not stored).
- * Stored items don't count toward encumbrance.
+ * Check if an item is currently being carried (contributes to encumbrance).
+ *
+ * Items with containedIn are NOT independently encumbering — their weight
+ * flows through their container, which handles encumbrance at its own level.
+ *
+ * "stored" remains NOT encumbering for backward compatibility until migration
+ * converts stored→carried. "carried" IS encumbering (new behavior).
  */
-export function isItemCarried(item: { state?: { readiness: EquipmentReadiness } }): boolean {
+export function isItemCarried(item: {
+  state?: { readiness: EquipmentReadiness; containedIn?: { containerId: string } };
+}): boolean {
   if (!item.state) {
     // Legacy items without state default to carried
     return true;
   }
-  return item.state.readiness !== "stored" && item.state.readiness !== "stashed";
+
+  // Items inside a container don't count independently — weight flows through container
+  if (item.state.containedIn) {
+    return false;
+  }
+
+  const nonEncumbering: EquipmentReadiness[] = ["stored", "stashed"];
+  return !nonEncumbering.includes(item.state.readiness);
 }
 
 /**
@@ -67,16 +82,27 @@ export function calculateArmorWeight(armor: ArmorItem[]): number {
 
 /**
  * Calculate total weight from general gear.
- * Only includes carried gear (not stored).
+ * Only includes carried gear (not stored). For containers, includes
+ * the container's own weight plus the weight of its contents.
  */
-export function calculateGearWeight(gear: GearItem[]): number {
+export function calculateGearWeight(gear: GearItem[], character?: Character): number {
   return gear
     .filter((item) => {
-      // GearItem may not have state, check if it exists
-      const gearWithState = item as { state?: { readiness: EquipmentReadiness } };
+      const gearWithState = item as {
+        state?: { readiness: EquipmentReadiness; containedIn?: { containerId: string } };
+      };
       return isItemCarried(gearWithState);
     })
-    .reduce((total, item) => total + getItemWeight(item), 0);
+    .reduce((total, item) => {
+      let itemWeight = getItemWeight(item);
+
+      // If this is a container, add the weight of its contents
+      if (character && item.id && isContainer(item)) {
+        itemWeight += getContainerContentWeight(character, item.id);
+      }
+
+      return total + itemWeight;
+    }, 0);
 }
 
 /**
@@ -139,7 +165,7 @@ export function calculateEncumbrance(character: Character): EncumbranceState {
   // Calculate weights from all gear types
   const weaponWeight = calculateWeaponWeight(character.weapons || []);
   const armorWeight = calculateArmorWeight(character.armor || []);
-  const gearWeight = calculateGearWeight(character.gear || []);
+  const gearWeight = calculateGearWeight(character.gear || [], character);
   const ammoWeight = calculateAmmunitionWeight(character.ammunition || []);
 
   const currentWeight = weaponWeight + armorWeight + gearWeight + ammoWeight;
