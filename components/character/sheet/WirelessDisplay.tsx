@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
-import type { Character } from "@/lib/types";
+import type { Character, Effect } from "@/lib/types";
 import type {
   GearCatalogData,
   WeaponData,
@@ -73,6 +73,18 @@ function findCatalogGearItem(
     if (found) return found;
   }
   return undefined;
+}
+
+/** Extract wireless bonus descriptions from effects with wirelessOverride. */
+function getWirelessFromEffects(effects?: Effect[]): string | undefined {
+  if (!effects) return undefined;
+  const descriptions: string[] = [];
+  for (const effect of effects) {
+    if (effect.wirelessOverride?.description) {
+      descriptions.push(effect.wirelessOverride.description);
+    }
+  }
+  return descriptions.length > 0 ? descriptions.join("; ") : undefined;
 }
 
 // ---------------------------------------------------------------------------
@@ -149,7 +161,10 @@ function getWirelessInfo(
     const catalogItem = item.catalogId
       ? cyberwareCatalog.find((c) => c.id === item.catalogId)
       : undefined;
-    const wb = item.wirelessBonus || catalogItem?.wirelessBonus;
+    const wb =
+      item.wirelessBonus ||
+      catalogItem?.wirelessBonus ||
+      getWirelessFromEffects(catalogItem?.effects);
     if (!wb) continue;
     const itemOn = item.wirelessEnabled !== false;
     if (itemOn) enabled++;
@@ -164,8 +179,7 @@ function getWirelessInfo(
     const catalogItem = item.catalogId
       ? biowareCatalog.find((b) => b.id === item.catalogId)
       : undefined;
-    const wb =
-      item.wirelessBonus || (catalogItem as { wirelessBonus?: string } | undefined)?.wirelessBonus;
+    const wb = item.wirelessBonus || getWirelessFromEffects(catalogItem?.effects);
     if (!wb) continue;
     const itemOn = item.wirelessEnabled !== false;
     if (itemOn) enabled++;

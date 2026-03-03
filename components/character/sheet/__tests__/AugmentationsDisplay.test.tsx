@@ -50,6 +50,11 @@ vi.mock("@/lib/rules/wireless", () => ({
   isGlobalWirelessEnabled: vi.fn(() => true),
 }));
 
+vi.mock("@/lib/rules/RulesetContext", () => ({
+  useCyberwareCatalog: vi.fn(() => []),
+  useBiowareCatalog: vi.fn(() => []),
+}));
+
 import { AugmentationsDisplay } from "../AugmentationsDisplay";
 
 describe("AugmentationsDisplay", () => {

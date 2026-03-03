@@ -8,7 +8,7 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { setupDisplayCardMock, LUCIDE_MOCK, createSheetCharacter } from "./test-helpers";
-import type { Character, Weapon, ArmorItem, CyberwareItem } from "@/lib/types";
+import type { Character, Weapon, ArmorItem, CyberwareItem, BiowareItem } from "@/lib/types";
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
@@ -86,7 +86,45 @@ const MOCK_CYBERWARE_CATALOG = [
     essenceCost: 2,
     cost: 39000,
     availability: 8,
-    wirelessBonus: "+1 Reaction while wireless is active",
+    effects: [
+      {
+        id: "wired-reflexes-initiative",
+        type: "initiative-modifier",
+        triggers: ["always"],
+        target: {},
+        value: { perRating: 1 },
+        description: "+[Rating]D6 Initiative",
+        wirelessOverride: {
+          bonusValue: 1,
+          description: "+1 additional Initiative Die when wireless active",
+        },
+      },
+    ],
+  },
+];
+
+const MOCK_BIOWARE_CATALOG = [
+  {
+    id: "muscle-toner",
+    name: "Muscle Toner",
+    category: "basic",
+    essenceCost: 0.2,
+    cost: 32000,
+    availability: 12,
+    effects: [
+      {
+        id: "muscle-toner-agility",
+        type: "attribute-modifier",
+        triggers: ["always"],
+        target: { attribute: "agility" },
+        value: { perRating: 1 },
+        description: "+[Rating] Agility",
+        wirelessOverride: {
+          bonusValue: 1,
+          description: "+1 additional Agility when wireless active",
+        },
+      },
+    ],
   },
 ];
 
@@ -100,7 +138,9 @@ function setupMocks({ enabled = true }: { enabled?: boolean } = {}) {
   mockUseCyberwareCatalog.mockReturnValue(
     MOCK_CYBERWARE_CATALOG as unknown as ReturnType<typeof useCyberwareCatalog>
   );
-  mockUseBiowareCatalog.mockReturnValue([]);
+  mockUseBiowareCatalog.mockReturnValue(
+    MOCK_BIOWARE_CATALOG as unknown as ReturnType<typeof useBiowareCatalog>
+  );
   mockSetAllWireless.mockImplementation((char, en) => ({
     ...char,
     wirelessBonusesEnabled: en,
@@ -152,6 +192,20 @@ function createWirelessCharacter(overrides?: Partial<Character>): Character {
         wirelessEnabled: true,
       } as CyberwareItem,
     ],
+    bioware: [
+      {
+        catalogId: "muscle-toner",
+        name: "Muscle Toner (Rating 1)",
+        category: "basic",
+        grade: "standard",
+        baseEssenceCost: 0.2,
+        essenceCost: 0.2,
+        rating: 1,
+        cost: 32000,
+        availability: 12,
+        wirelessEnabled: true,
+      } as BiowareItem,
+    ],
     ...overrides,
   });
 }
@@ -183,8 +237,8 @@ describe("WirelessDisplay", () => {
     setupMocks({ enabled: true });
     const character = createWirelessCharacter();
     render(<WirelessDisplay character={character} />);
-    // 1 weapon (katana) + 1 armor (berwick) + 1 cyberware (wired reflexes) = 3 on
-    expect(screen.getByText("3 on / 0 off")).toBeInTheDocument();
+    // 1 weapon (katana) + 1 armor (berwick) + 1 cyberware (wired reflexes) + 1 bioware (muscle toner) = 4 on
+    expect(screen.getByText("4 on / 0 off")).toBeInTheDocument();
   });
 
   it("counts disabled items separately", () => {
@@ -207,8 +261,8 @@ describe("WirelessDisplay", () => {
       ],
     });
     render(<WirelessDisplay character={character} />);
-    // Katana disabled, berwick + wired reflexes enabled = 2 on / 1 off
-    expect(screen.getByText("2 on / 1 off")).toBeInTheDocument();
+    // Katana disabled, berwick + wired reflexes + muscle toner enabled = 3 on / 1 off
+    expect(screen.getByText("3 on / 1 off")).toBeInTheDocument();
   });
 
   it("shows 0 on / 0 off when no items have wireless capability", () => {
@@ -269,10 +323,16 @@ describe("WirelessDisplay", () => {
     expect(screen.getByText("Armor")).toBeInTheDocument();
     expect(screen.getByText("Berwick Suit")).toBeInTheDocument();
     expect(screen.getByText("+1 Social limit.")).toBeInTheDocument();
-    // Cyberware bonus
+    // Cyberware bonus (from effects[].wirelessOverride)
     expect(screen.getByText("Cyberware")).toBeInTheDocument();
     expect(screen.getByText("Wired Reflexes")).toBeInTheDocument();
-    expect(screen.getByText("+1 Reaction while wireless is active")).toBeInTheDocument();
+    expect(
+      screen.getByText("+1 additional Initiative Die when wireless active")
+    ).toBeInTheDocument();
+    // Bioware bonus (from effects[].wirelessOverride)
+    expect(screen.getByText("Bioware")).toBeInTheDocument();
+    expect(screen.getByText("Muscle Toner (Rating 1)")).toBeInTheDocument();
+    expect(screen.getByText("+1 additional Agility when wireless active")).toBeInTheDocument();
   });
 
   it("excludes bonuses for items with wireless disabled", () => {
@@ -299,9 +359,12 @@ describe("WirelessDisplay", () => {
     expect(screen.getByText("Active Bonuses")).toBeInTheDocument();
     // Katana should NOT appear in bonuses (wireless disabled)
     expect(screen.queryByText("Readying is a Free Action.")).not.toBeInTheDocument();
-    // Berwick and Wired Reflexes should still appear
+    // Berwick, Wired Reflexes, Muscle Toner should still appear
     expect(screen.getByText("+1 Social limit.")).toBeInTheDocument();
-    expect(screen.getByText("+1 Reaction while wireless is active")).toBeInTheDocument();
+    expect(
+      screen.getByText("+1 additional Initiative Die when wireless active")
+    ).toBeInTheDocument();
+    expect(screen.getByText("+1 additional Agility when wireless active")).toBeInTheDocument();
   });
 
   it('shows "No active wireless bonuses" when no items and wireless ON', () => {
