@@ -90,6 +90,39 @@ import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, readAllJsonFi
 
 const CHARACTERS_DIR = path.join(process.cwd(), "data", "characters");
 
+// =============================================================================
+// DATA NORMALIZATION
+// =============================================================================
+
+/**
+ * Ensure all gear, weapon, and armor items have an `id` field.
+ *
+ * Legacy characters may have items with `catalogId` but no `id`.
+ * The container system requires `id` to move items between containers.
+ * This backfills missing IDs using a stable format: `${catalogId}-${index}`.
+ */
+function ensureItemIds(character: Character): Character {
+  let modified = false;
+
+  function backfillIds<T extends { id?: string; catalogId?: string; name: string }>(
+    items: T[]
+  ): T[] {
+    return items.map((item, index) => {
+      if (item.id) return item;
+      modified = true;
+      const base = item.catalogId || item.name.toLowerCase().replace(/[^a-z0-9]+/g, "-");
+      return { ...item, id: `${base}-${index}` };
+    });
+  }
+
+  const gear = backfillIds(character.gear);
+  const weapons = character.weapons ? backfillIds(character.weapons) : undefined;
+  const armor = character.armor ? backfillIds(character.armor) : undefined;
+
+  if (!modified) return character;
+  return { ...character, gear, weapons, armor };
+}
+
 /**
  * Get the directory path for a user's characters
  */
@@ -113,7 +146,8 @@ function getCharacterFilePath(userId: ID, characterId: ID): string {
  */
 export async function getCharacter(userId: ID, characterId: ID): Promise<Character | null> {
   const filePath = getCharacterFilePath(userId, characterId);
-  return readJsonFile<Character>(filePath);
+  const character = await readJsonFile<Character>(filePath);
+  return character ? ensureItemIds(character) : null;
 }
 
 /**
@@ -130,7 +164,8 @@ export async function getCharacterById(characterId: ID): Promise<Character | nul
  */
 export async function getUserCharacters(userId: ID): Promise<Character[]> {
   const userDir = getUserCharactersDir(userId);
-  return readAllJsonFiles<Character>(userDir);
+  const characters = await readAllJsonFiles<Character>(userDir);
+  return characters.map(ensureItemIds);
 }
 
 /**
