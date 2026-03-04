@@ -13,6 +13,7 @@ import { X, Maximize2, Minimize2 } from "lucide-react";
 import { CombatTracker } from "@/components/combat";
 import { useCombatSession } from "@/lib/combat";
 import type { Theme } from "@/lib/themes";
+import type { Character } from "@/lib/types";
 
 interface CombatTrackerModalProps {
   /** Whether the modal is open */
@@ -23,6 +24,8 @@ interface CombatTrackerModalProps {
   theme: Theme;
   /** Character ID for highlighting */
   characterId: string;
+  /** Optional character data for gear accessibility display */
+  character?: Character;
 }
 
 export function CombatTrackerModal({
@@ -30,6 +33,7 @@ export function CombatTrackerModal({
   onClose,
   theme,
   characterId,
+  character,
 }: CombatTrackerModalProps) {
   const { session, participant, isLoading, refreshSession, endTurn, delayTurn } =
     useCombatSession();
@@ -128,6 +132,7 @@ export function CombatTrackerModal({
                     console.log("Selected participant:", id);
                   }}
                   size="md"
+                  characters={character ? { [characterId]: character } : undefined}
                 />
               </div>
 
@@ -181,9 +186,10 @@ export function CombatTrackerModal({
 interface InlineCombatTrackerProps {
   theme: Theme;
   characterId: string;
+  character?: Character;
 }
 
-export function InlineCombatTracker({ theme, characterId }: InlineCombatTrackerProps) {
+export function InlineCombatTracker({ theme, characterId, character }: InlineCombatTrackerProps) {
   const { session, participant, isLoading, refreshSession, endTurn } = useCombatSession();
 
   if (!session) return null;
@@ -217,6 +223,7 @@ export function InlineCombatTracker({ theme, characterId }: InlineCombatTrackerP
           onAdvanceRound={() => refreshSession()}
           onTogglePause={() => refreshSession()}
           size="sm"
+          characters={character ? { [characterId]: character } : undefined}
         />
       </div>
     </div>

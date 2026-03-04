@@ -15,7 +15,9 @@ import {
   Zap,
   Shield,
 } from "lucide-react";
-import type { CombatSession, CombatParticipant, ActionAllocation } from "@/lib/types";
+import type { CombatSession, CombatParticipant, ActionAllocation, Character } from "@/lib/types";
+import { getEffectiveReadiness } from "@/lib/rules/inventory";
+import { calculateEncumbrance } from "@/lib/rules/encumbrance/calculator";
 
 // =============================================================================
 // TYPES
@@ -40,6 +42,8 @@ interface CombatTrackerProps {
   size?: "sm" | "md" | "lg";
   /** Whether to show action economy details */
   showActionEconomy?: boolean;
+  /** Optional character data for gear accessibility summaries */
+  characters?: Record<string, Character>;
 }
 
 interface ParticipantRowProps {
@@ -49,6 +53,8 @@ interface ParticipantRowProps {
   onSelect?: () => void;
   showActionEconomy: boolean;
   size: "sm" | "md" | "lg";
+  /** Character data for this participant (if available) */
+  character?: Character;
 }
 
 // =============================================================================
@@ -115,6 +121,52 @@ function ActionEconomyBadges({
 }
 
 // =============================================================================
+// GEAR ACCESSIBILITY SUMMARY
+// =============================================================================
+
+function GearAccessibilitySummary({ character }: { character: Character }) {
+  const summary = useMemo(() => {
+    const tiers = { readied: 0, onBody: 0, carried: 0 };
+    const allItems = [...(character.weapons || []), ...(character.gear || [])];
+
+    for (const item of allItems) {
+      if (!item.id) continue;
+      const eff = getEffectiveReadiness(character, item.id);
+      if (eff === "readied") tiers.readied++;
+      else if (["holstered", "worn", "pocketed"].includes(eff)) tiers.onBody++;
+      else if (eff === "carried") tiers.carried++;
+    }
+
+    return tiers;
+  }, [character]);
+
+  const encumbrance = useMemo(() => calculateEncumbrance(character), [character]);
+
+  const parts: string[] = [];
+  if (summary.readied > 0) parts.push(`${summary.readied} readied`);
+  if (summary.onBody > 0) parts.push(`${summary.onBody} on body`);
+  if (summary.carried > 0) parts.push(`${summary.carried} carried`);
+
+  if (parts.length === 0 && !encumbrance.isEncumbered) return null;
+
+  return (
+    <div
+      data-testid="gear-accessibility-summary"
+      className="mt-1 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[10px]"
+    >
+      {summary.readied > 0 && <span className="text-emerald-400">{summary.readied} readied</span>}
+      {summary.onBody > 0 && <span className="text-blue-400">{summary.onBody} on body</span>}
+      {summary.carried > 0 && <span className="text-orange-400">{summary.carried} carried</span>}
+      {encumbrance.isEncumbered && (
+        <span className="text-red-400 font-medium">
+          Encumbered ({encumbrance.overweightPenalty})
+        </span>
+      )}
+    </div>
+  );
+}
+
+// =============================================================================
 // PARTICIPANT ROW
 // =============================================================================
 
@@ -125,6 +177,7 @@ function ParticipantRow({
   onSelect,
   showActionEconomy,
   size,
+  character,
 }: ParticipantRowProps) {
   const sizeClasses = {
     sm: { text: "text-xs", padding: "px-2 py-1.5", icon: "w-3 h-3" },
@@ -185,6 +238,7 @@ function ParticipantRow({
             GM Controlled
           </div>
         )}
+        {isSelected && character && <GearAccessibilitySummary character={character} />}
       </div>
 
       {/* Initiative */}
@@ -226,6 +280,7 @@ export function CombatTracker({
   selectedParticipantId,
   size = "md",
   showActionEconomy = true,
+  characters,
 }: CombatTrackerProps) {
   const sizeClasses = {
     sm: { text: "text-xs", padding: "p-2", gap: "gap-1" },
@@ -329,6 +384,7 @@ export function CombatTracker({
               onSelect={() => onSelectParticipant?.(participant.id)}
               showActionEconomy={showActionEconomy}
               size={size}
+              character={characters?.[participant.entityId]}
             />
           ))
         )}

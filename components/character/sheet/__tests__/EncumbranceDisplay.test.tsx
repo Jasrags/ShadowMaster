@@ -8,9 +8,18 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { setupDisplayCardMock, LUCIDE_MOCK, createSheetCharacter } from "./test-helpers";
+import type { GearItem } from "@/lib/types";
 
 setupDisplayCardMock();
 vi.mock("lucide-react", () => LUCIDE_MOCK);
+
+const mockIsContainer = vi.fn();
+const mockGetContainerContentWeight = vi.fn();
+
+vi.mock("@/lib/rules/inventory", () => ({
+  isContainer: (...args: unknown[]) => mockIsContainer(...args),
+  getContainerContentWeight: (...args: unknown[]) => mockGetContainerContentWeight(...args),
+}));
 
 import { EncumbranceDisplay } from "../EncumbranceDisplay";
 
@@ -164,5 +173,41 @@ describe("EncumbranceDisplay", () => {
     expect(screen.getByText("0.0kg / 40.0kg")).toBeInTheDocument();
     // No breakdown when everything is 0
     expect(screen.queryByText("Weight Breakdown")).not.toBeInTheDocument();
+  });
+
+  // =========================================================================
+  // Container weights section
+  // =========================================================================
+
+  it("renders container weights section for containers with capacity", () => {
+    const containerGear: GearItem = {
+      name: "Backpack",
+      id: "bag-1",
+      category: "containers",
+      quantity: 1,
+      cost: 50,
+      weight: 1,
+      containerProperties: { weightCapacity: 15 },
+      state: { readiness: "carried" as const, wirelessEnabled: false },
+    };
+
+    mockIsContainer.mockReturnValue(true);
+    mockGetContainerContentWeight.mockReturnValue(8.5);
+
+    const char = createSheetCharacter({ gear: [containerGear] });
+    render(<EncumbranceDisplay character={char} />);
+
+    expect(screen.getByTestId("container-weights")).toBeInTheDocument();
+    expect(screen.getByText("Container Weights")).toBeInTheDocument();
+    expect(screen.getByText("Backpack")).toBeInTheDocument();
+  });
+
+  it("hides container weights when no containers", () => {
+    mockIsContainer.mockReturnValue(false);
+
+    const char = createSheetCharacter({ gear: [] });
+    render(<EncumbranceDisplay character={char} />);
+
+    expect(screen.queryByTestId("container-weights")).not.toBeInTheDocument();
   });
 });
