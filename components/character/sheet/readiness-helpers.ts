@@ -6,6 +6,7 @@
  */
 
 import type { EquipmentReadiness, TransitionActionCost } from "@/lib/types/gear-state";
+import type { ActionType } from "@/lib/rules/inventory";
 
 // ---------------------------------------------------------------------------
 // Labels
@@ -61,7 +62,7 @@ export function getReadinessColor(readiness: EquipmentReadiness): string {
 // Action cost labels
 // ---------------------------------------------------------------------------
 
-export function getActionCostLabel(cost: TransitionActionCost): string {
+export function getActionCostLabel(cost: TransitionActionCost | ActionType): string {
   switch (cost) {
     case "free":
       return "Free Action";
@@ -73,6 +74,40 @@ export function getActionCostLabel(cost: TransitionActionCost): string {
       return "Narrative Time";
     default:
       return "";
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Short action cost labels & colors (for readiness button badges)
+// ---------------------------------------------------------------------------
+
+export function getShortActionCostLabel(cost: ActionType): string {
+  switch (cost) {
+    case "free":
+      return "F";
+    case "simple":
+      return "S";
+    case "complex":
+      return "C";
+    case "narrative":
+      return "N";
+    default:
+      return "";
+  }
+}
+
+export function getActionCostColor(cost: ActionType): string {
+  switch (cost) {
+    case "free":
+      return "text-emerald-400";
+    case "simple":
+      return "text-blue-400";
+    case "complex":
+      return "text-violet-400";
+    case "narrative":
+      return "text-zinc-400";
+    default:
+      return "text-zinc-500";
   }
 }
 

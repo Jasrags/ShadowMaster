@@ -12,6 +12,7 @@ import {
   calculateGearWeight,
   calculateAmmunitionWeight,
 } from "@/lib/rules/encumbrance/calculator";
+import { isContainer, getContainerContentWeight } from "@/lib/rules/inventory";
 
 interface EncumbranceDisplayProps {
   character: Character;
@@ -94,6 +95,17 @@ export function EncumbranceDisplay({ character }: EncumbranceDisplayProps) {
     categoryWeights.gear > 0 ||
     categoryWeights.ammo > 0;
 
+  const containers = useMemo(() => {
+    return (character.gear || [])
+      .filter((g) => g.id && isContainer(g))
+      .map((g) => {
+        const contentWeight = getContainerContentWeight(character, g.id!);
+        const maxWeight = g.containerProperties?.weightCapacity ?? 0;
+        return { name: g.name, contentWeight, maxWeight, id: g.id! };
+      })
+      .filter((c) => c.maxWeight > 0);
+  }, [character]);
+
   return (
     <DisplayCard
       id="sheet-encumbrance"
@@ -147,6 +159,44 @@ export function EncumbranceDisplay({ character }: EncumbranceDisplayProps) {
               <WeightRow label="Armor" weight={categoryWeights.armor} />
               <WeightRow label="Gear" weight={categoryWeights.gear} />
               <WeightRow label="Ammo" weight={categoryWeights.ammo} />
+            </div>
+          </div>
+        )}
+
+        {/* Container weights */}
+        {containers.length > 0 && (
+          <div data-testid="container-weights">
+            <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              Container Weights
+            </div>
+            <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
+              {containers.map((c) => {
+                const cPct =
+                  c.maxWeight > 0 ? Math.min((c.contentWeight / c.maxWeight) * 100, 100) : 0;
+                const cBarColor =
+                  cPct >= 90 ? "bg-red-500" : cPct >= 70 ? "bg-amber-500" : "bg-emerald-500";
+                return (
+                  <div
+                    key={c.id}
+                    className="px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
+                        {c.name}
+                      </span>
+                      <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50">
+                        {formatWeight(c.contentWeight)} / {formatWeight(c.maxWeight)}
+                      </span>
+                    </div>
+                    <div className="h-1 rounded-full bg-zinc-200 dark:bg-zinc-700 overflow-hidden">
+                      <div
+                        className={`h-full rounded-full transition-all ${cBarColor}`}
+                        style={{ width: `${cPct}%` }}
+                      />
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         )}

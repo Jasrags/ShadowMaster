@@ -286,6 +286,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
         capacity,
         capacityUsed: 0,
         modifications: [],
+        containerProperties: gearData.containerProperties,
       };
 
       updateState({

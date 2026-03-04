@@ -12,7 +12,15 @@ import { isMeleeWeapon } from "./constants";
 import { WirelessIndicator } from "./WirelessIndicator";
 import { WeaponAmmoDisplay } from "./WeaponAmmoDisplay";
 import { MoveToContainerControl } from "./MoveToContainerControl";
-import { getReadinessLabel, getReadinessColor, READINESS_BY_EQUIPMENT } from "./readiness-helpers";
+import {
+  getReadinessLabel,
+  getReadinessColor,
+  getShortActionCostLabel,
+  getActionCostColor,
+  getActionCostLabel,
+  READINESS_BY_EQUIPMENT,
+} from "./readiness-helpers";
+import { getTransitionActionCost } from "@/lib/rules/inventory";
 import { ChevronDown, ChevronRight, Swords, Wifi, WifiOff } from "lucide-react";
 
 // ---------------------------------------------------------------------------
@@ -463,24 +471,34 @@ function WeaponRow({
                 <span className="mr-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                   Readiness
                 </span>
-                {READINESS_BY_EQUIPMENT.weapon.map((state) => (
-                  <button
-                    key={state}
-                    data-testid={`readiness-${state}`}
-                    disabled={state === readiness}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      changeWeaponReadiness(character, weaponId, state, onCharacterUpdate);
-                    }}
-                    className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
-                      state === readiness
-                        ? getReadinessColor(state)
-                        : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
-                    }`}
-                  >
-                    {getReadinessLabel(state)}
-                  </button>
-                ))}
+                {READINESS_BY_EQUIPMENT.weapon.map((state) => {
+                  const cost =
+                    state !== readiness ? getTransitionActionCost(readiness, state) : undefined;
+                  return (
+                    <button
+                      key={state}
+                      data-testid={`readiness-${state}`}
+                      disabled={state === readiness}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        changeWeaponReadiness(character, weaponId, state, onCharacterUpdate);
+                      }}
+                      title={cost && cost !== "none" ? getActionCostLabel(cost) : undefined}
+                      className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
+                        state === readiness
+                          ? getReadinessColor(state)
+                          : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                      }`}
+                    >
+                      {getReadinessLabel(state)}
+                      {cost && cost !== "none" && (
+                        <span className={`ml-0.5 ${getActionCostColor(cost)}`}>
+                          ({getShortActionCostLabel(cost)})
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
 
               {/* Wireless toggle */}

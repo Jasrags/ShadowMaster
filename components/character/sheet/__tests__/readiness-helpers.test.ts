@@ -10,9 +10,12 @@ import {
   getReadinessLabel,
   getReadinessColor,
   getActionCostLabel,
+  getShortActionCostLabel,
+  getActionCostColor,
   READINESS_BY_EQUIPMENT,
 } from "../readiness-helpers";
 import type { EquipmentReadiness, TransitionActionCost } from "@/lib/types/gear-state";
+import type { ActionType } from "@/lib/rules/inventory";
 
 // ---------------------------------------------------------------------------
 // getReadinessLabel
@@ -84,6 +87,50 @@ describe("getActionCostLabel", () => {
 
   it.each(cases)('returns "%s" → "%s"', (cost, expected) => {
     expect(getActionCostLabel(cost)).toBe(expected);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getShortActionCostLabel
+// ---------------------------------------------------------------------------
+
+describe("getShortActionCostLabel", () => {
+  const cases: [ActionType, string][] = [
+    ["free", "F"],
+    ["simple", "S"],
+    ["complex", "C"],
+    ["narrative", "N"],
+    ["none", ""],
+  ];
+
+  it.each(cases)('returns "%s" → "%s"', (cost, expected) => {
+    expect(getShortActionCostLabel(cost)).toBe(expected);
+  });
+});
+
+// ---------------------------------------------------------------------------
+// getActionCostColor
+// ---------------------------------------------------------------------------
+
+describe("getActionCostColor", () => {
+  it("returns emerald for free", () => {
+    expect(getActionCostColor("free")).toContain("emerald");
+  });
+
+  it("returns blue for simple", () => {
+    expect(getActionCostColor("simple")).toContain("blue");
+  });
+
+  it("returns violet for complex", () => {
+    expect(getActionCostColor("complex")).toContain("violet");
+  });
+
+  it("returns zinc for narrative", () => {
+    expect(getActionCostColor("narrative")).toContain("zinc");
+  });
+
+  it("returns zinc for none", () => {
+    expect(getActionCostColor("none")).toContain("zinc");
   });
 });
 

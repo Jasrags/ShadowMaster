@@ -67,6 +67,10 @@ vi.mock("@/lib/rules/wireless", () => ({
   isGlobalWirelessEnabled: vi.fn(() => true),
 }));
 
+vi.mock("@/lib/rules/inventory", () => ({
+  getTransitionActionCost: vi.fn(() => "simple"),
+}));
+
 // ---------------------------------------------------------------------------
 // Catalog mock
 // ---------------------------------------------------------------------------
@@ -719,6 +723,19 @@ describe("WeaponsDisplay", () => {
       expect(onUpdate).toHaveBeenCalledTimes(1);
       const updatedChar = onUpdate.mock.calls[0][0];
       expect(updatedChar.weapons[0].state.readiness).toBe("readied");
+    });
+
+    it("non-current readiness buttons show action cost label", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      // "holstered" is current so should NOT have cost label; "readied" should
+      const readiedBtn = screen.getByTestId("readiness-readied");
+      expect(readiedBtn).toHaveTextContent("(S)");
+      // Current button should not have cost label
+      const holsteredBtn = screen.getByTestId("readiness-holstered");
+      expect(holsteredBtn).not.toHaveTextContent("(S)");
     });
   });
 

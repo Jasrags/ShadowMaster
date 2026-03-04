@@ -5,12 +5,13 @@ import type { ContainerProperties } from "@/lib/types/gear-state";
 import {
   getContainerContents,
   getContainerContentWeight,
+  getEffectiveReadiness,
   removeItemFromContainer,
   MAX_CONTAINER_DEPTH,
   isContainer,
 } from "@/lib/rules/inventory";
 import { getReadinessLabel, getReadinessColor } from "./readiness-helpers";
-import { Minus, Package } from "lucide-react";
+import { AlertTriangle, Minus, Package } from "lucide-react";
 
 // ---------------------------------------------------------------------------
 // Types
@@ -56,8 +57,21 @@ export function ContainerContentsDisplay({
         </div>
         <span className="text-[10px] font-mono text-zinc-500 dark:text-zinc-400 whitespace-nowrap">
           {currentWeight.toFixed(1)} / {maxWeight} kg
+          {containerProperties.slotCapacity != null &&
+            ` · ${contents.length}/${containerProperties.slotCapacity} slots`}
         </span>
       </div>
+
+      {/* Capacity warning */}
+      {pct >= 90 && (
+        <div
+          data-testid="capacity-warning"
+          className="flex items-center gap-1 text-[10px] font-medium text-red-400"
+        >
+          <AlertTriangle className="h-3 w-3 shrink-0" />
+          {currentWeight > maxWeight ? "Over capacity!" : "Near capacity"}
+        </div>
+      )}
 
       {/* Contents */}
       {contents.length === 0 ? (
@@ -73,6 +87,10 @@ export function ContainerContentsDisplay({
             const itemId = "id" in item ? (item.id as string) : undefined;
             const readiness = item.state?.readiness ?? "carried";
             const itemIsContainer = isContainer(item);
+            const effectiveReadiness = itemId
+              ? getEffectiveReadiness(character, itemId)
+              : readiness;
+            const isRestricted = effectiveReadiness !== readiness;
 
             return (
               <div key={itemId ?? item.name} style={{ marginLeft: `${depth * 16}px` }}>
@@ -86,6 +104,15 @@ export function ContainerContentsDisplay({
                   >
                     {getReadinessLabel(readiness)}
                   </span>
+                  {isRestricted && (
+                    <span
+                      data-testid="effective-readiness"
+                      className={`shrink-0 rounded border px-1 py-0.5 text-[9px] font-medium opacity-75 ${getReadinessColor(effectiveReadiness)}`}
+                      title={`Effective: ${getReadinessLabel(effectiveReadiness)} (restricted by container)`}
+                    >
+                      eff: {getReadinessLabel(effectiveReadiness)}
+                    </span>
+                  )}
 
                   {editable && onCharacterUpdate && itemId && (
                     <button
