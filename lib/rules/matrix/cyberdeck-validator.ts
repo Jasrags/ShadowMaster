@@ -202,6 +202,25 @@ export function hasMatrixAccess(character: Character): boolean {
 }
 
 /**
+ * Check if a character has hacking capability (cyberdeck or technomancer living persona).
+ *
+ * Commlink-only characters can access the Matrix but cannot perform
+ * hacking actions, so they should not see MatrixActionsDisplay or
+ * MatrixMarksDisplay.
+ */
+export function hasHackingCapability(character: Character): boolean {
+  const cyberdecks = getCharacterCyberdecks(character);
+  if (cyberdecks.length > 0) return true;
+
+  // Technomancers have resonance and/or complex forms
+  const resonance = character.specialAttributes?.resonance ?? 0;
+  if (resonance > 0) return true;
+  if ((character.complexForms?.length ?? 0) > 0) return true;
+
+  return false;
+}
+
+/**
  * Get the active cyberdeck for a character
  *
  * Returns the first cyberdeck if no active device is set.

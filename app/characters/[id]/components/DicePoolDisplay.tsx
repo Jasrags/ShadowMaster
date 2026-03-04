@@ -96,9 +96,10 @@ export function DicePoolDisplay({
 
   // Calculate total pool
   const totalPool = useMemo(() => {
-    const modifierSum = modifiers.reduce((sum, m) => sum + m.value, 0);
+    const safeBase = isFinite(basePool) ? basePool : 0;
+    const modifierSum = modifiers.reduce((sum, m) => sum + (isFinite(m.value) ? m.value : 0), 0);
     const specBonus = specialization ? 2 : 0;
-    return Math.max(0, basePool + modifierSum + woundModifier + specBonus);
+    return Math.max(0, safeBase + modifierSum + woundModifier + specBonus);
   }, [basePool, modifiers, woundModifier, specialization]);
 
   // Determine if pool is limited

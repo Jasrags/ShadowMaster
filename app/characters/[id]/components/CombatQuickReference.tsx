@@ -301,7 +301,11 @@ export function CombatQuickReference({
     }
 
     // Add unified effect modifiers for defense
-    if (defenseEffects && defenseEffects.totalDicePoolModifier !== 0) {
+    if (
+      defenseEffects &&
+      defenseEffects.totalDicePoolModifier &&
+      isFinite(defenseEffects.totalDicePoolModifier)
+    ) {
       const effectMods = effectsToPoolModifiers(defenseEffects.dicePoolModifiers);
       defenseModifiers.push(...effectMods);
       defenseTotal += defenseEffects.totalDicePoolModifier;
@@ -354,7 +358,11 @@ export function CombatQuickReference({
     }
 
     // Add unified effect modifiers for full defense
-    if (defenseEffects && defenseEffects.totalDicePoolModifier !== 0) {
+    if (
+      defenseEffects &&
+      defenseEffects.totalDicePoolModifier &&
+      isFinite(defenseEffects.totalDicePoolModifier)
+    ) {
       const effectMods = effectsToPoolModifiers(defenseEffects.dicePoolModifiers);
       fullDefenseModifiers.push(...effectMods);
       fullDefenseTotal += defenseEffects.totalDicePoolModifier;
@@ -480,7 +488,8 @@ export function CombatQuickReference({
     };
   }, [character, physicalLimit, resolveEffects]);
 
-  const unifiedInitBonus = combatData.initEffects?.totalInitiativeModifier ?? 0;
+  const rawInitBonus = combatData.initEffects?.totalInitiativeModifier ?? 0;
+  const unifiedInitBonus = isFinite(rawInitBonus) ? rawInitBonus : 0;
   const effectiveInit =
     combatData.initiative.base +
     combatData.initiative.wirelessBonus +

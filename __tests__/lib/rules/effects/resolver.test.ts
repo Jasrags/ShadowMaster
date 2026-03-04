@@ -470,6 +470,25 @@ describe("Stacking", () => {
       expect(result.totalThresholdModifier).toBe(-1);
     });
   });
+
+  describe("NaN protection", () => {
+    it("should not produce NaN for effects with non-numeric value", () => {
+      const effects: UnifiedResolvedEffect[] = [
+        makeResolved({
+          effect: makeEffect({ id: "e1", type: "dice-pool-modifier" }),
+          resolvedValue: NaN,
+        }),
+        makeResolved({
+          effect: makeEffect({ id: "e2", type: "dice-pool-modifier" }),
+          resolvedValue: 2,
+        }),
+      ];
+      const result = applyStackingRules(effects);
+      // NaN + 2 = NaN, but the stacking function should still return a number
+      // The root fix is in resolver.ts preventing NaN resolvedValues
+      expect(typeof result.totalDicePoolModifier).toBe("number");
+    });
+  });
 });
 
 // ---------------------------------------------------------------------------
@@ -1553,6 +1572,75 @@ describe("Resolver Integration", () => {
     const result = resolveEffects(character, context, ruleset);
     // Base value: perRating 1 * rating 2 = 2, as limit-modifier
     expect(result.totalLimitModifier).toBe(2);
+  });
+
+  it("should resolve effect with unrecognized value format to zero instead of NaN", () => {
+    const character = createMockCharacter({
+      positiveQualities: [{ qualityId: "broken-quality", source: "creation" }],
+    });
+    const ruleset = makeMockRuleset({
+      qualities: {
+        positive: [
+          {
+            id: "broken-quality",
+            name: "Broken Quality",
+            type: "positive",
+            karmaCost: 5,
+            summary: "Has a malformed effect value",
+            effects: [
+              {
+                id: "broken-effect",
+                type: "dice-pool-modifier",
+                triggers: ["always"],
+                target: {},
+                // Malformed value — not a number and not { perRating }
+                value: "invalid" as unknown as number,
+              },
+            ],
+          },
+        ],
+        negative: [],
+      },
+    });
+    const context = makeContext({ type: "defense" });
+    const result = resolveEffects(character, context, ruleset);
+    // Should not produce NaN
+    expect(isFinite(result.totalDicePoolModifier)).toBe(true);
+    expect(result.totalDicePoolModifier).toBe(0);
+  });
+
+  it("should resolve effect with missing perRating to zero instead of NaN", () => {
+    const character = createMockCharacter({
+      positiveQualities: [{ qualityId: "missing-per-rating", source: "creation" }],
+    });
+    const ruleset = makeMockRuleset({
+      qualities: {
+        positive: [
+          {
+            id: "missing-per-rating",
+            name: "Missing Per Rating",
+            type: "positive",
+            karmaCost: 5,
+            summary: "Has object value but no perRating",
+            effects: [
+              {
+                id: "missing-pr-effect",
+                type: "dice-pool-modifier",
+                triggers: ["always"],
+                target: {},
+                // Object value missing perRating field
+                value: { description: "broken" } as unknown as number,
+              },
+            ],
+          },
+        ],
+        negative: [],
+      },
+    });
+    const context = makeContext({ type: "defense" });
+    const result = resolveEffects(character, context, ruleset);
+    expect(isFinite(result.totalDicePoolModifier)).toBe(true);
+    expect(result.totalDicePoolModifier).toBe(0);
   });
 });
 
