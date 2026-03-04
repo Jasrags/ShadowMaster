@@ -136,10 +136,11 @@ export async function getAllCampaigns(): Promise<Campaign[]> {
     const campaigns: Campaign[] = [];
     for (const file of jsonFiles) {
       try {
-        const filePath = path.join(DATA_DIR, file);
-        const fileContent = await fs.readFile(filePath, "utf-8");
-        const campaign = JSON.parse(fileContent) as Campaign;
-        campaigns.push(campaign);
+        const campaignId = file.replace(".json", "");
+        const campaign = await getCampaignById(campaignId);
+        if (campaign) {
+          campaigns.push(campaign);
+        }
       } catch (error) {
         console.error(`Error reading campaign file ${file}:`, error);
       }
