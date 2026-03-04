@@ -80,7 +80,35 @@ export async function getCampaignById(campaignId: string): Promise<Campaign | nu
   try {
     const filePath = getCampaignFilePath(campaignId);
     const fileContent = await fs.readFile(filePath, "utf-8");
-    const campaign = JSON.parse(fileContent) as Campaign;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const raw = JSON.parse(fileContent) as any;
+    const campaign = raw as Campaign;
+
+    // Migrate legacy schema fields
+    if (!campaign.title && raw.name) {
+      campaign.title = raw.name;
+    }
+    if (!campaign.gmId && raw.ownerId) {
+      campaign.gmId = raw.ownerId;
+    }
+    if (!campaign.gmId && raw.gmIds?.[0]) {
+      campaign.gmId = raw.gmIds[0];
+    }
+    if (!campaign.editionId) {
+      campaign.editionId = campaign.editionCode || "sr5";
+    }
+    if (!campaign.enabledBookIds) {
+      campaign.enabledBookIds = raw.settings?.allowedBooks || ["core-rulebook"];
+    }
+    if (!campaign.enabledCreationMethodIds) {
+      campaign.enabledCreationMethodIds = ["priority"];
+    }
+    if (!campaign.gameplayLevel) {
+      campaign.gameplayLevel = "street";
+    }
+    if (!campaign.visibility) {
+      campaign.visibility = "private";
+    }
 
     // Populate default settings for older campaigns
     if (!campaign.advancementSettings) {
