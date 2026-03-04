@@ -57,6 +57,8 @@ next-env.d.ts
 /data/security
 /data/combat
 /data/ruleset-snapshots
+/data/notifications/*
+!/data/notifications/.gitkeep
 /data/emails/*
 !/data/emails/.gitkeep
 /docs/capabilities/plans/verification-reports

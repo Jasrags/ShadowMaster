@@ -371,6 +371,7 @@ export type {
   CampaignEvent,
   CampaignTemplate,
   SessionRewardData,
+  MidSessionAward,
   CampaignActivityType,
   CampaignActivityEvent,
   NotificationType,
