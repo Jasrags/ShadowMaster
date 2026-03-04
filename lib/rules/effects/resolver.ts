@@ -30,9 +30,16 @@ function resolveEffect(sourced: SourcedEffect): UnifiedResolvedEffect {
   let resolvedValue: number;
   if (typeof effect.value === "number") {
     resolvedValue = effect.value;
-  } else {
+  } else if (
+    typeof effect.value === "object" &&
+    effect.value !== null &&
+    typeof effect.value.perRating === "number"
+  ) {
     // Per-rating scaling
     resolvedValue = effect.value.perRating * (source.rating ?? 1);
+  } else {
+    // Unrecognized value format — treat as zero to prevent NaN propagation
+    resolvedValue = 0;
   }
 
   let appliedVariant: "standard" | "wireless" = "standard";
@@ -47,7 +54,7 @@ function resolveEffect(sourced: SourcedEffect): UnifiedResolvedEffect {
       resolvedEffect = { ...effect, type: override.type };
     }
 
-    if (override.bonusValue !== undefined) {
+    if (typeof override.bonusValue === "number") {
       resolvedValue += override.bonusValue;
     }
 
