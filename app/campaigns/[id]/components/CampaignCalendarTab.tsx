@@ -2,9 +2,10 @@
 
 import { useState } from "react";
 import type { Campaign, CampaignEvent } from "@/lib/types";
-import { Plus, Clock, Trophy, CheckCircle2, Gift, Coins } from "lucide-react";
+import { Plus, Clock, Trophy, CheckCircle2, Gift, Coins, RefreshCw } from "lucide-react";
 import SessionRewardDialog from "./SessionRewardDialog";
 import MidSessionAwardDialog from "./MidSessionAwardDialog";
+import EdgeRefreshDialog from "./EdgeRefreshDialog";
 import type { CampaignSession } from "@/lib/types";
 
 interface CampaignCalendarTabProps {
@@ -36,6 +37,10 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
   const [awardSession, setAwardSession] = useState<CampaignSession | null>(null);
   const [isAwardDialogOpen, setIsAwardDialogOpen] = useState(false);
 
+  // Edge Refresh Dialog State
+  const [edgeRefreshSession, setEdgeRefreshSession] = useState<CampaignSession | null>(null);
+  const [isEdgeRefreshDialogOpen, setIsEdgeRefreshDialogOpen] = useState(false);
+
   const handleCompleteSession = (session: CampaignSession) => {
     setSelectedSession(session);
     setIsRewardDialogOpen(true);
@@ -46,7 +51,16 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
     setIsAwardDialogOpen(true);
   };
 
+  const handleEdgeRefresh = (session: CampaignSession) => {
+    setEdgeRefreshSession(session);
+    setIsEdgeRefreshDialogOpen(true);
+  };
+
   const handleAwardSuccess = () => {
+    window.location.reload();
+  };
+
+  const handleEdgeRefreshSuccess = () => {
     window.location.reload();
   };
 
@@ -308,6 +322,13 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                             Quick Award
                           </button>
                           <button
+                            onClick={() => handleEdgeRefresh(event)}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-cyan-600 hover:text-cyan-700 dark:text-cyan-400 dark:hover:text-cyan-300"
+                          >
+                            <RefreshCw className="h-3.5 w-3.5" />
+                            Edge Refresh
+                          </button>
+                          <button
                             onClick={() => handleCompleteSession(event)}
                             className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
                           >
@@ -372,6 +393,32 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                           </div>
                         </div>
                       )}
+                    {isSession(event) && event.edgeRefreshes && event.edgeRefreshes.length > 0 && (
+                      <div className="mt-3 rounded-md border border-cyan-200 bg-cyan-50 p-3 dark:border-cyan-900/40 dark:bg-cyan-900/10">
+                        <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-cyan-700 dark:text-cyan-400">
+                          <RefreshCw className="h-3.5 w-3.5" />
+                          {event.edgeRefreshes.length} Edge Refresh
+                          {event.edgeRefreshes.length !== 1 ? "es" : ""}
+                        </p>
+                        <div className="space-y-1">
+                          {event.edgeRefreshes.map((refresh) => (
+                            <div
+                              key={refresh.id}
+                              className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-300"
+                            >
+                              <span className="font-medium">
+                                {refresh.scope === "party"
+                                  ? "All Characters"
+                                  : refresh.characterNames.join(", ")}
+                              </span>
+                              <span className="text-zinc-500 dark:text-zinc-400">
+                                {refresh.reason}
+                              </span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               ))}
@@ -422,6 +469,17 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
           campaign={campaign}
           session={awardSession}
           onSuccess={handleAwardSuccess}
+        />
+      )}
+
+      {/* Edge Refresh Dialog */}
+      {edgeRefreshSession && (
+        <EdgeRefreshDialog
+          isOpen={isEdgeRefreshDialogOpen}
+          onClose={() => setIsEdgeRefreshDialogOpen(false)}
+          campaign={campaign}
+          session={edgeRefreshSession}
+          onSuccess={handleEdgeRefreshSuccess}
         />
       )}
     </div>
