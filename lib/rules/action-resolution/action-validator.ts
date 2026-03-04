@@ -523,8 +523,13 @@ function validateSinglePrerequisite(
       if (requirement === "edge") {
         hasMet = (character.attributes?.edge ?? 0) >= (minimumValue ?? 1);
       } else if (requirement === "ammunition") {
-        // Would need ammo tracking
-        hasMet = true;
+        // Check if any readied ranged weapon has enough ammo
+        hasMet =
+          character.weapons?.some((w) => {
+            if (!w.ammoState && !w.currentAmmo) return false;
+            const current = w.ammoState?.currentRounds ?? w.currentAmmo ?? 0;
+            return current >= (minimumValue ?? 1);
+          }) ?? false;
       }
       break;
 
@@ -930,9 +935,24 @@ export function validateActionCost(
         }
         break;
 
-      case "ammunition":
-        // Would need to check weapon ammo
+      case "ammunition": {
+        const ammoCost = typeof resourceCost.amount === "number" ? resourceCost.amount : 1;
+        const hasEnoughAmmo =
+          character.weapons?.some((w) => {
+            const current = w.ammoState?.currentRounds ?? w.currentAmmo ?? 0;
+            return current >= ammoCost;
+          }) ?? false;
+        if (!hasEnoughAmmo) {
+          errors.push(
+            createError(
+              ValidationErrorCodes.INSUFFICIENT_RESOURCE,
+              `Insufficient ammunition (need ${ammoCost} rounds)`,
+              "ammunition"
+            )
+          );
+        }
         break;
+      }
 
       // Add other resource types as needed
     }
