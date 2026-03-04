@@ -209,4 +209,61 @@ describe("MagicSummaryDisplay", () => {
 
     expect(screen.queryByTestId("power-points-section")).not.toBeInTheDocument();
   });
+
+  // ---------------------------------------------------------------------------
+  // Magic/Resonance reduction in rating pill
+  // ---------------------------------------------------------------------------
+
+  it("shows MAG effective / base when essenceHole.magicLost > 0", () => {
+    const character = createSheetCharacter({
+      magicalPath: "adept",
+      specialAttributes: { edge: 3, essence: 4.0, magic: 5 },
+      essenceHole: {
+        peakEssenceLoss: 2.0,
+        currentEssenceLoss: 2.0,
+        essenceHole: 0,
+        magicLost: 1,
+      },
+    });
+
+    render(<MagicSummaryDisplay character={character} />);
+
+    const ratingPill = screen.getByTestId("magic-rating");
+    expect(ratingPill).toHaveTextContent("MAG 5");
+    expect(ratingPill).toHaveTextContent("/ 6");
+  });
+
+  it("shows RES effective / base for technomancer when essenceHole.magicLost > 0", () => {
+    const character = createSheetCharacter({
+      magicalPath: "technomancer",
+      stream: "Cyberadept",
+      specialAttributes: { edge: 3, essence: 4.0, resonance: 4 },
+      essenceHole: {
+        peakEssenceLoss: 2.0,
+        currentEssenceLoss: 2.0,
+        essenceHole: 0,
+        magicLost: 1,
+      },
+    });
+
+    render(<MagicSummaryDisplay character={character} />);
+
+    const ratingPill = screen.getByTestId("magic-rating");
+    expect(ratingPill).toHaveTextContent("RES 4");
+    expect(ratingPill).toHaveTextContent("/ 5");
+  });
+
+  it("does not show base rating when no essence hole", () => {
+    const character = createSheetCharacter({
+      magicalPath: "full-mage",
+      tradition: "hermetic",
+      specialAttributes: { edge: 3, essence: 6, magic: 6 },
+    });
+
+    render(<MagicSummaryDisplay character={character} />);
+
+    const ratingPill = screen.getByTestId("magic-rating");
+    expect(ratingPill).toHaveTextContent("MAG 6");
+    expect(ratingPill.textContent).not.toContain("/");
+  });
 });

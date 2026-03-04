@@ -252,4 +252,117 @@ describe("AttributesDisplay", () => {
     expect(screen.queryByLabelText("Essence loss details")).not.toBeInTheDocument();
     expect(screen.queryByTestId("icon-ArrowDown")).not.toBeInTheDocument();
   });
+
+  // ---------------------------------------------------------------------------
+  // Magic/Resonance reduction display
+  // ---------------------------------------------------------------------------
+
+  it("renders magic reduction badge when essenceHole.magicLost > 0", () => {
+    const character = createSheetCharacter({
+      magicalPath: "adept",
+      specialAttributes: { edge: 3, essence: 4.0, magic: 5 },
+      essenceHole: {
+        peakEssenceLoss: 2.0,
+        currentEssenceLoss: 2.0,
+        essenceHole: 0,
+        magicLost: 1,
+      },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Reduction badge should be present with aria label
+    const reductionButton = screen.getByLabelText("Magic reduction details");
+    expect(reductionButton).toBeInTheDocument();
+    // Badge shows "-1"
+    expect(reductionButton).toHaveTextContent("-1");
+  });
+
+  it("shows effective / base format in magic value pill", () => {
+    const character = createSheetCharacter({
+      magicalPath: "adept",
+      specialAttributes: { edge: 3, essence: 4.0, magic: 5 },
+      essenceHole: {
+        peakEssenceLoss: 2.0,
+        currentEssenceLoss: 2.0,
+        essenceHole: 0,
+        magicLost: 1,
+      },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Value pill should show "5 / 6" (effective / base)
+    expect(screen.getByText("5 / 6")).toBeInTheDocument();
+  });
+
+  it("shows tooltip with essence loss and reduction details", () => {
+    const character = createSheetCharacter({
+      magicalPath: "full-mage",
+      specialAttributes: { edge: 3, essence: 3.0, magic: 4 },
+      essenceHole: {
+        peakEssenceLoss: 3.5,
+        currentEssenceLoss: 3.0,
+        essenceHole: 0.5,
+        magicLost: 2,
+      },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Tooltip should show the peak essence loss and magic reduction
+    expect(screen.getByText("Essence Lost")).toBeInTheDocument();
+    expect(screen.getByText("3.50")).toBeInTheDocument();
+    expect(screen.getByText("Magic Reduction")).toBeInTheDocument();
+    // "-2" appears in both badge and tooltip
+    expect(screen.getAllByText("-2").length).toBe(2);
+    expect(screen.getByText("Permanent — cannot be recovered")).toBeInTheDocument();
+  });
+
+  it("does not show reduction badge when essenceHole is undefined", () => {
+    const character = createSheetCharacter({
+      magicalPath: "adept",
+      specialAttributes: { edge: 3, essence: 6, magic: 6 },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    expect(screen.queryByLabelText("Magic reduction details")).not.toBeInTheDocument();
+    // Magic value should show plain "6", not "6 / 6"
+    // (There are other "6" values from attributes, so just verify no " / " appears for magic)
+    expect(screen.queryByText(/\d+ \/ \d+/)).not.toBeInTheDocument();
+  });
+
+  it("does not show reduction badge when magicLost is 0", () => {
+    const character = createSheetCharacter({
+      magicalPath: "adept",
+      specialAttributes: { edge: 3, essence: 5.0, magic: 6 },
+      essenceHole: {
+        peakEssenceLoss: 0.5,
+        currentEssenceLoss: 0.5,
+        essenceHole: 0,
+        magicLost: 0,
+      },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    expect(screen.queryByLabelText("Magic reduction details")).not.toBeInTheDocument();
+  });
+
+  it("shows reduction badge for Resonance attribute (technomancer)", () => {
+    const character = createSheetCharacter({
+      magicalPath: "technomancer",
+      specialAttributes: { edge: 3, essence: 4.0, resonance: 4 },
+      essenceHole: {
+        peakEssenceLoss: 2.0,
+        currentEssenceLoss: 2.0,
+        essenceHole: 0,
+        magicLost: 1,
+      },
+    });
+    render(<AttributesDisplay character={character} />);
+
+    // Resonance reduction badge
+    const reductionButton = screen.getByLabelText("Resonance reduction details");
+    expect(reductionButton).toBeInTheDocument();
+    expect(reductionButton).toHaveTextContent("-1");
+    // Value pill shows "4 / 5"
+    expect(screen.getByText("4 / 5")).toBeInTheDocument();
+  });
 });

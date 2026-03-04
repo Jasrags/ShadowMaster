@@ -57,6 +57,9 @@ export function MagicSummaryDisplay({ character }: MagicSummaryDisplayProps) {
     [character.specialAttributes, isTechnomancer]
   );
 
+  const magicLost = character.essenceHole?.magicLost ?? 0;
+  const baseMagicRating = magicRating + magicLost;
+
   const initiateGrade = character.initiateGrade ?? 0;
 
   const sustainedCount = character.sustainedSpells?.length ?? 0;
@@ -122,6 +125,9 @@ export function MagicSummaryDisplay({ character }: MagicSummaryDisplayProps) {
               className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50"
             >
               {isTechnomancer ? "RES" : "MAG"} {magicRating}
+              {magicLost > 0 && (
+                <span className="text-rose-500 dark:text-rose-400"> / {baseMagicRating}</span>
+              )}
             </span>
             {initiateGrade > 0 && (
               <span
