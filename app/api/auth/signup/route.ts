@@ -18,13 +18,19 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
 
   try {
     // Rate limiting check (before parsing body)
-    const rateLimiter = RateLimiter.get("signup", SIGNUP_LIMIT);
-    if (rateLimiter.isRateLimited(ip)) {
-      await AuditLogger.log({ event: "signup.rate_limited", ip });
-      return NextResponse.json(
-        { success: false, error: "Too many signup attempts. Please try again later." },
-        { status: 429 }
-      );
+    // E2E tests can bypass rate limiting in non-production environments
+    const isE2EBypass =
+      process.env.NODE_ENV !== "production" && request.headers.get("x-e2e-bypass") === "true";
+
+    if (!isE2EBypass) {
+      const rateLimiter = RateLimiter.get("signup", SIGNUP_LIMIT);
+      if (rateLimiter.isRateLimited(ip)) {
+        await AuditLogger.log({ event: "signup.rate_limited", ip });
+        return NextResponse.json(
+          { success: false, error: "Too many signup attempts. Please try again later." },
+          { status: 429 }
+        );
+      }
     }
 
     const body: SignupRequest = await request.json();

@@ -77,3 +77,5 @@ seattle-locations.json
 
 # Sentry Config File
 .env.sentry-build-plugin
+
+/everything-claude-code
