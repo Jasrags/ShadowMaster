@@ -209,7 +209,11 @@ function VehicleRow({
       ? (item.customName ?? item.name)
       : item.name;
 
-  const badgeText = isRCC(item) ? "RCC" : isDrone(item) ? item.size : item.type;
+  const badgeText = isRCC(item)
+    ? "RCC"
+    : isDrone(item)
+      ? item.size || "drone"
+      : item.type || "vehicle";
   const badgeLabel = badgeText.charAt(0).toUpperCase() + badgeText.slice(1);
 
   const cost = item.cost || catalogEntry?.cost || 0;

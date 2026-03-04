@@ -60,7 +60,7 @@ import {
   VehicleActionsDisplay,
   AutosoftManagerDisplay,
 } from "@/components/character/sheet";
-import { hasMatrixAccess } from "@/lib/rules/matrix/cyberdeck-validator";
+import { hasMatrixAccess, hasHackingCapability } from "@/lib/rules/matrix/cyberdeck-validator";
 import { hasRiggingAccess } from "@/components/character/sheet/rigging-helpers";
 
 // =============================================================================
@@ -454,12 +454,16 @@ function CharacterSheet({
                     editable={character.status === "active"}
                   />
                 )}
-                <MatrixActionsDisplay
-                  character={character}
-                  onSelect={(pool, label) => openDiceRoller(pool, label)}
-                  editable={character.status === "active"}
-                />
-                <MatrixMarksDisplay character={character} />
+                {hasHackingCapability(character) && (
+                  <>
+                    <MatrixActionsDisplay
+                      character={character}
+                      onSelect={(pool, label) => openDiceRoller(pool, label)}
+                      editable={character.status === "active"}
+                    />
+                    <MatrixMarksDisplay character={character} />
+                  </>
+                )}
               </>
             )}
 
