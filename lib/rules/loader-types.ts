@@ -19,6 +19,7 @@ import type {
   BiowareCategory,
   ActionDefinition,
   ItemLegality,
+  ContainerProperties,
 } from "../types";
 import type { Effect } from "../types/effects";
 
@@ -375,6 +376,8 @@ export interface GearItemData {
   specificationLabel?: string;
   /** Weight in kilograms */
   weight?: number;
+  /** Container properties for items that can hold other gear */
+  containerProperties?: ContainerProperties;
 }
 
 /**

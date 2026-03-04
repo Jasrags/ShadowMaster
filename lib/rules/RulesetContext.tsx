@@ -254,6 +254,8 @@ export interface GearItemData {
   requiresSpecification?: boolean;
   /** Label for the specification input (e.g., "Skill") */
   specificationLabel?: string;
+  /** Container properties for items that can hold other gear */
+  containerProperties?: import("@/lib/types").ContainerProperties;
 }
 
 export interface WeaponData extends GearItemData {

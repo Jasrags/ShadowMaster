@@ -12582,6 +12582,95 @@
               }
             },
             "weight": 5
+          },
+          {
+            "id": "backpack",
+            "name": "Backpack",
+            "category": "miscellaneous",
+            "cost": 50,
+            "availability": 0,
+            "description": "Standard nylon backpack.",
+            "source": "Core",
+            "page": 449,
+            "weight": 0.5,
+            "containerProperties": {
+              "weightCapacity": 15
+            }
+          },
+          {
+            "id": "duffel-bag",
+            "name": "Duffel Bag",
+            "category": "miscellaneous",
+            "cost": 30,
+            "availability": 0,
+            "description": "Large cylindrical bag.",
+            "source": "Core",
+            "page": 449,
+            "weight": 0.5,
+            "containerProperties": {
+              "weightCapacity": 25
+            }
+          },
+          {
+            "id": "briefcase",
+            "name": "Briefcase",
+            "category": "miscellaneous",
+            "cost": 50,
+            "availability": 0,
+            "description": "Rigid professional case.",
+            "source": "Core",
+            "page": 449,
+            "weight": 1,
+            "containerProperties": {
+              "weightCapacity": 8,
+              "slotCapacity": 6,
+              "rigid": true
+            }
+          },
+          {
+            "id": "courier-bag",
+            "name": "Courier Bag",
+            "category": "miscellaneous",
+            "cost": 30,
+            "availability": 0,
+            "description": "Messenger-style sling bag.",
+            "source": "Core",
+            "page": 449,
+            "weight": 0.3,
+            "containerProperties": {
+              "weightCapacity": 10
+            }
+          },
+          {
+            "id": "climbing-pack",
+            "name": "Climbing Pack",
+            "category": "miscellaneous",
+            "cost": 75,
+            "availability": 0,
+            "description": "Reinforced mountaineering pack.",
+            "source": "Core",
+            "page": 449,
+            "weight": 1,
+            "containerProperties": {
+              "weightCapacity": 20
+            }
+          },
+          {
+            "id": "smuggling-compartment",
+            "name": "Smuggling Compartment",
+            "category": "miscellaneous",
+            "cost": 500,
+            "availability": 8,
+            "legality": "restricted",
+            "description": "Hidden compartment for concealment.",
+            "source": "Core",
+            "page": 449,
+            "weight": 0.5,
+            "containerProperties": {
+              "weightCapacity": 5,
+              "slotCapacity": 2,
+              "rigid": true
+            }
           }
         ],
         "ammunition": [
