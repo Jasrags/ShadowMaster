@@ -15,7 +15,7 @@ import {
   Checkbox,
   Form,
 } from "react-aria-components";
-import { Loader2, Trophy, Coins, Users, X } from "lucide-react";
+import { Loader2, Trophy, Coins, Users, X, Gift } from "lucide-react";
 import type { Campaign, CampaignSession, Character } from "@/lib/types";
 
 interface SessionRewardDialogProps {
@@ -141,6 +141,34 @@ export default function SessionRewardDialog({
               </div>
 
               <Form onSubmit={handleSubmit} className="p-6">
+                {session.midSessionAwards &&
+                  session.midSessionAwards.length > 0 &&
+                  (() => {
+                    const totalKarma = session.midSessionAwards.reduce(
+                      (sum, a) => sum + a.karma,
+                      0
+                    );
+                    const totalNuyen = session.midSessionAwards.reduce(
+                      (sum, a) => sum + a.nuyen,
+                      0
+                    );
+                    return (
+                      <div className="mb-6 flex items-start gap-3 rounded-lg border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/40 dark:bg-amber-900/10">
+                        <Gift className="mt-0.5 h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+                        <div className="text-xs text-amber-700 dark:text-amber-300">
+                          <span className="font-semibold">
+                            {session.midSessionAwards.length} Quick Award
+                            {session.midSessionAwards.length !== 1 ? "s" : ""} already given
+                          </span>
+                          {" — "}
+                          {totalKarma > 0 && `${totalKarma} Karma`}
+                          {totalKarma > 0 && totalNuyen > 0 && ", "}
+                          {totalNuyen > 0 && `${totalNuyen}¥`}
+                          {" distributed mid-session."}
+                        </div>
+                      </div>
+                    );
+                  })()}
                 <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
                   {/* Left Column: Awards */}
                   <div className="space-y-6">

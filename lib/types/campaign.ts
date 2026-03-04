@@ -256,8 +256,24 @@ export interface CampaignSession {
   karmaAwarded?: number;
   /** Nuyen awarded this session per participant */
   nuyenAwarded?: number;
+  /** Mid-session individual awards (Quick Awards from GM) */
+  midSessionAwards?: MidSessionAward[];
   createdAt: ISODateString;
   updatedAt: ISODateString;
+}
+
+/**
+ * An individual mid-session award given by the GM
+ */
+export interface MidSessionAward {
+  id: ID;
+  characterId: ID;
+  characterName: string;
+  karma: number;
+  nuyen: number;
+  reason: string;
+  awardedBy: ID;
+  awardedAt: ISODateString;
 }
 
 /**
@@ -316,6 +332,7 @@ export type CampaignActivityType =
   | "session_scheduled"
   | "session_completed"
   | "karma_awarded"
+  | "mid_session_award"
   | "advancement_approved"
   | "advancement_rejected"
   | "post_created"

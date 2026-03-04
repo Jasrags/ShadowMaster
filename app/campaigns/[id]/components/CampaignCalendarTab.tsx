@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import type { Campaign, CampaignEvent } from "@/lib/types";
-import { Plus, Clock, Trophy, CheckCircle2 } from "lucide-react";
+import { Plus, Clock, Trophy, CheckCircle2, Gift, Coins } from "lucide-react";
 import SessionRewardDialog from "./SessionRewardDialog";
+import MidSessionAwardDialog from "./MidSessionAwardDialog";
 import type { CampaignSession } from "@/lib/types";
 
 interface CampaignCalendarTabProps {
@@ -31,9 +32,22 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
   const [selectedSession, setSelectedSession] = useState<CampaignSession | null>(null);
   const [isRewardDialogOpen, setIsRewardDialogOpen] = useState(false);
 
+  // Award Dialog State
+  const [awardSession, setAwardSession] = useState<CampaignSession | null>(null);
+  const [isAwardDialogOpen, setIsAwardDialogOpen] = useState(false);
+
   const handleCompleteSession = (session: CampaignSession) => {
     setSelectedSession(session);
     setIsRewardDialogOpen(true);
+  };
+
+  const handleQuickAward = (session: CampaignSession) => {
+    setAwardSession(session);
+    setIsAwardDialogOpen(true);
+  };
+
+  const handleAwardSuccess = () => {
+    window.location.reload();
   };
 
   const handleRewardSuccess = () => {
@@ -285,13 +299,22 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                         })}
                       </div>
                       {userRole === "gm" && isSession(event) && event.status !== "completed" && (
-                        <button
-                          onClick={() => handleCompleteSession(event)}
-                          className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
-                        >
-                          <Trophy className="h-3.5 w-3.5" />
-                          Complete & Award
-                        </button>
+                        <div className="flex items-center gap-3">
+                          <button
+                            onClick={() => handleQuickAward(event)}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-amber-600 hover:text-amber-700 dark:text-amber-400 dark:hover:text-amber-300"
+                          >
+                            <Coins className="h-3.5 w-3.5" />
+                            Quick Award
+                          </button>
+                          <button
+                            onClick={() => handleCompleteSession(event)}
+                            className="inline-flex items-center gap-1.5 text-xs font-semibold text-indigo-600 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300"
+                          >
+                            <Trophy className="h-3.5 w-3.5" />
+                            Complete & Award
+                          </button>
+                        </div>
                       )}
                     </div>
                     {"description" in event && event.description && (
@@ -321,6 +344,34 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
                         </div>
                       </div>
                     )}
+                    {isSession(event) &&
+                      event.midSessionAwards &&
+                      event.midSessionAwards.length > 0 && (
+                        <div className="mt-3 rounded-md border border-amber-200 bg-amber-50 p-3 dark:border-amber-900/40 dark:bg-amber-900/10">
+                          <p className="mb-2 flex items-center gap-1.5 text-xs font-semibold text-amber-700 dark:text-amber-400">
+                            <Gift className="h-3.5 w-3.5" />
+                            {event.midSessionAwards.length} Quick Award
+                            {event.midSessionAwards.length !== 1 ? "s" : ""}
+                          </p>
+                          <div className="space-y-1">
+                            {event.midSessionAwards.map((award) => (
+                              <div
+                                key={award.id}
+                                className="flex items-center justify-between text-xs text-zinc-600 dark:text-zinc-300"
+                              >
+                                <span className="font-medium">{award.characterName}</span>
+                                <span className="text-zinc-500 dark:text-zinc-400">
+                                  {award.karma > 0 && `${award.karma} Karma`}
+                                  {award.karma > 0 && award.nuyen > 0 && " · "}
+                                  {award.nuyen > 0 && `${award.nuyen}¥`}
+                                  {" — "}
+                                  {award.reason}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                   </div>
                 </div>
               ))}
@@ -360,6 +411,17 @@ export default function CampaignCalendarTab({ campaign, userRole }: CampaignCale
           campaign={campaign}
           session={selectedSession}
           onSuccess={handleRewardSuccess}
+        />
+      )}
+
+      {/* Quick Award Dialog */}
+      {awardSession && (
+        <MidSessionAwardDialog
+          isOpen={isAwardDialogOpen}
+          onClose={() => setIsAwardDialogOpen(false)}
+          campaign={campaign}
+          session={awardSession}
+          onSuccess={handleAwardSuccess}
         />
       )}
     </div>
