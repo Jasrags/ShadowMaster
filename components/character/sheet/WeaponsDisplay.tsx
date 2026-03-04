@@ -483,7 +483,7 @@ function WeaponRow({
                         e.stopPropagation();
                         changeWeaponReadiness(character, weaponId, state, onCharacterUpdate);
                       }}
-                      title={cost ? getActionCostLabel(cost) : undefined}
+                      title={cost && cost !== "none" ? getActionCostLabel(cost) : undefined}
                       className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
                         state === readiness
                           ? getReadinessColor(state)
@@ -491,7 +491,7 @@ function WeaponRow({
                       }`}
                     >
                       {getReadinessLabel(state)}
-                      {cost && (
+                      {cost && cost !== "none" && (
                         <span className={`ml-0.5 ${getActionCostColor(cost)}`}>
                           ({getShortActionCostLabel(cost)})
                         </span>
