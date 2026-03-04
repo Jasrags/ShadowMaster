@@ -20,6 +20,7 @@ import {
   validateCombatContext,
   validateAction,
   validateActionEligibility,
+  validateActionCost,
   calculateStateModifiers,
   canPerformAction,
   getActionBlockers,
@@ -776,6 +777,169 @@ describe("validateActionEligibility with combat context", () => {
 
     const result = validateActionEligibility(character, action, session, participant.id);
 
+    expect(result.valid).toBe(true);
+  });
+});
+
+// =============================================================================
+// AMMUNITION RESOURCE COST VALIDATION
+// =============================================================================
+
+describe("validateActionCost - ammunition", () => {
+  it("should pass when weapon has enough ammo", () => {
+    const character = createMockCharacter({
+      weapons: [
+        {
+          id: "pistol",
+          name: "Ares Predator V",
+          category: "weapon",
+          subcategory: "heavy-pistol",
+          damage: "8P",
+          ap: -1,
+          mode: ["SA"],
+          quantity: 1,
+          cost: 725,
+          ammoState: {
+            loadedAmmoTypeId: "regular",
+            currentRounds: 15,
+            magazineCapacity: 15,
+          },
+        },
+      ],
+    });
+    const action = createMockActionDefinition({
+      cost: {
+        actionType: "simple",
+        resourceCosts: [{ type: "ammunition", amount: 1 }],
+      },
+    });
+
+    const result = validateActionCost(character, action);
+    expect(result.valid).toBe(true);
+  });
+
+  it("should fail when no weapon has enough ammo", () => {
+    const character = createMockCharacter({
+      weapons: [
+        {
+          id: "pistol",
+          name: "Ares Predator V",
+          category: "weapon",
+          subcategory: "heavy-pistol",
+          damage: "8P",
+          ap: -1,
+          mode: ["SA"],
+          quantity: 1,
+          cost: 725,
+          ammoState: {
+            loadedAmmoTypeId: "regular",
+            currentRounds: 0,
+            magazineCapacity: 15,
+          },
+        },
+      ],
+    });
+    const action = createMockActionDefinition({
+      cost: {
+        actionType: "simple",
+        resourceCosts: [{ type: "ammunition", amount: 1 }],
+      },
+    });
+
+    const result = validateActionCost(character, action);
+    expect(result.valid).toBe(false);
+    expect(result.errors).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          code: ValidationErrorCodes.INSUFFICIENT_RESOURCE,
+          message: expect.stringContaining("Insufficient ammunition"),
+        }),
+      ])
+    );
+  });
+
+  it("should fail when ammo required exceeds available", () => {
+    const character = createMockCharacter({
+      weapons: [
+        {
+          id: "pistol",
+          name: "Ares Predator V",
+          category: "weapon",
+          subcategory: "heavy-pistol",
+          damage: "8P",
+          ap: -1,
+          mode: ["SA", "BF"],
+          quantity: 1,
+          cost: 725,
+          ammoState: {
+            loadedAmmoTypeId: "regular",
+            currentRounds: 2,
+            magazineCapacity: 15,
+          },
+        },
+      ],
+    });
+    const action = createMockActionDefinition({
+      cost: {
+        actionType: "complex",
+        resourceCosts: [{ type: "ammunition", amount: 6, description: "6 rounds for full auto" }],
+      },
+    });
+
+    const result = validateActionCost(character, action);
+    expect(result.valid).toBe(false);
+    expect(result.errors[0].message).toContain("need 6 rounds");
+  });
+
+  it("should pass when character has no weapons but ammo cost is optional", () => {
+    const character = createMockCharacter({ weapons: [] });
+    const action = createMockActionDefinition({
+      cost: {
+        actionType: "simple",
+        resourceCosts: [{ type: "ammunition", amount: 1, optional: true }],
+      },
+    });
+
+    const result = validateActionCost(character, action);
+    expect(result.valid).toBe(true);
+  });
+
+  it("should pass when action has no resourceCosts", () => {
+    const character = createMockCharacter();
+    const action = createMockActionDefinition({
+      cost: { actionType: "simple" },
+    });
+
+    const result = validateActionCost(character, action);
+    expect(result.valid).toBe(true);
+  });
+
+  it("should support legacy currentAmmo field", () => {
+    const character = createMockCharacter({
+      weapons: [
+        {
+          id: "pistol",
+          name: "Old Pistol",
+          category: "weapon",
+          subcategory: "light-pistol",
+          damage: "6P",
+          ap: 0,
+          mode: ["SA"],
+          quantity: 1,
+          cost: 200,
+          currentAmmo: 10,
+          ammoCapacity: 12,
+        },
+      ],
+    });
+    const action = createMockActionDefinition({
+      cost: {
+        actionType: "simple",
+        resourceCosts: [{ type: "ammunition", amount: 3 }],
+      },
+    });
+
+    const result = validateActionCost(character, action);
     expect(result.valid).toBe(true);
   });
 });

@@ -46,7 +46,11 @@ export interface CombatSessionActions {
   /** Refresh session state from server */
   refreshSession: () => Promise<void>;
   /** Execute an action in combat */
-  executeAction: (actionId: string, targetId?: string) => Promise<boolean>;
+  executeAction: (
+    actionId: string,
+    targetId?: string,
+    options?: { weaponId?: string; firingMode?: string; magazineId?: string; ammoItemId?: string }
+  ) => Promise<boolean>;
   /** Delay turn */
   delayTurn: () => Promise<boolean>;
   /** End turn */
@@ -220,7 +224,11 @@ export function CombatSessionProvider({
 
   // Execute an action
   const executeAction = useCallback(
-    async (actionId: string, targetId?: string): Promise<boolean> => {
+    async (
+      actionId: string,
+      targetId?: string,
+      options?: { weaponId?: string; firingMode?: string; magazineId?: string; ammoItemId?: string }
+    ): Promise<boolean> => {
       if (!session || !participant) {
         setError("Not in combat");
         return false;
@@ -237,6 +245,7 @@ export function CombatSessionProvider({
             participantId: participant.id,
             actionId,
             targetId,
+            ...options,
           }),
         });
 

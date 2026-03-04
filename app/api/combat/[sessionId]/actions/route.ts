@@ -31,13 +31,23 @@ import {
   type ValidationResult,
 } from "@/lib/rules/action-resolution";
 import { processDamageApplication } from "@/lib/rules/action-resolution/combat";
+import {
+  getWeaponAmmoState,
+  updateWeaponAmmoState,
+  loadWeapon,
+  unloadWeapon,
+  swapMagazine,
+  weaponUsesAmmo,
+} from "@/lib/rules/action-resolution/combat/ammunition-manager";
 import type {
   ActionDefinition,
   Character,
   EditionCode,
   ActionType,
   ActionAllocation,
+  Weapon,
 } from "@/lib/types";
+import type { MagazineItem, AmmunitionItem } from "@/lib/types/gear-state";
 
 interface RouteParams {
   params: Promise<{ sessionId: string }>;
@@ -260,7 +270,7 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
 
     // Parse body
     const body = await request.json();
-    const { actionId, participantId, targetId, modifiers } = body;
+    const { actionId, participantId, targetId, modifiers, weaponId, magazineId, ammoItemId } = body;
 
     // Validate required fields
     if (!actionId) {
@@ -332,6 +342,34 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       character = await getCharacterById(participant.entityId);
     }
 
+    // Validate ammunition for weapon-based actions
+    const ammoResourceCost = getAmmoResourceCost(action);
+    let targetWeapon: Weapon | undefined;
+
+    if (weaponId && character?.weapons) {
+      targetWeapon = character.weapons.find((w) => w.id === weaponId);
+      if (!targetWeapon) {
+        return NextResponse.json(
+          { success: false, error: `Weapon not found: ${weaponId}` },
+          { status: 404 }
+        );
+      }
+
+      // Check ammo for fire actions
+      if (ammoResourceCost !== null && weaponUsesAmmo(targetWeapon)) {
+        const ammoState = getWeaponAmmoState(targetWeapon);
+        if (ammoState.currentRounds < ammoResourceCost) {
+          return NextResponse.json(
+            {
+              success: false,
+              error: `Insufficient ammunition (need ${ammoResourceCost}, have ${ammoState.currentRounds})`,
+            },
+            { status: 400 }
+          );
+        }
+      }
+    }
+
     // Validate action
     let validation: ValidationResult | null = null;
     if (character) {
@@ -369,6 +407,80 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
     // Update participant's remaining actions
     await updateParticipantActions(sessionId, participant.id, newActionsRemaining);
 
+    // Consume ammunition after action economy deduction
+    if (ammoResourceCost !== null && targetWeapon && character && weaponUsesAmmo(targetWeapon)) {
+      const ammoState = getWeaponAmmoState(targetWeapon);
+      const newRounds = ammoState.currentRounds - ammoResourceCost;
+      const updatedWeapon = updateWeaponAmmoState(targetWeapon, {
+        ...ammoState,
+        currentRounds: newRounds,
+      });
+
+      const updatedWeapons = character.weapons!.map((w) => (w.id === weaponId ? updatedWeapon : w));
+      await updateCharacter(character.ownerId, character.id, { weapons: updatedWeapons });
+      // Update local reference for response
+      targetWeapon = updatedWeapon;
+    }
+
+    // Handle thrown weapons/grenades
+    if (isThrowAction(actionId) && targetWeapon && character?.weapons) {
+      let updatedWeapons: Weapon[];
+      if (targetWeapon.quantity > 1) {
+        updatedWeapons = character.weapons.map((w) =>
+          w.id === weaponId ? { ...w, quantity: w.quantity - 1 } : w
+        );
+      } else {
+        updatedWeapons = character.weapons.filter((w) => w.id !== weaponId);
+      }
+      await updateCharacter(character.ownerId, character.id, { weapons: updatedWeapons });
+    }
+
+    // Handle reload actions
+    let reloadResult: { roundsLoaded?: number; magazineSwapped?: boolean } | undefined;
+    if (isReloadAction(actionId) && targetWeapon && character?.weapons) {
+      if (actionId === "insert-clip" && magazineId && targetWeapon.spareMagazines) {
+        // Magazine swap
+        const magazine = targetWeapon.spareMagazines.find((m: MagazineItem) => m.id === magazineId);
+        if (magazine) {
+          const swapResult = swapMagazine(targetWeapon, magazine);
+          if (swapResult.success) {
+            const updatedSpares = targetWeapon.spareMagazines
+              .filter((m: MagazineItem) => m.id !== magazineId)
+              .concat(swapResult.oldMagazine ? [swapResult.oldMagazine] : []);
+            const updatedWeapon = { ...swapResult.weapon, spareMagazines: updatedSpares };
+            const updatedWeapons = character.weapons.map((w) =>
+              w.id === weaponId ? updatedWeapon : w
+            );
+            await updateCharacter(character.ownerId, character.id, { weapons: updatedWeapons });
+            reloadResult = { magazineSwapped: true };
+          }
+        }
+      } else if (actionId === "insert-clip" && ammoItemId) {
+        // Load from ammo inventory
+        const ammoItem = findAmmoItem(character, ammoItemId);
+        if (ammoItem) {
+          const loadResult = loadWeapon(targetWeapon, ammoItem);
+          if (loadResult.success) {
+            const updatedWeapons = character.weapons.map((w) =>
+              w.id === weaponId ? loadResult.weapon : w
+            );
+            await updateCharacter(character.ownerId, character.id, { weapons: updatedWeapons });
+            reloadResult = { roundsLoaded: loadResult.roundsLoaded };
+          }
+        }
+      } else if (actionId === "remove-clip") {
+        // Unload weapon
+        const unloadResult = unloadWeapon(targetWeapon);
+        if (unloadResult.success && unloadResult.roundsUnloaded > 0) {
+          const updatedWeapons = character.weapons.map((w) =>
+            w.id === weaponId ? unloadResult.weapon : w
+          );
+          await updateCharacter(character.ownerId, character.id, { weapons: updatedWeapons });
+          reloadResult = { roundsLoaded: 0 };
+        }
+      }
+    }
+
     // Build response
     const result: {
       success: boolean;
@@ -390,6 +502,11 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       damage?: unknown;
       validation?: ValidationResult;
       warnings?: ValidationResult["warnings"];
+      ammoConsumed?: number;
+      ammoRemaining?: number;
+      weaponId?: string;
+      consumableUsed?: boolean;
+      reloadResult?: { roundsLoaded?: number; magazineSwapped?: boolean };
     } = {
       success: true,
       action,
@@ -505,6 +622,26 @@ export async function POST(request: NextRequest, { params }: RouteParams) {
       }
     }
 
+    // Add ammo consumption info to response
+    if (ammoResourceCost !== null && targetWeapon && weaponUsesAmmo(targetWeapon)) {
+      const finalAmmoState = getWeaponAmmoState(targetWeapon);
+      result.ammoConsumed = ammoResourceCost;
+      result.ammoRemaining = finalAmmoState.currentRounds;
+      result.weaponId = weaponId;
+    }
+
+    // Add thrown weapon info
+    if (isThrowAction(actionId) && weaponId) {
+      result.consumableUsed = true;
+      result.weaponId = weaponId;
+    }
+
+    // Add reload info
+    if (reloadResult) {
+      result.reloadResult = reloadResult;
+      result.weaponId = weaponId;
+    }
+
     return NextResponse.json(result);
   } catch (error) {
     console.error("Failed to execute action:", error);
@@ -535,4 +672,55 @@ function checkActionConsumed(
     default:
       return true;
   }
+}
+
+/**
+ * Get the ammunition cost from an action's resourceCosts.
+ * Returns the amount if found, null otherwise.
+ */
+function getAmmoResourceCost(action: ActionDefinition): number | null {
+  if (!action.cost?.resourceCosts) return null;
+  const ammoCost = action.cost.resourceCosts.find((rc) => rc.type === "ammunition");
+  if (!ammoCost) return null;
+  return typeof ammoCost.amount === "number" ? ammoCost.amount : null;
+}
+
+/**
+ * Check if action is a thrown weapon action.
+ */
+function isThrowAction(actionId: string): boolean {
+  return actionId === "throw-weapon";
+}
+
+/**
+ * Check if action is a reload/magazine action.
+ */
+function isReloadAction(actionId: string): boolean {
+  return actionId === "insert-clip" || actionId === "remove-clip";
+}
+
+/**
+ * Find an ammunition item from character's weapon purchasedAmmunition.
+ * Converts PurchasedAmmunitionItem to the AmmunitionItem format
+ * expected by ammunition-manager.
+ */
+function findAmmoItem(character: Character, ammoItemId: string): AmmunitionItem | null {
+  for (const weapon of character.weapons ?? []) {
+    const purchased = weapon.purchasedAmmunition?.find((a) => a.catalogId === ammoItemId);
+    if (purchased && purchased.quantity > 0) {
+      return {
+        id: ammoItemId,
+        catalogId: purchased.catalogId,
+        name: purchased.name,
+        caliber: weapon.subcategory as AmmunitionItem["caliber"],
+        ammoType: "regular",
+        quantity: purchased.quantity * (purchased.roundsPerBox ?? 10),
+        damageModifier: purchased.apModifier ? 0 : 0,
+        apModifier: purchased.apModifier ?? 0,
+        cost: purchased.cost,
+        availability: purchased.availability,
+      };
+    }
+  }
+  return null;
 }
