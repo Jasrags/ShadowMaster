@@ -258,6 +258,8 @@ export interface CampaignSession {
   nuyenAwarded?: number;
   /** Mid-session individual awards (Quick Awards from GM) */
   midSessionAwards?: MidSessionAward[];
+  /** Edge refresh events triggered by the GM */
+  edgeRefreshes?: EdgeRefreshEvent[];
   createdAt: ISODateString;
   updatedAt: ISODateString;
 }
@@ -274,6 +276,19 @@ export interface MidSessionAward {
   reason: string;
   awardedBy: ID;
   awardedAt: ISODateString;
+}
+
+/**
+ * An Edge refresh event triggered by the GM
+ */
+export interface EdgeRefreshEvent {
+  id: ID;
+  scope: "party" | "individual";
+  characterIds: ID[];
+  characterNames: string[];
+  reason: string;
+  refreshedBy: ID;
+  refreshedAt: ISODateString;
 }
 
 /**
@@ -345,7 +360,8 @@ export type CampaignActivityType =
   | "grunt_team_deleted"
   | "grunt_casualties"
   | "grunt_morale_break"
-  | "grunt_morale_rally";
+  | "grunt_morale_rally"
+  | "edge_refresh";
 
 /**
  * Campaign activity feed entry
@@ -388,7 +404,8 @@ export type NotificationType =
   | "advancement_rejected"
   | "karma_awarded"
   | "post_created"
-  | "mentioned";
+  | "mentioned"
+  | "edge_refreshed";
 
 /**
  * User notification
