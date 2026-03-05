@@ -160,7 +160,7 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
 
       {/* Edge & Essence */}
       <div className="mt-2 flex items-center gap-3 border-t border-zinc-200 pt-2 text-xs dark:border-zinc-800">
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5" title="Edge Points">
           <span className="text-zinc-500 dark:text-zinc-500">Edge:</span>
           <div className="flex gap-0.5">
             {Array.from({ length: edge.max }, (_, i) => (
@@ -176,7 +176,7 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
             {edge.current}/{edge.max}
           </span>
         </div>
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-1" title="Essence">
           <Gem className="h-3 w-3 text-cyan-400" />
           <span className="font-mono text-zinc-600 dark:text-zinc-400">{essence.toFixed(1)}</span>
         </div>
