@@ -18,7 +18,6 @@
 import { useMemo, useCallback, useEffect, useState } from "react";
 import { usePriorityTable } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
-import { CHARACTER_TO_PRIORITY_PATH } from "@/lib/rules/validation/character-validator";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
 import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } from "lucide-react";
@@ -28,6 +27,12 @@ import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } fr
 // =============================================================================
 
 const PRIORITY_LEVELS = ["A", "B", "C", "D", "E"] as const;
+
+// Map character magical path values to priority table path names
+// Duplicated from character-validator.ts to avoid importing server-only module
+const CHARACTER_TO_PRIORITY_PATH: Record<string, string> = {
+  "full-mage": "magician",
+};
 type PriorityLevel = (typeof PRIORITY_LEVELS)[number];
 
 // Categories in their default order (A-E)
