@@ -232,6 +232,27 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate campaign edition match
+    let campaignForNotification: Awaited<
+      ReturnType<typeof import("@/lib/storage/campaigns").getCampaignById>
+    > = null;
+    if (campaignId) {
+      const { getCampaignById } = await import("@/lib/storage/campaigns");
+      campaignForNotification = await getCampaignById(campaignId);
+      if (!campaignForNotification) {
+        return NextResponse.json({ success: false, error: "Campaign not found" }, { status: 404 });
+      }
+      if (editionCode !== campaignForNotification.editionCode) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Character edition (${editionCode}) does not match campaign edition (${campaignForNotification.editionCode})`,
+          },
+          { status: 400 }
+        );
+      }
+    }
+
     // Create draft
     const draft = await createCharacterDraft(
       user.id,
@@ -243,11 +264,10 @@ export async function POST(request: NextRequest) {
     );
 
     // Log activity and notify GM asynchronously if campaignId is present
-    if (campaignId) {
+    if (campaignId && campaignForNotification) {
       try {
         const { logActivity } = await import("@/lib/storage/activity");
         const { createNotification } = await import("@/lib/storage/notifications");
-        const { getCampaignById } = await import("@/lib/storage/campaigns");
 
         await logActivity({
           campaignId: campaignId,
@@ -259,17 +279,14 @@ export async function POST(request: NextRequest) {
           description: `${user.username} created a character for the campaign: "${draft.name || "Unnamed"}".`,
         });
 
-        const campaign = await getCampaignById(campaignId);
-        if (campaign) {
-          await createNotification({
-            userId: campaign.gmId,
-            campaignId: campaignId,
-            type: "character_approval_requested",
-            title: "New Character",
-            message: `${user.username} created a new character "${draft.name || "Unnamed"}" for your campaign "${campaign.title}".`,
-            actionUrl: `/campaigns/${campaignId}?tab=approvals`,
-          });
-        }
+        await createNotification({
+          userId: campaignForNotification.gmId,
+          campaignId: campaignId,
+          type: "character_approval_requested",
+          title: "New Character",
+          message: `${user.username} created a new character "${draft.name || "Unnamed"}" for your campaign "${campaignForNotification.title}".`,
+          actionUrl: `/campaigns/${campaignId}?tab=approvals`,
+        });
       } catch (activityError) {
         console.error("Failed to log character creation activity:", activityError);
       }

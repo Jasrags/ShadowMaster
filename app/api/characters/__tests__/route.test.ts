@@ -11,6 +11,7 @@ import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as userStorageModule from "@/lib/storage/users";
 import * as characterStorageModule from "@/lib/storage/characters";
+import * as campaignStorageModule from "@/lib/storage/campaigns";
 
 import type { Character, CharacterDraft, UserRole } from "@/lib/types";
 import type { CharacterSearchResult } from "@/lib/storage/characters";
@@ -19,6 +20,9 @@ import type { CharacterSearchResult } from "@/lib/storage/characters";
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/users");
 vi.mock("@/lib/storage/characters");
+vi.mock("@/lib/storage/campaigns");
+vi.mock("@/lib/storage/activity");
+vi.mock("@/lib/storage/notifications");
 
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
@@ -637,5 +641,108 @@ describe("POST /api/characters", () => {
 
     // Restore console.error
     consoleErrorSpy.mockRestore();
+  });
+
+  it("should reject draft creation with nonexistent campaign", async () => {
+    const requestBody = {
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      name: "New Character",
+      campaignId: "nonexistent-campaign",
+    };
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(campaignStorageModule.getCampaignById).mockResolvedValue(null);
+
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(404);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Campaign not found");
+    expect(characterStorageModule.createCharacterDraft).not.toHaveBeenCalled();
+  });
+
+  it("should reject draft creation with mismatched campaign edition", async () => {
+    const requestBody = {
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      name: "New Character",
+      campaignId: "campaign-1",
+    };
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(campaignStorageModule.getCampaignById).mockResolvedValue({
+      id: "campaign-1",
+      gmId: "gm-user",
+      title: "Test Campaign",
+      status: "active",
+      editionId: "sr6",
+      editionCode: "sr6",
+      enabledBookIds: ["core-rulebook"],
+      enabledCreationMethodIds: ["priority"],
+      gameplayLevel: "experienced",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as import("@/lib/types").Campaign);
+
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toContain("does not match campaign edition");
+    expect(characterStorageModule.createCharacterDraft).not.toHaveBeenCalled();
+  });
+
+  it("should allow draft creation when edition matches campaign", async () => {
+    const requestBody = {
+      editionId: "sr5",
+      editionCode: "sr5",
+      creationMethodId: "priority",
+      name: "New Character",
+      campaignId: "campaign-1",
+    };
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-user-id");
+    vi.mocked(userStorageModule.getUserById).mockResolvedValue(mockUser);
+    vi.mocked(campaignStorageModule.getCampaignById).mockResolvedValue({
+      id: "campaign-1",
+      gmId: "gm-user",
+      title: "Test Campaign",
+      status: "active",
+      editionId: "sr5",
+      editionCode: "sr5",
+      enabledBookIds: ["core-rulebook"],
+      enabledCreationMethodIds: ["priority"],
+      gameplayLevel: "experienced",
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    } as import("@/lib/types").Campaign);
+    vi.mocked(characterStorageModule.createCharacterDraft).mockResolvedValue(mockDraft);
+
+    const request = createMockRequest("http://localhost:3000/api/characters", requestBody, "POST");
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(201);
+    expect(data.success).toBe(true);
+    expect(characterStorageModule.createCharacterDraft).toHaveBeenCalledWith(
+      "test-user-id",
+      "sr5",
+      "sr5",
+      "priority",
+      "New Character",
+      "campaign-1"
+    );
   });
 });

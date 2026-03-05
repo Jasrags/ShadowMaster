@@ -1448,6 +1448,17 @@ const campaignValidator: ValidatorDefinition = {
       return issues;
     }
 
+    // Check edition mismatch
+    if (character.editionCode !== campaign.editionCode) {
+      issues.push({
+        code: "CAMPAIGN_EDITION_MISMATCH",
+        message: `Character edition (${character.editionCode}) does not match campaign edition (${campaign.editionCode})`,
+        field: "editionCode",
+        severity: "error",
+        suggestion: "Create a new character using the campaign's edition",
+      });
+    }
+
     // Check if character uses only enabled books
     if (campaign.enabledBookIds && character.attachedBookIds) {
       const disabledBooks = character.attachedBookIds.filter(
