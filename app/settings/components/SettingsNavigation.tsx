@@ -34,7 +34,7 @@ export function SettingsNavigation({ activeSection, onSectionChange }: SettingsN
             className={`settings-nav-item ${isActive ? "settings-nav-item-active" : ""}`}
           >
             <item.icon
-              className={`mr-3 h-5 w-5 flex-shrink-0 ${isActive ? "text-emerald-400" : "text-zinc-500 group-hover:text-zinc-400"}`}
+              className={`mr-3 h-5 w-5 flex-shrink-0 ${isActive ? "text-emerald-600 dark:text-emerald-400" : "text-zinc-500 group-hover:text-zinc-400"}`}
               aria-hidden="true"
             />
             <span className="truncate">{item.name}</span>
