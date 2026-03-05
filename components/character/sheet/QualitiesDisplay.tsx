@@ -1,10 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import type { Character, QualitySelection } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
+import type { CharacterStateFlags } from "@/lib/types/effects";
 import { useQualities } from "@/lib/rules";
-import { formatEffectBadge, isUnifiedEffect, resolveRatingBasedValue } from "@/lib/rules/effects";
+import {
+  formatEffectBadge,
+  isUnifiedEffect,
+  resolveRatingBasedValue,
+  buildCharacterStateFlags,
+} from "@/lib/rules/effects";
 import type { EffectBadgeContext } from "@/lib/rules/effects";
 import { DisplayCard } from "./DisplayCard";
 import {
@@ -46,6 +52,51 @@ function renderDynamicStateText(
 }
 
 // ---------------------------------------------------------------------------
+// StateTogglePill
+// ---------------------------------------------------------------------------
+
+function StateTogglePill({
+  label,
+  active,
+  activeColor,
+  onToggle,
+}: {
+  label: string;
+  active: boolean;
+  activeColor: "red" | "amber";
+  onToggle: () => void;
+}) {
+  const colors = {
+    red: {
+      active: "border-red-500/40 bg-red-500/20 text-red-400 animate-pulse",
+      inactive:
+        "border-zinc-500/20 bg-zinc-500/10 text-zinc-500 hover:border-red-500/30 hover:text-red-400",
+    },
+    amber: {
+      active: "border-amber-500/40 bg-amber-500/20 text-amber-400",
+      inactive:
+        "border-zinc-500/20 bg-zinc-500/10 text-zinc-500 hover:border-amber-500/30 hover:text-amber-400",
+    },
+  };
+
+  return (
+    <button
+      data-testid="state-toggle-pill"
+      onClick={(e) => {
+        e.stopPropagation();
+        onToggle();
+      }}
+      className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase transition-colors ${
+        active ? colors[activeColor].active : colors[activeColor].inactive
+      }`}
+      title={`${active ? "Deactivate" : "Activate"} ${label}`}
+    >
+      {label}
+    </button>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Section config
 // ---------------------------------------------------------------------------
 
@@ -75,14 +126,20 @@ function QualityRow({
   karmaPillClasses,
   karmaValue,
   character,
+  characterStateFlags,
   onSettingsClick,
+  onStateToggle,
+  onFirstMeetingToggle,
 }: {
   selection: QualitySelection;
   data: QualityData | undefined;
   karmaPillClasses: string;
   karmaValue: number | undefined;
   character: Character;
+  characterStateFlags: CharacterStateFlags;
   onSettingsClick: (sel: QualitySelection) => void;
+  onStateToggle?: (qualityId: string, field: string, value: boolean) => void;
+  onFirstMeetingToggle?: () => void;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -146,12 +203,16 @@ function QualityRow({
       : undefined;
 
   const rawEffects = (data?.effects || []) as unknown[];
+  const hasFirstMeetingTrigger = rawEffects
+    .filter(isUnifiedEffect)
+    .some((e) => e.triggers.includes("first-meeting"));
   const effectBadges = rawEffects
     .filter(isUnifiedEffect)
     .map((effect) => {
       const ctx: EffectBadgeContext = {
         rating: charRating,
         dependencyType: addictionState?.substanceType,
+        activeCharacterStates: characterStateFlags,
       };
       // Resolve "rating-based" values from the quality's rating table
       if (typeof effect.value === "string" && ratingEntry) {
@@ -203,6 +264,51 @@ function QualityRow({
             Pending
           </span>
         )}
+        {/* State toggle pills */}
+        {rawSelection.dynamicState?.type === "addiction" &&
+          onStateToggle &&
+          (() => {
+            const addState = rawSelection.dynamicState as {
+              type: "addiction";
+              state: { withdrawalActive: boolean };
+            };
+            return (
+              <StateTogglePill
+                label="Withdrawal"
+                active={addState.state.withdrawalActive}
+                activeColor="red"
+                onToggle={() =>
+                  onStateToggle(id, "withdrawalActive", !addState.state.withdrawalActive)
+                }
+              />
+            );
+          })()}
+        {rawSelection.dynamicState?.type === "allergy" &&
+          onStateToggle &&
+          (() => {
+            const allState = rawSelection.dynamicState as {
+              type: "allergy";
+              state: { currentlyExposed: boolean };
+            };
+            return (
+              <StateTogglePill
+                label="Exposed"
+                active={allState.state.currentlyExposed}
+                activeColor="amber"
+                onToggle={() =>
+                  onStateToggle(id, "currentlyExposed", !allState.state.currentlyExposed)
+                }
+              />
+            );
+          })()}
+        {hasFirstMeetingTrigger && onFirstMeetingToggle && (
+          <StateTogglePill
+            label="First Meeting"
+            active={characterStateFlags.firstMeeting ?? false}
+            activeColor="amber"
+            onToggle={onFirstMeetingToggle}
+          />
+        )}
         {karmaValue !== undefined && (
           <span
             data-testid="karma-pill"
@@ -235,7 +341,13 @@ function QualityRow({
                   className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
                 >
                   {badge.label}
-                  {badge.trigger && <span className="opacity-50">· {badge.trigger}</span>}
+                  {badge.trigger && (
+                    <span
+                      className={badge.triggerActive ? "font-semibold text-red-400" : "opacity-50"}
+                    >
+                      · {badge.trigger}
+                    </span>
+                  )}
                 </span>
               ))}
             </div>
@@ -278,6 +390,33 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
   const { positive: positiveData, negative: negativeData } = useQualities();
   const [activeSelection, setActiveSelection] = useState<QualitySelection | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [firstMeeting, setFirstMeeting] = useState(false);
+
+  const persistedFlags = buildCharacterStateFlags(character);
+  const characterStateFlags: CharacterStateFlags = {
+    ...persistedFlags,
+    ...(firstMeeting ? { firstMeeting: true } : {}),
+  };
+
+  const handleStateToggle = useCallback(
+    async (qualityId: string, field: string, value: boolean) => {
+      if (!onUpdate) return;
+      try {
+        const characterId = character.id;
+        const res = await fetch(`/api/characters/${characterId}/qualities/${qualityId}/state`, {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ [field]: value }),
+        });
+        if (!res.ok) return;
+        const data = await res.json();
+        onUpdate(data.character);
+      } catch {
+        // Toggle failed — UI stays unchanged
+      }
+    },
+    [character.id, onUpdate]
+  );
 
   const positiveSelections = character.positiveQualities || [];
   const negativeSelections = character.negativeQualities || [];
@@ -335,7 +474,10 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
                             karmaPillClasses={config.karmaPillClasses}
                             karmaValue={karmaValue}
                             character={character}
+                            characterStateFlags={characterStateFlags}
                             onSettingsClick={handleSettingsClick}
+                            onStateToggle={onUpdate ? handleStateToggle : undefined}
+                            onFirstMeetingToggle={() => setFirstMeeting((prev) => !prev)}
                           />
                         );
                       })}

@@ -13,11 +13,13 @@ import type {
   EnvironmentContext,
   EffectResolutionContext,
   SpecificAction,
+  CharacterStateFlags,
 } from "@/lib/types/effects";
 
 export class EffectContextBuilder {
   private action: EffectActionContext | undefined;
   private environment: EnvironmentContext | undefined;
+  private charState: CharacterStateFlags | undefined;
 
   // ---------------------------------------------------------------------------
   // Static factory methods
@@ -94,6 +96,11 @@ export class EffectContextBuilder {
     return this;
   }
 
+  withCharacterState(flags: CharacterStateFlags): this {
+    this.charState = { ...this.charState, ...flags };
+    return this;
+  }
+
   // ---------------------------------------------------------------------------
   // Terminal method
   // ---------------------------------------------------------------------------
@@ -112,6 +119,7 @@ export class EffectContextBuilder {
     return {
       action: { ...this.action },
       ...(this.environment ? { environment: { ...this.environment } } : {}),
+      ...(this.charState ? { characterState: { ...this.charState } } : {}),
     };
   }
 

@@ -14,7 +14,11 @@ import { useMemo, useCallback } from "react";
 import type { Character } from "@/lib/types";
 import type { MergedRuleset } from "@/lib/types/edition";
 import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
-import { gatherEffectSources, resolveFromSources } from "@/lib/rules/effects";
+import {
+  gatherEffectSources,
+  resolveFromSources,
+  buildCharacterStateFlags,
+} from "@/lib/rules/effects";
 import type { SourcedEffect } from "@/lib/rules/effects";
 
 export interface UseCharacterEffectsResult {
@@ -33,11 +37,15 @@ export function useCharacterEffects(
     return gatherEffectSources(character, ruleset);
   }, [character, ruleset]);
 
+  const characterState = useMemo(() => buildCharacterStateFlags(character), [character]);
+
   const resolve = useCallback(
     (ctx: EffectResolutionContext): EffectResolutionResult => {
-      return resolveFromSources(sources, ctx);
+      // Auto-inject character state if not already set by caller
+      const ctxWithState = ctx.characterState ? ctx : { ...ctx, characterState };
+      return resolveFromSources(sources, ctxWithState);
     },
-    [sources]
+    [sources, characterState]
   );
 
   return { sources, resolve };

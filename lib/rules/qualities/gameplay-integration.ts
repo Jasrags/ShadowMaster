@@ -89,7 +89,9 @@ export function calculateSkillDicePool(
   );
   pool += qualityModifiers;
 
-  // Apply withdrawal penalties (if applicable)
+  // @deprecated Imperative withdrawal/allergy penalties — kept as fallback until
+  // unified effect pipeline (Issue #485) is verified end-to-end.
+  // TODO: Remove once unified pipeline handles all state-dependent triggers.
   const allQualities = [
     ...(character.positiveQualities || []),
     ...(character.negativeQualities || []),
@@ -112,7 +114,6 @@ export function calculateSkillDicePool(
     }
   }
 
-  // Apply allergy penalties (if applicable)
   for (const selection of allQualities) {
     if (selection.dynamicState?.type === "allergy") {
       const allergyPenalty = calculateAllergyPenalties(

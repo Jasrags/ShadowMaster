@@ -327,6 +327,21 @@ export interface EnvironmentContext {
 }
 
 /**
+ * Character state flags for conditional triggers.
+ *
+ * Tracks dynamic states like withdrawal, exposure, and first-meeting
+ * that activate state-dependent quality effects in the unified pipeline.
+ */
+export interface CharacterStateFlags {
+  /** Addiction withdrawal is active */
+  withdrawalActive?: boolean;
+  /** Allergy exposure is active */
+  exposureActive?: boolean;
+  /** First meeting with NPC (session-level, not persisted) */
+  firstMeeting?: boolean;
+}
+
+/**
  * Full resolution context combining action and environment.
  */
 export interface EffectResolutionContext {
@@ -335,6 +350,9 @@ export interface EffectResolutionContext {
 
   /** Environmental conditions (optional) */
   environment?: EnvironmentContext;
+
+  /** Character state flags for conditional triggers (optional) */
+  characterState?: CharacterStateFlags;
 }
 
 /**

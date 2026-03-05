@@ -259,8 +259,7 @@ export function matchesTrigger(
       return "testCategory" in context && context.testCategory === "social";
 
     case "first-meeting":
-      // Would need additional context flag
-      return false; // Placeholder
+      return context.characterState?.includes("first-meeting") ?? false;
 
     case "magic-use":
       return (
@@ -284,12 +283,10 @@ export function matchesTrigger(
       return false; // Placeholder
 
     case "withdrawal":
-      // Would need additional context flag
-      return false; // Placeholder
+      return context.characterState?.includes("withdrawal") ?? false;
 
     case "on-exposure":
-      // Would need additional context flag
-      return false; // Placeholder
+      return context.characterState?.includes("on-exposure") ?? false;
 
     default:
       return false;
