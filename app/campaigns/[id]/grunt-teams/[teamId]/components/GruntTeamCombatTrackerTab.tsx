@@ -11,6 +11,8 @@ import {
   Star,
   Skull,
   CheckCircle,
+  UserPlus,
+  UserMinus,
 } from "lucide-react";
 import type { GruntTeam, IndividualGrunts, IndividualGrunt, ID } from "@/lib/types";
 import { ConditionMonitor } from "./ConditionMonitor";
@@ -23,6 +25,8 @@ interface GruntTeamCombatTrackerTabProps {
   onSpendEdge?: (amount: number) => Promise<void>;
   onRollInitiative?: (type: "group" | "individual") => Promise<void>;
   onRefresh?: () => void;
+  onAddGrunt?: () => void;
+  onRemoveGrunt?: (gruntId: ID) => void;
 }
 
 function MoraleIndicator({
@@ -319,6 +323,8 @@ export function GruntTeamCombatTrackerTab({
   onSpendEdge,
   onRollInitiative,
   onRefresh,
+  onAddGrunt,
+  onRemoveGrunt,
 }: GruntTeamCombatTrackerTabProps) {
   const isGM = userRole === "gm";
   const readonly = !isGM;
@@ -333,15 +339,52 @@ export function GruntTeamCombatTrackerTab({
   return (
     <div className="space-y-6">
       {/* Control Panel Header */}
-      {isGM && onRefresh && (
-        <div className="flex justify-end">
-          <button
-            onClick={onRefresh}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
-          >
-            <RefreshCw className="h-4 w-4" />
-            Refresh
-          </button>
+      {isGM && (
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            {onAddGrunt && (
+              <button
+                onClick={onAddGrunt}
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-green-100 text-green-700 hover:bg-green-200 dark:bg-green-900/30 dark:text-green-400 dark:hover:bg-green-900/50"
+              >
+                <UserPlus className="h-4 w-4" />
+                Add Grunt
+              </button>
+            )}
+            {onRemoveGrunt && individualGrunts && (
+              <button
+                onClick={() => {
+                  // Find last alive grunt to remove
+                  const aliveGrunts = Object.entries(individualGrunts.grunts).filter(
+                    ([, g]) => !g.isDead
+                  );
+                  if (aliveGrunts.length > 0) {
+                    const [lastId] = aliveGrunts[aliveGrunts.length - 1];
+                    if (confirm("Remove the last grunt from the team?")) {
+                      onRemoveGrunt(lastId);
+                    }
+                  }
+                }}
+                disabled={
+                  !individualGrunts ||
+                  Object.values(individualGrunts.grunts).filter((g) => !g.isDead).length === 0
+                }
+                className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-red-100 text-red-700 hover:bg-red-200 dark:bg-red-900/30 dark:text-red-400 dark:hover:bg-red-900/50 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <UserMinus className="h-4 w-4" />
+                Remove Grunt
+              </button>
+            )}
+          </div>
+          {onRefresh && (
+            <button
+              onClick={onRefresh}
+              className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium rounded-lg bg-zinc-100 text-zinc-700 hover:bg-zinc-200 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
+            >
+              <RefreshCw className="h-4 w-4" />
+              Refresh
+            </button>
+          )}
         </div>
       )}
 

@@ -22,6 +22,7 @@ import type {
   LieutenantStats,
 } from "@/lib/types";
 import { ProfessionalRatingBadge } from "../components/ProfessionalRatingBadge";
+import { GruntStatsEditor } from "../components/GruntStatsEditor";
 import { PROFESSIONAL_RATING_DESCRIPTIONS } from "@/lib/types";
 
 type WizardStep = "basics" | "template" | "lieutenant" | "specialists" | "visibility" | "review";
@@ -449,6 +450,26 @@ export default function CreateGruntTeamPage() {
               >
                 Clear selection
               </button>
+            )}
+
+            {/* Customize Stats */}
+            {formState.baseGrunts && (
+              <details className="rounded-lg border border-zinc-200 dark:border-zinc-800">
+                <summary className="cursor-pointer px-4 py-3 text-sm font-medium text-zinc-700 dark:text-zinc-300 hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                  Customize Stats
+                </summary>
+                <div className="px-4 pb-4">
+                  <GruntStatsEditor
+                    stats={formState.baseGrunts}
+                    onChange={(stats) => setFormState((prev) => ({ ...prev, baseGrunts: stats }))}
+                    templateStats={
+                      formState.templateId
+                        ? templates.find((t) => t.id === formState.templateId)?.baseGrunts
+                        : undefined
+                    }
+                  />
+                </div>
+              </details>
             )}
           </div>
         )}
