@@ -1,12 +1,13 @@
 /**
  * Tests for /api/notifications endpoint
  *
- * Tests listing notifications (GET) and marking all as read (POST).
+ * Tests listing notifications (GET /api/notifications) and marking all as read (POST /api/notifications/mark-all-read).
  */
 
 import { describe, it, expect, vi, beforeEach } from "vitest";
 import { NextRequest } from "next/server";
-import { GET, POST } from "../route";
+import { GET } from "../route";
+import { POST } from "../mark-all-read/route";
 import * as sessionModule from "@/lib/auth/session";
 import * as usersModule from "@/lib/storage/users";
 import * as notificationsModule from "@/lib/storage/notifications";
@@ -212,7 +213,7 @@ describe("GET /api/notifications", () => {
   });
 });
 
-describe("POST /api/notifications", () => {
+describe("POST /api/notifications/mark-all-read", () => {
   const createMockRequest = (body: object): NextRequest => {
     return {
       json: async () => body,

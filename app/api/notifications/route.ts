@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getUserNotifications, markAllRead, getUnreadCount } from "@/lib/storage/notifications";
+import { getUserNotifications, getUnreadCount } from "@/lib/storage/notifications";
 
 /**
  * GET /api/notifications - Get user notifications
@@ -42,32 +42,6 @@ export async function GET(request: NextRequest) {
     });
   } catch (error) {
     console.error("Error fetching notifications:", error);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
-  }
-}
-
-/**
- * POST /api/notifications/mark-all-read - Mark all notifications as read
- */
-export async function POST(request: NextRequest) {
-  try {
-    const userId = await getSession();
-
-    if (!userId) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const campaignId = body.campaignId;
-
-    const count = await markAllRead(userId, campaignId);
-
-    return NextResponse.json({
-      success: true,
-      updatedCount: count,
-    });
-  } catch (error) {
-    console.error("Error marking notifications as read:", error);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }
