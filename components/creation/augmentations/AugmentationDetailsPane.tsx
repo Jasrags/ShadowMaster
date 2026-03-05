@@ -349,10 +349,8 @@ function EffectsSection({
           <span
             key={i}
             className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ${badge.colorClass}`}
-            title={badge.detail}
           >
             {badge.label}
-            {badge.detail ? `: ${badge.detail}` : ""}
           </span>
         ))}
       </div>

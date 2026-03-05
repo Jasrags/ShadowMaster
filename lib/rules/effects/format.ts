@@ -10,10 +10,8 @@
 import type { Effect } from "@/lib/types/effects";
 
 export interface EffectBadge {
-  /** Display label, e.g., "+2 Dice Pool" */
+  /** Compact display text, e.g., "+2 Sneaking" */
   label: string;
-  /** Detail text, e.g., "Stealth tests" */
-  detail: string;
   /** Tailwind color classes for the badge */
   colorClass: string;
 }
@@ -81,19 +79,19 @@ const EFFECT_TYPE_CONFIG: Record<string, { name: string; colorClass: string } | 
 };
 
 /**
- * Derive detail text from an effect's target.
+ * Derive a short target name from an effect's target.
  */
-function getDetailText(effect: Effect): string {
+function getTargetName(effect: Effect): string {
   const { target } = effect;
   if (!target) return "";
 
-  if (target.skill) return `${capitalize(target.skill)} tests`;
-  if (target.skillGroup) return `${capitalize(target.skillGroup)} group`;
+  if (target.skill) return capitalize(target.skill);
+  if (target.skillGroup) return `${capitalize(target.skillGroup)} Group`;
   if (target.attribute) return capitalize(target.attribute);
-  if (target.limit) return `${capitalize(target.limit)} limit`;
-  if (target.perceptionType) return `${capitalize(target.perceptionType)} perception`;
+  if (target.limit) return `${capitalize(target.limit)} Limit`;
+  if (target.perceptionType) return `${capitalize(target.perceptionType)} Perception`;
   if (target.specificAction) return capitalize(target.specificAction.replace(/-/g, " "));
-  if (target.testCategory) return `${capitalize(target.testCategory)} tests`;
+  if (target.testCategory) return capitalize(target.testCategory);
   if (target.weaponCategory?.length) return target.weaponCategory.map(capitalize).join(", ");
   if (target.stat) return capitalize(target.stat);
 
@@ -116,7 +114,10 @@ function capitalize(str: string): string {
 }
 
 /**
- * Format an Effect into a displayable badge.
+ * Format an Effect into a compact displayable badge.
+ *
+ * Produces short labels like "+2 Sneaking", "+1 Physical Limit", "+3 Initiative".
+ * Falls back to type name when no target is available (e.g., "+2 Dice Pool").
  *
  * Returns null for effect types that don't translate to a meaningful badge
  * (e.g., "special" type or types without display config).
@@ -126,11 +127,10 @@ export function formatEffectBadge(effect: Effect): EffectBadge | null {
   if (!config) return null;
 
   const valueStr = formatValue(effect.value);
-  const detail = effect.description || getDetailText(effect);
+  const target = getTargetName(effect);
 
   return {
-    label: `${valueStr} ${config.name}`,
-    detail,
+    label: target ? `${valueStr} ${target}` : `${valueStr} ${config.name}`,
     colorClass: config.colorClass,
   };
 }

@@ -73,10 +73,8 @@ export function SelectedQualityCard({
             <span
               key={i}
               className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
-              title={badge.detail}
             >
               {badge.label}
-              {badge.detail ? `: ${badge.detail}` : ""}
             </span>
           ))}
         </div>

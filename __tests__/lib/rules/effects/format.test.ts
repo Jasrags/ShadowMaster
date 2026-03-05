@@ -29,7 +29,7 @@ describe("formatEffectBadge", () => {
     expect(badge!.label).toBe("-1 Dice Pool");
   });
 
-  it("formats limit-modifier", () => {
+  it("formats limit-modifier with target in label", () => {
     const badge = formatEffectBadge(
       makeEffect({
         type: "limit-modifier",
@@ -39,12 +39,11 @@ describe("formatEffectBadge", () => {
     );
 
     expect(badge).not.toBeNull();
-    expect(badge!.label).toBe("+1 Limit");
-    expect(badge!.detail).toContain("Physical");
+    expect(badge!.label).toBe("+1 Physical Limit");
     expect(badge!.colorClass).toContain("blue");
   });
 
-  it("formats attribute-modifier", () => {
+  it("formats attribute-modifier with target in label", () => {
     const badge = formatEffectBadge(
       makeEffect({
         type: "attribute-modifier",
@@ -54,8 +53,7 @@ describe("formatEffectBadge", () => {
     );
 
     expect(badge).not.toBeNull();
-    expect(badge!.label).toBe("+1 Attribute");
-    expect(badge!.detail).toContain("Agility");
+    expect(badge!.label).toBe("+1 Agility");
     expect(badge!.colorClass).toContain("purple");
   });
 
@@ -75,29 +73,24 @@ describe("formatEffectBadge", () => {
     expect(badge!.colorClass).toContain("amber");
   });
 
-  it("uses description as detail text when provided", () => {
-    const badge = formatEffectBadge(
-      makeEffect({
-        description: "Stealth tests in urban environments",
-        target: { skill: "stealth" },
-      })
-    );
-
-    expect(badge).not.toBeNull();
-    expect(badge!.detail).toBe("Stealth tests in urban environments");
-  });
-
-  it("derives detail from target.skill", () => {
+  it("uses target name in label for skill target", () => {
     const badge = formatEffectBadge(makeEffect({ target: { skill: "sneaking" } }));
 
     expect(badge).not.toBeNull();
-    expect(badge!.detail).toBe("Sneaking tests");
+    expect(badge!.label).toBe("+2 Sneaking");
   });
 
-  it("derives detail from target.skillGroup", () => {
+  it("uses target name in label for skillGroup target", () => {
     const badge = formatEffectBadge(makeEffect({ target: { skillGroup: "stealth" } }));
 
-    expect(badge!.detail).toBe("Stealth group");
+    expect(badge!.label).toBe("+2 Stealth Group");
+  });
+
+  it("falls back to type name when no target", () => {
+    const badge = formatEffectBadge(makeEffect({ target: {} }));
+
+    expect(badge).not.toBeNull();
+    expect(badge!.label).toBe("+2 Dice Pool");
   });
 
   it("handles perRating value format", () => {
