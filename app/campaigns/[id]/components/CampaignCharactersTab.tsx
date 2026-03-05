@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import type { Campaign, Character } from "@/lib/types";
-import { Plus, Loader2, User, Search } from "lucide-react";
+import { Plus, Loader2, User, Search, LayoutGrid, TableProperties } from "lucide-react";
+import PartyOverviewPanel from "./PartyOverviewPanel";
 
 interface CampaignCharactersTabProps {
   campaign: Campaign;
@@ -16,6 +17,7 @@ export default function CampaignCharactersTab({ campaign, isGM }: CampaignCharac
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
+  const [viewMode, setViewMode] = useState<"cards" | "overview">("cards");
 
   useEffect(() => {
     async function fetchCharacters() {
@@ -78,17 +80,42 @@ export default function CampaignCharactersTab({ campaign, isGM }: CampaignCharac
             className="w-full rounded-md border border-zinc-300 py-2 pl-10 pr-3 text-sm focus:border-indigo-500 focus:ring-indigo-500 dark:border-zinc-700 dark:bg-black dark:text-white"
           />
         </div>
-        <button
-          onClick={handleCreateCharacter}
-          className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
-        >
-          <Plus className="h-4 w-4" />
-          Create Character
-        </button>
+        <div className="flex items-center gap-2">
+          {isGM && (
+            <div className="flex rounded-md border border-zinc-700 p-0.5">
+              <button
+                onClick={() => setViewMode("cards")}
+                className={`rounded p-1.5 ${viewMode === "cards" ? "bg-zinc-700 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+                title="Card view"
+              >
+                <LayoutGrid className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("overview")}
+                className={`rounded p-1.5 ${viewMode === "overview" ? "bg-zinc-700 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+                title="Party overview"
+              >
+                <TableProperties className="h-4 w-4" />
+              </button>
+            </div>
+          )}
+          <button
+            onClick={handleCreateCharacter}
+            className="inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700"
+          >
+            <Plus className="h-4 w-4" />
+            Create Character
+          </button>
+        </div>
       </div>
 
       {/* Character List */}
-      {filteredCharacters.length === 0 ? (
+      {viewMode === "overview" && isGM ? (
+        <PartyOverviewPanel
+          characters={filteredCharacters}
+          onCharacterClick={(id) => router.push(`/characters/${id}`)}
+        />
+      ) : filteredCharacters.length === 0 ? (
         <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-zinc-700 dark:bg-black">
           <User className="mx-auto h-12 w-12 text-zinc-300 dark:text-zinc-600" />
           <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-50">
