@@ -547,6 +547,92 @@ describe("CombatQuickReference", () => {
   });
 
   // -----------------------------------------------------------------------
+  // Specialization bonuses
+  // -----------------------------------------------------------------------
+
+  describe("specialization bonuses on weapons", () => {
+    it("adds +2 when weapon matches a specialization", () => {
+      const char = baseCharacter({
+        skillSpecializations: { pistols: ["Heavy Pistols"] },
+        gear: [
+          {
+            id: "weapon-1",
+            name: "Ares Predator V",
+            category: "weapons",
+            subcategory: "heavy-pistols",
+            accuracy: 5,
+            damage: "8P",
+            ap: -1,
+            mode: ["SA"],
+            quantity: 1,
+            availability: 5,
+            cost: 725,
+          } satisfies Weapon,
+        ] as unknown as Character["gear"],
+      });
+
+      renderComponent(char);
+      const weapon = getPoolProps("Ares Predator V");
+      // agility(5) + pistols(3) + spec(2) = 10
+      expect(weapon.pool).toBe(10);
+      const specMod = hasModifier(weapon.modifiers, "Spec: Heavy Pistols");
+      expect(specMod).toBeDefined();
+      expect(specMod!.value).toBe(2);
+    });
+
+    it("does not add spec bonus when weapon does not match any specialization", () => {
+      const char = baseCharacter({
+        skillSpecializations: { pistols: ["Light Pistols"] },
+        gear: [
+          {
+            id: "weapon-1",
+            name: "Ares Predator V",
+            category: "weapons",
+            subcategory: "heavy-pistols",
+            accuracy: 5,
+            damage: "8P",
+            ap: -1,
+            mode: ["SA"],
+            quantity: 1,
+            availability: 5,
+            cost: 725,
+          } satisfies Weapon,
+        ] as unknown as Character["gear"],
+      });
+
+      renderComponent(char);
+      const weapon = getPoolProps("Ares Predator V");
+      // agility(5) + pistols(3) = 8 (no spec)
+      expect(weapon.pool).toBe(8);
+      expect(hasModifier(weapon.modifiers, "Spec: Light Pistols")).toBeUndefined();
+    });
+
+    it("does not add spec bonus when character has no specializations", () => {
+      const char = baseCharacter({
+        gear: [
+          {
+            id: "weapon-1",
+            name: "Ares Predator V",
+            category: "weapons",
+            subcategory: "heavy-pistols",
+            accuracy: 5,
+            damage: "8P",
+            ap: -1,
+            mode: ["SA"],
+            quantity: 1,
+            availability: 5,
+            cost: 725,
+          } satisfies Weapon,
+        ] as unknown as Character["gear"],
+      });
+
+      renderComponent(char);
+      const weapon = getPoolProps("Ares Predator V");
+      expect(weapon.pool).toBe(8);
+    });
+  });
+
+  // -----------------------------------------------------------------------
   // Common Tests (no encumbrance/wireless)
   // -----------------------------------------------------------------------
 

@@ -211,6 +211,22 @@ function getWeaponPools(
       modifiers.push({ label: "Smartgun", value: smartgunBonus, type: "gear" });
     }
 
+    // Check for specialization bonus (+2 for matching spec)
+    let matchedSpecialization: string | undefined;
+    const specs = character.skillSpecializations?.[skillId] || [];
+    if (specs.length > 0) {
+      const weaponName = weapon.name.toLowerCase();
+      const weaponSubcat = (weapon.subcategory || "").toLowerCase().replace(/-/g, " ");
+      matchedSpecialization = specs.find((spec) => {
+        const normalizedSpec = spec.toLowerCase();
+        return weaponName.includes(normalizedSpec) || weaponSubcat.includes(normalizedSpec);
+      });
+      if (matchedSpecialization) {
+        modifiers.push({ label: `Spec: ${matchedSpecialization}`, value: 2, type: "other" });
+        pool += 2;
+      }
+    }
+
     // Armor encumbrance (agility penalty)
     if (armorAgilityPenalty < 0) {
       modifiers.push({

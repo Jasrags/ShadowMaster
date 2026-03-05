@@ -38,6 +38,7 @@ interface PoolBreakdown {
   skillRating: number;
   augBonuses: Array<{ source: string; value: number }>;
   effectBonuses?: Array<{ source: string; value: number; isWireless: boolean }>;
+  specBonuses?: Array<{ name: string; value: number }>;
 }
 
 interface EnrichedSkill {
@@ -114,7 +115,7 @@ function SkillRow({
         )}
         {skill.poolBreakdown ? (
           <span
-            className="ml-auto shrink-0"
+            className="ml-auto flex shrink-0 items-center gap-1"
             onClick={(e) => {
               e.stopPropagation();
               onSelect?.(skill.id, skill.dicePool, skill.attrAbbr);
@@ -138,6 +139,14 @@ function SkillRow({
                 {skill.dicePool}
               </AriaButton>
             </Tooltip>
+            {skill.specs.length > 0 && (
+              <span
+                data-testid="spec-bonus-indicator"
+                className="font-mono text-[10px] font-semibold text-amber-500 dark:text-amber-400"
+              >
+                [+2]
+              </span>
+            )}
           </span>
         ) : (
           <button
@@ -257,6 +266,14 @@ function PoolTooltipContent({ breakdown }: { breakdown: PoolBreakdown }) {
           </span>
         </div>
       ))}
+      {(breakdown.specBonuses || []).map((b, i) => (
+        <div key={`spec-${i}`} className="flex items-center justify-between gap-4">
+          <span className="text-amber-400">
+            {b.name} <span className="text-amber-400/60">(contextual)</span>
+          </span>
+          <span className="font-mono font-semibold text-amber-400">+{b.value}</span>
+        </div>
+      ))}
       <div className="border-t border-zinc-600" />
       <div className="flex items-center justify-between gap-4">
         <span className="text-[10px] font-semibold uppercase tracking-wide text-zinc-200">
@@ -325,6 +342,7 @@ export function SkillsDisplay({ character, onSelect, resolveEffects }: SkillsDis
             skillRating: rating,
             augBonuses,
             effectBonuses: effectBonuses.length > 0 ? effectBonuses : undefined,
+            specBonuses: specs.length > 0 ? specs.map((s) => ({ name: s, value: 2 })) : undefined,
           }
         : undefined,
     };
