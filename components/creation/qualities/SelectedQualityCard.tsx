@@ -2,6 +2,7 @@
 
 import { X } from "lucide-react";
 import type { SelectedQualityCardProps } from "./types";
+import { formatEffectBadge, isUnifiedEffect } from "@/lib/rules/effects";
 
 export function SelectedQualityCard({
   quality,
@@ -16,6 +17,13 @@ export function SelectedQualityCard({
     selection.level && quality.levels
       ? quality.levels.find((l) => l.level === selection.level)?.name
       : null;
+
+  // Extract unified effects from quality data for badge display
+  const effectBadges =
+    (quality.effects as unknown[] | undefined)
+      ?.filter(isUnifiedEffect)
+      .map(formatEffectBadge)
+      .filter((b): b is NonNullable<typeof b> => b !== null) ?? [];
 
   const displayName = selection.specification
     ? `${quality.name} (${selection.specification})`
@@ -58,6 +66,21 @@ export function SelectedQualityCard({
       </div>
       {/* Description */}
       <p className="ml-3 text-xs text-zinc-500 dark:text-zinc-400">{quality.summary}</p>
+      {/* Effect Badges */}
+      {effectBadges.length > 0 && (
+        <div className="ml-3 mt-1 flex flex-wrap gap-1">
+          {effectBadges.map((badge, i) => (
+            <span
+              key={i}
+              className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+              title={badge.detail}
+            >
+              {badge.label}
+              {badge.detail ? `: ${badge.detail}` : ""}
+            </span>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

@@ -8,7 +8,8 @@
  * bonuses, wireless bonus, magic/resonance warning, and validation errors.
  */
 
-import { AlertTriangle, Zap, Cpu, Heart, Ban } from "lucide-react";
+import { AlertTriangle, Zap, Cpu, Heart, Ban, Sparkles } from "lucide-react";
+import { formatEffectBadge, isUnifiedEffect } from "@/lib/rules/effects";
 import type { CyberwareCatalogItemData, BiowareCatalogItemData } from "@/lib/rules/RulesetContext";
 import type { CyberlimbLocation, CyberlimbType } from "@/lib/types/cyberlimb";
 import type { SkillData } from "@/lib/rules/RulesetContext";
@@ -277,6 +278,9 @@ export function AugmentationDetailsPane({
         </div>
       )}
 
+      {/* Unified Effects */}
+      <EffectsSection selectedItem={selectedItem} />
+
       {/* Magic/Resonance warning */}
       {(isAwakened || isTechnomancer) && projectedMagicLoss > 0 && (
         <div className="flex items-start gap-2 rounded-lg bg-amber-50 p-3 dark:bg-amber-900/20">
@@ -309,6 +313,49 @@ export function AugmentationDetailsPane({
           Exceeds availability limit ({maxAvailability})
         </div>
       )}
+    </div>
+  );
+}
+
+// =============================================================================
+// EFFECTS SECTION
+// =============================================================================
+
+function EffectsSection({
+  selectedItem,
+}: {
+  selectedItem: CyberwareCatalogItemData | BiowareCatalogItemData | null;
+}) {
+  if (!selectedItem) return null;
+
+  const effects = (selectedItem as unknown as Record<string, unknown>).effects;
+  if (!Array.isArray(effects)) return null;
+
+  const badges = effects
+    .filter(isUnifiedEffect)
+    .map(formatEffectBadge)
+    .filter((b): b is NonNullable<typeof b> => b !== null);
+
+  if (badges.length === 0) return null;
+
+  return (
+    <div>
+      <h4 className="flex items-center gap-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">
+        <Sparkles className="h-3 w-3" />
+        Effects
+      </h4>
+      <div className="mt-1 flex flex-wrap gap-1">
+        {badges.map((badge, i) => (
+          <span
+            key={i}
+            className={`inline-flex items-center rounded px-2 py-0.5 text-xs font-medium ${badge.colorClass}`}
+            title={badge.detail}
+          >
+            {badge.label}
+            {badge.detail ? `: ${badge.detail}` : ""}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
