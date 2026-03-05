@@ -1,0 +1,611 @@
+{
+  "id": "0bd8f72f-b5d9-45b7-a530-0c7f462257a1",
+  "ownerId": "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c",
+  "editionId": "sr5",
+  "editionCode": "sr5",
+  "creationMethodId": "sr5-priority",
+  "rulesetSnapshotId": "sr5-core-snapshot",
+  "attachedBookIds": [
+    "sr5-core-rulebook"
+  ],
+  "name": "Whisper",
+  "metatype": "elf",
+  "gender": "Female",
+  "age": 34,
+  "height": "1.82m",
+  "weight": "62kg",
+  "description": "An elven physical adept who moves like wind and strikes like lightning. Whisper trained in a remote monastery in the Tir before leaving to find her own path in the shadows of Seattle. She channels magic through her body, enhancing her natural speed and combat prowess to superhuman levels. Quiet and contemplative, she speaks only when necessary — but her blade speaks volumes. Bonded to a weapon focus katana she calls 'Silent Song'.",
+  "status": "active",
+  "attributes": {
+    "body": 4,
+    "agility": 7,
+    "reaction": 5,
+    "strength": 4,
+    "willpower": 4,
+    "logic": 3,
+    "intuition": 5,
+    "charisma": 3
+  },
+  "specialAttributes": {
+    "edge": 2,
+    "essence": 5.8,
+    "magic": 5
+  },
+  "magicalPath": "adept",
+  "essenceHole": {
+    "peakEssenceLoss": 1.0,
+    "currentEssenceLoss": 0.2,
+    "essenceHole": 0.8,
+    "magicLost": 1
+  },
+  "adeptPowers": [
+    {
+      "id": "adept-critical-strike",
+      "catalogId": "critical-strike",
+      "name": "Critical Strike (Blades)",
+      "powerPointCost": 0.5,
+      "rating": 1,
+      "specification": "Blades"
+    },
+    {
+      "id": "adept-improved-ability",
+      "catalogId": "improved-ability",
+      "name": "Improved Ability (Blades)",
+      "powerPointCost": 1,
+      "rating": 2,
+      "specification": "Blades"
+    },
+    {
+      "id": "adept-improved-reflexes",
+      "catalogId": "improved-reflexes",
+      "name": "Improved Reflexes",
+      "powerPointCost": 2.5,
+      "rating": 2
+    },
+    {
+      "id": "adept-killing-hands",
+      "catalogId": "killing-hands",
+      "name": "Killing Hands",
+      "powerPointCost": 0.5
+    },
+    {
+      "id": "adept-combat-sense",
+      "catalogId": "combat-sense",
+      "name": "Combat Sense",
+      "powerPointCost": 0.5,
+      "rating": 1
+    }
+  ],
+  "foci": [
+    {
+      "catalogId": "weapon-focus",
+      "name": "Weapon Focus (Katana) Force 3",
+      "type": "weapon",
+      "force": 3,
+      "bonded": true,
+      "karmaToBond": 9,
+      "cost": 21000,
+      "availability": 12,
+      "legality": "restricted",
+      "notes": "Bonded. 'Silent Song' — +3 dice and accuracy for melee attacks, deals damage to spirits."
+    }
+  ],
+  "skills": {
+    "blades": 6,
+    "throwing-weapons": 4,
+    "gymnastics": 5,
+    "running": 3,
+    "sneaking": 5,
+    "perception": 4,
+    "unarmed-combat": 3,
+    "assensing": 2,
+    "etiquette": 2,
+    "pistols": 2,
+    "survival": 2,
+    "tracking": 2
+  },
+  "skillSpecializations": {
+    "blades": [
+      "Katanas"
+    ],
+    "sneaking": [
+      "Urban"
+    ]
+  },
+  "knowledgeSkills": [
+    {
+      "name": "Tir Tairngire Politics",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Martial Arts Traditions",
+      "category": "academic",
+      "rating": 4
+    },
+    {
+      "name": "Seattle Underworld",
+      "category": "street",
+      "rating": 3
+    },
+    {
+      "name": "Meditation Techniques",
+      "category": "interests",
+      "rating": 2
+    }
+  ],
+  "languages": [
+    {
+      "name": "English",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Sperethiel",
+      "rating": 0,
+      "isNative": true
+    },
+    {
+      "name": "Japanese",
+      "rating": 3,
+      "isNative": false
+    }
+  ],
+  "positiveQualities": [
+    {
+      "qualityId": "bilingual",
+      "rating": 1,
+      "specification": "Sperethiel"
+    },
+    {
+      "qualityId": "catlike",
+      "rating": 1
+    }
+  ],
+  "negativeQualities": [
+    {
+      "qualityId": "code-of-honor",
+      "rating": 1,
+      "specification": "The Way of the Blade: Never refuse single combat, never strike an unarmed opponent lethally"
+    },
+    {
+      "qualityId": "prejudiced",
+      "rating": 1,
+      "specification": "Megacorp Security (Biased)"
+    }
+  ],
+  "racialQualities": [
+    "Low-Light Vision"
+  ],
+  "bioware": [
+    {
+      "catalogId": "muscle-toner",
+      "name": "Muscle Toner (Rating 1)",
+      "category": "basic",
+      "grade": "standard",
+      "baseEssenceCost": 0.2,
+      "essenceCost": 0.2,
+      "rating": 1,
+      "cost": 32000,
+      "availability": 12,
+      "legality": "restricted",
+      "attributeBonuses": {
+        "agility": 1
+      },
+      "notes": "+1 Agility (already included in attributes)"
+    }
+  ],
+  "contacts": [
+    {
+      "name": "Sensei Tanaka",
+      "type": "Martial Arts Master",
+      "connection": 3,
+      "loyalty": 4,
+      "notes": "Former teacher in Tir. Offers guidance and occasional training."
+    },
+    {
+      "name": "Raven",
+      "type": "Fixer",
+      "connection": 4,
+      "loyalty": 2,
+      "notes": "Elven fixer with connections across the Tir and Seattle."
+    },
+    {
+      "name": "Ghost",
+      "type": "Street Samurai",
+      "connection": 2,
+      "loyalty": 3,
+      "notes": "Fellow runner. Reliable combat partner."
+    },
+    {
+      "name": "Willow",
+      "type": "Talismonger",
+      "connection": 3,
+      "loyalty": 2,
+      "notes": "Sells weapon foci and adept-aligned magical supplies."
+    }
+  ],
+  "gear": [
+    {
+      "id": "gear-backpack",
+      "name": "Backpack",
+      "category": "miscellaneous",
+      "quantity": 1,
+      "cost": 50,
+      "weight": 0.5,
+      "state": { "readiness": "carried", "wirelessEnabled": false },
+      "containerProperties": { "weightCapacity": 15 }
+    },
+    {
+      "id": "gear-belt-pouch",
+      "name": "Concealed Belt Pouch",
+      "category": "miscellaneous",
+      "quantity": 1,
+      "cost": 75,
+      "weight": 0.1,
+      "state": { "readiness": "pocketed", "wirelessEnabled": false },
+      "containerProperties": { "weightCapacity": 2, "slotCapacity": 4 }
+    },
+    {
+      "id": "gear-climbing",
+      "name": "Climbing Gear",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200,
+      "weight": 3,
+      "state": { "readiness": "carried", "wirelessEnabled": false, "containedIn": "gear-backpack" }
+    },
+    {
+      "id": "gear-rappelling",
+      "name": "Rappelling Gloves",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 70,
+      "weight": 0.3,
+      "state": { "readiness": "carried", "wirelessEnabled": false, "containedIn": "gear-backpack" }
+    },
+    {
+      "id": "gear-survival-kit",
+      "name": "Survival Kit",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 200,
+      "weight": 2,
+      "state": { "readiness": "carried", "wirelessEnabled": false, "containedIn": "gear-backpack" }
+    },
+    {
+      "id": "gear-flashlight",
+      "name": "Flashlight",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 25,
+      "weight": 0.2,
+      "state": { "readiness": "pocketed", "wirelessEnabled": false }
+    },
+    {
+      "id": "gear-medkit",
+      "name": "Medkit (Rating 3)",
+      "category": "medical",
+      "quantity": 1,
+      "cost": 750,
+      "weight": 2.5,
+      "rating": 3,
+      "state": { "readiness": "carried", "wirelessEnabled": true, "containedIn": "gear-backpack" }
+    },
+    {
+      "id": "gear-trauma-patches",
+      "name": "Trauma Patches",
+      "category": "medical",
+      "quantity": 2,
+      "cost": 1000,
+      "weight": 0.1,
+      "state": { "readiness": "pocketed", "wirelessEnabled": false, "containedIn": "gear-belt-pouch" }
+    },
+    {
+      "id": "gear-transceiver",
+      "name": "Micro-Transceiver",
+      "category": "electronics",
+      "quantity": 1,
+      "cost": 100,
+      "weight": 0.1,
+      "state": { "readiness": "pocketed", "wirelessEnabled": true, "containedIn": "gear-belt-pouch" }
+    },
+    {
+      "id": "gear-glasses",
+      "name": "Glasses (Rating 2)",
+      "category": "optical-devices",
+      "quantity": 1,
+      "cost": 100,
+      "weight": 0.1,
+      "rating": 2,
+      "notes": "Image link, low-light vision",
+      "state": { "readiness": "worn", "wirelessEnabled": true }
+    },
+    {
+      "id": "gear-spare-arrows",
+      "name": "Arrows (40)",
+      "category": "ammunition",
+      "quantity": 1,
+      "cost": 200,
+      "weight": 2,
+      "state": {
+        "readiness": "stashed",
+        "wirelessEnabled": false,
+        "stashLocation": { "type": "home" }
+      }
+    },
+    {
+      "id": "gear-spare-ammo",
+      "name": "Light Pistol Ammo (100 rounds)",
+      "category": "ammunition",
+      "quantity": 1,
+      "cost": 200,
+      "weight": 1,
+      "state": {
+        "readiness": "stashed",
+        "wirelessEnabled": false,
+        "stashLocation": { "type": "home" }
+      }
+    },
+    {
+      "id": "gear-grapple-gun",
+      "name": "Grapple Gun",
+      "category": "survival",
+      "quantity": 1,
+      "cost": 500,
+      "weight": 2,
+      "state": {
+        "readiness": "stashed",
+        "wirelessEnabled": false,
+        "stashLocation": { "type": "safehouse" }
+      }
+    }
+  ],
+  "armor": [
+    {
+      "catalogId": "urban-explorer-jumpsuit",
+      "name": "Urban Explorer Jumpsuit",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 650,
+      "quantity": 1,
+      "equipped": true,
+      "weight": 2,
+      "notes": "Flexible, good for acrobatics",
+      "state": { "readiness": "worn", "wirelessEnabled": false }
+    },
+    {
+      "catalogId": "lined-coat",
+      "name": "Lined Coat",
+      "category": "armor",
+      "subcategory": "armor",
+      "armorRating": 9,
+      "capacity": 9,
+      "cost": 900,
+      "quantity": 1,
+      "equipped": false,
+      "weight": 2.5,
+      "notes": "For social situations",
+      "state": { "readiness": "stashed", "wirelessEnabled": false, "stashLocation": { "type": "home" } }
+    }
+  ],
+  "weapons": [
+    {
+      "catalogId": "katana",
+      "name": "Silent Song (Katana)",
+      "category": "weapons",
+      "subcategory": "blade",
+      "damage": "8P",
+      "ap": -3,
+      "mode": [],
+      "reach": 1,
+      "accuracy": 7,
+      "cost": 1000,
+      "quantity": 1,
+      "notes": "Weapon Focus Force 3 (bonded). Primary weapon.",
+      "weight": 1.2,
+      "state": { "readiness": "readied", "wirelessEnabled": false }
+    },
+    {
+      "catalogId": "throwing-knife",
+      "name": "Throwing Knives",
+      "category": "weapons",
+      "subcategory": "throwing-weapon",
+      "damage": "5P",
+      "ap": -1,
+      "mode": [],
+      "accuracy": 0,
+      "cost": 25,
+      "quantity": 6,
+      "notes": "Shuriken-style balanced throwing knives",
+      "weight": 0.15,
+      "state": { "readiness": "holstered", "wirelessEnabled": false }
+    },
+    {
+      "catalogId": "bow",
+      "name": "Bow (Rating 4)",
+      "category": "weapons",
+      "subcategory": "bow",
+      "damage": "6P",
+      "ap": -2,
+      "mode": [
+        "SS"
+      ],
+      "accuracy": 6,
+      "cost": 400,
+      "quantity": 1,
+      "rating": 4,
+      "notes": "20 arrows, silent ranged option",
+      "weight": 1,
+      "state": { "readiness": "carried", "wirelessEnabled": false }
+    },
+    {
+      "catalogId": "colt-america-l36",
+      "name": "Colt America L36",
+      "category": "weapons",
+      "subcategory": "light-pistol",
+      "damage": "7P",
+      "ap": 0,
+      "mode": [
+        "SA"
+      ],
+      "accuracy": 7,
+      "ammoCapacity": 11,
+      "cost": 320,
+      "quantity": 1,
+      "notes": "Concealable holster, 2 spare clips. For emergencies only.",
+      "weight": 0.6,
+      "state": { "readiness": "holstered", "wirelessEnabled": false }
+    }
+  ],
+  "commlinks": [
+    {
+      "catalogId": "sony-angel",
+      "name": "Sony Angel",
+      "deviceRating": 3,
+      "cost": 1000,
+      "notes": "Low-profile commlink"
+    }
+  ],
+  "identities": [
+    {
+      "name": "Lian Moonshadow",
+      "sin": {
+        "type": "fake",
+        "rating": 4
+      },
+      "licenses": [
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Concealed Carry"
+        },
+        {
+          "type": "fake",
+          "rating": 4,
+          "name": "Restricted Weapons"
+        }
+      ]
+    },
+    {
+      "name": "Sarah Winters",
+      "sin": {
+        "type": "fake",
+        "rating": 2
+      },
+      "licenses": []
+    }
+  ],
+  "lifestyles": [
+    {
+      "type": "low",
+      "monthlyCost": 2000,
+      "prepaidMonths": 3,
+      "location": "Puyallup, Seattle",
+      "notes": "Spartan dojo apartment above a noodle shop"
+    }
+  ],
+  "nuyen": 1680,
+  "startingNuyen": 50000,
+  "derivedStats": {
+    "physicalLimit": 6,
+    "mentalLimit": 5,
+    "socialLimit": 5,
+    "initiativeBase": 12,
+    "initiativeDice": 3,
+    "astralInitiativeBase": 10,
+    "astralInitiativeDice": 2,
+    "physicalConditionMonitor": 10,
+    "stunConditionMonitor": 10,
+    "composure": 7,
+    "judgeIntentions": 8,
+    "memory": 8,
+    "liftCarry": 8,
+    "movementWalk": 14,
+    "movementRun": 28,
+    "overflow": 4
+  },
+  "condition": {
+    "physicalDamage": 0,
+    "stunDamage": 0
+  },
+  "karmaTotal": 25,
+  "karmaCurrent": 0,
+  "karmaSpentAtCreation": 25,
+  "createdAt": "2026-02-11T00:00:00.000Z",
+  "updatedAt": "2026-02-11T14:54:37.208Z",
+  "metadata": {
+    "source": "Admin Example Character",
+    "archetype": "Physical Adept / Blade Specialist",
+    "notes": "Elf physical adept with 5 adept powers totaling 5.0 PP. Weapon focus katana (bonded). Bioware: muscle toner 1. Previously had a datajack (0.8 essence) that was surgically removed, creating an essence hole — Magic permanently reduced from 6 to 5. Priority: A-Attributes, B-Skills, C-Magic(Adept), D-Metatype(Elf), E-Resources."
+  },
+  "auditLog": [
+    {
+      "id": "35f17efa-7856-496a-91b7-131c2ee988f9",
+      "timestamp": "2026-02-11T14:54:37.184Z",
+      "action": "migration_started",
+      "actor": {
+        "userId": "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c",
+        "role": "owner"
+      },
+      "details": {
+        "syncEvent": "migration_started",
+        "sourceVersion": {
+          "editionCode": "sr5",
+          "editionVersion": "1.0.0",
+          "bookVersions": {},
+          "snapshotId": "sr5-core-snapshot",
+          "createdAt": "2026-02-11T00:00:00.000Z"
+        },
+        "targetVersion": {
+          "editionCode": "sr5",
+          "editionVersion": "1.0.0",
+          "bookVersions": {},
+          "snapshotId": "sr5-core-snapshot",
+          "createdAt": "2026-02-11T00:00:00.000Z"
+        },
+        "changes": []
+      }
+    },
+    {
+      "id": "42fbd374-6525-4c63-961c-5119a641ff16",
+      "timestamp": "2026-02-11T14:54:37.206Z",
+      "action": "migration_completed",
+      "actor": {
+        "userId": "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c",
+        "role": "owner"
+      },
+      "details": {
+        "syncEvent": "migration_completed",
+        "sourceVersion": {
+          "editionCode": "sr5",
+          "editionVersion": "1.0.0",
+          "bookVersions": {},
+          "snapshotId": "sr5-core-snapshot",
+          "createdAt": "2026-02-11T00:00:00.000Z"
+        },
+        "targetVersion": {
+          "editionCode": "sr5",
+          "editionVersion": "1.0.0",
+          "bookVersions": {},
+          "snapshotId": "sr5-core-snapshot",
+          "createdAt": "2026-02-11T00:00:00.000Z"
+        },
+        "changes": []
+      }
+    }
+  ],
+  "syncStatus": "synchronized",
+  "legalityStatus": "rules-legal",
+  "lastSyncCheck": "2026-02-11T14:54:37.203Z",
+  "rulesetVersion": {
+    "editionCode": "sr5",
+    "editionVersion": "1.0.0",
+    "bookVersions": {},
+    "snapshotId": "sr5-core-snapshot",
+    "createdAt": "2026-02-11T00:00:00.000Z"
+  },
+  "lastSyncAt": "2026-02-11T14:54:37.203Z"
+}

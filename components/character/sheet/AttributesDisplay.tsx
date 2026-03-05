@@ -86,6 +86,29 @@ function EssenceLossTooltipContent({
   );
 }
 
+function MagicReductionTooltipContent({
+  peakEssenceLoss,
+  magicLost,
+}: {
+  peakEssenceLoss: number;
+  magicLost: number;
+}) {
+  return (
+    <div className="space-y-1">
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-zinc-400">Essence Lost</span>
+        <span className="font-mono font-semibold text-rose-400">{peakEssenceLoss.toFixed(2)}</span>
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <span className="text-zinc-400">Magic Reduction</span>
+        <span className="font-mono font-semibold text-rose-400">-{magicLost}</span>
+      </div>
+      <div className="border-t border-zinc-600" />
+      <div className="text-[10px] text-zinc-500">Permanent — cannot be recovered</div>
+    </div>
+  );
+}
+
 function CoreAttributeRow({
   label,
   base,
@@ -144,20 +167,28 @@ function SpecialAttributeRow({
   attrKey,
   value,
   essenceLosses,
+  magicReduction,
   onClick,
 }: {
   attrKey: string;
   value: number;
   essenceLosses?: Array<{ source: string; cost: number }>;
+  magicReduction?: { magicLost: number; peakEssenceLoss: number };
   onClick?: () => void;
 }) {
   if (!SPECIAL_ATTRIBUTES.includes(attrKey)) return null;
 
   const label = attrKey.charAt(0).toUpperCase() + attrKey.slice(1);
   const isEssence = attrKey === "essence";
-  const displayValue = isEssence ? value.toFixed(2) : String(value);
   const hasEssenceLoss = isEssence && essenceLosses && essenceLosses.length > 0;
   const totalLoss = hasEssenceLoss ? essenceLosses.reduce((sum, l) => sum + l.cost, 0) : 0;
+  const hasMagicReduction = magicReduction && magicReduction.magicLost > 0;
+  const baseValue = hasMagicReduction ? value + magicReduction.magicLost : value;
+  const displayValue = isEssence
+    ? value.toFixed(2)
+    : hasMagicReduction
+      ? `${value} / ${baseValue}`
+      : String(value);
 
   return (
     <div
@@ -180,6 +211,28 @@ function SpecialAttributeRow({
                 className="inline-flex items-center gap-0.5 rounded bg-rose-500/15 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
               >
                 -{totalLoss.toFixed(2)}
+                <ArrowDown className="h-2.5 w-2.5" />
+              </AriaButton>
+            </Tooltip>
+          </span>
+        )}
+        {hasMagicReduction && (
+          <span onClick={(e) => e.stopPropagation()}>
+            <Tooltip
+              content={
+                <MagicReductionTooltipContent
+                  peakEssenceLoss={magicReduction.peakEssenceLoss}
+                  magicLost={magicReduction.magicLost}
+                />
+              }
+              delay={200}
+              showArrow={false}
+            >
+              <AriaButton
+                aria-label={`${label} reduction details`}
+                className="inline-flex items-center gap-0.5 rounded bg-rose-500/15 px-1.5 py-0.5 font-mono text-[11px] font-semibold text-rose-400 focus:outline-none focus:ring-2 focus:ring-rose-500"
+              >
+                -{magicReduction.magicLost}
                 <ArrowDown className="h-2.5 w-2.5" />
               </AriaButton>
             </Tooltip>
@@ -262,6 +315,14 @@ export function AttributesDisplay({ character, onSelect }: AttributesDisplayProp
           <SpecialAttributeRow
             attrKey="magic"
             value={character.specialAttributes.magic}
+            magicReduction={
+              character.essenceHole && character.essenceHole.magicLost > 0
+                ? {
+                    magicLost: character.essenceHole.magicLost,
+                    peakEssenceLoss: character.essenceHole.peakEssenceLoss,
+                  }
+                : undefined
+            }
             onClick={() => onSelect?.("magic", character.specialAttributes.magic!)}
           />
         )}
@@ -269,6 +330,14 @@ export function AttributesDisplay({ character, onSelect }: AttributesDisplayProp
           <SpecialAttributeRow
             attrKey="resonance"
             value={character.specialAttributes.resonance}
+            magicReduction={
+              character.essenceHole && character.essenceHole.magicLost > 0
+                ? {
+                    magicLost: character.essenceHole.magicLost,
+                    peakEssenceLoss: character.essenceHole.peakEssenceLoss,
+                  }
+                : undefined
+            }
             onClick={() => onSelect?.("resonance", character.specialAttributes.resonance!)}
           />
         )}
