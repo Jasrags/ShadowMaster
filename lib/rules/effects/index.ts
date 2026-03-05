@@ -30,5 +30,5 @@ export { UNIFIED_TRIGGERS, UNIFIED_TYPES } from "./constants";
 export { buildCreationCharacter } from "./creation-adapter";
 
 // Format
-export { formatEffectBadge, isUnifiedEffect } from "./format";
-export type { EffectBadge } from "./format";
+export { formatEffectBadge, isUnifiedEffect, resolveRatingBasedValue } from "./format";
+export type { EffectBadge, EffectBadgeContext } from "./format";

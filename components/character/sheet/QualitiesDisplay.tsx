@@ -4,7 +4,8 @@ import { useState } from "react";
 import type { Character, QualitySelection } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { useQualities } from "@/lib/rules";
-import { formatEffectBadge, isUnifiedEffect } from "@/lib/rules/effects";
+import { formatEffectBadge, isUnifiedEffect, resolveRatingBasedValue } from "@/lib/rules/effects";
+import type { EffectBadgeContext } from "@/lib/rules/effects";
 import { DisplayCard } from "./DisplayCard";
 import {
   ShieldCheck,
@@ -135,10 +136,30 @@ function QualityRow({
   }
   const extra = extraParts.join(", ");
 
+  // Build context for condition filtering and rating-based value resolution
+  const charRating = rawSelection.rating ?? qualityLevels?.[id];
+  const addictionState =
+    rawSelection.dynamicState?.type === "addiction" ? rawSelection.dynamicState.state : undefined;
+  const ratingEntry =
+    data?.ratings && charRating !== undefined
+      ? (data.ratings as Record<string, Record<string, unknown>>)[String(charRating)]
+      : undefined;
+
   const rawEffects = (data?.effects || []) as unknown[];
   const effectBadges = rawEffects
     .filter(isUnifiedEffect)
-    .map(formatEffectBadge)
+    .map((effect) => {
+      const ctx: EffectBadgeContext = {
+        rating: charRating,
+        dependencyType: addictionState?.substanceType,
+      };
+      // Resolve "rating-based" values from the quality's rating table
+      if (typeof effect.value === "string" && ratingEntry) {
+        const resolved = resolveRatingBasedValue(effect, ratingEntry);
+        if (resolved !== null) ctx.resolvedValue = resolved;
+      }
+      return formatEffectBadge(effect, ctx);
+    })
     .filter((b): b is NonNullable<typeof b> => b !== null);
   const hasExpandableContent =
     !!data?.summary || effectBadges.length > 0 || !!rawSelection.dynamicState;
@@ -211,9 +232,10 @@ function QualityRow({
                 <span
                   key={idx}
                   data-testid="effect-badge"
-                  className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+                  className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
                 >
                   {badge.label}
+                  {badge.trigger && <span className="opacity-50">· {badge.trigger}</span>}
                 </span>
               ))}
             </div>

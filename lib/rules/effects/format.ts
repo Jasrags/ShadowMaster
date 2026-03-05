@@ -14,6 +14,20 @@ export interface EffectBadge {
   label: string;
   /** Tailwind color classes for the badge */
   colorClass: string;
+  /** Trigger context for non-"always" effects, e.g., "withdrawal" */
+  trigger?: string;
+}
+
+/**
+ * Optional context for resolving rating-based values and filtering conditions.
+ */
+export interface EffectBadgeContext {
+  /** Pre-resolved numeric value (for "rating-based" effects) */
+  resolvedValue?: number;
+  /** Character's rating for this quality */
+  rating?: number;
+  /** Character's dependency type (for addiction condition filtering) */
+  dependencyType?: string;
 }
 
 /**
@@ -95,6 +109,12 @@ function getTargetName(effect: Effect): string {
   if (target.weaponCategory?.length) return target.weaponCategory.map(capitalize).join(", ");
   if (target.stat) return capitalize(target.stat);
 
+  // Category-level targets (e.g., addiction effects)
+  const raw = target as Record<string, unknown>;
+  if (typeof raw.attributeCategory === "string")
+    return `${capitalize(raw.attributeCategory)} Tests`;
+  if (typeof raw.skillCategory === "string") return `${capitalize(raw.skillCategory)} Tests`;
+
   return "";
 }
 
@@ -123,27 +143,118 @@ function capitalize(str: string): string {
 }
 
 /**
+ * Format a trigger name for display (kebab-case to lowercase words).
+ * Returns undefined for "always" trigger.
+ */
+function formatTrigger(triggers: string[]): string | undefined {
+  // If all triggers are "always", no suffix needed
+  if (triggers.every((t) => t === "always")) return undefined;
+
+  // Use the first non-"always" trigger for display
+  const trigger = triggers.find((t) => t !== "always");
+  if (!trigger) return undefined;
+
+  return trigger.replace(/-/g, " ");
+}
+
+/**
+ * Check if an effect's conditions are met by the given context.
+ * Returns false if the effect should be hidden.
+ */
+function matchesContext(effect: Effect, context?: EffectBadgeContext): boolean {
+  if (!context) return true;
+
+  const condition = effect.condition as Record<string, unknown> | undefined;
+  if (!condition) return true;
+
+  // minRating: hide if character's rating is below threshold
+  if (typeof condition.minRating === "number" && context.rating !== undefined) {
+    if (context.rating < condition.minRating) return false;
+  }
+
+  // dependencyType: hide if character's dependency type doesn't match
+  if (typeof condition.dependencyType === "string" && context.dependencyType !== undefined) {
+    if (condition.dependencyType !== context.dependencyType) return false;
+  }
+
+  return true;
+}
+
+/**
+ * Resolve a "rating-based" effect value from the quality's rating table.
+ *
+ * Looks for known penalty fields based on effect triggers and target:
+ * - Withdrawal-triggered effects → `withdrawalPenalty`
+ * - Social category target → `socialPenalty`
+ *
+ * @param effect - The effect with "rating-based" value
+ * @param ratingEntry - The quality's rating table entry for the character's rating
+ * @returns Resolved numeric value, or null if not resolvable
+ */
+export function resolveRatingBasedValue(
+  effect: Effect,
+  ratingEntry: Record<string, unknown> | undefined
+): number | null {
+  if (!ratingEntry) return null;
+
+  // Withdrawal effects → withdrawalPenalty
+  if (effect.triggers.includes("withdrawal") && typeof ratingEntry.withdrawalPenalty === "number") {
+    return ratingEntry.withdrawalPenalty;
+  }
+
+  // Social penalty effects → socialPenalty
+  const target = effect.target as Record<string, unknown>;
+  if (target.skillCategory === "social" && typeof ratingEntry.socialPenalty === "number") {
+    return ratingEntry.socialPenalty;
+  }
+
+  return null;
+}
+
+/**
  * Format an Effect into a compact displayable badge.
  *
  * Produces short labels like "+2 Sneaking", "+1 Physical Limit", "+3 Initiative".
  * Falls back to type name when no target is available (e.g., "+2 Dice Pool").
  *
+ * When context is provided:
+ * - `resolvedValue` overrides the effect's value (for "rating-based" effects)
+ * - `rating` + `dependencyType` are used for condition filtering
+ * - Non-"always" triggers get a `trigger` suffix on the badge
+ *
  * Returns null for effect types that don't translate to a meaningful badge
- * (e.g., "special" type or types without display config).
+ * (e.g., "special" type or types without display config), or for effects
+ * whose conditions are not met.
  */
-export function formatEffectBadge(effect: Effect): EffectBadge | null {
+export function formatEffectBadge(
+  effect: Effect,
+  context?: EffectBadgeContext
+): EffectBadge | null {
   const config = EFFECT_TYPE_CONFIG[effect.type as string];
   if (!config) return null;
 
-  const valueStr = formatValue(effect.value);
-  // Skip effects with non-numeric values (e.g., "rating-based", "halved")
+  // Check conditions against context
+  if (!matchesContext(effect, context)) return null;
+
+  // Resolve value: use context override, then effect.value
+  let valueStr: string | null = null;
+  if (context?.resolvedValue !== undefined) {
+    const v = context.resolvedValue;
+    valueStr = v >= 0 ? `+${v}` : `${v}`;
+  } else {
+    valueStr = formatValue(effect.value);
+  }
+
+  // Skip effects with non-numeric values and no resolved override
   if (valueStr === null) return null;
 
   const target = getTargetName(effect);
+  const trigger = formatTrigger(effect.triggers);
 
   return {
     label: target ? `${valueStr} ${target}` : `${valueStr} ${config.name}`,
     colorClass: config.colorClass,
+    ...(trigger ? { trigger } : {}),
   };
 }
 

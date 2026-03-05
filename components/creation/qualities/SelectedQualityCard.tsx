@@ -2,7 +2,8 @@
 
 import { X } from "lucide-react";
 import type { SelectedQualityCardProps } from "./types";
-import { formatEffectBadge, isUnifiedEffect } from "@/lib/rules/effects";
+import { formatEffectBadge, isUnifiedEffect, resolveRatingBasedValue } from "@/lib/rules/effects";
+import type { EffectBadgeContext } from "@/lib/rules/effects";
 
 export function SelectedQualityCard({
   quality,
@@ -19,10 +20,23 @@ export function SelectedQualityCard({
       : null;
 
   // Extract unified effects from quality data for badge display
+  const charRating = selection.level;
+  const ratingEntry =
+    quality.ratings && charRating !== undefined
+      ? (quality.ratings as Record<string, Record<string, unknown>>)[String(charRating)]
+      : undefined;
+
   const effectBadges =
     (quality.effects as unknown[] | undefined)
       ?.filter(isUnifiedEffect)
-      .map(formatEffectBadge)
+      .map((effect) => {
+        const ctx: EffectBadgeContext = { rating: charRating };
+        if (typeof effect.value === "string" && ratingEntry) {
+          const resolved = resolveRatingBasedValue(effect, ratingEntry);
+          if (resolved !== null) ctx.resolvedValue = resolved;
+        }
+        return formatEffectBadge(effect, ctx);
+      })
       .filter((b): b is NonNullable<typeof b> => b !== null) ?? [];
 
   const displayName = selection.specification
@@ -72,9 +86,10 @@ export function SelectedQualityCard({
           {effectBadges.map((badge, i) => (
             <span
               key={i}
-              className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+              className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
             >
               {badge.label}
+              {badge.trigger && <span className="opacity-50">· {badge.trigger}</span>}
             </span>
           ))}
         </div>

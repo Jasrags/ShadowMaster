@@ -333,7 +333,7 @@ function EffectsSection({
 
   const badges = effects
     .filter(isUnifiedEffect)
-    .map(formatEffectBadge)
+    .map((effect) => formatEffectBadge(effect))
     .filter((b): b is NonNullable<typeof b> => b !== null);
 
   if (badges.length === 0) return null;
