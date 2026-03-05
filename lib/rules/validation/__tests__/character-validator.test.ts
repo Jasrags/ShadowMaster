@@ -1265,6 +1265,31 @@ describe("Character Validator", () => {
       );
     });
 
+    it("should report edition mismatch", async () => {
+      const character = createMinimalCharacter({
+        campaignId: "campaign-1",
+        editionCode: "sr5",
+      });
+      const ruleset = createMinimalRuleset();
+      const campaign = createMinimalCampaign({
+        editionCode: "sr6",
+      });
+
+      const result = await validateCharacter({
+        character,
+        ruleset,
+        campaign,
+        mode: "finalization",
+      });
+
+      expect(result.errors).toContainEqual(
+        expect.objectContaining({
+          code: "CAMPAIGN_EDITION_MISMATCH",
+          field: "editionCode",
+        })
+      );
+    });
+
     it("should pass when all books are enabled", async () => {
       const character = createMinimalCharacter({
         campaignId: "campaign-1",
