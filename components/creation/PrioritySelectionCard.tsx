@@ -17,6 +17,7 @@
 
 import { useMemo, useCallback, useEffect, useState } from "react";
 import { usePriorityTable } from "@/lib/rules";
+import { useCreationBudgets } from "@/lib/contexts";
 import type { CreationState } from "@/lib/types";
 import { CreationCard } from "./shared";
 import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } from "lucide-react";
@@ -26,6 +27,12 @@ import { GripVertical, Check, Circle, AlertTriangle, ChevronUp, ChevronDown } fr
 // =============================================================================
 
 const PRIORITY_LEVELS = ["A", "B", "C", "D", "E"] as const;
+
+// Map character magical path values to priority table path names
+// Duplicated from character-validator.ts to avoid importing server-only module
+const CHARACTER_TO_PRIORITY_PATH: Record<string, string> = {
+  "full-mage": "magician",
+};
 type PriorityLevel = (typeof PRIORITY_LEVELS)[number];
 
 // Categories in their default order (A-E)
@@ -77,6 +84,7 @@ interface CategoryRowProps {
   isComplete: boolean;
   hasConflict: boolean;
   description: string;
+  conflictMessage?: string;
   onMoveUp: () => void;
   onMoveDown: () => void;
   canMoveUp: boolean;
@@ -96,6 +104,7 @@ function CategoryRow({
   isComplete,
   hasConflict,
   description,
+  conflictMessage,
   onMoveUp,
   onMoveDown,
   canMoveUp,
@@ -204,6 +213,13 @@ function CategoryRow({
 
       {/* Row 2: Description (indented to align with label) */}
       <p className="ml-11 text-xs text-zinc-500 dark:text-zinc-400">{description}</p>
+
+      {/* Row 3: Conflict message (if any) */}
+      {conflictMessage && (
+        <p className="ml-11 text-xs font-medium text-amber-600 dark:text-amber-400">
+          {conflictMessage}
+        </p>
+      )}
     </div>
   );
 }
@@ -280,11 +296,89 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
     [state.selections, getCategoryLevel]
   );
 
-  // Check for conflicts (e.g., metatype not available at priority)
-  const hasConflict = useCallback((_category: string): boolean => {
-    // TODO: Implement conflict detection for metatype/magic priority requirements
-    return false;
-  }, []);
+  // Budget context for detecting overspent allocations
+  const { budgets } = useCreationBudgets();
+
+  // Check for conflicts (e.g., metatype not available at priority, budget overspent)
+  const hasConflict = useCallback(
+    (category: string): boolean => {
+      switch (category) {
+        case "metatype": {
+          const selected = state.selections.metatype as string | undefined;
+          if (!selected) return false;
+          const level = getCategoryLevel("metatype");
+          const data = priorityTable?.table[level]?.metatype as { available: string[] } | undefined;
+          return data ? !data.available.includes(selected) : false;
+        }
+        case "magic": {
+          const raw = state.selections["magical-path"] as string | undefined;
+          if (!raw || raw === "mundane") return false;
+          const level = getCategoryLevel("magic");
+          const data = priorityTable?.table[level]?.magic as
+            | { options: Array<{ path: string }> }
+            | undefined;
+          if (!data?.options?.length) return true; // E priority = no options
+          const priorityPath = CHARACTER_TO_PRIORITY_PATH[raw] ?? raw;
+          return !data.options.some((o) => o.path === priorityPath);
+        }
+        case "attributes":
+          return (budgets["attribute-points"]?.remaining ?? 0) < 0;
+        case "skills":
+          return (
+            (budgets["skill-points"]?.remaining ?? 0) < 0 ||
+            (budgets["skill-group-points"]?.remaining ?? 0) < 0
+          );
+        case "resources":
+          return (budgets["nuyen"]?.remaining ?? 0) < 0;
+        default:
+          return false;
+      }
+    },
+    [state.selections, getCategoryLevel, priorityTable, budgets]
+  );
+
+  // Get specific conflict message for a category
+  const getConflictMessage = useCallback(
+    (category: string): string | undefined => {
+      if (!hasConflict(category)) return undefined;
+
+      switch (category) {
+        case "metatype": {
+          const selected = state.selections.metatype as string;
+          const level = getCategoryLevel("metatype");
+          const data = priorityTable?.table[level]?.metatype as { available: string[] } | undefined;
+          const available = data?.available?.join(", ") ?? "";
+          return `${selected} is not available at Priority ${level} (${available})`;
+        }
+        case "magic": {
+          const raw = state.selections["magical-path"] as string;
+          const level = getCategoryLevel("magic");
+          return `${raw} is not available at Priority ${level}`;
+        }
+        case "attributes": {
+          const budget = budgets["attribute-points"];
+          if (!budget) return undefined;
+          return `Overspent by ${Math.abs(budget.remaining)} attribute points`;
+        }
+        case "skills": {
+          const sp = budgets["skill-points"];
+          const sgp = budgets["skill-group-points"];
+          const parts: string[] = [];
+          if (sp && sp.remaining < 0) parts.push(`${Math.abs(sp.remaining)} skill pts over`);
+          if (sgp && sgp.remaining < 0) parts.push(`${Math.abs(sgp.remaining)} group pts over`);
+          return parts.join(", ");
+        }
+        case "resources": {
+          const budget = budgets["nuyen"];
+          if (!budget) return undefined;
+          return `Overspent by ${Math.abs(budget.remaining).toLocaleString()}¥`;
+        }
+        default:
+          return undefined;
+      }
+    },
+    [hasConflict, state.selections, getCategoryLevel, priorityTable, budgets]
+  );
 
   // Get description for a category at its current priority
   const getDescription = useCallback(
@@ -444,6 +538,7 @@ export function PrioritySelectionCard({ state, updateState }: PrioritySelectionC
               isComplete={isCategoryComplete(category)}
               hasConflict={hasConflict(category)}
               description={getDescription(category)}
+              conflictMessage={getConflictMessage(category)}
               onMoveUp={() => moveUp(category)}
               onMoveDown={() => moveDown(category)}
               canMoveUp={index > 0}

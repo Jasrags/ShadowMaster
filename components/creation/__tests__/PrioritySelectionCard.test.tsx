@@ -15,7 +15,12 @@ vi.mock("@/lib/rules", () => ({
   usePriorityTable: vi.fn(),
 }));
 
+vi.mock("@/lib/contexts", () => ({
+  useCreationBudgets: vi.fn(),
+}));
+
 import { usePriorityTable } from "@/lib/rules";
+import { useCreationBudgets } from "@/lib/contexts";
 
 // Mock the shared CreationCard wrapper
 vi.mock("../shared", () => ({
@@ -128,6 +133,14 @@ const createBaseState = (overrides: Record<string, any> = {}): any => ({
 describe("PrioritySelectionCard", () => {
   let mockUpdateState: Mock;
 
+  // Default budget mock with no overspend
+  const mockBudgets: Record<string, { remaining: number }> = {
+    "attribute-points": { remaining: 10 },
+    "skill-points": { remaining: 5 },
+    "skill-group-points": { remaining: 2 },
+    nuyen: { remaining: 1000 },
+  };
+
   beforeEach(() => {
     vi.clearAllMocks();
     mockUpdateState = vi.fn();
@@ -135,6 +148,18 @@ describe("PrioritySelectionCard", () => {
     vi.mocked(usePriorityTable).mockReturnValue(
       mockPriorityTable as unknown as ReturnType<typeof usePriorityTable>
     );
+
+    vi.mocked(useCreationBudgets).mockReturnValue({
+      budgets: mockBudgets,
+      errors: [],
+      warnings: [],
+      isValid: true,
+      canFinalize: true,
+      updateSpent: vi.fn(),
+      getBudget: vi.fn(),
+      hasRemaining: vi.fn(),
+      isOverspent: vi.fn(),
+    } as unknown as ReturnType<typeof useCreationBudgets>);
   });
 
   describe("rendering", () => {
@@ -468,6 +493,194 @@ describe("PrioritySelectionCard", () => {
       fireEvent.keyDown(items[4], { key: "ArrowDown" });
 
       expect(mockUpdateState).not.toHaveBeenCalled();
+    });
+  });
+
+  describe("conflict detection", () => {
+    it("shows metatype conflict when selected metatype unavailable at priority", () => {
+      // Troll selected but metatype priority is D (only human, elf)
+      const state = createBaseState({
+        priorities: {
+          metatype: "D",
+          attributes: "A",
+          magic: "B",
+          skills: "C",
+          resources: "E",
+        },
+        selections: {
+          metatype: "troll",
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(
+        screen.getByText("troll is not available at Priority D (human, elf)")
+      ).toBeInTheDocument();
+    });
+
+    it("shows magic conflict when selected path unavailable at priority", () => {
+      // Magician selected but magic priority is E (no options)
+      const state = createBaseState({
+        priorities: {
+          metatype: "A",
+          attributes: "B",
+          magic: "E",
+          skills: "C",
+          resources: "D",
+        },
+        selections: {
+          metatype: "human",
+          "magical-path": "magician",
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.getByText(/magician is not available at Priority E/)).toBeInTheDocument();
+    });
+
+    it("shows attribute overspend conflict", () => {
+      vi.mocked(useCreationBudgets).mockReturnValue({
+        budgets: {
+          ...mockBudgets,
+          "attribute-points": { remaining: -8 },
+        },
+        errors: [],
+        warnings: [],
+        isValid: false,
+        canFinalize: false,
+        updateSpent: vi.fn(),
+        getBudget: vi.fn(),
+        hasRemaining: vi.fn(),
+        isOverspent: vi.fn(),
+      } as unknown as ReturnType<typeof useCreationBudgets>);
+
+      const state = createBaseState();
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.getByText(/Overspent by 8 attribute points/)).toBeInTheDocument();
+    });
+
+    it("shows skill points overspend conflict", () => {
+      vi.mocked(useCreationBudgets).mockReturnValue({
+        budgets: {
+          ...mockBudgets,
+          "skill-points": { remaining: -10 },
+          "skill-group-points": { remaining: -3 },
+        },
+        errors: [],
+        warnings: [],
+        isValid: false,
+        canFinalize: false,
+        updateSpent: vi.fn(),
+        getBudget: vi.fn(),
+        hasRemaining: vi.fn(),
+        isOverspent: vi.fn(),
+      } as unknown as ReturnType<typeof useCreationBudgets>);
+
+      const state = createBaseState();
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.getByText(/10 skill pts over/)).toBeInTheDocument();
+      expect(screen.getByText(/3 group pts over/)).toBeInTheDocument();
+    });
+
+    it("shows resources overspend conflict", () => {
+      vi.mocked(useCreationBudgets).mockReturnValue({
+        budgets: {
+          ...mockBudgets,
+          nuyen: { remaining: -44000 },
+        },
+        errors: [],
+        warnings: [],
+        isValid: false,
+        canFinalize: false,
+        updateSpent: vi.fn(),
+        getBudget: vi.fn(),
+        hasRemaining: vi.fn(),
+        isOverspent: vi.fn(),
+      } as unknown as ReturnType<typeof useCreationBudgets>);
+
+      const state = createBaseState();
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.getByText(/Overspent by 44,000¥/)).toBeInTheDocument();
+    });
+
+    it("shows no conflict when selections are valid at current priorities", () => {
+      const state = createBaseState({
+        selections: {
+          metatype: "human", // available at all priorities
+          "magical-path": undefined,
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      // No conflict messages should appear
+      expect(screen.queryByText(/not available at Priority/)).not.toBeInTheDocument();
+      expect(screen.queryByText(/Overspent/)).not.toBeInTheDocument();
+    });
+
+    it("shows no metatype conflict when no metatype selected", () => {
+      const state = createBaseState({
+        priorities: {
+          metatype: "E",
+          attributes: "A",
+          magic: "B",
+          skills: "C",
+          resources: "D",
+        },
+        selections: {
+          metatype: undefined,
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.queryByText(/not available at Priority/)).not.toBeInTheDocument();
+    });
+
+    it("shows no magic conflict when mundane selected", () => {
+      const state = createBaseState({
+        priorities: {
+          metatype: "A",
+          attributes: "B",
+          magic: "E",
+          skills: "C",
+          resources: "D",
+        },
+        selections: {
+          metatype: "human",
+          "magical-path": "mundane",
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      // Mundane is always valid, even at E
+      expect(screen.queryByText(/not available at Priority/)).not.toBeInTheDocument();
+    });
+
+    it("sets card status to error when any conflict exists", () => {
+      // Troll at priority D = conflict
+      const state = createBaseState({
+        priorities: {
+          metatype: "D",
+          attributes: "A",
+          magic: "B",
+          skills: "C",
+          resources: "E",
+        },
+        selections: {
+          metatype: "troll",
+        },
+      });
+
+      render(<PrioritySelectionCard state={state} updateState={mockUpdateState} />);
+
+      expect(screen.getByTestId("creation-card")).toHaveAttribute("data-status", "error");
     });
   });
 });
