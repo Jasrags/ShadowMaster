@@ -14,11 +14,22 @@
  * - Movement: Walk, Run speeds
  */
 
-import { useMemo } from "react";
-import { useMetatypes } from "@/lib/rules";
+import { useMemo, useState } from "react";
+import { useMetatypes, useRuleset } from "@/lib/rules";
 import type { CreationState, CyberwareItem, BiowareItem } from "@/lib/types";
+import type { CreationSelections } from "@/lib/types/creation-selections";
 import { CreationCard } from "./shared";
-import { Activity, Shield, Heart, Brain, Footprints } from "lucide-react";
+import {
+  Activity,
+  Shield,
+  Heart,
+  Brain,
+  Footprints,
+  Sparkles,
+  ChevronDown,
+  ChevronUp,
+} from "lucide-react";
+import { useCreationEffects } from "./hooks/useCreationEffects";
 
 // =============================================================================
 // TYPES
@@ -89,7 +100,15 @@ function StatBlock({
 
 export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
   const metatypes = useMetatypes();
+  const { ruleset } = useRuleset();
   const selectedMetatype = state.selections.metatype as string;
+  const [showEffects, setShowEffects] = useState(false);
+
+  // Unified effects from creation selections
+  const { passiveEffects, sources } = useCreationEffects(
+    state.selections as CreationSelections,
+    ruleset
+  );
 
   // Get metatype data for attribute minimums
   const metatypeData = useMemo(() => {
@@ -147,6 +166,31 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
     };
   }, [state.selections.cyberware, state.selections.bioware]);
 
+  // Extract per-attribute modifiers from unified effects
+  const unifiedAttributeBonuses = useMemo(() => {
+    const bonuses: Record<string, number> = {};
+    if (!passiveEffects) return bonuses;
+
+    // Attribute modifiers from unified effects (e.g., quality "attribute-modifier" effects)
+    // These are already resolved and stacked
+    for (const resolved of [
+      ...passiveEffects.dicePoolModifiers,
+      ...passiveEffects.limitModifiers,
+      ...passiveEffects.initiativeModifiers,
+    ]) {
+      // Only extract attribute-modifier type effects for stat calculation
+      if (resolved.effect.type === "attribute-modifier" && resolved.effect.target?.attribute) {
+        const attr = resolved.effect.target.attribute;
+        bonuses[attr] = (bonuses[attr] || 0) + resolved.resolvedValue;
+      }
+    }
+
+    return bonuses;
+  }, [passiveEffects]);
+
+  // Unified initiative modifier from effects system
+  const unifiedInitiativeBonus = passiveEffects?.totalInitiativeModifier ?? 0;
+
   // Calculate derived stats
   const derivedStats = useMemo((): DerivedStats => {
     // Helper to get attribute value with metatype minimum fallback
@@ -164,20 +208,27 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
       return 1; // Default minimum
     };
 
+    // Merge manual augmentation bonuses with unified effect attribute bonuses
+    // Manual path covers items not yet migrated to unified effects
     const augBonuses = augmentationEffects.attributeBonuses;
+    const mergedBonuses: Record<string, number> = { ...augBonuses };
+    for (const [attr, val] of Object.entries(unifiedAttributeBonuses)) {
+      mergedBonuses[attr] = (mergedBonuses[attr] || 0) + val;
+    }
 
-    // Base attributes with augmentation bonuses
-    const body = getAttr("body") + (augBonuses.body || 0);
-    const agility = getAttr("agility") + (augBonuses.agility || 0);
-    const reaction = getAttr("reaction") + (augBonuses.reaction || 0);
-    const strength = getAttr("strength") + (augBonuses.strength || 0);
-    const willpower = getAttr("willpower") + (augBonuses.willpower || 0);
-    const logic = getAttr("logic") + (augBonuses.logic || 0);
-    const intuition = getAttr("intuition") + (augBonuses.intuition || 0);
-    const charisma = getAttr("charisma") + (augBonuses.charisma || 0);
+    // Base attributes with combined bonuses
+    const body = getAttr("body") + (mergedBonuses.body || 0);
+    const agility = getAttr("agility") + (mergedBonuses.agility || 0);
+    const reaction = getAttr("reaction") + (mergedBonuses.reaction || 0);
+    const strength = getAttr("strength") + (mergedBonuses.strength || 0);
+    const willpower = getAttr("willpower") + (mergedBonuses.willpower || 0);
+    const logic = getAttr("logic") + (mergedBonuses.logic || 0);
+    const intuition = getAttr("intuition") + (mergedBonuses.intuition || 0);
+    const charisma = getAttr("charisma") + (mergedBonuses.charisma || 0);
 
     const essence = augmentationEffects.remainingEssence;
-    const initiativeDice = 1 + augmentationEffects.initiativeDiceBonus;
+    // Combine manual initiative dice bonus with unified initiative modifier
+    const initiativeDice = 1 + augmentationEffects.initiativeDiceBonus + unifiedInitiativeBonus;
 
     return {
       // Limits
@@ -202,7 +253,13 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
       // Essence
       essence,
     };
-  }, [attributes, metatypeData, augmentationEffects]);
+  }, [
+    attributes,
+    metatypeData,
+    augmentationEffects,
+    unifiedAttributeBonuses,
+    unifiedInitiativeBonus,
+  ]);
 
   // Check if we have any attributes selected
   const hasAttributes = Object.keys(attributes).length > 0 || !!selectedMetatype;
@@ -230,7 +287,7 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
               value={`${derivedStats.initiative} + ${derivedStats.initiativeDice}d6`}
               tooltip="Initiative: (Intuition + Reaction) + 1d6 (+ augmentation bonuses)"
               colorClass={
-                augmentationEffects.initiativeDiceBonus > 0
+                augmentationEffects.initiativeDiceBonus > 0 || unifiedInitiativeBonus > 0
                   ? "bg-blue-100 ring-1 ring-blue-300 dark:bg-blue-900/30 dark:ring-blue-700"
                   : "bg-blue-50 dark:bg-blue-900/20"
               }
@@ -364,6 +421,45 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
             <div className="text-[10px] text-amber-500">
               Lost: {augmentationEffects.essenceLoss.toFixed(2)}
             </div>
+          </div>
+        )}
+
+        {/* Active Effects Summary */}
+        {sources.length > 0 && (
+          <div className="rounded border border-zinc-200 dark:border-zinc-700">
+            <button
+              onClick={() => setShowEffects(!showEffects)}
+              className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-zinc-600 hover:bg-zinc-50 dark:text-zinc-400 dark:hover:bg-zinc-800"
+            >
+              <span className="flex items-center gap-1">
+                <Sparkles className="h-3 w-3" />
+                Active Effects ({sources.length})
+              </span>
+              {showEffects ? (
+                <ChevronUp className="h-3 w-3" />
+              ) : (
+                <ChevronDown className="h-3 w-3" />
+              )}
+            </button>
+            {showEffects && (
+              <div className="border-t border-zinc-200 px-3 py-2 dark:border-zinc-700">
+                <div className="space-y-1">
+                  {sources.map((s, i) => (
+                    <div key={i} className="flex items-center justify-between text-[10px]">
+                      <span className="text-zinc-500 dark:text-zinc-400">{s.source.name}</span>
+                      <span className="font-medium text-zinc-700 dark:text-zinc-300">
+                        {s.effect.type.replace(/-/g, " ")}
+                        {typeof s.effect.value === "number"
+                          ? ` (${s.effect.value >= 0 ? "+" : ""}${s.effect.value})`
+                          : s.effect.value?.perRating
+                            ? ` (${s.effect.value.perRating >= 0 ? "+" : ""}${s.effect.value.perRating}/rating)`
+                            : ""}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>

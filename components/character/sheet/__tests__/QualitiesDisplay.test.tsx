@@ -226,7 +226,7 @@ describe("QualitiesDisplay", () => {
     expandFirstRow();
     const badges = screen.getAllByTestId("effect-badge");
     expect(badges.length).toBe(1);
-    expect(badges[0]).toHaveTextContent("wound modifier");
+    expect(badges[0]).toHaveTextContent("+1 Wound Threshold");
   });
 
   it("does not render effect badges when no effects", () => {
