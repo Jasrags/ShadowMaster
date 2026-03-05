@@ -124,14 +124,27 @@ export function getSkillRating(character: Character, skillName: string): number 
  * Check if character has a specialization for a skill
  */
 export function hasSpecialization(
-  _character: Character,
-  _skillName: string,
-  _specialization: string
+  character: Character,
+  skillName: string,
+  specialization: string
 ): boolean {
-  // Specializations would typically be stored in character data
-  // This is a placeholder - implement based on actual data structure
-  // For now, return false (no specialization bonus)
-  return false;
+  const specs =
+    character.skillSpecializations?.[skillName] ||
+    character.skillSpecializations?.[skillName.toLowerCase()];
+  if (!specs || !Array.isArray(specs)) return false;
+  const normalizedSpec = specialization.toLowerCase();
+  return specs.some((s) => s.toLowerCase() === normalizedSpec);
+}
+
+/**
+ * Get all specializations for a skill
+ */
+export function getSkillSpecializations(character: Character, skillName: string): string[] {
+  const specs =
+    character.skillSpecializations?.[skillName] ||
+    character.skillSpecializations?.[skillName.toLowerCase()];
+  if (!specs) return [];
+  return Array.isArray(specs) ? specs : [specs];
 }
 
 // =============================================================================

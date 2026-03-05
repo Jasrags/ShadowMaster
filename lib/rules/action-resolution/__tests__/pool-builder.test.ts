@@ -31,6 +31,7 @@ import {
   getAttributeValue,
   getSkillRating,
   hasSpecialization,
+  getSkillSpecializations,
   calculateLimit,
   buildActionPool,
   buildSimplePool,
@@ -314,9 +315,59 @@ describe("getSkillRating", () => {
 // =============================================================================
 
 describe("hasSpecialization", () => {
-  it("should return false (placeholder implementation)", () => {
+  it("should return true when character has matching skill+spec", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { pistols: ["Semi-Automatics", "Revolvers"] },
+    });
+    expect(hasSpecialization(character, "pistols", "Revolvers")).toBe(true);
+  });
+
+  it("should return false for non-matching spec", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { pistols: ["Semi-Automatics"] },
+    });
+    expect(hasSpecialization(character, "pistols", "Revolvers")).toBe(false);
+  });
+
+  it("should be case-insensitive", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { pistols: ["Semi-Automatics"] },
+    });
+    expect(hasSpecialization(character, "pistols", "semi-automatics")).toBe(true);
+    expect(hasSpecialization(character, "pistols", "SEMI-AUTOMATICS")).toBe(true);
+  });
+
+  it("should handle missing skillSpecializations", () => {
     const character = createMockCharacter();
-    expect(hasSpecialization(character, "firearms", "pistols")).toBe(false);
+    expect(hasSpecialization(character, "pistols", "Revolvers")).toBe(false);
+  });
+
+  it("should return false when skill has no specs", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { blades: ["Swords"] },
+    });
+    expect(hasSpecialization(character, "pistols", "Revolvers")).toBe(false);
+  });
+});
+
+describe("getSkillSpecializations", () => {
+  it("should return specs for a skill", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { pistols: ["Semi-Automatics", "Revolvers"] },
+    });
+    expect(getSkillSpecializations(character, "pistols")).toEqual(["Semi-Automatics", "Revolvers"]);
+  });
+
+  it("should return empty array for skill with no specs", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { blades: ["Swords"] },
+    });
+    expect(getSkillSpecializations(character, "pistols")).toEqual([]);
+  });
+
+  it("should return empty array when skillSpecializations is undefined", () => {
+    const character = createMockCharacter();
+    expect(getSkillSpecializations(character, "pistols")).toEqual([]);
   });
 });
 
@@ -550,6 +601,38 @@ describe("buildActionPool", () => {
 
     expect(pool.basePool).toBe(4);
     expect(pool.totalDice).toBe(4);
+  });
+
+  it("should add +2 specialization bonus when spec matches", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { firearms: ["Pistols"] },
+    });
+    const pool = buildActionPool(character, {
+      attribute: "agility",
+      skill: "firearms",
+      specialization: "Pistols",
+    });
+
+    // 5 AGI + 4 Firearms + 2 spec = 11
+    expect(pool.totalDice).toBe(11);
+    expect(pool.modifiers).toContainEqual(
+      expect.objectContaining({ source: "other", value: 2, description: "Specialization: Pistols" })
+    );
+  });
+
+  it("should not add spec bonus when spec does not match", () => {
+    const character = createMockCharacter({
+      skillSpecializations: { firearms: ["Shotguns"] },
+    });
+    const pool = buildActionPool(character, {
+      attribute: "agility",
+      skill: "firearms",
+      specialization: "Pistols",
+    });
+
+    // 5 AGI + 4 Firearms, no spec bonus
+    expect(pool.totalDice).toBe(9);
+    expect(pool.modifiers.find((m) => m.description?.includes("Specialization"))).toBeUndefined();
   });
 });
 

@@ -139,8 +139,9 @@ describe("SkillsDisplay", () => {
     expect(screen.getByText("(Semi-Automatics, Revolvers)")).toBeInTheDocument();
     // Also visible as tags in expanded section
     fireEvent.click(screen.getByTestId("expand-button"));
-    expect(screen.getByText("Semi-Automatics")).toBeInTheDocument();
-    expect(screen.getByText("Revolvers")).toBeInTheDocument();
+    const expandedContent = screen.getByTestId("expanded-content");
+    expect(within(expandedContent).getByText("Semi-Automatics")).toBeInTheDocument();
+    expect(within(expandedContent).getByText("Revolvers")).toBeInTheDocument();
   });
 
   it("does not render specialization placeholder for skills without specs", () => {
@@ -149,6 +150,56 @@ describe("SkillsDisplay", () => {
     });
     render(<SkillsDisplay character={character} />);
     expect(screen.queryByText("__________")).not.toBeInTheDocument();
+  });
+
+  it("shows [+2] indicator when skill has specializations", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+      skillSpecializations: { pistols: ["Semi-Automatics"] },
+    });
+    render(<SkillsDisplay character={character} />);
+    expect(screen.getByTestId("spec-bonus-indicator")).toHaveTextContent("[+2]");
+  });
+
+  it("does not show [+2] indicator when skill has no specializations", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+    });
+    render(<SkillsDisplay character={character} />);
+    expect(screen.queryByTestId("spec-bonus-indicator")).not.toBeInTheDocument();
+  });
+
+  it("does not include +2 in base dice pool number", () => {
+    const character = createSheetCharacter({
+      attributes: {
+        body: 5,
+        agility: 6,
+        reaction: 5,
+        strength: 4,
+        willpower: 3,
+        logic: 3,
+        intuition: 4,
+        charisma: 2,
+      },
+      skills: { pistols: 5 },
+      skillSpecializations: { pistols: ["Semi-Automatics"] },
+    });
+    const { container } = render(<SkillsDisplay character={character} />);
+    // Pool = pistols(5) + agility(6) = 11 (no +2 baked in)
+    const poolPill = container.querySelector('[data-testid="dice-pool-pill"]');
+    expect(poolPill!.textContent).toBe("11");
+  });
+
+  it("shows specialization in tooltip with contextual label", () => {
+    const character = createSheetCharacter({
+      skills: { pistols: 5 },
+      skillSpecializations: { pistols: ["Semi-Automatics"] },
+    });
+    render(<SkillsDisplay character={character} />);
+
+    const tooltipContent = screen.getByTestId("tooltip-content");
+    expect(tooltipContent.textContent).toContain("Semi-Automatics");
+    expect(tooltipContent.textContent).toContain("(contextual)");
   });
 
   it("calls onSelect with skillId, dicePool, and attrAbbr", () => {
