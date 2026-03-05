@@ -464,7 +464,7 @@ export function LifestylesDisplay({
     ) : undefined;
 
   return (
-    <>
+    <div data-testid="sheet-lifestyles">
       <DisplayCard
         id="sheet-lifestyles"
         title="Lifestyles"
@@ -545,6 +545,6 @@ export function LifestylesDisplay({
         initialData={editIndex !== null ? lifestyleToFormState(lifestyles[editIndex]) : undefined}
         isEditMode={editIndex !== null}
       />
-    </>
+    </div>
   );
 }
