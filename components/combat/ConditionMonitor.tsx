@@ -526,7 +526,7 @@ export function CompactConditionMonitor({
   return (
     <div className={`flex items-center gap-2 ${sizeClasses[size]}`}>
       {/* Physical bar */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1" title="Physical Damage">
         <Heart className="w-3 h-3 text-rose-400" />
         <div className="w-16 h-2 bg-zinc-700 rounded-full overflow-hidden">
           <div
@@ -546,7 +546,7 @@ export function CompactConditionMonitor({
       </div>
 
       {/* Stun bar */}
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-1" title="Stun Damage">
         <Brain className="w-3 h-3 text-violet-400" />
         <div className="w-16 h-2 bg-zinc-700 rounded-full overflow-hidden">
           <div
