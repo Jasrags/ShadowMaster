@@ -723,6 +723,29 @@ export async function awardNuyen(userId: ID, characterId: ID, amount: number): P
 }
 
 /**
+ * Spend nuyen (validates sufficient balance)
+ */
+export async function spendNuyen(
+  userId: ID,
+  characterId: ID,
+  amount: number,
+  _reason?: string
+): Promise<Character> {
+  const character = await getCharacter(userId, characterId);
+  if (!character) {
+    throw new Error(`Character with ID ${characterId} not found`);
+  }
+
+  if (character.nuyen < amount) {
+    throw new Error(`Insufficient nuyen. Have: ${character.nuyen}, Need: ${amount}`);
+  }
+
+  return updateCharacter(userId, characterId, {
+    nuyen: character.nuyen - amount,
+  });
+}
+
+/**
  * Set character's campaign
  */
 export async function setCharacterCampaign(

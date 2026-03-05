@@ -12,6 +12,8 @@ import {
   healCharacter,
   spendKarma,
   awardKarma,
+  spendNuyen,
+  awardNuyen,
   retireCharacter,
   killCharacter,
 } from "@/lib/storage/characters";
@@ -22,6 +24,8 @@ type GameplayAction =
   | { action: "heal"; physical: number; stun: number }
   | { action: "spendKarma"; amount: number }
   | { action: "awardKarma"; amount: number }
+  | { action: "spendNuyen"; amount: number; reason?: string }
+  | { action: "awardNuyen"; amount: number; reason?: string }
   | { action: "retire" }
   | { action: "kill" };
 
@@ -84,6 +88,26 @@ export async function POST(
           );
         }
         character = await awardKarma(userId, characterId, body.amount);
+        break;
+
+      case "spendNuyen":
+        if (!body.amount || body.amount <= 0) {
+          return NextResponse.json(
+            { success: false, error: "Amount must be positive" },
+            { status: 400 }
+          );
+        }
+        character = await spendNuyen(userId, characterId, body.amount, body.reason);
+        break;
+
+      case "awardNuyen":
+        if (!body.amount || body.amount <= 0) {
+          return NextResponse.json(
+            { success: false, error: "Amount must be positive" },
+            { status: 400 }
+          );
+        }
+        character = await awardNuyen(userId, characterId, body.amount);
         break;
 
       case "retire":

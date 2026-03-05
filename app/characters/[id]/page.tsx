@@ -37,6 +37,7 @@ import {
   GearDisplay,
   MagicSummaryDisplay,
   IdentitiesDisplay,
+  LifestylesDisplay,
   CharacterInfoDisplay,
   KnowledgeLanguagesDisplay,
   MatrixActionsDisplay,
@@ -557,6 +558,12 @@ function CharacterSheet({
 
             <DrugsDisplay
               drugs={(character.gear || []).filter((item) => item.category === "drug")}
+            />
+
+            <LifestylesDisplay
+              character={character}
+              onCharacterUpdate={(updated) => setCharacter(updated)}
+              editable={character.status === "active"}
             />
 
             <ContactsDisplay character={character} />
