@@ -54,8 +54,8 @@ export function SecuritySection({ onChangePassword }: SecuritySectionProps) {
             <div
               className={`rounded-md p-4 transition-colors ${
                 message.type === "success"
-                  ? "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
-                  : "bg-red-500/10 text-red-400 border border-red-500/20"
+                  ? "bg-emerald-50 text-emerald-700 border border-emerald-200 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20"
+                  : "bg-red-50 text-red-700 border border-red-200 dark:bg-red-500/10 dark:text-red-400 dark:border-red-500/20"
               }`}
             >
               {message.text}
