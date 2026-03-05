@@ -100,17 +100,26 @@ function getTargetName(effect: Effect): string {
 
 /**
  * Format a numeric value with sign prefix.
+ * Returns null for non-numeric values (e.g., "rating-based", "halved").
  */
-function formatValue(value: number | { perRating: number }): string {
-  const num = typeof value === "number" ? value : value.perRating;
-  return num >= 0 ? `+${num}` : `${num}`;
+function formatValue(value: number | { perRating: number }): string | null {
+  if (typeof value === "number") {
+    return value >= 0 ? `+${value}` : `${value}`;
+  }
+  if (typeof value === "object" && value !== null && typeof value.perRating === "number") {
+    return value.perRating >= 0 ? `+${value.perRating}` : `${value.perRating}`;
+  }
+  return null;
 }
 
 /**
- * Capitalize first letter of a string.
+ * Capitalize a string, converting kebab-case to Title Case.
  */
 function capitalize(str: string): string {
-  return str.charAt(0).toUpperCase() + str.slice(1);
+  return str
+    .split("-")
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(" ");
 }
 
 /**
@@ -127,6 +136,9 @@ export function formatEffectBadge(effect: Effect): EffectBadge | null {
   if (!config) return null;
 
   const valueStr = formatValue(effect.value);
+  // Skip effects with non-numeric values (e.g., "rating-based", "halved")
+  if (valueStr === null) return null;
+
   const target = getTargetName(effect);
 
   return {

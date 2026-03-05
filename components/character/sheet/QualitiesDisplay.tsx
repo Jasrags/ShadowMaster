@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import type { Character, QualitySelection, QualityEffect } from "@/lib/types";
+import type { Character, QualitySelection } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { useQualities } from "@/lib/rules";
+import { formatEffectBadge, isUnifiedEffect } from "@/lib/rules/effects";
 import { DisplayCard } from "./DisplayCard";
 import {
   ShieldCheck,
@@ -134,8 +135,13 @@ function QualityRow({
   }
   const extra = extraParts.join(", ");
 
-  const effects = (data?.effects || []) as QualityEffect[];
-  const hasExpandableContent = !!data?.summary || effects.length > 0 || !!rawSelection.dynamicState;
+  const rawEffects = (data?.effects || []) as unknown[];
+  const effectBadges = rawEffects
+    .filter(isUnifiedEffect)
+    .map(formatEffectBadge)
+    .filter((b): b is NonNullable<typeof b> => b !== null);
+  const hasExpandableContent =
+    !!data?.summary || effectBadges.length > 0 || !!rawSelection.dynamicState;
 
   return (
     <div
@@ -199,36 +205,17 @@ function QualityRow({
           )}
 
           {/* Effect badges */}
-          {effects.length > 0 && (
+          {effectBadges.length > 0 && (
             <div className="flex flex-wrap gap-1">
-              {effects.map((eff, idx) => {
-                // Check if this is a unified effect with triggers array
-                const isUnified =
-                  "triggers" in eff &&
-                  Array.isArray((eff as unknown as { triggers?: unknown }).triggers);
-                const value =
-                  isUnified && typeof eff.value === "number" ? (eff.value as number) : null;
-                const hasWirelessOverride =
-                  isUnified && "wirelessOverride" in eff && eff.wirelessOverride;
-
-                return (
-                  <span
-                    key={idx}
-                    data-testid="effect-badge"
-                    className="rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400"
-                    title={eff.description}
-                  >
-                    {eff.type.replace(/-/g, " ")}
-                    {value !== null && (
-                      <span className="ml-1 text-emerald-400">
-                        {value > 0 ? "+" : ""}
-                        {value}
-                      </span>
-                    )}
-                    {hasWirelessOverride ? <span className="ml-1 text-cyan-400">W</span> : null}
-                  </span>
-                );
-              })}
+              {effectBadges.map((badge, idx) => (
+                <span
+                  key={idx}
+                  data-testid="effect-badge"
+                  className={`inline-flex items-center rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+                >
+                  {badge.label}
+                </span>
+              ))}
             </div>
           )}
 

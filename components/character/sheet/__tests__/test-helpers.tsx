@@ -571,8 +571,8 @@ export const MOCK_POSITIVE_QUALITIES = [
       {
         id: "hpt-wound",
         type: "wound-modifier",
-        trigger: "always",
-        target: {},
+        triggers: ["always"],
+        target: { stat: "wound-threshold" },
         value: 1,
         description: "Ignore 1 box of wound modifiers per rating",
       },
