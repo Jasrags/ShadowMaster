@@ -2,11 +2,21 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ArrowLeft, Loader2, Edit, Trash2, BarChart3, Swords, Settings } from "lucide-react";
-import type { GruntTeam, IndividualGrunts, Campaign, ID } from "@/lib/types";
+import {
+  ArrowLeft,
+  Loader2,
+  Edit,
+  Trash2,
+  BarChart3,
+  Swords,
+  Settings,
+  Rocket,
+} from "lucide-react";
+import type { GruntTeam, IndividualGrunts, Campaign, CombatSession, ID } from "@/lib/types";
 import { ProfessionalRatingBadge } from "../components/ProfessionalRatingBadge";
 import { GruntTeamStatsTab } from "./components/GruntTeamStatsTab";
 import { GruntTeamCombatTrackerTab } from "./components/GruntTeamCombatTrackerTab";
+import { GruntTeamSettingsTab } from "./components/GruntTeamSettingsTab";
 
 type TabType = "stats" | "combat" | "settings";
 
@@ -29,6 +39,8 @@ export default function GruntTeamDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [activeTab, setActiveTab] = useState<TabType>("stats");
+  const [activeSessions, setActiveSessions] = useState<CombatSession[]>([]);
+  const [deploying, setDeploying] = useState(false);
 
   const fetchTeam = useCallback(
     async (includeCombatState = false) => {
@@ -74,6 +86,25 @@ export default function GruntTeamDetailPage() {
     fetchCampaign();
     fetchTeam();
   }, [fetchCampaign, fetchTeam]);
+
+  // Fetch active combat sessions for deploy button (GM only)
+  useEffect(() => {
+    async function fetchActiveSessions() {
+      try {
+        const response = await fetch(`/api/campaigns/${campaignId}/combat-sessions`);
+        const data = await response.json();
+        if (response.ok && data.sessions) {
+          setActiveSessions(data.sessions);
+        }
+      } catch {
+        // Non-critical, just means no deploy button
+      }
+    }
+
+    if (userRole === "gm") {
+      fetchActiveSessions();
+    }
+  }, [userRole, campaignId]);
 
   // Fetch combat state when switching to combat tab
   useEffect(() => {
@@ -169,8 +200,79 @@ export default function GruntTeamDetailPage() {
     }
   };
 
+  const handleDeployToCombat = async (sessionId: string) => {
+    if (!team || deploying) return;
+    setDeploying(true);
+
+    try {
+      const response = await fetch(`/api/combat/${sessionId}/participants`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "grunt",
+          entityId: team.id,
+          name: team.name,
+          isGMControlled: true,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to deploy to combat");
+      }
+
+      alert(`"${team.name}" deployed to combat session.`);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to deploy to combat");
+    } finally {
+      setDeploying(false);
+    }
+  };
+
   const handleRefresh = () => {
     fetchTeam(true);
+  };
+
+  const handleAddGrunt = async () => {
+    try {
+      const response = await fetch(`/api/grunt-teams/${teamId}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          initialSize: (team?.initialSize ?? 0) + 1,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to add grunt");
+      }
+
+      await fetchTeam(true);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to add grunt");
+    }
+  };
+
+  const handleRemoveGrunt = async (gruntId: ID) => {
+    try {
+      // Apply lethal damage to remove from tracking
+      const response = await fetch(`/api/grunt-teams/${teamId}/grunts/${gruntId}/damage`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ damage: 99, damageType: "physical" }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || "Failed to remove grunt");
+      }
+
+      await fetchTeam(true);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : "Failed to remove grunt");
+    }
   };
 
   const isGM = userRole === "gm";
@@ -228,6 +330,39 @@ export default function GruntTeamDetailPage() {
 
           {isGM && (
             <div className="flex gap-2">
+              {activeSessions.length > 0 &&
+                (activeSessions.length === 1 ? (
+                  <button
+                    onClick={() => handleDeployToCombat(activeSessions[0].id)}
+                    disabled={deploying}
+                    className="inline-flex items-center gap-2 rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-500 disabled:opacity-50"
+                  >
+                    <Rocket className="h-4 w-4" />
+                    {deploying ? "Deploying..." : "Deploy to Combat"}
+                  </button>
+                ) : (
+                  <div className="relative">
+                    <select
+                      onChange={(e) => {
+                        if (e.target.value) handleDeployToCombat(e.target.value);
+                        e.target.value = "";
+                      }}
+                      disabled={deploying}
+                      className="inline-flex items-center gap-2 rounded-lg bg-orange-600 pl-4 pr-8 py-2 text-sm font-medium text-white hover:bg-orange-500 disabled:opacity-50 appearance-none cursor-pointer"
+                      defaultValue=""
+                    >
+                      <option value="" disabled>
+                        {deploying ? "Deploying..." : "Deploy to Combat..."}
+                      </option>
+                      {activeSessions.map((session) => (
+                        <option key={session.id} value={session.id}>
+                          {session.name || `Session ${session.id.slice(0, 8)}`}
+                        </option>
+                      ))}
+                    </select>
+                    <Rocket className="absolute right-2 top-1/2 -translate-y-1/2 h-4 w-4 text-white pointer-events-none" />
+                  </div>
+                ))}
               <button
                 onClick={() => router.push(`/campaigns/${campaignId}/grunt-teams/${teamId}/edit`)}
                 className="inline-flex items-center gap-2 rounded-lg border border-zinc-200 bg-white px-4 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
@@ -287,18 +422,12 @@ export default function GruntTeamDetailPage() {
             onSpendEdge={isGM ? handleSpendEdge : undefined}
             onRollInitiative={isGM ? handleRollInitiative : undefined}
             onRefresh={isGM ? handleRefresh : undefined}
+            onAddGrunt={isGM ? handleAddGrunt : undefined}
+            onRemoveGrunt={isGM ? handleRemoveGrunt : undefined}
           />
         )}
         {activeTab === "settings" && isGM && (
-          <div className="rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
-            <h3 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50 mb-4">
-              Team Settings
-            </h3>
-            <p className="text-zinc-500 dark:text-zinc-400">
-              Settings configuration will be available here. Use the Edit button to modify team
-              configuration.
-            </p>
-          </div>
+          <GruntTeamSettingsTab team={team} onTeamUpdate={(updated) => setTeam(updated)} />
         )}
       </div>
     </div>

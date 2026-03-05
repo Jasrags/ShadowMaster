@@ -5,6 +5,7 @@ export type CampaignTabId =
   | "characters"
   | "notes"
   | "roster"
+  | "grunt-teams"
   | "locations"
   | "posts"
   | "calendar"
@@ -34,6 +35,7 @@ export default function CampaignTabs({
     { id: "locations" as const, label: "Locations", public: false },
     { id: "notes" as const, label: "Notes", public: false },
     ...(isGM ? [{ id: "roster" as const, label: "Roster", public: false }] : []),
+    ...(isGM ? [{ id: "grunt-teams" as const, label: "Grunt Teams", public: false }] : []),
     ...(isGM
       ? [
           {

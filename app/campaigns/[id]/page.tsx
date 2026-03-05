@@ -25,6 +25,7 @@ import CampaignPostsTab from "./components/CampaignPostsTab";
 import CampaignCalendarTab from "./components/CampaignCalendarTab";
 import CampaignLocationsTab from "./components/CampaignLocationsTab";
 import CampaignAdvancementsTab from "./components/CampaignAdvancementsTab";
+import CampaignGruntTeamsTab from "./components/CampaignGruntTeamsTab";
 
 interface CampaignDetailProps {
   params: Promise<{ id: string }>;
@@ -337,6 +338,9 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
         )}
         {activeTab === "roster" && userRole === "gm" && (
           <CampaignRosterTab campaign={campaign} onCampaignUpdate={handleCampaignUpdate} />
+        )}
+        {activeTab === "grunt-teams" && userRole === "gm" && (
+          <CampaignGruntTeamsTab campaignId={id} />
         )}
         {activeTab === "approvals" && userRole === "gm" && (
           <CampaignAdvancementsTab
