@@ -79,7 +79,7 @@ const MAX_CHARACTER_NAME_LENGTH = 100;
 // =============================================================================
 
 // Reverse of MAGICAL_PATH_SELECTION_MAP: character field → priority table path
-const CHARACTER_TO_PRIORITY_PATH: Record<string, string> = {
+export const CHARACTER_TO_PRIORITY_PATH: Record<string, string> = {
   "full-mage": "magician",
 };
 
