@@ -2,8 +2,9 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { X } from "lucide-react";
-import type { LifestyleModification } from "@/lib/types";
+import type { LifestyleModification, LifestyleSubscription } from "@/lib/types";
 import { LifestyleModificationSelector } from "../shared/LifestyleModificationSelector";
+import { LifestyleSubscriptionSelector } from "../shared/LifestyleSubscriptionSelector";
 import { Modal } from "./Modal";
 import { LIFESTYLE_TYPES } from "./constants";
 import type { LifestyleModalProps, NewLifestyleState } from "./types";
@@ -23,6 +24,8 @@ export function LifestyleModal({
     customIncome: 0,
     notes: "",
     modifications: [],
+    subscriptions: [],
+    prepaidMonths: 0,
   };
 
   const [formState, setFormState] = useState<NewLifestyleState>(initialData || defaultFormState);
@@ -52,7 +55,18 @@ export function LifestyleModal({
     }
     return sum + mod.modifier * (mod.type === "positive" ? 1 : -1);
   }, 0);
-  const totalCost = Math.max(0, baseCost + modificationsCost);
+  const subscriptionsCost = (formState.subscriptions || []).reduce(
+    (sum, sub) => sum + sub.monthlyCost,
+    0
+  );
+  const totalCost = Math.max(
+    0,
+    baseCost +
+      modificationsCost +
+      subscriptionsCost +
+      formState.customExpenses -
+      formState.customIncome
+  );
 
   const canAfford = totalCost <= nuyenRemaining;
   const canSave = formState.type && canAfford;
@@ -73,17 +87,26 @@ export function LifestyleModal({
     });
   };
 
+  // Add subscription handler
+  const handleAddSubscription = (sub: LifestyleSubscription) => {
+    setFormState({
+      ...formState,
+      subscriptions: [...(formState.subscriptions || []), sub],
+    });
+  };
+
+  // Remove subscription handler
+  const handleRemoveSubscription = (index: number) => {
+    setFormState({
+      ...formState,
+      subscriptions: (formState.subscriptions || []).filter((_, i) => i !== index),
+    });
+  };
+
   const handleSave = () => {
     if (canSave) {
       onSave(formState);
-      setFormState({
-        type: "",
-        location: "",
-        customExpenses: 0,
-        customIncome: 0,
-        notes: "",
-        modifications: [],
-      });
+      setFormState(defaultFormState);
       onClose();
     }
   };
@@ -192,6 +215,76 @@ export function LifestyleModal({
           )}
         </div>
 
+        {/* Subscriptions */}
+        <div>
+          <div className="mb-2 flex items-center justify-between">
+            <label className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+              Subscriptions
+            </label>
+            <LifestyleSubscriptionSelector
+              onAdd={handleAddSubscription}
+              existingSubscriptions={formState.subscriptions || []}
+            />
+          </div>
+          {(formState.subscriptions || []).length > 0 ? (
+            <div className="space-y-2">
+              {(formState.subscriptions || []).map((sub, index) => (
+                <div
+                  key={sub.catalogId || index}
+                  className="flex items-center justify-between rounded-lg border border-zinc-200 bg-zinc-50 px-3 py-2 dark:border-zinc-700 dark:bg-zinc-800"
+                >
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm text-zinc-900 dark:text-zinc-100">{sub.name}</span>
+                    {sub.level && (
+                      <span className="rounded border border-blue-500/20 bg-blue-500/10 px-1.5 py-0.5 text-[10px] font-semibold text-blue-600 dark:text-blue-300">
+                        {sub.level}
+                      </span>
+                    )}
+                    <span className="text-xs text-zinc-500 dark:text-zinc-400">
+                      {sub.monthlyCost.toLocaleString()}/mo
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => handleRemoveSubscription(index)}
+                    className="text-zinc-400 hover:text-red-500"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-xs text-zinc-500 dark:text-zinc-400">
+              No subscriptions added. Click &quot;+ Add&quot; to add subscriptions like DocWagon or
+              food service.
+            </p>
+          )}
+        </div>
+
+        {/* Prepaid Months */}
+        <div>
+          <label className="mb-1.5 block text-sm font-medium text-zinc-700 dark:text-zinc-300">
+            Prepaid Months (Optional)
+          </label>
+          <input
+            type="number"
+            min="0"
+            max="12"
+            value={formState.prepaidMonths || 0}
+            onChange={(e) =>
+              setFormState({
+                ...formState,
+                prepaidMonths: Math.max(0, Math.min(12, parseInt(e.target.value) || 0)),
+              })
+            }
+            className="w-full rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm dark:border-zinc-700 dark:bg-zinc-800"
+          />
+          <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+            Number of months paid in advance (0-12)
+          </p>
+        </div>
+
         {/* Custom Expenses / Income */}
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -261,6 +354,30 @@ export function LifestyleModal({
                   >
                     {modificationsCost > 0 ? "+" : ""}
                     {modificationsCost.toLocaleString()}
+                  </span>
+                </div>
+              )}
+              {subscriptionsCost > 0 && (
+                <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
+                  <span>Subscriptions</span>
+                  <span className="text-red-600 dark:text-red-400">
+                    +{subscriptionsCost.toLocaleString()}
+                  </span>
+                </div>
+              )}
+              {formState.customExpenses > 0 && (
+                <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
+                  <span>Custom Expenses</span>
+                  <span className="text-red-600 dark:text-red-400">
+                    +{formState.customExpenses.toLocaleString()}
+                  </span>
+                </div>
+              )}
+              {formState.customIncome > 0 && (
+                <div className="flex justify-between text-zinc-600 dark:text-zinc-400">
+                  <span>Custom Income</span>
+                  <span className="text-emerald-600 dark:text-emerald-400">
+                    -{formState.customIncome.toLocaleString()}
                   </span>
                 </div>
               )}
