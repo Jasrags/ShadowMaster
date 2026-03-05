@@ -99,21 +99,21 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
   return (
     <div
       onClick={onClick}
-      className={`group cursor-pointer rounded-lg border border-zinc-800 bg-black p-3 transition-all hover:border-zinc-600 hover:shadow-lg ${
+      className={`group cursor-pointer rounded-lg border border-zinc-200 bg-white p-3 transition-all hover:border-zinc-300 hover:shadow-lg dark:border-zinc-800 dark:bg-black dark:hover:border-zinc-600 ${
         isDraft ? "opacity-60" : ""
       }`}
     >
       {/* Header: name, metatype, badge */}
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-start gap-2 min-w-0">
-          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-800">
-            <User className="h-4 w-4 text-zinc-400" />
+          <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-zinc-100 dark:bg-zinc-800">
+            <User className="h-4 w-4 text-zinc-500" />
           </div>
           <div className="min-w-0">
-            <h4 className="truncate text-sm font-medium text-zinc-50 group-hover:text-indigo-400">
+            <h4 className="truncate text-sm font-medium text-zinc-900 group-hover:text-indigo-600 dark:text-zinc-50 dark:group-hover:text-indigo-400">
               {character.name || "Unnamed Character"}
             </h4>
-            <p className="truncate text-xs text-zinc-500">
+            <p className="truncate text-xs text-zinc-500 dark:text-zinc-400">
               {character.metatype}
               {character.magicalPath &&
                 character.magicalPath !== "mundane" &&
@@ -131,7 +131,7 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
       </div>
 
       {/* Combat stats row */}
-      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-zinc-800 pt-2 text-xs text-zinc-400">
+      <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 border-t border-zinc-200 pt-2 text-xs text-zinc-600 dark:border-zinc-800 dark:text-zinc-400">
         <span className="flex items-center gap-1" title="Initiative">
           <Zap className="h-3 w-3 text-amber-400" />
           {initiative}
@@ -148,7 +148,7 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
       </div>
 
       {/* Condition monitors */}
-      <div className="mt-2 border-t border-zinc-800 pt-2">
+      <div className="mt-2 border-t border-zinc-200 pt-2 dark:border-zinc-800">
         <CompactConditionMonitor
           physicalMax={condition.physicalMax}
           stunMax={condition.stunMax}
@@ -159,26 +159,26 @@ export default function PartyCharacterCard({ character, onClick }: PartyCharacte
       </div>
 
       {/* Edge & Essence */}
-      <div className="mt-2 flex items-center gap-3 border-t border-zinc-800 pt-2 text-xs">
+      <div className="mt-2 flex items-center gap-3 border-t border-zinc-200 pt-2 text-xs dark:border-zinc-800">
         <div className="flex items-center gap-1.5">
-          <span className="text-zinc-500">Edge:</span>
+          <span className="text-zinc-500 dark:text-zinc-500">Edge:</span>
           <div className="flex gap-0.5">
             {Array.from({ length: edge.max }, (_, i) => (
               <div
                 key={i}
                 className={`h-2 w-2 rounded-sm ${
-                  i < edge.current ? "bg-amber-400" : "bg-zinc-700"
+                  i < edge.current ? "bg-amber-400" : "bg-zinc-200 dark:bg-zinc-700"
                 }`}
               />
             ))}
           </div>
-          <span className="font-mono text-zinc-400">
+          <span className="font-mono text-zinc-600 dark:text-zinc-400">
             {edge.current}/{edge.max}
           </span>
         </div>
         <div className="flex items-center gap-1">
           <Gem className="h-3 w-3 text-cyan-400" />
-          <span className="font-mono text-zinc-400">{essence.toFixed(1)}</span>
+          <span className="font-mono text-zinc-600 dark:text-zinc-400">{essence.toFixed(1)}</span>
         </div>
       </div>
     </div>

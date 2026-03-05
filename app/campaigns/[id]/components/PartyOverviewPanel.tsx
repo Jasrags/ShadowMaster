@@ -22,10 +22,12 @@ export default function PartyOverviewPanel({
 
   if (characters.length === 0) {
     return (
-      <div className="rounded-lg border border-dashed border-zinc-700 bg-black p-12 text-center">
-        <Users className="mx-auto h-12 w-12 text-zinc-600" />
-        <h3 className="mt-4 text-lg font-medium text-zinc-50">No characters in party</h3>
-        <p className="mt-2 text-sm text-zinc-400">
+      <div className="rounded-lg border border-dashed border-zinc-300 bg-white p-12 text-center dark:border-zinc-700 dark:bg-black">
+        <Users className="mx-auto h-12 w-12 text-zinc-300 dark:text-zinc-600" />
+        <h3 className="mt-4 text-lg font-medium text-zinc-900 dark:text-zinc-50">
+          No characters in party
+        </h3>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
           Characters added to this campaign will appear here.
         </p>
       </div>
@@ -35,7 +37,7 @@ export default function PartyOverviewPanel({
   return (
     <div className="space-y-4">
       {/* Party summary header */}
-      <div className="flex items-center gap-3 text-sm text-zinc-400">
+      <div className="flex items-center gap-3 text-sm text-zinc-600 dark:text-zinc-400">
         <span className="flex items-center gap-1.5">
           <Users className="h-4 w-4" />
           {characters.length} character{characters.length !== 1 ? "s" : ""}

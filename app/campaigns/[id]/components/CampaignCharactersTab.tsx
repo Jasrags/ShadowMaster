@@ -82,17 +82,17 @@ export default function CampaignCharactersTab({ campaign, isGM }: CampaignCharac
         </div>
         <div className="flex items-center gap-2">
           {isGM && (
-            <div className="flex rounded-md border border-zinc-700 p-0.5">
+            <div className="flex rounded-md border border-zinc-300 p-0.5 dark:border-zinc-700">
               <button
                 onClick={() => setViewMode("cards")}
-                className={`rounded p-1.5 ${viewMode === "cards" ? "bg-zinc-700 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+                className={`rounded p-1.5 ${viewMode === "cards" ? "bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-white" : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"}`}
                 title="Card view"
               >
                 <LayoutGrid className="h-4 w-4" />
               </button>
               <button
                 onClick={() => setViewMode("overview")}
-                className={`rounded p-1.5 ${viewMode === "overview" ? "bg-zinc-700 text-white" : "text-zinc-400 hover:text-zinc-200"}`}
+                className={`rounded p-1.5 ${viewMode === "overview" ? "bg-zinc-200 text-zinc-900 dark:bg-zinc-700 dark:text-white" : "text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200"}`}
                 title="Party overview"
               >
                 <TableProperties className="h-4 w-4" />
