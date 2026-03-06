@@ -12,6 +12,7 @@ import type { Character } from "@/lib/types";
 import type { MergedRuleset } from "@/lib/types/edition";
 import type { Quality } from "@/lib/types/qualities";
 import type { Effect, EffectSource, EffectSourceType } from "@/lib/types/effects";
+import { resolveRatingBasedValue } from "./format";
 
 /**
  * An effect paired with its source metadata for resolution.
@@ -117,8 +118,22 @@ function gatherQualityEffects(character: Character, ruleset: MergedRuleset): Sou
       rating,
     };
 
+    // Look up rating table entry for resolving "rating-based" values
+    const ratingsTable = (definition as unknown as Record<string, unknown>).ratings as
+      | Record<string, Record<string, unknown>>
+      | undefined;
+    const ratingEntry = ratingsTable?.[String(rating)];
+
     for (const rawEffect of effects) {
       if (isUnifiedEffect(rawEffect)) {
+        // Resolve "rating-based" string values to numbers during gathering
+        if (typeof (rawEffect as unknown as Record<string, unknown>).value === "string") {
+          const resolved = resolveRatingBasedValue(rawEffect, ratingEntry);
+          if (resolved !== null) {
+            results.push({ effect: { ...rawEffect, value: resolved }, source });
+            continue;
+          }
+        }
         results.push({ effect: rawEffect, source });
       }
     }

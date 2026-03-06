@@ -61,6 +61,7 @@ import {
   VehicleActionsDisplay,
   AutosoftManagerDisplay,
 } from "@/components/character/sheet";
+import type { EffectResolutionContext, EffectResolutionResult } from "@/lib/types/effects";
 import { hasMatrixAccess, hasHackingCapability } from "@/lib/rules/matrix/cyberdeck-validator";
 import { hasRiggingAccess } from "@/components/character/sheet/rigging-helpers";
 
@@ -97,9 +98,25 @@ function CharacterSheet({
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
   const matrixSession = useMatrixSession();
-  const { sources: effectSources, resolve: resolveEffects } = useCharacterEffects(
+  const [firstMeeting, setFirstMeeting] = useState(false);
+  const { sources: effectSources, resolve: resolveEffectsBase } = useCharacterEffects(
     character,
     ruleset
+  );
+
+  // Wrap resolveEffects to inject transient firstMeeting state
+  const resolveEffects = useCallback(
+    (ctx: EffectResolutionContext): EffectResolutionResult => {
+      if (firstMeeting) {
+        const merged = {
+          ...ctx,
+          characterState: { ...ctx.characterState, firstMeeting: true },
+        };
+        return resolveEffectsBase(merged);
+      }
+      return resolveEffectsBase(ctx);
+    },
+    [resolveEffectsBase, firstMeeting]
   );
 
   useEffect(() => {
@@ -507,7 +524,12 @@ function CharacterSheet({
               onSelect={(pool, label) => openDiceRoller(pool, label)}
             />
 
-            <QualitiesDisplay character={character} onUpdate={(updated) => setCharacter(updated)} />
+            <QualitiesDisplay
+              character={character}
+              onUpdate={(updated) => setCharacter(updated)}
+              firstMeeting={firstMeeting}
+              onFirstMeetingChange={setFirstMeeting}
+            />
           </div>
 
           {/* Right Column - Gear & Assets */}

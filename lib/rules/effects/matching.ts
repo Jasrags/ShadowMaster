@@ -15,6 +15,7 @@ import type {
   EffectCondition,
   EffectActionContext,
   EffectResolutionContext,
+  CharacterStateFlags,
 } from "@/lib/types/effects";
 
 /**
@@ -66,12 +67,34 @@ function getImpliedTriggers(action: EffectActionContext): Set<EffectTrigger> {
 }
 
 /**
- * Check if any of the effect's triggers match the action context.
- * Returns true if ANY trigger in the array is in the implied trigger set.
+ * Derive state-dependent triggers from character state flags.
  */
-export function matchesTrigger(triggers: EffectTrigger[], action: EffectActionContext): boolean {
+function getStateDerivedTriggers(state?: CharacterStateFlags): Set<EffectTrigger> {
+  const triggers = new Set<EffectTrigger>();
+  if (state?.withdrawalActive) triggers.add("withdrawal");
+  if (state?.exposureActive) triggers.add("on-exposure");
+  if (state?.firstMeeting) triggers.add("first-meeting");
+  return triggers;
+}
+
+/**
+ * Check if any of the effect's triggers match the resolution context.
+ * Returns true if ANY trigger in the array is in the implied trigger set
+ * (from action context) or the state-derived trigger set (from character state).
+ */
+export function matchesTrigger(
+  triggers: EffectTrigger[],
+  actionOrContext: EffectActionContext | EffectResolutionContext
+): boolean {
+  // Support both old (action-only) and new (full context) signatures
+  const action = "action" in actionOrContext ? actionOrContext.action : actionOrContext;
+  const characterState =
+    "characterState" in actionOrContext ? actionOrContext.characterState : undefined;
+
   const implied = getImpliedTriggers(action);
-  return triggers.some((t) => implied.has(t));
+  const stateTriggers = getStateDerivedTriggers(characterState);
+
+  return triggers.some((t) => implied.has(t) || stateTriggers.has(t));
 }
 
 /**
@@ -103,6 +126,15 @@ export function matchesTarget(target: EffectTarget, action: EffectActionContext)
     target.specificAction &&
     action.specificAction &&
     target.specificAction !== action.specificAction
+  ) {
+    return false;
+  }
+
+  // Skill category match
+  if (
+    target.skillCategory &&
+    action.skillCategory &&
+    target.skillCategory !== action.skillCategory
   ) {
     return false;
   }
@@ -155,7 +187,7 @@ export function matchesCondition(
  * Checks trigger matching, target matching, and condition matching.
  */
 export function effectApplies(effect: Effect, context: EffectResolutionContext): boolean {
-  if (!matchesTrigger(effect.triggers, context.action)) return false;
+  if (!matchesTrigger(effect.triggers, context)) return false;
   if (!matchesTarget(effect.target, context.action)) return false;
   if (!matchesCondition(effect.condition, context)) return false;
   return true;

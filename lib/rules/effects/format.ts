@@ -7,7 +7,7 @@
  * @see Issue #448
  */
 
-import type { Effect } from "@/lib/types/effects";
+import type { Effect, CharacterStateFlags } from "@/lib/types/effects";
 
 export interface EffectBadge {
   /** Compact display text, e.g., "+2 Sneaking" */
@@ -16,6 +16,8 @@ export interface EffectBadge {
   colorClass: string;
   /** Trigger context for non-"always" effects, e.g., "withdrawal" */
   trigger?: string;
+  /** Whether the trigger is currently active (for state-dependent styling) */
+  triggerActive?: boolean;
 }
 
 /**
@@ -28,6 +30,8 @@ export interface EffectBadgeContext {
   rating?: number;
   /** Character's dependency type (for addiction condition filtering) */
   dependencyType?: string;
+  /** Active character state flags for trigger-active styling */
+  activeCharacterStates?: CharacterStateFlags;
 }
 
 /**
@@ -251,10 +255,30 @@ export function formatEffectBadge(
   const target = getTargetName(effect);
   const trigger = formatTrigger(effect.triggers);
 
+  // Determine if the trigger is currently active based on character state
+  let triggerActive: boolean | undefined;
+  if (trigger && context?.activeCharacterStates) {
+    const states = context.activeCharacterStates;
+    const stateTriggers = effect.triggers.filter((t) => t !== "always");
+    triggerActive = stateTriggers.some((t) => {
+      switch (t) {
+        case "withdrawal":
+          return states.withdrawalActive;
+        case "on-exposure":
+          return states.exposureActive;
+        case "first-meeting":
+          return states.firstMeeting;
+        default:
+          return false;
+      }
+    });
+  }
+
   return {
     label: target ? `${valueStr} ${target}` : `${valueStr} ${config.name}`,
     colorClass: config.colorClass,
     ...(trigger ? { trigger } : {}),
+    ...(triggerActive !== undefined ? { triggerActive } : {}),
   };
 }
 
