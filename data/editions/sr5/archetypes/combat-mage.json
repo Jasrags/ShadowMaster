@@ -1,0 +1,49 @@
+{
+  "id": "combat-mage",
+  "editionCode": "sr5",
+  "name": "Combat Mage",
+  "description": "A full magician who channels arcane power into devastating combat spells and protective wards. Combat mages bring magical firepower to the team — fireballs, lightning bolts, and healing spells. They can also perceive the astral plane and summon spirits to fight alongside them.",
+  "category": "magic",
+  "difficulty": "advanced",
+  "keyAttributes": ["willpower", "logic", "body"],
+  "suggestedMetatype": "human",
+  "magicalPath": "magician",
+  "priorities": {
+    "magic": "A",
+    "attributes": "B",
+    "metatype": "C",
+    "skills": "D",
+    "resources": "E"
+  },
+  "selections": {
+    "metatype": "human",
+    "magical-path": "magician",
+    "attributes": {
+      "body": 5,
+      "agility": 3,
+      "reaction": 3,
+      "strength": 3,
+      "willpower": 4,
+      "logic": 5,
+      "intuition": 3,
+      "charisma": 2
+    },
+    "specialAttributes": {
+      "edge": 2,
+      "magic": 6
+    },
+    "skills": {
+      "spellcasting": 5,
+      "counterspelling": 5,
+      "summoning": 4,
+      "assensing": 3,
+      "astral-combat": 3,
+      "banishing": 3,
+      "perception": 3,
+      "pistols": 3,
+      "first-aid": 3,
+      "blades": 2
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}

@@ -1,0 +1,53 @@
+{
+  "id": "face",
+  "editionCode": "sr5",
+  "name": "Face",
+  "description": "The team's social expert, master of persuasion, deception, and negotiation. Faces talk their way past security, charm corporate contacts, and close deals that keep the team working. With a broad skill set covering social manipulation and electronics, they're the glue that holds a team together.",
+  "category": "social",
+  "difficulty": "intermediate",
+  "keyAttributes": ["charisma", "intuition", "logic"],
+  "suggestedMetatype": "elf",
+  "magicalPath": "mundane",
+  "priorities": {
+    "skills": "A",
+    "attributes": "B",
+    "metatype": "C",
+    "resources": "D",
+    "magic": "E"
+  },
+  "selections": {
+    "metatype": "elf",
+    "magical-path": "mundane",
+    "attributes": {
+      "body": 3,
+      "agility": 4,
+      "reaction": 3,
+      "strength": 2,
+      "willpower": 4,
+      "logic": 4,
+      "intuition": 4,
+      "charisma": 7
+    },
+    "specialAttributes": {
+      "edge": 4
+    },
+    "skills": {
+      "con": 4,
+      "etiquette": 5,
+      "negotiation": 5,
+      "impersonation": 4,
+      "leadership": 4,
+      "intimidation": 4,
+      "perception": 4,
+      "pistols": 4,
+      "computer": 4,
+      "electronic-warfare": 4,
+      "performance": 4,
+      "forgery": 4,
+      "sneaking": 2,
+      "palming": 2,
+      "pilot-ground-craft": 1
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}

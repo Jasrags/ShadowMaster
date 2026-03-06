@@ -1,0 +1,51 @@
+{
+  "id": "decker",
+  "editionCode": "sr5",
+  "name": "Decker",
+  "description": "A Matrix specialist who hacks through corporate security, manipulates data, and wages cybercombat. Deckers are the team's digital muscle — they crack hosts, disable alarms, and steal paydata. Armed with a cyberdeck and sharp mind, they turn the Matrix into their personal playground.",
+  "category": "technology",
+  "difficulty": "intermediate",
+  "keyAttributes": ["logic", "willpower", "intuition"],
+  "suggestedMetatype": "dwarf",
+  "magicalPath": "mundane",
+  "priorities": {
+    "skills": "A",
+    "attributes": "B",
+    "metatype": "C",
+    "resources": "D",
+    "magic": "E"
+  },
+  "selections": {
+    "metatype": "dwarf",
+    "magical-path": "mundane",
+    "attributes": {
+      "body": 3,
+      "agility": 2,
+      "reaction": 3,
+      "strength": 3,
+      "willpower": 5,
+      "logic": 5,
+      "intuition": 4,
+      "charisma": 2
+    },
+    "specialAttributes": {
+      "edge": 2
+    },
+    "skills": {
+      "hacking": 6,
+      "cybercombat": 6,
+      "electronic-warfare": 6,
+      "computer": 6,
+      "software": 6,
+      "hardware": 6,
+      "pistols": 4,
+      "automatics": 4,
+      "etiquette": 4,
+      "first-aid": 3,
+      "locksmith": 4,
+      "unarmed-combat": 3,
+      "pilot-ground-craft": 3
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}

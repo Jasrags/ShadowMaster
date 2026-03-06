@@ -17,8 +17,10 @@ import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
 import { CreationSetup } from "@/components/creation/CreationSetup";
+import { ArchetypeSelector } from "@/components/creation/ArchetypeSelector";
 import { CreationErrorBoundary } from "@/components/creation/CreationErrorBoundary";
 import type { EditionCode, Campaign, CreationState, ID } from "@/lib/types";
+import type { CharacterArchetype } from "@/lib/types/archetype";
 import type { GameplayLevel } from "@/lib/types/campaign";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -97,6 +99,9 @@ function SheetCreationContent({
     }
     return createInitialCreationState();
   });
+  const [selectedArchetype, setSelectedArchetype] = useState<CharacterArchetype | "skipped" | null>(
+    null
+  );
   const [characterId, setCharacterId] = useState<ID | null>(existingCharacter?.id || null);
   const [isSaving, setIsSaving] = useState(false);
   const [lastSaved, setLastSaved] = useState<Date | null>(null);
@@ -381,6 +386,32 @@ function SheetCreationContent({
     [updateState]
   );
 
+  // Handle archetype selection — pre-fill creation state with archetype data
+  const handleArchetypeSelect = useCallback(
+    (archetype: CharacterArchetype) => {
+      setSelectedArchetype(archetype);
+      updateState({
+        priorities: archetype.priorities,
+        selections: {
+          ...creationState.selections,
+          metatype: archetype.selections.metatype,
+          "magical-path": archetype.selections["magical-path"],
+          attributes: archetype.selections.attributes,
+          specialAttributes: archetype.selections.specialAttributes,
+          skills: archetype.selections.skills,
+        },
+      });
+    },
+    [creationState.selections, updateState]
+  );
+
+  const handleArchetypeSkip = useCallback(() => {
+    setSelectedArchetype("skipped");
+  }, []);
+
+  // Determine if archetype selection is needed
+  const needsArchetypeSelection = !existingCharacter && selectedArchetype === null && ready;
+
   // Determine if setup is needed (standalone characters without a gameplay level)
   const needsSetup = !campaign && !creationState.gameplayLevel;
 
@@ -440,6 +471,17 @@ function SheetCreationContent({
           </button>
         </div>
       </div>
+    );
+  }
+
+  // Show archetype selector after ruleset loads
+  if (needsArchetypeSelection) {
+    return (
+      <ArchetypeSelector
+        editionCode={editionCode || (selectedEdition as string)}
+        onSelect={handleArchetypeSelect}
+        onSkip={handleArchetypeSkip}
+      />
     );
   }
 

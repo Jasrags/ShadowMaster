@@ -1,0 +1,54 @@
+{
+  "id": "technomancer",
+  "editionCode": "sr5",
+  "name": "Technomancer",
+  "description": "A living Matrix interface who manipulates the digital world through Resonance rather than hardware. Technomancers don't need cyberdecks — they connect to the Matrix with their minds, compiling sprites and threading complex forms. Feared and misunderstood, they wield power that corps would kill to study.",
+  "category": "technology",
+  "difficulty": "advanced",
+  "keyAttributes": ["intuition", "logic", "willpower"],
+  "suggestedMetatype": "human",
+  "magicalPath": "technomancer",
+  "priorities": {
+    "resonance": "A",
+    "skills": "B",
+    "metatype": "C",
+    "attributes": "D",
+    "resources": "E"
+  },
+  "selections": {
+    "metatype": "human",
+    "magical-path": "technomancer",
+    "attributes": {
+      "body": 3,
+      "agility": 3,
+      "reaction": 3,
+      "strength": 3,
+      "willpower": 5,
+      "logic": 5,
+      "intuition": 6,
+      "charisma": 4
+    },
+    "specialAttributes": {
+      "edge": 3,
+      "resonance": 5
+    },
+    "skills": {
+      "compiling": 3,
+      "computer": 4,
+      "cybercombat": 4,
+      "decompiling": 2,
+      "electronic-warfare": 6,
+      "hacking": 4,
+      "software": 4,
+      "hardware": 2,
+      "etiquette": 4,
+      "leadership": 4,
+      "negotiation": 4,
+      "pistols": 2,
+      "sneaking": 2,
+      "first-aid": 1,
+      "pilot-ground-craft": 1
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}
