@@ -233,6 +233,22 @@ export async function getDefaultCreationMethod(
 }
 
 // =============================================================================
+// RULE REFERENCE OPERATIONS
+// =============================================================================
+
+import type { RuleReferenceData } from "../types/rule-reference";
+
+/**
+ * Get rule reference data for an edition
+ */
+export async function getRuleReference(
+  editionCode: EditionCode
+): Promise<RuleReferenceData | null> {
+  const filePath = path.join(getEditionDir(editionCode), "rule-reference.json");
+  return readJsonFile<RuleReferenceData>(filePath);
+}
+
+// =============================================================================
 // DISCOVERY OPERATIONS (Content Summarization)
 // =============================================================================
 

@@ -9,6 +9,9 @@ import { NotificationBell } from "@/components/NotificationBell";
 import { EnvironmentBadge } from "@/components/EnvironmentBadge";
 import { EmailVerificationBanner } from "@/components/auth/EmailVerificationBanner";
 import { Tooltip } from "@/components/ui/Tooltip";
+import { RuleReferenceProvider } from "@/lib/contexts/RuleReferenceContext";
+import { RuleReferenceTrigger } from "@/components/rule-reference/RuleReferenceTrigger";
+import { RuleReferencePalette } from "@/components/rule-reference/RuleReferencePalette";
 
 // =============================================================================
 // TYPES
@@ -342,260 +345,266 @@ export default function AuthenticatedLayout({
   ];
 
   return (
-    <div className="flex min-h-screen flex-col bg-white font-sans dark:bg-zinc-950">
-      {/* Skip Link for keyboard users */}
-      <a
-        href={`#${mainContentId}`}
-        className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-emerald-500 focus:px-4 focus:py-2 focus:text-white focus:outline-none"
-      >
-        Skip to main content
-      </a>
-
-      {/* Screen reader announcements */}
-      <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
-        {isOpen ? "Navigation sidebar opened" : ""}
-      </div>
-
-      {/* Header */}
-      <header className="neon-header fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800/50 dark:bg-zinc-950/95">
-        <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-4">
-            {/* Mobile hamburger menu */}
-            <Button
-              ref={toggleButtonRef}
-              onPress={toggle}
-              className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-emerald-400 dark:focus:ring-offset-zinc-950 lg:hidden"
-              aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
-              aria-expanded={isOpen}
-              aria-controls={sidebarId}
-            >
-              {isOpen ? <CloseIcon className="h-6 w-6" /> : <HamburgerIcon className="h-6 w-6" />}
-            </Button>
-            <div className="flex flex-col">
-              {/* Accessible heading - visually hidden but available to screen readers */}
-              <h1 className="sr-only">Shadow Master</h1>
-              <Link
-                href="/"
-                className="logo-text text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-emerald-400"
-                aria-label="Shadow Master - Go to home page"
-              >
-                Shadow Master
-              </Link>
-              <EnvironmentBadge />
-            </div>
-          </div>
-          <div className="flex items-center gap-3">
-            {/* Notifications */}
-            <NotificationBell />
-            {/* User Menu */}
-            <MenuTrigger>
-              <Button
-                className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-zinc-50 dark:hover:bg-zinc-900"
-                aria-label={`User menu for ${user.username}`}
-              >
-                <div className="avatar-glow flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 dark:border dark:border-emerald-500/20 dark:bg-zinc-800">
-                  <span className="text-xs font-medium text-zinc-700 dark:text-emerald-400">
-                    {user.username.charAt(0).toUpperCase()}
-                  </span>
-                </div>
-                <span className="hidden sm:inline">{user.username}</span>
-                <ChevronDownIcon className="h-4 w-4" />
-              </Button>
-              <Popover className="min-w-[200px] rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
-                <Menu className="p-1">
-                  <MenuItem className="flex flex-col items-start rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800">
-                    <div className="font-medium">{user.username}</div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">{user.email}</div>
-                    <div className="text-xs text-zinc-600 dark:text-zinc-400">
-                      {Array.isArray(user.role) ? user.role.join(", ") : user.role}
-                    </div>
-                  </MenuItem>
-                  <MenuItem
-                    onAction={() => router.push("/settings/profile")}
-                    className="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
-                  >
-                    Profile
-                  </MenuItem>
-                  <MenuItem
-                    onAction={() => router.push("/settings")}
-                    className="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
-                  >
-                    Settings
-                  </MenuItem>
-                  <MenuItem
-                    onAction={handleSignOut}
-                    className="cursor-pointer rounded-md px-3 py-2 text-sm text-red-600 outline-none focus:bg-zinc-100 dark:text-red-400 dark:focus:bg-zinc-800"
-                  >
-                    Sign Out
-                  </MenuItem>
-                </Menu>
-              </Popover>
-            </MenuTrigger>
-          </div>
-        </div>
-      </header>
-
-      <div className="flex flex-1">
-        {/* Sidebar */}
-        <aside
-          ref={sidebarRef}
-          id={sidebarId}
-          role="complementary"
-          aria-label="Main navigation sidebar"
-          className={`neon-sidebar fixed left-0 top-0 z-40 h-screen border-r border-zinc-200 bg-white/95 pt-16 transition-[transform,width] duration-300 ease-in-out dark:border-zinc-800/50 dark:bg-zinc-950/95 lg:translate-x-0 ${
-            isOpen ? "translate-x-0" : "-translate-x-full"
-          } ${isCollapsed ? "w-16" : "w-64"}`}
+    <RuleReferenceProvider>
+      <div className="flex min-h-screen flex-col bg-white font-sans dark:bg-zinc-950">
+        {/* Skip Link for keyboard users */}
+        <a
+          href={`#${mainContentId}`}
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[100] focus:rounded-md focus:bg-emerald-500 focus:px-4 focus:py-2 focus:text-white focus:outline-none"
         >
-          <div className="flex h-full flex-col">
-            {/* Collapse toggle (desktop only) */}
-            <div className="flex items-center justify-end border-b border-zinc-100 p-2 dark:border-zinc-800/30">
-              <Tooltip
-                content={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-                placement="right"
-                delay={300}
+          Skip to main content
+        </a>
+
+        {/* Screen reader announcements */}
+        <div role="status" aria-live="polite" aria-atomic="true" className="sr-only">
+          {isOpen ? "Navigation sidebar opened" : ""}
+        </div>
+
+        {/* Header */}
+        <header className="neon-header fixed top-0 z-50 w-full border-b border-zinc-200 bg-white/95 backdrop-blur-sm dark:border-zinc-800/50 dark:bg-zinc-950/95">
+          <div className="flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
+            <div className="flex items-center gap-4">
+              {/* Mobile hamburger menu */}
+              <Button
+                ref={toggleButtonRef}
+                onPress={toggle}
+                className="flex h-10 w-10 items-center justify-center rounded-md text-zinc-600 transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 dark:text-zinc-400 dark:hover:bg-zinc-900 dark:focus:ring-emerald-400 dark:focus:ring-offset-zinc-950 lg:hidden"
+                aria-label={isOpen ? "Close navigation menu" : "Open navigation menu"}
+                aria-expanded={isOpen}
+                aria-controls={sidebarId}
               >
-                <button
-                  onClick={toggleCollapse}
-                  className="collapse-btn hidden h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-zinc-500 dark:hover:bg-zinc-900 lg:flex"
-                  aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
-                  aria-expanded={!isCollapsed}
+                {isOpen ? <CloseIcon className="h-6 w-6" /> : <HamburgerIcon className="h-6 w-6" />}
+              </Button>
+              <div className="flex flex-col">
+                {/* Accessible heading - visually hidden but available to screen readers */}
+                <h1 className="sr-only">Shadow Master</h1>
+                <Link
+                  href="/"
+                  className="logo-text text-xl font-semibold text-black transition-colors hover:text-zinc-700 dark:text-zinc-50 dark:hover:text-emerald-400"
+                  aria-label="Shadow Master - Go to home page"
                 >
-                  {isCollapsed ? (
-                    <ChevronRightIcon className="h-4 w-4" />
-                  ) : (
-                    <ChevronLeftIcon className="h-4 w-4" />
-                  )}
-                </button>
-              </Tooltip>
+                  Shadow Master
+                </Link>
+                <EnvironmentBadge />
+              </div>
             </div>
+            <div className="flex items-center gap-3">
+              {/* Notifications */}
+              <NotificationBell />
+              {/* User Menu */}
+              <MenuTrigger>
+                <Button
+                  className="flex items-center gap-2 rounded-md px-3 py-2 text-sm font-medium text-black transition-colors hover:bg-zinc-100 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-zinc-50 dark:hover:bg-zinc-900"
+                  aria-label={`User menu for ${user.username}`}
+                >
+                  <div className="avatar-glow flex h-8 w-8 items-center justify-center rounded-full bg-zinc-200 dark:border dark:border-emerald-500/20 dark:bg-zinc-800">
+                    <span className="text-xs font-medium text-zinc-700 dark:text-emerald-400">
+                      {user.username.charAt(0).toUpperCase()}
+                    </span>
+                  </div>
+                  <span className="hidden sm:inline">{user.username}</span>
+                  <ChevronDownIcon className="h-4 w-4" />
+                </Button>
+                <Popover className="min-w-[200px] rounded-lg border border-zinc-200 bg-white shadow-lg dark:border-zinc-800 dark:bg-zinc-900">
+                  <Menu className="p-1">
+                    <MenuItem className="flex flex-col items-start rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800">
+                      <div className="font-medium">{user.username}</div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">{user.email}</div>
+                      <div className="text-xs text-zinc-600 dark:text-zinc-400">
+                        {Array.isArray(user.role) ? user.role.join(", ") : user.role}
+                      </div>
+                    </MenuItem>
+                    <MenuItem
+                      onAction={() => router.push("/settings/profile")}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
+                    >
+                      Profile
+                    </MenuItem>
+                    <MenuItem
+                      onAction={() => router.push("/settings")}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-zinc-900 outline-none focus:bg-zinc-100 dark:text-zinc-50 dark:focus:bg-zinc-800"
+                    >
+                      Settings
+                    </MenuItem>
+                    <MenuItem
+                      onAction={handleSignOut}
+                      className="cursor-pointer rounded-md px-3 py-2 text-sm text-red-600 outline-none focus:bg-zinc-100 dark:text-red-400 dark:focus:bg-zinc-800"
+                    >
+                      Sign Out
+                    </MenuItem>
+                  </Menu>
+                </Popover>
+              </MenuTrigger>
+            </div>
+          </div>
+        </header>
 
-            {/* Navigation */}
-            <nav
-              aria-label="Main navigation"
-              className={`flex-1 overflow-y-auto p-2 ${isCollapsed ? "items-center" : ""}`}
-            >
-              <ul role="list" className="space-y-1">
-                {navItems.map((item) => {
-                  const Icon = item.icon;
-                  const isActive = item.href === currentPath;
-                  const isDisabled = item.disabled;
+        <div className="flex flex-1">
+          {/* Sidebar */}
+          <aside
+            ref={sidebarRef}
+            id={sidebarId}
+            role="complementary"
+            aria-label="Main navigation sidebar"
+            className={`neon-sidebar fixed left-0 top-0 z-40 h-screen border-r border-zinc-200 bg-white/95 pt-16 transition-[transform,width] duration-300 ease-in-out dark:border-zinc-800/50 dark:bg-zinc-950/95 lg:translate-x-0 ${
+              isOpen ? "translate-x-0" : "-translate-x-full"
+            } ${isCollapsed ? "w-16" : "w-64"}`}
+          >
+            <div className="flex h-full flex-col">
+              {/* Collapse toggle (desktop only) */}
+              <div className="flex items-center justify-end border-b border-zinc-100 p-2 dark:border-zinc-800/30">
+                <Tooltip
+                  content={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                  placement="right"
+                  delay={300}
+                >
+                  <button
+                    onClick={toggleCollapse}
+                    className="collapse-btn hidden h-6 w-6 items-center justify-center rounded-md text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 dark:text-zinc-500 dark:hover:bg-zinc-900 lg:flex"
+                    aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+                    aria-expanded={!isCollapsed}
+                  >
+                    {isCollapsed ? (
+                      <ChevronRightIcon className="h-4 w-4" />
+                    ) : (
+                      <ChevronLeftIcon className="h-4 w-4" />
+                    )}
+                  </button>
+                </Tooltip>
+              </div>
 
-                  // Render disabled items as non-interactive elements
-                  if (isDisabled) {
-                    const disabledContent = (
-                      <div
-                        className={`flex cursor-not-allowed items-center rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600 ${
-                          isCollapsed ? "justify-center" : "gap-3"
+              {/* Navigation */}
+              <nav
+                aria-label="Main navigation"
+                className={`flex-1 overflow-y-auto p-2 ${isCollapsed ? "items-center" : ""}`}
+              >
+                <ul role="list" className="space-y-1">
+                  {navItems.map((item) => {
+                    const Icon = item.icon;
+                    const isActive = item.href === currentPath;
+                    const isDisabled = item.disabled;
+
+                    // Render disabled items as non-interactive elements
+                    if (isDisabled) {
+                      const disabledContent = (
+                        <div
+                          className={`flex cursor-not-allowed items-center rounded-md px-3 py-2 text-sm font-medium text-zinc-400 dark:text-zinc-600 ${
+                            isCollapsed ? "justify-center" : "gap-3"
+                          }`}
+                          aria-disabled="true"
+                        >
+                          <Icon className="h-5 w-5 shrink-0" />
+                          {!isCollapsed && (
+                            <>
+                              <span className="truncate">{item.label}</span>
+                              <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
+                                Soon
+                              </span>
+                            </>
+                          )}
+                        </div>
+                      );
+
+                      return (
+                        <li key={item.id}>
+                          {isCollapsed ? (
+                            <Tooltip
+                              content={`${item.label} (Coming soon)`}
+                              placement="right"
+                              delay={300}
+                            >
+                              <div role="button" tabIndex={0} aria-disabled="true">
+                                {disabledContent}
+                              </div>
+                            </Tooltip>
+                          ) : (
+                            <div title="Coming soon">{disabledContent}</div>
+                          )}
+                        </li>
+                      );
+                    }
+
+                    const linkContent = (
+                      <Link
+                        href={item.href}
+                        aria-current={isActive ? "page" : undefined}
+                        className={`nav-item flex items-center rounded-md py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
+                          isCollapsed ? "justify-center px-2" : "gap-3 px-3"
+                        } ${
+                          isActive
+                            ? "nav-item-active bg-zinc-100 text-black dark:bg-emerald-500/10 dark:text-emerald-400"
+                            : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-emerald-400"
                         }`}
-                        aria-disabled="true"
                       >
-                        <Icon className="h-5 w-5 shrink-0" />
+                        <Icon
+                          className={`h-5 w-5 shrink-0 ${isActive ? "dark:text-emerald-400" : ""}`}
+                        />
                         {!isCollapsed && (
                           <>
                             <span className="truncate">{item.label}</span>
-                            <span className="ml-auto rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-400 dark:bg-zinc-800 dark:text-zinc-500">
-                              Soon
-                            </span>
+                            {"badge" in item &&
+                              (item as { badge?: string | number | null }).badge != null && (
+                                <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
+                                  {(item as { badge?: string | number | null }).badge}
+                                </span>
+                              )}
                           </>
                         )}
-                      </div>
+                      </Link>
                     );
 
                     return (
                       <li key={item.id}>
                         {isCollapsed ? (
-                          <Tooltip
-                            content={`${item.label} (Coming soon)`}
-                            placement="right"
-                            delay={300}
-                          >
-                            <div role="button" tabIndex={0} aria-disabled="true">
-                              {disabledContent}
-                            </div>
+                          <Tooltip content={item.label} placement="right" delay={300}>
+                            {linkContent}
                           </Tooltip>
                         ) : (
-                          <div title="Coming soon">{disabledContent}</div>
+                          linkContent
                         )}
                       </li>
                     );
-                  }
+                  })}
+                </ul>
+              </nav>
+            </div>
+          </aside>
 
-                  const linkContent = (
-                    <Link
-                      href={item.href}
-                      aria-current={isActive ? "page" : undefined}
-                      className={`nav-item flex items-center rounded-md py-2 text-sm font-medium transition-all focus:outline-none focus:ring-2 focus:ring-emerald-500/50 ${
-                        isCollapsed ? "justify-center px-2" : "gap-3 px-3"
-                      } ${
-                        isActive
-                          ? "nav-item-active bg-zinc-100 text-black dark:bg-emerald-500/10 dark:text-emerald-400"
-                          : "text-zinc-600 hover:bg-zinc-100 hover:text-black dark:text-zinc-400 dark:hover:bg-zinc-800/50 dark:hover:text-emerald-400"
-                      }`}
-                    >
-                      <Icon
-                        className={`h-5 w-5 shrink-0 ${isActive ? "dark:text-emerald-400" : ""}`}
-                      />
-                      {!isCollapsed && (
-                        <>
-                          <span className="truncate">{item.label}</span>
-                          {"badge" in item &&
-                            (item as { badge?: string | number | null }).badge != null && (
-                              <span className="ml-auto rounded-full bg-zinc-200 px-2 py-0.5 text-xs font-medium text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
-                                {(item as { badge?: string | number | null }).badge}
-                              </span>
-                            )}
-                        </>
-                      )}
-                    </Link>
-                  );
+          {/* Sidebar overlay for mobile */}
+          {isOpen && (
+            <div
+              className="fixed inset-0 z-30 bg-black/50 lg:hidden"
+              onClick={close}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  close();
+                }
+              }}
+              role="button"
+              tabIndex={0}
+              aria-label="Close sidebar overlay"
+            />
+          )}
 
-                  return (
-                    <li key={item.id}>
-                      {isCollapsed ? (
-                        <Tooltip content={item.label} placement="right" delay={300}>
-                          {linkContent}
-                        </Tooltip>
-                      ) : (
-                        linkContent
-                      )}
-                    </li>
-                  );
-                })}
-              </ul>
-            </nav>
-          </div>
-        </aside>
+          {/* Main Content - margin only on lg+ screens where sidebar is visible */}
+          <main
+            id={mainContentId}
+            tabIndex={-1}
+            className={`flex-1 min-h-screen bg-white pt-16 transition-[margin] duration-300 ease-in-out dark:bg-zinc-950 ${
+              isCollapsed ? "lg:ml-16" : "lg:ml-64"
+            }`}
+          >
+            {/* Email Verification Banner - in document flow, spans full width */}
+            <EmailVerificationBanner />
+            <div className="px-4 py-6 sm:px-6 lg:px-8">{children}</div>
+          </main>
+        </div>
 
-        {/* Sidebar overlay for mobile */}
-        {isOpen && (
-          <div
-            className="fixed inset-0 z-30 bg-black/50 lg:hidden"
-            onClick={close}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                close();
-              }
-            }}
-            role="button"
-            tabIndex={0}
-            aria-label="Close sidebar overlay"
-          />
-        )}
-
-        {/* Main Content - margin only on lg+ screens where sidebar is visible */}
-        <main
-          id={mainContentId}
-          tabIndex={-1}
-          className={`flex-1 min-h-screen bg-white pt-16 transition-[margin] duration-300 ease-in-out dark:bg-zinc-950 ${
-            isCollapsed ? "lg:ml-16" : "lg:ml-64"
-          }`}
-        >
-          {/* Email Verification Banner - in document flow, spans full width */}
-          <EmailVerificationBanner />
-          <div className="px-4 py-6 sm:px-6 lg:px-8">{children}</div>
-        </main>
+        {/* Rule Quick-Reference */}
+        <RuleReferenceTrigger />
+        <RuleReferencePalette />
       </div>
-    </div>
+    </RuleReferenceProvider>
   );
 }
