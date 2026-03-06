@@ -21,7 +21,8 @@ import React, {
 } from "react";
 import type { CreationState, ValidationError } from "../types/creation";
 import type { PriorityTableData, SkillData } from "../rules/RulesetContext";
-import { useSkills } from "../rules/RulesetContext";
+import type { GameplayLevelModifiers } from "../types/edition";
+import { useSkills, useGameplayLevelModifiers } from "../rules/RulesetContext";
 import {
   getFreeSkillsFromMagicPriority,
   calculateFreeSkillPointsUsed,
@@ -154,13 +155,18 @@ function calculateBudgetTotals(
   priorities: Record<string, string> | undefined,
   selections: Record<string, unknown>,
   priorityTable: PriorityTableData | null,
-  stateBudgets: Record<string, unknown>
+  stateBudgets: Record<string, unknown>,
+  gameplayModifiers?: GameplayLevelModifiers
 ): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
   const totals: Record<
     string,
     { total: number; label: string; displayFormat?: "number" | "currency" }
   > = {
-    karma: { total: 25, label: "Karma", displayFormat: "number" },
+    karma: {
+      total: gameplayModifiers?.startingKarma ?? 25,
+      label: "Karma",
+      displayFormat: "number",
+    },
   };
 
   if (!priorityTable || !priorities) {
@@ -197,12 +203,13 @@ function calculateBudgetTotals(
     };
   }
 
-  // Resources (nuyen) from priority
+  // Resources (nuyen) from priority, with gameplay level multiplier
   const resourcePriority = priorities.resources;
   if (resourcePriority && priorityTable.table[resourcePriority]) {
-    const nuyen = priorityTable.table[resourcePriority].resources as number;
+    const baseNuyen = priorityTable.table[resourcePriority].resources as number;
+    const multiplier = gameplayModifiers?.resourcesMultiplier ?? 1;
     totals["nuyen"] = {
-      total: nuyen || 0,
+      total: Math.round((baseNuyen || 0) * multiplier),
       label: "Nuyen",
       displayFormat: "currency",
     };
@@ -223,11 +230,12 @@ function calculateBudgetTotals(
     };
   }
 
-  // Contact points = CHA × 3 (calculated from attributes)
+  // Contact points = CHA × multiplier (calculated from attributes)
   const attributes = selections.attributes as Record<string, number> | undefined;
   const charisma = attributes?.charisma || 1;
+  const contactMultiplier = gameplayModifiers?.contactMultiplier ?? 3;
   totals["contact-points"] = {
-    total: charisma * 3,
+    total: charisma * contactMultiplier,
     label: "Contact Points",
     displayFormat: "number",
   };
@@ -342,9 +350,7 @@ function extractSpentValues(
     loyalty: number;
   }>;
   const totalContactCostForPoints = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-  const contactAttributes = selections.attributes as Record<string, number> | undefined;
-  const contactCharisma = contactAttributes?.charisma || 1;
-  const freeContactPool = contactCharisma * 3;
+  const freeContactPool = totals["contact-points"]?.total || 0;
   // Only count up to the free pool - karma handles the rest
   spent["contact-points"] = Math.min(totalContactCostForPoints, freeContactPool);
 
@@ -633,10 +639,8 @@ function extractSpentValues(
   const karmaSpentFoci = (stateBudgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections to avoid stale closure bugs
-  // Calculate: total contact cost - free pool (CHA × 3)
-  const attributes = selections.attributes as Record<string, number> | undefined;
-  const charisma = attributes?.charisma || 1;
-  const freeContactKarma = charisma * 3;
+  // Calculate: total contact cost - free pool (from totals, which already has gameplay level multiplier)
+  const freeContactKarma = totals["contact-points"]?.total || 0;
   const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
   const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 
@@ -881,6 +885,9 @@ export function CreationBudgetProvider({
   const { activeSkills, skillGroups: skillGroupDefs } = useSkills();
   const skillCategories = useMemo(() => buildSkillCategoriesMap(activeSkills), [activeSkills]);
 
+  // Get gameplay level modifiers for budget calculations
+  const gameplayModifiers = useGameplayLevelModifiers(creationState.gameplayLevel);
+
   // Calculate budget totals from priorities
   const budgetTotals = useMemo(
     () =>
@@ -888,9 +895,16 @@ export function CreationBudgetProvider({
         creationState.priorities,
         creationState.selections,
         priorityTable,
-        creationState.budgets
+        creationState.budgets,
+        gameplayModifiers
       ),
-    [creationState.priorities, creationState.selections, priorityTable, creationState.budgets]
+    [
+      creationState.priorities,
+      creationState.selections,
+      priorityTable,
+      creationState.budgets,
+      gameplayModifiers,
+    ]
   );
 
   // Extract spent values from state and selections

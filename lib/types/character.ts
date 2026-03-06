@@ -8,6 +8,7 @@
 
 import type { ID, ISODateString, Metadata, MagicalPath, ItemLegality } from "./core";
 import type { EditionCode, FocusType, SpiritType } from "./edition";
+import type { GameplayLevel } from "./campaign";
 import type { CharacterProgram } from "./programs";
 import type { QualitySelection } from "./qualities";
 import type { AuditEntry } from "./audit";
@@ -154,6 +155,9 @@ export interface Character {
   /** Creation method used to build this character */
   creationMethodId: ID;
   creationMethodVersion?: string;
+
+  /** Gameplay level used during character creation */
+  gameplayLevel?: GameplayLevel;
 
   /**
    * Reference to the merged ruleset snapshot used during creation.
@@ -1385,6 +1389,7 @@ export interface CreateCharacterRequest {
   editionId: ID;
   creationMethodId: ID;
   name?: string;
+  gameplayLevel?: GameplayLevel;
 }
 
 export interface UpdateCharacterRequest {

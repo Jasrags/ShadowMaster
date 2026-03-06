@@ -24384,6 +24384,34 @@
           "capabilityMode": "capacity-based"
         }
       }
+    },
+    "gameplayLevels": {
+      "mergeStrategy": "replace",
+      "payload": {
+        "levels": {
+          "street": {
+            "label": "Street Level",
+            "startingKarma": 13,
+            "maxAvailability": 6,
+            "contactMultiplier": 2,
+            "resourcesMultiplier": 1.0
+          },
+          "experienced": {
+            "label": "Standard",
+            "startingKarma": 25,
+            "maxAvailability": 12,
+            "contactMultiplier": 3,
+            "resourcesMultiplier": 1.0
+          },
+          "prime-runner": {
+            "label": "Prime Runner",
+            "startingKarma": 35,
+            "maxAvailability": 18,
+            "contactMultiplier": 5,
+            "resourcesMultiplier": 1.5
+          }
+        }
+      }
     }
   }
 }

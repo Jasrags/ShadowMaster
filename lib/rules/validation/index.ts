@@ -35,6 +35,8 @@ export {
   calculateKarmaSpent,
   KARMA_TO_NUYEN_LIMIT,
   SR5_KARMA_BUDGET,
+  getKarmaBudget,
+  getContactMultiplier,
 } from "./budget-calculator";
 
 // Re-export from constraint validation module for backwards compatibility
