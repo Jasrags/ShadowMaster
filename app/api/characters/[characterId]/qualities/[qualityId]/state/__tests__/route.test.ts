@@ -170,8 +170,7 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
       expect(response.status).toBe(200);
     });
 
-    it("should return 500 if body is null (crashes accessing data.updates)", async () => {
-      // Note: null body causes error when accessing data.updates in the route
+    it("should return 400 if body is null", async () => {
       const request = createMockRequest(
         `http://localhost/api/characters/${TEST_CHARACTER_ID}/qualities/${qualityId}/state`,
         null,
@@ -182,8 +181,8 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
         params: Promise.resolve({ characterId: TEST_CHARACTER_ID, qualityId }),
       });
 
-      // Accessing null.updates throws, caught by outer try-catch -> 500
-      expect(response.status).toBe(500);
+      // null is not a valid object, caught by validation -> 400
+      expect(response.status).toBe(400);
       const data = await response.json();
       expect(data.success).toBe(false);
     });
@@ -194,32 +193,7 @@ describe("PATCH /api/characters/[characterId]/qualities/[qualityId]/state", () =
   // ===========================================================================
 
   describe("Request Format Support", () => {
-    it("should accept { updates: {...} } format", async () => {
-      const updatedCharacter = { ...mockCharacter };
-      vi.mocked(characterStorageModule.updateQualityDynamicState).mockResolvedValue(
-        updatedCharacter
-      );
-
-      const request = createMockRequest(
-        `http://localhost/api/characters/${TEST_CHARACTER_ID}/qualities/${qualityId}/state`,
-        { updates: { severity: "severe" } },
-        "PATCH"
-      );
-
-      const response = await PATCH(request, {
-        params: Promise.resolve({ characterId: TEST_CHARACTER_ID, qualityId }),
-      });
-
-      expect(response.status).toBe(200);
-      expect(characterStorageModule.updateQualityDynamicState).toHaveBeenCalledWith(
-        TEST_USER_ID,
-        TEST_CHARACTER_ID,
-        qualityId,
-        { severity: "severe" }
-      );
-    });
-
-    it("should accept direct {...} format without wrapper", async () => {
+    it("should accept direct state update format", async () => {
       const updatedCharacter = { ...mockCharacter };
       vi.mocked(characterStorageModule.updateQualityDynamicState).mockResolvedValue(
         updatedCharacter

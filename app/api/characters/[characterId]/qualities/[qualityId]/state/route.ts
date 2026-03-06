@@ -39,7 +39,7 @@ export async function PATCH(
 
     // Parse body for state updates
     const data = await request.json();
-    const updates = data.updates || data; // Flexible: handle both {updates: {...}} and {...}
+    const updates = data;
 
     if (!updates || typeof updates !== "object") {
       return NextResponse.json(
