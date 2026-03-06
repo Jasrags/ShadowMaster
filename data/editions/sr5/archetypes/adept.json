@@ -1,0 +1,54 @@
+{
+  "id": "adept",
+  "editionCode": "sr5",
+  "name": "Adept",
+  "description": "A physical adept who channels magical energy inward to enhance their body beyond mortal limits. Adepts don't cast spells — they become the weapon. Enhanced reflexes, killing hands, and supernatural martial arts make them devastating in close combat without sacrificing a single point of Essence to chrome.",
+  "category": "combat",
+  "difficulty": "intermediate",
+  "keyAttributes": ["agility", "body", "strength"],
+  "suggestedMetatype": "human",
+  "magicalPath": "adept",
+  "priorities": {
+    "attributes": "A",
+    "skills": "B",
+    "magic": "C",
+    "metatype": "D",
+    "resources": "E"
+  },
+  "selections": {
+    "metatype": "human",
+    "magical-path": "adept",
+    "attributes": {
+      "body": 5,
+      "agility": 5,
+      "reaction": 5,
+      "strength": 5,
+      "willpower": 3,
+      "logic": 3,
+      "intuition": 3,
+      "charisma": 3
+    },
+    "specialAttributes": {
+      "edge": 4,
+      "magic": 5
+    },
+    "skills": {
+      "unarmed-combat": 6,
+      "blades": 4,
+      "clubs": 4,
+      "gymnastics": 4,
+      "sneaking": 4,
+      "running": 4,
+      "swimming": 4,
+      "perception": 3,
+      "intimidation": 3,
+      "escape-artist": 3,
+      "throwing-weapons": 3,
+      "etiquette": 2,
+      "locksmith": 2,
+      "first-aid": 1,
+      "pilot-ground-craft": 1
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}

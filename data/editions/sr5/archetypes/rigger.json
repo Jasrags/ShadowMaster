@@ -1,0 +1,47 @@
+{
+  "id": "rigger",
+  "editionCode": "sr5",
+  "name": "Rigger",
+  "description": "A vehicle and drone specialist who merges with machines through a control rig. Riggers pilot everything from motorcycles to attack helicopters, commanding drone fleets and providing mobile firepower. When they jack in, the vehicle becomes their body — every sensor an eye, every weapon an arm.",
+  "category": "technology",
+  "difficulty": "intermediate",
+  "keyAttributes": ["reaction", "intuition", "logic"],
+  "suggestedMetatype": "troll",
+  "magicalPath": "mundane",
+  "priorities": {
+    "resources": "A",
+    "attributes": "B",
+    "metatype": "C",
+    "skills": "D",
+    "magic": "E"
+  },
+  "selections": {
+    "metatype": "troll",
+    "magical-path": "mundane",
+    "attributes": {
+      "body": 5,
+      "agility": 2,
+      "reaction": 5,
+      "strength": 5,
+      "willpower": 3,
+      "logic": 2,
+      "intuition": 5,
+      "charisma": 4
+    },
+    "specialAttributes": {
+      "edge": 1
+    },
+    "skills": {
+      "pilot-ground-craft": 6,
+      "pilot-aircraft": 5,
+      "gunnery": 5,
+      "negotiation": 3,
+      "pistols": 3,
+      "electronic-warfare": 2,
+      "etiquette": 2,
+      "pilot-watercraft": 2,
+      "navigation": 1
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}

@@ -883,3 +883,6 @@ export {
   isBlockedByExisting,
   getAffectedLocations,
 } from "./cyberlimb";
+
+// Archetype types
+export type { CharacterArchetype, ArchetypeCategory } from "./archetype";

@@ -1,0 +1,45 @@
+{
+  "id": "street-samurai",
+  "editionCode": "sr5",
+  "name": "Street Samurai",
+  "description": "A chrome warrior who augments their body with cyberware and bioware for combat superiority. Street samurai are the front-line fighters of the shadows, combining heavy weaponry with enhanced reflexes and toughened bodies. They live by a personal code and die by the sword — or the gun.",
+  "category": "combat",
+  "difficulty": "beginner",
+  "keyAttributes": ["body", "agility", "strength"],
+  "suggestedMetatype": "ork",
+  "magicalPath": "mundane",
+  "priorities": {
+    "resources": "A",
+    "attributes": "B",
+    "metatype": "C",
+    "skills": "D",
+    "magic": "E"
+  },
+  "selections": {
+    "metatype": "ork",
+    "magical-path": "mundane",
+    "attributes": {
+      "body": 7,
+      "agility": 6,
+      "reaction": 5,
+      "strength": 5,
+      "willpower": 3,
+      "logic": 2,
+      "intuition": 3,
+      "charisma": 2
+    },
+    "specialAttributes": {
+      "edge": 1
+    },
+    "skills": {
+      "automatics": 5,
+      "blades": 5,
+      "longarms": 3,
+      "pistols": 4,
+      "sneaking": 2,
+      "unarmed-combat": 2,
+      "pilot-ground-craft": 1
+    }
+  },
+  "source": "SR5 Core Rulebook"
+}
