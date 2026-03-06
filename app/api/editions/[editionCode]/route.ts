@@ -15,6 +15,7 @@ import {
   getAllBooks,
   getAllCreationMethods,
   getEditionContentSummary,
+  getBookSummary,
 } from "@/lib/storage/editions";
 import type { EditionCode } from "@/lib/types";
 
@@ -61,6 +62,14 @@ export async function GET(
     if (include.includes("summary")) {
       const contentSummary = await getEditionContentSummary(editionCode as EditionCode);
       response.contentSummary = contentSummary;
+    }
+
+    // Optionally include book summaries with content contribution counts
+    if (include.includes("bookSummaries")) {
+      const bookSummaries = await Promise.all(
+        edition.bookIds.map((bookId) => getBookSummary(editionCode as EditionCode, bookId))
+      );
+      response.bookSummaries = bookSummaries.filter(Boolean);
     }
 
     return NextResponse.json(response);

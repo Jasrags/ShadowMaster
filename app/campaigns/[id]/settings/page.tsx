@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import type {
   Campaign,
   Book,
+  BookSummary,
   CreationMethod,
   GameplayLevel,
   CampaignVisibility,
@@ -85,6 +86,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
 
   // Edition data
   const [books, setBooks] = useState<Book[]>([]);
+  const [bookSummaries, setBookSummaries] = useState<BookSummary[]>([]);
   const [creationMethods, setCreationMethods] = useState<CreationMethod[]>([]);
 
   // Fetch campaign and edition data
@@ -126,11 +128,12 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
           setAdvancementSettings(c.advancementSettings);
         }
 
-        // Fetch edition data
-        const editionRes = await fetch(`/api/editions/${c.editionCode}`);
+        // Fetch edition data with book summaries
+        const editionRes = await fetch(`/api/editions/${c.editionCode}?include=bookSummaries`);
         const editionData = await editionRes.json();
         if (editionData.success) {
           setBooks(editionData.books || []);
+          setBookSummaries(editionData.bookSummaries || []);
           setCreationMethods(editionData.creationMethods || []);
         }
       } catch {
@@ -468,26 +471,62 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
               <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Enabled Books
               </label>
-              <div className="mt-2 space-y-2">
-                {books.map((book) => (
-                  <label key={book.id} className="flex items-center gap-2">
-                    <input
-                      type="checkbox"
-                      checked={enabledBookIds.includes(book.id)}
-                      onChange={() => toggleBookId(book.id)}
-                      disabled={book.isCore} // Core book cannot be disabled
-                      className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
-                    />
-                    <span className="text-sm text-zinc-700 dark:text-zinc-300">
-                      {book.title}
-                      {book.isCore && (
-                        <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                          (Core - Required)
-                        </span>
-                      )}
-                    </span>
-                  </label>
-                ))}
+              <div className="mt-2 space-y-3">
+                {books.map((book) => {
+                  const summary = bookSummaries.find((s) => s.id === book.id);
+                  return (
+                    <label
+                      key={book.id}
+                      className="flex cursor-pointer gap-3 rounded-lg border border-zinc-200 p-3 transition-colors hover:bg-zinc-50 dark:border-zinc-700 dark:hover:bg-zinc-800/50"
+                    >
+                      <input
+                        type="checkbox"
+                        checked={enabledBookIds.includes(book.id)}
+                        onChange={() => toggleBookId(book.id)}
+                        disabled={book.isCore}
+                        className="mt-0.5 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center gap-2">
+                          {book.abbreviation && (
+                            <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                              {book.abbreviation}
+                            </span>
+                          )}
+                          <span className="text-sm font-medium text-zinc-900 dark:text-zinc-100">
+                            {book.title}
+                          </span>
+                          {book.isCore && (
+                            <span className="text-xs text-indigo-600 dark:text-indigo-400">
+                              (Core - Required)
+                            </span>
+                          )}
+                        </div>
+                        {summary && (
+                          <>
+                            {summary.role && (
+                              <p className="mt-1 text-xs text-zinc-500 dark:text-zinc-400">
+                                {summary.role}
+                              </p>
+                            )}
+                            {summary.contentContributions.length > 0 && (
+                              <div className="mt-2 flex flex-wrap gap-1.5">
+                                {summary.contentContributions.map((c) => (
+                                  <span
+                                    key={c.id}
+                                    className="rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600 dark:bg-zinc-800 dark:text-zinc-400"
+                                  >
+                                    {c.name}: {c.itemCount}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </>
+                        )}
+                      </div>
+                    </label>
+                  );
+                })}
               </div>
             </div>
 

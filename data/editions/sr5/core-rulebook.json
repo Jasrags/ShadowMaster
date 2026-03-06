@@ -6,7 +6,9 @@
     "version": "1.0.0",
     "category": "core",
     "publisher": "Catalyst Game Labs",
-    "releaseYear": 2013
+    "releaseYear": 2013,
+    "abbreviation": "SR5",
+    "description": "The complete core rules for Shadowrun 5th Edition, including character creation, combat, magic, the Matrix, and rigging."
   },
   "modules": {
     "advancement": {

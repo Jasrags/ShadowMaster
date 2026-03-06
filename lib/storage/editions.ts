@@ -116,6 +116,9 @@ export async function getAllBooks(editionCode: EditionCode): Promise<Book[]> {
         id: bookPayload.meta.bookId,
         editionId: edition.id,
         title: bookPayload.meta.title,
+        abbreviation: bookPayload.meta.abbreviation,
+        publisher: bookPayload.meta.publisher,
+        releaseYear: bookPayload.meta.releaseYear,
         version: bookPayload.meta.version || "1.0.0",
         isCore: bookPayload.meta.category === "core",
         categories: [bookPayload.meta.category],
@@ -405,6 +408,8 @@ export async function getBookSummary(
   return {
     id: payload.meta.bookId,
     title: payload.meta.title,
+    abbreviation: payload.meta.abbreviation,
+    releaseYear: payload.meta.releaseYear,
     category: payload.meta.category,
     role: payload.meta.category === "core" ? "Core rules foundation" : "Content expansion",
     contentContributions: contributions,
