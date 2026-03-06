@@ -6,7 +6,6 @@ import {
   Dice1,
   Plus,
   Minus,
-  Zap,
   AlertCircle,
   ChevronDown,
   ChevronUp,
@@ -15,6 +14,7 @@ import {
   Crosshair,
 } from "lucide-react";
 import type { ActionPool, PoolModifier, EdgeActionType, ActionContext } from "@/lib/types";
+import { EdgeActionSelector } from "./EdgeActionSelector";
 
 interface ActionPoolBuilderProps {
   /** Character's attribute values */
@@ -578,52 +578,15 @@ export function ActionPoolBuilder({
       {/* Edge Actions */}
       {canUseEdge && (
         <div className="mb-4">
-          <div className="flex items-center gap-2 mb-2">
-            <Zap className="w-4 h-4 text-rose-500 dark:text-rose-400" />
-            <span className={`text-muted-foreground ${s.text}`}>
-              Edge Actions ({currentEdge}/{maxEdge})
-            </span>
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <Button
-              onPress={() => handleEdgeAction("push-the-limit")}
-              className={`
-                flex items-center justify-center gap-1
-                px-2 py-1.5 rounded ${s.text}
-                ${
-                  edgeAction === "push-the-limit"
-                    ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
-                    : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
-                }
-                transition-colors
-              `}
-            >
-              <Zap className="w-3 h-3" />
-              Push the Limit
-            </Button>
-            <Button
-              onPress={() => handleEdgeAction("blitz")}
-              className={`
-                flex items-center justify-center gap-1
-                px-2 py-1.5 rounded ${s.text}
-                ${
-                  edgeAction === "blitz"
-                    ? "bg-rose-500/20 text-rose-500 dark:text-rose-400 border border-rose-500/30"
-                    : "bg-muted text-muted-foreground border border-border hover:bg-muted/80"
-                }
-                transition-colors
-              `}
-            >
-              <Zap className="w-3 h-3" />
-              Blitz
-            </Button>
-          </div>
-          {edgeAction && (
-            <p className={`mt-2 text-muted-foreground ${s.text}`}>
-              {edgeAction === "push-the-limit" && <>Add Edge to pool, no limit, exploding 6s</>}
-              {edgeAction === "blitz" && <>Go first in combat (5 initiative dice)</>}
-            </p>
-          )}
+          <EdgeActionSelector
+            timing="pre-roll"
+            selectedAction={edgeAction}
+            onSelect={handleEdgeAction}
+            currentEdge={currentEdge}
+            maxEdge={maxEdge}
+            isDisabled={isLoading}
+            size={size === "lg" ? "md" : "sm"}
+          />
         </div>
       )}
 
