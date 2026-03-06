@@ -260,6 +260,12 @@ export interface EffectSource {
 
   /** Whether wireless is enabled on source item */
   wirelessEnabled?: boolean;
+
+  /** Parent item name (for mods installed on weapons/gear) */
+  parentName?: string;
+
+  /** Parent item ID (for mods installed on weapons/gear) */
+  parentId?: string;
 }
 
 /**
