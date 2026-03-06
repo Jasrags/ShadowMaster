@@ -12,7 +12,32 @@ import type { Character } from "@/lib/types";
 import type { MergedRuleset } from "@/lib/types/edition";
 import type { Quality } from "@/lib/types/qualities";
 import type { Effect, EffectSource, EffectSourceType } from "@/lib/types/effects";
+import type { EquipmentReadiness } from "@/lib/types/gear-state";
+import { normalizeReadiness } from "@/lib/types/gear-state";
 import { resolveRatingBasedValue } from "./format";
+
+/**
+ * Which readiness states allow effects to be gathered per equipment category.
+ * Items not in an active readiness state are skipped during effect gathering.
+ */
+const EFFECT_ACTIVE_READINESS: Record<string, EquipmentReadiness[]> = {
+  weapon: ["readied", "holstered"],
+  armor: ["worn"],
+  clothing: ["worn"],
+  gear: ["worn", "holstered", "pocketed", "carried"],
+  electronics: ["worn", "holstered", "pocketed", "carried"],
+};
+
+/**
+ * Check if an item's readiness state allows its effects to be gathered.
+ * Items with no state (legacy data) are treated as active for backward compatibility.
+ */
+function isReadinessActive(category: string, readiness: EquipmentReadiness | undefined): boolean {
+  if (!readiness) return true;
+  const normalized = normalizeReadiness(readiness);
+  const validStates = EFFECT_ACTIVE_READINESS[category] ?? EFFECT_ACTIVE_READINESS.gear;
+  return validStates.includes(normalized);
+}
 
 /**
  * An effect paired with its source metadata for resolution.
@@ -149,6 +174,8 @@ function gatherGearEffects(character: Character, ruleset: MergedRuleset): Source
   const results: SourcedEffect[] = [];
 
   for (const item of character.gear || []) {
+    if (!isReadinessActive(item.category, item.state?.readiness)) continue;
+
     const itemId = item.id;
     if (!itemId) continue;
 
@@ -178,6 +205,8 @@ function gatherWeaponEffects(character: Character, ruleset: MergedRuleset): Sour
   const results: SourcedEffect[] = [];
 
   for (const weapon of character.weapons || []) {
+    if (!isReadinessActive("weapon", weapon.state?.readiness)) continue;
+
     const catalogId = weapon.catalogId;
     if (!catalogId) continue;
 
@@ -206,6 +235,8 @@ function gatherArmorEffects(character: Character, ruleset: MergedRuleset): Sourc
   const results: SourcedEffect[] = [];
 
   for (const armor of character.armor || []) {
+    if (!isReadinessActive("armor", armor.state?.readiness)) continue;
+
     const catalogId = armor.catalogId;
     if (!catalogId) continue;
 
@@ -339,6 +370,8 @@ function gatherGearModEffects(character: Character, ruleset: MergedRuleset): Sou
   const results: SourcedEffect[] = [];
 
   for (const item of character.gear || []) {
+    if (!isReadinessActive(item.category, item.state?.readiness)) continue;
+
     for (const mod of item.modifications || []) {
       const catalogItem = findCatalogItem("gear", mod.catalogId, ruleset);
       if (!catalogItem) continue;
@@ -368,6 +401,8 @@ function gatherWeaponModEffects(character: Character, ruleset: MergedRuleset): S
   const results: SourcedEffect[] = [];
 
   for (const weapon of character.weapons || []) {
+    if (!isReadinessActive("weapon", weapon.state?.readiness)) continue;
+
     for (const mod of weapon.modifications || []) {
       const catalogItem = findCatalogItem("modifications", mod.catalogId, ruleset);
       if (!catalogItem) continue;
