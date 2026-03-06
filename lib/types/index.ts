@@ -75,6 +75,8 @@ export type {
   ModificationSlot,
   ModificationCapability,
   CategoryModificationDefaults,
+  // Gameplay level modifiers
+  GameplayLevelModifiers,
   // Spirit types
   SpiritPower,
   Spirit,

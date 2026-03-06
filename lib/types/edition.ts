@@ -159,7 +159,8 @@ export type RuleModuleType =
   | "diceRules" // Dice mechanics (hit thresholds, glitch rules, Edge actions)
   | "socialModifiers" // Social test modifiers
   | "actions" // Action definitions for combat and other activities
-  | "categoryModificationDefaults"; // Default modification capabilities per gear category
+  | "categoryModificationDefaults" // Default modification capabilities per gear category
+  | "gameplayLevels"; // Gameplay level modifiers (street, experienced, prime-runner)
 
 /**
  * Rules governing character advancement post-creation.
@@ -1404,6 +1405,22 @@ export interface ModificationCapability {
  * ```
  */
 export type CategoryModificationDefaults = Record<string, ModificationCapability>;
+
+// =============================================================================
+// GAMEPLAY LEVEL MODIFIERS
+// =============================================================================
+
+/**
+ * Modifiers for a specific gameplay level (street, experienced, prime-runner).
+ * Defined in the gameplayLevels rule module of each edition.
+ */
+export interface GameplayLevelModifiers {
+  label: string;
+  startingKarma: number;
+  maxAvailability: number;
+  contactMultiplier: number;
+  resourcesMultiplier: number;
+}
 
 // =============================================================================
 // MERGED RULESET

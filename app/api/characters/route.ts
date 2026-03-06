@@ -219,7 +219,7 @@ export async function POST(request: NextRequest) {
 
     // Parse body
     const body = await request.json();
-    const { editionId, editionCode, creationMethodId, name, campaignId } = body;
+    const { editionId, editionCode, creationMethodId, name, campaignId, gameplayLevel } = body;
 
     // Validate required fields
     if (!editionId || !editionCode || !creationMethodId) {

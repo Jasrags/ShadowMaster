@@ -17,7 +17,7 @@ import { Plus, X, Edit2, User } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 import type { Contact } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
-import { useContactTemplates, useMetatypes } from "@/lib/rules";
+import { useContactTemplates, useMetatypes, useGameplayLevelModifiers } from "@/lib/rules";
 import { CreationCard, SummaryFooter } from "../shared";
 import { MIN_KARMA_PER_CONTACT, MAX_KARMA_PER_CONTACT } from "./constants";
 import { ContactModal } from "./ContactModal";
@@ -28,6 +28,7 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
   const { budgets } = useCreationBudgets();
   const metatypes = useMetatypes();
   const contactTemplates = useContactTemplates();
+  const gameplayModifiers = useGameplayLevelModifiers(state.gameplayLevel);
 
   // Modal state
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -56,8 +57,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     return metatypeMin;
   }, [state.selections.attributes, state.selections.metatype, metatypes]);
 
-  // Calculate free contact karma budget: CHA × 3
-  const freeContactKarma = useMemo(() => charisma * 3, [charisma]);
+  // Calculate free contact karma budget: CHA × multiplier (gameplay level)
+  const freeContactKarma = useMemo(
+    () => charisma * gameplayModifiers.contactMultiplier,
+    [charisma, gameplayModifiers.contactMultiplier]
+  );
 
   // Get current contacts from state
   const contacts = useMemo(() => {

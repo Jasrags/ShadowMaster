@@ -22,7 +22,7 @@ import { useCreationBudgets } from "@/lib/contexts";
 import type { CreationState, Campaign, SelectedQuality } from "@/lib/types";
 import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, Clock, Save } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
-import { useQualities, useSkills } from "@/lib/rules/RulesetContext";
+import { useQualities, useSkills, useGameplayLevelModifiers } from "@/lib/rules/RulesetContext";
 
 // Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
@@ -185,6 +185,7 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   const { budgets, isValid, errors, warnings } = useCreationBudgets();
   const { positive: positiveQualityCatalog, negative: negativeQualityCatalog } = useQualities();
   const { activeSkills } = useSkills();
+  const gameplayModifiers = useGameplayLevelModifiers(creationState.gameplayLevel);
 
   // Build lookup maps for quality and skill names
   const positiveQualityMap = useMemo(
@@ -211,7 +212,8 @@ function BudgetSummaryCard({ creationState }: BudgetSummaryCardProps) {
   }>;
   const attributesForKarma = selections.attributes as Record<string, number> | undefined;
   const charismaForKarma = attributesForKarma?.charisma || 1;
-  const freeContactKarma = charismaForKarma * 3;
+  const contactMultiplier = gameplayModifiers.contactMultiplier;
+  const freeContactKarma = charismaForKarma * contactMultiplier;
   const totalContactCost = contactsForKarma.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
   const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 

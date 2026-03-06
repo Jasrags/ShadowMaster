@@ -73,11 +73,14 @@ describe("extractSpentValues", () => {
           { connection: 4, loyalty: 3 }, // 7 points
         ],
       };
+      const totalsWithContacts = {
+        "contact-points": { total: 12, label: "Contact Points" },
+      };
 
       const spent = extractSpentValues(
         stateBudgets,
         selections,
-        emptyTotals,
+        totalsWithContacts,
         null,
         undefined,
         emptySkillCategories
@@ -96,11 +99,14 @@ describe("extractSpentValues", () => {
           { connection: 4, loyalty: 3 }, // 7 points - total 12
         ],
       };
+      const totalsWithContacts = {
+        "contact-points": { total: 9, label: "Contact Points" },
+      };
 
       const spent = extractSpentValues(
         stateBudgets,
         selections,
-        emptyTotals,
+        totalsWithContacts,
         null,
         undefined,
         emptySkillCategories

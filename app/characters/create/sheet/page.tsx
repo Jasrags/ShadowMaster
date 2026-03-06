@@ -16,8 +16,10 @@ import { RulesetProvider, useRulesetStatus, useRuleset, usePriorityTable } from 
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
+import { CreationSetup } from "@/components/creation/CreationSetup";
 import { CreationErrorBoundary } from "@/components/creation/CreationErrorBoundary";
 import type { EditionCode, Campaign, CreationState, ID } from "@/lib/types";
+import type { GameplayLevel } from "@/lib/types/campaign";
 import { Loader2, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 
@@ -371,6 +373,24 @@ function SheetCreationContent({
     }
   }, [characterId, router]);
 
+  // Handle gameplay level selection (setup step for standalone characters)
+  const handleGameplayLevelSelect = useCallback(
+    (level: GameplayLevel) => {
+      updateState({ gameplayLevel: level });
+    },
+    [updateState]
+  );
+
+  // Determine if setup is needed (standalone characters without a gameplay level)
+  const needsSetup = !campaign && !creationState.gameplayLevel;
+
+  // For campaign characters, auto-inherit gameplay level
+  useEffect(() => {
+    if (campaign && !creationState.gameplayLevel) {
+      updateState({ gameplayLevel: campaign.gameplayLevel });
+    }
+  }, [campaign, creationState.gameplayLevel, updateState]);
+
   // Show edition selector if no edition selected (and no campaign)
   if (!selectedEdition && !campaign) {
     return <EditionSelector onSelect={handleEditionSelect} />;
@@ -421,6 +441,11 @@ function SheetCreationContent({
         </div>
       </div>
     );
+  }
+
+  // Show gameplay level setup for standalone characters
+  if (ready && needsSetup) {
+    return <CreationSetup onComplete={handleGameplayLevelSelect} />;
   }
 
   // Show sheet creation when ready

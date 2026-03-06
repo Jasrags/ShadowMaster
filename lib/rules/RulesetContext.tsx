@@ -19,7 +19,9 @@ import type {
   CatalogItemRatingSpec,
   ItemLegality,
   Effect,
+  GameplayLevelModifiers,
 } from "../types";
+import type { GameplayLevel } from "../types/campaign";
 import type {
   QualityData,
   AdeptPowerCatalogItem,
@@ -2559,4 +2561,58 @@ export function useProgram(programId: string): ProgramCatalogItemData | null {
   return useMemo(() => {
     return programs.find((p) => p.id === programId) ?? null;
   }, [programs, programId]);
+}
+
+// =============================================================================
+// GAMEPLAY LEVEL HOOKS
+// =============================================================================
+
+const EXPERIENCED_DEFAULTS: GameplayLevelModifiers = {
+  label: "Standard",
+  startingKarma: 25,
+  maxAvailability: 12,
+  contactMultiplier: 3,
+  resourcesMultiplier: 1.0,
+};
+
+/**
+ * Hook to get gameplay level modifiers for a specific level.
+ * Falls back to "experienced" defaults if the module is missing.
+ */
+export function useGameplayLevelModifiers(
+  level: GameplayLevel | undefined
+): GameplayLevelModifiers {
+  const { ruleset } = useRuleset();
+
+  return useMemo(() => {
+    const effectiveLevel = level ?? "experienced";
+    const mod = ruleset?.modules?.gameplayLevels as Record<string, unknown> | undefined;
+    // Module data may be nested under "payload.levels" or directly under "levels"
+    const levelsMap = ((mod?.payload as Record<string, unknown> | undefined)?.levels ??
+      mod?.levels) as Record<string, GameplayLevelModifiers> | undefined;
+    return levelsMap?.[effectiveLevel] ?? EXPERIENCED_DEFAULTS;
+  }, [ruleset, level]);
+}
+
+/**
+ * Hook to get all gameplay levels (for UI display).
+ */
+export function useGameplayLevels(): Record<string, GameplayLevelModifiers> {
+  const { ruleset } = useRuleset();
+
+  return useMemo(() => {
+    const mod = ruleset?.modules?.gameplayLevels as Record<string, unknown> | undefined;
+    const levelsMap = ((mod?.payload as Record<string, unknown> | undefined)?.levels ??
+      mod?.levels) as Record<string, GameplayLevelModifiers> | undefined;
+    return levelsMap ?? { experienced: EXPERIENCED_DEFAULTS };
+  }, [ruleset]);
+}
+
+/**
+ * Hook to get max availability for a gameplay level.
+ * Convenience wrapper for gear filtering.
+ */
+export function useMaxAvailability(level: GameplayLevel | undefined): number {
+  const modifiers = useGameplayLevelModifiers(level);
+  return modifiers.maxAvailability;
 }

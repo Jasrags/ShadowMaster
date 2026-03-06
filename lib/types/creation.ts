@@ -415,6 +415,9 @@ export interface CreationState {
   characterId: ID;
   creationMethodId: ID;
 
+  /** Gameplay level for budget calculations */
+  gameplayLevel?: import("./campaign").GameplayLevel;
+
   /** Current step index */
   currentStep: number;
 

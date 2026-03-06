@@ -61,6 +61,8 @@ import {
   calculateKarmaSpent,
   KARMA_TO_NUYEN_LIMIT,
   SR5_KARMA_BUDGET,
+  getKarmaBudget,
+  getContactMultiplier,
 } from "./budget-calculator";
 import { isGradeAvailableAtCreation, applyGradeToAvailability } from "../augmentations/grades";
 import { isCyberlimb } from "@/lib/types/cyberlimb";
@@ -1223,7 +1225,8 @@ const contactValidator: ValidatorDefinition = {
     if (character.attributes) {
       const charisma = character.attributes.charisma ?? 0;
       if (charisma > 0) {
-        const contactBudget = charisma * 3; // SR5: CHA × 3 free contact points
+        const contactMult = getContactMultiplier(character.gameplayLevel);
+        const contactBudget = charisma * contactMult;
         const totalPoints = character.contacts.reduce(
           (sum, c) => sum + calculateContactPoints(c),
           0
@@ -1231,7 +1234,7 @@ const contactValidator: ValidatorDefinition = {
         if (totalPoints > contactBudget) {
           issues.push({
             code: "CONTACT_POINTS_EXCEEDED",
-            message: `Total contact points (${totalPoints}) exceed budget of ${contactBudget} (Charisma ${charisma} × 3)`,
+            message: `Total contact points (${totalPoints}) exceed budget of ${contactBudget} (Charisma ${charisma} × ${contactMult})`,
             field: "contacts",
             severity: "warning",
             suggestion: "Reduce contact ratings or remove contacts to stay within budget",
@@ -2140,14 +2143,15 @@ const contactBudgetValidator: ValidatorDefinition = {
 
     // Calculate free pool and total cost
     const charisma = character.attributes?.charisma ?? 0;
-    const freePool = charisma * 3;
+    const contactMult = getContactMultiplier(character.gameplayLevel);
+    const freePool = charisma * contactMult;
     const totalCost = contacts.reduce((sum, c) => sum + (c.connection || 0) + (c.loyalty || 0), 0);
     const overflow = totalCost - freePool;
 
     if (overflow > 0) {
       issues.push({
         code: "CONTACT_KARMA_OVERFLOW",
-        message: `Contact points exceed free pool by ${overflow} (${totalCost} spent, ${freePool} free from CHA × 3). Overflow costs karma.`,
+        message: `Contact points exceed free pool by ${overflow} (${totalCost} spent, ${freePool} free from CHA × ${contactMult}). Overflow costs karma.`,
         field: "contacts",
         severity: "info",
       });
@@ -2355,7 +2359,7 @@ const karmaBudgetValidator: ValidatorDefinition = {
     const budgets = creationState.budgets || {};
 
     // Calculate server-side karma spending
-    const karmaBreakdown = calculateKarmaSpent(selections, budgets);
+    const karmaBreakdown = calculateKarmaSpent(selections, budgets, creationState.gameplayLevel);
     const serverSpent = karmaBreakdown.total;
 
     // Get client-reported spending
@@ -2381,12 +2385,13 @@ const karmaBudgetValidator: ValidatorDefinition = {
       });
     }
 
-    // Check if over budget
-    if (serverSpent > SR5_KARMA_BUDGET) {
-      const overage = serverSpent - SR5_KARMA_BUDGET;
+    // Check if over budget (use gameplay level if available)
+    const karmaBudget = getKarmaBudget(creationState.gameplayLevel);
+    if (serverSpent > karmaBudget) {
+      const overage = serverSpent - karmaBudget;
       issues.push({
         code: "KARMA_BUDGET_EXCEEDED",
-        message: `Karma budget exceeded by ${overage} (${serverSpent} spent, ${SR5_KARMA_BUDGET} available)`,
+        message: `Karma budget exceeded by ${overage} (${serverSpent} spent, ${karmaBudget} available)`,
         field: "karma",
         severity: "error",
       });

@@ -237,6 +237,30 @@ export const KARMA_TO_NUYEN_LIMIT = 10;
 /** Starting karma budget for SR5 character creation */
 export const SR5_KARMA_BUDGET = 25;
 
+/** Get karma budget for a gameplay level */
+export function getKarmaBudget(gameplayLevel?: string): number {
+  switch (gameplayLevel) {
+    case "street":
+      return 13;
+    case "prime-runner":
+      return 35;
+    default:
+      return 25; // experienced/standard
+  }
+}
+
+/** Get contact multiplier for a gameplay level */
+export function getContactMultiplier(gameplayLevel?: string): number {
+  switch (gameplayLevel) {
+    case "street":
+      return 2;
+    case "prime-runner":
+      return 5;
+    default:
+      return 3; // experienced/standard
+  }
+}
+
 /**
  * Calculate total karma spent from creation selections and budgets.
  *
@@ -257,7 +281,8 @@ export const SR5_KARMA_BUDGET = 25;
  */
 export function calculateKarmaSpent(
   selections: CreationSelections,
-  budgets: Record<string, unknown>
+  budgets: Record<string, unknown>,
+  gameplayLevel?: string
 ): KarmaBreakdown {
   // Quality karma: derive from selections first, fall back to stateBudgets
   type QualitySelectionWithKarma = { karma?: number; originalKarma?: number };
@@ -290,11 +315,11 @@ export function calculateKarmaSpent(
   const karmaSpentFoci = (budgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections
-  // Calculate: total contact cost - free pool (CHA × 3)
+  // Calculate: total contact cost - free pool (CHA × multiplier)
   const contacts = (selections.contacts || []) as Array<{ connection: number; loyalty: number }>;
   const attributes = selections.attributes as Record<string, number> | undefined;
   const charisma = attributes?.charisma || 1;
-  const freeContactKarma = charisma * 3;
+  const freeContactKarma = charisma * getContactMultiplier(gameplayLevel);
   const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
   const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
 

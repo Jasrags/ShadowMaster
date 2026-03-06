@@ -32,18 +32,21 @@ import type { CharacterRCC, CharacterDrone, CharacterAutosoft } from "@/lib/type
 // =============================================================================
 
 /**
- * Default creation constraints (SR5 standard)
+ * Get creation constraints for a given max availability (varies by gameplay level).
  */
-export const CREATION_CONSTRAINTS = {
-  /** Maximum availability rating at character creation */
-  maxAvailabilityAtCreation: 12,
-  /** Maximum device rating at character creation */
-  maxDeviceRatingAtCreation: 6,
-  /** Whether restricted items are allowed at creation (typically no without GM approval) */
-  allowRestrictedAtCreation: false,
-  /** Whether forbidden items are allowed at creation (never) */
-  allowForbiddenAtCreation: false,
-} as const;
+export function getCreationConstraints(maxAvailability = 12) {
+  return {
+    maxAvailabilityAtCreation: maxAvailability,
+    maxDeviceRatingAtCreation: 6,
+    allowRestrictedAtCreation: false,
+    allowForbiddenAtCreation: false,
+  } as const;
+}
+
+/**
+ * Default creation constraints (SR5 standard/experienced)
+ */
+export const CREATION_CONSTRAINTS = getCreationConstraints();
 
 // =============================================================================
 // INTERFACES

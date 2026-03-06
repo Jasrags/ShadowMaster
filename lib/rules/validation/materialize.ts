@@ -106,6 +106,12 @@ export function materializeFromCreationState(
   // Start with a shallow copy
   const result = { ...character };
 
+  // --- Gameplay Level ---
+
+  if (creationState.gameplayLevel && !result.gameplayLevel) {
+    result.gameplayLevel = creationState.gameplayLevel;
+  }
+
   // --- Basic Info ---
 
   if (selections.metatype && isEmpty(result.metatype)) {
