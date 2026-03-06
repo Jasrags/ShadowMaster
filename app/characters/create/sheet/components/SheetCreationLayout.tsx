@@ -20,7 +20,15 @@ import { useMemo } from "react";
 import dynamic from "next/dynamic";
 import { useCreationBudgets } from "@/lib/contexts";
 import type { CreationState, Campaign, SelectedQuality } from "@/lib/types";
-import { CheckCircle2, AlertCircle, AlertTriangle, Loader2, Clock, Save } from "lucide-react";
+import {
+  CheckCircle2,
+  AlertCircle,
+  AlertTriangle,
+  Loader2,
+  Clock,
+  Save,
+  BookOpen,
+} from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 import { useQualities, useSkills, useGameplayLevelModifiers } from "@/lib/rules/RulesetContext";
 
@@ -807,8 +815,8 @@ export function SheetCreationLayout({
   lastSaved,
   saveError,
   onRetry,
-  campaignId: _campaignId, // Used in Phase 5+
-  campaign: _campaign, // Used in Phase 5+
+  campaignId: _campaignId,
+  campaign,
   serverValidation,
 }: SheetCreationLayoutProps) {
   // Determine what sections are available based on selections
@@ -854,6 +862,20 @@ export function SheetCreationLayout({
           )}
         </div>
       </div>
+
+      {/* Active Books Banner */}
+      {campaign && (
+        <div className="rounded-md bg-blue-50 px-4 py-3 dark:bg-blue-900/20">
+          <div className="flex items-center gap-2 text-sm">
+            <BookOpen className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+            <span className="font-medium text-blue-800 dark:text-blue-200">{campaign.title}</span>
+            <span className="text-blue-600 dark:text-blue-400">
+              — {campaign.enabledBookIds.length} book
+              {campaign.enabledBookIds.length !== 1 ? "s" : ""} active
+            </span>
+          </div>
+        </div>
+      )}
 
       {/* Three Column Grid */}
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">

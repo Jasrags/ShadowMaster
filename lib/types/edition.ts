@@ -279,6 +279,10 @@ export interface BookPayload {
     edition: EditionCode;
     version: string;
     category: BookCategory;
+    abbreviation?: string;
+    description?: string;
+    publisher?: string;
+    releaseYear?: number;
   };
 
   /**
