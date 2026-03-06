@@ -131,6 +131,11 @@ describe("EffectContextBuilder — Modifier Methods", () => {
     expect(ctx.action.specificAction).toBe("called-shot");
   });
 
+  it("withSkillCategory sets skillCategory on action", () => {
+    const ctx = EffectContextBuilder.forSkillTest("leadership").withSkillCategory("social").build();
+    expect(ctx.action.skillCategory).toBe("social");
+  });
+
   it("supports full chaining", () => {
     const ctx = EffectContextBuilder.forSkillTest("firearms")
       .withEnvironment({ lighting: "dim" })

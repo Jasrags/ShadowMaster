@@ -240,6 +240,22 @@ describe("Matching", () => {
       // If action doesn't specify a skill, we don't reject (the effect just targets that skill)
       expect(matchesTarget({ skill: "firearms" }, makeAction())).toBe(true);
     });
+
+    it("should match when skillCategory matches", () => {
+      expect(
+        matchesTarget({ skillCategory: "social" }, makeAction({ skillCategory: "social" }))
+      ).toBe(true);
+    });
+
+    it("should not match when skillCategory differs", () => {
+      expect(
+        matchesTarget({ skillCategory: "social" }, makeAction({ skillCategory: "combat" }))
+      ).toBe(false);
+    });
+
+    it("should match when target has skillCategory but action does not (broad context)", () => {
+      expect(matchesTarget({ skillCategory: "social" }, makeAction())).toBe(true);
+    });
   });
 
   describe("matchesCondition", () => {

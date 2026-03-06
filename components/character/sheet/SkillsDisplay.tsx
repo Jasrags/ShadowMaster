@@ -308,7 +308,9 @@ export function SkillsDisplay({ character, onSelect, resolveEffects }: SkillsDis
     let effectBonus = 0;
     let effectBonuses: Array<{ source: string; value: number; isWireless: boolean }> = [];
     if (resolveEffects) {
-      const result = resolveEffects(EffectContextBuilder.forSkillTest(skillId).build());
+      const ctxBuilder = EffectContextBuilder.forSkillTest(skillId);
+      if (skillData?.category) ctxBuilder.withSkillCategory(skillData.category);
+      const result = resolveEffects(ctxBuilder.build());
       effectBonus = result.totalDicePoolModifier;
       effectBonuses = result.dicePoolModifiers.map((e) => ({
         source: e.source.name,

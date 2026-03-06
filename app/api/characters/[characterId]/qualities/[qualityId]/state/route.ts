@@ -7,7 +7,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateQualityDynamicState } from "@/lib/storage/characters";
+import { getCharacter, updateCharacter, updateQualityDynamicState } from "@/lib/storage/characters";
+import { readJsonFile } from "@/lib/storage/base";
+import { initializeDynamicState } from "@/lib/rules/qualities/dynamic-state";
+import type { Quality, QualitySelection } from "@/lib/types";
+import path from "path";
 
 export async function PATCH(
   request: NextRequest,
@@ -42,6 +46,57 @@ export async function PATCH(
         { success: false, error: "Invalid updates format" },
         { status: 400 }
       );
+    }
+
+    // Auto-initialize dynamicState if missing
+    const allSelections = [
+      ...(character.positiveQualities || []),
+      ...(character.negativeQualities || []),
+    ];
+    const targetSelection = allSelections.find(
+      (s) => (typeof s === "string" ? s : s.qualityId || s.id) === qualityId
+    ) as QualitySelection | undefined;
+
+    if (targetSelection && typeof targetSelection !== "string" && !targetSelection.dynamicState) {
+      // Look up the catalog quality to initialize dynamic state
+      const editionCode = character.editionCode;
+      const bookPath = path.join(
+        process.cwd(),
+        "data",
+        "editions",
+        editionCode,
+        "core-rulebook.json"
+      );
+      const bookData = await readJsonFile<Record<string, unknown>>(bookPath);
+      const qualitiesModule = bookData?.modules as Record<string, unknown> | undefined;
+      const qualitiesPayload = (qualitiesModule?.qualities as Record<string, unknown>)?.payload as
+        | { positive?: Quality[]; negative?: Quality[] }
+        | undefined;
+      const allCatalog = [
+        ...(qualitiesPayload?.positive || []),
+        ...(qualitiesPayload?.negative || []),
+      ];
+      const catalogQuality = allCatalog.find((q) => q.id === qualityId);
+
+      if (catalogQuality) {
+        const initialState = initializeDynamicState(catalogQuality, targetSelection);
+        if (initialState) {
+          // Persist initialized state on the character
+          const updateQualities = (selections: QualitySelection[]) =>
+            selections.map((s) => {
+              const sid = typeof s === "string" ? s : s.qualityId || s.id;
+              if (sid === qualityId && typeof s !== "string") {
+                return { ...s, dynamicState: initialState };
+              }
+              return s;
+            });
+
+          await updateCharacter(userId, characterId, {
+            positiveQualities: updateQualities(character.positiveQualities || []),
+            negativeQualities: updateQualities(character.negativeQualities || []),
+          });
+        }
+      }
     }
 
     // Update quality dynamic state

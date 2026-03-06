@@ -130,6 +130,15 @@ export function matchesTarget(target: EffectTarget, action: EffectActionContext)
     return false;
   }
 
+  // Skill category match
+  if (
+    target.skillCategory &&
+    action.skillCategory &&
+    target.skillCategory !== action.skillCategory
+  ) {
+    return false;
+  }
+
   return true;
 }
 

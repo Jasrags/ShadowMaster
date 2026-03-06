@@ -152,6 +152,12 @@ export interface EffectTarget {
 
   /** Specific action targeting (typed enum) */
   specificAction?: SpecificAction;
+
+  /** Target all skills in a category (e.g., "social", "combat") */
+  skillCategory?: string;
+
+  /** Target all attributes in a category (e.g., "physical", "mental") */
+  attributeCategory?: string;
 }
 
 /**
@@ -304,6 +310,9 @@ export interface EffectActionContext {
 
   /** Specific action for fine-grained targeting */
   specificAction?: SpecificAction;
+
+  /** Category of skill being tested (e.g., "social", "combat") */
+  skillCategory?: string;
 
   /** Weapon ID for attack contexts */
   weaponId?: string;

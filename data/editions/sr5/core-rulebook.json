@@ -5507,6 +5507,7 @@
             "name": "Addiction",
             "karmaBonus": 4,
             "summary": "Physical or psychological dependence on a substance or activity.",
+            "dynamicState": "addiction",
             "requiresSpecification": true,
             "specificationLabel": "Substance/Activity",
             "requiresSelection": {
@@ -5606,6 +5607,7 @@
             "name": "Allergy",
             "karmaBonus": 5,
             "summary": "Allergenic reaction to a substance or condition. Karma = Commonality + Severity.",
+            "dynamicState": "allergy",
             "requiresSpecification": true,
             "specificationLabel": "Allergen",
             "karmaCalculation": {

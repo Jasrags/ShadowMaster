@@ -30,6 +30,8 @@ import { DynamicStateModal } from "@/app/characters/[id]/components/DynamicState
 interface QualitiesDisplayProps {
   character: Character;
   onUpdate?: (updatedCharacter: Character) => void;
+  firstMeeting?: boolean;
+  onFirstMeetingChange?: (active: boolean) => void;
 }
 
 // ---------------------------------------------------------------------------
@@ -264,43 +266,44 @@ function QualityRow({
             Pending
           </span>
         )}
-        {/* State toggle pills */}
-        {rawSelection.dynamicState?.type === "addiction" &&
-          onStateToggle &&
-          (() => {
-            const addState = rawSelection.dynamicState as {
-              type: "addiction";
-              state: { withdrawalActive: boolean };
-            };
-            return (
-              <StateTogglePill
-                label="Withdrawal"
-                active={addState.state.withdrawalActive}
-                activeColor="red"
-                onToggle={() =>
-                  onStateToggle(id, "withdrawalActive", !addState.state.withdrawalActive)
-                }
-              />
-            );
-          })()}
-        {rawSelection.dynamicState?.type === "allergy" &&
-          onStateToggle &&
-          (() => {
-            const allState = rawSelection.dynamicState as {
-              type: "allergy";
-              state: { currentlyExposed: boolean };
-            };
-            return (
-              <StateTogglePill
-                label="Exposed"
-                active={allState.state.currentlyExposed}
-                activeColor="amber"
-                onToggle={() =>
-                  onStateToggle(id, "currentlyExposed", !allState.state.currentlyExposed)
-                }
-              />
-            );
-          })()}
+        {/* State toggle pills — detect via effect triggers, not dynamicState presence */}
+        {(() => {
+          const unifiedEffects = rawEffects.filter(isUnifiedEffect);
+          const hasWithdrawalTrigger = unifiedEffects.some((e) =>
+            e.triggers.includes("withdrawal")
+          );
+          const hasExposureTrigger = unifiedEffects.some((e) => e.triggers.includes("on-exposure"));
+
+          const withdrawalActive =
+            rawSelection.dynamicState?.type === "addiction"
+              ? (rawSelection.dynamicState.state as { withdrawalActive: boolean }).withdrawalActive
+              : false;
+          const exposedActive =
+            rawSelection.dynamicState?.type === "allergy"
+              ? (rawSelection.dynamicState.state as { currentlyExposed: boolean }).currentlyExposed
+              : false;
+
+          return (
+            <>
+              {hasWithdrawalTrigger && onStateToggle && (
+                <StateTogglePill
+                  label="Withdrawal"
+                  active={withdrawalActive}
+                  activeColor="red"
+                  onToggle={() => onStateToggle(id, "withdrawalActive", !withdrawalActive)}
+                />
+              )}
+              {hasExposureTrigger && onStateToggle && (
+                <StateTogglePill
+                  label="Exposed"
+                  active={exposedActive}
+                  activeColor="amber"
+                  onToggle={() => onStateToggle(id, "currentlyExposed", !exposedActive)}
+                />
+              )}
+            </>
+          );
+        })()}
         {hasFirstMeetingTrigger && onFirstMeetingToggle && (
           <StateTogglePill
             label="First Meeting"
@@ -386,11 +389,19 @@ function QualityRow({
 // Main component
 // ---------------------------------------------------------------------------
 
-export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps) {
+export function QualitiesDisplay({
+  character,
+  onUpdate,
+  firstMeeting: controlledFirstMeeting,
+  onFirstMeetingChange,
+}: QualitiesDisplayProps) {
   const { positive: positiveData, negative: negativeData } = useQualities();
   const [activeSelection, setActiveSelection] = useState<QualitySelection | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [firstMeeting, setFirstMeeting] = useState(false);
+  const [localFirstMeeting, setLocalFirstMeeting] = useState(false);
+
+  // Use controlled state if provided, otherwise fall back to local state
+  const firstMeeting = controlledFirstMeeting ?? localFirstMeeting;
 
   const persistedFlags = buildCharacterStateFlags(character);
   const characterStateFlags: CharacterStateFlags = {
@@ -477,7 +488,14 @@ export function QualitiesDisplay({ character, onUpdate }: QualitiesDisplayProps)
                             characterStateFlags={characterStateFlags}
                             onSettingsClick={handleSettingsClick}
                             onStateToggle={onUpdate ? handleStateToggle : undefined}
-                            onFirstMeetingToggle={() => setFirstMeeting((prev) => !prev)}
+                            onFirstMeetingToggle={() => {
+                              const newValue = !firstMeeting;
+                              if (onFirstMeetingChange) {
+                                onFirstMeetingChange(newValue);
+                              } else {
+                                setLocalFirstMeeting(newValue);
+                              }
+                            }}
                           />
                         );
                       })}

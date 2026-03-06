@@ -96,6 +96,13 @@ export class EffectContextBuilder {
     return this;
   }
 
+  withSkillCategory(category: string): this {
+    if (this.action) {
+      this.action = { ...this.action, skillCategory: category };
+    }
+    return this;
+  }
+
   withCharacterState(flags: CharacterStateFlags): this {
     this.charState = { ...this.charState, ...flags };
     return this;
