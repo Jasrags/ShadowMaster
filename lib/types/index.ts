@@ -886,3 +886,11 @@ export {
 
 // Archetype types
 export type { CharacterArchetype, ArchetypeCategory } from "./archetype";
+
+// Rule Reference types
+export type {
+  RuleReferenceCategory,
+  RuleReferenceTable,
+  RuleReferenceEntry,
+  RuleReferenceData,
+} from "./rule-reference";

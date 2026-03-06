@@ -1,0 +1,1105 @@
+{
+  "version": "1.0.0",
+  "editionCode": "sr5",
+  "entries": [
+    {
+      "id": "defense-modifiers",
+      "title": "Defense Modifiers",
+      "category": "combat",
+      "subcategory": "ranged",
+      "tags": ["defense", "dodge", "cover", "prone", "modifiers"],
+      "summary": "Dice pool modifiers applied to a defender's defense test in ranged and melee combat.",
+      "tables": [
+        {
+          "headers": ["Situation", "Dice Pool Modifier"],
+          "rows": [
+            ["Defender inside a moving vehicle", "+3"],
+            ["Defender prone", "-2"],
+            ["Defender unaware of attack", "No defense possible"],
+            ["Defender wounded", "-wound modifiers"],
+            ["Attacker has longer Reach", "-1 per point of net Reach"],
+            ["Defender has longer Reach", "+1 per point of net Reach"],
+            ["Defender receiving a charge", "+1"],
+            ["Defender has defended against previous attack", "-1 per previous attack"]
+          ]
+        },
+        {
+          "headers": ["Attacker Firing Situation", "Dice Pool Modifier"],
+          "rows": [
+            ["Flechette shotgun narrow spread", "-1"],
+            ["Flechette shotgun medium spread", "-3"],
+            ["Flechette shotgun wide spread", "-5"],
+            ["Full-auto (Complex)", "-9"],
+            ["Long burst or full-auto (Simple)", "-5"],
+            ["Burst or semi-auto burst", "-2"],
+            ["Defender in melee targeted by ranged attack", "-3"],
+            ["Defender running", "+2"],
+            ["Defender/Target has Good Cover", "+4"],
+            ["Defender/Target has Partial Cover", "+2"],
+            ["Targeted by area-effect attack", "-2"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 188 }
+    },
+    {
+      "id": "melee-modifiers",
+      "title": "Melee Modifiers",
+      "category": "combat",
+      "subcategory": "melee",
+      "tags": ["melee", "close combat", "reach", "modifiers", "called shot"],
+      "summary": "Dice pool modifiers for melee combat attacks and defense.",
+      "tables": [
+        {
+          "headers": ["Situation", "Dice Pool Modifier"],
+          "rows": [
+            ["Attacker making charging attack", "+2"],
+            ["Attacker prone", "-1"],
+            ["Attacker making a Called Shot", "-4"],
+            ["Character attacking multiple targets", "Split dice pool"],
+            ["Character has superior position", "+2"],
+            ["Character using off-hand weapon", "-2"],
+            ["Attacker wounded", "-wound modifier"],
+            ["Defender receiving a charge", "+1"],
+            ["Environmental modifiers", "Use Light and Visibility"],
+            ["Attacker has friends in melee", "+1 or Teamwork"],
+            ["Opponent prone", "+1"],
+            ["Touch-only attack", "+2"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 187 }
+    },
+    {
+      "id": "firing-modes",
+      "title": "Firing Modes",
+      "category": "combat",
+      "subcategory": "ranged",
+      "tags": ["firing mode", "burst", "auto", "semi-auto", "suppressive fire", "recoil", "rounds"],
+      "summary": "Weapon firing modes with defense modifiers, rounds consumed, and recoil notes.",
+      "tables": [
+        {
+          "headers": ["Mode", "Defense Modifier", "Rounds Used", "Notes"],
+          "rows": [
+            ["Single-Shot (SS)", "0", "1", "No Recoil"],
+            ["Semi-Automatic (SA)", "0", "1", ""],
+            ["Semi-Automatic Burst (SB)", "-2", "3", ""],
+            ["Burst Fire (BF)", "-2", "3", ""],
+            ["Long Burst / Full Auto (Simple)", "-5", "6", ""],
+            ["Full Auto (Complex)", "-9", "10", ""],
+            ["Suppressive Fire", "Duck or Cover", "20", "No Recoil"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 178 }
+    },
+    {
+      "id": "range-table",
+      "title": "Range Table",
+      "category": "combat",
+      "subcategory": "ranged",
+      "tags": [
+        "range",
+        "short",
+        "medium",
+        "long",
+        "extreme",
+        "distance",
+        "pistol",
+        "rifle",
+        "shotgun"
+      ],
+      "summary": "Range bands by weapon type and dice pool modifiers for each range category.",
+      "tables": [
+        {
+          "headers": ["Range", "Modifier"],
+          "rows": [
+            ["Short", "+0"],
+            ["Medium", "-1"],
+            ["Long", "-3"],
+            ["Extreme", "-6"]
+          ]
+        },
+        {
+          "headers": ["Weapon", "Short", "Medium", "Long", "Extreme"],
+          "rows": [
+            ["Taser", "0-5", "6-10", "11-15", "16-20"],
+            ["Hold-Out Pistol", "0-5", "6-15", "16-30", "31-50"],
+            ["Light Pistol", "0-5", "6-15", "16-30", "31-50"],
+            ["Heavy Pistol", "0-5", "6-20", "21-40", "41-60"],
+            ["Machine Pistol", "0-5", "6-15", "16-30", "31-50"],
+            ["SMG", "0-10", "11-40", "41-80", "81-150"],
+            ["Assault Rifle", "0-25", "26-150", "151-350", "351-550"],
+            ["Shotgun (flechette)", "0-15", "16-30", "31-45", "45-60"],
+            ["Shotgun (slug)", "0-10", "11-40", "41-80", "81-150"],
+            ["Sniper Rifle", "0-50", "51-350", "351-800", "801-1,500"],
+            ["Light Machinegun", "0-25", "26-200", "201-400", "401-800"],
+            ["Medium/Heavy Machinegun", "0-40", "41-250", "251-750", "751-1,200"],
+            ["Assault Cannon", "0-50", "51-300", "301-750", "751-1,500"]
+          ]
+        }
+      ],
+      "notes": [
+        "Ranges in meters.",
+        "See Launcher Minimum Range, p. 182 for grenade/missile launchers."
+      ],
+      "source": { "book": "SR5 Core", "page": 185 }
+    },
+    {
+      "id": "barrier-ratings",
+      "title": "Barrier Ratings",
+      "category": "combat",
+      "subcategory": "barriers",
+      "tags": ["barrier", "structure", "armor", "cover", "destruction", "wall", "door"],
+      "summary": "Structure and armor ratings for common barrier materials, used when attacking through or destroying barriers.",
+      "tables": [
+        {
+          "headers": ["Barrier", "Examples", "Structure", "Armor"],
+          "rows": [
+            ["Fragile", "Standard glass", "1", "2"],
+            ["Cheap Material", "Drywall, plaster, door, regular tire", "2", "4"],
+            ["Average Material", "Furniture, plastiboard, ballistic glass", "4", "6"],
+            ["Heavy Material", "Tree, hardwood, dataterm, light post, chain link", "6", "8"],
+            [
+              "Reinforced Material",
+              "Densiplast, security door, armored glass, Kevlar wallboard",
+              "8",
+              "12"
+            ],
+            ["Structural Material", "Brick, plascrete", "10", "16"],
+            ["Heavy Structural Material", "Concrete, metal beam", "12", "20"],
+            ["Armored/Reinforced Material", "Reinforced concrete", "14", "24"],
+            ["Hardened Material", "Blast bunkers", "16+", "32+"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 197 }
+    },
+    {
+      "id": "combat-actions",
+      "title": "Combat Actions",
+      "category": "combat",
+      "subcategory": "actions",
+      "tags": ["action", "free", "simple", "complex", "interrupt", "initiative", "turn"],
+      "summary": "Available combat actions organized by action type: Free, Simple, Complex, and Interrupt.",
+      "tables": [
+        {
+          "headers": ["Free Actions"],
+          "rows": [
+            ["Call a Shot"],
+            ["Change Linked Device Mode"],
+            ["Drop Object"],
+            ["Drop Prone"],
+            ["Eject Smartgun Clip"],
+            ["Multiple Attacks"],
+            ["Run"],
+            ["Speak/Text/Transmit Phrase"]
+          ]
+        },
+        {
+          "headers": ["Simple Actions"],
+          "rows": [
+            ["Activate Focus"],
+            ["Call Spirit"],
+            ["Change Device Mode"],
+            ["Command Spirit"],
+            ["Dismiss Spirit"],
+            ["Fire Bow"],
+            ["Fire Weapon (SA, SS, BF, FA)"],
+            ["Insert Clip"],
+            ["Observe in Detail"],
+            ["Pick Up/Put Down Object"],
+            ["Quick Draw"],
+            ["Ready/Draw Weapon"],
+            ["Reckless Spellcasting"],
+            ["Reload Weapon (see table)"],
+            ["Remove Clip"],
+            ["Shift Perception"],
+            ["Take Aim"],
+            ["Take Cover"],
+            ["Throw Weapon"],
+            ["Use Simple Device"]
+          ]
+        },
+        {
+          "headers": ["Complex Actions"],
+          "rows": [
+            ["Astral Projection"],
+            ["Banish Spirit"],
+            ["Cast Spell"],
+            ["Fire Weapon (FA)"],
+            ["Fire Long or Semi-Auto Burst"],
+            ["Fire Mounted or Vehicle Weapon"],
+            ["Melee Attack"],
+            ["Reload Weapon (see table)"],
+            ["Rigger Jump In"],
+            ["Sprint"],
+            ["Summoning"],
+            ["Use Skill"]
+          ]
+        },
+        {
+          "headers": ["Interrupt Actions"],
+          "rows": [
+            ["Block"],
+            ["Dodge"],
+            ["Full Defense"],
+            ["Hit the Dirt"],
+            ["Intercept"],
+            ["Parry"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 163 }
+    },
+    {
+      "id": "scatter-table",
+      "title": "Scatter Table",
+      "category": "combat",
+      "subcategory": "ranged",
+      "tags": ["scatter", "grenade", "rocket", "missile", "launcher", "miss"],
+      "summary": "Scatter distance formulas for grenades, launchers, and missiles. Roll 2D6 for direction.",
+      "tables": [
+        {
+          "headers": ["Type", "Scatter"],
+          "rows": [
+            ["Standard Grenade", "(1D6 - Hits) meters"],
+            ["Aerodynamic Grenade", "(2D6 - Hits) meters"],
+            ["Grenade Launcher", "(3D6 - Hits) meters"],
+            ["Missile Launcher", "(4D6 - Hits) meters"],
+            ["Rocket Launcher", "(5D6 - Hits) meters"]
+          ]
+        }
+      ],
+      "notes": ["Roll 2D6 for direction (2/12=Down, 7=Up, etc.). Minimum scatter is 0 meters."],
+      "source": { "book": "SR5 Core", "page": 182 }
+    },
+    {
+      "id": "reloading-weapons",
+      "title": "Reloading Weapons",
+      "category": "combat",
+      "subcategory": "ranged",
+      "tags": ["reload", "clip", "magazine", "ammunition", "ammo", "action"],
+      "summary": "Reloading methods for different weapon types and the action type required.",
+      "tables": [
+        {
+          "headers": ["Reloading Method", "Result", "Action Type"],
+          "rows": [
+            ["Removable Clip (c)", "Remove or insert clip", "Simple"],
+            ["Speed Loader", "Completely load gun", "Complex"],
+            ["Fill Clip", "Insert (Agility) rounds into clip", "Complex"],
+            ["Break Action (b)", "Insert 2 rounds", "Complex"],
+            ["Belt Fed (belt)", "Remove or insert belt", "Complex"],
+            ["Fill Belt/Drum", "Insert (Agility) rounds", "Complex"],
+            ["Internal Magazine (m)", "Insert (Agility) rounds", "Complex"],
+            ["Muzzle-Loader (ml)", "Load 1 muzzle tube", "Complex"],
+            ["Cylinder (cy)", "Insert (Agility) rounds", "Complex"],
+            ["Drum (d)", "Remove or insert drum", "Complex"],
+            ["Bow", "Nock 1 arrow", "Simple"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 163 }
+    },
+    {
+      "id": "damaging-barriers",
+      "title": "Damaging Barriers",
+      "category": "combat",
+      "subcategory": "barriers",
+      "tags": ["barrier", "damage", "penetration", "explosive", "combat spell"],
+      "summary": "Damage value modifiers when attacking barriers with different weapon types.",
+      "tables": [
+        {
+          "headers": ["Weapon", "DV Modifier"],
+          "rows": [
+            ["Melee or unarmed", "No change"],
+            ["Projectiles and bullets", "See Penetration Weapons"],
+            ["Explosive in contact with barrier", "Base DV x 2"],
+            ["AV rocket/missile", "Base DV x 2"],
+            ["Combat spell", "No change"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 197 }
+    },
+    {
+      "id": "environmental-modifiers",
+      "title": "Environmental Modifiers",
+      "category": "environment",
+      "tags": ["visibility", "light", "glare", "wind", "rain", "fog", "smoke", "darkness"],
+      "summary": "Dice pool modifiers from visibility, light/glare, wind, and range conditions. Conditions in the same row stack.",
+      "tables": [
+        {
+          "headers": ["Visibility", "Light/Glare", "Wind", "Range", "Modifier"],
+          "rows": [
+            ["Clear", "Full Light/No Glare", "None or Light Breeze", "Short", "--"],
+            ["Light Rain/Fog/Smoke", "Partial Light/Weak Glare", "Light Winds", "Medium", "-1"],
+            ["Moderate Rain/Fog/Smoke", "Dim Light/Moderate Glare", "Moderate Winds", "Long", "-3"],
+            [
+              "Heavy Rain/Fog/Smoke",
+              "Total Darkness/Blinding Glare",
+              "Strong Winds",
+              "Extreme",
+              "-6"
+            ],
+            ["Two or more conditions at -6 level", "", "", "", "-10"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 173 }
+    },
+    {
+      "id": "terrain-modifiers",
+      "title": "Terrain Modifiers",
+      "category": "environment",
+      "tags": ["terrain", "driving", "vehicle", "open", "tight", "restricted"],
+      "summary": "Threshold modifiers for vehicle tests based on terrain difficulty.",
+      "tables": [
+        {
+          "headers": ["Terrain", "Modifier", "Examples"],
+          "rows": [
+            ["Open", "0", "Highways, flat plains, open sea, clear sky"],
+            ["Light", "+1", "Main streets, rolling hills, dock areas"],
+            ["Restricted", "+2", "Side streets, light woods, rocky slopes, shallow waters"],
+            ["Tight", "+4", "Back alleys, heavy woods, steep slopes, swamp, street-level flying"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 201 }
+    },
+    {
+      "id": "environmental-compensation",
+      "title": "Environmental Compensation",
+      "category": "environment",
+      "tags": [
+        "compensation",
+        "flare",
+        "low-light",
+        "thermographic",
+        "ultrasound",
+        "smartlink",
+        "vision"
+      ],
+      "summary": "Gear and abilities that reduce environmental modifiers, and which conditions each compensates.",
+      "tables": [
+        {
+          "headers": ["Compensation", "Effect"],
+          "rows": [
+            ["Flare Compensation", "Glare conditions shift two rows up"],
+            ["Image Magnification", "Reduce Range conditions by one category"],
+            ["Low-Light Vision", "Treat Partial/Dim Light as Full Light"],
+            ["Thermographic Vision", "Visibility and Light shift one row up"],
+            ["Tracer Rounds (FA)", "Wind below Light Winds and Range below Short shift one row up"],
+            ["Smartlink", "Wind shifts one row up"],
+            ["Sunglasses", "Glare shifts one row up / Light shifts one row down"],
+            ["Ultrasound", "Visibility shifts one row up, ignore Light (within 50m)"]
+          ]
+        },
+        {
+          "headers": ["Condition", "How to Compensate"],
+          "rows": [
+            ["Visibility", "Ultrasound, Thermographic"],
+            ["Light", "Low-Light, Sunglasses, Thermographic, Ultrasound"],
+            ["Wind", "Tracer Rounds, Smartlink"],
+            ["Range", "Image Magnification, Tracer Rounds"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 175 }
+    },
+    {
+      "id": "perception-thresholds",
+      "title": "Perception Thresholds",
+      "category": "tests",
+      "tags": ["perception", "threshold", "notice", "spot", "hear", "detect"],
+      "summary": "Thresholds for Perception tests based on how obvious or hidden the target is.",
+      "tables": [
+        {
+          "headers": ["Item/Event Is", "Threshold", "Examples"],
+          "rows": [
+            ["Obvious/Large/Loud", "1", "Neon sign, running crowd, yelling, gunfire"],
+            ["Normal", "2", "Street sign, pedestrian, conversation, silenced gunfire"],
+            ["Obscured/Small/Muffled", "3", "Item dropped under table, contact lens, whispering"],
+            ["Hidden/Micro/Silent", "4", "Secret door, needle in haystack, subvocal speech"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 135 }
+    },
+    {
+      "id": "perception-test-modifiers",
+      "title": "Perception Test Modifiers",
+      "category": "tests",
+      "tags": ["perception", "modifiers", "distracted", "enhancements", "looking"],
+      "summary": "Dice pool modifiers for Perception tests based on situational factors.",
+      "tables": [
+        {
+          "headers": ["Situation", "Dice Pool Modifier"],
+          "rows": [
+            ["Perceiver is distracted", "-2"],
+            ["Perceiver is specifically looking/listening for it", "+3"],
+            ["Object/sound not in immediate vicinity", "-2"],
+            ["Object/sound far away", "-3"],
+            ["Object/sound stands out in some way", "+2"],
+            ["Interfering sight/odor/sound", "-2"],
+            ["Perceiver has active enhancements", "+(Rating)"]
+          ]
+        }
+      ],
+      "notes": ["Visibility and Light: See Environmental Factors, p. 173"],
+      "source": { "book": "SR5 Core", "page": 135 }
+    },
+    {
+      "id": "success-test-thresholds",
+      "title": "Success Test Thresholds",
+      "category": "tests",
+      "tags": ["threshold", "difficulty", "success", "easy", "hard", "extreme"],
+      "summary": "Standard threshold values for success tests by difficulty level.",
+      "tables": [
+        {
+          "headers": ["Difficulty", "Threshold"],
+          "rows": [
+            ["Easy", "1"],
+            ["Average", "2"],
+            ["Hard", "4"],
+            ["Very Hard", "6"],
+            ["Extreme", "8-10"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 45 }
+    },
+    {
+      "id": "extended-test-thresholds",
+      "title": "Extended Test Thresholds",
+      "category": "tests",
+      "tags": ["extended test", "threshold", "cumulative", "time"],
+      "summary": "Threshold values for extended tests where hits accumulate across multiple rolls.",
+      "tables": [
+        {
+          "headers": ["Difficulty", "Threshold"],
+          "rows": [
+            ["Easy", "6"],
+            ["Average", "12"],
+            ["Hard", "18"],
+            ["Very Hard", "24"],
+            ["Extreme", "30+"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 48 }
+    },
+    {
+      "id": "healing-modifiers",
+      "title": "Healing Modifiers",
+      "category": "tests",
+      "tags": ["healing", "first aid", "medicine", "medkit", "wounds", "recovery"],
+      "summary": "Dice pool modifiers for First Aid and Medicine tests based on conditions and equipment.",
+      "tables": [
+        {
+          "headers": ["Situation", "Modifier"],
+          "rows": [
+            ["Good conditions (sterilized med facility)", "+0"],
+            ["Average conditions (indoors)", "-1"],
+            ["Poor conditions (street or wilderness)", "-2"],
+            ["Bad conditions (combat, bad weather, swamp)", "-3"],
+            ["Terrible conditions (fire, severe storm)", "-4"],
+            ["No medical supplies", "-3"],
+            ["Improvised medical supplies", "-1"],
+            ["Wireless medkit/autodoc", "+Rating"],
+            ["Applying care remotely through medkit/autodoc", "-2"],
+            ["Assistance", "As Teamwork Test (p. 49)"],
+            ["Uncooperative patient", "-2"],
+            ["Patient is Awakened or Emerged", "-2"],
+            ["Patient has implants", "-1 per 2 full points of lost Essence"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 205 }
+    },
+    {
+      "id": "assensing-table",
+      "title": "Assensing Table",
+      "category": "magic",
+      "tags": ["assensing", "astral", "aura", "perception", "magic", "awakened", "cyberware"],
+      "summary": "Information gained from Assensing based on number of hits. Each level includes all previous information.",
+      "tables": [
+        {
+          "headers": ["Hits", "Information Gained"],
+          "rows": [
+            ["0", "None"],
+            ["1", "General health, emotional state, mundane or Awakened"],
+            ["2", "Cyberware presence/location, magical class, aura recognition"],
+            ["3", "Alphaware, Essence/Magic/Force comparison, malady diagnosis, astral signatures"],
+            ["4", "Bioware/betaware, exact Essence/Magic/Force, astral signature cause"],
+            ["5+", "Deltaware/gene treatments/nanotech, accurate diagnosis, technomancer detection"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 312 }
+    },
+    {
+      "id": "spirit-services",
+      "title": "Spirit Services",
+      "category": "magic",
+      "tags": ["spirit", "summoning", "binding", "services", "command"],
+      "summary": "Available services for unbound and bound spirits.",
+      "tables": [
+        {
+          "headers": ["Unbound Spirit Services", "Bound Spirit Services"],
+          "rows": [
+            ["Combat", "Any Unbound Spirit Service"],
+            ["Power Use", "Aid Alchemy"],
+            ["Physical Task", "Aid Sorcery"],
+            ["Remote Service", "Spell Binding"],
+            ["", "Spell Sustaining"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 301 }
+    },
+    {
+      "id": "object-resistance",
+      "title": "Object Resistance Table",
+      "category": "magic",
+      "tags": ["object resistance", "spell", "magic", "target", "threshold"],
+      "summary": "Dice pool for objects resisting magical effects, based on level of processing/technology.",
+      "tables": [
+        {
+          "headers": ["Object Type", "Dice Pool"],
+          "rows": [
+            ["Natural Objects (trees, soil, hand-carved wood)", "3"],
+            ["Manufactured Low-Tech (brick, leather, simple plastics)", "6"],
+            ["Manufactured High-Tech (advanced plastics, alloys, electronics)", "9"],
+            ["Highly Processed (computers, drones, vehicles)", "15+"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 295 }
+    },
+    {
+      "id": "astral-combat",
+      "title": "Astral Combat",
+      "category": "magic",
+      "tags": ["astral", "combat", "spirit", "weapon focus", "damage"],
+      "summary": "Attack and defense tests for astral combat, plus damage values by source type.",
+      "tables": [
+        {
+          "headers": ["Attack Type", "Attack Test", "Defense Test"],
+          "rows": [
+            ["Unarmed", "Astral Combat + Willpower [Astral]", "Intuition + Logic"],
+            ["Weapon Focus", "Astral Combat + Willpower [Accuracy]", "Intuition + Logic"]
+          ]
+        },
+        {
+          "headers": ["Source", "Damage"],
+          "rows": [
+            ["Magician", "Charisma"],
+            ["Weapon Focus", "By weapon (uses Charisma instead of Strength)"],
+            ["Spirit", "Force"],
+            ["Watcher", "1"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 315 }
+    },
+    {
+      "id": "focus-bonding",
+      "title": "Focus Bonding Costs",
+      "category": "magic",
+      "tags": ["focus", "bonding", "karma", "enchanting", "power", "weapon", "spell"],
+      "summary": "Karma costs for bonding different types of foci.",
+      "tables": [
+        {
+          "headers": ["Focus Type", "Bonding Cost (Karma)"],
+          "rows": [
+            ["Enchanting Focus", "Force x 3"],
+            ["Metamagic Focus", "Force x 3"],
+            ["Power Focus", "Force x 6"],
+            ["Qi Focus", "Force x 2"],
+            ["Spell Focus", "Force x 2"],
+            ["Spirit Focus", "Force x 2"],
+            ["Weapon Focus", "Force x 3"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 318 }
+    },
+    {
+      "id": "matrix-actions",
+      "title": "Matrix Actions",
+      "category": "matrix",
+      "tags": ["matrix", "hacking", "decker", "technomancer", "actions", "brute force", "hack"],
+      "summary": "All matrix actions organized by action type: Free, Simple, Complex, and Variable.",
+      "tables": [
+        {
+          "headers": ["Free Actions"],
+          "rows": [
+            ["Load Program"],
+            ["Switch Two Matrix Attributes"],
+            ["Swap Two Programs"],
+            ["Unload Program"]
+          ]
+        },
+        {
+          "headers": ["Simple Actions"],
+          "rows": [
+            ["Call/Dismiss Sprite"],
+            ["Change Icon"],
+            ["Command Sprite"],
+            ["Jack Out"],
+            ["Invite Mark"],
+            ["Send Message"],
+            ["Switch Interface Mode"]
+          ]
+        },
+        {
+          "headers": ["Complex Actions"],
+          "rows": [
+            ["Brute Force"],
+            ["Check Overwatch Score"],
+            ["Crack File"],
+            ["Crash Program"],
+            ["Data Spike"],
+            ["Disarm Data Bomb"],
+            ["Edit File"],
+            ["Enter/Exit Host"],
+            ["Erase Mark"],
+            ["Format Device"],
+            ["Hack on the Fly"],
+            ["Hide"],
+            ["Jam Signals"],
+            ["Jump Into Rigged Device"],
+            ["Matrix Perception"],
+            ["Reboot Device"],
+            ["Set Data Bomb"],
+            ["Snoop"],
+            ["Spoof Command"],
+            ["Trace Icon"],
+            ["Compile Sprite"],
+            ["Decompile Sprite"],
+            ["Register Sprite"],
+            ["Thread Complex Form"]
+          ]
+        },
+        {
+          "headers": ["Variable Actions"],
+          "rows": [["Control Device"], ["Matrix Search"]]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 237 }
+    },
+    {
+      "id": "noise-table",
+      "title": "Noise Table",
+      "category": "matrix",
+      "tags": ["noise", "distance", "signal", "jamming", "matrix", "wireless"],
+      "summary": "Noise levels based on physical distance and situational factors that affect matrix signal quality.",
+      "tables": [
+        {
+          "headers": ["Distance", "Noise Level"],
+          "rows": [
+            ["Directly connected (any distance)", "0"],
+            ["Up to 100 meters", "0"],
+            ["101-1,000 meters (1 km)", "1"],
+            ["1,001-10,000 meters (10 km)", "3"],
+            ["10,001-100,000 meters (100 km)", "5"],
+            ["Greater than 100 km", "8"]
+          ]
+        },
+        {
+          "headers": ["Situation", "Noise Level"],
+          "rows": [
+            ["Dense foliage", "1 per 5 meters"],
+            ["Faraday cage", "No signal (actions blocked)"],
+            ["Fresh water", "1 per 10 cm"],
+            ["Jamming", "1 per hit on Jam Signals"],
+            ["Metal-laced earth or wall", "1 per 5 meters"],
+            ["Salt water", "1 per centimeter"],
+            ["Spam/static zone", "Rating"],
+            ["Wireless negation (wallpaper/paint)", "Rating"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 230 }
+    },
+    {
+      "id": "host-ratings",
+      "title": "Sample Host Ratings",
+      "category": "matrix",
+      "tags": ["host", "rating", "security", "corporate", "government", "hacking"],
+      "summary": "Example host ratings for different types of matrix hosts, from personal sites to megacorp HQs.",
+      "tables": [
+        {
+          "headers": ["Examples", "Host Rating"],
+          "rows": [
+            ["Personal sites, pirate archives, public education", "1-2"],
+            ["Low-end commercial, private businesses, public libraries", "3-4"],
+            ["Social media, small universities, local police networks", "5-6"],
+            ["Matrix games, local corporate hosts, large universities", "7-8"],
+            ["Regional corporate hosts, major government systems", "9-10"],
+            ["Megacorporate HQs, military command centers", "11-12"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 247 }
+    },
+    {
+      "id": "user-modes",
+      "title": "User Modes",
+      "category": "matrix",
+      "tags": ["AR", "VR", "cold-sim", "hot-sim", "augmented reality", "initiative", "matrix mode"],
+      "summary": "Matrix user modes with initiative values and special bonuses.",
+      "tables": [
+        {
+          "headers": ["User Mode", "Initiative", "Initiative Dice", "Notes"],
+          "rows": [
+            [
+              "Augmented Reality",
+              "Physical Initiative",
+              "Physical Initiative Dice",
+              "Can be distracting"
+            ],
+            ["Cold-Sim VR", "Data Processing + Intuition", "3D6", ""],
+            [
+              "Hot-Sim VR",
+              "Data Processing + Intuition",
+              "4D6",
+              "+2 dice pool bonus to Matrix actions"
+            ]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 229 }
+    },
+    {
+      "id": "social-modifiers",
+      "title": "Social Modifiers",
+      "category": "social",
+      "tags": [
+        "social",
+        "con",
+        "etiquette",
+        "intimidation",
+        "negotiation",
+        "leadership",
+        "charisma"
+      ],
+      "summary": "Dice pool modifiers for social skill tests including general, con, etiquette, intimidation, leadership, and negotiation modifiers.",
+      "tables": [
+        {
+          "headers": ["General Modifier", "Dice Pool Modifier"],
+          "rows": [
+            ["NPC attitude: Friendly", "+2"],
+            ["NPC attitude: Neutral", "+0"],
+            ["NPC attitude: Suspicious", "-1"],
+            ["NPC attitude: Prejudiced", "-2"],
+            ["NPC attitude: Hostile", "-3"],
+            ["NPC attitude: Enemy", "-4"],
+            ["Result advantageous to NPC", "+1"],
+            ["Result of no value to NPC", "+0"],
+            ["Result annoying to NPC", "-1"],
+            ["Result harmful to NPC", "-3"],
+            ["Result disastrous to NPC", "-4"],
+            ["Character has street reputation", "+(Street Cred)"],
+            ["Subject has romantic attraction", "+2"],
+            ["Character is intoxicated", "-1"]
+          ]
+        },
+        {
+          "headers": ["Skill-Specific Modifier", "Dice Pool Modifier"],
+          "rows": [
+            ["Con: Plausible-seeming evidence", "+1 or +2"],
+            ["Con: Subject has time to evaluate", "-1"],
+            ["Etiquette: Wrong attire/look", "-2"],
+            ["Etiquette: Obviously nervous/agitated", "-2"],
+            ["Intimidation: Physically imposing", "+1 to +3"],
+            ["Intimidation: Characters outnumber subject", "+2"],
+            ["Intimidation: Wielding weapon/obvious magic", "+2"],
+            ["Negotiation: Lacks background knowledge", "-2"],
+            ["Negotiation: Has blackmail/heavy bargaining chip", "+2"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 140 }
+    },
+    {
+      "id": "social-skill-tests",
+      "title": "Social Skill Tests",
+      "category": "social",
+      "tags": [
+        "social",
+        "opposed test",
+        "con",
+        "etiquette",
+        "intimidation",
+        "negotiation",
+        "impersonation"
+      ],
+      "summary": "Opposed test pools for social skill tests - what both the character and target roll.",
+      "tables": [
+        {
+          "headers": ["Skill", "Character Roll", "Target Roll"],
+          "rows": [
+            ["Con", "Con + Charisma [Social]", "Con + Charisma [Social]"],
+            ["Etiquette", "Etiquette + Charisma [Social]", "Perception + Charisma [Social]"],
+            [
+              "Impersonation",
+              "Impersonation + Charisma [Social]",
+              "Perception + Intuition [Mental]"
+            ],
+            [
+              "Intimidation",
+              "Intimidation + Charisma [Social]",
+              "Intimidation + Willpower [Social]"
+            ],
+            ["Leadership", "Leadership + Charisma [Social]", "Leadership + Willpower [Social]"],
+            ["Negotiation", "Negotiation + Charisma [Social]", "Negotiation + Charisma [Social]"],
+            ["Performance", "Performance + Charisma [Social]", "Charisma + Willpower"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 141 }
+    },
+    {
+      "id": "connection-rating",
+      "title": "Connection Rating Table",
+      "category": "social",
+      "tags": ["contact", "connection", "rating", "influence", "network"],
+      "summary": "What each Connection rating level means in terms of a contact's social influence and reach.",
+      "tables": [
+        {
+          "headers": ["Rating", "Description"],
+          "rows": [
+            ["1", "No social influence; useful only for Knowledge skills"],
+            ["2", "One or two friends, some minor social influence"],
+            ["3", "A few friends, not much social influence"],
+            ["4", "Knows several people in a neighborhood; gang leader, borough mayor"],
+            ["5", "Moderate social influence; city councilman, low-level corporate exec"],
+            ["6", "Connected across state; city mayor, notable fixer, mid-level corp exec"],
+            ["7", "Considerable influence over large area; national corp leadership"],
+            ["8", "Multi-state connections; state government or national corp exec"],
+            ["9", "Continental connections; AA megacorp or small national government"],
+            ["10", "Worldwide connections; senior exec in government or AA megacorp"],
+            ["11", "Extreme worldwide connections; mid-level AAA megacorp or major government"],
+            ["12", "Global power-player; key exec in AAA megacorp or major government"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 387 }
+    },
+    {
+      "id": "loyalty-rating",
+      "title": "Loyalty Rating Table",
+      "category": "social",
+      "tags": ["contact", "loyalty", "rating", "relationship", "trust"],
+      "summary": "What each Loyalty rating level means for a contact's willingness to help.",
+      "tables": [
+        {
+          "headers": ["Rating", "Level", "Description"],
+          "rows": [
+            ["1", "Just Biz", "Purely mercenary, based solely on economics"],
+            ["2", "Regular", "All business, but with mutual respect"],
+            ["3", "Acquaintance", "Friendly but won't take a fall for you"],
+            ["4", "Buddy", "Actual friendship; will go out of their way"],
+            ["5", "Got Your Back", "Trust each other; will back you in risky situations"],
+            ["6", "Friend for Life", "Will go to the wall for each other"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 389 }
+    },
+    {
+      "id": "karma-rewards",
+      "title": "Karma Rewards",
+      "category": "social",
+      "subcategory": "rewards",
+      "tags": ["karma", "reward", "experience", "session", "adventure"],
+      "summary": "Karma awarded at the end of a session or adventure based on survival, objectives, and run type.",
+      "tables": [
+        {
+          "headers": ["Situation", "Karma"],
+          "rows": [
+            ["Character survived", "2"],
+            ["Group completed all objectives", "2"],
+            ["Group completed some objectives", "1"],
+            ["Overall adventure challenge", "Highest opposed Dice Pool / 6 (round down)"]
+          ]
+        },
+        {
+          "headers": ["Run Type", "Modifier"],
+          "rows": [
+            ["Standard run", "0"],
+            ["Cold-hearted bastard run", "-2"],
+            ["Good feelings run", "+2"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 375 }
+    },
+    {
+      "id": "cash-rewards",
+      "title": "Cash Rewards",
+      "category": "social",
+      "subcategory": "rewards",
+      "tags": ["nuyen", "payment", "reward", "run", "money", "cash"],
+      "summary": "Base payment and modifiers for shadowruns. Base cost is 3,000 nuyen.",
+      "tables": [
+        {
+          "headers": ["Situation", "Modifier"],
+          "rows": [
+            ["Highest opposing Dice Pool", "+(Dice Pool/4)"],
+            ["Outnumbered 3:1 in combat", "+1"],
+            ["Outnumbered 2:1 by PR4+ NPCs", "+1"],
+            ["Faced pack of 6+ critters", "+1"],
+            ["Encountered 3+ spirits in one encounter", "+1"],
+            ["Impressive speed/subtlety", "+1"],
+            ["Risked public exposure", "+1"],
+            ["Direct contact with dangerous Sixth World element", "+1"]
+          ]
+        },
+        {
+          "headers": ["Run Description", "Cost Modifier"],
+          "rows": [
+            ["Standard run", "0%"],
+            ["Cold-hearted bastard run (wetwork, etc.)", "+10-20%"],
+            ["Good feelings run (hooding, etc.)", "-10-20%"]
+          ]
+        }
+      ],
+      "notes": ["Base cost: 3,000 nuyen. Multiply base by total situational modifiers."],
+      "source": { "book": "SR5 Core", "page": 376 }
+    },
+    {
+      "id": "htr-response-time",
+      "title": "HTR Response Time",
+      "category": "social",
+      "subcategory": "security",
+      "tags": ["security", "response", "HTR", "police", "knight errant", "lone star"],
+      "summary": "High Threat Response team arrival times based on area security rating.",
+      "tables": [
+        {
+          "headers": ["Security Level", "Example", "Response Time"],
+          "rows": [
+            ["AAA", "Downtown Seattle, megacorp HQ, military", "1D6 minutes"],
+            ["AA", "Luxury residential area", "1D6 + 4 minutes"],
+            ["A", "Mid/high residential, common corporations", "2D6 + 3 minutes"],
+            ["B", "Mid-level residential, industrial", "1D6 x 5 minutes"],
+            ["C", "Low-end residential, storage areas", "1D6 x 10 minutes"],
+            ["Z", "Redmond Barrens, Chicago CZ", "2D6 hours"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 370 }
+    },
+    {
+      "id": "delivery-times",
+      "title": "Delivery Times",
+      "category": "equipment",
+      "tags": ["gear", "delivery", "purchase", "availability", "shopping", "time"],
+      "summary": "How long gear takes to arrive based on purchase cost.",
+      "tables": [
+        {
+          "headers": ["Gear Cost", "Delivery Time"],
+          "rows": [
+            ["Up to 100 nuyen", "6 hours"],
+            ["101-1,000 nuyen", "1 day"],
+            ["1,001-10,000 nuyen", "2 days"],
+            ["10,001-100,000 nuyen", "1 week"],
+            ["More than 100,000 nuyen", "1 month"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 418 }
+    },
+    {
+      "id": "favor-rating",
+      "title": "Favor Rating Table",
+      "category": "social",
+      "tags": ["favor", "contact", "rating", "risk", "services"],
+      "summary": "What each Favor rating level represents in terms of risk, value, and access provided.",
+      "tables": [
+        {
+          "headers": ["Rating", "Description"],
+          "rows": [
+            ["1", "Minor: Deliver a message, access to low-level restricted area"],
+            ["2", "Low Risk: Loan equipment up to 5,000 nuyen, first-line supervisor signature"],
+            ["3", "Medium: Access to mid-level restricted security area"],
+            ["4", "Moderate Risk: Loan equipment up to 50,000 nuyen, middle manager signature"],
+            ["5", "Serious: Access to high-level security area (FBI, AA/AAA megacorp HQ)"],
+            ["6", "Major Risk: Loan equipment up to 500,000 nuyen, senior manager signature"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 389 }
+    },
+    {
+      "id": "initiative-chart",
+      "title": "Initiative Types",
+      "category": "combat",
+      "subcategory": "initiative",
+      "tags": ["initiative", "astral", "matrix", "physical", "dice", "passes"],
+      "summary": "Initiative formulas for physical, astral, and matrix combat.",
+      "tables": [
+        {
+          "headers": ["Type", "Initiative", "Initiative Dice"],
+          "rows": [
+            ["Physical", "Reaction + Intuition", "1D6"],
+            ["Astral", "Intuition x 2", "2D6"],
+            ["Matrix AR", "Physical Initiative", "Physical Initiative Dice"],
+            ["Matrix Cold-Sim VR", "Data Processing + Intuition", "3D6"],
+            ["Matrix Hot-Sim VR", "Data Processing + Intuition", "4D6"]
+          ]
+        }
+      ],
+      "notes": [
+        "Each additional Initiative Die grants +1D6 (e.g., wired reflexes). Multiple initiative passes when total exceeds 10."
+      ],
+      "source": { "book": "SR5 Core", "page": 159 }
+    },
+    {
+      "id": "mana-barriers",
+      "title": "Mana Barriers",
+      "category": "magic",
+      "tags": ["mana barrier", "ward", "lodge", "circle of protection", "astral", "physical"],
+      "summary": "Types of mana barriers and whether they exist on the astral plane, physical plane, or both.",
+      "tables": [
+        {
+          "headers": ["Mana Barrier", "Astral or Physical", "Reference"],
+          "rows": [
+            ["Circle of Protection ritual", "Both", "p. 298"],
+            ["Magical Lodge", "Both", "p. 280"],
+            ["Mana Barrier spell", "Either", "p. 294"],
+            ["Ward ritual", "Both", "p. 297"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 315 }
+    },
+    {
+      "id": "situational-modifiers",
+      "title": "Situational Modifiers",
+      "category": "tests",
+      "tags": ["modifiers", "situational", "attacker", "defender", "general"],
+      "summary": "General situational modifiers that apply to various types of tests.",
+      "tables": [
+        {
+          "headers": ["Situation", "Dice Pool Modifier"],
+          "rows": [
+            ["Attacker running", "-2"],
+            ["Attacker in melee combat", "-3"],
+            ["Attacker firing from moving vehicle", "-2"],
+            ["Attacker firing from full cover (blind fire)", "-6"],
+            ["Attacker using off-hand weapon", "-2"],
+            ["Attacker using image link", "+1"],
+            ["Attacker using smartlink", "+2"],
+            ["Attacker using laser sight", "+1"],
+            ["Attacker wounded", "-wound modifier"],
+            ["Called Shot", "-4"]
+          ]
+        }
+      ],
+      "source": { "book": "SR5 Core", "page": 174 }
+    }
+  ]
+}
