@@ -382,6 +382,8 @@ function gatherGearModEffects(character: Character, ruleset: MergedRuleset): Sou
         id: mod.catalogId,
         name: mod.name,
         rating: mod.rating,
+        parentName: item.name,
+        parentId: item.id,
       };
 
       for (const effect of effects) {
@@ -413,6 +415,8 @@ function gatherWeaponModEffects(character: Character, ruleset: MergedRuleset): S
         id: mod.catalogId,
         name: mod.name,
         rating: mod.rating,
+        parentName: weapon.name,
+        parentId: weapon.id,
       };
 
       for (const effect of effects) {

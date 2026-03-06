@@ -5,14 +5,16 @@
  *
  * Collapsible DisplayCard showing all active effects on a character,
  * grouped by source type (Qualities, Cyberware, Bioware, Gear, Adept Powers,
- * Active Modifiers). Each row shows source name, effect type badge,
- * value pill, and wireless indicator.
+ * Active Modifiers) and sub-grouped by source item. Each source item shows
+ * its name (with parent attribution for mods) and colored effect badges.
  *
- * @see Issue #113
+ * @see Issue #113, #486
  */
 
 import type { EffectSourceType } from "@/lib/types/effects";
 import type { SourcedEffect } from "@/lib/rules/effects";
+import { formatEffectBadge } from "@/lib/rules/effects";
+import type { EffectBadge } from "@/lib/rules/effects";
 import { DisplayCard } from "./DisplayCard";
 import { Zap, Wifi } from "lucide-react";
 
@@ -22,6 +24,14 @@ import { Zap, Wifi } from "lucide-react";
 
 interface EffectsSummaryDisplayProps {
   sources: SourcedEffect[];
+}
+
+interface GroupedSourceItem {
+  id: string;
+  name: string;
+  parentName?: string;
+  hasWireless: boolean;
+  effects: SourcedEffect[];
 }
 
 // ---------------------------------------------------------------------------
@@ -40,10 +50,6 @@ const SOURCE_SECTIONS: Array<{ key: EffectSourceType; label: string }> = [
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function formatEffectType(type: string): string {
-  return type.replace(/-/g, " ");
-}
 
 function resolveDisplayValue(source: SourcedEffect): number {
   const { effect, source: src } = source;
@@ -67,49 +73,86 @@ function resolveDisplayValue(source: SourcedEffect): number {
   return value;
 }
 
+/**
+ * Sub-group effects by source.id within a source-type section.
+ * Preserves insertion order.
+ */
+function groupBySourceId(effects: SourcedEffect[]): GroupedSourceItem[] {
+  const map = new Map<string, GroupedSourceItem>();
+
+  for (const s of effects) {
+    const existing = map.get(s.source.id);
+    if (existing) {
+      existing.effects.push(s);
+      if (isWirelessEffect(s)) {
+        existing.hasWireless = true;
+      }
+    } else {
+      map.set(s.source.id, {
+        id: s.source.id,
+        name: s.source.name,
+        parentName: s.source.parentName,
+        hasWireless: isWirelessEffect(s),
+        effects: [s],
+      });
+    }
+  }
+
+  return Array.from(map.values());
+}
+
+function isWirelessEffect(s: SourcedEffect): boolean {
+  return !!(
+    s.source.wirelessEnabled &&
+    (s.effect.wirelessOverride !== undefined || s.effect.requiresWireless === true)
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function EffectRow({ sourced }: { sourced: SourcedEffect }) {
-  const { effect, source } = sourced;
-  const value = resolveDisplayValue(sourced);
-  const isWireless =
-    source.wirelessEnabled &&
-    (effect.wirelessOverride !== undefined || effect.requiresWireless === true);
+function SourceItemRow({ item }: { item: GroupedSourceItem }) {
+  const badges: Array<EffectBadge & { value: number }> = [];
+
+  for (const s of item.effects) {
+    const value = resolveDisplayValue(s);
+    const badge = formatEffectBadge(s.effect, { resolvedValue: value });
+    if (badge) {
+      badges.push({ ...badge, value });
+    }
+  }
 
   return (
-    <div className="flex min-w-0 items-center gap-1.5 px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50">
-      {/* Source name */}
+    <div className="flex min-w-0 flex-wrap items-center gap-1.5 px-3 py-1.5 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50">
+      {/* Source name with optional parent attribution */}
       <span className="truncate text-[13px] font-medium text-zinc-800 dark:text-zinc-200">
-        {source.name}
-      </span>
-
-      {/* Effect type badge */}
-      <span className="shrink-0 rounded-full border border-blue-500/20 bg-blue-500/10 px-1.5 py-px font-mono text-[9px] uppercase text-blue-400">
-        {formatEffectType(effect.type)}
+        {item.name}
+        {item.parentName && <span className="text-zinc-500"> ({item.parentName})</span>}
       </span>
 
       {/* Wireless indicator */}
-      {isWireless && (
+      {item.hasWireless && (
         <span title="Wireless bonus active">
           <Wifi className="h-3 w-3 shrink-0 text-cyan-400" />
         </span>
       )}
 
-      {/* Value pill */}
-      <span
-        className={`ml-auto shrink-0 rounded border px-1.5 py-0.5 font-mono text-[10px] font-semibold ${
-          value > 0
-            ? "border-emerald-500/20 bg-emerald-500/12 text-emerald-600 dark:text-emerald-300"
-            : value < 0
-              ? "border-red-500/20 bg-red-500/12 text-red-600 dark:text-red-300"
-              : "border-zinc-500/20 bg-zinc-500/12 text-zinc-500"
-        }`}
-      >
-        {value > 0 ? "+" : ""}
-        {value}
-      </span>
+      {/* Effect badges */}
+      {badges.map((badge, idx) => (
+        <span
+          key={idx}
+          data-testid="effect-badge"
+          className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+        >
+          {badge.label}
+          {badge.trigger && (
+            <span className={badge.triggerActive ? "font-semibold text-red-400" : "opacity-50"}>
+              · {badge.trigger}
+            </span>
+          )}
+        </span>
+      ))}
     </div>
   );
 }
@@ -143,14 +186,15 @@ export function EffectsSummaryDisplay({ sources }: EffectsSummaryDisplayProps) {
       <div className="space-y-3">
         {SOURCE_SECTIONS.filter((section) => grouped.has(section.key)).map((section) => {
           const sectionSources = grouped.get(section.key)!;
+          const items = groupBySourceId(sectionSources);
           return (
             <div key={section.key}>
               <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
                 {section.label}
               </div>
               <div className="overflow-hidden rounded-lg border border-zinc-200 bg-zinc-50 dark:border-zinc-800 dark:bg-zinc-950">
-                {sectionSources.map((s, idx) => (
-                  <EffectRow key={`${s.source.id}-${s.effect.id}-${idx}`} sourced={s} />
+                {items.map((item) => (
+                  <SourceItemRow key={item.id} item={item} />
                 ))}
               </div>
             </div>
