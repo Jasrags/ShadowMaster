@@ -58,6 +58,12 @@ interface SkillListItemProps {
   onDesignate?: () => void;
   /** Callback when user wants to undesignate this skill */
   onUndesignate?: () => void;
+  /** Dice pool value (attribute + skill rating) */
+  dicePool?: number;
+  /** Augmented attribute value used for this skill's pool */
+  augmentedAttributeValue?: number;
+  /** Tooltip text for the dice pool formula */
+  dicePoolTooltip?: string;
 }
 
 // =============================================================================
@@ -90,6 +96,9 @@ export function SkillListItem({
   canDesignate = false,
   onDesignate,
   onUndesignate,
+  dicePool,
+  augmentedAttributeValue,
+  dicePoolTooltip,
 }: SkillListItemProps) {
   const isAtMax = rating >= maxRating;
   const hasSpecs = specializations.length > 0;
@@ -290,10 +299,37 @@ export function SkillListItem({
         </div>
       </div>
 
-      {/* Line 2: Linked attribute and group name */}
-      <div className="ml-5 mt-0.5 text-xs text-zinc-500 dark:text-zinc-400">
-        {linkedAttribute.toUpperCase().slice(0, 3)}
-        {groupName && <span className="text-purple-500 dark:text-purple-400"> • {groupName}</span>}
+      {/* Line 2: Linked attribute, group name, and dice pool */}
+      <div className="ml-5 mt-0.5 flex items-center gap-1.5 text-xs text-zinc-500 dark:text-zinc-400">
+        <span>
+          {linkedAttribute.toUpperCase().slice(0, 3)}
+          {groupName && (
+            <span className="text-purple-500 dark:text-purple-400"> • {groupName}</span>
+          )}
+        </span>
+        {dicePool !== undefined && dicePool > 0 && (
+          <Tooltip
+            content={
+              <div className="text-xs">
+                <div>
+                  {dicePoolTooltip ||
+                    `${linkedAttribute} (${augmentedAttributeValue ?? "?"}) + ${skillName} (${rating}) = ${dicePool} dice`}
+                </div>
+                {specializations.length > 0 && (
+                  <div className="mt-0.5 text-amber-300 dark:text-amber-400">
+                    +2 for: {specializations.join(", ")}
+                  </div>
+                )}
+              </div>
+            }
+            placement="top"
+            delay={300}
+          >
+            <span className="inline-flex cursor-help items-center rounded bg-cyan-100 px-1 py-0.5 font-mono text-[10px] font-bold text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
+              {dicePool}d
+            </span>
+          </Tooltip>
+        )}
       </div>
 
       {/* Line 3: Specializations (if any) */}

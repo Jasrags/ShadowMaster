@@ -14,10 +14,47 @@ import { SkillsCard } from "../SkillsCard";
 vi.mock("@/lib/rules", () => ({
   useSkills: vi.fn(),
   usePriorityTable: vi.fn(),
+  useMetatypes: vi.fn(() => []),
+  useRuleset: vi.fn(() => ({ ruleset: null })),
+  useMagicPaths: vi.fn(() => []),
 }));
 
 vi.mock("@/lib/contexts", () => ({
   useCreationBudgets: vi.fn(),
+}));
+
+// Mock effects module (needed by useAugmentedAttributes → useCreationEffects)
+vi.mock("@/lib/rules/effects", () => ({
+  buildCreationCharacter: vi.fn(() => ({
+    positiveQualities: [],
+    negativeQualities: [],
+    cyberware: [],
+    bioware: [],
+    adeptPowers: [],
+    gear: [],
+    weapons: [],
+    armor: [],
+    wirelessBonusesEnabled: true,
+  })),
+  gatherEffectSources: vi.fn(() => []),
+  resolveFromSources: vi.fn(() => ({
+    dicePoolModifiers: [],
+    limitModifiers: [],
+    thresholdModifiers: [],
+    accuracyModifiers: [],
+    initiativeModifiers: [],
+    totalDicePoolModifier: 0,
+    totalLimitModifier: 0,
+    totalThresholdModifier: 0,
+    totalAccuracyModifier: 0,
+    totalInitiativeModifier: 0,
+    excludedByStacking: [],
+  })),
+  EffectContextBuilder: {
+    forInitiative: vi.fn(() => ({
+      build: vi.fn(() => ({ action: { type: "initiative" } })),
+    })),
+  },
 }));
 
 // Mock extracted sub-components imported from direct paths by SkillsCard
