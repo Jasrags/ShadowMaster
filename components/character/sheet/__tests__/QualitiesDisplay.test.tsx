@@ -299,6 +299,20 @@ describe("QualitiesDisplay", () => {
     expect(screen.getByTestId("settings-button")).toBeInTheDocument();
   });
 
+  it("renders settings button when catalog defines dynamicState but selection lacks it", () => {
+    renderWith({
+      negativeQualities: [
+        {
+          qualityId: "addiction",
+          source: "creation",
+        },
+      ],
+    });
+    expandFirstRow();
+    expect(screen.getByTestId("settings-button")).toBeInTheDocument();
+    expect(screen.queryByTestId("dynamic-state-text")).not.toBeInTheDocument();
+  });
+
   it("does not render settings button without dynamic state", () => {
     renderWith({
       positiveQualities: [{ qualityId: "ambidextrous", source: "creation" }],
