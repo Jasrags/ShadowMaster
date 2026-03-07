@@ -48,6 +48,8 @@ function renderDynamicStateText(
       return `${dynamicState.state.severity.toUpperCase()} \u2022 ${dynamicState.state.allergen} (${dynamicState.state.prevalence})`;
     case "dependent":
       return `TIER ${dynamicState.state.tier} \u2022 ${dynamicState.state.relationship} (${dynamicState.state.currentStatus})`;
+    case "code-of-honor":
+      return `${dynamicState.state.codeName} \u2022 ${dynamicState.state.violations.length} violation${dynamicState.state.violations.length !== 1 ? "s" : ""} (${dynamicState.state.totalKarmaLost} karma lost)`;
     default:
       return "";
   }
