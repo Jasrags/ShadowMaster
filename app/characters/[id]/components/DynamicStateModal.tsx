@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Button, Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import { X, Settings2 } from "lucide-react";
 import type {
@@ -11,6 +11,14 @@ import type {
   DependentState,
   CodeOfHonorState,
 } from "@/lib/types";
+import { useQualities } from "@/lib/rules";
+import {
+  formatEffectBadge,
+  isUnifiedEffect,
+  resolveRatingBasedValue,
+  buildCharacterStateFlags,
+} from "@/lib/rules/effects";
+import type { EffectBadgeContext } from "@/lib/rules/effects";
 import { AddictionTracker } from "./trackers/AddictionTracker";
 import { AllergyTracker } from "./trackers/AllergyTracker";
 import { DependentTracker } from "./trackers/DependentTracker";
@@ -33,6 +41,15 @@ export function DynamicStateModal({
 }: DynamicStateModalProps) {
   const [error, setError] = useState<string | null>(null);
   const [isInitializing, setIsInitializing] = useState(false);
+  const [successFlash, setSuccessFlash] = useState(false);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up timer on unmount
+  useEffect(() => {
+    return () => {
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    };
+  }, []);
 
   const handleUpdate = async (
     updates: Partial<AddictionState | AllergyState | DependentState | CodeOfHonorState>
@@ -55,6 +72,9 @@ export function DynamicStateModal({
 
       if (result.character) {
         onUpdate(result.character);
+        setSuccessFlash(true);
+        if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+        flashTimerRef.current = setTimeout(() => setSuccessFlash(false), 600);
       }
     } catch (err: unknown) {
       const message = err instanceof Error ? err.message : "An unknown error occurred";
@@ -70,6 +90,36 @@ export function DynamicStateModal({
       handleUpdate({}).finally(() => setIsInitializing(false));
     }
   }, [isOpen, selection.dynamicState]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Compute effect badges for this quality
+  const { positive: positiveData, negative: negativeData } = useQualities();
+  const allCatalog = [...positiveData, ...negativeData];
+  const qualityData = allCatalog.find((q) => q.id === selection.qualityId);
+  const rawEffects = ((qualityData?.effects || []) as unknown[]).filter(isUnifiedEffect);
+
+  const characterStateFlags = buildCharacterStateFlags(character);
+  const charRating = selection.rating;
+  const addictionState =
+    selection.dynamicState?.type === "addiction" ? selection.dynamicState.state : undefined;
+  const ratingEntry =
+    qualityData?.ratings && charRating !== undefined
+      ? (qualityData.ratings as Record<string, Record<string, unknown>>)[String(charRating)]
+      : undefined;
+
+  const effectBadges = rawEffects
+    .map((effect) => {
+      const ctx: EffectBadgeContext = {
+        rating: charRating,
+        dependencyType: addictionState?.substanceType,
+        activeCharacterStates: characterStateFlags,
+      };
+      if (typeof effect.value === "string" && ratingEntry) {
+        const resolved = resolveRatingBasedValue(effect, ratingEntry);
+        if (resolved !== null) ctx.resolvedValue = resolved;
+      }
+      return formatEffectBadge(effect, ctx);
+    })
+    .filter((b): b is NonNullable<typeof b> => b !== null);
 
   const renderTracker = () => {
     const type = selection.dynamicState?.type;
@@ -141,10 +191,44 @@ export function DynamicStateModal({
               </div>
 
               {/* Content */}
-              <div className="flex-1 overflow-y-auto p-6">
+              <div
+                data-testid="modal-content"
+                className={`flex-1 overflow-y-auto p-6 transition-colors duration-300${successFlash ? " border-l-2 border-emerald-500/40" : ""}`}
+              >
                 {error && (
                   <div className="mb-6 p-3 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs font-medium">
                     {error}
+                  </div>
+                )}
+
+                {effectBadges.length > 0 && (
+                  <div
+                    data-testid="active-effects-section"
+                    className="mb-4 p-3 bg-muted/20 rounded border border-border/30 space-y-2"
+                  >
+                    <div className="text-[9px] font-bold uppercase tracking-widest text-muted-foreground">
+                      Active Effects
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      {effectBadges.map((badge, idx) => (
+                        <span
+                          key={idx}
+                          data-testid="effect-badge"
+                          className={`inline-flex items-center gap-1 rounded px-1.5 py-0.5 text-[10px] font-medium ${badge.colorClass}`}
+                        >
+                          {badge.label}
+                          {badge.trigger && (
+                            <span
+                              className={
+                                badge.triggerActive ? "font-semibold text-red-400" : "opacity-50"
+                              }
+                            >
+                              · {badge.trigger}
+                            </span>
+                          )}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 )}
 
