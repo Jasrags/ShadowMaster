@@ -11,11 +11,12 @@ import {
   MinusCircle,
   Calendar,
 } from "lucide-react";
-import type { QualitySelection, CodeOfHonorState } from "@/lib/types";
+import type { Character, QualitySelection, CodeOfHonorState } from "@/lib/types";
 
 interface CodeOfHonorTrackerProps {
   selection: QualitySelection;
   onUpdate: (updates: Partial<CodeOfHonorState>) => Promise<void>;
+  character?: Character;
 }
 
 export function CodeOfHonorTracker({ selection, onUpdate }: CodeOfHonorTrackerProps) {

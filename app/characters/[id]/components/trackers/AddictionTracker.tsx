@@ -1,16 +1,32 @@
 "use client";
 
 import React, { useState } from "react";
-import { AlertCircle, Calendar, History, Activity, Plus } from "lucide-react";
-import type { QualitySelection, AddictionState } from "@/lib/types";
+import { AlertCircle, Calendar, History, Activity, Plus, Dice5 } from "lucide-react";
+import type { Character, QualitySelection, AddictionState } from "@/lib/types";
+import { executeRoll } from "@/lib/rules/action-resolution/dice-engine";
+
+const SEVERITY_THRESHOLD: Record<AddictionState["severity"], number> = {
+  mild: 2,
+  moderate: 3,
+  severe: 4,
+  burnout: 5,
+};
+
+interface CravingTestResult {
+  hits: number;
+  threshold: number;
+  resisted: boolean;
+}
 
 interface AddictionTrackerProps {
   selection: QualitySelection;
   onUpdate: (updates: Partial<AddictionState>) => Promise<void>;
+  character: Character;
 }
 
-export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps) {
+export function AddictionTracker({ selection, onUpdate, character }: AddictionTrackerProps) {
   const [isUpdating, setIsUpdating] = useState(false);
+  const [rollResult, setRollResult] = useState<CravingTestResult | null>(null);
 
   const dynamicState = selection.dynamicState;
   if (!dynamicState || dynamicState.type !== "addiction") return null;
@@ -45,6 +61,25 @@ export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps)
         withdrawalActive: false,
         daysClean: 0,
       });
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handleCravingTest = async () => {
+    setIsUpdating(true);
+    setRollResult(null);
+    try {
+      const pool = (character.attributes.body || 1) + (character.attributes.willpower || 1);
+      const threshold = SEVERITY_THRESHOLD[state.severity];
+      const result = executeRoll(pool);
+      const resisted = result.hits >= threshold;
+      setRollResult({ hits: result.hits, threshold, resisted });
+      if (!resisted) {
+        await onUpdate({ cravingActive: true });
+      } else {
+        await onUpdate({ cravingActive: false });
+      }
     } finally {
       setIsUpdating(false);
     }
@@ -138,13 +173,32 @@ export function AddictionTracker({ selection, onUpdate }: AddictionTrackerProps)
           Log Dose
         </button>
         <button
+          onClick={handleCravingTest}
           disabled={isUpdating}
           className="flex-1 flex items-center justify-center gap-2 py-2.5 bg-muted hover:bg-muted-foreground/10 text-foreground border border-border rounded text-xs font-bold transition-colors shadow-sm"
         >
-          <Activity className="w-4 h-4" />
+          <Dice5 className="w-4 h-4" />
           Craving Test
         </button>
       </div>
+
+      {/* Roll Result */}
+      {rollResult && (
+        <div
+          className={`p-3 rounded border text-xs font-medium ${
+            rollResult.resisted
+              ? "bg-emerald-500/10 border-emerald-500/30 text-emerald-500"
+              : "bg-red-500/10 border-red-500/30 text-red-500"
+          }`}
+        >
+          <div className="flex items-center justify-between">
+            <span className="font-bold">{rollResult.resisted ? "Resisted!" : "Failed!"}</span>
+            <span className="font-mono">
+              {rollResult.hits} hits vs {rollResult.threshold} threshold
+            </span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

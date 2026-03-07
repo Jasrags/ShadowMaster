@@ -67,6 +67,7 @@ export function DynamicStateModal({
     const props = {
       selection,
       onUpdate: handleUpdate,
+      character,
     };
 
     switch (type) {
