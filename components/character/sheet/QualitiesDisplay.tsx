@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import type { Character, QualitySelection } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import type { CharacterStateFlags } from "@/lib/types/effects";
@@ -64,11 +64,13 @@ function StateTogglePill({
   active,
   activeColor,
   onToggle,
+  flash,
 }: {
   label: string;
   active: boolean;
   activeColor: "red" | "amber";
   onToggle: () => void;
+  flash?: boolean;
 }) {
   const colors = {
     red: {
@@ -90,9 +92,9 @@ function StateTogglePill({
         e.stopPropagation();
         onToggle();
       }}
-      className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase transition-colors ${
+      className={`shrink-0 rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase transition-all ${
         active ? colors[activeColor].active : colors[activeColor].inactive
-      }`}
+      }${flash ? " ring-2 ring-emerald-500/60" : ""}`}
       title={`${active ? "Deactivate" : "Activate"} ${label}`}
     >
       {label}
@@ -134,6 +136,7 @@ function QualityRow({
   onSettingsClick,
   onStateToggle,
   onFirstMeetingToggle,
+  successFlash,
 }: {
   selection: QualitySelection;
   data: QualityData | undefined;
@@ -144,6 +147,7 @@ function QualityRow({
   onSettingsClick: (sel: QualitySelection) => void;
   onStateToggle?: (qualityId: string, field: string, value: boolean) => void;
   onFirstMeetingToggle?: () => void;
+  successFlash?: string | null;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -293,6 +297,7 @@ function QualityRow({
                   active={withdrawalActive}
                   activeColor="red"
                   onToggle={() => onStateToggle(id, "withdrawalActive", !withdrawalActive)}
+                  flash={successFlash === `${id}:withdrawalActive`}
                 />
               )}
               {hasExposureTrigger && onStateToggle && (
@@ -301,6 +306,7 @@ function QualityRow({
                   active={exposedActive}
                   activeColor="amber"
                   onToggle={() => onStateToggle(id, "currentlyExposed", !exposedActive)}
+                  flash={successFlash === `${id}:currentlyExposed`}
                 />
               )}
             </>
@@ -403,6 +409,18 @@ export function QualitiesDisplay({
   const [activeSelection, setActiveSelection] = useState<QualitySelection | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [localFirstMeeting, setLocalFirstMeeting] = useState(false);
+  const [toggleError, setToggleError] = useState<string | null>(null);
+  const [successFlash, setSuccessFlash] = useState<string | null>(null);
+  const errorTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Clean up timers on unmount
+  useEffect(() => {
+    return () => {
+      if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+      if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    };
+  }, []);
 
   // Use controlled state if provided, otherwise fall back to local state
   const firstMeeting = controlledFirstMeeting ?? localFirstMeeting;
@@ -423,11 +441,28 @@ export function QualitiesDisplay({
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ [field]: value }),
         });
-        if (!res.ok) return;
+        if (!res.ok) {
+          const body = await res.json().catch(() => null);
+          const message = body?.error || `Failed to update state (${res.status})`;
+          setToggleError(message);
+          if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+          errorTimerRef.current = setTimeout(() => setToggleError(null), 4000);
+          return;
+        }
         const data = await res.json();
+        setToggleError(null);
         onUpdate(data.character);
-      } catch {
-        // Toggle failed — UI stays unchanged
+
+        // Brief success flash
+        const flashKey = `${qualityId}:${field}`;
+        setSuccessFlash(flashKey);
+        if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+        flashTimerRef.current = setTimeout(() => setSuccessFlash(null), 600);
+      } catch (err: unknown) {
+        const message = err instanceof Error ? err.message : "An unknown error occurred";
+        setToggleError(message);
+        if (errorTimerRef.current) clearTimeout(errorTimerRef.current);
+        errorTimerRef.current = setTimeout(() => setToggleError(null), 4000);
       }
     },
     [character.id, onUpdate]
@@ -459,6 +494,14 @@ export function QualitiesDisplay({
         icon={<ShieldCheck className="h-4 w-4 text-zinc-400" />}
         collapsible
       >
+        {toggleError && (
+          <div
+            data-testid="toggle-error-banner"
+            className="mb-3 p-3 bg-red-500/10 border border-red-500/20 rounded text-red-500 text-xs font-medium"
+          >
+            {toggleError}
+          </div>
+        )}
         {!hasQualities ? (
           <p className="px-1 text-sm italic text-zinc-500">No qualities selected</p>
         ) : (
@@ -492,6 +535,7 @@ export function QualitiesDisplay({
                             characterStateFlags={characterStateFlags}
                             onSettingsClick={handleSettingsClick}
                             onStateToggle={onUpdate ? handleStateToggle : undefined}
+                            successFlash={successFlash}
                             onFirstMeetingToggle={() => {
                               const newValue = !firstMeeting;
                               if (onFirstMeetingChange) {
