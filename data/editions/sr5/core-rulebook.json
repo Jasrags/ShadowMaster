@@ -5782,6 +5782,7 @@
             "name": "Code of Honor",
             "karmaBonus": 15,
             "summary": "Will not kill or allow killing of a protected group.",
+            "dynamicState": "code-of-honor",
             "requiresSpecification": true,
             "specificationLabel": "Protected Group",
             "specificationOptions": [
@@ -5914,6 +5915,7 @@
             "name": "Dependents",
             "karmaBonus": 3,
             "summary": "Loved ones require time/resources. Increases lifestyle cost and skill learning time.",
+            "dynamicState": "dependent",
             "hasRating": true,
             "minRating": 1,
             "maxRating": 3,

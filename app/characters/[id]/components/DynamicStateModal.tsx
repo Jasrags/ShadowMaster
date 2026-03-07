@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Dialog, Heading, Modal, ModalOverlay } from "react-aria-components";
 import { X, Settings2 } from "lucide-react";
 import type {
@@ -32,6 +32,7 @@ export function DynamicStateModal({
   onUpdate,
 }: DynamicStateModalProps) {
   const [error, setError] = useState<string | null>(null);
+  const [isInitializing, setIsInitializing] = useState(false);
 
   const handleUpdate = async (
     updates: Partial<AddictionState | AllergyState | DependentState | CodeOfHonorState>
@@ -62,6 +63,14 @@ export function DynamicStateModal({
     }
   };
 
+  // Auto-initialize dynamic state when modal opens for uninitialized qualities
+  useEffect(() => {
+    if (isOpen && !selection.dynamicState && !isInitializing) {
+      setIsInitializing(true);
+      handleUpdate({}).finally(() => setIsInitializing(false));
+    }
+  }, [isOpen, selection.dynamicState]); // eslint-disable-line react-hooks/exhaustive-deps
+
   const renderTracker = () => {
     const type = selection.dynamicState?.type;
     const props = {
@@ -82,7 +91,9 @@ export function DynamicStateModal({
       default:
         return (
           <div className="p-8 text-center text-muted-foreground italic">
-            No specialized tracker available for {type} state.
+            {isInitializing || !selection.dynamicState
+              ? "Initializing tracker..."
+              : `No specialized tracker available for ${type} state.`}
           </div>
         );
     }

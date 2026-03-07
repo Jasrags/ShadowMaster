@@ -48,6 +48,8 @@ function renderDynamicStateText(
       return `${dynamicState.state.severity.toUpperCase()} \u2022 ${dynamicState.state.allergen} (${dynamicState.state.prevalence})`;
     case "dependent":
       return `TIER ${dynamicState.state.tier} \u2022 ${dynamicState.state.relationship} (${dynamicState.state.currentStatus})`;
+    case "code-of-honor":
+      return `${dynamicState.state.codeName} \u2022 ${dynamicState.state.violations.length} violation${dynamicState.state.violations.length !== 1 ? "s" : ""} (${dynamicState.state.totalKarmaLost} karma lost)`;
     default:
       return "";
   }
@@ -357,15 +359,17 @@ function QualityRow({
           )}
 
           {/* Dynamic state text + settings button */}
-          {rawSelection.dynamicState && (
+          {(rawSelection.dynamicState || data?.dynamicState) && (
             <div className="flex items-center justify-between">
-              <div
-                data-testid="dynamic-state-text"
-                className="flex items-center gap-1.5 text-[9px] font-medium text-amber-500 dark:text-amber-400"
-              >
-                <AlertCircle className="h-2.5 w-2.5" />
-                <span>{renderDynamicStateText(rawSelection.dynamicState)}</span>
-              </div>
+              {rawSelection.dynamicState && (
+                <div
+                  data-testid="dynamic-state-text"
+                  className="flex items-center gap-1.5 text-[9px] font-medium text-amber-500 dark:text-amber-400"
+                >
+                  <AlertCircle className="h-2.5 w-2.5" />
+                  <span>{renderDynamicStateText(rawSelection.dynamicState)}</span>
+                </div>
+              )}
               <button
                 data-testid="settings-button"
                 onClick={(e) => {
