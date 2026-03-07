@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import { Heart, ShieldCheck, ShieldAlert, HelpCircle, Clock, Coins, UserCheck } from "lucide-react";
-import type { QualitySelection, DependentState } from "@/lib/types";
+import type { Character, QualitySelection, DependentState } from "@/lib/types";
 
 interface DependentTrackerProps {
   selection: QualitySelection;
   onUpdate: (updates: Partial<DependentState>) => Promise<void>;
+  character?: Character;
 }
 
 export function DependentTracker({ selection, onUpdate }: DependentTrackerProps) {

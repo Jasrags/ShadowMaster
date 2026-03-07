@@ -2,11 +2,12 @@
 
 import React, { useState } from "react";
 import { AlertCircle, Wind, ShieldAlert, Zap } from "lucide-react";
-import type { QualitySelection, AllergyState } from "@/lib/types";
+import type { Character, QualitySelection, AllergyState } from "@/lib/types";
 
 interface AllergyTrackerProps {
   selection: QualitySelection;
   onUpdate: (updates: Partial<AllergyState>) => Promise<void>;
+  character?: Character;
 }
 
 export function AllergyTracker({ selection, onUpdate }: AllergyTrackerProps) {
