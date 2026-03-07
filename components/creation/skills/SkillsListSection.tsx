@@ -17,6 +17,7 @@ import { MAX_GROUP_RATING } from "./useSkillsCardHandlers";
 import type { UseGroupBreakingResult } from "./useGroupBreaking";
 import type { UseKarmaPurchaseResult } from "./useKarmaPurchase";
 import type { UseSkillDesignationsResult } from "./useSkillDesignations";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
 
 // =============================================================================
 // TYPES
@@ -45,6 +46,8 @@ export interface SkillsListSectionProps {
   onOpenGroupModal: () => void;
   /** Open skill modal callback */
   onOpenSkillModal: () => void;
+  /** Augmented attribute values for dice pool display */
+  augmentedAttributes?: Record<string, number>;
 }
 
 // =============================================================================
@@ -63,6 +66,7 @@ export function SkillsListSection({
   karmaRemaining,
   onOpenGroupModal,
   onOpenSkillModal,
+  augmentedAttributes,
 }: SkillsListSectionProps) {
   const {
     getGroupData,
@@ -197,6 +201,32 @@ export function SkillsListSection({
               const canDesignate =
                 !isGroupSkill && hasFreeSkillConfigs && canSkillBeDesignated(entry.skillId);
 
+              // Compute dice pool if augmented attributes are available
+              const attrValue = augmentedAttributes?.[skillData.linkedAttribute];
+              const dicePool = attrValue !== undefined ? attrValue + entry.rating : undefined;
+
+              // Build tooltip for dice pool
+              const ATTR_DISPLAY_NAMES: Record<string, string> = {
+                body: "Body",
+                agility: "Agility",
+                reaction: "Reaction",
+                strength: "Strength",
+                willpower: "Willpower",
+                logic: "Logic",
+                intuition: "Intuition",
+                charisma: "Charisma",
+                magic: "Magic",
+                resonance: "Resonance",
+                edge: "Edge",
+              };
+              const attrDisplayName =
+                ATTR_DISPLAY_NAMES[skillData.linkedAttribute] ||
+                getCoreAttributeName(skillData.linkedAttribute);
+              const dicePoolTooltip =
+                attrValue !== undefined
+                  ? `${attrDisplayName} (${attrValue}) + ${skillData.name} (${entry.rating}) = ${attrValue + entry.rating} dice`
+                  : undefined;
+
               return (
                 <SkillListItem
                   key={entry.skillId}
@@ -205,6 +235,9 @@ export function SkillsListSection({
                   rating={entry.rating}
                   maxRating={skillMaxRating}
                   specializations={entry.specializations}
+                  dicePool={dicePool}
+                  augmentedAttributeValue={attrValue}
+                  dicePoolTooltip={dicePoolTooltip}
                   isGroupSkill={isGroupSkill}
                   groupName={entry.source.type === "group" ? entry.source.groupName : undefined}
                   canIncrease={!isGroupSkill && purchaseInfo.mode === "skill-points"}

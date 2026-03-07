@@ -12,12 +12,13 @@
  * - Condition Monitors: Physical CM, Stun CM, Overflow
  * - Secondary Stats: Composure, Judge Intentions, Memory, Lift/Carry
  * - Movement: Walk, Run speeds
+ * - Dice Pools: Defense pool + top selected skill pools
  */
 
 import { useMemo, useState } from "react";
-import { useMetatypes, useRuleset } from "@/lib/rules";
-import type { CreationState, CyberwareItem, BiowareItem } from "@/lib/types";
-import type { CreationSelections } from "@/lib/types/creation-selections";
+import { useSkills } from "@/lib/rules";
+import type { CreationState } from "@/lib/types";
+import type { SkillGroupValue } from "@/lib/types/creation-selections";
 import { CreationCard } from "./shared";
 import {
   Activity,
@@ -28,8 +29,11 @@ import {
   Sparkles,
   ChevronDown,
   ChevronUp,
+  Dice5,
 } from "lucide-react";
-import { useCreationEffects } from "./hooks/useCreationEffects";
+import { useAugmentedAttributes } from "./hooks/useAugmentedAttributes";
+import { getCoreAttributeName } from "@/lib/constants/attributes";
+import { getGroupRating, isGroupBroken } from "@/lib/rules/skills/group-utils";
 
 // =============================================================================
 // TYPES
@@ -62,6 +66,34 @@ interface DerivedStats {
   runSpeed: number;
   // Essence
   essence: number;
+}
+
+interface PoolEntry {
+  name: string;
+  pool: number;
+  formula: string;
+}
+
+// =============================================================================
+// ATTRIBUTE DISPLAY NAME HELPER
+// =============================================================================
+
+const ATTRIBUTE_DISPLAY_NAMES: Record<string, string> = {
+  body: "Body",
+  agility: "Agility",
+  reaction: "Reaction",
+  strength: "Strength",
+  willpower: "Willpower",
+  logic: "Logic",
+  intuition: "Intuition",
+  charisma: "Charisma",
+  magic: "Magic",
+  resonance: "Resonance",
+  edge: "Edge",
+};
+
+function getAttributeDisplayName(key: string): string {
+  return ATTRIBUTE_DISPLAY_NAMES[key] || getCoreAttributeName(key);
 }
 
 // =============================================================================
@@ -99,135 +131,31 @@ function StatBlock({
 // =============================================================================
 
 export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
-  const metatypes = useMetatypes();
-  const { ruleset } = useRuleset();
   const selectedMetatype = state.selections.metatype as string;
   const [showEffects, setShowEffects] = useState(false);
+  const [showPools, setShowPools] = useState(false);
+  const { activeSkills, skillGroups } = useSkills();
 
-  // Unified effects from creation selections
-  const { passiveEffects, sources } = useCreationEffects(
-    state.selections as CreationSelections,
-    ruleset
-  );
+  // Use shared augmented attributes hook
+  const {
+    attributes: augmentedAttributes,
+    augmentationEffects,
+    effectSources: sources,
+    unifiedInitiativeBonus,
+  } = useAugmentedAttributes(state);
 
-  // Get metatype data for attribute minimums
-  const metatypeData = useMemo(() => {
-    return metatypes.find((m) => m.id === selectedMetatype);
-  }, [metatypes, selectedMetatype]);
-
-  // Get current attributes from state
-  const attributes = useMemo(() => {
-    return (state.selections.attributes || {}) as Record<string, number>;
-  }, [state.selections.attributes]);
-
-  // Calculate augmentation effects (essence loss, attribute bonuses, initiative dice)
-  const augmentationEffects = useMemo(() => {
-    const cyberware = (state.selections.cyberware || []) as CyberwareItem[];
-    const bioware = (state.selections.bioware || []) as BiowareItem[];
-
-    let essenceLoss = 0;
-    let initiativeDiceBonus = 0;
-    const attributeBonuses: Record<string, number> = {};
-
-    // Process cyberware
-    cyberware.forEach((item) => {
-      essenceLoss += item.essenceCost || 0;
-
-      // Check for initiative dice bonuses
-      if (item.initiativeDiceBonus) {
-        initiativeDiceBonus += item.initiativeDiceBonus;
-      }
-
-      // Check for attribute bonuses
-      if (item.attributeBonuses) {
-        Object.entries(item.attributeBonuses).forEach(([attr, value]) => {
-          attributeBonuses[attr] = (attributeBonuses[attr] || 0) + value;
-        });
-      }
-    });
-
-    // Process bioware
-    bioware.forEach((item) => {
-      essenceLoss += item.essenceCost || 0;
-
-      // Check for attribute bonuses
-      if (item.attributeBonuses) {
-        Object.entries(item.attributeBonuses).forEach(([attr, value]) => {
-          attributeBonuses[attr] = (attributeBonuses[attr] || 0) + value;
-        });
-      }
-    });
-
-    return {
-      essenceLoss,
-      remainingEssence: Math.max(0, 6 - essenceLoss),
-      initiativeDiceBonus,
-      attributeBonuses,
-    };
-  }, [state.selections.cyberware, state.selections.bioware]);
-
-  // Extract per-attribute modifiers from unified effects
-  const unifiedAttributeBonuses = useMemo(() => {
-    const bonuses: Record<string, number> = {};
-    if (!passiveEffects) return bonuses;
-
-    // Attribute modifiers from unified effects (e.g., quality "attribute-modifier" effects)
-    // These are already resolved and stacked
-    for (const resolved of [
-      ...passiveEffects.dicePoolModifiers,
-      ...passiveEffects.limitModifiers,
-      ...passiveEffects.initiativeModifiers,
-    ]) {
-      // Only extract attribute-modifier type effects for stat calculation
-      if (resolved.effect.type === "attribute-modifier" && resolved.effect.target?.attribute) {
-        const attr = resolved.effect.target.attribute;
-        bonuses[attr] = (bonuses[attr] || 0) + resolved.resolvedValue;
-      }
-    }
-
-    return bonuses;
-  }, [passiveEffects]);
-
-  // Unified initiative modifier from effects system
-  const unifiedInitiativeBonus = passiveEffects?.totalInitiativeModifier ?? 0;
-
-  // Calculate derived stats
+  // Calculate derived stats from augmented attributes
   const derivedStats = useMemo((): DerivedStats => {
-    // Helper to get attribute value with metatype minimum fallback
-    const getAttr = (attrId: string): number => {
-      if (attributes[attrId] !== undefined) {
-        return attributes[attrId];
-      }
-      // Fall back to metatype minimum
-      if (metatypeData?.attributes?.[attrId]) {
-        const attrData = metatypeData.attributes[attrId];
-        if (typeof attrData === "object" && "min" in attrData) {
-          return attrData.min;
-        }
-      }
-      return 1; // Default minimum
-    };
-
-    // Merge manual augmentation bonuses with unified effect attribute bonuses
-    // Manual path covers items not yet migrated to unified effects
-    const augBonuses = augmentationEffects.attributeBonuses;
-    const mergedBonuses: Record<string, number> = { ...augBonuses };
-    for (const [attr, val] of Object.entries(unifiedAttributeBonuses)) {
-      mergedBonuses[attr] = (mergedBonuses[attr] || 0) + val;
-    }
-
-    // Base attributes with combined bonuses
-    const body = getAttr("body") + (mergedBonuses.body || 0);
-    const agility = getAttr("agility") + (mergedBonuses.agility || 0);
-    const reaction = getAttr("reaction") + (mergedBonuses.reaction || 0);
-    const strength = getAttr("strength") + (mergedBonuses.strength || 0);
-    const willpower = getAttr("willpower") + (mergedBonuses.willpower || 0);
-    const logic = getAttr("logic") + (mergedBonuses.logic || 0);
-    const intuition = getAttr("intuition") + (mergedBonuses.intuition || 0);
-    const charisma = getAttr("charisma") + (mergedBonuses.charisma || 0);
+    const body = augmentedAttributes.body || 1;
+    const agility = augmentedAttributes.agility || 1;
+    const reaction = augmentedAttributes.reaction || 1;
+    const strength = augmentedAttributes.strength || 1;
+    const willpower = augmentedAttributes.willpower || 1;
+    const logic = augmentedAttributes.logic || 1;
+    const intuition = augmentedAttributes.intuition || 1;
+    const charisma = augmentedAttributes.charisma || 1;
 
     const essence = augmentationEffects.remainingEssence;
-    // Combine manual initiative dice bonus with unified initiative modifier
     const initiativeDice = 1 + augmentationEffects.initiativeDiceBonus + unifiedInitiativeBonus;
 
     return {
@@ -253,16 +181,80 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
       // Essence
       essence,
     };
+  }, [augmentedAttributes, augmentationEffects, unifiedInitiativeBonus]);
+
+  // Compute dice pools for selected skills
+  const poolEntries = useMemo((): PoolEntry[] => {
+    const skills = (state.selections.skills || {}) as Record<string, number>;
+    const groups = (state.selections.skillGroups || {}) as Record<string, SkillGroupValue>;
+    const entries: PoolEntry[] = [];
+
+    // Individual skills
+    for (const [skillId, rating] of Object.entries(skills)) {
+      const skillData = activeSkills.find((s) => s.id === skillId);
+      if (!skillData || rating <= 0) continue;
+
+      const attrValue = augmentedAttributes[skillData.linkedAttribute] || 0;
+      const pool = attrValue + rating;
+      const attrName = getAttributeDisplayName(skillData.linkedAttribute);
+      entries.push({
+        name: skillData.name,
+        pool,
+        formula: `${attrName} (${attrValue}) + ${skillData.name} (${rating})`,
+      });
+    }
+
+    // Group skills
+    for (const [groupId, groupValue] of Object.entries(groups)) {
+      if (isGroupBroken(groupValue)) continue;
+      const groupData = skillGroups.find((g) => g.id === groupId);
+      if (!groupData) continue;
+      const rating = getGroupRating(groupValue);
+      if (rating <= 0) continue;
+
+      for (const skillId of groupData.skills) {
+        const skillData = activeSkills.find((s) => s.id === skillId);
+        if (!skillData) continue;
+
+        const attrValue = augmentedAttributes[skillData.linkedAttribute] || 0;
+        const pool = attrValue + rating;
+        const attrName = getAttributeDisplayName(skillData.linkedAttribute);
+        entries.push({
+          name: skillData.name,
+          pool,
+          formula: `${attrName} (${attrValue}) + ${skillData.name} (${rating})`,
+        });
+      }
+    }
+
+    // Sort by pool descending, take top 8
+    entries.sort((a, b) => b.pool - a.pool);
+    return entries.slice(0, 8);
   }, [
-    attributes,
-    metatypeData,
-    augmentationEffects,
-    unifiedAttributeBonuses,
-    unifiedInitiativeBonus,
+    state.selections.skills,
+    state.selections.skillGroups,
+    activeSkills,
+    skillGroups,
+    augmentedAttributes,
   ]);
 
+  // Defense pool (always available if attributes exist)
+  const defensePool = useMemo(() => {
+    const reaction = augmentedAttributes.reaction || 0;
+    const intuition = augmentedAttributes.intuition || 0;
+    if (reaction === 0 && intuition === 0) return null;
+    return {
+      pool: reaction + intuition,
+      formula: `Reaction (${reaction}) + Intuition (${intuition})`,
+    };
+  }, [augmentedAttributes]);
+
+  const hasSkillPools = poolEntries.length > 0;
+  const hasPools = defensePool !== null || hasSkillPools;
+
   // Check if we have any attributes selected
-  const hasAttributes = Object.keys(attributes).length > 0 || !!selectedMetatype;
+  const coreAttributes = (state.selections.attributes || {}) as Record<string, number>;
+  const hasAttributes = Object.keys(coreAttributes).length > 0 || !!selectedMetatype;
 
   return (
     <CreationCard
@@ -410,6 +402,69 @@ export function DerivedStatsCard({ state }: DerivedStatsCardProps) {
             />
           </div>
         </div>
+
+        {/* Dice Pools */}
+        {hasPools && (
+          <div className="rounded border border-cyan-200 dark:border-cyan-800">
+            <button
+              onClick={() => setShowPools(!showPools)}
+              className="flex w-full items-center justify-between px-3 py-2 text-xs font-medium text-cyan-700 hover:bg-cyan-50 dark:text-cyan-300 dark:hover:bg-cyan-900/30"
+            >
+              <span className="flex items-center gap-1">
+                <Dice5 className="h-3 w-3" />
+                Dice Pools
+                {defensePool && (
+                  <span className="ml-1 rounded bg-cyan-100 px-1 py-0.5 font-mono text-[10px] dark:bg-cyan-900/40">
+                    Def {defensePool.pool}
+                  </span>
+                )}
+              </span>
+              {showPools ? <ChevronUp className="h-3 w-3" /> : <ChevronDown className="h-3 w-3" />}
+            </button>
+            {showPools && (
+              <div className="border-t border-cyan-200 px-3 py-2 dark:border-cyan-800">
+                <div className="space-y-1.5">
+                  {/* Defense Pool */}
+                  {defensePool && (
+                    <div className="flex items-center justify-between" title={defensePool.formula}>
+                      <span className="text-xs font-medium text-zinc-700 dark:text-zinc-300">
+                        Defense
+                      </span>
+                      <span className="flex items-center gap-1.5">
+                        <span className="text-[10px] text-zinc-500 dark:text-zinc-400">
+                          REA + INT
+                        </span>
+                        <span className="rounded bg-cyan-100 px-1.5 py-0.5 font-mono text-xs font-bold text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
+                          {defensePool.pool}d
+                        </span>
+                      </span>
+                    </div>
+                  )}
+                  {/* Top Skill Pools */}
+                  {poolEntries.map((entry) => (
+                    <div
+                      key={entry.name}
+                      className="flex items-center justify-between"
+                      title={entry.formula}
+                    >
+                      <span className="truncate text-xs text-zinc-600 dark:text-zinc-400">
+                        {entry.name}
+                      </span>
+                      <span className="ml-2 shrink-0 rounded bg-cyan-100 px-1.5 py-0.5 font-mono text-xs font-bold text-cyan-700 dark:bg-cyan-900/40 dark:text-cyan-300">
+                        {entry.pool}d
+                      </span>
+                    </div>
+                  ))}
+                  {!hasSkillPools && (
+                    <div className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                      Add skills to see skill pools
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Essence (if there's essence loss) */}
         {augmentationEffects.essenceLoss > 0 && (

@@ -32,6 +32,7 @@ import { AlertTriangle, Star, RefreshCw } from "lucide-react";
 import { useSkillsCardHandlers, type SkillListEntry } from "./skills/useSkillsCardHandlers";
 import { SkillsListSection } from "./skills/SkillsListSection";
 import { SkillsModalsSection } from "./skills/SkillsModalsSection";
+import { useAugmentedAttributes } from "./hooks/useAugmentedAttributes";
 
 // =============================================================================
 // CONSTANTS
@@ -218,6 +219,9 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
   );
 
   const { getSkillData } = handlers;
+
+  // Get augmented attributes for dice pool display
+  const { attributes: augmentedAttributes } = useAugmentedAttributes(state);
 
   // Calculate total specializations (for display purposes)
   const totalSpecializations = useMemo(() => {
@@ -490,6 +494,7 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
             karmaRemaining={karmaRemaining}
             onOpenGroupModal={() => setIsGroupModalOpen(true)}
             onOpenSkillModal={() => setIsSkillModalOpen(true)}
+            augmentedAttributes={augmentedAttributes}
           />
 
           {/* Footer Summary */}
