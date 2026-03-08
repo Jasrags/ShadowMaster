@@ -11,16 +11,15 @@ import {
   getActionTypeDescription,
   getTestTypeForAction,
   getSkillForAction,
+  hasVehicleControlRig,
+  getVehicleControlRig,
 } from "@/lib/rules/rigging";
+import { useRiggingSession, useJumpedInState } from "@/lib/rigging";
+import { CONTROL_MODE_BADGE } from "./rigging-helpers";
 
 // ---------------------------------------------------------------------------
 // Action definitions grouped by category
 // ---------------------------------------------------------------------------
-
-interface ActionDef {
-  type: VehicleActionType;
-  category: string;
-}
 
 const ACTION_CATEGORIES: { key: string; label: string; actions: VehicleActionType[] }[] = [
   {
@@ -48,9 +47,22 @@ interface ActionRowProps {
   actionType: VehicleActionType;
   character: Character;
   onSelect?: (pool: number, label: string) => void;
+  /** VCR control bonus (added when jumped in) */
+  vcrBonus: number;
+  /** Whether character is currently jumped in */
+  isJumpedIn: boolean;
+  /** Whether a rigging session is active */
+  isSessionActive: boolean;
 }
 
-function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
+function ActionRow({
+  actionType,
+  character,
+  onSelect,
+  vcrBonus,
+  isJumpedIn: jumpedIn,
+  isSessionActive,
+}: ActionRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
   const name = getActionTypeDescription(actionType);
@@ -59,7 +71,7 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
   const testType = getTestTypeForAction(actionType);
   const skill = getSkillForAction(actionType);
 
-  // Estimate a dice pool from character skills (simplified, no rigging state)
+  // Base dice pool from character skills
   const skillRating =
     skill === "gunnery"
       ? (character.skills?.gunnery ?? 0)
@@ -74,13 +86,24 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
         ? (character.attributes?.intuition ?? 0)
         : (character.attributes?.reaction ?? 0);
 
-  const estimatedPool = skillRating + attrValue;
+  const basePool = skillRating + attrValue;
+
+  // Apply VCR bonus when jumped in
+  const activeVcrBonus = jumpedIn ? vcrBonus : 0;
+  const estimatedPool = basePool + activeVcrBonus;
+
+  // Determine if action is disabled (requires jumped-in but not jumped in)
+  const isDisabled = isSessionActive && needsJumpedIn && !jumpedIn;
 
   return (
     <div
       data-testid="action-row"
-      onClick={() => setIsExpanded(!isExpanded)}
-      className="cursor-pointer px-3 py-1.5 transition-colors hover:bg-zinc-100 dark:hover:bg-zinc-700/30 [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50"
+      onClick={() => !isDisabled && setIsExpanded(!isExpanded)}
+      className={`px-3 py-1.5 transition-colors [&+&]:border-t [&+&]:border-zinc-200 dark:[&+&]:border-zinc-800/50 ${
+        isDisabled
+          ? "cursor-not-allowed opacity-50"
+          : "cursor-pointer hover:bg-zinc-100 dark:hover:bg-zinc-700/30"
+      }`}
     >
       {/* Collapsed row */}
       <div className="flex min-w-0 items-center gap-1.5">
@@ -99,9 +122,13 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
         {needsJumpedIn && (
           <span
             data-testid="jumped-in-badge"
-            className="shrink-0 rounded border border-amber-400/30 bg-amber-400/10 px-1 text-[9px] font-bold uppercase text-amber-600 dark:text-amber-400"
+            className={`shrink-0 rounded border px-1 text-[9px] font-bold uppercase ${
+              isDisabled
+                ? "border-red-400/30 bg-red-400/10 text-red-500 dark:text-red-400"
+                : "border-amber-400/30 bg-amber-400/10 text-amber-600 dark:text-amber-400"
+            }`}
           >
-            Jumped-In
+            {isDisabled ? "Requires Jump-In" : "Jumped-In"}
           </span>
         )}
         {!needsJumpedIn && canRemote && (
@@ -115,8 +142,18 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
 
         <span className="ml-auto" />
 
+        {/* VCR bonus indicator */}
+        {activeVcrBonus > 0 && (
+          <span
+            data-testid="vcr-bonus-badge"
+            className="shrink-0 rounded bg-emerald-100 px-1 py-0.5 font-mono text-[9px] font-semibold text-emerald-700 dark:bg-emerald-900/30 dark:text-emerald-400"
+          >
+            +{activeVcrBonus} VCR
+          </span>
+        )}
+
         {/* Dice pool pill */}
-        {estimatedPool > 0 && (
+        {estimatedPool > 0 && !isDisabled && (
           <button
             data-testid="pool-pill"
             onClick={(e) => {
@@ -131,7 +168,7 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
       </div>
 
       {/* Expanded content */}
-      {isExpanded && (
+      {isExpanded && !isDisabled && (
         <div
           data-testid="expanded-content"
           onClick={(e) => e.stopPropagation()}
@@ -151,14 +188,13 @@ function ActionRow({ actionType, character, onSelect }: ActionRowProps) {
               </span>
             </span>
           </div>
-          {estimatedPool > 0 && (
-            <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
-              Pool:{" "}
-              <span className="font-mono font-medium text-zinc-700 dark:text-zinc-300">
-                {attrValue} (attr) + {skillRating} (skill) = {estimatedPool}
-              </span>
-            </div>
-          )}
+          <div className="text-[11px] text-zinc-500 dark:text-zinc-400">
+            Pool:{" "}
+            <span className="font-mono font-medium text-zinc-700 dark:text-zinc-300">
+              {attrValue} (attr) + {skillRating} (skill)
+              {activeVcrBonus > 0 && ` + ${activeVcrBonus} (VCR)`} = {estimatedPool}
+            </span>
+          </div>
           {needsJumpedIn && (
             <div className="text-[11px] text-amber-600 dark:text-amber-400">
               Requires jumped-in control via VCR
@@ -180,9 +216,24 @@ interface VehicleActionsDisplayProps {
   editable?: boolean;
 }
 
-export function VehicleActionsDisplay({ character, onSelect }: VehicleActionsDisplayProps) {
+export function VehicleActionsDisplay({
+  character,
+  onSelect,
+  editable = false,
+}: VehicleActionsDisplayProps) {
   const hasVehicles = (character.vehicles?.length ?? 0) > 0;
   const hasDrones = (character.drones?.length ?? 0) > 0;
+
+  const { isSessionActive } = useRiggingSession();
+  const { isJumpedIn } = useJumpedInState();
+
+  // Get VCR bonus
+  const hasVCR = hasVehicleControlRig(character);
+  const vcr = hasVCR ? getVehicleControlRig(character) : null;
+  const vcrBonus = vcr?.controlBonus ?? 0;
+
+  // Determine current control mode for badge
+  const controlMode = isSessionActive ? (isJumpedIn ? "jumped-in" : "remote") : "manual";
 
   if (!hasVehicles && !hasDrones) return null;
 
@@ -195,6 +246,26 @@ export function VehicleActionsDisplay({ character, onSelect }: VehicleActionsDis
       defaultCollapsed
     >
       <div className="space-y-3">
+        {/* Control mode badge */}
+        {editable && isSessionActive && (
+          <div data-testid="control-mode-indicator" className="flex items-center gap-2">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
+              Control Mode
+            </span>
+            <span
+              data-testid="control-mode-badge"
+              className={`rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide ${CONTROL_MODE_BADGE[controlMode].style}`}
+            >
+              {CONTROL_MODE_BADGE[controlMode].label}
+            </span>
+            {hasVCR && vcr && (
+              <span className="rounded bg-zinc-200 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-zinc-900 dark:bg-zinc-800 dark:text-zinc-50">
+                VCR R{vcr.rating}
+              </span>
+            )}
+          </div>
+        )}
+
         {ACTION_CATEGORIES.map(({ key, label, actions }) => (
           <div key={key}>
             <div className="mb-1 text-[10px] font-semibold uppercase tracking-wider text-zinc-500">
@@ -207,6 +278,9 @@ export function VehicleActionsDisplay({ character, onSelect }: VehicleActionsDis
                   actionType={actionType}
                   character={character}
                   onSelect={onSelect}
+                  vcrBonus={vcrBonus}
+                  isJumpedIn={isJumpedIn}
+                  isSessionActive={isSessionActive}
                 />
               ))}
             </div>

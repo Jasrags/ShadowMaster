@@ -64,6 +64,13 @@ vi.mock("@/lib/rules/rigging", () => ({
     if (actionType === "sensor_targeting") return "perception";
     return "pilot";
   },
+  hasVehicleControlRig: () => false,
+  getVehicleControlRig: () => null,
+}));
+
+vi.mock("@/lib/rigging", () => ({
+  useRiggingSession: () => ({ isSessionActive: false }),
+  useJumpedInState: () => ({ isJumpedIn: false }),
 }));
 
 import { VehicleActionsDisplay } from "../VehicleActionsDisplay";

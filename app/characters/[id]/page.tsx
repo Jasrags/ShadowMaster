@@ -18,6 +18,7 @@ import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferenc
 import { useCharacterEffects } from "./hooks/useCharacterEffects";
 import { CombatSessionProvider } from "@/lib/combat";
 import { MatrixSessionProvider, useMatrixSession } from "@/lib/matrix";
+import { RiggingSessionProvider, useRiggingSession } from "@/lib/rigging";
 
 import {
   ActiveModifiersPanel,
@@ -725,18 +726,20 @@ export default function CharacterPage({ params }: CharacterPageProps) {
     <RulesetProvider>
       <CombatSessionProvider characterId={character.id} pollInterval={5000}>
         <MatrixSessionProvider character={character} onCharacterUpdate={setCharacter}>
-          <CharacterSheet
-            character={character}
-            setCharacter={setCharacter}
-            showDiceRoller={showDiceRoller}
-            setShowDiceRoller={setShowDiceRoller}
-            targetPool={targetPool}
-            setTargetPool={setTargetPool}
-            poolContext={poolContext}
-            setPoolContext={setPoolContext}
-            isAdmin={isAdmin}
-            onRefresh={handleStatusChange}
-          />
+          <RiggingSessionProvider character={character} onCharacterUpdate={setCharacter}>
+            <CharacterSheet
+              character={character}
+              setCharacter={setCharacter}
+              showDiceRoller={showDiceRoller}
+              setShowDiceRoller={setShowDiceRoller}
+              targetPool={targetPool}
+              setTargetPool={setTargetPool}
+              poolContext={poolContext}
+              setPoolContext={setPoolContext}
+              isAdmin={isAdmin}
+              onRefresh={handleStatusChange}
+            />
+          </RiggingSessionProvider>
         </MatrixSessionProvider>
       </CombatSessionProvider>
     </RulesetProvider>
