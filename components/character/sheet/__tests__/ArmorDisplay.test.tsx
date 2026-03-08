@@ -60,6 +60,29 @@ vi.mock("@/lib/rules/wireless", () => ({
   isGlobalWirelessEnabled: vi.fn(() => true),
 }));
 
+// Default mock: not in combat, all transitions allowed
+const mockCanChangeReadiness = vi.fn(
+  (): { allowed: boolean; reason?: string; actionCost: string } => ({
+    allowed: true,
+    actionCost: "simple",
+  })
+);
+const mockPerformReadinessChange = vi.fn(
+  async (_from: unknown, _to: unknown, applyChange: () => void) => {
+    applyChange();
+    return true;
+  }
+);
+
+vi.mock("@/lib/combat", () => ({
+  useCombatReadiness: () => ({
+    isInCombat: false,
+    isMyTurn: false,
+    canChangeReadiness: mockCanChangeReadiness,
+    performReadinessChange: mockPerformReadinessChange,
+  }),
+}));
+
 vi.mock("react-aria-components", () => ({
   Button: ({
     children,
@@ -152,6 +175,13 @@ import { calculateArmorTotal } from "@/lib/rules/gameplay";
 beforeEach(() => {
   vi.clearAllMocks();
   (isGlobalWirelessEnabled as ReturnType<typeof vi.fn>).mockReturnValue(true);
+  mockCanChangeReadiness.mockReturnValue({ allowed: true, actionCost: "simple" });
+  mockPerformReadinessChange.mockImplementation(
+    async (_from: unknown, _to: unknown, applyChange: () => void) => {
+      applyChange();
+      return true;
+    }
+  );
 });
 
 describe("ArmorDisplay", () => {
@@ -504,6 +534,44 @@ describe("ArmorDisplay", () => {
 
       // Row should still be expanded after moving from Worn to Carried section
       expect(screen.getByTestId("expanded-content")).toBeInTheDocument();
+    });
+  });
+
+  // --- Combat readiness gating ---
+
+  describe("combat readiness gating", () => {
+    it("disables readiness button when combat check blocks it", () => {
+      mockCanChangeReadiness.mockReturnValue({
+        allowed: false,
+        reason: "No complex actions remaining",
+        actionCost: "complex",
+      });
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={vi.fn()} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-carried")).toBeDisabled();
+    });
+
+    it("shows combat block reason in title when blocked", () => {
+      mockCanChangeReadiness.mockReturnValue({
+        allowed: false,
+        reason: "Not your turn",
+        actionCost: "complex",
+      });
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={vi.fn()} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-carried")).toHaveAttribute("title", "Not your turn");
+    });
+
+    it("calls performReadinessChange on click", () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ armor: [MOCK_ARMOR_EQUIPPED] });
+      render(<ArmorDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-carried"));
+      expect(mockPerformReadinessChange).toHaveBeenCalledTimes(1);
+      expect(onUpdate).toHaveBeenCalledTimes(1);
     });
   });
 

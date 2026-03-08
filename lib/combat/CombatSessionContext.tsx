@@ -51,6 +51,8 @@ export interface CombatSessionActions {
     targetId?: string,
     options?: { weaponId?: string; firingMode?: string; magazineId?: string; ammoItemId?: string }
   ) => Promise<boolean>;
+  /** Spend an action from the current participant's action economy */
+  spendAction: (actionType: "free" | "simple" | "complex") => Promise<boolean>;
   /** Delay turn */
   delayTurn: () => Promise<boolean>;
   /** End turn */
@@ -272,6 +274,54 @@ export function CombatSessionProvider({
     [session, participant]
   );
 
+  // Spend an action from action economy (for readiness changes, etc.)
+  const spendAction = useCallback(
+    async (actionType: "free" | "simple" | "complex"): Promise<boolean> => {
+      if (!session || !participant) {
+        setError("Not in combat");
+        return false;
+      }
+
+      try {
+        const response = await fetch(`/api/combat/${session.id}/spend-action`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            participantId: participant.id,
+            actionType,
+          }),
+        });
+
+        const data = await response.json();
+
+        if (!data.success) {
+          setError(data.error || `No ${actionType} actions remaining`);
+          return false;
+        }
+
+        // Update session with new action allocation
+        if (data.actionsRemaining) {
+          setSession((prev) => {
+            if (!prev) return prev;
+            return {
+              ...prev,
+              participants: prev.participants.map((p) =>
+                p.id === participant.id ? { ...p, actionsRemaining: data.actionsRemaining } : p
+              ),
+            };
+          });
+        }
+
+        return true;
+      } catch (err) {
+        const message = err instanceof Error ? err.message : "Failed to spend action";
+        setError(message);
+        return false;
+      }
+    },
+    [session, participant]
+  );
+
   // Delay turn
   const delayTurn = useCallback(async (): Promise<boolean> => {
     if (!session || !participant) {
@@ -453,6 +503,7 @@ export function CombatSessionProvider({
       leaveSession,
       refreshSession,
       executeAction,
+      spendAction,
       delayTurn,
       endTurn,
       useInterrupt,
@@ -469,6 +520,7 @@ export function CombatSessionProvider({
       leaveSession,
       refreshSession,
       executeAction,
+      spendAction,
       delayTurn,
       endTurn,
       useInterrupt,
@@ -502,6 +554,7 @@ export function useCombatSession(): CombatSessionContextValue {
       leaveSession: async () => false,
       refreshSession: async () => {},
       executeAction: async () => false,
+      spendAction: async () => false,
       delayTurn: async () => false,
       endTurn: async () => false,
       useInterrupt: async () => false,

@@ -5,6 +5,7 @@ import type { Character, GearItem } from "@/lib/types";
 import type { GearItemData, GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { EquipmentReadiness, ContainerProperties } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
+import { useCombatReadiness } from "@/lib/combat";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
 import { MoveToContainerControl } from "./MoveToContainerControl";
@@ -145,6 +146,7 @@ function GearRow({
   editable?: boolean;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const { canChangeReadiness, performReadinessChange } = useCombatReadiness();
 
   const extras = catalogItem as (GearItemData & CatalogExtras) | undefined;
 
@@ -365,20 +367,33 @@ function GearRow({
                 {READINESS_BY_EQUIPMENT.gear.map((state) => {
                   const cost =
                     state !== readiness ? getTransitionActionCost(readiness, state) : undefined;
+                  const combatCheck =
+                    state !== readiness ? canChangeReadiness(readiness, state) : undefined;
+                  const isBlocked = combatCheck ? !combatCheck.allowed : false;
                   return (
                     <button
                       key={state}
                       data-testid={`readiness-${state}`}
-                      disabled={state === readiness}
-                      onClick={(e) => {
+                      disabled={state === readiness || isBlocked}
+                      onClick={async (e) => {
                         e.stopPropagation();
-                        changeGearReadiness(character, itemIndex, state, onCharacterUpdate);
+                        await performReadinessChange(readiness, state, () =>
+                          changeGearReadiness(character, itemIndex, state, onCharacterUpdate)
+                        );
                       }}
-                      title={cost && cost !== "none" ? getActionCostLabel(cost) : undefined}
+                      title={
+                        isBlocked && combatCheck?.reason
+                          ? combatCheck.reason
+                          : cost && cost !== "none"
+                            ? getActionCostLabel(cost)
+                            : undefined
+                      }
                       className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
                         state === readiness
                           ? getReadinessColor(state)
-                          : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                          : isBlocked
+                            ? "border-zinc-300 text-zinc-400 opacity-50 cursor-not-allowed dark:border-zinc-700 dark:text-zinc-500"
+                            : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
                       }`}
                     >
                       {getReadinessLabel(state)}

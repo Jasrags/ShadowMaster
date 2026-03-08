@@ -133,6 +133,29 @@ vi.mock("@/lib/rules/wireless", () => ({
   isGlobalWirelessEnabled: (character: unknown) => mockIsGlobalWirelessEnabled(character),
 }));
 
+// Default mock: not in combat, all transitions allowed
+const mockCanChangeReadiness = vi.fn(
+  (): { allowed: boolean; reason?: string; actionCost: string } => ({
+    allowed: true,
+    actionCost: "simple",
+  })
+);
+const mockPerformReadinessChange = vi.fn(
+  async (_from: unknown, _to: unknown, applyChange: () => void) => {
+    applyChange();
+    return true;
+  }
+);
+
+vi.mock("@/lib/combat", () => ({
+  useCombatReadiness: () => ({
+    isInCombat: false,
+    isMyTurn: false,
+    canChangeReadiness: mockCanChangeReadiness,
+    performReadinessChange: mockPerformReadinessChange,
+  }),
+}));
+
 import { GearDisplay } from "../GearDisplay";
 
 // ---------------------------------------------------------------------------
@@ -178,7 +201,15 @@ function expandRow(index = 0) {
 
 describe("GearDisplay", () => {
   beforeEach(() => {
+    vi.clearAllMocks();
     mockIsGlobalWirelessEnabled.mockReturnValue(true);
+    mockCanChangeReadiness.mockReturnValue({ allowed: true, actionCost: "simple" });
+    mockPerformReadinessChange.mockImplementation(
+      async (_from: unknown, _to: unknown, applyChange: () => void) => {
+        applyChange();
+        return true;
+      }
+    );
   });
 
   // --- Empty state ---
@@ -585,6 +616,64 @@ describe("GearDisplay", () => {
     const updated = onUpdate.mock.calls[0][0] as Character;
     const updatedItem = updated.gear?.find((g) => g.name === "Headjammer");
     expect(updatedItem?.state?.wirelessEnabled).toBe(false);
+  });
+
+  // --- Combat readiness gating ---
+
+  it("disables readiness button when combat check blocks it", () => {
+    mockCanChangeReadiness.mockReturnValue({
+      allowed: false,
+      reason: "No simple actions remaining",
+      actionCost: "simple",
+    });
+    renderGear(
+      [
+        makeGear({
+          name: "Headjammer",
+          category: "electronics",
+          state: { readiness: "carried", wirelessEnabled: true },
+        }),
+      ],
+      { editable: true, onCharacterUpdate: vi.fn() }
+    );
+    expandRow();
+    expect(screen.getByTestId("readiness-holstered")).toBeDisabled();
+  });
+
+  it("shows combat block reason in title when blocked", () => {
+    mockCanChangeReadiness.mockReturnValue({
+      allowed: false,
+      reason: "Not your turn",
+      actionCost: "simple",
+    });
+    renderGear(
+      [
+        makeGear({
+          name: "Headjammer",
+          category: "electronics",
+          state: { readiness: "carried", wirelessEnabled: true },
+        }),
+      ],
+      { editable: true, onCharacterUpdate: vi.fn() }
+    );
+    expandRow();
+    expect(screen.getByTestId("readiness-holstered")).toHaveAttribute("title", "Not your turn");
+  });
+
+  it("calls performReadinessChange on readiness click", () => {
+    const onUpdate = vi.fn();
+    const gear = [
+      makeGear({
+        name: "Headjammer",
+        category: "electronics",
+        state: { readiness: "carried", wirelessEnabled: true },
+      }),
+    ];
+    renderGear(gear, { editable: true, onCharacterUpdate: onUpdate });
+    expandRow();
+    fireEvent.click(screen.getByTestId("readiness-holstered"));
+    expect(mockPerformReadinessChange).toHaveBeenCalledTimes(1);
+    expect(onUpdate).toHaveBeenCalledTimes(1);
   });
 
   // --- Wireless toggle (expanded, editable) ---
