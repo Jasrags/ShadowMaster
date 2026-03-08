@@ -99,7 +99,10 @@ export function BaseCard({
   const CollapseIcon = isCollapsed ? ChevronRight : ChevronDown;
 
   return (
-    <div className={`rounded-lg border bg-white dark:bg-zinc-900 ${borderClassName} ${className}`}>
+    <div
+      id={id}
+      className={`rounded-lg border bg-white dark:bg-zinc-900 ${borderClassName} ${className}`}
+    >
       {/* Header */}
       <div
         className={`flex items-start justify-between border-b border-zinc-100 px-4 py-3 dark:border-zinc-800 ${
