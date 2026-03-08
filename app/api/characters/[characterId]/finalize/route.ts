@@ -20,12 +20,7 @@ import { getSession } from "@/lib/auth/session";
 import { updateCharacter } from "@/lib/storage/characters";
 import { getCampaignById } from "@/lib/storage/campaigns";
 import { authorizeOwnerAccess } from "@/lib/auth/character-authorization";
-import {
-  executeTransition,
-  createAuditEntry,
-  appendAuditEntry,
-  type TransitionContext,
-} from "@/lib/rules/character/state-machine";
+import { executeTransition, type TransitionContext } from "@/lib/rules/character/state-machine";
 import { validateForFinalization, materializeFromCreationState } from "@/lib/rules/validation";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
 import { loadCreationMethod } from "@/lib/rules/loader";
@@ -130,25 +125,39 @@ export async function POST(
 
     // Check campaign approval requirement
     if (campaign && validationResult.campaign?.requiresApproval) {
-      // Character needs GM approval - set to pending instead of active
-      const auditEntry = createAuditEntry({
-        action: "approval_requested",
-        actor: { userId, role: authResult.role },
-        details: {
-          campaignId: campaign.id,
-          campaignName: campaign.title,
+      // Character needs GM approval - transition to pending-review
+      const approvalTransitionContext: TransitionContext = {
+        actor: {
+          userId,
+          role: authResult.role,
         },
         note: "Character submitted for GM approval",
-      });
+      };
 
-      const characterWithApproval = appendAuditEntry(
-        {
-          ...materializedCharacter,
-          approvalStatus: "pending",
-          updatedAt: new Date().toISOString(),
-        },
-        auditEntry
+      const approvalTransitionResult = await executeTransition(
+        materializedCharacter,
+        "pending-review",
+        approvalTransitionContext
       );
+
+      if (!approvalTransitionResult.success) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: "State transition to pending-review failed",
+            errors: approvalTransitionResult.errors,
+            warnings: approvalTransitionResult.warnings,
+          },
+          { status: 400 }
+        );
+      }
+
+      // Set approvalStatus for backward compat
+      const characterWithApproval = {
+        ...approvalTransitionResult.character!,
+        approvalStatus: "pending" as const,
+        approvalFeedback: undefined,
+      };
 
       const updatedCharacter = await updateCharacter(userId, characterId, characterWithApproval);
 
