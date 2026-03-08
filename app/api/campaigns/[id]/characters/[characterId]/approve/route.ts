@@ -2,11 +2,16 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCampaignById } from "@/lib/storage/campaigns";
 import { getCharacterById, updateCharacter } from "@/lib/storage/characters";
+import { executeTransition, type TransitionContext } from "@/lib/rules/character/state-machine";
 import type { CharacterApprovalStatus } from "@/lib/types";
 
 /**
  * POST /api/campaigns/[id]/characters/[characterId]/approve
  * Approve or reject a character for the campaign (GM-only)
+ *
+ * Uses the state machine for lifecycle transitions:
+ * - Approve: pending-review → active
+ * - Reject: pending-review → draft
  */
 export async function POST(
   request: NextRequest,
@@ -50,6 +55,14 @@ export async function POST(
       );
     }
 
+    // Verify character is in pending-review status
+    if (character.status !== "pending-review") {
+      return NextResponse.json(
+        { success: false, error: "Character is not pending review" },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
     const { action, feedback } = body;
 
@@ -60,12 +73,45 @@ export async function POST(
       );
     }
 
+    // Require feedback for rejection
+    if (action === "reject" && (!feedback || feedback.trim() === "")) {
+      return NextResponse.json(
+        { success: false, error: "Feedback is required when rejecting a character" },
+        { status: 400 }
+      );
+    }
+
+    // Execute state machine transition
+    const targetStatus = action === "approve" ? "active" : "draft";
+    const transitionContext: TransitionContext = {
+      actor: {
+        userId,
+        role: "gm",
+      },
+      note:
+        action === "approve" ? "Character approved by GM" : `Character rejected by GM: ${feedback}`,
+    };
+
+    const transitionResult = await executeTransition(character, targetStatus, transitionContext);
+
+    if (!transitionResult.success) {
+      return NextResponse.json(
+        {
+          success: false,
+          error: "State transition failed",
+          errors: transitionResult.errors,
+        },
+        { status: 400 }
+      );
+    }
+
     const approvalStatus: CharacterApprovalStatus = action === "approve" ? "approved" : "rejected";
 
-    // Update the character
+    // Update the character with new status and approval fields
     const updatedCharacter = await updateCharacter(character.ownerId, characterId, {
+      ...transitionResult.character!,
       approvalStatus,
-      approvalFeedback: feedback || undefined,
+      approvalFeedback: action === "reject" ? feedback : undefined,
     });
 
     // Log activity and notify player asynchronously
@@ -108,7 +154,7 @@ export async function POST(
           campaignId: id,
           type: "character_rejected",
           title: "Character Rejected",
-          message: `Your character "${character.name}" was not approved for "${campaign.title}". Feedback: ${feedback || "No feedback provided."}`,
+          message: `Your character "${character.name}" was not approved for "${campaign.title}". Feedback: ${feedback}`,
           actionUrl: `/characters/${characterId}`,
         });
       }

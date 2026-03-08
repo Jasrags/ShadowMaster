@@ -247,6 +247,24 @@ function CharacterSheet({
           </div>
         </div>
 
+        {/* Approval Status Banners */}
+        {character.status === "pending-review" && (
+          <div className="rounded-lg border border-indigo-500/30 bg-indigo-500/10 p-4 print-hidden dark:bg-indigo-500/20">
+            <p className="text-sm font-medium text-indigo-700 dark:text-indigo-400">
+              Pending GM Review — This character is awaiting approval from the Game Master before it
+              can be used in play.
+            </p>
+          </div>
+        )}
+        {character.approvalStatus === "rejected" && character.approvalFeedback && (
+          <div className="rounded-lg border border-red-500/30 bg-red-500/10 p-4 print-hidden dark:bg-red-500/20">
+            <p className="text-sm font-medium text-red-700 dark:text-red-400">Revision Requested</p>
+            <p className="mt-1 text-sm text-red-600 dark:text-red-300">
+              {character.approvalFeedback}
+            </p>
+          </div>
+        )}
+
         {/* Actions Bar */}
         <div className="flex items-center justify-end gap-2 mb-4 print-hidden">
           <Button

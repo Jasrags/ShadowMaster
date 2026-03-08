@@ -25,6 +25,7 @@ import CampaignPostsTab from "./components/CampaignPostsTab";
 import CampaignCalendarTab from "./components/CampaignCalendarTab";
 import CampaignLocationsTab from "./components/CampaignLocationsTab";
 import CampaignAdvancementsTab from "./components/CampaignAdvancementsTab";
+import CampaignCharacterApprovalsTab from "./components/CampaignCharacterApprovalsTab";
 import CampaignGruntTeamsTab from "./components/CampaignGruntTeamsTab";
 
 interface CampaignDetailProps {
@@ -99,15 +100,18 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
     fetchCampaign();
   }, [id]);
 
-  // Fetch pending approvals count for GMs
+  // Fetch pending approvals count for GMs (advancements + character reviews)
   useEffect(() => {
     async function fetchPendingCount() {
       try {
-        const res = await fetch(`/api/campaigns/${id}/advancements/pending`);
-        const data = await res.json();
-        if (data.success) {
-          setPendingApprovalsCount(data.count || 0);
-        }
+        const [advRes, charRes] = await Promise.all([
+          fetch(`/api/campaigns/${id}/advancements/pending`),
+          fetch(`/api/campaigns/${id}/characters/pending-review`),
+        ]);
+        const [advData, charData] = await Promise.all([advRes.json(), charRes.json()]);
+        const advCount = advData.success ? advData.count || 0 : 0;
+        const charCount = charData.success ? charData.count || 0 : 0;
+        setPendingApprovalsCount(advCount + charCount);
       } catch (error) {
         // Badge will show 0 but error is logged
         console.error("Failed to fetch pending approvals count:", error);
@@ -343,10 +347,16 @@ export default function CampaignDetailPage({ params }: CampaignDetailProps) {
           <CampaignGruntTeamsTab campaignId={id} />
         )}
         {activeTab === "approvals" && userRole === "gm" && (
-          <CampaignAdvancementsTab
-            campaign={campaign}
-            onApprovalProcessed={handleApprovalProcessed}
-          />
+          <div className="space-y-8">
+            <CampaignCharacterApprovalsTab
+              campaign={campaign}
+              onApprovalProcessed={handleApprovalProcessed}
+            />
+            <CampaignAdvancementsTab
+              campaign={campaign}
+              onApprovalProcessed={handleApprovalProcessed}
+            />
+          </div>
         )}
       </div>
     </div>

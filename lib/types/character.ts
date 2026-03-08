@@ -42,6 +42,7 @@ import type { ActiveModifier } from "./effects";
  */
 export type CharacterStatus =
   | "draft" // Still being created
+  | "pending-review" // Submitted for GM approval
   | "active" // Playable character
   | "retired" // No longer in active play
   | "deceased"; // Character died in game

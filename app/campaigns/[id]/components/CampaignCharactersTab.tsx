@@ -158,6 +158,16 @@ export default function CampaignCharactersTab({ campaign, isGM }: CampaignCharac
                       character.magicalPath !== "mundane" &&
                       ` • ${character.magicalPath}`}
                   </p>
+                  {character.status === "pending-review" && (
+                    <span className="mt-1 inline-flex items-center rounded-full bg-indigo-100 px-2 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400">
+                      Pending Review
+                    </span>
+                  )}
+                  {character.approvalStatus === "rejected" && character.status === "draft" && (
+                    <span className="mt-1 inline-flex items-center rounded-full bg-red-100 px-2 py-0.5 text-xs font-medium text-red-700 dark:bg-red-900/30 dark:text-red-400">
+                      Revision Needed
+                    </span>
+                  )}
                   {isGM && character.ownerId && (
                     <p className="mt-1 text-xs text-zinc-400 dark:text-zinc-500">
                       Player ID: {character.ownerId.slice(0, 8)}...

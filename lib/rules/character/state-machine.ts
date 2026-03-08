@@ -74,13 +74,38 @@ export interface StateTransition {
  * All valid state transitions in the system
  */
 export const VALID_TRANSITIONS: StateTransition[] = [
-  // Draft → Active: Requires character completion validation
+  // Draft → Active: Requires character completion validation (no approval required)
   {
     from: "draft",
     to: "active",
     validator: validateCharacterComplete,
     allowedRoles: ["owner", "admin"],
     description: "Finalize character for play",
+  },
+
+  // Draft → Pending Review: Submit for GM approval (campaign with approval required)
+  {
+    from: "draft",
+    to: "pending-review",
+    validator: validateCharacterComplete,
+    allowedRoles: ["owner", "admin"],
+    description: "Submit character for GM review",
+  },
+
+  // Pending Review → Active: GM approves character
+  {
+    from: "pending-review",
+    to: "active",
+    allowedRoles: ["gm", "admin"],
+    description: "Approve character for play",
+  },
+
+  // Pending Review → Draft: GM rejects or owner withdraws
+  {
+    from: "pending-review",
+    to: "draft",
+    allowedRoles: ["owner", "gm", "admin"],
+    description: "Return character to draft for revisions",
   },
 
   // Active → Retired: Owner or GM can retire
@@ -424,7 +449,20 @@ export async function executeTransition(
 function getAuditActionForTransition(
   from: CharacterStatus,
   to: CharacterStatus
-): "finalized" | "retired" | "reactivated" | "deceased" | "updated" {
+):
+  | "finalized"
+  | "retired"
+  | "reactivated"
+  | "deceased"
+  | "updated"
+  | "approval_requested"
+  | "approval_granted"
+  | "approval_rejected" {
+  // Approval workflow transitions
+  if (from === "draft" && to === "pending-review") return "approval_requested";
+  if (from === "pending-review" && to === "active") return "approval_granted";
+  if (from === "pending-review" && to === "draft") return "approval_rejected";
+
   // Forward transitions
   if (from === "draft" && to === "active") return "finalized";
   if (to === "retired") return "retired";

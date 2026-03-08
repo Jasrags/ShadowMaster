@@ -319,6 +319,8 @@ function StatusBadge({ status }: { status: string }) {
       "bg-emerald-500/10 text-emerald-700 border-emerald-500/20 dark:bg-emerald-500/20 dark:text-emerald-400 dark:border-emerald-500/30",
     draft:
       "bg-amber-500/10 text-amber-700 border-amber-500/20 dark:bg-amber-500/20 dark:text-amber-400 dark:border-amber-500/30",
+    "pending-review":
+      "bg-indigo-500/10 text-indigo-700 border-indigo-500/20 dark:bg-indigo-500/20 dark:text-indigo-400 dark:border-indigo-500/30",
     retired:
       "bg-zinc-500/10 text-zinc-700 border-zinc-500/20 dark:bg-zinc-500/20 dark:text-zinc-400 dark:border-zinc-500/30",
     deceased:
@@ -674,6 +676,7 @@ function FilterTabs({ activeFilter, onFilterChange, counts }: FilterTabsProps) {
     { id: "all", label: "All" },
     { id: "active", label: "Active" },
     { id: "draft", label: "Drafts" },
+    { id: "pending-review", label: "Pending" },
     { id: "retired", label: "Retired" },
   ];
 
@@ -881,6 +884,7 @@ export default function CharactersPage() {
     all: characters.length,
     active: characters.filter((c) => c.status === "active").length,
     draft: characters.filter((c) => c.status === "draft").length,
+    "pending-review": characters.filter((c) => c.status === "pending-review").length,
     retired: characters.filter((c) => c.status === "retired").length,
   };
 

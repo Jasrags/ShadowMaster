@@ -24,6 +24,19 @@ vi.mock("@/lib/storage/notifications", () => ({
   createNotification: vi.fn().mockResolvedValue(undefined),
 }));
 
+// Mock the state machine - executeTransition returns success with updated character
+vi.mock("@/lib/rules/character/state-machine", () => ({
+  executeTransition: vi.fn().mockImplementation(async (character, targetStatus) => ({
+    success: true,
+    character: {
+      ...character,
+      status: targetStatus,
+      updatedAt: new Date().toISOString(),
+      auditLog: [],
+    },
+  })),
+}));
+
 // Helper to create a NextRequest with JSON body
 function createMockRequest(url: string, body?: unknown): NextRequest {
   const headers = new Headers();
@@ -85,7 +98,7 @@ function createMockCampaign(overrides?: Partial<Campaign>): Campaign {
   };
 }
 
-// Mock character factory
+// Mock character factory - now defaults to pending-review status
 function createMockCharacter(overrides?: Partial<Character>): Character {
   return {
     id: "test-character-id",
@@ -114,7 +127,7 @@ function createMockCharacter(overrides?: Partial<Character>): Character {
     gear: [],
     nuyen: 5000,
     karma: 0,
-    state: "draft",
+    status: "pending-review",
     approvalStatus: "pending",
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
@@ -148,9 +161,14 @@ describe("POST /api/campaigns/[id]/characters/[characterId]/approve", () => {
     const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
     const mockCharacter = createMockCharacter({
       campaignId: "test-campaign-id",
+      status: "pending-review",
       approvalStatus: "pending",
     });
-    const updatedCharacter = { ...mockCharacter, approvalStatus: "approved" as const };
+    const updatedCharacter = {
+      ...mockCharacter,
+      status: "active" as const,
+      approvalStatus: "approved" as const,
+    };
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
@@ -172,7 +190,10 @@ describe("POST /api/campaigns/[id]/characters/[characterId]/approve", () => {
     expect(characterStorage.updateCharacter).toHaveBeenCalledWith(
       mockCharacter.ownerId,
       "test-character-id",
-      { approvalStatus: "approved", approvalFeedback: undefined }
+      expect.objectContaining({
+        approvalStatus: "approved",
+        approvalFeedback: undefined,
+      })
     );
   });
 
@@ -180,10 +201,12 @@ describe("POST /api/campaigns/[id]/characters/[characterId]/approve", () => {
     const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
     const mockCharacter = createMockCharacter({
       campaignId: "test-campaign-id",
+      status: "pending-review",
       approvalStatus: "pending",
     });
     const updatedCharacter = {
       ...mockCharacter,
+      status: "draft" as const,
       approvalStatus: "rejected" as const,
       approvalFeedback: "Needs more backstory",
     };
@@ -207,13 +230,71 @@ describe("POST /api/campaigns/[id]/characters/[characterId]/approve", () => {
     expect(characterStorage.updateCharacter).toHaveBeenCalledWith(
       mockCharacter.ownerId,
       "test-character-id",
-      { approvalStatus: "rejected", approvalFeedback: "Needs more backstory" }
+      expect.objectContaining({
+        approvalStatus: "rejected",
+        approvalFeedback: "Needs more backstory",
+      })
     );
+  });
+
+  it("should return 400 when rejecting without feedback", async () => {
+    const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
+    const mockCharacter = createMockCharacter({
+      campaignId: "test-campaign-id",
+      status: "pending-review",
+    });
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(characterStorage.getCharacterById).mockResolvedValue(mockCharacter);
+
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/characters/test-character-id/approve",
+      { action: "reject" }
+    );
+    const response = await POST(request, {
+      params: Promise.resolve({ id: "test-campaign-id", characterId: "test-character-id" }),
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Feedback is required when rejecting a character");
+    expect(characterStorage.updateCharacter).not.toHaveBeenCalled();
+  });
+
+  it("should return 400 when character is not pending review", async () => {
+    const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
+    const mockCharacter = createMockCharacter({
+      campaignId: "test-campaign-id",
+      status: "draft" as const,
+    });
+
+    vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
+    vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
+    vi.mocked(characterStorage.getCharacterById).mockResolvedValue(mockCharacter);
+
+    const request = createMockRequest(
+      "http://localhost:3000/api/campaigns/test-campaign-id/characters/test-character-id/approve",
+      { action: "approve" }
+    );
+    const response = await POST(request, {
+      params: Promise.resolve({ id: "test-campaign-id", characterId: "test-character-id" }),
+    });
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Character is not pending review");
+    expect(characterStorage.updateCharacter).not.toHaveBeenCalled();
   });
 
   it("should return 400 when action is invalid", async () => {
     const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
-    const mockCharacter = createMockCharacter({ campaignId: "test-campaign-id" });
+    const mockCharacter = createMockCharacter({
+      campaignId: "test-campaign-id",
+      status: "pending-review",
+    });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
@@ -236,7 +317,10 @@ describe("POST /api/campaigns/[id]/characters/[characterId]/approve", () => {
 
   it("should return 400 when action is missing", async () => {
     const mockCampaign = createMockCampaign({ gmId: "test-gm-id" });
-    const mockCharacter = createMockCharacter({ campaignId: "test-campaign-id" });
+    const mockCharacter = createMockCharacter({
+      campaignId: "test-campaign-id",
+      status: "pending-review",
+    });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue("test-gm-id");
     vi.mocked(campaignStorage.getCampaignById).mockResolvedValue(mockCampaign);
