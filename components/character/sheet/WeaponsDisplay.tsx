@@ -6,6 +6,7 @@ import type { WeaponData, GearCatalogData } from "@/lib/rules/RulesetContext";
 import type { EquipmentReadiness } from "@/lib/types/gear-state";
 import type { AmmunitionItem } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
+import { useCombatReadiness } from "@/lib/combat";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { DisplayCard } from "./DisplayCard";
 import { isMeleeWeapon } from "./constants";
@@ -184,6 +185,7 @@ function WeaponRow({
   const { pool, label } = calculateWeaponPool(weapon, character);
   const isMelee = isMeleeWeapon(weapon);
   const modeStr = weapon.mode?.join("/") || "";
+  const { canChangeReadiness, performReadinessChange } = useCombatReadiness();
 
   // Resolve stats: character weapon takes priority, catalog fills gaps
   const avail = weapon.availability ?? catalogWeapon?.availability;
@@ -474,20 +476,33 @@ function WeaponRow({
                 {READINESS_BY_EQUIPMENT.weapon.map((state) => {
                   const cost =
                     state !== readiness ? getTransitionActionCost(readiness, state) : undefined;
+                  const combatCheck =
+                    state !== readiness ? canChangeReadiness(readiness, state) : undefined;
+                  const isBlocked = combatCheck ? !combatCheck.allowed : false;
                   return (
                     <button
                       key={state}
                       data-testid={`readiness-${state}`}
-                      disabled={state === readiness}
-                      onClick={(e) => {
+                      disabled={state === readiness || isBlocked}
+                      onClick={async (e) => {
                         e.stopPropagation();
-                        changeWeaponReadiness(character, weaponId, state, onCharacterUpdate);
+                        await performReadinessChange(readiness, state, () =>
+                          changeWeaponReadiness(character, weaponId, state, onCharacterUpdate)
+                        );
                       }}
-                      title={cost && cost !== "none" ? getActionCostLabel(cost) : undefined}
+                      title={
+                        isBlocked && combatCheck?.reason
+                          ? combatCheck.reason
+                          : cost && cost !== "none"
+                            ? getActionCostLabel(cost)
+                            : undefined
+                      }
                       className={`rounded border px-2 py-0.5 text-[10px] font-medium transition-colors ${
                         state === readiness
                           ? getReadinessColor(state)
-                          : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
+                          : isBlocked
+                            ? "border-zinc-300 text-zinc-400 opacity-50 cursor-not-allowed dark:border-zinc-700 dark:text-zinc-500"
+                            : "border-zinc-300 text-zinc-400 hover:border-zinc-400 hover:text-zinc-300 dark:border-zinc-700 dark:text-zinc-500 dark:hover:border-zinc-600"
                       }`}
                     >
                       {getReadinessLabel(state)}

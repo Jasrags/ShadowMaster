@@ -14,3 +14,9 @@ export {
   type CombatSessionActions,
   type CombatSessionContextValue,
 } from "./CombatSessionContext";
+
+export {
+  useCombatReadiness,
+  type ReadinessChangeCheck,
+  type CombatReadinessHook,
+} from "./useCombatReadiness";

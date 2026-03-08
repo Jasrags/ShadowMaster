@@ -71,6 +71,29 @@ vi.mock("@/lib/rules/inventory", () => ({
   getTransitionActionCost: vi.fn(() => "simple"),
 }));
 
+// Default mock: not in combat, all transitions allowed
+const mockCanChangeReadiness = vi.fn(
+  (): { allowed: boolean; reason?: string; actionCost: string } => ({
+    allowed: true,
+    actionCost: "simple",
+  })
+);
+const mockPerformReadinessChange = vi.fn(
+  async (_from: unknown, _to: unknown, applyChange: () => void) => {
+    applyChange();
+    return true;
+  }
+);
+
+vi.mock("@/lib/combat", () => ({
+  useCombatReadiness: () => ({
+    isInCombat: false,
+    isMyTurn: false,
+    canChangeReadiness: mockCanChangeReadiness,
+    performReadinessChange: mockPerformReadinessChange,
+  }),
+}));
+
 // ---------------------------------------------------------------------------
 // Catalog mock
 // ---------------------------------------------------------------------------
@@ -156,6 +179,13 @@ import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 beforeEach(() => {
   vi.clearAllMocks();
   (isGlobalWirelessEnabled as ReturnType<typeof vi.fn>).mockReturnValue(true);
+  mockCanChangeReadiness.mockReturnValue({ allowed: true, actionCost: "simple" });
+  mockPerformReadinessChange.mockImplementation(
+    async (_from: unknown, _to: unknown, applyChange: () => void) => {
+      applyChange();
+      return true;
+    }
+  );
 });
 
 describe("WeaponsDisplay", () => {
@@ -887,6 +917,60 @@ describe("WeaponsDisplay", () => {
       render(<WeaponsDisplay character={character} editable={true} />);
       fireEvent.click(screen.getByTestId("expand-button"));
       expect(screen.queryByTestId("move-to-container-control")).not.toBeInTheDocument();
+    });
+  });
+
+  // =========================================================================
+  // Combat readiness gating
+  // =========================================================================
+
+  describe("combat readiness gating", () => {
+    it("disables readiness button when combat check blocks it", () => {
+      mockCanChangeReadiness.mockReturnValue({
+        allowed: false,
+        reason: "No simple actions remaining",
+        actionCost: "simple",
+      });
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      // Non-current readiness buttons should be disabled
+      expect(screen.getByTestId("readiness-readied")).toBeDisabled();
+    });
+
+    it("shows combat block reason in title when blocked", () => {
+      mockCanChangeReadiness.mockReturnValue({
+        allowed: false,
+        reason: "Not your turn",
+        actionCost: "simple",
+      });
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      expect(screen.getByTestId("readiness-readied")).toHaveAttribute("title", "Not your turn");
+    });
+
+    it("calls performReadinessChange on click instead of direct change", async () => {
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-readied"));
+      expect(mockPerformReadinessChange).toHaveBeenCalledTimes(1);
+      expect(onUpdate).toHaveBeenCalledTimes(1);
+    });
+
+    it("does not call onCharacterUpdate when performReadinessChange fails", async () => {
+      mockPerformReadinessChange.mockResolvedValue(false);
+      const onUpdate = vi.fn();
+      const character = createSheetCharacter({ weapons: [MOCK_RANGED_WEAPON] });
+      render(<WeaponsDisplay character={character} editable={true} onCharacterUpdate={onUpdate} />);
+      fireEvent.click(screen.getByTestId("expand-button"));
+      fireEvent.click(screen.getByTestId("readiness-readied"));
+      expect(mockPerformReadinessChange).toHaveBeenCalledTimes(1);
+      expect(onUpdate).not.toHaveBeenCalled();
     });
   });
 
