@@ -23,6 +23,7 @@ import {
   Shield,
   Zap,
   Users,
+  Maximize2,
 } from "lucide-react";
 import { DisplayCard } from "@/components/character/sheet/DisplayCard";
 import { useCombatSession } from "@/lib/combat";
@@ -35,6 +36,8 @@ interface QuickCombatControlsProps {
   editionCode: string;
   /** Callback when combat state changes */
   onCombatStateChange?: (isInCombat: boolean) => void;
+  /** Callback to open the full combat tracker modal */
+  onOpenCombatTracker?: () => void;
 }
 
 /**
@@ -79,6 +82,7 @@ export function QuickCombatControls({
   character,
   editionCode,
   onCombatStateChange,
+  onOpenCombatTracker,
 }: QuickCombatControlsProps) {
   // Combat session context
   const {
@@ -440,6 +444,23 @@ export function QuickCombatControls({
                 </div>
               </div>
             </div>
+          )}
+
+          {/* Open Full Tracker */}
+          {onOpenCombatTracker && (
+            <Button
+              onPress={onOpenCombatTracker}
+              className={`
+                w-full flex items-center justify-center gap-2
+                px-3 py-2 rounded font-medium text-sm
+                bg-amber-500/20 text-amber-500 border border-amber-500/30
+                hover:bg-amber-500/30
+                transition-colors
+              `}
+            >
+              <Maximize2 className="w-4 h-4" />
+              Open Combat Tracker
+            </Button>
           )}
 
           {/* Participants Count */}

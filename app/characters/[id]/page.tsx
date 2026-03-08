@@ -9,16 +9,28 @@ import { useAuth } from "@/lib/auth/AuthProvider";
 import AdminActionsPanel from "../components/AdminActionsPanel";
 import { RulesetProvider, useRuleset, useMergedRuleset, useRulesetStatus } from "@/lib/rules";
 import { calculateLimit, calculateWoundModifier } from "@/lib/rules/qualities";
-import { ArrowLeft, Download, Pencil, Dice5, Printer, TrendingUp, Users, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Download,
+  Pencil,
+  Dice5,
+  Printer,
+  TrendingUp,
+  Users,
+  X,
+  Swords,
+} from "lucide-react";
 import { downloadCharacterJson } from "@/lib/utils";
 import { ActionPanel } from "./components/ActionPanel";
 import { QuickCombatControls } from "./components/QuickCombatControls";
 import { QuickNPCPanel } from "./components/QuickNPCPanel";
 import { useCharacterSheetPreferences } from "./hooks/useCharacterSheetPreferences";
 import { useCharacterEffects } from "./hooks/useCharacterEffects";
-import { CombatSessionProvider } from "@/lib/combat";
+import { CombatSessionProvider, useCombatSession } from "@/lib/combat";
 import { MatrixSessionProvider, useMatrixSession } from "@/lib/matrix";
 import { RiggingSessionProvider, useRiggingSession } from "@/lib/rigging";
+import { CombatTrackerModal } from "./components/CombatTrackerModal";
+import { THEMES, DEFAULT_THEME } from "@/lib/themes";
 
 import {
   ActiveModifiersPanel,
@@ -99,6 +111,10 @@ function CharacterSheet({
 
   const { updatePreference: updateSheetPref } = useCharacterSheetPreferences(character.id);
   const matrixSession = useMatrixSession();
+  const { isInCombat } = useCombatSession();
+  const theme = THEMES[DEFAULT_THEME];
+  const [showCombatTracker, setShowCombatTracker] = useState(false);
+  const handleOpenCombatTracker = useCallback(() => setShowCombatTracker(true), []);
   const [firstMeeting, setFirstMeeting] = useState(false);
   const { sources: effectSources, resolve: resolveEffectsBase } = useCharacterEffects(
     character,
@@ -281,6 +297,16 @@ function CharacterSheet({
           >
             <Dice5 className={`w-6 h-6 ${showDiceRoller ? "text-emerald-400" : ""}`} />
           </Button>
+          {isInCombat && (
+            <Button
+              className="relative p-2 text-amber-500 hover:text-amber-400 transition-colors"
+              onPress={() => setShowCombatTracker(true)}
+              aria-label="Open Combat Tracker"
+            >
+              <Swords className="w-5 h-5" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-amber-500 animate-pulse" />
+            </Button>
+          )}
           {character.status === "active" && (
             <>
               <Link
@@ -365,6 +391,15 @@ function CharacterSheet({
           </Modal>
         </ModalOverlay>
 
+        {/* Combat Tracker Modal */}
+        <CombatTrackerModal
+          isOpen={showCombatTracker}
+          onClose={() => setShowCombatTracker(false)}
+          theme={theme}
+          characterId={character.id}
+          character={character}
+        />
+
         {/* Main Content Grid */}
         <div className="character-sheet-grid grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {/* Left Column - Attributes & Condition */}
@@ -428,7 +463,11 @@ function CharacterSheet({
             />
 
             {/* Quick Combat Controls */}
-            <QuickCombatControls character={character} editionCode={character.editionCode} />
+            <QuickCombatControls
+              character={character}
+              editionCode={character.editionCode}
+              onOpenCombatTracker={handleOpenCombatTracker}
+            />
 
             <QuickNPCPanel />
           </div>

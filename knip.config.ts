@@ -56,7 +56,6 @@ const config: KnipConfig = {
     "app/characters/[id]/components/ActionResultToast.tsx", // Combat action feedback
     "app/characters/[id]/components/AugmentationsPanel.tsx", // Augmentations display
     "app/characters/[id]/components/CombatModeIndicator.tsx", // Combat state indicator
-    "app/characters/[id]/components/CombatTrackerModal.tsx", // Initiative tracker
     "components/AugmentationCard.tsx", // Augmentation display card
     "components/EssenceDisplay.tsx", // Essence meter component
     "components/character/**", // Character sheet sub-components (Matrix, Rigging, Magic)
