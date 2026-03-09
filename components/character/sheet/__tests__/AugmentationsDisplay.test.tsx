@@ -7,15 +7,31 @@
  * management controls (toggle, bonus text, effects pills).
  */
 
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+const {
+  mockAddEnhancement,
+  mockRemoveEnhancement,
+  mockAddAccessory,
+  mockRemoveAccessory,
+  mockToggleWireless,
+} = vi.hoisted(() => ({
+  mockAddEnhancement: vi.fn().mockResolvedValue({ success: false }),
+  mockRemoveEnhancement: vi.fn().mockResolvedValue({ success: false }),
+  mockAddAccessory: vi.fn().mockResolvedValue({ success: false }),
+  mockRemoveAccessory: vi.fn().mockResolvedValue({ success: false }),
+  mockToggleWireless: vi.fn().mockResolvedValue({ success: false }),
+}));
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { within } from "@testing-library/react";
 import {
   createSheetCharacter,
   setupDisplayCardMock,
   LUCIDE_MOCK,
   MOCK_CYBERWARE,
   MOCK_BIOWARE,
+  makeCyberlimb,
 } from "./test-helpers";
 
 setupDisplayCardMock();
@@ -57,49 +73,91 @@ vi.mock("@/lib/rules/RulesetContext", () => ({
 }));
 
 vi.mock("@/lib/rules/augmentations/cyberlimb-hooks", () => ({
+  useCharacterCyberlimbs: vi.fn(() => ({
+    cyberlimbs: [],
+    totalCMBonus: 0,
+    totalEssenceLost: 0,
+    loading: false,
+    error: null,
+    refetch: vi.fn(),
+  })),
+  useInstallCyberlimb: vi.fn(() => ({
+    install: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useRemoveCyberlimb: vi.fn(() => ({
+    remove: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
   useAddCyberlimbEnhancement: vi.fn(() => ({
-    add: vi.fn(),
+    add: mockAddEnhancement,
     reset: vi.fn(),
     data: null,
     loading: false,
     error: null,
   })),
   useRemoveCyberlimbEnhancement: vi.fn(() => ({
-    remove: vi.fn(),
+    remove: mockRemoveEnhancement,
     reset: vi.fn(),
     data: null,
     loading: false,
     error: null,
   })),
   useAddCyberlimbAccessory: vi.fn(() => ({
-    add: vi.fn(),
+    add: mockAddAccessory,
     reset: vi.fn(),
     data: null,
     loading: false,
     error: null,
   })),
   useRemoveCyberlimbAccessory: vi.fn(() => ({
-    remove: vi.fn(),
+    remove: mockRemoveAccessory,
     reset: vi.fn(),
     data: null,
     loading: false,
     error: null,
   })),
   useToggleCyberlimbWireless: vi.fn(() => ({
-    toggle: vi.fn(),
+    toggle: mockToggleWireless,
     reset: vi.fn(),
     data: null,
     loading: false,
     error: null,
   })),
+  useCyberlimbDetails: vi.fn(() => ({
+    limb: null,
+    loading: false,
+    error: null,
+    refetch: vi.fn(),
+  })),
 }));
 
 vi.mock("@/components/cyberlimbs/CyberlimbEnhancementModal", () => ({
-  CyberlimbEnhancementModal: () => null,
+  CyberlimbEnhancementModal: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
+    isOpen ? (
+      <div data-testid="enhancement-modal">
+        <button data-testid="close-enhancement-modal" onClick={onClose}>
+          Close
+        </button>
+      </div>
+    ) : null,
 }));
 
 vi.mock("@/components/cyberlimbs/CyberlimbAccessoryModal", () => ({
-  CyberlimbAccessoryModal: () => null,
+  CyberlimbAccessoryModal: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
+    isOpen ? (
+      <div data-testid="accessory-modal">
+        <button data-testid="close-accessory-modal" onClick={onClose}>
+          Close
+        </button>
+      </div>
+    ) : null,
 }));
 
 vi.mock("@/lib/rules/augmentations/hooks", () => ({
@@ -134,6 +192,10 @@ vi.mock("@/components/character/sheet/RemoveAugmentationDialog", () => ({
 import { AugmentationsDisplay } from "../AugmentationsDisplay";
 
 describe("AugmentationsDisplay", () => {
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
   it("returns null when no cyberware or bioware", () => {
     const character = createSheetCharacter({ cyberware: [], bioware: [] });
     const { container } = render(<AugmentationsDisplay character={character} />);
@@ -429,5 +491,127 @@ describe("AugmentationsDisplay", () => {
     expect(onUpdate).toHaveBeenCalledTimes(1);
     const updated = onUpdate.mock.calls[0][0];
     expect(updated.bioware[0].wirelessEnabled).toBe(false);
+  });
+
+  // --- Cyberlimbs ---
+
+  describe("Cyberlimbs", () => {
+    it("returns null when no cyberware, bioware, or cyberlimbs", () => {
+      const character = createSheetCharacter();
+      const { container } = render(<AugmentationsDisplay character={character} />);
+      expect(container.innerHTML).toBe("");
+    });
+
+    it('renders "Cyberlimbs" section header when character has cyberlimbs', () => {
+      const character = createSheetCharacter({ cyberlimbs: [makeCyberlimb()] });
+      render(<AugmentationsDisplay character={character} />);
+      expect(screen.getByText("Cyberlimbs")).toBeInTheDocument();
+    });
+
+    it("shows limb name, location, STR/AGI, capacity in collapsed row", () => {
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      render(<AugmentationsDisplay character={character} />);
+
+      const row = screen.getByTestId("cyberlimb-row");
+      expect(within(row).getByText("Cyberarm")).toBeInTheDocument();
+      expect(within(row).getByTestId("location-pill")).toHaveTextContent("L. Arm");
+      // STR = 3 + 2 + 2(enh) = 7, AGI = 3 + 1 = 4
+      expect(within(row).getByTestId("str-agi-display")).toHaveTextContent("S7 A4");
+      expect(within(row).getByTestId("capacity-display")).toHaveTextContent("[3/15]");
+    });
+
+    it("expanding a limb row shows enhancements and accessories", async () => {
+      const user = userEvent.setup();
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      render(<AugmentationsDisplay character={character} />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+
+      expect(screen.getByTestId("cyberlimb-expanded")).toBeInTheDocument();
+      expect(screen.getByTestId("enhancements-list")).toBeInTheDocument();
+      expect(screen.getByText("Enhanced Strength")).toBeInTheDocument();
+      expect(screen.getByTestId("accessories-list")).toBeInTheDocument();
+      expect(screen.getByText("Gyromount")).toBeInTheDocument();
+    });
+
+    it("capacity bar renders with correct percentage", async () => {
+      const user = userEvent.setup();
+      const limb = makeCyberlimb({ capacityUsed: 12, baseCapacity: 15 });
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      render(<AugmentationsDisplay character={character} />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+
+      const bar = screen.getByTestId("capacity-bar");
+      expect(bar).toBeInTheDocument();
+      // 12/15 = 80% → amber color
+      const fill = bar.querySelector("[style]");
+      expect(fill).toHaveStyle({ width: "80%" });
+    });
+
+    it("+Enhancement button opens modal in editable mode", async () => {
+      const user = userEvent.setup();
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      const onUpdate = vi.fn();
+      render(<AugmentationsDisplay character={character} onCharacterUpdate={onUpdate} editable />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+      await user.click(screen.getByTestId("add-enhancement-btn"));
+      expect(screen.getByTestId("enhancement-modal")).toBeInTheDocument();
+    });
+
+    it("+Accessory button opens modal in editable mode", async () => {
+      const user = userEvent.setup();
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      const onUpdate = vi.fn();
+      render(<AugmentationsDisplay character={character} onCharacterUpdate={onUpdate} editable />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+      await user.click(screen.getByTestId("add-accessory-btn"));
+      expect(screen.getByTestId("accessory-modal")).toBeInTheDocument();
+    });
+
+    it("remove enhancement calls handler with correct IDs", async () => {
+      const user = userEvent.setup();
+      mockRemoveEnhancement.mockResolvedValueOnce({ success: true });
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      const onUpdate = vi.fn();
+      render(<AugmentationsDisplay character={character} onCharacterUpdate={onUpdate} editable />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+      await user.click(screen.getByTestId("remove-enhancement-enh-1"));
+
+      expect(mockRemoveEnhancement).toHaveBeenCalledWith("limb-1", "enh-1");
+    });
+
+    it("action buttons hidden when editable is false", async () => {
+      const user = userEvent.setup();
+      const limb = makeCyberlimb();
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      render(<AugmentationsDisplay character={character} />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+      expect(screen.queryByTestId("add-enhancement-btn")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("add-accessory-btn")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("remove-enhancement-enh-1")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("remove-accessory-acc-1")).not.toBeInTheDocument();
+    });
+
+    it("wireless toggle works for cyberlimbs", async () => {
+      const user = userEvent.setup();
+      mockToggleWireless.mockResolvedValueOnce({ success: true });
+      const limb = makeCyberlimb({ wirelessEnabled: true });
+      const character = createSheetCharacter({ cyberlimbs: [limb] });
+      const onUpdate = vi.fn();
+      render(<AugmentationsDisplay character={character} onCharacterUpdate={onUpdate} editable />);
+
+      await user.click(screen.getByTestId("cyberlimb-row"));
+      expect(screen.getByTestId("cyberlimb-wireless-toggle")).toBeInTheDocument();
+    });
   });
 });
