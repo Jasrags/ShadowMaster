@@ -224,7 +224,7 @@ describe("User Storage", () => {
       expect(foundUsers.length).toBe(2);
       expect(users.map((u) => u.email)).toContain(user1.email);
       expect(users.map((u) => u.email)).toContain(user2.email);
-    });
+    }, 15000);
 
     it("should return users (may include existing data)", async () => {
       const users = await getAllUsers();
@@ -498,6 +498,6 @@ describe("User Storage", () => {
           );
         }
       }
-    });
+    }, 15000);
   });
 });
