@@ -53,6 +53,53 @@ vi.mock("@/lib/rules/wireless", () => ({
 vi.mock("@/lib/rules/RulesetContext", () => ({
   useCyberwareCatalog: vi.fn(() => []),
   useBiowareCatalog: vi.fn(() => []),
+  useCyberware: vi.fn(() => ({ catalog: [] })),
+}));
+
+vi.mock("@/lib/rules/augmentations/cyberlimb-hooks", () => ({
+  useAddCyberlimbEnhancement: vi.fn(() => ({
+    add: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useRemoveCyberlimbEnhancement: vi.fn(() => ({
+    remove: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useAddCyberlimbAccessory: vi.fn(() => ({
+    add: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useRemoveCyberlimbAccessory: vi.fn(() => ({
+    remove: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useToggleCyberlimbWireless: vi.fn(() => ({
+    toggle: vi.fn(),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+}));
+
+vi.mock("@/components/cyberlimbs/CyberlimbEnhancementModal", () => ({
+  CyberlimbEnhancementModal: () => null,
+}));
+
+vi.mock("@/components/cyberlimbs/CyberlimbAccessoryModal", () => ({
+  CyberlimbAccessoryModal: () => null,
 }));
 
 import { AugmentationsDisplay } from "../AugmentationsDisplay";
