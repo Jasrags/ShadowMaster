@@ -31,7 +31,11 @@ export default function BookCard({ book, isCore }: BookCardProps) {
             {book.categories.map((cat) => (
               <span
                 key={cat}
-                className="text-xs px-2 py-1 rounded-full bg-muted text-muted-foreground capitalize font-mono"
+                className={`text-xs px-2 py-1 rounded-full capitalize font-mono ${
+                  cat === "errata"
+                    ? "bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/20 font-medium"
+                    : "bg-muted text-muted-foreground"
+                }`}
               >
                 {cat}
               </span>

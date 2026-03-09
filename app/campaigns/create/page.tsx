@@ -305,19 +305,13 @@ export default function CreateCampaignPage() {
                       onChange={() => toggleBookId(book.id)}
                       className="rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500"
                     />
-                    <span className="text-sm text-zinc-700 dark:text-zinc-300">
-                      {book.title}
-                      {book.isCore && (
-                        <span className="ml-1 text-xs text-indigo-600 dark:text-indigo-400">
-                          (Core)
-                        </span>
-                      )}
-                      {book.categories.includes("errata") && (
-                        <span className="ml-1 text-xs text-amber-600 dark:text-amber-400">
-                          (Errata)
-                        </span>
-                      )}
-                    </span>
+                    <span className="text-sm text-zinc-700 dark:text-zinc-300">{book.title}</span>
+                    {book.isCore && (
+                      <span className="text-xs text-indigo-600 dark:text-indigo-400">(Core)</span>
+                    )}
+                    {book.categories.includes("errata") && (
+                      <span className="text-xs text-amber-600 dark:text-amber-400">(Errata)</span>
+                    )}
                   </label>
                 ))}
               </div>
