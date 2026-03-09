@@ -7,6 +7,7 @@ export { AdeptPowersDisplay } from "./AdeptPowersDisplay";
 export { ArmorDisplay } from "./ArmorDisplay";
 export { AttributesDisplay } from "./AttributesDisplay";
 export { AugmentationsDisplay } from "./AugmentationsDisplay";
+export { RemoveAugmentationDialog } from "./RemoveAugmentationDialog";
 export { CharacterInfoDisplay } from "./CharacterInfoDisplay";
 export { CombatDisplay } from "./CombatDisplay";
 export { ComplexFormsDisplay } from "./ComplexFormsDisplay";

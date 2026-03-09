@@ -109,6 +109,8 @@ interface AugmentationModalProps {
   installedCyberlimbs?: InstalledCyberlimb[];
   /** Installed skill-linked bioware for duplicate skill checking */
   installedSkillLinkedBioware?: InstalledSkillLinkedBioware[];
+  /** Mode: "creation" applies availability/grade restrictions; "management" shows all */
+  mode?: "creation" | "management";
 }
 
 // =============================================================================
@@ -120,7 +122,7 @@ export function AugmentationModal({
   onClose,
   onAdd,
   augmentationType,
-  maxAvailability: maxAvail = MAX_AVAILABILITY,
+  maxAvailability: maxAvailProp = MAX_AVAILABILITY,
   remainingEssence,
   remainingNuyen,
   isAwakened,
@@ -129,6 +131,7 @@ export function AugmentationModal({
   currentResonance = 0,
   installedCyberlimbs = [],
   installedSkillLinkedBioware = [],
+  mode = "creation",
 }: AugmentationModalProps) {
   const cyberwareCatalog = useCyberware({ excludeForbidden: false });
   const biowareCatalog = useBioware({ excludeForbidden: false });
@@ -150,6 +153,9 @@ export function AugmentationModal({
 
   // Track previous values to avoid cascading renders from setState in effects
   const prevItemIdRef = useRef<string | null>(null);
+
+  // In management mode, skip availability cap
+  const maxAvail = mode === "management" ? Infinity : maxAvailProp;
 
   const isCyberware = activeType === "cyberware";
   const categories = isCyberware ? CYBERWARE_CATEGORIES : BIOWARE_CATEGORIES;
@@ -184,17 +190,19 @@ export function AugmentationModal({
     setSelectedSkill(null);
   }, []);
 
-  // Available grades based on type, filtered by creation restrictions
+  // Available grades based on type, filtered by creation restrictions (skipped in management mode)
   const availableGrades = useMemo(() => {
+    const allGrades = isCyberware ? cyberwareGrades : biowareGrades;
+    if (mode === "management") return allGrades;
+
     const creationGradeIds = isCyberware
       ? getCreationAvailableCyberwareGrades()
       : getCreationAvailableBiowareGrades();
 
-    const allGrades = isCyberware ? cyberwareGrades : biowareGrades;
     return allGrades.filter((g) =>
       creationGradeIds.includes(g.id as (typeof creationGradeIds)[number])
     );
-  }, [isCyberware, cyberwareGrades, biowareGrades]);
+  }, [isCyberware, cyberwareGrades, biowareGrades, mode]);
 
   // Filter catalog items
   const filteredItems = useMemo(() => {
@@ -601,7 +609,10 @@ export function AugmentationModal({
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="full" className="max-w-4xl">
       {({ close }) => (
         <>
-          <ModalHeader title="Add Augmentation" onClose={close}>
+          <ModalHeader
+            title={mode === "management" ? "Install Augmentation" : "Add Augmentation"}
+            onClose={close}
+          >
             <AugmentationHeaderIcon activeType={activeType} />
           </ModalHeader>
 
@@ -739,7 +750,7 @@ export function AugmentationModal({
                 }`}
               >
                 <Plus className="h-4 w-4" />
-                Add {isCyberware ? "Cyberware" : "Bioware"}
+                {mode === "management" ? "Install" : "Add"} {isCyberware ? "Cyberware" : "Bioware"}
               </button>
             </div>
           </ModalFooter>
