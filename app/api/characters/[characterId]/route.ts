@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { getCharacter, updateCharacter, deleteCharacter } from "@/lib/storage/characters";
 import { authorizeOwnerAccess, type CharacterPermission } from "@/lib/auth/character-authorization";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 import { createAuditEntry, appendAuditEntry } from "@/lib/rules/character/state-machine";
 
 export async function GET(
@@ -28,19 +29,18 @@ export async function GET(
 
     const { characterId } = await params;
 
-    // Authorize view access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
     return NextResponse.json({
       success: true,
-      character: authResult.character,
+      character: resolution.character,
     });
   } catch (error) {
     console.error("Failed to get character:", error);

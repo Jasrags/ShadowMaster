@@ -14,23 +14,19 @@ vi.mock("@/lib/auth/session", () => ({
   getSession: vi.fn(),
 }));
 
-vi.mock("@/lib/storage/users", () => ({
-  getUserById: vi.fn(),
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
 }));
 
 vi.mock("@/lib/storage/characters", () => ({
-  getCharacter: vi.fn(),
   updateCharacterWithAudit: vi.fn(),
 }));
 
-vi.mock("@/lib/storage/campaigns", () => ({
-  getCampaignById: vi.fn(),
-}));
-
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
-import type { Character, User } from "@/lib/types";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
+import type { Character } from "@/lib/types";
 
 // Helper to create mock request
 function createMockRequest(body: unknown): NextRequest {
@@ -42,12 +38,6 @@ function createMockRequest(body: unknown): NextRequest {
 }
 
 // Sample test data
-const mockUser: Partial<User> = {
-  id: "user-1",
-  username: "testuser",
-  email: "test@example.com",
-};
-
 const mockCharacter: Partial<Character> = {
   id: "char-1",
   ownerId: "user-1",
@@ -63,6 +53,18 @@ const mockCharacter: Partial<Character> = {
     overflowDamage: 0,
   },
 };
+
+/** Helper to mock resolveCharacterForGameplay as authorized */
+function mockResolveAuthorized(character: Partial<Character> = mockCharacter) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character: character as Character,
+    ownerId: "user-1",
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
 
 describe("POST /api/characters/[characterId]/damage", () => {
   beforeEach(() => {
@@ -86,9 +88,13 @@ describe("POST /api/characters/[characterId]/damage", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("returns 404 if user not found", async () => {
+    it("returns 404 if character resolution fails", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Character not found",
+        status: 404,
+      });
 
       const request = createMockRequest({ type: "physical", amount: 3 });
       const response = await POST(request, { params: Promise.resolve({ characterId: "char-1" }) });
@@ -96,15 +102,18 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
       expect(response.status).toBe(404);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("User not found");
+      expect(data.error).toBe("Character not found");
     });
   });
 
   describe("Authorization", () => {
     it("returns 404 if character not found", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Character not found",
+        status: 404,
+      });
 
       const request = createMockRequest({ type: "physical", amount: 3 });
       const response = await POST(request, { params: Promise.resolve({ characterId: "char-1" }) });
@@ -119,8 +128,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
   describe("Validation", () => {
     it("returns 400 for invalid damage type", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
 
       const request = createMockRequest({ type: "invalid", amount: 3 });
       const response = await POST(request, { params: Promise.resolve({ characterId: "char-1" }) });
@@ -133,8 +141,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
     it("returns 400 if amount is not a number", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
 
       const request = createMockRequest({ type: "physical", amount: "three" });
       const response = await POST(request, { params: Promise.resolve({ characterId: "char-1" }) });
@@ -149,8 +156,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
   describe("Damage Application", () => {
     it("applies physical damage correctly", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...mockCharacter,
         condition: { physicalDamage: 3, stunDamage: 0, overflowDamage: 0 },
@@ -168,8 +174,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
     it("applies stun damage correctly", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...mockCharacter,
         condition: { physicalDamage: 0, stunDamage: 6, overflowDamage: 0 },
@@ -191,8 +196,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 3, stunDamage: 0, overflowDamage: 0 },
       };
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(charWithDamage as Character);
+      mockResolveAuthorized(charWithDamage);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...charWithDamage,
         condition: { physicalDamage: 3, stunDamage: 3, overflowDamage: 0 },
@@ -215,8 +219,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 5, stunDamage: 0, overflowDamage: 0 },
       };
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(wounded as Character);
+      mockResolveAuthorized(wounded);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...wounded,
         condition: { physicalDamage: 2, stunDamage: 0, overflowDamage: 0 },
@@ -237,8 +240,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 2, stunDamage: 0, overflowDamage: 0 },
       };
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(wounded as Character);
+      mockResolveAuthorized(wounded);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...wounded,
         condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
@@ -259,8 +261,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
       // Physical monitor = 10 boxes
       // Applying 12 damage should fill physical and add 2 to overflow
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
 
       // The actual overflow logic is in applyDamageWithOverflow
       // We capture the condition passed to updateCharacterWithAudit
@@ -292,8 +293,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
       // Stun monitor = 10 boxes
       // Applying 12 stun should fill stun and add 2 physical
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
 
       let capturedCondition: unknown;
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_userId, _charId, updates) => {
@@ -323,8 +323,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
   describe("Audit Logging", () => {
     it("creates audit entry with correct action for damage", async () => {
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter as Character);
+      mockResolveAuthorized();
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...mockCharacter,
         condition: { physicalDamage: 3, stunDamage: 0, overflowDamage: 0 },
@@ -359,8 +358,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 5, stunDamage: 0, overflowDamage: 0 },
       };
       vi.mocked(getSession).mockResolvedValue("user-1");
-      vi.mocked(getUserById).mockResolvedValue(mockUser as User);
-      vi.mocked(getCharacter).mockResolvedValue(wounded as Character);
+      mockResolveAuthorized(wounded);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue({
         ...wounded,
         condition: { physicalDamage: 2, stunDamage: 0, overflowDamage: 0 },

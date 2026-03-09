@@ -22,8 +22,14 @@ vi.mock("@/lib/storage/characters", () => ({
   updateCharacterWithAudit: vi.fn(),
 }));
 
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
+}));
+
 import { getSession } from "@/lib/auth/session";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 import { GET, POST } from "../route";
 import { DELETE } from "../[modifierId]/route";
 import type { Character } from "@/lib/types";
@@ -103,6 +109,27 @@ const mockParamsWithModifier = Promise.resolve({
   modifierId: TEST_MODIFIER_ID,
 });
 
+/** Helper to mock resolveCharacterForGameplay as authorized (owner) */
+function mockResolutionSuccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: character.ownerId,
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
+
+/** Helper to mock resolveCharacterForGameplay as denied */
+function mockResolutionDenied(status: number, error: string) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: false,
+    error,
+    status,
+  });
+}
+
 // =============================================================================
 // TESTS
 // =============================================================================
@@ -120,21 +147,21 @@ describe("GET /api/characters/[characterId]/modifiers", () => {
 
   it("returns 404 when character not found", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(null);
+    mockResolutionDenied(404, "Character not found");
     const res = await GET(makeRequest("GET"), { params: mockParams });
     expect(res.status).toBe(404);
   });
 
   it("returns 403 when not the owner", async () => {
     vi.mocked(getSession).mockResolvedValue("different-user");
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionDenied(403, "Permission denied: view");
     const res = await GET(makeRequest("GET"), { params: mockParams });
     expect(res.status).toBe(403);
   });
 
   it("returns empty array when no modifiers", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionSuccess(createTestCharacter());
     const res = await GET(makeRequest("GET"), { params: mockParams });
     const data = await res.json();
     expect(res.status).toBe(200);
@@ -144,9 +171,7 @@ describe("GET /api/characters/[characterId]/modifiers", () => {
 
   it("returns existing modifiers", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createTestCharacter({ activeModifiers: [mockModifier] })
-    );
+    mockResolutionSuccess(createTestCharacter({ activeModifiers: [mockModifier] }));
     const res = await GET(makeRequest("GET"), { params: mockParams });
     const data = await res.json();
     expect(data.success).toBe(true);
@@ -169,21 +194,21 @@ describe("POST /api/characters/[characterId]/modifiers", () => {
 
   it("returns 404 when character not found", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(null);
+    mockResolutionDenied(404, "Character not found");
     const res = await POST(makeRequest("POST", {}), { params: mockParams });
     expect(res.status).toBe(404);
   });
 
   it("returns 403 when not the owner", async () => {
     vi.mocked(getSession).mockResolvedValue("different-user");
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionDenied(403, "Permission denied: gameplay_edit");
     const res = await POST(makeRequest("POST", {}), { params: mockParams });
     expect(res.status).toBe(403);
   });
 
   it("returns 400 on validation failure", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionSuccess(createTestCharacter());
     const res = await POST(makeRequest("POST", { source: "invalid", duration: "bad" }), {
       params: mockParams,
     });
@@ -194,7 +219,7 @@ describe("POST /api/characters/[characterId]/modifiers", () => {
 
   it("adds template modifier successfully", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionSuccess(createTestCharacter());
     const res = await POST(
       makeRequest("POST", {
         templateId: "partial-cover",
@@ -212,7 +237,7 @@ describe("POST /api/characters/[characterId]/modifiers", () => {
 
   it("adds custom modifier successfully", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionSuccess(createTestCharacter());
     const res = await POST(
       makeRequest("POST", {
         name: "Wind Penalty",
@@ -232,7 +257,7 @@ describe("POST /api/characters/[characterId]/modifiers", () => {
 
   it("calls updateCharacterWithAudit with modifier_applied", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionSuccess(createTestCharacter());
     await POST(
       makeRequest("POST", {
         templateId: "partial-cover",
@@ -264,21 +289,21 @@ describe("DELETE /api/characters/[characterId]/modifiers/[modifierId]", () => {
 
   it("returns 404 when character not found", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(null);
+    mockResolutionDenied(404, "Character not found");
     const res = await DELETE(makeRequest("DELETE"), { params: mockParamsWithModifier });
     expect(res.status).toBe(404);
   });
 
   it("returns 403 when not the owner", async () => {
     vi.mocked(getSession).mockResolvedValue("different-user");
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter());
+    mockResolutionDenied(403, "Permission denied: gameplay_edit");
     const res = await DELETE(makeRequest("DELETE"), { params: mockParamsWithModifier });
     expect(res.status).toBe(403);
   });
 
   it("returns 404 when modifier not found", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(createTestCharacter({ activeModifiers: [] }));
+    mockResolutionSuccess(createTestCharacter({ activeModifiers: [] }));
     const res = await DELETE(makeRequest("DELETE"), { params: mockParamsWithModifier });
     expect(res.status).toBe(404);
     const data = await res.json();
@@ -287,9 +312,7 @@ describe("DELETE /api/characters/[characterId]/modifiers/[modifierId]", () => {
 
   it("removes modifier successfully", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createTestCharacter({ activeModifiers: [mockModifier] })
-    );
+    mockResolutionSuccess(createTestCharacter({ activeModifiers: [mockModifier] }));
     const res = await DELETE(makeRequest("DELETE"), { params: mockParamsWithModifier });
     expect(res.status).toBe(200);
     const data = await res.json();
@@ -298,9 +321,7 @@ describe("DELETE /api/characters/[characterId]/modifiers/[modifierId]", () => {
 
   it("calls updateCharacterWithAudit with modifier_removed", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(getCharacter).mockResolvedValue(
-      createTestCharacter({ activeModifiers: [mockModifier] })
-    );
+    mockResolutionSuccess(createTestCharacter({ activeModifiers: [mockModifier] }));
     await DELETE(makeRequest("DELETE"), { params: mockParamsWithModifier });
     expect(updateCharacterWithAudit).toHaveBeenCalledWith(
       TEST_USER_ID,

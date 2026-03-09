@@ -13,23 +13,18 @@ vi.mock("@/lib/auth/session", () => ({
   getSession: vi.fn(),
 }));
 
-vi.mock("@/lib/storage/users", () => ({
-  getUserById: vi.fn(),
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
 }));
 
 vi.mock("@/lib/storage/characters", () => ({
-  getCharacter: vi.fn(),
   updateCharacterWithAudit: vi.fn(),
 }));
 
-vi.mock("@/lib/storage/campaigns", () => ({
-  getCampaignById: vi.fn(),
-}));
-
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
 import { POST } from "../route";
 import type { Character } from "@/lib/types";
 import type { Campaign } from "@/lib/types/campaign";
@@ -42,53 +37,6 @@ const TEST_USER_ID = "test-user-123";
 const TEST_GM_ID = "test-gm-456";
 const TEST_CHARACTER_ID = "test-char-789";
 const TEST_CAMPAIGN_ID = "test-campaign-111";
-
-import type { User } from "@/lib/types";
-
-function createMockUser(overrides: Partial<User> = {}): User {
-  return {
-    id: TEST_USER_ID,
-    username: "testrunner",
-    email: "test@example.com",
-    passwordHash: "hashed_password",
-    role: ["user"],
-    preferences: { theme: "dark", navigationCollapsed: false },
-    createdAt: new Date().toISOString(),
-    lastLogin: new Date().toISOString(),
-    characters: [TEST_CHARACTER_ID],
-    failedLoginAttempts: 0,
-    lockoutUntil: null,
-    sessionVersion: 1,
-    sessionSecretHash: null,
-    accountStatus: "active",
-    statusChangedAt: null,
-    statusChangedBy: null,
-    statusReason: null,
-    lastRoleChangeAt: null,
-    lastRoleChangeBy: null,
-    emailVerified: true,
-    emailVerifiedAt: null,
-    emailVerificationTokenHash: null,
-    emailVerificationTokenExpiresAt: null,
-    emailVerificationTokenPrefix: null,
-    passwordResetTokenHash: null,
-    passwordResetTokenExpiresAt: null,
-    passwordResetTokenPrefix: null,
-    magicLinkTokenHash: null,
-    magicLinkTokenExpiresAt: null,
-    magicLinkTokenPrefix: null,
-    ...overrides,
-  };
-}
-
-const mockUser = createMockUser();
-
-const mockGm = createMockUser({
-  id: TEST_GM_ID,
-  username: "testgm",
-  email: "gm@example.com",
-  role: ["gamemaster"],
-});
 
 const mockCampaign: Campaign = {
   id: TEST_CAMPAIGN_ID,
@@ -170,6 +118,34 @@ function createMockRequest(body: Record<string, unknown>): NextRequest {
   });
 }
 
+/**
+ * Helper to mock resolveCharacterForGameplay for authorized owner access
+ */
+function mockOwnerAccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: TEST_USER_ID,
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
+
+/**
+ * Helper to mock resolveCharacterForGameplay for authorized GM access
+ */
+function mockGMAccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: "other-owner",
+    actorRole: "gm",
+    campaign: mockCampaign,
+    isGMAccess: true,
+  });
+}
+
 // =============================================================================
 // AUTHENTICATION TESTS
 // =============================================================================
@@ -194,9 +170,13 @@ describe("POST /api/characters/[characterId]/damage", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("should return 404 when user not found", async () => {
+    it("should return 404 when character not found", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Character not found",
+        status: 404,
+      });
 
       const request = createMockRequest({ type: "physical", amount: 3 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -206,7 +186,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
       expect(response.status).toBe(404);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("User not found");
+      expect(data.error).toBe("Character not found");
     });
   });
 
@@ -217,8 +197,11 @@ describe("POST /api/characters/[characterId]/damage", () => {
   describe("Authorization", () => {
     it("should return 404 when character not found", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Character not found",
+        status: 404,
+      });
 
       const request = createMockRequest({ type: "physical", amount: 3 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -233,31 +216,10 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
     it("should return 403 when user is not owner and not GM", async () => {
       vi.mocked(getSession).mockResolvedValue("other-user-id");
-      vi.mocked(getUserById).mockResolvedValue({ ...mockUser, id: "other-user-id" });
-      vi.mocked(getCharacter).mockResolvedValue(null); // Not found for other user
-
-      const request = createMockRequest({ type: "physical", amount: 3 });
-      const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
-
-      const response = await POST(request, { params });
-      const data = await response.json();
-
-      expect(response.status).toBe(404);
-      expect(data.success).toBe(false);
-    });
-
-    it("should return 403 when not owner and campaign GM doesn't match", async () => {
-      vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(
-        createMockCharacter({
-          ownerId: "other-owner",
-          campaignId: TEST_CAMPAIGN_ID,
-        })
-      );
-      vi.mocked(getCampaignById).mockResolvedValue({
-        ...mockCampaign,
-        gmId: "different-gm",
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Not authorized to access this character",
+        status: 403,
       });
 
       const request = createMockRequest({ type: "physical", amount: 3 });
@@ -268,14 +230,32 @@ describe("POST /api/characters/[characterId]/damage", () => {
 
       expect(response.status).toBe(403);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("Not authorized to modify this character");
+      expect(data.error).toBe("Not authorized to access this character");
+    });
+
+    it("should return 403 when not owner and campaign GM doesn't match", async () => {
+      vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+        authorized: false,
+        error: "Not authorized to access this character",
+        status: 403,
+      });
+
+      const request = createMockRequest({ type: "physical", amount: 3 });
+      const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
+
+      const response = await POST(request, { params });
+      const data = await response.json();
+
+      expect(response.status).toBe(403);
+      expect(data.success).toBe(false);
+      expect(data.error).toBe("Not authorized to access this character");
     });
 
     it("should allow owner to apply damage", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue(mockChar);
 
       const request = createMockRequest({ type: "physical", amount: 3 });
@@ -294,9 +274,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         campaignId: TEST_CAMPAIGN_ID,
       });
       vi.mocked(getSession).mockResolvedValue(TEST_GM_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockGm);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
-      vi.mocked(getCampaignById).mockResolvedValue(mockCampaign);
+      mockGMAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockResolvedValue(mockChar);
 
       const request = createMockRequest({ type: "physical", amount: 3 });
@@ -318,8 +296,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should return 400 when damage type is missing", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
 
       const request = createMockRequest({ amount: 3 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -335,8 +312,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should return 400 when damage type is invalid", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
 
       const request = createMockRequest({ type: "invalid", amount: 3 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -352,8 +328,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should return 400 when amount is not a number", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
 
       const request = createMockRequest({ type: "physical", amount: "three" });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -375,8 +350,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should apply physical damage correctly", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -398,8 +372,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 5, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -421,8 +394,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 2, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -445,8 +417,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 8, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -474,8 +445,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should apply stun damage correctly", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -497,8 +467,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 0, stunDamage: 6, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -520,8 +489,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 0, stunDamage: 2, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -544,8 +512,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 0, stunDamage: 8, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -575,8 +542,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 10, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -599,8 +565,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 10, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -622,8 +587,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 10, stunDamage: 0, overflowDamage: 3 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -652,8 +616,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 3, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -676,8 +639,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 2, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -701,8 +663,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 0, stunDamage: 3, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -729,8 +690,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
     it("should create audit entry for damage", async () => {
       const mockChar = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -762,8 +722,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         condition: { physicalDamage: 5, stunDamage: 0, overflowDamage: 0 },
       });
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
+      mockOwnerAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -795,9 +754,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
         campaignId: TEST_CAMPAIGN_ID,
       });
       vi.mocked(getSession).mockResolvedValue(TEST_GM_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockGm);
-      vi.mocked(getCharacter).mockResolvedValue(mockChar);
-      vi.mocked(getCampaignById).mockResolvedValue(mockCampaign);
+      mockGMAccess(mockChar);
       vi.mocked(updateCharacterWithAudit).mockImplementation(async (_, __, updates) => ({
         ...mockChar,
         ...updates,
@@ -816,6 +773,14 @@ describe("POST /api/characters/[characterId]/damage", () => {
           actor: { userId: TEST_GM_ID, role: "gm" },
         })
       );
+
+      expect(notifyOwnerOfGMEdit).toHaveBeenCalledWith(
+        mockChar,
+        mockCampaign,
+        TEST_GM_ID,
+        "3 physical damage applied",
+        undefined
+      );
     });
   });
 
@@ -826,8 +791,7 @@ describe("POST /api/characters/[characterId]/damage", () => {
   describe("Error handling", () => {
     it("should return 500 on unexpected error", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockRejectedValue(new Error("Database error"));
+      vi.mocked(resolveCharacterForGameplay).mockRejectedValue(new Error("Database error"));
 
       const request = createMockRequest({ type: "physical", amount: 3 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });

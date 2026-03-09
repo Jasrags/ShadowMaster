@@ -11,9 +11,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
-import { getCampaignById } from "@/lib/storage/campaigns";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import type { Character } from "@/lib/types";
 
 // =============================================================================
@@ -182,75 +181,23 @@ export async function POST(
       );
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
         {
           success: false,
-          error: "User not found",
+          error: resolution.error,
           character: {
             condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
             woundModifier: 0,
           },
         },
-        { status: 404 }
+        { status: resolution.status }
       );
     }
 
-    // Get the character - first try with current user as owner
-    const character = await getCharacter(userId, characterId);
-    let isOwner = true;
-
-    // If not found, check if user is GM for the character's campaign
-    if (!character) {
-      // Character might belong to another user in a campaign the current user GMs
-      // For now, we only allow owners or GMs to modify damage
-      // TODO: Implement cross-user character lookup for GM access
-      return NextResponse.json(
-        {
-          success: false,
-          error: "Character not found",
-          character: {
-            condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
-            woundModifier: 0,
-          },
-        },
-        { status: 404 }
-      );
-    }
-
-    // Validate permission: Owner can always modify, GM can modify campaign characters
-    if (character.ownerId !== userId) {
-      if (character.campaignId) {
-        const campaign = await getCampaignById(character.campaignId);
-        if (!campaign || campaign.gmId !== userId) {
-          return NextResponse.json(
-            {
-              success: false,
-              error: "Not authorized to modify this character",
-              character: {
-                condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
-                woundModifier: 0,
-              },
-            },
-            { status: 403 }
-          );
-        }
-        isOwner = false;
-      } else {
-        return NextResponse.json(
-          {
-            success: false,
-            error: "Not authorized to modify this character",
-            character: {
-              condition: { physicalDamage: 0, stunDamage: 0, overflowDamage: 0 },
-              woundModifier: 0,
-            },
-          },
-          { status: 403 }
-        );
-      }
-    }
+    const { character, ownerId, actorRole, campaign, isGMAccess } = resolution;
 
     // Parse request body
     const body: DamageRequest = await request.json();
@@ -290,14 +237,14 @@ export async function POST(
 
     // Update character with audit trail
     const updatedCharacter = await updateCharacterWithAudit(
-      character.ownerId,
+      ownerId,
       characterId,
       { condition },
       {
         action: amount > 0 ? "damage_applied" : "damage_healed",
         actor: {
           userId,
-          role: isOwner ? "owner" : "gm",
+          role: actorRole,
         },
         details: {
           damageType: type,
@@ -305,11 +252,17 @@ export async function POST(
           source: source || "manual",
           previousCondition: character.condition,
           newCondition: condition,
-          actorName: user.username,
         },
         note: source ? `${amount > 0 ? "Damage" : "Healing"}: ${source}` : undefined,
       }
     );
+
+    // Notify owner if GM made the edit
+    if (isGMAccess && campaign) {
+      const actionDesc =
+        amount > 0 ? `${amount} ${type} damage applied` : `${Math.abs(amount)} ${type} healed`;
+      await notifyOwnerOfGMEdit(character, campaign, userId, actionDesc, source);
+    }
 
     // Calculate wound modifier
     const woundModifier = calculateTotalWoundModifier(updatedCharacter);
@@ -325,6 +278,7 @@ export async function POST(
         woundModifier,
       },
       overflow: overflow.physical > 0 || overflow.stun > 0 ? overflow : undefined,
+      actorRole,
     });
   } catch (error) {
     console.error("Failed to apply damage:", error);

@@ -11,7 +11,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { updateCharacter } from "@/lib/storage/characters";
-import { authorizeOwnerAccess } from "@/lib/auth/character-authorization";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import {
   setEquipmentReadiness,
   getEquipmentStateSummary,
@@ -74,17 +74,16 @@ export async function GET(
 
     const { characterId } = await params;
 
-    // Authorize view access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
-    const character = authResult.character!;
+    const character = resolution.character;
 
     // Calculate encumbrance
     const encumbranceState = calculateEncumbrance(character);
@@ -132,17 +131,16 @@ export async function PATCH(
 
     const { characterId } = await params;
 
-    // Authorize edit access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "edit");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
-    const character = authResult.character!;
+    const { character, ownerId, campaign, isGMAccess } = resolution;
 
     // Parse request body
     const body: UpdateStateRequest = await request.json();
@@ -178,7 +176,7 @@ export async function PATCH(
         if (result.success) {
           const updatedWeapons = [...character.weapons!];
           updatedWeapons[weaponIndex] = result.item as Weapon;
-          await updateCharacter(userId, characterId, { weapons: updatedWeapons });
+          await updateCharacter(ownerId, characterId, { weapons: updatedWeapons });
         }
         break;
       }
@@ -200,7 +198,7 @@ export async function PATCH(
           updatedArmor[armorIndex] = result.item as ArmorItem;
           // Also update legacy equipped field
           (updatedArmor[armorIndex] as ArmorItem).equipped = newState === "worn";
-          await updateCharacter(userId, characterId, { armor: updatedArmor });
+          await updateCharacter(ownerId, characterId, { armor: updatedArmor });
         }
         break;
       }
@@ -224,7 +222,7 @@ export async function PATCH(
         if (result.success) {
           const updatedGear = [...character.gear!];
           updatedGear[gearIndex] = result.item as GearItem;
-          await updateCharacter(userId, characterId, { gear: updatedGear });
+          await updateCharacter(ownerId, characterId, { gear: updatedGear });
         }
         break;
       }
@@ -245,6 +243,16 @@ export async function PATCH(
 
     if (!result.success) {
       return NextResponse.json({ success: false, error: result.error, result }, { status: 400 });
+    }
+
+    // Notify owner if GM made the edit
+    if (isGMAccess && campaign) {
+      await notifyOwnerOfGMEdit(
+        character,
+        campaign,
+        userId,
+        `${itemType} readiness changed to ${newState}`
+      );
     }
 
     return NextResponse.json({

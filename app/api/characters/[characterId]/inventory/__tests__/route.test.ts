@@ -9,14 +9,18 @@ import { GET, PATCH } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as characterStorageModule from "@/lib/storage/characters";
-import * as authorizationModule from "@/lib/auth/character-authorization";
 
 import type { Character, Weapon, ArmorItem } from "@/lib/types";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/characters");
-vi.mock("@/lib/auth/character-authorization");
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
+}));
+
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 
 // Helper to create a NextRequest
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
@@ -56,6 +60,27 @@ function createMockCharacter(overrides: Partial<Character> = {}): Character {
     startingNuyen: 5000,
     ...overrides,
   } as Character;
+}
+
+/** Helper to mock resolveCharacterForGameplay as authorized (owner) */
+function mockResolutionSuccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: character.ownerId,
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
+
+/** Helper to mock resolveCharacterForGameplay as denied */
+function mockResolutionDenied(status: number, error: string) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: false,
+    error,
+    status,
+  });
 }
 
 describe("GET /api/characters/[characterId]/inventory", () => {
@@ -98,14 +123,7 @@ describe("GET /api/characters/[characterId]/inventory", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
-      authorized: true,
-      character: mockCharacter,
-      campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
-    });
+    mockResolutionSuccess(mockCharacter);
   });
 
   it("should return inventory state with encumbrance", async () => {
@@ -141,15 +159,7 @@ describe("GET /api/characters/[characterId]/inventory", () => {
   });
 
   it("should return 404 when character not found", async () => {
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
-      authorized: false,
-      character: null,
-      campaign: null,
-      role: "owner",
-      permissions: [],
-      error: "Character not found",
-      status: 404,
-    });
+    mockResolutionDenied(404, "Character not found");
 
     const request = createMockRequest(
       `http://localhost:3000/api/characters/${characterId}/inventory`
@@ -190,14 +200,7 @@ describe("PATCH /api/characters/[characterId]/inventory", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
-      authorized: true,
-      character: mockCharacter,
-      campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
-    });
+    mockResolutionSuccess(mockCharacter);
     vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(mockCharacter);
   });
 
@@ -241,14 +244,7 @@ describe("PATCH /api/characters/[characterId]/inventory", () => {
       ],
     });
 
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
-      authorized: true,
-      character: mockCharacter,
-      campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
-    });
+    mockResolutionSuccess(mockCharacter);
 
     const requestBody = {
       itemId: "armor-1",

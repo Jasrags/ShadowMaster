@@ -9,14 +9,14 @@ import { GET, PATCH, POST } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
 import * as characterStorageModule from "@/lib/storage/characters";
-import * as authorizationModule from "@/lib/auth/character-authorization";
+import * as gmAccessModule from "@/lib/auth/gm-character-access";
 
 import type { Character, Weapon, CyberwareItem } from "@/lib/types";
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
 vi.mock("@/lib/storage/characters");
-vi.mock("@/lib/auth/character-authorization");
+vi.mock("@/lib/auth/gm-character-access");
 
 // Helper to create a NextRequest
 function createMockRequest(url: string, body?: unknown, method = "GET"): NextRequest {
@@ -102,13 +102,13 @@ describe("GET /api/characters/[characterId]/wireless", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
+    vi.mocked(gmAccessModule.resolveCharacterForGameplay).mockResolvedValue({
       authorized: true,
       character: mockCharacter,
+      ownerId: "test-user-id",
+      actorRole: "owner",
       campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
+      isGMAccess: false,
     });
   });
 
@@ -182,13 +182,13 @@ describe("PATCH /api/characters/[characterId]/wireless", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
+    vi.mocked(gmAccessModule.resolveCharacterForGameplay).mockResolvedValue({
       authorized: true,
       character: mockCharacter,
+      ownerId: "test-user-id",
+      actorRole: "owner",
       campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
+      isGMAccess: false,
     });
     vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(mockCharacter);
   });
@@ -308,13 +308,13 @@ describe("POST /api/characters/[characterId]/wireless", () => {
     });
 
     vi.mocked(sessionModule.getSession).mockResolvedValue(userId);
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
+    vi.mocked(gmAccessModule.resolveCharacterForGameplay).mockResolvedValue({
       authorized: true,
       character: mockCharacter,
+      ownerId: "test-user-id",
+      actorRole: "owner",
       campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
+      isGMAccess: false,
     });
     vi.mocked(characterStorageModule.updateCharacter).mockResolvedValue(mockCharacter);
   });
@@ -342,13 +342,13 @@ describe("POST /api/characters/[characterId]/wireless", () => {
       wirelessBonusesEnabled: false,
     });
 
-    vi.mocked(authorizationModule.authorizeOwnerAccess).mockResolvedValue({
+    vi.mocked(gmAccessModule.resolveCharacterForGameplay).mockResolvedValue({
       authorized: true,
       character: mockCharacter,
+      ownerId: "test-user-id",
+      actorRole: "owner",
       campaign: null,
-      role: "owner",
-      permissions: ["view", "edit"],
-      status: 200,
+      isGMAccess: false,
     });
 
     const requestBody = {

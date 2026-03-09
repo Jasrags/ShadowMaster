@@ -8,7 +8,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 
 // =============================================================================
 // TYPES
@@ -38,17 +39,16 @@ export async function DELETE(
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
-    }
-
-    if (character.ownerId !== userId) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: "Not authorized to modify this character" },
-        { status: 403 }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
+
+    const { character, ownerId, actorRole, campaign, isGMAccess } = resolution;
 
     const existing = character.activeModifiers ?? [];
     const modifier = existing.find((m) => m.id === modifierId);
@@ -59,12 +59,12 @@ export async function DELETE(
     const updated = existing.filter((m) => m.id !== modifierId);
 
     await updateCharacterWithAudit(
-      userId,
+      ownerId,
       characterId,
       { activeModifiers: updated },
       {
         action: "modifier_removed",
-        actor: { userId, role: "owner" },
+        actor: { userId, role: actorRole },
         details: {
           modifierId: modifier.id,
           modifierName: modifier.name,
@@ -74,6 +74,11 @@ export async function DELETE(
         note: `Removed modifier: ${modifier.name}`,
       }
     );
+
+    // Notify owner if GM made the edit
+    if (isGMAccess && campaign) {
+      await notifyOwnerOfGMEdit(character, campaign, userId, `modifier removed: ${modifier.name}`);
+    }
 
     return NextResponse.json({ success: true });
   } catch (error) {

@@ -37,7 +37,8 @@ export type CharacterPermission =
   | "approve_advancement" // Approve pending advancements (GM)
   | "reject_advancement" // Reject pending advancements (GM)
   | "transfer" // Transfer ownership (admin)
-  | "manage_campaign"; // Join/leave campaign
+  | "manage_campaign" // Join/leave campaign
+  | "gameplay_edit"; // Gameplay actions (damage, healing, karma, inventory, etc.)
 
 // =============================================================================
 // AUTHORIZATION RESULT
@@ -97,13 +98,14 @@ export function getPermissionsForRole(
         "reject_advancement",
         "transfer",
         "manage_campaign",
+        "gameplay_edit",
       ];
 
     case "gm":
       // GM can view campaign characters and manage approvals
       permissions.push("view");
       if (characterStatus === "active") {
-        permissions.push("retire", "approve_advancement", "reject_advancement");
+        permissions.push("retire", "approve_advancement", "reject_advancement", "gameplay_edit");
       }
       if (characterStatus === "deceased") {
         permissions.push("resurrect");
@@ -117,7 +119,7 @@ export function getPermissionsForRole(
         permissions.push("edit", "finalize");
       }
       if (characterStatus === "active") {
-        permissions.push("retire", "advance");
+        permissions.push("retire", "advance", "gameplay_edit");
       }
       if (characterStatus === "retired") {
         // Can reactivate retired characters
@@ -139,6 +141,7 @@ export function getPermissionsForRole(
         "reject_advancement",
         "transfer",
         "manage_campaign",
+        "gameplay_edit",
       ];
   }
 

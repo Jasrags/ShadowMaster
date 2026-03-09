@@ -14,12 +14,12 @@ vi.mock("@/lib/auth/session", () => ({
   getSession: vi.fn(),
 }));
 
-vi.mock("@/lib/storage/users", () => ({
-  getUserById: vi.fn(),
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
 }));
 
 vi.mock("@/lib/storage/characters", () => ({
-  getCharacter: vi.fn(),
   spendEdge: vi.fn(),
   restoreEdge: vi.fn(),
   restoreFullEdge: vi.fn(),
@@ -28,9 +28,8 @@ vi.mock("@/lib/storage/characters", () => ({
 }));
 
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 import {
-  getCharacter,
   spendEdge,
   restoreEdge,
   restoreFullEdge,
@@ -38,7 +37,7 @@ import {
   getMaxEdge,
 } from "@/lib/storage/characters";
 import { GET, POST } from "../route";
-import type { User, Character } from "@/lib/types";
+import type { Character } from "@/lib/types";
 
 // =============================================================================
 // TEST DATA
@@ -46,42 +45,6 @@ import type { User, Character } from "@/lib/types";
 
 const TEST_USER_ID = "test-user-123";
 const TEST_CHARACTER_ID = "test-char-789";
-
-function createMockUser(overrides: Partial<User> = {}): User {
-  return {
-    id: TEST_USER_ID,
-    username: "testrunner",
-    email: "test@example.com",
-    passwordHash: "hashed_password",
-    role: ["user"],
-    preferences: { theme: "dark", navigationCollapsed: false },
-    createdAt: new Date().toISOString(),
-    lastLogin: new Date().toISOString(),
-    characters: [TEST_CHARACTER_ID],
-    failedLoginAttempts: 0,
-    lockoutUntil: null,
-    sessionVersion: 1,
-    sessionSecretHash: null,
-    accountStatus: "active",
-    statusChangedAt: null,
-    statusChangedBy: null,
-    statusReason: null,
-    lastRoleChangeAt: null,
-    lastRoleChangeBy: null,
-    emailVerified: true,
-    emailVerifiedAt: null,
-    emailVerificationTokenHash: null,
-    emailVerificationTokenExpiresAt: null,
-    emailVerificationTokenPrefix: null,
-    passwordResetTokenHash: null,
-    passwordResetTokenExpiresAt: null,
-    passwordResetTokenPrefix: null,
-    magicLinkTokenHash: null,
-    magicLinkTokenExpiresAt: null,
-    magicLinkTokenPrefix: null,
-    ...overrides,
-  };
-}
 
 function createMockCharacter(overrides: Partial<Character> = {}): Character {
   return {
@@ -140,8 +103,22 @@ function createMockPostRequest(body: Record<string, unknown>): NextRequest {
   });
 }
 
-const mockUser = createMockUser();
 const mockCharacter = createMockCharacter();
+
+const mockResolveSuccess = {
+  authorized: true as const,
+  character: mockCharacter,
+  ownerId: TEST_USER_ID,
+  actorRole: "owner" as const,
+  campaign: null,
+  isGMAccess: false,
+};
+
+const mockResolveNotFound = {
+  authorized: false as const,
+  error: "Character not found",
+  status: 404,
+};
 
 // =============================================================================
 // GET TESTS
@@ -167,9 +144,9 @@ describe("GET /api/characters/[characterId]/edge", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("should return 404 when user not found", async () => {
+    it("should return 404 when character access is not authorized", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveNotFound);
 
       const request = createMockGetRequest();
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -179,15 +156,14 @@ describe("GET /api/characters/[characterId]/edge", () => {
 
       expect(response.status).toBe(404);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("User not found");
+      expect(data.error).toBe("Character not found");
     });
   });
 
   describe("Authorization", () => {
     it("should return 404 when character not found", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveNotFound);
 
       const request = createMockGetRequest();
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -204,8 +180,7 @@ describe("GET /api/characters/[characterId]/edge", () => {
   describe("Success", () => {
     it("should return Edge status when character exists", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(3);
       vi.mocked(getMaxEdge).mockReturnValue(4);
 
@@ -225,8 +200,7 @@ describe("GET /api/characters/[characterId]/edge", () => {
 
     it("should show canSpend as false when Edge is 0", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(0);
       vi.mocked(getMaxEdge).mockReturnValue(4);
 
@@ -243,8 +217,7 @@ describe("GET /api/characters/[characterId]/edge", () => {
 
     it("should show canRestore as false when Edge is at max", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(4);
       vi.mocked(getMaxEdge).mockReturnValue(4);
 
@@ -263,8 +236,7 @@ describe("GET /api/characters/[characterId]/edge", () => {
   describe("Error handling", () => {
     it("should return 500 on unexpected error", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockRejectedValue(new Error("Database error"));
+      vi.mocked(resolveCharacterForGameplay).mockRejectedValue(new Error("Database error"));
 
       const request = createMockGetRequest();
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -303,9 +275,9 @@ describe("POST /api/characters/[characterId]/edge", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("should return 404 when user not found", async () => {
+    it("should return 404 when character access is not authorized", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveNotFound);
 
       const request = createMockPostRequest({ action: "spend", amount: 1 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -315,15 +287,14 @@ describe("POST /api/characters/[characterId]/edge", () => {
 
       expect(response.status).toBe(404);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("User not found");
+      expect(data.error).toBe("Character not found");
     });
   });
 
   describe("Authorization", () => {
     it("should return 404 when character not found", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(null);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveNotFound);
 
       const request = createMockPostRequest({ action: "spend", amount: 1 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -340,8 +311,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
   describe("Validation", () => {
     it("should return 400 when action is missing", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
 
       const request = createMockPostRequest({ amount: 1 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -356,8 +326,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
 
     it("should return 400 when amount is less than 1", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
 
       // Use negative number since 0 defaults to 1 via `body.amount || 1`
       const request = createMockPostRequest({ action: "spend", amount: -1 });
@@ -373,8 +342,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
 
     it("should return 400 for invalid action", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
 
       const request = createMockPostRequest({ action: "invalid", amount: 1 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -391,8 +359,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
   describe("Spend Edge", () => {
     it("should return 400 when insufficient Edge", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(1);
 
       const request = createMockPostRequest({ action: "spend", amount: 2 });
@@ -409,8 +376,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
     it("should spend Edge successfully", async () => {
       const updatedCharacter = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(4).mockReturnValueOnce(4);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(spendEdge).mockResolvedValue(updatedCharacter);
@@ -434,8 +400,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
     it("should default amount to 1 when not specified", async () => {
       const updatedCharacter = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(4);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(spendEdge).mockResolvedValue(updatedCharacter);
@@ -457,8 +422,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
     it("should restore Edge successfully", async () => {
       const updatedCharacter = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(2);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(restoreEdge).mockResolvedValue(updatedCharacter);
@@ -484,8 +448,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
     it("should call restoreFullEdge when amount equals max", async () => {
       const updatedCharacter = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(0);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(restoreFullEdge).mockResolvedValue(updatedCharacter);
@@ -505,8 +468,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
     it("should call restoreFullEdge when amount is undefined", async () => {
       const updatedCharacter = createMockCharacter();
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(0);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(restoreFullEdge).mockResolvedValue(updatedCharacter);
@@ -526,8 +488,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
   describe("Error handling", () => {
     it("should return 500 on unexpected error during spend", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(4);
       vi.mocked(spendEdge).mockRejectedValue(new Error("Storage error"));
 
@@ -544,8 +505,7 @@ describe("POST /api/characters/[characterId]/edge", () => {
 
     it("should return 500 on unexpected error during restore", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getUserById).mockResolvedValue(mockUser);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      vi.mocked(resolveCharacterForGameplay).mockResolvedValue(mockResolveSuccess);
       vi.mocked(getCurrentEdge).mockReturnValue(2);
       vi.mocked(getMaxEdge).mockReturnValue(4);
       vi.mocked(restoreEdge).mockRejectedValue(new Error("Storage error"));
