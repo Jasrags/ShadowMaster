@@ -189,6 +189,13 @@ function getWirelessInfo(
     }
   }
 
+  // --- Cyberlimbs ---
+  for (const limb of character.cyberlimbs || []) {
+    const itemOn = limb.wirelessEnabled !== false;
+    if (itemOn) enabled++;
+    else disabled++;
+  }
+
   // --- Drones (always wireless-capable) ---
   for (const drone of character.drones || []) {
     const itemOn = drone.state?.wirelessEnabled !== false;
