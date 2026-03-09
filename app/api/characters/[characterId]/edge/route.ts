@@ -9,15 +9,14 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
 import {
-  getCharacter,
   spendEdge,
   restoreEdge,
   restoreFullEdge,
   getCurrentEdge,
   getMaxEdge,
 } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import type { EdgeRequest } from "@/lib/types";
 import { apiLogger } from "@/lib/logging";
 
@@ -37,19 +36,18 @@ export async function GET(
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
-    }
-
     const { characterId } = await params;
 
-    // Verify character ownership
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
+      return NextResponse.json(
+        { success: false, error: resolution.error },
+        { status: resolution.status }
+      );
     }
 
+    const { character } = resolution;
     const current = getCurrentEdge(character);
     const maximum = getMaxEdge(character);
 
@@ -88,18 +86,19 @@ export async function POST(
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
-    }
-
     const { characterId } = await params;
 
-    // Verify character ownership
-    let character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
+      return NextResponse.json(
+        { success: false, error: resolution.error },
+        { status: resolution.status }
+      );
     }
+
+    let { character } = resolution;
+    const { ownerId, actorRole, campaign, isGMAccess } = resolution;
 
     // Parse request body
     const body: EdgeRequest = await request.json();
@@ -132,7 +131,17 @@ export async function POST(
         );
       }
 
-      character = await spendEdge(userId, characterId, amount);
+      character = await spendEdge(ownerId, characterId, amount);
+
+      if (isGMAccess && campaign) {
+        await notifyOwnerOfGMEdit(
+          resolution.character,
+          campaign,
+          userId,
+          `${amount} Edge spent`,
+          body.reason
+        );
+      }
 
       return NextResponse.json({
         success: true,
@@ -141,13 +150,24 @@ export async function POST(
         edgeCurrent: getCurrentEdge(character),
         edgeMaximum: getMaxEdge(character),
         reason: body.reason,
+        actorRole,
       });
     } else if (body.action === "restore") {
       // Check if "full" restore requested
       if (body.amount === undefined || body.amount === getMaxEdge(character)) {
-        character = await restoreFullEdge(userId, characterId);
+        character = await restoreFullEdge(ownerId, characterId);
       } else {
-        character = await restoreEdge(userId, characterId, amount);
+        character = await restoreEdge(ownerId, characterId, amount);
+      }
+
+      if (isGMAccess && campaign) {
+        await notifyOwnerOfGMEdit(
+          resolution.character,
+          campaign,
+          userId,
+          `${amount} Edge restored`,
+          body.reason
+        );
       }
 
       return NextResponse.json({
@@ -157,6 +177,7 @@ export async function POST(
         edgeCurrent: getCurrentEdge(character),
         edgeMaximum: getMaxEdge(character),
         reason: body.reason,
+        actorRole,
       });
     }
 

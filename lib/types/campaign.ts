@@ -405,7 +405,8 @@ export type NotificationType =
   | "karma_awarded"
   | "post_created"
   | "mentioned"
-  | "edge_refreshed";
+  | "edge_refreshed"
+  | "character_gm_edited";
 
 /**
  * User notification

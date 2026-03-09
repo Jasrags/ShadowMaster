@@ -9,11 +9,9 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { GET, PATCH } from "../route";
 import { NextRequest } from "next/server";
 import * as sessionModule from "@/lib/auth/session";
-import * as usersModule from "@/lib/storage/users";
 import * as charactersModule from "@/lib/storage/characters";
 import * as cyberdeckValidator from "@/lib/rules/matrix/cyberdeck-validator";
 import type { Character } from "@/lib/types";
-import type { User } from "@/lib/types/user";
 import type { CharacterProgram } from "@/lib/types/programs";
 import type {
   CyberdeckAttributeConfig,
@@ -23,9 +21,14 @@ import type {
 
 // Mock dependencies
 vi.mock("@/lib/auth/session");
-vi.mock("@/lib/storage/users");
 vi.mock("@/lib/storage/characters");
 vi.mock("@/lib/rules/matrix/cyberdeck-validator");
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
+}));
+
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 
 // Helper to create a NextRequest for PATCH
 function createPatchRequest(characterId: string, body?: unknown): NextRequest {
@@ -133,49 +136,29 @@ function createMockProgram(overrides?: Partial<CharacterProgram>): CharacterProg
   };
 }
 
-// Helper to create full User mock
-function createMockUser(overrides?: Partial<User>): User {
-  return {
-    id: "test-user-id",
-    email: "test@example.com",
-    username: "testuser",
-    passwordHash: "hashed-password",
-    role: ["user"],
-    createdAt: new Date().toISOString(),
-    lastLogin: new Date().toISOString(),
-    characters: [],
-    failedLoginAttempts: 0,
-    lockoutUntil: null,
-    sessionVersion: 1,
-    sessionSecretHash: null,
-    preferences: {
-      theme: "system",
-      navigationCollapsed: false,
-    },
-    accountStatus: "active",
-    statusChangedAt: null,
-    statusChangedBy: null,
-    statusReason: null,
-    lastRoleChangeAt: null,
-    lastRoleChangeBy: null,
-    emailVerified: true,
-    emailVerifiedAt: null,
-    emailVerificationTokenHash: null,
-    emailVerificationTokenExpiresAt: null,
-    emailVerificationTokenPrefix: null,
-    passwordResetTokenHash: null,
-    passwordResetTokenExpiresAt: null,
-    passwordResetTokenPrefix: null,
-    magicLinkTokenHash: null,
-    magicLinkTokenExpiresAt: null,
-    magicLinkTokenPrefix: null,
-    ...overrides,
-  };
+/** Helper to mock resolveCharacterForGameplay as authorized (owner) */
+function mockResolutionSuccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: character.ownerId,
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
+
+/** Helper to mock resolveCharacterForGameplay as denied */
+function mockResolutionDenied(status: number, error: string) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: false,
+    error,
+    status,
+  });
 }
 
 describe("/api/characters/[characterId]/matrix", () => {
   const mockUserId = "test-user-id";
-  const mockUser = createMockUser({ id: mockUserId });
   const mockDeck = createMockCyberdeck();
   const mockCommlink = createMockCommlink();
   const mockCharacter = createMockCharacter({
@@ -227,9 +210,9 @@ describe("/api/characters/[characterId]/matrix", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("should return 404 when user not found", async () => {
+    it("should return 404 when character not found", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(null);
+      mockResolutionDenied(404, "Character not found");
 
       const request = createGetRequest("test-char-id");
       const response = await GET(request, {
@@ -238,31 +221,12 @@ describe("/api/characters/[characterId]/matrix", () => {
       const data = await response.json();
 
       expect(response.status).toBe(404);
-      expect(data.error).toBe("User not found");
-    });
-
-    it("should return 404 when character not found", async () => {
-      vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(null);
-
-      const request = createGetRequest("non-existent-id");
-      const response = await GET(request, {
-        params: Promise.resolve({ characterId: "non-existent-id" }),
-      });
-      const data = await response.json();
-
-      expect(response.status).toBe(404);
       expect(data.error).toBe("Character not found");
     });
 
-    it("should return 403 when user doesn't own character", async () => {
+    it("should return 403 when not authorized", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
-        ...mockCharacter,
-        ownerId: "different-user-id",
-      });
+      mockResolutionDenied(403, "Permission denied: view");
 
       const request = createGetRequest("test-char-id");
       const response = await GET(request, {
@@ -271,7 +235,7 @@ describe("/api/characters/[characterId]/matrix", () => {
       const data = await response.json();
 
       expect(response.status).toBe(403);
-      expect(data.error).toBe("Not authorized to view this character");
+      expect(data.error).toBe("Permission denied: view");
     });
 
     it("should return empty arrays when no matrix equipment", async () => {
@@ -282,8 +246,7 @@ describe("/api/characters/[characterId]/matrix", () => {
       });
 
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(emptyCharacter);
+      mockResolutionSuccess(emptyCharacter);
       vi.mocked(cyberdeckValidator.getCharacterCyberdecks).mockReturnValue([]);
       vi.mocked(cyberdeckValidator.getCharacterCommlinks).mockReturnValue([]);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(null);
@@ -302,8 +265,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should return cyberdecks with current config", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createGetRequest("test-char-id");
       const response = await GET(request, {
@@ -324,8 +286,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should return commlinks with derived stats", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createGetRequest("test-char-id");
       const response = await GET(request, {
@@ -353,8 +314,7 @@ describe("/api/characters/[characterId]/matrix", () => {
       });
 
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(charWithLoadedPrograms);
+      mockResolutionSuccess(charWithLoadedPrograms);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(deckWithLoaded);
 
       const request = createGetRequest("test-char-id");
@@ -380,8 +340,7 @@ describe("/api/characters/[characterId]/matrix", () => {
       });
 
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(charWithoutActiveDevice);
+      mockResolutionSuccess(charWithoutActiveDevice);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(mockDeck);
 
       const request = createGetRequest("test-char-id");
@@ -413,9 +372,9 @@ describe("/api/characters/[characterId]/matrix", () => {
       expect(data.error).toBe("Unauthorized");
     });
 
-    it("should return 404 when user not found", async () => {
+    it("should return 404 when character not found", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(null);
+      mockResolutionDenied(404, "Character not found");
 
       const request = createPatchRequest("test-char-id", { deckConfig: validConfig });
       const response = await PATCH(request, {
@@ -424,31 +383,12 @@ describe("/api/characters/[characterId]/matrix", () => {
       const data = await response.json();
 
       expect(response.status).toBe(404);
-      expect(data.error).toBe("User not found");
-    });
-
-    it("should return 404 when character not found", async () => {
-      vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(null);
-
-      const request = createPatchRequest("non-existent-id", { deckConfig: validConfig });
-      const response = await PATCH(request, {
-        params: Promise.resolve({ characterId: "non-existent-id" }),
-      });
-      const data = await response.json();
-
-      expect(response.status).toBe(404);
       expect(data.error).toBe("Character not found");
     });
 
-    it("should return 403 when user doesn't own character", async () => {
+    it("should return 403 when not authorized", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
-        ...mockCharacter,
-        ownerId: "different-user-id",
-      });
+      mockResolutionDenied(403, "Permission denied: gameplay_edit");
 
       const request = createPatchRequest("test-char-id", { deckConfig: validConfig });
       const response = await PATCH(request, {
@@ -457,15 +397,12 @@ describe("/api/characters/[characterId]/matrix", () => {
       const data = await response.json();
 
       expect(response.status).toBe(403);
-      expect(data.error).toBe("Not authorized to modify this character");
+      expect(data.error).toBe("Permission denied: gameplay_edit");
     });
 
     it("should return 400 when no active cyberdeck for deckConfig update", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(
-        createMockCharacter({ cyberdecks: [] })
-      );
+      mockResolutionSuccess(createMockCharacter({ cyberdecks: [] }));
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(null);
 
       const request = createPatchRequest("test-char-id", { deckConfig: validConfig });
@@ -480,8 +417,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should return 400 for invalid deck config", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(mockDeck);
       vi.mocked(cyberdeckValidator.validateCyberdeckConfig).mockReturnValue({
         valid: false,
@@ -509,8 +445,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should update deck config successfully", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(mockDeck);
       vi.mocked(cyberdeckValidator.validateCyberdeckConfig).mockReturnValue({
         valid: true,
@@ -522,12 +457,10 @@ describe("/api/characters/[characterId]/matrix", () => {
         ...mockCharacter,
         cyberdecks: [{ ...mockDeck, currentConfig: validConfig }],
       });
-      vi.mocked(charactersModule.getCharacter)
-        .mockResolvedValueOnce(mockCharacter) // First call
-        .mockResolvedValueOnce({
-          ...mockCharacter,
-          cyberdecks: [{ ...mockDeck, currentConfig: validConfig }],
-        }); // Second call after update
+      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
+        ...mockCharacter,
+        cyberdecks: [{ ...mockDeck, currentConfig: validConfig }],
+      });
 
       const request = createPatchRequest("test-char-id", { deckConfig: validConfig });
       const response = await PATCH(request, {
@@ -542,8 +475,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should return 400 when program slots exceeded", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue({
         ...mockDeck,
         programSlots: 2,
@@ -565,8 +497,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should load programs successfully", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue({
         ...mockDeck,
         programSlots: 4,
@@ -576,12 +507,10 @@ describe("/api/characters/[characterId]/matrix", () => {
         ...mockCharacter,
         cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
       });
-      vi.mocked(charactersModule.getCharacter)
-        .mockResolvedValueOnce(mockCharacter)
-        .mockResolvedValueOnce({
-          ...mockCharacter,
-          cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
-        });
+      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
+        ...mockCharacter,
+        cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
+      });
 
       const request = createPatchRequest("test-char-id", {
         loadPrograms: ["browse", "edit"],
@@ -607,19 +536,16 @@ describe("/api/characters/[characterId]/matrix", () => {
       };
 
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(charWithLoadedPrograms);
+      mockResolutionSuccess(charWithLoadedPrograms as Character);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(deckWithLoadedPrograms);
       vi.mocked(charactersModule.updateCharacterWithAudit).mockResolvedValue({
         ...mockCharacter,
         cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse"] }],
       });
-      vi.mocked(charactersModule.getCharacter)
-        .mockResolvedValueOnce(charWithLoadedPrograms)
-        .mockResolvedValueOnce({
-          ...mockCharacter,
-          cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse"] }],
-        });
+      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
+        ...mockCharacter,
+        cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse"] }],
+      });
 
       const request = createPatchRequest("test-char-id", {
         unloadPrograms: ["edit"],
@@ -646,19 +572,16 @@ describe("/api/characters/[characterId]/matrix", () => {
       };
 
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(charWithSomeLoaded);
+      mockResolutionSuccess(charWithSomeLoaded as Character);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(deckWithSomeLoaded);
       vi.mocked(charactersModule.updateCharacterWithAudit).mockResolvedValue({
         ...mockCharacter,
         cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
       });
-      vi.mocked(charactersModule.getCharacter)
-        .mockResolvedValueOnce(charWithSomeLoaded)
-        .mockResolvedValueOnce({
-          ...mockCharacter,
-          cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
-        });
+      vi.mocked(charactersModule.getCharacter).mockResolvedValue({
+        ...mockCharacter,
+        cyberdecks: [{ ...mockDeck, loadedPrograms: ["browse", "edit"] }],
+      });
 
       const request = createPatchRequest("test-char-id", {
         loadPrograms: ["browse", "edit"], // browse is already loaded
@@ -674,8 +597,7 @@ describe("/api/characters/[characterId]/matrix", () => {
 
     it("should create audit trail for changes", async () => {
       vi.mocked(sessionModule.getSession).mockResolvedValue(mockUserId);
-      vi.mocked(usersModule.getUserById).mockResolvedValue(mockUser);
-      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(cyberdeckValidator.getActiveCyberdeck).mockReturnValue(mockDeck);
       vi.mocked(cyberdeckValidator.validateCyberdeckConfig).mockReturnValue({
         valid: true,
@@ -684,6 +606,7 @@ describe("/api/characters/[characterId]/matrix", () => {
         effectiveAttributes: validConfig,
       });
       vi.mocked(charactersModule.updateCharacterWithAudit).mockResolvedValue(mockCharacter);
+      vi.mocked(charactersModule.getCharacter).mockResolvedValue(mockCharacter);
 
       const request = createPatchRequest("test-char-id", { deckConfig: validConfig });
       await PATCH(request, { params: Promise.resolve({ characterId: "test-char-id" }) });

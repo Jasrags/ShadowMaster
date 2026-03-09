@@ -12,7 +12,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
 import { updateCharacter } from "@/lib/storage/characters";
-import { authorizeOwnerAccess } from "@/lib/auth/character-authorization";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import {
   toggleWireless,
   toggleAugmentationWireless,
@@ -86,17 +86,16 @@ export async function GET(
 
     const { characterId } = await params;
 
-    // Authorize view access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "view");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
-    const character = authResult.character!;
+    const character = resolution.character;
 
     // Get global wireless state
     const globalEnabled = isGlobalWirelessEnabled(character);
@@ -183,17 +182,16 @@ export async function PATCH(
 
     const { characterId } = await params;
 
-    // Authorize edit access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "edit");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
-    const character = authResult.character!;
+    const { character, ownerId, campaign, isGMAccess } = resolution;
 
     // Parse request body
     const body: ToggleWirelessRequest = await request.json();
@@ -212,7 +210,16 @@ export async function PATCH(
       if (updatedCharacter.cyberware) updates.cyberware = updatedCharacter.cyberware;
       if (updatedCharacter.bioware) updates.bioware = updatedCharacter.bioware;
       if (updatedCharacter.drones) updates.drones = updatedCharacter.drones;
-      await updateCharacter(userId, characterId, updates);
+      await updateCharacter(ownerId, characterId, updates);
+
+      if (isGMAccess && campaign) {
+        await notifyOwnerOfGMEdit(
+          character,
+          campaign,
+          userId,
+          `global wireless ${enabled ? "enabled" : "disabled"}`
+        );
+      }
 
       return NextResponse.json({
         success: true,
@@ -252,7 +259,7 @@ export async function PATCH(
 
         const updatedWeapons = [...character.weapons!];
         updatedWeapons[weaponIndex] = item as Weapon;
-        await updateCharacter(userId, characterId, { weapons: updatedWeapons });
+        await updateCharacter(ownerId, characterId, { weapons: updatedWeapons });
         break;
       }
 
@@ -272,7 +279,7 @@ export async function PATCH(
 
         const updatedArmor = [...character.armor!];
         updatedArmor[armorIndex] = item as ArmorItem;
-        await updateCharacter(userId, characterId, { armor: updatedArmor });
+        await updateCharacter(ownerId, characterId, { armor: updatedArmor });
         break;
       }
 
@@ -296,7 +303,7 @@ export async function PATCH(
 
         const updatedGear = [...character.gear!];
         updatedGear[gearIndex] = item as GearItem;
-        await updateCharacter(userId, characterId, { gear: updatedGear });
+        await updateCharacter(ownerId, characterId, { gear: updatedGear });
         break;
       }
 
@@ -316,7 +323,7 @@ export async function PATCH(
 
         const updatedCyberware = [...character.cyberware!];
         updatedCyberware[cyberIndex] = item as CyberwareItem;
-        await updateCharacter(userId, characterId, { cyberware: updatedCyberware });
+        await updateCharacter(ownerId, characterId, { cyberware: updatedCyberware });
         break;
       }
 
@@ -339,7 +346,7 @@ export async function PATCH(
 
         const updatedBioware = [...character.bioware!];
         updatedBioware[bioIndex] = item as typeof bioItem;
-        await updateCharacter(userId, characterId, { bioware: updatedBioware });
+        await updateCharacter(ownerId, characterId, { bioware: updatedBioware });
         break;
       }
 
@@ -348,6 +355,16 @@ export async function PATCH(
           { success: false, error: `Invalid item type: ${itemType}` },
           { status: 400 }
         );
+    }
+
+    // Notify owner if GM made the edit
+    if (isGMAccess && campaign) {
+      await notifyOwnerOfGMEdit(
+        character,
+        campaign,
+        userId,
+        `wireless ${enabled ? "enabled" : "disabled"} on ${itemType}`
+      );
     }
 
     return NextResponse.json({
@@ -381,17 +398,16 @@ export async function POST(
 
     const { characterId } = await params;
 
-    // Authorize edit access
-    const authResult = await authorizeOwnerAccess(userId, userId, characterId, "edit");
-
-    if (!authResult.authorized) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: authResult.error },
-        { status: authResult.status }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
 
-    const character = authResult.character!;
+    const { character, ownerId, campaign, isGMAccess } = resolution;
 
     // Parse request body
     const body: ToggleAllWirelessRequest = await request.json();
@@ -415,7 +431,16 @@ export async function POST(
     if (updatedCharacter.cyberware) updates.cyberware = updatedCharacter.cyberware;
     if (updatedCharacter.bioware) updates.bioware = updatedCharacter.bioware;
     if (updatedCharacter.drones) updates.drones = updatedCharacter.drones;
-    await updateCharacter(userId, characterId, updates);
+    await updateCharacter(ownerId, characterId, updates);
+
+    if (isGMAccess && campaign) {
+      await notifyOwnerOfGMEdit(
+        character,
+        campaign,
+        userId,
+        `all wireless ${enabled ? "enabled" : "disabled"}`
+      );
+    }
 
     return NextResponse.json({
       success: true,

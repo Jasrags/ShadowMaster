@@ -9,7 +9,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
+import { updateCharacterWithAudit } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import { validateAddModifier, getModifierTemplate, computeExpiresAt } from "@/lib/rules/modifiers";
 import type { AddModifierRequest } from "@/lib/rules/modifiers";
 import type { ActiveModifier, Effect } from "@/lib/types/effects";
@@ -54,24 +55,18 @@ export async function GET(
       );
     }
 
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, modifiers: [], error: "Character not found" },
-        { status: 404 }
-      );
-    }
-
-    if (character.ownerId !== userId) {
-      return NextResponse.json(
-        { success: false, modifiers: [], error: "Not authorized to view this character" },
-        { status: 403 }
+        { success: false, modifiers: [], error: resolution.error },
+        { status: resolution.status }
       );
     }
 
     return NextResponse.json({
       success: true,
-      modifiers: character.activeModifiers ?? [],
+      modifiers: resolution.character.activeModifiers ?? [],
     });
   } catch (error) {
     console.error("Failed to get modifiers:", error);
@@ -97,17 +92,16 @@ export async function POST(
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
-    }
-
-    if (character.ownerId !== userId) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: "Not authorized to modify this character" },
-        { status: 403 }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
+
+    const { character, ownerId, actorRole, campaign, isGMAccess } = resolution;
 
     const body: AddModifierRequest = await request.json();
 
@@ -162,12 +156,12 @@ export async function POST(
     // Append and save
     const existingModifiers = character.activeModifiers ?? [];
     await updateCharacterWithAudit(
-      userId,
+      ownerId,
       characterId,
       { activeModifiers: [...existingModifiers, modifier] },
       {
         action: "modifier_applied",
-        actor: { userId, role: "owner" },
+        actor: { userId, role: actorRole },
         details: {
           modifierId: modifier.id,
           modifierName: name,
@@ -180,6 +174,11 @@ export async function POST(
         note: `Applied modifier: ${name}`,
       }
     );
+
+    // Notify owner if GM made the edit
+    if (isGMAccess && campaign) {
+      await notifyOwnerOfGMEdit(character, campaign, userId, `modifier applied: ${name}`);
+    }
 
     return NextResponse.json({ success: true, modifier }, { status: 201 });
   } catch (error) {

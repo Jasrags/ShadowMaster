@@ -19,6 +19,10 @@ vi.mock("@/lib/auth/character-authorization", () => ({
   authorizeOwnerAccess: vi.fn(),
 }));
 
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+}));
+
 vi.mock("@/lib/storage/characters", () => ({
   getCharacter: vi.fn(),
   updateCharacter: vi.fn(),
@@ -32,6 +36,7 @@ vi.mock("@/lib/rules/character/state-machine", () => ({
 
 import { getSession } from "@/lib/auth/session";
 import { authorizeOwnerAccess } from "@/lib/auth/character-authorization";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 import { updateCharacter, deleteCharacter } from "@/lib/storage/characters";
 import { createAuditEntry, appendAuditEntry } from "@/lib/rules/character/state-machine";
 import { GET, PATCH, DELETE } from "../route";
@@ -149,14 +154,11 @@ describe("GET /api/characters/[characterId]", () => {
 
   it("should return 403 when not authorized", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(authorizeOwnerAccess).mockResolvedValue(
-      createAuthResult({
-        authorized: false,
-        character: null,
-        error: "Permission denied: view",
-        status: 403,
-      })
-    );
+    vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+      authorized: false,
+      error: "Permission denied: view",
+      status: 403,
+    });
 
     const request = createMockRequest();
     const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -171,14 +173,11 @@ describe("GET /api/characters/[characterId]", () => {
 
   it("should return 404 when character not found", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(authorizeOwnerAccess).mockResolvedValue(
-      createAuthResult({
-        authorized: false,
-        character: null,
-        error: "Character not found",
-        status: 404,
-      })
-    );
+    vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+      authorized: false,
+      error: "Character not found",
+      status: 404,
+    });
 
     const request = createMockRequest();
     const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -194,9 +193,14 @@ describe("GET /api/characters/[characterId]", () => {
   it("should return 200 with character data on success", async () => {
     const mockCharacter = createMockCharacter();
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(authorizeOwnerAccess).mockResolvedValue(
-      createAuthResult({ character: mockCharacter })
-    );
+    vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+      authorized: true,
+      character: mockCharacter,
+      ownerId: TEST_USER_ID,
+      actorRole: "owner",
+      campaign: null,
+      isGMAccess: false,
+    });
 
     const request = createMockRequest();
     const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -212,7 +216,7 @@ describe("GET /api/characters/[characterId]", () => {
 
   it("should return 500 on storage error", async () => {
     vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-    vi.mocked(authorizeOwnerAccess).mockRejectedValue(new Error("Storage error"));
+    vi.mocked(resolveCharacterForGameplay).mockRejectedValue(new Error("Storage error"));
 
     const consoleSpy = vi.spyOn(console, "error").mockImplementation(() => {});
 

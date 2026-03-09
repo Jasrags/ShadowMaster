@@ -23,9 +23,13 @@ vi.mock("@/lib/storage/characters", () => ({
   killCharacter: vi.fn(),
 }));
 
+vi.mock("@/lib/auth/gm-character-access", () => ({
+  resolveCharacterForGameplay: vi.fn(),
+  notifyOwnerOfGMEdit: vi.fn(),
+}));
+
 import { getSession } from "@/lib/auth/session";
 import {
-  getCharacter,
   applyDamage,
   healCharacter,
   spendKarma,
@@ -33,6 +37,7 @@ import {
   retireCharacter,
   killCharacter,
 } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay } from "@/lib/auth/gm-character-access";
 import { POST } from "../route";
 import type { Character } from "@/lib/types";
 
@@ -95,6 +100,27 @@ function createMockRequest(body: Record<string, unknown>): NextRequest {
   });
 }
 
+/** Helper to mock resolveCharacterForGameplay as authorized (owner) */
+function mockResolutionSuccess(character: Character) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: true,
+    character,
+    ownerId: character.ownerId,
+    actorRole: "owner",
+    campaign: null,
+    isGMAccess: false,
+  });
+}
+
+/** Helper to mock resolveCharacterForGameplay as denied */
+function mockResolutionDenied(status: number, error: string) {
+  vi.mocked(resolveCharacterForGameplay).mockResolvedValue({
+    authorized: false,
+    error,
+    status,
+  });
+}
+
 // =============================================================================
 // AUTHENTICATION TESTS
 // =============================================================================
@@ -123,7 +149,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
   describe("Authorization", () => {
     it("should return 404 when character not found", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(null);
+      mockResolutionDenied(404, "Character not found");
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -136,10 +162,10 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       expect(data.error).toBe("Character not found");
     });
 
-    it("should return 400 when character is not active", async () => {
-      const draftCharacter = createMockCharacter({ status: "draft" });
+    it("should return 403 when character is not active (draft)", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(draftCharacter);
+      // gameplay_edit permission denied for non-active characters
+      mockResolutionDenied(403, "Permission denied: gameplay_edit");
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -147,15 +173,14 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const response = await POST(request, { params });
       const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(403);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("Character must be active for gameplay actions");
     });
 
-    it("should return 400 when character is retired", async () => {
-      const retiredCharacter = createMockCharacter({ status: "retired" });
+    it("should return 403 when character is retired", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(retiredCharacter);
+      // gameplay_edit permission denied for retired characters
+      mockResolutionDenied(403, "Permission denied: gameplay_edit");
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -163,9 +188,8 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const response = await POST(request, { params });
       const data = await response.json();
 
-      expect(response.status).toBe(400);
+      expect(response.status).toBe(403);
       expect(data.success).toBe(false);
-      expect(data.error).toBe("Character must be active for gameplay actions");
     });
   });
 
@@ -181,7 +205,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(applyDamage).mockResolvedValue(damagedCharacter);
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 2 });
@@ -204,7 +228,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(applyDamage).mockResolvedValue(damagedCharacter);
 
       const request = createMockRequest({ action: "damage", physical: 3 });
@@ -231,7 +255,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(healCharacter).mockResolvedValue(healedCharacter);
 
       const request = createMockRequest({ action: "heal", physical: 3, stun: 3 });
@@ -254,7 +278,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(healCharacter).mockResolvedValue(healedCharacter);
 
       const request = createMockRequest({ action: "heal", stun: 3 });
@@ -277,7 +301,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const updatedCharacter = createMockCharacter({ karmaTotal: 60, karmaCurrent: 5 });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(spendKarma).mockResolvedValue(updatedCharacter);
 
       const request = createMockRequest({ action: "spendKarma", amount: 5 });
@@ -295,7 +319,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "spendKarma" });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -312,7 +336,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "spendKarma", amount: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -329,7 +353,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "spendKarma", amount: -5 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -349,7 +373,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const updatedCharacter = createMockCharacter({ karmaTotal: 60, karmaCurrent: 15 });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(awardKarma).mockResolvedValue(updatedCharacter);
 
       const request = createMockRequest({ action: "awardKarma", amount: 10 });
@@ -367,7 +391,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "awardKarma" });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -384,7 +408,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "awardKarma", amount: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -408,7 +432,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const retiredCharacter = createMockCharacter({ status: "retired" });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(retireCharacter).mockResolvedValue(retiredCharacter);
 
       const request = createMockRequest({ action: "retire" });
@@ -430,7 +454,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const deceasedCharacter = createMockCharacter({ status: "deceased" });
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(killCharacter).mockResolvedValue(deceasedCharacter);
 
       const request = createMockRequest({ action: "kill" });
@@ -455,7 +479,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
 
       const request = createMockRequest({ action: "invalid" });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -476,7 +500,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
   describe("Error handling", () => {
     it("should return 500 on unexpected error", async () => {
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockRejectedValue(new Error("Storage error"));
+      vi.mocked(resolveCharacterForGameplay).mockRejectedValue(new Error("Storage error"));
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 0 });
       const params = Promise.resolve({ characterId: TEST_CHARACTER_ID });
@@ -493,7 +517,7 @@ describe("POST /api/characters/[characterId]/gameplay", () => {
       const mockCharacter = createMockCharacter();
 
       vi.mocked(getSession).mockResolvedValue(TEST_USER_ID);
-      vi.mocked(getCharacter).mockResolvedValue(mockCharacter);
+      mockResolutionSuccess(mockCharacter);
       vi.mocked(applyDamage).mockRejectedValue(new Error("Failed to apply damage"));
 
       const request = createMockRequest({ action: "damage", physical: 3, stun: 0 });

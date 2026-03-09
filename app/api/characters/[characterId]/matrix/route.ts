@@ -11,8 +11,8 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { getSession } from "@/lib/auth/session";
-import { getUserById } from "@/lib/storage/users";
 import { getCharacter, updateCharacterWithAudit } from "@/lib/storage/characters";
+import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import type {
   MatrixEquipmentResponse,
   UpdateMatrixStateRequest,
@@ -43,21 +43,13 @@ export async function GET(
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+    // Resolve character with GM cross-user support (view permission for GET)
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "view");
+    if (!resolution.authorized) {
+      return NextResponse.json({ error: resolution.error }, { status: resolution.status });
     }
 
-    // Get the character
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ error: "Character not found" }, { status: 404 });
-    }
-
-    // Check ownership
-    if (character.ownerId !== userId) {
-      return NextResponse.json({ error: "Not authorized to view this character" }, { status: 403 });
-    }
+    const character = resolution.character;
 
     // Get matrix equipment
     const cyberdecks = getCharacterCyberdecks(character);
@@ -125,24 +117,16 @@ export async function PATCH(
       return NextResponse.json({ success: false, error: "Unauthorized" }, { status: 401 });
     }
 
-    const user = await getUserById(userId);
-    if (!user) {
-      return NextResponse.json({ success: false, error: "User not found" }, { status: 404 });
-    }
-
-    // Get the character
-    const character = await getCharacter(userId, characterId);
-    if (!character) {
-      return NextResponse.json({ success: false, error: "Character not found" }, { status: 404 });
-    }
-
-    // Check ownership
-    if (character.ownerId !== userId) {
+    // Resolve character with GM cross-user support
+    const resolution = await resolveCharacterForGameplay(userId, characterId, "gameplay_edit");
+    if (!resolution.authorized) {
       return NextResponse.json(
-        { success: false, error: "Not authorized to modify this character" },
-        { status: 403 }
+        { success: false, error: resolution.error },
+        { status: resolution.status }
       );
     }
+
+    const { character, ownerId, actorRole, campaign, isGMAccess } = resolution;
 
     // Parse request
     const body: UpdateMatrixStateRequest = await request.json();
@@ -307,19 +291,29 @@ export async function PATCH(
 
     // Apply updates if any
     if (Object.keys(updates).length > 0) {
-      await updateCharacterWithAudit(character.ownerId, characterId, updates, {
+      await updateCharacterWithAudit(ownerId, characterId, updates, {
         action: "updated",
         actor: {
           userId,
-          role: "owner",
+          role: actorRole,
         },
         details: auditDetails,
         note: "Matrix equipment configuration updated",
       });
+
+      // Notify owner if GM made the edit
+      if (isGMAccess && campaign) {
+        await notifyOwnerOfGMEdit(
+          character,
+          campaign,
+          userId,
+          "matrix equipment configuration updated"
+        );
+      }
     }
 
     // Return updated cyberdecks
-    const updatedCharacter = await getCharacter(userId, characterId);
+    const updatedCharacter = await getCharacter(ownerId, characterId);
     return NextResponse.json({
       success: true,
       cyberdecks: updatedCharacter?.cyberdecks,
