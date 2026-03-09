@@ -68,11 +68,14 @@ export function getPasswordStrengthError(password: string): string | null {
 }
 
 /**
- * Validate username length
- * Username must be between 3 and 50 characters
+ * Validate username format
+ * - Between 3 and 50 characters
+ * - Only alphanumeric characters, hyphens, and underscores
+ * - Must start and end with an alphanumeric character
  */
 export function isValidUsername(username: string): boolean {
-  return username.length >= 3 && username.length <= 50;
+  if (username.length < 3 || username.length > 50) return false;
+  return /^[a-zA-Z0-9][a-zA-Z0-9_-]*[a-zA-Z0-9]$/.test(username);
 }
 
 /**
@@ -84,6 +87,12 @@ export function getUsernameError(username: string): string | null {
   }
   if (username.length > 50) {
     return "Username must be no more than 50 characters long";
+  }
+  if (!/^[a-zA-Z0-9_-]+$/.test(username)) {
+    return "Username can only contain letters, numbers, hyphens, and underscores";
+  }
+  if (!/^[a-zA-Z0-9]/.test(username) || !/[a-zA-Z0-9]$/.test(username)) {
+    return "Username must start and end with a letter or number";
   }
   return null;
 }

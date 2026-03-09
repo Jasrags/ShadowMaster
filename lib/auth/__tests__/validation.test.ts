@@ -177,19 +177,24 @@ describe("validation", () => {
   });
 
   describe("isValidUsername", () => {
-    it("returns true for usernames between 3 and 50 characters", () => {
-      expect(isValidUsername("abc")).toBe(true); // 3 chars (minimum)
+    it("returns true for valid usernames", () => {
+      expect(isValidUsername("abc")).toBe(true);
       expect(isValidUsername("username")).toBe(true);
-      expect(isValidUsername("a".repeat(50))).toBe(true); // 50 chars (maximum)
+      expect(isValidUsername("a".repeat(50))).toBe(true);
+      expect(isValidUsername("user_name")).toBe(true);
+      expect(isValidUsername("user-name")).toBe(true);
+      expect(isValidUsername("User123")).toBe(true);
+      expect(isValidUsername("a_b")).toBe(true);
+      expect(isValidUsername("a-b")).toBe(true);
     });
 
     it("returns false for usernames under 3 characters", () => {
-      expect(isValidUsername("ab")).toBe(false); // 2 chars
+      expect(isValidUsername("ab")).toBe(false);
       expect(isValidUsername("a")).toBe(false);
     });
 
     it("returns false for usernames over 50 characters", () => {
-      expect(isValidUsername("a".repeat(51))).toBe(false); // 51 chars
+      expect(isValidUsername("a".repeat(51))).toBe(false);
       expect(isValidUsername("a".repeat(100))).toBe(false);
     });
 
@@ -197,10 +202,39 @@ describe("validation", () => {
       expect(isValidUsername("")).toBe(false);
     });
 
-    it("accepts usernames with special characters if within length", () => {
-      expect(isValidUsername("user_name")).toBe(true);
-      expect(isValidUsername("user-name")).toBe(true);
-      expect(isValidUsername("user.name")).toBe(true);
+    it("returns false for usernames with dots", () => {
+      expect(isValidUsername("user.name")).toBe(false);
+    });
+
+    it("returns false for usernames with HTML tags", () => {
+      expect(isValidUsername("<script>alert</script>")).toBe(false);
+      expect(isValidUsername("<b>bold</b>")).toBe(false);
+    });
+
+    it("returns false for usernames with whitespace", () => {
+      expect(isValidUsername("user name")).toBe(false);
+      expect(isValidUsername("   ")).toBe(false);
+      expect(isValidUsername("user\tname")).toBe(false);
+      expect(isValidUsername("user\nname")).toBe(false);
+    });
+
+    it("returns false for usernames with unicode characters", () => {
+      expect(isValidUsername("usеrname")).toBe(false); // Cyrillic 'е'
+      expect(isValidUsername("user\u200Bname")).toBe(false); // zero-width space
+      expect(isValidUsername("héllo")).toBe(false);
+    });
+
+    it("returns false for usernames starting or ending with special chars", () => {
+      expect(isValidUsername("_username")).toBe(false);
+      expect(isValidUsername("-username")).toBe(false);
+      expect(isValidUsername("username_")).toBe(false);
+      expect(isValidUsername("username-")).toBe(false);
+    });
+
+    it("returns false for usernames with other special characters", () => {
+      expect(isValidUsername("user@name")).toBe(false);
+      expect(isValidUsername("user!name")).toBe(false);
+      expect(isValidUsername("user#name")).toBe(false);
     });
   });
 
@@ -209,6 +243,8 @@ describe("validation", () => {
       expect(getUsernameError("abc")).toBeNull();
       expect(getUsernameError("username")).toBeNull();
       expect(getUsernameError("a".repeat(50))).toBeNull();
+      expect(getUsernameError("user_name")).toBeNull();
+      expect(getUsernameError("user-name")).toBeNull();
     });
 
     it("returns too short error for usernames under 3 characters", () => {
@@ -224,6 +260,30 @@ describe("validation", () => {
 
     it("returns too short error for empty string", () => {
       expect(getUsernameError("")).toBe("Username must be at least 3 characters long");
+    });
+
+    it("returns invalid characters error for disallowed characters", () => {
+      expect(getUsernameError("user.name")).toBe(
+        "Username can only contain letters, numbers, hyphens, and underscores"
+      );
+      expect(getUsernameError("user@name")).toBe(
+        "Username can only contain letters, numbers, hyphens, and underscores"
+      );
+      expect(getUsernameError("<script>")).toBe(
+        "Username can only contain letters, numbers, hyphens, and underscores"
+      );
+    });
+
+    it("returns start/end error for leading or trailing special chars", () => {
+      expect(getUsernameError("_username")).toBe(
+        "Username must start and end with a letter or number"
+      );
+      expect(getUsernameError("username_")).toBe(
+        "Username must start and end with a letter or number"
+      );
+      expect(getUsernameError("-username")).toBe(
+        "Username must start and end with a letter or number"
+      );
     });
   });
 });

@@ -93,6 +93,7 @@ describe("POST /api/auth/signup", () => {
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("hashed-password");
@@ -112,6 +113,7 @@ describe("POST /api/auth/signup", () => {
     expect(data.user.role).toEqual(mockNewUser.role);
 
     expect(validationModule.isValidEmail).toHaveBeenCalledWith("newuser@example.com");
+    expect(validationModule.isValidUsername).toHaveBeenCalledWith("newuser");
     expect(validationModule.isStrongPassword).toHaveBeenCalledWith("ValidPass123!");
     expect(storageModule.getUserByEmail).toHaveBeenCalledWith("newuser@example.com");
     expect(passwordModule.hashPassword).toHaveBeenCalledWith("ValidPass123!");
@@ -201,6 +203,7 @@ describe("POST /api/auth/signup", () => {
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(false);
     vi.mocked(validationModule.getPasswordStrengthError).mockReturnValue(
       "Password must be at least 8 characters long"
@@ -261,6 +264,7 @@ describe("POST /api/auth/signup", () => {
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(existingUser);
 
@@ -284,6 +288,7 @@ describe("POST /api/auth/signup", () => {
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(storageModule.getUserByEmail).mockResolvedValue(null);
     vi.mocked(passwordModule.hashPassword).mockResolvedValue("hashed-password");
@@ -312,6 +317,7 @@ describe("POST /api/auth/signup", () => {
     };
 
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(storageModule.getUserByEmail).mockRejectedValue(new Error("Database error"));
 
