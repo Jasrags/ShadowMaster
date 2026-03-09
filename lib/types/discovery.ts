@@ -125,6 +125,8 @@ export interface ContentPreviewItem {
   id: string;
   name: string;
   category?: string;
+  /** Subcategory for finer grouping (e.g., "Pistols", "Combat Spells") */
+  subcategory?: string;
   /** Brief description for preview */
   summary?: string;
   /** Source book reference */
@@ -140,6 +142,8 @@ export interface ContentPreviewResponse {
   offset: number;
   limit: number;
   category?: string;
+  /** Echo back the search term when filtering */
+  search?: string;
 }
 
 // =============================================================================
