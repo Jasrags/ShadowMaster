@@ -10,6 +10,8 @@ import {
 } from "@/lib/types/cyberlimb";
 import { isGlobalWirelessEnabled } from "@/lib/rules/wireless";
 import { useCyberwareCatalog, useBiowareCatalog } from "@/lib/rules/RulesetContext";
+import { useInstallAugmentation, useRemoveAugmentation } from "@/lib/rules/augmentations/hooks";
+import { getCurrentEssence } from "@/lib/rules/augmentations/essence";
 import {
   useAddCyberlimbEnhancement,
   useRemoveCyberlimbEnhancement,
@@ -17,11 +19,14 @@ import {
   useRemoveCyberlimbAccessory,
   useToggleCyberlimbWireless,
 } from "@/lib/rules/augmentations/cyberlimb-hooks";
+import { AugmentationModal } from "@/components/creation/augmentations/AugmentationModal";
+import type { AugmentationSelection } from "@/components/creation/augmentations/AugmentationModal";
 import { CyberlimbEnhancementModal } from "@/components/cyberlimbs/CyberlimbEnhancementModal";
 import type { CyberlimbEnhancementSelection } from "@/components/cyberlimbs/CyberlimbEnhancementModal";
 import { CyberlimbAccessoryModal } from "@/components/cyberlimbs/CyberlimbAccessoryModal";
 import type { CyberlimbAccessorySelection } from "@/components/cyberlimbs/CyberlimbAccessoryModal";
 import { DisplayCard } from "./DisplayCard";
+import { RemoveAugmentationDialog } from "./RemoveAugmentationDialog";
 import { WirelessIndicator } from "./WirelessIndicator";
 import {
   ChevronDown,
@@ -112,6 +117,7 @@ interface AugmentationRowProps {
   onCharacterUpdate?: (updatedCharacter: Character) => void;
   editable?: boolean;
   catalogWirelessBonus?: string;
+  onRemove?: (item: CyberwareItem | BiowareItem, type: "cyberware" | "bioware") => void;
 }
 
 function AugmentationRow({
@@ -121,6 +127,7 @@ function AugmentationRow({
   onCharacterUpdate,
   editable,
   catalogWirelessBonus,
+  onRemove,
 }: AugmentationRowProps) {
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -275,6 +282,18 @@ function AugmentationRow({
                 </span>
               ))}
             </div>
+          )}
+
+          {/* Remove button */}
+          {editable && onRemove && (
+            <button
+              data-testid="remove-augmentation-btn"
+              onClick={() => onRemove(item, isCyberware ? "cyberware" : "bioware")}
+              className="flex items-center gap-1 rounded-md px-2 py-1 text-[11px] font-medium text-red-500 hover:bg-red-100 dark:text-red-400 dark:hover:bg-red-900/30"
+            >
+              <Trash2 className="h-3 w-3" />
+              Remove
+            </button>
           )}
         </div>
       )}
@@ -602,13 +621,22 @@ export function AugmentationsDisplay({
   const cyberwareCatalog = useCyberwareCatalog();
   const biowareCatalog = useBiowareCatalog();
 
+  // Install/remove modal state
+  const [installModalOpen, setInstallModalOpen] = useState(false);
+  const [removeTarget, setRemoveTarget] = useState<{
+    item: CyberwareItem | BiowareItem;
+    type: "cyberware" | "bioware";
+  } | null>(null);
+
   // Cyberlimb modal state
   const [selectedCyberlimb, setSelectedCyberlimb] = useState<CyberlimbItem | null>(null);
   const [enhancementModalOpen, setEnhancementModalOpen] = useState(false);
   const [accessoryModalOpen, setAccessoryModalOpen] = useState(false);
 
-  // Cyberlimb mutation hooks
+  // Mutation hooks
   const characterId = character.id ?? null;
+  const { install, loading: installLoading } = useInstallAugmentation(characterId);
+  const { remove: removeAug, loading: removeLoading } = useRemoveAugmentation(characterId);
   const { add: addEnhancement } = useAddCyberlimbEnhancement(characterId);
   const { remove: removeEnhancement } = useRemoveCyberlimbEnhancement(characterId);
   const { add: addAccessory } = useAddCyberlimbAccessory(characterId);
@@ -618,6 +646,64 @@ export function AugmentationsDisplay({
   const hasCyber = (character.cyberware?.length || 0) > 0;
   const hasBio = (character.bioware?.length || 0) > 0;
   const hasCyberlimbs = (character.cyberlimbs?.length || 0) > 0;
+
+  // Character metadata for modal
+  const isAwakened = !!(
+    character.specialAttributes?.magic != null && character.specialAttributes.magic > 0
+  );
+  const isTechnomancer = !!(
+    character.specialAttributes?.resonance != null && character.specialAttributes.resonance > 0
+  );
+  const remainingEssence = getCurrentEssence(character.cyberware ?? [], character.bioware ?? []);
+
+  // Install augmentation handler
+  const handleInstall = useCallback(
+    async (selection: AugmentationSelection) => {
+      if (!onCharacterUpdate) return;
+      const result = await install({
+        type: selection.type === "cyberware" ? "cyberware" : "bioware",
+        catalogId: selection.catalogId,
+        grade: selection.grade,
+        rating: selection.rating,
+      });
+      if (result.success && result.installedItem) {
+        const item = result.installedItem;
+        if (selection.type === "cyberware") {
+          onCharacterUpdate({
+            ...character,
+            cyberware: [...(character.cyberware ?? []), item as CyberwareItem],
+          });
+        } else {
+          onCharacterUpdate({
+            ...character,
+            bioware: [...(character.bioware ?? []), item as BiowareItem],
+          });
+        }
+      }
+    },
+    [character, onCharacterUpdate, install]
+  );
+
+  // Remove augmentation handler
+  const handleRemoveConfirm = useCallback(async () => {
+    if (!removeTarget || !onCharacterUpdate) return;
+    const itemId = removeTarget.item.id || removeTarget.item.catalogId;
+    const result = await removeAug(itemId);
+    if (result.success) {
+      if (removeTarget.type === "cyberware") {
+        onCharacterUpdate({
+          ...character,
+          cyberware: character.cyberware?.filter((c) => (c.id || c.catalogId) !== itemId),
+        });
+      } else {
+        onCharacterUpdate({
+          ...character,
+          bioware: character.bioware?.filter((b) => (b.id || b.catalogId) !== itemId),
+        });
+      }
+      setRemoveTarget(null);
+    }
+  }, [removeTarget, character, onCharacterUpdate, removeAug]);
 
   // Cyberlimb mutation handlers
   const handleAddEnhancement = useCallback(
@@ -746,7 +832,7 @@ export function AugmentationsDisplay({
     [character, onCharacterUpdate, toggleWireless]
   );
 
-  if (!hasCyber && !hasBio && !hasCyberlimbs) return null;
+  if (!hasCyber && !hasBio && !hasCyberlimbs && !editable) return null;
 
   const items: Record<"cyber" | "bio", (CyberwareItem | BiowareItem)[]> = {
     cyber: hasCyber
@@ -782,8 +868,28 @@ export function AugmentationsDisplay({
       title="Augmentations"
       icon={<Cpu className="h-4 w-4 text-zinc-400" />}
       collapsible
+      headerAction={
+        <div className="flex items-center gap-2">
+          <span className="font-mono text-xs text-zinc-500 dark:text-zinc-400">
+            {remainingEssence.toFixed(2)} ESS
+          </span>
+          {editable && onCharacterUpdate && (
+            <button
+              data-testid="install-augmentation-btn"
+              onClick={() => setInstallModalOpen(true)}
+              className="flex items-center gap-1 rounded-md bg-cyan-500/10 px-2 py-0.5 text-[11px] font-medium text-cyan-600 hover:bg-cyan-500/20 dark:text-cyan-400"
+            >
+              <Plus className="h-3 w-3" />
+              Install
+            </button>
+          )}
+        </div>
+      }
     >
       <div className="space-y-3">
+        {!hasCyber && !hasBio && !hasCyberlimbs && (
+          <p className="text-sm text-zinc-500 italic">No augmentations installed</p>
+        )}
         {AUGMENTATION_SECTIONS.map(({ key, label }) => {
           if (key === "cyberlimbs") {
             if (cyberlimbs.length === 0) return null;
@@ -835,6 +941,11 @@ export function AugmentationsDisplay({
                     onCharacterUpdate={onCharacterUpdate}
                     editable={editable}
                     catalogWirelessBonus={getCatalogWirelessBonus(item, isCyberware)}
+                    onRemove={
+                      editable && onCharacterUpdate
+                        ? (i, t) => setRemoveTarget({ item: i, type: t })
+                        : undefined
+                    }
                   />
                 ))}
               </div>
@@ -868,6 +979,34 @@ export function AugmentationsDisplay({
           onAdd={handleAddAccessory}
           limb={selectedCyberlimb}
           availableNuyen={Infinity}
+        />
+      )}
+
+      {/* Install Augmentation Modal */}
+      <AugmentationModal
+        isOpen={installModalOpen}
+        onClose={() => setInstallModalOpen(false)}
+        onAdd={handleInstall}
+        augmentationType="cyberware"
+        mode="management"
+        remainingEssence={remainingEssence}
+        remainingNuyen={Infinity}
+        isAwakened={isAwakened}
+        isTechnomancer={isTechnomancer}
+        currentMagic={character.specialAttributes?.magic ?? 0}
+        currentResonance={character.specialAttributes?.resonance ?? 0}
+      />
+
+      {/* Remove Augmentation Confirmation */}
+      {removeTarget && (
+        <RemoveAugmentationDialog
+          item={removeTarget.item}
+          type={removeTarget.type}
+          isAwakened={isAwakened}
+          isTechnomancer={isTechnomancer}
+          onConfirm={handleRemoveConfirm}
+          onCancel={() => setRemoveTarget(null)}
+          loading={removeLoading}
         />
       )}
     </DisplayCard>

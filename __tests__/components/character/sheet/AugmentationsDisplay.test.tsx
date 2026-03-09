@@ -143,6 +143,42 @@ vi.mock("@/components/cyberlimbs/CyberlimbAccessoryModal", () => ({
     ) : null,
 }));
 
+vi.mock("@/lib/rules/augmentations/hooks", () => ({
+  useInstallAugmentation: vi.fn(() => ({
+    install: vi.fn().mockResolvedValue({ success: false }),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+  useRemoveAugmentation: vi.fn(() => ({
+    remove: vi.fn().mockResolvedValue({ success: false }),
+    reset: vi.fn(),
+    data: null,
+    loading: false,
+    error: null,
+  })),
+}));
+
+vi.mock("@/lib/rules/augmentations/essence", () => ({
+  getCurrentEssence: vi.fn(() => 6.0),
+}));
+
+vi.mock("@/components/creation/augmentations/AugmentationModal", () => ({
+  AugmentationModal: ({ isOpen, onClose }: { isOpen: boolean; onClose: () => void }) =>
+    isOpen ? (
+      <div data-testid="install-modal">
+        <button data-testid="close-install-modal" onClick={onClose}>
+          Close
+        </button>
+      </div>
+    ) : null,
+}));
+
+vi.mock("@/components/character/sheet/RemoveAugmentationDialog", () => ({
+  RemoveAugmentationDialog: () => <div data-testid="remove-dialog" />,
+}));
+
 import { AugmentationsDisplay } from "@/components/character/sheet/AugmentationsDisplay";
 
 // ---------------------------------------------------------------------------
