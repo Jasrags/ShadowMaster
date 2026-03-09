@@ -3,7 +3,13 @@ import { createUser, getUserByEmail, type NewUserData } from "@/lib/storage/user
 import { hashPassword } from "@/lib/auth/password";
 import { createSession } from "@/lib/auth/session";
 import { toPublicUser } from "@/lib/auth/middleware";
-import { isValidEmail, isStrongPassword, getPasswordStrengthError } from "@/lib/auth/validation";
+import {
+  isValidEmail,
+  isStrongPassword,
+  getPasswordStrengthError,
+  isValidUsername,
+  getUsernameError,
+} from "@/lib/auth/validation";
 import { sendVerificationEmail } from "@/lib/auth/email-verification";
 import { sendAdminNewUserNotification } from "@/lib/email";
 import { RateLimiter } from "@/lib/security/rate-limit";
@@ -47,6 +53,15 @@ export async function POST(request: NextRequest): Promise<NextResponse<AuthRespo
     // Validate email format
     if (!isValidEmail(email)) {
       return NextResponse.json({ success: false, error: "Invalid email format" }, { status: 400 });
+    }
+
+    // Validate username format
+    if (!isValidUsername(username)) {
+      const errorMessage = getUsernameError(username);
+      return NextResponse.json(
+        { success: false, error: errorMessage || "Invalid username format" },
+        { status: 400 }
+      );
     }
 
     // Validate password strength

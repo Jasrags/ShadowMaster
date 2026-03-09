@@ -87,6 +87,8 @@ describe("POST /api/auth/signup", () => {
 
     // Default validation mocks (passing)
     vi.mocked(validationModule.isValidEmail).mockReturnValue(true);
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(true);
+    vi.mocked(validationModule.getUsernameError).mockReturnValue(null);
     vi.mocked(validationModule.isStrongPassword).mockReturnValue(true);
     vi.mocked(validationModule.getPasswordStrengthError).mockReturnValue(null);
 
@@ -204,6 +206,31 @@ describe("POST /api/auth/signup", () => {
     expect(data.success).toBe(false);
     expect(data.error).toBe("Invalid email format");
     expect(validationModule.isValidEmail).toHaveBeenCalledWith("invalid-email");
+    expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
+    expect(storageModule.createUser).not.toHaveBeenCalled();
+  });
+
+  it("should return 400 when username format is invalid", async () => {
+    vi.mocked(validationModule.isValidUsername).mockReturnValue(false);
+    vi.mocked(validationModule.getUsernameError).mockReturnValue(
+      "Username can only contain letters, numbers, hyphens, and underscores"
+    );
+
+    const requestBody = {
+      email: "newuser@example.com",
+      username: "<script>alert</script>",
+      password: "ValidPass123!",
+    };
+
+    const request = createMockRequest("http://localhost:3000/api/auth/signup", requestBody, "POST");
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(400);
+    expect(data.success).toBe(false);
+    expect(data.error).toBe("Username can only contain letters, numbers, hyphens, and underscores");
+    expect(validationModule.isValidUsername).toHaveBeenCalledWith("<script>alert</script>");
     expect(storageModule.getUserByEmail).not.toHaveBeenCalled();
     expect(storageModule.createUser).not.toHaveBeenCalled();
   });
