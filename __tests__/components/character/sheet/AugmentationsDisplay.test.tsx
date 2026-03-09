@@ -7,6 +7,37 @@ import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 // Mocks
 // ---------------------------------------------------------------------------
 
+// Mock all lucide-react icons used by AugmentationsDisplay and its transitive deps
+function mockIcon(name: string) {
+  const Icon = (props: Record<string, unknown>) => <span data-testid={`icon-${name}`} {...props} />;
+  Icon.displayName = name;
+  return Icon;
+}
+
+vi.mock("lucide-react", () => ({
+  // AugmentationsDisplay
+  ChevronDown: mockIcon("ChevronDown"),
+  ChevronRight: mockIcon("ChevronRight"),
+  Cpu: mockIcon("Cpu"),
+  Wifi: mockIcon("Wifi"),
+  WifiOff: mockIcon("WifiOff"),
+  CircuitBoard: mockIcon("CircuitBoard"),
+  Plus: mockIcon("Plus"),
+  Trash2: mockIcon("Trash2"),
+  // WirelessIndicator
+  AlertCircle: mockIcon("AlertCircle"),
+  Zap: mockIcon("Zap"),
+  // CyberlimbEnhancementModal (mocked but still resolved)
+  X: mockIcon("X"),
+  Minus: mockIcon("Minus"),
+  Target: mockIcon("Target"),
+  Shield: mockIcon("Shield"),
+  AlertTriangle: mockIcon("AlertTriangle"),
+  // CyberlimbAccessoryModal
+  Search: mockIcon("Search"),
+  Package: mockIcon("Package"),
+}));
+
 vi.mock("@/lib/rules/RulesetContext", () => ({
   useCyberwareCatalog: vi.fn(() => []),
   useBiowareCatalog: vi.fn(() => []),
