@@ -427,7 +427,12 @@ export async function getBookSummary(
     abbreviation: payload.meta.abbreviation,
     releaseYear: payload.meta.releaseYear,
     category: payload.meta.category,
-    role: payload.meta.category === "core" ? "Core rules foundation" : "Content expansion",
+    role:
+      payload.meta.category === "core"
+        ? "Core rules foundation"
+        : payload.meta.category === "errata"
+          ? "Official corrections and clarifications"
+          : "Content expansion",
     contentContributions: contributions,
   };
 }

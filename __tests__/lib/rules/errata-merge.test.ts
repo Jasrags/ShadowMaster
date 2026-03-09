@@ -1,5 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { loadAndMergeRuleset } from "@/lib/rules/merge";
+import { getBookSummary } from "@/lib/storage/editions";
 
 describe("SR5 errata multi-book merge", () => {
   it("loads both core-rulebook and errata books", async () => {
@@ -71,6 +72,15 @@ describe("SR5 errata multi-book merge", () => {
       expect(combatSense!.name).toBe("Combat Sense");
       expect(combatSense!.description).toBeTruthy();
       expect(combatSense!.hasRating).toBe(true);
+    });
+  });
+
+  describe("book summary", () => {
+    it("returns errata-specific role in book summary", async () => {
+      const summary = await getBookSummary("sr5", "core-errata-2014-02-09");
+      expect(summary).toBeDefined();
+      expect(summary!.category).toBe("errata");
+      expect(summary!.role).toBe("Official corrections and clarifications");
     });
   });
 

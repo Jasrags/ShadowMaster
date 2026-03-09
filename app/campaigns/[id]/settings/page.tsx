@@ -483,7 +483,7 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                         type="checkbox"
                         checked={enabledBookIds.includes(book.id)}
                         onChange={() => toggleBookId(book.id)}
-                        disabled={book.isCore}
+                        disabled={book.isCore || book.categories.includes("errata")}
                         className="mt-0.5 rounded border-zinc-300 text-indigo-600 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:opacity-50"
                       />
                       <div className="min-w-0 flex-1">
@@ -499,6 +499,11 @@ export default function CampaignSettingsPage({ params }: SettingsPageProps) {
                           {book.isCore && (
                             <span className="text-xs text-indigo-600 dark:text-indigo-400">
                               (Core - Required)
+                            </span>
+                          )}
+                          {book.categories.includes("errata") && (
+                            <span className="text-xs text-amber-600 dark:text-amber-400">
+                              (Errata - Required)
                             </span>
                           )}
                         </div>
