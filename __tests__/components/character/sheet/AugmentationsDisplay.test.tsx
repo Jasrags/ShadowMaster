@@ -7,15 +7,19 @@ import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 // Mocks
 // ---------------------------------------------------------------------------
 
-// Mock all lucide-react icons used by AugmentationsDisplay and its transitive deps
-function mockIcon(name: string) {
-  const Icon = (props: Record<string, unknown>) => <span data-testid={`icon-${name}`} {...props} />;
-  Icon.displayName = name;
-  return Icon;
-}
+// Mock all lucide-react icons — vi.hoisted ensures the helper is available in the hoisted vi.mock factory
+const { mockIcon } = vi.hoisted(() => {
+  function mockIcon(name: string) {
+    const Icon = (props: Record<string, unknown>) => (
+      <span data-testid={`icon-${name}`} {...props} />
+    );
+    Icon.displayName = name;
+    return Icon;
+  }
+  return { mockIcon };
+});
 
 vi.mock("lucide-react", () => ({
-  // AugmentationsDisplay
   ChevronDown: mockIcon("ChevronDown"),
   ChevronRight: mockIcon("ChevronRight"),
   Cpu: mockIcon("Cpu"),
@@ -24,16 +28,13 @@ vi.mock("lucide-react", () => ({
   CircuitBoard: mockIcon("CircuitBoard"),
   Plus: mockIcon("Plus"),
   Trash2: mockIcon("Trash2"),
-  // WirelessIndicator
   AlertCircle: mockIcon("AlertCircle"),
   Zap: mockIcon("Zap"),
-  // CyberlimbEnhancementModal (mocked but still resolved)
   X: mockIcon("X"),
   Minus: mockIcon("Minus"),
   Target: mockIcon("Target"),
   Shield: mockIcon("Shield"),
   AlertTriangle: mockIcon("AlertTriangle"),
-  // CyberlimbAccessoryModal
   Search: mockIcon("Search"),
   Package: mockIcon("Package"),
 }));
