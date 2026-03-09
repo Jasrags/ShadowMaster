@@ -81,7 +81,8 @@ export type BookCategory =
   | "sourcebook" // Optional rules, gear, spells, etc.
   | "adventure" // Narrative content with optional mechanics
   | "mission" // Episodic campaign content
-  | "novel"; // Lore-only content
+  | "novel" // Lore-only content
+  | "errata"; // Official corrections and clarifications
 
 /**
  * A Book represents a physical or digital Shadowrun publication
