@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "bookId": "core-errata-2014-02-09",
+    "title": "SR5 Core Rulebook Errata (2014-02-09)",
+    "edition": "sr5",
+    "version": "1.0.0",
+    "category": "errata",
+    "publisher": "Catalyst Game Labs",
+    "releaseYear": 2014,
+    "abbreviation": "SR5-ERRATA",
+    "description": "Official errata corrections for the SR5 Core Rulebook, dated February 9, 2014."
+  },
+  "modules": {
+    "skills": {
+      "mergeStrategy": "merge",
+      "payload": {
+        "activeSkills": [
+          {
+            "id": "biotechnology",
+            "group": "biotech"
+          }
+        ],
+        "skillGroups": [
+          {
+            "id": "biotech",
+            "skills": ["biotechnology"]
+          }
+        ]
+      }
+    },
+    "adeptPowers": {
+      "mergeStrategy": "merge",
+      "payload": {
+        "powers": [
+          {
+            "id": "combat-sense",
+            "activation": "passive"
+          }
+        ]
+      }
+    }
+  }
+}
