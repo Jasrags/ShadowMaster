@@ -10,6 +10,7 @@ import { createMockCharacter } from "@/__tests__/mocks/storage";
 import type { Character, Vehicle, CharacterDrone, CharacterRCC } from "@/lib/types";
 import type { CharacterCyberdeck, CharacterCommlink } from "@/lib/types/matrix";
 import type { CharacterProgram } from "@/lib/types/programs";
+import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 import { SinnerQuality } from "@/lib/types";
 
 // ---------------------------------------------------------------------------
@@ -366,6 +367,59 @@ export const MOCK_BIOWARE = {
   wirelessEnabled: true,
   wirelessEffects: [{ type: "attribute" as const, modifier: 1, attribute: "agility" as const }],
 };
+
+// ---------------------------------------------------------------------------
+// Mock cyberlimb data
+// ---------------------------------------------------------------------------
+export function makeCyberlimb(overrides: Partial<CyberlimbItem> = {}): CyberlimbItem {
+  return {
+    id: "limb-1",
+    catalogId: "cyberlimb-full-arm",
+    name: "Cyberarm",
+    category: "cyberlimb",
+    location: "left-arm",
+    limbType: "full-arm",
+    appearance: "obvious",
+    grade: "standard",
+    essenceCost: 1.0,
+    baseStrength: 3,
+    baseAgility: 3,
+    customStrength: 2,
+    customAgility: 1,
+    baseCapacity: 15,
+    capacityUsed: 3,
+    enhancements: [
+      {
+        id: "enh-1",
+        catalogId: "enhancement-strength",
+        name: "Enhanced Strength",
+        enhancementType: "strength",
+        rating: 2,
+        capacityUsed: 2,
+        cost: 13000,
+        availability: 16,
+      },
+    ],
+    accessories: [
+      {
+        id: "acc-1",
+        catalogId: "gyromount",
+        name: "Gyromount",
+        capacityUsed: 1,
+        cost: 6000,
+        availability: 12,
+      },
+    ],
+    weapons: [],
+    wirelessEnabled: true,
+    condition: "working",
+    installedAt: "2024-06-01T00:00:00Z",
+    modificationHistory: [],
+    ...overrides,
+  } as CyberlimbItem;
+}
+
+export const MOCK_CYBERLIMB = makeCyberlimb();
 
 // ---------------------------------------------------------------------------
 // Mock contact data
