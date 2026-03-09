@@ -12,7 +12,13 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { RulesetProvider, useRulesetStatus, useRuleset, usePriorityTable } from "@/lib/rules";
+import {
+  RulesetProvider,
+  useRulesetStatus,
+  useRuleset,
+  usePriorityTable,
+  useMetatypes,
+} from "@/lib/rules";
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
@@ -66,6 +72,7 @@ function SheetCreationContent({
   const { loading, error, ready } = useRulesetStatus();
   const { loadRuleset, editionCode, ruleset } = useRuleset();
   const priorityTable = usePriorityTable();
+  const metatypes = useMetatypes();
 
   // localStorage key for backup (development safety net)
   const localStorageKey = existingCharacter?.id
@@ -390,6 +397,28 @@ function SheetCreationContent({
   const handleArchetypeSelect = useCallback(
     (archetype: CharacterArchetype) => {
       setSelectedArchetype(archetype);
+
+      // Calculate coreAttributePointsSpent from archetype attributes and metatype minimums
+      const archetypeMetatype = metatypes.find((m) => m.id === archetype.selections.metatype);
+      const archetypeAttributes = (archetype.selections.attributes || {}) as Record<string, number>;
+      const coreAttrIds = [
+        "body",
+        "agility",
+        "reaction",
+        "strength",
+        "willpower",
+        "logic",
+        "intuition",
+        "charisma",
+      ];
+      let coreAttributePointsSpent = 0;
+      for (const attrId of coreAttrIds) {
+        const value = archetypeAttributes[attrId] ?? 0;
+        const attrData = archetypeMetatype?.attributes?.[attrId];
+        const min = attrData && "min" in attrData ? attrData.min : 1;
+        coreAttributePointsSpent += value - min;
+      }
+
       updateState({
         priorities: archetype.priorities,
         selections: {
@@ -399,10 +428,11 @@ function SheetCreationContent({
           attributes: archetype.selections.attributes,
           specialAttributes: archetype.selections.specialAttributes,
           skills: archetype.selections.skills,
+          coreAttributePointsSpent,
         },
       });
     },
-    [creationState.selections, updateState]
+    [creationState.selections, metatypes, updateState]
   );
 
   const handleArchetypeSkip = useCallback(() => {
