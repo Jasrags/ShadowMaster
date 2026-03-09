@@ -12,6 +12,7 @@
  */
 
 import { useMemo, useState, useCallback } from "react";
+import { Dialog, Modal, ModalOverlay } from "react-aria-components";
 import type { CyberlimbItem, CyberlimbEnhancementType } from "@/lib/types/cyberlimb";
 import type { CyberwareGrade } from "@/lib/types";
 import { X, Plus, Minus, Target, Zap, Shield, AlertTriangle } from "lucide-react";
@@ -149,16 +150,6 @@ export function CyberlimbEnhancementModal({
     return new Set(limb.enhancements.map((e) => e.enhancementType));
   }, [limb]);
 
-  // Calculate current attribute values for max rating checks
-  const currentAttributes = useMemo(() => {
-    const strEnh = limb.enhancements.find((e) => e.enhancementType === "strength");
-    const agiEnh = limb.enhancements.find((e) => e.enhancementType === "agility");
-    return {
-      strength: limb.baseStrength + limb.customStrength + (strEnh?.rating ?? 0),
-      agility: limb.baseAgility + limb.customAgility + (agiEnh?.rating ?? 0),
-    };
-  }, [limb]);
-
   // Get max rating for selected type
   const maxRating = useMemo(() => {
     if (selectedType === "armor") {
@@ -244,195 +235,220 @@ export function CyberlimbEnhancementModal({
     onClose();
   }, [onClose]);
 
-  if (!isOpen) return null;
-
   const selectedTypeData = ENHANCEMENT_TYPES.find((t) => t.type === selectedType)!;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-      <div className="flex flex-col w-full max-w-lg max-h-[90vh] overflow-hidden rounded-xl bg-zinc-900 shadow-2xl border border-zinc-800">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-800 px-6 py-4">
-          <div>
-            <h2 className="text-lg font-semibold text-zinc-100">Add Enhancement</h2>
-            <p className="text-xs text-zinc-500">
-              {limb.name} — [{remainingCapacity}] capacity remaining
-            </p>
-          </div>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
+    <ModalOverlay
+      isOpen={isOpen}
+      onOpenChange={(open) => !open && handleClose()}
+      isDismissable
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+    >
+      <Modal className="flex w-full max-w-lg max-h-[90vh] flex-col overflow-hidden rounded-xl bg-white shadow-2xl dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800">
+        <Dialog className="flex max-h-[90vh] flex-col outline-none">
+          {({ close }) => (
+            <>
+              {/* Header */}
+              <div className="flex items-center justify-between border-b border-zinc-200 px-6 py-4 dark:border-zinc-800">
+                <div>
+                  <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-100">
+                    Add Enhancement
+                  </h2>
+                  <p className="text-xs text-zinc-500 dark:text-zinc-500">
+                    {limb.name} — [{remainingCapacity}] capacity remaining
+                  </p>
+                </div>
+                <button
+                  onClick={close}
+                  aria-label="Close modal"
+                  className="rounded-lg p-2 text-zinc-400 transition-colors hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-800 dark:hover:text-zinc-300"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
 
-        {/* Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          {/* Enhancement Type Selection */}
-          <div>
-            <label className="block text-sm font-medium text-zinc-300 mb-3">Enhancement Type</label>
-            <div className="space-y-2">
-              {ENHANCEMENT_TYPES.map((type) => {
-                const isInstalled = installedTypes.has(type.type);
-                const Icon = type.icon;
-                return (
-                  <button
-                    key={type.type}
-                    onClick={() => !isInstalled && handleTypeChange(type.type)}
-                    disabled={isInstalled}
-                    className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors ${
-                      selectedType === type.type && !isInstalled
-                        ? `${type.bgColor} ${type.borderColor} ${type.color}`
-                        : isInstalled
-                          ? "bg-zinc-800/30 border-zinc-700/50 text-zinc-600 cursor-not-allowed"
-                          : "bg-zinc-800/50 border-zinc-700 text-zinc-400 hover:border-zinc-600"
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    <div className="flex-1 text-left">
-                      <div className="text-sm font-medium">{type.name}</div>
-                      <div className="text-[10px] text-zinc-500">{type.description}</div>
-                    </div>
-                    {isInstalled && (
-                      <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-700 text-zinc-400">
-                        Installed
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto p-6 space-y-6">
+                {/* Enhancement Type Selection */}
+                <div>
+                  <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
+                    Enhancement Type
+                  </label>
+                  <div className="space-y-2">
+                    {ENHANCEMENT_TYPES.map((type) => {
+                      const isInstalled = installedTypes.has(type.type);
+                      const Icon = type.icon;
+                      return (
+                        <button
+                          key={type.type}
+                          onClick={() => !isInstalled && handleTypeChange(type.type)}
+                          disabled={isInstalled}
+                          className={`w-full flex items-center gap-3 p-3 rounded-lg border transition-colors ${
+                            selectedType === type.type && !isInstalled
+                              ? `${type.bgColor} ${type.borderColor} ${type.color}`
+                              : isInstalled
+                                ? "bg-zinc-100 border-zinc-200 text-zinc-400 cursor-not-allowed dark:bg-zinc-800/30 dark:border-zinc-700/50 dark:text-zinc-600"
+                                : "bg-zinc-50 border-zinc-200 text-zinc-600 hover:border-zinc-300 dark:bg-zinc-800/50 dark:border-zinc-700 dark:text-zinc-400 dark:hover:border-zinc-600"
+                          }`}
+                        >
+                          <Icon className="w-5 h-5" />
+                          <div className="flex-1 text-left">
+                            <div className="text-sm font-medium">{type.name}</div>
+                            <div className="text-[10px] text-zinc-400 dark:text-zinc-500">
+                              {type.description}
+                            </div>
+                          </div>
+                          {isInstalled && (
+                            <span className="text-[10px] px-2 py-0.5 rounded bg-zinc-200 text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+                              Installed
+                            </span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Rating Selection */}
+                {!installedTypes.has(selectedType) && (
+                  <div>
+                    <label className="block text-sm font-medium text-zinc-700 dark:text-zinc-300 mb-3">
+                      Rating
+                      <span className="text-xs text-zinc-400 dark:text-zinc-500 ml-2">
+                        (max {maxRating})
                       </span>
+                    </label>
+                    <div className="flex items-center justify-center gap-4">
+                      <button
+                        onClick={() => setRating(Math.max(1, rating - 1))}
+                        disabled={rating <= 1}
+                        className={`p-2 rounded-lg ${
+                          rating > 1
+                            ? "bg-zinc-200 text-zinc-700 hover:bg-zinc-300 dark:bg-zinc-700 dark:text-zinc-300 dark:hover:bg-zinc-600"
+                            : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600"
+                        }`}
+                      >
+                        <Minus className="w-5 h-5" />
+                      </button>
+                      <div
+                        className={`w-20 h-16 flex items-center justify-center rounded-lg ${selectedTypeData.bgColor}`}
+                      >
+                        <span className={`text-3xl font-bold font-mono ${selectedTypeData.color}`}>
+                          {rating}
+                        </span>
+                      </div>
+                      <button
+                        onClick={() => setRating(Math.min(maxRating, rating + 1))}
+                        disabled={rating >= maxRating}
+                        className={`p-2 rounded-lg ${
+                          rating < maxRating
+                            ? `${selectedTypeData.bgColor} ${selectedTypeData.color} hover:opacity-80`
+                            : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-600"
+                        }`}
+                      >
+                        <Plus className="w-5 h-5" />
+                      </button>
+                    </div>
+
+                    {/* Attribute preview for STR/AGI */}
+                    {(selectedType === "strength" || selectedType === "agility") && (
+                      <div className="mt-3 text-center text-xs text-zinc-500">
+                        {selectedType === "strength" ? "Strength" : "Agility"} will be:{" "}
+                        <span className={selectedTypeData.color}>
+                          {(selectedType === "strength"
+                            ? limb.baseStrength + limb.customStrength
+                            : limb.baseAgility + limb.customAgility) + rating}
+                        </span>
+                      </div>
                     )}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+                  </div>
+                )}
 
-          {/* Rating Selection */}
-          {!installedTypes.has(selectedType) && (
-            <div>
-              <label className="block text-sm font-medium text-zinc-300 mb-3">
-                Rating
-                <span className="text-xs text-zinc-500 ml-2">(max {maxRating})</span>
-              </label>
-              <div className="flex items-center justify-center gap-4">
+                {/* Cost Summary */}
+                {!installedTypes.has(selectedType) && (
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200 text-center dark:bg-zinc-800/50 dark:border-zinc-700">
+                      <div className="text-[10px] text-zinc-500 uppercase">Capacity</div>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.capacityCost > remainingCapacity
+                            ? "text-red-400"
+                            : "text-cyan-600 dark:text-cyan-400"
+                        }`}
+                      >
+                        [{calculations.capacityCost}]
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200 text-center dark:bg-zinc-800/50 dark:border-zinc-700">
+                      <div className="text-[10px] text-zinc-500 uppercase">Cost</div>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.cost > availableNuyen
+                            ? "text-red-400"
+                            : "text-zinc-800 dark:text-zinc-200"
+                        }`}
+                      >
+                        {formatCurrency(calculations.cost)}¥
+                      </div>
+                    </div>
+                    <div className="p-3 rounded-lg bg-zinc-50 border border-zinc-200 text-center dark:bg-zinc-800/50 dark:border-zinc-700">
+                      <div className="text-[10px] text-zinc-500 uppercase">Avail</div>
+                      <div
+                        className={`text-xl font-bold font-mono ${
+                          calculations.availability > maxAvailability
+                            ? "text-red-400"
+                            : "text-zinc-800 dark:text-zinc-200"
+                        }`}
+                      >
+                        {calculations.availability}
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Validation Errors */}
+                {!validation.valid && (
+                  <div className="space-y-1">
+                    {validation.errors.map((error, idx) => (
+                      <div
+                        key={idx}
+                        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-50 border border-red-200 dark:bg-red-500/10 dark:border-red-500/30"
+                      >
+                        <AlertTriangle className="w-4 h-4 text-red-500 dark:text-red-400" />
+                        <span className="text-xs text-red-600 dark:text-red-400">{error}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer */}
+              <div className="border-t border-zinc-200 px-6 py-4 flex gap-3 dark:border-zinc-800">
                 <button
-                  onClick={() => setRating(Math.max(1, rating - 1))}
-                  disabled={rating <= 1}
-                  className={`p-2 rounded-lg ${
-                    rating > 1
-                      ? "bg-zinc-700 text-zinc-300 hover:bg-zinc-600"
-                      : "bg-zinc-800 text-zinc-600 cursor-not-allowed"
-                  }`}
+                  onClick={close}
+                  className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium
+                    bg-zinc-100 text-zinc-700 hover:bg-zinc-200 transition-colors
+                    dark:bg-zinc-800 dark:text-zinc-300 dark:hover:bg-zinc-700"
                 >
-                  <Minus className="w-5 h-5" />
+                  Cancel
                 </button>
-                <div
-                  className={`w-20 h-16 flex items-center justify-center rounded-lg ${selectedTypeData.bgColor}`}
-                >
-                  <span className={`text-3xl font-bold font-mono ${selectedTypeData.color}`}>
-                    {rating}
-                  </span>
-                </div>
                 <button
-                  onClick={() => setRating(Math.min(maxRating, rating + 1))}
-                  disabled={rating >= maxRating}
-                  className={`p-2 rounded-lg ${
-                    rating < maxRating
-                      ? `${selectedTypeData.bgColor} ${selectedTypeData.color} hover:opacity-80`
-                      : "bg-zinc-800 text-zinc-600 cursor-not-allowed"
+                  onClick={handleAdd}
+                  disabled={!validation.valid}
+                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    validation.valid
+                      ? "bg-purple-500 text-white hover:bg-purple-600"
+                      : "bg-zinc-100 text-zinc-400 cursor-not-allowed dark:bg-zinc-800 dark:text-zinc-500"
                   }`}
                 >
-                  <Plus className="w-5 h-5" />
+                  <Plus className="w-4 h-4" />
+                  Add Enhancement
                 </button>
               </div>
-
-              {/* Attribute preview for STR/AGI */}
-              {(selectedType === "strength" || selectedType === "agility") && (
-                <div className="mt-3 text-center text-xs text-zinc-500">
-                  {selectedType === "strength" ? "Strength" : "Agility"} will be:{" "}
-                  <span className={selectedTypeData.color}>
-                    {(selectedType === "strength"
-                      ? limb.baseStrength + limb.customStrength
-                      : limb.baseAgility + limb.customAgility) + rating}
-                  </span>
-                </div>
-              )}
-            </div>
+            </>
           )}
-
-          {/* Cost Summary */}
-          {!installedTypes.has(selectedType) && (
-            <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
-                <div className="text-[10px] text-zinc-500 uppercase">Capacity</div>
-                <div
-                  className={`text-xl font-bold font-mono ${
-                    calculations.capacityCost > remainingCapacity ? "text-red-400" : "text-cyan-400"
-                  }`}
-                >
-                  [{calculations.capacityCost}]
-                </div>
-              </div>
-              <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
-                <div className="text-[10px] text-zinc-500 uppercase">Cost</div>
-                <div
-                  className={`text-xl font-bold font-mono ${
-                    calculations.cost > availableNuyen ? "text-red-400" : "text-zinc-200"
-                  }`}
-                >
-                  {formatCurrency(calculations.cost)}¥
-                </div>
-              </div>
-              <div className="p-3 rounded-lg bg-zinc-800/50 border border-zinc-700 text-center">
-                <div className="text-[10px] text-zinc-500 uppercase">Avail</div>
-                <div
-                  className={`text-xl font-bold font-mono ${
-                    calculations.availability > maxAvailability ? "text-red-400" : "text-zinc-200"
-                  }`}
-                >
-                  {calculations.availability}
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* Validation Errors */}
-          {!validation.valid && (
-            <div className="space-y-1">
-              {validation.errors.map((error, idx) => (
-                <div
-                  key={idx}
-                  className="flex items-center gap-2 px-3 py-2 rounded-lg bg-red-500/10 border border-red-500/30"
-                >
-                  <AlertTriangle className="w-4 h-4 text-red-400" />
-                  <span className="text-xs text-red-400">{error}</span>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div className="border-t border-zinc-800 px-6 py-4 flex gap-3">
-          <button
-            onClick={handleClose}
-            className="flex-1 px-4 py-2.5 rounded-lg text-sm font-medium
-              bg-zinc-800 text-zinc-300 hover:bg-zinc-700 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            onClick={handleAdd}
-            disabled={!validation.valid}
-            className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-              validation.valid
-                ? "bg-purple-500 text-white hover:bg-purple-600"
-                : "bg-zinc-800 text-zinc-500 cursor-not-allowed"
-            }`}
-          >
-            <Plus className="w-4 h-4" />
-            Add Enhancement
-          </button>
-        </div>
-      </div>
-    </div>
+        </Dialog>
+      </Modal>
+    </ModalOverlay>
   );
 }

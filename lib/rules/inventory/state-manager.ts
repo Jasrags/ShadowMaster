@@ -381,6 +381,11 @@ export function setAllWireless(character: Character, enabled: boolean): Characte
     state: { ...getDefaultState("gear"), ...d.state, wirelessEnabled: enabled },
   }));
 
+  const cyberlimbs = character.cyberlimbs?.map((cl) => ({
+    ...cl,
+    wirelessEnabled: enabled,
+  }));
+
   return {
     ...character,
     wirelessBonusesEnabled: enabled,
@@ -390,6 +395,7 @@ export function setAllWireless(character: Character, enabled: boolean): Characte
     ...(cyberware && { cyberware }),
     ...(bioware && { bioware }),
     ...(drones && { drones }),
+    ...(cyberlimbs && { cyberlimbs }),
   };
 }
 

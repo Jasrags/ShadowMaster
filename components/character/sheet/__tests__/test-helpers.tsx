@@ -167,6 +167,10 @@ export const LUCIDE_MOCK = {
   Pencil: createIconMock("Pencil"),
   MapPin: createIconMock("MapPin"),
   CheckCircle2: createIconMock("CheckCircle2"),
+  // Cyberlimb icons
+  CircuitBoard: createIconMock("CircuitBoard"),
+  Target: createIconMock("Target"),
+  Search: createIconMock("Search"),
 };
 
 // ---------------------------------------------------------------------------

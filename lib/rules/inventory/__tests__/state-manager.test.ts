@@ -6,6 +6,7 @@
 
 import { describe, it, expect } from "vitest";
 import type { Weapon, ArmorItem, Character, BiowareItem, CharacterDrone } from "@/lib/types";
+import type { CyberlimbItem } from "@/lib/types/cyberlimb";
 import type { DeviceCondition } from "@/lib/types/gear-state";
 import {
   getDefaultState,
@@ -522,6 +523,47 @@ describe("Equipment State Manager", () => {
       expect(updated.wirelessBonusesEnabled).toBe(false);
       expect(updated.weapons![0].state?.wirelessEnabled).toBe(false);
       expect(updated.armor![0].state?.wirelessEnabled).toBe(false);
+    });
+
+    it("should toggle wireless on cyberlimbs", () => {
+      const character = createCharacter({
+        wirelessBonusesEnabled: true,
+        cyberlimbs: [
+          {
+            id: "limb-1",
+            catalogId: "cyberlimb-full-arm",
+            name: "Cyberarm",
+            category: "cyberlimb",
+            location: "left-arm",
+            limbType: "full-arm",
+            appearance: "obvious",
+            grade: "standard",
+            essenceCost: 1.0,
+            baseEssenceCost: 1.0,
+            cost: 15000,
+            availability: 12,
+            baseStrength: 3,
+            baseAgility: 3,
+            customStrength: 0,
+            customAgility: 0,
+            baseCapacity: 15,
+            capacityUsed: 0,
+            enhancements: [],
+            accessories: [],
+            weapons: [],
+            wirelessEnabled: true,
+            condition: "working",
+            installedAt: "2024-01-01T00:00:00Z",
+            modificationHistory: [],
+          } as CyberlimbItem,
+        ],
+      });
+
+      const updated = setAllWireless(character, false);
+      expect(updated.cyberlimbs![0].wirelessEnabled).toBe(false);
+
+      const reEnabled = setAllWireless(updated, true);
+      expect(reEnabled.cyberlimbs![0].wirelessEnabled).toBe(true);
     });
   });
 
