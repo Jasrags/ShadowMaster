@@ -16,6 +16,8 @@ import {
   readAllJsonFiles,
   directoryExists,
   listSubdirectories,
+  ensureDataDirectories,
+  DATA_DIR,
 } from "../base";
 
 const TEST_DIR = path.join(process.cwd(), "__tests__", "temp-storage");
@@ -322,6 +324,46 @@ describe("Storage Base Utilities", () => {
     it("should return empty array for non-existent directory", async () => {
       const result = await listSubdirectories(path.join(TEST_DIR, "nonexistent"));
       expect(result).toEqual([]);
+    });
+  });
+
+  describe("ensureDataDirectories", () => {
+    it("should create all required data directories", async () => {
+      await ensureDataDirectories();
+
+      const expectedDirs = [
+        "users",
+        "characters",
+        "campaigns",
+        "campaign_templates",
+        "activity",
+        "migrations",
+        "security/logs",
+        "combat",
+        "ruleset-snapshots",
+        "notifications",
+        "emails",
+        "audit",
+        "audit/users",
+        "audit/users-archived",
+        "editions",
+        "violations",
+        "templates",
+        "drift-reports",
+      ];
+
+      for (const dir of expectedDirs) {
+        const exists = await directoryExists(path.join(DATA_DIR, dir));
+        expect(exists, `Expected data/${dir} to exist`).toBe(true);
+      }
+    });
+
+    it("should be idempotent", async () => {
+      await ensureDataDirectories();
+      await ensureDataDirectories();
+
+      const exists = await directoryExists(path.join(DATA_DIR, "users"));
+      expect(exists).toBe(true);
     });
   });
 });

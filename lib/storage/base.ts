@@ -10,6 +10,9 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+/** Root data directory for all file-based storage */
+export const DATA_DIR = path.join(process.cwd(), "data");
+
 /**
  * Check if a file exists
  */
@@ -158,4 +161,32 @@ export async function deleteDirectory(dirPath: string): Promise<boolean> {
   } catch {
     return false;
   }
+}
+
+/**
+ * Ensure all required top-level data directories exist.
+ * Called once at server startup via instrumentation.ts.
+ */
+export async function ensureDataDirectories(): Promise<void> {
+  const dirs = [
+    "users",
+    "characters",
+    "campaigns",
+    "campaign_templates",
+    "activity",
+    "migrations",
+    "security/logs",
+    "combat",
+    "ruleset-snapshots",
+    "notifications",
+    "emails",
+    "audit",
+    "audit/users",
+    "audit/users-archived",
+    "editions",
+    "violations",
+    "templates",
+    "drift-reports",
+  ];
+  await Promise.all(dirs.map((dir) => ensureDirectory(path.join(DATA_DIR, dir))));
 }
