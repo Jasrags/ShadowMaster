@@ -1,0 +1,28 @@
+{
+  "meta": {
+    "bookId": "run-faster",
+    "title": "Run Faster",
+    "edition": "sr5",
+    "version": "1.0.0",
+    "category": "sourcebook",
+    "publisher": "Catalyst Game Labs",
+    "releaseYear": 2014,
+    "abbreviation": "RF",
+    "description": "Advanced character options for Shadowrun 5th Edition, including new metatypes, qualities, creation methods, lifestyles, contacts, and more.",
+    "isbn": "978-1-936876-88-2"
+  },
+  "modules": {
+    "metatypes": { "mergeStrategy": "append", "payload": { "metatypes": [] } },
+    "qualities": { "mergeStrategy": "append", "payload": { "positive": [], "negative": [] } },
+    "creationMethods": { "mergeStrategy": "append", "payload": { "creationMethods": [] } },
+    "lifestyle": { "mergeStrategy": "merge", "payload": {} },
+    "contactArchetypes": { "mergeStrategy": "append", "payload": { "archetypes": [] } },
+    "contactTemplates": { "mergeStrategy": "append", "payload": { "templates": [] } },
+    "equipmentPacks": { "mergeStrategy": "replace", "payload": {} },
+    "metagenics": { "mergeStrategy": "replace", "payload": {} },
+    "infected": { "mergeStrategy": "replace", "payload": {} },
+    "lifeModules": { "mergeStrategy": "replace", "payload": {} },
+    "shapeshifters": { "mergeStrategy": "replace", "payload": {} },
+    "johnsonProfiles": { "mergeStrategy": "replace", "payload": {} }
+  }
+}
