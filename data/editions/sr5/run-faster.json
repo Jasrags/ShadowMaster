@@ -13,7 +13,1142 @@
   },
   "modules": {
     "metatypes": { "mergeStrategy": "append", "payload": { "metatypes": [] } },
-    "qualities": { "mergeStrategy": "append", "payload": { "positive": [], "negative": [] } },
+    "qualities": {
+      "mergeStrategy": "append",
+      "payload": {
+        "positive": [
+          {
+            "id": "adrenaline-surge",
+            "name": "Adrenaline Surge",
+            "karmaCost": 12,
+            "summary": "Go first in the first Initiative Pass of a combat, before anyone rolls Initiative.",
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "agile-defender",
+            "name": "Agile Defender",
+            "karmaCost": 5,
+            "summary": "Use Agility instead of Willpower for Full Defense.",
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "alibi",
+            "name": "Alibi",
+            "karmaCost": 6,
+            "summary": "Character always has a solid alibi or backup story; +2 dice to Con tests to maintain cover.",
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "animal-empathy",
+            "name": "Animal Empathy",
+            "karmaCost": 6,
+            "summary": "+2 dice to Animal Handling tests; animals are calm and friendly around you.",
+            "effects": [
+              {
+                "id": "animal-empathy-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "animal-handling"
+                },
+                "value": 2,
+                "description": "+2 dice to Animal Handling tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "aptitude-rf",
+            "name": "Aptitude",
+            "karmaCost": 14,
+            "summary": "Raise one skill max to 7 at creation, 13 after. (Run Faster errata: may be taken for any skill, not just one from the core rulebook.)",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "specificationSource": "skills",
+            "limit": 1,
+            "note": "This entry clarifies Aptitude for Run Faster skills; use core-rulebook aptitude for CRB skills.",
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "battle-hardened",
+            "name": "Battle Hardened",
+            "summary": "+1 to Composure limit per rating when resisting fear or stress in combat.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 15 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 20 }
+            },
+            "source": { "book": "run-faster", "page": 144 }
+          },
+          {
+            "id": "bike-enthusiast",
+            "name": "Bike Enthusiast",
+            "karmaCost": 5,
+            "summary": "+2 dice to Pilot Ground Craft tests when riding motorcycles.",
+            "effects": [
+              {
+                "id": "bike-enthusiast-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "pilot-ground-craft",
+                  "condition": "motorcycles-only"
+                },
+                "value": 2,
+                "description": "+2 dice to Pilot Ground Craft tests when operating motorcycles.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "blank-slate",
+            "name": "Blank Slate",
+            "karmaCost": 8,
+            "summary": "No SIN, no records; +2 to resist background checks and data searches.",
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "brilliant-heuristics",
+            "name": "Brilliant Heuristics",
+            "karmaCost": 5,
+            "summary": "+2 dice to Software tests for writing or modifying code.",
+            "effects": [
+              {
+                "id": "brilliant-heuristics-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "software",
+                  "condition": "writing-or-modifying-code"
+                },
+                "value": 2,
+                "description": "+2 dice to Software tests for writing or modifying code.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "chain-breaker",
+            "name": "Chain Breaker",
+            "karmaCost": 5,
+            "summary": "+2 dice to resist Binding tests when a spirit attempts to resist your Binding.",
+            "requiresMagic": true,
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "chosen-follower",
+            "name": "Chosen Follower",
+            "karmaCost": 5,
+            "summary": "Your mentor spirit chose you; +2 dice to resist mentor spirit disadvantage.",
+            "requiresMagic": true,
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "common-sense",
+            "name": "Common Sense",
+            "karmaCost": 3,
+            "summary": "GM warns the player when the character is about to do something obviously foolish.",
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "daredevil",
+            "name": "Daredevil",
+            "karmaCost": 6,
+            "summary": "+1 to Physical limit and +1 Edge when making a Reckless action.",
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "dealer-connection",
+            "name": "Dealer Connection",
+            "karmaCost": 7,
+            "summary": "Get 10% discount from a specific type of dealer/vendor.",
+            "requiresSpecification": true,
+            "specificationLabel": "Dealer Type",
+            "source": { "book": "run-faster", "page": 145 }
+          },
+          {
+            "id": "durable-preparations",
+            "name": "Durable Preparations",
+            "karmaCost": 8,
+            "summary": "Preparations last twice as long before becoming inert.",
+            "requiresMagic": true,
+            "source": { "book": "run-faster", "page": 146 }
+          },
+          {
+            "id": "erased",
+            "name": "Erased",
+            "karmaCost": 8,
+            "summary": "All prior records have been erased; +3 dice to resist data searches on your identity.",
+            "incompatibilities": ["records-on-file"],
+            "source": { "book": "run-faster", "page": 146 }
+          },
+          {
+            "id": "fame",
+            "name": "Fame",
+            "summary": "Character is publicly known; provides social advantages and disadvantages based on level.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4,
+                "name": "Local Fame",
+                "description": "Well-known in a single neighborhood or small community."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8,
+                "name": "Regional Fame",
+                "description": "Known throughout a city or sprawl."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 12,
+                "name": "National Fame",
+                "description": "Famous across a country or major region."
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 16,
+                "name": "Megastar",
+                "description": "Globally recognized celebrity."
+              }
+            },
+            "incompatibilities": ["erased"],
+            "source": { "book": "run-faster", "page": 146 }
+          },
+          {
+            "id": "flash-tolerance",
+            "name": "Flash Tolerance",
+            "karmaCost": 3,
+            "summary": "+2 dice to resist flash-based attacks or blinding effects.",
+            "source": { "book": "run-faster", "page": 147 }
+          },
+          {
+            "id": "hawk-eye",
+            "name": "Hawk Eye",
+            "karmaCost": 5,
+            "summary": "+1 die to Perception tests involving vision; reduce range penalties by 1 category.",
+            "effects": [
+              {
+                "id": "hawk-eye-perception",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "perception",
+                  "condition": "vision"
+                },
+                "value": 1,
+                "description": "+1 die to visual Perception tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 147 }
+          },
+          {
+            "id": "honest-face",
+            "name": "Honest Face",
+            "karmaCost": 5,
+            "summary": "+1 die to Con tests; people are inclined to trust you.",
+            "effects": [
+              {
+                "id": "honest-face-con-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "con"
+                },
+                "value": 1,
+                "description": "+1 die to Con tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 147 }
+          },
+          {
+            "id": "inspired",
+            "name": "Inspired",
+            "karmaCost": 6,
+            "summary": "Gain an additional Artisan specialization for free.",
+            "source": { "book": "run-faster", "page": 147 }
+          },
+          {
+            "id": "lightning-reflexes",
+            "name": "Lightning Reflexes",
+            "karmaCost": 20,
+            "summary": "+1 to Reaction and +1d6 Initiative Die (unaugmented only).",
+            "prerequisite": {
+              "description": "Cannot have any Reaction or Initiative augmentations (cyberware, bioware, adept powers, etc.)"
+            },
+            "effects": [
+              {
+                "id": "lightning-reflexes-reaction",
+                "type": "attribute-modifier",
+                "target": {
+                  "attribute": "reaction"
+                },
+                "value": 1,
+                "description": "+1 to Reaction attribute.",
+                "triggers": ["always"]
+              },
+              {
+                "id": "lightning-reflexes-initiative",
+                "type": "initiative-modifier",
+                "target": {
+                  "stat": "initiative-dice"
+                },
+                "value": 1,
+                "description": "+1d6 to Initiative.",
+                "triggers": ["always"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 147 }
+          },
+          {
+            "id": "lucky-rf",
+            "name": "Lucky",
+            "karmaCost": 12,
+            "summary": "Raise Edge natural maximum by 1. (Run Faster errata: clarifies stacking rules.)",
+            "note": "Clarification entry; use core-rulebook lucky for base effect.",
+            "source": { "book": "run-faster", "page": 148 }
+          },
+          {
+            "id": "magic-resistance",
+            "name": "Magic Resistance",
+            "summary": "+1 die per rating to Spell Resistance tests. Cannot be turned off; affects beneficial spells too.",
+            "forbidsMagic": true,
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 6 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 12 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 18 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 24 }
+            },
+            "note": "Clarification entry; use core-rulebook magical-resistance for base effect.",
+            "source": { "book": "run-faster", "page": 148 }
+          },
+          {
+            "id": "mentor-spirit-rf",
+            "name": "Mentor Spirit",
+            "karmaCost": 5,
+            "summary": "Gain mentor spirit benefits/drawbacks. (Run Faster adds additional mentor spirits.)",
+            "requiresMagic": true,
+            "requiresSpecification": true,
+            "specificationLabel": "Spirit",
+            "specificationSource": "mentorSpirits",
+            "limit": 1,
+            "note": "Clarification entry; use core-rulebook mentor-spirit for base effect.",
+            "source": { "book": "run-faster", "page": 148 }
+          },
+          {
+            "id": "muscular-toner",
+            "name": "Muscular Toner",
+            "karmaCost": 10,
+            "summary": "+1 die to Athletics tests; improved muscle tone and flexibility.",
+            "source": { "book": "run-faster", "page": 148 }
+          },
+          {
+            "id": "natural-immunity-rf",
+            "name": "Natural Immunity",
+            "summary": "Immunity to one specific disease or toxin. (Run Faster clarification.)",
+            "requiresSpecification": true,
+            "specificationLabel": "Disease/Toxin",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4,
+                "description": "Immunity to natural pathogens/toxins only"
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "description": "Immunity to both natural and synthetic versions"
+              }
+            },
+            "note": "Clarification entry; use core-rulebook natural-immunity for base effect.",
+            "source": { "book": "run-faster", "page": 148 }
+          },
+          {
+            "id": "overclocker",
+            "name": "Overclocker",
+            "karmaCost": 5,
+            "summary": "Boost one ASDF attribute of your cyberdeck by 1 (max +1) as a Free Action.",
+            "requiresSpecification": true,
+            "specificationLabel": "Cyberdeck Attribute",
+            "specificationOptions": ["Attack", "Sleaze", "Data Processing", "Firewall"],
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "perceptive",
+            "name": "Perceptive",
+            "summary": "+1 die to Perception tests per rating.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 10 }
+            },
+            "effects": [
+              {
+                "id": "perceptive-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "perception"
+                },
+                "value": { "perRating": 1 },
+                "description": "+1 die per rating to Perception tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "practice-practice-practice",
+            "name": "Practice, Practice, Practice",
+            "karmaCost": 4,
+            "summary": "+1 die to a single non-combat skill when used in a specific practiced way.",
+            "requiresSpecification": true,
+            "specificationLabel": "Skill",
+            "specificationSource": "skills",
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "quick-healer-rf",
+            "name": "Quick Healer",
+            "karmaCost": 3,
+            "summary": "+2 dice to all Healing tests. (Run Faster errata clarification.)",
+            "note": "Clarification entry; use core-rulebook quick-healer for base effect.",
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "restricted-gear",
+            "name": "Restricted Gear",
+            "karmaCost": 10,
+            "summary": "Purchase one item up to Availability 20F at character creation.",
+            "limit": 1,
+            "requiresGMApproval": true,
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "shoot-first-dont-ask-questions",
+            "name": "Shoot First, Don't Ask Questions",
+            "karmaCost": 7,
+            "summary": "+2 dice to Initiative tests in the first Combat Turn of a surprise situation.",
+            "source": { "book": "run-faster", "page": 149 }
+          },
+          {
+            "id": "solid-rep",
+            "name": "Solid Rep",
+            "summary": "Positive reputation with a specific group; +1 die per rating on Social tests with that group.",
+            "requiresSpecification": true,
+            "specificationLabel": "Group/Organization",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 2 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 4 }
+            },
+            "source": { "book": "run-faster", "page": 150 }
+          },
+          {
+            "id": "spike-resistance",
+            "name": "Spike Resistance",
+            "summary": "+1 die per rating to resist Matrix damage from data spikes.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 10 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 20 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 30 }
+            },
+            "source": { "book": "run-faster", "page": 150 }
+          },
+          {
+            "id": "spirit-whisperer",
+            "name": "Spirit Whisperer",
+            "karmaCost": 8,
+            "summary": "+1 die to Summoning and Binding tests for one type of spirit.",
+            "requiresMagic": true,
+            "requiresSpecification": true,
+            "specificationLabel": "Spirit Type",
+            "specificationSource": "spiritTypes",
+            "source": { "book": "run-faster", "page": 150 }
+          },
+          {
+            "id": "stunt-driver",
+            "name": "Stunt Driver",
+            "karmaCost": 5,
+            "summary": "+1 to vehicle handling limit when performing stunts or evasive maneuvers.",
+            "source": { "book": "run-faster", "page": 150 }
+          },
+          {
+            "id": "subtle-pilot",
+            "name": "Subtle Pilot",
+            "karmaCost": 5,
+            "summary": "+2 dice to avoid detection while operating a vehicle (sensor evasion, tailing, etc.).",
+            "source": { "book": "run-faster", "page": 150 }
+          },
+          {
+            "id": "tough-as-nails",
+            "name": "Tough as Nails",
+            "summary": "+1 box to the chosen Condition Monitor per rating (Physical or Stun).",
+            "requiresSpecification": true,
+            "specificationLabel": "Condition Monitor",
+            "specificationOptions": ["Physical", "Stun"],
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 15 }
+            },
+            "effects": [
+              {
+                "id": "tough-as-nails-condition-monitor",
+                "type": "derived-stat-modifier",
+                "target": {
+                  "stat": "condition-monitor-specification"
+                },
+                "value": { "perRating": 1 },
+                "description": "+1 box per rating to the chosen Condition Monitor (Physical or Stun).",
+                "triggers": ["always"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 151 }
+          },
+          {
+            "id": "trust-fund",
+            "name": "Trust Fund",
+            "summary": "Receive a free lifestyle and monthly stipend based on rating.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "Low",
+                "lifestyle": "Low",
+                "stipend": 500
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Medium",
+                "lifestyle": "Medium",
+                "stipend": 2500
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15,
+                "name": "High",
+                "lifestyle": "High",
+                "stipend": 5000
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20,
+                "name": "Luxury",
+                "lifestyle": "Luxury",
+                "stipend": 10000
+              }
+            },
+            "source": { "book": "run-faster", "page": 151 }
+          },
+          {
+            "id": "vehicle-empathy",
+            "name": "Vehicle Empathy",
+            "karmaCost": 7,
+            "summary": "+1 die to all Vehicle tests; instinctive understanding of vehicle behavior.",
+            "effects": [
+              {
+                "id": "vehicle-empathy-bonus",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skillCategory": "vehicle"
+                },
+                "value": 1,
+                "description": "+1 die to all Vehicle tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 151 }
+          }
+        ],
+        "negative": [
+          {
+            "id": "albinism",
+            "name": "Albinism",
+            "summary": "Lack of pigmentation causes social stigma and light sensitivity.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4,
+                "name": "Partial",
+                "description": "Light skin and hair; -1 die to Social tests in situations where appearance causes bias."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8,
+                "name": "Full",
+                "description": "Complete albinism; -1 die to Social tests and -1 die to visual Perception in bright light."
+              }
+            },
+            "source": { "book": "run-faster", "page": 152 }
+          },
+          {
+            "id": "astral-bouncer",
+            "name": "Astral Bouncer",
+            "karmaBonus": 5,
+            "summary": "Astral forms and spirits are hostile to you and attack on sight.",
+            "requiresMagic": true,
+            "source": { "book": "run-faster", "page": 152 }
+          },
+          {
+            "id": "big-regret",
+            "name": "Big Regret",
+            "karmaBonus": 5,
+            "summary": "A past action haunts the character; -2 dice to Composure tests related to the regret.",
+            "requiresSpecification": true,
+            "specificationLabel": "Regret",
+            "source": { "book": "run-faster", "page": 152 }
+          },
+          {
+            "id": "borrowed-time",
+            "name": "Borrowed Time",
+            "karmaBonus": 20,
+            "summary": "Character has a terminal condition; GM secretly rolls to determine remaining time.",
+            "requiresGMApproval": true,
+            "source": { "book": "run-faster", "page": 152 }
+          },
+          {
+            "id": "city-slicker",
+            "name": "City Slicker",
+            "karmaBonus": 6,
+            "summary": "-2 dice to all Outdoor/Wilderness skill tests.",
+            "incompatibilities": ["outdoorsman"],
+            "source": { "book": "run-faster", "page": 152 }
+          },
+          {
+            "id": "creature-of-comfort",
+            "name": "Creature of Comfort",
+            "summary": "Character suffers penalties when living below their expected lifestyle.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Middle",
+                "description": "Lifestyle below Middle incurs -2 dice to Social tests."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 17,
+                "name": "High",
+                "description": "Lifestyle below High incurs -4 dice to Social tests."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25,
+                "name": "Luxury",
+                "description": "Lifestyle below Luxury incurs -6 dice to Social tests."
+              }
+            },
+            "source": { "book": "run-faster", "page": 153 }
+          },
+          {
+            "id": "curiosity-killed-the-cat",
+            "name": "Curiosity Killed the Cat",
+            "karmaBonus": 4,
+            "summary": "Character cannot resist investigating mysteries; Composure (3) test to walk away.",
+            "source": { "book": "run-faster", "page": 153 }
+          },
+          {
+            "id": "day-job",
+            "name": "Day Job",
+            "summary": "Character has a regular job that limits available time for running.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "Part-Time",
+                "hoursPerWeek": 10,
+                "description": "10 hours/week; occasional schedule conflicts."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Full-Time",
+                "hoursPerWeek": 30,
+                "description": "30 hours/week; frequent schedule conflicts, may miss runs."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15,
+                "name": "Executive",
+                "hoursPerWeek": 50,
+                "description": "50+ hours/week; severe schedule limitations."
+              }
+            },
+            "source": { "book": "run-faster", "page": 153 }
+          },
+          {
+            "id": "deaf",
+            "name": "Deaf",
+            "karmaBonus": 15,
+            "summary": "Character cannot hear; automatic failure on hearing-based Perception tests.",
+            "incompatibilities": ["absolute-perfect-pitch"],
+            "source": { "book": "run-faster", "page": 153 }
+          },
+          {
+            "id": "demanding-master",
+            "name": "Demanding Master",
+            "karmaBonus": 6,
+            "summary": "Mentor spirit is demanding; Composure (3) test to refuse its requests or suffer -2 dice.",
+            "requiresMagic": true,
+            "source": { "book": "run-faster", "page": 153 }
+          },
+          {
+            "id": "diet-requirement",
+            "name": "Diet Requirement",
+            "karmaBonus": 6,
+            "summary": "Character requires unusual or specific diet; failure to maintain causes -2 dice to all actions.",
+            "requiresSpecification": true,
+            "specificationLabel": "Diet Type",
+            "source": { "book": "run-faster", "page": 154 }
+          },
+          {
+            "id": "driven",
+            "name": "Driven",
+            "karmaBonus": 4,
+            "summary": "Character is obsessed with a goal; -2 dice to resist pursuing it.",
+            "requiresSpecification": true,
+            "specificationLabel": "Goal",
+            "source": { "book": "run-faster", "page": 154 }
+          },
+          {
+            "id": "emotional-attachment",
+            "name": "Emotional Attachment",
+            "karmaBonus": 5,
+            "summary": "Character is emotionally attached to an item; -1 die to all actions when separated from it.",
+            "requiresSpecification": true,
+            "specificationLabel": "Item",
+            "source": { "book": "run-faster", "page": 154 }
+          },
+          {
+            "id": "glass-jaw",
+            "name": "Glass Jaw",
+            "karmaBonus": 10,
+            "summary": "-2 dice to resist Stun damage from physical attacks.",
+            "effects": [
+              {
+                "id": "glass-jaw-stun-penalty",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "test": "damage-resistance",
+                  "damageType": "stun"
+                },
+                "value": -2,
+                "description": "-2 dice to resist Stun damage from physical attacks.",
+                "triggers": ["damage-resistance"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 154 }
+          },
+          {
+            "id": "gremlins-rf",
+            "name": "Gremlins",
+            "summary": "Tech glitches more easily. (Run Faster clarification.)",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 4 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 8 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 12 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 16 }
+            },
+            "note": "Clarification entry; use core-rulebook gremlins for base effect.",
+            "source": { "book": "run-faster", "page": 154 }
+          },
+          {
+            "id": "honorbound",
+            "name": "Honorbound",
+            "karmaBonus": 10,
+            "summary": "Character is bound by strict personal code of honor; cannot break it without severe consequences.",
+            "requiresSpecification": true,
+            "specificationLabel": "Code",
+            "requiresGMApproval": true,
+            "source": { "book": "run-faster", "page": 155 }
+          },
+          {
+            "id": "in-debt",
+            "name": "In Debt",
+            "summary": "Character owes money; must make payments or face consequences.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 15,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 1 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 2 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 3 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 4 },
+              "5": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "6": { "cost": 0, "availability": 0, "karmaCost": 6 },
+              "7": { "cost": 0, "availability": 0, "karmaCost": 7 },
+              "8": { "cost": 0, "availability": 0, "karmaCost": 8 },
+              "9": { "cost": 0, "availability": 0, "karmaCost": 9 },
+              "10": { "cost": 0, "availability": 0, "karmaCost": 10 },
+              "11": { "cost": 0, "availability": 0, "karmaCost": 11 },
+              "12": { "cost": 0, "availability": 0, "karmaCost": 12 },
+              "13": { "cost": 0, "availability": 0, "karmaCost": 13 },
+              "14": { "cost": 0, "availability": 0, "karmaCost": 14 },
+              "15": { "cost": 0, "availability": 0, "karmaCost": 15 }
+            },
+            "nuyenPerPoint": 5000,
+            "source": { "book": "run-faster", "page": 155 }
+          },
+          {
+            "id": "incomplete-deprogramming",
+            "name": "Incomplete Deprogramming",
+            "karmaBonus": 8,
+            "summary": "Former cult/gang member; old conditioning triggers under stress. Composure (4) test or revert.",
+            "requiresSpecification": true,
+            "specificationLabel": "Former Group",
+            "source": { "book": "run-faster", "page": 155 }
+          },
+          {
+            "id": "infirm",
+            "name": "Infirm",
+            "summary": "Reduce Physical attribute maximums by 1 per rating.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 5,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 15 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 20 },
+              "5": { "cost": 0, "availability": 0, "karmaCost": 25 }
+            },
+            "effects": [
+              {
+                "id": "infirm-attribute-max",
+                "type": "attribute-maximum",
+                "target": {
+                  "attributeCategory": "physical"
+                },
+                "value": { "perRating": -1 },
+                "description": "Reduce Physical attribute maximums (Body, Agility, Reaction, Strength) by 1 per rating.",
+                "triggers": ["always"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 155 }
+          },
+          {
+            "id": "liar",
+            "name": "Liar",
+            "karmaBonus": 7,
+            "summary": "Character compulsively lies; -2 dice to Judge Intentions tests made by others against you, but -1 to Social limit on honest interactions.",
+            "source": { "book": "run-faster", "page": 156 }
+          },
+          {
+            "id": "lightweight",
+            "name": "Lightweight",
+            "karmaBonus": 6,
+            "summary": "Double the effects of alcohol and recreational drugs; -2 dice to Toxin Resistance for those substances.",
+            "source": { "book": "run-faster", "page": 156 }
+          },
+          {
+            "id": "on-the-wagon",
+            "name": "On the Wagon",
+            "karmaBonus": 5,
+            "summary": "Former addict; Composure (3) test to resist relapsing when exposed to former substance.",
+            "requiresSpecification": true,
+            "specificationLabel": "Former Substance",
+            "source": { "book": "run-faster", "page": 156 }
+          },
+          {
+            "id": "outdoorsman",
+            "name": "Outdoorsman",
+            "karmaBonus": 6,
+            "summary": "-2 dice to all Urban/Social skill tests; uncomfortable in cities.",
+            "incompatibilities": ["city-slicker"],
+            "source": { "book": "run-faster", "page": 156 }
+          },
+          {
+            "id": "phobia",
+            "name": "Phobia",
+            "summary": "Irrational fear; severity and commonality determine karma value.",
+            "requiresSpecification": true,
+            "specificationLabel": "Fear",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3,
+                "name": "Mild / Uncommon",
+                "description": "Uncommon trigger, mild reaction; -1 die when confronted."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "Mild / Common",
+                "description": "Common trigger, mild reaction; -1 die when confronted."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7,
+                "name": "Severe / Uncommon",
+                "description": "Uncommon trigger, severe reaction; -2 dice and Composure (3) test to avoid fleeing."
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Severe / Common",
+                "description": "Common trigger, severe reaction; -2 dice and Composure (3) test to avoid fleeing."
+              }
+            },
+            "source": { "book": "run-faster", "page": 157 }
+          },
+          {
+            "id": "poor-self-control",
+            "name": "Poor Self Control",
+            "summary": "Character lacks restraint in a specific area.",
+            "requiresSpecification": true,
+            "specificationLabel": "Type",
+            "specificationOptions": [
+              "Combat Monster",
+              "Compulsive (Specific)",
+              "Sadistic",
+              "Thrill Seeker",
+              "Vindictive"
+            ],
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 2,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4,
+                "name": "Moderate",
+                "description": "Composure (2) test to resist impulse."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8,
+                "name": "Severe",
+                "description": "Composure (4) test to resist impulse; failure may cause reckless behavior."
+              }
+            },
+            "source": { "book": "run-faster", "page": 157 }
+          },
+          {
+            "id": "prejudiced",
+            "name": "Prejudiced",
+            "summary": "Bias against a specific group; severity determines social penalty.",
+            "requiresSpecification": true,
+            "specificationLabel": "Target Group",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 3,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3,
+                "name": "Biased",
+                "description": "-2 dice to Social tests with target group."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "Outspoken",
+                "description": "-3 dice to Social tests with target group; vocal about bias."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8,
+                "name": "Radical",
+                "description": "-4 dice to Social tests; may refuse to work with or actively oppose target group."
+              }
+            },
+            "source": { "book": "run-faster", "page": 157 }
+          },
+          {
+            "id": "records-on-file",
+            "name": "Records on File",
+            "summary": "A corporation has your biometric data on file; +1 die per rating to trace/identify you.",
+            "requiresSpecification": true,
+            "specificationLabel": "Corporation",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 10,
+            "ratings": {
+              "1": { "cost": 0, "availability": 0, "karmaCost": 1 },
+              "2": { "cost": 0, "availability": 0, "karmaCost": 2 },
+              "3": { "cost": 0, "availability": 0, "karmaCost": 3 },
+              "4": { "cost": 0, "availability": 0, "karmaCost": 4 },
+              "5": { "cost": 0, "availability": 0, "karmaCost": 5 },
+              "6": { "cost": 0, "availability": 0, "karmaCost": 6 },
+              "7": { "cost": 0, "availability": 0, "karmaCost": 7 },
+              "8": { "cost": 0, "availability": 0, "karmaCost": 8 },
+              "9": { "cost": 0, "availability": 0, "karmaCost": 9 },
+              "10": { "cost": 0, "availability": 0, "karmaCost": 10 }
+            },
+            "incompatibilities": ["erased"],
+            "source": { "book": "run-faster", "page": 158 }
+          },
+          {
+            "id": "reduced-sense",
+            "name": "Reduced Sense",
+            "summary": "One sense is diminished; -2 dice to Perception tests using that sense.",
+            "requiresSpecification": true,
+            "specificationLabel": "Sense",
+            "specificationOptions": ["Hearing", "Sight", "Smell", "Taste", "Touch"],
+            "karmaBonus": 2,
+            "effects": [
+              {
+                "id": "reduced-sense-penalty",
+                "type": "dice-pool-modifier",
+                "target": {
+                  "skill": "perception",
+                  "condition": "specification-sense"
+                },
+                "value": -2,
+                "description": "-2 dice to Perception tests using the specified sense.",
+                "triggers": ["skill-test"]
+              }
+            ],
+            "source": { "book": "run-faster", "page": 158 }
+          },
+          {
+            "id": "school-of-hard-knocks",
+            "name": "School of Hard Knocks",
+            "karmaBonus": 4,
+            "summary": "Street education; -1 die to Academic Knowledge tests.",
+            "source": { "book": "run-faster", "page": 158 }
+          },
+          {
+            "id": "sensitive-neural-structure",
+            "name": "Sensitive Neural Structure",
+            "karmaBonus": 5,
+            "summary": "Double effect of neural-affecting drugs and BTLs; -2 to resist biofeedback damage.",
+            "source": { "book": "run-faster", "page": 158 }
+          },
+          {
+            "id": "sinner",
+            "name": "SINner",
+            "summary": "Character has a System Identification Number; varying levels of records and obligations.",
+            "hasRating": true,
+            "minRating": 1,
+            "maxRating": 4,
+            "ratings": {
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "National SIN",
+                "description": "Standard citizen; pays taxes, on record."
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Criminal SIN",
+                "description": "Criminal record; -2 dice to Social tests with law enforcement."
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15,
+                "name": "Corporate Limited SIN",
+                "description": "Corporate citizen; restricted travel and employment options."
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25,
+                "name": "Corporate Full SIN",
+                "description": "Full corporate citizen; significant restrictions and monitoring."
+              }
+            },
+            "source": { "book": "run-faster", "page": 158 }
+          },
+          {
+            "id": "social-stress",
+            "name": "Social Stress",
+            "karmaBonus": 8,
+            "summary": "-2 dice to Social tests in a specific stressful environment.",
+            "requiresSpecification": true,
+            "specificationLabel": "Stressful Environment",
+            "source": { "book": "run-faster", "page": 159 }
+          },
+          {
+            "id": "this-is-your-last-chance",
+            "name": "This Is Your Last Chance",
+            "karmaBonus": 5,
+            "summary": "Character is on final warning with their fixer or contacts; one more screwup and they're cut off.",
+            "source": { "book": "run-faster", "page": 159 }
+          },
+          {
+            "id": "unsteady-hands",
+            "name": "Unsteady Hands",
+            "karmaBonus": 7,
+            "summary": "-2 dice to all tests requiring fine motor control (lockpicking, surgery, demolitions, etc.).",
+            "source": { "book": "run-faster", "page": 159 }
+          }
+        ]
+      }
+    },
     "creationMethods": { "mergeStrategy": "append", "payload": { "creationMethods": [] } },
     "lifestyle": { "mergeStrategy": "merge", "payload": {} },
     "contactArchetypes": { "mergeStrategy": "append", "payload": { "archetypes": [] } },
