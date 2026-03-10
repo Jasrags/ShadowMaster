@@ -174,14 +174,54 @@ export function extractModule<T = Record<string, unknown>>(
   ruleset: LoadedRuleset,
   moduleType: RuleModuleType
 ): T | null {
-  // Find the first book that has this module (core book first due to load order)
+  // Merge payloads from all books (core + sourcebooks) so that
+  // sourcebook data with "append" merge strategy is included.
+  // Arrays of objects with `id` fields are deduplicated; other values
+  // are overwritten by later books.
+  let merged: Record<string, unknown> | null = null;
+
   for (const book of ruleset.books) {
     const moduleEntry = book.payload.modules?.[moduleType];
-    if (moduleEntry?.payload) {
-      return moduleEntry.payload as T;
+    if (!moduleEntry?.payload) continue;
+
+    const payload = moduleEntry.payload as Record<string, unknown>;
+
+    if (!merged) {
+      // First book — deep-clone so we don't mutate the original
+      merged = structuredClone(payload);
+      continue;
+    }
+
+    // Merge each key from this book's payload into the accumulated result
+    for (const [key, value] of Object.entries(payload)) {
+      const existing = merged[key];
+
+      if (Array.isArray(existing) && Array.isArray(value)) {
+        // Merge arrays: deduplicate by `id` if items have one, otherwise append
+        const seenIds = new Set<string>();
+        for (const item of existing) {
+          if (item && typeof item === "object" && "id" in item) {
+            seenIds.add((item as { id: string }).id);
+          }
+        }
+        for (const item of value) {
+          if (item && typeof item === "object" && "id" in item) {
+            if (!seenIds.has((item as { id: string }).id)) {
+              seenIds.add((item as { id: string }).id);
+              existing.push(item);
+            }
+          } else {
+            existing.push(item);
+          }
+        }
+      } else if (value !== undefined) {
+        // Scalars and objects: later book wins
+        merged[key] = structuredClone(value);
+      }
     }
   }
-  return null;
+
+  return merged as T | null;
 }
 
 /**
