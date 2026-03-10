@@ -219,8 +219,14 @@ function SheetCreationContent({
 
   // Auto-save draft to server (debounced with race condition protection)
   useEffect(() => {
-    // Only save if we have priorities set (meaningful progress)
-    if (!creationState.priorities || Object.keys(creationState.priorities).length === 0) {
+    // Only save if we have priorities set (meaningful progress) and required fields
+    const resolvedEditionCode = editionCode || selectedEdition;
+    if (
+      !creationState.priorities ||
+      Object.keys(creationState.priorities).length === 0 ||
+      !resolvedEditionCode ||
+      !creationState.creationMethodId
+    ) {
       return;
     }
 
