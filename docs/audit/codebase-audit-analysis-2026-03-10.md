@@ -52,13 +52,13 @@ These are findings where the audit could not determine intent — the code could
 |----|---------|-------------------|
 | ~~**U1**~~ | ~~File-based storage with no database~~ | **RESOLVED:** File-based storage is the permanent, intentional design for a small-group/self-hosted tool. |
 | ~~**U2**~~ | ~~No Next.js middleware.ts~~ | **RESOLVED:** This was an oversight. Middleware should be added for centralized auth. B6 is a symptom of this gap. |
-| **U3** | Security headers only at Caddy layer, not in Next.js | Works in production (Caddy), but dev/Docker environments have no security headers. Could be acceptable or could mean developers test without headers. |
-| **U4** | `sendDefaultPii: true` in all Sentry configs | Could be intentional for debugging, or an oversight with compliance implications. |
-| **U5** | `tracesSampleRate: 1` (100% tracing) | Could be acceptable for low-traffic self-hosted app, or a dev-time setting that wasn't adjusted for production. |
-| **U6** | `core-rulebook.json.backup` in editions directory | Could be version control for hand-edited data, or accidental leftover. 388KB file committed to git. |
-| **U7** | Migration scripts split between `/data/migrations/` and `/lib/migrations/` | Unclear which is the canonical location. `/data/` has one-off scripts, `/lib/` has the framework. |
-| **U8** | Combat logic split across 3 directories (`lib/combat/`, `lib/rules/combat/`, `lib/rules/action-resolution/`) | Could be intentional layering (session state / rules / resolution) or organic sprawl. |
-| **U9** | PROJECT_STATE.md last updated 2026-01-10 | **Confirmed stale.** Code verification found: augmentations are fully integrated (PROJECT_STATE said pending), combat is partially integrated with modal and controls (PROJECT_STATE said pending), magic display is integrated (PROJECT_STATE said pending). The document materially misrepresents current state. |
+| ~~**U3**~~ | ~~Security headers only at Caddy layer~~ | **RESOLVED:** Add headers at Next.js level too, for defense-in-depth. |
+| ~~**U4**~~ | ~~`sendDefaultPii: true` in all Sentry configs~~ | **RESOLVED:** Intentional. Keep it. |
+| ~~**U5**~~ | ~~`tracesSampleRate: 1` (100% tracing)~~ | **RESOLVED:** Dev-time setting. Reduce for production. |
+| ~~**U6**~~ | ~~`core-rulebook.json.backup` in editions directory~~ | **RESOLVED:** Intentional backup. Add to .gitignore. |
+| ~~**U7**~~ | ~~Migration scripts split between two directories~~ | **RESOLVED:** Both locations are intentional. `/data/` = one-off scripts, `/lib/` = framework. |
+| ~~**U8**~~ | ~~Combat logic split across 3 directories~~ | **RESOLVED:** Intentional layering. Session state / rules / resolution. |
+| ~~**U9**~~ | ~~PROJECT_STATE.md last updated 2026-01-10~~ | **RESOLVED:** Confirmed stale. Retire and delete the file. |
 | ~~**U10**~~ | ~~Issues #88-92 referenced as blockers~~ | **RESOLVED:** All five issues are closed. References to these issues throughout the audit are no longer actionable. |
 
 ### D. Merely Rough or Unpolished
@@ -164,18 +164,18 @@ I2 (Rigging session UI)        ──▶  no blockers, just not built yet
 | **U2** | Is the absence of middleware.ts intentional? | **No — oversight. Middleware should be added.** B6 (combat auth bypass) is a symptom of this structural gap. | B6 needs a structural fix (middleware), not just a point patch. D3 resolved — centralize auth in middleware. All future routes will be protected by default. |
 | **U10** | Are Issues #88-92 still the active work items? | **No — all five issues have been closed.** | These are no longer blockers or references. D8b resolved. The "incomplete" findings I1, I2, I4, I5 need reassessment — the issues tracking them are closed, so either the work is considered done or it was deprioritized. |
 
-### Deferrable Unknowns (can proceed without answering)
+### Deferrable Unknowns — RESOLVED
 
-| ID | Question | Risk if Deferred | Why Deferrable |
-|----|----------|-----------------|----------------|
-| **U3** | Should security headers exist at the Next.js level? | Low. Production has headers via Caddy. Dev environments lack them, but this is standard for local dev. | Fix anytime. No downstream work depends on this. |
-| **U4** | Is `sendDefaultPii: true` intentional? | Low-Medium. Privacy compliance risk exists but is bounded to Sentry data. | Can be flipped to `false` as a one-line change anytime. No code depends on it. |
-| **U5** | Is 100% trace sampling intentional? | Low. Cost/performance concern only, no correctness impact. | Tunable at any time via config. |
-| **U6** | What is `core-rulebook.json.backup`? | Very low. Takes up git space but has no runtime effect. | Can be gitignored or deleted anytime. |
-| **U7** | Where should migration scripts live? | Low. Convention question. Both locations work. | Can be consolidated during any cleanup pass. |
-| **U8** | Is the 3-directory combat split intentional? | Low. The code works regardless of organization. | Refactoring can happen independently. |
-| **U9** | Is PROJECT_STATE.md still accurate? | Low. Documentation staleness doesn't affect code. | Update at any time. |
-| **U12** | What's the actual test coverage? | Low. Code works regardless of measured coverage. | Run `pnpm test:coverage` to answer. |
+| ID | Question | Resolution | Impact |
+|----|----------|------------|--------|
+| **U3** | Should security headers exist at the Next.js level? | **Yes — add to Next.js too.** Defense-in-depth; protects dev/Docker and acts as safety net for Caddy. | D10 resolved. Low-effort config addition. |
+| **U4** | Is `sendDefaultPii: true` intentional? | **Yes — keep it.** Full debugging data to Sentry is acceptable. | D6 resolved. No change needed. |
+| **U5** | Is 100% trace sampling intentional? | **No — reduce for production.** Dev-time setting that wasn't adjusted. | D14 resolved. Needs a production-appropriate rate (e.g., 0.1-0.2). |
+| **U6** | What is `core-rulebook.json.backup`? | **Intentional manual backup. Add to .gitignore.** | D11 resolved. Keep file, stop tracking in git. |
+| **U7** | Where should migration scripts live? | **Both locations are intentional.** `/data/migrations/` = one-off scripts, `/lib/migrations/` = framework. Different purposes. | D12 resolved. No consolidation needed. |
+| **U8** | Is the 3-directory combat split intentional? | **Yes — intentional layering.** `/lib/combat/` = session state, `/lib/rules/combat/` = rules, `/lib/rules/action-resolution/` = dice/execution. | No action needed. Architecture is by design. |
+| **U9** | Is PROJECT_STATE.md still accurate? | **Retire it.** GitHub issues and the codebase are the source of truth. | D8 resolved. Delete the file. |
+| **U12** | What's the actual test coverage? | **Measure and raise thresholds.** Current 30%/25% are too permissive. | Run coverage, set thresholds to match or slightly below actual. |
 
 ---
 
@@ -197,9 +197,9 @@ Decisions the developer needs to make before improvement work begins. Ordered by
 | # | Decision | What It Affects |
 |---|----------|----------------|
 | **D5** | Should the CI pipeline match the pre-commit hooks (add type-check, knip, format-check)? | I10. Straightforward to implement, but needs a yes/no. |
-| **D6** | Is `sendDefaultPii: true` acceptable, or should it be turned off? | U4. One-line change, but needs a privacy stance. |
+| ~~**D6**~~ | ~~Is `sendDefaultPii: true` acceptable?~~ | **RESOLVED:** Keep it. Full debugging data is acceptable. |
 | **D7** | Should broken training-time functions (B1) be implemented, or should the advancement paths be gated in the UI to prevent users from reaching them? | B1. Two valid approaches: implement the calculations, or add guards that prevent users from triggering unimplemented paths. |
-| **D8** | Should PROJECT_STATE.md be updated or retired? | Confirmed stale — augmentations listed as pending are actually complete, combat listed as pending is partially integrated. If kept, needs full rewrite. If retired, need an alternative source of truth. |
+| ~~**D8**~~ | ~~Should PROJECT_STATE.md be updated or retired?~~ | **RESOLVED:** Retire it. Delete the file. GitHub issues and codebase are the source of truth. |
 | ~~**D8b**~~ | ~~Are Issues #88-92 still current?~~ | **RESOLVED:** All five issues are closed. No longer actionable references. |
 
 ### Low-Impact Decisions (can be made anytime)
@@ -207,11 +207,11 @@ Decisions the developer needs to make before improvement work begins. Ordered by
 | # | Decision | What It Affects |
 |---|----------|----------------|
 | **D9** | Should `console.error` in auth routes be migrated to pino? | R1. Cosmetic but consistent. |
-| **D10** | Should security headers be added at the Next.js level in addition to Caddy? | U3. Defense-in-depth question. |
-| **D11** | Should `core-rulebook.json.backup` be removed or gitignored? | U6. Cleanup only. |
-| **D12** | Should the migration script convention be formalized (one location)? | U7. Organizational only. |
+| ~~**D10**~~ | ~~Should security headers be added at the Next.js level?~~ | **RESOLVED:** Yes, add them. Defense-in-depth. |
+| ~~**D11**~~ | ~~Should `core-rulebook.json.backup` be removed or gitignored?~~ | **RESOLVED:** Keep file, add to .gitignore. |
+| ~~**D12**~~ | ~~Should the migration script convention be formalized?~~ | **RESOLVED:** Both locations are intentional. No change needed. |
 | **D13** | Is WebKit/Safari E2E support a goal? | R6. Determines whether to install WebKit in CI. |
-| **D14** | What Sentry trace sample rate is appropriate for production? | U5. Cost/performance tuning. |
+| ~~**D14**~~ | ~~What Sentry trace sample rate is appropriate for production?~~ | **RESOLVED:** Reduce from 1.0. Needs a production-appropriate value. |
 
 ---
 
