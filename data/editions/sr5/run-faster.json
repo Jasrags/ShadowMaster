@@ -22,6 +22,16 @@
             "name": "Adrenaline Surge",
             "karmaCost": 12,
             "summary": "Act first in the first Initiative Pass of combat, before anyone rolls Initiative.",
+            "effects": [
+              {
+                "id": "adrenaline-surge-first-action",
+                "type": "special-ability",
+                "target": { "stat": "initiative" },
+                "value": 0,
+                "description": "Act first in the first Initiative Pass, before Initiative is rolled.",
+                "triggers": ["combat-start"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 144 }
           },
           {
@@ -63,6 +73,26 @@
             "karmaCost": 7,
             "summary": "+1 Outdoors in urban environments, -1 Perception/Survival in non-urban.",
             "incompatibilities": ["outdoorsman"],
+            "effects": [
+              {
+                "id": "city-slicker-urban-bonus",
+                "type": "dice-pool-modifier",
+                "target": { "skillCategory": "outdoors" },
+                "value": 1,
+                "condition": { "environment": "urban" },
+                "description": "+1 die to Outdoors skill tests in urban environments.",
+                "triggers": ["skill-test"]
+              },
+              {
+                "id": "city-slicker-rural-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "skills": ["perception", "survival"] },
+                "value": -1,
+                "condition": { "environment": "non-urban" },
+                "description": "-1 die to Perception and Survival tests outside urban areas.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 145 }
           },
           {
@@ -91,6 +121,16 @@
             "name": "Digital Doppelganger",
             "karmaCost": 7,
             "summary": "+2 threshold for Matrix tracking on your linked SIN.",
+            "effects": [
+              {
+                "id": "digital-doppelganger-threshold",
+                "type": "threshold-modifier",
+                "target": { "test": "matrix-tracking" },
+                "value": 2,
+                "description": "+2 to the threshold for Matrix searches targeting your SIN.",
+                "triggers": ["matrix-search"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 146 }
           },
           {
@@ -98,6 +138,17 @@
             "name": "Disgraced",
             "karmaCost": 2,
             "summary": "+2 Intimidate against criminals; penalty with upright citizens.",
+            "effects": [
+              {
+                "id": "disgraced-intimidate-bonus",
+                "type": "dice-pool-modifier",
+                "target": { "skill": "intimidation" },
+                "value": 2,
+                "condition": { "customCondition": "target-is-criminal" },
+                "description": "+2 dice to Intimidation tests against criminals.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 146 }
           },
           {
@@ -106,6 +157,24 @@
             "karmaCost": 8,
             "summary": "No Matrix search results; Public Awareness maximum 1.",
             "incompatibilities": ["records-on-file", "fame"],
+            "effects": [
+              {
+                "id": "erased-no-matrix-search",
+                "type": "special-ability",
+                "target": { "stat": "matrix-presence" },
+                "value": 0,
+                "description": "No Matrix search results exist for this character.",
+                "triggers": ["always"]
+              },
+              {
+                "id": "erased-public-awareness-cap",
+                "type": "derived-stat-modifier",
+                "target": { "stat": "public-awareness-maximum" },
+                "value": 1,
+                "description": "Public Awareness cannot exceed 1.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 146 }
           },
           {
@@ -177,6 +246,16 @@
             "name": "Inspired",
             "karmaCost": 4,
             "summary": "+2 Street Cred among artists; +1 Artisan or Performance.",
+            "effects": [
+              {
+                "id": "inspired-artisan-bonus",
+                "type": "dice-pool-modifier",
+                "target": { "skills": ["artisan", "performance"] },
+                "value": 1,
+                "description": "+1 die to Artisan or Performance tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 147 }
           },
           {
@@ -235,6 +314,24 @@
             "name": "Night Vision",
             "karmaCost": 2,
             "summary": "Low-light vision with sun glare penalty.",
+            "effects": [
+              {
+                "id": "night-vision-low-light",
+                "type": "special-ability",
+                "target": { "sense": "vision" },
+                "value": 0,
+                "description": "Natural low-light vision; no penalties in dim light conditions.",
+                "triggers": ["always"]
+              },
+              {
+                "id": "night-vision-glare-penalty",
+                "type": "visibility-modifier",
+                "target": { "condition": "glare" },
+                "value": -1,
+                "description": "-1 die penalty in bright sunlight or glare conditions.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 148 }
           },
           {
@@ -243,6 +340,26 @@
             "karmaCost": 3,
             "summary": "+2 Outdoors in rural environments; -1 Perception/Survival in urban.",
             "incompatibilities": ["city-slicker"],
+            "effects": [
+              {
+                "id": "outdoorsman-rural-bonus",
+                "type": "dice-pool-modifier",
+                "target": { "skillCategory": "outdoors" },
+                "value": 2,
+                "condition": { "environment": "rural" },
+                "description": "+2 dice to Outdoors skill tests in rural/wilderness environments.",
+                "triggers": ["skill-test"]
+              },
+              {
+                "id": "outdoorsman-urban-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "skills": ["perception", "survival"] },
+                "value": -1,
+                "condition": { "environment": "urban" },
+                "description": "-1 die to Perception and Survival tests in urban areas.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 149 }
           },
           {
@@ -253,6 +370,16 @@
             "requiresSpecification": true,
             "specificationLabel": "Cyberdeck Attribute",
             "specificationOptions": ["Attack", "Sleaze", "Data Processing", "Firewall"],
+            "effects": [
+              {
+                "id": "overclocker-asdf-bonus",
+                "type": "attribute-modifier",
+                "target": { "attribute": "cyberdeck-specification" },
+                "value": 1,
+                "description": "+1 to the chosen cyberdeck ASDF attribute rating.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 149 }
           },
           {
@@ -283,6 +410,16 @@
             "name": "Perfect Time",
             "karmaCost": 5,
             "summary": "Always knows the exact time; +1 Free Action per Initiative Pass.",
+            "effects": [
+              {
+                "id": "perfect-time-free-action",
+                "type": "special-ability",
+                "target": { "stat": "free-actions" },
+                "value": 1,
+                "description": "+1 Free Action per Initiative Pass.",
+                "triggers": ["initiative-pass"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 149 }
           },
           {
@@ -290,6 +427,16 @@
             "name": "Poor Link",
             "karmaCost": 8,
             "summary": "-2 Ritual Spellcasting against this character; +2 dice to resist ritual spells.",
+            "effects": [
+              {
+                "id": "poor-link-ritual-resistance",
+                "type": "dice-pool-modifier",
+                "target": { "test": "resist-ritual-spellcasting" },
+                "value": 2,
+                "description": "+2 dice to resist ritual spells targeting this character.",
+                "triggers": ["resist-spell"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 149 }
           },
           {
@@ -320,6 +467,16 @@
             "name": "Sense of Direction",
             "karmaCost": 3,
             "summary": "Always knows which way is north; +1 die to Navigation tests.",
+            "effects": [
+              {
+                "id": "sense-of-direction-navigation",
+                "type": "dice-pool-modifier",
+                "target": { "skill": "navigation" },
+                "value": 1,
+                "description": "+1 die to Navigation tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 150 }
           },
           {
@@ -366,6 +523,16 @@
               "2": { "cost": 0, "availability": 0, "karmaCost": 20 },
               "3": { "cost": 0, "availability": 0, "karmaCost": 30 }
             },
+            "effects": [
+              {
+                "id": "spike-resistance-biofeedback",
+                "type": "dice-pool-modifier",
+                "target": { "test": "resist-biofeedback" },
+                "value": { "perRating": 1 },
+                "description": "+1 die per rating to resist biofeedback damage.",
+                "triggers": ["resist-damage"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 151 }
           },
           {
@@ -377,6 +544,16 @@
             "requiresSpecification": true,
             "specificationLabel": "Spirit Type",
             "specificationSource": "spiritTypes",
+            "effects": [
+              {
+                "id": "spirit-whisperer-force-bonus",
+                "type": "summoning-modifier",
+                "target": { "stat": "spirit-force" },
+                "value": 1,
+                "description": "Summoned spirits of the chosen type arrive at Force + 1.",
+                "triggers": ["summoning"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 151 }
           },
           {
@@ -384,6 +561,16 @@
             "name": "Steely Eyed Wheelman",
             "karmaCost": 2,
             "summary": "Terrain modifiers reduced by 1 for vehicle tests.",
+            "effects": [
+              {
+                "id": "steely-eyed-wheelman-terrain",
+                "type": "special-ability",
+                "target": { "category": "vehicle" },
+                "value": 1,
+                "description": "Reduce terrain modifiers by 1 for vehicle tests.",
+                "triggers": ["vehicle-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 151 }
           },
           {
@@ -468,6 +655,25 @@
             "name": "Trustworthy",
             "karmaCost": 15,
             "summary": "+1 Influence; +2 Social Limit for establishing trust.",
+            "effects": [
+              {
+                "id": "trustworthy-influence-bonus",
+                "type": "dice-pool-modifier",
+                "target": { "skillCategory": "influence" },
+                "value": 1,
+                "description": "+1 die to Influence skill group tests.",
+                "triggers": ["skill-test"]
+              },
+              {
+                "id": "trustworthy-social-limit",
+                "type": "limit-modifier",
+                "target": { "limit": "social" },
+                "value": 2,
+                "condition": { "customCondition": "establishing-trust" },
+                "description": "+2 Social Limit when establishing trust.",
+                "triggers": ["social-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 153 }
           },
           {
@@ -492,6 +698,16 @@
             "name": "Water Sprite",
             "karmaCost": 6,
             "summary": "+2 dice to Diving and Swimming tests.",
+            "effects": [
+              {
+                "id": "water-sprite-swimming",
+                "type": "dice-pool-modifier",
+                "target": { "skills": ["diving", "swimming"] },
+                "value": 2,
+                "description": "+2 dice to Diving and Swimming tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 153 }
           },
           {
@@ -500,6 +716,24 @@
             "karmaCost": 7,
             "summary": "+2 DV on Direct Damage spells; +2 Drain on those spells.",
             "requiresMagic": true,
+            "effects": [
+              {
+                "id": "witness-my-hate-damage",
+                "type": "damage-modifier",
+                "target": { "spellCategory": "direct-damage" },
+                "value": 2,
+                "description": "+2 DV to Direct Damage combat spells.",
+                "triggers": ["spellcasting"]
+              },
+              {
+                "id": "witness-my-hate-drain",
+                "type": "special-ability",
+                "target": { "stat": "drain", "spellCategory": "direct-damage" },
+                "value": 2,
+                "description": "+2 Drain when casting Direct Damage combat spells.",
+                "triggers": ["spellcasting"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 153 }
           }
         ],
@@ -527,6 +761,16 @@
                 "description": "Complete albinism; severe glare penalties and social stigma."
               }
             },
+            "effects": [
+              {
+                "id": "albinism-glare-penalty",
+                "type": "visibility-modifier",
+                "target": { "condition": "glare" },
+                "value": { "perRating": -1 },
+                "description": "Increased glare penalties due to lack of pigmentation.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 154 }
           },
           {
@@ -559,6 +803,16 @@
             "name": "Asthma",
             "karmaBonus": 8,
             "summary": "Double fatigue frequency; penalties in poor air quality.",
+            "effects": [
+              {
+                "id": "asthma-fatigue",
+                "type": "special-ability",
+                "target": { "stat": "fatigue-frequency" },
+                "value": 2,
+                "description": "Fatigue tests occur at double the normal frequency.",
+                "triggers": ["physical-exertion"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 154 }
           },
           {
@@ -566,6 +820,16 @@
             "name": "Bi-polar",
             "karmaBonus": 7,
             "summary": "Random mood swings affecting attributes; GM rolls each session.",
+            "effects": [
+              {
+                "id": "bi-polar-mood-swing",
+                "type": "attribute-modifier",
+                "target": { "attribute": "variable" },
+                "value": 0,
+                "description": "GM rolls each session to determine mood state; may gain +1 or -1 to social/mental attributes.",
+                "triggers": ["session-start"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 154 }
           },
           {
@@ -575,6 +839,17 @@
             "summary": "-3 Social Limit vs those who know about the regret.",
             "requiresSpecification": true,
             "specificationLabel": "Regret",
+            "effects": [
+              {
+                "id": "big-regret-social-limit",
+                "type": "limit-modifier",
+                "target": { "limit": "social" },
+                "value": -3,
+                "condition": { "customCondition": "target-knows-regret" },
+                "description": "-3 Social Limit when dealing with those who know about the regret.",
+                "triggers": ["social-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 155 }
           },
           {
@@ -582,6 +857,25 @@
             "name": "Blind",
             "karmaBonus": 15,
             "summary": "Automatic failure on vision tests; severe combat penalties.",
+            "incompatibilities": ["hawk-eye", "night-vision"],
+            "effects": [
+              {
+                "id": "blind-vision-restriction",
+                "type": "skill-restriction",
+                "target": { "skill": "perception", "condition": "vision" },
+                "value": 0,
+                "description": "Automatic failure on all vision-based Perception tests.",
+                "triggers": ["skill-test"]
+              },
+              {
+                "id": "blind-combat-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "category": "combat" },
+                "value": -6,
+                "description": "-6 dice to combat-related tests due to blindness.",
+                "triggers": ["combat-action"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 155 }
           },
           {
@@ -597,6 +891,16 @@
             "name": "Computer Illiterate",
             "karmaBonus": 7,
             "summary": "-4 dice to all computer and electronics tests.",
+            "effects": [
+              {
+                "id": "computer-illiterate-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "skillCategory": "electronics" },
+                "value": -4,
+                "description": "-4 dice to all Computer and Electronics skill tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 155 }
           },
           {
@@ -671,6 +975,16 @@
             "name": "Deaf",
             "karmaBonus": 15,
             "summary": "Automatic failure on audio-based Perception tests.",
+            "effects": [
+              {
+                "id": "deaf-hearing-restriction",
+                "type": "skill-restriction",
+                "target": { "skill": "perception", "condition": "hearing" },
+                "value": 0,
+                "description": "Automatic failure on all hearing-based Perception tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 156 }
           },
           {
@@ -695,6 +1009,16 @@
             "requiresSpecification": true,
             "specificationLabel": "Attribute",
             "specificationOptions": ["Logic", "Intuition"],
+            "effects": [
+              {
+                "id": "dimmer-bulb-attribute-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "attribute": "specification" },
+                "value": { "perRating": -1 },
+                "description": "-1 die per rating to tests using the chosen attribute (Logic or Intuition).",
+                "triggers": ["attribute-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 156 }
           },
           {
@@ -795,6 +1119,7 @@
               "15": { "cost": 0, "availability": 0, "karmaCost": 15 }
             },
             "nuyenPerPoint": 5000,
+            "incompatibilities": ["trust-fund", "born-rich"],
             "source": { "book": "run-faster", "page": 158 }
           },
           {
@@ -837,6 +1162,16 @@
             "name": "Liar",
             "karmaBonus": 7,
             "summary": "-1 Social limit; random lying detection by others.",
+            "effects": [
+              {
+                "id": "liar-social-limit",
+                "type": "limit-modifier",
+                "target": { "limit": "social" },
+                "value": -1,
+                "description": "-1 Social Limit.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 158 }
           },
           {
@@ -844,6 +1179,16 @@
             "name": "Night Blindness",
             "karmaBonus": 6,
             "summary": "Light modifiers worse by one category.",
+            "effects": [
+              {
+                "id": "night-blindness-visibility",
+                "type": "visibility-modifier",
+                "target": { "condition": "low-light" },
+                "value": -1,
+                "description": "Light/visibility modifiers shift one category worse.",
+                "triggers": ["always"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 159 }
           },
           {
@@ -869,6 +1214,16 @@
                 "description": "-2 Perception and +1 to thresholds against you."
               }
             },
+            "effects": [
+              {
+                "id": "oblivious-perception-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "skill": "perception" },
+                "value": -2,
+                "description": "-2 dice to all Perception tests.",
+                "triggers": ["skill-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 159 }
           },
           {
@@ -901,6 +1256,17 @@
             "name": "Paranoia",
             "karmaBonus": 7,
             "summary": "-2 Social with low-Loyalty or unfamiliar contacts.",
+            "effects": [
+              {
+                "id": "paranoia-social-penalty",
+                "type": "dice-pool-modifier",
+                "target": { "skillCategory": "social" },
+                "value": -2,
+                "condition": { "customCondition": "low-loyalty-or-unfamiliar-contact" },
+                "description": "-2 dice to Social tests with low-Loyalty or unfamiliar contacts.",
+                "triggers": ["social-test"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 159 }
           },
           {
@@ -932,6 +1298,24 @@
             "name": "Pie Iesu Domine",
             "karmaBonus": 2,
             "summary": "High Pain Tolerance 1 but start with 1 box of Physical damage.",
+            "effects": [
+              {
+                "id": "pie-iesu-domine-hpt",
+                "type": "wound-modifier",
+                "target": { "stat": "wound-threshold" },
+                "value": 1,
+                "description": "Ignore 1 point of wound modifiers (as High Pain Tolerance 1).",
+                "triggers": ["always"]
+              },
+              {
+                "id": "pie-iesu-domine-starting-damage",
+                "type": "special-ability",
+                "target": { "stat": "physical-damage" },
+                "value": 1,
+                "description": "Start each session with 1 box of Physical damage.",
+                "triggers": ["session-start"]
+              }
+            ],
             "source": { "book": "run-faster", "page": 159 }
           },
           {
