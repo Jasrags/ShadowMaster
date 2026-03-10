@@ -161,7 +161,13 @@ export type RuleModuleType =
   | "socialModifiers" // Social test modifiers
   | "actions" // Action definitions for combat and other activities
   | "categoryModificationDefaults" // Default modification capabilities per gear category
-  | "gameplayLevels"; // Gameplay level modifiers (street, experienced, prime-runner)
+  | "gameplayLevels" // Gameplay level modifiers (street, experienced, prime-runner)
+  | "equipmentPacks" // Pre-built equipment packages (Run Faster)
+  | "metagenics" // Metagenic qualities / SURGE system (Run Faster)
+  | "infected" // HMHVV infected character types (Run Faster)
+  | "lifeModules" // Life module character creation (Run Faster)
+  | "shapeshifters" // Shapeshifter character types (Run Faster)
+  | "johnsonProfiles"; // Mr. Johnson NPC profiles (Run Faster)
 
 /**
  * Rules governing character advancement post-creation.
