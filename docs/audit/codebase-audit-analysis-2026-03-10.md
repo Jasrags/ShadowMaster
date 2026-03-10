@@ -50,8 +50,8 @@ These are findings where the audit could not determine intent — the code could
 
 | ID | Finding | Why It's Ambiguous |
 |----|---------|-------------------|
-| **U1** | File-based storage with no database | Could be intentional for a small-group tool, or a pre-production placeholder. The Playwright single-worker constraint and in-memory rate limiter both depend on this being single-instance. |
-| **U2** | No Next.js middleware.ts | Could be deliberate avoidance of middleware complexity, or an oversight. Per-route auth works but doesn't scale with route count. |
+| ~~**U1**~~ | ~~File-based storage with no database~~ | **RESOLVED:** File-based storage is the permanent, intentional design for a small-group/self-hosted tool. |
+| ~~**U2**~~ | ~~No Next.js middleware.ts~~ | **RESOLVED:** This was an oversight. Middleware should be added for centralized auth. B6 is a symptom of this gap. |
 | **U3** | Security headers only at Caddy layer, not in Next.js | Works in production (Caddy), but dev/Docker environments have no security headers. Could be acceptable or could mean developers test without headers. |
 | **U4** | `sendDefaultPii: true` in all Sentry configs | Could be intentional for debugging, or an oversight with compliance implications. |
 | **U5** | `tracesSampleRate: 1` (100% tracing) | Could be acceptable for low-traffic self-hosted app, or a dev-time setting that wasn't adjusted for production. |
@@ -59,7 +59,7 @@ These are findings where the audit could not determine intent — the code could
 | **U7** | Migration scripts split between `/data/migrations/` and `/lib/migrations/` | Unclear which is the canonical location. `/data/` has one-off scripts, `/lib/` has the framework. |
 | **U8** | Combat logic split across 3 directories (`lib/combat/`, `lib/rules/combat/`, `lib/rules/action-resolution/`) | Could be intentional layering (session state / rules / resolution) or organic sprawl. |
 | **U9** | PROJECT_STATE.md last updated 2026-01-10 | **Confirmed stale.** Code verification found: augmentations are fully integrated (PROJECT_STATE said pending), combat is partially integrated with modal and controls (PROJECT_STATE said pending), magic display is integrated (PROJECT_STATE said pending). The document materially misrepresents current state. |
-| **U10** | Issues #88-92 referenced as blockers | Can't verify status from code alone. Given that PROJECT_STATE.md is confirmed stale, these issue descriptions may also be outdated. What "UI integration" means has shifted — augmentations are done, combat is partially done, magic display is done. |
+| ~~**U10**~~ | ~~Issues #88-92 referenced as blockers~~ | **RESOLVED:** All five issues are closed. References to these issues throughout the audit are no longer actionable. |
 
 ### D. Merely Rough or Unpolished
 
@@ -117,9 +117,10 @@ I8 (deprecated quality integration) ──blocks──▶ Issue #485 (unified ef
 I7 (grunt activity logging) ──blocked-by──▶ CampaignActivityType enum extension
     Code explicitly defers to enum addition.
 
-U1 (file-based storage) ──constrains──▶ U2 (no middleware), R4 (rate limiter), I10 (CI E2E)
-    Storage choice dictates single-instance, which makes middleware less critical
-    and rate limiter acceptable, but also means E2E must run single-worker.
+U1 (file-based storage — RESOLVED: permanent) ──constrains──▶ R4 (rate limiter), I10 (CI E2E)
+    Single-instance is confirmed. R4 (in-memory rate limiter) is acceptable.
+    E2E must remain single-worker. No database work needed.
+    NOTE: Middleware (U2) is confirmed as needed regardless — for auth, not storage.
 
 I10 (CI quality gates) ──independent──
     Can be fixed anytime. No dependencies.
@@ -155,13 +156,13 @@ I2 (Rigging session UI)        ──▶  no blockers, just not built yet
 
 ## 3. Unknowns — Risk Assessment
 
-### Blocking Unknowns (must answer before major work)
+### Blocking Unknowns — RESOLVED
 
-| ID | Question | Risk if Unanswered | Why Blocking |
-|----|----------|-------------------|--------------|
-| **U1** | Is file-based storage the long-term choice? | Medium. If a database migration is planned, significant work on storage-dependent features (campaigns, multiplayer combat, rate limiting) would need to be rearchitected. | Affects whether to invest in fixing R4, scaling campaigns, or adding persistent rate limiting. |
-| **U2** | Is the absence of middleware.ts intentional? | Medium. If every new route must manually call `getSession()`, B6-style auth gaps are likely to recur. | Determines whether fixing B6 is a one-off patch or a symptom of a structural gap. |
-| **U10** | Are Issues #88-92 still the active work items? | Medium. If these issues are stale or superseded, the integration work (I1-I5) may have different requirements. | Determines the shape of all remaining integration work. |
+| ID | Question | Resolution | Impact on Analysis |
+|----|----------|------------|-------------------|
+| **U1** | Is file-based storage the long-term choice? | **Yes — file-based is permanent.** This is a small-group/self-hosted tool by design. | In-memory rate limiter (R4) is acceptable. Single-worker E2E is fine. No database migration work needed. D1 resolved — single-instance is the model. |
+| **U2** | Is the absence of middleware.ts intentional? | **No — oversight. Middleware should be added.** B6 (combat auth bypass) is a symptom of this structural gap. | B6 needs a structural fix (middleware), not just a point patch. D3 resolved — centralize auth in middleware. All future routes will be protected by default. |
+| **U10** | Are Issues #88-92 still the active work items? | **No — all five issues have been closed.** | These are no longer blockers or references. D8b resolved. The "incomplete" findings I1, I2, I4, I5 need reassessment — the issues tracking them are closed, so either the work is considered done or it was deprioritized. |
 
 ### Deferrable Unknowns (can proceed without answering)
 
@@ -186,10 +187,10 @@ Decisions the developer needs to make before improvement work begins. Ordered by
 
 | # | Decision | Options Observed in Code | What It Unblocks |
 |---|----------|-------------------------|------------------|
-| **D1** | What is the deployment model? Single-instance forever, or multi-instance eventually? | Code assumes single-instance (file storage, in-memory rate limiter, single-worker E2E). Portainer compose runs one container. | Determines whether to invest in database migration, Redis rate limiting, or middleware centralization. Affects B6, R4, U1, U2. |
+| ~~**D1**~~ | ~~What is the deployment model?~~ | **RESOLVED:** Single-instance, file-based storage is permanent. | No database migration, Redis, or multi-instance concerns. R4 (in-memory rate limiter) is acceptable as-is. |
 | **D2** | Should the live bugs (B4 cyberlimb caps, B5 weapon mod capacity, B6 combat auth) be fixed before new feature work? | Code verification shows these aren't future blockers — they're wrong in production now. B4 shows wrong limits for non-human cyberlimbs. B5 lets users bypass weapon mod capacity. B6 allows unauthorized combat session access. | Determines immediate priority. These were previously categorized as blocking future work, but augmentations and combat are already shipped. |
-| **D3** | Should auth be centralized in middleware, or remain per-route? | No middleware.ts exists. Auth is per-route via `getSession()`. | Determines whether B6 (combat auth bypass) gets a point fix or a structural solution. Affects all future routes. |
-| **D4** | What is the scope of "interactive gameplay UI" for Matrix, Rigging, and Magic? | Code verification clarified: display components are already integrated for all three. What's missing is interactive session UIs — casting spells, jacking into the Matrix, managing drone operations during play. These are new features, not integration of existing components. | Determines the size of I1, I2, I4. (I3 retracted, I5 partially done.) |
+| ~~**D3**~~ | ~~Should auth be centralized in middleware, or remain per-route?~~ | **RESOLVED:** Add middleware. Per-route auth was an oversight, not a design choice. | B6 fix should be a middleware implementation, not a point patch. All future routes automatically protected. |
+| **D4** | What is the scope of "interactive gameplay UI" for Matrix, Rigging, and Magic? | Code verification clarified: display components are already integrated for all three. What's missing is interactive session UIs — casting spells, jacking into the Matrix, managing drone operations during play. These are new features, not integration of existing components. Issues #88-92 are all closed — so either this work was considered done or deprioritized. | Determines whether I1, I2, I4 are still desired. |
 
 ### Medium-Impact Decisions
 
@@ -199,7 +200,7 @@ Decisions the developer needs to make before improvement work begins. Ordered by
 | **D6** | Is `sendDefaultPii: true` acceptable, or should it be turned off? | U4. One-line change, but needs a privacy stance. |
 | **D7** | Should broken training-time functions (B1) be implemented, or should the advancement paths be gated in the UI to prevent users from reaching them? | B1. Two valid approaches: implement the calculations, or add guards that prevent users from triggering unimplemented paths. |
 | **D8** | Should PROJECT_STATE.md be updated or retired? | Confirmed stale — augmentations listed as pending are actually complete, combat listed as pending is partially integrated. If kept, needs full rewrite. If retired, need an alternative source of truth. |
-| **D8b** | Are Issues #88-92 still current, or have they been superseded? | Given PROJECT_STATE.md is confirmed wrong, these issue descriptions may also be outdated. If they describe "integrate display components into character page" — that's already done for augmentations, magic, rigging, and combat. Remaining work is interactive gameplay UIs. |
+| ~~**D8b**~~ | ~~Are Issues #88-92 still current?~~ | **RESOLVED:** All five issues are closed. No longer actionable references. |
 
 ### Low-Impact Decisions (can be made anytime)
 
