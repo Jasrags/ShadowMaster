@@ -130,7 +130,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
   const { ruleset } = useRuleset();
   const gearCatalog = useGear();
   const weaponModsCatalog = useWeaponModifications();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -223,6 +223,7 @@ export function WeaponsPanel({ state, updateState }: WeaponsPanelProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Add weapon (actual implementation - called after affordability check)

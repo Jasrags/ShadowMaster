@@ -43,6 +43,8 @@ export interface UseKarmaConversionPromptOptions {
   currentConversion: number;
   /** Callback to update karma conversion in state */
   onConvert: (newTotalConversion: number) => void;
+  /** Override maximum karma conversion (default 10, Born Rich → 40) */
+  maxKarmaConversion?: number;
 }
 
 export interface KarmaConversionModalState {
@@ -98,7 +100,9 @@ export function useKarmaConversionPrompt({
   karmaRemaining,
   currentConversion,
   onConvert,
+  maxKarmaConversion: maxKarmaConversionOverride,
 }: UseKarmaConversionPromptOptions): UseKarmaConversionPromptReturn {
+  const effectiveMaxConversion = maxKarmaConversionOverride ?? MAX_KARMA_CONVERSION;
   // Modal state
   const [modalState, setModalState] = useState<KarmaConversionModalState>({
     isOpen: false,
@@ -126,20 +130,20 @@ export function useKarmaConversionPrompt({
       const nuyenGained = karmaNeeded * KARMA_TO_NUYEN_RATE;
 
       // Check if already at max conversion
-      if (currentConversion >= MAX_KARMA_CONVERSION) {
+      if (currentConversion >= effectiveMaxConversion) {
         return {
           karmaNeeded,
           nuyenGained,
           canConvert: false,
-          reason: `Already at maximum conversion (${MAX_KARMA_CONVERSION} karma)`,
+          reason: `Already at maximum conversion (${effectiveMaxConversion} karma)`,
         };
       }
 
       // Check if would exceed max conversion
       const newTotal = currentConversion + karmaNeeded;
-      if (newTotal > MAX_KARMA_CONVERSION) {
+      if (newTotal > effectiveMaxConversion) {
         // Calculate max additional karma we can convert
-        const maxAdditional = MAX_KARMA_CONVERSION - currentConversion;
+        const maxAdditional = effectiveMaxConversion - currentConversion;
         const maxAdditionalNuyen = maxAdditional * KARMA_TO_NUYEN_RATE;
 
         // Check if max additional would be enough
@@ -161,7 +165,7 @@ export function useKarmaConversionPrompt({
           karmaNeeded,
           nuyenGained,
           canConvert: false,
-          reason: `Would exceed maximum conversion (${MAX_KARMA_CONVERSION} karma)`,
+          reason: `Would exceed maximum conversion (${effectiveMaxConversion} karma)`,
         };
       }
 
@@ -182,7 +186,7 @@ export function useKarmaConversionPrompt({
         canConvert: true,
       };
     },
-    [remaining, karmaRemaining, currentConversion]
+    [remaining, karmaRemaining, currentConversion, effectiveMaxConversion]
   );
 
   /**
@@ -251,6 +255,6 @@ export function useKarmaConversionPrompt({
     currentRemaining: remaining,
     karmaAvailable: karmaRemaining,
     currentKarmaConversion: currentConversion,
-    maxKarmaConversion: MAX_KARMA_CONVERSION,
+    maxKarmaConversion: effectiveMaxConversion,
   };
 }

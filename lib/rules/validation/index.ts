@@ -34,6 +34,7 @@ export {
   calculateNuyenSpent,
   calculateKarmaSpent,
   KARMA_TO_NUYEN_LIMIT,
+  getKarmaToNuyenLimit,
   SR5_KARMA_BUDGET,
   getKarmaBudget,
   getContactMultiplier,

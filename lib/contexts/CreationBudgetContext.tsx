@@ -34,6 +34,10 @@ import {
 } from "../rules/skills/free-skills";
 import { FREE_SKILL_TYPE_LABELS } from "@/components/creation/magic-path/constants";
 import { calculateBrokenGroupSkillPointOffset } from "../rules/skills/group-utils";
+import {
+  getQualityBudgetModifiers,
+  type QualityBudgetModifiers,
+} from "../rules/qualities/budget-modifiers";
 
 // =============================================================================
 // SKILL CATEGORY HELPERS
@@ -116,6 +120,9 @@ export interface CreationBudgetContextValue {
 
   /** Check if a budget is overspent */
   isOverspent: (budgetId: string) => boolean;
+
+  /** Quality-derived budget modifiers (karma cap, knowledge cost multipliers, etc.) */
+  qualityModifiers: QualityBudgetModifiers;
 }
 
 /**
@@ -314,7 +321,13 @@ function extractSpentValues(
   priorityTable: PriorityTableData | null,
   priorities: Record<string, string> | undefined,
   skillCategories: Record<string, string | undefined>,
-  skillGroupDefs: { id: string; skills: string[] }[] = []
+  skillGroupDefs: { id: string; skills: string[] }[] = [],
+  qualityModifiers: QualityBudgetModifiers = {
+    karmaToNuyenCap: 10,
+    knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+    languageCostMultiplier: 1,
+    jackOfAllTrades: false,
+  }
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -452,13 +465,21 @@ function extractSpentValues(
 
   // Calculate knowledge points spent from selections (languages + knowledge skills)
   // Native languages are free and do not count toward the knowledge point budget (SR5 Core)
+  // Apply quality modifiers: Linguist halves language costs, education qualities halve category costs
   const languages = (selections.languages || []) as Array<{ rating: number; isNative?: boolean }>;
-  const knowledgeSkills = (selections.knowledgeSkills || []) as Array<{ rating: number }>;
+  const knowledgeSkills = (selections.knowledgeSkills || []) as Array<{
+    rating: number;
+    category?: string;
+  }>;
   const languagePointsSpent = languages
     .filter((lang) => !lang.isNative)
-    .reduce((sum, lang) => sum + (lang.rating || 0), 0);
-  const knowledgePointsSpent = knowledgeSkills.reduce((sum, skill) => sum + (skill.rating || 0), 0);
-  spent["knowledge-points"] = languagePointsSpent + knowledgePointsSpent;
+    .reduce((sum, lang) => sum + (lang.rating || 0) * qualityModifiers.languageCostMultiplier, 0);
+  const knowledgePointsSpent = knowledgeSkills.reduce((sum, skill) => {
+    const category = skill.category as keyof typeof qualityModifiers.knowledgeCostMultipliers;
+    const multiplier = qualityModifiers.knowledgeCostMultipliers[category] ?? 1;
+    return sum + (skill.rating || 0) * multiplier;
+  }, 0);
+  spent["knowledge-points"] = Math.ceil(languagePointsSpent + knowledgePointsSpent);
 
   // Nuyen is special - calculate from all spending categories in selections
   const gear = (selections.gear || []) as Array<{
@@ -689,7 +710,13 @@ function validateBudgets(
   budgets: Record<string, BudgetState>,
   state: CreationState,
   priorityTable: PriorityTableData | null,
-  skillCategories: Record<string, string | undefined>
+  skillCategories: Record<string, string | undefined>,
+  qualityModifiers: QualityBudgetModifiers = {
+    karmaToNuyenCap: 10,
+    knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+    languageCostMultiplier: 1,
+    jackOfAllTrades: false,
+  }
 ): { errors: ValidationError[]; warnings: ValidationError[] } {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
@@ -765,13 +792,13 @@ function validateBudgets(
     });
   }
 
-  // Check karma-to-nuyen conversion limit (max 10 karma)
-  const MAX_KARMA_CONVERSION = 10;
+  // Check karma-to-nuyen conversion limit (dynamic: default 10, Born Rich → 40)
+  const karmaToNuyenCap = qualityModifiers.karmaToNuyenCap;
   const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
-  if (karmaSpentGear > MAX_KARMA_CONVERSION) {
+  if (karmaSpentGear > karmaToNuyenCap) {
     errors.push({
       constraintId: "karma-conversion-limit",
-      message: `Karma-to-nuyen conversion cannot exceed ${MAX_KARMA_CONVERSION} karma (currently ${karmaSpentGear})`,
+      message: `Karma-to-nuyen conversion cannot exceed ${karmaToNuyenCap} karma (currently ${karmaSpentGear})`,
       severity: "error",
     });
   }
@@ -888,6 +915,15 @@ export function CreationBudgetProvider({
   // Get gameplay level modifiers for budget calculations
   const gameplayModifiers = useGameplayLevelModifiers(creationState.gameplayLevel);
 
+  // Compute quality-driven budget modifiers from selections
+  const qualityModifiers = useMemo(
+    () =>
+      getQualityBudgetModifiers(
+        creationState.selections as import("@/lib/types/creation-selections").CreationSelections
+      ),
+    [creationState.selections]
+  );
+
   // Calculate budget totals from priorities
   const budgetTotals = useMemo(
     () =>
@@ -917,7 +953,8 @@ export function CreationBudgetProvider({
         priorityTable,
         creationState.priorities,
         skillCategories,
-        skillGroupDefs
+        skillGroupDefs,
+        qualityModifiers
       ),
     [
       creationState.budgets,
@@ -927,6 +964,7 @@ export function CreationBudgetProvider({
       creationState.priorities,
       skillCategories,
       skillGroupDefs,
+      qualityModifiers,
     ]
   );
 
@@ -970,7 +1008,8 @@ export function CreationBudgetProvider({
         budgets,
         creationState,
         priorityTable,
-        skillCategories
+        skillCategories,
+        qualityModifiers
       );
 
       // Add custom validation if provided
@@ -995,6 +1034,7 @@ export function CreationBudgetProvider({
     validationDebounceMs,
     priorityTable,
     skillCategories,
+    qualityModifiers,
   ]);
 
   // Update spent callback - this notifies parent to update CreationState
@@ -1055,6 +1095,7 @@ export function CreationBudgetProvider({
       getBudget,
       hasRemaining,
       isOverspent,
+      qualityModifiers,
     }),
     [
       budgets,
@@ -1066,6 +1107,7 @@ export function CreationBudgetProvider({
       getBudget,
       hasRemaining,
       isOverspent,
+      qualityModifiers,
     ]
   );
 

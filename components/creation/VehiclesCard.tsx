@@ -86,7 +86,7 @@ interface VehiclesCardProps {
 // =============================================================================
 
 export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -153,6 +153,7 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Add vehicle from modal

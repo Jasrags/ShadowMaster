@@ -115,6 +115,12 @@ const mockBudgets = {
     nuyen: { total: 50000, spent: 10000, remaining: 40000 },
     karma: { total: 25, spent: 0, remaining: 25 },
   },
+  qualityModifiers: {
+    karmaToNuyenCap: 10,
+    knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+    languageCostMultiplier: 1,
+    jackOfAllTrades: false,
+  },
 };
 
 function makeState(overrides: Partial<CreationState> = {}): CreationState {

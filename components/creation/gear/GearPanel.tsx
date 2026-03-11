@@ -101,7 +101,7 @@ interface GearPanelProps {
 
 export function GearPanel({ state, updateState }: GearPanelProps) {
   const gearCatalog = useGear();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -195,6 +195,7 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Calculate gear cost based on rating

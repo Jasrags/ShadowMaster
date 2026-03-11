@@ -223,7 +223,7 @@ function DataSoftwareRow({
 export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const commlinksCatalog = useCommlinks();
   const cyberdecksCatalog = useCyberdecks();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -339,6 +339,7 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Add commlink (actual implementation) - modal stays open for bulk-add

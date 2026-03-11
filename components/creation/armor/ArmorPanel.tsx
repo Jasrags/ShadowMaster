@@ -126,7 +126,7 @@ interface ArmorPanelProps {
 
 export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
   const gearCatalog = useGear();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -215,6 +215,7 @@ export function ArmorPanel({ state, updateState }: ArmorPanelProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Add armor (actual implementation)

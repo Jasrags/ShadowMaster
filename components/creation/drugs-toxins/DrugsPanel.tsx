@@ -61,7 +61,7 @@ interface DrugsPanelProps {
 // =============================================================================
 
 export function DrugsPanel({ state, updateState }: DrugsPanelProps) {
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -117,6 +117,7 @@ export function DrugsPanel({ state, updateState }: DrugsPanelProps) {
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Add drug (actual implementation)

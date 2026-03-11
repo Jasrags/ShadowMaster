@@ -165,6 +165,12 @@ describe("ComplexFormsCard", () => {
       errors: [],
       warnings: [],
       isComplete: false,
+      qualityModifiers: {
+        karmaToNuyenCap: 10,
+        knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+        languageCostMultiplier: 1,
+        jackOfAllTrades: false,
+      },
     } as unknown as ReturnType<typeof useCreationBudgets>);
   });
 

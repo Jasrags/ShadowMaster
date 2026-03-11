@@ -55,7 +55,7 @@ interface SkillsCardProps {
 
 export function SkillsCard({ state, updateState }: SkillsCardProps) {
   const { activeSkills, skillGroups } = useSkills();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const skillBudget = getBudget("skill-points");
   const groupBudget = getBudget("skill-group-points");
   const karmaBudget = getBudget("karma");
@@ -201,7 +201,8 @@ export function SkillsCard({ state, updateState }: SkillsCardProps) {
     activeSkills,
     skillPointsRemaining,
     groupPointsRemaining,
-    karmaRemaining
+    karmaRemaining,
+    qualityModifiers.jackOfAllTrades
   );
 
   // Use extracted handlers hook
