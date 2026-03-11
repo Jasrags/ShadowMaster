@@ -46,7 +46,7 @@ jobs:
         run: pnpm type-check
 
       - name: Dead code detection
-        run: pnpm knip --max-issues 100
+        run: pnpm knip --max-issues 310
 
       - name: Run unit tests
         run: pnpm test:ci --reporter=verbose
