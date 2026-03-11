@@ -33,14 +33,16 @@ export type NewUserData = Omit<
   | "magicLinkTokenPrefix"
 >;
 
-const DATA_DIR = path.join(process.cwd(), "data", "users");
+function getDataDir(): string {
+  return process.env.USER_DATA_DIR || path.join(process.cwd(), "data", "users");
+}
 
 /**
  * Ensures the data directory exists, creating it if necessary
  */
 async function ensureDataDirectory(): Promise<void> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.mkdir(getDataDir(), { recursive: true });
   } catch (error) {
     // Directory might already exist, which is fine
     if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
@@ -53,7 +55,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a user by ID
  */
 function getUserFilePath(userId: string): string {
-  return path.join(DATA_DIR, `${userId}.json`);
+  return path.join(getDataDir(), `${userId}.json`);
 }
 
 /**
@@ -166,13 +168,13 @@ function normalizeUserDefaults(user: User): User {
 export async function getAllUsers(): Promise<User[]> {
   try {
     await ensureDataDirectory();
-    const files = await fs.readdir(DATA_DIR);
+    const files = await fs.readdir(getDataDir());
     const jsonFiles = files.filter((file) => file.endsWith(".json"));
 
     const users: User[] = [];
     for (const file of jsonFiles) {
       try {
-        const filePath = path.join(DATA_DIR, file);
+        const filePath = path.join(getDataDir(), file);
         const fileContent = await fs.readFile(filePath, "utf-8");
         const user = JSON.parse(fileContent) as User;
         // Normalize role to array for backward compatibility
