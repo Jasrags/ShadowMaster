@@ -30,7 +30,12 @@ import {
   BookOpen,
 } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
-import { useQualities, useSkills, useGameplayLevelModifiers } from "@/lib/rules/RulesetContext";
+import {
+  useQualities,
+  useSkills,
+  useGameplayLevelModifiers,
+  useCreationMethod,
+} from "@/lib/rules/RulesetContext";
 
 // Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
@@ -819,6 +824,8 @@ export function SheetCreationLayout({
   campaign,
   serverValidation,
 }: SheetCreationLayoutProps) {
+  const currentCreationMethod = useCreationMethod();
+
   // Determine what sections are available based on selections
   const magicPath = creationState.selections["magical-path"] as string | undefined;
   const isMagical = ["magician", "mystic-adept", "aspected-mage"].includes(magicPath || "");
@@ -863,7 +870,7 @@ export function SheetCreationLayout({
         </div>
       </div>
 
-      {/* Active Books Banner */}
+      {/* Active Campaign Banner */}
       {campaign && (
         <div className="rounded-md bg-blue-50 px-4 py-3 dark:bg-blue-900/20">
           <div className="flex items-center gap-2 text-sm">
@@ -872,6 +879,7 @@ export function SheetCreationLayout({
             <span className="text-blue-600 dark:text-blue-400">
               — {campaign.enabledBookIds.length} book
               {campaign.enabledBookIds.length !== 1 ? "s" : ""} active
+              {currentCreationMethod && <> · {currentCreationMethod.name}</>}
             </span>
           </div>
         </div>
