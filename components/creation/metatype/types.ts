@@ -15,6 +15,8 @@ export interface MetatypeOption {
   attributes: Record<string, { min: number; max: number }>;
   /** Karma cost for Point Buy creation (undefined for priority-based methods) */
   karmaCost?: number;
+  /** SAP at each priority level (A–E). null = unavailable at that level. */
+  priorityAvailability?: Record<string, number | null>;
 }
 
 export interface MetatypeModalProps {

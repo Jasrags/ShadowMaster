@@ -88,7 +88,9 @@ export interface CharacterSummary {
 }
 import { ensureDirectory, readJsonFile, writeJsonFile, deleteFile, readAllJsonFiles } from "./base";
 
-const CHARACTERS_DIR = path.join(process.cwd(), "data", "characters");
+function getCharactersDir(): string {
+  return process.env.CHARACTER_DATA_DIR || path.join(process.cwd(), "data", "characters");
+}
 
 // =============================================================================
 // DATA NORMALIZATION
@@ -127,7 +129,7 @@ function ensureItemIds(character: Character): Character {
  * Get the directory path for a user's characters
  */
 function getUserCharactersDir(userId: ID): string {
-  return path.join(CHARACTERS_DIR, userId);
+  return path.join(getCharactersDir(), userId);
 }
 
 /**
@@ -173,7 +175,7 @@ export async function getUserCharacters(userId: ID): Promise<Character[]> {
  */
 export async function getAllCharacters(): Promise<Character[]> {
   const { listSubdirectories } = await import("./base");
-  const userDirs = await listSubdirectories(CHARACTERS_DIR);
+  const userDirs = await listSubdirectories(getCharactersDir());
   const allCharacters: Character[] = [];
 
   for (const userId of userDirs) {
