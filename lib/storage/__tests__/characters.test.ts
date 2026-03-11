@@ -2,64 +2,84 @@
  * Tests for character storage layer
  *
  * Tests character CRUD operations, filtering, and gameplay functions.
- *
- * NOTE: These tests use the actual data directory. For proper isolation,
- * the storage layer should be refactored to support configurable data paths.
- * These tests use unique test user IDs to minimize conflicts with real data.
+ * Uses a temporary directory via CHARACTER_DATA_DIR env var for full isolation.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
-import {
-  getCharacter,
-  getUserCharacters,
-  getAllCharacters,
-  getCharactersByStatus,
-  getDraftCharacters,
-  getActiveCharacters,
-  getCharactersByEdition,
-  getCharactersByCampaign,
-  createCharacterDraft,
-  updateCharacter,
-  finalizeCharacter,
-  deleteCharacter,
-  updateCharacterAttributes,
-  updateCharacterSkills,
-  updateCharacterQualities,
-  updateCharacterGear,
-  applyDamage,
-  healCharacter,
-  spendKarma,
-  awardKarma,
-  setCharacterCampaign,
-  retireCharacter,
-  killCharacter,
-} from "../characters";
+import os from "os";
 
-const TEST_DATA_DIR = path.join(process.cwd(), "__tests__", "temp-characters");
+let testDir: string;
+
+// Dynamic imports so we can set CHARACTER_DATA_DIR before module evaluation
+let getCharacter: typeof import("../characters").getCharacter;
+let getUserCharacters: typeof import("../characters").getUserCharacters;
+let getAllCharacters: typeof import("../characters").getAllCharacters;
+let getCharactersByStatus: typeof import("../characters").getCharactersByStatus;
+let getDraftCharacters: typeof import("../characters").getDraftCharacters;
+let getActiveCharacters: typeof import("../characters").getActiveCharacters;
+let getCharactersByEdition: typeof import("../characters").getCharactersByEdition;
+let getCharactersByCampaign: typeof import("../characters").getCharactersByCampaign;
+let createCharacterDraft: typeof import("../characters").createCharacterDraft;
+let updateCharacter: typeof import("../characters").updateCharacter;
+let finalizeCharacter: typeof import("../characters").finalizeCharacter;
+let deleteCharacter: typeof import("../characters").deleteCharacter;
+let updateCharacterAttributes: typeof import("../characters").updateCharacterAttributes;
+let updateCharacterSkills: typeof import("../characters").updateCharacterSkills;
+let updateCharacterQualities: typeof import("../characters").updateCharacterQualities;
+let updateCharacterGear: typeof import("../characters").updateCharacterGear;
+let applyDamage: typeof import("../characters").applyDamage;
+let healCharacter: typeof import("../characters").healCharacter;
+let spendKarma: typeof import("../characters").spendKarma;
+let awardKarma: typeof import("../characters").awardKarma;
+let setCharacterCampaign: typeof import("../characters").setCharacterCampaign;
+let retireCharacter: typeof import("../characters").retireCharacter;
+let killCharacter: typeof import("../characters").killCharacter;
 
 describe("Character Storage", () => {
-  // Use unique test user IDs with timestamp to avoid conflicts
-  const timestamp = Date.now();
-  const userId1 = `test-user-1-${timestamp}`;
-  const userId2 = `test-user-2-${timestamp}`;
+  const userId1 = "test-user-1";
+  const userId2 = "test-user-2";
 
   beforeEach(async () => {
-    // Clean up test directory
-    try {
-      await fs.rm(TEST_DATA_DIR, { recursive: true, force: true });
-    } catch {
-      // Ignore
-    }
+    // Create isolated temp directory for each test
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), "character-storage-test-"));
+    process.env.CHARACTER_DATA_DIR = testDir;
+
+    // Reset module cache so characters.ts picks up the new env var
+    vi.resetModules();
+    const chars = await import("../characters");
+    getCharacter = chars.getCharacter;
+    getUserCharacters = chars.getUserCharacters;
+    getAllCharacters = chars.getAllCharacters;
+    getCharactersByStatus = chars.getCharactersByStatus;
+    getDraftCharacters = chars.getDraftCharacters;
+    getActiveCharacters = chars.getActiveCharacters;
+    getCharactersByEdition = chars.getCharactersByEdition;
+    getCharactersByCampaign = chars.getCharactersByCampaign;
+    createCharacterDraft = chars.createCharacterDraft;
+    updateCharacter = chars.updateCharacter;
+    finalizeCharacter = chars.finalizeCharacter;
+    deleteCharacter = chars.deleteCharacter;
+    updateCharacterAttributes = chars.updateCharacterAttributes;
+    updateCharacterSkills = chars.updateCharacterSkills;
+    updateCharacterQualities = chars.updateCharacterQualities;
+    updateCharacterGear = chars.updateCharacterGear;
+    applyDamage = chars.applyDamage;
+    healCharacter = chars.healCharacter;
+    spendKarma = chars.spendKarma;
+    awardKarma = chars.awardKarma;
+    setCharacterCampaign = chars.setCharacterCampaign;
+    retireCharacter = chars.retireCharacter;
+    killCharacter = chars.killCharacter;
   });
 
   afterEach(async () => {
-    // Clean up test directory
+    delete process.env.CHARACTER_DATA_DIR;
     try {
-      await fs.rm(TEST_DATA_DIR, { recursive: true, force: true });
+      await fs.rm(testDir, { recursive: true, force: true });
     } catch {
-      // Ignore
+      // Ignore cleanup errors
     }
   });
 
@@ -133,31 +153,27 @@ describe("Character Storage", () => {
 
       const characters = await getUserCharacters(userId1);
 
-      // Should include our test characters
-      const testCharIds = [char1.id, char2.id];
-      const foundChars = characters.filter((c) => testCharIds.includes(c.id));
-      expect(foundChars.length).toBe(2);
+      expect(characters.length).toBe(2);
       expect(characters.map((c) => c.id)).toContain(char1.id);
       expect(characters.map((c) => c.id)).toContain(char2.id);
     });
 
     it("should return empty array for user with no characters", async () => {
-      // Use a unique user ID that definitely has no characters
-      const uniqueUserId = `test-empty-user-${Date.now()}`;
-      const characters = await getUserCharacters(uniqueUserId);
+      const characters = await getUserCharacters("nonexistent-user");
       expect(characters).toEqual([]);
     });
 
     it("should only return characters for specified user", async () => {
-      const char1 = await createCharacterDraft(userId1, "sr5", "sr5", "priority", "User1");
-      const char2 = await createCharacterDraft(userId2, "sr5", "sr5", "priority", "User2");
+      await createCharacterDraft(userId1, "sr5", "sr5", "priority", "User1");
+      await createCharacterDraft(userId2, "sr5", "sr5", "priority", "User2");
 
       const user1Chars = await getUserCharacters(userId1);
       const user2Chars = await getUserCharacters(userId2);
 
-      // Should find our test characters
-      expect(user1Chars.find((c) => c.id === char1.id)?.name).toBe("User1");
-      expect(user2Chars.find((c) => c.id === char2.id)?.name).toBe("User2");
+      expect(user1Chars.length).toBe(1);
+      expect(user1Chars[0].name).toBe("User1");
+      expect(user2Chars.length).toBe(1);
+      expect(user2Chars[0].name).toBe("User2");
     });
   });
 
@@ -170,11 +186,12 @@ describe("Character Storage", () => {
       const drafts = await getCharactersByStatus(userId1, "draft");
       const active = await getCharactersByStatus(userId1, "active");
 
-      // Should find our test characters
-      expect(drafts.find((c) => c.id === draft2.id)).toBeDefined();
-      expect(active.find((c) => c.id === draft1.id)).toBeDefined();
-      expect(drafts.find((c) => c.id === draft2.id)?.status).toBe("draft");
-      expect(active.find((c) => c.id === draft1.id)?.status).toBe("active");
+      expect(drafts.length).toBe(1);
+      expect(drafts[0].id).toBe(draft2.id);
+      expect(drafts[0].status).toBe("draft");
+      expect(active.length).toBe(1);
+      expect(active[0].id).toBe(draft1.id);
+      expect(active[0].status).toBe("active");
     });
   });
 
@@ -185,10 +202,9 @@ describe("Character Storage", () => {
       await finalizeCharacter(userId1, draft2.id);
 
       const drafts = await getDraftCharacters(userId1);
-      // Should include our test draft character
-      const testDraft = drafts.find((c) => c.id === draft1.id);
-      expect(testDraft).toBeDefined();
-      expect(testDraft?.status).toBe("draft");
+      expect(drafts.length).toBe(1);
+      expect(drafts[0].id).toBe(draft1.id);
+      expect(drafts[0].status).toBe("draft");
     });
 
     it("should return active characters", async () => {
@@ -196,26 +212,24 @@ describe("Character Storage", () => {
       await finalizeCharacter(userId1, char.id);
 
       const active = await getActiveCharacters(userId1);
-      // Should include our test active character
-      const testActive = active.find((c) => c.id === char.id);
-      expect(testActive).toBeDefined();
-      expect(testActive?.status).toBe("active");
+      expect(active.length).toBe(1);
+      expect(active[0].id).toBe(char.id);
+      expect(active[0].status).toBe("active");
     });
   });
 
   describe("getCharactersByEdition", () => {
     it("should filter characters by edition", async () => {
-      const sr5Char = await createCharacterDraft(userId1, "sr5", "sr5", "priority", "SR5 Char");
-      const sr6Char = await createCharacterDraft(userId1, "sr6", "sr6", "priority", "SR6 Char");
+      await createCharacterDraft(userId1, "sr5", "sr5", "priority", "SR5 Char");
+      await createCharacterDraft(userId1, "sr6", "sr6", "priority", "SR6 Char");
 
       const sr5Chars = await getCharactersByEdition(userId1, "sr5");
       const sr6Chars = await getCharactersByEdition(userId1, "sr6");
 
-      // Should include our test characters
-      expect(sr5Chars.find((c) => c.id === sr5Char.id)).toBeDefined();
-      expect(sr5Chars.find((c) => c.id === sr5Char.id)?.editionCode).toBe("sr5");
-      expect(sr6Chars.find((c) => c.id === sr6Char.id)).toBeDefined();
-      expect(sr6Chars.find((c) => c.id === sr6Char.id)?.editionCode).toBe("sr6");
+      expect(sr5Chars.length).toBe(1);
+      expect(sr5Chars[0].editionCode).toBe("sr5");
+      expect(sr6Chars.length).toBe(1);
+      expect(sr6Chars[0].editionCode).toBe("sr6");
     });
   });
 
@@ -477,11 +491,11 @@ describe("Character Storage", () => {
       const char2 = await createCharacterDraft(userId2, "sr5", "sr5", "priority", "User2");
 
       const all = await getAllCharacters();
-      // Should include our test characters
+      expect(all.length).toBe(2);
       expect(all.find((c) => c.id === char1.id)).toBeDefined();
       expect(all.find((c) => c.id === char2.id)).toBeDefined();
       expect(all.find((c) => c.id === char1.id)?.name).toBe("User1");
       expect(all.find((c) => c.id === char2.id)?.name).toBe("User2");
-    }, 10000); // File I/O across multiple user directories can be slow
+    });
   });
 });

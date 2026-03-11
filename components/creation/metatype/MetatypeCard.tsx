@@ -64,19 +64,40 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
         const hasPriorityAvail = !!m.priorityAvailability?.[metatypePriority];
         return inPriorityTable || hasPriorityAvail;
       })
-      .map((m) => ({
-        id: m.id,
-        name: m.name,
-        baseMetatype: m.baseMetatype ?? null,
-        description: m.description,
-        specialAttributePoints:
-          priorityData.specialAttributePoints?.[m.id] ??
-          m.priorityAvailability?.[metatypePriority]?.specialAttributePoints ??
-          0,
-        racialTraits: m.racialTraits || [],
-        attributes: m.attributes as Record<string, { min: number; max: number }>,
-        karmaCost: m.karmaCost,
-      }));
+      .map((m) => {
+        // Build full priority availability map (A–E) for detail panel
+        const allLevels = ["A", "B", "C", "D", "E"];
+        const fullPriorityAvail: Record<string, number | null> = {};
+        for (const level of allLevels) {
+          const levelData = priorityTable?.table[level]?.metatype as
+            | { available: string[]; specialAttributePoints: Record<string, number> }
+            | undefined;
+          const inLevel = levelData?.available?.includes(m.id);
+          const variantAvail = m.priorityAvailability?.[level];
+          if (inLevel) {
+            fullPriorityAvail[level] = levelData?.specialAttributePoints?.[m.id] ?? 0;
+          } else if (variantAvail) {
+            fullPriorityAvail[level] = variantAvail.specialAttributePoints ?? 0;
+          } else {
+            fullPriorityAvail[level] = null;
+          }
+        }
+
+        return {
+          id: m.id,
+          name: m.name,
+          baseMetatype: m.baseMetatype ?? null,
+          description: m.description,
+          specialAttributePoints:
+            priorityData.specialAttributePoints?.[m.id] ??
+            m.priorityAvailability?.[metatypePriority]?.specialAttributePoints ??
+            0,
+          racialTraits: m.racialTraits || [],
+          attributes: m.attributes as Record<string, { min: number; max: number }>,
+          karmaCost: m.karmaCost,
+          priorityAvailability: fullPriorityAvail,
+        };
+      });
   }, [isPointBuy, metatypePriority, priorityTable, metatypes]);
 
   // Get selected metatype data
