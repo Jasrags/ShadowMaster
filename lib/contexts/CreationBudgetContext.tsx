@@ -247,6 +247,10 @@ function calculateBudgetTotals(
     displayFormat: "number",
   };
 
+  // Friends in High Places: extra CHA × 4 pool for Connection 8+ contacts
+  // This is computed by the provider after qualityModifiers are available
+  // We add a placeholder here that gets populated in the provider
+
   // Knowledge points = (INT + LOG) × 2 (calculated from attributes)
   const intuition = attributes?.intuition || 1;
   const logic = attributes?.logic || 1;
@@ -327,6 +331,10 @@ function extractSpentValues(
     knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
     languageCostMultiplier: 1,
     jackOfAllTrades: false,
+    friendsInHighPlaces: false,
+    freeContacts: [],
+    restrictedGear: false,
+    blackMarketPipeline: null,
   }
 ): Record<string, number> {
   const spent: Record<string, number> = {};
@@ -356,16 +364,46 @@ function extractSpentValues(
   // ============================================================================
   // CONTACT POINTS - derived from selections
   // Cap at free pool (CHA × 3) - overflow goes to karma, not contact points
+  // Quality-granted contacts (sourceQualityId set) are free and excluded
   // ============================================================================
 
   const contacts = (selections.contacts || []) as Array<{
     connection: number;
     loyalty: number;
+    sourceQualityId?: string;
   }>;
-  const totalContactCostForPoints = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  // Filter out quality-granted contacts (they are free)
+  const paidContacts = contacts.filter((c) => !c.sourceQualityId);
+
+  // If Friends in High Places is active, split contacts into high-connection and regular
+  const highConnectionPool = totals["high-connection-contact-points"]?.total || 0;
+  let highConnectionSpent = 0;
+  let regularContactCost = 0;
+
+  if (highConnectionPool > 0) {
+    // High-connection contacts (Connection 8+) use the special pool first
+    const highConnectionContacts = paidContacts.filter((c) => c.connection >= 8);
+    const regularContacts = paidContacts.filter((c) => c.connection < 8);
+
+    const totalHighCost = highConnectionContacts.reduce(
+      (sum, c) => sum + c.connection + c.loyalty,
+      0
+    );
+    highConnectionSpent = Math.min(totalHighCost, highConnectionPool);
+    // Overflow from high-connection pool goes to regular pool
+    const highConnectionOverflow = Math.max(0, totalHighCost - highConnectionPool);
+    regularContactCost =
+      regularContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0) +
+      highConnectionOverflow;
+
+    spent["high-connection-contact-points"] = highConnectionSpent;
+  } else {
+    regularContactCost = paidContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  }
+
   const freeContactPool = totals["contact-points"]?.total || 0;
   // Only count up to the free pool - karma handles the rest
-  spent["contact-points"] = Math.min(totalContactCostForPoints, freeContactPool);
+  spent["contact-points"] = Math.min(regularContactCost, freeContactPool);
 
   // ============================================================================
   // SPELL SLOTS - derived from selections
@@ -660,10 +698,10 @@ function extractSpentValues(
   const karmaSpentFoci = (stateBudgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections to avoid stale closure bugs
-  // Calculate: total contact cost - free pool (from totals, which already has gameplay level multiplier)
-  const freeContactKarma = totals["contact-points"]?.total || 0;
-  const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-  const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
+  // Quality-granted contacts are free, high-connection pool covers some costs
+  const totalPaidContactCost = paidContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+  const totalFreePools = freeContactPool + highConnectionPool;
+  const karmaSpentContacts = Math.max(0, totalPaidContactCost - totalFreePools);
 
   // Calculate skill karma spent from selections.skillKarmaSpent if present
   // This tracks karma spent on breaking groups (raising skills, adding specializations),
@@ -716,6 +754,10 @@ function validateBudgets(
     knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
     languageCostMultiplier: 1,
     jackOfAllTrades: false,
+    friendsInHighPlaces: false,
+    freeContacts: [],
+    restrictedGear: false,
+    blackMarketPipeline: null,
   }
 ): { errors: ValidationError[]; warnings: ValidationError[] } {
   const errors: ValidationError[] = [];
@@ -925,7 +967,7 @@ export function CreationBudgetProvider({
   );
 
   // Calculate budget totals from priorities
-  const budgetTotals = useMemo(
+  const baseBudgetTotals = useMemo(
     () =>
       calculateBudgetTotals(
         creationState.priorities,
@@ -942,6 +984,21 @@ export function CreationBudgetProvider({
       gameplayModifiers,
     ]
   );
+
+  // Add quality-driven budget totals (Friends in High Places high-connection pool)
+  const budgetTotals = useMemo(() => {
+    const totals = { ...baseBudgetTotals };
+    if (qualityModifiers.friendsInHighPlaces) {
+      const attrs = creationState.selections.attributes as Record<string, number> | undefined;
+      const charisma = attrs?.charisma || 1;
+      totals["high-connection-contact-points"] = {
+        total: charisma * 4,
+        label: "High-Connection Contact Points",
+        displayFormat: "number",
+      };
+    }
+    return totals;
+  }, [baseBudgetTotals, qualityModifiers.friendsInHighPlaces, creationState.selections.attributes]);
 
   // Extract spent values from state and selections
   const spentValues = useMemo(

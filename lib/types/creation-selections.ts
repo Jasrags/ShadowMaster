@@ -312,6 +312,8 @@ export interface CreationSelections
     GearSelections,
     AugmentationSelections,
     VehicleSelections {
+  /** Tracks which purchased item uses the Restricted Gear quality exception */
+  restrictedGearItemId?: string;
   /** Allow additional properties for extensibility */
   [key: string]: unknown;
 }

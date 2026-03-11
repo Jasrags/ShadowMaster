@@ -9,7 +9,12 @@
  */
 
 import type { CreationSelections } from "@/lib/types/creation-selections";
-import { getPositiveQualityIds } from "@/lib/types/creation-selections";
+import {
+  getPositiveQualityIds,
+  getPositiveQualities,
+  getQualityId,
+} from "@/lib/types/creation-selections";
+import type { QualitySelectionValue } from "@/lib/types/creation-selections";
 
 // =============================================================================
 // TYPES
@@ -27,6 +32,18 @@ export interface KnowledgeCostMultipliers {
 }
 
 /**
+ * A free contact granted by a quality (e.g., Made Man, Sensei).
+ */
+export interface QualityFreeContact {
+  qualityId: string;
+  name: string;
+  connection: number;
+  loyalty: number;
+  type: string;
+  specification?: string;
+}
+
+/**
  * Budget modifiers derived from selected qualities.
  */
 export interface QualityBudgetModifiers {
@@ -38,6 +55,18 @@ export interface QualityBudgetModifiers {
   languageCostMultiplier: number;
   /** Whether Jack of All Trades is active */
   jackOfAllTrades: boolean;
+  /** Whether Friends in High Places is active (extra CHA × 4 pool for Connection 8+ contacts) */
+  friendsInHighPlaces: boolean;
+  /** Free contacts granted by qualities (Made Man, Sensei) */
+  freeContacts: QualityFreeContact[];
+  /** Whether Restricted Gear is active (1 item up to Availability 24) */
+  restrictedGear: boolean;
+  /** Black Market Pipeline discount info, or null if not active */
+  blackMarketPipeline: {
+    specification: string;
+    priceMultiplier: number;
+    availabilityBonus: number;
+  } | null;
 }
 
 // =============================================================================
@@ -50,6 +79,11 @@ const SCHOOL_OF_HARD_KNOCKS = "school-of-hard-knocks";
 const TECHNICAL_SCHOOL_EDUCATION = "technical-school-education";
 const LINGUIST = "linguist";
 const JACK_OF_ALL_TRADES = "jack-of-all-trades";
+export const FRIENDS_IN_HIGH_PLACES = "friends-in-high-places";
+export const MADE_MAN = "made-man";
+export const SENSEI = "sensei";
+export const RESTRICTED_GEAR = "restricted-gear";
+export const BLACK_MARKET_PIPELINE = "black-market-pipeline";
 
 // =============================================================================
 // DEFAULTS
@@ -68,6 +102,10 @@ const DEFAULT_MODIFIERS: QualityBudgetModifiers = {
   },
   languageCostMultiplier: 1.0,
   jackOfAllTrades: false,
+  friendsInHighPlaces: false,
+  freeContacts: [],
+  restrictedGear: false,
+  blackMarketPipeline: null,
 };
 
 // =============================================================================
@@ -93,6 +131,47 @@ export function getQualityBudgetModifiers(selections: CreationSelections): Quali
   }
 
   const qualitySet = new Set(qualityIds);
+  const qualities = getPositiveQualities(selections);
+
+  // Build free contacts from Made Man and Sensei
+  const freeContacts: QualityFreeContact[] = [];
+  for (const q of qualities) {
+    const id = getQualityId(q);
+    const spec = getQualitySpecification(q);
+    if (id === MADE_MAN) {
+      freeContacts.push({
+        qualityId: MADE_MAN,
+        name: spec ? `${spec} Contact` : "Syndicate Contact",
+        connection: 2,
+        loyalty: 4,
+        type: "Syndicate",
+        specification: spec,
+      });
+    } else if (id === SENSEI) {
+      freeContacts.push({
+        qualityId: SENSEI,
+        name: spec ? `${spec} Sensei` : "Sensei",
+        connection: 1,
+        loyalty: 1,
+        type: "Training",
+        specification: spec,
+      });
+    }
+  }
+
+  // Build Black Market Pipeline info
+  let blackMarketPipeline: QualityBudgetModifiers["blackMarketPipeline"] = null;
+  if (qualitySet.has(BLACK_MARKET_PIPELINE)) {
+    const bmpQuality = qualities.find((q) => getQualityId(q) === BLACK_MARKET_PIPELINE);
+    const spec = bmpQuality ? getQualitySpecification(bmpQuality) : undefined;
+    if (spec) {
+      blackMarketPipeline = {
+        specification: spec,
+        priceMultiplier: 0.9,
+        availabilityBonus: 2,
+      };
+    }
+  }
 
   return {
     karmaToNuyenCap: qualitySet.has(BORN_RICH)
@@ -106,7 +185,18 @@ export function getQualityBudgetModifiers(selections: CreationSelections): Quali
     },
     languageCostMultiplier: qualitySet.has(LINGUIST) ? 0.5 : 1.0,
     jackOfAllTrades: qualitySet.has(JACK_OF_ALL_TRADES),
+    friendsInHighPlaces: qualitySet.has(FRIENDS_IN_HIGH_PLACES),
+    freeContacts,
+    restrictedGear: qualitySet.has(RESTRICTED_GEAR),
+    blackMarketPipeline,
   };
+}
+
+/**
+ * Extract specification from a quality selection value.
+ */
+function getQualitySpecification(q: QualitySelectionValue): string | undefined {
+  return typeof q === "string" ? undefined : q.specification;
 }
 
 /**

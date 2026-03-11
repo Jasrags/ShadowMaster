@@ -108,6 +108,12 @@ export interface GearValidationContext {
   allowRestricted?: boolean;
   /** Whether to allow forbidden items */
   allowForbidden?: boolean;
+  /** Item ID designated for Restricted Gear quality exception (allows Avail up to 24) */
+  restrictedGearItemId?: string;
+  /** Black Market Pipeline category (items in this category get +availabilityBonus to max avail) */
+  blackMarketCategory?: string;
+  /** Availability bonus for Black Market Pipeline category (default +2) */
+  blackMarketAvailabilityBonus?: number;
 }
 
 // =============================================================================
@@ -499,14 +505,18 @@ function validateArmorMods(
 // =============================================================================
 
 /**
- * Validate item availability against constraints
+ * Validate item availability against constraints.
+ * Supports Restricted Gear quality (1 item up to Avail 24) and
+ * Black Market Pipeline quality (+availabilityBonus for matching category).
  */
 function validateAvailability(
   availability: number,
   itemName: string,
   itemType: GearValidationError["itemType"],
   context: GearValidationContext,
-  legality?: ItemLegality
+  legality?: ItemLegality,
+  itemId?: string,
+  itemCategory?: string
 ): GearValidationError | null {
   // Check forbidden first (most restrictive)
   if (legality === "forbidden" && !context.allowForbidden) {
@@ -536,19 +546,37 @@ function validateAvailability(
     };
   }
 
-  // Check max availability
-  if (context.maxAvailability !== undefined && availability > context.maxAvailability) {
-    return {
-      code: "AVAILABILITY_EXCEEDED",
-      message: `${itemName} has Availability ${availability}, which exceeds the maximum of ${context.maxAvailability} allowed during character creation.`,
-      itemName,
-      itemType,
-      field: "availability",
-      details: {
-        availability,
-        maxAllowed: context.maxAvailability,
-      },
-    };
+  // Check max availability with quality exceptions
+  if (context.maxAvailability !== undefined) {
+    let effectiveMaxAvailability = context.maxAvailability;
+
+    // Restricted Gear quality: designated item can go up to Avail 24
+    if (context.restrictedGearItemId && itemId && itemId === context.restrictedGearItemId) {
+      effectiveMaxAvailability = 24;
+    }
+    // Black Market Pipeline: matching category gets +availabilityBonus
+    else if (
+      context.blackMarketCategory &&
+      itemCategory &&
+      itemCategory.toLowerCase() === context.blackMarketCategory.toLowerCase() &&
+      context.blackMarketAvailabilityBonus
+    ) {
+      effectiveMaxAvailability += context.blackMarketAvailabilityBonus;
+    }
+
+    if (availability > effectiveMaxAvailability) {
+      return {
+        code: "AVAILABILITY_EXCEEDED",
+        message: `${itemName} has Availability ${availability}, which exceeds the maximum of ${effectiveMaxAvailability} allowed during character creation.`,
+        itemName,
+        itemType,
+        field: "availability",
+        details: {
+          availability,
+          maxAllowed: effectiveMaxAvailability,
+        },
+      };
+    }
   }
 
   return null;

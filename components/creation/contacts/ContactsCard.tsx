@@ -63,17 +63,25 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
     [charisma, gameplayModifiers.contactMultiplier]
   );
 
+  // Get quality modifiers for high-connection pool
+  const { qualityModifiers } = useCreationBudgets();
+  const highConnectionPool = qualityModifiers.friendsInHighPlaces ? charisma * 4 : 0;
+
   // Get current contacts from state
   const contacts = useMemo(() => {
     return (state.selections.contacts || []) as Contact[];
   }, [state.selections.contacts]);
 
-  // Calculate total karma spent on contacts
+  // Split contacts into paid and quality-granted
+  const paidContacts = useMemo(() => contacts.filter((c) => !c.sourceQualityId), [contacts]);
+  const qualityContacts = useMemo(() => contacts.filter((c) => !!c.sourceQualityId), [contacts]);
+
+  // Calculate total karma spent on paid contacts only
   const totalContactKarmaSpent = useMemo(() => {
-    return contacts.reduce((sum, contact) => {
+    return paidContacts.reduce((sum, contact) => {
       return sum + contact.connection + contact.loyalty;
     }, 0);
-  }, [contacts]);
+  }, [paidContacts]);
 
   // Calculate free vs general karma usage
   const freeContactKarmaSpent = Math.min(totalContactKarmaSpent, freeContactKarma);
@@ -325,16 +333,56 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
             )}
           </div>
 
+          {/* High-Connection Contact Points (Friends in High Places) */}
+          {highConnectionPool > 0 && (
+            <div className="space-y-1">
+              <div className="flex items-center justify-between text-xs">
+                <span className="flex items-center gap-1 text-zinc-600 dark:text-zinc-400">
+                  High-Connection Points (C8+)
+                  <InfoTooltip
+                    content="Extra pool from Friends in High Places. Only for contacts with Connection 8+."
+                    label="High-connection points info"
+                  />
+                </span>
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                  {budgets["high-connection-contact-points"]?.spent || 0} / {highConnectionPool}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-zinc-100 dark:bg-zinc-800">
+                <div
+                  className="h-full bg-purple-500 transition-all"
+                  style={{
+                    width: `${
+                      highConnectionPool > 0
+                        ? Math.min(
+                            100,
+                            ((budgets["high-connection-contact-points"]?.spent || 0) /
+                              highConnectionPool) *
+                              100
+                          )
+                        : 0
+                    }%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
+
           {/* Contacts List */}
           {contacts.length > 0 && (
             <div className="space-y-2">
               {contacts.map((contact, index) => {
                 const cost = contact.connection + contact.loyalty;
+                const isQualityContact = !!contact.sourceQualityId;
 
                 return (
                   <div
                     key={index}
-                    className="flex items-center justify-between rounded-md border border-zinc-200 bg-white p-2 dark:border-zinc-700 dark:bg-zinc-800/50"
+                    className={`flex items-center justify-between rounded-md border p-2 ${
+                      isQualityContact
+                        ? "border-purple-200 bg-purple-50/50 dark:border-purple-800 dark:bg-purple-900/20"
+                        : "border-zinc-200 bg-white dark:border-zinc-700 dark:bg-zinc-800/50"
+                    }`}
                   >
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
@@ -345,6 +393,11 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                         {contact.type && (
                           <span className="flex-shrink-0 rounded bg-zinc-100 px-1.5 py-0.5 text-xs text-zinc-600 dark:bg-zinc-700 dark:text-zinc-400">
                             {contact.type}
+                          </span>
+                        )}
+                        {isQualityContact && (
+                          <span className="flex-shrink-0 rounded bg-purple-100 px-1.5 py-0.5 text-xs font-medium text-purple-700 dark:bg-purple-900/40 dark:text-purple-300">
+                            Quality
                           </span>
                         )}
                       </div>
@@ -359,25 +412,32 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
                     </div>
 
                     <div className="flex items-center gap-1">
-                      <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
-                        {cost}K
-                      </span>
-                      <button
-                        onClick={() => handleOpenEditModal(index)}
-                        className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
-                        title="Edit contact"
-                      >
-                        <Edit2 className="h-3.5 w-3.5" />
-                      </button>
-                      {/* Separator */}
-                      <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
-                      <button
-                        onClick={() => handleRemoveContact(index)}
-                        className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
-                        title="Remove contact"
-                      >
-                        <X className="h-3.5 w-3.5" />
-                      </button>
+                      {!isQualityContact && (
+                        <>
+                          <span className="rounded bg-indigo-100 px-1.5 py-0.5 text-xs font-medium text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300">
+                            {cost}K
+                          </span>
+                          <button
+                            onClick={() => handleOpenEditModal(index)}
+                            className="rounded p-1 text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 dark:hover:bg-zinc-700 dark:hover:text-zinc-300"
+                            title="Edit contact"
+                          >
+                            <Edit2 className="h-3.5 w-3.5" />
+                          </button>
+                          {/* Separator */}
+                          <div className="mx-1 h-5 w-px bg-zinc-300 dark:bg-zinc-600" />
+                          <button
+                            onClick={() => handleRemoveContact(index)}
+                            className="rounded p-1 text-zinc-400 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/30 dark:hover:text-red-400"
+                            title="Remove contact"
+                          >
+                            <X className="h-3.5 w-3.5" />
+                          </button>
+                        </>
+                      )}
+                      {isQualityContact && (
+                        <span className="text-xs text-purple-600 dark:text-purple-400">Free</span>
+                      )}
                     </div>
                   </div>
                 );

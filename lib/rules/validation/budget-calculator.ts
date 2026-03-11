@@ -12,6 +12,7 @@
 
 import type { CreationSelections } from "@/lib/types/creation-selections";
 import { getQualityBudgetModifiers } from "@/lib/rules/qualities/budget-modifiers";
+import type { Contact } from "@/lib/types";
 
 // =============================================================================
 // NUYEN CALCULATION
@@ -324,13 +325,19 @@ export function calculateKarmaSpent(
   const karmaSpentFoci = (budgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections
-  // Calculate: total contact cost - free pool (CHA × multiplier)
-  const contacts = (selections.contacts || []) as Array<{ connection: number; loyalty: number }>;
+  // Quality-granted contacts (sourceQualityId set) are free
+  const contacts = (selections.contacts || []) as Contact[];
   const attributes = selections.attributes as Record<string, number> | undefined;
   const charisma = attributes?.charisma || 1;
+  const qualityMods = getQualityBudgetModifiers(selections);
+  const paidContacts = contacts.filter((c) => !c.sourceQualityId);
+  const totalPaidContactCost = paidContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+
+  // Friends in High Places provides extra CHA × 4 pool for Connection 8+ contacts
+  const highConnectionPool = qualityMods.friendsInHighPlaces ? charisma * 4 : 0;
   const freeContactKarma = charisma * getContactMultiplier(gameplayLevel);
-  const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-  const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
+  const totalFreePools = freeContactKarma + highConnectionPool;
+  const karmaSpentContacts = Math.max(0, totalPaidContactCost - totalFreePools);
 
   // Skill karma - derive from skillKarmaSpent if present
   const skillKarmaSpent = selections.skillKarmaSpent as
