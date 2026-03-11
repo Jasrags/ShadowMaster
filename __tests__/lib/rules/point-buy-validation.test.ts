@@ -120,14 +120,24 @@ describe("POINT_BUY constants", () => {
     expect(POINT_BUY_MAX_LEFTOVER_NUYEN).toBe(5000);
   });
 
-  it("has correct metatype costs", () => {
-    expect(POINT_BUY_METATYPE_COSTS).toEqual({
-      human: 0,
-      elf: 40,
-      dwarf: 50,
-      ork: 50,
-      troll: 90,
-    });
+  it("has correct base metatype costs", () => {
+    expect(POINT_BUY_METATYPE_COSTS.human).toBe(0);
+    expect(POINT_BUY_METATYPE_COSTS.elf).toBe(40);
+    expect(POINT_BUY_METATYPE_COSTS.dwarf).toBe(50);
+    expect(POINT_BUY_METATYPE_COSTS.ork).toBe(50);
+    expect(POINT_BUY_METATYPE_COSTS.troll).toBe(90);
+  });
+
+  it("has correct metavariant costs", () => {
+    // Dwarf variants (base 50 + variant karma)
+    expect(POINT_BUY_METATYPE_COSTS.gnome).toBe(57);
+    expect(POINT_BUY_METATYPE_COSTS.koborokuru).toBe(50);
+    // Elf variants (base 40 + variant karma)
+    expect(POINT_BUY_METATYPE_COSTS.dryad).toBe(40);
+    expect(POINT_BUY_METATYPE_COSTS.wakyambi).toBe(52);
+    // Metasapients (standalone)
+    expect(POINT_BUY_METATYPE_COSTS.centaur).toBe(25);
+    expect(POINT_BUY_METATYPE_COSTS.pixie).toBe(15);
   });
 
   it("has correct magic quality costs", () => {
@@ -167,7 +177,7 @@ describe("getMetatypeKarmaCost", () => {
   });
 
   it("returns null for unknown metatype", () => {
-    expect(getMetatypeKarmaCost("pixie")).toBeNull();
+    expect(getMetatypeKarmaCost("dragon")).toBeNull();
   });
 
   it("uses custom cost table", () => {
@@ -308,7 +318,7 @@ describe("calculatePointBuyKarmaSpent", () => {
   });
 
   it("handles unknown metatype (costs 0)", () => {
-    expect(calculatePointBuyKarmaSpent({ metatypeId: "pixie" })).toBe(0);
+    expect(calculatePointBuyKarmaSpent({ metatypeId: "dragon" })).toBe(0);
   });
 
   it("uses custom metatype costs from params", () => {

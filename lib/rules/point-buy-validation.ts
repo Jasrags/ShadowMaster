@@ -29,13 +29,42 @@ export const POINT_BUY_MAX_LEFTOVER_NUYEN = 5000;
 
 /**
  * Metatype Karma costs for Point Buy creation (Run Faster p. 64)
+ * Metavariant costs = base metatype cost + variant karma cost from Run Faster pp. 88-101
  */
 export const POINT_BUY_METATYPE_COSTS: Readonly<Record<string, number>> = {
+  // Base metatypes
   human: 0,
   elf: 40,
   dwarf: 50,
   ork: 50,
   troll: 90,
+  // Dwarf variants (base 50 + variant karma)
+  gnome: 57,
+  hanuman: 55,
+  koborokuru: 50,
+  menehune: 52,
+  // Elf variants (base 40 + variant karma)
+  dryad: 40,
+  nocturna: 40,
+  wakyambi: 52,
+  "xapiri-thepe": 40,
+  // Human variant (base 0 + variant karma)
+  nartaki: 0,
+  // Ork variants (base 50 + variant karma)
+  hobgoblin: 55,
+  ogre: 58,
+  oni: 54,
+  satyr: 60,
+  // Troll variants (base 90 + variant karma)
+  cyclopean: 92,
+  fomorian: 102,
+  giant: 92,
+  minotaur: 92,
+  // Metasapients (standalone karma costs)
+  centaur: 25,
+  naga: 25,
+  pixie: 15,
+  sasquatch: 20,
 };
 
 /**

@@ -86,6 +86,8 @@ export interface MetatypeData {
   name: string;
   baseMetatype: string | null;
   description?: string;
+  karmaCost?: number;
+  source?: { book: string; page: number };
   attributes: Record<string, { min: number; max: number } | { base: number }>;
   racialTraits: string[];
   priorityAvailability?: Record<string, { specialAttributePoints: number }>;

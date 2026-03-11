@@ -34,20 +34,21 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
 
   // Get available metatypes based on creation method
   const availableMetatypes = useMemo((): MetatypeOption[] => {
-    // Point Buy: all base metatypes available with karma costs
+    // Point Buy: all metatypes available with karma costs from data
     if (isPointBuy) {
       return metatypes.map((m) => ({
         id: m.id,
         name: m.name,
+        baseMetatype: m.baseMetatype ?? null,
         description: m.description,
-        specialAttributePoints: 0, // Point Buy uses SAP from metatype data directly
+        specialAttributePoints: 0,
         racialTraits: m.racialTraits || [],
         attributes: m.attributes as Record<string, { min: number; max: number }>,
         karmaCost: POINT_BUY_METATYPE_COSTS[m.id] ?? 0,
       }));
     }
 
-    // Priority-based: filter by assigned priority
+    // Priority-based: filter by assigned priority level
     if (!metatypePriority || !priorityTable?.table[metatypePriority]) {
       return [];
     }
@@ -55,17 +56,26 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
       available: string[];
       specialAttributePoints: Record<string, number>;
     };
-    const availableIds = priorityData?.available || [];
 
+    // Include metatypes from priority table AND those with matching priorityAvailability
     return metatypes
-      .filter((m) => availableIds.includes(m.id))
+      .filter((m) => {
+        const inPriorityTable = (priorityData?.available || []).includes(m.id);
+        const hasPriorityAvail = !!m.priorityAvailability?.[metatypePriority];
+        return inPriorityTable || hasPriorityAvail;
+      })
       .map((m) => ({
         id: m.id,
         name: m.name,
+        baseMetatype: m.baseMetatype ?? null,
         description: m.description,
-        specialAttributePoints: priorityData.specialAttributePoints?.[m.id] || 0,
+        specialAttributePoints:
+          priorityData.specialAttributePoints?.[m.id] ??
+          m.priorityAvailability?.[metatypePriority]?.specialAttributePoints ??
+          0,
         racialTraits: m.racialTraits || [],
         attributes: m.attributes as Record<string, { min: number; max: number }>,
+        karmaCost: m.karmaCost,
       }));
   }, [isPointBuy, metatypePriority, priorityTable, metatypes]);
 

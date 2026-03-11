@@ -8,6 +8,7 @@ export interface MetatypeCardProps {
 export interface MetatypeOption {
   id: string;
   name: string;
+  baseMetatype: string | null;
   description?: string;
   specialAttributePoints: number;
   racialTraits: string[];

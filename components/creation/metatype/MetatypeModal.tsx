@@ -1,9 +1,48 @@
 "use client";
 
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 import { Check, X } from "lucide-react";
 import { METATYPE_DESCRIPTIONS } from "./constants";
-import type { MetatypeModalProps } from "./types";
+import type { MetatypeModalProps, MetatypeOption } from "./types";
+
+/** Group label for base metatypes and metasapients */
+const BASE_METATYPE_LABELS: Record<string, string> = {
+  human: "Human",
+  elf: "Elf",
+  dwarf: "Dwarf",
+  ork: "Ork",
+  troll: "Troll",
+};
+
+interface MetatypeGroup {
+  readonly label: string;
+  readonly metatypes: readonly MetatypeOption[];
+}
+
+/** Group metatypes: base types first, then variants nested under parent, then metasapients */
+function groupMetatypes(metatypes: readonly MetatypeOption[]): readonly MetatypeGroup[] {
+  const baseTypes = metatypes.filter((m) => !m.baseMetatype);
+  const variants = metatypes.filter((m) => !!m.baseMetatype);
+
+  const groups: MetatypeGroup[] = [];
+
+  // Group base metatypes with their variants
+  for (const base of baseTypes) {
+    const label = BASE_METATYPE_LABELS[base.id];
+    if (label) {
+      const children = variants.filter((v) => v.baseMetatype === base.id);
+      groups.push({ label, metatypes: [base, ...children] });
+    }
+  }
+
+  // Metasapients: base types without a known label (centaur, naga, pixie, sasquatch)
+  const metasapients = baseTypes.filter((m) => !BASE_METATYPE_LABELS[m.id]);
+  if (metasapients.length > 0) {
+    groups.push({ label: "Metasapients", metatypes: metasapients });
+  }
+
+  return groups;
+}
 
 export function MetatypeModal({
   isOpen,
@@ -14,6 +53,8 @@ export function MetatypeModal({
   currentSelection,
 }: MetatypeModalProps) {
   const [selectedId, setSelectedId] = useState<string | null>(currentSelection);
+
+  const groups = useMemo(() => groupMetatypes(metatypes), [metatypes]);
 
   // Reset selection when modal opens
   const handleClose = useCallback(() => {
@@ -57,9 +98,7 @@ export function MetatypeModal({
               <>
                 Available at Priority {priorityLevel}:{" "}
                 <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                  {metatypes.length === 5
-                    ? "All metatypes"
-                    : `${metatypes.length} metatype${metatypes.length !== 1 ? "s" : ""}`}
+                  {metatypes.length} metatype{metatypes.length !== 1 ? "s" : ""}
                 </span>
               </>
             ) : (
@@ -73,74 +112,100 @@ export function MetatypeModal({
           </p>
         </div>
 
-        {/* Metatype list */}
+        {/* Metatype list grouped by base type */}
         <div className="max-h-[60vh] overflow-y-auto p-4">
-          <div className="space-y-2">
-            {metatypes.map((metatype) => {
-              const isSelected = selectedId === metatype.id;
-              const description = METATYPE_DESCRIPTIONS[metatype.id] || metatype.description || "";
-
-              return (
-                <button
-                  key={metatype.id}
-                  onClick={() => setSelectedId(metatype.id)}
-                  className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
-                    isSelected
-                      ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
-                      : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-emerald-500"
-                  }`}
-                >
-                  {/* Header row */}
-                  <div className="flex items-center gap-3">
-                    {/* Radio indicator */}
-                    <div
-                      className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
-                        isSelected
-                          ? "border-emerald-500 bg-emerald-500 text-white"
-                          : "border-zinc-300 dark:border-zinc-600"
-                      }`}
-                    >
-                      {isSelected && <Check className="h-3 w-3" />}
-                    </div>
-
-                    <span
-                      className={`text-base font-semibold uppercase ${
-                        isSelected
-                          ? "text-emerald-900 dark:text-emerald-100"
-                          : "text-zinc-900 dark:text-zinc-100"
-                      }`}
-                    >
-                      {metatype.name}
-                    </span>
-                  </div>
-
-                  {/* Description */}
-                  {description && (
-                    <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">
-                      {description}
-                    </p>
+          <div className="space-y-4">
+            {groups.map((group) => (
+              <div key={group.label}>
+                {/* Group header */}
+                <h3 className="mb-2 text-xs font-semibold uppercase tracking-wider text-zinc-400 dark:text-zinc-500">
+                  {group.label}
+                  {group.metatypes.length > 1 && (
+                    <span className="ml-1 font-normal">({group.metatypes.length})</span>
                   )}
+                </h3>
+                <div className="space-y-2">
+                  {group.metatypes.map((metatype) => {
+                    const isSelected = selectedId === metatype.id;
+                    const isVariant = !!metatype.baseMetatype;
+                    const description =
+                      METATYPE_DESCRIPTIONS[metatype.id] || metatype.description || "";
 
-                  {/* Stats */}
-                  <div className="mt-3 space-y-1 pl-8 text-sm">
-                    {metatype.karmaCost !== undefined && (
-                      <div className="text-zinc-700 dark:text-zinc-300">
-                        <span className="font-medium">Karma Cost:</span>{" "}
-                        <span className="font-mono">{metatype.karmaCost}</span>
-                      </div>
-                    )}
-                    <div className="text-zinc-700 dark:text-zinc-300">
-                      <span className="font-medium">Special Attribute Points:</span>{" "}
-                      {metatype.specialAttributePoints}
-                    </div>
-                    <div className="text-zinc-700 dark:text-zinc-300">
-                      <span className="font-medium">Racial Traits:</span>{" "}
-                      {metatype.racialTraits.length > 0 ? metatype.racialTraits.join(", ") : "None"}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+                    return (
+                      <button
+                        key={metatype.id}
+                        onClick={() => setSelectedId(metatype.id)}
+                        className={`w-full rounded-lg border-2 p-4 text-left transition-all ${
+                          isVariant ? "ml-4" : ""
+                        } ${
+                          isSelected
+                            ? "border-emerald-500 bg-emerald-50 dark:border-emerald-500 dark:bg-emerald-900/20"
+                            : "border-zinc-200 bg-white hover:border-emerald-400 dark:border-zinc-700 dark:bg-zinc-800 dark:hover:border-emerald-500"
+                        }`}
+                      >
+                        {/* Header row */}
+                        <div className="flex items-center gap-3">
+                          {/* Radio indicator */}
+                          <div
+                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded-full border-2 transition-colors ${
+                              isSelected
+                                ? "border-emerald-500 bg-emerald-500 text-white"
+                                : "border-zinc-300 dark:border-zinc-600"
+                            }`}
+                          >
+                            {isSelected && <Check className="h-3 w-3" />}
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            <span
+                              className={`text-base font-semibold uppercase ${
+                                isSelected
+                                  ? "text-emerald-900 dark:text-emerald-100"
+                                  : "text-zinc-900 dark:text-zinc-100"
+                              }`}
+                            >
+                              {metatype.name}
+                            </span>
+                            {isVariant && (
+                              <span className="rounded bg-zinc-100 px-1.5 py-0.5 text-[10px] font-medium uppercase text-zinc-500 dark:bg-zinc-700 dark:text-zinc-400">
+                                Variant
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Description */}
+                        {description && (
+                          <p className="mt-2 pl-8 text-sm text-zinc-600 dark:text-zinc-400">
+                            {description}
+                          </p>
+                        )}
+
+                        {/* Stats */}
+                        <div className="mt-3 space-y-1 pl-8 text-sm">
+                          {metatype.karmaCost !== undefined && metatype.karmaCost > 0 && (
+                            <div className="text-zinc-700 dark:text-zinc-300">
+                              <span className="font-medium">Karma Cost:</span>{" "}
+                              <span className="font-mono">{metatype.karmaCost}</span>
+                            </div>
+                          )}
+                          <div className="text-zinc-700 dark:text-zinc-300">
+                            <span className="font-medium">Special Attribute Points:</span>{" "}
+                            {metatype.specialAttributePoints}
+                          </div>
+                          <div className="text-zinc-700 dark:text-zinc-300">
+                            <span className="font-medium">Racial Traits:</span>{" "}
+                            {metatype.racialTraits.length > 0
+                              ? metatype.racialTraits.join(", ")
+                              : "None"}
+                          </div>
+                        </div>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
