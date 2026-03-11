@@ -17,6 +17,7 @@ import { Plus, X, Edit2, User } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 import type { Contact } from "@/lib/types";
 import { useCreationBudgets } from "@/lib/contexts";
+import { FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER } from "@/lib/rules/qualities/budget-modifiers";
 import { useContactTemplates, useMetatypes, useGameplayLevelModifiers } from "@/lib/rules";
 import { CreationCard, SummaryFooter } from "../shared";
 import { MIN_KARMA_PER_CONTACT, MAX_KARMA_PER_CONTACT } from "./constants";
@@ -65,7 +66,9 @@ export function ContactsCard({ state, updateState }: ContactsCardProps) {
 
   // Get quality modifiers for high-connection pool
   const { qualityModifiers } = useCreationBudgets();
-  const highConnectionPool = qualityModifiers.friendsInHighPlaces ? charisma * 4 : 0;
+  const highConnectionPool = qualityModifiers.friendsInHighPlaces
+    ? charisma * FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER
+    : 0;
 
   // Get current contacts from state
   const contacts = useMemo(() => {

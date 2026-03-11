@@ -26,7 +26,12 @@ import { MAX_POSITIVE_KARMA, MAX_NEGATIVE_KARMA } from "./constants";
 import { SelectedQualityCard } from "./SelectedQualityCard";
 import { QualitySelectionModal } from "./QualitySelectionModal";
 import type { SelectedQuality } from "./types";
-import { MADE_MAN, SENSEI, RESTRICTED_GEAR } from "@/lib/rules/qualities/budget-modifiers";
+import {
+  MADE_MAN,
+  SENSEI,
+  RESTRICTED_GEAR,
+  buildFreeContact,
+} from "@/lib/rules/qualities/budget-modifiers";
 
 interface QualitiesCardProps {
   state: CreationState;
@@ -144,22 +149,14 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       // Side effects: Made Man and Sensei add free contacts
       if (qualityId === MADE_MAN || qualityId === SENSEI) {
         const existingContacts = (state.selections.contacts || []) as Contact[];
-        const freeContact: Contact =
-          qualityId === MADE_MAN
-            ? {
-                name: specification ? `${specification} Contact` : "Syndicate Contact",
-                connection: 2,
-                loyalty: 4,
-                type: "Syndicate",
-                sourceQualityId: MADE_MAN,
-              }
-            : {
-                name: specification ? `${specification} Sensei` : "Sensei",
-                connection: 1,
-                loyalty: 1,
-                type: "Training",
-                sourceQualityId: SENSEI,
-              };
+        const freeContactData = buildFreeContact(qualityId, specification);
+        const freeContact: Contact = {
+          name: freeContactData.name,
+          connection: freeContactData.connection,
+          loyalty: freeContactData.loyalty,
+          type: freeContactData.type,
+          sourceQualityId: freeContactData.qualityId,
+        };
         updatedSelections.contacts = [...existingContacts, freeContact];
       }
 

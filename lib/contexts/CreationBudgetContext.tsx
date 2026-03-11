@@ -36,7 +36,9 @@ import { FREE_SKILL_TYPE_LABELS } from "@/components/creation/magic-path/constan
 import { calculateBrokenGroupSkillPointOffset } from "../rules/skills/group-utils";
 import {
   getQualityBudgetModifiers,
+  getDefaultModifiers,
   type QualityBudgetModifiers,
+  FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
 } from "../rules/qualities/budget-modifiers";
 
 // =============================================================================
@@ -326,16 +328,7 @@ function extractSpentValues(
   priorities: Record<string, string> | undefined,
   skillCategories: Record<string, string | undefined>,
   skillGroupDefs: { id: string; skills: string[] }[] = [],
-  qualityModifiers: QualityBudgetModifiers = {
-    karmaToNuyenCap: 10,
-    knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
-    languageCostMultiplier: 1,
-    jackOfAllTrades: false,
-    friendsInHighPlaces: false,
-    freeContacts: [],
-    restrictedGear: false,
-    blackMarketPipeline: null,
-  }
+  qualityModifiers: QualityBudgetModifiers = getDefaultModifiers()
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -697,11 +690,9 @@ function extractSpentValues(
   const karmaSpentAttributes = (stateBudgets["karma-spent-attributes"] as number) || 0;
   const karmaSpentFoci = (stateBudgets["karma-spent-foci"] as number) || 0;
 
-  // Contact karma - derive from selections to avoid stale closure bugs
-  // Quality-granted contacts are free, high-connection pool covers some costs
-  const totalPaidContactCost = paidContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-  const totalFreePools = freeContactPool + highConnectionPool;
-  const karmaSpentContacts = Math.max(0, totalPaidContactCost - totalFreePools);
+  // Contact karma - derive from already-computed pool splits (lines 383-406)
+  // regularContactCost already includes high-connection overflow
+  const karmaSpentContacts = Math.max(0, regularContactCost - freeContactPool);
 
   // Calculate skill karma spent from selections.skillKarmaSpent if present
   // This tracks karma spent on breaking groups (raising skills, adding specializations),
@@ -749,16 +740,7 @@ function validateBudgets(
   state: CreationState,
   priorityTable: PriorityTableData | null,
   skillCategories: Record<string, string | undefined>,
-  qualityModifiers: QualityBudgetModifiers = {
-    karmaToNuyenCap: 10,
-    knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
-    languageCostMultiplier: 1,
-    jackOfAllTrades: false,
-    friendsInHighPlaces: false,
-    freeContacts: [],
-    restrictedGear: false,
-    blackMarketPipeline: null,
-  }
+  qualityModifiers: QualityBudgetModifiers = getDefaultModifiers()
 ): { errors: ValidationError[]; warnings: ValidationError[] } {
   const errors: ValidationError[] = [];
   const warnings: ValidationError[] = [];
@@ -992,7 +974,7 @@ export function CreationBudgetProvider({
       const attrs = creationState.selections.attributes as Record<string, number> | undefined;
       const charisma = attrs?.charisma || 1;
       totals["high-connection-contact-points"] = {
-        total: charisma * 4,
+        total: charisma * FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
         label: "High-Connection Contact Points",
         displayFormat: "number",
       };

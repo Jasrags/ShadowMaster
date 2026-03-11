@@ -188,7 +188,15 @@ function validateGearItems(
   for (const item of items) {
     // Check base item availability
     if (item.availability !== undefined) {
-      const availResult = validateAvailability(item.availability, item.name, "gear", context);
+      const availResult = validateAvailability(
+        item.availability,
+        item.name,
+        "gear",
+        context,
+        item.legality,
+        item.id,
+        item.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -210,7 +218,15 @@ function validateWeapons(weapons: Weapon[], context: GearValidationContext): Gea
   for (const weapon of weapons) {
     // Check base weapon availability
     if (weapon.availability !== undefined) {
-      const availResult = validateAvailability(weapon.availability, weapon.name, "weapon", context);
+      const availResult = validateAvailability(
+        weapon.availability,
+        weapon.name,
+        "weapon",
+        context,
+        weapon.legality,
+        weapon.id,
+        weapon.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -235,7 +251,15 @@ function validateArmor(
   for (const armor of armorItems) {
     // Check base armor availability
     if (armor.availability !== undefined) {
-      const availResult = validateAvailability(armor.availability, armor.name, "armor", context);
+      const availResult = validateAvailability(
+        armor.availability,
+        armor.name,
+        "armor",
+        context,
+        armor.legality,
+        armor.id,
+        armor.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -269,7 +293,8 @@ function validateCyberdecks(
         deck.name,
         "cyberdeck",
         context,
-        deck.legality
+        deck.legality,
+        deck.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -298,7 +323,9 @@ function validateCommlinks(
         commlink.availability,
         commlink.name,
         "commlink",
-        context
+        context,
+        commlink.legality,
+        commlink.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -330,7 +357,8 @@ function validateRCCs(rccs: CharacterRCC[], context: GearValidationContext): Gea
         rcc.name,
         "rcc",
         context,
-        rcc.legality
+        rcc.legality,
+        rcc.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -364,7 +392,8 @@ function validateDrones(
         drone.customName || drone.name,
         "drone",
         context,
-        drone.legality
+        drone.legality,
+        drone.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -389,7 +418,9 @@ function validateAutosofts(
         autosoft.availability,
         autosoft.name,
         "autosoft",
-        context
+        context,
+        undefined,
+        autosoft.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -415,7 +446,8 @@ function validateVehicles(
         vehicle.name,
         "vehicle",
         context,
-        vehicle.legality
+        vehicle.legality,
+        vehicle.id
       );
       if (availResult) errors.push(availResult);
     }
