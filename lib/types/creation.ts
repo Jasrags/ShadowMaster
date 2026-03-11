@@ -152,11 +152,29 @@ export interface SelectStepPayload {
 export interface PriorityStepPayload {
   type: "priority";
 
-  /** Priority categories to assign */
-  categories: PriorityCategory[];
+  /** Priority categories to assign (strings or full category objects) */
+  categories: (string | PriorityCategory)[];
 
   /** Available priority levels */
   levels: string[]; // ["A", "B", "C", "D", "E"]
+
+  /**
+   * Point values per priority level (for Sum-to-Ten variant).
+   * Maps level letter to point cost, e.g. { "A": 4, "B": 3, "C": 2, "D": 1, "E": 0 }
+   */
+  pointValues?: Record<string, number>;
+
+  /**
+   * Total point budget that assigned levels must sum to (for Sum-to-Ten variant).
+   * e.g. 10 for Sum-to-Ten
+   */
+  totalBudget?: number;
+
+  /**
+   * Whether duplicate priority levels are allowed (for Sum-to-Ten variant).
+   * Standard Priority = false (default), Sum-to-Ten = true
+   */
+  allowDuplicates?: boolean;
 }
 
 export interface PriorityCategory {
@@ -281,6 +299,7 @@ export type ConstraintType =
   | "essence-minimum" // Essence cannot drop below value
   | "equipment-rating" // Equipment ratings must be valid
   | "special-attribute-init" // Edge/Magic/Resonance starting values
+  | "sum-to-ten-budget" // Priority point values must sum to exact total
   | "custom"; // Custom validation function name
 
 /**
