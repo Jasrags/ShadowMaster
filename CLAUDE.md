@@ -2,7 +2,7 @@
 
 This file provides guidance to Claude Code (claude.ai/code) and Cursor IDE when working with code in this repository.
 
-@docs/claude/reference.md
+For detailed architecture reference, use the `/architecture-reference` skill (loaded on demand to save context).
 
 ## Project Overview
 
@@ -109,3 +109,5 @@ Use skills for detailed domain knowledge (loaded on demand, not every session):
 - `/archetype-import` - Importing SR5 archetypes from sourcebook stat blocks
 - `/shadowrun-aesthetic` - UI styling guidelines
 - `/sheet-ui-redesign` - Redesign sheet display components to match creation card aesthetic
+- `/plan` - Create implementation plans from GitHub issues
+- `/ship` - Ship current work (type-check, test, commit, push, create PR)
