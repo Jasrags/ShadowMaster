@@ -19,6 +19,10 @@ vi.mock("@/lib/contexts", () => ({
   useCreationBudgets: vi.fn(),
 }));
 
+vi.mock("@/lib/rules/RulesetContext", () => ({
+  useCreationMethod: vi.fn(() => null),
+}));
+
 import { usePriorityTable } from "@/lib/rules";
 import { useCreationBudgets } from "@/lib/contexts";
 
@@ -41,6 +45,7 @@ vi.mock("../shared", () => ({
       {children}
     </div>
   ),
+  BudgetIndicator: () => <div data-testid="budget-indicator" />,
 }));
 
 // Priority table mock matching the shape PrioritySelectionCard expects

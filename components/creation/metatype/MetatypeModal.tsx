@@ -50,15 +50,26 @@ export function MetatypeModal({
           </button>
         </div>
 
-        {/* Priority info */}
+        {/* Priority / Point Buy info */}
         <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
           <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Available at Priority {priorityLevel}:{" "}
-            <span className="font-medium text-zinc-900 dark:text-zinc-100">
-              {metatypes.length === 5
-                ? "All metatypes"
-                : `${metatypes.length} metatype${metatypes.length !== 1 ? "s" : ""}`}
-            </span>
+            {priorityLevel ? (
+              <>
+                Available at Priority {priorityLevel}:{" "}
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                  {metatypes.length === 5
+                    ? "All metatypes"
+                    : `${metatypes.length} metatype${metatypes.length !== 1 ? "s" : ""}`}
+                </span>
+              </>
+            ) : (
+              <>
+                All metatypes available —{" "}
+                <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                  Karma cost deducted from budget
+                </span>
+              </>
+            )}
           </p>
         </div>
 
@@ -112,6 +123,12 @@ export function MetatypeModal({
 
                   {/* Stats */}
                   <div className="mt-3 space-y-1 pl-8 text-sm">
+                    {metatype.karmaCost !== undefined && (
+                      <div className="text-zinc-700 dark:text-zinc-300">
+                        <span className="font-medium">Karma Cost:</span>{" "}
+                        <span className="font-mono">{metatype.karmaCost}</span>
+                      </div>
+                    )}
                     <div className="text-zinc-700 dark:text-zinc-300">
                       <span className="font-medium">Special Attribute Points:</span>{" "}
                       {metatype.specialAttributePoints}

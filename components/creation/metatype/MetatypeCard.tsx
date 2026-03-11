@@ -15,21 +15,39 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { useMetatypes, usePriorityTable } from "@/lib/rules";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import { CreationCard } from "../shared";
 import { Lock, ChevronRight } from "lucide-react";
 import { MetatypeModal } from "./MetatypeModal";
+import { POINT_BUY_METATYPE_COSTS } from "@/lib/rules/point-buy-validation";
 import type { MetatypeCardProps, MetatypeOption } from "./types";
 
 export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
   const metatypes = useMetatypes();
   const priorityTable = usePriorityTable();
+  const currentCreationMethod = useCreationMethod();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const isPointBuy = currentCreationMethod?.type === "point-buy";
   const selectedMetatype = state.selections.metatype as string | undefined;
   const metatypePriority = state.priorities?.metatype;
 
-  // Get available metatypes based on priority
+  // Get available metatypes based on creation method
   const availableMetatypes = useMemo((): MetatypeOption[] => {
+    // Point Buy: all base metatypes available with karma costs
+    if (isPointBuy) {
+      return metatypes.map((m) => ({
+        id: m.id,
+        name: m.name,
+        description: m.description,
+        specialAttributePoints: 0, // Point Buy uses SAP from metatype data directly
+        racialTraits: m.racialTraits || [],
+        attributes: m.attributes as Record<string, { min: number; max: number }>,
+        karmaCost: POINT_BUY_METATYPE_COSTS[m.id] ?? 0,
+      }));
+    }
+
+    // Priority-based: filter by assigned priority
     if (!metatypePriority || !priorityTable?.table[metatypePriority]) {
       return [];
     }
@@ -49,7 +67,7 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
         racialTraits: m.racialTraits || [],
         attributes: m.attributes as Record<string, { min: number; max: number }>,
       }));
-  }, [metatypePriority, priorityTable, metatypes]);
+  }, [isPointBuy, metatypePriority, priorityTable, metatypes]);
 
   // Get selected metatype data
   const selectedMetatypeData = useMemo(() => {
@@ -75,13 +93,13 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
 
   // Get validation status
   const validationStatus = useMemo(() => {
-    if (!metatypePriority) return "pending";
+    if (!isPointBuy && !metatypePriority) return "pending";
     if (selectedMetatype) return "valid";
     return "warning";
-  }, [metatypePriority, selectedMetatype]);
+  }, [isPointBuy, metatypePriority, selectedMetatype]);
 
-  // If no priority assigned, show locked state
-  if (!metatypePriority) {
+  // If no priority assigned and not point-buy, show locked state
+  if (!isPointBuy && !metatypePriority) {
     return (
       <CreationCard title="Metatype" description="Select your character's species" status="pending">
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
@@ -97,7 +115,11 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
     <span className="text-sm">
       <span className="font-medium">{selectedMetatypeData.name}</span>
       <span className="text-zinc-400"> • </span>
-      <span>{selectedMetatypeData.specialAttributePoints} SAP</span>
+      {isPointBuy ? (
+        <span className="font-mono">{selectedMetatypeData.karmaCost ?? 0} Karma</span>
+      ) : (
+        <span>{selectedMetatypeData.specialAttributePoints} SAP</span>
+      )}
       {selectedMetatypeData.racialTraits.length > 0 && (
         <>
           <span className="text-zinc-400"> • </span>
@@ -117,8 +139,12 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
         title="Metatype"
         description={
           selectedMetatypeData
-            ? `${selectedMetatypeData.name} • ${selectedMetatypeData.specialAttributePoints} SAP`
-            : `Priority ${metatypePriority} - ${availableMetatypes.length} option${availableMetatypes.length !== 1 ? "s" : ""}`
+            ? isPointBuy
+              ? `${selectedMetatypeData.name} • ${selectedMetatypeData.karmaCost ?? 0} Karma`
+              : `${selectedMetatypeData.name} • ${selectedMetatypeData.specialAttributePoints} SAP`
+            : isPointBuy
+              ? `${availableMetatypes.length} metatypes — Karma cost from budget`
+              : `Priority ${metatypePriority} - ${availableMetatypes.length} option${availableMetatypes.length !== 1 ? "s" : ""}`
         }
         status={validationStatus}
         collapsible={!!selectedMetatypeData}
@@ -141,12 +167,23 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
                 <span className="text-sm text-emerald-600 dark:text-emerald-400">Change</span>
               </button>
 
-              {/* Special Attribute Points */}
+              {/* Karma Cost (Point Buy) or Special Attribute Points */}
               <div className="text-sm text-zinc-600 dark:text-zinc-400">
-                <span className="font-medium text-zinc-900 dark:text-zinc-100">
-                  Special Attribute Points:
-                </span>{" "}
-                {selectedMetatypeData.specialAttributePoints}
+                {isPointBuy ? (
+                  <>
+                    <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                      Karma Cost:
+                    </span>{" "}
+                    <span className="font-mono">{selectedMetatypeData.karmaCost ?? 0}</span>
+                  </>
+                ) : (
+                  <>
+                    <span className="font-medium text-zinc-900 dark:text-zinc-100">
+                      Special Attribute Points:
+                    </span>{" "}
+                    {selectedMetatypeData.specialAttributePoints}
+                  </>
+                )}
               </div>
 
               {/* Racial Traits */}
@@ -183,16 +220,18 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
             </button>
           )}
 
-          {/* Unavailable metatypes hint */}
-          {metatypes.filter((m) => !availableMetatypes.find((am) => am.id === m.id)).length > 0 && (
-            <p className="text-xs text-zinc-500 dark:text-zinc-400">
-              <span className="font-medium">Higher priority needed:</span>{" "}
-              {metatypes
-                .filter((m) => !availableMetatypes.find((am) => am.id === m.id))
-                .map((m) => m.name)
-                .join(", ")}
-            </p>
-          )}
+          {/* Unavailable metatypes hint (priority-based only) */}
+          {!isPointBuy &&
+            metatypes.filter((m) => !availableMetatypes.find((am) => am.id === m.id)).length >
+              0 && (
+              <p className="text-xs text-zinc-500 dark:text-zinc-400">
+                <span className="font-medium">Higher priority needed:</span>{" "}
+                {metatypes
+                  .filter((m) => !availableMetatypes.find((am) => am.id === m.id))
+                  .map((m) => m.name)
+                  .join(", ")}
+              </p>
+            )}
         </div>
       </CreationCard>
 
@@ -202,7 +241,7 @@ export function MetatypeCard({ state, updateState }: MetatypeCardProps) {
         onClose={() => setIsModalOpen(false)}
         onConfirm={handleSelect}
         metatypes={availableMetatypes}
-        priorityLevel={metatypePriority}
+        priorityLevel={isPointBuy ? undefined : metatypePriority}
         currentSelection={selectedMetatype || null}
       />
     </>

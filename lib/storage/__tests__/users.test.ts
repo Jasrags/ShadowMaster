@@ -2,48 +2,58 @@
  * Tests for user storage layer
  *
  * Tests user CRUD operations and validation.
- *
- * NOTE: These tests use the actual data directory. For proper isolation,
- * the storage layer should be refactored to support configurable data paths.
- * These tests use unique test emails to minimize conflicts with real data.
+ * Uses a temporary directory via USER_DATA_DIR env var for full isolation.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
+import os from "os";
 import { UserRole } from "../../types/user";
-import {
-  getUserById,
-  getUserByEmail,
-  getAllUsers,
-  createUser,
-  updateUser,
-  deleteUser,
-  suspendUser,
-  reactivateUser,
-  updateUserRoles,
-  countAdmins,
-  isLastAdmin,
-} from "../users";
 
-const TEST_DATA_DIR = path.join(process.cwd(), "__tests__", "temp-users");
+let testDir: string;
+
+// Dynamic imports so we can set USER_DATA_DIR before module evaluation
+let getUserById: typeof import("../users").getUserById;
+let getUserByEmail: typeof import("../users").getUserByEmail;
+let getAllUsers: typeof import("../users").getAllUsers;
+let createUser: typeof import("../users").createUser;
+let updateUser: typeof import("../users").updateUser;
+let deleteUser: typeof import("../users").deleteUser;
+let suspendUser: typeof import("../users").suspendUser;
+let reactivateUser: typeof import("../users").reactivateUser;
+let updateUserRoles: typeof import("../users").updateUserRoles;
+let countAdmins: typeof import("../users").countAdmins;
+let isLastAdmin: typeof import("../users").isLastAdmin;
 
 describe("User Storage", () => {
   beforeEach(async () => {
-    // Clean up test directory
-    try {
-      await fs.rm(TEST_DATA_DIR, { recursive: true, force: true });
-    } catch {
-      // Ignore
-    }
+    // Create isolated temp directory for each test
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), "user-storage-test-"));
+    process.env.USER_DATA_DIR = testDir;
+
+    // Reset module cache so users.ts picks up the new env var
+    vi.resetModules();
+    const users = await import("../users");
+    getUserById = users.getUserById;
+    getUserByEmail = users.getUserByEmail;
+    getAllUsers = users.getAllUsers;
+    createUser = users.createUser;
+    updateUser = users.updateUser;
+    deleteUser = users.deleteUser;
+    suspendUser = users.suspendUser;
+    reactivateUser = users.reactivateUser;
+    updateUserRoles = users.updateUserRoles;
+    countAdmins = users.countAdmins;
+    isLastAdmin = users.isLastAdmin;
   });
 
   afterEach(async () => {
-    // Clean up test directory
+    delete process.env.USER_DATA_DIR;
     try {
-      await fs.rm(TEST_DATA_DIR, { recursive: true, force: true });
+      await fs.rm(testDir, { recursive: true, force: true });
     } catch {
-      // Ignore
+      // Ignore cleanup errors
     }
   });
 
@@ -68,25 +78,15 @@ describe("User Storage", () => {
     });
 
     it("should assign administrator role to first user", async () => {
-      // Get current user count to determine if this will be first user
-      const existingUsers = await getAllUsers();
-      const willBeFirst = existingUsers.length === 0;
-
-      const userData = {
-        email: `admin-${Date.now()}@test.example.com`,
+      const user = await createUser({
+        email: "admin@example.com",
         passwordHash: "hash",
         username: "Admin",
-        role: ["administrator" as UserRole],
-      };
+        role: ["user" as UserRole],
+      });
 
-      const user = await createUser(userData);
-
-      if (willBeFirst) {
-        expect(user.role).toContain("administrator");
-      } else {
-        // If users already exist, this will be a regular user
-        expect(user.role).toContain("user");
-      }
+      // First user always gets administrator role
+      expect(user.role).toContain("administrator");
     });
 
     it("should assign user role to subsequent users", async () => {
@@ -99,14 +99,12 @@ describe("User Storage", () => {
       });
 
       // Create second user (regular user)
-      const userData = {
+      const user = await createUser({
         email: "user@example.com",
         passwordHash: "hash",
         username: "User",
         role: ["user" as UserRole],
-      };
-
-      const user = await createUser(userData);
+      });
 
       expect(user.role).toContain("user");
       expect(user.role).not.toContain("administrator");
@@ -153,7 +151,6 @@ describe("User Storage", () => {
     });
 
     it("should normalize role to array", async () => {
-      // This tests backward compatibility with single role values
       const user = await createUser({
         email: "test@example.com",
         passwordHash: "hash",
@@ -200,17 +197,16 @@ describe("User Storage", () => {
   });
 
   describe("getAllUsers", () => {
-    it("should return all users including test users", async () => {
-      const timestamp = Date.now();
+    it("should return all users", async () => {
       const user1 = await createUser({
-        email: `user1-${timestamp}@test.example.com`,
+        email: "user1@example.com",
         passwordHash: "hash",
         username: "User1",
         role: ["user" as UserRole],
       });
 
       const user2 = await createUser({
-        email: `user2-${timestamp}@test.example.com`,
+        email: "user2@example.com",
         passwordHash: "hash",
         username: "User2",
         role: ["user" as UserRole],
@@ -218,18 +214,16 @@ describe("User Storage", () => {
 
       const users = await getAllUsers();
 
-      // Should include our test users
-      const testUserEmails = [user1.email, user2.email];
-      const foundUsers = users.filter((u) => testUserEmails.includes(u.email));
-      expect(foundUsers.length).toBe(2);
+      // First user gets admin role, so there are 2 users total
+      expect(users.length).toBe(2);
       expect(users.map((u) => u.email)).toContain(user1.email);
       expect(users.map((u) => u.email)).toContain(user2.email);
-    }, 15000);
+    });
 
-    it("should return users (may include existing data)", async () => {
+    it("should return empty array when no users exist", async () => {
       const users = await getAllUsers();
-      // May have existing users, so just check it's an array
       expect(Array.isArray(users)).toBe(true);
+      expect(users.length).toBe(0);
     });
 
     it("should skip invalid JSON files", async () => {
@@ -241,15 +235,13 @@ describe("User Storage", () => {
         role: ["user" as UserRole],
       });
 
-      // Create an invalid JSON file manually
-      const invalidPath = path.join(TEST_DATA_DIR, "invalid.json");
-      await fs.mkdir(TEST_DATA_DIR, { recursive: true });
+      // Create an invalid JSON file manually in the test data dir
+      const invalidPath = path.join(testDir, "invalid.json");
       await fs.writeFile(invalidPath, "invalid json", "utf-8");
 
       const users = await getAllUsers();
-      // Should still return the valid user
-      expect(users.length).toBeGreaterThanOrEqual(1);
-      expect(users.find((u) => u.email === "valid@example.com")).toBeDefined();
+      expect(users.length).toBe(1);
+      expect(users[0].email).toBe("valid@example.com");
     });
   });
 
@@ -269,7 +261,7 @@ describe("User Storage", () => {
 
       expect(updated.username).toBe("Updated");
       expect(updated.email).toBe("updated@example.com");
-      expect(updated.id).toBe(user.id); // ID should not change
+      expect(updated.id).toBe(user.id);
     });
 
     it("should preserve ID", async () => {
@@ -322,11 +314,9 @@ describe("User Storage", () => {
         role: ["user" as UserRole],
       });
 
-      // Update should use atomic write
       const updated = await updateUser(user.id, { username: "Updated" });
 
       expect(updated.username).toBe("Updated");
-      // Verify file exists and is valid
       const retrieved = await getUserById(user.id);
       expect(retrieved?.username).toBe("Updated");
     });
@@ -334,6 +324,14 @@ describe("User Storage", () => {
 
   describe("suspendUser", () => {
     it("should suspend an active user", async () => {
+      // Create admin first so test user isn't last admin
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
       const user = await createUser({
         email: "suspend-test@example.com",
         passwordHash: "hash",
@@ -350,6 +348,14 @@ describe("User Storage", () => {
     });
 
     it("should increment sessionVersion on suspension", async () => {
+      // Create admin first so test user isn't last admin
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
       const user = await createUser({
         email: "session-test@example.com",
         passwordHash: "hash",
@@ -370,6 +376,14 @@ describe("User Storage", () => {
 
   describe("reactivateUser", () => {
     it("should reactivate a suspended user", async () => {
+      // Create admin first so test user isn't last admin
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
       const user = await createUser({
         email: "reactivate-test@example.com",
         passwordHash: "hash",
@@ -392,6 +406,14 @@ describe("User Storage", () => {
 
   describe("updateUserRoles", () => {
     it("should update user roles", async () => {
+      // Create admin first so test user isn't last admin
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
       const user = await createUser({
         email: "role-test@example.com",
         passwordHash: "hash",
@@ -408,6 +430,14 @@ describe("User Storage", () => {
     });
 
     it("should increment sessionVersion on role demotion", async () => {
+      // Create admin first so test user isn't last admin
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
       const user = await createUser({
         email: "demotion-test@example.com",
         passwordHash: "hash",
@@ -439,65 +469,87 @@ describe("User Storage", () => {
 
   describe("countAdmins", () => {
     it("should count administrators", async () => {
+      // Empty directory — no admins
       const count = await countAdmins();
-      expect(count).toBeGreaterThanOrEqual(0);
+      expect(count).toBe(0);
+    });
+
+    it("should count after creating admin", async () => {
+      // First user gets administrator role
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
+      const count = await countAdmins();
+      expect(count).toBe(1);
     });
   });
 
   describe("isLastAdmin", () => {
-    it("should correctly identify last admin status", async () => {
-      // Create an admin user
+    it("should return true for the only admin", async () => {
       const admin = await createUser({
-        email: "last-admin-test@example.com",
+        email: "admin@example.com",
         passwordHash: "hash",
-        username: "LastAdminTest",
+        username: "Admin",
         role: ["administrator" as UserRole],
       });
 
-      // Check if this user is the last admin
+      // First user gets admin role automatically
       const result = await isLastAdmin(admin.id);
-      // Result depends on whether there are other admins in the system
-      expect(typeof result).toBe("boolean");
+      expect(result).toBe(true);
+    });
+
+    it("should return false for non-admin", async () => {
+      // Create first user (admin)
+      await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
+
+      // Create second user (regular user)
+      const user = await createUser({
+        email: "user@example.com",
+        passwordHash: "hash",
+        username: "User",
+        role: ["user" as UserRole],
+      });
+
+      const result = await isLastAdmin(user.id);
+      expect(result).toBe(false);
     });
   });
 
   describe("last-admin protection", () => {
     it("should prevent suspending the last administrator", async () => {
-      // Get current admin count
-      const adminCount = await countAdmins();
+      // First user automatically gets admin role
+      const admin = await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
 
-      if (adminCount === 1) {
-        // Find the sole admin
-        const users = await getAllUsers();
-        const soleAdmin = users.find((u) =>
-          Array.isArray(u.role) ? u.role.includes("administrator") : u.role === "administrator"
-        );
-
-        if (soleAdmin) {
-          await expect(suspendUser(soleAdmin.id, "some-other-admin", "Test")).rejects.toThrow(
-            /last administrator/i
-          );
-        }
-      }
+      await expect(suspendUser(admin.id, "some-other-admin", "Test")).rejects.toThrow(
+        /last administrator/i
+      );
     });
 
     it("should prevent demoting the last administrator", async () => {
-      // Get current admin count
-      const adminCount = await countAdmins();
+      const admin = await createUser({
+        email: "admin@example.com",
+        passwordHash: "hash",
+        username: "Admin",
+        role: ["administrator" as UserRole],
+      });
 
-      if (adminCount === 1) {
-        // Find the sole admin
-        const users = await getAllUsers();
-        const soleAdmin = users.find((u) =>
-          Array.isArray(u.role) ? u.role.includes("administrator") : u.role === "administrator"
-        );
-
-        if (soleAdmin) {
-          await expect(updateUserRoles(soleAdmin.id, ["user"], "some-other-admin")).rejects.toThrow(
-            /last administrator/i
-          );
-        }
-      }
-    }, 15000);
+      await expect(updateUserRoles(admin.id, ["user"], "some-other-admin")).rejects.toThrow(
+        /last administrator/i
+      );
+    });
   });
 });
