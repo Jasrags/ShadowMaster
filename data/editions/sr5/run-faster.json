@@ -12,7 +12,1427 @@
     "isbn": "978-1-936876-88-2"
   },
   "modules": {
-    "metatypes": { "mergeStrategy": "append", "payload": { "metatypes": [] } },
+    "metatypes": {
+      "mergeStrategy": "append",
+      "payload": {
+        "metatypes": [
+          {
+            "id": "gnome",
+            "name": "Gnome",
+            "baseMetatype": "dwarf",
+            "description": "Small, magically resistant dwarves known for their youthful appearance and arcane nullifying abilities.",
+            "karmaCost": 7,
+            "source": {
+              "book": "run-faster",
+              "page": 88
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 4
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 4
+              },
+              "willpower": {
+                "min": 2,
+                "max": 7
+              },
+              "logic": {
+                "min": 2,
+                "max": 7
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Arcane Arrester (2)", "Neoteny", "Thermographic Vision"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 1
+              }
+            }
+          },
+          {
+            "id": "hanuman",
+            "name": "Hanuman",
+            "baseMetatype": "dwarf",
+            "description": "Simian dwarves from the Indian subcontinent with prehensile tails and monkey-like features.",
+            "karmaCost": 5,
+            "source": {
+              "book": "run-faster",
+              "page": 89
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 1,
+                "max": 5
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Low-Light Vision",
+              "Monkey Paws",
+              "Prehensile Tail",
+              "Unusual Hair (Body)"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 1
+              }
+            }
+          },
+          {
+            "id": "koborokuru",
+            "name": "Koborokuru",
+            "baseMetatype": "dwarf",
+            "description": "Japanese dwarves known for their speed and unusual body hair patterns.",
+            "karmaCost": 0,
+            "source": {
+              "book": "run-faster",
+              "page": 89
+            },
+            "attributes": {
+              "body": {
+                "min": 2,
+                "max": 7
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 2,
+                "max": 7
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Celerity",
+              "Resistance to Pathogens/Toxins",
+              "Thermographic Vision",
+              "Unusual Hair"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 1
+              }
+            }
+          },
+          {
+            "id": "menehune",
+            "name": "Menehune",
+            "baseMetatype": "dwarf",
+            "description": "Hawaiian dwarves adapted to aquatic environments with exceptional swimming abilities.",
+            "karmaCost": 2,
+            "source": {
+              "book": "run-faster",
+              "page": 90
+            },
+            "attributes": {
+              "body": {
+                "min": 2,
+                "max": 7
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 5
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Resistance to Pathogens/Toxins",
+              "Thermographic Vision",
+              "Underwater Vision"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 1
+              }
+            }
+          },
+          {
+            "id": "dryad",
+            "name": "Dryad",
+            "baseMetatype": "elf",
+            "description": "Elf variants with an innate connection to nature, possessing glamour and symbiotic plant bonds.",
+            "karmaCost": 0,
+            "source": {
+              "book": "run-faster",
+              "page": 90
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 5
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 3,
+                "max": 8
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Glamour", "Low-Light Vision", "Symbiosis"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 3
+              },
+              "D": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "nocturna",
+            "name": "Nocturna",
+            "baseMetatype": "elf",
+            "description": "Nocturnal elves covered in colored fur, with enhanced hearing and aversion to sunlight.",
+            "karmaCost": 0,
+            "source": {
+              "book": "run-faster",
+              "page": 91
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 5
+              },
+              "agility": {
+                "min": 3,
+                "max": 8
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Allergy (Sunlight, Mild)",
+              "Low-Light Vision",
+              "Keen-eared",
+              "Nocturnal",
+              "Unusual Hair (Colored Fur)"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 3
+              },
+              "D": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "wakyambi",
+            "name": "Wakyambi",
+            "baseMetatype": "elf",
+            "description": "Exceptionally tall, slender African elves known for their elongated limbs and speed.",
+            "karmaCost": 12,
+            "source": {
+              "book": "run-faster",
+              "page": 92
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 2,
+                "max": 7
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Celerity", "Elongated Limbs", "Low-Light Vision"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 3
+              },
+              "D": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "xapiri-thepe",
+            "name": "Xapiri Thëpë",
+            "baseMetatype": "elf",
+            "description": "Amazonian elves who photosynthesize, sensitive to pollutants but deeply connected to nature.",
+            "karmaCost": 0,
+            "source": {
+              "book": "run-faster",
+              "page": 92
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Allergy (Pollutants, Mild)", "Low-Light Vision", "Photometabolism"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 3
+              },
+              "D": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "nartaki",
+            "name": "Nartaki",
+            "baseMetatype": "human",
+            "description": "Multi-armed humans from South Asia, possessing an extra pair of arms and striking skin coloring.",
+            "karmaCost": 0,
+            "source": {
+              "book": "run-faster",
+              "page": 93
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Shiva Arms", "Striking Skin Pigmentation"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 4
+              },
+              "D": {
+                "specialAttributePoints": 2
+              },
+              "E": {
+                "specialAttributePoints": 1
+              }
+            }
+          },
+          {
+            "id": "hobgoblin",
+            "name": "Hobgoblin",
+            "baseMetatype": "ork",
+            "description": "European ork variants with pronounced fangs, vivid eyes, and a vindictive temperament.",
+            "karmaCost": 5,
+            "source": {
+              "book": "run-faster",
+              "page": 93
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Fangs",
+              "Low-Light Vision",
+              "Extravagant Eyes",
+              "Poor Self Control (Vindictive)"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "ogre",
+            "name": "Ogre",
+            "baseMetatype": "ork",
+            "description": "Massive ork variants with iron stomachs and exceptional physical strength.",
+            "karmaCost": 8,
+            "source": {
+              "book": "run-faster",
+              "page": 94
+            },
+            "attributes": {
+              "body": {
+                "min": 4,
+                "max": 9
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 5
+              },
+              "strength": {
+                "min": 3,
+                "max": 8
+              },
+              "willpower": {
+                "min": 2,
+                "max": 7
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 4
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Low-Light Vision", "Ogre Stomach"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "oni",
+            "name": "Oni",
+            "baseMetatype": "ork",
+            "description": "Japanese ork variants with striking skin pigmentation and balanced physical attributes.",
+            "karmaCost": 4,
+            "source": {
+              "book": "run-faster",
+              "page": 94
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Low-Light Vision", "Striking Skin Pigmentation"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "satyr",
+            "name": "Satyr",
+            "baseMetatype": "ork",
+            "description": "Goat-legged ork variants known for their agility and social charm.",
+            "karmaCost": 10,
+            "source": {
+              "book": "run-faster",
+              "page": 95
+            },
+            "attributes": {
+              "body": {
+                "min": 2,
+                "max": 7
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 2,
+                "max": 7
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 5
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Low-Light Vision", "Satyr Legs"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "cyclopean",
+            "name": "Cyclopean",
+            "baseMetatype": "troll",
+            "description": "One-eyed troll variants with massive frames and extraordinary strength.",
+            "karmaCost": 2,
+            "source": {
+              "book": "run-faster",
+              "page": 95
+            },
+            "attributes": {
+              "body": {
+                "min": 5,
+                "max": 10
+              },
+              "agility": {
+                "min": 1,
+                "max": 5
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 6,
+                "max": 11
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 4
+              },
+              "intuition": {
+                "min": 1,
+                "max": 5
+              },
+              "charisma": {
+                "min": 1,
+                "max": 4
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Cyclopean Eye", "+1 Reach"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 5
+              },
+              "B": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "fomorian",
+            "name": "Fomorian",
+            "baseMetatype": "troll",
+            "description": "Celtic troll variants with arcane resistance and formidable physical power.",
+            "karmaCost": 12,
+            "source": {
+              "book": "run-faster",
+              "page": 96
+            },
+            "attributes": {
+              "body": {
+                "min": 4,
+                "max": 9
+              },
+              "agility": {
+                "min": 1,
+                "max": 5
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 5,
+                "max": 10
+              },
+              "willpower": {
+                "min": 1,
+                "max": 5
+              },
+              "logic": {
+                "min": 1,
+                "max": 4
+              },
+              "intuition": {
+                "min": 1,
+                "max": 4
+              },
+              "charisma": {
+                "min": 1,
+                "max": 5
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Arcane Arrester (1)", "Thermographic Vision", "+1 Reach"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 5
+              },
+              "B": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "giant",
+            "name": "Giant",
+            "baseMetatype": "troll",
+            "description": "Bark-skinned troll variants of enormous size with natural dermal armor.",
+            "karmaCost": 2,
+            "source": {
+              "book": "run-faster",
+              "page": 96
+            },
+            "attributes": {
+              "body": {
+                "min": 5,
+                "max": 10
+              },
+              "agility": {
+                "min": 1,
+                "max": 5
+              },
+              "reaction": {
+                "min": 1,
+                "max": 5
+              },
+              "strength": {
+                "min": 5,
+                "max": 10
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 5
+              },
+              "charisma": {
+                "min": 1,
+                "max": 5
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Dermal Alteration (Bark)", "Thermographic Vision", "+1 Reach"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 5
+              },
+              "B": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "minotaur",
+            "name": "Minotaur",
+            "baseMetatype": "troll",
+            "description": "Bull-horned troll variants with devastating gore attacks and immense body mass.",
+            "karmaCost": 2,
+            "source": {
+              "book": "run-faster",
+              "page": 97
+            },
+            "attributes": {
+              "body": {
+                "min": 6,
+                "max": 11
+              },
+              "agility": {
+                "min": 1,
+                "max": 5
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 5,
+                "max": 10
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 4
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Goring Horns", "Thermographic Vision", "+1 Reach"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 5
+              },
+              "B": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "centaur",
+            "name": "Centaur",
+            "baseMetatype": null,
+            "description": "Four-legged metasapients with innate magical abilities, combining equine and humanoid forms.",
+            "karmaCost": 25,
+            "source": {
+              "book": "run-faster",
+              "page": 98
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 3,
+                "max": 8
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 5
+              },
+              "charisma": {
+                "min": 1,
+                "max": 5
+              },
+              "edge": {
+                "min": 1,
+                "max": 5
+              },
+              "magic": {
+                "min": 1,
+                "max": 1
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Low-Light Vision",
+              "Thermographic Vision",
+              "Magic Sense",
+              "Natural Weapon (Kick: DV (STR +2)P, AP +1, +1 Reach)",
+              "Search"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 6
+              },
+              "B": {
+                "specialAttributePoints": 3
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "naga",
+            "name": "Naga",
+            "baseMetatype": null,
+            "description": "Serpentine metasapients with natural armor, venom, and dual-natured perception.",
+            "karmaCost": 25,
+            "source": {
+              "book": "run-faster",
+              "page": 99
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 1,
+                "max": 4
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 4,
+                "max": 9
+              },
+              "willpower": {
+                "min": 2,
+                "max": 7
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 5
+              },
+              "magic": {
+                "min": 1,
+                "max": 1
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Armor 8",
+              "Cold-Blooded",
+              "Dual Natured",
+              "Guard",
+              "Natural Weapon (Bite: DV (STR +1)P, AP -2, Reach -1)",
+              "Venom"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 4
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "pixie",
+            "name": "Pixie",
+            "baseMetatype": null,
+            "description": "Tiny winged metasapients with natural concealment abilities but limited education.",
+            "karmaCost": 15,
+            "source": {
+              "book": "run-faster",
+              "page": 100
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 2
+              },
+              "agility": {
+                "min": 3,
+                "max": 8
+              },
+              "reaction": {
+                "min": 3,
+                "max": 8
+              },
+              "strength": {
+                "min": 1,
+                "max": 2
+              },
+              "willpower": {
+                "min": 3,
+                "max": 8
+              },
+              "logic": {
+                "min": 2,
+                "max": 7
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 3,
+                "max": 8
+              },
+              "edge": {
+                "min": 2,
+                "max": 7
+              },
+              "magic": {
+                "min": 1,
+                "max": 1
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Astral Perception",
+              "Concealment (Self Only)",
+              "Vanishing",
+              "Uneducated"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 6
+              },
+              "B": {
+                "specialAttributePoints": 3
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "sasquatch",
+            "name": "Sasquatch",
+            "baseMetatype": null,
+            "description": "Massive primate metasapients with mimicry abilities and dual-natured awareness.",
+            "karmaCost": 20,
+            "source": {
+              "book": "run-faster",
+              "page": 101
+            },
+            "attributes": {
+              "body": {
+                "min": 6,
+                "max": 11
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 5,
+                "max": 10
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 6
+              },
+              "magic": {
+                "min": 1,
+                "max": 1
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Dual Natured",
+              "Mimicry",
+              "Natural Weapon (Claws: DV (STR +1)P, AP -, +1 Reach)",
+              "Uneducated"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 5
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          }
+        ]
+      }
+    },
     "qualities": {
       "mergeStrategy": "append",
       "payload": {
@@ -26,13 +1446,18 @@
               {
                 "id": "adrenaline-surge-first-action",
                 "type": "special-ability",
-                "target": { "stat": "initiative" },
+                "target": {
+                  "stat": "initiative"
+                },
                 "value": 0,
                 "description": "Act first in the first Initiative Pass, before Initiative is rolled.",
                 "triggers": ["combat-start"]
               }
             ],
-            "source": { "book": "run-faster", "page": 144 }
+            "source": {
+              "book": "run-faster",
+              "page": 144
+            }
           },
           {
             "id": "animal-empathy",
@@ -43,13 +1468,18 @@
               {
                 "id": "animal-empathy-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "animal-handling" },
+                "target": {
+                  "skill": "animal-handling"
+                },
                 "value": 2,
                 "description": "+2 dice to Animal Handling tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 144 }
+            "source": {
+              "book": "run-faster",
+              "page": 144
+            }
           },
           {
             "id": "black-market-pipeline",
@@ -58,14 +1488,20 @@
             "summary": "10% price reduction and +2 Availability for one contact or gear category.",
             "requiresSpecification": true,
             "specificationLabel": "Contact/Category",
-            "source": { "book": "run-faster", "page": 144 }
+            "source": {
+              "book": "run-faster",
+              "page": 144
+            }
           },
           {
             "id": "born-rich",
             "name": "Born Rich",
             "karmaCost": 5,
             "summary": "Trade up to 40 Karma for nuyen at character creation instead of the normal 10.",
-            "source": { "book": "run-faster", "page": 145 }
+            "source": {
+              "book": "run-faster",
+              "page": 145
+            }
           },
           {
             "id": "city-slicker",
@@ -77,44 +1513,64 @@
               {
                 "id": "city-slicker-urban-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "outdoors" },
+                "target": {
+                  "skillCategory": "outdoors"
+                },
                 "value": 1,
-                "condition": { "environment": "urban" },
+                "condition": {
+                  "environment": "urban"
+                },
                 "description": "+1 die to Outdoors skill tests in urban environments.",
                 "triggers": ["skill-test"]
               },
               {
                 "id": "city-slicker-rural-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skills": ["perception", "survival"] },
+                "target": {
+                  "skills": ["perception", "survival"]
+                },
                 "value": -1,
-                "condition": { "environment": "non-urban" },
+                "condition": {
+                  "environment": "non-urban"
+                },
                 "description": "-1 die to Perception and Survival tests outside urban areas.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 145 }
+            "source": {
+              "book": "run-faster",
+              "page": 145
+            }
           },
           {
             "id": "college-education",
             "name": "College Education",
             "karmaCost": 4,
             "summary": "Half-price Academic Knowledge skills at character creation.",
-            "source": { "book": "run-faster", "page": 145 }
+            "source": {
+              "book": "run-faster",
+              "page": 145
+            }
           },
           {
             "id": "common-sense",
             "name": "Common Sense",
             "karmaCost": 3,
             "summary": "GM warns the player when the character is about to do something obviously foolish (once per session via Edge).",
-            "source": { "book": "run-faster", "page": 145 }
+            "source": {
+              "book": "run-faster",
+              "page": 145
+            }
           },
           {
             "id": "daredevil",
             "name": "Daredevil",
             "karmaCost": 6,
             "summary": "Regain 2 Edge instead of 1 for daring actions.",
-            "source": { "book": "run-faster", "page": 145 }
+            "source": {
+              "book": "run-faster",
+              "page": 145
+            }
           },
           {
             "id": "digital-doppelganger",
@@ -125,13 +1581,18 @@
               {
                 "id": "digital-doppelganger-threshold",
                 "type": "threshold-modifier",
-                "target": { "test": "matrix-tracking" },
+                "target": {
+                  "test": "matrix-tracking"
+                },
                 "value": 2,
                 "description": "+2 to the threshold for Matrix searches targeting your SIN.",
                 "triggers": ["matrix-search"]
               }
             ],
-            "source": { "book": "run-faster", "page": 146 }
+            "source": {
+              "book": "run-faster",
+              "page": 146
+            }
           },
           {
             "id": "disgraced",
@@ -142,14 +1603,21 @@
               {
                 "id": "disgraced-intimidate-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "intimidation" },
+                "target": {
+                  "skill": "intimidation"
+                },
                 "value": 2,
-                "condition": { "customCondition": "target-is-criminal" },
+                "condition": {
+                  "customCondition": "target-is-criminal"
+                },
                 "description": "+2 dice to Intimidation tests against criminals.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 146 }
+            "source": {
+              "book": "run-faster",
+              "page": 146
+            }
           },
           {
             "id": "erased",
@@ -161,7 +1629,9 @@
               {
                 "id": "erased-no-matrix-search",
                 "type": "special-ability",
-                "target": { "stat": "matrix-presence" },
+                "target": {
+                  "stat": "matrix-presence"
+                },
                 "value": 0,
                 "description": "No Matrix search results exist for this character.",
                 "triggers": ["always"]
@@ -169,13 +1639,18 @@
               {
                 "id": "erased-public-awareness-cap",
                 "type": "derived-stat-modifier",
-                "target": { "stat": "public-awareness-maximum" },
+                "target": {
+                  "stat": "public-awareness-maximum"
+                },
                 "value": 1,
                 "description": "Public Awareness cannot exceed 1.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 146 }
+            "source": {
+              "book": "run-faster",
+              "page": 146
+            }
           },
           {
             "id": "fame",
@@ -215,14 +1690,20 @@
               }
             },
             "incompatibilities": ["erased"],
-            "source": { "book": "run-faster", "page": 146 }
+            "source": {
+              "book": "run-faster",
+              "page": 146
+            }
           },
           {
             "id": "friends-in-high-places",
             "name": "Friends in High Places",
             "karmaCost": 8,
             "summary": "Extra CHA x 4 Karma for contacts with Connection 8+.",
-            "source": { "book": "run-faster", "page": 147 }
+            "source": {
+              "book": "run-faster",
+              "page": 147
+            }
           },
           {
             "id": "hawk-eye",
@@ -233,13 +1714,19 @@
               {
                 "id": "hawk-eye-perception",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "perception", "condition": "vision" },
+                "target": {
+                  "skill": "perception",
+                  "condition": "vision"
+                },
                 "value": 1,
                 "description": "+1 die to visual Perception tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 147 }
+            "source": {
+              "book": "run-faster",
+              "page": 147
+            }
           },
           {
             "id": "inspired",
@@ -250,20 +1737,28 @@
               {
                 "id": "inspired-artisan-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skills": ["artisan", "performance"] },
+                "target": {
+                  "skills": ["artisan", "performance"]
+                },
                 "value": 1,
                 "description": "+1 die to Artisan or Performance tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 147 }
+            "source": {
+              "book": "run-faster",
+              "page": 147
+            }
           },
           {
             "id": "jack-of-all-trades",
             "name": "Jack of All Trades",
             "karmaCost": 2,
             "summary": "-1 Karma cost for skills up to rating 5; +2 Karma cost beyond rating 5.",
-            "source": { "book": "run-faster", "page": 147 }
+            "source": {
+              "book": "run-faster",
+              "page": 147
+            }
           },
           {
             "id": "lightning-reflexes",
@@ -277,7 +1772,9 @@
               {
                 "id": "lightning-reflexes-reaction",
                 "type": "attribute-modifier",
-                "target": { "attribute": "reaction" },
+                "target": {
+                  "attribute": "reaction"
+                },
                 "value": 1,
                 "description": "+1 to Reaction attribute.",
                 "triggers": ["always"]
@@ -285,20 +1782,28 @@
               {
                 "id": "lightning-reflexes-initiative",
                 "type": "initiative-modifier",
-                "target": { "stat": "initiative-dice" },
+                "target": {
+                  "stat": "initiative-dice"
+                },
                 "value": 1,
                 "description": "+1d6 to Initiative.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 147 }
+            "source": {
+              "book": "run-faster",
+              "page": 147
+            }
           },
           {
             "id": "linguist",
             "name": "Linguist",
             "karmaCost": 4,
             "summary": "Half language learning time; 2-for-1 language skills at character creation.",
-            "source": { "book": "run-faster", "page": 148 }
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            }
           },
           {
             "id": "made-man",
@@ -307,7 +1812,10 @@
             "summary": "Free syndicate group contact; fence services at 30%.",
             "requiresSpecification": true,
             "specificationLabel": "Syndicate",
-            "source": { "book": "run-faster", "page": 148 }
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            }
           },
           {
             "id": "night-vision",
@@ -318,7 +1826,9 @@
               {
                 "id": "night-vision-low-light",
                 "type": "special-ability",
-                "target": { "sense": "vision" },
+                "target": {
+                  "sense": "vision"
+                },
                 "value": 0,
                 "description": "Natural low-light vision; no penalties in dim light conditions.",
                 "triggers": ["always"]
@@ -326,13 +1836,18 @@
               {
                 "id": "night-vision-glare-penalty",
                 "type": "visibility-modifier",
-                "target": { "condition": "glare" },
+                "target": {
+                  "condition": "glare"
+                },
                 "value": -1,
                 "description": "-1 die penalty in bright sunlight or glare conditions.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 148 }
+            "source": {
+              "book": "run-faster",
+              "page": 148
+            }
           },
           {
             "id": "outdoorsman",
@@ -344,23 +1859,34 @@
               {
                 "id": "outdoorsman-rural-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "outdoors" },
+                "target": {
+                  "skillCategory": "outdoors"
+                },
                 "value": 2,
-                "condition": { "environment": "rural" },
+                "condition": {
+                  "environment": "rural"
+                },
                 "description": "+2 dice to Outdoors skill tests in rural/wilderness environments.",
                 "triggers": ["skill-test"]
               },
               {
                 "id": "outdoorsman-urban-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skills": ["perception", "survival"] },
+                "target": {
+                  "skills": ["perception", "survival"]
+                },
                 "value": -1,
-                "condition": { "environment": "urban" },
+                "condition": {
+                  "environment": "urban"
+                },
                 "description": "-1 die to Perception and Survival tests in urban areas.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 149 }
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            }
           },
           {
             "id": "overclocker",
@@ -374,13 +1900,18 @@
               {
                 "id": "overclocker-asdf-bonus",
                 "type": "attribute-modifier",
-                "target": { "attribute": "cyberdeck-specification" },
+                "target": {
+                  "attribute": "cyberdeck-specification"
+                },
                 "value": 1,
                 "description": "+1 to the chosen cyberdeck ASDF attribute rating.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 149 }
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            }
           },
           {
             "id": "perceptive",
@@ -390,20 +1921,35 @@
             "minRating": 1,
             "maxRating": 2,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 10 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              }
             },
             "effects": [
               {
                 "id": "perceptive-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "perception" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "skill": "perception"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+1 die per rating to Perception tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 149 }
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            }
           },
           {
             "id": "perfect-time",
@@ -414,13 +1960,18 @@
               {
                 "id": "perfect-time-free-action",
                 "type": "special-ability",
-                "target": { "stat": "free-actions" },
+                "target": {
+                  "stat": "free-actions"
+                },
                 "value": 1,
                 "description": "+1 Free Action per Initiative Pass.",
                 "triggers": ["initiative-pass"]
               }
             ],
-            "source": { "book": "run-faster", "page": 149 }
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            }
           },
           {
             "id": "poor-link",
@@ -431,20 +1982,28 @@
               {
                 "id": "poor-link-ritual-resistance",
                 "type": "dice-pool-modifier",
-                "target": { "test": "resist-ritual-spellcasting" },
+                "target": {
+                  "test": "resist-ritual-spellcasting"
+                },
                 "value": 2,
                 "description": "+2 dice to resist ritual spells targeting this character.",
                 "triggers": ["resist-spell"]
               }
             ],
-            "source": { "book": "run-faster", "page": 149 }
+            "source": {
+              "book": "run-faster",
+              "page": 149
+            }
           },
           {
             "id": "privileged-family-name",
             "name": "Privileged Family Name",
             "karmaCost": 7,
             "summary": "Minor misdemeanor immunity in home sprawl due to family connections.",
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "restricted-gear",
@@ -453,14 +2012,20 @@
             "summary": "Buy one item up to Availability 24 at character creation.",
             "limit": 1,
             "requiresGMApproval": true,
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "school-of-hard-knocks",
             "name": "School of Hard Knocks",
             "karmaCost": 4,
             "summary": "Half-price Street Knowledge skills at character creation.",
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "sense-of-direction",
@@ -471,13 +2036,18 @@
               {
                 "id": "sense-of-direction-navigation",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "navigation" },
+                "target": {
+                  "skill": "navigation"
+                },
                 "value": 1,
                 "description": "+1 die to Navigation tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "sensei",
@@ -487,7 +2057,10 @@
             "requiresSpecification": true,
             "specificationLabel": "Skill",
             "specificationSource": "skills",
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "solid-rep",
@@ -499,17 +2072,33 @@
             "minRating": 1,
             "maxRating": 2,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 2, "name": "Solid Rep" },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 4, "name": "Legendary Rep" }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 2,
+                "name": "Solid Rep"
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4,
+                "name": "Legendary Rep"
+              }
             },
-            "source": { "book": "run-faster", "page": 150 }
+            "source": {
+              "book": "run-faster",
+              "page": 150
+            }
           },
           {
             "id": "speed-reading",
             "name": "Speed Reading",
             "karmaCost": 2,
             "summary": "Read approximately 800 words per 5 seconds.",
-            "source": { "book": "run-faster", "page": 151 }
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            }
           },
           {
             "id": "spike-resistance",
@@ -519,21 +2108,40 @@
             "minRating": 1,
             "maxRating": 3,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 10 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 20 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 30 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 30
+              }
             },
             "effects": [
               {
                 "id": "spike-resistance-biofeedback",
                 "type": "dice-pool-modifier",
-                "target": { "test": "resist-biofeedback" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "test": "resist-biofeedback"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+1 die per rating to resist biofeedback damage.",
                 "triggers": ["resist-damage"]
               }
             ],
-            "source": { "book": "run-faster", "page": 151 }
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            }
           },
           {
             "id": "spirit-whisperer",
@@ -548,13 +2156,18 @@
               {
                 "id": "spirit-whisperer-force-bonus",
                 "type": "summoning-modifier",
-                "target": { "stat": "spirit-force" },
+                "target": {
+                  "stat": "spirit-force"
+                },
                 "value": 1,
                 "description": "Summoned spirits of the chosen type arrive at Force + 1.",
                 "triggers": ["summoning"]
               }
             ],
-            "source": { "book": "run-faster", "page": 151 }
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            }
           },
           {
             "id": "steely-eyed-wheelman",
@@ -565,20 +2178,28 @@
               {
                 "id": "steely-eyed-wheelman-terrain",
                 "type": "special-ability",
-                "target": { "category": "vehicle" },
+                "target": {
+                  "category": "vehicle"
+                },
                 "value": 1,
                 "description": "Reduce terrain modifiers by 1 for vehicle tests.",
                 "triggers": ["vehicle-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 151 }
+            "source": {
+              "book": "run-faster",
+              "page": 151
+            }
           },
           {
             "id": "technical-school-education",
             "name": "Technical School Education",
             "karmaCost": 4,
             "summary": "Half-price Professional Knowledge skills at character creation.",
-            "source": { "book": "run-faster", "page": 152 }
+            "source": {
+              "book": "run-faster",
+              "page": 152
+            }
           },
           {
             "id": "tough-as-nails",
@@ -591,21 +2212,40 @@
             "minRating": 1,
             "maxRating": 3,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 15 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
+              }
             },
             "effects": [
               {
                 "id": "tough-as-nails-condition-monitor",
                 "type": "derived-stat-modifier",
-                "target": { "stat": "condition-monitor-specification" },
-                "value": { "perRating": 1 },
+                "target": {
+                  "stat": "condition-monitor-specification"
+                },
+                "value": {
+                  "perRating": 1
+                },
                 "description": "+1 box per rating to the chosen Condition Monitor (Physical or Stun).",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 152 }
+            "source": {
+              "book": "run-faster",
+              "page": 152
+            }
           },
           {
             "id": "trust-fund",
@@ -648,7 +2288,10 @@
                 "stipend": 10000
               }
             },
-            "source": { "book": "run-faster", "page": 152 }
+            "source": {
+              "book": "run-faster",
+              "page": 152
+            }
           },
           {
             "id": "trustworthy",
@@ -659,7 +2302,9 @@
               {
                 "id": "trustworthy-influence-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "influence" },
+                "target": {
+                  "skillCategory": "influence"
+                },
                 "value": 1,
                 "description": "+1 die to Influence skill group tests.",
                 "triggers": ["skill-test"]
@@ -667,14 +2312,21 @@
               {
                 "id": "trustworthy-social-limit",
                 "type": "limit-modifier",
-                "target": { "limit": "social" },
+                "target": {
+                  "limit": "social"
+                },
                 "value": 2,
-                "condition": { "customCondition": "establishing-trust" },
+                "condition": {
+                  "customCondition": "establishing-trust"
+                },
                 "description": "+2 Social Limit when establishing trust.",
                 "triggers": ["social-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 153 }
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            }
           },
           {
             "id": "vehicle-empathy",
@@ -685,13 +2337,18 @@
               {
                 "id": "vehicle-empathy-bonus",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "vehicle" },
+                "target": {
+                  "skillCategory": "vehicle"
+                },
                 "value": 1,
                 "description": "+1 die to all Vehicle tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 153 }
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            }
           },
           {
             "id": "water-sprite",
@@ -702,13 +2359,18 @@
               {
                 "id": "water-sprite-swimming",
                 "type": "dice-pool-modifier",
-                "target": { "skills": ["diving", "swimming"] },
+                "target": {
+                  "skills": ["diving", "swimming"]
+                },
                 "value": 2,
                 "description": "+2 dice to Diving and Swimming tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 153 }
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            }
           },
           {
             "id": "witness-my-hate",
@@ -720,7 +2382,9 @@
               {
                 "id": "witness-my-hate-damage",
                 "type": "damage-modifier",
-                "target": { "spellCategory": "direct-damage" },
+                "target": {
+                  "spellCategory": "direct-damage"
+                },
                 "value": 2,
                 "description": "+2 DV to Direct Damage combat spells.",
                 "triggers": ["spellcasting"]
@@ -728,13 +2392,19 @@
               {
                 "id": "witness-my-hate-drain",
                 "type": "special-ability",
-                "target": { "stat": "drain", "spellCategory": "direct-damage" },
+                "target": {
+                  "stat": "drain",
+                  "spellCategory": "direct-damage"
+                },
                 "value": 2,
                 "description": "+2 Drain when casting Direct Damage combat spells.",
                 "triggers": ["spellcasting"]
               }
             ],
-            "source": { "book": "run-faster", "page": 153 }
+            "source": {
+              "book": "run-faster",
+              "page": 153
+            }
           }
         ],
         "negative": [
@@ -765,13 +2435,20 @@
               {
                 "id": "albinism-glare-penalty",
                 "type": "visibility-modifier",
-                "target": { "condition": "glare" },
-                "value": { "perRating": -1 },
+                "target": {
+                  "condition": "glare"
+                },
+                "value": {
+                  "perRating": -1
+                },
                 "description": "Increased glare penalties due to lack of pigmentation.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 154 }
+            "source": {
+              "book": "run-faster",
+              "page": 154
+            }
           },
           {
             "id": "amnesia",
@@ -796,7 +2473,10 @@
                 "description": "Complete memory loss; GM controls all backstory reveals."
               }
             },
-            "source": { "book": "run-faster", "page": 154 }
+            "source": {
+              "book": "run-faster",
+              "page": 154
+            }
           },
           {
             "id": "asthma",
@@ -807,13 +2487,18 @@
               {
                 "id": "asthma-fatigue",
                 "type": "special-ability",
-                "target": { "stat": "fatigue-frequency" },
+                "target": {
+                  "stat": "fatigue-frequency"
+                },
                 "value": 2,
                 "description": "Fatigue tests occur at double the normal frequency.",
                 "triggers": ["physical-exertion"]
               }
             ],
-            "source": { "book": "run-faster", "page": 154 }
+            "source": {
+              "book": "run-faster",
+              "page": 154
+            }
           },
           {
             "id": "bi-polar",
@@ -824,13 +2509,18 @@
               {
                 "id": "bi-polar-mood-swing",
                 "type": "attribute-modifier",
-                "target": { "attribute": "variable" },
+                "target": {
+                  "attribute": "variable"
+                },
                 "value": 0,
                 "description": "GM rolls each session to determine mood state; may gain +1 or -1 to social/mental attributes.",
                 "triggers": ["session-start"]
               }
             ],
-            "source": { "book": "run-faster", "page": 154 }
+            "source": {
+              "book": "run-faster",
+              "page": 154
+            }
           },
           {
             "id": "big-regret",
@@ -843,14 +2533,21 @@
               {
                 "id": "big-regret-social-limit",
                 "type": "limit-modifier",
-                "target": { "limit": "social" },
+                "target": {
+                  "limit": "social"
+                },
                 "value": -3,
-                "condition": { "customCondition": "target-knows-regret" },
+                "condition": {
+                  "customCondition": "target-knows-regret"
+                },
                 "description": "-3 Social Limit when dealing with those who know about the regret.",
                 "triggers": ["social-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 155 }
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            }
           },
           {
             "id": "blind",
@@ -862,7 +2559,10 @@
               {
                 "id": "blind-vision-restriction",
                 "type": "skill-restriction",
-                "target": { "skill": "perception", "condition": "vision" },
+                "target": {
+                  "skill": "perception",
+                  "condition": "vision"
+                },
                 "value": 0,
                 "description": "Automatic failure on all vision-based Perception tests.",
                 "triggers": ["skill-test"]
@@ -870,13 +2570,18 @@
               {
                 "id": "blind-combat-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "category": "combat" },
+                "target": {
+                  "category": "combat"
+                },
                 "value": -6,
                 "description": "-6 dice to combat-related tests due to blindness.",
                 "triggers": ["combat-action"]
               }
             ],
-            "source": { "book": "run-faster", "page": 155 }
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            }
           },
           {
             "id": "borrowed-time",
@@ -884,7 +2589,10 @@
             "karmaBonus": 20,
             "summary": "Secret death roll each session; terminal condition.",
             "requiresGMApproval": true,
-            "source": { "book": "run-faster", "page": 155 }
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            }
           },
           {
             "id": "computer-illiterate",
@@ -895,13 +2603,18 @@
               {
                 "id": "computer-illiterate-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "electronics" },
+                "target": {
+                  "skillCategory": "electronics"
+                },
                 "value": -4,
                 "description": "-4 dice to all Computer and Electronics skill tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 155 }
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            }
           },
           {
             "id": "creature-of-comfort",
@@ -933,7 +2646,10 @@
                 "description": "Penalties below Luxury lifestyle."
               }
             },
-            "source": { "book": "run-faster", "page": 155 }
+            "source": {
+              "book": "run-faster",
+              "page": 155
+            }
           },
           {
             "id": "day-job",
@@ -968,7 +2684,10 @@
                 "description": "50+ hours/week."
               }
             },
-            "source": { "book": "run-faster", "page": 156 }
+            "source": {
+              "book": "run-faster",
+              "page": 156
+            }
           },
           {
             "id": "deaf",
@@ -979,20 +2698,29 @@
               {
                 "id": "deaf-hearing-restriction",
                 "type": "skill-restriction",
-                "target": { "skill": "perception", "condition": "hearing" },
+                "target": {
+                  "skill": "perception",
+                  "condition": "hearing"
+                },
                 "value": 0,
                 "description": "Automatic failure on all hearing-based Perception tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 156 }
+            "source": {
+              "book": "run-faster",
+              "page": 156
+            }
           },
           {
             "id": "did-you-just-call-me-dumb",
             "name": "Did You Just Call Me Dumb?",
             "karmaBonus": 3,
             "summary": "Social glitches become critical glitches.",
-            "source": { "book": "run-faster", "page": 156 }
+            "source": {
+              "book": "run-faster",
+              "page": 156
+            }
           },
           {
             "id": "dimmer-bulb",
@@ -1002,9 +2730,21 @@
             "minRating": 1,
             "maxRating": 3,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 15 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
+              }
             },
             "requiresSpecification": true,
             "specificationLabel": "Attribute",
@@ -1013,13 +2753,20 @@
               {
                 "id": "dimmer-bulb-attribute-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "attribute": "specification" },
-                "value": { "perRating": -1 },
+                "target": {
+                  "attribute": "specification"
+                },
+                "value": {
+                  "perRating": -1
+                },
                 "description": "-1 die per rating to tests using the chosen attribute (Logic or Intuition).",
                 "triggers": ["attribute-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 156 }
+            "source": {
+              "book": "run-faster",
+              "page": 156
+            }
           },
           {
             "id": "driven",
@@ -1028,7 +2775,10 @@
             "summary": "Must pursue obsession; +1 Willpower on leads related to it.",
             "requiresSpecification": true,
             "specificationLabel": "Obsession",
-            "source": { "book": "run-faster", "page": 156 }
+            "source": {
+              "book": "run-faster",
+              "page": 156
+            }
           },
           {
             "id": "emotional-attachment",
@@ -1037,14 +2787,20 @@
             "summary": "Must always use chosen item; penalties when separated.",
             "requiresSpecification": true,
             "specificationLabel": "Item",
-            "source": { "book": "run-faster", "page": 157 }
+            "source": {
+              "book": "run-faster",
+              "page": 157
+            }
           },
           {
             "id": "ex-con",
             "name": "Ex-Con",
             "karmaBonus": 15,
             "summary": "Police file, criminal SIN, and parole requirements.",
-            "source": { "book": "run-faster", "page": 157 }
+            "source": {
+              "book": "run-faster",
+              "page": 157
+            }
           },
           {
             "id": "flashbacks",
@@ -1071,28 +2827,40 @@
             },
             "requiresSpecification": true,
             "specificationLabel": "Trigger",
-            "source": { "book": "run-faster", "page": 157 }
+            "source": {
+              "book": "run-faster",
+              "page": 157
+            }
           },
           {
             "id": "hobo-with-a-shotgun",
             "name": "Hobo with a Shotgun",
             "karmaBonus": 10,
             "summary": "Refuses to stay above Squatter lifestyle.",
-            "source": { "book": "run-faster", "page": 157 }
+            "source": {
+              "book": "run-faster",
+              "page": 157
+            }
           },
           {
             "id": "hung-out-to-dry",
             "name": "Hung Out to Dry",
             "karmaBonus": 8,
             "summary": "All contacts have clammed up; cannot use contacts initially.",
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "illiterate",
             "name": "Illiterate",
             "karmaBonus": 5,
             "summary": "Cannot read; skill restrictions for text-dependent tasks.",
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "in-debt",
@@ -1102,25 +2870,88 @@
             "minRating": 1,
             "maxRating": 15,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 1 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 2 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 3 },
-              "4": { "cost": 0, "availability": 0, "karmaCost": 4 },
-              "5": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "6": { "cost": 0, "availability": 0, "karmaCost": 6 },
-              "7": { "cost": 0, "availability": 0, "karmaCost": 7 },
-              "8": { "cost": 0, "availability": 0, "karmaCost": 8 },
-              "9": { "cost": 0, "availability": 0, "karmaCost": 9 },
-              "10": { "cost": 0, "availability": 0, "karmaCost": 10 },
-              "11": { "cost": 0, "availability": 0, "karmaCost": 11 },
-              "12": { "cost": 0, "availability": 0, "karmaCost": 12 },
-              "13": { "cost": 0, "availability": 0, "karmaCost": 13 },
-              "14": { "cost": 0, "availability": 0, "karmaCost": 14 },
-              "15": { "cost": 0, "availability": 0, "karmaCost": 15 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 1
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 2
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 6
+              },
+              "7": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7
+              },
+              "8": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
+              },
+              "9": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 9
+              },
+              "10": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              },
+              "11": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 11
+              },
+              "12": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 12
+              },
+              "13": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 13
+              },
+              "14": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 14
+              },
+              "15": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
+              }
             },
             "nuyenPerPoint": 5000,
             "incompatibilities": ["trust-fund", "born-rich"],
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "incomplete-deprogramming",
@@ -1129,7 +2960,10 @@
             "summary": "Cover identity takes over under stress; Composure (4) test.",
             "requiresSpecification": true,
             "specificationLabel": "Former Group",
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "infirm",
@@ -1139,23 +2973,50 @@
             "minRating": 1,
             "maxRating": 5,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 10 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 15 },
-              "4": { "cost": 0, "availability": 0, "karmaCost": 20 },
-              "5": { "cost": 0, "availability": 0, "karmaCost": 25 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 20
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 25
+              }
             },
             "effects": [
               {
                 "id": "infirm-attribute-max",
                 "type": "attribute-maximum",
-                "target": { "attributeCategory": "physical" },
-                "value": { "perRating": -1 },
+                "target": {
+                  "attributeCategory": "physical"
+                },
+                "value": {
+                  "perRating": -1
+                },
                 "description": "Reduce Physical attribute maximums (Body, Agility, Reaction, Strength) by 1 per rating.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "liar",
@@ -1166,13 +3027,18 @@
               {
                 "id": "liar-social-limit",
                 "type": "limit-modifier",
-                "target": { "limit": "social" },
+                "target": {
+                  "limit": "social"
+                },
                 "value": -1,
                 "description": "-1 Social Limit.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 158 }
+            "source": {
+              "book": "run-faster",
+              "page": 158
+            }
           },
           {
             "id": "night-blindness",
@@ -1183,13 +3049,18 @@
               {
                 "id": "night-blindness-visibility",
                 "type": "visibility-modifier",
-                "target": { "condition": "low-light" },
+                "target": {
+                  "condition": "low-light"
+                },
                 "value": -1,
                 "description": "Light/visibility modifiers shift one category worse.",
                 "triggers": ["always"]
               }
             ],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "oblivious",
@@ -1218,13 +3089,18 @@
               {
                 "id": "oblivious-perception-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "perception" },
+                "target": {
+                  "skill": "perception"
+                },
                 "value": -2,
                 "description": "-2 dice to all Perception tests.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "pacifist",
@@ -1249,7 +3125,10 @@
                 "description": "Will not use violence at all; must find peaceful solutions."
               }
             },
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "paranoia",
@@ -1260,21 +3139,31 @@
               {
                 "id": "paranoia-social-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skillCategory": "social" },
+                "target": {
+                  "skillCategory": "social"
+                },
                 "value": -2,
-                "condition": { "customCondition": "low-loyalty-or-unfamiliar-contact" },
+                "condition": {
+                  "customCondition": "low-loyalty-or-unfamiliar-contact"
+                },
                 "description": "-2 dice to Social tests with low-Loyalty or unfamiliar contacts.",
                 "triggers": ["social-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "paraplegic",
             "name": "Paraplegic",
             "karmaBonus": 10,
             "summary": "Wheelchair mobility; cannot use legs.",
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "phobia",
@@ -1286,12 +3175,35 @@
             "minRating": 1,
             "maxRating": 4,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 5, "name": "Mild / Uncommon" },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 7, "name": "Mild / Common" },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 10, "name": "Severe / Uncommon" },
-              "4": { "cost": 0, "availability": 0, "karmaCost": 15, "name": "Severe / Common" }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5,
+                "name": "Mild / Uncommon"
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7,
+                "name": "Mild / Common"
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10,
+                "name": "Severe / Uncommon"
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 15,
+                "name": "Severe / Common"
+              }
             },
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "pie-iesu-domine",
@@ -1302,7 +3214,9 @@
               {
                 "id": "pie-iesu-domine-hpt",
                 "type": "wound-modifier",
-                "target": { "stat": "wound-threshold" },
+                "target": {
+                  "stat": "wound-threshold"
+                },
                 "value": 1,
                 "description": "Ignore 1 point of wound modifiers (as High Pain Tolerance 1).",
                 "triggers": ["always"]
@@ -1310,13 +3224,18 @@
               {
                 "id": "pie-iesu-domine-starting-damage",
                 "type": "special-ability",
-                "target": { "stat": "physical-damage" },
+                "target": {
+                  "stat": "physical-damage"
+                },
                 "value": 1,
                 "description": "Start each session with 1 box of Physical damage.",
                 "triggers": ["session-start"]
               }
             ],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "poor-self-control",
@@ -1350,7 +3269,10 @@
                 "description": "Composure (4) test to resist impulse."
               }
             },
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "records-on-file",
@@ -1362,19 +3284,62 @@
             "minRating": 1,
             "maxRating": 10,
             "ratings": {
-              "1": { "cost": 0, "availability": 0, "karmaCost": 1 },
-              "2": { "cost": 0, "availability": 0, "karmaCost": 2 },
-              "3": { "cost": 0, "availability": 0, "karmaCost": 3 },
-              "4": { "cost": 0, "availability": 0, "karmaCost": 4 },
-              "5": { "cost": 0, "availability": 0, "karmaCost": 5 },
-              "6": { "cost": 0, "availability": 0, "karmaCost": 6 },
-              "7": { "cost": 0, "availability": 0, "karmaCost": 7 },
-              "8": { "cost": 0, "availability": 0, "karmaCost": 8 },
-              "9": { "cost": 0, "availability": 0, "karmaCost": 9 },
-              "10": { "cost": 0, "availability": 0, "karmaCost": 10 }
+              "1": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 1
+              },
+              "2": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 2
+              },
+              "3": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 3
+              },
+              "4": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 4
+              },
+              "5": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 5
+              },
+              "6": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 6
+              },
+              "7": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 7
+              },
+              "8": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 8
+              },
+              "9": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 9
+              },
+              "10": {
+                "cost": 0,
+                "availability": 0,
+                "karmaCost": 10
+              }
             },
             "incompatibilities": ["erased"],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "reduced-sense",
@@ -1388,27 +3353,39 @@
               {
                 "id": "reduced-sense-penalty",
                 "type": "dice-pool-modifier",
-                "target": { "skill": "perception", "condition": "specification-sense" },
+                "target": {
+                  "skill": "perception",
+                  "condition": "specification-sense"
+                },
                 "value": -2,
                 "description": "-2 dice to Perception tests using the specified sense.",
                 "triggers": ["skill-test"]
               }
             ],
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "sensory-overload-syndrome",
             "name": "Sensory Overload Syndrome",
             "karmaBonus": 15,
             "summary": "Seizures in high-ARO areas; Composure test to avoid incapacitation.",
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "signature",
             "name": "Signature",
             "karmaBonus": 10,
             "summary": "Must leave calling card at every job; makes identification easier.",
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "vendetta",
@@ -1417,14 +3394,20 @@
             "summary": "Blood feud; Composure test to avoid confrontation with target.",
             "requiresSpecification": true,
             "specificationLabel": "Target",
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           },
           {
             "id": "wanted",
             "name": "Wanted",
             "karmaBonus": 10,
             "summary": "25,000+ nuyen bounty on your head.",
-            "source": { "book": "run-faster", "page": 159 }
+            "source": {
+              "book": "run-faster",
+              "page": 159
+            }
           }
         ]
       }
@@ -1451,7 +3434,13 @@
                   "type": "priority",
                   "categories": ["metatype", "attributes", "magic", "skills", "resources"],
                   "levels": ["A", "B", "C", "D", "E"],
-                  "pointValues": { "A": 4, "B": 3, "C": 2, "D": 1, "E": 0 },
+                  "pointValues": {
+                    "A": 4,
+                    "B": 3,
+                    "C": 2,
+                    "D": 1,
+                    "E": 0
+                  },
                   "totalBudget": 10,
                   "allowDuplicates": true
                 }
@@ -1668,7 +3657,13 @@
                 "severity": "error",
                 "params": {
                   "totalBudget": 10,
-                  "pointValues": { "A": 4, "B": 3, "C": 2, "D": 1, "E": 0 },
+                  "pointValues": {
+                    "A": 4,
+                    "B": 3,
+                    "C": 2,
+                    "D": 1,
+                    "E": 0
+                  },
                   "categories": ["metatype", "attributes", "magic", "skills", "resources"]
                 },
                 "errorMessage": "Priority points must total exactly 10."
@@ -2052,14 +4047,45 @@
         ]
       }
     },
-    "lifestyle": { "mergeStrategy": "merge", "payload": {} },
-    "contactArchetypes": { "mergeStrategy": "append", "payload": { "archetypes": [] } },
-    "contactTemplates": { "mergeStrategy": "append", "payload": { "templates": [] } },
-    "equipmentPacks": { "mergeStrategy": "replace", "payload": {} },
-    "metagenics": { "mergeStrategy": "replace", "payload": {} },
-    "infected": { "mergeStrategy": "replace", "payload": {} },
-    "lifeModules": { "mergeStrategy": "replace", "payload": {} },
-    "shapeshifters": { "mergeStrategy": "replace", "payload": {} },
-    "johnsonProfiles": { "mergeStrategy": "replace", "payload": {} }
+    "lifestyle": {
+      "mergeStrategy": "merge",
+      "payload": {}
+    },
+    "contactArchetypes": {
+      "mergeStrategy": "append",
+      "payload": {
+        "archetypes": []
+      }
+    },
+    "contactTemplates": {
+      "mergeStrategy": "append",
+      "payload": {
+        "templates": []
+      }
+    },
+    "equipmentPacks": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    },
+    "metagenics": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    },
+    "infected": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    },
+    "lifeModules": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    },
+    "shapeshifters": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    },
+    "johnsonProfiles": {
+      "mergeStrategy": "replace",
+      "payload": {}
+    }
   }
 }

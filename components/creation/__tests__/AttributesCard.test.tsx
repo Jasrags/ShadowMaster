@@ -29,6 +29,8 @@ const mockMetatypes = [
   {
     id: "human",
     name: "Human",
+    baseMetatype: null,
+    racialTraits: [],
     attributes: {
       body: { min: 1, max: 6 },
       agility: { min: 1, max: 6 },
@@ -44,6 +46,8 @@ const mockMetatypes = [
   {
     id: "elf",
     name: "Elf",
+    baseMetatype: null,
+    racialTraits: [],
     attributes: {
       body: { min: 1, max: 6 },
       agility: { min: 2, max: 7 },
@@ -59,6 +63,8 @@ const mockMetatypes = [
   {
     id: "troll",
     name: "Troll",
+    baseMetatype: null,
+    racialTraits: [],
     attributes: {
       body: { min: 5, max: 10 },
       agility: { min: 1, max: 5 },

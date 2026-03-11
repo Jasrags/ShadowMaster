@@ -100,9 +100,13 @@ export type {
 export interface MetatypeData {
   id: string;
   name: string;
+  baseMetatype: string | null;
   description?: string;
+  karmaCost?: number;
+  source?: { book: string; page: number };
   attributes: Record<string, { min: number; max: number } | { base: number }>;
-  racialTraits?: string[];
+  racialTraits: string[];
+  priorityAvailability?: Record<string, { specialAttributePoints: number }>;
 }
 
 export interface SkillData {
