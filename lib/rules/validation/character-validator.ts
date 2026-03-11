@@ -59,7 +59,7 @@ import type { PriorityTableData } from "../loader-types";
 import {
   calculateNuyenSpent,
   calculateKarmaSpent,
-  KARMA_TO_NUYEN_LIMIT,
+  getKarmaToNuyenLimit,
   SR5_KARMA_BUDGET,
   getKarmaBudget,
   getContactMultiplier,
@@ -2365,11 +2365,12 @@ const karmaBudgetValidator: ValidatorDefinition = {
     // Get client-reported spending
     const clientSpent = (budgets["karma-spent"] as number) ?? serverSpent;
 
-    // Check karma-to-nuyen conversion limit (max 10 karma)
-    if (karmaBreakdown.karmaToNuyen > KARMA_TO_NUYEN_LIMIT) {
+    // Check karma-to-nuyen conversion limit (dynamic: default 10, Born Rich → 40)
+    const karmaToNuyenLimit = getKarmaToNuyenLimit(selections);
+    if (karmaBreakdown.karmaToNuyen > karmaToNuyenLimit) {
       issues.push({
         code: "KARMA_TO_NUYEN_LIMIT_EXCEEDED",
-        message: `Karma-to-nuyen conversion exceeds limit: ${karmaBreakdown.karmaToNuyen} karma spent, maximum ${KARMA_TO_NUYEN_LIMIT} allowed`,
+        message: `Karma-to-nuyen conversion exceeds limit: ${karmaBreakdown.karmaToNuyen} karma spent, maximum ${karmaToNuyenLimit} allowed`,
         field: "karma",
         severity: "error",
       });

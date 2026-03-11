@@ -159,6 +159,12 @@ describe("PrioritySelectionCard", () => {
       getBudget: vi.fn(),
       hasRemaining: vi.fn(),
       isOverspent: vi.fn(),
+      qualityModifiers: {
+        karmaToNuyenCap: 10,
+        knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+        languageCostMultiplier: 1,
+        jackOfAllTrades: false,
+      },
     } as unknown as ReturnType<typeof useCreationBudgets>);
   });
 
@@ -554,6 +560,12 @@ describe("PrioritySelectionCard", () => {
         getBudget: vi.fn(),
         hasRemaining: vi.fn(),
         isOverspent: vi.fn(),
+        qualityModifiers: {
+          karmaToNuyenCap: 10,
+          knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+          languageCostMultiplier: 1,
+          jackOfAllTrades: false,
+        },
       } as unknown as ReturnType<typeof useCreationBudgets>);
 
       const state = createBaseState();
@@ -577,6 +589,12 @@ describe("PrioritySelectionCard", () => {
         getBudget: vi.fn(),
         hasRemaining: vi.fn(),
         isOverspent: vi.fn(),
+        qualityModifiers: {
+          karmaToNuyenCap: 10,
+          knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+          languageCostMultiplier: 1,
+          jackOfAllTrades: false,
+        },
       } as unknown as ReturnType<typeof useCreationBudgets>);
 
       const state = createBaseState();
@@ -600,6 +618,12 @@ describe("PrioritySelectionCard", () => {
         getBudget: vi.fn(),
         hasRemaining: vi.fn(),
         isOverspent: vi.fn(),
+        qualityModifiers: {
+          karmaToNuyenCap: 10,
+          knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
+          languageCostMultiplier: 1,
+          jackOfAllTrades: false,
+        },
       } as unknown as ReturnType<typeof useCreationBudgets>);
 
       const state = createBaseState();

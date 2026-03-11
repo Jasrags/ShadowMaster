@@ -70,7 +70,7 @@ interface AugmentationsCardProps {
 
 export function AugmentationsCard({ state, updateState }: AugmentationsCardProps) {
   const augmentationRules = useAugmentationRules();
-  const { getBudget } = useCreationBudgets();
+  const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
 
@@ -160,6 +160,7 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     karmaRemaining,
     currentConversion: karmaConversion,
     onConvert: handleKarmaConvert,
+    maxKarmaConversion: qualityModifiers.karmaToNuyenCap,
   });
 
   // Calculate essence

@@ -17,6 +17,7 @@ import {
   getGroupRating,
   isGroupBroken,
 } from "@/lib/rules/skills/group-utils";
+import { applyJackOfAllTradesModifier } from "@/lib/rules/qualities/budget-modifiers";
 import type { SkillGroupData, SkillData } from "@/lib/rules";
 import { getKarmaSpent } from "./utils";
 
@@ -74,7 +75,8 @@ export function useKarmaPurchase(
   activeSkills: SkillData[],
   skillPointsRemaining: number,
   groupPointsRemaining: number,
-  karmaRemaining: number
+  karmaRemaining: number,
+  hasJackOfAllTrades: boolean = false
 ): UseKarmaPurchaseResult {
   // Karma purchase confirmation states
   const [karmaSkillPurchase, setKarmaSkillPurchase] = useState<SkillKarmaPurchaseState | null>(
@@ -99,7 +101,10 @@ export function useKarmaPurchase(
         return { mode: "skill-points" };
       }
       // Skill points exhausted - check if karma purchase is possible
-      const karmaCost = calculateSkillRaiseKarmaCost(currentRating, currentRating + 1);
+      const baseCost = calculateSkillRaiseKarmaCost(currentRating, currentRating + 1);
+      const karmaCost = hasJackOfAllTrades
+        ? applyJackOfAllTradesModifier(baseCost, currentRating, currentRating + 1)
+        : baseCost;
       if (karmaRemaining >= karmaCost) {
         return { mode: "karma" };
       }
@@ -108,7 +113,7 @@ export function useKarmaPurchase(
         disabledReason: `No skill points. Need ${karmaCost} karma (have ${karmaRemaining})`,
       };
     },
-    [skillPointsRemaining, karmaRemaining]
+    [skillPointsRemaining, karmaRemaining, hasJackOfAllTrades]
   );
 
   /**
@@ -163,7 +168,10 @@ export function useKarmaPurchase(
 
     const { skillId, currentRating } = karmaSkillPurchase;
     const newRating = currentRating + 1;
-    const karmaCost = calculateSkillRaiseKarmaCost(currentRating, newRating);
+    const baseCost = calculateSkillRaiseKarmaCost(currentRating, newRating);
+    const karmaCost = hasJackOfAllTrades
+      ? applyJackOfAllTradesModifier(baseCost, currentRating, newRating)
+      : baseCost;
 
     // Update skill rating
     const newSkills = { ...skills, [skillId]: newRating };

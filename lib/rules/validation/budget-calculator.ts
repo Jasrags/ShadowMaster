@@ -11,6 +11,7 @@
  */
 
 import type { CreationSelections } from "@/lib/types/creation-selections";
+import { getQualityBudgetModifiers } from "@/lib/rules/qualities/budget-modifiers";
 
 // =============================================================================
 // NUYEN CALCULATION
@@ -231,8 +232,16 @@ export interface KarmaBreakdown {
   total: number;
 }
 
-/** Maximum karma that can be converted to nuyen during creation */
+/** Default maximum karma that can be converted to nuyen during creation */
 export const KARMA_TO_NUYEN_LIMIT = 10;
+
+/**
+ * Get the dynamic karma-to-nuyen limit based on selected qualities.
+ * Born Rich raises the cap from 10 to 40.
+ */
+export function getKarmaToNuyenLimit(selections: CreationSelections): number {
+  return getQualityBudgetModifiers(selections).karmaToNuyenCap;
+}
 
 /** Starting karma budget for SR5 character creation */
 export const SR5_KARMA_BUDGET = 25;
