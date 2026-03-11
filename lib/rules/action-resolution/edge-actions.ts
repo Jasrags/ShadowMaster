@@ -389,6 +389,41 @@ export function executeEdgeAction(
 // EDGE RESTORATION
 // =============================================================================
 
+/** Quality ID for the Daredevil quality (Run Faster) */
+export const DAREDEVIL_QUALITY_ID = "daredevil";
+
+/** Edge regain amount when Daredevil performs a daring action */
+export const DAREDEVIL_REGAIN_AMOUNT = 2;
+
+/** Default edge regain amount (normal action) */
+export const DEFAULT_REGAIN_AMOUNT = 1;
+
+/** Edge regain context: "normal" (default) or "daring" (GM-judged daring action) */
+export type EdgeRegainContext = "normal" | "daring";
+
+/**
+ * Calculate the edge regain amount for a character.
+ *
+ * SR5 Run Faster: Daredevil quality grants 2 Edge regain instead of 1
+ * when performing a "daring action" (GM judgment call).
+ *
+ * @param character - The character regaining edge
+ * @param context - Whether the action is "normal" or "daring" (default: "normal")
+ * @returns The amount of edge to regain (1 or 2)
+ */
+export function calculateEdgeRegainAmount(
+  character: Character,
+  context: EdgeRegainContext = "normal"
+): number {
+  if (context !== "daring") return DEFAULT_REGAIN_AMOUNT;
+
+  const hasDaredevil = character.positiveQualities.some(
+    (q) => q.qualityId === DAREDEVIL_QUALITY_ID || q.id === DAREDEVIL_QUALITY_ID
+  );
+
+  return hasDaredevil ? DAREDEVIL_REGAIN_AMOUNT : DEFAULT_REGAIN_AMOUNT;
+}
+
 /**
  * Calculate how much Edge can be restored
  */
