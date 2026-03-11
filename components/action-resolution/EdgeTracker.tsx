@@ -4,6 +4,9 @@ import React from "react";
 import { Button } from "react-aria-components";
 import { Zap, Plus, Minus, RotateCcw } from "lucide-react";
 
+/** Context for edge restoration: normal or daring (Daredevil quality) */
+type EdgeRestoreContext = "normal" | "daring";
+
 interface EdgeTrackerProps {
   /** Current Edge points */
   current: number;
@@ -13,10 +16,12 @@ interface EdgeTrackerProps {
   isLoading?: boolean;
   /** Callback when Edge is spent */
   onSpend?: (amount: number) => void;
-  /** Callback when Edge is restored */
-  onRestore?: (amount: number) => void;
+  /** Callback when Edge is restored, with optional context */
+  onRestore?: (amount: number, context?: EdgeRestoreContext) => void;
   /** Callback when Edge is fully restored */
   onRestoreFull?: () => void;
+  /** Whether character has Daredevil quality (shows daring action option) */
+  hasDaredevil?: boolean;
   /** Whether to show controls */
   showControls?: boolean;
   /** Size variant */
@@ -32,6 +37,7 @@ export function EdgeTracker({
   onSpend,
   onRestore,
   onRestoreFull,
+  hasDaredevil = false,
   showControls = true,
   size = "md",
   compact = false,
@@ -169,7 +175,7 @@ export function EdgeTracker({
             Spend
           </Button>
           <Button
-            onPress={() => onRestore?.(1)}
+            onPress={() => onRestore?.(1, "normal")}
             isDisabled={!canRestore}
             className={`
               flex-1 flex items-center justify-center gap-1.5
@@ -181,8 +187,25 @@ export function EdgeTracker({
             `}
           >
             <Plus className="w-3 h-3" />
-            Restore
+            {hasDaredevil ? "Normal (1)" : "Restore"}
           </Button>
+          {hasDaredevil && (
+            <Button
+              onPress={() => onRestore?.(2, "daring")}
+              isDisabled={!canRestore}
+              className={`
+                flex-1 flex items-center justify-center gap-1.5
+                px-3 py-1.5 rounded
+                bg-amber-500/20 text-amber-500 dark:text-amber-400 border border-amber-500/30
+                hover:bg-amber-500/30
+                disabled:opacity-50 disabled:cursor-not-allowed
+                transition-colors ${s.text}
+              `}
+            >
+              <Zap className="w-3 h-3" />
+              Daring (2)
+            </Button>
+          )}
           {onRestoreFull && (
             <Button
               onPress={onRestoreFull}

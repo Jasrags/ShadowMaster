@@ -316,6 +316,8 @@ export interface EdgeRequest {
   amount: number;
   /** Reason for the change */
   reason?: string;
+  /** Context for edge regain: "daring" triggers Daredevil quality (2 Edge instead of 1) */
+  context?: "normal" | "daring";
 }
 
 /**

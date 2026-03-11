@@ -18,6 +18,7 @@ import {
 } from "@/lib/storage/characters";
 import { resolveCharacterForGameplay, notifyOwnerOfGMEdit } from "@/lib/auth/gm-character-access";
 import type { EdgeRequest } from "@/lib/types";
+import { calculateEdgeRegainAmount } from "@/lib/rules/action-resolution/edge-actions";
 import { apiLogger } from "@/lib/logging";
 
 /**
@@ -110,7 +111,11 @@ export async function POST(
       );
     }
 
-    const amount = body.amount || 1;
+    // For restore actions, calculate amount based on Daredevil quality + context
+    const regainContext = body.context || "normal";
+    const defaultRestoreAmount =
+      body.action === "restore" ? calculateEdgeRegainAmount(character, regainContext) : 1;
+    const amount = body.amount || defaultRestoreAmount;
 
     if (amount < 1) {
       return NextResponse.json(
