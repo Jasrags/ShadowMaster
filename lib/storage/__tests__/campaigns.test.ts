@@ -1,12 +1,13 @@
 /**
  * Unit tests for campaigns.ts storage module
  *
- * Tests campaign CRUD and management operations with real filesystem.
+ * Tests campaign CRUD and management operations with isolated temp directories.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
+import os from "os";
 import type {
   Campaign,
   CreateCampaignRequest,
@@ -14,14 +15,8 @@ import type {
   CampaignEvent,
 } from "@/lib/types/campaign";
 
-// Test directory - uses actual data paths
-const TEST_CAMPAIGN_PREFIX = `test-campaign-${Date.now()}`;
-const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
-const TEMPLATES_DIR = path.join(process.cwd(), "data", "campaign_templates");
-
-// Track created campaign IDs for cleanup
-const createdCampaignIds: string[] = [];
-const createdTemplateIds: string[] = [];
+let testDir: string;
+let templatesDir: string;
 
 // Mock the editions storage module to avoid loading real editions
 vi.mock("../editions", () => ({
@@ -46,49 +41,40 @@ vi.mock("../characters", () => ({
   updateCharacter: vi.fn().mockResolvedValue({}),
 }));
 
-// Import after mocking
-import * as campaignStorage from "../campaigns";
+// Dynamic imports so we can set env vars before module evaluation
+let campaignStorage: typeof import("../campaigns");
 
 // =============================================================================
 // SETUP & TEARDOWN
 // =============================================================================
 
+const TEST_GM_ID = "test-gm-user";
+
 beforeEach(async () => {
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.mkdir(TEMPLATES_DIR, { recursive: true });
-  } catch {
-    // Ignore
-  }
+  testDir = await fs.mkdtemp(path.join(os.tmpdir(), "campaign-storage-test-"));
+  templatesDir = path.join(testDir, "templates");
+  await fs.mkdir(templatesDir, { recursive: true });
+
+  process.env.CAMPAIGN_DATA_DIR = testDir;
+  process.env.CAMPAIGN_TEMPLATES_DATA_DIR = templatesDir;
+
+  vi.resetModules();
+  campaignStorage = await import("../campaigns");
 });
 
 afterEach(async () => {
-  // Clean up test campaigns
-  for (const id of createdCampaignIds) {
-    try {
-      await fs.unlink(path.join(DATA_DIR, `${id}.json`));
-    } catch {
-      // File might not exist
-    }
+  delete process.env.CAMPAIGN_DATA_DIR;
+  delete process.env.CAMPAIGN_TEMPLATES_DATA_DIR;
+  try {
+    await fs.rm(testDir, { recursive: true, force: true });
+  } catch {
+    // Ignore cleanup errors
   }
-  createdCampaignIds.length = 0;
-
-  // Clean up test templates
-  for (const id of createdTemplateIds) {
-    try {
-      await fs.unlink(path.join(TEMPLATES_DIR, `${id}.json`));
-    } catch {
-      // File might not exist
-    }
-  }
-  createdTemplateIds.length = 0;
 });
 
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
-
-const TEST_GM_ID = "test-gm-user";
 
 function createMockCampaignRequest(
   overrides: Partial<CreateCampaignRequest> = {}
@@ -108,12 +94,7 @@ function createMockCampaignRequest(
 async function createTestCampaign(
   overrides: Partial<CreateCampaignRequest> = {}
 ): Promise<Campaign> {
-  const campaign = await campaignStorage.createCampaign(
-    TEST_GM_ID,
-    createMockCampaignRequest(overrides)
-  );
-  createdCampaignIds.push(campaign.id);
-  return campaign;
+  return campaignStorage.createCampaign(TEST_GM_ID, createMockCampaignRequest(overrides));
 }
 
 // =============================================================================
@@ -214,11 +195,10 @@ describe("getCampaignById", () => {
     };
 
     await fs.writeFile(
-      path.join(DATA_DIR, `${campaignId}.json`),
+      path.join(testDir, `${campaignId}.json`),
       JSON.stringify(legacyCampaign, null, 2),
       "utf-8"
     );
-    createdCampaignIds.push(campaignId);
 
     const result = await campaignStorage.getCampaignById(campaignId);
 
@@ -238,10 +218,8 @@ describe("getAllCampaigns", () => {
 
     const result = await campaignStorage.getAllCampaigns();
 
-    // May include other campaigns from other tests, so check ours exist
-    // Guard against campaigns without titles (from malformed data files)
     const ourCampaigns = result.filter((c) => c.title?.startsWith("All Test"));
-    expect(ourCampaigns.length).toBeGreaterThanOrEqual(2);
+    expect(ourCampaigns.length).toBe(2);
   });
 });
 
@@ -256,7 +234,7 @@ describe("getCampaignsByUserId", () => {
     const result = await campaignStorage.getCampaignsByUserId(TEST_GM_ID);
 
     const ourCampaigns = result.filter((c) => c.title === "GM Campaign");
-    expect(ourCampaigns.length).toBeGreaterThanOrEqual(1);
+    expect(ourCampaigns.length).toBe(1);
   });
 
   it("should return campaigns where user is player", async () => {
@@ -419,9 +397,6 @@ describe("updateCampaign", () => {
 describe("deleteCampaign", () => {
   it("should delete campaign", async () => {
     const campaign = await createTestCampaign();
-    // Remove from cleanup list since we're deleting it
-    const index = createdCampaignIds.indexOf(campaign.id);
-    if (index > -1) createdCampaignIds.splice(index, 1);
 
     await campaignStorage.deleteCampaign(campaign.id);
 
@@ -535,7 +510,6 @@ describe("saveCampaignAsTemplate", () => {
       "My Template",
       TEST_GM_ID
     );
-    createdTemplateIds.push(template.id);
 
     expect(template.id).toBeDefined();
     expect(template.name).toBe("My Template");
@@ -553,7 +527,6 @@ describe("getCampaignTemplates", () => {
       "User Template",
       TEST_GM_ID
     );
-    createdTemplateIds.push(template.id);
 
     const result = await campaignStorage.getCampaignTemplates(TEST_GM_ID);
 

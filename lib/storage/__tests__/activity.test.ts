@@ -1,41 +1,45 @@
 /**
  * Unit tests for activity.ts storage module
  *
- * Tests campaign activity logging with real filesystem operations.
+ * Tests campaign activity logging with isolated temp directories.
  */
 
 import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
+import os from "os";
 import type { CampaignActivityEvent } from "@/lib/types/campaign";
 
-// Test directory - must use the module's actual data path due to non-configurable paths
-const TEST_CAMPAIGN_ID = `test-campaign-activity-${Date.now()}`;
-const DATA_DIR = path.join(process.cwd(), "data", "activity");
+let testDir: string;
 
-// Import after setting up test environment
-import * as activityStorage from "../activity";
+// Dynamic imports so we can set ACTIVITY_DATA_DIR before module evaluation
+let logActivity: typeof import("../activity").logActivity;
+let getCampaignActivity: typeof import("../activity").getCampaignActivity;
+let getCampaignActivityCount: typeof import("../activity").getCampaignActivityCount;
+
+const TEST_CAMPAIGN_ID = "test-campaign-activity";
 
 // =============================================================================
 // SETUP & TEARDOWN
 // =============================================================================
 
 beforeEach(async () => {
-  // Ensure test directory exists
-  try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-  } catch {
-    // Ignore
-  }
+  testDir = await fs.mkdtemp(path.join(os.tmpdir(), "activity-storage-test-"));
+  process.env.ACTIVITY_DATA_DIR = testDir;
+
+  vi.resetModules();
+  const mod = await import("../activity");
+  logActivity = mod.logActivity;
+  getCampaignActivity = mod.getCampaignActivity;
+  getCampaignActivityCount = mod.getCampaignActivityCount;
 });
 
 afterEach(async () => {
-  // Clean up test files
+  delete process.env.ACTIVITY_DATA_DIR;
   try {
-    const testFilePath = path.join(DATA_DIR, `${TEST_CAMPAIGN_ID}.json`);
-    await fs.unlink(testFilePath);
+    await fs.rm(testDir, { recursive: true, force: true });
   } catch {
-    // File might not exist
+    // Ignore cleanup errors
   }
 });
 
@@ -63,7 +67,7 @@ describe("logActivity", () => {
   it("should create activity file if it does not exist", async () => {
     const eventData = createMockActivityEvent();
 
-    const result = await activityStorage.logActivity(eventData);
+    const result = await logActivity(eventData);
 
     expect(result.id).toBeDefined();
     expect(result.timestamp).toBeDefined();
@@ -72,25 +76,24 @@ describe("logActivity", () => {
   });
 
   it("should generate unique ID for each activity", async () => {
-    const event1 = await activityStorage.logActivity(createMockActivityEvent());
-    const event2 = await activityStorage.logActivity(createMockActivityEvent());
+    const event1 = await logActivity(createMockActivityEvent());
+    const event2 = await logActivity(createMockActivityEvent());
 
     expect(event1.id).not.toBe(event2.id);
   });
 
   it("should add new events to the beginning of the array", async () => {
-    await activityStorage.logActivity(createMockActivityEvent({ description: "First event" }));
-    await activityStorage.logActivity(createMockActivityEvent({ description: "Second event" }));
+    await logActivity(createMockActivityEvent({ description: "First event" }));
+    await logActivity(createMockActivityEvent({ description: "Second event" }));
 
-    const activities = await activityStorage.getCampaignActivity(TEST_CAMPAIGN_ID);
+    const activities = await getCampaignActivity(TEST_CAMPAIGN_ID);
 
     expect(activities[0].description).toBe("Second event");
     expect(activities[1].description).toBe("First event");
   });
 
   it("should limit entries to 500", async () => {
-    // This test is slow, so we'll mock the file read to return 500 existing entries
-    // First, create a file with 500 entries
+    // Create a file with 500 entries directly
     const existingEntries: CampaignActivityEvent[] = [];
     for (let i = 0; i < 500; i++) {
       existingEntries.push({
@@ -103,15 +106,13 @@ describe("logActivity", () => {
       });
     }
 
-    const filePath = path.join(DATA_DIR, `${TEST_CAMPAIGN_ID}.json`);
+    const filePath = path.join(testDir, `${TEST_CAMPAIGN_ID}.json`);
     await fs.writeFile(filePath, JSON.stringify(existingEntries, null, 2), "utf-8");
 
     // Add one more event
-    await activityStorage.logActivity(
-      createMockActivityEvent({ description: "New event beyond limit" })
-    );
+    await logActivity(createMockActivityEvent({ description: "New event beyond limit" }));
 
-    const count = await activityStorage.getCampaignActivityCount(TEST_CAMPAIGN_ID);
+    const count = await getCampaignActivityCount(TEST_CAMPAIGN_ID);
 
     expect(count).toBe(500);
   });
@@ -119,7 +120,7 @@ describe("logActivity", () => {
   it("should set timestamp to current time", async () => {
     const beforeTime = new Date().toISOString();
 
-    const result = await activityStorage.logActivity(createMockActivityEvent());
+    const result = await logActivity(createMockActivityEvent());
 
     const afterTime = new Date().toISOString();
 
@@ -134,17 +135,17 @@ describe("logActivity", () => {
 
 describe("getCampaignActivity", () => {
   it("should return empty array for non-existent campaign", async () => {
-    const result = await activityStorage.getCampaignActivity("non-existent-campaign");
+    const result = await getCampaignActivity("non-existent-campaign");
     expect(result).toEqual([]);
   });
 
   it("should return activities with default pagination", async () => {
     // Create some activities
     for (let i = 0; i < 60; i++) {
-      await activityStorage.logActivity(createMockActivityEvent({ description: `Event ${i}` }));
+      await logActivity(createMockActivityEvent({ description: `Event ${i}` }));
     }
 
-    const result = await activityStorage.getCampaignActivity(TEST_CAMPAIGN_ID);
+    const result = await getCampaignActivity(TEST_CAMPAIGN_ID);
 
     // Default limit is 50
     expect(result.length).toBe(50);
@@ -152,23 +153,22 @@ describe("getCampaignActivity", () => {
 
   it("should respect limit parameter", async () => {
     for (let i = 0; i < 20; i++) {
-      await activityStorage.logActivity(createMockActivityEvent({ description: `Event ${i}` }));
+      await logActivity(createMockActivityEvent({ description: `Event ${i}` }));
     }
 
-    const result = await activityStorage.getCampaignActivity(TEST_CAMPAIGN_ID, 10);
+    const result = await getCampaignActivity(TEST_CAMPAIGN_ID, 10);
 
     expect(result.length).toBe(10);
   });
 
   it("should respect offset parameter", async () => {
     for (let i = 0; i < 10; i++) {
-      await activityStorage.logActivity(createMockActivityEvent({ description: `Event ${i}` }));
+      await logActivity(createMockActivityEvent({ description: `Event ${i}` }));
     }
 
-    const result = await activityStorage.getCampaignActivity(TEST_CAMPAIGN_ID, 5, 3);
+    const result = await getCampaignActivity(TEST_CAMPAIGN_ID, 5, 3);
 
     expect(result.length).toBe(5);
-    // Events are in reverse order (newest first), so with offset 3, we should see events 6, 5, 4, 3, 2
   });
 });
 
@@ -178,17 +178,17 @@ describe("getCampaignActivity", () => {
 
 describe("getCampaignActivityCount", () => {
   it("should return 0 for non-existent campaign", async () => {
-    const count = await activityStorage.getCampaignActivityCount("non-existent-campaign");
+    const count = await getCampaignActivityCount("non-existent-campaign");
     expect(count).toBe(0);
   });
 
   it("should return correct count", async () => {
     // Create 5 activities
     for (let i = 0; i < 5; i++) {
-      await activityStorage.logActivity(createMockActivityEvent());
+      await logActivity(createMockActivityEvent());
     }
 
-    const count = await activityStorage.getCampaignActivityCount(TEST_CAMPAIGN_ID);
+    const count = await getCampaignActivityCount(TEST_CAMPAIGN_ID);
 
     expect(count).toBe(5);
   });
@@ -196,10 +196,10 @@ describe("getCampaignActivityCount", () => {
   it("should return total count regardless of pagination", async () => {
     // Create 100 activities
     for (let i = 0; i < 100; i++) {
-      await activityStorage.logActivity(createMockActivityEvent());
+      await logActivity(createMockActivityEvent());
     }
 
-    const count = await activityStorage.getCampaignActivityCount(TEST_CAMPAIGN_ID);
+    const count = await getCampaignActivityCount(TEST_CAMPAIGN_ID);
 
     expect(count).toBe(100);
   });

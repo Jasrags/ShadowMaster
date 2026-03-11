@@ -9,14 +9,16 @@ import path from "path";
 import { v4 as uuidv4 } from "uuid";
 import type { CampaignNotification } from "../types/campaign";
 
-const DATA_DIR = path.join(process.cwd(), "data", "notifications");
+function getDataDir(): string {
+  return process.env.NOTIFICATION_DATA_DIR || path.join(process.cwd(), "data", "notifications");
+}
 
 /**
  * Ensures the notification directory exists
  */
 async function ensureDataDirectory(): Promise<void> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.mkdir(getDataDir(), { recursive: true });
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
       throw error;
@@ -28,7 +30,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a user's notifications
  */
 function getFilePath(userId: string): string {
-  return path.join(DATA_DIR, `${userId}.json`);
+  return path.join(getDataDir(), `${userId}.json`);
 }
 
 /**
