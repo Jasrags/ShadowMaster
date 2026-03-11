@@ -21,6 +21,7 @@ import { getModule } from "./merge";
 import { validateRating, validateRatingAvailability, convertLegacyRatingSpec } from "./ratings";
 import { validateAllQualities, validateKarmaLimits } from "./qualities";
 import { validateAllGear } from "./gear/validation";
+import { validateSumToTenBudget } from "./sum-to-ten-validation";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -265,6 +266,7 @@ const constraintValidators: Record<ConstraintType, ConstraintValidator> = {
   "essence-minimum": validateEssenceMinimum,
   "equipment-rating": validateEquipmentRatings,
   "special-attribute-init": validateSpecialAttributeInit,
+  "sum-to-ten-budget": validateSumToTenBudget,
   custom: validateCustom,
 };
 

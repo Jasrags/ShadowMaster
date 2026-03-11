@@ -1429,7 +1429,331 @@
         ]
       }
     },
-    "creationMethods": { "mergeStrategy": "append", "payload": { "creationMethods": [] } },
+    "creationMethods": {
+      "mergeStrategy": "append",
+      "payload": {
+        "creationMethods": [
+          {
+            "id": "sum-to-ten",
+            "editionId": "sr5",
+            "editionCode": "sr5",
+            "bookId": "run-faster",
+            "name": "Sum to Ten",
+            "type": "sum-to-ten",
+            "description": "A flexible variant of the Priority system. Assign priority levels A-E to five categories, where A=4, B=3, C=2, D=1, E=0 points. Levels may be repeated, but the total must equal exactly 10.",
+            "version": "1.0.0",
+            "steps": [
+              {
+                "id": "priorities",
+                "title": "Assign Priorities",
+                "type": "priority",
+                "payload": {
+                  "type": "priority",
+                  "categories": ["metatype", "attributes", "magic", "skills", "resources"],
+                  "levels": ["A", "B", "C", "D", "E"],
+                  "pointValues": { "A": 4, "B": 3, "C": 2, "D": 1, "E": 0 },
+                  "totalBudget": 10,
+                  "allowDuplicates": true
+                }
+              },
+              {
+                "id": "metatype",
+                "title": "Select Metatype",
+                "type": "select",
+                "payload": {
+                  "type": "select",
+                  "target": "metatype"
+                }
+              },
+              {
+                "id": "attributes",
+                "title": "Allocate Attributes",
+                "type": "allocate",
+                "payload": {
+                  "type": "allocate",
+                  "target": "attributes",
+                  "budgetId": "attribute-points"
+                }
+              },
+              {
+                "id": "magic",
+                "title": "Magic/Resonance",
+                "type": "select",
+                "optional": true,
+                "payload": {
+                  "type": "select",
+                  "target": "magical-path"
+                }
+              },
+              {
+                "id": "skills",
+                "title": "Allocate Skills",
+                "type": "allocate",
+                "payload": {
+                  "type": "allocate",
+                  "target": "skills",
+                  "budgetId": "skill-points"
+                }
+              },
+              {
+                "id": "qualities",
+                "title": "Select Qualities",
+                "type": "choose",
+                "payload": {
+                  "type": "choose",
+                  "target": "qualities",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "spells",
+                "title": "Spells",
+                "type": "custom",
+                "description": "Select spells if you are a magician or mystic adept.",
+                "payload": {
+                  "type": "custom",
+                  "target": "spells"
+                }
+              },
+              {
+                "id": "rituals",
+                "title": "Rituals",
+                "type": "custom",
+                "description": "Learn ritual spellcasting if your magical path includes it.",
+                "payload": {
+                  "type": "custom",
+                  "target": "rituals"
+                }
+              },
+              {
+                "id": "adept-powers",
+                "title": "Adept Powers",
+                "type": "custom",
+                "description": "Select adept powers using your Power Points (equal to Magic for Adepts).",
+                "payload": {
+                  "type": "custom",
+                  "target": "adeptPowers"
+                }
+              },
+              {
+                "id": "contacts",
+                "title": "Build Contacts",
+                "type": "allocate",
+                "description": "Build your network of contacts using free Karma based on Charisma.",
+                "payload": {
+                  "type": "allocate",
+                  "target": "contacts",
+                  "budgetId": "contact-karma"
+                }
+              },
+              {
+                "id": "augmentations",
+                "title": "Augmentations",
+                "type": "purchase",
+                "description": "Install cyberware and bioware. Essence loss affects Magic rating.",
+                "payload": {
+                  "type": "purchase",
+                  "target": "augmentations",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "gear",
+                "title": "Purchase Gear",
+                "type": "purchase",
+                "payload": {
+                  "type": "purchase",
+                  "target": "gear",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "vehicles",
+                "title": "Vehicles & Drones",
+                "type": "purchase",
+                "payload": {
+                  "type": "purchase",
+                  "target": "vehicles",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "programs",
+                "title": "Matrix Programs",
+                "description": "Select Matrix programs for your cyberdeck",
+                "type": "purchase",
+                "payload": {
+                  "budget": "nuyen",
+                  "catalog": "programs"
+                }
+              },
+              {
+                "id": "karma",
+                "title": "Spend Karma",
+                "type": "allocate",
+                "description": "Spend remaining Karma on spells, complex forms, or stat improvements. Max 7 Karma carryover.",
+                "payload": {
+                  "type": "allocate",
+                  "target": "karma",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "identities",
+                "title": "Identities & SINs",
+                "type": "choose",
+                "description": "Create identities with SINs (fake or real) and licenses. Each character must have at least one identity.",
+                "payload": {
+                  "type": "choose",
+                  "target": "identities"
+                }
+              },
+              {
+                "id": "review",
+                "title": "Review & Finalize",
+                "type": "validate",
+                "payload": {
+                  "type": "validate",
+                  "validations": ["all"]
+                }
+              }
+            ],
+            "budgets": [
+              {
+                "id": "attribute-points",
+                "label": "Attribute Points",
+                "initialValueFormula": "priorities.attributes"
+              },
+              {
+                "id": "special-attribute-points",
+                "label": "Special Attribute Points",
+                "initialValueFormula": "metatype.specialAttributePoints"
+              },
+              {
+                "id": "skill-points",
+                "label": "Skill Points",
+                "initialValueFormula": "priorities.skills.skillPoints"
+              },
+              {
+                "id": "skill-group-points",
+                "label": "Skill Group Points",
+                "initialValueFormula": "priorities.skills.skillGroupPoints"
+              },
+              {
+                "id": "karma",
+                "label": "Karma",
+                "initialValue": 25
+              },
+              {
+                "id": "nuyen",
+                "label": "Nuyen",
+                "initialValueFormula": "priorities.resources",
+                "displayFormat": "currency"
+              },
+              {
+                "id": "contact-karma",
+                "label": "Contact Karma",
+                "initialValueFormula": "charisma * 3",
+                "description": "Free Karma for contacts = CHA x 3"
+              }
+            ],
+            "constraints": [
+              {
+                "id": "sum-to-ten-budget",
+                "type": "sum-to-ten-budget",
+                "description": "Priority point values (A=4, B=3, C=2, D=1, E=0) must total exactly 10.",
+                "severity": "error",
+                "params": {
+                  "totalBudget": 10,
+                  "pointValues": { "A": 4, "B": 3, "C": 2, "D": 1, "E": 0 },
+                  "categories": ["metatype", "attributes", "magic", "skills", "resources"]
+                },
+                "errorMessage": "Priority points must total exactly 10."
+              },
+              {
+                "id": "max-one-attribute-at-max",
+                "type": "attribute-limit",
+                "description": "Only one attribute can be at natural maximum at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAtMax": 1
+                },
+                "errorMessage": "Only one attribute can be at its natural maximum."
+              },
+              {
+                "id": "positive-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma in Positive Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "positive-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot spend more than 25 Karma on positive qualities."
+              },
+              {
+                "id": "negative-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma from Negative Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "negative-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot gain more than 25 Karma from negative qualities."
+              },
+              {
+                "id": "skill-max-at-creation",
+                "type": "skill-limit",
+                "description": "Skills capped at 6 at creation (7 with Aptitude).",
+                "severity": "error",
+                "params": {
+                  "max": 6,
+                  "maxWithAptitude": 7
+                },
+                "errorMessage": "Skill rating cannot exceed 6 at creation (7 with Aptitude)."
+              },
+              {
+                "id": "special-attribute-init",
+                "type": "special-attribute-init",
+                "description": "Edge starts at metatype value. Magic/Resonance start at priority value (0 for mundane).",
+                "severity": "error",
+                "params": {
+                  "validateEdge": true,
+                  "validateMagic": true,
+                  "validateResonance": true
+                },
+                "errorMessage": "Special attributes must meet minimum requirements."
+              },
+              {
+                "id": "gear-availability",
+                "type": "custom",
+                "description": "Gear availability cannot exceed 12 at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAvailability": 12
+                },
+                "errorMessage": "Cannot purchase gear with availability higher than 12."
+              },
+              {
+                "id": "essence-minimum",
+                "type": "essence-minimum",
+                "description": "Essence cannot drop below 0.",
+                "severity": "error",
+                "params": {
+                  "min": 0
+                },
+                "errorMessage": "Essence cannot drop below 0."
+              }
+            ],
+            "createdAt": "2025-01-01T00:00:00.000Z"
+          }
+        ]
+      }
+    },
     "lifestyle": { "mergeStrategy": "merge", "payload": {} },
     "contactArchetypes": { "mergeStrategy": "append", "payload": { "archetypes": [] } },
     "contactTemplates": { "mergeStrategy": "append", "payload": { "templates": [] } },
