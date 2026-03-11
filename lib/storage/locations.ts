@@ -20,11 +20,15 @@ import type {
 } from "../types";
 import { validateLocationData, validateLocationTemplateData, assertValid } from "./validation";
 
+function getCampaignsBaseDir(): string {
+  return process.env.LOCATIONS_CAMPAIGNS_DATA_DIR || path.join(process.cwd(), "data", "campaigns");
+}
+
 /**
  * Get the locations directory for a campaign
  */
 function getLocationsDir(campaignId: string): string {
-  return path.join(process.cwd(), "data", "campaigns", campaignId, "locations");
+  return path.join(getCampaignsBaseDir(), campaignId, "locations");
 }
 
 /**
@@ -49,7 +53,7 @@ function getLocationFilePath(campaignId: string, locationId: string): string {
  * Get the connections directory for a campaign
  */
 function getConnectionsDir(campaignId: string): string {
-  return path.join(process.cwd(), "data", "campaigns", campaignId, "connections");
+  return path.join(getCampaignsBaseDir(), campaignId, "connections");
 }
 
 /**
@@ -74,7 +78,7 @@ function getConnectionFilePath(campaignId: string, connectionId: string): string
  * Get the templates directory
  */
 function getTemplatesDir(): string {
-  return path.join(process.cwd(), "data", "templates");
+  return process.env.LOCATION_TEMPLATES_DATA_DIR || path.join(process.cwd(), "data", "templates");
 }
 
 /**

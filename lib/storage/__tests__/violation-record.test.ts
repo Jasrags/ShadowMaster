@@ -1,45 +1,48 @@
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+/**
+ * Tests for violation record storage
+ *
+ * Tests violation CRUD operations with isolated temp directories.
+ */
+
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
-import {
-  recordViolation,
-  getViolationById,
-  getViolationsByCharacter,
-  getViolationsByCampaign,
-  queryViolations,
-  getViolationCountsByType,
-  createViolationFromValidation,
-  type ViolationRecordInput,
-} from "../violation-record";
+import os from "os";
+
+let testDir: string;
+
+// Dynamic imports so we can set VIOLATION_DATA_DIR before module evaluation
+let recordViolation: typeof import("../violation-record").recordViolation;
+let getViolationById: typeof import("../violation-record").getViolationById;
+let getViolationsByCharacter: typeof import("../violation-record").getViolationsByCharacter;
+let getViolationsByCampaign: typeof import("../violation-record").getViolationsByCampaign;
+let queryViolations: typeof import("../violation-record").queryViolations;
+let getViolationCountsByType: typeof import("../violation-record").getViolationCountsByType;
+let createViolationFromValidation: typeof import("../violation-record").createViolationFromValidation;
+type ViolationRecordInput = import("../violation-record").ViolationRecordInput;
 
 describe("violation-record", () => {
-  const DATA_DIR = path.join(process.cwd(), "data", "violations");
-
-  // Track created violation IDs for cleanup
-  let createdIds: string[] = [];
-
   beforeEach(async () => {
-    createdIds = [];
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), "violation-storage-test-"));
+    process.env.VIOLATION_DATA_DIR = testDir;
+
+    vi.resetModules();
+    const mod = await import("../violation-record");
+    recordViolation = mod.recordViolation;
+    getViolationById = mod.getViolationById;
+    getViolationsByCharacter = mod.getViolationsByCharacter;
+    getViolationsByCampaign = mod.getViolationsByCampaign;
+    queryViolations = mod.queryViolations;
+    getViolationCountsByType = mod.getViolationCountsByType;
+    createViolationFromValidation = mod.createViolationFromValidation;
   });
 
   afterEach(async () => {
-    // Cleanup created violations
-    for (const id of createdIds) {
-      try {
-        await fs.unlink(path.join(DATA_DIR, `${id}.json`));
-      } catch {
-        // Ignore if file doesn't exist
-      }
-    }
-
-    // Reset index to empty array if it exists
+    delete process.env.VIOLATION_DATA_DIR;
     try {
-      const indexPath = path.join(DATA_DIR, "_index.json");
-      const index = JSON.parse(await fs.readFile(indexPath, "utf-8"));
-      const filteredIndex = index.filter((entry: { id: string }) => !createdIds.includes(entry.id));
-      await fs.writeFile(indexPath, JSON.stringify(filteredIndex, null, 2) + "\n");
+      await fs.rm(testDir, { recursive: true, force: true });
     } catch {
-      // Ignore if index doesn't exist
+      // Ignore cleanup errors
     }
   });
 
@@ -57,7 +60,6 @@ describe("violation-record", () => {
       };
 
       const record = await recordViolation(input);
-      createdIds.push(record.id);
 
       expect(record.id).toBeDefined();
       expect(record.timestamp).toBeDefined();
@@ -79,10 +81,9 @@ describe("violation-record", () => {
       };
 
       const record = await recordViolation(input);
-      createdIds.push(record.id);
 
       // Verify file exists
-      const filePath = path.join(DATA_DIR, `${record.id}.json`);
+      const filePath = path.join(testDir, `${record.id}.json`);
       const fileContent = await fs.readFile(filePath, "utf-8");
       const savedRecord = JSON.parse(fileContent);
 
@@ -105,7 +106,6 @@ describe("violation-record", () => {
       };
 
       const created = await recordViolation(input);
-      createdIds.push(created.id);
 
       const retrieved = await getViolationById(created.id);
 
@@ -122,30 +122,28 @@ describe("violation-record", () => {
 
   describe("getViolationsByCharacter", () => {
     it("should return violations for a specific character", async () => {
-      const characterId = `test-char-${Date.now()}`;
+      const characterId = "test-char-violations";
 
       // Create two violations for the same character
-      const v1 = await recordViolation({
+      await recordViolation({
         characterId,
         violationType: "creation",
         severity: "error",
         constraintId: "test-1",
         details: { attemptedAction: "Action 1", rejectReason: "Reason 1" },
       });
-      createdIds.push(v1.id);
 
-      const v2 = await recordViolation({
+      await recordViolation({
         characterId,
         violationType: "advancement",
         severity: "error",
         constraintId: "test-2",
         details: { attemptedAction: "Action 2", rejectReason: "Reason 2" },
       });
-      createdIds.push(v2.id);
 
       const violations = await getViolationsByCharacter(characterId);
 
-      expect(violations.length).toBeGreaterThanOrEqual(2);
+      expect(violations.length).toBe(2);
       expect(violations.every((v) => v.characterId === characterId)).toBe(true);
     });
 
@@ -167,7 +165,6 @@ describe("violation-record", () => {
         rulesetSnapshotId: "snapshot-abc",
         enabledBookIds: ["core", "run-faster"],
       });
-      createdIds.push(record.id);
 
       expect(record.campaignId).toBe("campaign-123");
       expect(record.details.rulesetSnapshotId).toBe("snapshot-abc");
@@ -177,39 +174,36 @@ describe("violation-record", () => {
 
   describe("getViolationCountsByType", () => {
     it("should return counts by violation type", async () => {
-      const charId = `count-test-${Date.now()}`;
+      const charId = "count-test-char";
 
-      const v1 = await recordViolation({
+      await recordViolation({
         characterId: charId,
         violationType: "creation",
         severity: "error",
         constraintId: "c1",
         details: { attemptedAction: "a", rejectReason: "r" },
       });
-      createdIds.push(v1.id);
 
-      const v2 = await recordViolation({
+      await recordViolation({
         characterId: charId,
         violationType: "creation",
         severity: "error",
         constraintId: "c2",
         details: { attemptedAction: "a", rejectReason: "r" },
       });
-      createdIds.push(v2.id);
 
-      const v3 = await recordViolation({
+      await recordViolation({
         characterId: charId,
         violationType: "advancement",
         severity: "error",
         constraintId: "c3",
         details: { attemptedAction: "a", rejectReason: "r" },
       });
-      createdIds.push(v3.id);
 
       const counts = await getViolationCountsByType(charId);
 
-      expect(counts.creation).toBeGreaterThanOrEqual(2);
-      expect(counts.advancement).toBeGreaterThanOrEqual(1);
+      expect(counts.creation).toBe(2);
+      expect(counts.advancement).toBe(1);
     });
   });
 });

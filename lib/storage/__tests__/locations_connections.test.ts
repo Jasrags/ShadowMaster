@@ -1,29 +1,41 @@
 /**
  * Tests for location connection storage
+ *
+ * Uses isolated temp directories via LOCATIONS_CAMPAIGNS_DATA_DIR env var.
  */
 
 import { promises as fs } from "fs";
 import path from "path";
-import { describe, it, expect, afterEach } from "vitest";
-import {
-  createLocationConnection,
-  getLocationConnections,
-  deleteLocationConnection,
-} from "../locations";
+import os from "os";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 
-const TEST_DATA_DIR = path.join(process.cwd(), "data", "campaigns");
+let testDir: string;
+
+// Dynamic imports so we can set LOCATIONS_CAMPAIGNS_DATA_DIR before module evaluation
+let createLocationConnection: typeof import("../locations").createLocationConnection;
+let getLocationConnections: typeof import("../locations").getLocationConnections;
+let deleteLocationConnection: typeof import("../locations").deleteLocationConnection;
 
 describe("Location Connection Storage", () => {
-  const timestamp = Date.now();
-  const campaignId = `test-campaign-conn-${timestamp}`;
+  const campaignId = "test-campaign-conn";
+
+  beforeEach(async () => {
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), "locations-conn-storage-test-"));
+    process.env.LOCATIONS_CAMPAIGNS_DATA_DIR = testDir;
+
+    vi.resetModules();
+    const mod = await import("../locations");
+    createLocationConnection = mod.createLocationConnection;
+    getLocationConnections = mod.getLocationConnections;
+    deleteLocationConnection = mod.deleteLocationConnection;
+  });
 
   afterEach(async () => {
-    // Clean up test directory
+    delete process.env.LOCATIONS_CAMPAIGNS_DATA_DIR;
     try {
-      const campaignDir = path.join(TEST_DATA_DIR, campaignId);
-      await fs.rm(campaignDir, { recursive: true, force: true });
+      await fs.rm(testDir, { recursive: true, force: true });
     } catch {
-      // Ignore
+      // Ignore cleanup errors
     }
   });
 

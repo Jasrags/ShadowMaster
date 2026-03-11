@@ -23,13 +23,15 @@ import type {
   ISODateString,
 } from "../types";
 
-const AUDIT_DIR = path.join(process.cwd(), "data", "audit", "users");
+function getAuditDir(): string {
+  return process.env.USER_AUDIT_DATA_DIR || path.join(process.cwd(), "data", "audit", "users");
+}
 
 /**
  * Get the file path for a user's audit log
  */
 function getUserAuditFilePath(userId: string): string {
-  return path.join(AUDIT_DIR, `${userId}.json`);
+  return path.join(getAuditDir(), `${userId}.json`);
 }
 
 /**
@@ -45,7 +47,7 @@ async function getUserAuditEntries(userId: string): Promise<UserAuditEntry[]> {
  * Save audit entries for a specific user
  */
 async function saveUserAuditEntries(userId: string, entries: UserAuditEntry[]): Promise<void> {
-  await ensureDirectory(AUDIT_DIR);
+  await ensureDirectory(getAuditDir());
   const filePath = getUserAuditFilePath(userId);
   await writeJsonFile(filePath, entries);
 }
@@ -133,7 +135,7 @@ export async function getAllUserAuditEntries(
     allEntries = await getUserAuditEntries(targetUserId);
   } else {
     // Get all user IDs with audit logs
-    const userIds = await listJsonFiles(AUDIT_DIR);
+    const userIds = await listJsonFiles(getAuditDir());
 
     // Collect all entries from all users
     for (const userId of userIds) {
@@ -220,8 +222,8 @@ export async function archiveUserAuditLog(
 
   entries.push(deletionEntry);
 
-  // Save to archive location
-  const archiveDir = path.join(process.cwd(), "data", "audit", "users-archived");
+  // Save to archive location (sibling to audit dir)
+  const archiveDir = path.join(path.dirname(getAuditDir()), "users-archived");
   await ensureDirectory(archiveDir);
   const archivePath = path.join(archiveDir, `${userId}-${Date.now()}.json`);
   await writeJsonFile(archivePath, entries);

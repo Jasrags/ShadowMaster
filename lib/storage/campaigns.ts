@@ -22,16 +22,24 @@ import { getAllCharacters, updateCharacter } from "./characters";
 import { getEdition } from "./editions";
 import { validateCampaignTemplateData, assertValid } from "./validation";
 
-const DATA_DIR = path.join(process.cwd(), "data", "campaigns");
-const TEMPLATES_DIR = path.join(process.cwd(), "data", "campaign_templates");
+function getDataDir(): string {
+  return process.env.CAMPAIGN_DATA_DIR || path.join(process.cwd(), "data", "campaigns");
+}
+
+function getTemplatesDir(): string {
+  return (
+    process.env.CAMPAIGN_TEMPLATES_DATA_DIR ||
+    path.join(process.cwd(), "data", "campaign_templates")
+  );
+}
 
 /**
  * Ensures the data directory exists, creating it if necessary
  */
 async function ensureDataDirectory(): Promise<void> {
   try {
-    await fs.mkdir(DATA_DIR, { recursive: true });
-    await fs.mkdir(TEMPLATES_DIR, { recursive: true });
+    await fs.mkdir(getDataDir(), { recursive: true });
+    await fs.mkdir(getTemplatesDir(), { recursive: true });
   } catch (error) {
     if ((error as NodeJS.ErrnoException).code !== "EEXIST") {
       throw error;
@@ -43,7 +51,7 @@ async function ensureDataDirectory(): Promise<void> {
  * Get the file path for a campaign by ID
  */
 function getCampaignFilePath(campaignId: string): string {
-  return path.join(DATA_DIR, `${campaignId}.json`);
+  return path.join(getDataDir(), `${campaignId}.json`);
 }
 
 /**
@@ -130,7 +138,7 @@ export async function getCampaignById(campaignId: string): Promise<Campaign | nu
 export async function getAllCampaigns(): Promise<Campaign[]> {
   try {
     await ensureDataDirectory();
-    const files = await fs.readdir(DATA_DIR);
+    const files = await fs.readdir(getDataDir());
     const jsonFiles = files.filter((file) => file.endsWith(".json"));
 
     const campaigns: Campaign[] = [];
@@ -475,7 +483,7 @@ export async function saveCampaignAsTemplate(
   // Validate data before writing (defense-in-depth for CWE-73)
   assertValid(validateCampaignTemplateData(template), "CampaignTemplate");
 
-  const filePath = path.join(TEMPLATES_DIR, `${template.id}.json`);
+  const filePath = path.join(getTemplatesDir(), `${template.id}.json`);
   await fs.writeFile(filePath, JSON.stringify(template, null, 2), "utf-8");
 
   return template;
@@ -490,18 +498,18 @@ export async function getCampaignTemplates(userId: ID): Promise<CampaignTemplate
 
     // Ensure templates dir exists (it might be empty if we just created it)
     try {
-      await fs.access(TEMPLATES_DIR);
+      await fs.access(getTemplatesDir());
     } catch {
-      await fs.mkdir(TEMPLATES_DIR, { recursive: true });
+      await fs.mkdir(getTemplatesDir(), { recursive: true });
     }
 
-    const files = await fs.readdir(TEMPLATES_DIR);
+    const files = await fs.readdir(getTemplatesDir());
     const jsonFiles = files.filter((file) => file.endsWith(".json"));
 
     const templates: CampaignTemplate[] = [];
     for (const file of jsonFiles) {
       try {
-        const filePath = path.join(TEMPLATES_DIR, file);
+        const filePath = path.join(getTemplatesDir(), file);
         const fileContent = await fs.readFile(filePath, "utf-8");
         const template = JSON.parse(fileContent) as CampaignTemplate;
 

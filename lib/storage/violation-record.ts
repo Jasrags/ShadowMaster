@@ -125,16 +125,18 @@ export interface ViolationQueryOptions {
 // DATA DIRECTORY
 // =============================================================================
 
-const DATA_DIR = path.join(process.cwd(), "data", "violations");
+function getDataDir(): string {
+  return process.env.VIOLATION_DATA_DIR || path.join(process.cwd(), "data", "violations");
+}
 
 /**
  * Ensure the violations directory exists.
  */
 async function ensureDataDir(): Promise<void> {
   try {
-    await fs.access(DATA_DIR);
+    await fs.access(getDataDir());
   } catch {
-    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.mkdir(getDataDir(), { recursive: true });
   }
 }
 
@@ -142,14 +144,14 @@ async function ensureDataDir(): Promise<void> {
  * Get the file path for a violation record.
  */
 function getViolationFilePath(id: ID): string {
-  return path.join(DATA_DIR, `${id}.json`);
+  return path.join(getDataDir(), `${id}.json`);
 }
 
 /**
  * Get the index file path.
  */
 function getIndexFilePath(): string {
-  return path.join(DATA_DIR, "_index.json");
+  return path.join(getDataDir(), "_index.json");
 }
 
 // =============================================================================

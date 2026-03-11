@@ -1,31 +1,45 @@
 /**
  * Tests for user audit log storage layer
  *
- * Tests user governance audit logging functionality.
+ * Tests user governance audit logging functionality with isolated temp directories.
  */
 
-import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { describe, it, expect, beforeEach, afterEach, vi } from "vitest";
 import { promises as fs } from "fs";
 import path from "path";
-import {
-  createUserAuditEntry,
-  getUserAuditLog,
-  getAllUserAuditEntries,
-  archiveUserAuditLog,
-  deleteUserAuditLog,
-} from "../user-audit";
+import os from "os";
 import type { UserAuditAction } from "@/lib/types/audit";
 
-const TEST_AUDIT_DIR = path.join(process.cwd(), "data", "audit", "users");
+let testDir: string;
+
+// Dynamic imports so we can set USER_AUDIT_DATA_DIR before module evaluation
+let createUserAuditEntry: typeof import("../user-audit").createUserAuditEntry;
+let getUserAuditLog: typeof import("../user-audit").getUserAuditLog;
+let getAllUserAuditEntries: typeof import("../user-audit").getAllUserAuditEntries;
+let archiveUserAuditLog: typeof import("../user-audit").archiveUserAuditLog;
+let deleteUserAuditLog: typeof import("../user-audit").deleteUserAuditLog;
 
 describe("User Audit Storage", () => {
-  const testUserId = `test-user-${Date.now()}`;
-  const testActorId = `test-actor-${Date.now()}`;
+  const testUserId = "test-user-audit";
+  const testActorId = "test-actor-audit";
+
+  beforeEach(async () => {
+    testDir = await fs.mkdtemp(path.join(os.tmpdir(), "user-audit-storage-test-"));
+    process.env.USER_AUDIT_DATA_DIR = testDir;
+
+    vi.resetModules();
+    const mod = await import("../user-audit");
+    createUserAuditEntry = mod.createUserAuditEntry;
+    getUserAuditLog = mod.getUserAuditLog;
+    getAllUserAuditEntries = mod.getAllUserAuditEntries;
+    archiveUserAuditLog = mod.archiveUserAuditLog;
+    deleteUserAuditLog = mod.deleteUserAuditLog;
+  });
 
   afterEach(async () => {
-    // Clean up test audit files
+    delete process.env.USER_AUDIT_DATA_DIR;
     try {
-      await deleteUserAuditLog(testUserId);
+      await fs.rm(testDir, { recursive: true, force: true });
     } catch {
       // Ignore cleanup errors
     }
@@ -155,7 +169,7 @@ describe("User Audit Storage", () => {
   });
 
   describe("getAllUserAuditEntries", () => {
-    const anotherUserId = `another-user-${Date.now()}`;
+    const anotherUserId = "another-user-audit";
 
     beforeEach(async () => {
       // Create entries for multiple users
@@ -181,19 +195,10 @@ describe("User Audit Storage", () => {
       });
     });
 
-    afterEach(async () => {
-      try {
-        await deleteUserAuditLog(anotherUserId);
-      } catch {
-        // Ignore cleanup errors
-      }
-    });
-
     it("should return entries from all users", async () => {
       const { entries, total } = await getAllUserAuditEntries();
 
-      // Should have entries from both test users (at minimum)
-      expect(total).toBeGreaterThanOrEqual(3);
+      expect(total).toBe(3);
 
       const userIds = new Set(entries.map((e) => e.targetUserId));
       expect(userIds.has(testUserId)).toBe(true);
@@ -203,21 +208,21 @@ describe("User Audit Storage", () => {
     it("should filter by action type", async () => {
       const { entries } = await getAllUserAuditEntries({ actions: ["user_suspended"] });
 
-      expect(entries.length).toBeGreaterThanOrEqual(1);
+      expect(entries.length).toBe(1);
       expect(entries.every((e) => e.action === "user_suspended")).toBe(true);
     });
 
     it("should filter by target user ID", async () => {
       const { entries } = await getAllUserAuditEntries({ targetUserId: testUserId });
 
-      expect(entries.length).toBeGreaterThanOrEqual(2);
+      expect(entries.length).toBe(2);
       expect(entries.every((e) => e.targetUserId === testUserId)).toBe(true);
     });
 
     it("should filter by actor ID", async () => {
       const { entries } = await getAllUserAuditEntries({ actorId: testActorId });
 
-      expect(entries.length).toBeGreaterThanOrEqual(3);
+      expect(entries.length).toBe(3);
       expect(entries.every((e) => e.actor.userId === testActorId)).toBe(true);
     });
   });
