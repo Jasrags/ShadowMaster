@@ -2,28 +2,29 @@
  * E2E: GM Character Approval Workflow (#445 / PR #507)
  *
  * Verifies the full character approval lifecycle:
- * 1. Campaign character → finalize → pending-review (requiresApproval: true)
+ * 1. Campaign character -> finalize -> pending-review (requiresApproval: true)
  * 2. GM sees character in Approvals tab with badge count
- * 3. GM approves → character becomes active
- * 4. GM rejects with feedback → draft + "Revision Requested" banner
- * 5. Player re-submits after rejection → pending-review again
- * 6. Non-campaign character → finalize directly to active
+ * 3. GM approves -> character becomes active
+ * 4. GM rejects with feedback -> draft + "Revision Requested" banner
+ * 5. Player re-submits after rejection -> pending-review again
+ * 6. Non-campaign character -> finalize directly to active
  *
  * Strategy: Two browser contexts (GM + Player) with API-driven setup.
  * File injection provides minimal valid character fields to pass validation.
  */
 
 import { test, expect, type Page, type BrowserContext } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
+import { signUpTestUser, setupRateLimitBypass } from "./helpers/auth";
+import {
+  readCharacterFromUser,
+  writeCharacterForUser,
+  cleanupUserCharacters,
+  cleanupCampaign,
+} from "./helpers/fixtures";
 
 // ---------------------------------------------------------------------------
 // Constants
 // ---------------------------------------------------------------------------
-
-const DATA_DIR = path.resolve("data");
-const CAMPAIGNS_DIR = path.join(DATA_DIR, "campaigns");
-const CHARACTERS_DIR = path.join(DATA_DIR, "characters");
 
 const EDITION_CODE = "sr5";
 const EDITION_ID = "sr5";
@@ -70,67 +71,6 @@ const MINIMAL_VALID_FIELDS = {
   karmaCurrent: 0,
   karmaSpentAtCreation: 0,
 };
-
-// ---------------------------------------------------------------------------
-// File-system helpers
-// ---------------------------------------------------------------------------
-
-function readCharacterFile(characterId: string, userId: string): Record<string, unknown> {
-  const filePath = path.join(CHARACTERS_DIR, userId, `${characterId}.json`);
-  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-}
-
-function writeCharacterFile(
-  characterId: string,
-  userId: string,
-  data: Record<string, unknown>
-): void {
-  const filePath = path.join(CHARACTERS_DIR, userId, `${characterId}.json`);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
-
-function cleanupUserCharacters(userId: string): void {
-  const dir = path.join(CHARACTERS_DIR, userId);
-  if (!fs.existsSync(dir)) return;
-  for (const file of fs.readdirSync(dir)) {
-    fs.unlinkSync(path.join(dir, file));
-  }
-  fs.rmdirSync(dir);
-}
-
-function cleanupCampaign(campaignId: string): void {
-  // Remove campaign JSON file
-  const campaignFile = path.join(CAMPAIGNS_DIR, `${campaignId}.json`);
-  if (fs.existsSync(campaignFile)) fs.unlinkSync(campaignFile);
-  // Remove campaign directory if it exists (for subdirectories like activity, etc.)
-  const campaignDir = path.join(CAMPAIGNS_DIR, campaignId);
-  if (fs.existsSync(campaignDir)) {
-    fs.rmSync(campaignDir, { recursive: true, force: true });
-  }
-}
-
-// ---------------------------------------------------------------------------
-// Auth helpers
-// ---------------------------------------------------------------------------
-
-async function signUpTestUser(page: Page, prefix: string): Promise<string> {
-  const ts = Date.now();
-  const rnd = Math.random().toString(36).substring(7);
-
-  await page.goto("/signup");
-  await page.locator("#email").fill(`e2e-${prefix}-${ts}-${rnd}@test.com`);
-  await page.locator("#username").fill(`${prefix}${ts}`.substring(0, 20));
-  await page.locator("#password").fill("TestPass123!");
-  await page.locator("#confirmPassword").fill("TestPass123!");
-  await page.getByRole("button", { name: "Sign Up" }).click();
-  await expect(page).toHaveURL("/", { timeout: 15000 });
-
-  const resp = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
-  if (!resp.success || !resp.user?.id) {
-    throw new Error(`Failed to get user ID after signup: ${JSON.stringify(resp)}`);
-  }
-  return resp.user.id as string;
-}
 
 // ---------------------------------------------------------------------------
 // API helpers (called via page.evaluate to inherit auth cookies)
@@ -229,9 +169,9 @@ async function finalizeCharacterViaAPI(
  * This bypasses creation UI and makes the character pass validateCharacterComplete.
  */
 function injectValidCharacterFields(characterId: string, userId: string): void {
-  const charData = readCharacterFile(characterId, userId);
+  const charData = readCharacterFromUser(characterId, userId);
   const updated = { ...charData, ...MINIMAL_VALID_FIELDS };
-  writeCharacterFile(characterId, userId, updated);
+  writeCharacterForUser(characterId, userId, updated);
 }
 
 // ---------------------------------------------------------------------------
@@ -249,14 +189,6 @@ test.describe("GM Character Approval Workflow (#445)", () => {
   let playerUserId: string;
   let campaignId: string;
 
-  // Bypass rate limiting on all API calls
-  async function setupRateLimitBypass(page: Page): Promise<void> {
-    await page.route("**/api/**", async (route) => {
-      const headers = { ...route.request().headers(), "x-e2e-bypass": "true" };
-      await route.continue({ headers });
-    });
-  }
-
   test.beforeAll(async ({ browser }) => {
     // Create two separate browser contexts for GM and Player
     gmContext = await browser.newContext();
@@ -269,10 +201,10 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     await setupRateLimitBypass(playerPage);
 
     // Sign up GM user
-    gmUserId = await signUpTestUser(gmPage, "gm");
+    gmUserId = await signUpTestUser(gmPage, "e2e-approval-gm");
 
     // Sign up Player user
-    playerUserId = await signUpTestUser(playerPage, "plyr");
+    playerUserId = await signUpTestUser(playerPage, "e2e-approval-plyr");
 
     // GM creates a campaign
     const campaign = await createCampaignViaAPI(gmPage);
@@ -295,7 +227,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
   // Track character IDs created by each test for cross-test cleanup
   let test1CharId: string;
 
-  test("1. Campaign character finalize → pending-review with requiresApproval", async () => {
+  test("1. Campaign character finalize -> pending-review with requiresApproval", async () => {
     // Player creates a character linked to the campaign
     const char = await createCharacterViaAPI(playerPage, campaignId);
     test1CharId = char.id;
@@ -311,7 +243,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     expect((result.character as Record<string, unknown>).status).toBe("pending-review");
 
     // Verify on disk
-    const charData = readCharacterFile(char.id, playerUserId);
+    const charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("pending-review");
   });
 
@@ -341,7 +273,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     await expect(gmPage.getByRole("button", { name: "Reject" })).toBeVisible();
   });
 
-  test("3. GM approves → character becomes active", async () => {
+  test("3. GM approves -> character becomes active", async () => {
     // Create and finalize a new character for the approve test
     const char = await createCharacterViaAPI(playerPage, campaignId);
     injectValidCharacterFields(char.id, playerUserId);
@@ -365,7 +297,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     expect(approveResult.success).toBe(true);
 
     // Verify on disk: character should now be active
-    const charData = readCharacterFile(char.id, playerUserId);
+    const charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("active");
 
     // Player navigates to character page and sees active status (no pending-review banner)
@@ -390,7 +322,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     }
   });
 
-  test("4. GM rejects with feedback → draft + feedback banner", async () => {
+  test("4. GM rejects with feedback -> draft + feedback banner", async () => {
     const feedbackText = "Please adjust your attributes to match the priority table.";
 
     // Create and finalize a new character for the reject test
@@ -429,7 +361,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     });
 
     // Verify on disk: character should be back to draft
-    const charData = readCharacterFile(char.id, playerUserId);
+    const charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("draft");
     expect(charData.approvalStatus).toBe("rejected");
     expect(charData.approvalFeedback).toBe(feedbackText);
@@ -440,7 +372,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     await expect(playerPage.getByText(feedbackText)).toBeVisible();
   });
 
-  test("5. Player re-submits after rejection → pending-review again", async () => {
+  test("5. Player re-submits after rejection -> pending-review again", async () => {
     // Create, finalize, then reject a character
     const char = await createCharacterViaAPI(playerPage, campaignId);
     injectValidCharacterFields(char.id, playerUserId);
@@ -466,7 +398,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     );
 
     // Verify character is now draft
-    let charData = readCharacterFile(char.id, playerUserId);
+    let charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("draft");
 
     // Player re-finalizes the character
@@ -475,11 +407,11 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     expect((result.character as Record<string, unknown>).status).toBe("pending-review");
 
     // Verify on disk
-    charData = readCharacterFile(char.id, playerUserId);
+    charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("pending-review");
   });
 
-  test("6. Non-campaign character → finalize directly to active", async () => {
+  test("6. Non-campaign character -> finalize directly to active", async () => {
     // Create a character WITHOUT a campaign
     const char = await createCharacterViaAPI(playerPage);
 
@@ -492,7 +424,7 @@ test.describe("GM Character Approval Workflow (#445)", () => {
     expect((result.character as Record<string, unknown>).status).toBe("active");
 
     // Verify on disk
-    const charData = readCharacterFile(char.id, playerUserId);
+    const charData = readCharacterFromUser(char.id, playerUserId);
     expect(charData.status).toBe("active");
   });
 });

@@ -20,80 +20,14 @@
  */
 
 import { test, expect, type Page } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-const WHISPER_ID = "0bd8f72f-b5d9-45b7-a530-0c7f462257a1";
-const ORIGINAL_OWNER = "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c";
-const DATA_DIR = path.resolve("data");
-
-// ---------------------------------------------------------------------------
-// File-system helpers
-// ---------------------------------------------------------------------------
-
-function copyCharacterToUser(characterId: string, userId: string): void {
-  const srcFile = path.join(DATA_DIR, "characters", ORIGINAL_OWNER, `${characterId}.json`);
-  if (!fs.existsSync(srcFile)) return;
-
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) {
-    fs.mkdirSync(destDir, { recursive: true });
-  }
-
-  const charData = JSON.parse(fs.readFileSync(srcFile, "utf-8"));
-  charData.ownerId = userId;
-  fs.writeFileSync(path.join(destDir, `${characterId}.json`), JSON.stringify(charData, null, 2));
-}
-
-function readCharacterFromUser(characterId: string, userId: string): Record<string, unknown> {
-  const filePath = path.join(DATA_DIR, "characters", userId, `${characterId}.json`);
-  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-}
-
-function writeCharacterForUser(
-  characterId: string,
-  userId: string,
-  data: Record<string, unknown>
-): void {
-  const filePath = path.join(DATA_DIR, "characters", userId, `${characterId}.json`);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
-
-function cleanupUserCharacters(userId: string): void {
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) return;
-  for (const file of fs.readdirSync(destDir)) {
-    fs.unlinkSync(path.join(destDir, file));
-  }
-  fs.rmdirSync(destDir);
-}
-
-// ---------------------------------------------------------------------------
-// Auth helpers
-// ---------------------------------------------------------------------------
-
-async function signUpTestUser(page: Page): Promise<string> {
-  const ts = Date.now();
-  const rnd = Math.random().toString(36).substring(7);
-
-  await page.goto("/signup");
-  await page.locator("#email").fill(`e2e-rigging-${ts}-${rnd}@test.com`);
-  await page.locator("#username").fill(`rig${ts}`.substring(0, 20));
-  await page.locator("#password").fill("TestPass123!");
-  await page.locator("#confirmPassword").fill("TestPass123!");
-  await page.getByRole("button", { name: "Sign Up" }).click();
-  await expect(page).toHaveURL("/", { timeout: 15000 });
-
-  const resp = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
-  if (!resp.success || !resp.user?.id) {
-    throw new Error(`Failed to get user ID after signup: ${JSON.stringify(resp)}`);
-  }
-  return resp.user.id as string;
-}
+import { signUpTestUser, setupRateLimitBypass } from "./helpers/auth";
+import {
+  WHISPER_ID,
+  copyCharacterToUser,
+  readCharacterFromUser,
+  writeCharacterForUser,
+  cleanupUserCharacters,
+} from "./helpers/fixtures";
 
 // ---------------------------------------------------------------------------
 // Rigging data injection
@@ -287,10 +221,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
 
   // Bypass rate limiting on all API calls
   test.beforeEach(async ({ page }) => {
-    await page.route("**/api/**", async (route) => {
-      const headers = { ...route.request().headers(), "x-e2e-bypass": "true" };
-      await route.continue({ headers });
-    });
+    await setupRateLimitBypass(page);
   });
 
   // ---------------------------------------------------------------------------
@@ -301,7 +232,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -342,7 +273,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -398,7 +329,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -499,7 +430,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -588,7 +519,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -678,7 +609,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       copyCharacterToUser(WHISPER_ID, testUserId);
       injectRiggingFields(testUserId);
     });
@@ -733,7 +664,7 @@ test.describe("Rigging System E2E (#407-410)", () => {
     let testUserId: string;
 
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-rigging");
       // Copy Whisper WITHOUT injecting rigging fields
       copyCharacterToUser(WHISPER_ID, testUserId);
     });

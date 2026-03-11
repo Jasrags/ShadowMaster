@@ -13,57 +13,19 @@
 import { test, expect, type Page, type Locator } from "@playwright/test";
 import * as fs from "fs";
 import * as path from "path";
-
-const WHISPER_ID = "0bd8f72f-b5d9-45b7-a530-0c7f462257a1";
-const GLITCH_ID = "b04cc67c-d31c-4f7e-9b89-54e38f163894";
-const ORIGINAL_OWNER = "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c";
-const DATA_DIR = path.resolve("data");
+import { signUpTestUser, setupRateLimitBypass } from "./helpers/auth";
+import {
+  WHISPER_ID,
+  GLITCH_ID,
+  DATA_DIR,
+  ORIGINAL_OWNER,
+  copyCharacterToUser,
+  cleanupUserCharacters,
+} from "./helpers/fixtures";
 
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function copyCharacterToUser(characterId: string, userId: string): void {
-  const srcFile = path.join(DATA_DIR, "characters", ORIGINAL_OWNER, `${characterId}.json`);
-  if (!fs.existsSync(srcFile)) return;
-
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) {
-    fs.mkdirSync(destDir, { recursive: true });
-  }
-
-  const charData = JSON.parse(fs.readFileSync(srcFile, "utf-8"));
-  charData.ownerId = userId;
-  fs.writeFileSync(path.join(destDir, `${characterId}.json`), JSON.stringify(charData, null, 2));
-}
-
-function cleanupUserCharacters(userId: string): void {
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) return;
-  for (const file of fs.readdirSync(destDir)) {
-    fs.unlinkSync(path.join(destDir, file));
-  }
-  fs.rmdirSync(destDir);
-}
-
-async function signUpTestUser(page: Page): Promise<string> {
-  const ts = Date.now();
-  const rnd = Math.random().toString(36).substring(7);
-
-  await page.goto("/signup");
-  await page.locator("#email").fill(`e2e-magic-${ts}-${rnd}@test.com`);
-  await page.locator("#username").fill(`mtest${ts}`.substring(0, 20));
-  await page.locator("#password").fill("TestPass123!");
-  await page.locator("#confirmPassword").fill("TestPass123!");
-  await page.getByRole("button", { name: "Sign Up" }).click();
-  await expect(page).toHaveURL("/", { timeout: 15000 });
-
-  const resp = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
-  if (!resp.success || !resp.user?.id) {
-    throw new Error(`Failed to get user ID: ${JSON.stringify(resp)}`);
-  }
-  return resp.user.id;
-}
 
 /**
  * Find a display card by its heading text.
@@ -86,15 +48,12 @@ test.describe("Magic/Resonance Reduction Display (#454)", () => {
 
   // Bypass rate limiting for all API requests
   test.beforeEach(async ({ page }) => {
-    await page.route("**/api/**", async (route) => {
-      const headers = { ...route.request().headers(), "x-e2e-bypass": "true" };
-      await route.continue({ headers });
-    });
+    await setupRateLimitBypass(page);
   });
 
   test.describe("Whisper (Adept) — Magic Reduction", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-magic");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
@@ -192,7 +151,7 @@ test.describe("Magic/Resonance Reduction Display (#454)", () => {
         test.skip();
         return;
       }
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-magic");
       copyCharacterToUser(GLITCH_ID, testUserId);
     });
 

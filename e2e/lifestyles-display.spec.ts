@@ -20,80 +20,14 @@
  */
 
 import { test, expect, type Page, type Locator } from "@playwright/test";
-import * as fs from "fs";
-import * as path from "path";
-
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
-const WHISPER_ID = "0bd8f72f-b5d9-45b7-a530-0c7f462257a1";
-const ORIGINAL_OWNER = "b7e99950-bbeb-40ee-9139-ae5b2e9a2a0c";
-const DATA_DIR = path.resolve("data");
-
-// ---------------------------------------------------------------------------
-// File-system helpers (same pattern as magic-resonance-reduction.spec.ts)
-// ---------------------------------------------------------------------------
-
-function copyCharacterToUser(characterId: string, userId: string): void {
-  const srcFile = path.join(DATA_DIR, "characters", ORIGINAL_OWNER, `${characterId}.json`);
-  if (!fs.existsSync(srcFile)) return;
-
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) {
-    fs.mkdirSync(destDir, { recursive: true });
-  }
-
-  const charData = JSON.parse(fs.readFileSync(srcFile, "utf-8"));
-  charData.ownerId = userId;
-  fs.writeFileSync(path.join(destDir, `${characterId}.json`), JSON.stringify(charData, null, 2));
-}
-
-function readCharacterFromUser(characterId: string, userId: string): Record<string, unknown> {
-  const filePath = path.join(DATA_DIR, "characters", userId, `${characterId}.json`);
-  return JSON.parse(fs.readFileSync(filePath, "utf-8"));
-}
-
-function writeCharacterForUser(
-  characterId: string,
-  userId: string,
-  data: Record<string, unknown>
-): void {
-  const filePath = path.join(DATA_DIR, "characters", userId, `${characterId}.json`);
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
-
-function cleanupUserCharacters(userId: string): void {
-  const destDir = path.join(DATA_DIR, "characters", userId);
-  if (!fs.existsSync(destDir)) return;
-  for (const file of fs.readdirSync(destDir)) {
-    fs.unlinkSync(path.join(destDir, file));
-  }
-  fs.rmdirSync(destDir);
-}
-
-// ---------------------------------------------------------------------------
-// Auth helpers
-// ---------------------------------------------------------------------------
-
-async function signUpTestUser(page: Page): Promise<string> {
-  const ts = Date.now();
-  const rnd = Math.random().toString(36).substring(7);
-
-  await page.goto("/signup");
-  await page.locator("#email").fill(`e2e-lifestyles-${ts}-${rnd}@test.com`);
-  await page.locator("#username").fill(`lstyle${ts}`.substring(0, 20));
-  await page.locator("#password").fill("TestPass123!");
-  await page.locator("#confirmPassword").fill("TestPass123!");
-  await page.getByRole("button", { name: "Sign Up" }).click();
-  await expect(page).toHaveURL("/", { timeout: 15000 });
-
-  const resp = await page.evaluate(() => fetch("/api/auth/me").then((r) => r.json()));
-  if (!resp.success || !resp.user?.id) {
-    throw new Error(`Failed to get user ID after signup: ${JSON.stringify(resp)}`);
-  }
-  return resp.user.id as string;
-}
+import { signUpTestUser, setupRateLimitBypass } from "./helpers/auth";
+import {
+  WHISPER_ID,
+  copyCharacterToUser,
+  readCharacterFromUser,
+  writeCharacterForUser,
+  cleanupUserCharacters,
+} from "./helpers/fixtures";
 
 // ---------------------------------------------------------------------------
 // Page helpers
@@ -132,15 +66,12 @@ test.describe("Lifestyles Display (#455)", () => {
 
   // Bypass rate limiting on all API calls
   test.beforeEach(async ({ page }) => {
-    await page.route("**/api/**", async (route) => {
-      const headers = { ...route.request().headers(), "x-e2e-bypass": "true" };
-      await route.continue({ headers });
-    });
+    await setupRateLimitBypass(page);
   });
 
   test.describe("Section layout", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
@@ -188,7 +119,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Expanded row and actions", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
@@ -217,7 +148,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Add lifestyle", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
       const charData = readCharacterFromUser(WHISPER_ID, testUserId);
       writeCharacterForUser(WHISPER_ID, testUserId, {
@@ -292,7 +223,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Edit lifestyle", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
       // Ensure enough nuyen so the modal's Save button is enabled (canAfford check)
       const charData = readCharacterFromUser(WHISPER_ID, testUserId);
@@ -332,7 +263,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Pay Month — prepaid > 0 (local decrement)", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
@@ -382,7 +313,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Pay Month — prepaid = 0 (deducts nuyen via API)", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
       const charData = readCharacterFromUser(WHISPER_ID, testUserId);
       const lifestyles = charData.lifestyles as Array<Record<string, unknown>>;
@@ -444,7 +375,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Remove lifestyle", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
@@ -489,7 +420,7 @@ test.describe("Lifestyles Display (#455)", () => {
 
   test.describe("Nuyen warning banner", () => {
     test.beforeEach(async ({ page }) => {
-      testUserId = await signUpTestUser(page);
+      testUserId = await signUpTestUser(page, "e2e-lifestyles");
       copyCharacterToUser(WHISPER_ID, testUserId);
     });
 
