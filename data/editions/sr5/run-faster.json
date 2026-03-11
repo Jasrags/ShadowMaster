@@ -1750,6 +1750,304 @@
               }
             ],
             "createdAt": "2025-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "point-buy",
+            "editionId": "sr5",
+            "editionCode": "sr5",
+            "bookId": "run-faster",
+            "name": "Point Buy",
+            "type": "point-buy",
+            "description": "A fully karma-based creation system with 800 Karma. Purchase metatype, attributes, skills, qualities, gear, and more using advancement costs. Offers maximum flexibility at the cost of more time-consuming creation.",
+            "version": "1.0.0",
+            "steps": [
+              {
+                "id": "metatype",
+                "title": "Select Metatype",
+                "type": "select",
+                "description": "Choose your metatype. Cost is deducted from your 800 Karma budget.",
+                "payload": {
+                  "type": "select",
+                  "target": "metatype"
+                }
+              },
+              {
+                "id": "magic",
+                "title": "Magic/Resonance",
+                "type": "select",
+                "optional": true,
+                "description": "Purchase a magical or resonance quality to gain access to Magic or Resonance attributes.",
+                "payload": {
+                  "type": "select",
+                  "target": "magical-path"
+                }
+              },
+              {
+                "id": "attributes",
+                "title": "Allocate Attributes",
+                "type": "allocate",
+                "description": "Raise attributes from metatype minimums using advancement costs (New Rating × 5 Karma).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "attributes",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "skills",
+                "title": "Allocate Skills",
+                "type": "allocate",
+                "description": "Purchase skills using advancement costs (New Rating × 2 Karma for active, × 5 for groups, × 1 for knowledge).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "skills",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "qualities",
+                "title": "Select Qualities",
+                "type": "choose",
+                "description": "Purchase positive qualities and take negative qualities (refunds Karma).",
+                "payload": {
+                  "type": "choose",
+                  "target": "qualities",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "spells",
+                "title": "Spells",
+                "type": "custom",
+                "description": "Select spells if you are a magician or mystic adept (5 Karma each).",
+                "payload": {
+                  "type": "custom",
+                  "target": "spells"
+                }
+              },
+              {
+                "id": "rituals",
+                "title": "Rituals",
+                "type": "custom",
+                "description": "Learn ritual spellcasting if your magical path includes it.",
+                "payload": {
+                  "type": "custom",
+                  "target": "rituals"
+                }
+              },
+              {
+                "id": "adept-powers",
+                "title": "Adept Powers",
+                "type": "custom",
+                "description": "Select adept powers using your Power Points (equal to Magic for Adepts; Mystic Adepts buy power points at 5 Karma each).",
+                "payload": {
+                  "type": "custom",
+                  "target": "adeptPowers"
+                }
+              },
+              {
+                "id": "contacts",
+                "title": "Build Contacts",
+                "type": "allocate",
+                "description": "Build your network of contacts using Karma (Connection + Loyalty per contact).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "contacts",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "augmentations",
+                "title": "Augmentations",
+                "type": "purchase",
+                "description": "Install cyberware and bioware. Essence loss affects Magic rating. Purchased with nuyen from gear karma.",
+                "payload": {
+                  "type": "purchase",
+                  "target": "augmentations",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "gear",
+                "title": "Purchase Gear",
+                "type": "purchase",
+                "description": "Purchase gear using nuyen (1 Karma = 2,000¥, max 200 Karma on gear).",
+                "payload": {
+                  "type": "purchase",
+                  "target": "gear",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "vehicles",
+                "title": "Vehicles & Drones",
+                "type": "purchase",
+                "payload": {
+                  "type": "purchase",
+                  "target": "vehicles",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "programs",
+                "title": "Matrix Programs",
+                "description": "Select Matrix programs for your cyberdeck.",
+                "type": "purchase",
+                "payload": {
+                  "budget": "nuyen",
+                  "catalog": "programs"
+                }
+              },
+              {
+                "id": "identities",
+                "title": "Identities & SINs",
+                "type": "choose",
+                "description": "Create identities with SINs (fake or real) and licenses.",
+                "payload": {
+                  "type": "choose",
+                  "target": "identities"
+                }
+              },
+              {
+                "id": "review",
+                "title": "Review & Finalize",
+                "type": "validate",
+                "description": "Review your character. All 800 Karma must be spent — no leftover Karma allowed.",
+                "payload": {
+                  "type": "validate",
+                  "validations": ["all"]
+                }
+              }
+            ],
+            "budgets": [
+              {
+                "id": "karma",
+                "label": "Karma",
+                "initialValue": 800,
+                "description": "Starting Karma budget for Point Buy creation"
+              },
+              {
+                "id": "nuyen",
+                "label": "Nuyen",
+                "initialValue": 0,
+                "displayFormat": "currency",
+                "description": "Nuyen from karma-to-nuyen conversion (1 Karma = 2,000¥)"
+              },
+              {
+                "id": "gear-karma",
+                "label": "Gear Karma",
+                "initialValue": 0,
+                "max": 200,
+                "description": "Karma spent on gear (max 200)"
+              }
+            ],
+            "constraints": [
+              {
+                "id": "point-buy-budget",
+                "type": "point-buy-budget",
+                "description": "Total Karma spent cannot exceed 800. Gear karma capped at 200.",
+                "severity": "error",
+                "params": {
+                  "totalBudget": 800,
+                  "maxGearKarma": 200,
+                  "nuyenPerKarma": 2000,
+                  "maxLeftoverNuyen": 5000,
+                  "metatypeCosts": {
+                    "human": 0,
+                    "elf": 40,
+                    "dwarf": 50,
+                    "ork": 50,
+                    "troll": 90
+                  },
+                  "magicQualityCosts": {
+                    "adept": 20,
+                    "aspected-magician": 15,
+                    "magician": 30,
+                    "mystic-adept": 35,
+                    "technomancer": 15
+                  }
+                },
+                "errorMessage": "Karma budget exceeded (800 Karma total, 200 max on gear)."
+              },
+              {
+                "id": "max-one-attribute-at-max",
+                "type": "attribute-limit",
+                "description": "Only one Physical or Mental attribute can be at natural maximum at creation. Special attributes (Edge, Magic, Resonance) are exempt.",
+                "severity": "error",
+                "params": {
+                  "maxAtMax": 1
+                },
+                "errorMessage": "Only one Physical or Mental attribute can be at its natural maximum."
+              },
+              {
+                "id": "positive-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma in Positive Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "positive-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot spend more than 25 Karma on positive qualities."
+              },
+              {
+                "id": "negative-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma from Negative Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "negative-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot gain more than 25 Karma from negative qualities."
+              },
+              {
+                "id": "skill-max-at-creation",
+                "type": "skill-limit",
+                "description": "Skills capped at 6 at creation (7 with Aptitude).",
+                "severity": "error",
+                "params": {
+                  "max": 6,
+                  "maxWithAptitude": 7
+                },
+                "errorMessage": "Skill rating cannot exceed 6 at creation (7 with Aptitude)."
+              },
+              {
+                "id": "gear-availability",
+                "type": "custom",
+                "description": "Gear availability cannot exceed 12 at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAvailability": 12
+                },
+                "errorMessage": "Cannot purchase gear with availability higher than 12."
+              },
+              {
+                "id": "essence-minimum",
+                "type": "essence-minimum",
+                "description": "Essence cannot drop below 0.",
+                "severity": "error",
+                "params": {
+                  "min": 0
+                },
+                "errorMessage": "Essence cannot drop below 0."
+              },
+              {
+                "id": "no-leftover-karma",
+                "type": "budget-balance",
+                "description": "All Karma must be spent — no leftover Karma allowed.",
+                "severity": "warning",
+                "params": {
+                  "budgetId": "karma",
+                  "max": 0
+                },
+                "errorMessage": "Leftover Karma cannot be carried over from Point Buy creation."
+              }
+            ],
+            "createdAt": "2025-01-01T00:00:00.000Z"
           }
         ]
       }

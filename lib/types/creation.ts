@@ -300,6 +300,7 @@ export type ConstraintType =
   | "equipment-rating" // Equipment ratings must be valid
   | "special-attribute-init" // Edge/Magic/Resonance starting values
   | "sum-to-ten-budget" // Priority point values must sum to exact total
+  | "point-buy-budget" // Karma budget tracking for point-buy creation
   | "custom"; // Custom validation function name
 
 /**

@@ -22,6 +22,7 @@ import { validateRating, validateRatingAvailability, convertLegacyRatingSpec } f
 import { validateAllQualities, validateKarmaLimits } from "./qualities";
 import { validateAllGear } from "./gear/validation";
 import { validateSumToTenBudget } from "./sum-to-ten-validation";
+import { validatePointBuyBudget } from "./point-buy-validation";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -267,6 +268,7 @@ const constraintValidators: Record<ConstraintType, ConstraintValidator> = {
   "equipment-rating": validateEquipmentRatings,
   "special-attribute-init": validateSpecialAttributeInit,
   "sum-to-ten-budget": validateSumToTenBudget,
+  "point-buy-budget": validatePointBuyBudget,
   custom: validateCustom,
 };
 
