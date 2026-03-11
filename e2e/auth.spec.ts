@@ -1,26 +1,10 @@
 import { test, expect, type Page } from "@playwright/test";
+import { generateTestUser, setupRateLimitBypass, TEST_PASSWORD } from "./helpers/auth";
 
 // Add E2E bypass header to all API requests to skip rate limiting
 test.beforeEach(async ({ page }) => {
-  await page.route("**/api/**", async (route) => {
-    const headers = {
-      ...route.request().headers(),
-      "x-e2e-bypass": "true",
-    };
-    await route.continue({ headers });
-  });
+  await setupRateLimitBypass(page);
 });
-
-// Helper to generate unique test users
-function generateTestUser() {
-  const timestamp = Date.now();
-  const random = Math.random().toString(36).substring(7);
-  return {
-    email: `test-${timestamp}-${random}@example.com`,
-    username: `testuser${timestamp}${random}`.substring(0, 20), // Keep username reasonable length
-    password: "TestPass123!",
-  };
-}
 
 // Helper to wait for client-side navigation to home page
 // Uses toHaveURL instead of waitForURL since router.push does client-side navigation
@@ -96,7 +80,7 @@ test.describe("Sign Up", () => {
   test("should show error for password mismatch", async ({ page }) => {
     await page.locator("#email").fill("test@example.com");
     await page.locator("#username").fill("testuser");
-    await page.locator("#password").fill("TestPass123!");
+    await page.locator("#password").fill(TEST_PASSWORD);
     await page.locator("#confirmPassword").fill("DifferentPass123!");
     await page.getByRole("button", { name: "Sign Up" }).click();
 
@@ -107,8 +91,8 @@ test.describe("Sign Up", () => {
   test("should show error for short username", async ({ page }) => {
     await page.locator("#email").fill("test@example.com");
     await page.locator("#username").fill("ab");
-    await page.locator("#password").fill("TestPass123!");
-    await page.locator("#confirmPassword").fill("TestPass123!");
+    await page.locator("#password").fill(TEST_PASSWORD);
+    await page.locator("#confirmPassword").fill(TEST_PASSWORD);
     await page.getByRole("button", { name: "Sign Up" }).click();
 
     await expect(page.locator("#username-error")).toBeVisible();
