@@ -1,14 +1,32 @@
 "use client";
 
 import { useState } from "react";
-import { useGameplayLevels } from "@/lib/rules/RulesetContext";
+import { useCreationMethods, useGameplayLevels } from "@/lib/rules/RulesetContext";
 import type { GameplayLevel } from "@/lib/types/campaign";
-import type { GameplayLevelModifiers } from "@/lib/types";
-import { ArrowRight, Users, Zap, Crown } from "lucide-react";
+import type { CreationMethod, GameplayLevelModifiers } from "@/lib/types";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Users,
+  Zap,
+  Crown,
+  Sparkles,
+  Calculator,
+  Coins,
+} from "lucide-react";
+
+// =============================================================================
+// TYPES
+// =============================================================================
 
 interface CreationSetupProps {
-  onComplete: (gameplayLevel: GameplayLevel) => void;
+  onComplete: (gameplayLevel: GameplayLevel, creationMethodId: string) => void;
+  defaultMethodId?: string;
 }
+
+// =============================================================================
+// CONSTANTS
+// =============================================================================
 
 const LEVEL_ORDER: GameplayLevel[] = ["street", "experienced", "prime-runner"];
 
@@ -46,8 +64,138 @@ const LEVEL_COLORS: Record<string, { text: string; bg: string; border: string; r
   },
 };
 
-export function CreationSetup({ onComplete }: CreationSetupProps) {
-  const [selected, setSelected] = useState<GameplayLevel>("experienced");
+const METHOD_ICONS: Record<string, typeof Sparkles> = {
+  priority: Sparkles,
+  "sum-to-ten": Calculator,
+  "point-buy": Coins,
+};
+
+const METHOD_COLORS: Record<string, { text: string; bg: string; border: string; ring: string }> = {
+  priority: {
+    text: "text-emerald-600 dark:text-emerald-400",
+    bg: "bg-emerald-500/10",
+    border: "border-emerald-500/30",
+    ring: "ring-emerald-500/50",
+  },
+  "sum-to-ten": {
+    text: "text-cyan-600 dark:text-cyan-400",
+    bg: "bg-cyan-500/10",
+    border: "border-cyan-500/30",
+    ring: "ring-cyan-500/50",
+  },
+  "point-buy": {
+    text: "text-amber-600 dark:text-amber-400",
+    bg: "bg-amber-500/10",
+    border: "border-amber-500/30",
+    ring: "ring-amber-500/50",
+  },
+};
+
+const DEFAULT_COLORS = {
+  text: "text-emerald-600 dark:text-emerald-400",
+  bg: "bg-emerald-500/10",
+  border: "border-emerald-500/30",
+  ring: "ring-emerald-500/50",
+};
+
+// =============================================================================
+// METHOD SELECTOR STEP
+// =============================================================================
+
+function CreationMethodStep({
+  methods,
+  selectedId,
+  onSelect,
+  onContinue,
+}: {
+  methods: CreationMethod[];
+  selectedId: string;
+  onSelect: (id: string) => void;
+  onContinue: () => void;
+}) {
+  return (
+    <div className="mx-auto max-w-3xl py-8">
+      <div className="mb-8 text-center">
+        <h2 className="text-2xl font-bold text-zinc-900 dark:text-zinc-50">
+          Choose Creation Method
+        </h2>
+        <p className="mt-2 text-sm text-zinc-600 dark:text-zinc-400">
+          Select how you want to build your character. Each method offers a different balance of
+          structure and flexibility.
+        </p>
+      </div>
+
+      <div className={`grid gap-4 ${methods.length <= 2 ? "sm:grid-cols-2" : "sm:grid-cols-3"}`}>
+        {methods.map((method) => {
+          const Icon = METHOD_ICONS[method.id] ?? Sparkles;
+          const colors = METHOD_COLORS[method.id] ?? DEFAULT_COLORS;
+          const isSelected = selectedId === method.id;
+
+          return (
+            <button
+              key={method.id}
+              onClick={() => onSelect(method.id)}
+              className={`relative flex flex-col rounded-xl border p-5 text-left transition-all ${
+                isSelected
+                  ? `${colors.border} ${colors.bg} ring-2 ${colors.ring}`
+                  : "border-zinc-200 hover:border-zinc-300 dark:border-zinc-700 dark:hover:border-zinc-600"
+              }`}
+            >
+              <div className="mb-3 flex items-center gap-2">
+                <div className={`flex h-8 w-8 items-center justify-center rounded-lg ${colors.bg}`}>
+                  <Icon className={`h-4 w-4 ${colors.text}`} />
+                </div>
+                <h3
+                  className={`text-sm font-semibold ${isSelected ? colors.text : "text-zinc-900 dark:text-zinc-100"}`}
+                >
+                  {method.name}
+                </h3>
+              </div>
+
+              {method.description && (
+                <p className="text-xs text-zinc-500 dark:text-zinc-400">{method.description}</p>
+              )}
+
+              {method.bookId && (
+                <div className="mt-3">
+                  <span className="inline-flex items-center rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-500 dark:bg-zinc-800 dark:text-zinc-400">
+                    {method.bookId === "run-faster" ? "Run Faster" : method.bookId}
+                  </span>
+                </div>
+              )}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="mt-8 flex justify-center">
+        <button
+          onClick={onContinue}
+          className="flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
+        >
+          Continue
+          <ArrowRight className="h-4 w-4" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+// =============================================================================
+// GAMEPLAY LEVEL STEP
+// =============================================================================
+
+function GameplayLevelStep({
+  selectedLevel,
+  onSelect,
+  onContinue,
+  onBack,
+}: {
+  selectedLevel: GameplayLevel;
+  onSelect: (level: GameplayLevel) => void;
+  onContinue: () => void;
+  onBack?: () => void;
+}) {
   const levels = useGameplayLevels();
 
   return (
@@ -68,12 +216,12 @@ export function CreationSetup({ onComplete }: CreationSetupProps) {
 
           const Icon = LEVEL_ICONS[levelId] ?? Zap;
           const colors = LEVEL_COLORS[levelId] ?? LEVEL_COLORS.experienced;
-          const isSelected = selected === levelId;
+          const isSelected = selectedLevel === levelId;
 
           return (
             <button
               key={levelId}
-              onClick={() => setSelected(levelId)}
+              onClick={() => onSelect(levelId)}
               className={`relative flex flex-col rounded-xl border p-5 text-left transition-all ${
                 isSelected
                   ? `${colors.border} ${colors.bg} ring-2 ${colors.ring}`
@@ -128,9 +276,18 @@ export function CreationSetup({ onComplete }: CreationSetupProps) {
         })}
       </div>
 
-      <div className="mt-8 flex justify-center">
+      <div className="mt-8 flex justify-center gap-3">
+        {onBack && (
+          <button
+            onClick={onBack}
+            className="flex items-center gap-2 rounded-lg border border-zinc-300 px-6 py-2.5 text-sm font-medium text-zinc-700 transition-colors hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back
+          </button>
+        )}
         <button
-          onClick={() => onComplete(selected)}
+          onClick={onContinue}
           className="flex items-center gap-2 rounded-lg bg-emerald-600 px-6 py-2.5 text-sm font-medium text-white transition-colors hover:bg-emerald-700"
         >
           Continue
@@ -138,5 +295,52 @@ export function CreationSetup({ onComplete }: CreationSetupProps) {
         </button>
       </div>
     </div>
+  );
+}
+
+// =============================================================================
+// MAIN COMPONENT
+// =============================================================================
+
+type SetupStep = "method" | "gameplay-level";
+
+export function CreationSetup({ onComplete, defaultMethodId = "priority" }: CreationSetupProps) {
+  const methods = useCreationMethods();
+  const [step, setStep] = useState<SetupStep>(methods.length > 1 ? "method" : "gameplay-level");
+  const [selectedMethod, setSelectedMethod] = useState<string>(defaultMethodId);
+  const [selectedLevel, setSelectedLevel] = useState<GameplayLevel>("experienced");
+
+  const hasMultipleMethods = methods.length > 1;
+
+  // Skip method step if only one method available
+  if (step === "method" && !hasMultipleMethods) {
+    const methodId = methods[0]?.id ?? defaultMethodId;
+    return (
+      <GameplayLevelStep
+        selectedLevel={selectedLevel}
+        onSelect={setSelectedLevel}
+        onContinue={() => onComplete(selectedLevel, methodId)}
+      />
+    );
+  }
+
+  if (step === "method") {
+    return (
+      <CreationMethodStep
+        methods={methods}
+        selectedId={selectedMethod}
+        onSelect={setSelectedMethod}
+        onContinue={() => setStep("gameplay-level")}
+      />
+    );
+  }
+
+  return (
+    <GameplayLevelStep
+      selectedLevel={selectedLevel}
+      onSelect={setSelectedLevel}
+      onContinue={() => onComplete(selectedLevel, selectedMethod)}
+      onBack={hasMultipleMethods ? () => setStep("method") : undefined}
+    />
   );
 }

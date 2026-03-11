@@ -418,12 +418,16 @@ function SheetCreationContent({
     }
   }, [characterId, router]);
 
-  // Handle gameplay level selection (setup step for standalone characters)
-  const handleGameplayLevelSelect = useCallback(
-    (level: GameplayLevel) => {
-      updateState({ gameplayLevel: level });
+  // Handle setup completion (creation method + gameplay level for standalone characters)
+  const handleSetupComplete = useCallback(
+    (level: GameplayLevel, creationMethodId: string) => {
+      selectCreationMethod(creationMethodId);
+      updateState({
+        gameplayLevel: level,
+        creationMethodId,
+      });
     },
-    [updateState]
+    [updateState, selectCreationMethod]
   );
 
   // Handle archetype selection — pre-fill creation state with archetype data
@@ -548,9 +552,9 @@ function SheetCreationContent({
     );
   }
 
-  // Show gameplay level setup for standalone characters
+  // Show creation method + gameplay level setup for standalone characters
   if (ready && needsSetup) {
-    return <CreationSetup onComplete={handleGameplayLevelSelect} />;
+    return <CreationSetup onComplete={handleSetupComplete} />;
   }
 
   // Show error if no creation methods are available for this campaign
