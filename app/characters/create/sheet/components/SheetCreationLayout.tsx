@@ -40,6 +40,7 @@ import {
 // Phase 2, 3, 4, 5 & 6 Components - Static imports for always-visible cards
 import {
   PrioritySelectionCard,
+  PointBuyBudgetCard,
   MetatypeCard,
   AttributesCard,
   SkillsCard,
@@ -896,8 +897,12 @@ export function SheetCreationLayout({
           {/* Character Info - Phase 5 */}
           <CharacterInfoCard state={creationState} updateState={updateState} />
 
-          {/* Priority Selection - Phase 2 */}
-          <PrioritySelectionCard state={creationState} updateState={updateState} />
+          {/* Priority Selection / Point Buy Budget - Phase 2 */}
+          {currentCreationMethod?.type === "point-buy" ? (
+            <PointBuyBudgetCard state={creationState} />
+          ) : (
+            <PrioritySelectionCard state={creationState} updateState={updateState} />
+          )}
 
           {/* Metatype Selection - Phase 2 */}
           <MetatypeCard state={creationState} updateState={updateState} />

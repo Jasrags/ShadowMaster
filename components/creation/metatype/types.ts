@@ -12,6 +12,8 @@ export interface MetatypeOption {
   specialAttributePoints: number;
   racialTraits: string[];
   attributes: Record<string, { min: number; max: number }>;
+  /** Karma cost for Point Buy creation (undefined for priority-based methods) */
+  karmaCost?: number;
 }
 
 export interface MetatypeModalProps {
@@ -19,6 +21,7 @@ export interface MetatypeModalProps {
   onClose: () => void;
   onConfirm: (metatypeId: string) => void;
   metatypes: MetatypeOption[];
-  priorityLevel: string;
+  /** Priority level label (e.g. "A"). Undefined for Point Buy. */
+  priorityLevel?: string;
   currentSelection: string | null;
 }

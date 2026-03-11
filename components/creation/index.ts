@@ -1,5 +1,6 @@
 // Phase 2: Core Creation Components
 export { PrioritySelectionCard } from "./PrioritySelectionCard";
+export { PointBuyBudgetCard } from "./PointBuyBudgetCard";
 export { MetatypeCard } from "./metatype";
 export { AttributesCard } from "./AttributesCard";
 export { SkillsCard } from "./SkillsCard";
