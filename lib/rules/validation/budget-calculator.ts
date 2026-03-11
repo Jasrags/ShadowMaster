@@ -11,7 +11,11 @@
  */
 
 import type { CreationSelections } from "@/lib/types/creation-selections";
-import { getQualityBudgetModifiers } from "@/lib/rules/qualities/budget-modifiers";
+import {
+  getQualityBudgetModifiers,
+  FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
+} from "@/lib/rules/qualities/budget-modifiers";
+import type { Contact } from "@/lib/types";
 
 // =============================================================================
 // NUYEN CALCULATION
@@ -324,13 +328,35 @@ export function calculateKarmaSpent(
   const karmaSpentFoci = (budgets["karma-spent-foci"] as number) || 0;
 
   // Contact karma - derive from selections
-  // Calculate: total contact cost - free pool (CHA × multiplier)
-  const contacts = (selections.contacts || []) as Array<{ connection: number; loyalty: number }>;
+  // Quality-granted contacts (sourceQualityId set) are free
+  const contacts = (selections.contacts || []) as Contact[];
   const attributes = selections.attributes as Record<string, number> | undefined;
   const charisma = attributes?.charisma || 1;
-  const freeContactKarma = charisma * getContactMultiplier(gameplayLevel);
-  const totalContactCost = contacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
-  const karmaSpentContacts = Math.max(0, totalContactCost - freeContactKarma);
+  const qualityMods = getQualityBudgetModifiers(selections);
+  const paidContacts = contacts.filter((c) => !c.sourceQualityId);
+  const totalPaidContactCost = paidContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0);
+
+  // Friends in High Places provides extra CHA × 4 pool for Connection 8+ contacts only
+  const freeContactPool = charisma * getContactMultiplier(gameplayLevel);
+  let regularContactCost: number;
+
+  if (qualityMods.friendsInHighPlaces) {
+    const highConnectionPool = charisma * FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER;
+    const highConnectionContacts = paidContacts.filter((c) => c.connection >= 8);
+    const regularContacts = paidContacts.filter((c) => c.connection < 8);
+    const totalHighCost = highConnectionContacts.reduce(
+      (sum, c) => sum + c.connection + c.loyalty,
+      0
+    );
+    const highConnectionOverflow = Math.max(0, totalHighCost - highConnectionPool);
+    regularContactCost =
+      regularContacts.reduce((sum, c) => sum + c.connection + c.loyalty, 0) +
+      highConnectionOverflow;
+  } else {
+    regularContactCost = totalPaidContactCost;
+  }
+
+  const karmaSpentContacts = Math.max(0, regularContactCost - freeContactPool);
 
   // Skill karma - derive from skillKarmaSpent if present
   const skillKarmaSpent = selections.skillKarmaSpent as

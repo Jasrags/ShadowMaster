@@ -108,6 +108,12 @@ export interface GearValidationContext {
   allowRestricted?: boolean;
   /** Whether to allow forbidden items */
   allowForbidden?: boolean;
+  /** Item ID designated for Restricted Gear quality exception (allows Avail up to 24) */
+  restrictedGearItemId?: string;
+  /** Black Market Pipeline category (items in this category get +availabilityBonus to max avail) */
+  blackMarketCategory?: string;
+  /** Availability bonus for Black Market Pipeline category (default +2) */
+  blackMarketAvailabilityBonus?: number;
 }
 
 // =============================================================================
@@ -182,7 +188,15 @@ function validateGearItems(
   for (const item of items) {
     // Check base item availability
     if (item.availability !== undefined) {
-      const availResult = validateAvailability(item.availability, item.name, "gear", context);
+      const availResult = validateAvailability(
+        item.availability,
+        item.name,
+        "gear",
+        context,
+        item.legality,
+        item.id,
+        item.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -204,7 +218,15 @@ function validateWeapons(weapons: Weapon[], context: GearValidationContext): Gea
   for (const weapon of weapons) {
     // Check base weapon availability
     if (weapon.availability !== undefined) {
-      const availResult = validateAvailability(weapon.availability, weapon.name, "weapon", context);
+      const availResult = validateAvailability(
+        weapon.availability,
+        weapon.name,
+        "weapon",
+        context,
+        weapon.legality,
+        weapon.id,
+        weapon.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -229,7 +251,15 @@ function validateArmor(
   for (const armor of armorItems) {
     // Check base armor availability
     if (armor.availability !== undefined) {
-      const availResult = validateAvailability(armor.availability, armor.name, "armor", context);
+      const availResult = validateAvailability(
+        armor.availability,
+        armor.name,
+        "armor",
+        context,
+        armor.legality,
+        armor.id,
+        armor.category
+      );
       if (availResult) errors.push(availResult);
     }
 
@@ -263,7 +293,8 @@ function validateCyberdecks(
         deck.name,
         "cyberdeck",
         context,
-        deck.legality
+        deck.legality,
+        deck.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -292,7 +323,9 @@ function validateCommlinks(
         commlink.availability,
         commlink.name,
         "commlink",
-        context
+        context,
+        commlink.legality,
+        commlink.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -324,7 +357,8 @@ function validateRCCs(rccs: CharacterRCC[], context: GearValidationContext): Gea
         rcc.name,
         "rcc",
         context,
-        rcc.legality
+        rcc.legality,
+        rcc.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -358,7 +392,8 @@ function validateDrones(
         drone.customName || drone.name,
         "drone",
         context,
-        drone.legality
+        drone.legality,
+        drone.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -383,7 +418,9 @@ function validateAutosofts(
         autosoft.availability,
         autosoft.name,
         "autosoft",
-        context
+        context,
+        undefined,
+        autosoft.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -409,7 +446,8 @@ function validateVehicles(
         vehicle.name,
         "vehicle",
         context,
-        vehicle.legality
+        vehicle.legality,
+        vehicle.id
       );
       if (availResult) errors.push(availResult);
     }
@@ -499,14 +537,18 @@ function validateArmorMods(
 // =============================================================================
 
 /**
- * Validate item availability against constraints
+ * Validate item availability against constraints.
+ * Supports Restricted Gear quality (1 item up to Avail 24) and
+ * Black Market Pipeline quality (+availabilityBonus for matching category).
  */
 function validateAvailability(
   availability: number,
   itemName: string,
   itemType: GearValidationError["itemType"],
   context: GearValidationContext,
-  legality?: ItemLegality
+  legality?: ItemLegality,
+  itemId?: string,
+  itemCategory?: string
 ): GearValidationError | null {
   // Check forbidden first (most restrictive)
   if (legality === "forbidden" && !context.allowForbidden) {
@@ -536,19 +578,37 @@ function validateAvailability(
     };
   }
 
-  // Check max availability
-  if (context.maxAvailability !== undefined && availability > context.maxAvailability) {
-    return {
-      code: "AVAILABILITY_EXCEEDED",
-      message: `${itemName} has Availability ${availability}, which exceeds the maximum of ${context.maxAvailability} allowed during character creation.`,
-      itemName,
-      itemType,
-      field: "availability",
-      details: {
-        availability,
-        maxAllowed: context.maxAvailability,
-      },
-    };
+  // Check max availability with quality exceptions
+  if (context.maxAvailability !== undefined) {
+    let effectiveMaxAvailability = context.maxAvailability;
+
+    // Restricted Gear quality: designated item can go up to Avail 24
+    if (context.restrictedGearItemId && itemId && itemId === context.restrictedGearItemId) {
+      effectiveMaxAvailability = 24;
+    }
+    // Black Market Pipeline: matching category gets +availabilityBonus
+    else if (
+      context.blackMarketCategory &&
+      itemCategory &&
+      itemCategory.toLowerCase() === context.blackMarketCategory.toLowerCase() &&
+      context.blackMarketAvailabilityBonus
+    ) {
+      effectiveMaxAvailability += context.blackMarketAvailabilityBonus;
+    }
+
+    if (availability > effectiveMaxAvailability) {
+      return {
+        code: "AVAILABILITY_EXCEEDED",
+        message: `${itemName} has Availability ${availability}, which exceeds the maximum of ${effectiveMaxAvailability} allowed during character creation.`,
+        itemName,
+        itemType,
+        field: "availability",
+        details: {
+          availability,
+          maxAllowed: effectiveMaxAvailability,
+        },
+      };
+    }
   }
 
   return null;

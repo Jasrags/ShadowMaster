@@ -16,7 +16,7 @@
 
 import { useMemo, useCallback, useState } from "react";
 import { useQualities, useSkills } from "@/lib/rules";
-import type { CreationState } from "@/lib/types";
+import type { CreationState, Contact } from "@/lib/types";
 import type { QualityData } from "@/lib/rules/loader-types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { useCreationBudgets } from "@/lib/contexts";
@@ -26,6 +26,12 @@ import { MAX_POSITIVE_KARMA, MAX_NEGATIVE_KARMA } from "./constants";
 import { SelectedQualityCard } from "./SelectedQualityCard";
 import { QualitySelectionModal } from "./QualitySelectionModal";
 import type { SelectedQuality } from "./types";
+import {
+  MADE_MAN,
+  SENSEI,
+  RESTRICTED_GEAR,
+  buildFreeContact,
+} from "@/lib/rules/qualities/budget-modifiers";
 
 interface QualitiesCardProps {
   state: CreationState;
@@ -133,14 +139,29 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       const currentList = isPositive ? selectedPositive : selectedNegative;
       const newList = [...currentList, newSelection];
 
+      // Build updated selections
+      const updatedSelections = {
+        ...state.selections,
+        positiveQualities: isPositive ? newList : selectedPositive,
+        negativeQualities: isPositive ? selectedNegative : newList,
+      };
+
+      // Side effects: Made Man and Sensei add free contacts
+      if (qualityId === MADE_MAN || qualityId === SENSEI) {
+        const existingContacts = (state.selections.contacts || []) as Contact[];
+        const freeContactData = buildFreeContact(qualityId, specification);
+        const freeContact: Contact = {
+          name: freeContactData.name,
+          connection: freeContactData.connection,
+          loyalty: freeContactData.loyalty,
+          type: freeContactData.type,
+          sourceQualityId: freeContactData.qualityId,
+        };
+        updatedSelections.contacts = [...existingContacts, freeContact];
+      }
+
       // Only update selections - context derives karma from selection karma values
-      updateState({
-        selections: {
-          ...state.selections,
-          positiveQualities: isPositive ? newList : selectedPositive,
-          negativeQualities: isPositive ? selectedNegative : newList,
-        },
-      });
+      updateState({ selections: updatedSelections });
     },
     [
       selectedPositive,
@@ -160,14 +181,27 @@ export function QualitiesCard({ state, updateState }: QualitiesCardProps) {
       const currentList = isPositive ? selectedPositive : selectedNegative;
       const newList = currentList.filter((sel) => sel.id !== qualityId);
 
+      const updatedSelections = {
+        ...state.selections,
+        positiveQualities: isPositive ? newList : selectedPositive,
+        negativeQualities: isPositive ? selectedNegative : newList,
+      };
+
+      // Side effects: remove free contacts when Made Man or Sensei is deselected
+      if (qualityId === MADE_MAN || qualityId === SENSEI) {
+        const existingContacts = (state.selections.contacts || []) as Contact[];
+        updatedSelections.contacts = existingContacts.filter(
+          (c) => c.sourceQualityId !== qualityId
+        );
+      }
+
+      // Side effect: clear restricted gear tracking when Restricted Gear is deselected
+      if (qualityId === RESTRICTED_GEAR) {
+        updatedSelections.restrictedGearItemId = undefined;
+      }
+
       // Only update selections - context derives karma from selection karma values
-      updateState({
-        selections: {
-          ...state.selections,
-          positiveQualities: isPositive ? newList : selectedPositive,
-          negativeQualities: isPositive ? selectedNegative : newList,
-        },
-      });
+      updateState({ selections: updatedSelections });
     },
     [selectedPositive, selectedNegative, state.selections, updateState]
   );

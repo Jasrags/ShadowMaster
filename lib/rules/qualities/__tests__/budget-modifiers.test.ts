@@ -1,7 +1,15 @@
 import { describe, it, expect } from "vitest";
 import type { CreationSelections } from "@/lib/types/creation-selections";
 import type { SelectedQuality } from "@/lib/types/creation-selections";
-import { getQualityBudgetModifiers, applyJackOfAllTradesModifier } from "../budget-modifiers";
+import {
+  getQualityBudgetModifiers,
+  applyJackOfAllTradesModifier,
+  FRIENDS_IN_HIGH_PLACES,
+  MADE_MAN,
+  SENSEI,
+  RESTRICTED_GEAR,
+  BLACK_MARKET_PIPELINE,
+} from "../budget-modifiers";
 
 // =============================================================================
 // HELPERS
@@ -23,6 +31,10 @@ describe("getQualityBudgetModifiers", () => {
       knowledgeCostMultipliers: { academic: 1, street: 1, professional: 1, interests: 1 },
       languageCostMultiplier: 1,
       jackOfAllTrades: false,
+      friendsInHighPlaces: false,
+      freeContacts: [],
+      restrictedGear: false,
+      blackMarketPipeline: null,
     });
   });
 
@@ -119,6 +131,101 @@ describe("getQualityBudgetModifiers", () => {
     );
     expect(result.knowledgeCostMultipliers.academic).toBe(0.5);
     expect(result.jackOfAllTrades).toBe(true);
+  });
+
+  // Friends in High Places
+  it("Friends in High Places sets flag", () => {
+    const result = getQualityBudgetModifiers(makeSelections([FRIENDS_IN_HIGH_PLACES]));
+    expect(result.friendsInHighPlaces).toBe(true);
+  });
+
+  it("friendsInHighPlaces is false when not selected", () => {
+    const result = getQualityBudgetModifiers(makeSelections(["born-rich"]));
+    expect(result.friendsInHighPlaces).toBe(false);
+  });
+
+  // Made Man
+  it("Made Man adds free syndicate contact (C2, L4)", () => {
+    const result = getQualityBudgetModifiers(makeSelections([MADE_MAN]));
+    expect(result.freeContacts).toHaveLength(1);
+    expect(result.freeContacts[0]).toEqual({
+      qualityId: MADE_MAN,
+      name: "Syndicate Contact",
+      connection: 2,
+      loyalty: 4,
+      type: "Syndicate",
+      specification: undefined,
+    });
+  });
+
+  it("Made Man uses specification in contact name", () => {
+    const result = getQualityBudgetModifiers(
+      makeSelections([{ id: MADE_MAN, specification: "Yakuza" }])
+    );
+    expect(result.freeContacts[0].name).toBe("Yakuza Contact");
+    expect(result.freeContacts[0].specification).toBe("Yakuza");
+  });
+
+  // Sensei
+  it("Sensei adds free training contact (C1, L1)", () => {
+    const result = getQualityBudgetModifiers(makeSelections([SENSEI]));
+    expect(result.freeContacts).toHaveLength(1);
+    expect(result.freeContacts[0]).toEqual({
+      qualityId: SENSEI,
+      name: "Sensei",
+      connection: 1,
+      loyalty: 1,
+      type: "Training",
+      specification: undefined,
+    });
+  });
+
+  it("Sensei uses specification in contact name", () => {
+    const result = getQualityBudgetModifiers(
+      makeSelections([{ id: SENSEI, specification: "Pistols" }])
+    );
+    expect(result.freeContacts[0].name).toBe("Pistols Sensei");
+  });
+
+  // Made Man + Sensei combined
+  it("Made Man and Sensei produce separate free contacts", () => {
+    const result = getQualityBudgetModifiers(makeSelections([MADE_MAN, SENSEI]));
+    expect(result.freeContacts).toHaveLength(2);
+    expect(result.freeContacts[0].qualityId).toBe(MADE_MAN);
+    expect(result.freeContacts[1].qualityId).toBe(SENSEI);
+  });
+
+  // Restricted Gear
+  it("Restricted Gear sets flag", () => {
+    const result = getQualityBudgetModifiers(makeSelections([RESTRICTED_GEAR]));
+    expect(result.restrictedGear).toBe(true);
+  });
+
+  it("restrictedGear is false when not selected", () => {
+    const result = getQualityBudgetModifiers(makeSelections([]));
+    expect(result.restrictedGear).toBe(false);
+  });
+
+  // Black Market Pipeline
+  it("BMP returns discount info with specification", () => {
+    const result = getQualityBudgetModifiers(
+      makeSelections([{ id: BLACK_MARKET_PIPELINE, specification: "Electronics" }])
+    );
+    expect(result.blackMarketPipeline).toEqual({
+      specification: "Electronics",
+      priceMultiplier: 0.9,
+      availabilityBonus: 2,
+    });
+  });
+
+  it("BMP returns null without specification", () => {
+    const result = getQualityBudgetModifiers(makeSelections([BLACK_MARKET_PIPELINE]));
+    expect(result.blackMarketPipeline).toBeNull();
+  });
+
+  it("BMP returns null when not selected", () => {
+    const result = getQualityBudgetModifiers(makeSelections([]));
+    expect(result.blackMarketPipeline).toBeNull();
   });
 });
 
