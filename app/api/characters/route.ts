@@ -251,6 +251,22 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         );
       }
+
+      // Validate creation method is allowed by campaign
+      const enabledMethodIds = campaignForNotification.enabledCreationMethodIds;
+      if (
+        enabledMethodIds &&
+        enabledMethodIds.length > 0 &&
+        !enabledMethodIds.includes(creationMethodId)
+      ) {
+        return NextResponse.json(
+          {
+            success: false,
+            error: `Creation method "${creationMethodId}" is not allowed in this campaign. Allowed methods: ${enabledMethodIds.join(", ")}`,
+          },
+          { status: 400 }
+        );
+      }
     }
 
     // Create draft

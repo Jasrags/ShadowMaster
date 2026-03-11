@@ -18,7 +18,9 @@ import {
   useRuleset,
   usePriorityTable,
   useMetatypes,
+  useCreationMethods,
 } from "@/lib/rules";
+import { getAvailableCreationMethods } from "@/lib/rules/creation-method-filter";
 import { CreationBudgetProvider } from "@/lib/contexts";
 import { SheetCreationLayout } from "./components/SheetCreationLayout";
 import { EditionSelector } from "@/components/creation/EditionSelector";
@@ -70,9 +72,10 @@ function SheetCreationContent({
     (existingCharacter?.editionCode as EditionCode) || campaign?.editionCode || null
   );
   const { loading, error, ready } = useRulesetStatus();
-  const { loadRuleset, editionCode, ruleset } = useRuleset();
+  const { loadRuleset, editionCode, ruleset, selectCreationMethod } = useRuleset();
   const priorityTable = usePriorityTable();
   const metatypes = useMetatypes();
+  const allCreationMethods = useCreationMethods();
 
   // localStorage key for backup (development safety net)
   const localStorageKey = existingCharacter?.id
@@ -131,6 +134,30 @@ function SheetCreationContent({
   } | null>(null);
   const serverValidationRef = useRef(serverValidation);
   serverValidationRef.current = serverValidation;
+
+  // Filter creation methods by campaign settings
+  const creationMethodFilter = getAvailableCreationMethods(
+    allCreationMethods,
+    campaign,
+    creationState.creationMethodId
+  );
+
+  // Auto-correct creation method if current is invalid for this campaign
+  useEffect(() => {
+    if (!ready) return;
+    if (creationMethodFilter.isCurrentMethodValid) return;
+    if (creationMethodFilter.hasNoMethods) return;
+    if (!creationMethodFilter.suggestedMethodId) return;
+
+    // Switch to the first available method
+    const suggestedId = creationMethodFilter.suggestedMethodId;
+    selectCreationMethod(suggestedId);
+    setCreationState((prev) => ({
+      ...prev,
+      creationMethodId: suggestedId,
+      updatedAt: new Date().toISOString(),
+    }));
+  }, [ready, creationMethodFilter, selectCreationMethod]);
 
   // Refs for managing auto-save race conditions
   const abortControllerRef = useRef<AbortController | null>(null);
@@ -524,6 +551,45 @@ function SheetCreationContent({
   // Show gameplay level setup for standalone characters
   if (ready && needsSetup) {
     return <CreationSetup onComplete={handleGameplayLevelSelect} />;
+  }
+
+  // Show error if no creation methods are available for this campaign
+  if (ready && creationMethodFilter.hasNoMethods) {
+    return (
+      <div className="flex min-h-[400px] items-center justify-center">
+        <div className="max-w-md rounded-lg border border-amber-200 bg-amber-50 p-6 text-center dark:border-amber-900 dark:bg-amber-950">
+          <div className="mx-auto h-12 w-12 rounded-full bg-amber-100 p-3 dark:bg-amber-900">
+            <svg
+              className="h-6 w-6 text-amber-600 dark:text-amber-400"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"
+              />
+            </svg>
+          </div>
+          <h3 className="mt-4 text-sm font-medium text-amber-800 dark:text-amber-200">
+            No Creation Methods Available
+          </h3>
+          <p className="mt-1 text-sm text-amber-600 dark:text-amber-400">
+            {campaign
+              ? `The campaign "${campaign.title}" has no valid creation methods enabled. Ask the GM to enable at least one creation method in campaign settings.`
+              : "No creation methods are available for this edition."}
+          </p>
+          <button
+            onClick={() => router.back()}
+            className="mt-4 rounded-lg bg-amber-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-amber-700"
+          >
+            Go Back
+          </button>
+        </div>
+      </div>
+    );
   }
 
   // Show sheet creation when ready
