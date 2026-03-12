@@ -21,6 +21,7 @@ vi.mock("lucide-react", () => {
     X: createIcon("X"),
     ChevronRight: createIcon("ChevronRight"),
     Check: createIcon("Check"),
+    ArrowRightLeft: createIcon("ArrowRightLeft"),
   };
 });
 
@@ -109,6 +110,7 @@ const mockCatalog: LifeModulesCatalog = {
 
 vi.mock("@/lib/rules/RulesetContext", () => ({
   useLifeModules: () => mockCatalog,
+  useQualities: () => ({ positive: [], negative: [] }),
 }));
 
 function makeState(overrides: Partial<CreationState> = {}): CreationState {

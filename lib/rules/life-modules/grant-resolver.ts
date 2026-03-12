@@ -19,6 +19,7 @@ import type {
   LifeModuleQualityGrant,
   LifeModuleContactGrant,
   LifeModulePhase,
+  QualityReplacement,
 } from "@/lib/types/life-modules";
 import {
   LIFE_MODULES_MAX_ACTIVE_SKILL,
@@ -172,6 +173,88 @@ function mergeModuleGrants(
 }
 
 // =============================================================================
+// DUPLICATE QUALITY DETECTION
+// =============================================================================
+
+/**
+ * Info about a quality that was granted by a module but already exists.
+ * Used to prompt the player for a replacement of equal karma value.
+ */
+export interface DuplicateQualityInfo {
+  /** The quality ID that is duplicated */
+  readonly qualityId: string;
+  /** Whether this is a positive or negative quality */
+  readonly type: "positive" | "negative";
+}
+
+/**
+ * Detect incoming qualities that duplicate already-accumulated or existing character qualities.
+ *
+ * Per Run Faster p.67: if a character receives a quality they already have that does not
+ * have cumulative effects, they may instead take a quality of the same value.
+ *
+ * @param accumulated - Qualities already granted by prior modules
+ * @param incoming - Qualities from the current module being resolved
+ * @param existingCharacterQualityIds - Quality IDs the character already has (from other sources)
+ * @param alreadyReplacedIds - Quality IDs that have already been replaced (skip these)
+ * @returns Array of duplicate quality info for qualities needing replacement
+ */
+export function detectDuplicateQualities(
+  accumulated: readonly LifeModuleQualityGrant[],
+  incoming: readonly LifeModuleQualityGrant[],
+  existingCharacterQualityIds: readonly string[] = [],
+  alreadyReplacedIds: readonly string[] = []
+): readonly DuplicateQualityInfo[] {
+  const knownIds = new Set([...accumulated.map((q) => q.id), ...existingCharacterQualityIds]);
+  const replacedSet = new Set(alreadyReplacedIds);
+
+  const duplicates: DuplicateQualityInfo[] = [];
+  for (const grant of incoming) {
+    if (replacedSet.has(grant.id)) continue;
+    if (knownIds.has(grant.id)) {
+      duplicates.push({ qualityId: grant.id, type: grant.type });
+    }
+  }
+  return duplicates;
+}
+
+/**
+ * Apply quality replacements to a list of quality grants.
+ *
+ * For each replacement, the *second* occurrence of the original quality ID
+ * is swapped to the replacement ID. The first occurrence is kept intact.
+ *
+ * @param qualities - All accumulated quality grants
+ * @param replacements - Replacements chosen by the player
+ * @returns New array with replacements applied (immutable)
+ */
+export function applyQualityReplacements(
+  qualities: readonly LifeModuleQualityGrant[],
+  replacements: readonly QualityReplacement[]
+): readonly LifeModuleQualityGrant[] {
+  if (replacements.length === 0) return qualities;
+
+  // Track how many times we've seen each quality ID that has a replacement
+  const replacementMap = new Map(
+    replacements.map((r) => [r.originalQualityId, r.replacementQualityId])
+  );
+  const seenCount = new Map<string, number>();
+
+  return qualities.map((q) => {
+    if (!replacementMap.has(q.id)) return q;
+
+    const count = (seenCount.get(q.id) ?? 0) + 1;
+    seenCount.set(q.id, count);
+
+    // Keep first occurrence, replace subsequent
+    if (count > 1) {
+      return { ...q, id: replacementMap.get(q.id)! };
+    }
+    return q;
+  });
+}
+
+// =============================================================================
 // MAIN RESOLVER
 // =============================================================================
 
@@ -196,6 +279,9 @@ export function resolveLifeModuleGrants(
   // Accumulate grants from all modules
   let accumulated = EMPTY_GRANTS;
 
+  // Collect all quality replacements from selections
+  const allReplacements = selections.flatMap((s) => s.qualityReplacements ?? []);
+
   for (const selection of selections) {
     const module = lookupModule(selection.moduleId, selection.subModuleId, catalog);
     if (!module) continue;
@@ -203,9 +289,13 @@ export function resolveLifeModuleGrants(
     accumulated = mergeModuleGrants(accumulated, module);
   }
 
+  // Apply quality replacements (Run Faster p. 67 — duplicate non-stackable qualities)
+  const resolvedQualities = applyQualityReplacements(accumulated.qualities, allReplacements);
+
   // Apply skill caps (Run Faster p. 67)
   return {
     ...accumulated,
+    qualities: resolvedQualities,
     activeSkills: capValues(accumulated.activeSkills, LIFE_MODULES_MAX_ACTIVE_SKILL),
     knowledgeSkills: capValues(accumulated.knowledgeSkills, LIFE_MODULES_MAX_KNOWLEDGE_SKILL),
   };
