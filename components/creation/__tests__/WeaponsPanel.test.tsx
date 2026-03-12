@@ -15,6 +15,7 @@ vi.mock("@/lib/rules/RulesetContext", () => ({
   useGear: vi.fn(),
   useWeaponModifications: vi.fn(),
   useRuleset: vi.fn(),
+  useCreationMethod: vi.fn(() => ({ type: "priority", name: "Priority" })),
 }));
 
 vi.mock("@/lib/contexts", () => ({

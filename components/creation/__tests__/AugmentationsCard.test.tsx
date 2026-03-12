@@ -14,6 +14,7 @@ import { AugmentationsCard } from "../AugmentationsCard";
 vi.mock("@/lib/rules/RulesetContext", () => ({
   useAugmentationRules: vi.fn(),
   calculateMagicLoss: vi.fn(),
+  useCreationMethod: vi.fn(() => ({ type: "priority", name: "Priority" })),
 }));
 
 vi.mock("@/lib/contexts", () => ({

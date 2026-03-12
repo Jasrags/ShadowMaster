@@ -11,6 +11,10 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { VehiclesCard } from "../VehiclesCard";
 
 // Mock hooks
+vi.mock("@/lib/rules/RulesetContext", () => ({
+  useCreationMethod: vi.fn(() => ({ type: "priority", name: "Priority" })),
+}));
+
 vi.mock("@/lib/contexts", () => ({
   useCreationBudgets: vi.fn(),
 }));

@@ -38,6 +38,7 @@ import {
   type RCCSelection,
   type AutosoftSelection,
 } from "./vehicles";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import { Lock, X, Car, Bot, Wifi, Code, Plus } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
@@ -86,6 +87,7 @@ interface VehiclesCardProps {
 // =============================================================================
 
 export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
+  const currentCreationMethod = useCreationMethod();
   const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -447,9 +449,11 @@ export function VehiclesCard({ state, updateState }: VehiclesCardProps) {
     return "pending";
   }, [remaining, totalItems]);
 
-  // Check prerequisites
+  // Check prerequisites - Point Buy and Life Modules bypass priority requirement
+  const isNonPriorityMethod =
+    currentCreationMethod?.type === "point-buy" || currentCreationMethod?.type === "life-modules";
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
-  if (!hasPriorities) {
+  if (!isNonPriorityMethod && !hasPriorities) {
     return (
       <CreationCard
         title="Vehicles & Drones"

@@ -56,6 +56,8 @@ import { useLifeModules } from "../rules/RulesetContext";
 import {
   POINT_BUY_METATYPE_COSTS,
   POINT_BUY_MAGIC_QUALITY_COSTS,
+  POINT_BUY_KARMA_BUDGET,
+  POINT_BUY_NUYEN_PER_KARMA,
 } from "../rules/point-buy-validation";
 
 // =============================================================================
@@ -191,6 +193,11 @@ function calculateBudgetTotals(
   // Life Modules: 750 Karma budget, gear via karma-to-nuyen conversion
   if (creationMethodId === "life-modules") {
     return calculateLifeModulesBudgetTotals(selections, stateBudgets);
+  }
+
+  // Point Buy: 800 Karma budget, gear via karma-to-nuyen conversion
+  if (creationMethodId === "point-buy") {
+    return calculatePointBuyBudgetTotals(selections, stateBudgets);
   }
 
   const totals: Record<
@@ -390,6 +397,55 @@ function calculateLifeModulesBudgetTotals(
 }
 
 /**
+ * Calculate budget totals for Point Buy creation method.
+ * Point Buy uses a flat 800 Karma budget with no priority table.
+ * Gear is purchased via karma-to-nuyen conversion (1K = 2,000¥).
+ */
+function calculatePointBuyBudgetTotals(
+  selections: Record<string, unknown>,
+  stateBudgets: Record<string, unknown>
+): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
+  const totals: Record<
+    string,
+    { total: number; label: string; displayFormat?: "number" | "currency" }
+  > = {
+    karma: {
+      total: POINT_BUY_KARMA_BUDGET,
+      label: "Karma",
+      displayFormat: "number",
+    },
+  };
+
+  // Nuyen budget: derived from karma-to-nuyen conversion only
+  const karmaSpentGear = (stateBudgets["karma-spent-gear"] as number) || 0;
+  totals["nuyen"] = {
+    total: karmaSpentGear * POINT_BUY_NUYEN_PER_KARMA,
+    label: "Nuyen",
+    displayFormat: "currency",
+  };
+
+  // Contact points: CHA × 3 (standard formula, no priority)
+  const attributes = selections.attributes as Record<string, number> | undefined;
+  const charisma = attributes?.charisma || 1;
+  totals["contact-points"] = {
+    total: charisma * 3,
+    label: "Contact Points",
+    displayFormat: "number",
+  };
+
+  // Knowledge points: (INT + LOG) × 2
+  const intuition = attributes?.intuition || 1;
+  const logic = attributes?.logic || 1;
+  totals["knowledge-points"] = {
+    total: (intuition + logic) * 2,
+    label: "Knowledge Points",
+    displayFormat: "number",
+  };
+
+  return totals;
+}
+
+/**
  * Extract spent values from creation state budgets and selections
  *
  * Phase 4.2: Budget calculation is now derived from selections where possible,
@@ -403,7 +459,8 @@ function extractSpentValues(
   priorities: Record<string, string> | undefined,
   skillCategories: Record<string, string | undefined>,
   skillGroupDefs: { id: string; skills: string[] }[] = [],
-  qualityModifiers: QualityBudgetModifiers = getDefaultModifiers()
+  qualityModifiers: QualityBudgetModifiers = getDefaultModifiers(),
+  creationMethodId?: string
 ): Record<string, number> {
   const spent: Record<string, number> = {};
 
@@ -798,16 +855,19 @@ function extractSpentValues(
 
   // Metatype and magic path karma costs apply only to non-priority methods
   // (life-modules, point-buy) where these are purchased from the karma pool.
-  // Priority-based creation gets metatype/magic from priority selections for free.
-  const hasPriorities = priorities && Object.keys(priorities).length > 0;
+  // Priority-based and sum-to-ten creation gets metatype/magic from priority selections for free.
+  const chargesKarmaForMetatype =
+    creationMethodId === "point-buy" || creationMethodId === "life-modules";
 
   const selectedMetatypeId = selections.metatype as string | undefined;
   const karmaSpentMetatype =
-    !hasPriorities && selectedMetatypeId ? (POINT_BUY_METATYPE_COSTS[selectedMetatypeId] ?? 0) : 0;
+    chargesKarmaForMetatype && selectedMetatypeId
+      ? (POINT_BUY_METATYPE_COSTS[selectedMetatypeId] ?? 0)
+      : 0;
 
   const selectedMagicPath = selections["magical-path"] as string | undefined;
   const karmaSpentMagicPath =
-    !hasPriorities && selectedMagicPath && selectedMagicPath !== "mundane"
+    chargesKarmaForMetatype && selectedMagicPath && selectedMagicPath !== "mundane"
       ? (POINT_BUY_MAGIC_QUALITY_COSTS[selectedMagicPath] ?? 0)
       : 0;
 
@@ -1119,7 +1179,8 @@ export function CreationBudgetProvider({
         creationState.priorities,
         skillCategories,
         skillGroupDefs,
-        qualityModifiers
+        qualityModifiers,
+        creationState.creationMethodId
       ),
     [
       creationState.budgets,
@@ -1130,6 +1191,7 @@ export function CreationBudgetProvider({
       skillCategories,
       skillGroupDefs,
       qualityModifiers,
+      creationState.creationMethodId,
     ]
   );
 
@@ -1237,7 +1299,7 @@ export function CreationBudgetProvider({
   // Derived state
   const isValid = validationState.errors.length === 0;
 
-  // Can finalize if valid and has required selections
+  // Can finalize if valid and has required selections per method type
   const canFinalize = useMemo(() => {
     if (!isValid) return false;
 
@@ -1251,6 +1313,13 @@ export function CreationBudgetProvider({
       return hasMetatype && hasModules;
     }
 
+    // Point Buy doesn't use priorities — only requires metatype
+    if (creationState.creationMethodId === "point-buy") {
+      return hasMetatype;
+    }
+
+    // Sum-to-Ten uses priorities (5 categories, can duplicate)
+    // Priority uses priorities (5 unique categories A-E)
     const hasPriorities = Object.keys(creationState.priorities || {}).length === 5;
     return hasMetatype && hasPriorities;
   }, [
@@ -1348,4 +1417,5 @@ export const _testExports = {
   validateBudgets,
   calculateBudgetTotals,
   calculateLifeModulesBudgetTotals,
+  calculatePointBuyBudgetTotals,
 };
