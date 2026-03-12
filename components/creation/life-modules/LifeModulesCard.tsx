@@ -286,15 +286,41 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
       }
       const updatedBuyOffs = boughtOffIds.filter((id) => remainingQualityIds.has(id));
 
+      // Recalculate budget values for the remaining buy-offs
+      const remainingGrants = catalog
+        ? updatedModules.flatMap((sel) => {
+            const mod = lookupModule(sel.moduleId, sel.subModuleId, catalog);
+            return mod?.qualities ?? [];
+          })
+        : [];
+      const breakdown = getEffectiveNegativeQualityKarma(
+        remainingGrants,
+        updatedBuyOffs,
+        negativeQualities
+      );
+
       updateState({
         selections: {
           ...state.selections,
           lifeModules: updatedModules,
           boughtOffQualityIds: updatedBuyOffs.length > 0 ? updatedBuyOffs : undefined,
         },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-quality-buyoff": breakdown.boughtOffKarma,
+          "negative-quality-karma-gained": breakdown.effectiveNegativeKarma,
+        },
       });
     },
-    [existingSelections, state.selections, updateState, catalog, boughtOffIds]
+    [
+      existingSelections,
+      state.selections,
+      state.budgets,
+      updateState,
+      catalog,
+      boughtOffIds,
+      negativeQualities,
+    ]
   );
 
   // Validation status
