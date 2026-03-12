@@ -48,6 +48,12 @@ import {
 } from "../types";
 import type { LifeModuleSelection } from "../types";
 import {
+  resolveLifeModuleGrants,
+  EMPTY_GRANTS,
+  type ResolvedLifeModuleGrants,
+} from "../rules/life-modules/grant-resolver";
+import { useLifeModules } from "../rules/RulesetContext";
+import {
   POINT_BUY_METATYPE_COSTS,
   POINT_BUY_MAGIC_QUALITY_COSTS,
 } from "../rules/point-buy-validation";
@@ -136,6 +142,9 @@ export interface CreationBudgetContextValue {
 
   /** Quality-derived budget modifiers (karma cap, knowledge cost multipliers, etc.) */
   qualityModifiers: QualityBudgetModifiers;
+
+  /** Resolved grants from life module selections (empty if not using life modules) */
+  resolvedLifeModuleGrants: ResolvedLifeModuleGrants;
 }
 
 /**
@@ -1043,6 +1052,17 @@ export function CreationBudgetProvider({
   // Get gameplay level modifiers for budget calculations
   const gameplayModifiers = useGameplayLevelModifiers(creationState.gameplayLevel);
 
+  // Resolve life module grants from selections + catalog
+  const lifeModulesCatalog = useLifeModules();
+  const resolvedGrants = useMemo(() => {
+    if (creationState.creationMethodId !== "life-modules" || !lifeModulesCatalog) {
+      return EMPTY_GRANTS;
+    }
+    const lifeModules = (creationState.selections.lifeModules ||
+      []) as readonly LifeModuleSelection[];
+    return resolveLifeModuleGrants(lifeModules, lifeModulesCatalog);
+  }, [creationState.creationMethodId, creationState.selections.lifeModules, lifeModulesCatalog]);
+
   // Compute quality-driven budget modifiers from selections
   const qualityModifiers = useMemo(
     () =>
@@ -1254,6 +1274,7 @@ export function CreationBudgetProvider({
       hasRemaining,
       isOverspent,
       qualityModifiers,
+      resolvedLifeModuleGrants: resolvedGrants,
     }),
     [
       budgets,
@@ -1266,6 +1287,7 @@ export function CreationBudgetProvider({
       hasRemaining,
       isOverspent,
       qualityModifiers,
+      resolvedGrants,
     ]
   );
 
