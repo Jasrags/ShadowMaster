@@ -13,6 +13,7 @@ import {
   Sparkles,
   Calculator,
   Coins,
+  Route,
 } from "lucide-react";
 
 // =============================================================================
@@ -68,6 +69,7 @@ const METHOD_ICONS: Record<string, typeof Sparkles> = {
   priority: Sparkles,
   "sum-to-ten": Calculator,
   "point-buy": Coins,
+  "life-modules": Route,
 };
 
 const METHOD_COLORS: Record<string, { text: string; bg: string; border: string; ring: string }> = {
@@ -88,6 +90,12 @@ const METHOD_COLORS: Record<string, { text: string; bg: string; border: string; 
     bg: "bg-amber-500/10",
     border: "border-amber-500/30",
     ring: "ring-amber-500/50",
+  },
+  "life-modules": {
+    text: "text-rose-600 dark:text-rose-400",
+    bg: "bg-rose-500/10",
+    border: "border-rose-500/30",
+    ring: "ring-rose-500/50",
   },
 };
 
