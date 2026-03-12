@@ -301,6 +301,8 @@ export type ConstraintType =
   | "special-attribute-init" // Edge/Magic/Resonance starting values
   | "sum-to-ten-budget" // Priority point values must sum to exact total
   | "point-buy-budget" // Karma budget tracking for point-buy creation
+  | "life-modules-budget" // Karma budget tracking for life-modules creation
+  | "life-modules-skill-cap" // Active/knowledge skill cap enforcement
   | "custom"; // Custom validation function name
 
 /**

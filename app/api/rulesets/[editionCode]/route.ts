@@ -37,6 +37,7 @@ import {
   extractFoci,
   extractSpirits,
   extractActions,
+  extractLifeModules,
 } from "@/lib/rules/loader";
 
 export async function GET(
@@ -109,6 +110,7 @@ export async function GET(
           foci: extractFoci(loadedRuleset),
           spirits: extractSpirits(loadedRuleset),
           actions: extractActions(loadedRuleset),
+          lifeModules: extractLifeModules(loadedRuleset),
         }
       : null;
 

@@ -16,7 +16,7 @@ export interface MagicPathModalProps {
   onClose: () => void;
   onConfirm: (pathId: string) => void;
   availableOptions: PathOption[];
-  priorityLevel: string;
+  priorityLevel?: string;
   currentSelection: string | null;
   magicPaths: Array<{ id: string; name: string; hasResonance?: boolean }>;
 }

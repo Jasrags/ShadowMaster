@@ -1,7 +1,9 @@
 "use client";
 
 import { useCallback, useMemo, useState, useEffect } from "react";
-import { Check, X, Search } from "lucide-react";
+import { Check, Search } from "lucide-react";
+import { Heading } from "react-aria-components";
+import { BaseModalRoot, ModalFooter } from "@/components/ui/BaseModal";
 import { METATYPE_DESCRIPTIONS } from "./constants";
 import type { MetatypeModalProps, MetatypeOption } from "./types";
 
@@ -287,11 +289,6 @@ export function MetatypeModal({
     }
   }, [isOpen, currentSelection]);
 
-  const handleClose = useCallback(() => {
-    setSelectedId(currentSelection);
-    onClose();
-  }, [currentSelection, onClose]);
-
   const handleConfirm = useCallback(() => {
     if (selectedId) {
       onConfirm(selectedId);
@@ -327,182 +324,196 @@ export function MetatypeModal({
     return selectedId ? metatypes.find((m) => m.id === selectedId) : null;
   }, [selectedId, metatypes]);
 
-  if (!isOpen) return null;
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-      {/* Backdrop */}
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={handleClose} />
-
-      {/* Modal */}
-      <div className="relative flex max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden rounded-xl bg-zinc-900 shadow-2xl">
-        {/* Header */}
-        <div className="flex items-center justify-between border-b border-zinc-700 px-6 py-4">
-          <h2 className="text-lg font-bold uppercase tracking-wide text-zinc-100">
-            Select Metatype
-          </h2>
-          <button
-            onClick={handleClose}
-            className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
-          >
-            <X className="h-5 w-5" />
-          </button>
-        </div>
-
-        {/* Toolbar: search + filter pills */}
-        <div className="flex items-center gap-3 border-b border-zinc-700 bg-zinc-800/50 px-6 py-3">
-          {/* Search */}
-          <div className="flex flex-1 items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2">
-            <Search className="h-4 w-4 shrink-0 text-zinc-500" />
-            <input
-              type="text"
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search metatypes..."
-              className="w-full bg-transparent text-sm text-zinc-200 placeholder-zinc-600 outline-none"
-            />
+    <BaseModalRoot isOpen={isOpen} onClose={onClose} size="full" className="bg-zinc-900">
+      {({ close }) => (
+        <>
+          {/* Header */}
+          <div className="flex items-center justify-between border-b border-zinc-700 px-6 py-4">
+            <Heading
+              slot="title"
+              className="text-lg font-bold uppercase tracking-wide text-zinc-100"
+            >
+              Select Metatype
+            </Heading>
+            <button
+              onClick={close}
+              aria-label="Close modal"
+              className="rounded-lg p-2 text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+            >
+              <span className="sr-only">Close</span>
+              <svg
+                className="h-5 w-5"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6 6 18" />
+                <path d="m6 6 12 12" />
+              </svg>
+            </button>
           </div>
 
-          {/* Filter pills */}
-          <div className="hidden gap-1 sm:flex" data-testid="filter-pills">
-            {FILTER_OPTIONS.map((opt) => (
+          {/* Toolbar: search + filter pills */}
+          <div className="flex items-center gap-3 border-b border-zinc-700 bg-zinc-800/50 px-6 py-3">
+            {/* Search */}
+            <div className="flex flex-1 items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2">
+              <Search className="h-4 w-4 shrink-0 text-zinc-500" />
+              <input
+                type="text"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                placeholder="Search metatypes..."
+                className="w-full bg-transparent text-sm text-zinc-200 placeholder-zinc-600 outline-none"
+              />
+            </div>
+
+            {/* Filter pills */}
+            <div className="hidden gap-1 sm:flex" data-testid="filter-pills">
+              {FILTER_OPTIONS.map((opt) => (
+                <button
+                  key={opt.id}
+                  onClick={() => setActiveFilter(opt.id)}
+                  className={`rounded-md px-2.5 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
+                    activeFilter === opt.id
+                      ? "bg-emerald-600 text-white"
+                      : "border border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300"
+                  }`}
+                >
+                  {opt.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Two-panel body */}
+          <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
+            {/* Left panel: browse list */}
+            <div
+              data-testid="metatype-list"
+              className="max-h-[200px] w-full shrink-0 overflow-y-auto border-b border-zinc-700 bg-zinc-800/30 sm:max-h-none sm:w-60 sm:border-b-0 sm:border-r [scrollbar-width:thin]"
+            >
+              {filteredGroups.length === 0 ? (
+                <div className="p-4 text-center text-sm italic text-zinc-500">
+                  No metatypes match
+                </div>
+              ) : (
+                filteredGroups.map((group) => (
+                  <div key={group.label}>
+                    {/* Group header */}
+                    <div className="sticky top-0 z-10 bg-zinc-800/80 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500 backdrop-blur-sm">
+                      {group.label}
+                      <span className="ml-1 font-normal text-zinc-600">
+                        ({group.metatypes.length})
+                      </span>
+                    </div>
+
+                    {/* Metatype items */}
+                    {group.metatypes.map((metatype) => {
+                      const isSelected = selectedId === metatype.id;
+                      const isVariant = !!metatype.baseMetatype;
+                      return (
+                        <button
+                          key={metatype.id}
+                          onClick={() => setSelectedId(metatype.id)}
+                          className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm transition-colors ${
+                            isSelected
+                              ? "bg-emerald-900/30 text-emerald-300"
+                              : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
+                          }`}
+                        >
+                          {/* Radio dot */}
+                          <div
+                            className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border-2 ${
+                              isSelected ? "border-emerald-500 bg-emerald-500" : "border-zinc-600"
+                            }`}
+                          >
+                            {isSelected && <Check className="h-2.5 w-2.5 text-white" />}
+                          </div>
+
+                          {/* Name */}
+                          <span className={`flex-1 font-medium ${isVariant ? "pl-2" : ""}`}>
+                            {metatype.name}
+                          </span>
+
+                          {/* SAP */}
+                          <span
+                            className={`font-mono text-xs ${
+                              isSelected ? "text-emerald-400" : "text-zinc-600"
+                            }`}
+                          >
+                            {metatype.specialAttributePoints}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                ))
+              )}
+            </div>
+
+            {/* Right panel: detail */}
+            <div
+              data-testid="metatype-detail"
+              className="flex-1 overflow-y-auto p-5 [scrollbar-width:thin]"
+            >
+              <MetatypeDetailPanel metatype={detailMetatype} priorityLevel={priorityLevel} />
+            </div>
+          </div>
+
+          {/* Footer */}
+          <ModalFooter className="bg-zinc-800/50">
+            <div className="text-sm text-zinc-500">
+              {selectedMetatype ? (
+                <div className="flex items-center gap-2">
+                  <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                  <span>
+                    Selected: <strong className="text-zinc-300">{selectedMetatype.name}</strong>
+                    <span className="text-zinc-600"> · </span>
+                    {selectedMetatype.specialAttributePoints} SAP
+                    {selectedMetatype.racialTraits.length > 0 && (
+                      <>
+                        <span className="text-zinc-600"> · </span>
+                        {selectedMetatype.racialTraits.length} trait
+                        {selectedMetatype.racialTraits.length !== 1 ? "s" : ""}
+                      </>
+                    )}
+                  </span>
+                </div>
+              ) : (
+                <span>
+                  {priorityLevel
+                    ? `Priority ${priorityLevel}: ${metatypes.length} metatype${metatypes.length !== 1 ? "s" : ""}`
+                    : `All metatypes available — Karma cost from budget`}
+                </span>
+              )}
+            </div>
+
+            <div className="flex gap-2">
               <button
-                key={opt.id}
-                onClick={() => setActiveFilter(opt.id)}
-                className={`rounded-md px-2.5 py-1 text-xs font-semibold uppercase tracking-wide transition-colors ${
-                  activeFilter === opt.id
-                    ? "bg-emerald-600 text-white"
-                    : "border border-zinc-700 text-zinc-400 hover:border-zinc-600 hover:text-zinc-300"
+                onClick={close}
+                className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleConfirm}
+                disabled={!selectedId}
+                className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
+                  selectedId
+                    ? "bg-emerald-600 text-white hover:bg-emerald-700"
+                    : "cursor-not-allowed bg-zinc-700 text-zinc-500"
                 }`}
               >
-                {opt.label}
+                Confirm
               </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Two-panel body */}
-        <div className="flex min-h-0 flex-1 flex-col sm:flex-row">
-          {/* Left panel: browse list */}
-          <div
-            data-testid="metatype-list"
-            className="max-h-[200px] w-full shrink-0 overflow-y-auto border-b border-zinc-700 bg-zinc-800/30 sm:max-h-none sm:w-60 sm:border-b-0 sm:border-r [scrollbar-width:thin]"
-          >
-            {filteredGroups.length === 0 ? (
-              <div className="p-4 text-center text-sm italic text-zinc-500">No metatypes match</div>
-            ) : (
-              filteredGroups.map((group) => (
-                <div key={group.label}>
-                  {/* Group header */}
-                  <div className="sticky top-0 z-10 bg-zinc-800/80 px-4 py-2 text-[10px] font-bold uppercase tracking-widest text-zinc-500 backdrop-blur-sm">
-                    {group.label}
-                    <span className="ml-1 font-normal text-zinc-600">
-                      ({group.metatypes.length})
-                    </span>
-                  </div>
-
-                  {/* Metatype items */}
-                  {group.metatypes.map((metatype) => {
-                    const isSelected = selectedId === metatype.id;
-                    const isVariant = !!metatype.baseMetatype;
-                    return (
-                      <button
-                        key={metatype.id}
-                        onClick={() => setSelectedId(metatype.id)}
-                        className={`flex w-full items-center gap-2 px-4 py-2 text-left text-sm transition-colors ${
-                          isSelected
-                            ? "bg-emerald-900/30 text-emerald-300"
-                            : "text-zinc-400 hover:bg-zinc-800 hover:text-zinc-200"
-                        }`}
-                      >
-                        {/* Radio dot */}
-                        <div
-                          className={`flex h-3.5 w-3.5 shrink-0 items-center justify-center rounded-full border-2 ${
-                            isSelected ? "border-emerald-500 bg-emerald-500" : "border-zinc-600"
-                          }`}
-                        >
-                          {isSelected && <Check className="h-2.5 w-2.5 text-white" />}
-                        </div>
-
-                        {/* Name */}
-                        <span className={`flex-1 font-medium ${isVariant ? "pl-2" : ""}`}>
-                          {metatype.name}
-                        </span>
-
-                        {/* SAP */}
-                        <span
-                          className={`font-mono text-xs ${
-                            isSelected ? "text-emerald-400" : "text-zinc-600"
-                          }`}
-                        >
-                          {metatype.specialAttributePoints}
-                        </span>
-                      </button>
-                    );
-                  })}
-                </div>
-              ))
-            )}
-          </div>
-
-          {/* Right panel: detail */}
-          <div
-            data-testid="metatype-detail"
-            className="flex-1 overflow-y-auto p-5 [scrollbar-width:thin]"
-          >
-            <MetatypeDetailPanel metatype={detailMetatype} priorityLevel={priorityLevel} />
-          </div>
-        </div>
-
-        {/* Footer */}
-        <div className="flex items-center justify-between border-t border-zinc-700 bg-zinc-800/50 px-6 py-3">
-          <div className="text-sm text-zinc-500">
-            {selectedMetatype ? (
-              <div className="flex items-center gap-2">
-                <div className="h-2 w-2 rounded-full bg-emerald-500" />
-                <span>
-                  Selected: <strong className="text-zinc-300">{selectedMetatype.name}</strong>
-                  <span className="text-zinc-600"> · </span>
-                  {selectedMetatype.specialAttributePoints} SAP
-                  {selectedMetatype.racialTraits.length > 0 && (
-                    <>
-                      <span className="text-zinc-600"> · </span>
-                      {selectedMetatype.racialTraits.length} trait
-                      {selectedMetatype.racialTraits.length !== 1 ? "s" : ""}
-                    </>
-                  )}
-                </span>
-              </div>
-            ) : (
-              <span>
-                {priorityLevel
-                  ? `Priority ${priorityLevel}: ${metatypes.length} metatype${metatypes.length !== 1 ? "s" : ""}`
-                  : `All metatypes available — Karma cost from budget`}
-              </span>
-            )}
-          </div>
-
-          <div className="flex gap-2">
-            <button
-              onClick={handleClose}
-              className="rounded-lg px-4 py-2 text-sm font-medium text-zinc-400 hover:bg-zinc-800 hover:text-zinc-300"
-            >
-              Cancel
-            </button>
-            <button
-              onClick={handleConfirm}
-              disabled={!selectedId}
-              className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${
-                selectedId
-                  ? "bg-emerald-600 text-white hover:bg-emerald-700"
-                  : "cursor-not-allowed bg-zinc-700 text-zinc-500"
-              }`}
-            >
-              Confirm
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
+            </div>
+          </ModalFooter>
+        </>
+      )}
+    </BaseModalRoot>
   );
 }

@@ -4043,6 +4043,284 @@
               }
             ],
             "createdAt": "2025-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "life-modules",
+            "editionId": "sr5",
+            "editionCode": "sr5",
+            "bookId": "run-faster",
+            "name": "Life Modules",
+            "type": "life-modules",
+            "description": "A life-path system where characters progress through nationality, formative years, teen years, further education, and real-life career modules. Each module provides attributes, skills, qualities, and knowledge. Starting budget is 750 Karma.",
+            "version": "1.0.0",
+            "steps": [
+              {
+                "id": "metatype",
+                "title": "Select Metatype",
+                "type": "select",
+                "description": "Choose your metatype. Metatype costs Karma from your 750 budget.",
+                "payload": {
+                  "type": "select",
+                  "target": "metatype"
+                }
+              },
+              {
+                "id": "magic",
+                "title": "Magic/Resonance",
+                "type": "select",
+                "optional": true,
+                "description": "Purchase a magical or resonance quality (same costs as Point Buy: Adept 20K, Magician 30K, etc.).",
+                "payload": {
+                  "type": "select",
+                  "target": "magical-path"
+                }
+              },
+              {
+                "id": "nationality",
+                "title": "Nationality",
+                "type": "choose",
+                "description": "Select your nationality and regional origin. Provides language skills, regional knowledge, and qualities. (15 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-nationality",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.nationality"
+                }
+              },
+              {
+                "id": "formative",
+                "title": "Formative Years",
+                "type": "choose",
+                "description": "Select your childhood upbringing (age to 10). Provides attribute points, skills, and qualities. (40 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-formative",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.formative"
+                }
+              },
+              {
+                "id": "teen",
+                "title": "Teen Years",
+                "type": "choose",
+                "description": "Select your teenage experience (age to 17). Provides skills, knowledge, and qualities. (50 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-teen",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.teen"
+                }
+              },
+              {
+                "id": "education",
+                "title": "Further Education",
+                "type": "choose",
+                "optional": true,
+                "description": "Optionally attend an institution and select a discipline. Costs vary by institution (40-115 Karma).",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-education",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.education"
+                }
+              },
+              {
+                "id": "career",
+                "title": "Real Life",
+                "type": "choose",
+                "optional": true,
+                "description": "Select career modules (100 Karma each, 4 years). Multiple allowed but no repeats.",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-career",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.career",
+                  "multiple": true
+                }
+              },
+              {
+                "id": "tour",
+                "title": "Tours of Duty",
+                "type": "choose",
+                "optional": true,
+                "description": "Select military tours of duty (100 Karma each, 5 years). Multiple allowed but no repeats.",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-tour",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.tour",
+                  "multiple": true
+                }
+              },
+              {
+                "id": "attributes",
+                "title": "Allocate Attributes",
+                "type": "allocate",
+                "description": "Spend remaining Karma to raise attributes (New Rating × 5 Karma).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "attributes",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "skills",
+                "title": "Allocate Skills",
+                "type": "allocate",
+                "description": "Spend remaining Karma on skills. Active skill max 7, knowledge skill max 9.",
+                "payload": {
+                  "type": "allocate",
+                  "target": "skills",
+                  "budgetId": "karma",
+                  "maxRating": 7
+                }
+              },
+              {
+                "id": "qualities",
+                "title": "Select Qualities",
+                "type": "choose",
+                "description": "Purchase positive qualities or buy off negative qualities gained from modules.",
+                "payload": {
+                  "type": "choose",
+                  "target": "qualities",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "contacts",
+                "title": "Build Contacts",
+                "type": "allocate",
+                "description": "Build contacts using Karma (in addition to any granted by modules).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "contacts",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "gear",
+                "title": "Purchase Gear",
+                "type": "purchase",
+                "description": "Purchase gear using nuyen (1 Karma = 2,000¥, max 200 Karma on gear).",
+                "payload": {
+                  "type": "purchase",
+                  "target": "gear",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "review",
+                "title": "Review & Finalize",
+                "type": "validate",
+                "description": "Review your character. Remaining Karma can be kept (unlike Point Buy).",
+                "payload": {
+                  "type": "validate",
+                  "validations": ["all"]
+                }
+              }
+            ],
+            "budgets": [
+              {
+                "id": "karma",
+                "label": "Karma",
+                "initialValue": 750,
+                "description": "Starting Karma budget for Life Modules creation (Run Faster p. 65)"
+              },
+              {
+                "id": "nuyen",
+                "label": "Nuyen",
+                "initialValue": 0,
+                "displayFormat": "currency",
+                "description": "Nuyen from karma-to-nuyen conversion (1 Karma = 2,000¥)"
+              },
+              {
+                "id": "gear-karma",
+                "label": "Gear Karma",
+                "initialValue": 0,
+                "max": 200,
+                "description": "Karma spent on gear (max 200)"
+              }
+            ],
+            "constraints": [
+              {
+                "id": "life-modules-budget",
+                "type": "life-modules-budget",
+                "description": "Total Karma spent on modules and purchases cannot exceed 750.",
+                "severity": "error",
+                "params": {
+                  "totalBudget": 750,
+                  "maxGearKarma": 200,
+                  "nuyenPerKarma": 2000,
+                  "maxNegativeQualities": 25
+                },
+                "errorMessage": "Karma budget exceeded (750 Karma total, 200 max on gear)."
+              },
+              {
+                "id": "life-modules-active-skill-cap",
+                "type": "life-modules-skill-cap",
+                "description": "Active skills capped at 7, knowledge skills capped at 9.",
+                "severity": "error",
+                "params": {
+                  "maxActiveSkill": 7,
+                  "maxKnowledgeSkill": 9
+                },
+                "errorMessage": "Skill rating exceeds Life Modules creation cap."
+              },
+              {
+                "id": "max-one-attribute-at-max",
+                "type": "attribute-limit",
+                "description": "Only one Physical or Mental attribute can be at natural maximum at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAtMax": 1
+                },
+                "errorMessage": "Only one Physical or Mental attribute can be at its natural maximum."
+              },
+              {
+                "id": "positive-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma in Positive Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "positive-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot spend more than 25 Karma on positive qualities."
+              },
+              {
+                "id": "negative-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma from Negative Qualities after all modules.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "negative-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot gain more than 25 Karma from negative qualities after all modules."
+              },
+              {
+                "id": "gear-availability",
+                "type": "custom",
+                "description": "Gear availability cannot exceed 12 at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAvailability": 12
+                },
+                "errorMessage": "Cannot purchase gear with availability higher than 12."
+              },
+              {
+                "id": "essence-minimum",
+                "type": "essence-minimum",
+                "description": "Essence cannot drop below 0.",
+                "severity": "error",
+                "params": {
+                  "min": 0
+                },
+                "errorMessage": "Essence cannot drop below 0."
+              }
+            ],
+            "createdAt": "2025-01-01T00:00:00.000Z"
           }
         ]
       }
@@ -4077,7 +4355,3787 @@
     },
     "lifeModules": {
       "mergeStrategy": "replace",
-      "payload": {}
+      "payload": {
+        "nationality": [
+          {
+            "id": "ucas",
+            "name": "UCAS",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "description": "Born in the United Canadian and American States.",
+            "pageReference": "RF p. 65",
+            "languages": {
+              "english": 0
+            },
+            "secondaryLanguageChoices": [
+              "spanish",
+              "german",
+              "italian",
+              "french",
+              "mandarin",
+              "polish",
+              "yiddish"
+            ],
+            "secondaryLanguageRanks": 1,
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "ucas-general",
+                "name": "General UCAS",
+                "description": "Born in the general UCAS territory.",
+                "pageReference": "RF p. 65",
+                "attributeModifiers": {
+                  "logic": 1
+                },
+                "activeSkills": {
+                  "computer": 1,
+                  "etiquette": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "ucas": 1,
+                  "[city]": 2
+                },
+                "languages": {
+                  "english": 0,
+                  "[any]": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "ucas-canada",
+                "name": "Canada",
+                "description": "Born in the Canadian sector of the UCAS.",
+                "pageReference": "RF p. 65",
+                "attributeModifiers": {
+                  "body": 1
+                },
+                "activeSkills": {
+                  "computer": 1,
+                  "navigation": 1,
+                  "survival": 1,
+                  "etiquette": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "ucas": 1
+                },
+                "languages": {
+                  "english": 0
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "ucas-denver",
+                "name": "Denver (UCAS Sector)",
+                "description": "Born in the UCAS sector of Denver.",
+                "pageReference": "RF p. 65",
+                "attributeModifiers": {
+                  "intuition": 1
+                },
+                "activeSkills": {
+                  "computer": 1,
+                  "negotiation": 1,
+                  "etiquette": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "ucas": 1,
+                  "denver": 2
+                },
+                "languages": {
+                  "english": 0
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "ucas-seattle",
+                "name": "Seattle",
+                "description": "Born in the Seattle metroplex.",
+                "pageReference": "RF p. 65",
+                "attributeModifiers": {
+                  "reaction": 1
+                },
+                "activeSkills": {
+                  "computer": 1,
+                  "perception": 1,
+                  "intimidation": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "ucas": 1,
+                  "seattle": 2
+                },
+                "languages": {
+                  "english": 0
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "ucas-sinless",
+                "name": "SINless",
+                "description": "Born SINless in the UCAS. No national SIN, no corporate ties.",
+                "pageReference": "RF p. 65",
+                "attributeModifiers": {
+                  "agility": 1
+                },
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "ucas": 1,
+                  "[city]": 1
+                },
+                "languages": {
+                  "english": 0
+                }
+              }
+            ]
+          },
+          {
+            "id": "cas",
+            "name": "CAS",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "description": "Born in the Confederation of American States.",
+            "pageReference": "RF p. 66",
+            "languages": {
+              "english": 0
+            },
+            "secondaryLanguageChoices": ["spanish", "german", "polish", "yiddish"],
+            "secondaryLanguageRanks": 1,
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "cas-general",
+                "name": "General CAS",
+                "description": "Born in the general CAS territory.",
+                "pageReference": "RF p. 66",
+                "attributeModifiers": {
+                  "charisma": 1
+                },
+                "activeSkills": {
+                  "etiquette": 1,
+                  "computer": 2
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "cas": 1
+                },
+                "languages": {
+                  "english": 0
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "cas-denver",
+                "name": "Denver",
+                "description": "Born in the CAS sector of Denver.",
+                "pageReference": "RF p. 66",
+                "attributeModifiers": {
+                  "intuition": 1
+                },
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1,
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "cas": 1,
+                  "denver": 2
+                },
+                "languages": {
+                  "english": 0
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "cas-sinless",
+                "name": "SINless",
+                "description": "Born SINless in the CAS.",
+                "pageReference": "RF p. 66",
+                "attributeModifiers": {
+                  "body": 1
+                },
+                "activeSkills": {
+                  "etiquette": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "cas": 1,
+                  "[city]": 1
+                },
+                "languages": {
+                  "english": 0
+                }
+              }
+            ]
+          },
+          {
+            "id": "nan",
+            "name": "NAN",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "description": "Born in the Native American Nations.",
+            "pageReference": "RF p. 66",
+            "notes": "Primary language chosen from regional options. English may be selected as secondary with 1 rank.",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "nan-algonkian-manitou",
+                "name": "Algonkian-Manitou Council",
+                "description": "Born in the Algonkian-Manitou Council.",
+                "pageReference": "RF p. 66",
+                "secondaryLanguageChoices": ["athabaskan", "anishinaabe", "iroquoian"],
+                "activeSkills": {
+                  "archery": 2,
+                  "perception": 1,
+                  "blades": 1,
+                  "unarmed-combat": 1
+                },
+                "skillGroups": {
+                  "outdoors": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "[tribe]": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-athabaskan",
+                "name": "Athabaskan Council",
+                "description": "Born in the Athabaskan Council.",
+                "pageReference": "RF p. 66",
+                "secondaryLanguageChoices": ["athabaskan", "eskimo-aleut"],
+                "attributeModifiers": {
+                  "body": 1
+                },
+                "activeSkills": {
+                  "archery": 2,
+                  "survival": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-pueblo",
+                "name": "Pueblo Corporate Council",
+                "description": "Born in the Pueblo Corporate Council.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["uto-aztecan", "zuni"],
+                "activeSkills": {
+                  "archery": 2,
+                  "etiquette": 2
+                },
+                "skillGroups": {
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "business-practices": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-salish-shidhe",
+                "name": "Salish-Shidhe Council",
+                "description": "Born in the Salish-Shidhe Council.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["salish", "siouan", "orzet"],
+                "attributeModifiers": {
+                  "logic": 1
+                },
+                "activeSkills": {
+                  "archery": 2,
+                  "survival": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-sioux",
+                "name": "Sioux Nation",
+                "description": "Born in the Sioux Nation.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["anishinaabe", "athabaskan", "iroquoian", "siouan"],
+                "activeSkills": {
+                  "archery": 2,
+                  "blades": 2
+                },
+                "skillGroups": {
+                  "outdoors": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "sioux-culture": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-trans-polar-aleut",
+                "name": "Trans-Polar Aleut Nation",
+                "description": "Born in the Trans-Polar Aleut Nation.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["eskimo-aleut"],
+                "activeSkills": {
+                  "archery": 2,
+                  "exotic-melee-weapon": 2,
+                  "perception": 1,
+                  "survival": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "polar-critters": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ],
+                "notes": "Exotic Melee Weapon specialization: Harpoon"
+              },
+              {
+                "id": "nan-tsimshian",
+                "name": "Tsimshian Nation",
+                "description": "Born in the Tsimshian Nation.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["athabaskan", "tlingit", "tsimshianic", "siouan"],
+                "attributeModifiers": {
+                  "strength": 1
+                },
+                "activeSkills": {
+                  "archery": 2,
+                  "blades": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1
+                },
+                "qualities": [
+                  {
+                    "id": "allergy-uncommon-mild",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-denver",
+                "name": "Denver",
+                "description": "Born in the NAN sector of Denver.",
+                "pageReference": "RF p. 67",
+                "attributeModifiers": {
+                  "intuition": 1
+                },
+                "activeSkills": {
+                  "archery": 2,
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-las-vegas",
+                "name": "Las Vegas",
+                "description": "Born in Las Vegas.",
+                "pageReference": "RF p. 67",
+                "secondaryLanguageChoices": ["[any-native-american-tribal]"],
+                "activeSkills": {
+                  "archery": 2,
+                  "perception": 1,
+                  "con": 2,
+                  "etiquette": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "gambling-games": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "nan-salt-lake-city",
+                "name": "Salt Lake City",
+                "description": "Born in Salt Lake City.",
+                "pageReference": "RF p. 67",
+                "activeSkills": {
+                  "archery": 2,
+                  "artisan": 1,
+                  "computer": 1,
+                  "etiquette": 1,
+                  "negotiation": 1,
+                  "perception": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "nan": 1,
+                  "mormons": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              }
+            ]
+          },
+          {
+            "id": "tir-tairngire",
+            "name": "Tír Tairngire",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "description": "Born in Tír Tairngire, the Land of Promise.",
+            "pageReference": "RF p. 68",
+            "languages": {
+              "sperethiel": 0,
+              "english": 2
+            },
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "tir-tairngire-elves-humans",
+                "name": "Elves/Humans",
+                "description": "Born as an elf or human in Tír Tairngire.",
+                "pageReference": "RF p. 68",
+                "attributeModifiers": {
+                  "charisma": 1
+                },
+                "activeSkills": {
+                  "etiquette": 1,
+                  "computer": 2
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "tir-tairngire": 1
+                },
+                "languages": {
+                  "sperethiel": 0,
+                  "english": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              },
+              {
+                "id": "tir-tairngire-orks-trolls-dwarfs",
+                "name": "Orks/Trolls/Dwarfs",
+                "description": "Born as an ork, troll, or dwarf in Tír Tairngire.",
+                "pageReference": "RF p. 68",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "con": 2,
+                  "disguise": 1,
+                  "intimidation": 1,
+                  "sneaking": 1,
+                  "perception": 1
+                },
+                "knowledgeSkills": {
+                  "history": 1,
+                  "tir-tairngire": 1,
+                  "counterculture": 2
+                },
+                "languages": {
+                  "sperethiel": 0,
+                  "english": 2
+                },
+                "qualities": [
+                  {
+                    "id": "sinner-national",
+                    "type": "negative"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "formative": [
+          {
+            "id": "arcology-living",
+            "name": "Arcology Living",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in a corporate arcology.",
+            "pageReference": "RF p. 69",
+            "attributeModifiers": {
+              "logic": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "etiquette": 2,
+              "perception": 1
+            },
+            "skillGroups": {
+              "electronics": 2
+            },
+            "knowledgeSkills": {
+              "[corporation]": 3
+            },
+            "qualities": [
+              {
+                "id": "sinner-corporate-limited",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "corp-drone",
+            "name": "Corp Drone",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised by corporate wage-slave parents.",
+            "pageReference": "RF p. 69",
+            "attributeModifiers": {
+              "logic": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "etiquette": 2,
+              "perception": 1
+            },
+            "skillGroups": {
+              "electronics": 2
+            },
+            "knowledgeSkills": {
+              "[corporation]": 3
+            }
+          },
+          {
+            "id": "farm-living-formative",
+            "name": "Farm Living",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised on a farm in rural territory.",
+            "pageReference": "RF p. 69",
+            "attributeModifiers": {
+              "body": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "industrial-mechanic": 1
+            },
+            "knowledgeSkills": {
+              "farming": 5
+            },
+            "qualities": [
+              {
+                "id": "uneducated",
+                "type": "negative"
+              },
+              {
+                "id": "toughness",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "fugitive",
+            "name": "Fugitive",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised on the run, always looking over your shoulder.",
+            "pageReference": "RF p. 69",
+            "attributeModifiers": {
+              "reaction": 1,
+              "willpower": 1,
+              "intuition": 1
+            },
+            "activeSkills": {
+              "perception": 1,
+              "sneaking": 1
+            },
+            "skillGroups": {
+              "acting": 2
+            },
+            "knowledgeSkills": {
+              "[city]": 2
+            },
+            "qualities": [
+              {
+                "id": "paranoia",
+                "type": "negative"
+              },
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              },
+              {
+                "id": "bad-rep",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "isolated-rural-upbringing-formative",
+            "name": "Isolated Rural Upbringing",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in an isolated rural area, far from civilization.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "body": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "blades": 1,
+              "running": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "outdoors": 2
+            },
+            "knowledgeSkills": {
+              "farming": 2
+            },
+            "qualities": [
+              {
+                "id": "uncouth",
+                "type": "negative"
+              },
+              {
+                "id": "uneducated",
+                "type": "negative"
+              },
+              {
+                "id": "toughness",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "military-brat",
+            "name": "Military Brat",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in a military family, moving from base to base.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "strength": 1,
+              "reaction": 1
+            },
+            "activeSkills": {
+              "negotiation": 1,
+              "perception": 1
+            },
+            "skillGroups": {
+              "close-combat": 2
+            },
+            "knowledgeSkills": {
+              "military": 3,
+              "military-history": 2
+            },
+            "qualities": [
+              {
+                "id": "uncouth",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "orphan",
+            "name": "Orphan",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised without parents, bouncing through the foster system.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "willpower": 1
+            },
+            "activeSkills": {
+              "computer": 1,
+              "perception": 2,
+              "sneaking": 2,
+              "survival": 1
+            },
+            "knowledgeSkills": {
+              "[city]": 3,
+              "foster-system": 3
+            }
+          },
+          {
+            "id": "rich-kid",
+            "name": "Rich Kid",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in wealth and privilege.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "charisma": 1
+            },
+            "activeSkills": {
+              "artisan": 1,
+              "leadership": 2,
+              "computers": 2
+            },
+            "knowledgeSkills": {
+              "[any]": 3
+            },
+            "languages": {
+              "[any]": 3
+            },
+            "qualities": [
+              {
+                "id": "trust-fund",
+                "type": "positive"
+              },
+              {
+                "id": "prejudiced-poor",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "street-urchin",
+            "name": "Street Urchin",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised on the streets, fighting for survival from childhood.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "body": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "perception": 1,
+              "running": 1,
+              "sneaking": 1
+            },
+            "skillGroups": {
+              "close-combat": 2
+            },
+            "knowledgeSkills": {
+              "[city]": 3
+            },
+            "qualities": [
+              {
+                "id": "paranoia",
+                "type": "negative"
+              },
+              {
+                "id": "flashbacks",
+                "type": "negative"
+              },
+              {
+                "id": "uneducated",
+                "type": "negative"
+              },
+              {
+                "id": "toughness",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "white-collar",
+            "name": "White Collar",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in a comfortable white-collar household.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": {
+              "logic": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "etiquette": 1,
+              "negotiation": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 3
+            },
+            "languages": {
+              "[any]": 3
+            },
+            "notes": "Etiquette skill has Professional specialization."
+          }
+        ],
+        "teen": [
+          {
+            "id": "corporate-education",
+            "name": "Corporate Education",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Educated in a corporate-sponsored school.",
+            "pageReference": "RF p. 71",
+            "attributeModifiers": {
+              "charisma": 1,
+              "logic": 1
+            },
+            "activeSkills": {
+              "chemistry": 1,
+              "gymnastics": 1
+            },
+            "skillGroups": {
+              "electronics": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 1,
+              "[any-2]": 1,
+              "[corporation]": 2,
+              "[job]": 2
+            }
+          },
+          {
+            "id": "farm-living-teen",
+            "name": "Farm Living",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Spent teen years working on a farm.",
+            "pageReference": "RF p. 71",
+            "attributeModifiers": {
+              "body": 1,
+              "intuition": 1
+            },
+            "activeSkills": {
+              "industrial-mechanic": 2,
+              "longarms": 1,
+              "pilot-ground-craft": 2,
+              "pistols": 1
+            },
+            "knowledgeSkills": {
+              "farming": 1,
+              "[any]": 1
+            },
+            "qualities": [
+              {
+                "id": "animal-empathy",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "gang-warfare",
+            "name": "Gang Warfare",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Spent teen years running with a gang.",
+            "pageReference": "RF p. 71",
+            "attributeModifiers": {
+              "body": 1,
+              "reaction": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "blades": 2,
+              "first-aid": 1,
+              "leadership": 1,
+              "negotiation": 1,
+              "perception": 1,
+              "running": 1,
+              "survival": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "[city]": 2
+            },
+            "qualities": [
+              {
+                "id": "black-market-pipeline",
+                "type": "positive"
+              },
+              {
+                "id": "paranoia",
+                "type": "negative"
+              },
+              {
+                "id": "uneducated",
+                "type": "negative"
+              },
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "high-school",
+            "name": "High School",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended a standard high school.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": {
+              "charisma": 1,
+              "logic": 1
+            },
+            "activeSkills": {
+              "athletics": 1,
+              "computers": 2,
+              "chemistry": 1,
+              "software": 2
+            },
+            "knowledgeSkills": {
+              "[any]": 1,
+              "[any-2]": 1,
+              "[hometown]": 1
+            },
+            "languages": {
+              "[any]": 1
+            }
+          },
+          {
+            "id": "home-tutored",
+            "name": "Home Tutored",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Educated at home by private tutors.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": {
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "chemistry": 1,
+              "computers": 3,
+              "software": 2
+            },
+            "knowledgeSkills": {
+              "[any]": 3,
+              "[any-2]": 3
+            },
+            "languages": {
+              "[any]": 2
+            },
+            "qualities": [
+              {
+                "id": "social-stress",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "isolated-rural-upbringing-teen",
+            "name": "Isolated Rural Upbringing",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Spent teen years in an isolated rural area.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": {
+              "body": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "blades": 1,
+              "first-aid": 1,
+              "gymnastics": 1,
+              "longarms": 1,
+              "perception": 2,
+              "sneaking": 1
+            },
+            "skillGroups": {
+              "outdoors": 1
+            },
+            "knowledgeSkills": {
+              "critters": 2
+            },
+            "qualities": [
+              {
+                "id": "incompetent-electronics",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "magical-education",
+            "name": "Magical Education",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended a school for the magically gifted.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": {
+              "willpower": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "arcana": 2
+            },
+            "knowledgeSkills": {
+              "magical-theory": 5,
+              "[any]": 4,
+              "[any-2]": 4,
+              "[any-3]": 3
+            },
+            "languages": {
+              "[any]": 2
+            },
+            "qualities": [
+              {
+                "id": "sinner-corporate-limited",
+                "type": "negative"
+              }
+            ],
+            "requiresSubModuleSelection": true,
+            "notes": "Choose a magical tradition path for additional skill groups.",
+            "subModules": [
+              {
+                "id": "magical-education-magician",
+                "name": "Magician",
+                "description": "Traditional magician training path.",
+                "notes": "Add 1 rank to two of: Sorcery skill group, Conjuring skill group, Enchanting skill group.",
+                "skillGroupChoices": {
+                  "choose": 2,
+                  "from": ["sorcery", "conjuring", "enchanting"],
+                  "ranks": 1
+                }
+              },
+              {
+                "id": "magical-education-adept",
+                "name": "Adept",
+                "description": "Physical adept training path.",
+                "notes": "Add 1 rank to two of: Close Combat skill group, Firearms skill group, Stealth skill group.",
+                "skillGroupChoices": {
+                  "choose": 2,
+                  "from": ["close-combat", "firearms", "stealth"],
+                  "ranks": 1
+                }
+              },
+              {
+                "id": "magical-education-aspected-magician",
+                "name": "Aspected Magician",
+                "description": "Aspected magician training path.",
+                "notes": "Add 1 rank to Sorcery, Conjuring, or Enchanting skill group; then add 2 ranks split among Arcana, Assensing, and Astral Combat.",
+                "skillGroupChoices": {
+                  "choose": 1,
+                  "from": ["sorcery", "conjuring", "enchanting"],
+                  "ranks": 1
+                },
+                "additionalSkillChoices": {
+                  "pool": 2,
+                  "from": ["arcana", "assensing", "astral-combat"]
+                }
+              },
+              {
+                "id": "magical-education-mystic-adept",
+                "name": "Mystic Adept",
+                "description": "Mystic adept training path.",
+                "notes": "Add 1 rank to any two groups from the Magician or Adept lists.",
+                "skillGroupChoices": {
+                  "choose": 2,
+                  "from": [
+                    "sorcery",
+                    "conjuring",
+                    "enchanting",
+                    "close-combat",
+                    "firearms",
+                    "stealth"
+                  ],
+                  "ranks": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "military-school",
+            "name": "Military School",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended a military academy during teen years.",
+            "pageReference": "RF p. 73",
+            "attributeModifiers": {
+              "body": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "blades": 1,
+              "first-aid": 1,
+              "leadership": 1,
+              "unarmed-combat": 1,
+              "running": 1,
+              "swimming": 1
+            },
+            "skillGroups": {
+              "electronics": 1,
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "military": 3,
+              "military-history": 3,
+              "[any]": 1,
+              "strategy": 1
+            },
+            "qualities": [
+              {
+                "id": "military-rank",
+                "type": "positive"
+              },
+              {
+                "id": "code-of-honor",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "preparatory-school",
+            "name": "Preparatory School",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended an elite preparatory school.",
+            "pageReference": "RF p. 73",
+            "attributeModifiers": {
+              "charisma": 1,
+              "logic": 1
+            },
+            "activeSkills": {
+              "chemistry": 1,
+              "computers": 1,
+              "etiquette": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 1,
+              "[any-2]": 1
+            },
+            "languages": {
+              "[any]": 1
+            },
+            "qualities": [
+              {
+                "id": "first-impression",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "street-kid",
+            "name": "Street Kid",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Spent teen years surviving on the streets.",
+            "pageReference": "RF p. 73",
+            "attributeModifiers": {
+              "body": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "clubs": 1,
+              "etiquette": 1,
+              "gymnastics": 1,
+              "intimidation": 1,
+              "first-aid": 1,
+              "negotiation": 1,
+              "perception": 1,
+              "running": 1
+            },
+            "skillGroups": {
+              "acting": 2,
+              "stealth": 1
+            },
+            "knowledgeSkills": {
+              "[city]": 1
+            },
+            "qualities": [
+              {
+                "id": "bad-rep",
+                "type": "negative"
+              },
+              {
+                "id": "enemy",
+                "type": "negative"
+              }
+            ]
+          }
+        ],
+        "education": [
+          {
+            "id": "community-college",
+            "name": "Community College",
+            "phase": "education",
+            "karmaCost": 55,
+            "yearsAdded": 2,
+            "description": "Attended a community college.",
+            "pageReference": "RF p. 74",
+            "attributeModifiers": {
+              "logic": 1,
+              "willpower": 1
+            },
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "cc-architecture",
+                "name": "Architecture",
+                "activeSkills": {
+                  "artisan": 1,
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "buildings": 5
+                },
+                "notes": "Artisan has Drawing specialization."
+              },
+              {
+                "id": "cc-business",
+                "name": "Business",
+                "activeSkills": {
+                  "con": 1,
+                  "etiquette": 1,
+                  "negotiation": 2
+                },
+                "knowledgeSkills": {
+                  "economics": 5
+                }
+              },
+              {
+                "id": "cc-computer-science",
+                "name": "Computer Science",
+                "activeSkills": {
+                  "cybercombat": 1,
+                  "hacking": 1
+                },
+                "skillGroups": {
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-design": 6
+                }
+              },
+              {
+                "id": "cc-engineering",
+                "name": "Engineering",
+                "activeSkills": {
+                  "chemistry": 1,
+                  "hardware": 1,
+                  "industrial-mechanic": 2
+                },
+                "knowledgeSkills": {
+                  "engineering": 5
+                }
+              },
+              {
+                "id": "cc-law",
+                "name": "Law",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 2,
+                  "performance": 1
+                },
+                "knowledgeSkills": {
+                  "law": 5
+                }
+              },
+              {
+                "id": "cc-magic",
+                "name": "Magic",
+                "skillGroups": {
+                  "sorcery": 1
+                },
+                "knowledgeSkills": {
+                  "magical-theory-or-metaplanes": 5
+                },
+                "notes": "Choose Academic Knowledge: Magical Theory or Metaplanes."
+              },
+              {
+                "id": "cc-mathematics",
+                "name": "Mathematics",
+                "activeSkills": {
+                  "computer": 1,
+                  "etiquette": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "mathematics": 5
+                }
+              },
+              {
+                "id": "cc-medicine",
+                "name": "Medicine",
+                "activeSkills": {
+                  "chemistry": 1
+                },
+                "skillGroups": {
+                  "biotech": 1
+                },
+                "knowledgeSkills": {
+                  "medicine": 6
+                }
+              },
+              {
+                "id": "cc-natural-sciences",
+                "name": "Natural Sciences",
+                "activeSkills": {
+                  "computer": 1,
+                  "first-aid": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[chemistry-physics-or-biology]": 5
+                },
+                "notes": "Choose one: Chemistry, Physics, or Biology for Academic Knowledge."
+              },
+              {
+                "id": "cc-art",
+                "name": "Art",
+                "activeSkills": {
+                  "artisan": 3
+                },
+                "knowledgeSkills": {
+                  "art-history": 3
+                }
+              },
+              {
+                "id": "cc-history",
+                "name": "History",
+                "activeSkills": {
+                  "computer": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[national-or-world]-history": 2
+                },
+                "notes": "Choose National or World History."
+              },
+              {
+                "id": "cc-languages",
+                "name": "Languages",
+                "activeSkills": {
+                  "negotiation": 1,
+                  "etiquette": 1
+                },
+                "languages": {
+                  "[any]": 6,
+                  "[any-2]": 5
+                }
+              },
+              {
+                "id": "cc-literature",
+                "name": "Literature",
+                "activeSkills": {
+                  "artisan": 1
+                },
+                "knowledgeSkills": {
+                  "literature": 5
+                },
+                "notes": "Artisan has Writing specialization."
+              },
+              {
+                "id": "cc-metahumanities",
+                "name": "Metahumanities",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[ancient-language-philosophy-or-religion]": 13
+                },
+                "notes": "Spread 13 ranks among at least three Academic Knowledge skills from: Ancient Language, Philosophy, Religion. Minimum 3 ranks each."
+              },
+              {
+                "id": "cc-social-sciences",
+                "name": "Social Sciences",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[sociology-psychology-archaeology-criminology-or-politics]": 13
+                },
+                "notes": "Spread 13 ranks among at least three Academic Knowledge skills from: Sociology, Psychology, Archaeology, Criminology, Politics. Minimum 3 ranks each."
+              }
+            ]
+          },
+          {
+            "id": "state-university",
+            "name": "State University/College",
+            "phase": "education",
+            "karmaCost": 65,
+            "yearsAdded": 4,
+            "description": "Attended a state university or college.",
+            "pageReference": "RF p. 75",
+            "attributeModifiers": {
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "computer": 1,
+              "perception": 1,
+              "etiquette": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 4
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Universal skills (Computer +1, Perception +1, Etiquette +1, Academic Knowledge [Any] +4) apply in addition to discipline skills.",
+            "subModules": [
+              {
+                "id": "su-architecture",
+                "name": "Architecture",
+                "activeSkills": {
+                  "artisan": 1,
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "buildings": 5
+                },
+                "notes": "Artisan has Drawing specialization."
+              },
+              {
+                "id": "su-business",
+                "name": "Business",
+                "activeSkills": {
+                  "con": 1,
+                  "etiquette": 1,
+                  "negotiation": 2
+                },
+                "knowledgeSkills": {
+                  "economics": 5
+                }
+              },
+              {
+                "id": "su-computer-science",
+                "name": "Computer Science",
+                "activeSkills": {
+                  "cybercombat": 1,
+                  "hacking": 1
+                },
+                "skillGroups": {
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-design": 6
+                }
+              },
+              {
+                "id": "su-engineering",
+                "name": "Engineering",
+                "activeSkills": {
+                  "chemistry": 1,
+                  "hardware": 1,
+                  "industrial-mechanic": 2
+                },
+                "knowledgeSkills": {
+                  "engineering": 5
+                }
+              },
+              {
+                "id": "su-law",
+                "name": "Law",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 2,
+                  "performance": 1
+                },
+                "knowledgeSkills": {
+                  "law": 5
+                }
+              },
+              {
+                "id": "su-magic",
+                "name": "Magic",
+                "skillGroups": {
+                  "sorcery": 1
+                },
+                "knowledgeSkills": {
+                  "magical-theory-or-metaplanes": 5
+                },
+                "notes": "Choose Academic Knowledge: Magical Theory or Metaplanes."
+              },
+              {
+                "id": "su-mathematics",
+                "name": "Mathematics",
+                "activeSkills": {
+                  "computer": 1,
+                  "etiquette": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "mathematics": 5
+                }
+              },
+              {
+                "id": "su-medicine",
+                "name": "Medicine",
+                "activeSkills": {
+                  "chemistry": 1
+                },
+                "skillGroups": {
+                  "biotech": 2
+                },
+                "knowledgeSkills": {
+                  "medicine": 6
+                }
+              },
+              {
+                "id": "su-natural-sciences",
+                "name": "Natural Sciences",
+                "activeSkills": {
+                  "computer": 1,
+                  "first-aid": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[chemistry-physics-or-biology]": 5
+                }
+              },
+              {
+                "id": "su-art",
+                "name": "Art",
+                "activeSkills": {
+                  "artisan": 3
+                },
+                "knowledgeSkills": {
+                  "art-history": 3
+                }
+              },
+              {
+                "id": "su-history",
+                "name": "History",
+                "activeSkills": {
+                  "computer": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[national-or-world]-history": 5
+                }
+              },
+              {
+                "id": "su-languages",
+                "name": "Languages",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1
+                },
+                "languages": {
+                  "[any]": 6,
+                  "[any-2]": 5
+                }
+              },
+              {
+                "id": "su-literature",
+                "name": "Literature",
+                "activeSkills": {
+                  "artisan": 1,
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "literature": 5
+                },
+                "notes": "Artisan has Writing specialization."
+              },
+              {
+                "id": "su-metahumanities",
+                "name": "Metahumanities",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[ancient-language-philosophy-or-religion]": 13
+                },
+                "notes": "Divide 13 ranks among all three areas (Ancient Language, Philosophy, Religion), no one skill more than 7."
+              },
+              {
+                "id": "su-social-sciences",
+                "name": "Social Sciences",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[sociology-psychology-archaeology-criminology-or-politics]": 13
+                },
+                "notes": "Divide 13 ranks among desired subjects, no one skill more than 6."
+              }
+            ]
+          },
+          {
+            "id": "ivy-league-university",
+            "name": "Ivy League University",
+            "phase": "education",
+            "karmaCost": 80,
+            "yearsAdded": 4,
+            "description": "Attended a prestigious Ivy League university.",
+            "pageReference": "RF p. 77",
+            "attributeModifiers": {
+              "charisma": 1,
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "computer": 1,
+              "etiquette": 1,
+              "perception": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 4
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Universal skills (Computer +1, Etiquette +1, Perception +1, Academic Knowledge [Any] +4) apply in addition to discipline skills.",
+            "subModules": [
+              {
+                "id": "ivy-architecture",
+                "name": "Architecture",
+                "activeSkills": {
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "buildings": 6
+                }
+              },
+              {
+                "id": "ivy-business",
+                "name": "Business",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1
+                },
+                "knowledgeSkills": {
+                  "economics": 6
+                }
+              },
+              {
+                "id": "ivy-computer-science",
+                "name": "Computer Science",
+                "skillGroups": {
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-design": 5
+                }
+              },
+              {
+                "id": "ivy-engineering",
+                "name": "Engineering",
+                "activeSkills": {
+                  "chemistry": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "engineering": 6
+                }
+              },
+              {
+                "id": "ivy-law",
+                "name": "Law",
+                "activeSkills": {
+                  "negotiation": 1,
+                  "performance": 1
+                },
+                "knowledgeSkills": {
+                  "law": 6
+                }
+              },
+              {
+                "id": "ivy-magic",
+                "name": "Magic",
+                "skillGroups": {
+                  "sorcery": 1
+                },
+                "knowledgeSkills": {
+                  "magical-theory-or-metaplanes": 5
+                },
+                "notes": "Choose Academic Knowledge: Magical Theory or Metaplanes."
+              },
+              {
+                "id": "ivy-mathematics",
+                "name": "Mathematics",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "software": 1
+                },
+                "knowledgeSkills": {
+                  "mathematics": 6
+                }
+              },
+              {
+                "id": "ivy-medicine",
+                "name": "Medicine",
+                "skillGroups": {
+                  "biotech": 1
+                },
+                "knowledgeSkills": {
+                  "medicine": 5
+                }
+              },
+              {
+                "id": "ivy-natural-sciences",
+                "name": "Natural Sciences",
+                "activeSkills": {
+                  "computer": 1,
+                  "software": 1
+                },
+                "knowledgeSkills": {
+                  "[chemistry-physics-or-biology]": 6
+                },
+                "notes": "Choose one: Chemistry, Physics, or Biology."
+              },
+              {
+                "id": "ivy-art",
+                "name": "Art",
+                "activeSkills": {
+                  "artisan": 2
+                },
+                "knowledgeSkills": {
+                  "art-history": 4
+                }
+              },
+              {
+                "id": "ivy-history",
+                "name": "History",
+                "activeSkills": {
+                  "computer": 1,
+                  "software": 1
+                },
+                "knowledgeSkills": {
+                  "history": 6
+                }
+              },
+              {
+                "id": "ivy-languages",
+                "name": "Languages",
+                "activeSkills": {
+                  "etiquette": 1
+                },
+                "languages": {
+                  "[any]": 4,
+                  "[any-2]": 2,
+                  "[any-3]": 2
+                }
+              },
+              {
+                "id": "ivy-literature",
+                "name": "Literature",
+                "activeSkills": {
+                  "artisan": 1
+                },
+                "knowledgeSkills": {
+                  "literature": 4
+                },
+                "notes": "Artisan has Writing specialization."
+              },
+              {
+                "id": "ivy-metahumanities",
+                "name": "Metahumanities",
+                "knowledgeSkills": {
+                  "[ancient-language-philosophy-or-religion]": 10
+                },
+                "notes": "Divide 10 ranks among all three areas (Ancient Language, Philosophy, Religion), minimum 2 each."
+              },
+              {
+                "id": "ivy-social-sciences",
+                "name": "Social Sciences",
+                "knowledgeSkills": {
+                  "[sociology-psychology-archaeology-criminology-or-politics]": 10
+                },
+                "notes": "Divide 10 ranks among at least three subjects, no single skill more than 6."
+              }
+            ]
+          },
+          {
+            "id": "military-academy",
+            "name": "Military Academy",
+            "phase": "education",
+            "karmaCost": 115,
+            "yearsAdded": 4,
+            "description": "Attended a prestigious military academy.",
+            "pageReference": "RF p. 78",
+            "attributeModifiers": {
+              "body": 1,
+              "reaction": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "leadership": 1,
+              "navigation": 1,
+              "swimming": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "military-history": 2,
+              "military": 3
+            },
+            "qualities": [
+              {
+                "id": "military-rank",
+                "type": "positive"
+              }
+            ],
+            "requiresSubModuleSelection": true,
+            "notes": "Universal skills (Firearms group +1, First Aid +1, Leadership +1, Navigation +1, Swimming +1, Unarmed Combat +1, Academic Knowledge: Military History +2, Professional Knowledge: Military +3) apply in addition to discipline skills. Military Rank quality at 20 karma value.",
+            "subModules": [
+              {
+                "id": "ma-architecture",
+                "name": "Architecture",
+                "activeSkills": {
+                  "artisan": 1,
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "buildings": 5
+                },
+                "notes": "Artisan has Drawing specialization."
+              },
+              {
+                "id": "ma-business",
+                "name": "Business",
+                "activeSkills": {
+                  "con": 1,
+                  "etiquette": 1,
+                  "negotiation": 2
+                },
+                "knowledgeSkills": {
+                  "economics": 5
+                }
+              },
+              {
+                "id": "ma-computer-science",
+                "name": "Computer Science",
+                "activeSkills": {
+                  "cybercombat": 1,
+                  "hacking": 1
+                },
+                "skillGroups": {
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-design": 6
+                }
+              },
+              {
+                "id": "ma-engineering",
+                "name": "Engineering",
+                "activeSkills": {
+                  "chemistry": 1,
+                  "hardware": 1,
+                  "industrial-mechanic": 2
+                },
+                "knowledgeSkills": {
+                  "engineering": 5
+                }
+              },
+              {
+                "id": "ma-law",
+                "name": "Law",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 2,
+                  "performance": 1
+                },
+                "knowledgeSkills": {
+                  "law": 5
+                }
+              },
+              {
+                "id": "ma-magic",
+                "name": "Magic",
+                "skillGroups": {
+                  "sorcery": 1
+                },
+                "knowledgeSkills": {
+                  "magical-theory-or-metaplanes": 5
+                },
+                "notes": "Choose Academic Knowledge: Magical Theory or Metaplanes."
+              },
+              {
+                "id": "ma-mathematics",
+                "name": "Mathematics",
+                "activeSkills": {
+                  "computer": 1,
+                  "etiquette": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "mathematics": 5
+                }
+              },
+              {
+                "id": "ma-medicine",
+                "name": "Medicine",
+                "activeSkills": {
+                  "chemistry": 1
+                },
+                "skillGroups": {
+                  "biotech": 2
+                },
+                "knowledgeSkills": {
+                  "medicine": 6
+                }
+              },
+              {
+                "id": "ma-natural-sciences",
+                "name": "Natural Sciences",
+                "activeSkills": {
+                  "computer": 1,
+                  "first-aid": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[chemistry-physics-or-biology]": 5
+                }
+              },
+              {
+                "id": "ma-art",
+                "name": "Art",
+                "activeSkills": {
+                  "artisan": 3
+                },
+                "knowledgeSkills": {
+                  "art-history": 3
+                }
+              },
+              {
+                "id": "ma-history",
+                "name": "History",
+                "activeSkills": {
+                  "computer": 1,
+                  "software": 2
+                },
+                "knowledgeSkills": {
+                  "[national-or-world]-history": 5
+                }
+              },
+              {
+                "id": "ma-languages",
+                "name": "Languages",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1
+                },
+                "languages": {
+                  "[any]": 6,
+                  "[any-2]": 5
+                }
+              },
+              {
+                "id": "ma-literature",
+                "name": "Literature",
+                "activeSkills": {
+                  "artisan": 1,
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "literature": 5
+                },
+                "notes": "Artisan has Writing specialization."
+              },
+              {
+                "id": "ma-metahumanities",
+                "name": "Metahumanities",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[ancient-language-philosophy-or-religion]": 13
+                },
+                "notes": "Distribute 13 ranks with no more than 6 ranks each."
+              },
+              {
+                "id": "ma-social-sciences",
+                "name": "Social Sciences",
+                "activeSkills": {
+                  "computer": 1
+                },
+                "knowledgeSkills": {
+                  "[sociology-psychology-archaeology-criminology-or-politics]": 13
+                },
+                "notes": "Distribute 13 ranks with no more than 6 in any given subject."
+              }
+            ]
+          },
+          {
+            "id": "trade-school",
+            "name": "Trade/Technical School",
+            "phase": "education",
+            "karmaCost": 40,
+            "yearsAdded": 2,
+            "description": "Attended a trade or technical school.",
+            "pageReference": "RF p. 79",
+            "attributeModifiers": {
+              "logic": 1
+            },
+            "activeSkills": {
+              "computers": 1,
+              "gymnastics": 2,
+              "perception": 1
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "General Studies (Computers +1, Gymnastics +2, Perception +1) apply in addition to vocation skills.",
+            "subModules": [
+              {
+                "id": "ts-architect",
+                "name": "Architect",
+                "activeSkills": {
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "buildings": 6
+                }
+              },
+              {
+                "id": "ts-fashion-designer",
+                "name": "Fashion Designer",
+                "activeSkills": {
+                  "artisan": 1
+                },
+                "knowledgeSkills": {
+                  "fashion": 4
+                },
+                "notes": "Artisan has Fashion specialization."
+              },
+              {
+                "id": "ts-graphic-designer",
+                "name": "Graphic Designer",
+                "activeSkills": {
+                  "artisan": 1
+                },
+                "knowledgeSkills": {
+                  "corporate-logos": 4
+                },
+                "notes": "Artisan has Drawing specialization."
+              },
+              {
+                "id": "ts-journalist",
+                "name": "Journalist",
+                "activeSkills": {
+                  "con": 1,
+                  "etiquette": 1,
+                  "negotiation": 1
+                },
+                "knowledgeSkills": {
+                  "politics": 4
+                }
+              },
+              {
+                "id": "ts-lawyer",
+                "name": "Lawyer",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1,
+                  "performance": 1
+                },
+                "knowledgeSkills": {
+                  "law": 4
+                }
+              },
+              {
+                "id": "ts-mechanic",
+                "name": "Mechanic",
+                "activeSkills": {
+                  "first-aid": 2
+                },
+                "skillGroups": {
+                  "engineering": 1
+                },
+                "knowledgeSkills": {
+                  "mechanics": 3
+                }
+              },
+              {
+                "id": "ts-media-studies",
+                "name": "Media Studies",
+                "activeSkills": {
+                  "etiquette": 1,
+                  "negotiation": 1
+                },
+                "knowledgeSkills": {
+                  "trid-shows": 6
+                }
+              },
+              {
+                "id": "ts-nurse",
+                "name": "Nurse",
+                "activeSkills": {
+                  "etiquette": 1
+                },
+                "skillGroups": {
+                  "biotech": 1
+                },
+                "knowledgeSkills": {
+                  "medicine": 3
+                }
+              },
+              {
+                "id": "ts-tradesman",
+                "name": "Tradesman",
+                "activeSkills": {
+                  "automotive-mechanic": 1,
+                  "first-aid": 1,
+                  "industrial-mechanic": 1
+                },
+                "knowledgeSkills": {
+                  "diy": 4
+                }
+              }
+            ]
+          }
+        ],
+        "career": [
+          {
+            "id": "bounty-hunter",
+            "name": "Bounty Hunter",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked as a bounty hunter, tracking down fugitives.",
+            "pageReference": "RF p. 80",
+            "attributeModifiers": {
+              "body": 1,
+              "willpower": 1,
+              "intuition": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "intimidation": 1,
+              "longarms": 1,
+              "perception": 1,
+              "pistols": 1,
+              "survival": 1,
+              "tracking": 1
+            },
+            "skillGroups": {
+              "athletics": 1,
+              "close-combat": 1
+            },
+            "knowledgeSkills": {
+              "lone-star-procedures": 3,
+              "crook-hangouts": 3
+            }
+          },
+          {
+            "id": "celebrity",
+            "name": "Celebrity",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Lived as a celebrity in the public eye.",
+            "pageReference": "RF p. 80",
+            "attributeModifiers": {
+              "charisma": 1
+            },
+            "activeSkills": {
+              "con": 1,
+              "escape-artist": 1
+            },
+            "knowledgeSkills": {
+              "[sports-music-or-film]": 3
+            },
+            "qualities": [
+              {
+                "id": "fame",
+                "type": "positive"
+              }
+            ],
+            "notes": "Add +1 to two attributes of choice (other than Charisma). Also +6 ranks to buy skills appropriate to field (no more than 3 ranks per skill; Con and Escape Artist may be purchased further)."
+          },
+          {
+            "id": "combat-correspondent",
+            "name": "Combat Correspondent",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked as a journalist embedded with combat units.",
+            "pageReference": "RF p. 80",
+            "attributeModifiers": {
+              "charisma": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "navigation": 1,
+              "negotiation": 2,
+              "perception": 2,
+              "survival": 1
+            },
+            "skillGroups": {
+              "electronics": 2
+            },
+            "knowledgeSkills": {
+              "journalism": 5
+            },
+            "languages": {
+              "[any]": 3,
+              "[any-2]": 1
+            },
+            "qualities": [
+              {
+                "id": "guts",
+                "type": "positive"
+              }
+            ]
+          },
+          {
+            "id": "corporate",
+            "name": "Corporate",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked for a major corporation.",
+            "pageReference": "RF p. 80",
+            "attributeModifiers": {
+              "logic": 1,
+              "intuition": 1
+            },
+            "activeSkills": {
+              "etiquette": 1
+            },
+            "knowledgeSkills": {
+              "[corporation]": 3
+            },
+            "qualities": [
+              {
+                "id": "sinner-corporate-limited",
+                "type": "negative"
+              }
+            ],
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "corporate-company-man",
+                "name": "Company Man",
+                "activeSkills": {
+                  "demolitions": 2,
+                  "pilot-ground-craft": 2,
+                  "sneaking": 3,
+                  "unarmed-combat": 2
+                },
+                "skillGroups": {
+                  "firearms": 3
+                }
+              },
+              {
+                "id": "corporate-hacker-decker",
+                "name": "Hacker/Decker",
+                "activeSkills": {
+                  "first-aid": 2
+                },
+                "skillGroups": {
+                  "cracking": 2,
+                  "electronics": 3
+                },
+                "knowledgeSkills": {
+                  "physics": 3,
+                  "matrix-security-design": 6
+                }
+              },
+              {
+                "id": "corporate-security-guard",
+                "name": "Security Guard",
+                "activeSkills": {
+                  "perception": 2
+                },
+                "skillGroups": {
+                  "athletics": 2,
+                  "close-combat": 2,
+                  "firearms": 2
+                },
+                "knowledgeSkills": {
+                  "security-procedures": 5,
+                  "law-enforcement-procedures": 4
+                }
+              },
+              {
+                "id": "corporate-security-rigger",
+                "name": "Security Rigger",
+                "activeSkills": {
+                  "gunnery": 3,
+                  "perception": 2,
+                  "pilot-aircraft": 2,
+                  "pilot-anthroform": 2,
+                  "pilot-ground-craft": 3
+                },
+                "skillGroups": {
+                  "electronics": 2
+                },
+                "knowledgeSkills": {
+                  "drones": 3
+                }
+              },
+              {
+                "id": "corporate-wage-mage",
+                "name": "Wage Mage",
+                "activeSkills": {
+                  "arcana": 2,
+                  "assensing": 3,
+                  "astral-combat": 2
+                },
+                "skillGroups": {
+                  "conjuring": 2,
+                  "enchanting": 1,
+                  "sorcery": 2
+                },
+                "knowledgeSkills": {
+                  "magical-law": 1
+                }
+              },
+              {
+                "id": "corporate-wage-slave",
+                "name": "Wage Slave",
+                "attributeModifiers": {
+                  "charisma": 1,
+                  "willpower": 1
+                },
+                "activeSkills": {
+                  "con": 1,
+                  "etiquette": 2,
+                  "negotiation": 2
+                },
+                "knowledgeSkills": {
+                  "administration": 6
+                }
+              }
+            ]
+          },
+          {
+            "id": "covert-operations",
+            "name": "Covert Operations",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked in covert operations and espionage.",
+            "pageReference": "RF p. 81",
+            "attributeModifiers": {
+              "intuition": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "chemistry": 1,
+              "con": 1,
+              "escape-artist": 1,
+              "etiquette": 1,
+              "gymnastics": 1,
+              "navigation": 1,
+              "perception": 1,
+              "pistols": 1,
+              "sneaking": 2,
+              "survival": 1,
+              "unarmed-combat": 1
+            },
+            "knowledgeSkills": {
+              "[any]": 3,
+              "codes": 2,
+              "[city]": 3
+            },
+            "languages": {
+              "[any]": 3
+            },
+            "qualities": [
+              {
+                "id": "hawk-eye",
+                "type": "positive"
+              },
+              {
+                "id": "poor-link",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "drifter",
+            "name": "Drifter",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Spent years drifting from place to place.",
+            "pageReference": "RF p. 81",
+            "activeSkills": {
+              "con": 2,
+              "escape-artist": 1,
+              "negotiation": 1,
+              "running": 1,
+              "sneaking": 1,
+              "survival": 2,
+              "swimming": 1,
+              "unarmed-combat": 1
+            },
+            "knowledgeSkills": {
+              "grey-market": 3,
+              "black-market": 3,
+              "[city]": 5,
+              "[any]": 3
+            },
+            "qualities": [
+              {
+                "id": "high-pain-tolerance",
+                "type": "positive"
+              },
+              {
+                "id": "sense-of-direction",
+                "type": "positive"
+              }
+            ],
+            "notes": "Add +1 to any two separate attributes."
+          },
+          {
+            "id": "ganger",
+            "name": "Ganger",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Ran with a gang as an adult.",
+            "pageReference": "RF p. 81",
+            "attributeModifiers": {
+              "body": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "blades": 3,
+              "demolitions": 1,
+              "escape-artist": 1,
+              "heavy-weapons": 1,
+              "survival": 1,
+              "perception": 1,
+              "pilot-ground-craft": 1,
+              "running": 1
+            },
+            "skillGroups": {
+              "cracking": 1,
+              "electronics": 1,
+              "firearms": 2,
+              "stealth": 1
+            },
+            "qualities": [
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "government-agent",
+            "name": "Government Agent",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked as a government agent.",
+            "pageReference": "RF p. 81",
+            "attributeModifiers": {
+              "intuition": 1,
+              "reaction": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "pistols": 2,
+              "perception": 3,
+              "pilot-ground-craft": 1,
+              "running": 1,
+              "tracking": 1
+            },
+            "skillGroups": {
+              "influence": 2
+            },
+            "knowledgeSkills": {
+              "government-procedures": 5,
+              "law-enforcement-protocols": 5,
+              "national-threats": 4
+            },
+            "qualities": [
+              {
+                "id": "sinner-national",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "law-enforcement",
+            "name": "Law Enforcement",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Served in law enforcement.",
+            "pageReference": "RF p. 82",
+            "attributeModifiers": {
+              "body": 1,
+              "reaction": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "clubs": 1,
+              "etiquette": 1,
+              "first-aid": 1,
+              "leadership": 1,
+              "perception": 1,
+              "pistols": 1
+            },
+            "knowledgeSkills": {
+              "police-procedures": 3
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Basic Training (Clubs +1, Etiquette +1, First Aid +1, Leadership +1, Perception +1, Pistols +1, Professional Knowledge: Police Procedures +3) applies to all branches.",
+            "subModules": [
+              {
+                "id": "law-enforcement-beat-cop",
+                "name": "Beat Cop",
+                "activeSkills": {
+                  "intimidation": 2,
+                  "navigation": 1,
+                  "pilot-ground-craft": 1
+                },
+                "knowledgeSkills": {
+                  "[city]": 5
+                }
+              },
+              {
+                "id": "law-enforcement-cyber-crime",
+                "name": "Cyber Crime",
+                "skillGroups": {
+                  "cracking": 1,
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-criminals": 5
+                }
+              },
+              {
+                "id": "law-enforcement-cyber-division",
+                "name": "Cyber Division",
+                "activeSkills": {
+                  "cybertechnology": 1,
+                  "heavy-weapons": 2,
+                  "unarmed-combat": 1
+                },
+                "skillGroups": {
+                  "firearms": 1
+                }
+              },
+              {
+                "id": "law-enforcement-mage-division",
+                "name": "Mage Division",
+                "activeSkills": {
+                  "arcana": 1,
+                  "assensing": 2
+                },
+                "skillGroups": {
+                  "sorcery": 1
+                },
+                "knowledgeSkills": {
+                  "magical-threats": 2
+                }
+              },
+              {
+                "id": "law-enforcement-rigger",
+                "name": "Rigger",
+                "activeSkills": {
+                  "automotive-mechanic": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 1,
+                  "pilot-anthroform": 1,
+                  "pilot-ground-craft": 2
+                },
+                "knowledgeSkills": {
+                  "drones": 1
+                }
+              },
+              {
+                "id": "law-enforcement-swat",
+                "name": "SWAT Team",
+                "activeSkills": {
+                  "armorer": 1,
+                  "gymnastics": 1,
+                  "throwing-weapons": 2
+                },
+                "skillGroups": {
+                  "firearms": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "organized-crime",
+            "name": "Organized Crime",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked for organized crime.",
+            "pageReference": "RF p. 82",
+            "activeSkills": {
+              "blades": 1,
+              "con": 2,
+              "demolitions": 1,
+              "escape-artist": 1,
+              "etiquette": 1,
+              "forgery": 1,
+              "hardware": 1,
+              "intimidation": 2,
+              "leadership": 1,
+              "negotiation": 1,
+              "perception": 2,
+              "pilot-ground-craft": 1,
+              "unarmed-combat": 2
+            },
+            "skillGroups": {
+              "firearms": 3,
+              "stealth": 1
+            },
+            "knowledgeSkills": {
+              "[syndicate]": 4,
+              "[city]": 3
+            },
+            "qualities": [
+              {
+                "id": "made-man",
+                "type": "positive"
+              },
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "political-activist",
+            "name": "Political Activist",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Spent years as a political activist.",
+            "pageReference": "RF p. 83",
+            "attributeModifiers": {
+              "charisma": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "con": 1,
+              "disguise": 1,
+              "etiquette": 2,
+              "forgery": 2,
+              "instruction": 1,
+              "leadership": 2,
+              "negotiation": 2,
+              "palming": 2,
+              "perception": 2,
+              "pilot-ground-craft": 1
+            },
+            "knowledgeSkills": {
+              "[city]": 3,
+              "police-procedures": 3,
+              "[policlub]": 4
+            },
+            "qualities": [
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "postgraduate-studies",
+            "name": "Postgraduate Studies",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Pursued postgraduate academic studies.",
+            "pageReference": "RF p. 83",
+            "attributeModifiers": {
+              "logic": 1,
+              "intuition": 1,
+              "charisma": 1
+            },
+            "activeSkills": {
+              "instruction": 2
+            },
+            "knowledgeSkills": {
+              "[major]": 2,
+              "[any]": 2
+            },
+            "notes": "Also add +10 ranks to skills from your education module (no more than 4 added to any one skill)."
+          },
+          {
+            "id": "private-investigator",
+            "name": "Private Investigator/Detective",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked as a private investigator or detective.",
+            "pageReference": "RF p. 83",
+            "attributeModifiers": {
+              "intuition": 1,
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "perception": 2,
+              "pistols": 2,
+              "pilot-ground-craft": 1,
+              "tracking": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "athletics": 1,
+              "influence": 1
+            },
+            "knowledgeSkills": {
+              "law-enforcement-procedures": 3,
+              "[city]": 2
+            },
+            "qualities": [
+              {
+                "id": "sinner-national",
+                "type": "negative"
+              }
+            ],
+            "prerequisites": [
+              "tour-of-duty",
+              "law-enforcement",
+              "covert-operations",
+              "shadow-work",
+              "corporate"
+            ],
+            "notes": "Must have completed Tour of Duty, Law Enforcement, Covert Operations, Shadow Work, or Corporate module."
+          },
+          {
+            "id": "regular-job",
+            "name": "Regular Job",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Held a regular day job.",
+            "pageReference": "RF p. 83",
+            "attributeModifiers": {
+              "charisma": 1,
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "leadership": 1,
+              "etiquette": 1,
+              "negotiation": 1
+            },
+            "knowledgeSkills": {
+              "[job]": 1,
+              "[job-2]": 2,
+              "[any]": 1
+            },
+            "notes": "Also add +6 points to vocational skills relating to your job (no more than 3 ranks per skill)."
+          },
+          {
+            "id": "shadow-work",
+            "name": "Shadow Work",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked the shadows as a shadowrunner.",
+            "pageReference": "RF p. 83",
+            "attributeModifiers": {
+              "body": 1
+            },
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "shadow-work-face",
+                "name": "Face",
+                "attributeModifiers": {
+                  "charisma": 1
+                },
+                "activeSkills": {
+                  "con": 1,
+                  "intimidation": 1,
+                  "perception": 1,
+                  "pilot-ground-craft": 1,
+                  "pistols": 1
+                },
+                "skillGroups": {
+                  "influence": 3
+                },
+                "qualities": [
+                  {
+                    "id": "first-impression",
+                    "type": "positive"
+                  }
+                ]
+              },
+              {
+                "id": "shadow-work-decker",
+                "name": "Decker",
+                "attributeModifiers": {
+                  "intuition": 1
+                },
+                "activeSkills": {
+                  "forgery": 1,
+                  "perception": 1,
+                  "pistols": 1
+                },
+                "skillGroups": {
+                  "cracking": 2,
+                  "electronics": 2
+                },
+                "knowledgeSkills": {
+                  "matrix-security-procedures": 4
+                },
+                "qualities": [
+                  {
+                    "id": "codeslinger",
+                    "type": "positive"
+                  }
+                ]
+              },
+              {
+                "id": "shadow-work-smuggler",
+                "name": "Smuggler",
+                "activeSkills": {
+                  "electronic-warfare": 2,
+                  "etiquette": 1,
+                  "gunnery": 2,
+                  "[aeronautics-automotive-or-nautical]-mechanic": 2,
+                  "navigation": 1,
+                  "negotiation": 1,
+                  "perception": 2,
+                  "pilot-aircraft": 2,
+                  "pilot-ground-craft": 2,
+                  "pilot-watercraft": 2,
+                  "pistols": 1,
+                  "sneaking": 1
+                },
+                "knowledgeSkills": {
+                  "border-patrol-tactics": 6,
+                  "smuggler-safe-houses": 6,
+                  "smuggler-routes": 6
+                },
+                "notes": "Choose one Mechanic skill: Aeronautics, Automotive, or Nautical."
+              },
+              {
+                "id": "shadow-work-street-samurai",
+                "name": "Street Samurai",
+                "attributeModifiers": {
+                  "agility": 1,
+                  "reaction": 1
+                },
+                "activeSkills": {
+                  "blades": 2,
+                  "heavy-weapons": 1,
+                  "negotiation": 1,
+                  "perception": 2,
+                  "pilot-ground-craft": 1,
+                  "sneaking": 1,
+                  "unarmed-combat": 1
+                },
+                "skillGroups": {
+                  "athletics": 1,
+                  "firearms": 2
+                },
+                "knowledgeSkills": {
+                  "safe-houses": 3
+                },
+                "qualities": [
+                  {
+                    "id": "code-of-honor",
+                    "type": "positive"
+                  }
+                ]
+              },
+              {
+                "id": "shadow-work-weapon-specialist",
+                "name": "Weapon Specialist",
+                "activeSkills": {
+                  "archery": 1,
+                  "armorer": 3,
+                  "chemistry": 2,
+                  "demolitions": 1,
+                  "heavy-weapons": 1,
+                  "negotiation": 1,
+                  "throwing-weapons": 1
+                },
+                "skillGroups": {
+                  "close-combat": 2,
+                  "firearms": 2
+                },
+                "knowledgeSkills": {
+                  "blade-design": 4,
+                  "gun-design": 5,
+                  "gun-trivia": 3
+                }
+              }
+            ]
+          },
+          {
+            "id": "street-magic",
+            "name": "Street Magic",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Practiced magic on the streets.",
+            "pageReference": "RF p. 84",
+            "attributeModifiers": {
+              "willpower": 1
+            },
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "street-magic-aspected-magician",
+                "name": "Aspected Magician",
+                "activeSkills": {
+                  "arcana": 2,
+                  "assensing": 2,
+                  "blades": 1,
+                  "first-aid": 1,
+                  "survival": 1
+                },
+                "knowledgeSkills": {
+                  "magical-security": 3,
+                  "small-group-tactics": 2,
+                  "magical-theory": 1
+                },
+                "notes": "Add +1 to the Alchemy, Conjuring, or Spellcasting skill group.",
+                "skillGroupChoices": {
+                  "choose": 1,
+                  "from": ["alchemy", "conjuring", "sorcery"],
+                  "ranks": 1
+                }
+              },
+              {
+                "id": "street-magic-occult-investigator",
+                "name": "Occult Investigator",
+                "activeSkills": {
+                  "arcana": 1,
+                  "assensing": 3,
+                  "locksmith": 1,
+                  "perception": 3,
+                  "pistols": 1,
+                  "tracking": 2
+                },
+                "skillGroups": {
+                  "conjuring": 1,
+                  "influence": 1,
+                  "sorcery": 2
+                },
+                "knowledgeSkills": {
+                  "forensics": 5,
+                  "[city]": 4
+                }
+              },
+              {
+                "id": "street-magic-eco-shaman",
+                "name": "Eco-Shaman",
+                "activeSkills": {
+                  "assensing": 2,
+                  "astral-combat": 2,
+                  "demolitions": 1,
+                  "etiquette": 1,
+                  "first-aid": 1,
+                  "forgery": 2,
+                  "perception": 2,
+                  "pistols": 1
+                },
+                "skillGroups": {
+                  "conjuring": 2,
+                  "sorcery": 2
+                },
+                "knowledgeSkills": {
+                  "megacorp-law": 5,
+                  "magical-theory": 3
+                }
+              },
+              {
+                "id": "street-magic-street-mage",
+                "name": "Street Mage",
+                "activeSkills": {
+                  "assensing": 2,
+                  "blades": 1,
+                  "palming": 1,
+                  "perception": 1,
+                  "sneaking": 1,
+                  "survival": 1
+                },
+                "skillGroups": {
+                  "conjuring": 3,
+                  "sorcery": 2
+                },
+                "knowledgeSkills": {
+                  "charity-shelters": 5,
+                  "[city]": 4
+                }
+              },
+              {
+                "id": "street-magic-street-shaman",
+                "name": "Street Shaman",
+                "activeSkills": {
+                  "assensing": 2,
+                  "blades": 1,
+                  "palming": 1,
+                  "perception": 1,
+                  "sneaking": 1,
+                  "survival": 1
+                },
+                "skillGroups": {
+                  "conjuring": 3,
+                  "sorcery": 2
+                },
+                "knowledgeSkills": {
+                  "charity-shelters": 5,
+                  "[sprawl]": 4
+                }
+              },
+              {
+                "id": "street-magic-talismonger",
+                "name": "Talismonger",
+                "activeSkills": {
+                  "assensing": 3,
+                  "chemistry": 1,
+                  "etiquette": 1,
+                  "first-aid": 1,
+                  "negotiation": 2,
+                  "pistols": 1
+                },
+                "skillGroups": {
+                  "enchanting": 3
+                },
+                "knowledgeSkills": {
+                  "telesma": 5,
+                  "alchemy": 5
+                }
+              }
+            ]
+          },
+          {
+            "id": "terrorist",
+            "name": "Terrorist",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Participated in terrorist activities.",
+            "pageReference": "RF p. 84",
+            "attributeModifiers": {
+              "logic": 1,
+              "willpower": 1
+            },
+            "activeSkills": {
+              "con": 1,
+              "demolitions": 3,
+              "disguise": 2,
+              "leadership": 2,
+              "palming": 2,
+              "perception": 2,
+              "pilot-ground-craft": 1
+            },
+            "skillGroups": {
+              "firearms": 2
+            },
+            "knowledgeSkills": {
+              "[city]": 3,
+              "law-enforcement-procedures": 2
+            },
+            "qualities": [
+              {
+                "id": "criminal-sin",
+                "type": "negative"
+              }
+            ]
+          },
+          {
+            "id": "think-tank",
+            "name": "Think Tank",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked in a think tank, conducting research and analysis.",
+            "pageReference": "RF p. 84",
+            "attributeModifiers": {
+              "willpower": 1,
+              "logic": 2
+            },
+            "activeSkills": {
+              "etiquette": 2
+            },
+            "knowledgeSkills": {
+              "[any]": 6,
+              "[any-2]": 3,
+              "[any-3]": 3
+            },
+            "qualities": [
+              {
+                "id": "analytical-mind",
+                "type": "positive"
+              }
+            ],
+            "notes": "Three different Academic Knowledge skills must be selected."
+          }
+        ],
+        "tour": [
+          {
+            "id": "tour-mercenary",
+            "name": "Mercenary",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served as a mercenary soldier.",
+            "pageReference": "RF p. 84",
+            "attributeModifiers": {
+              "body": 1,
+              "reaction": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "navigation": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "foreign-military": 3
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Basic Training (Firearms group +1, First Aid +1, Navigation +1, Professional Knowledge: Foreign Military +3) applies to all branches.",
+            "subModules": [
+              {
+                "id": "mercenary-air-force",
+                "name": "Air Force",
+                "activeSkills": {
+                  "aeronautics-mechanic": 1,
+                  "armorer": 1,
+                  "blades": 1,
+                  "free-fall": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 2,
+                  "survival": 1
+                }
+              },
+              {
+                "id": "mercenary-army",
+                "name": "Army",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "free-fall": 1,
+                  "heavy-weapons": 1,
+                  "pilot-ground-craft": 1,
+                  "running": 1,
+                  "survival": 1,
+                  "swimming": 1,
+                  "throwing-weapons": 1
+                }
+              },
+              {
+                "id": "mercenary-engineering-corps",
+                "name": "Engineering Corps",
+                "activeSkills": {
+                  "armorer": 2,
+                  "demolitions": 1,
+                  "gunnery": 1
+                },
+                "skillGroups": {
+                  "engineering": 1
+                },
+                "knowledgeSkills": {
+                  "military-vehicles": 3
+                }
+              },
+              {
+                "id": "mercenary-mage-corps",
+                "name": "Mage Corps",
+                "activeSkills": {
+                  "assensing": 2,
+                  "arcana": 1
+                },
+                "skillGroups": {
+                  "conjuring": 1,
+                  "sorcery": 1
+                }
+              },
+              {
+                "id": "mercenary-medical-corps",
+                "name": "Medical Corps",
+                "skillGroups": {
+                  "biotech": 2
+                }
+              },
+              {
+                "id": "mercenary-navy",
+                "name": "Navy",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "gunnery": 1,
+                  "perception": 1,
+                  "pilot-watercraft": 2,
+                  "survival": 1,
+                  "swimming": 1
+                }
+              },
+              {
+                "id": "mercenary-rigger-corps",
+                "name": "Rigger Corps",
+                "activeSkills": {
+                  "gunnery": 2,
+                  "electronic-warfare": 2,
+                  "pilot-aircraft": 1,
+                  "pilot-anthroform": 1,
+                  "pilot-ground-craft": 1
+                }
+              },
+              {
+                "id": "mercenary-special-forces",
+                "name": "Special Forces",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "demolitions": 1,
+                  "free-fall": 1,
+                  "perception": 1,
+                  "pilot-ground-craft": 1,
+                  "pilot-watercraft": 1,
+                  "sneaking": 1,
+                  "survival": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "tour-nan",
+            "name": "NAN Military",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served in the Native American Nations military.",
+            "pageReference": "RF p. 85",
+            "attributeModifiers": {
+              "body": 1,
+              "strength": 1,
+              "intuition": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "navigation": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "nan-military": 3
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Basic Training (Firearms group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: NAN Military +3) applies to all branches.",
+            "subModules": [
+              {
+                "id": "nan-military-air-force",
+                "name": "Air Force",
+                "activeSkills": {
+                  "blades": 1,
+                  "free-fall": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 2,
+                  "survival": 1,
+                  "tracking": 1
+                }
+              },
+              {
+                "id": "nan-military-army",
+                "name": "Army",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "heavy-weapons": 1,
+                  "pilot-ground-craft": 1,
+                  "survival": 2,
+                  "throwing-weapons": 1
+                }
+              },
+              {
+                "id": "nan-military-engineering-corps",
+                "name": "Engineering Corps",
+                "activeSkills": {
+                  "armorer": 2,
+                  "demolitions": 1,
+                  "gunnery": 1
+                },
+                "skillGroups": {
+                  "engineering": 1
+                }
+              },
+              {
+                "id": "nan-military-mage-corps",
+                "name": "Mage Corps",
+                "activeSkills": {
+                  "assensing": 1,
+                  "blades": 1,
+                  "survival": 1
+                },
+                "skillGroups": {
+                  "conjuring": 1,
+                  "sorcery": 1
+                }
+              },
+              {
+                "id": "nan-military-medical-corps",
+                "name": "Medical Corps",
+                "skillGroups": {
+                  "biotech": 2
+                }
+              },
+              {
+                "id": "nan-military-navy",
+                "name": "Navy",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "gunnery": 1,
+                  "pilot-watercraft": 1,
+                  "survival": 2,
+                  "swimming": 1
+                }
+              },
+              {
+                "id": "nan-military-rigger-corps",
+                "name": "Rigger Corps",
+                "activeSkills": {
+                  "archery": 1,
+                  "blades": 1,
+                  "electronic-warfare": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 1,
+                  "pilot-anthroform": 1,
+                  "pilot-ground-craft": 1,
+                  "survival": 1
+                }
+              },
+              {
+                "id": "nan-military-special-forces",
+                "name": "Special Forces",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "demolitions": 1,
+                  "free-fall": 1,
+                  "pilot-ground-craft": 1,
+                  "pilot-watercraft": 1,
+                  "sneaking": 1,
+                  "survival": 1,
+                  "tracking": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "tour-tir-tairngire",
+            "name": "Tír Tairngire Military",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served in the Tír Tairngire military.",
+            "pageReference": "RF p. 85",
+            "attributeModifiers": {
+              "agility": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "navigation": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "peacekeepers": 4
+            },
+            "requiresSubModuleSelection": true,
+            "notes": "Basic Training (Firearms group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: Peacekeepers +4) applies to all branches.",
+            "subModules": [
+              {
+                "id": "tir-military-air-force",
+                "name": "Air Force",
+                "attributeModifiers": {
+                  "reaction": 1
+                },
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "free-fall": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 2,
+                  "survival": 1
+                }
+              },
+              {
+                "id": "tir-military-border-patrol",
+                "name": "Border Patrol",
+                "attributeModifiers": {
+                  "charisma": 1
+                },
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "heavy-weapons": 1,
+                  "perception": 1,
+                  "pilot-ground-craft": 1,
+                  "sneaking": 1,
+                  "swimming": 1,
+                  "survival": 1,
+                  "throwing-weapons": 1
+                }
+              },
+              {
+                "id": "tir-military-engineering-corps",
+                "name": "Engineering Corps",
+                "attributeModifiers": {
+                  "logic": 1
+                },
+                "activeSkills": {
+                  "armorer": 2,
+                  "demolitions": 1,
+                  "gunnery": 1
+                },
+                "skillGroups": {
+                  "engineering": 1
+                },
+                "knowledgeSkills": {
+                  "tir-military-vehicles": 3
+                }
+              },
+              {
+                "id": "tir-military-ghosts",
+                "name": "Ghosts",
+                "attributeModifiers": {
+                  "willpower": 1
+                },
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "demolitions": 1,
+                  "free-fall": 1,
+                  "perception": 1,
+                  "pilot-ground-craft": 1,
+                  "pilot-watercraft": 1,
+                  "sneaking": 1,
+                  "survival": 1
+                }
+              },
+              {
+                "id": "tir-military-mage-corps",
+                "name": "Mage Corps",
+                "attributeModifiers": {
+                  "logic": 1
+                },
+                "activeSkills": {
+                  "arcana": 1,
+                  "assensing": 2
+                },
+                "skillGroups": {
+                  "conjuring": 1,
+                  "sorcery": 1
+                }
+              },
+              {
+                "id": "tir-military-medical-corps",
+                "name": "Medical Corps",
+                "attributeModifiers": {
+                  "logic": 1
+                },
+                "skillGroups": {
+                  "biotech": 2
+                }
+              },
+              {
+                "id": "tir-military-navy",
+                "name": "Navy",
+                "attributeModifiers": {
+                  "body": 1
+                },
+                "activeSkills": {
+                  "blades": 1,
+                  "gunnery": 1,
+                  "pilot-watercraft": 2,
+                  "armorer": 1,
+                  "perception": 1,
+                  "survival": 1,
+                  "swimming": 1
+                }
+              },
+              {
+                "id": "tir-military-netwatch",
+                "name": "Netwatch",
+                "attributeModifiers": {
+                  "intuition": 1
+                },
+                "activeSkills": {
+                  "perception": 1
+                },
+                "skillGroups": {
+                  "cracking": 1,
+                  "electronics": 1
+                },
+                "knowledgeSkills": {
+                  "matrix-threats": 6
+                }
+              },
+              {
+                "id": "tir-military-peace-keepers",
+                "name": "Peace Keepers",
+                "attributeModifiers": {
+                  "body": 1
+                },
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "clubs": 1,
+                  "free-fall": 1,
+                  "heavy-weapons": 1,
+                  "pilot-ground-craft": 1,
+                  "perception": 1,
+                  "survival": 1,
+                  "throwing-weapons": 1
+                }
+              },
+              {
+                "id": "tir-military-rigger-corp",
+                "name": "Rigger Corp",
+                "attributeModifiers": {
+                  "reaction": 1
+                },
+                "activeSkills": {
+                  "electronic-warfare": 2,
+                  "gunnery": 2,
+                  "pilot-aircraft": 1,
+                  "pilot-anthroform": 1,
+                  "pilot-ground-craft": 1
+                }
+              }
+            ]
+          },
+          {
+            "id": "tour-ucas-cas-cfs",
+            "name": "UCAS/CAS/CFS Military",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served in the UCAS, CAS, or CFS military.",
+            "pageReference": "RF p. 86",
+            "attributeModifiers": {
+              "body": 1,
+              "reaction": 1,
+              "strength": 1
+            },
+            "activeSkills": {
+              "first-aid": 1,
+              "navigation": 1,
+              "unarmed-combat": 1
+            },
+            "skillGroups": {
+              "firearms": 1
+            },
+            "knowledgeSkills": {
+              "military": 4
+            },
+            "qualities": [
+              {
+                "id": "sinner-national",
+                "type": "negative"
+              }
+            ],
+            "requiresSubModuleSelection": true,
+            "notes": "Basic Training (Firearms group +1, First Aid +1, Navigation +1, Unarmed Combat +1, Professional Knowledge: Military +4) applies to all branches.",
+            "subModules": [
+              {
+                "id": "ucas-cas-cfs-air-force",
+                "name": "Air Force",
+                "activeSkills": {
+                  "armorer": 2,
+                  "blades": 1,
+                  "free-fall": 1,
+                  "gunnery": 1,
+                  "pilot-aircraft": 2,
+                  "survival": 1
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-army",
+                "name": "Army",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "free-fall": 1,
+                  "heavy-weapons": 1,
+                  "pilot-ground-craft": 1,
+                  "survival": 1,
+                  "throwing-weapons": 2
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-engineering-corps",
+                "name": "Engineering Corps",
+                "activeSkills": {
+                  "armorer": 2,
+                  "demolitions": 1,
+                  "gunnery": 1
+                },
+                "skillGroups": {
+                  "engineering": 1
+                },
+                "knowledgeSkills": {
+                  "military-vehicles": 5
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-mage-corps",
+                "name": "Mage Corps",
+                "activeSkills": {
+                  "assensing": 2,
+                  "perception": 1
+                },
+                "skillGroups": {
+                  "conjuring": 1,
+                  "sorcery": 1
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-medical-corps",
+                "name": "Medical Corps",
+                "skillGroups": {
+                  "biotech": 2
+                },
+                "knowledgeSkills": {
+                  "medicine": 3
+                },
+                "notes": "Must have finished Nurse or Medicine module from Further Education.",
+                "prerequisites": [
+                  "ts-nurse",
+                  "cc-medicine",
+                  "su-medicine",
+                  "ivy-medicine",
+                  "ma-medicine"
+                ]
+              },
+              {
+                "id": "ucas-cas-cfs-navy",
+                "name": "Navy",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "gunnery": 2,
+                  "pilot-watercraft": 2,
+                  "survival": 1,
+                  "swimming": 1
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-rigger-corps",
+                "name": "Rigger Corps",
+                "activeSkills": {
+                  "electronic-warfare": 2,
+                  "gunnery": 2,
+                  "pilot-aircraft": 1,
+                  "pilot-anthroform": 1,
+                  "pilot-ground-craft": 1
+                }
+              },
+              {
+                "id": "ucas-cas-cfs-special-forces",
+                "name": "Special Forces",
+                "activeSkills": {
+                  "armorer": 1,
+                  "blades": 1,
+                  "demolitions": 1,
+                  "free-fall": 1,
+                  "perception": 1,
+                  "pilot-ground-craft": 1,
+                  "pilot-watercraft": 1,
+                  "sneaking": 1,
+                  "survival": 1,
+                  "tracking": 1
+                }
+              }
+            ]
+          }
+        ]
+      }
     },
     "shapeshifters": {
       "mergeStrategy": "replace",

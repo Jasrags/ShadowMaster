@@ -413,15 +413,12 @@ describe("MetatypeModal", () => {
       expect(props.onConfirm).not.toHaveBeenCalled();
     });
 
-    it("calls onClose when backdrop clicked", async () => {
+    it("calls onClose when Escape key is pressed", async () => {
       const user = userEvent.setup();
       const props = defaultProps();
-      const { container } = render(<MetatypeModal {...props} />);
+      render(<MetatypeModal {...props} />);
 
-      const backdrop = container.querySelector(".backdrop-blur-sm");
-      if (backdrop) {
-        await user.click(backdrop);
-      }
+      await user.keyboard("{Escape}");
 
       expect(props.onClose).toHaveBeenCalled();
     });

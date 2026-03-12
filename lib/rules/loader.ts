@@ -544,6 +544,20 @@ export function extractAdeptPowers(ruleset: LoadedRuleset): AdeptPowerCatalogIte
 }
 
 // =============================================================================
+// LIFE MODULES DATA TYPES AND LOADERS
+// =============================================================================
+
+import type { LifeModulesCatalog } from "../types";
+
+/**
+ * Load life modules catalog from a ruleset
+ */
+export function extractLifeModules(ruleset: LoadedRuleset): LifeModulesCatalog | null {
+  const ruleModule = extractModule<LifeModulesCatalog>(ruleset, "lifeModules");
+  return ruleModule || null;
+}
+
+// =============================================================================
 // TRADITION DATA TYPES AND LOADERS
 // =============================================================================
 
