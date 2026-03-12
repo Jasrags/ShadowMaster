@@ -7,3 +7,10 @@ export {
   type ResolvedLifeModuleGrants,
   type DuplicateQualityInfo,
 } from "./grant-resolver";
+
+export {
+  getModuleGrantedNegativeQualities,
+  calculateBuyOffCost,
+  getEffectiveNegativeQualityKarma,
+  type NegativeQualityKarmaBreakdown,
+} from "./buy-off";

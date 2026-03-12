@@ -236,6 +236,13 @@ export interface LifeModulesSelections {
 
   /** Calculated character age based on module selections */
   readonly calculatedAge?: number;
+
+  /**
+   * Quality IDs bought off with remaining karma (Run Faster p.67).
+   * Modules still record granting these qualities, but they are removed
+   * from the character's final quality list. Cost = quality's karmaBonus (1x).
+   */
+  readonly boughtOffQualityIds?: readonly string[];
 }
 
 // =============================================================================

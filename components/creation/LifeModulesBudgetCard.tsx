@@ -91,6 +91,12 @@ function calculateKarmaBreakdown(state: CreationState): readonly BudgetLineItem[
     items.push({ label: "Negative Qualities", amount: -negQualityKarma });
   }
 
+  // Bought-off negative qualities (costs karma to remove — Run Faster p.67)
+  const buyOffKarma = budgets["karma-spent-quality-buyoff"] || 0;
+  if (buyOffKarma > 0) {
+    items.push({ label: "Bought Off Qualities", amount: buyOffKarma });
+  }
+
   // Contacts
   const contactKarma = budgets["karma-spent-contacts"] || 0;
   if (contactKarma > 0) {
@@ -132,7 +138,10 @@ export function LifeModulesBudgetCard({ state }: LifeModulesBudgetCardProps) {
 
   const remaining = LIFE_MODULES_KARMA_BUDGET - totalSpent;
   const gearKarma = state.budgets?.["karma-spent-gear"] || 0;
-  const negQualityKarma = state.budgets?.["negative-quality-karma-gained"] || 0;
+  const negQualityKarmaRaw = state.budgets?.["negative-quality-karma-gained"] || 0;
+  const buyOffKarma = state.budgets?.["karma-spent-quality-buyoff"] || 0;
+  // Enforce 25 Karma max AFTER buy-offs are applied (Run Faster p.67)
+  const negQualityKarma = negQualityKarmaRaw - buyOffKarma;
 
   const validationStatus = useMemo(() => {
     if (totalSpent > LIFE_MODULES_KARMA_BUDGET) return "error" as const;
@@ -141,7 +150,7 @@ export function LifeModulesBudgetCard({ state }: LifeModulesBudgetCardProps) {
     if (totalSpent === 0) return "pending" as const;
     if (remaining === 0) return "valid" as const;
     return "warning" as const;
-  }, [totalSpent, gearKarma, negQualityKarma, remaining]);
+  }, [totalSpent, gearKarma, negQualityKarma, remaining, buyOffKarma]);
 
   return (
     <CreationCard
