@@ -2,6 +2,7 @@
 export { PrioritySelectionCard } from "./PrioritySelectionCard";
 export { PointBuyBudgetCard } from "./PointBuyBudgetCard";
 export { LifeModulesBudgetCard } from "./LifeModulesBudgetCard";
+export { LifeModulesCard } from "./life-modules";
 export { MetatypeCard } from "./metatype";
 export { AttributesCard } from "./AttributesCard";
 export { SkillsCard } from "./SkillsCard";

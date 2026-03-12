@@ -20,6 +20,7 @@ import type {
   ItemLegality,
   Effect,
   GameplayLevelModifiers,
+  LifeModulesCatalog,
 } from "../types";
 import type { GameplayLevel } from "../types/campaign";
 import type {
@@ -663,6 +664,7 @@ export interface RulesetData {
   foci: FocusCatalogItemData[];
   spirits: SpiritsCatalogData | null;
   actions: ActionsCatalogData | null;
+  lifeModules: LifeModulesCatalog | null;
 }
 
 /**
@@ -727,6 +729,7 @@ const defaultData: RulesetData = {
   foci: [],
   spirits: null,
   actions: null,
+  lifeModules: null,
 };
 
 const defaultState: RulesetContextState = {
@@ -818,6 +821,7 @@ export function RulesetProvider({ children }: RulesetProviderProps) {
             foci: extractedData.foci || [],
             spirits: extractedData.spirits || null,
             actions: extractedData.actions || null,
+            lifeModules: extractedData.lifeModules || null,
           }
         : defaultData;
 
@@ -955,6 +959,14 @@ export function useSkills(): {
 export function useQualities(): { positive: QualityData[]; negative: QualityData[] } {
   const { data } = useRuleset();
   return data.qualities;
+}
+
+/**
+ * Hook to get life modules catalog from the ruleset
+ */
+export function useLifeModules(): LifeModulesCatalog | null {
+  const { data } = useRuleset();
+  return data.lifeModules;
 }
 
 /**

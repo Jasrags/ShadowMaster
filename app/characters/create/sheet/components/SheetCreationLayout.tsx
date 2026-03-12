@@ -42,6 +42,7 @@ import {
   PrioritySelectionCard,
   PointBuyBudgetCard,
   LifeModulesBudgetCard,
+  LifeModulesCard,
   MetatypeCard,
   AttributesCard,
   SkillsCard,
@@ -898,13 +899,18 @@ export function SheetCreationLayout({
           {/* Character Info - Phase 5 */}
           <CharacterInfoCard state={creationState} updateState={updateState} />
 
-          {/* Priority Selection / Point Buy Budget - Phase 2 */}
+          {/* Priority Selection / Point Buy Budget / Life Modules Budget */}
           {currentCreationMethod?.type === "point-buy" ? (
             <PointBuyBudgetCard state={creationState} />
           ) : currentCreationMethod?.type === "life-modules" ? (
             <LifeModulesBudgetCard state={creationState} />
           ) : (
             <PrioritySelectionCard state={creationState} updateState={updateState} />
+          )}
+
+          {/* Life Modules Selection (life-modules only) */}
+          {currentCreationMethod?.type === "life-modules" && (
+            <LifeModulesCard state={creationState} updateState={updateState} />
           )}
 
           {/* Metatype Selection - Phase 2 */}
