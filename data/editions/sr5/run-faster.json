@@ -7571,8 +7571,15 @@
             "knowledgeSkills": {
               "foreign-military": 3
             },
+            "prerequisites": [
+              "tour-nan",
+              "tour-tir-tairngire",
+              "tour-ucas-cas-cfs",
+              "corporate",
+              "shadow-work"
+            ],
             "requiresSubModuleSelection": true,
-            "notes": "Basic Training (Firearms group +1, First Aid +1, Navigation +1, Professional Knowledge: Foreign Military +3) applies to all branches.",
+            "notes": "Must have completed another Tour of Duty, the Company Man (Corporate), or Shadow Work module.",
             "subModules": [
               {
                 "id": "mercenary-air-force",

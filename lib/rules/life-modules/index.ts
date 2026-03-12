@@ -14,3 +14,9 @@ export {
   getEffectiveNegativeQualityKarma,
   type NegativeQualityKarmaBreakdown,
 } from "./buy-off";
+
+export {
+  checkPrerequisites,
+  getUnmetPrerequisiteNames,
+  type PrerequisiteResult,
+} from "./prerequisites";
