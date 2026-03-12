@@ -258,7 +258,7 @@ export function LifeModulesModal({
                         >
                           <span>{sub.name}</span>
                           <span className="text-[10px] text-zinc-400">
-                            {sub.karmaCost !== highlightedModule.karmaCost
+                            {sub.karmaCost != null && sub.karmaCost !== highlightedModule.karmaCost
                               ? `${sub.karmaCost}K`
                               : ""}
                           </span>

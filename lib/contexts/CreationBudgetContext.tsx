@@ -47,6 +47,10 @@ import {
   LIFE_MODULES_NUYEN_PER_KARMA,
 } from "../types";
 import type { LifeModuleSelection } from "../types";
+import {
+  POINT_BUY_METATYPE_COSTS,
+  POINT_BUY_MAGIC_QUALITY_COSTS,
+} from "../rules/point-buy-validation";
 
 // =============================================================================
 // SKILL CATEGORY HELPERS
@@ -783,6 +787,21 @@ function extractSpentValues(
   const lifeModules = (selections.lifeModules || []) as readonly LifeModuleSelection[];
   const karmaSpentLifeModules = lifeModules.reduce((sum, mod) => sum + mod.karmaCost, 0);
 
+  // Metatype and magic path karma costs apply only to non-priority methods
+  // (life-modules, point-buy) where these are purchased from the karma pool.
+  // Priority-based creation gets metatype/magic from priority selections for free.
+  const hasPriorities = priorities && Object.keys(priorities).length > 0;
+
+  const selectedMetatypeId = selections.metatype as string | undefined;
+  const karmaSpentMetatype =
+    !hasPriorities && selectedMetatypeId ? (POINT_BUY_METATYPE_COSTS[selectedMetatypeId] ?? 0) : 0;
+
+  const selectedMagicPath = selections["magical-path"] as string | undefined;
+  const karmaSpentMagicPath =
+    !hasPriorities && selectedMagicPath && selectedMagicPath !== "mundane"
+      ? (POINT_BUY_MAGIC_QUALITY_COSTS[selectedMagicPath] ?? 0)
+      : 0;
+
   // Net karma spent = positive qualities + other spends - negative qualities gained
   spent["karma"] =
     karmaSpentPositive +
@@ -793,6 +812,8 @@ function extractSpentValues(
     karmaSpentFoci +
     karmaSpentSkills +
     karmaSpentContacts +
+    karmaSpentMetatype +
+    karmaSpentMagicPath +
     karmaSpentLifeModules -
     karmaGainedNegative;
 

@@ -36,11 +36,14 @@ import {
 } from "./constants";
 import { calculatePositiveKarmaSpent, type QualitySelection } from "./utils";
 import { MagicPathModal } from "./MagicPathModal";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import type { MagicPathCardProps } from "./types";
 
 export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
   const magicPaths = useMagicPaths();
   const priorityTable = usePriorityTable();
+  const currentCreationMethod = useCreationMethod();
+  const isLifeModules = currentCreationMethod?.type === "life-modules";
   const traditions = useTraditions();
   const mentorSpirits = useMentorSpirits();
   const { positive: positiveQualitiesData } = useQualities();
@@ -76,8 +79,19 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       (typeof q === "object" && q.id === MENTOR_SPIRIT_QUALITY_ID)
   );
 
-  // Get available magic options based on priority
+  // Get available magic options based on priority or creation method
   const availableOptions = useMemo(() => {
+    // Life Modules: all magic paths available (magic rating from modules)
+    if (isLifeModules) {
+      return magicPaths
+        .filter((p) => p.id !== "mundane")
+        .map((p) => ({
+          path: p.id,
+          magicRating: p.hasMagic ? 1 : undefined,
+          resonanceRating: p.hasResonance ? 1 : undefined,
+        }));
+    }
+
     if (!magicPriority || !priorityTable?.table[magicPriority]) {
       return [];
     }
@@ -85,7 +99,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
       options: Array<{ path: string; magicRating?: number; resonanceRating?: number }>;
     };
     return magicData?.options || [];
-  }, [magicPriority, priorityTable]);
+  }, [isLifeModules, magicPaths, magicPriority, priorityTable]);
 
   // Get selected path's rating and free skills
   const selectedOption = useMemo(() => {
@@ -292,15 +306,22 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
 
   // Validation status
   const validationStatus = useMemo(() => {
-    if (!magicPriority) return "pending";
+    if (!isLifeModules && !magicPriority) return "pending";
     if (!selectedPath) return "warning";
     if (selectedPath === "aspected-mage" && !selectedAspectedGroup) return "warning";
     if (canSelectTradition && !selectedTradition) return "warning";
     return "valid";
-  }, [magicPriority, selectedPath, selectedAspectedGroup, canSelectTradition, selectedTradition]);
+  }, [
+    isLifeModules,
+    magicPriority,
+    selectedPath,
+    selectedAspectedGroup,
+    canSelectTradition,
+    selectedTradition,
+  ]);
 
-  // Check if priority is set
-  if (!magicPriority) {
+  // Check if priority is set (life-modules bypasses priority requirement)
+  if (!isLifeModules && !magicPriority) {
     return (
       <CreationCard title="Magic / Resonance" description="Select magical path" status="pending">
         <div className="flex items-center gap-2 rounded-lg border-2 border-dashed border-zinc-200 p-4 text-center dark:border-zinc-700">
@@ -315,7 +336,7 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
     return (
       <CreationCard
         title="Magic / Resonance"
-        description={`Priority ${magicPriority} - Mundane`}
+        description={isLifeModules ? "Mundane" : `Priority ${magicPriority} - Mundane`}
         status="valid"
       >
         <div className="space-y-3">
@@ -348,7 +369,9 @@ export function MagicPathCard({ state, updateState }: MagicPathCardProps) {
         description={
           selectedPathData
             ? `${selectedPathData.name}${pathRating > 0 ? ` • ${isResonancePath ? "RES" : "MAG"} ${pathRating}` : ""}`
-            : `Priority ${magicPriority} - ${availableOptions.length + 1} options`
+            : isLifeModules
+              ? `${availableOptions.length + 1} options — select path`
+              : `Priority ${magicPriority} - ${availableOptions.length + 1} options`
         }
         status={validationStatus}
       >

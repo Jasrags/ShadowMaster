@@ -140,11 +140,13 @@ export function MagicPathModal({
         </div>
 
         {/* Priority info */}
-        <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
-          <p className="text-sm text-zinc-600 dark:text-zinc-400">
-            Available at Priority {priorityLevel}
-          </p>
-        </div>
+        {priorityLevel && (
+          <div className="border-b border-zinc-100 bg-zinc-50 px-6 py-3 dark:border-zinc-800 dark:bg-zinc-800/50">
+            <p className="text-sm text-zinc-600 dark:text-zinc-400">
+              Available at Priority {priorityLevel}
+            </p>
+          </div>
+        )}
 
         {/* Path list */}
         <div className="max-h-[60vh] overflow-y-auto p-4">

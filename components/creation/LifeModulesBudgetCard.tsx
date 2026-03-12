@@ -18,6 +18,10 @@ import {
   LIFE_MODULES_MAX_NEGATIVE_QUALITIES,
   LIFE_MODULES_NUYEN_PER_KARMA,
 } from "@/lib/types";
+import {
+  POINT_BUY_METATYPE_COSTS,
+  POINT_BUY_MAGIC_QUALITY_COSTS,
+} from "@/lib/rules/point-buy-validation";
 
 interface LifeModulesBudgetCardProps {
   readonly state: CreationState;
@@ -36,6 +40,21 @@ function calculateKarmaBreakdown(state: CreationState): readonly BudgetLineItem[
   const items: BudgetLineItem[] = [];
   const selections = state.selections || {};
   const budgets = state.budgets || {};
+
+  // Metatype karma cost
+  const metatypeId = selections.metatype as string | undefined;
+  const metatypeKarma = metatypeId ? (POINT_BUY_METATYPE_COSTS[metatypeId] ?? 0) : 0;
+  if (metatypeKarma > 0) {
+    items.push({ label: "Metatype", amount: metatypeKarma });
+  }
+
+  // Magic/Resonance path karma cost
+  const magicPath = selections["magical-path"] as string | undefined;
+  const magicKarma =
+    magicPath && magicPath !== "mundane" ? (POINT_BUY_MAGIC_QUALITY_COSTS[magicPath] ?? 0) : 0;
+  if (magicKarma > 0) {
+    items.push({ label: "Magic/Resonance", amount: magicKarma });
+  }
 
   // Karma spent on life module selections
   const lifeModules = selections.lifeModules;
