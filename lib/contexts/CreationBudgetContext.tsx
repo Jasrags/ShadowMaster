@@ -40,6 +40,13 @@ import {
   type QualityBudgetModifiers,
   FRIENDS_IN_HIGH_PLACES_CONTACT_MULTIPLIER,
 } from "../rules/qualities/budget-modifiers";
+import {
+  LIFE_MODULES_KARMA_BUDGET,
+  LIFE_MODULES_MAX_GEAR_KARMA,
+  LIFE_MODULES_MAX_NEGATIVE_QUALITIES,
+  LIFE_MODULES_NUYEN_PER_KARMA,
+} from "../types";
+import type { LifeModuleSelection } from "../types";
 
 // =============================================================================
 // SKILL CATEGORY HELPERS
@@ -158,15 +165,21 @@ const CreationBudgetContext = createContext<CreationBudgetContextValue | null>(n
 // =============================================================================
 
 /**
- * Calculate total budget values from priority selections
+ * Calculate total budget values from priority selections or creation method
  */
 function calculateBudgetTotals(
   priorities: Record<string, string> | undefined,
   selections: Record<string, unknown>,
   priorityTable: PriorityTableData | null,
   stateBudgets: Record<string, unknown>,
-  gameplayModifiers?: GameplayLevelModifiers
+  gameplayModifiers?: GameplayLevelModifiers,
+  creationMethodId?: string
 ): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
+  // Life Modules: 750 Karma budget, gear via karma-to-nuyen conversion
+  if (creationMethodId === "life-modules") {
+    return calculateLifeModulesBudgetTotals(selections, stateBudgets);
+  }
+
   const totals: Record<
     string,
     { total: number; label: string; displayFormat?: "number" | "currency" }
@@ -310,6 +323,55 @@ function calculateBudgetTotals(
       };
     }
   }
+
+  return totals;
+}
+
+/**
+ * Calculate budget totals for Life Modules creation method.
+ * Life Modules uses a flat 750 Karma budget with no priority table.
+ * Gear is purchased via karma-to-nuyen conversion (1K = 2,000¥).
+ */
+function calculateLifeModulesBudgetTotals(
+  selections: Record<string, unknown>,
+  stateBudgets: Record<string, unknown>
+): Record<string, { total: number; label: string; displayFormat?: "number" | "currency" }> {
+  const totals: Record<
+    string,
+    { total: number; label: string; displayFormat?: "number" | "currency" }
+  > = {
+    karma: {
+      total: LIFE_MODULES_KARMA_BUDGET,
+      label: "Karma",
+      displayFormat: "number",
+    },
+  };
+
+  // Nuyen budget: derived from karma-to-nuyen conversion only
+  const karmaSpentGear = (stateBudgets["karma-spent-gear"] as number) || 0;
+  totals["nuyen"] = {
+    total: karmaSpentGear * LIFE_MODULES_NUYEN_PER_KARMA,
+    label: "Nuyen",
+    displayFormat: "currency",
+  };
+
+  // Contact points: CHA × 3 (standard formula, no priority)
+  const attributes = selections.attributes as Record<string, number> | undefined;
+  const charisma = attributes?.charisma || 1;
+  totals["contact-points"] = {
+    total: charisma * 3,
+    label: "Contact Points",
+    displayFormat: "number",
+  };
+
+  // Knowledge points: (INT + LOG) × 2
+  const intuition = attributes?.intuition || 1;
+  const logic = attributes?.logic || 1;
+  totals["knowledge-points"] = {
+    total: (intuition + logic) * 2,
+    label: "Knowledge Points",
+    displayFormat: "number",
+  };
 
   return totals;
 }
@@ -717,6 +779,10 @@ function extractSpentValues(
     karmaSpentSkills = skillRaisesTotal + (skillKarmaSpent.specializations || 0) + groupRaisesTotal;
   }
 
+  // Life module karma: sum of karmaCost from selected modules
+  const lifeModules = (selections.lifeModules || []) as readonly LifeModuleSelection[];
+  const karmaSpentLifeModules = lifeModules.reduce((sum, mod) => sum + mod.karmaCost, 0);
+
   // Net karma spent = positive qualities + other spends - negative qualities gained
   spent["karma"] =
     karmaSpentPositive +
@@ -726,7 +792,8 @@ function extractSpentValues(
     karmaSpentAttributes +
     karmaSpentFoci +
     karmaSpentSkills +
-    karmaSpentContacts -
+    karmaSpentContacts +
+    karmaSpentLifeModules -
     karmaGainedNegative;
 
   return spent;
@@ -816,15 +883,31 @@ function validateBudgets(
     });
   }
 
-  // Check karma-to-nuyen conversion limit (dynamic: default 10, Born Rich → 40)
-  const karmaToNuyenCap = qualityModifiers.karmaToNuyenCap;
+  // Check karma-to-nuyen conversion limit
+  // Life Modules uses its own cap (200); standard priority uses dynamic cap (default 10, Born Rich → 40)
   const karmaSpentGear = (state.budgets["karma-spent-gear"] as number) || 0;
+  const isLifeModules = state.creationMethodId === "life-modules";
+  const karmaToNuyenCap = isLifeModules
+    ? LIFE_MODULES_MAX_GEAR_KARMA
+    : qualityModifiers.karmaToNuyenCap;
   if (karmaSpentGear > karmaToNuyenCap) {
     errors.push({
       constraintId: "karma-conversion-limit",
       message: `Karma-to-nuyen conversion cannot exceed ${karmaToNuyenCap} karma (currently ${karmaSpentGear})`,
       severity: "error",
     });
+  }
+
+  // Life Modules: negative quality cap after all modules (25 Karma)
+  if (isLifeModules) {
+    const lmNegativeKarma = (state.budgets["negative-quality-karma-gained"] as number) || 0;
+    if (lmNegativeKarma > LIFE_MODULES_MAX_NEGATIVE_QUALITIES) {
+      errors.push({
+        constraintId: "life-modules-negative-quality-limit",
+        message: `Negative quality karma after modules cannot exceed ${LIFE_MODULES_MAX_NEGATIVE_QUALITIES} (currently ${lmNegativeKarma})`,
+        severity: "error",
+      });
+    }
   }
 
   // Check for unused free skills from magic priority
@@ -956,7 +1039,8 @@ export function CreationBudgetProvider({
         creationState.selections,
         priorityTable,
         creationState.budgets,
-        gameplayModifiers
+        gameplayModifiers,
+        creationState.creationMethodId
       ),
     [
       creationState.priorities,
@@ -964,6 +1048,7 @@ export function CreationBudgetProvider({
       priorityTable,
       creationState.budgets,
       gameplayModifiers,
+      creationState.creationMethodId,
     ]
   );
 
@@ -1117,10 +1202,23 @@ export function CreationBudgetProvider({
 
     // Check required selections
     const hasMetatype = !!creationState.selections.metatype;
-    const hasPriorities = Object.keys(creationState.priorities || {}).length === 5;
 
+    // Life Modules doesn't use priorities — check for module selections instead
+    if (creationState.creationMethodId === "life-modules") {
+      const lifeModules = creationState.selections.lifeModules;
+      const hasModules = Array.isArray(lifeModules) && lifeModules.length > 0;
+      return hasMetatype && hasModules;
+    }
+
+    const hasPriorities = Object.keys(creationState.priorities || {}).length === 5;
     return hasMetatype && hasPriorities;
-  }, [isValid, creationState.selections.metatype, creationState.priorities]);
+  }, [
+    isValid,
+    creationState.selections.metatype,
+    creationState.priorities,
+    creationState.creationMethodId,
+    creationState.selections.lifeModules,
+  ]);
 
   // Context value
   const value: CreationBudgetContextValue = useMemo(
@@ -1206,4 +1304,5 @@ export const _testExports = {
   extractSpentValues,
   validateBudgets,
   calculateBudgetTotals,
+  calculateLifeModulesBudgetTotals,
 };
