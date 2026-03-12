@@ -15,14 +15,17 @@ import { useLifeModules, useQualities } from "@/lib/rules/RulesetContext";
 import { PHASE_ORDER, PHASE_INFO } from "./constants";
 import { LifeModulesModal } from "./LifeModulesModal";
 import { QualityReplacementModal } from "./QualityReplacementModal";
+import { NegativeQualityBuyOffSection } from "./NegativeQualityBuyOffSection";
 import type { LifeModulesCardProps, PhaseModules } from "./types";
 import type { LifeModuleSelection, LifeModulesCatalog, QualityReplacement } from "@/lib/types";
 import { LIFE_MODULES_KARMA_BUDGET } from "@/lib/types";
 import {
   detectDuplicateQualities,
   lookupModule,
+  resolveLifeModuleGrants,
   type DuplicateQualityInfo,
 } from "@/lib/rules/life-modules";
+import { getEffectiveNegativeQualityKarma } from "@/lib/rules/life-modules/buy-off";
 
 /**
  * Build phase-organized module map from catalog data
@@ -132,6 +135,42 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
     return ids;
   }, [catalog, existingSelections]);
 
+  // Resolve all grants to get quality list for buy-off section
+  const resolvedGrants = useMemo(() => {
+    if (!catalog || existingSelections.length === 0) return null;
+    return resolveLifeModuleGrants(existingSelections, catalog);
+  }, [catalog, existingSelections]);
+
+  const boughtOffIds: readonly string[] = useMemo(
+    () => state.selections.boughtOffQualityIds ?? [],
+    [state.selections.boughtOffQualityIds]
+  );
+
+  const handleBuyOffChange = useCallback(
+    (updatedIds: readonly string[]) => {
+      // Calculate the karma cost of bought-off qualities
+      const negQualityCatalog = negativeQualities;
+      const breakdown = getEffectiveNegativeQualityKarma(
+        resolvedGrants?.qualities ?? [],
+        updatedIds,
+        negQualityCatalog
+      );
+
+      updateState({
+        selections: {
+          ...state.selections,
+          boughtOffQualityIds: updatedIds,
+        },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-quality-buyoff": breakdown.boughtOffKarma,
+          "negative-quality-karma-gained": breakdown.effectiveNegativeKarma,
+        },
+      });
+    },
+    [resolvedGrants, negativeQualities, state.selections, state.budgets, updateState]
+  );
+
   // Finalize adding a module (with any replacements already resolved)
   const finalizeAddModule = useCallback(
     (selection: LifeModuleSelection, replacements: readonly QualityReplacement[]) => {
@@ -233,14 +272,55 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
     (index: number) => {
       const updatedModules = existingSelections.filter((_, i) => i !== index);
 
+      // Recalculate which bought-off IDs are still valid after module removal
+      const remainingQualityIds = new Set<string>();
+      if (catalog) {
+        for (const sel of updatedModules) {
+          const mod = lookupModule(sel.moduleId, sel.subModuleId, catalog);
+          if (mod?.qualities) {
+            for (const q of mod.qualities) {
+              if (q.type === "negative") remainingQualityIds.add(q.id);
+            }
+          }
+        }
+      }
+      const updatedBuyOffs = boughtOffIds.filter((id) => remainingQualityIds.has(id));
+
+      // Recalculate budget values for the remaining buy-offs
+      const remainingGrants = catalog
+        ? updatedModules.flatMap((sel) => {
+            const mod = lookupModule(sel.moduleId, sel.subModuleId, catalog);
+            return mod?.qualities ?? [];
+          })
+        : [];
+      const breakdown = getEffectiveNegativeQualityKarma(
+        remainingGrants,
+        updatedBuyOffs,
+        negativeQualities
+      );
+
       updateState({
         selections: {
           ...state.selections,
           lifeModules: updatedModules,
+          boughtOffQualityIds: updatedBuyOffs.length > 0 ? updatedBuyOffs : undefined,
+        },
+        budgets: {
+          ...state.budgets,
+          "karma-spent-quality-buyoff": breakdown.boughtOffKarma,
+          "negative-quality-karma-gained": breakdown.effectiveNegativeKarma,
         },
       });
     },
-    [existingSelections, state.selections, updateState]
+    [
+      existingSelections,
+      state.selections,
+      state.budgets,
+      updateState,
+      catalog,
+      boughtOffIds,
+      negativeQualities,
+    ]
   );
 
   // Validation status
@@ -383,6 +463,16 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
                   {totalModuleKarma} Karma
                 </span>
               </div>
+
+              {/* Negative quality buy-off section */}
+              {resolvedGrants && resolvedGrants.qualities.length > 0 && (
+                <NegativeQualityBuyOffSection
+                  grantedQualities={resolvedGrants.qualities}
+                  boughtOffIds={boughtOffIds}
+                  qualityCatalog={negativeQualities}
+                  onBuyOffChange={handleBuyOffChange}
+                />
+              )}
 
               {/* Missing required phases warning */}
               {validationStatus === "warning" && (
