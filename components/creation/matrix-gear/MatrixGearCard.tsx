@@ -36,6 +36,7 @@ import {
   LegalityBadge,
 } from "../shared";
 import { MatrixGearModal } from "./MatrixGearModal";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import {
   Lock,
   Plus,
@@ -223,6 +224,7 @@ function DataSoftwareRow({
 export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
   const commlinksCatalog = useCommlinks();
   const cyberdecksCatalog = useCyberdecks();
+  const currentCreationMethod = useCreationMethod();
   const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -525,9 +527,11 @@ export function MatrixGearCard({ state, updateState }: MatrixGearCardProps) {
     return "pending";
   }, [isOverBudget, selectedCommlinks.length, selectedCyberdecks.length, selectedSoftware.length]);
 
-  // Check prerequisites
+  // Check prerequisites - Point Buy and Life Modules bypass priority requirement
+  const isNonPriorityMethod =
+    currentCreationMethod?.type === "point-buy" || currentCreationMethod?.type === "life-modules";
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
-  if (!hasPriorities) {
+  if (!isNonPriorityMethod && !hasPriorities) {
     return (
       <CreationCard
         title="Matrix Gear"

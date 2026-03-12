@@ -655,15 +655,53 @@ function ValidationSummary({
   const hasServerWarnings = serverValidation && serverValidation.warnings.length > 0;
 
   // Compute incomplete requirements matching server-side finalization validators
+  const currentCreationMethod = useCreationMethod();
+  const methodType = currentCreationMethod?.type;
+
   const incompleteItems = useMemo(() => {
     const items: string[] = [];
     const priorities = creationState.priorities || {};
     const selections = creationState.selections || {};
 
-    if (Object.keys(priorities).length < 5) items.push("Set all 5 priorities");
+    // Priority requirements depend on creation method type
+    const usesPriorities = methodType === "priority" || methodType === "sum-to-ten";
+    const isPointBuy = methodType === "point-buy";
+    const isLifeModules = methodType === "life-modules";
+    const isSumToTen = methodType === "sum-to-ten";
+
+    if (usesPriorities) {
+      if (Object.keys(priorities).length < 5) {
+        if (isSumToTen) {
+          items.push("Set all 5 priorities (sum to 10)");
+        } else {
+          items.push("Set all 5 priorities");
+        }
+      }
+    }
+
     if (!selections.metatype) items.push("Select a metatype");
-    if (!selections["magical-path"] && priorities?.magic !== "E")
-      items.push("Select a magic/resonance path");
+
+    // Magic path check: priority/sum-to-ten checks priority level, others always show
+    if (!selections["magical-path"]) {
+      if (usesPriorities) {
+        if (priorities?.magic !== "E") {
+          items.push("Select a magic/resonance path");
+        }
+      } else if (isLifeModules) {
+        // Life Modules: magic path selection is optional (mundane is valid)
+        // but show reminder if they haven't chosen
+        items.push("Select a magic/resonance path");
+      }
+      // Point Buy: magic path is optional (mundane is valid default)
+    }
+
+    // Life Modules: require at least one module
+    if (isLifeModules) {
+      const lifeModules = selections.lifeModules;
+      if (!Array.isArray(lifeModules) || lifeModules.length === 0) {
+        items.push("Add at least one life module");
+      }
+    }
 
     // Tradition required for magician, mystic-adept, aspected-mage
     const TRADITION_PATHS = ["magician", "mystic-adept", "aspected-mage"];
@@ -677,7 +715,7 @@ function ValidationSummary({
       items.push("Add at least one lifestyle");
 
     return items;
-  }, [creationState.priorities, creationState.selections]);
+  }, [creationState.priorities, creationState.selections, methodType]);
 
   return (
     <div>

@@ -52,6 +52,7 @@ import {
   wouldReplaceExisting,
   isCyberlimb,
 } from "@/lib/types/cyberlimb";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import { Lock, AlertTriangle, Cpu, Heart, Plus } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
@@ -70,6 +71,7 @@ interface AugmentationsCardProps {
 
 export function AugmentationsCard({ state, updateState }: AugmentationsCardProps) {
   const augmentationRules = useAugmentationRules();
+  const currentCreationMethod = useCreationMethod();
   const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -751,9 +753,11 @@ export function AugmentationsCard({ state, updateState }: AugmentationsCardProps
     selectedBioware.length,
   ]);
 
-  // Check prerequisites
+  // Check prerequisites - Point Buy and Life Modules bypass priority requirement
+  const isNonPriorityMethod =
+    currentCreationMethod?.type === "point-buy" || currentCreationMethod?.type === "life-modules";
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
-  if (!hasPriorities) {
+  if (!isNonPriorityMethod && !hasPriorities) {
     return (
       <CreationCard
         title="Augmentations"

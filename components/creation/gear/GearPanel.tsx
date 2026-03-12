@@ -33,6 +33,7 @@ import {
 import { GearRow } from "./GearRow";
 import { GearPurchaseModal } from "./GearPurchaseModal";
 import { GearModificationModal } from "./GearModificationModal";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import { Lock, Plus } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
@@ -101,6 +102,7 @@ interface GearPanelProps {
 
 export function GearPanel({ state, updateState }: GearPanelProps) {
   const gearCatalog = useGear();
+  const currentCreationMethod = useCreationMethod();
   const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -482,9 +484,11 @@ export function GearPanel({ state, updateState }: GearPanelProps) {
     return "pending";
   }, [isOverBudget, selectedGear.length]);
 
-  // Check prerequisites
+  // Check prerequisites - Point Buy and Life Modules bypass priority requirement
+  const isNonPriorityMethod =
+    currentCreationMethod?.type === "point-buy" || currentCreationMethod?.type === "life-modules";
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
-  if (!hasPriorities) {
+  if (!isNonPriorityMethod && !hasPriorities) {
     return (
       <CreationCard title="Gear" description="Purchase equipment" status="pending">
         <div className="space-y-3">
