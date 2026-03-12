@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { Loader2, ChevronLeft, ChevronRight, Search, X } from "lucide-react";
+import { useState, useEffect, useRef, useCallback } from "react";
+import { Loader2, Search, X } from "lucide-react";
 import type { ContentPreviewItem, EditionCode } from "@/lib/types";
 
 interface ContentPreviewProps {
@@ -33,18 +33,22 @@ const CATEGORY_LABELS: Record<string, string> = {
   actions: "Actions",
 };
 
+const PAGE_SIZE = 50;
+
 export default function ContentPreview({ editionCode, category }: ContentPreviewProps) {
   const [items, setItems] = useState<ContentPreviewItem[]>([]);
   const [total, setTotal] = useState(0);
   const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string | undefined>(category);
   const [searchInput, setSearchInput] = useState("");
   const [debouncedSearch, setDebouncedSearch] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
 
-  const limit = 10;
+  const hasMore = items.length < total;
 
   // Debounce search input
   useEffect(() => {
@@ -54,18 +58,29 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
     return () => clearTimeout(timer);
   }, [searchInput]);
 
-  // Reset pagination when search changes
+  // Reset when search or category changes
   useEffect(() => {
+    setItems([]);
     setOffset(0);
-  }, [debouncedSearch]);
+    setTotal(0);
+  }, [debouncedSearch, selectedCategory]);
 
+  // Fetch content (initial load or next page)
   useEffect(() => {
+    let cancelled = false;
+
     async function fetchContent() {
-      setLoading(true);
+      const isFirstPage = offset === 0;
+      if (isFirstPage) {
+        setLoading(true);
+      } else {
+        setLoadingMore(true);
+      }
       setError(null);
+
       try {
         const params = new URLSearchParams({
-          limit: limit.toString(),
+          limit: PAGE_SIZE.toString(),
           offset: offset.toString(),
         });
         if (selectedCategory) {
@@ -78,30 +93,65 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
         const res = await fetch(`/api/editions/${editionCode}/content?${params}`);
         const data = await res.json();
 
+        if (cancelled) return;
+
         if (data.success) {
-          setItems(data.items);
+          setItems((prev) => (isFirstPage ? data.items : [...prev, ...data.items]));
           setTotal(data.total);
         } else {
           setError(data.error || "Failed to load content");
         }
       } catch (err) {
-        setError("An error occurred while loading content");
-        console.error(err);
+        if (!cancelled) {
+          setError("An error occurred while loading content");
+          console.error(err);
+        }
       } finally {
-        setLoading(false);
+        if (!cancelled) {
+          setLoading(false);
+          setLoadingMore(false);
+        }
       }
     }
 
     fetchContent();
+
+    return () => {
+      cancelled = true;
+    };
   }, [editionCode, offset, selectedCategory, debouncedSearch]);
+
+  // Load next page
+  const loadMore = useCallback(() => {
+    if (!loadingMore && !loading && hasMore) {
+      setOffset((prev) => prev + PAGE_SIZE);
+    }
+  }, [loadingMore, loading, hasMore]);
+
+  // IntersectionObserver for infinite scroll sentinel
+  useEffect(() => {
+    const sentinel = sentinelRef.current;
+    if (!sentinel) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0]?.isIntersecting) {
+          loadMore();
+        }
+      },
+      { rootMargin: "200px" }
+    );
+
+    observer.observe(sentinel);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [loadMore]);
 
   const handleCategoryChange = (cat: string | undefined) => {
     setSelectedCategory(cat);
-    setOffset(0);
   };
-
-  const hasNext = offset + limit < total;
-  const hasPrev = offset > 0;
 
   return (
     <div className="space-y-4">
@@ -182,73 +232,66 @@ export default function ContentPreview({ editionCode, category }: ContentPreview
           {selectedCategory ? ` in ${CATEGORY_LABELS[selectedCategory] || selectedCategory}` : ""}.
         </div>
       ) : (
-        <div className="space-y-2">
-          {items.map((item) => (
-            <div
-              key={`${item.category}-${item.id}`}
-              className="p-3 rounded-lg bg-muted/30 border border-border hover:border-emerald-500/30 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h4 className="font-medium text-foreground">{item.name}</h4>
-                  {item.summary && (
-                    <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
-                      {item.summary}
-                    </p>
-                  )}
+        <>
+          <div className="space-y-2">
+            {items.map((item) => (
+              <div
+                key={`${item.category}-${item.id}`}
+                className="p-3 rounded-lg bg-muted/30 border border-border hover:border-emerald-500/30 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="font-medium text-foreground">{item.name}</h4>
+                    {item.summary && (
+                      <p className="text-sm text-muted-foreground mt-0.5 line-clamp-2">
+                        {item.summary}
+                      </p>
+                    )}
+                  </div>
+                  <div className="flex gap-1.5 shrink-0 ml-2">
+                    {item.subcategory && (
+                      <span className="text-xs bg-zinc-500/10 text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded font-mono">
+                        {item.subcategory}
+                      </span>
+                    )}
+                    {item.category && (
+                      <span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded font-mono">
+                        {CATEGORY_LABELS[item.category] || item.category}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="flex gap-1.5 shrink-0 ml-2">
-                  {item.subcategory && (
-                    <span className="text-xs bg-zinc-500/10 text-zinc-500 dark:text-zinc-400 px-2 py-0.5 rounded font-mono">
-                      {item.subcategory}
-                    </span>
-                  )}
-                  {item.category && (
-                    <span className="text-xs bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 px-2 py-0.5 rounded font-mono">
-                      {CATEGORY_LABELS[item.category] || item.category}
-                    </span>
-                  )}
-                </div>
+                {item.source && (
+                  <p className="text-xs text-muted-foreground mt-2 font-mono">
+                    Source: {item.source}
+                  </p>
+                )}
               </div>
-              {item.source && (
-                <p className="text-xs text-muted-foreground mt-2 font-mono">
-                  Source: {item.source}
-                </p>
+            ))}
+          </div>
+
+          {/* Scroll sentinel + loading indicator */}
+          {hasMore && (
+            <div
+              ref={sentinelRef}
+              data-testid="scroll-loader"
+              className="flex items-center justify-center py-4"
+            >
+              {loadingMore && (
+                <Loader2 className="w-5 h-5 animate-spin text-emerald-500" aria-hidden="true" />
               )}
             </div>
-          ))}
-        </div>
-      )}
+          )}
 
-      {/* Pagination */}
-      {total > limit && (
-        <div className="flex items-center justify-between pt-2 border-t border-border">
-          <span className="text-sm text-muted-foreground">
-            Showing <span className="font-mono font-semibold text-foreground">{offset + 1}</span>-
-            <span className="font-mono font-semibold text-foreground">
-              {Math.min(offset + limit, total)}
-            </span>{" "}
-            of <span className="font-mono font-semibold text-foreground">{total}</span>
-          </span>
-          <div className="flex gap-2">
-            <button
-              onClick={() => setOffset(Math.max(0, offset - limit))}
-              disabled={!hasPrev}
-              className="p-2 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              aria-label="Previous page"
-            >
-              <ChevronLeft className="w-4 h-4" aria-hidden="true" />
-            </button>
-            <button
-              onClick={() => setOffset(offset + limit)}
-              disabled={!hasNext}
-              className="p-2 rounded-lg bg-muted hover:bg-muted/80 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-              aria-label="Next page"
-            >
-              <ChevronRight className="w-4 h-4" aria-hidden="true" />
-            </button>
+          {/* Item count footer */}
+          <div className="text-center pt-2 border-t border-border">
+            <span className="text-sm text-muted-foreground">
+              Showing{" "}
+              <span className="font-mono font-semibold text-foreground">{items.length}</span> of{" "}
+              <span className="font-mono font-semibold text-foreground">{total}</span> items
+            </span>
           </div>
-        </div>
+        </>
       )}
     </div>
   );
