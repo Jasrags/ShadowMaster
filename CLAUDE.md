@@ -41,6 +41,7 @@ pnpm docker:dev       # Build and start Docker containers
 /lib                    # Business logic (types, storage ~21 modules, rules, auth, combat, security)
 /components/creation    # Character creation cards (~117 components in 19 subfolders)
 /data/editions/{code}/  # Edition data (edition.json, core-rulebook.json, grunt-templates/)
+/docs/pdfs/             # Sourcebook PDFs for rule reference (Core Rulebook, Run Faster, Run & Gun, Errata)
 /__tests__              # ~353 test files (Vitest)
 /e2e                    # E2E tests (Playwright)
 ```
