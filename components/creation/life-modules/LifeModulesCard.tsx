@@ -9,14 +9,20 @@
  */
 
 import { useMemo, useCallback, useState } from "react";
-import { Plus, Route, Trash2 } from "lucide-react";
+import { Plus, Route, Trash2, ArrowRightLeft } from "lucide-react";
 import { CreationCard } from "../shared";
-import { useLifeModules } from "@/lib/rules/RulesetContext";
+import { useLifeModules, useQualities } from "@/lib/rules/RulesetContext";
 import { PHASE_ORDER, PHASE_INFO } from "./constants";
 import { LifeModulesModal } from "./LifeModulesModal";
+import { QualityReplacementModal } from "./QualityReplacementModal";
 import type { LifeModulesCardProps, PhaseModules } from "./types";
-import type { LifeModuleSelection, LifeModulesCatalog } from "@/lib/types";
+import type { LifeModuleSelection, LifeModulesCatalog, QualityReplacement } from "@/lib/types";
 import { LIFE_MODULES_KARMA_BUDGET } from "@/lib/types";
+import {
+  detectDuplicateQualities,
+  lookupModule,
+  type DuplicateQualityInfo,
+} from "@/lib/rules/life-modules";
 
 /**
  * Build phase-organized module map from catalog data
@@ -66,7 +72,14 @@ function findModuleName(
 
 export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
   const catalog = useLifeModules();
+  const { positive: positiveQualities, negative: negativeQualities } = useQualities();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Duplicate quality replacement state
+  const [pendingSelection, setPendingSelection] = useState<LifeModuleSelection | null>(null);
+  const [pendingDuplicates, setPendingDuplicates] = useState<readonly DuplicateQualityInfo[]>([]);
+  const [pendingReplacements, setPendingReplacements] = useState<QualityReplacement[]>([]);
+  const [currentDuplicateIndex, setCurrentDuplicateIndex] = useState(0);
 
   const existingSelections: readonly LifeModuleSelection[] = useMemo(
     () => state.selections.lifeModules || [],
@@ -102,10 +115,30 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
     return age > 0 ? age : null;
   }, [catalog, existingSelections]);
 
-  const handleAddModule = useCallback(
-    (selection: LifeModuleSelection) => {
-      const updatedModules = [...existingSelections, selection];
+  // All quality IDs already accumulated from existing selections
+  const accumulatedQualityIds = useMemo(() => {
+    if (!catalog) return [];
+    const ids: string[] = [];
+    for (const sel of existingSelections) {
+      const mod = lookupModule(sel.moduleId, sel.subModuleId, catalog);
+      if (mod?.qualities) {
+        for (const q of mod.qualities) {
+          // If this quality was replaced, use the replacement ID
+          const replacement = sel.qualityReplacements?.find((r) => r.originalQualityId === q.id);
+          ids.push(replacement ? replacement.replacementQualityId : q.id);
+        }
+      }
+    }
+    return ids;
+  }, [catalog, existingSelections]);
 
+  // Finalize adding a module (with any replacements already resolved)
+  const finalizeAddModule = useCallback(
+    (selection: LifeModuleSelection, replacements: readonly QualityReplacement[]) => {
+      const finalSelection: LifeModuleSelection =
+        replacements.length > 0 ? { ...selection, qualityReplacements: replacements } : selection;
+
+      const updatedModules = [...existingSelections, finalSelection];
       updateState({
         selections: {
           ...state.selections,
@@ -115,6 +148,86 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
     },
     [existingSelections, state.selections, updateState]
   );
+
+  const handleAddModule = useCallback(
+    (selection: LifeModuleSelection) => {
+      if (!catalog) {
+        finalizeAddModule(selection, []);
+        return;
+      }
+
+      // Look up the module to get its quality grants
+      const mod = lookupModule(selection.moduleId, selection.subModuleId, catalog);
+      const moduleQualities = mod?.qualities ?? [];
+
+      if (moduleQualities.length === 0) {
+        finalizeAddModule(selection, []);
+        return;
+      }
+
+      // Build accumulated qualities from all prior selections
+      const accumulatedQualities = existingSelections.flatMap((sel) => {
+        const m = lookupModule(sel.moduleId, sel.subModuleId, catalog);
+        return m?.qualities ?? [];
+      });
+
+      const duplicates = detectDuplicateQualities(accumulatedQualities, moduleQualities);
+
+      if (duplicates.length === 0) {
+        finalizeAddModule(selection, []);
+        return;
+      }
+
+      // Start the sequential replacement flow
+      setPendingSelection(selection);
+      setPendingDuplicates(duplicates);
+      setPendingReplacements([]);
+      setCurrentDuplicateIndex(0);
+    },
+    [catalog, existingSelections, finalizeAddModule]
+  );
+
+  // Handle a replacement choice for the current duplicate
+  const handleReplacementSelect = useCallback(
+    (replacementQualityId: string) => {
+      if (!pendingSelection || pendingDuplicates.length === 0) return;
+
+      const currentDup = pendingDuplicates[currentDuplicateIndex];
+      const newReplacements = [
+        ...pendingReplacements,
+        { originalQualityId: currentDup.qualityId, replacementQualityId },
+      ];
+
+      const nextIndex = currentDuplicateIndex + 1;
+      if (nextIndex < pendingDuplicates.length) {
+        // More duplicates to resolve
+        setPendingReplacements(newReplacements);
+        setCurrentDuplicateIndex(nextIndex);
+      } else {
+        // All duplicates resolved — finalize
+        finalizeAddModule(pendingSelection, newReplacements);
+        setPendingSelection(null);
+        setPendingDuplicates([]);
+        setPendingReplacements([]);
+        setCurrentDuplicateIndex(0);
+      }
+    },
+    [
+      pendingSelection,
+      pendingDuplicates,
+      currentDuplicateIndex,
+      pendingReplacements,
+      finalizeAddModule,
+    ]
+  );
+
+  const handleReplacementCancel = useCallback(() => {
+    // Cancel the entire module addition
+    setPendingSelection(null);
+    setPendingDuplicates([]);
+    setPendingReplacements([]);
+    setCurrentDuplicateIndex(0);
+  }, []);
 
   const handleRemoveModule = useCallback(
     (index: number) => {
@@ -213,28 +326,44 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
                       {info.label}
                     </h4>
                     {items.map(({ selection, index }) => (
-                      <div
-                        key={index}
-                        className="flex items-center justify-between rounded px-2 py-1 hover:bg-zinc-50 dark:hover:bg-zinc-800/50"
-                      >
-                        <div className="flex items-center gap-2 min-w-0">
-                          <Route className="h-3 w-3 flex-shrink-0 text-rose-500" />
-                          <span className="truncate text-xs text-zinc-700 dark:text-zinc-300">
-                            {findModuleName(catalog, selection)}
-                          </span>
+                      <div key={index}>
+                        <div className="flex items-center justify-between rounded px-2 py-1 hover:bg-zinc-50 dark:hover:bg-zinc-800/50">
+                          <div className="flex items-center gap-2 min-w-0">
+                            <Route className="h-3 w-3 flex-shrink-0 text-rose-500" />
+                            <span className="truncate text-xs text-zinc-700 dark:text-zinc-300">
+                              {findModuleName(catalog, selection)}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <span className="text-[10px] font-mono text-zinc-400">
+                              {selection.karmaCost}K
+                            </span>
+                            <button
+                              onClick={() => handleRemoveModule(index)}
+                              className="rounded p-0.5 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
+                              title="Remove module"
+                            >
+                              <Trash2 className="h-3 w-3" />
+                            </button>
+                          </div>
                         </div>
-                        <div className="flex items-center gap-2 flex-shrink-0">
-                          <span className="text-[10px] font-mono text-zinc-400">
-                            {selection.karmaCost}K
-                          </span>
-                          <button
-                            onClick={() => handleRemoveModule(index)}
-                            className="rounded p-0.5 text-zinc-400 hover:bg-red-50 hover:text-red-500 dark:hover:bg-red-900/20"
-                            title="Remove module"
-                          >
-                            <Trash2 className="h-3 w-3" />
-                          </button>
-                        </div>
+                        {/* Show quality replacements if any */}
+                        {selection.qualityReplacements &&
+                          selection.qualityReplacements.length > 0 && (
+                            <div className="ml-7 space-y-0.5 pb-1">
+                              {selection.qualityReplacements.map((r) => (
+                                <div
+                                  key={r.originalQualityId}
+                                  className="flex items-center gap-1 text-[10px] text-amber-600 dark:text-amber-400"
+                                >
+                                  <ArrowRightLeft className="h-2.5 w-2.5" />
+                                  <span>
+                                    {r.originalQualityId} → {r.replacementQualityId}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                       </div>
                     ))}
                   </div>
@@ -279,6 +408,19 @@ export function LifeModulesCard({ state, updateState }: LifeModulesCardProps) {
         modules={phaseModules}
         existingSelections={existingSelections}
       />
+
+      {/* Quality replacement modal — shown when a module grants a duplicate quality */}
+      {pendingDuplicates.length > 0 && currentDuplicateIndex < pendingDuplicates.length && (
+        <QualityReplacementModal
+          isOpen={true}
+          onClose={handleReplacementCancel}
+          onSelect={handleReplacementSelect}
+          duplicateQualityId={pendingDuplicates[currentDuplicateIndex].qualityId}
+          duplicateQualityType={pendingDuplicates[currentDuplicateIndex].type}
+          availableQualities={[...positiveQualities, ...negativeQualities]}
+          alreadySelectedIds={accumulatedQualityIds}
+        />
+      )}
     </>
   );
 }

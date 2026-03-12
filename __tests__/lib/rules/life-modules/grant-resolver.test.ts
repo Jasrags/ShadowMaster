@@ -3,8 +3,16 @@ import {
   resolveLifeModuleGrants,
   lookupModule,
   EMPTY_GRANTS,
+  detectDuplicateQualities,
+  applyQualityReplacements,
+  type DuplicateQualityInfo,
 } from "@/lib/rules/life-modules/grant-resolver";
-import type { LifeModulesCatalog, LifeModuleSelection, LifeModule } from "@/lib/types/life-modules";
+import type {
+  LifeModulesCatalog,
+  LifeModuleSelection,
+  LifeModule,
+  LifeModuleQualityGrant,
+} from "@/lib/types/life-modules";
 
 // =============================================================================
 // TEST CATALOG FIXTURES
@@ -124,7 +132,24 @@ const testCatalog: LifeModulesCatalog = {
       knowledgeSkills: { "military-tactics": 8 },
     }),
   ],
-  tour: [],
+  tour: [
+    // Module that also grants toughness — for duplicate testing
+    makeModule({
+      id: "combat-tour",
+      phase: "tour",
+      karmaCost: 60,
+      yearsAdded: 2,
+      qualities: [{ id: "toughness", type: "positive" }],
+    }),
+    // Module that grants a unique quality
+    makeModule({
+      id: "diplomatic-tour",
+      phase: "tour",
+      karmaCost: 60,
+      yearsAdded: 2,
+      qualities: [{ id: "first-impression", type: "positive" }],
+    }),
+  ],
 };
 
 // =============================================================================
@@ -444,5 +469,176 @@ describe("resolveLifeModuleGrants", () => {
       // Age: 0 + 10 + 7 + 4 = 21
       expect(result.calculatedAge).toBe(21);
     });
+  });
+});
+
+// =============================================================================
+// detectDuplicateQualities
+// =============================================================================
+
+describe("detectDuplicateQualities", () => {
+  it("returns empty array when no duplicates exist", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+    const incoming: readonly LifeModuleQualityGrant[] = [
+      { id: "first-impression", type: "positive" },
+    ];
+
+    const result = detectDuplicateQualities(accumulated, incoming);
+    expect(result).toEqual([]);
+  });
+
+  it("detects a duplicate quality between accumulated and incoming", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+    const incoming: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+
+    const result = detectDuplicateQualities(accumulated, incoming);
+    expect(result).toHaveLength(1);
+    expect(result[0].qualityId).toBe("toughness");
+    expect(result[0].type).toBe("positive");
+  });
+
+  it("detects duplicates against existing character qualities", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [];
+    const incoming: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+    const existingCharacterQualityIds = ["toughness"];
+
+    const result = detectDuplicateQualities(accumulated, incoming, existingCharacterQualityIds);
+    expect(result).toHaveLength(1);
+    expect(result[0].qualityId).toBe("toughness");
+  });
+
+  it("detects multiple duplicates in one incoming batch", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+    ];
+    const incoming: readonly LifeModuleQualityGrant[] = [
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+      { id: "first-impression", type: "positive" },
+    ];
+
+    const result = detectDuplicateQualities(accumulated, incoming);
+    expect(result).toHaveLength(2);
+    expect(result.map((d) => d.qualityId)).toEqual(["toughness", "sinner-national"]);
+  });
+
+  it("does not flag the same quality within incoming only (no prior accumulation)", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [];
+    const incoming: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+
+    const result = detectDuplicateQualities(accumulated, incoming);
+    expect(result).toEqual([]);
+  });
+
+  it("excludes already-replaced quality IDs from detection", () => {
+    const accumulated: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+    const incoming: readonly LifeModuleQualityGrant[] = [{ id: "toughness", type: "positive" }];
+    const alreadyReplacedIds = ["toughness"];
+
+    const result = detectDuplicateQualities(accumulated, incoming, [], alreadyReplacedIds);
+    expect(result).toEqual([]);
+  });
+});
+
+// =============================================================================
+// applyQualityReplacements
+// =============================================================================
+
+describe("applyQualityReplacements", () => {
+  it("returns qualities unchanged when no replacements", () => {
+    const qualities: readonly LifeModuleQualityGrant[] = [
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+    ];
+
+    const result = applyQualityReplacements(qualities, []);
+    expect(result).toEqual(qualities);
+  });
+
+  it("replaces a duplicate quality with the chosen replacement", () => {
+    const qualities: readonly LifeModuleQualityGrant[] = [
+      { id: "toughness", type: "positive" },
+      { id: "toughness", type: "positive" }, // duplicate from second module
+    ];
+    const replacements = [
+      { originalQualityId: "toughness", replacementQualityId: "natural-athlete" },
+    ];
+
+    const result = applyQualityReplacements(qualities, replacements);
+    expect(result).toHaveLength(2);
+    expect(result[0]).toEqual({ id: "toughness", type: "positive" });
+    // Second occurrence replaced
+    expect(result[1]).toEqual({ id: "natural-athlete", type: "positive" });
+  });
+
+  it("replaces only the second occurrence (keeps first)", () => {
+    const qualities: readonly LifeModuleQualityGrant[] = [
+      { id: "first-impression", type: "positive" },
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+      { id: "toughness", type: "positive" }, // dup
+    ];
+    const replacements = [{ originalQualityId: "toughness", replacementQualityId: "guts" }];
+
+    const result = applyQualityReplacements(qualities, replacements);
+    expect(result).toHaveLength(4);
+    expect(result[1]).toEqual({ id: "toughness", type: "positive" }); // first kept
+    expect(result[3]).toEqual({ id: "guts", type: "positive" }); // second replaced
+  });
+
+  it("handles multiple replacements", () => {
+    const qualities: readonly LifeModuleQualityGrant[] = [
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+      { id: "toughness", type: "positive" },
+      { id: "sinner-national", type: "negative" },
+    ];
+    const replacements = [
+      { originalQualityId: "toughness", replacementQualityId: "guts" },
+      { originalQualityId: "sinner-national", replacementQualityId: "bad-luck" },
+    ];
+
+    const result = applyQualityReplacements(qualities, replacements);
+    expect(result[0]).toEqual({ id: "toughness", type: "positive" });
+    expect(result[1]).toEqual({ id: "sinner-national", type: "negative" });
+    expect(result[2]).toEqual({ id: "guts", type: "positive" });
+    expect(result[3]).toEqual({ id: "bad-luck", type: "negative" });
+  });
+});
+
+// =============================================================================
+// resolveLifeModuleGrants with quality replacements
+// =============================================================================
+
+describe("resolveLifeModuleGrants with quality replacements", () => {
+  it("applies quality replacements from selections", () => {
+    const selections: LifeModuleSelection[] = [
+      { moduleId: "gang-member", phase: "teen", karmaCost: 50 },
+      {
+        moduleId: "combat-tour",
+        phase: "tour",
+        karmaCost: 60,
+        qualityReplacements: [{ originalQualityId: "toughness", replacementQualityId: "guts" }],
+      },
+    ];
+    const result = resolveLifeModuleGrants(selections, testCatalog);
+
+    // toughness from gang-member kept, toughness from combat-tour replaced with guts
+    const qualityIds = result.qualities.map((q) => q.id);
+    expect(qualityIds).toContain("toughness");
+    expect(qualityIds).toContain("guts");
+    expect(qualityIds.filter((id) => id === "toughness")).toHaveLength(1);
+  });
+
+  it("does not modify qualities when no replacements needed", () => {
+    const selections: LifeModuleSelection[] = [
+      { moduleId: "gang-member", phase: "teen", karmaCost: 50 },
+      { moduleId: "diplomatic-tour", phase: "tour", karmaCost: 60 },
+    ];
+    const result = resolveLifeModuleGrants(selections, testCatalog);
+
+    const qualityIds = result.qualities.map((q) => q.id);
+    expect(qualityIds).toEqual(["toughness", "first-impression"]);
   });
 });
