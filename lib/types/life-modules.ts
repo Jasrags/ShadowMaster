@@ -62,6 +62,9 @@ export interface LifeModule {
   /** Active skill ranks granted (skill ID -> ranks) */
   readonly activeSkills?: Readonly<Record<string, number>>;
 
+  /** Skill group ranks granted (group ID -> ranks) */
+  readonly skillGroups?: Readonly<Record<string, number>>;
+
   /** Knowledge skill ranks granted (skill name -> ranks) */
   readonly knowledgeSkills?: Readonly<Record<string, number>>;
 
