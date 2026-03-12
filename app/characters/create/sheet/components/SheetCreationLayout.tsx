@@ -41,6 +41,7 @@ import {
 import {
   PrioritySelectionCard,
   PointBuyBudgetCard,
+  LifeModulesBudgetCard,
   MetatypeCard,
   AttributesCard,
   SkillsCard,
@@ -900,6 +901,8 @@ export function SheetCreationLayout({
           {/* Priority Selection / Point Buy Budget - Phase 2 */}
           {currentCreationMethod?.type === "point-buy" ? (
             <PointBuyBudgetCard state={creationState} />
+          ) : currentCreationMethod?.type === "life-modules" ? (
+            <LifeModulesBudgetCard state={creationState} />
           ) : (
             <PrioritySelectionCard state={creationState} updateState={updateState} />
           )}
