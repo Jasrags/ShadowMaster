@@ -4043,6 +4043,284 @@
               }
             ],
             "createdAt": "2025-01-01T00:00:00.000Z"
+          },
+          {
+            "id": "life-modules",
+            "editionId": "sr5",
+            "editionCode": "sr5",
+            "bookId": "run-faster",
+            "name": "Life Modules",
+            "type": "life-modules",
+            "description": "A life-path system where characters progress through nationality, formative years, teen years, further education, and real-life career modules. Each module provides attributes, skills, qualities, and knowledge. Starting budget is 750 Karma.",
+            "version": "1.0.0",
+            "steps": [
+              {
+                "id": "metatype",
+                "title": "Select Metatype",
+                "type": "select",
+                "description": "Choose your metatype. Metatype costs Karma from your 750 budget.",
+                "payload": {
+                  "type": "select",
+                  "target": "metatype"
+                }
+              },
+              {
+                "id": "magic",
+                "title": "Magic/Resonance",
+                "type": "select",
+                "optional": true,
+                "description": "Purchase a magical or resonance quality (same costs as Point Buy: Adept 20K, Magician 30K, etc.).",
+                "payload": {
+                  "type": "select",
+                  "target": "magical-path"
+                }
+              },
+              {
+                "id": "nationality",
+                "title": "Nationality",
+                "type": "choose",
+                "description": "Select your nationality and regional origin. Provides language skills, regional knowledge, and qualities. (15 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-nationality",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.nationality"
+                }
+              },
+              {
+                "id": "formative",
+                "title": "Formative Years",
+                "type": "choose",
+                "description": "Select your childhood upbringing (age to 10). Provides attribute points, skills, and qualities. (40 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-formative",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.formative"
+                }
+              },
+              {
+                "id": "teen",
+                "title": "Teen Years",
+                "type": "choose",
+                "description": "Select your teenage experience (age to 17). Provides skills, knowledge, and qualities. (50 Karma)",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-teen",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.teen"
+                }
+              },
+              {
+                "id": "education",
+                "title": "Further Education",
+                "type": "choose",
+                "optional": true,
+                "description": "Optionally attend an institution and select a discipline. Costs vary by institution (40-115 Karma).",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-education",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.education"
+                }
+              },
+              {
+                "id": "career",
+                "title": "Real Life",
+                "type": "choose",
+                "optional": true,
+                "description": "Select career modules (100 Karma each, 4 years). Multiple allowed but no repeats.",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-career",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.career",
+                  "multiple": true
+                }
+              },
+              {
+                "id": "tour",
+                "title": "Tours of Duty",
+                "type": "choose",
+                "optional": true,
+                "description": "Select military tours of duty (100 Karma each, 5 years). Multiple allowed but no repeats.",
+                "payload": {
+                  "type": "choose",
+                  "target": "life-module-tour",
+                  "budgetId": "karma",
+                  "optionsSource": "lifeModules.tour",
+                  "multiple": true
+                }
+              },
+              {
+                "id": "attributes",
+                "title": "Allocate Attributes",
+                "type": "allocate",
+                "description": "Spend remaining Karma to raise attributes (New Rating × 5 Karma).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "attributes",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "skills",
+                "title": "Allocate Skills",
+                "type": "allocate",
+                "description": "Spend remaining Karma on skills. Active skill max 7, knowledge skill max 9.",
+                "payload": {
+                  "type": "allocate",
+                  "target": "skills",
+                  "budgetId": "karma",
+                  "maxRating": 7
+                }
+              },
+              {
+                "id": "qualities",
+                "title": "Select Qualities",
+                "type": "choose",
+                "description": "Purchase positive qualities or buy off negative qualities gained from modules.",
+                "payload": {
+                  "type": "choose",
+                  "target": "qualities",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "contacts",
+                "title": "Build Contacts",
+                "type": "allocate",
+                "description": "Build contacts using Karma (in addition to any granted by modules).",
+                "payload": {
+                  "type": "allocate",
+                  "target": "contacts",
+                  "budgetId": "karma"
+                }
+              },
+              {
+                "id": "gear",
+                "title": "Purchase Gear",
+                "type": "purchase",
+                "description": "Purchase gear using nuyen (1 Karma = 2,000¥, max 200 Karma on gear).",
+                "payload": {
+                  "type": "purchase",
+                  "target": "gear",
+                  "budgetId": "nuyen",
+                  "availabilityLimit": 12
+                }
+              },
+              {
+                "id": "review",
+                "title": "Review & Finalize",
+                "type": "validate",
+                "description": "Review your character. Remaining Karma can be kept (unlike Point Buy).",
+                "payload": {
+                  "type": "validate",
+                  "validations": ["all"]
+                }
+              }
+            ],
+            "budgets": [
+              {
+                "id": "karma",
+                "label": "Karma",
+                "initialValue": 750,
+                "description": "Starting Karma budget for Life Modules creation (Run Faster p. 65)"
+              },
+              {
+                "id": "nuyen",
+                "label": "Nuyen",
+                "initialValue": 0,
+                "displayFormat": "currency",
+                "description": "Nuyen from karma-to-nuyen conversion (1 Karma = 2,000¥)"
+              },
+              {
+                "id": "gear-karma",
+                "label": "Gear Karma",
+                "initialValue": 0,
+                "max": 200,
+                "description": "Karma spent on gear (max 200)"
+              }
+            ],
+            "constraints": [
+              {
+                "id": "life-modules-budget",
+                "type": "life-modules-budget",
+                "description": "Total Karma spent on modules and purchases cannot exceed 750.",
+                "severity": "error",
+                "params": {
+                  "totalBudget": 750,
+                  "maxGearKarma": 200,
+                  "nuyenPerKarma": 2000,
+                  "maxNegativeQualities": 25
+                },
+                "errorMessage": "Karma budget exceeded (750 Karma total, 200 max on gear)."
+              },
+              {
+                "id": "life-modules-active-skill-cap",
+                "type": "life-modules-skill-cap",
+                "description": "Active skills capped at 7, knowledge skills capped at 9.",
+                "severity": "error",
+                "params": {
+                  "maxActiveSkill": 7,
+                  "maxKnowledgeSkill": 9
+                },
+                "errorMessage": "Skill rating exceeds Life Modules creation cap."
+              },
+              {
+                "id": "max-one-attribute-at-max",
+                "type": "attribute-limit",
+                "description": "Only one Physical or Mental attribute can be at natural maximum at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAtMax": 1
+                },
+                "errorMessage": "Only one Physical or Mental attribute can be at its natural maximum."
+              },
+              {
+                "id": "positive-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma in Positive Qualities.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "positive-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot spend more than 25 Karma on positive qualities."
+              },
+              {
+                "id": "negative-quality-limit",
+                "type": "budget-balance",
+                "description": "Maximum 25 Karma from Negative Qualities after all modules.",
+                "severity": "error",
+                "params": {
+                  "budgetId": "negative-quality-karma",
+                  "max": 25
+                },
+                "errorMessage": "Cannot gain more than 25 Karma from negative qualities after all modules."
+              },
+              {
+                "id": "gear-availability",
+                "type": "custom",
+                "description": "Gear availability cannot exceed 12 at creation.",
+                "severity": "error",
+                "params": {
+                  "maxAvailability": 12
+                },
+                "errorMessage": "Cannot purchase gear with availability higher than 12."
+              },
+              {
+                "id": "essence-minimum",
+                "type": "essence-minimum",
+                "description": "Essence cannot drop below 0.",
+                "severity": "error",
+                "params": {
+                  "min": 0
+                },
+                "errorMessage": "Essence cannot drop below 0."
+              }
+            ],
+            "createdAt": "2025-01-01T00:00:00.000Z"
           }
         ]
       }
@@ -4077,7 +4355,536 @@
     },
     "lifeModules": {
       "mergeStrategy": "replace",
-      "payload": {}
+      "payload": {
+        "nationality": [
+          {
+            "id": "ucas-general",
+            "name": "UCAS - General",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "UCAS",
+            "primaryLanguage": "english",
+            "description": "Born in the United Canadian and American States.",
+            "pageReference": "RF p. 67",
+            "activeSkills": {},
+            "knowledgeSkills": { "ucas-politics": 2 },
+            "languages": { "english": 0 },
+            "qualities": [{ "id": "sinner-national", "type": "negative" }]
+          },
+          {
+            "id": "ucas-seattle",
+            "name": "UCAS - Seattle",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "UCAS",
+            "primaryLanguage": "english",
+            "description": "Born in Seattle, the Emerald City sprawl.",
+            "pageReference": "RF p. 67",
+            "activeSkills": {},
+            "knowledgeSkills": { "seattle-area-knowledge": 2, "seattle-gangs": 1 },
+            "languages": { "english": 0 },
+            "qualities": [{ "id": "sinner-national", "type": "negative" }]
+          },
+          {
+            "id": "ucas-sinless",
+            "name": "UCAS - SINless",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "UCAS",
+            "primaryLanguage": "english",
+            "description": "Born SINless in the UCAS. No national SIN, no corporate ties.",
+            "pageReference": "RF p. 67",
+            "activeSkills": {},
+            "knowledgeSkills": { "ucas-area-knowledge": 1, "street-rumors": 1 },
+            "languages": { "english": 0 },
+            "qualities": []
+          },
+          {
+            "id": "cas-general",
+            "name": "CAS - General",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "CAS",
+            "primaryLanguage": "english",
+            "description": "Born in the Confederation of American States.",
+            "pageReference": "RF p. 68",
+            "activeSkills": {},
+            "knowledgeSkills": { "cas-politics": 2 },
+            "languages": { "english": 0 },
+            "qualities": [{ "id": "sinner-national", "type": "negative" }]
+          },
+          {
+            "id": "nan-pueblo",
+            "name": "NAN - Pueblo Corporate Council",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "NAN",
+            "primaryLanguage": "english",
+            "secondaryLanguage": "hopi",
+            "description": "Born in the Pueblo Corporate Council.",
+            "pageReference": "RF p. 68",
+            "activeSkills": {},
+            "knowledgeSkills": { "pueblo-corporate-culture": 2 },
+            "languages": { "english": 0, "hopi": 0 },
+            "qualities": [{ "id": "sinner-national", "type": "negative" }]
+          },
+          {
+            "id": "tir-tairngire-elves",
+            "name": "Tír Tairngire - Elves/Humans",
+            "phase": "nationality",
+            "karmaCost": 15,
+            "nation": "Tír Tairngire",
+            "primaryLanguage": "english",
+            "secondaryLanguage": "sperethiel",
+            "description": "Born in Tír Tairngire as an elf or human.",
+            "pageReference": "RF p. 69",
+            "activeSkills": {},
+            "knowledgeSkills": { "tir-tairngire-politics": 2 },
+            "languages": { "english": 0, "sperethiel": 0 },
+            "qualities": [{ "id": "sinner-national", "type": "negative" }]
+          }
+        ],
+        "formative": [
+          {
+            "id": "street-urchin",
+            "name": "Street Urchin",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Grew up on the streets, surviving by wits and speed.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": { "agility": 1, "intuition": 1 },
+            "activeSkills": { "palming": 1, "sneaking": 1 },
+            "knowledgeSkills": { "street-rumors": 2 },
+            "qualities": [
+              { "id": "toughness", "type": "positive" },
+              { "id": "poor-self-control", "type": "negative", "specification": "Thrill Seeker" }
+            ]
+          },
+          {
+            "id": "corp-drone",
+            "name": "Corp Drone",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in a corporate housing block. Routine, structure, and obedience.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": { "logic": 1, "charisma": 1 },
+            "activeSkills": { "computer": 1, "etiquette": 1 },
+            "knowledgeSkills": { "corporate-culture": 2 },
+            "qualities": [{ "id": "sinner-corporate", "type": "negative" }]
+          },
+          {
+            "id": "military-brat",
+            "name": "Military Brat",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Grew up on military bases, moving frequently.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": { "body": 1, "willpower": 1 },
+            "activeSkills": { "gymnastics": 1, "leadership": 1 },
+            "knowledgeSkills": { "military-procedures": 2 },
+            "qualities": []
+          },
+          {
+            "id": "rich-kid",
+            "name": "Rich Kid",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Born into wealth and privilege.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": { "charisma": 1 },
+            "activeSkills": { "etiquette": 2, "negotiation": 1 },
+            "knowledgeSkills": { "high-society": 2, "fine-dining": 1 },
+            "qualities": [{ "id": "sinner-corporate", "type": "negative" }]
+          },
+          {
+            "id": "orphan",
+            "name": "Orphan",
+            "phase": "formative",
+            "karmaCost": 40,
+            "yearsAdded": 10,
+            "description": "Raised in an orphanage or foster system.",
+            "pageReference": "RF p. 70",
+            "attributeModifiers": { "willpower": 1, "intuition": 1 },
+            "activeSkills": { "con": 1, "perception": 1 },
+            "knowledgeSkills": { "street-rumors": 1 },
+            "qualities": [{ "id": "resistance-to-pathogens-toxins", "type": "positive" }]
+          }
+        ],
+        "teen": [
+          {
+            "id": "gang-warfare",
+            "name": "Gang Warfare",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Teenage years spent in gang territory. Learned to fight and survive.",
+            "pageReference": "RF p. 71",
+            "attributeModifiers": { "body": 1, "agility": 1 },
+            "activeSkills": { "pistols": 1, "unarmed-combat": 1, "intimidation": 1 },
+            "knowledgeSkills": { "gang-identification": 2, "street-drugs": 1 },
+            "qualities": [{ "id": "toughness", "type": "positive" }]
+          },
+          {
+            "id": "high-school",
+            "name": "High School",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Standard public or private high school education.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": { "logic": 1 },
+            "activeSkills": { "computer": 1, "perception": 1 },
+            "knowledgeSkills": { "mathematics": 1, "history": 1, "science": 1 },
+            "qualities": []
+          },
+          {
+            "id": "street-kid",
+            "name": "Street Kid",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Dropped out and lived on the streets as a teenager.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": { "agility": 1, "intuition": 1 },
+            "activeSkills": { "sneaking": 1, "palming": 1, "running": 1 },
+            "knowledgeSkills": { "safe-houses": 2 },
+            "qualities": []
+          },
+          {
+            "id": "magical-education",
+            "name": "Magical Education",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended a magical academy. Choose a magical tradition sub-module.",
+            "pageReference": "RF p. 72",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "magical-education-magician",
+                "name": "Magician Track",
+                "phase": "teen",
+                "karmaCost": 0,
+                "activeSkills": { "spellcasting": 2, "counterspelling": 1, "assensing": 1 },
+                "knowledgeSkills": { "magical-theory": 3 }
+              },
+              {
+                "id": "magical-education-adept",
+                "name": "Adept Track",
+                "phase": "teen",
+                "karmaCost": 0,
+                "activeSkills": { "unarmed-combat": 2, "gymnastics": 1, "assensing": 1 },
+                "knowledgeSkills": { "magical-theory": 2 }
+              }
+            ]
+          },
+          {
+            "id": "military-school",
+            "name": "Military School",
+            "phase": "teen",
+            "karmaCost": 50,
+            "yearsAdded": 7,
+            "description": "Attended a military academy during teenage years.",
+            "pageReference": "RF p. 72",
+            "attributeModifiers": { "body": 1, "willpower": 1 },
+            "activeSkills": { "automatics": 1, "leadership": 1, "first-aid": 1 },
+            "knowledgeSkills": { "military-procedures": 2, "tactics": 1 },
+            "qualities": []
+          }
+        ],
+        "education": [
+          {
+            "id": "community-college",
+            "name": "Community College",
+            "phase": "education",
+            "karmaCost": 55,
+            "yearsAdded": 2,
+            "description": "Two-year community college program.",
+            "pageReference": "RF p. 73",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "community-college-computer-science",
+                "name": "Computer Science",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "computer": 2, "software": 1 },
+                "knowledgeSkills": { "computer-science": 3 }
+              },
+              {
+                "id": "community-college-business",
+                "name": "Business",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "negotiation": 2, "etiquette": 1 },
+                "knowledgeSkills": { "business": 3, "economics": 1 }
+              }
+            ]
+          },
+          {
+            "id": "state-university",
+            "name": "State University",
+            "phase": "education",
+            "karmaCost": 65,
+            "yearsAdded": 4,
+            "description": "Four-year state university program.",
+            "pageReference": "RF p. 73",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "state-university-computer-science",
+                "name": "Computer Science",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "computer": 3, "software": 2 },
+                "knowledgeSkills": { "computer-science": 4, "mathematics": 2 }
+              },
+              {
+                "id": "state-university-medicine",
+                "name": "Medicine",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "medicine": 3, "first-aid": 2 },
+                "knowledgeSkills": { "medicine": 4, "biology": 2 }
+              },
+              {
+                "id": "state-university-law",
+                "name": "Law",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "negotiation": 2, "etiquette": 2 },
+                "knowledgeSkills": { "law": 4, "politics": 2 }
+              }
+            ]
+          },
+          {
+            "id": "trade-school",
+            "name": "Trade/Technical School",
+            "phase": "education",
+            "karmaCost": 40,
+            "yearsAdded": 2,
+            "description": "Vocational training in a skilled trade.",
+            "pageReference": "RF p. 75",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "trade-school-mechanic",
+                "name": "Mechanic",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "automotive-mechanic": 3, "industrial-mechanic": 1 },
+                "knowledgeSkills": { "engineering": 3 }
+              },
+              {
+                "id": "trade-school-nurse",
+                "name": "Nurse",
+                "phase": "education",
+                "karmaCost": 0,
+                "activeSkills": { "medicine": 2, "first-aid": 2 },
+                "knowledgeSkills": { "medicine": 3, "biology": 1 }
+              }
+            ]
+          }
+        ],
+        "career": [
+          {
+            "id": "shadow-work",
+            "name": "Shadow Work",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Worked in the shadows as a runner or fixer.",
+            "pageReference": "RF p. 78",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "shadow-work-street-samurai",
+                "name": "Street Samurai",
+                "phase": "career",
+                "karmaCost": 0,
+                "activeSkills": { "automatics": 2, "blades": 2, "sneaking": 1 },
+                "knowledgeSkills": { "shadow-community": 2 },
+                "contacts": [{ "archetype": "Fixer", "connection": 3, "loyalty": 2 }]
+              },
+              {
+                "id": "shadow-work-decker",
+                "name": "Decker",
+                "phase": "career",
+                "karmaCost": 0,
+                "activeSkills": {
+                  "hacking": 2,
+                  "cybercombat": 1,
+                  "electronic-warfare": 1,
+                  "computer": 1
+                },
+                "knowledgeSkills": { "matrix-gangs": 2 },
+                "contacts": [{ "archetype": "Fixer", "connection": 3, "loyalty": 2 }]
+              },
+              {
+                "id": "shadow-work-face",
+                "name": "Face",
+                "phase": "career",
+                "karmaCost": 0,
+                "activeSkills": { "con": 2, "negotiation": 2, "etiquette": 1 },
+                "knowledgeSkills": { "shadow-community": 2, "corporate-rumors": 1 },
+                "contacts": [{ "archetype": "Fixer", "connection": 4, "loyalty": 2 }]
+              }
+            ]
+          },
+          {
+            "id": "bounty-hunter",
+            "name": "Bounty Hunter",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Tracked and captured fugitives for bounty.",
+            "pageReference": "RF p. 76",
+            "activeSkills": { "tracking": 2, "pistols": 2, "perception": 1, "intimidation": 1 },
+            "knowledgeSkills": { "law-enforcement-procedures": 2, "bounty-board": 1 },
+            "contacts": [{ "archetype": "Bail Bondsman", "connection": 3, "loyalty": 2 }]
+          },
+          {
+            "id": "law-enforcement",
+            "name": "Law Enforcement",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Served in law enforcement.",
+            "pageReference": "RF p. 77",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "law-enforcement-beat-cop",
+                "name": "Beat Cop",
+                "phase": "career",
+                "karmaCost": 0,
+                "activeSkills": { "pistols": 2, "clubs": 1, "perception": 1, "intimidation": 1 },
+                "knowledgeSkills": { "law": 2, "local-gangs": 1 },
+                "contacts": [{ "archetype": "Police Contact", "connection": 3, "loyalty": 2 }]
+              },
+              {
+                "id": "law-enforcement-detective",
+                "name": "Detective",
+                "phase": "career",
+                "karmaCost": 0,
+                "activeSkills": {
+                  "perception": 2,
+                  "pistols": 1,
+                  "tracking": 1,
+                  "interrogation": 1
+                },
+                "knowledgeSkills": { "forensics": 2, "law": 2 },
+                "contacts": [{ "archetype": "Informant", "connection": 2, "loyalty": 3 }]
+              }
+            ]
+          },
+          {
+            "id": "drifter",
+            "name": "Drifter",
+            "phase": "career",
+            "karmaCost": 100,
+            "yearsAdded": 4,
+            "description": "Wandered from place to place, taking odd jobs.",
+            "pageReference": "RF p. 77",
+            "activeSkills": { "survival": 2, "navigation": 1, "con": 1 },
+            "knowledgeSkills": { "safe-houses": 2, "urban-legends": 1 },
+            "qualities": []
+          }
+        ],
+        "tour": [
+          {
+            "id": "ucas-cas-cfs",
+            "name": "UCAS/CAS/CFS Military",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served in the UCAS, CAS, or California Free State military.",
+            "pageReference": "RF p. 80",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "ucas-army",
+                "name": "Army",
+                "phase": "tour",
+                "karmaCost": 0,
+                "attributeModifiers": { "body": 1, "agility": 1 },
+                "activeSkills": { "automatics": 2, "leadership": 1, "first-aid": 1 },
+                "knowledgeSkills": { "military-procedures": 3, "tactics": 1 },
+                "qualities": [{ "id": "toughness", "type": "positive" }]
+              },
+              {
+                "id": "ucas-special-forces",
+                "name": "Special Forces",
+                "phase": "tour",
+                "karmaCost": 0,
+                "attributeModifiers": { "body": 1, "agility": 1, "willpower": 1 },
+                "activeSkills": { "automatics": 2, "sneaking": 2, "demolitions": 1, "survival": 1 },
+                "knowledgeSkills": { "special-operations": 3, "tactics": 2 },
+                "qualities": [
+                  { "id": "toughness", "type": "positive" },
+                  { "id": "will-to-live", "type": "positive", "level": 1 }
+                ]
+              },
+              {
+                "id": "ucas-navy",
+                "name": "Navy",
+                "phase": "tour",
+                "karmaCost": 0,
+                "attributeModifiers": { "body": 1, "strength": 1 },
+                "activeSkills": {
+                  "nautical-mechanic": 1,
+                  "navigation": 1,
+                  "swimming": 1,
+                  "gunnery": 1
+                },
+                "knowledgeSkills": { "naval-procedures": 3 },
+                "qualities": []
+              }
+            ]
+          },
+          {
+            "id": "mercenary",
+            "name": "Mercenary",
+            "phase": "tour",
+            "karmaCost": 100,
+            "yearsAdded": 5,
+            "description": "Served as a private military contractor.",
+            "pageReference": "RF p. 79",
+            "requiresSubModuleSelection": true,
+            "subModules": [
+              {
+                "id": "mercenary-army",
+                "name": "Mercenary Ground Forces",
+                "phase": "tour",
+                "karmaCost": 0,
+                "attributeModifiers": { "body": 1, "agility": 1 },
+                "activeSkills": { "automatics": 2, "heavy-weapons": 1, "survival": 1 },
+                "knowledgeSkills": { "mercenary-market": 2, "tactics": 1 },
+                "contacts": [{ "archetype": "Mercenary Contact", "connection": 3, "loyalty": 2 }]
+              },
+              {
+                "id": "mercenary-special-forces",
+                "name": "Mercenary Special Ops",
+                "phase": "tour",
+                "karmaCost": 0,
+                "attributeModifiers": { "agility": 1, "willpower": 1 },
+                "activeSkills": {
+                  "sneaking": 2,
+                  "automatics": 1,
+                  "demolitions": 1,
+                  "perception": 1
+                },
+                "knowledgeSkills": { "special-operations": 2, "mercenary-market": 1 },
+                "contacts": [{ "archetype": "Fixer", "connection": 4, "loyalty": 2 }]
+              }
+            ]
+          }
+        ]
+      }
     },
     "shapeshifters": {
       "mergeStrategy": "replace",
