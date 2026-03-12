@@ -26,6 +26,7 @@ import {
 import { DrugRow } from "./DrugRow";
 import { ToxinRow } from "./ToxinRow";
 import { DrugsPurchaseModal } from "./DrugsPurchaseModal";
+import { useCreationMethod } from "@/lib/rules/RulesetContext";
 import { Lock, Plus, Pill, FlaskConical } from "lucide-react";
 import { InfoTooltip } from "@/components/ui";
 
@@ -61,6 +62,7 @@ interface DrugsPanelProps {
 // =============================================================================
 
 export function DrugsPanel({ state, updateState }: DrugsPanelProps) {
+  const currentCreationMethod = useCreationMethod();
   const { getBudget, qualityModifiers } = useCreationBudgets();
   const nuyenBudget = getBudget("nuyen");
   const karmaBudget = getBudget("karma");
@@ -293,9 +295,11 @@ export function DrugsPanel({ state, updateState }: DrugsPanelProps) {
     return "pending";
   }, [isOverBudget, totalItems]);
 
-  // Check prerequisites
+  // Check prerequisites - Point Buy and Life Modules bypass priority requirement
+  const isNonPriorityMethod =
+    currentCreationMethod?.type === "point-buy" || currentCreationMethod?.type === "life-modules";
   const hasPriorities = state.priorities?.metatype && state.priorities?.resources;
-  if (!hasPriorities) {
+  if (!isNonPriorityMethod && !hasPriorities) {
     return (
       <CreationCard title="Drugs & Toxins" description="Purchase consumables" status="pending">
         <div className="space-y-3">

@@ -13,6 +13,7 @@ import { DrugsPanel } from "../DrugsPanel";
 vi.mock("@/lib/rules/RulesetContext", () => ({
   useDrugs: vi.fn(),
   useToxins: vi.fn(),
+  useCreationMethod: vi.fn(() => ({ type: "priority" })),
 }));
 
 vi.mock("@/lib/contexts", () => ({
