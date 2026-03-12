@@ -322,6 +322,38 @@ export {
   getContacts,
 } from "./creation-selections";
 
+// Life Modules types (Run Faster)
+export type {
+  LifeModulePhase,
+  LifeModule,
+  LifeModuleQualityGrant,
+  LifeModuleContactGrant,
+  NationalityModule,
+  EducationInstitutionType,
+  EducationDisciplineCategory,
+  LifeModulesCatalog,
+  LifeModuleSelection,
+  QualityReplacement,
+  LifeModulesSelections,
+} from "./life-modules";
+
+export {
+  LIFE_MODULES_KARMA_BUDGET,
+  LIFE_MODULES_MAX_ACTIVE_SKILL,
+  LIFE_MODULES_MAX_KNOWLEDGE_SKILL,
+  LIFE_MODULES_MAX_GEAR_KARMA,
+  LIFE_MODULES_NUYEN_PER_KARMA,
+  LIFE_MODULES_MAX_NEGATIVE_QUALITIES,
+  LIFE_MODULES_BASE_AGE,
+  NATIONALITY_KARMA_COST,
+  FORMATIVE_KARMA_COST,
+  TEEN_KARMA_COST,
+  CAREER_KARMA_COST,
+  CAREER_YEARS_ADDED,
+  TOUR_KARMA_COST,
+  TOUR_YEARS_ADDED,
+} from "./life-modules";
+
 // User types
 export * from "./user";
 

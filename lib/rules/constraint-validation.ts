@@ -23,6 +23,7 @@ import { validateAllQualities, validateKarmaLimits } from "./qualities";
 import { validateAllGear } from "./gear/validation";
 import { validateSumToTenBudget } from "./sum-to-ten-validation";
 import { validatePointBuyBudget } from "./point-buy-validation";
+import { validateLifeModulesBudget, validateLifeModulesSkillCap } from "./life-modules-validation";
 import type {
   GearCatalogData,
   CyberwareCatalogData,
@@ -269,6 +270,8 @@ const constraintValidators: Record<ConstraintType, ConstraintValidator> = {
   "special-attribute-init": validateSpecialAttributeInit,
   "sum-to-ten-budget": validateSumToTenBudget,
   "point-buy-budget": validatePointBuyBudget,
+  "life-modules-budget": validateLifeModulesBudget,
+  "life-modules-skill-cap": validateLifeModulesSkillCap,
   custom: validateCustom,
 };
 

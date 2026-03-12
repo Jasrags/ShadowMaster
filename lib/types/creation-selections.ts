@@ -25,6 +25,7 @@ import type {
   Weapon,
 } from "./index";
 import type { FreeSkillDesignations } from "@/lib/rules/skills/free-skills";
+import type { LifeModulesSelections } from "./life-modules";
 
 // =============================================================================
 // ATTRIBUTE IDS
@@ -311,7 +312,8 @@ export interface CreationSelections
     IdentitySelections,
     GearSelections,
     AugmentationSelections,
-    VehicleSelections {
+    VehicleSelections,
+    LifeModulesSelections {
   /** Tracks which purchased item uses the Restricted Gear quality exception */
   restrictedGearItemId?: string;
   /** Allow additional properties for extensibility */
