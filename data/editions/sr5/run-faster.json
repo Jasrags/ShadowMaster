@@ -1429,6 +1429,740 @@
                 "specialAttributePoints": 0
               }
             }
+          },
+          {
+            "id": "shapeshifter-bovine",
+            "name": "Shapeshifter (Bovine)",
+            "baseMetatype": null,
+            "description": "Awakened bovine shapeshifters capable of assuming metahuman form, known for their physical endurance and formidable strength.",
+            "karmaCost": 5,
+            "source": {
+              "book": "run-faster",
+              "page": 101
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 1,
+                "max": 4
+              },
+              "reaction": {
+                "min": 1,
+                "max": 4
+              },
+              "strength": {
+                "min": 4,
+                "max": 9
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Goring Horns", "Shift (Metahuman Form)", "Uneducated"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 4
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-canine",
+            "name": "Shapeshifter (Canine)",
+            "baseMetatype": null,
+            "description": "Awakened canine shapeshifters with keen senses and pack instincts, equally at home in the wilds or the urban sprawl.",
+            "karmaCost": 10,
+            "source": {
+              "book": "run-faster",
+              "page": 102
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 5
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 1,
+                "max": 5
+              },
+              "willpower": {
+                "min": 2,
+                "max": 7
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +1)P, AP -1)",
+              "Shift (Metahuman Form)",
+              "Vomeronasal Organ"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 5
+              },
+              "C": {
+                "specialAttributePoints": 3
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-equine",
+            "name": "Shapeshifter (Equine)",
+            "baseMetatype": null,
+            "description": "Awakened equine shapeshifters prized for their raw power and speed, often found ranging across the NAN territories.",
+            "karmaCost": 15,
+            "source": {
+              "book": "run-faster",
+              "page": 102
+            },
+            "attributes": {
+              "body": {
+                "min": 4,
+                "max": 9
+              },
+              "agility": {
+                "min": 1,
+                "max": 4
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 5,
+                "max": 10
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 6
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": ["Keen-Eared", "Shift (Metahuman Form)", "Uneducated"],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 6
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 2
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-falconine",
+            "name": "Shapeshifter (Falconine)",
+            "baseMetatype": null,
+            "description": "Awakened raptor shapeshifters with extraordinary eyesight and devastating aerial strikes, among the rarest of their kind.",
+            "karmaCost": 10,
+            "source": {
+              "book": "run-faster",
+              "page": 103
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 4
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 3,
+                "max": 8
+              },
+              "strength": {
+                "min": 1,
+                "max": 4
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Hawk Eyed",
+              "Natural Weapon (Bite: DV (STR +2)P, AP -1, Reach -1; Talons: DV (STR)P, AP -)",
+              "Shift (Metahuman Form)"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 7
+              },
+              "B": {
+                "specialAttributePoints": 5
+              },
+              "C": {
+                "specialAttributePoints": 3
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-leonine",
+            "name": "Shapeshifter (Leonine)",
+            "baseMetatype": null,
+            "description": "Awakened great cat shapeshifters embodying predatory grace and raw power, feared across the African and Asian wilderness.",
+            "karmaCost": 20,
+            "source": {
+              "book": "run-faster",
+              "page": 103
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 1,
+                "max": 6
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 4,
+                "max": 9
+              },
+              "willpower": {
+                "min": 1,
+                "max": 5
+              },
+              "logic": {
+                "min": 1,
+                "max": 4
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 4
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Balance Receptor",
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +1)P, AP -1; Claws: DV (STR +1)P, AP -1, +1 Reach)",
+              "Shift (Metahuman Form)",
+              "Uneducated"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 4
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-lupine",
+            "name": "Shapeshifter (Lupine)",
+            "baseMetatype": null,
+            "description": "Awakened wolf shapeshifters with heightened senses and fierce loyalty, thriving in both wilderness packs and shadowrunner teams.",
+            "karmaCost": 15,
+            "source": {
+              "book": "run-faster",
+              "page": 104
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 6
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +1)P, AP -1)",
+              "Shift (Metahuman Form)",
+              "Uneducated",
+              "Vomeronasal Organ"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 6
+              },
+              "B": {
+                "specialAttributePoints": 4
+              },
+              "C": {
+                "specialAttributePoints": 2
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-pantherine",
+            "name": "Shapeshifter (Pantherine)",
+            "baseMetatype": null,
+            "description": "Awakened panther shapeshifters combining stealth and cunning with razor-sharp instincts, favored as infiltrators in the shadows.",
+            "karmaCost": 25,
+            "source": {
+              "book": "run-faster",
+              "page": 104
+            },
+            "attributes": {
+              "body": {
+                "min": 2,
+                "max": 7
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 1,
+                "max": 6
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 3,
+                "max": 8
+              },
+              "charisma": {
+                "min": 3,
+                "max": 8
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Balance Receptor",
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +2)P, AP -3; Claws: DV (STR +1)P, AP -)",
+              "Shift (Metahuman Form)",
+              "Uneducated"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 4
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-tigrine",
+            "name": "Shapeshifter (Tigrine)",
+            "baseMetatype": null,
+            "description": "Awakened tiger shapeshifters possessing devastating strength and predatory intelligence, among the most dangerous shifters alive.",
+            "karmaCost": 25,
+            "source": {
+              "book": "run-faster",
+              "page": 105
+            },
+            "attributes": {
+              "body": {
+                "min": 3,
+                "max": 8
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 2,
+                "max": 7
+              },
+              "strength": {
+                "min": 3,
+                "max": 8
+              },
+              "willpower": {
+                "min": 1,
+                "max": 5
+              },
+              "logic": {
+                "min": 1,
+                "max": 4
+              },
+              "intuition": {
+                "min": 3,
+                "max": 8
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 4
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Balance Receptor",
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +2)P, AP -2; Claws: DV (STR +1)P, AP -1, +1 Reach)",
+              "Shift (Metahuman Form)",
+              "Uneducated"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 4
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-ursine",
+            "name": "Shapeshifter (Ursine)",
+            "baseMetatype": null,
+            "description": "Awakened bear shapeshifters of immense physical power and resilience, as comfortable in the frozen barrens as in a brawl.",
+            "karmaCost": 20,
+            "source": {
+              "book": "run-faster",
+              "page": 105
+            },
+            "attributes": {
+              "body": {
+                "min": 6,
+                "max": 11
+              },
+              "agility": {
+                "min": 1,
+                "max": 5
+              },
+              "reaction": {
+                "min": 1,
+                "max": 5
+              },
+              "strength": {
+                "min": 7,
+                "max": 12
+              },
+              "willpower": {
+                "min": 1,
+                "max": 5
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 1,
+                "max": 6
+              },
+              "charisma": {
+                "min": 1,
+                "max": 6
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Keen-Eared",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +2)P, AP -2; Claws: DV (STR +3)P, AP -1, +1 Reach)",
+              "Shift (Metahuman Form)",
+              "Uneducated",
+              "Vomeronasal Organ"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 4
+              },
+              "B": {
+                "specialAttributePoints": 2
+              },
+              "C": {
+                "specialAttributePoints": 0
+              }
+            }
+          },
+          {
+            "id": "shapeshifter-vulpine",
+            "name": "Shapeshifter (Vulpine)",
+            "baseMetatype": null,
+            "description": "Awakened fox shapeshifters renowned for their cunning and adaptability, often blending seamlessly into metahuman society.",
+            "karmaCost": 5,
+            "source": {
+              "book": "run-faster",
+              "page": 105
+            },
+            "attributes": {
+              "body": {
+                "min": 1,
+                "max": 4
+              },
+              "agility": {
+                "min": 2,
+                "max": 7
+              },
+              "reaction": {
+                "min": 1,
+                "max": 6
+              },
+              "strength": {
+                "min": 1,
+                "max": 4
+              },
+              "willpower": {
+                "min": 1,
+                "max": 6
+              },
+              "logic": {
+                "min": 1,
+                "max": 5
+              },
+              "intuition": {
+                "min": 2,
+                "max": 7
+              },
+              "charisma": {
+                "min": 2,
+                "max": 7
+              },
+              "edge": {
+                "min": 1,
+                "max": 4
+              },
+              "magic": {
+                "min": 1,
+                "max": 5
+              },
+              "essence": {
+                "base": 6
+              }
+            },
+            "racialTraits": [
+              "Broadened Auditory Spectrum (Ultrasonic)",
+              "Keen-Eared",
+              "Low-Light Vision",
+              "Natural Weapon (Bite: DV (STR +1)P, AP -)",
+              "Shift (Metahuman Form)",
+              "Uneducated",
+              "Vomeronasal Organ"
+            ],
+            "priorityAvailability": {
+              "A": {
+                "specialAttributePoints": 8
+              },
+              "B": {
+                "specialAttributePoints": 6
+              },
+              "C": {
+                "specialAttributePoints": 4
+              }
+            }
           }
         ]
       }
