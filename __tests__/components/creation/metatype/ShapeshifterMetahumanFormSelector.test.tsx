@@ -15,9 +15,7 @@ import { ShapeshifterMetahumanFormSelector } from "@/components/creation/metatyp
 
 describe("ShapeshifterMetahumanFormSelector - rendering", () => {
   it("should render all 5 metahuman form options", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />);
 
     expect(screen.getByTestId("metahuman-form-human")).toBeInTheDocument();
     expect(screen.getByTestId("metahuman-form-dwarf")).toBeInTheDocument();
@@ -27,9 +25,7 @@ describe("ShapeshifterMetahumanFormSelector - rendering", () => {
   });
 
   it("should display form names", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />);
 
     expect(screen.getByText("Human")).toBeInTheDocument();
     expect(screen.getByText("Dwarf")).toBeInTheDocument();
@@ -39,9 +35,7 @@ describe("ShapeshifterMetahumanFormSelector - rendering", () => {
   });
 
   it("should display karma costs", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />);
 
     // Human is free, others have karma costs
     expect(screen.getByText("Free")).toBeInTheDocument();
@@ -52,21 +46,15 @@ describe("ShapeshifterMetahumanFormSelector - rendering", () => {
   });
 
   it("should show the required label", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />);
 
     expect(screen.getByText("Metahuman Form (required)")).toBeInTheDocument();
   });
 
   it("should show explanatory text", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm={undefined} onSelectForm={vi.fn()} />);
 
-    expect(
-      screen.getByText(/your shapeshifter assumes this metahuman form/i)
-    ).toBeInTheDocument();
+    expect(screen.getByText(/your shapeshifter assumes this metahuman form/i)).toBeInTheDocument();
   });
 });
 
@@ -76,18 +64,14 @@ describe("ShapeshifterMetahumanFormSelector - rendering", () => {
 
 describe("ShapeshifterMetahumanFormSelector - selection", () => {
   it("should highlight the selected form", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm="elf" onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm="elf" onSelectForm={vi.fn()} />);
 
     const elfButton = screen.getByTestId("metahuman-form-elf");
     expect(elfButton.className).toContain("border-amber-500");
   });
 
   it("should not highlight unselected forms", () => {
-    render(
-      <ShapeshifterMetahumanFormSelector selectedForm="elf" onSelectForm={vi.fn()} />
-    );
+    render(<ShapeshifterMetahumanFormSelector selectedForm="elf" onSelectForm={vi.fn()} />);
 
     const humanButton = screen.getByTestId("metahuman-form-human");
     expect(humanButton.className).not.toContain("border-amber-500");

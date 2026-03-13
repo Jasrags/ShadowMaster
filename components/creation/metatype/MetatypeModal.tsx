@@ -184,9 +184,9 @@ function MetatypeDetailPanel({
       {/* Shapeshifter info box */}
       {isShapeshifterMetatype(metatype.id) && (
         <div className="rounded-lg border border-amber-200 bg-amber-50 p-3 text-sm text-amber-800 dark:border-amber-800/60 dark:bg-amber-900/20 dark:text-amber-300">
-          <span className="font-semibold">Dual-Form:</span> Shapeshifters have a natural animal
-          form and must select a metahuman form (Human, Dwarf, Elf, Ork, or Troll). They cannot
-          be Technomancers.
+          <span className="font-semibold">Dual-Form:</span> Shapeshifters have a natural animal form
+          and must select a metahuman form (Human, Dwarf, Elf, Ork, or Troll). They cannot be
+          Technomancers.
         </div>
       )}
 

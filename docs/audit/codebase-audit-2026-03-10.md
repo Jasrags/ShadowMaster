@@ -194,6 +194,7 @@ Configuration files:
 ## 2. Feature Area Status
 
 ### Character Creation — WORKING
+
 - Sheet-based single-page creation with all sections visible
 - SR5 Priority system fully implemented
 - 19 creation card categories covering: metatype, attributes, skills, qualities, magic, augmentations, gear, weapons, armor, vehicles, contacts, identities, knowledge/languages, matrix gear, foci, drugs/toxins, adept powers, spells
@@ -205,6 +206,7 @@ Configuration files:
 - Archetype quick-start templates (7 archetypes)
 
 ### Character Sheet — WORKING
+
 - 49+ display components for read-only character viewing
 - Covers all subsystems: attributes, skills, qualities, augmentations, weapons, armor, gear, vehicles, matrix, rigging, magic, contacts, identities, conditions, modifiers, effects, loadouts, encumbrance, wireless
 - DiceRoller integration for action resolution
@@ -212,6 +214,7 @@ Configuration files:
 - QuickNPC panel for GM use
 
 ### Character Advancement — WORKING
+
 - Karma spending for attributes, skills, specializations, edge, magic
 - Training time calculations (with some unimplemented paths — see below)
 - GM approval workflow for campaign characters
@@ -220,6 +223,7 @@ Configuration files:
 - Advancement ledger and history
 
 ### Campaign Management — WORKING
+
 - CRUD operations with join codes
 - Public campaign discovery
 - Tabbed hub: Overview, Characters, Notes, Roster, Posts, Calendar, Locations, Advancements, Approvals, Grunt Teams
@@ -231,6 +235,7 @@ Configuration files:
 - Campaign templates and validation
 
 ### Authentication & Security — WORKING
+
 - Two auth methods: email/password and magic link
 - Password reset via email token
 - Email verification flow
@@ -243,6 +248,7 @@ Configuration files:
 - User enumeration prevention on all sensitive endpoints
 
 ### Combat System — PARTIAL
+
 - `CombatSessionContext` provides session state, participants, turn tracking
 - CombatTracker UI built (initiative, actions, conditions)
 - ActionSelector for action point allocation
@@ -252,6 +258,7 @@ Configuration files:
 - **Missing:** Initiative dice from cyberware/powers not integrated, campaign membership check for multiplayer not implemented
 
 ### Action Resolution — WORKING
+
 - Dice engine with critical hit calculation
 - Pool builder with modifier stacking
 - Action executor for outcome resolution
@@ -260,6 +267,7 @@ Configuration files:
 - Action history tracking
 
 ### Matrix Operations — BACKEND COMPLETE, UI PARTIAL
+
 - Cyberdeck validation, program installation limits
 - Matrix dice pool calculator
 - Action validator and action mapper
@@ -270,6 +278,7 @@ Configuration files:
 - **Missing per PROJECT_STATE.md:** Dedicated Matrix UI page/integration (#88)
 
 ### Rigging System — BACKEND COMPLETE, UI PARTIAL
+
 - VCR and RCC validation
 - Drone network and slave limits
 - Drone condition tracking
@@ -282,6 +291,7 @@ Configuration files:
 - **Missing per PROJECT_STATE.md:** Dedicated Rigging UI page/integration (#89)
 
 ### Augmentations — BACKEND COMPLETE, UI PARTIAL
+
 - Essence tracking and loss calculation
 - Cyberlimb system with capacity and enhancements
 - Grade system (standard/alpha/beta/delta)
@@ -293,6 +303,7 @@ Configuration files:
 - **Missing per PROJECT_STATE.md:** Full integration into character page (#91)
 
 ### Magic System — BACKEND COMPLETE, UI PARTIAL
+
 - Spell validation with prerequisites
 - Tradition and spirit type validation
 - Complex form validation (technomancer)
@@ -302,6 +313,7 @@ Configuration files:
 - **Missing per PROJECT_STATE.md:** Full integration (#92)
 
 ### Contact Network — WORKING
+
 - Contact management with loyalty/connection ratings
 - Favor economy and favor ledger
 - Social capital metrics
@@ -310,6 +322,7 @@ Configuration files:
 - Sample contact templates (8)
 
 ### Inventory & Loadouts — WORKING
+
 - Equipment readiness states
 - Wireless toggles and bonus calculation
 - Container system
@@ -319,12 +332,14 @@ Configuration files:
 - Concealment rules
 
 ### Qualities System — WORKING
+
 - Positive and negative quality selection
 - Quality effects and advancement
 - Dynamic state management
 - Gameplay integration (withdrawal, allergy)
 
 ### Ruleset System — WORKING
+
 - Edition → Book → RuleModule → MergedRuleset pipeline
 - Merge strategies: replace, merge, append, remove
 - Deep merge with ID-based array merging
@@ -333,6 +348,7 @@ Configuration files:
 - Rule reference with command palette search
 
 ### Sync & Migration — WORKING
+
 - Ruleset versioning with drift detection
 - Character sync endpoints (GET/PUT)
 - Migration engine for edition changes
@@ -340,6 +356,7 @@ Configuration files:
 - StabilityShield indicator and MigrationWizard UI
 
 ### Email System — WORKING
+
 - 4 transports: SMTP (Mailpit dev), Resend (production), file (fallback), mock (testing)
 - Templates: verification, password reset, magic link, security alerts
 - Security alerts: lockout, password change, email change
@@ -347,12 +364,14 @@ Configuration files:
 - Email preferences
 
 ### Admin Features — WORKING
+
 - User management dashboard (admin-only)
 - Character state transitions (admin)
 - Audit log access
 - Data migration endpoints
 
 ### Settings — WORKING
+
 - Account profile management
 - Password change
 - Theme preferences
@@ -484,4 +503,4 @@ Configuration files:
 
 ---
 
-*End of raw findings. No recommendations or categorization applied — these are observations only.*
+_End of raw findings. No recommendations or categorization applied — these are observations only._

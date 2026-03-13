@@ -114,7 +114,11 @@ export function SkillSpecModal({
     <BaseModalRoot isOpen={isOpen} onClose={handleClose} size="sm">
       {({ close }) => (
         <>
-          <ModalHeader title={`Add Specialization - ${skillName}`} onClose={close} showCloseButton />
+          <ModalHeader
+            title={`Add Specialization - ${skillName}`}
+            onClose={close}
+            showCloseButton
+          />
 
           <ModalBody className="p-4">
             <div className="space-y-4">
@@ -206,9 +210,7 @@ export function SkillSpecModal({
               {/* Cost display */}
               <div
                 className={`rounded-lg p-2 text-xs ${
-                  isKarmaMode
-                    ? "bg-amber-50 dark:bg-amber-900/20"
-                    : "bg-zinc-100 dark:bg-zinc-800"
+                  isKarmaMode ? "bg-amber-50 dark:bg-amber-900/20" : "bg-zinc-100 dark:bg-zinc-800"
                 }`}
               >
                 <div className="flex items-center justify-between">

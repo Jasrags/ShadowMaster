@@ -10,7 +10,7 @@ Detailed reference material for Shadow Master. The root CLAUDE.md imports this f
 | **Grunt/NPC System**      | Pre-built templates (PR0-PR6) for encounter management   |
 | **Contact Network**       | Relationships, loyalty/connection ratings, favor economy |
 | **Matrix Operations**     | Full matrix hacking with overwatch, marks, and programs  |
-| **Rigging System**        | VCR, RCC, drone networks, jump-in mode, biofeedback     |
+| **Rigging System**        | VCR, RCC, drone networks, jump-in mode, biofeedback      |
 | **Augmentations**         | Cyberlimb system with essence tracking and grades        |
 | **Campaign Management**   | Sessions, locations, notes, posts, grunt teams           |
 | **Character Advancement** | Karma spending for attributes, skills, magic, edge       |
@@ -111,13 +111,13 @@ All domain entities in `/lib/types/`. Key files:
 
 This project uses MCP servers for AI-assisted development. For detailed tool selection guides, use the `/mcp-guide` skill.
 
-| Server       | Purpose                      |
-| ------------ | ---------------------------- |
-| context7     | Library documentation lookup |
-| github       | GitHub API (PRs, issues)     |
-| knip         | Dead code detection          |
-| memory       | Persistent knowledge graph   |
-| git          | Local git operations         |
+| Server   | Purpose                      |
+| -------- | ---------------------------- |
+| context7 | Library documentation lookup |
+| github   | GitHub API (PRs, issues)     |
+| knip     | Dead code detection          |
+| memory   | Persistent knowledge graph   |
+| git      | Local git operations         |
 
 ## Documentation
 
