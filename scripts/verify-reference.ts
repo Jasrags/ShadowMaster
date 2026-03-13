@@ -8,6 +8,8 @@
  * Usage:
  *   pnpm verify-reference                           # Run all mapping configs
  *   pnpm verify-reference --mapping <path>          # Run specific mapping
+ *   pnpm verify-reference --system <name>           # Run all mappings for a system domain
+ *   pnpm verify-reference --list-systems            # List available system domains
  *   pnpm verify-reference --output <dir>            # Write report to directory
  *   pnpm verify-reference --json                    # Output JSON instead of text
  */
@@ -34,6 +36,13 @@ interface MappingConfig {
   description: string;
   mappings: MappingEntry[];
 }
+
+interface SystemDomain {
+  description: string;
+  prefixes: string[];
+}
+
+type SystemsRegistry = Record<string, SystemDomain>;
 
 interface ReferenceTable {
   source: string;
@@ -658,6 +667,149 @@ function formatReport(report: VerificationReport): string {
 }
 
 // ============================================================================
+// System Domain Aggregation
+// ============================================================================
+
+function loadSystemsRegistry(): SystemsRegistry {
+  const registryPath = path.join(PROJECT_ROOT, "docs/references/systems.json");
+  if (!fs.existsSync(registryPath)) {
+    console.error("Systems registry not found: docs/references/systems.json");
+    process.exit(1);
+  }
+  return JSON.parse(fs.readFileSync(registryPath, "utf-8")) as SystemsRegistry;
+}
+
+/**
+ * Check if a dataPath matches any of the system's prefixes.
+ * A mapping entry matches if its dataPath (joined with ".") starts with any prefix.
+ */
+function dataPathMatchesSystem(dataPath: string[], prefixes: string[]): boolean {
+  const joined = dataPath.join(".");
+  return prefixes.some((prefix) => joined.startsWith(prefix));
+}
+
+/**
+ * Filter a mapping config to only include entries whose dataPath matches the system.
+ * Returns undefined if no entries match.
+ */
+function filterMappingForSystem(
+  config: MappingConfig,
+  prefixes: string[]
+): MappingConfig | undefined {
+  const filtered = config.mappings.filter((m) => dataPathMatchesSystem(m.dataPath, prefixes));
+  if (filtered.length === 0) return undefined;
+  return { ...config, mappings: filtered };
+}
+
+function formatSystemReport(
+  systemName: string,
+  system: SystemDomain,
+  reports: Array<{ book: string; report: VerificationReport }>
+): string {
+  const lines: string[] = [];
+
+  lines.push("═".repeat(72));
+  lines.push(`  System Domain Report: ${systemName}`);
+  lines.push(`  ${system.description}`);
+  lines.push(`  Prefixes: ${system.prefixes.join(", ")}`);
+  lines.push(`  ${new Date().toISOString()}`);
+  lines.push("═".repeat(72));
+  lines.push("");
+
+  // Aggregate summary
+  let totalErrors = 0;
+  let totalWarnings = 0;
+  let totalTables = 0;
+  let totalMissingItems = 0;
+  let totalMissingFields = 0;
+  let totalValueMismatches = 0;
+
+  for (const { report } of reports) {
+    totalErrors += report.summary.errors;
+    totalWarnings += report.summary.warnings;
+    totalTables += report.summary.totalTables;
+    totalMissingItems += report.summary.missingItems;
+    totalMissingFields += report.summary.missingFields;
+    totalValueMismatches += report.summary.valueMismatches;
+  }
+
+  lines.push("## Aggregate Summary");
+  lines.push(`  Books scanned:       ${reports.length}`);
+  lines.push(`  Tables checked:      ${totalTables}`);
+  lines.push(`  Total errors:        ${totalErrors}`);
+  lines.push(`  Total warnings:      ${totalWarnings}`);
+  lines.push(`  Missing items:       ${totalMissingItems}`);
+  lines.push(`  Missing fields:      ${totalMissingFields}`);
+  lines.push(`  Value mismatches:    ${totalValueMismatches}`);
+  lines.push("");
+
+  // Per-book breakdown
+  for (const { book, report } of reports) {
+    lines.push("─".repeat(72));
+    lines.push(`  Book: ${book}`);
+    lines.push(`  ${report.description}`);
+    lines.push(`  Errors: ${report.summary.errors}, Warnings: ${report.summary.warnings}`);
+    lines.push("");
+
+    for (const table of report.tables) {
+      if (table.findings.length === 0) {
+        lines.push(
+          `  ✓ ${table.table} — ${table.matched}/${table.referenceCount} matched, 0 findings`
+        );
+        continue;
+      }
+
+      lines.push(
+        `  ✗ ${table.table} (${table.source}) — ${table.matched}/${table.referenceCount} matched, ${table.findings.length} findings`
+      );
+
+      const grouped: Record<string, Finding[]> = {};
+      for (const f of table.findings) {
+        const key = `${f.severity}:${f.type}`;
+        if (!grouped[key]) grouped[key] = [];
+        grouped[key].push(f);
+      }
+
+      const order = [
+        "error:missing-category",
+        "error:missing-item",
+        "error:value-mismatch",
+        "warning:missing-field",
+        "info:extra-item",
+      ];
+
+      for (const key of order) {
+        const findings = grouped[key];
+        if (!findings) continue;
+
+        const [severity, type] = key.split(":");
+        const icon = severity === "error" ? "✗" : severity === "warning" ? "△" : "·";
+        lines.push(`    ${icon} ${type} (${findings.length})`);
+        for (const f of findings) {
+          lines.push(`      ${f.message}`);
+        }
+      }
+      lines.push("");
+    }
+  }
+
+  // Exit status
+  lines.push("═".repeat(72));
+  if (totalErrors > 0) {
+    lines.push(
+      `FAIL: ${totalErrors} errors, ${totalWarnings} warnings across ${reports.length} book(s)`
+    );
+  } else if (totalWarnings > 0) {
+    lines.push(`WARN: ${totalWarnings} warnings, 0 errors across ${reports.length} book(s)`);
+  } else {
+    lines.push("PASS: No findings");
+  }
+  lines.push("");
+
+  return lines.join("\n");
+}
+
+// ============================================================================
 // CLI
 // ============================================================================
 
@@ -687,8 +839,82 @@ function main(): void {
   const args = process.argv.slice(2);
   const jsonOutput = args.includes("--json");
   const mappingIdx = args.indexOf("--mapping");
+  const systemIdx = args.indexOf("--system");
   const outputIdx = args.indexOf("--output");
+  const listSystems = args.includes("--list-systems");
 
+  // --list-systems: print available systems and exit
+  if (listSystems) {
+    const registry = loadSystemsRegistry();
+    console.log("\nAvailable system domains:\n");
+    for (const [name, system] of Object.entries(registry)) {
+      console.log(`  ${name.padEnd(14)} ${system.description}`);
+      console.log(`  ${"".padEnd(14)} prefixes: ${system.prefixes.join(", ")}`);
+      console.log("");
+    }
+    process.exit(0);
+  }
+
+  // --system <name>: aggregate by system domain
+  if (systemIdx !== -1 && args[systemIdx + 1]) {
+    const systemName = args[systemIdx + 1];
+    const registry = loadSystemsRegistry();
+    const system = registry[systemName];
+
+    if (!system) {
+      console.error(`Unknown system: "${systemName}"`);
+      console.error(`Available systems: ${Object.keys(registry).join(", ")}`);
+      process.exit(1);
+    }
+
+    const allMappings = findAllMappings();
+    const bookReports: Array<{ book: string; report: VerificationReport }> = [];
+    let totalErrors = 0;
+
+    for (const mappingFile of allMappings) {
+      const config = loadJson(mappingFile) as MappingConfig | undefined;
+      if (!config) continue;
+
+      const filtered = filterMappingForSystem(config, system.prefixes);
+      if (!filtered) continue;
+
+      // Extract book name from path: docs/references/<book>/mappings/<file>.json
+      const book = mappingFile.split("/")[2] ?? mappingFile;
+
+      const report = verifyMapping(filtered);
+      bookReports.push({ book, report });
+      totalErrors += report.summary.errors;
+    }
+
+    if (bookReports.length === 0) {
+      console.error(`No mapping entries found for system "${systemName}"`);
+      process.exit(1);
+    }
+
+    if (jsonOutput) {
+      console.log(JSON.stringify({ system: systemName, ...system, books: bookReports }, null, 2));
+    } else {
+      console.log(formatSystemReport(systemName, system, bookReports));
+    }
+
+    // Write to output directory if specified
+    if (outputIdx !== -1 && args[outputIdx + 1]) {
+      const outDir = resolvePath(args[outputIdx + 1]);
+      fs.mkdirSync(outDir, { recursive: true });
+      fs.writeFileSync(
+        path.join(outDir, `system-${systemName}.json`),
+        JSON.stringify({ system: systemName, ...system, books: bookReports }, null, 2)
+      );
+      fs.writeFileSync(
+        path.join(outDir, `system-${systemName}.txt`),
+        formatSystemReport(systemName, system, bookReports)
+      );
+    }
+
+    process.exit(totalErrors > 0 ? 1 : 0);
+  }
+
+  // Default: --mapping or all mappings
   let mappingFiles: string[];
 
   if (mappingIdx !== -1 && args[mappingIdx + 1]) {

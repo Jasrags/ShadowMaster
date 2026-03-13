@@ -21,9 +21,22 @@ pnpm verify-reference
 # Specific mapping
 pnpm verify-reference --mapping docs/references/sr5-core-rulebook/mappings/street-gear-weapons-armor.json
 
+# System domain aggregation — verify all mappings targeting a domain across all books
+pnpm verify-reference --system gear
+pnpm verify-reference --system qualities
+pnpm verify-reference --system magic
+
+# List available system domains
+pnpm verify-reference --list-systems
+
 # JSON output for programmatic analysis
 pnpm verify-reference --json
+pnpm verify-reference --system gear --json
 ```
+
+### System Domains
+
+The `--system` flag aggregates mappings by data path domain, scanning all books. The registry is at `docs/references/systems.json`. Available systems: gear, matrix, vehicles, magic, combat, qualities, skills, cyberware, critters, character.
 
 The script compares reference JSON tables against edition data files using mapping configs
 in `docs/references/*/mappings/*.json`. It reports:
