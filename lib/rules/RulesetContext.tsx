@@ -57,7 +57,9 @@ import type {
   DrugCatalogItemData,
   ToxinCatalogItemData,
   InfectedCatalogData,
+  GearCatalogData,
 } from "./loader-types";
+export type { GearCatalogData } from "./loader-types";
 export type {
   QualityData,
   TraditionData,
@@ -312,37 +314,6 @@ export interface CyberdeckData extends GearItemData {
     firewall: number;
   };
   programs: number;
-}
-
-export interface GearCatalogData {
-  categories: Array<{ id: string; name: string }>;
-  weapons: {
-    melee: WeaponData[];
-    pistols: WeaponData[];
-    smgs: WeaponData[];
-    rifles: WeaponData[];
-    shotguns: WeaponData[];
-    sniperRifles: WeaponData[];
-    throwingWeapons: WeaponData[];
-    grenades: WeaponData[];
-  };
-  armor: ArmorData[];
-  commlinks: CommlinkData[];
-  cyberdecks: CyberdeckData[];
-  electronics: GearItemData[];
-  tools: GearItemData[];
-  survival: GearItemData[];
-  medical: GearItemData[];
-  security: GearItemData[];
-  miscellaneous: GearItemData[];
-  ammunition: GearItemData[];
-  explosives: GearItemData[];
-  rfidTags: GearItemData[];
-  industrialChemicals: GearItemData[];
-  visionEnhancements?: GearItemData[];
-  audioEnhancements?: GearItemData[];
-  drugs?: DrugCatalogItemData[];
-  toxins?: ToxinCatalogItemData[];
 }
 
 export interface SpellData {

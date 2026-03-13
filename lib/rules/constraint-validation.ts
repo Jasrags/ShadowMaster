@@ -30,6 +30,7 @@ import type {
   GearItemData,
   CyberwareCatalogItemData,
 } from "./loader-types";
+import { findGearItemInCatalog } from "./gear/catalog-helpers";
 
 // =============================================================================
 // TYPES
@@ -78,32 +79,34 @@ function findGearCatalogItem(ruleset: MergedRuleset, identifier: string): GearIt
   const gearCatalog = getModule<GearCatalogData>(ruleset, "gear");
   if (!gearCatalog) return null;
 
-  // Search all gear categories
-  const allGear: GearItemData[] = [
-    ...(gearCatalog.electronics || []),
-    ...(gearCatalog.tools || []),
-    ...(gearCatalog.survival || []),
-    ...(gearCatalog.medical || []),
-    ...(gearCatalog.security || []),
-    ...(gearCatalog.miscellaneous || []),
-    ...(gearCatalog.ammunition || []),
-    ...(gearCatalog.explosives || []),
-    ...(gearCatalog.rfidTags || []),
-    ...(gearCatalog.armor || []),
-    ...(gearCatalog.commlinks || []),
-    ...(gearCatalog.cyberdecks || []),
-    // Weapons
-    ...(gearCatalog.weapons?.melee || []),
-    ...(gearCatalog.weapons?.pistols || []),
-    ...(gearCatalog.weapons?.smgs || []),
-    ...(gearCatalog.weapons?.rifles || []),
-    ...(gearCatalog.weapons?.shotguns || []),
-    ...(gearCatalog.weapons?.sniperRifles || []),
-    ...(gearCatalog.weapons?.throwingWeapons || []),
-    ...(gearCatalog.weapons?.grenades || []),
-  ];
+  // Search GearItemData sub-arrays (browsable + hidden)
+  const found = findGearItemInCatalog(
+    gearCatalog,
+    (item) => item.id === identifier || item.name === identifier
+  );
+  if (found) return found;
 
-  return allGear.find((item) => item.id === identifier || item.name === identifier) || null;
+  // Also search non-GearItemData arrays that extend GearItemData
+  const otherArrays: (GearItemData[] | undefined)[] = [
+    gearCatalog.armor,
+    gearCatalog.commlinks,
+    gearCatalog.cyberdecks,
+    gearCatalog.weapons?.melee,
+    gearCatalog.weapons?.pistols,
+    gearCatalog.weapons?.smgs,
+    gearCatalog.weapons?.rifles,
+    gearCatalog.weapons?.shotguns,
+    gearCatalog.weapons?.sniperRifles,
+    gearCatalog.weapons?.throwingWeapons,
+    gearCatalog.weapons?.grenades,
+  ];
+  for (const arr of otherArrays) {
+    if (!arr) continue;
+    const match = arr.find((item) => item.id === identifier || item.name === identifier);
+    if (match) return match;
+  }
+
+  return null;
 }
 
 /**

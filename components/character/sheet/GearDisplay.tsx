@@ -2,7 +2,9 @@
 
 import { useState } from "react";
 import type { Character, GearItem } from "@/lib/types";
-import type { GearItemData, GearCatalogData } from "@/lib/rules/RulesetContext";
+import type { GearItemData } from "@/lib/rules/RulesetContext";
+import type { GearCatalogData } from "@/lib/rules/loader-types";
+import { GEAR_BROWSABLE_KEYS, findGearItemInCatalog } from "@/lib/rules/gear/catalog-helpers";
 import type { EquipmentReadiness, ContainerProperties } from "@/lib/types/gear-state";
 import { useGear } from "@/lib/rules";
 import { useCombatReadiness } from "@/lib/combat";
@@ -47,27 +49,7 @@ function formatCategoryLabel(category: string, catalog: GearCatalogData | null):
 
 /** Search all GearItemData sub-arrays in the catalog to find an item by name. */
 function findCatalogItem(catalog: GearCatalogData | null, name: string): GearItemData | undefined {
-  if (!catalog) return undefined;
-  const arrays: (GearItemData[] | undefined)[] = [
-    catalog.electronics,
-    catalog.tools,
-    catalog.survival,
-    catalog.medical,
-    catalog.security,
-    catalog.miscellaneous,
-    catalog.ammunition,
-    catalog.explosives,
-    catalog.rfidTags,
-    catalog.industrialChemicals,
-    catalog.visionEnhancements,
-    catalog.audioEnhancements,
-  ];
-  for (const arr of arrays) {
-    if (!arr) continue;
-    const found = arr.find((item) => item.name === name);
-    if (found) return found;
-  }
-  return undefined;
+  return findGearItemInCatalog(catalog, (item) => item.name === name);
 }
 
 // ---------------------------------------------------------------------------
@@ -122,15 +104,7 @@ function toggleGearWireless(
 // Category ordering
 // ---------------------------------------------------------------------------
 
-const CATEGORY_ORDER = [
-  "electronics",
-  "tools",
-  "survival",
-  "medical",
-  "security",
-  "explosives",
-  "miscellaneous",
-];
+const CATEGORY_ORDER: string[] = [...GEAR_BROWSABLE_KEYS];
 
 // ---------------------------------------------------------------------------
 // GearRow

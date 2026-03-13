@@ -14,10 +14,18 @@
  */
 
 import { useState, useMemo, useCallback } from "react";
-import { useGear, type GearItemData, type GearCatalogData } from "@/lib/rules/RulesetContext";
+import { useGear, type GearItemData } from "@/lib/rules/RulesetContext";
+import type { GearCatalogData } from "@/lib/rules/loader-types";
 import type { ItemLegality } from "@/lib/types";
 import { hasUnifiedRatings, getRatingTableValue } from "@/lib/types/ratings";
 import { isLegalAtCreation, CREATION_CONSTRAINTS } from "@/lib/rules/gear/validation";
+import {
+  GEAR_BROWSABLE_KEYS,
+  GEAR_BROWSABLE_LABELS,
+  type GearBrowsableKey,
+  getAllBrowsableGear,
+  mapToDisplayCategory,
+} from "@/lib/rules/gear/catalog-helpers";
 import { BaseModalRoot, ModalFooter } from "@/components/ui";
 import { Search, Minus, Plus, AlertTriangle, X } from "lucide-react";
 import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantitySelector";
@@ -28,79 +36,24 @@ import { BulkQuantitySelector } from "@/components/creation/shared/BulkQuantityS
 
 const MAX_AVAILABILITY = CREATION_CONSTRAINTS.maxAvailabilityAtCreation;
 
-type GearCategory =
-  | "all"
-  | "electronics"
-  | "tools"
-  | "survival"
-  | "medical"
-  | "security"
-  | "explosives"
-  | "miscellaneous"
-  | "rfidTags";
+type GearCategory = "all" | GearBrowsableKey;
 
 const GEAR_CATEGORIES: Array<{ id: GearCategory; label: string }> = [
   { id: "all", label: "All" },
-  { id: "electronics", label: "Electronics" },
-  { id: "tools", label: "Tools" },
-  { id: "medical", label: "Medical" },
-  { id: "security", label: "Security" },
-  { id: "survival", label: "Survival" },
-  { id: "explosives", label: "Explosives" },
-  { id: "rfidTags", label: "RFID Tags" },
-  { id: "miscellaneous", label: "Misc" },
+  ...GEAR_BROWSABLE_KEYS.map((key) => ({
+    id: key as GearCategory,
+    label: key === "miscellaneous" ? "Misc" : GEAR_BROWSABLE_LABELS[key],
+  })),
 ];
 
 /** Labels for sticky category headers */
 const CATEGORY_LABELS: Record<GearCategory, string> = {
   all: "All Gear",
-  electronics: "Electronics",
-  tools: "Tools",
-  survival: "Survival",
-  medical: "Medical",
-  security: "Security",
-  explosives: "Explosives",
-  miscellaneous: "Miscellaneous",
-  rfidTags: "RFID Tags",
+  ...GEAR_BROWSABLE_LABELS,
 };
 
 /** Category display order for grouped view */
-const CATEGORY_ORDER: GearCategory[] = [
-  "electronics",
-  "tools",
-  "medical",
-  "security",
-  "survival",
-  "explosives",
-  "rfidTags",
-  "miscellaneous",
-];
-
-/** Map sub-categories to their parent display category for grouped view */
-function getDisplayCategory(category: string): GearCategory {
-  switch (category) {
-    case "audio-devices":
-    case "optical-devices":
-    case "imaging-devices":
-      return "electronics";
-    case "restraints":
-      return "tools";
-    case "grapple-gun":
-      return "survival";
-    case "rfid-tags":
-      return "rfidTags";
-    case "electronics":
-    case "tools":
-    case "medical":
-    case "security":
-    case "survival":
-    case "explosives":
-    case "rfidTags":
-      return category as GearCategory;
-    default:
-      return "miscellaneous";
-  }
-}
+const CATEGORY_ORDER: GearCategory[] = [...GEAR_BROWSABLE_KEYS];
 
 // =============================================================================
 // HELPERS
@@ -122,23 +75,6 @@ function getAvailabilityDisplay(availability: number, legality?: ItemLegality): 
 }
 
 /**
- * Extract all gear from catalog into flat array with category info
- */
-function getAllGear(catalog: GearCatalogData | null): GearItemData[] {
-  if (!catalog) return [];
-  return [
-    ...catalog.electronics,
-    ...catalog.tools,
-    ...catalog.survival,
-    ...catalog.medical,
-    ...catalog.security,
-    ...(catalog.explosives || []),
-    ...catalog.miscellaneous,
-    ...(catalog.rfidTags || []),
-  ];
-}
-
-/**
  * Get gear by category
  */
 function getGearByCategory(
@@ -146,7 +82,7 @@ function getGearByCategory(
   category: GearCategory
 ): GearItemData[] {
   if (!catalog) return [];
-  if (category === "all") return getAllGear(catalog);
+  if (category === "all") return getAllBrowsableGear(catalog);
   return catalog[category] || [];
 }
 
@@ -354,29 +290,16 @@ export function GearPurchaseModal({
   // Category counts
   const categoryCounts = useMemo(() => {
     if (!gearCatalog) return {};
-    return {
-      all: getAllGear(gearCatalog).filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
-        .length,
-      electronics: gearCatalog.electronics.filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
-      tools: gearCatalog.tools.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY).length,
-      survival: gearCatalog.survival.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
-        .length,
-      medical: gearCatalog.medical.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
-        .length,
-      security: gearCatalog.security.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY)
-        .length,
-      explosives: (gearCatalog.explosives || []).filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
-      rfidTags: (gearCatalog.rfidTags || []).filter(
-        (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
-      ).length,
-      miscellaneous: gearCatalog.miscellaneous.filter(
+    const counts: Record<string, number> = {
+      all: getAllBrowsableGear(gearCatalog).filter(
         (g) => getMinimumAvailability(g) <= MAX_AVAILABILITY
       ).length,
     };
+    for (const key of GEAR_BROWSABLE_KEYS) {
+      const items: GearItemData[] = gearCatalog[key] ?? [];
+      counts[key] = items.filter((g) => getMinimumAvailability(g) <= MAX_AVAILABILITY).length;
+    }
+    return counts;
   }, [gearCatalog]);
 
   // Filter by search, availability, and legality
@@ -448,7 +371,7 @@ export function GearPurchaseModal({
     }
     const grouped: Partial<Record<GearCategory, GearItemData[]>> = {};
     filteredGear.forEach((gear) => {
-      const cat = getDisplayCategory(gear.category);
+      const cat = mapToDisplayCategory(gear.category);
       if (!grouped[cat]) grouped[cat] = [];
       grouped[cat]!.push(gear);
     });

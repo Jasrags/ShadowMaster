@@ -32,6 +32,51 @@ export const GEAR_BROWSABLE_KEYS = [
 
 export type GearBrowsableKey = (typeof GEAR_BROWSABLE_KEYS)[number];
 
+/**
+ * Human-readable labels for each browsable subcategory.
+ * Used by GearPurchaseModal tabs, GearPanel headers, and GearDisplay ordering.
+ */
+export const GEAR_BROWSABLE_LABELS: Record<GearBrowsableKey, string> = {
+  electronics: "Electronics",
+  tools: "Tools",
+  survival: "Survival",
+  medical: "Medical",
+  security: "Security",
+  explosives: "Explosives",
+  miscellaneous: "Miscellaneous",
+  rfidTags: "RFID Tags",
+};
+
+/**
+ * Non-browsable GearItemData array keys.
+ * These aren't shown as tabs but must be searched when looking up items.
+ */
+export const GEAR_HIDDEN_KEYS = [
+  "ammunition",
+  "accessories",
+  "armorModifications",
+  "industrialChemicals",
+  "visionEnhancements",
+  "audioEnhancements",
+  "securityDevices",
+  "restraints",
+] as const;
+
+/**
+ * All GearItemData array keys used by the search index.
+ * Combines browsable, hidden, and additional keys that carry
+ * non-GearItemData payloads but are still indexable.
+ */
+export const GEAR_SEARCH_KEYS = [
+  ...GEAR_BROWSABLE_KEYS,
+  ...GEAR_HIDDEN_KEYS,
+  "commlinks",
+  "cyberdecks",
+  "toxins",
+  "drugs",
+  "sensors",
+] as const;
+
 // =============================================================================
 // CATALOG QUERY HELPERS
 // =============================================================================
@@ -65,17 +110,8 @@ export function findGearItemInCatalog(
   }
 
   // Non-browsable but still searchable arrays
-  const extraArrays: (GearItemData[] | undefined)[] = [
-    catalog.ammunition,
-    catalog.accessories,
-    catalog.armorModifications,
-    catalog.industrialChemicals,
-    catalog.visionEnhancements,
-    catalog.audioEnhancements,
-    catalog.securityDevices,
-    catalog.restraints,
-  ];
-  for (const arr of extraArrays) {
+  for (const key of GEAR_HIDDEN_KEYS) {
+    const arr = catalog[key] as GearItemData[] | undefined;
     if (!arr) continue;
     const found = arr.find(predicate);
     if (found) return found;
